@@ -1,3 +1,7 @@
+// COMMENTED OUT for now until we want to actually turn on accessibility tests on CI
+// See docs for more details including story- and component-level configuration:
+// https://storybook.js.org/docs/writing-tests/accessibility-testing#automate-accessibility-tests-with-test-runner
+
 // import type { TestRunnerConfig } from '@storybook/test-runner';
 // import { injectAxe, checkA11y } from 'axe-playwright';
 //
