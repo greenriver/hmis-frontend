@@ -37,29 +37,31 @@ const ProjectExternalSubmissionsTable = ({
       const defs: ColumnDef<ExternalFormSubmissionSummaryFragment>[] =
         Array.from(summaryKeys)
           .sort()
-          .map((key) => ({
-            key,
-            header: key,
-            render: (submission: ExternalFormSubmissionSummaryFragment) =>
-              submission.summaryFields.find((f) => f.key === key)?.value,
+          .map((fieldKey) => ({
+            key: fieldKey,
+            header: fieldKey,
+            render: ({
+              summaryFields,
+            }: ExternalFormSubmissionSummaryFragment) =>
+              summaryFields.find(({ key }) => key === fieldKey)?.value,
           }));
 
       return [
         {
           header: 'Status',
           linkTreatment: false,
-          render: (s: ExternalFormSubmissionSummaryFragment) => {
-            const isNew = s.status === ExternalFormSubmissionStatus.New;
+          render: ({ status, spam }: ExternalFormSubmissionSummaryFragment) => {
+            const isNew = status === ExternalFormSubmissionStatus.New;
             return (
               <>
                 <Chip
-                  label={capitalize(s.status)}
+                  label={capitalize(status)}
                   size='small'
                   color={isNew ? 'primary' : 'default'}
                   variant={isNew ? 'filled' : 'outlined'}
                   sx={isNew ? {} : { color: theme.palette.text.secondary }}
                 />
-                {s.spam && (
+                {spam && (
                   <Chip
                     label='Spam'
                     size='small'
@@ -75,8 +77,8 @@ const ProjectExternalSubmissionsTable = ({
         {
           header: 'Date Submitted',
           linkTreatment: false,
-          render: (s: ExternalFormSubmissionSummaryFragment) =>
-            parseAndFormatDateTime(s.submittedAt),
+          render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) =>
+            parseAndFormatDateTime(submittedAt),
         },
         ...defs,
       ];
