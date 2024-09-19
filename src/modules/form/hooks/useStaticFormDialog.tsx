@@ -1,6 +1,5 @@
 import { TypedDocumentNode } from '@apollo/client';
 import {
-  Box,
   DialogActions,
   DialogContent,
   DialogProps,
@@ -38,7 +37,6 @@ interface Args<TData, TVariables> {
   pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
   localConstants?: LocalConstants;
-  beforeFormComponent?: ReactNode;
 }
 export function useStaticFormDialog<
   TData extends { __typename?: 'Mutation' },
@@ -53,7 +51,6 @@ export function useStaticFormDialog<
   localConstants,
   initialValues,
   pickListArgs,
-  beforeFormComponent,
 }: Args<TData, TVariables>) {
   const errorRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -87,7 +84,6 @@ export function useStaticFormDialog<
         >
           <DialogTitle>{title}</DialogTitle>
           <DialogContent>
-            <Box mt={2}>{beforeFormComponent}</Box>
             <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
               <Grid item xs>
                 <StaticForm
@@ -144,7 +140,6 @@ export function useStaticFormDialog<
       mutationDocument,
       onCompleted,
       pickListArgs,
-      beforeFormComponent,
     ]
   );
   return {
