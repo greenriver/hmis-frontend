@@ -9,7 +9,7 @@ import {
   getCustomDataElementColumns,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import ExternalSubmissionsViewModal from '@/modules/projects/ExternalSubmissionsViewModal';
+import ExternalSubmissionsViewModal from '@/modules/projects/components/ExternalSubmissionsViewModal';
 import {
   ExternalFormSubmissionFieldsFragment,
   ExternalFormSubmissionFilterOptions,
