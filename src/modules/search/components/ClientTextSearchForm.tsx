@@ -39,11 +39,11 @@ const ClientTextSearchForm: React.FC<Props> = ({
 
   useEffect(() => {
     if (!minChars || !tooShort) return;
-    if (value && value.length >= minChars) setTooShort(false);
+    if (value && value.trim().length >= minChars) setTooShort(false);
   }, [minChars, value, tooShort]);
 
   const handleSearch = useCallback(() => {
-    if (minChars && (value || '').length < minChars) {
+    if (minChars && (value || '').trim().length < minChars) {
       setTooShort(true);
     } else {
       onSearch(value);
