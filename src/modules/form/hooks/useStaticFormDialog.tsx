@@ -1,6 +1,5 @@
 import { TypedDocumentNode } from '@apollo/client';
 import {
-  Box,
   DialogActions,
   DialogContent,
   DialogProps,
@@ -85,7 +84,6 @@ export function useStaticFormDialog<
         >
           <DialogTitle>{title}</DialogTitle>
           <DialogContent>
-            <Box mt={2}>{beforeFormComponent}</Box>
             <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
               <Grid item xs>
                 <StaticForm
