@@ -28,7 +28,7 @@ import {
   useUpdateExternalFormSubmissionMutation,
 } from '@/types/gqlTypes';
 
-const ExternalSubmissionsUpdateForm = ({
+const ExternalSubmissionsModalContent = ({
   submission,
   onClose,
 }: {
@@ -193,7 +193,7 @@ const ExternalSubmissionsViewModal = ({
         </DialogContent>
       )}
       {submission && (
-        <ExternalSubmissionsUpdateForm
+        <ExternalSubmissionsModalContent
           submission={submission}
           onClose={onClose}
         />
