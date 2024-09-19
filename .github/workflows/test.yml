@@ -54,8 +54,6 @@ jobs:
         exitZeroOnChanges: true
         onlyChanged: true
     - name: Storybook test
-      with:
-        node-version-file: '.nvmrc'
       run: |
         npx playwright install --with-deps
         yarn build-storybook --quiet
