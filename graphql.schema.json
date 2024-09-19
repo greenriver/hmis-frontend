@@ -19812,7 +19812,7 @@
         "fields": [
           {
             "name": "clientId",
-            "description": "ID of Client that was generated from this submission, if any",
+            "description": "Client that was generated from this submission, if any",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -19864,7 +19864,7 @@
           },
           {
             "name": "enrollmentId",
-            "description": "ID of Enrollment that was generated from this submission, if any",
+            "description": "Enrollment that was generated from this submission, if any",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -19948,7 +19948,7 @@
           },
           {
             "name": "summaryFields",
-            "description": "summary fields for identifying the submission",
+            "description": "Key/value responses for certain summary-level form questions",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -45280,8 +45280,8 @@
           {
             "name": "EXTERNAL_FORM_SUBMISSION_REVIEW",
             "description": "External form submission review",
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "External forms are moving to a directly configured react form, rather than a static form."
           },
           {
             "name": "FORM_DEFINITION",

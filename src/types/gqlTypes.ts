@@ -2812,18 +2812,18 @@ export enum ExpelledReason {
 
 export type ExternalFormSubmission = {
   __typename?: 'ExternalFormSubmission';
-  /** ID of Client that was generated from this submission, if any */
+  /** Client that was generated from this submission, if any */
   clientId?: Maybe<Scalars['ID']['output']>;
   customDataElements: Array<CustomDataElement>;
   definition: FormDefinition;
-  /** ID of Enrollment that was generated from this submission, if any */
+  /** Enrollment that was generated from this submission, if any */
   enrollmentId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   spam?: Maybe<Scalars['Boolean']['output']>;
   status: ExternalFormSubmissionStatus;
   submittedAt: Scalars['ISO8601DateTime']['output'];
-  /** summary fields for identifying the submission */
+  /** Key/value responses for certain summary-level form questions */
   summaryFields: Array<KeyValue>;
   values?: Maybe<Scalars['JSON']['output']>;
 };
@@ -7161,7 +7161,10 @@ export enum StaticFormRole {
   AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
-  /** External form submission review */
+  /**
+   * External form submission review
+   * @deprecated External forms are moving to a directly configured react form, rather than a static form.
+   */
   ExternalFormSubmissionReview = 'EXTERNAL_FORM_SUBMISSION_REVIEW',
   /** Form definition */
   FormDefinition = 'FORM_DEFINITION',
