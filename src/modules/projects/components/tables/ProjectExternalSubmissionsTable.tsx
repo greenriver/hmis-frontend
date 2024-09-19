@@ -1,7 +1,7 @@
 import { Button, Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
-import React, { useCallback, useState } from 'react';
-import LoadingButton from '@/components/elements/LoadingButton';
+import { useCallback, useState } from 'react';
+import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
@@ -32,63 +32,88 @@ const ProjectExternalSubmissionsTable = ({
       awaitRefetchQueries: true,
     });
 
-  const getColumnDefs = useCallback(() => {
-    return [
-      {
-        header: 'ID',
-        render: (s: ExternalFormSubmissionSummaryFragment) => s.id,
-      },
-      {
-        header: 'Status',
-        linkTreatment: false,
-        render: (s: ExternalFormSubmissionSummaryFragment) => {
-          const isNew = s.status === ExternalFormSubmissionStatus.New;
-          return (
-            <>
-              <Chip
-                label={capitalize(s.status)}
-                size='small'
-                color={isNew ? 'primary' : 'default'}
-                variant={isNew ? 'filled' : 'outlined'}
-                sx={isNew ? {} : { color: theme.palette.text.secondary }}
-              />
-              {s.spam && (
-                <Chip
-                  label='Spam'
-                  size='small'
-                  color='error'
-                  variant='outlined'
-                  sx={{ ml: 1, color: theme.palette.error.dark }}
-                />
-              )}
-            </>
-          );
+  const getColumnDefs = useCallback(
+    (
+      rows: ExternalFormSubmissionSummaryFragment[]
+    ): ColumnDef<ExternalFormSubmissionSummaryFragment>[] => {
+      // Get all unique "summary keys"
+      const summaryKeys = new Set<string>();
+      rows.forEach(({ summaryFields }) =>
+        summaryFields.forEach(({ key }) => summaryKeys.add(key))
+      );
+
+      // Add one column definition for each summary key
+      const defs: ColumnDef<ExternalFormSubmissionSummaryFragment>[] =
+        Array.from(summaryKeys)
+          .sort()
+          .map((fieldKey) => ({
+            key: fieldKey,
+            header: fieldKey,
+            render: ({
+              summaryFields,
+            }: ExternalFormSubmissionSummaryFragment) =>
+              summaryFields.find(({ key }) => key === fieldKey)?.value,
+          }));
+
+      return [
+        {
+          header: 'ID',
+          render: (s: ExternalFormSubmissionSummaryFragment) => s.id,
         },
-      },
-      {
-        header: 'Date Submitted',
-        linkTreatment: false,
-        render: (s: ExternalFormSubmissionSummaryFragment) => (
-          <RelativeDateTableCellContents
-            dateTimeString={s.submittedAt}
-            horizontal
-          />
-        ),
-      },
-      {
-        header: 'Action',
-        render: (s: ExternalFormSubmissionSummaryFragment) => (
-          <Button
-            variant='outlined'
-            onClick={() => setSelectedId(s.id)}
-            disabled={bulkLoading}
-          >
-            View
-          </Button>
-        ),
-      },
-    ];
-  }, [setSelectedId, bulkLoading]);
+        {
+          header: 'Status',
+          linkTreatment: false,
+          render: ({ status, spam }: ExternalFormSubmissionSummaryFragment) => {
+            const isNew = status === ExternalFormSubmissionStatus.New;
+            return (
+              <>
+                <Chip
+                  label={capitalize(status)}
+                  size='small'
+                  color={isNew ? 'primary' : 'default'}
+                  variant={isNew ? 'filled' : 'outlined'}
+                  sx={isNew ? {} : { color: theme.palette.text.secondary }}
+                />
+                {spam && (
+                  <Chip
+                    label='Spam'
+                    size='small'
+                    color='error'
+                    variant='outlined'
+                    sx={{ ml: 1, color: theme.palette.error.dark }}
+                  />
+                )}
+              </>
+            );
+          },
+        },
+        {
+          header: 'Date Submitted',
+          linkTreatment: false,
+          render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) => (
+            <RelativeDateTableCellContents
+              dateTimeString={submittedAt}
+              horizontal
+            />
+          ),
+        },
+        ...defs,
+        {
+          header: 'Action',
+          render: ({ id }: ExternalFormSubmissionSummaryFragment) => (
+            <Button
+              variant='outlined'
+              onClick={() => setSelectedId(id)}
+              disabled={bulkLoading}
+            >
+              View
+            </Button>
+          ),
+        },
+      ];
+    },
+    [setSelectedId, bulkLoading]
+  );
 
   const filters = useFilters({
     type: 'ExternalFormSubmissionFilterOptions',

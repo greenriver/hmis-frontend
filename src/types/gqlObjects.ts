@@ -3042,6 +3042,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'ExternalFormSubmission',
     fields: [
+      { name: 'clientId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
       {
         name: 'id',
         type: {
@@ -4281,6 +4286,20 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'youthVetBedInventory',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
+    ],
+  },
+  {
+    name: 'KeyValue',
+    fields: [
+      {
+        name: 'key',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      { name: 'value', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {

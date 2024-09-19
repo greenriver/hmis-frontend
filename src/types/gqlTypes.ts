@@ -2819,13 +2819,19 @@ export enum ExpelledReason {
 
 export type ExternalFormSubmission = {
   __typename?: 'ExternalFormSubmission';
+  /** Client that was generated from this submission, if any */
+  clientId?: Maybe<Scalars['ID']['output']>;
   customDataElements: Array<CustomDataElement>;
   definition: FormDefinition;
+  /** Enrollment that was generated from this submission, if any */
+  enrollmentId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   spam?: Maybe<Scalars['Boolean']['output']>;
   status: ExternalFormSubmissionStatus;
   submittedAt: Scalars['ISO8601DateTime']['output'];
+  /** Key/value responses for certain summary-level form questions */
+  summaryFields: Array<KeyValue>;
   values?: Maybe<Scalars['JSON']['output']>;
 };
 
@@ -3893,6 +3899,12 @@ export enum ItemType {
   Text = 'TEXT',
   TimeOfDay = 'TIME_OF_DAY',
 }
+
+export type KeyValue = {
+  __typename?: 'KeyValue';
+  key: Scalars['String']['output'];
+  value?: Maybe<Scalars['String']['output']>;
+};
 
 /** HUD LastGradeCompleted (R4.1) */
 export enum LastGradeCompleted {
@@ -7161,7 +7173,10 @@ export enum StaticFormRole {
   AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
-  /** External form submission review */
+  /**
+   * External form submission review
+   * @deprecated External forms are moving to a directly configured react form, rather than a static form.
+   */
   ExternalFormSubmissionReview = 'EXTERNAL_FORM_SUBMISSION_REVIEW',
   /** Form definition */
   FormDefinition = 'FORM_DEFINITION',
@@ -19948,6 +19963,13 @@ export type ExternalFormSubmissionSummaryFragment = {
   spam?: boolean | null;
   status: ExternalFormSubmissionStatus;
   notes?: string | null;
+  enrollmentId?: string | null;
+  clientId?: string | null;
+  summaryFields: Array<{
+    __typename?: 'KeyValue';
+    key: string;
+    value?: string | null;
+  }>;
 };
 
 export type ExternalFormSubmissionFieldsFragment = {
@@ -19958,6 +19980,8 @@ export type ExternalFormSubmissionFieldsFragment = {
   spam?: boolean | null;
   status: ExternalFormSubmissionStatus;
   notes?: string | null;
+  enrollmentId?: string | null;
+  clientId?: string | null;
   definition: {
     __typename?: 'FormDefinition';
     id: string;
@@ -20462,6 +20486,11 @@ export type ExternalFormSubmissionFieldsFragment = {
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
+  summaryFields: Array<{
+    __typename?: 'KeyValue';
+    key: string;
+    value?: string | null;
+  }>;
 };
 
 export type UpdateExternalFormSubmissionMutationVariables = Exact<{
@@ -20480,6 +20509,13 @@ export type UpdateExternalFormSubmissionMutation = {
       spam?: boolean | null;
       status: ExternalFormSubmissionStatus;
       notes?: string | null;
+      enrollmentId?: string | null;
+      clientId?: string | null;
+      summaryFields: Array<{
+        __typename?: 'KeyValue';
+        key: string;
+        value?: string | null;
+      }>;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -20525,6 +20561,13 @@ export type DeleteExternalFormSubmissionMutation = {
       spam?: boolean | null;
       status: ExternalFormSubmissionStatus;
       notes?: string | null;
+      enrollmentId?: string | null;
+      clientId?: string | null;
+      summaryFields: Array<{
+        __typename?: 'KeyValue';
+        key: string;
+        value?: string | null;
+      }>;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -20568,6 +20611,13 @@ export type GetProjectExternalFormSubmissionsQuery = {
         spam?: boolean | null;
         status: ExternalFormSubmissionStatus;
         notes?: string | null;
+        enrollmentId?: string | null;
+        clientId?: string | null;
+        summaryFields: Array<{
+          __typename?: 'KeyValue';
+          key: string;
+          value?: string | null;
+        }>;
       }>;
     };
   } | null;
@@ -20587,6 +20637,8 @@ export type GetExternalFormSubmissionQuery = {
     spam?: boolean | null;
     status: ExternalFormSubmissionStatus;
     notes?: string | null;
+    enrollmentId?: string | null;
+    clientId?: string | null;
     definition: {
       __typename?: 'FormDefinition';
       id: string;
@@ -21091,6 +21143,11 @@ export type GetExternalFormSubmissionQuery = {
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
+    summaryFields: Array<{
+      __typename?: 'KeyValue';
+      key: string;
+      value?: string | null;
+    }>;
   } | null;
 };
 
@@ -36192,6 +36249,12 @@ export const ExternalFormSubmissionSummaryFragmentDoc = gql`
     spam
     status
     notes
+    enrollmentId
+    clientId
+    summaryFields {
+      key
+      value
+    }
   }
 `;
 export const ExternalFormSubmissionFieldsFragmentDoc = gql`
