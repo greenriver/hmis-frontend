@@ -28,3 +28,9 @@ mutation DeleteExternalFormSubmission($id: ID!) {
     }
   }
 }
+
+mutation RefreshExternalSubmissions {
+  refreshExternalSubmissions {
+    success
+  }
+}
