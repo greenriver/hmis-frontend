@@ -21,8 +21,8 @@ import {
 } from '../form/util/formUtil';
 
 import { DashboardEnrollment } from './types';
-import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
 import { ColumnDef } from '@/components/elements/table/types';
+import { ClientAssessmentType } from '@/modules/client/components/clientDashboard/enrollments/ClientAssessments';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {

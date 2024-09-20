@@ -28,7 +28,6 @@ const config = {
     });
   },
   stories: [
-    '../src/**/*.stories.mdx',
     {
       directory: '../src/components',
       files: '**/*.stories.*',
