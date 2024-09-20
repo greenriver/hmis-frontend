@@ -1,5 +1,7 @@
 const { mergeConfig } = require('vite');
 const { resolve } = require('path');
+import react from '@vitejs/plugin-react';
+
 const config = {
   async viteFinal(config) {
     return mergeConfig(config, {
@@ -11,6 +13,16 @@ const config = {
             __dirname,
             './../src/test/__mocks__/activeStorageBlob.js'
           ),
+        },
+      },
+      build: {
+        rollupOptions: {
+          // this doesn't come over in merge for some reason, so re-define it here
+          onwarn(warning, defaultHandler) {
+            if (warning.code === 'SOURCEMAP_ERROR') return;
+            if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+            defaultHandler(warning);
+          },
         },
       },
     });
@@ -28,15 +40,17 @@ const config = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    '@storybook/addon-mdx-gfm',
     'storybook-addon-apollo-client',
     '@chromatic-com/storybook',
+    '@storybook/addon-a11y',
   ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
   },
-  core: {},
+  core: {
+    builder: '@storybook/builder-vite',
+  },
   typescript: {
     check: false,
     skipBabel: true,
