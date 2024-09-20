@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 import EnrollmentDetails from '../EnrollmentDetails';
 
+import EnrollmentReminders from '@/components/clientDashboard/enrollments/EnrollmentReminders';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAlertHouseholdWrapper } from '@/modules/client/components/clientAlerts/ClientAlertWrappers';
-import EnrollmentReminders from '@/modules/client/components/clientDashboard/enrollments/EnrollmentReminders';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
 import StaffAssignmentCard from '@/modules/enrollment/components/staffAssignment/StaffAssignmentCard';

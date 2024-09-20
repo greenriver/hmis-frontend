@@ -11,10 +11,10 @@ import { AssessmentForPopulation } from '../types';
 import { getFieldOnAssessment, getPopulatableChildren } from '../util/formUtil';
 import { assessmentColumns } from '../util/recordPickerUtil';
 
+import AssessmentsForPopulationTable from '@/components/clientDashboard/enrollments/tables/AssessmentsForPopulationTable';
 import CommonDialog from '@/components/elements/CommonDialog';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { ColumnDef } from '@/components/elements/table/types';
-import AssessmentsForPopulationTable from '@/modules/client/components/clientDashboard/enrollments/tables/AssessmentsForPopulationTable';
 import HmisField from '@/modules/hmis/components/HmisField';
 import { AssessmentRole, FormItem, FormRole } from '@/types/gqlTypes';
 

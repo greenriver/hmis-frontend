@@ -28,12 +28,8 @@ const config = {
     });
   },
   stories: [
-    {
-      directory: '../src/components',
-      files: '**/*.stories.*',
-      titlePrefix: 'Components',
-    },
-    '../src/modules/**/*.stories.@(js|jsx|ts|tsx)',
+    // Use implicit paths for all stories
+    '../src/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [
     '@storybook/addon-links',
