@@ -64,6 +64,7 @@ const ClickToShow: React.FC<Props> = ({
       })}
       onClick={onToggle}
       size='small'
+      data-testid='clickToShow'
     >
       <Stack direction='row' alignItems='center' gap={0.8}>
         {hidden ? (
