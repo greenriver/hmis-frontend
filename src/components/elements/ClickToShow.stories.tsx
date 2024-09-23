@@ -16,6 +16,7 @@ export const Clicked: Story = {
   args: {
     children: 'Hidden Value',
     hiddenAriaLabel: 'Hidden, click to reveal',
+    shownAriaLabel: 'Shown, click to hide',
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -28,5 +29,6 @@ export const Clicked: Story = {
     await userEvent.click(btn);
 
     await expect(btn).toHaveTextContent('Hidden Value');
+    await expect(btn).toHaveAttribute('aria-label', 'Shown, click to hide');
   },
 };

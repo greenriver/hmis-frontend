@@ -44,7 +44,8 @@ const ClientSsn = ({
       variant={variant}
       hide={hide}
       onToggle={onToggle}
-      hiddenAriaLabel={`${client.id} SSN Hidden`}
+      hiddenAriaLabel={`SSN Hidden - Click to Show`}
+      shownAriaLabel={`SSN ${masked} - Click to Hide`}
     >
       {fullSsn}
     </ClickToShow>
