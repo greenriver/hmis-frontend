@@ -27,7 +27,13 @@ const config = {
       },
     });
   },
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: [
+    // Use implicit paths for all stories
+    '../src/**/*.stories.@(js|jsx|ts|tsx)',
+    // For a better structure, need to reorganize some things. Should first confirm approach that "src" has comment element components and "modules" have components for specific pages or modules, which is the vague pattern right now.
+    // - Move src/components/clientDashboard components into module(s)
+    // - Move src/components/pages into modules too?
+  ],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',

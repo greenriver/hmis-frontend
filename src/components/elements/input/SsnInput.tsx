@@ -4,7 +4,7 @@ import { isNil, padEnd, padStart } from 'lodash-es';
 import { useMemo } from 'react';
 
 import LabelWithContent from '../LabelWithContent';
-import MultiFieldInput from '../MultiFieldInput';
+import MultiFieldInput from './MultiFieldInput';
 
 import { DynamicInputCommonProps } from '@/modules/form/types';
 
