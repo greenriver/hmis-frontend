@@ -38,7 +38,12 @@ const ClientDobAge = ({
         (alwaysShow ? (
           dobComponent
         ) : (
-          <ClickToShow variant={variant} hide={hide} onToggle={onToggle}>
+          <ClickToShow
+            variant={variant}
+            hide={hide}
+            onToggle={onToggle}
+            hiddenAriaLabel={`${client.id} DOB Hidden`}
+          >
             {dobComponent}
           </ClickToShow>
         ))}

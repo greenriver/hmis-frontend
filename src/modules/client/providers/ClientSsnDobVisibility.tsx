@@ -66,6 +66,7 @@ export const ContextualSsnToggleButton: React.FC<ButtonProps> = (props) => (
         {...props}
         on={show}
         onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
+        aria-label={show ? 'Hide SSN' : 'Show SSN'}
       >
         <strong>SSN</strong>
       </VisibilityToggleButton>
@@ -80,6 +81,7 @@ export const ContextualDobToggleButton: React.FC<ButtonProps> = (props) => (
         {...props}
         on={show}
         onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
+        aria-label={show ? 'Hide DOB' : 'Show DOB'}
       >
         <strong>DOB</strong>
       </VisibilityToggleButton>

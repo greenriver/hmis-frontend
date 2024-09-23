@@ -40,7 +40,12 @@ const ClientSsn = ({
   );
   if (alwaysShow) return fullSsn;
   return (
-    <ClickToShow variant={variant} hide={hide} onToggle={onToggle}>
+    <ClickToShow
+      variant={variant}
+      hide={hide}
+      onToggle={onToggle}
+      hiddenAriaLabel={`${client.id} SSN Hidden`}
+    >
       {fullSsn}
     </ClickToShow>
   );
