@@ -1,7 +1,6 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Button, Stack, Typography, TypographyProps } from '@mui/material';
-import { Box } from '@mui/system';
 import { isNil } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -80,7 +79,7 @@ const ClickToShow: React.FC<Props> = ({
             {text}
           </Typography>
         ) : (
-          <Box>{children}</Box>
+          <>{children}</>
         )}
       </Stack>
     </Button>
