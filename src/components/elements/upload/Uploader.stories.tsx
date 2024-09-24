@@ -8,7 +8,6 @@ import Uploader from './UploaderBase';
 import { createDirectUploadMock, getFileMock } from '@/test/__mocks__/requests';
 
 export default {
-  title: 'Uploader',
   component: Uploader,
   parameters: {
     apolloClient: {

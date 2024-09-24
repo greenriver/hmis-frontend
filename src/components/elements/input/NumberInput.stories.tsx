@@ -4,7 +4,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import NumberInput from './NumberInput';
 
 export default {
-  title: 'Input Elements/NumberInput',
   component: NumberInput,
   argTypes: { label: { control: 'text' } },
   decorators: [
