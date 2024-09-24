@@ -1,4 +1,4 @@
-import { Button, Chip } from '@mui/material';
+import { Button, Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
@@ -147,7 +147,16 @@ const ProjectExternalSubmissionsTable = ({
         paginationItemName='submission'
         filters={filters}
         EnhancedTableToolbarProps={{
-          title: 'Form Submissions',
+          title: (
+            <Stack
+              direction='row'
+              justifyContent={'space-between'}
+              sx={{ width: '100%' }}
+            >
+              <Typography variant='h3'>Form Submissions</Typography>
+              <RefreshExternalSubmissionsButton />
+            </Stack>
+          ),
           renderBulkAction: (selectedIds, selectedRows) => (
             <LoadingButton
               onClick={() => {
@@ -162,7 +171,6 @@ const ProjectExternalSubmissionsTable = ({
               Bulk Review ({selectedRows.length}) Submissions
             </LoadingButton>
           ),
-          additionalActions: <RefreshExternalSubmissionsButton />,
         }}
       />
       {selectedId && (

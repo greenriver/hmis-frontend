@@ -9,7 +9,6 @@ export interface EnhancedTableToolbarProps<T> {
     selectedIds: readonly string[],
     selectedRows: T[]
   ) => ReactNode;
-  additionalActions?: ReactNode;
 }
 
 const EnhancedTableToolbar = <T extends { id: string }>({
@@ -17,7 +16,6 @@ const EnhancedTableToolbar = <T extends { id: string }>({
   title,
   renderBulkAction,
   rows,
-  additionalActions,
 }: EnhancedTableToolbarProps<T>) => {
   const selectedRows = useMemo(() => {
     return rows.filter((r) => selectedIds.includes(r.id));
@@ -60,12 +58,9 @@ const EnhancedTableToolbar = <T extends { id: string }>({
         ) : (
           title
         )}
-        <Stack direction='row' gap={1}>
-          {selectedIds.length > 0 &&
-            renderBulkAction &&
-            renderBulkAction(selectedIds, selectedRows)}
-          {additionalActions}
-        </Stack>
+        {selectedIds.length > 0 &&
+          renderBulkAction &&
+          renderBulkAction(selectedIds, selectedRows)}
       </Stack>
     </Toolbar>
   );
