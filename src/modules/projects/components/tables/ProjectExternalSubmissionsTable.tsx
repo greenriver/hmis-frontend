@@ -1,4 +1,4 @@
-import { Button, Chip } from '@mui/material';
+import { Button, Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
@@ -8,6 +8,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import ExternalSubmissionsViewModal from '@/modules/projects/components/ExternalSubmissionsViewModal';
+import RefreshExternalSubmissionsButton from '@/modules/projects/components/RefreshExternalSubmissionsButton';
 import {
   ExternalFormSubmissionFilterOptions,
   ExternalFormSubmissionStatus,
@@ -146,7 +147,16 @@ const ProjectExternalSubmissionsTable = ({
         paginationItemName='submission'
         filters={filters}
         EnhancedTableToolbarProps={{
-          title: 'Form Submissions',
+          title: (
+            <Stack
+              direction='row'
+              justifyContent={'space-between'}
+              sx={{ width: '100%' }}
+            >
+              <Typography variant='h3'>Form Submissions</Typography>
+              <RefreshExternalSubmissionsButton />
+            </Stack>
+          ),
           renderBulkAction: (selectedIds, selectedRows) => (
             <LoadingButton
               onClick={() => {
