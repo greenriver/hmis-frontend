@@ -1,6 +1,7 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Button, ButtonProps, useTheme } from '@mui/material';
+import { Box, Button, ButtonProps, useTheme } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import { isNil } from 'lodash-es';
 import { PropsWithChildren } from 'react';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
@@ -62,14 +63,18 @@ const VisibilityToggleButton: React.FC<
 export const ContextualSsnToggleButton: React.FC<ButtonProps> = (props) => (
   <SsnShowContext.Consumer>
     {([show, setShow]) => (
-      <VisibilityToggleButton
-        {...props}
-        on={show}
-        onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
-        aria-label={show ? 'Hide SSN' : 'Show SSN'}
-      >
-        <strong>SSN</strong>
-      </VisibilityToggleButton>
+      <>
+        <VisibilityToggleButton
+          {...props}
+          on={show}
+          onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
+          aria-hidden
+        >
+          <strong>SSN</strong>
+        </VisibilityToggleButton>
+        {/* Hide the toggle button since it doesn't make sense in a screen reader context. Add a visually hidden plaintext column header so the screen reader behaves correctly when navigating within the table. */}
+        <Box sx={visuallyHidden}>SSN</Box>
+      </>
     )}
   </SsnShowContext.Consumer>
 );
@@ -77,14 +82,18 @@ export const ContextualSsnToggleButton: React.FC<ButtonProps> = (props) => (
 export const ContextualDobToggleButton: React.FC<ButtonProps> = (props) => (
   <DobShowContext.Consumer>
     {([show, setShow]) => (
-      <VisibilityToggleButton
-        {...props}
-        on={show}
-        onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
-        aria-label={show ? 'Hide DOB' : 'Show DOB'}
-      >
-        <strong>DOB</strong>
-      </VisibilityToggleButton>
+      <>
+        <VisibilityToggleButton
+          {...props}
+          on={show}
+          onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
+          aria-hidden
+        >
+          <strong>DOB</strong>
+        </VisibilityToggleButton>
+        {/* Hide the toggle button since it doesn't make sense in a screen reader context. Add a visually hidden plaintext column header so the screen reader behaves correctly when navigating within the table. */}
+        <Box sx={visuallyHidden}>DOB</Box>
+      </>
     )}
   </DobShowContext.Consumer>
 );
