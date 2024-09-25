@@ -41,7 +41,6 @@ const ExternalSubmissionsModalContent = ({
   onClose: VoidFunction;
 }) => {
   const submissionValues = useMemo(() => {
-    if (!submission) return {};
     const itemMap = getItemMap(submission.definition.definition, true);
     const submissionValues: FormValues = {};
     Object.entries(itemMap).forEach(([key, item]) => {
@@ -96,7 +95,7 @@ const ExternalSubmissionsModalContent = ({
 
   const deleteButton = useMemo(
     () =>
-      submission && (
+      submission.status === ExternalFormSubmissionStatus.New && (
         <DeleteMutationButton<
           DeleteExternalFormSubmissionMutation,
           DeleteExternalFormSubmissionMutationVariables
@@ -143,12 +142,10 @@ const ExternalSubmissionsModalContent = ({
             </Alert>
           )}
           <Card sx={{ p: 2 }}>
-            {submission && (
-              <DynamicView
-                values={submissionValues}
-                definition={submission.definition.definition}
-              />
-            )}
+            <DynamicView
+              values={submissionValues}
+              definition={submission.definition.definition}
+            />
           </Card>
           <Stack gap={1}>
             <TextInput
