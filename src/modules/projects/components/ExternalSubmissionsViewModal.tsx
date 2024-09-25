@@ -1,21 +1,26 @@
 import {
+  Alert,
   Card,
   DialogActions,
   DialogContent,
   DialogTitle,
   Stack,
+  Typography,
 } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
+import Loading from '@/components/elements/Loading';
+import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { FormValues } from '@/modules/form/types';
 import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
-import { customDataElementValueForKey } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteExternalFormSubmissionDocument,
   DeleteExternalFormSubmissionMutation,
@@ -23,32 +28,34 @@ import {
   ExternalFormSubmissionFieldsFragment,
   ExternalFormSubmissionInput,
   ExternalFormSubmissionStatus,
-  FormDefinitionFieldsFragment,
+  useGetExternalFormSubmissionQuery,
   useUpdateExternalFormSubmissionMutation,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
-const ExternalSubmissionsViewModal = ({
-  selected,
+const ExternalSubmissionsModalContent = ({
+  submission,
   onClose,
-  definition,
 }: {
-  selected: ExternalFormSubmissionFieldsFragment;
+  submission: ExternalFormSubmissionFieldsFragment;
   onClose: VoidFunction;
-  definition: FormDefinitionFieldsFragment;
 }) => {
   const submissionValues = useMemo(() => {
-    if (!selected || !definition) return {};
-    const itemMap = getItemMap(definition.definition, true);
+    if (!submission) return {};
+    const itemMap = getItemMap(submission.definition.definition, true);
     const submissionValues: FormValues = {};
-    Object.keys(itemMap).forEach((key) => {
-      const item = itemMap[key];
-      const customFieldKey = item.mapping?.customFieldKey;
-      if (!customFieldKey) return;
+    Object.entries(itemMap).forEach(([key, item]) => {
+      const { customFieldKey, recordType, fieldName } = item.mapping || {};
+      const recordAttrKey =
+        recordType && fieldName
+          ? `${HmisEnums.RelatedRecordType[recordType]}.${fieldName}`
+          : '';
 
-      const value = customDataElementValueForKey(
-        customFieldKey,
-        selected.customDataElements
-      );
+      if (!customFieldKey && !recordAttrKey) return;
+
+      const value = customFieldKey
+        ? submission.values[customFieldKey]
+        : submission.values[recordAttrKey];
 
       // if item has a picklist, convert value to PickListOption(s) so we can display the readable label
       if (item.pickListOptions) {
@@ -62,18 +69,18 @@ const ExternalSubmissionsViewModal = ({
       }
     });
     return submissionValues;
-  }, [selected, definition]);
+  }, [submission]);
 
-  const [notes, setNotes] = useState(selected.notes || '');
+  const [notes, setNotes] = useState(submission.notes || '');
   const [status, setStatus] = useState(
-    selected.status || ExternalFormSubmissionStatus.New
+    submission.status || ExternalFormSubmissionStatus.New
   );
-  const [spam, setSpam] = useState(selected.spam || false);
+  const [spam, setSpam] = useState(submission.spam || false);
 
   const [updateSubmission, { loading, error }] =
     useUpdateExternalFormSubmissionMutation({
       variables: {
-        id: selected.id,
+        id: submission.id,
         input: {
           notes: notes,
           status: status,
@@ -87,41 +94,61 @@ const ExternalSubmissionsViewModal = ({
       },
     });
 
-  if (error) throw error;
-
   const deleteButton = useMemo(
     () =>
-      selected && (
+      submission && (
         <DeleteMutationButton<
           DeleteExternalFormSubmissionMutation,
           DeleteExternalFormSubmissionMutationVariables
         >
           queryDocument={DeleteExternalFormSubmissionDocument}
-          variables={{ id: selected.id }}
+          variables={{ id: submission.id }}
           idPath={'deleteExternalFormSubmission.externalFormSubmission.id'}
           recordName='Submission'
           onSuccess={() => {
             cache.evict({
-              id: `ExternalFormSubmission:${selected.id}`,
+              id: `ExternalFormSubmission:${submission.id}`,
             });
             onClose();
           }}
           onlyIcon
         />
       ),
-    [onClose, selected]
+    [onClose, submission]
   );
 
+  if (error) throw error;
+
   return (
-    <CommonDialog open={!!selected && !!definition} fullWidth onClose={onClose}>
-      <DialogTitle>Review Submission</DialogTitle>
+    <>
       <DialogContent>
         <Stack gap={2} sx={{ my: 2 }}>
+          {submission.enrollmentId && submission.clientId && (
+            <Alert severity='success'>
+              <Typography variant='body2'>
+                This form submission is linked to{' '}
+                <RouterLink
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                    {
+                      clientId: submission.clientId,
+                      enrollmentId: submission.enrollmentId,
+                    }
+                  )}
+                  openInNew
+                >
+                  Enrollment {submission.enrollmentId}
+                </RouterLink>
+              </Typography>
+            </Alert>
+          )}
           <Card sx={{ p: 2 }}>
-            <DynamicView
-              values={submissionValues}
-              definition={definition.definition}
-            />
+            {submission && (
+              <DynamicView
+                values={submissionValues}
+                definition={submission.definition.definition}
+              />
+            )}
           </Card>
           <Stack gap={1}>
             <TextInput
@@ -131,22 +158,26 @@ const ExternalSubmissionsViewModal = ({
               minRows={2}
               onChange={(event) => setNotes(event.target.value)}
             />
-            <LabeledCheckbox
-              value={status === ExternalFormSubmissionStatus.Reviewed}
-              label='Mark as Reviewed'
-              onChange={(_e, checked) => {
-                setStatus(
-                  checked
-                    ? ExternalFormSubmissionStatus.Reviewed
-                    : ExternalFormSubmissionStatus.New
-                );
-              }}
-            />
-            <LabeledCheckbox
-              value={spam}
-              label='Mark as Spam'
-              onChange={(_e, checked) => setSpam(checked)}
-            />
+            {submission.status === ExternalFormSubmissionStatus.New && (
+              <>
+                <LabeledCheckbox
+                  value={status === ExternalFormSubmissionStatus.Reviewed}
+                  label='Mark as Reviewed'
+                  onChange={(_e, checked) => {
+                    setStatus(
+                      checked
+                        ? ExternalFormSubmissionStatus.Reviewed
+                        : ExternalFormSubmissionStatus.New
+                    );
+                  }}
+                />
+                <LabeledCheckbox
+                  value={spam}
+                  label='Mark as Spam'
+                  onChange={(_e, checked) => setSpam(checked)}
+                />
+              </>
+            )}
           </Stack>
         </Stack>
       </DialogContent>
@@ -158,6 +189,43 @@ const ExternalSubmissionsViewModal = ({
           otherActions={deleteButton}
         />
       </DialogActions>
+    </>
+  );
+};
+
+const ExternalSubmissionsViewModal = ({
+  submissionId,
+  onClose,
+}: {
+  submissionId: string;
+  onClose: VoidFunction;
+}) => {
+  const {
+    data: { externalFormSubmission: submission } = {},
+    loading: loading,
+    error: error,
+  } = useGetExternalFormSubmissionQuery({
+    variables: {
+      id: submissionId,
+    },
+  });
+
+  if (error) throw error;
+
+  return (
+    <CommonDialog open={!!submissionId} fullWidth onClose={onClose}>
+      <DialogTitle>Submission {submissionId}</DialogTitle>
+      {loading && (
+        <DialogContent>
+          <Loading />
+        </DialogContent>
+      )}
+      {submission && (
+        <ExternalSubmissionsModalContent
+          submission={submission}
+          onClose={onClose}
+        />
+      )}
     </CommonDialog>
   );
 };

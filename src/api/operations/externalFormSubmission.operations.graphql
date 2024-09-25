@@ -4,7 +4,7 @@ mutation UpdateExternalFormSubmission(
 ) {
   updateExternalFormSubmission(id: $id, input: $input) {
     externalFormSubmission {
-      ...ExternalFormSubmissionFields
+      ...ExternalFormSubmissionSummary
     }
     errors {
       ...ValidationErrorFields
@@ -12,13 +12,25 @@ mutation UpdateExternalFormSubmission(
   }
 }
 
+mutation BulkReviewExternalSubmissions($ids: [ID!]!) {
+  bulkReviewExternalSubmissions(externalSubmissionIds: $ids) {
+    success
+  }
+}
+
 mutation DeleteExternalFormSubmission($id: ID!) {
   deleteExternalFormSubmission(id: $id) {
     externalFormSubmission {
-      ...ExternalFormSubmissionFields
+      ...ExternalFormSubmissionSummary
     }
     errors {
       ...ValidationErrorFields
     }
+  }
+}
+
+mutation RefreshExternalSubmissions {
+  refreshExternalSubmissions {
+    success
   }
 }

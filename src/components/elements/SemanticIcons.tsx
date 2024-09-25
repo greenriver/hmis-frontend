@@ -22,6 +22,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Home from '@mui/icons-material/Home';
 import ImageIcon from '@mui/icons-material/Image';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MediationRoundedIcon from '@mui/icons-material/MediationRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import PeopleIcon from '@mui/icons-material/People';
@@ -78,4 +79,5 @@ export {
   ArrowDropUpRoundedIcon as UpIcon,
   ArrowDropDownRoundedIcon as DownIcon,
   MediationRoundedIcon as ConditionalIcon,
+  LocationOnIcon as FormLocationIcon,
 };
