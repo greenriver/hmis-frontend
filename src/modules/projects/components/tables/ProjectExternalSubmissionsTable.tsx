@@ -26,7 +26,7 @@ const ProjectExternalSubmissionsTable = ({
   projectId: string;
   formDefinitionIdentifier: string;
 }) => {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [modalOpenId, setModalOpenId] = useState<string | null>(null);
 
   const [bulkUpdate, { loading: bulkLoading, error: bulkError }] =
     useBulkReviewExternalSubmissionsMutation({
@@ -105,7 +105,7 @@ const ProjectExternalSubmissionsTable = ({
           render: ({ id }: ExternalFormSubmissionSummaryFragment) => (
             <Button
               variant='outlined'
-              onClick={() => setSelectedId(id)}
+              onClick={() => setModalOpenId(id)}
               disabled={bulkLoading}
             >
               View
@@ -114,7 +114,7 @@ const ProjectExternalSubmissionsTable = ({
         },
       ];
     },
-    [setSelectedId, bulkLoading]
+    [setModalOpenId, bulkLoading]
   );
 
   const filters = useFilters({
@@ -173,10 +173,10 @@ const ProjectExternalSubmissionsTable = ({
           ),
         }}
       />
-      {selectedId && (
+      {modalOpenId && (
         <ExternalSubmissionsViewModal
-          submissionId={selectedId}
-          onClose={() => setSelectedId(null)}
+          submissionId={modalOpenId}
+          onClose={() => setModalOpenId(null)}
         />
       )}
     </>
