@@ -54,10 +54,7 @@ const useAssessmentFormDefinition = ({
     };
   }, [data]);
 
-  if (error)
-    throw new Error(
-      `Failed to fetch form definition: ${formDefinitionId || role || ''}`
-    );
+  if (error) throw error;
 
   return { formDefinition, itemMap, loading };
 };
