@@ -26,10 +26,7 @@ const useFormDefinition = (
     };
   }, [data?.recordFormDefinition, localDefinition]);
 
-  if (error)
-    throw new Error(
-      `Failed to fetch form definition for role ${queryVariables.role}`
-    );
+  if (error) throw error;
 
   return { formDefinition, itemMap, loading };
 };
