@@ -57,7 +57,7 @@ const ExternalSubmissionsModalContent = ({
         : submission.values[recordAttrKey];
 
       // if item has a picklist, convert value to PickListOption(s) so we can display the readable label
-      if (item.pickListOptions) {
+      if (item.pickListOptions || item.pickListReference) {
         if (Array.isArray(value)) {
           submissionValues[key] = value.map((v) => getOptionValue(v, item));
         } else {
