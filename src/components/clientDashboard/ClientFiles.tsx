@@ -8,6 +8,7 @@ import PageTitle from '../layout/PageTitle';
 import FileDialog from './files/FileModal';
 import useFileActions from './files/useFileActions';
 
+import { ClientDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -18,7 +19,6 @@ import {
   useClientPermissions,
   useHasClientPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
-import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientFilesDocument,
   GetClientFilesQuery,

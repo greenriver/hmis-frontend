@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 
 import { useCallback, useMemo, useState } from 'react';
+import { cache } from '@/app/apolloClient';
 import { ClickToCopyButton } from '@/components/elements/ClickToCopy';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -21,7 +22,6 @@ import {
   dataUrlForClientImage,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
 import {
   ClientFieldsFragment,
   useCreateScanCardMutation,

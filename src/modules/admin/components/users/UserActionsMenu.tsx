@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
+import { AdminDashboardRoutes } from '@/app/routes';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
 
 interface Props {

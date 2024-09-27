@@ -17,12 +17,12 @@ import { flatten, isEmpty } from 'lodash-es';
 import React, { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { Routes } from '@/app/routes';
 import TextInput from '@/components/elements/input/TextInput';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientName from '@/modules/client/components/ClientName';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { Routes } from '@/routes/routes';
 import {
   AddRecentItemMutationVariables,
   RecentItemType,

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import apolloClient from '@/providers/apolloClient';
+import apolloClient from '@/app/apolloClient';
 import { ProjectCocCountFragmentDoc } from '@/types/gqlTypes';
 
 export function useProjectCocsCountFromCache(projectId?: string) {

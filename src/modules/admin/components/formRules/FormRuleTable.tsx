@@ -1,10 +1,10 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, TableCell, TableRow } from '@mui/material';
 import React from 'react';
+import { cache } from '@/app/apolloClient';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { FormRule } from '@/modules/admin/components/formRules/FormRule';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { cache } from '@/providers/apolloClient';
 import {
   ActiveStatus,
   FormRole,

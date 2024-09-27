@@ -1,12 +1,12 @@
 import { alpha, Theme } from '@mui/material';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { Routes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
 import { PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS } from '@/modules/admin/components/AdminDashboard';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { Routes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
 
 export const TOOLBAR_MENU_ITEMS: (NavItem<RootPermissionsFragment> & {

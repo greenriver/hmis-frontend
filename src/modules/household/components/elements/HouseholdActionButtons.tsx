@@ -3,11 +3,11 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import { Stack } from '@mui/material';
 import { useMemo } from 'react';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { HouseholdIcon } from '@/components/elements/SemanticIcons';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

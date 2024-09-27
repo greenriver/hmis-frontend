@@ -3,17 +3,17 @@ import { merge, startCase } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
-import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
-import useCurrentPath from '@/hooks/useCurrentPath';
-import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
-import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   AdminDashboardRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
-} from '@/routes/routes';
+} from '@/app/routes';
+import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
+import useCurrentPath from '@/hooks/useCurrentPath';
+import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
+import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
 type CrumbConfig = {
   [x: string]: {

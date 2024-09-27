@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { cache } from '@/app/apolloClient';
 import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -7,7 +8,6 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
 import {
   GetProjectReferralRequestsDocument,
   GetProjectReferralRequestsQuery,

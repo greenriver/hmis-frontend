@@ -1,8 +1,8 @@
 import { Paper, Stack } from '@mui/material';
 import ClientMergeCandidatesTable from './ClientMergeCandidatesTable';
+import { AdminDashboardRoutes } from '@/app/routes';
 import BackButtonLink from '@/components/elements/BackButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
-import { AdminDashboardRoutes } from '@/routes/routes';
 
 const AdminClientMerge: React.FC = () => {
   return (

@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
+import { AdminDashboardRoutes } from '@/app/routes';
 import {
   ErrorState,
   emptyErrorState,
   partitionValidations,
 } from '@/modules/errors/util';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import { usePublishFormDefinitionMutation } from '@/types/gqlTypes';
 
 export function usePublishForm({

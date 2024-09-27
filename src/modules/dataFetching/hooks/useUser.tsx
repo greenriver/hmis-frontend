@@ -1,4 +1,4 @@
-import apolloClient from '@/providers/apolloClient';
+import apolloClient from '@/app/apolloClient';
 import { UserFieldsFragmentDoc, useGetUserQuery } from '@/types/gqlTypes';
 
 export function useUser(userId?: string) {

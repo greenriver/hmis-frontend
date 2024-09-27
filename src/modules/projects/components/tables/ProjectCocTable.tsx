@@ -3,13 +3,13 @@ import { isNil } from 'lodash-es';
 
 import { useProjectDashboardContext } from '../ProjectDashboard';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectProjectCocsDocument,

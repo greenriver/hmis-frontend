@@ -3,6 +3,7 @@ import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import ConsumerSummaryReportButton from './ConsumerSummaryReportButton';
+import { Routes } from '@/app/routes';
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
@@ -14,7 +15,6 @@ import {
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ReferralPostingDetailFieldsFragment,

@@ -3,6 +3,7 @@ import { Stack } from '@mui/system';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { generatePath } from 'react-router-dom';
 import { usePublishForm } from './usePublishForm';
+import { AdminDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
@@ -31,7 +32,6 @@ import {
   createValuesForSubmit,
 } from '@/modules/form/util/formUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormStatus,
   useGetFormDefinitionFieldsForEditorQuery,

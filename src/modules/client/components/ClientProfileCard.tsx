@@ -17,6 +17,7 @@ import { useCallback, useRef, useState } from 'react';
 import ClientAddress from './ClientAddress';
 import ClientCardImageElement from './ClientCardImageElement';
 import ClientContactPoint from './ClientContactPoint';
+import { ClientDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
@@ -33,7 +34,6 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,

@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
+import { cache } from '@/app/apolloClient';
+import { ClientDashboardRoutes } from '@/app/routes';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
-import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   FileFieldsFragment,
   RecordFormRole,

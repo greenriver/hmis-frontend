@@ -3,6 +3,8 @@ import { Stack } from '@mui/system';
 import React, { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
+import { cache } from '@/app/apolloClient';
+import { AdminDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import EditIconButton from '@/components/elements/EditIconButton';
 import PageTitle from '@/components/layout/PageTitle';
@@ -10,8 +12,6 @@ import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutati
 
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { cache } from '@/providers/apolloClient';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   DeleteFormDefinitionDraftDocument,
   DeleteFormDefinitionDraftMutation,

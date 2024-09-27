@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useHasPermissions } from './useHasPermissionsHooks';
 
-import apolloClient from '@/providers/apolloClient';
+import apolloClient from '@/app/apolloClient';
 import {
   ClientAccess,
   ClientAccessFieldsFragmentDoc,

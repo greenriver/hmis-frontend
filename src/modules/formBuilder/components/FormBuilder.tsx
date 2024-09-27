@@ -9,6 +9,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 
 import { v4 } from 'uuid';
 import { useUpdateForm } from './useUpdateForm';
+import { AdminDashboardRoutes } from '@/app/routes';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import useMaxPageWidth from '@/hooks/useMaxPageWidth';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -17,8 +18,6 @@ import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeade
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemDrawer from '@/modules/formBuilder/components/itemEditor/FormItemDrawer';
-
-import { AdminDashboardRoutes } from '@/routes/routes';
 
 import {
   FormDefinitionFieldsForEditorFragment,

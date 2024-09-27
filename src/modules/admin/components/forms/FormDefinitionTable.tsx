@@ -2,9 +2,9 @@ import { Chip } from '@mui/material';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import FormTypeChip from './FormTypeChip';
+import { AdminDashboardRoutes } from '@/app/routes';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetFormIdentifiersDocument,
   GetFormIdentifiersQuery,

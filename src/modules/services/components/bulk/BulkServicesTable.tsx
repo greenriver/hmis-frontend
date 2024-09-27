@@ -2,6 +2,7 @@ import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { ServicePeriod } from '../../types';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -15,7 +16,6 @@ import {
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   BulkServicesClientSearchDocument,
   BulkServicesClientSearchQuery,

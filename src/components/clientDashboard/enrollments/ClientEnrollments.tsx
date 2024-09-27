@@ -1,6 +1,7 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import { ReactNode, useCallback } from 'react';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -13,7 +14,6 @@ import {
   PERMANENT_HOUSING_PROJECT_TYPES,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentSortOption,

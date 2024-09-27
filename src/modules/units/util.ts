@@ -1,4 +1,4 @@
-import { cache } from '@/providers/apolloClient';
+import { cache } from '@/app/apolloClient';
 import { PickListType } from '@/types/gqlTypes';
 import { evictPickList } from '@/utils/cacheUtil';
 

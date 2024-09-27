@@ -33,7 +33,7 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
-import { LocationState } from '@/routes/routeUtil';
+import { LocationState } from '@/utils/routeUtil';
 
 export interface Props<T> {
   rows: T[];

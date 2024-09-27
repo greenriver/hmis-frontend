@@ -1,7 +1,7 @@
 import { ApolloError, ServerError, ServerParseError } from '@apollo/client';
 import { partition } from 'lodash-es';
 
-import { CustomFetchNetworkError } from '@/providers/apolloClient';
+import { CustomFetchNetworkError } from '@/app/apolloClient';
 import { ValidationError, ValidationSeverity } from '@/types/gqlTypes';
 
 // This message is shown for unhandled exceptions

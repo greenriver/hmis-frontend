@@ -1,12 +1,12 @@
 import { Paper } from '@mui/material';
 import { ClientMergeAuditColumns } from '../client/ClientMergeHistory';
+import { AdminDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GlobalClientMergeHistoryDocument,
   GlobalClientMergeHistoryQuery,

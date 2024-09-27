@@ -1,8 +1,8 @@
 import { Cache } from '@apollo/client';
 
 import { isMatch } from 'lodash-es';
+import { cache } from '@/app/apolloClient';
 import { PickListArgs } from '@/modules/form/types';
-import { cache } from '@/providers/apolloClient';
 import { PickListType, Query } from '@/types/gqlTypes';
 
 /**

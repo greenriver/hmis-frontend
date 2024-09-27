@@ -3,6 +3,7 @@ import { Box, Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
+import { ClientDashboardRoutes, Routes } from '@/app/routes';
 import BackButtonLink from '@/components/elements/BackButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import RouterLink from '@/components/elements/RouterLink';
@@ -19,7 +20,6 @@ import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRec
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
-import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,

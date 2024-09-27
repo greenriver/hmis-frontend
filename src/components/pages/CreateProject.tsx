@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 import NotFound from './NotFound';
 
+import { cache } from '@/app/apolloClient';
+import { Routes } from '@/app/routes';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
-import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
 import { RecordFormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

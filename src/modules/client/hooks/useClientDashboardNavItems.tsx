@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { NavItem } from '../../../components/layout/dashboard/sideNav/types';
 
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/app/routes';
 import {
   ClientAccessFieldsFragment,
   ClientDashboardFeature,

@@ -2,6 +2,7 @@ import { Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { memoize } from 'lodash-es';
 import React from 'react';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import { ColumnDef } from '@/components/elements/table/types';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -10,7 +11,6 @@ import {
   clientBriefName,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetUserStaffAssignmentsDocument,
   GetUserStaffAssignmentsQuery,

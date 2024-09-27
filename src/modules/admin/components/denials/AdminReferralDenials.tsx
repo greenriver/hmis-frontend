@@ -1,13 +1,13 @@
 import { Paper } from '@mui/material';
 
 import { useMemo } from 'react';
+import { AdminDashboardRoutes } from '@/app/routes';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useReferralFilter } from '@/modules/referrals/components/useReferralFilter';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetDeniedPendingReferralPostingsDocument,
   GetDeniedPendingReferralPostingsQuery,

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   DataCollectionFeatureRole,
   ProjectAccessFieldsFragment,

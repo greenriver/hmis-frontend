@@ -19,6 +19,8 @@ import {
   tabPanelA11yProps,
 } from './util';
 
+import { cache } from '@/app/apolloClient';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import BackButtonLink from '@/components/elements/BackButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
 import LoadingSkeleton from '@/components/elements/LoadingSkeleton';
@@ -34,8 +36,6 @@ import {
   ErrorState,
   partitionValidations,
 } from '@/modules/errors/util';
-import { cache } from '@/providers/apolloClient';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   SubmitHouseholdAssessmentsMutation,

@@ -6,12 +6,12 @@ import Loading from '../elements/Loading';
 
 import NotFound from './NotFound';
 
+import { Routes } from '@/app/routes';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
-import { Routes } from '@/routes/routes';
 import {
   DeleteOrganizationDocument,
   DeleteOrganizationMutation,

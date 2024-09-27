@@ -1,6 +1,7 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
@@ -20,7 +21,6 @@ import {
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,

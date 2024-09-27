@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import Loading from '@/components/elements/Loading';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
@@ -6,7 +7,6 @@ import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessmentFormController from '@/modules/assessments/components/IndividualAssessmentFormController';
 import MissingDefinitionAlert from '@/modules/assessments/components/MissingDefinitionAlert';
 import useAssessmentFormDefinition from '@/modules/assessments/hooks/useAssessmentFormDefinition';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { FormStatus } from '@/types/gqlTypes';
 
 /**

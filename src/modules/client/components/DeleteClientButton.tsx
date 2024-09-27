@@ -2,6 +2,8 @@ import { Button, ButtonProps, Link, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
+import { cache } from '@/app/apolloClient';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { defaultRenderError } from '@/modules/errors/components/WarningAlert';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
@@ -11,8 +13,6 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   DeleteClientMutation,
   useDeleteClientMutation,

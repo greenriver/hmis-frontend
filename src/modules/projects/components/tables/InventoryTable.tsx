@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { useProjectDashboardContext } from '../ProjectDashboard';
 
+import { cache } from '@/app/apolloClient';
+import { ProjectDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
@@ -10,8 +12,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteInventoryDocument,

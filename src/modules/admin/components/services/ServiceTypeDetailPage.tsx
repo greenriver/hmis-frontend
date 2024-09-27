@@ -1,6 +1,7 @@
 import { Paper, Stack } from '@mui/material';
 import { useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
+import { AdminDashboardRoutes } from '@/app/routes';
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import EditIconButton from '@/components/elements/EditIconButton';
@@ -11,7 +12,6 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import UpdateServiceTypeDialog from '@/modules/admin/components/services/UpdateServiceTypeDialog';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   DeleteServiceTypeDocument,
   DeleteServiceTypeMutation,

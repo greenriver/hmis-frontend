@@ -4,9 +4,9 @@ import { Paper } from '@mui/material';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import ProjectCocTable from './tables/ProjectCocTable';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 const Cocs = () => {
   const { project } = useProjectDashboardContext();

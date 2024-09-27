@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import Loading from '@/components/elements/Loading';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import HouseholdAssessments from '@/modules/assessments/components/household/HouseholdAssessments';
 import MissingDefinitionAlert from '@/modules/assessments/components/MissingDefinitionAlert';
 import useAssessmentFormDefinition from '@/modules/assessments/hooks/useAssessmentFormDefinition';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

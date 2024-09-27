@@ -1,8 +1,8 @@
 import pluralize from 'pluralize';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import RouterLink from '@/components/elements/RouterLink';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { RelationshipToHoH, UnitFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

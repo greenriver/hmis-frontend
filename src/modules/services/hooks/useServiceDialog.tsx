@@ -19,6 +19,7 @@ import {
 
 import ServiceTypeSelect from '../components/ServiceTypeSelect';
 
+import { cache } from '@/app/apolloClient';
 import CommonDialog from '@/components/elements/CommonDialog';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
@@ -30,7 +31,6 @@ import DynamicForm, {
 import { useDynamicFormHandlersForRecord } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
 import useServiceFormDefinition from '@/modules/form/hooks/useServiceFormDefinition';
 import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
-import { cache } from '@/providers/apolloClient';
 import {
   DeleteServiceDocument,
   DeleteServiceMutation,

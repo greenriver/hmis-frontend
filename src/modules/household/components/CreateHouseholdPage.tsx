@@ -1,11 +1,11 @@
 import { To, useLocation, useNavigate } from 'react-router-dom';
 import ManageHousehold from './ManageHousehold';
+import { ProjectDashboardRoutes } from '@/app/routes';
 import BackButton from '@/components/elements/BackButton';
 import PageTitle from '@/components/layout/PageTitle';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ProjectDashboardRoutes } from '@/routes/routes';
-import { injectSearchParams } from '@/routes/routeUtil';
+import { injectSearchParams } from '@/utils/routeUtil';
 
 function buttonTextForPath(path?: string) {
   if (path === ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD) {

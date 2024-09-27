@@ -2,6 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 
+import { cache } from '@/app/apolloClient';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
@@ -13,7 +14,6 @@ import {
   eventReferralResult,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteCeEventDocument,

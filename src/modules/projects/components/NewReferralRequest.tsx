@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { ProjectFormTitle } from './ProjectOverview';
 
+import { cache } from '@/app/apolloClient';
+import { ProjectDashboardRoutes } from '@/app/routes';
 import useSafeParams from '@/hooks/useSafeParams';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import EditRecord from '@/modules/form/components/EditRecord';
-import { cache } from '@/providers/apolloClient';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   RecordFormRole,
   ReferralRequestFieldsFragment,

@@ -4,6 +4,7 @@ import pluralize from 'pluralize';
 import { ReactNode, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
+import { AdminDashboardRoutes } from '@/app/routes';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import ExternalLink from '@/components/elements/ExternalLink';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
@@ -19,7 +20,6 @@ import {
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetMergeCandidatesDocument,

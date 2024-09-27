@@ -13,9 +13,9 @@ import fetch from 'cross-fetch';
 import { generatePath, matchRoutes } from 'react-router-dom';
 
 import { dispatchSessionTrackingEvent } from '../modules/auth/events';
+import apolloErrorLink from '@/app/apolloErrorLink';
+import { allRoutes } from '@/app/routes';
 import { HMIS_SESSION_UID_HEADER } from '@/modules/auth/api/constants';
-import apolloErrorLink from '@/providers/apolloErrorLink';
-import { allRoutes } from '@/routes/routes';
 import { getCsrfToken } from '@/utils/csrf';
 import { decodeParams } from '@/utils/pathEncoding';
 

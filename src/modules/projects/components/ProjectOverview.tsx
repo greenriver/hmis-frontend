@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
 import ViewRecord from '@/modules/form/components/ViewRecord';
@@ -13,7 +14,6 @@ import {
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { ProjectAllFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

@@ -7,6 +7,7 @@ import BulkServiceSearchToggle from './BulkServiceSearchToggle';
 import BulkServicesTable from './BulkServicesTable';
 import ServiceDateRangeSelect from './ServiceDateRangeSelect';
 import StepCard, { StepCardTitle } from './StepCard';
+import { ProjectDashboardRoutes } from '@/app/routes';
 import DatePicker from '@/components/elements/input/DatePicker';
 import PageTitle from '@/components/layout/PageTitle';
 import useSearchParamsState, {
@@ -17,7 +18,6 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import CocPicker from '@/modules/projects/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {

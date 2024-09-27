@@ -10,12 +10,12 @@ import { useMemo, useState } from 'react';
 
 import { TabDefinition } from './util';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import { CommonOrderedList } from '@/components/CommonOrderedList';
 import { CommonCard } from '@/components/elements/CommonCard';
 import ExpandInfoButton from '@/components/elements/ExpandInfoButton';
 import RouterLink from '@/components/elements/RouterLink';
 import useSafeParams from '@/hooks/useSafeParams';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {

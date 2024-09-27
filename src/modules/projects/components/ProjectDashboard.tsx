@@ -4,6 +4,7 @@ import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useDetailedProject } from '../hooks/useDetailedProject';
 import { useProjectDashboardNavItems } from '../hooks/useProjectDashboardNavItems';
+import { Routes } from '@/app/routes';
 import { ClickToCopyId } from '@/components/elements/ClickToCopy';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
@@ -20,7 +21,6 @@ import { useDashboardState } from '@/hooks/useDashboardState';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';

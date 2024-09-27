@@ -1,13 +1,13 @@
 import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

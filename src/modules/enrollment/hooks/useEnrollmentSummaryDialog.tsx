@@ -7,12 +7,12 @@ import {
 } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
+import { Routes } from '@/app/routes';
 import CommonDialog from '@/components/elements/CommonDialog';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { EnrollmentSummaryFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';

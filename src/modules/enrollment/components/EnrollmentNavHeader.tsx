@@ -1,13 +1,13 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
+import { Routes } from '@/app/routes';
 import { ClickToCopyId } from '@/components/elements/ClickToCopy';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import RouterLink from '@/components/elements/RouterLink';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';

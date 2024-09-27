@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import BasicBreadcrumbPageLayout from '../layout/BasicBreadcrumbPageLayout';
 import { STICKY_BAR_HEIGHT } from '../layout/layoutConstants';
 
+import { Routes } from '@/app/routes';
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
-import { Routes } from '@/routes/routes';
 import { ClientFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

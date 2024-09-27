@@ -3,11 +3,11 @@ import { Paper, Stack } from '@mui/material';
 
 import ProjectEnrollmentsTable from './tables/ProjectEnrollmentsTable';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectEnrollments = () => {

@@ -1,11 +1,11 @@
 import { User } from '@sentry/react';
+import apolloClient from '@/app/apolloClient';
 import {
   HMIS_REMOTE_SESSION_UID_EVENT,
   HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 import * as storage from '@/modules/auth/api/storage';
 
-import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
 import { HttpError } from '@/utils/HttpError';
 

@@ -1,13 +1,10 @@
 import { Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+import { cache } from '@/app/apolloClient';
+import { ClientDashboardRoutes, EnrollmentDashboardRoutes } from '@/app/routes';
 import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import { cache } from '@/providers/apolloClient';
-import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
 import {
   AssessmentRole,
   DeleteAssessmentDocument,

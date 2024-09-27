@@ -4,6 +4,7 @@ import React from 'react';
 import { generatePath } from 'react-router-dom';
 import FormRulesCard from '../formRules/FormRulesCard';
 import FormVersionTable from './FormVersionTable';
+import { AdminDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -20,7 +21,6 @@ import {
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormIdentifierDetailsFragment,

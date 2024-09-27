@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Paper } from '@mui/material';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -11,7 +12,6 @@ import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRec
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FunderFieldsFragment,

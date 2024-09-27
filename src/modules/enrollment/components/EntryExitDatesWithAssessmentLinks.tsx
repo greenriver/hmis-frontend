@@ -1,13 +1,13 @@
 import { Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useMemo } from 'react';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { AssessmentIcon } from '@/components/elements/SemanticIcons';
 import theme from '@/config/theme';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {

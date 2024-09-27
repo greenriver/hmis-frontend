@@ -16,6 +16,7 @@ import { NEW_MCI_STRING } from '../util';
 
 import { MciClearanceProps } from './types';
 
+import { Routes } from '@/app/routes';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import RouterLink from '@/components/elements/RouterLink';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -25,7 +26,6 @@ import {
   clientNameAllParts,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ClientNameFragment, MciMatchFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';

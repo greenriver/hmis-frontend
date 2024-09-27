@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material';
 import { ReactNode } from 'react';
+import { Routes } from '@/app/routes';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import RouterLink from '@/components/elements/RouterLink';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import { Routes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 export interface AssessmentTitleProps {

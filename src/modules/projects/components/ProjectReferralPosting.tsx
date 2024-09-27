@@ -4,6 +4,7 @@ import { Button, Grid, Stack, Typography } from '@mui/material';
 import { fetchPreventionAssessmentReportUrl } from '../api';
 import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
@@ -15,7 +16,6 @@ import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import ProjectReferralPostingDetails from '@/modules/projects/components/ReferralPostingDetails';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   ReferralPostingStatus,
   useGetReferralPostingQuery,

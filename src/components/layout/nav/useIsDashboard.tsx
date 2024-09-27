@@ -1,10 +1,10 @@
-import useCurrentPath from '@/hooks/useCurrentPath';
 import {
   AdminDashboardRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
-} from '@/routes/routes';
+} from '@/app/routes';
+import useCurrentPath from '@/hooks/useCurrentPath';
 
 export const useIsDashboard = () => {
   const currentPath = useCurrentPath();

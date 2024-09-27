@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
 import { To } from 'react-router-dom';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import {
   clientBriefName,
   relationshipToHohForDisplay,
 } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { RelationshipToHoH, useGetRelatedAnnualsQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

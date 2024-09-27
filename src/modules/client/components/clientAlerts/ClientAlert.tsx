@@ -1,10 +1,10 @@
 import { Alert, AlertTitle, Box, Typography } from '@mui/material';
+import { cache } from '@/app/apolloClient';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
 import {
   ClientAlertFieldsFragment,
   DeleteClientAlertDocument,

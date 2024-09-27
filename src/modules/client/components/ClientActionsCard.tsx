@@ -1,11 +1,11 @@
 import { Card, Grid, Typography } from '@mui/material';
 
+import { ClientDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
 } from '@/modules/permissions/PermissionsFilters';
-import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

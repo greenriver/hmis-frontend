@@ -1,11 +1,11 @@
 import { Paper } from '@mui/material';
+import { ClientDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientMergeHistoryDocument,
   ClientMergeHistoryQuery,

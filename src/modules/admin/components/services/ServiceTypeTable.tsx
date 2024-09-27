@@ -1,8 +1,8 @@
 import { Chip } from '@mui/material';
+import { AdminDashboardRoutes } from '@/app/routes';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetServiceTypesDocument,
   GetServiceTypesQuery,

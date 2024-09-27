@@ -1,13 +1,13 @@
 import { Stack, StackProps, Typography, TypographyProps } from '@mui/material';
 import { forwardRef, useMemo } from 'react';
 
+import { EnrollmentDashboardRoutes, Routes } from '@/app/routes';
 import RouterLink, { RouterLinkProps } from '@/components/elements/RouterLink';
 import {
   anonymousClientName,
   clientBriefName,
   clientNameAllParts,
 } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes, Routes } from '@/routes/routes';
 import { ClientNameFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

@@ -1,6 +1,7 @@
 import { Paper } from '@mui/material';
 import { useMemo } from 'react';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -12,7 +13,6 @@ import {
 } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
   GetClientServicesQuery,

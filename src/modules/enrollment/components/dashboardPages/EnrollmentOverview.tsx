@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import EnrollmentDetails from '../EnrollmentDetails';
 
+import { ClientDashboardRoutes } from '@/app/routes';
 import EnrollmentReminders from '@/components/clientDashboard/enrollments/EnrollmentReminders';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
@@ -18,7 +19,6 @@ import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable, {
   HOUSEHOLD_MEMBER_COLUMNS,
 } from '@/modules/household/components/HouseholdMemberTable';
-import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   DeleteEnrollmentDocument,
   DeleteEnrollmentMutation,

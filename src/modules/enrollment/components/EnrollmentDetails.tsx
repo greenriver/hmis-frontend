@@ -4,6 +4,7 @@ import { ReactNode, useMemo } from 'react';
 import EnrollmentOccurrencePointForm from './EnrollmentOccurrencePointForm';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import EntryExitDatesWithAssessmentLinks from './EntryExitDatesWithAssessmentLinks';
+import { ProjectDashboardRoutes } from '@/app/routes';
 import {
   CommonDetailGridContainer,
   CommonDetailGridItem,
@@ -21,7 +22,6 @@ import {
   yesNo,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { Destination } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';

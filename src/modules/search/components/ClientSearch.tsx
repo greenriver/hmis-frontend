@@ -12,6 +12,7 @@ import ClientDisplayTypeToggle, {
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 
 import ClientTextSearchForm from './ClientTextSearchForm';
+import { ClientDashboardRoutes, Routes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
@@ -36,7 +37,6 @@ import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings
 import { isEnrollment, isHouseholdClient } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ClientSearchInput as ClientSearchInputType,

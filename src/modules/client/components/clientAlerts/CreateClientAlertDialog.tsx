@@ -5,10 +5,10 @@ import {
   DialogProps,
   DialogTitle,
 } from '@mui/material';
+import { cache } from '@/app/apolloClient';
 import CommonDialog from '@/components/elements/CommonDialog';
 import StaticForm from '@/modules/form/components/StaticForm';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
 import {
   ClientAlertInput,
   ClientNameFragment,

@@ -1,6 +1,7 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { useMemo } from 'react';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import GenericTable from '@/components/elements/table/GenericTable';
 import TitleCard from '@/components/elements/TitleCard';
 import { isRecentEnrollment } from '@/modules/hmis/hmisUtil';
@@ -8,7 +9,6 @@ import {
   ENROLLMENT_PERIOD_COL,
   ENROLLMENT_STATUS_COL,
 } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,

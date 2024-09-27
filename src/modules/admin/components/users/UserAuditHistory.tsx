@@ -1,3 +1,4 @@
+import { Routes } from '@/app/routes';
 import { ContextualCollapsibleListsProvider } from '@/components/elements/CollapsibleListContext';
 import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -5,7 +6,6 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { AUDIT_HISTORY_COLUMNS } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { Routes } from '@/routes/routes';
 import {
   UserAuditEventFilterOptions,
   GetUserAuditEventsDocument,

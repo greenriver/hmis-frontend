@@ -2,12 +2,12 @@ import { Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
+import { AdminDashboardRoutes } from '@/app/routes';
 import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormStatus,
   GetFormIdentifierVersionsDocument,

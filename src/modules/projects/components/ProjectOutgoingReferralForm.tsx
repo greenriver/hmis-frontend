@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import ProjectOutgoingReferralDetailsSubForm from './ProjectOutgoingReferralDetailsSubForm';
+import { ProjectDashboardRoutes } from '@/app/routes';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import DynamicField from '@/modules/form/components/DynamicField';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   ItemType,
   PickListOption,

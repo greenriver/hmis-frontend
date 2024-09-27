@@ -7,9 +7,9 @@ import {
   useRoutes,
 } from 'react-router-dom';
 
-import { protectedRoutes } from './protected';
+import { STATE_FROM_LOGIN_REDIRECT } from '../utils/routeUtil';
+import { protectedRoutes } from './protectedRoutes';
 
-import { STATE_FROM_LOGIN_REDIRECT } from './routeUtil';
 import PathHandler from '@/components/elements/PathHandler';
 import { HmisUser } from '@/modules/auth/api/sessions';
 import Login from '@/modules/auth/components/Login';

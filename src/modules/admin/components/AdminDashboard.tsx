@@ -2,6 +2,7 @@ import { Container, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
+import { AdminDashboardRoutes } from '@/app/routes';
 import Loading from '@/components/elements/Loading';
 import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
 import {
@@ -17,7 +18,6 @@ import useCurrentPath from '@/hooks/useCurrentPath';
 import { useDashboardState } from '@/hooks/useDashboardState';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
 
 const ProjectNavHeader: React.FC = () => {

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   DataCollectionFeatureRole,
   EnrollmentAccessFieldsFragment,

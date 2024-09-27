@@ -1,8 +1,8 @@
 import { Stack } from '@mui/system';
 import { isNil } from 'lodash-es';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import RouterLink from '@/components/elements/RouterLink';
 import ClientName from '@/modules/client/components/ClientName';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { ClientNameFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

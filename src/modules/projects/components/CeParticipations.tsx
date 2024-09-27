@@ -6,13 +6,13 @@ import { useCallback, useMemo } from 'react';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 
+import { cache } from '@/app/apolloClient';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { parseAndFormatDateRange, yesNo } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
 import {
   CeParticipationFieldsFragment,
   DeleteCeParticipationDocument,

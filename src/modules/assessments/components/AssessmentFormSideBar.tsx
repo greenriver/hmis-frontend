@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import DeleteAssessmentButton from './DeleteAssessmentButton';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -12,7 +13,6 @@ import PrintViewButton from '@/components/layout/PrintViewButton';
 import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import FormStepper from '@/modules/form/components/FormStepper';
 
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   EnrollmentFieldsFragment,

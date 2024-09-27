@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -8,7 +9,6 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { useReferralFilter } from '@/modules/referrals/components/useReferralFilter';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectReferralPostingsDocument,
   GetProjectReferralPostingsQuery,

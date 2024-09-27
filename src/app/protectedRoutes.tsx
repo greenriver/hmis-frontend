@@ -107,6 +107,9 @@ import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
 
+/**
+ * Wrapper component for all "protected" (aka authorized) application routes
+ */
 const App = () => {
   // Setup mobile menu context - open/closed state and handlers
   const mobileMenuContext = useMobileMenuContext();
@@ -129,15 +132,6 @@ const App = () => {
     </MainLayout>
   );
 };
-
-// const ParamsWrapper = <T extends { [x: string]: string } = any>({
-//   children,
-// }: {
-//   children: (params: T) => JSX.Element;
-// }): JSX.Element => {
-//   const params = useSafeParams() as T;
-//   return children(params);
-// };
 
 interface RouteNode {
   path: string;

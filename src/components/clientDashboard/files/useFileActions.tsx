@@ -2,11 +2,11 @@ import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
+import { cache } from '@/app/apolloClient';
+import { ClientDashboardRoutes } from '@/app/routes';
 import useSafeParams from '@/hooks/useSafeParams';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   DeleteClientFileDocument,
   DeleteClientFileMutation,

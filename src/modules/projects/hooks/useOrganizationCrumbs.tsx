@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
 
+import apolloClient from '@/app/apolloClient';
+import { Routes } from '@/app/routes';
 import useSafeParams from '@/hooks/useSafeParams';
-import apolloClient from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
 import {
   GetOrganizationQuery,
   OrganizationNameFieldsFragmentDoc,

@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { ProjectFormTitle } from './ProjectOverview';
 
+import { cache } from '@/app/apolloClient';
+import { ProjectDashboardRoutes } from '@/app/routes';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
-import { cache } from '@/providers/apolloClient';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   DeleteProjectCocDocument,
   DeleteProjectCocMutation,

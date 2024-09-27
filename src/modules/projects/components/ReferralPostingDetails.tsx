@@ -2,6 +2,7 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
@@ -13,7 +14,6 @@ import {
   customDataElementValueAsString,
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

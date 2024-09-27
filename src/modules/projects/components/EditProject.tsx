@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { ProjectFormTitle } from './ProjectOverview';
 
+import { cache } from '@/app/apolloClient';
+import { Routes } from '@/app/routes';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
 import {
   DeleteProjectDocument,
   DeleteProjectMutation,

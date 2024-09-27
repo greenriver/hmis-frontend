@@ -3,6 +3,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { isToday } from 'date-fns';
 import { lowerCase, sortBy } from 'lodash-es';
 import { useMemo } from 'react';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -17,7 +18,6 @@ import {
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   DataCollectionFeatureRole,

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import useCurrentPath from './useCurrentPath';
 
-import { PRINTABLE_ROUTES } from '@/routes/routes';
+import { PRINTABLE_ROUTES } from '@/app/routes';
 
 const useIsPrintView = () => {
   const location = useLocation();

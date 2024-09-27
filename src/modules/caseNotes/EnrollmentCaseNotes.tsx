@@ -4,6 +4,7 @@ import { Box, Button } from '@mui/material';
 import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../form/hooks/useViewEditRecordDialogs';
+import { cache } from '@/app/apolloClient';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
@@ -13,7 +14,6 @@ import {
   lastUpdatedBy,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
 import {
   CustomCaseNoteFieldsFragment,
   DeleteCustomCaseNoteDocument,

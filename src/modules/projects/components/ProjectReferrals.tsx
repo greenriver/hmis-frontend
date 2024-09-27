@@ -6,11 +6,11 @@ import ProjectOutgoingReferralPostingsTable from './tables/ProjectOutgoingReferr
 import ProjectReferralPostingsTable from './tables/ProjectReferralPostingsTable';
 import ProjectReferralRequestsTable from './tables/ProjectReferralRequestsTable';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectReferrals = () => {

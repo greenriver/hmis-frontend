@@ -5,11 +5,11 @@ import {
   AssessmentResponseStatus,
   useAssessmentHandlers,
 } from '../hooks/useAssessmentHandlers';
+import { cache } from '@/app/apolloClient';
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
 import { DashboardEnrollment } from '@/modules/hmis/types';
-import { cache } from '@/providers/apolloClient';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrolledClientFieldsFragment,
   FormDefinitionFieldsFragment,

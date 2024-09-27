@@ -9,6 +9,7 @@ import {
 } from '../providers/ClientSsnDobVisibility';
 
 import ClientCardImageElement from './ClientCardImageElement';
+import { ClientDashboardRoutes, EnrollmentDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { LabeledExternalIdDisplay } from '@/components/elements/ExternalIdDisplay';
@@ -22,10 +23,6 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ExternalIdentifierType,

@@ -4,6 +4,7 @@ import { Paper } from '@mui/material';
 // import { formatISO, subWeeks } from 'date-fns';
 import { generatePath, useNavigate } from 'react-router-dom';
 
+import { AdminDashboardRoutes } from '@/app/routes';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import Loading from '@/components/elements/Loading';
@@ -15,7 +16,6 @@ import UserAccessHistory, {
 } from '@/modules/admin/components/users/UserAccessHistory';
 import UserAuditHistory from '@/modules/admin/components/users/UserAuditHistory';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
-import { AdminDashboardRoutes } from '@/routes/routes';
 
 type UserHistoryType = 'access' | 'edits';
 const historyTypeToggleItems: ToggleItem<UserHistoryType>[] = [

@@ -5,6 +5,7 @@ import { useCallback, useMemo } from 'react';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 
+import { cache } from '@/app/apolloClient';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -12,7 +13,6 @@ import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecord
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteHmisParticipationDocument,

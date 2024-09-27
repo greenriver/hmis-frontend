@@ -2,12 +2,12 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid, Paper } from '@mui/material';
 import { generatePath, useNavigate } from 'react-router-dom';
 import FormDefinitionTable from './FormDefinitionTable';
+import { AdminDashboardRoutes } from '@/app/routes';
 import PageTitle from '@/components/layout/PageTitle';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   CreateFormDefinitionDocument,
   CreateFormDefinitionMutation,

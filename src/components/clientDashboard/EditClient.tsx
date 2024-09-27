@@ -8,12 +8,12 @@ import {
 } from '../layout/layoutConstants';
 import { useClientDashboardContext } from '../pages/ClientDashboard';
 
+import { cache } from '@/app/apolloClient';
+import { Routes } from '@/app/routes';
 import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
 import { ClientFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

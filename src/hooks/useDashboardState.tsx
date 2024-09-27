@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import useCurrentPath from './useCurrentPath';
+import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/app/routes';
 import { useMobileMenu } from '@/components/layout/nav/useMobileMenuContext';
-import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/routes/routes';
 
 export function useDashboardState() {
   const currentPath = useCurrentPath();

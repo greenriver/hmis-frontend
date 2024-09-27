@@ -1,5 +1,6 @@
 import { Alert, Box } from '@mui/material';
 import { generatePath, useNavigate } from 'react-router-dom';
+import { AdminDashboardRoutes } from '@/app/routes';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import {
@@ -12,7 +13,6 @@ import ClientAccessSummaryTable from '@/modules/admin/components/users/ClientAcc
 import EnrollmentAccessSummaryTable from '@/modules/admin/components/users/EnrollmentAccessSummaryTable';
 import ClientTextSearchInput from '@/modules/search/components/ClientTextSearchInput';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
-import { AdminDashboardRoutes } from '@/routes/routes';
 
 export type AccessEntityType = 'clients' | 'enrollments';
 const accessToggleItems: ToggleItem<AccessEntityType>[] = [

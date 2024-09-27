@@ -1,8 +1,8 @@
 import { LoadingButton } from '@mui/lab';
 import { ButtonProps } from '@mui/material';
 import { generatePath, useNavigate } from 'react-router-dom';
+import { AdminDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormIdentifierDetailsFragment,
   useCreateNextDraftFormDefinitionMutation,

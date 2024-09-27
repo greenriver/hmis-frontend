@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useMemo, useState } from 'react';
+import { cache } from '@/app/apolloClient';
 import CommonDialog from '@/components/elements/CommonDialog';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -21,7 +22,6 @@ import { localResolvePickList } from '@/modules/form/util/formUtil';
 import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
-import { cache } from '@/providers/apolloClient';
 import {
   ActiveStatus,
   DataCollectedAbout,

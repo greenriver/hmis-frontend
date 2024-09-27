@@ -1,10 +1,10 @@
+import { EnrollmentDashboardRoutes } from '@/app/routes';
 import BackButtonLink from '@/components/elements/BackButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ManageHousehold from '@/modules/household/components/ManageHousehold';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const EditHousehold = () => {

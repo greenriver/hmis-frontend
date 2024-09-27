@@ -25,6 +25,7 @@ import {
   TabDefinition,
 } from './util';
 
+import { router } from '@/app/router';
 import Loading from '@/components/elements/Loading';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -40,7 +41,6 @@ import {
 } from '@/modules/assessments/components/household/formState';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
-import { router } from '@/routes/router';
 import {
   AssessmentFieldsFragment,
   AssessmentRole,

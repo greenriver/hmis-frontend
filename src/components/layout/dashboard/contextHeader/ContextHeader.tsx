@@ -12,8 +12,8 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { locationFromDefaultOrLogin } from '@/routes/routeUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
+import { locationFromDefaultOrLogin } from '@/utils/routeUtil';
 
 interface Props {
   isOpen: boolean;

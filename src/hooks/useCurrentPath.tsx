@@ -1,6 +1,6 @@
 import { matchRoutes, useLocation } from 'react-router-dom';
 
-import { allRoutes } from '@/routes/routes';
+import { allRoutes } from '@/app/routes';
 
 export default function useCurrentPath() {
   const location = useLocation();

@@ -4,10 +4,10 @@ import { Paper } from '@mui/material';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import InventoryTable from './tables/InventoryTable';
 
+import { ProjectDashboardRoutes } from '@/app/routes';
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const Inventories = () => {

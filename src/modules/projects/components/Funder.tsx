@@ -7,12 +7,12 @@ import NotFound from '../../../components/pages/NotFound';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { ProjectFormTitle } from './ProjectOverview';
 
+import { cache } from '@/app/apolloClient';
+import { ProjectDashboardRoutes } from '@/app/routes';
 import useSafeParams from '@/hooks/useSafeParams';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   DeleteFunderDocument,
   DeleteFunderMutation,
