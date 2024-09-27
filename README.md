@@ -173,3 +173,99 @@ rails driver:hmis:dump_graphql_schema
 ```
 
 To pick up the local schema changes on the frontend, run the `graphql:codegen` script (see above).
+
+## Project Structure
+
+This project follows the [bulletproof-react](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md) structure.
+
+```
+src
+|
++-- api               # graphql queries/mutations/fragments
+|
++-- app               # application layer containing:
+|   +-- App.tsx              # main application component
+|   +-- AppProvider.tsx      # application provider that wraps the entire application
+|   +-- protectedRoutes.ts   # define routes for the authorized applciation
++-- assets            # assets folder can contain all the static files such as images, fonts, etc.
+|
++-- components        # shared components used across the entire application
+|
++-- config            # global configurations, exported env variables etc.
+|
++-- modules           # feature based modules
+|
++-- hooks             # shared hooks used across the entire application
+|
++-- providers         # shared contexts and providers? (added)
+|
++-- test              # test utilities and mocks
+|
++-- types             # shared types used across the application
+|
++-- utils             # shared utility functions
+```
+
+Important modules
+```
+app
+components             # no components, just a dir
+components/elements    # common components
+components/input       # base input components that are used across the app
+components/table       # table components that are used across the app
+components/layout      # layout components that are used across the app
+components/pages       # ***keep or move to modules or src/app/pages?? these are not re-used
+
+modules:
+
+modules/admin                  # everything related to top-level Admin page (Should be further split out)
+modules/assessments
+modules/audit
+modules/auth
+modules/caseNotes
+modules/client        # components used on client overview page, plus client alerts. could be divided
+modules/clientMerge
+modules/dataFetching  # doesn't really fit in, not a feature. remove?
+modules/enrollment    # lots of enrollment components including staff assignment. could be divided
+modules/errors
+modules/external/mci  # other external components could go here, or rename to just externalMci or mci modules/form          # BIG. all DynamicForm/DynamicView related components, plus some enrollment/client-specific components that should go in modules, I think. should be divided. also contains rhf components that shouold probably be a different module.
+modules/formBuilder
+modules/hmis          # "hmis" atomic elements, like ClientDobAge, EnrollmentStatus, HmisField etc. I guess these should just be moved to src/components/elements
+modules/hmisAppSettings
+modules/household     # components related to creating/editing/viewing household membership
+modules/permissions   # should move src/components/accessWrappers to here
+modules/projects      # BIG, should be divided. contains referral components that should be moved to referral module. maybe project configuration components could have their own module too.
+modules/referrals
+modules/scanCards
+modules/search
+modules/services     # includes bulk- and individual- service stuff, could be split to bulkServices/bedNights module
+modules/systemStatus
+modules/units
+modules/userDashboard
+
+new modules:
+modules/clientDashboard        # NEW (was src/components/clientDashboard)
+modules/theme                  # NEW (was in src/config)
+modules/referrals              # NEW (was in modules/projects and modules/admin)
+```
+
+Topics for discussion
+* Should we have all "table" implementations in one module, with all their column definitions, or should each table live within it's individual module? (eg `modules/projects/ProjectEnrollmentsTable)
+* Moving `ProjectServices` table/page from `projects` modules to `services` module. I think I like having all Service-related tables/pages in one module, because they share column configurations.
+* Modules themselves don't follow the consistent inner structure, I would propose updating them.
+* Do we want to recommend flat structure of components within modules? So things lie flat in storybook.
+
+
+Inner structure of modules
+```
+src/modules/awesomeModule
+|
++-- components  # components scoped to a specific feature
+|
++-- hooks       # hooks scoped to a specific feature
+|
++-- types       # typescript types used within the feature
+|
++-- utils       # utility functions for a specific feature
+
+```
