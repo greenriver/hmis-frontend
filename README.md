@@ -212,8 +212,8 @@ app
 components             # no components, just a dir
 components/elements    # common components
 components/input       # base input components that are used across the app
-components/table       # table components that are used across the app
 components/layout      # layout components that are used across the app
+components/table       # table components that are used across the app (could be a module or just in elements/ ?)
 components/pages       # ***keep or move to modules or src/app/pages?? these are not re-used
 
 modules:
@@ -228,7 +228,8 @@ modules/clientMerge
 modules/dataFetching  # doesn't really fit in, not a feature. remove?
 modules/enrollment    # lots of enrollment components including staff assignment. could be divided
 modules/errors
-modules/external/mci  # other external components could go here, or rename to just externalMci or mci modules/form          # BIG. all DynamicForm/DynamicView related components, plus some enrollment/client-specific components that should go in modules, I think. should be divided. also contains rhf components that shouold probably be a different module.
+modules/external/mci  # other external components could go here, or rename to just externalMci or mci
+modules/form          # BIG. all DynamicForm/DynamicView related components, plus some enrollment/client-specific components that should go in modules, I think. should be divided. also contains rhf components that shouold probably be a different module.
 modules/formBuilder
 modules/hmis          # "hmis" atomic elements, like ClientDobAge, EnrollmentStatus, HmisField etc. I guess these should just be moved to src/components/elements
 modules/hmisAppSettings
@@ -246,12 +247,10 @@ modules/userDashboard
 new modules:
 modules/clientDashboard        # NEW (was src/components/clientDashboard)
 modules/theme                  # NEW (was in src/config)
-modules/referrals              # NEW (was in modules/projects and modules/admin)
 ```
 
 Topics for discussion
-* Should we have all "table" implementations in one module, with all their column definitions, or should each table live within it's individual module? (eg `modules/projects/ProjectEnrollmentsTable)
-* Moving `ProjectServices` table/page from `projects` modules to `services` module. I think I like having all Service-related tables/pages in one module, because they share column configurations.
+* Moving `ProjectServices` table/page from `modules/projects` modules to `modules/services` (example). I think I like having all Service-related tables/pages in one module, because they share column configurations. And of course the generic table is in `src/components`.
 * Modules themselves don't follow the consistent inner structure, I would propose updating them.
 * Do we want to recommend flat structure of components within modules? So things lie flat in storybook.
 
