@@ -21826,7 +21826,7 @@
           },
           {
             "name": "customRule",
-            "description": null,
+            "description": "Custom rules that apply to this item",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -22090,7 +22090,7 @@
           },
           {
             "name": "rule",
-            "description": null,
+            "description": "Rules that apply to this item",
             "args": [],
             "type": {
               "kind": "SCALAR",
