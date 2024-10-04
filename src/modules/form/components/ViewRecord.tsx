@@ -29,6 +29,7 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
 }: ViewRecordProps<RecordType>): JSX.Element => {
   const { formDefinition, itemMap, loading } = useFormDefinition({
     role: formRole,
+    id: 'formDefinitionId' in record ? record.formDefinitionId : undefined,
     projectId,
   });
 
