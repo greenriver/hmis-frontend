@@ -1,5 +1,19 @@
 # HMIS Front End
 
+## Application Stack
+* Node JS
+* React
+* TypeScript
+* Apollo GraphQL Client
+* Material UI
+* GraphQL Codegen
+* Storybook 8
+* Chromatic
+* Vite
+* yarn
+* prettier / eslint
+* [hmis-warehouse](https://github.com/greenriver/hmis-warehouse) backend (Rails, ruby-graphql)
+
 ## Developer Installation
 
 ### Install Node, NPM, and Yarn
@@ -39,7 +53,7 @@
    yarn install
    ```
 
-3. Run dev server with live reload
+3. Run vite dev server with live reload
 
    ```sh
    yarn dev
@@ -67,8 +81,10 @@ yarn build && yarn preview
 Use the `graphql:codegen` script to update generated types.
 
 ```sh
-SCHEMA_PATH=<path to schema.graphql> yarn graphql:codegen
+SCHEMA_PATH=/path/to/warehouse/schema.graphql yarn graphql:codegen
 ```
+
+> 💡 If you add `export SCHEMA_PATH=/my-dev-path/hmis-warehouse/drivers/hmis/app/graphql/schema.graphql` to your shell configuration file (eg .zshrc, .bashrc), then you only need to run `yarn graphql:codegen`
 
 ### Upgrading Yarn
 
@@ -93,9 +109,9 @@ git add yarn.lock package.json
 ```
 
 
-### E2E tests
+### Capybara System Tests
 
-See the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/stable/drivers/hmis/README.md) in the Warehouse repo for instructions on running end-to-end tests.
+See the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/stable/drivers/hmis/README.md) in the Warehouse repo for instructions on running end-to-end Capybara tests.
 
 ## Backend configuration
 
