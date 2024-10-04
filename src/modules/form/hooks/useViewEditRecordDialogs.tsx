@@ -19,7 +19,6 @@ interface Args<T> {
   localConstants?: LocalConstants;
   maxWidth?: Breakpoint | false;
   projectId?: string; // Project context for fetching form definition
-  formDefinitionId?: string; // Specific form definition ID, if known
 }
 
 /**

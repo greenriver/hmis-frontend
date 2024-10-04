@@ -29,6 +29,9 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
 }: ViewRecordProps<RecordType>): JSX.Element => {
   const { formDefinition, itemMap, loading } = useFormDefinition({
     role: formRole,
+    // record.formDefinitionId comes from the form processor. It is the form that was last used to create/edit the record.
+    // If the record has formDefinitionId, then we should just use that definition, rather than trying to find the best
+    // definition based on the role and project ID
     id: 'formDefinitionId' in record ? record.formDefinitionId : undefined,
     projectId,
   });
