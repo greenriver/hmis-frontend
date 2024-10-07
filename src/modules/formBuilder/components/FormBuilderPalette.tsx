@@ -11,6 +11,7 @@ import {
   FormGroupIcon,
   FormImageIcon,
   FormIntegerIcon,
+  FormLocationIcon,
   FormObjectIcon,
   FormStringIcon,
   FormTextIcon,
@@ -22,6 +23,14 @@ import {
 } from '@/components/layout/layoutConstants';
 import { FormItemPaletteType } from '@/modules/formBuilder/types';
 import { ItemType } from '@/types/gqlTypes';
+
+// Item types that are excluded from the form builder palette, until we have better support (#6401)
+const EXCLUDED_ITEM_TYPES = [
+  ItemType.Object,
+  ItemType.Image,
+  ItemType.File,
+  ItemType.Geolocation,
+];
 
 export const FORM_ITEM_PALETTE = {
   [ItemType.Group]: {
@@ -94,6 +103,11 @@ export const FORM_ITEM_PALETTE = {
     IconClass: FormObjectIcon,
     displayName: 'Object',
   },
+  [ItemType.Geolocation]: {
+    itemType: ItemType.Geolocation,
+    IconClass: FormLocationIcon,
+    displayName: 'Geolocation',
+  },
 };
 
 const PaletteButton: React.FC<
@@ -138,14 +152,7 @@ const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
     >
       <Stack gap={1}>
         {Object.entries(FORM_ITEM_PALETTE)
-          // Remove Image, File, and Object from the list for now until we add support
-          // https://github.com/open-path/Green-River/issues/6401
-          .filter(
-            ([key]) =>
-              ![ItemType.Object, ItemType.Image, ItemType.File].includes(
-                key as ItemType
-              )
-          )
+          .filter(([key]) => !EXCLUDED_ITEM_TYPES.includes(key as ItemType))
           .map(([key, paletteItem]) => (
             <PaletteButton
               key={key}

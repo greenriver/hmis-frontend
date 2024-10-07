@@ -58,6 +58,7 @@ const CapacityProgressBar = ({ percentFilled }: { percentFilled: number }) => {
 const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
   const { data, error, loading } = useGetProjectUnitTypesQuery({
     variables: { id: projectId },
+    fetchPolicy: 'cache-and-network',
   });
   const columns: ColumnDef<UnitTypeCapacityFieldsFragment>[] = [
     {

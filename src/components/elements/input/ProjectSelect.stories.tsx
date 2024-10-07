@@ -5,7 +5,6 @@ import ProjectSelect from './ProjectSelect';
 import { projectsForSelectMock } from '@/test/__mocks__/requests';
 
 export default {
-  title: 'Input Elements/ProjectSelect',
   component: ProjectSelect,
   parameters: {
     apolloClient: {

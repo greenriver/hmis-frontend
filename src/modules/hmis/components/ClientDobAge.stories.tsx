@@ -6,7 +6,6 @@ import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
-  title: 'ClientDobAge',
   component: ClientDobAge,
 } as Meta<typeof ClientDobAge>;
 

@@ -13,7 +13,6 @@ import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
 const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
 export default {
-  title: 'DynamicForm',
   component: DynamicForm,
   argTypes: { label: { control: 'text' } },
   decorators: [
