@@ -14,12 +14,3 @@ export const Default: Story = {
     children: <div>Content</div>,
   },
 };
-
-// export const WithBorder: Story = {
-//   args: {
-//     title: 'Title',
-//     actions: <Button>Action Button</Button>,
-//     children: <div>Content</div>,
-//     headerVariant: 'border',
-//   },
-// };

@@ -11,7 +11,6 @@ type Story = StoryObj<typeof CommonCard>;
 export const Default: Story = {
   args: {
     title: 'Title',
-    // titleComponent: 'h5',
     children: <div>Content</div>,
   },
 };
