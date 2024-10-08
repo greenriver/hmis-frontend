@@ -1436,6 +1436,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
+        name: 'formDefinitionId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -3042,6 +3050,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'ExternalFormSubmission',
     fields: [
+      { name: 'clientId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
       {
         name: 'id',
         type: {
@@ -3072,6 +3085,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
+      { name: 'values', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
     ],
   },
   {
@@ -4280,6 +4294,20 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'youthVetBedInventory',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
+    ],
+  },
+  {
+    name: 'KeyValue',
+    fields: [
+      {
+        name: 'key',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      { name: 'value', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {

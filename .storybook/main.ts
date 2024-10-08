@@ -1,5 +1,7 @@
 const { mergeConfig } = require('vite');
 const { resolve } = require('path');
+import react from '@vitejs/plugin-react';
+
 const config = {
   async viteFinal(config) {
     return mergeConfig(config, {
@@ -13,22 +15,40 @@ const config = {
           ),
         },
       },
+      build: {
+        rollupOptions: {
+          // this doesn't come over in merge for some reason, so re-define it here
+          onwarn(warning, defaultHandler) {
+            if (warning.code === 'SOURCEMAP_ERROR') return;
+            if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+            defaultHandler(warning);
+          },
+        },
+      },
     });
   },
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: [
+    // Use implicit paths for all stories
+    '../src/**/*.stories.@(js|jsx|ts|tsx)',
+    // For a better structure, need to reorganize some things. Should first confirm approach that "src" has comment element components and "modules" have components for specific pages or modules, which is the vague pattern right now.
+    // - Move src/components/clientDashboard components into module(s)
+    // - Move src/components/pages into modules too?
+  ],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    '@storybook/addon-mdx-gfm',
     'storybook-addon-apollo-client',
     '@chromatic-com/storybook',
+    '@storybook/addon-a11y',
   ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
   },
-  core: {},
+  core: {
+    builder: '@storybook/builder-vite',
+  },
   typescript: {
     check: false,
     skipBabel: true,

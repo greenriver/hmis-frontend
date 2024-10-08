@@ -4,7 +4,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import SsnInput from './SsnInput';
 
 export default {
-  title: 'Input Elements/SsnInput',
   component: SsnInput,
   argTypes: {
     label: { control: 'text' },

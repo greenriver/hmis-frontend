@@ -111,17 +111,17 @@ const NewFormRuleDialog: React.FC<Props> = ({
     formRole,
   ]);
 
+  const [validationError, setValidationError] = useState<string>();
+
   const onCloseDialog = useCallback(() => {
     onClose();
     // Null out the form values
     setDataCollectedAbout(DataCollectedAbout.AllClients);
     setRuleConditions([]);
+    setValidationError(undefined);
   }, [onClose]);
 
   const [createFormRule, { loading, error }] = useCreateFormRuleMutation({
-    variables: {
-      input: { input: rule, definitionId: formId },
-    },
     onCompleted: (data) => {
       if (data.createFormRule?.formRule) {
         onCloseDialog();
@@ -136,7 +136,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                 nodesCount: existingRules.nodesCount + 1, // this isn't used, but update it anyway to avoid inconsistency
                 nodes: [
                   ...existingRules.nodes,
-                  { __ref: `FormRule:${data.createFormRule?.formRule.id}` },
+                  { __ref: `FormRule:${data.createFormRule?.formRule?.id}` },
                 ],
               };
             },
@@ -148,12 +148,12 @@ const NewFormRuleDialog: React.FC<Props> = ({
           id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
           fieldName: 'projectMatches',
         });
+      } else if (data.createFormRule?.errors?.length) {
+        setValidationError(data.createFormRule.errors[0].fullMessage);
       }
     },
   });
 
-  // This would be better handled with real form validation
-  const [validationError, setValidationError] = useState<string>();
   const handleSubmit = () => {
     let error: string | undefined = undefined;
     if (formRole === FormRole.Service) {
@@ -164,7 +164,13 @@ const NewFormRuleDialog: React.FC<Props> = ({
 
     setValidationError(error);
     if (!error) {
-      createFormRule();
+      // drop empty string values from rule object (eg { projectId: '' })
+      const cleaned = Object.fromEntries(
+        Object.entries(rule).map(([k, v]) => [k, v || undefined])
+      );
+      createFormRule({
+        variables: { input: { input: cleaned, definitionId: formId } },
+      });
     }
   };
 

@@ -30,6 +30,7 @@ const RouterLink = forwardRef<RouterLinkProps, any>(
           gap={0.75}
           alignItems='center'
           sx={{ display: 'inline-flex', textDecoration: 'inherit' }}
+          component='span'
         >
           {children}
           {openInNew ? (

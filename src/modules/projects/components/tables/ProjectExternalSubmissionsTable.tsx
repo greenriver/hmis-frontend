@@ -1,42 +1,23 @@
-import { Card, Chip } from '@mui/material';
+import { Button, Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
-import Loading from '@/components/elements/Loading';
+import { useCallback, useState } from 'react';
+import LoadingButton from '@/components/elements/LoadingButton';
+import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
-import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import DynamicView from '@/modules/form/components/viewable/DynamicView';
-import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
-import { FormValues } from '@/modules/form/types';
-import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
+import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import ExternalSubmissionsViewModal from '@/modules/projects/components/ExternalSubmissionsViewModal';
+import RefreshExternalSubmissionsButton from '@/modules/projects/components/RefreshExternalSubmissionsButton';
 import {
-  customDataElementValueForKey,
-  getCustomDataElementColumns,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
-import {
-  DeleteExternalFormSubmissionDocument,
-  DeleteExternalFormSubmissionMutation,
-  DeleteExternalFormSubmissionMutationVariables,
-  ExternalFormSubmissionFieldsFragment,
   ExternalFormSubmissionFilterOptions,
-  ExternalFormSubmissionInput,
   ExternalFormSubmissionStatus,
+  ExternalFormSubmissionSummaryFragment,
   GetProjectExternalFormSubmissionsDocument,
   GetProjectExternalFormSubmissionsQuery,
   GetProjectExternalFormSubmissionsQueryVariables,
-  StaticFormRole,
-  UpdateExternalFormSubmissionDocument,
-  UpdateExternalFormSubmissionMutation,
-  UpdateExternalFormSubmissionMutationVariables,
-  useGetExternalFormDefinitionQuery,
+  useBulkReviewExternalSubmissionsMutation,
 } from '@/types/gqlTypes';
-
-export type ExternalFormSubmissionFields = NonNullable<
-  GetProjectExternalFormSubmissionsQuery['project']
->['externalFormSubmissions']['nodes'][number];
 
 const ProjectExternalSubmissionsTable = ({
   projectId,
@@ -45,168 +26,119 @@ const ProjectExternalSubmissionsTable = ({
   projectId: string;
   formDefinitionIdentifier: string;
 }) => {
-  const { data, loading, error } = useGetExternalFormDefinitionQuery({
-    variables: { formDefinitionIdentifier: formDefinitionIdentifier },
-    skip: !formDefinitionIdentifier,
-  });
-  const definition = data?.externalFormDefinition;
+  const [modalOpenId, setModalOpenId] = useState<string | null>(null);
 
-  const getColumnDefs = useCallback((rows: ExternalFormSubmissionFields[]) => {
-    const customColumns = getCustomDataElementColumns(rows);
-    return [
-      {
-        header: 'Status',
-        linkTreatment: false,
-        render: (s: ExternalFormSubmissionFieldsFragment) => {
-          const isNew = s.status === ExternalFormSubmissionStatus.New;
-          return (
-            <>
-              <Chip
-                label={capitalize(s.status)}
-                size='small'
-                color={isNew ? 'primary' : 'default'}
-                variant={isNew ? 'filled' : 'outlined'}
-                sx={isNew ? {} : { color: theme.palette.text.secondary }}
-              />
-              {s.spam && (
-                <Chip
-                  label='Spam'
-                  size='small'
-                  color='error'
-                  variant='outlined'
-                  sx={{ ml: 1, color: theme.palette.error.dark }}
-                />
-              )}
-            </>
-          );
-        },
-      },
-      {
-        header: 'Date Submitted',
-        linkTreatment: false,
-        render: (s: ExternalFormSubmissionFieldsFragment) =>
-          parseAndFormatDateTime(s.submittedAt),
-      },
-      ...customColumns,
-    ];
-  }, []);
+  const [bulkUpdate, { loading: bulkLoading, error: bulkError }] =
+    useBulkReviewExternalSubmissionsMutation({
+      refetchQueries: [GetProjectExternalFormSubmissionsDocument],
+      awaitRefetchQueries: true,
+    });
 
-  const [selected, setSelected] =
-    useState<ExternalFormSubmissionFieldsFragment | null>(null);
-
-  const submissionValues = useMemo(() => {
-    if (!selected || !definition) return {};
-    const itemMap = getItemMap(definition.definition, true);
-    const submissionValues: FormValues = {};
-    Object.keys(itemMap).forEach((key) => {
-      const item = itemMap[key];
-      const customFieldKey = item.mapping?.customFieldKey;
-      if (!customFieldKey) return;
-
-      const value = customDataElementValueForKey(
-        customFieldKey,
-        selected.customDataElements
+  const getColumnDefs = useCallback(
+    (
+      rows: ExternalFormSubmissionSummaryFragment[]
+    ): ColumnDef<ExternalFormSubmissionSummaryFragment>[] => {
+      // Get all unique "summary keys"
+      const summaryKeys = new Set<string>();
+      rows.forEach(({ summaryFields }) =>
+        summaryFields.forEach(({ key }) => summaryKeys.add(key))
       );
 
-      // if item has a picklist, convert value to PickListOption(s) so we can display the readable label
-      if (item.pickListOptions) {
-        if (Array.isArray(value)) {
-          submissionValues[key] = value.map((v) => getOptionValue(v, item));
-        } else {
-          submissionValues[key] = getOptionValue(value, item);
-        }
-      } else {
-        submissionValues[key] = value;
-      }
-    });
-    return submissionValues;
-  }, [selected, definition]);
+      // Add one column definition for each summary key
+      const defs: ColumnDef<ExternalFormSubmissionSummaryFragment>[] =
+        Array.from(summaryKeys)
+          .sort()
+          .map((fieldKey) => ({
+            key: fieldKey,
+            header: fieldKey,
+            render: ({
+              summaryFields,
+            }: ExternalFormSubmissionSummaryFragment) =>
+              summaryFields.find(({ key }) => key === fieldKey)?.value,
+          }));
 
-  const { openFormDialog, renderFormDialog, closeDialog } = useStaticFormDialog<
-    UpdateExternalFormSubmissionMutation,
-    UpdateExternalFormSubmissionMutationVariables
-  >({
-    formRole: StaticFormRole.ExternalFormSubmissionReview,
-    mutationDocument: UpdateExternalFormSubmissionDocument,
-    getErrors: (data) => data.updateExternalFormSubmission?.errors || [],
-    getVariables: (values) => {
-      return {
-        id: selected?.id || '', // selected should never be undefined when dialog is open
-        input: {
-          notes: values.notes,
-          status: values.reviewed
-            ? ExternalFormSubmissionStatus.Reviewed
-            : ExternalFormSubmissionStatus.New,
-          spam: values.spam,
-        } as ExternalFormSubmissionInput,
-      };
+      return [
+        {
+          header: 'ID',
+          render: (s: ExternalFormSubmissionSummaryFragment) => s.id,
+        },
+        {
+          header: 'Status',
+          linkTreatment: false,
+          render: ({ status, spam }: ExternalFormSubmissionSummaryFragment) => {
+            const isNew = status === ExternalFormSubmissionStatus.New;
+            return (
+              <>
+                <Chip
+                  label={capitalize(status)}
+                  size='small'
+                  color={isNew ? 'primary' : 'default'}
+                  variant={isNew ? 'filled' : 'outlined'}
+                  sx={isNew ? {} : { color: theme.palette.text.secondary }}
+                />
+                {spam && (
+                  <Chip
+                    label='Spam'
+                    size='small'
+                    color='error'
+                    variant='outlined'
+                    sx={{ ml: 1, color: theme.palette.error.dark }}
+                  />
+                )}
+              </>
+            );
+          },
+        },
+        {
+          header: 'Date Submitted',
+          linkTreatment: false,
+          render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) => (
+            <RelativeDateTableCellContents
+              dateTimeString={submittedAt}
+              horizontal
+            />
+          ),
+        },
+        ...defs,
+        {
+          header: 'Action',
+          render: ({ id }: ExternalFormSubmissionSummaryFragment) => (
+            <Button
+              variant='outlined'
+              onClick={() => setModalOpenId(id)}
+              disabled={bulkLoading}
+            >
+              View
+            </Button>
+          ),
+        },
+      ];
     },
-    initialValues: selected
-      ? {
-          notes: selected.notes,
-          reviewed: selected.status === ExternalFormSubmissionStatus.Reviewed,
-          spam: selected.spam,
-        }
-      : {},
-    onCompleted: (data) => {
-      if (!data?.updateExternalFormSubmission?.errors?.length) {
-        setSelected(null);
-      }
-    },
-    onClose: () => setSelected(null),
-    beforeFormComponent: selected && definition && (
-      <Card sx={{ p: 2 }}>
-        <DynamicView
-          values={submissionValues}
-          definition={definition.definition}
-        />
-      </Card>
-    ),
-  });
-
-  const deleteButton = useMemo(
-    () =>
-      selected && (
-        <DeleteMutationButton<
-          DeleteExternalFormSubmissionMutation,
-          DeleteExternalFormSubmissionMutationVariables
-        >
-          queryDocument={DeleteExternalFormSubmissionDocument}
-          variables={{ id: selected.id }}
-          idPath={'deleteExternalFormSubmission.externalFormSubmission.id'}
-          recordName='Submission'
-          onSuccess={() => {
-            cache.evict({
-              id: `ExternalFormSubmission:${selected.id}`,
-            });
-            setSelected(null);
-            closeDialog();
-          }}
-          onlyIcon
-        />
-      ),
-    [closeDialog, selected]
+    [setModalOpenId, bulkLoading]
   );
 
   const filters = useFilters({
     type: 'ExternalFormSubmissionFilterOptions',
   });
 
-  if (loading) return <Loading />;
-  if (error) throw error;
+  if (bulkError) throw bulkError;
 
   return (
     <>
       <GenericTableWithData<
         GetProjectExternalFormSubmissionsQuery,
         GetProjectExternalFormSubmissionsQueryVariables,
-        ExternalFormSubmissionFields,
+        ExternalFormSubmissionSummaryFragment,
         ExternalFormSubmissionFilterOptions
       >
         queryVariables={{
           id: projectId,
           formDefinitionIdentifier: formDefinitionIdentifier,
         }}
+        selectable='checkbox'
+        isRowSelectable={(s) =>
+          s.status === ExternalFormSubmissionStatus.New && !s.spam
+        }
         queryDocument={GetProjectExternalFormSubmissionsDocument}
         getColumnDefs={getColumnDefs}
         noData='No external form submissions'
@@ -214,15 +146,39 @@ const ProjectExternalSubmissionsTable = ({
         recordType='ExternalFormSubmission'
         paginationItemName='submission'
         filters={filters}
-        handleRowClick={(row) => {
-          setSelected(row);
-          openFormDialog();
+        EnhancedTableToolbarProps={{
+          title: (
+            <Stack
+              direction='row'
+              justifyContent={'space-between'}
+              sx={{ width: '100%' }}
+            >
+              <Typography variant='h3'>Form Submissions</Typography>
+              <RefreshExternalSubmissionsButton />
+            </Stack>
+          ),
+          renderBulkAction: (selectedIds, selectedRows) => (
+            <LoadingButton
+              onClick={() => {
+                bulkUpdate({
+                  variables: {
+                    ids: selectedIds as string[],
+                  },
+                });
+              }}
+              loading={bulkLoading}
+            >
+              Bulk Review ({selectedRows.length}) Submissions
+            </LoadingButton>
+          ),
         }}
       />
-      {renderFormDialog({
-        title: 'Review Submission',
-        otherActions: deleteButton,
-      })}
+      {modalOpenId && (
+        <ExternalSubmissionsViewModal
+          submissionId={modalOpenId}
+          onClose={() => setModalOpenId(null)}
+        />
+      )}
     </>
   );
 };
