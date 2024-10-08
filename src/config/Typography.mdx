@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/blocks';
+import { ThemeProvider, Typography } from '@mui/material';
+import theme from '@/config/theme';
+
+<Meta title='Typography' />
+
+export const SampleText =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu diam sed ipsum vulputate condimentum accumsan et massa. Pellentesque sit amet placerat purus. Vestibulum quis risus at lacus scelerisque hendrerit sed a ante. Nulla vel rhoncus arcu. Sed efficitur fringilla aliquam. Etiam sagittis bibendum urna, in imperdiet tellus commodo nec.';
+
+# Typography
+
+The typography below is programmatically pulled from our theme, reflecting the current state of the code,
+not the desired state of the theme discipline. See Figma for desired changes. When we make those changes we should
+consider what updates to make here to most helpfully document our type system.
+
+We haven't used Storybook's built-in Typeset here, which is more useful for displaying a flexible type system
+(different font weights in combination with different sizes).
+
+<ThemeProvider theme={theme}>
+  {Object.entries(theme.typography).map(([k, v]) => {
+    if (typeof v === 'object' && k !== 'inherit') {
+      return (
+        <>
+          <Typography variant={k}>
+            {formatTypeString(k)}
+            {k.startsWith('body') && ': ' + SampleText}
+          </Typography>
+          <br />
+        </>
+      );
+    } else {
+      // These are MUI values like fontWeightRegular, fontWeightBold
+      console.log(k, v);
+    }
+  })}
+</ThemeProvider>
+
+export function formatTypeString(input) {
+  return input
+    .replace(/^h(\d)/, 'Heading $1') // Convert 'h' followed by a digit
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // Convert camelCase to spaces
+    .replace(/\d+/, (match) => ' ' + match) // Add space before numbers
+    .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
+}

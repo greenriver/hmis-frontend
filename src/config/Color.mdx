@@ -1,0 +1,47 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import theme from '@/config/theme';
+
+<Meta title='Color' />
+
+# Color
+
+The swatches below are programmatically pulled from our theme, so they reflect the current state of the code,
+not the desired state of the theme discipline. See Figma for desired changes.
+
+From the advanced example here: https://storybook.js.org/docs/6/writing-docs/doc-blocks/doc-block-colorpalette
+
+<ColorPalette>{getColorItems(theme.palette)}</ColorPalette>
+
+export function isColor(maybeColor) {
+  return (
+    typeof maybeColor === 'string' &&
+    (maybeColor.match(/^#/) ||
+      maybeColor.match(/^rgb/) ||
+      maybeColor.match(/color/i))
+  );
+}
+
+export function extractColors(paletteObject, prefix = '') {
+  // The complexity/recursion here is because of the way we've setup Alerts colors.
+  return Object.entries(paletteObject).reduce((acc, [key, value]) => {
+    if (isColor(value)) {
+      return { ...acc, [prefix + ' ' + key]: value };
+    } else if (typeof value === 'object' && value !== null) {
+      // Recursively accumulate colors from nested objects
+      return { ...acc, ...extractColors(value, (prefix = key)) };
+    }
+    return acc;
+  }, {});
+}
+
+export function getColorItems(palette) {
+  return Object.entries(palette).map(([k, v]) => {
+    if (isColor(v)) {
+      return <ColorItem key={k} title={k} colors={{ [k]: v }} subtitle='' />;
+    } else if (typeof v === 'object') {
+      const colors = extractColors(v);
+      return <ColorItem key={k} title={k} colors={colors} subtitle='' />;
+    }
+    return null;
+  });
+}

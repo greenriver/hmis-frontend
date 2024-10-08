@@ -1,7 +1,6 @@
 import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import { MockedProvider } from '@apollo/client/testing';
-import { ThemeProvider } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import en from 'date-fns/locale/en-US';
@@ -11,6 +10,8 @@ import theme from '../src/config/theme';
 import '../src/index.css';
 import { fakeEnrollment, RITA_ACKROYD } from '../src/test/__mocks__/requests';
 import { RenderRouteWithOutletContext } from './components/RenderRouteWithOutletContext';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { withThemeFromJSXProvider } from '@storybook/addon-themes';
 
 export const parameters = {
   layout: 'padded',
@@ -63,10 +64,16 @@ export const decorators = [
     }
   },
   (Story) => (
-    <ThemeProvider theme={theme}>
-      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en}>
-        {Story()}
-      </LocalizationProvider>
-    </ThemeProvider>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en}>
+      {Story()}
+    </LocalizationProvider>
   ),
+  withThemeFromJSXProvider({
+    themes: {
+      default: theme,
+    },
+    defaultTheme: 'default',
+    Provider: ThemeProvider,
+    GlobalStyles: CssBaseline,
+  }),
 ];

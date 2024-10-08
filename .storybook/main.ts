@@ -30,6 +30,7 @@ const config = {
   stories: [
     // Use implicit paths for all stories
     '../src/**/*.stories.@(js|jsx|ts|tsx)',
+    '../src/**/*.mdx',
     // For a better structure, need to reorganize some things. Should first confirm approach that "src" has comment element components and "modules" have components for specific pages or modules, which is the vague pattern right now.
     // - Move src/components/clientDashboard components into module(s)
     // - Move src/components/pages into modules too?
