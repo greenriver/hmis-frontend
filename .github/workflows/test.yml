@@ -45,7 +45,7 @@ jobs:
       run: |
         yarn storybook --smoke-test
     - name: Run Chromatic
-      # Don't run chromatic on PRs. Only on pushes to release-N or stable
+      id: chromatic
       uses: chromaui/action@latest
       with:
         projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -53,9 +53,8 @@ jobs:
         exitZeroOnChanges: true
         onlyChanged: true
     - name: Storybook test
-      #if: github.event.deployment_status.state == 'success'
       run: |
         echo $TARGET_URL
         yarn test-storybook
       env:
-        TARGET_URL: '${{ github.event.deployment_status.target_url }}'
+        TARGET_URL: '${{ steps.chromatic.outputs.storybookUrl }}'
