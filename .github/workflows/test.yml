@@ -46,7 +46,6 @@ jobs:
         yarn storybook --smoke-test
     - name: Run Chromatic
       # Don't run chromatic on PRs. Only on pushes to release-N or stable
-#      if: github.event_name != 'pull_request'
       uses: chromaui/action@latest
       with:
         projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -54,9 +53,9 @@ jobs:
         exitZeroOnChanges: true
         onlyChanged: true
     - name: Storybook test
+      #if: github.event.deployment_status.state == 'success'
       run: |
-        npx playwright install --with-deps
-        yarn build-storybook --quiet
-        npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
-          "npx http-server storybook-static --port 6006 --silent" \
-          "npx wait-on tcp:127.0.0.1:6006 && yarn test-storybook"
+        echo $TARGET_URL
+        yarn test-storybook
+      env:
+        TARGET_URL: '${{ github.event.deployment_status.target_url }}'
