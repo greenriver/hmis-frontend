@@ -54,7 +54,7 @@ jobs:
         onlyChanged: true
     - name: Storybook test
       run: |
-        echo $TARGET_URL
+        npx playwright install --with-deps
         yarn test-storybook
       env:
         TARGET_URL: '${{ steps.chromatic.outputs.storybookUrl }}'
