@@ -3038,7 +3038,7 @@
     "@storybook/global" "^5.0.0"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-themes@^8.3.5":
+"@storybook/addon-themes@^8.3.2":
   version "8.3.5"
   resolved "https://registry.yarnpkg.com/@storybook/addon-themes/-/addon-themes-8.3.5.tgz#fef6a783612a091675e96fc37c93b24ba406f4f3"
   integrity sha512-kXHKAZvAtMoOR1XFGTo5/T8anE9x7W8Ddpof2wyi+du5HscFiEW7TesWdvNgBUR7wAaiR21aW2S4jC72a6gTCw==
@@ -3077,7 +3077,7 @@
     ts-dedent "^2.0.0"
     util-deprecate "^1.0.2"
 
-"@storybook/blocks@^8.3.5":
+"@storybook/blocks@^8.3.2":
   version "8.3.5"
   resolved "https://registry.yarnpkg.com/@storybook/blocks/-/blocks-8.3.5.tgz#35e20efb0c13a235832dd945520ff8ac61f40717"
   integrity sha512-8cHTdTywolTHlgwN8I7YH7saWAIjGzV617AwjhJ95AKlC0VtpO1gAFcAgCqr4DU9eMc+LZuvbnaU/RSvA5eCCQ==
@@ -9160,7 +9160,7 @@ storybook@8.3.2:
   dependencies:
     "@storybook/core" "8.3.2"
 
-storybook@^8.3.5:
+storybook@^8.3.2:
   version "8.3.5"
   resolved "https://registry.yarnpkg.com/storybook/-/storybook-8.3.5.tgz#aef0542c08e245b7ac22742c1e1633a125063b8e"
   integrity sha512-hYQVtP2l+3kO8oKDn4fjXXQYxgTRsj/LaV6lUMJH0zt+OhVmDXKJLxmdUP4ieTm0T8wEbSYosFavgPcQZlxRfw==

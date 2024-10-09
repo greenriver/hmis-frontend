@@ -56,6 +56,10 @@ const config = {
     checkOptions: {},
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
+      // Makes union prop types like variant and size appear as select controls
+      shouldExtractLiteralValuesFromEnum: true,
+      // Makes string and boolean types that can be undefined appear as inputs and switches
+      shouldRemoveUndefinedFromOptional: true,
       propFilter: (prop: any) => {
         return prop.parent
           ? prop.parent.name !== 'DOMAttributes' &&

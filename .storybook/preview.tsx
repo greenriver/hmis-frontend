@@ -70,6 +70,8 @@ export const decorators = [
   ),
   withThemeFromJSXProvider({
     themes: {
+      // If we provide more than one theme here, a toolbar menu will appear in
+      // the Storybook UI to select among them
       default: theme,
     },
     defaultTheme: 'default',
