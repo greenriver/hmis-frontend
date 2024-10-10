@@ -1455,6 +1455,7 @@ export type CustomCaseNote = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
+  formDefinitionId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<ApplicationUser>;
@@ -5835,7 +5836,6 @@ export type Query = {
   /** Get the most relevant Form Definition to use for record viewing/editing */
   recordFormDefinition?: Maybe<FormDefinition>;
   referralPosting?: Maybe<ReferralPosting>;
-  refreshExternalSubmissions?: Maybe<Scalars['Boolean']['output']>;
   /** Service lookup */
   service?: Maybe<Service>;
   serviceCategories: ServiceCategoriesPaginated;
@@ -6016,6 +6016,7 @@ export type QueryProjectsArgs = {
 };
 
 export type QueryRecordFormDefinitionArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   role: RecordFormRole;
 };
@@ -17091,6 +17092,7 @@ export type CustomCaseNoteFieldsFragment = {
   informationDate?: string | null;
   dateUpdated?: string | null;
   dateCreated?: string | null;
+  formDefinitionId: string;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -17176,6 +17178,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
         informationDate?: string | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
+        formDefinitionId: string;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17290,6 +17293,7 @@ export type GetClientCaseNotesQuery = {
         informationDate?: string | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
+        formDefinitionId: string;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -24633,6 +24637,7 @@ export type GetPickListQuery = {
 export type GetFormDefinitionQueryVariables = Exact<{
   role: RecordFormRole;
   projectId?: InputMaybe<Scalars['ID']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 export type GetFormDefinitionQuery = {
@@ -27122,6 +27127,7 @@ export type SubmitFormMutation = {
           informationDate?: string | null;
           dateUpdated?: string | null;
           dateCreated?: string | null;
+          formDefinitionId: string;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -35878,6 +35884,7 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
     informationDate
     dateUpdated
     dateCreated
+    formDefinitionId
     user {
       ...UserFields
     }
@@ -43518,8 +43525,8 @@ export type GetPickListQueryResult = Apollo.QueryResult<
   GetPickListQueryVariables
 >;
 export const GetFormDefinitionDocument = gql`
-  query GetFormDefinition($role: RecordFormRole!, $projectId: ID) {
-    recordFormDefinition(role: $role, projectId: $projectId) {
+  query GetFormDefinition($role: RecordFormRole!, $projectId: ID, $id: ID) {
+    recordFormDefinition(role: $role, projectId: $projectId, id: $id) {
       ...FormDefinitionFields
     }
   }
@@ -43540,6 +43547,7 @@ export const GetFormDefinitionDocument = gql`
  *   variables: {
  *      role: // value for 'role'
  *      projectId: // value for 'projectId'
+ *      id: // value for 'id'
  *   },
  * });
  */

@@ -95,3 +95,17 @@ export const CommonDetailGridItem: React.FC<{
     </>
   );
 };
+
+interface Props {
+  rows: { id: string; label: ReactNode; value: ReactNode }[];
+}
+const CommonDetailGrid: React.FC<Props> = ({ rows }) => (
+  <CommonDetailGridContainer>
+    {rows.map(({ id, label, value }) => (
+      <CommonDetailGridItem label={label} key={id}>
+        {value}
+      </CommonDetailGridItem>
+    ))}
+  </CommonDetailGridContainer>
+);
+export default CommonDetailGrid;
