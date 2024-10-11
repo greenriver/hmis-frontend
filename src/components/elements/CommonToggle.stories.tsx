@@ -4,7 +4,6 @@ import CommonToggle from './CommonToggle';
 
 export default {
   component: CommonToggle,
-  // https://github.com/storybookjs/storybook/discussions/21680#discussioncomment-7698496
   render: function Component(args) {
     const [, setArgs] = useArgs();
 
