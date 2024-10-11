@@ -37711,35 +37711,6 @@
             "deprecationReason": null
           },
           {
-            "name": "externalFormDefinition",
-            "description": null,
-            "args": [
-              {
-                "name": "identifier",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "FormDefinition",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "use definition from the individual submission to display"
-          },
-          {
             "name": "externalFormSubmission",
             "description": null,
             "args": [
