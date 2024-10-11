@@ -3,17 +3,17 @@ import { Button, ButtonProps } from '@mui/material';
 import { forwardRef, Ref } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
-export type ButtonLinkProps = Omit<ButtonProps, 'href'> &
+export type ButtonLinkProps = Omit<ButtonProps, 'href' | `on${string}`> &
   LinkProps & {
     leftAlign?: boolean;
     Icon?: SvgIconComponent;
     openInNew?: boolean;
   };
 
-const ButtonLink = forwardRef<HTMLButtonElement, ButtonLinkProps>(
+const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
   function ButtonLink(
     { sx, leftAlign, Icon, openInNew, ...props },
-    ref: Ref<HTMLButtonElement>
+    ref: Ref<HTMLAnchorElement>
   ) {
     return (
       <Button
