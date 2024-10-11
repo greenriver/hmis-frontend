@@ -183,79 +183,22 @@ src
 |
 +-- api               # graphql queries/mutations/fragments
 |
-+-- app               # application layer containing:
-|   +-- App.tsx              # main application component
-|   +-- AppProvider.tsx      # application provider that wraps the entire application
-|   +-- protectedRoutes.ts   # define routes for the authorized applciation
-+-- assets            # assets folder can contain all the static files such as images, fonts, etc.
-|
 +-- components        # shared components used across the entire application
 |
-+-- config            # global configurations, exported env variables etc.
-|
-+-- modules           # feature based modules
++-- modules           # feature-based modules
 |
 +-- hooks             # shared hooks used across the entire application
 |
-+-- providers         # shared contexts and providers? (added)
-|
 +-- test              # test utilities and mocks
 |
-+-- types             # shared types used across the application
++-- types             # shared types used across the application (auto-generated from the graphql schema)
 |
 +-- utils             # shared utility functions
 ```
 
-Important modules
-```
-app
-components             # no components, just a dir
-components/elements    # common components
-components/input       # base input components that are used across the app
-components/layout      # layout components that are used across the app
-components/table       # table components that are used across the app (could be a module or just in elements/ ?)
-components/pages       # ***keep or move to modules or src/app/pages?? these are not re-used
 
-modules:
+Inner structure of a module:
 
-modules/admin                  # everything related to top-level Admin page (Should be further split out)
-modules/assessments
-modules/audit
-modules/auth
-modules/caseNotes
-modules/client        # components used on client overview page, plus client alerts. could be divided
-modules/clientMerge
-modules/dataFetching  # doesn't really fit in, not a feature. remove?
-modules/enrollment    # lots of enrollment components including staff assignment. could be divided
-modules/errors
-modules/external/mci  # other external components could go here, or rename to just externalMci or mci
-modules/form          # BIG. all DynamicForm/DynamicView related components, plus some enrollment/client-specific components that should go in modules, I think. should be divided. also contains rhf components that shouold probably be a different module.
-modules/formBuilder
-modules/hmis          # "hmis" atomic elements, like ClientDobAge, EnrollmentStatus, HmisField etc. I guess these should just be moved to src/components/elements
-modules/hmisAppSettings
-modules/household     # components related to creating/editing/viewing household membership
-modules/permissions   # should move src/components/accessWrappers to here
-modules/projects      # BIG, should be divided. contains referral components that should be moved to referral module. maybe project configuration components could have their own module too.
-modules/referrals
-modules/scanCards
-modules/search
-modules/services     # includes bulk- and individual- service stuff, could be split to bulkServices/bedNights module
-modules/systemStatus
-modules/units
-modules/userDashboard
-
-new modules:
-modules/clientDashboard        # NEW (was src/components/clientDashboard)
-modules/theme                  # NEW (was in src/config)
-```
-
-Topics for discussion
-* Moving `ProjectServices` table/page from `modules/projects` modules to `modules/services` (example). I think I like having all Service-related tables/pages in one module, because they share column configurations. And of course the generic table is in `src/components`.
-* Modules themselves don't follow the consistent inner structure, I would propose updating them.
-* Do we want to recommend flat structure of components within modules? So things lie flat in storybook.
-
-
-Inner structure of modules
 ```
 src/modules/awesomeModule
 |
@@ -263,8 +206,21 @@ src/modules/awesomeModule
 |
 +-- hooks       # hooks scoped to a specific feature
 |
-+-- types       # typescript types used within the feature
++-- myTypes.ts  # typescript types used within the feature, with appropriate filename
 |
-+-- utils       # utility functions for a specific feature
++-- myUtils.ts  # utility functions for a specific feature, with appropriate filename
 
 ```
+
+#### Guidelines for categorization
+* Prefer to co-locate code that deals with the same type of thing into a shared `module`, even if the components are rendered in different parts of the application. For example, the Project Services table and Client Services table can live in the same "service" module.
+* A `module` should typically contain more than just a couple of files, but not so many that it becomes difficult to navigate or understand.
+* If two potential features are highly interdependent and frequently change together, consider combining them into a single `module`.
+* The top-level `components` folder should contain generic components that are used across the application. For the most part, they should not be domain-specific.
+* Components in the top-level `components` dir should not have dependencies on `module` code.
+
+#### Examples of modules
+* `modules/service` - includes the service table components, and service-related pages (e.g. ProjectServicesPage, EnrollmentServicesPage)
+* `modules/bulkServices` - includes components to support the bulk service assignment feature. This is separated out from the `services` module to keep the size manageable, and because they are relatively independent implementations.
+* `modules/scanCards` - components to support the Scan Card feature
+
