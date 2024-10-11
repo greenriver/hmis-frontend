@@ -12,7 +12,7 @@ export type ButtonLinkProps = Omit<ButtonProps, 'href'> &
 
 const ButtonLink = forwardRef<HTMLButtonElement, ButtonLinkProps>(
   function ButtonLink(
-    { sx, leftAlign, Icon, openInNew, ...props }: ButtonLinkProps,
+    { sx, leftAlign, Icon, openInNew, ...props },
     ref: Ref<HTMLButtonElement>
   ) {
     return (
