@@ -9,15 +9,12 @@ export const SampleText =
 
 # Typography
 
-The typography below is programmatically pulled from our theme, reflecting the current state of the code,
-not the desired state of the theme discipline. See Figma for desired changes. When we make those changes we should
-consider what updates to make here to most helpfully document our type system.
-
-We haven't used Storybook's built-in Typeset here, which is more useful for displaying a flexible type system
-(different font weights in combination with different sizes).
+The typography below reflects the default theme of the application.
 
 <ThemeProvider theme={theme}>
   {Object.entries(theme.typography).map(([k, v]) => {
+    // We haven't used Storybook's built-in Typeset here, which is more useful for displaying a flexible type system
+    // (different font weights in combination with different sizes).
     if (typeof v === 'object' && k !== 'inherit') {
       return (
         <>
@@ -28,10 +25,8 @@ We haven't used Storybook's built-in Typeset here, which is more useful for disp
           <br />
         </>
       );
-    } else {
-      // These are MUI values like fontWeightRegular, fontWeightBold
-      console.log(k, v);
     }
+    // else - the non-object items in the theme.typography map are default MUI values like fontWeightRegular, fontWeightBold.
   })}
 </ThemeProvider>
 

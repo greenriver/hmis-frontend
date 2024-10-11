@@ -5,10 +5,7 @@ import theme from '@/config/theme';
 
 # Color
 
-The swatches below are programmatically pulled from our theme, so they reflect the current state of the code,
-not the desired state of the theme discipline. See Figma for desired changes.
-
-From the advanced example here: https://storybook.js.org/docs/6/writing-docs/doc-blocks/doc-block-colorpalette
+The swatches below reflect the default theme of the application.
 
 <ColorPalette>{getColorItems(theme.palette)}</ColorPalette>
 
@@ -22,7 +19,8 @@ export function isColor(maybeColor) {
 }
 
 export function extractColors(paletteObject, prefix = '') {
-  // The complexity/recursion here is because of the way we've setup Alerts colors.
+  // This is based on the advanced example here: https://storybook.js.org/docs/6/writing-docs/doc-blocks/doc-block-colorpalette
+  // with added complexity/recursion because of the way we've setup Alerts colors.
   return Object.entries(paletteObject).reduce((acc, [key, value]) => {
     if (isColor(value)) {
       return { ...acc, [prefix + ' ' + key]: value };
