@@ -34,7 +34,13 @@ const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
     }, [loading, loadingPosition]);
 
     return (
-      <MuiLoadingButton ref={ref} {...props} sx={{ ...props.sx, ...extraSx }} />
+      <MuiLoadingButton
+        ref={ref}
+        loadingPosition={loadingPosition}
+        loading={loading}
+        {...props}
+        sx={{ ...props.sx, ...extraSx }}
+      />
     );
   }
 );
