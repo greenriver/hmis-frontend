@@ -1,7 +1,7 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Link, LinkProps, Stack } from '@mui/material';
-import { forwardRef, Ref } from 'react';
+import { forwardRef } from 'react';
 import {
   Link as ReactRouterLink,
   LinkProps as ReactRouterLinkProps,
@@ -16,8 +16,8 @@ export type RouterLinkProps = Omit<LinkProps, 'href'> &
 
 const RouterLink = forwardRef<HTMLLinkElement, RouterLinkProps>(
   function RouterLink(
-    { plain, openInNew = false, children, Icon, ...props }: RouterLinkProps,
-    ref: Ref<HTMLLinkElement>
+    { plain, openInNew = false, children, Icon, ...props },
+    ref
   ) {
     return (
       <Link

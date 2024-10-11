@@ -1,6 +1,6 @@
 import { LoadingButton as MuiLoadingButton } from '@mui/lab';
 import { ButtonProps } from '@mui/material';
-import { forwardRef, Ref, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 
 /**
  * Wrapper around LoadingButton to make tsc compilation faster.
@@ -16,12 +16,8 @@ export interface LoadingButtonProps extends ButtonProps {
 
 const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
   function LoadingButton(
-    {
-      loadingPosition = 'start',
-      loading = false,
-      ...props
-    }: LoadingButtonProps,
-    ref: Ref<HTMLButtonElement>
+    { loadingPosition = 'start', loading = false, ...props },
+    ref
   ) {
     const extraSx = useMemo(() => {
       if (loading && loadingPosition === 'start') {
