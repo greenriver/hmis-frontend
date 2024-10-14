@@ -3,16 +3,16 @@ import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import Loading from '../../../../components/elements/Loading';
-import ContextHeaderContent from '../../../../components/layout/dashboard/contextHeader/ContextHeaderContent';
-import DashboardContentContainer from '../../../../components/layout/dashboard/DashboardContentContainer';
-import SideNavMenu from '../../../../components/layout/dashboard/sideNav/SideNavMenu';
-import NotFound from '../../../../components/pages/NotFound';
-
+import Loading from '@/components/elements/Loading';
+import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
 import {
   useDashboardBreadcrumbs,
   useEnrollmentBreadcrumbConfig,
 } from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
+import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
+import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
+import NotFound from '@/components/pages/NotFound';
+
 import { useDashboardState } from '@/hooks/useDashboardState';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';

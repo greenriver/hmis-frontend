@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Loading from '../../../components/elements/Loading';
-import NotFound from '../../../components/pages/NotFound';
-
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { ProjectFormTitle } from './ProjectOverview';
+import Loading from '@/components/elements/Loading';
+import NotFound from '@/components/pages/NotFound';
+
 
 import useSafeParams from '@/hooks/useSafeParams';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';

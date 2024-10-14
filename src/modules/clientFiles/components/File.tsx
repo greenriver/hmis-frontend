@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Loading from '../elements/Loading';
+import Loading from '@/components/elements/Loading';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
