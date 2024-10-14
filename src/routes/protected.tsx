@@ -15,7 +15,7 @@ import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import ProjectRoute from '@/components/accessWrappers/ProjectRoute';
-import ClientFiles from '@/components/clientDashboard/ClientFiles';
+
 import EditClient from '@/components/clientDashboard/EditClient';
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
 import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
@@ -75,6 +75,7 @@ import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/E
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import ClientFilesPage from '@/modules/files/components/ClientFilesPage';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
@@ -653,7 +654,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewAnyFiles'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ClientFiles />
+                <ClientFilesPage />
               </ClientRoute>
             ),
           },

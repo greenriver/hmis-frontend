@@ -2,14 +2,13 @@ import UploadIcon from '@mui/icons-material/Upload';
 import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 
-import NotCollectedText from '../elements/NotCollectedText';
-import PageTitle from '../layout/PageTitle';
-
-import FileDialog from './files/FileModal';
-import useFileActions from './files/useFileActions';
+import useFileActions from '../hooks/useFileActions';
+import FileDialog from './FileModal';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
+import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
@@ -61,7 +60,7 @@ const FileActions: React.FC<{
   );
 };
 
-const ClientFiles = () => {
+const ClientFilesPage = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const [viewingFile, setViewingFile] = useState<ClientFileType | undefined>();
 
@@ -189,4 +188,4 @@ const ClientFiles = () => {
   );
 };
 
-export default ClientFiles;
+export default ClientFilesPage;
