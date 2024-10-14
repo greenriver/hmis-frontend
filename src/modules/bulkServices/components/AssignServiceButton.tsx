@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import * as React from 'react';
-import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
+import { useBulkAssignMutations } from '../hooks/useBulkAssignMutations';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 
 import CommonDialog from '@/components/elements/CommonDialog';

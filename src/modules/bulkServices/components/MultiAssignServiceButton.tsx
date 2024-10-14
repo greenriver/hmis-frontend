@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
+import { useBulkAssignMutations } from '../hooks/useBulkAssignMutations';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import LoadingButton from '@/components/elements/LoadingButton';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';

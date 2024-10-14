@@ -8,7 +8,11 @@ import {
 } from '@mui/material';
 
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
-import { FixedServiceRanges, ServicePeriod, isFixedRange } from '../../types';
+import {
+  FixedServiceRanges,
+  ServicePeriod,
+  isFixedRange,
+} from '../bulkServicesTypes';
 import CommonDialog from '@/components/elements/CommonDialog';
 import DatePicker from '@/components/elements/input/DatePicker';
 import GenericSelect, {

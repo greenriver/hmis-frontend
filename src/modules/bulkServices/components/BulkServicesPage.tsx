@@ -2,7 +2,7 @@ import { Box, Grid, Paper, Stack } from '@mui/material';
 import pluralize from 'pluralize';
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ServiceTypeSelect from '../ServiceTypeSelect';
+
 import BulkServiceSearchToggle from './BulkServiceSearchToggle';
 import BulkServicesTable from './BulkServicesTable';
 import ServiceDateRangeSelect from './ServiceDateRangeSelect';
@@ -17,6 +17,7 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import CocPicker from '@/modules/projectAdministration/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
+import ServiceTypeSelect from '@/modules/services/components/ServiceTypeSelect';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 

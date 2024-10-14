@@ -6,12 +6,13 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   SERVICE_BASIC_COLUMNS,
   SERVICE_COLUMNS,
-} from '@/modules/enrollment/components/pages/EnrollmentServicesPage';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import { useFilters } from '@/modules/hmis/filterUtil';
+} from '@/modules/services/serviceColumns';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
@@ -25,7 +26,7 @@ type ServiceType = NonNullable<
   NonNullable<GetClientServicesQuery['client']>['services']
 >['nodes'][0];
 
-const ClientServices: React.FC<{
+const ClientServicesPage: React.FC<{
   omitColumns?: string[];
   enrollmentId?: string;
 }> = ({ omitColumns = [] }) => {
@@ -109,4 +110,4 @@ const ClientServices: React.FC<{
   );
 };
 
-export default ClientServices;
+export default ClientServicesPage;

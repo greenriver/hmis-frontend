@@ -47,6 +47,8 @@ import NewIndividualAssessmentPage from '@/modules/assessments/components/NewInd
 import ClientAssessmentsPage from '@/modules/assessments/components/pages/ClientAssessmentsPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
+import BedNightsPage from '@/modules/bulkServices/components/BedNightsPage';
+import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage';
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
 
@@ -68,7 +70,7 @@ import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/componen
 import EnrollmentDashboard from '@/modules/enrollment/components/pages/EnrollmentDashboard';
 import EnrollmentEsgFundingReport from '@/modules/enrollment/components/pages/EnrollmentEsgFundingReport';
 import EnrollmentOverview from '@/modules/enrollment/components/pages/EnrollmentOverview';
-import EnrollmentServicesPage from '@/modules/enrollment/components/pages/EnrollmentServicesPage';
+
 import HouseholdPage from '@/modules/enrollment/components/pages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
@@ -100,12 +102,13 @@ import ProjectExternalFormSubmissions from '@/modules/projects/components/Projec
 import ProjectOverviewPage from '@/modules/projects/components/ProjectOverviewPage';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
-import ProjectServices from '@/modules/projects/components/ProjectServices';
+
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
 import ClientSearchPage from '@/modules/search/components/ClientSearchPage';
-import BedNightsPage from '@/modules/services/components/bulk/BedNightsPage';
-import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPage';
-import ClientServices from '@/modules/services/components/ClientServices';
+
+import ClientServicesPage from '@/modules/services/components/ClientServicesPage';
+import EnrollmentServicesPage from '@/modules/services/components/EnrollmentServicesPage';
+import ProjectServicesPage from '@/modules/services/components/ProjectServicesPage';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
 import MyDashboardPage from '@/modules/userDashboard/MyDashboardPage';
@@ -183,7 +186,7 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
-            element: <ProjectServices />,
+            element: <ProjectServicesPage />,
           },
           {
             path: ProjectDashboardRoutes.PROJECT_CURRENT_LIVING_SITUATIONS,
@@ -618,7 +621,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ClientServices />
+                <ClientServicesPage />
               </ClientRoute>
             ),
           },

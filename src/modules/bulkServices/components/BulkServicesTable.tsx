@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { ServicePeriod } from '../../types';
+import { ServicePeriod } from '../bulkServicesTypes';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';

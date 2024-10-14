@@ -1,11 +1,11 @@
 import { Paper } from '@mui/material';
 
-import ProjectServicesTable from './tables/ProjectServicesTable';
+import ProjectServicesTable from './ProjectServicesTable';
 
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 
-const ProjectServices = () => {
+const ProjectServicesPage = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
@@ -19,4 +19,4 @@ const ProjectServices = () => {
     </>
   );
 };
-export default ProjectServices;
+export default ProjectServicesPage;
