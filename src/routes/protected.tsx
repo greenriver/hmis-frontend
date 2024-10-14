@@ -62,6 +62,7 @@ import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
+import ClientFilesPage from '@/modules/clientFiles/components/ClientFilesPage';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
 import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
@@ -75,7 +76,6 @@ import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/E
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
-import ClientFilesPage from '@/modules/files/components/ClientFilesPage';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
