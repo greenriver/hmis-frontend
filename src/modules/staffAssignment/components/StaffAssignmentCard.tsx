@@ -1,6 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Divider, Typography } from '@mui/material';
 import React, { useMemo, useState } from 'react';
+import EditStaffAssignmentDialog from './EditStaffAssignmentDialog';
 import {
   CommonDetailGridContainer,
   CommonDetailGridItem,
@@ -8,7 +9,6 @@ import {
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import IconButtonContainer from '@/modules/enrollment/components/IconButtonContainer';
-import EditStaffAssignmentDialog from '@/modules/enrollment/components/staffAssignment/EditStaffAssignmentDialog';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import {
   RelationshipToHoH,

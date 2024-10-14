@@ -2,12 +2,12 @@ import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Loading from '../../../components/elements/Loading';
-
-import NotFound from '../../../components/pages/NotFound';
-
 import { useOrganizationCrumbs } from '../hooks/useOrganizationCrumbs';
+import Loading from '@/components/elements/Loading';
+
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
+import NotFound from '@/components/pages/NotFound';
+
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';

@@ -25,7 +25,6 @@ import {
 } from '@/components/layout/nav/useMobileMenuContext';
 
 import NotFound from '@/components/pages/NotFound';
-import UserDashboard from '@/components/pages/UserDashboard';
 import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
@@ -109,6 +108,7 @@ import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPag
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
+import MyDashboardPage from '@/modules/userDashboard/MyDashboardPage';
 
 const App = () => {
   // Setup mobile menu context - open/closed state and handlers
@@ -153,7 +153,7 @@ export const protectedRoutes: RouteNode[] = [
     element: <App />,
     children: [
       { path: Routes.ALL_PROJECTS, element: <AllProjectsPage /> },
-      { path: Routes.MY_DASHBOARD, element: <UserDashboard /> },
+      { path: Routes.MY_DASHBOARD, element: <MyDashboardPage /> },
       {
         path: Routes.PROJECT,
         element: <ProjectDashboard />,

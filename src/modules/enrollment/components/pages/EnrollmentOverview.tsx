@@ -12,12 +12,12 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAlertHouseholdWrapper } from '@/modules/client/components/clientAlerts/ClientAlertWrappers';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
-import StaffAssignmentCard from '@/modules/enrollment/components/staffAssignment/StaffAssignmentCard';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable, {
   HOUSEHOLD_MEMBER_COLUMNS,
 } from '@/modules/household/components/HouseholdMemberTable';
+import StaffAssignmentCard from '@/modules/staffAssignment/components/StaffAssignmentCard';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   DeleteEnrollmentDocument,

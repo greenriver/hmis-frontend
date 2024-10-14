@@ -3,14 +3,12 @@ import { Grid, Paper } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useCallback, useState } from 'react';
 
-import ButtonLink from '../../../components/elements/ButtonLink';
-
-import CommonToggle, {
-  ToggleItem,
-} from '../../../components/elements/CommonToggle';
-import PageContainer from '../../../components/layout/PageContainer';
 import CommonSearchInput from '../../search/components/CommonSearchInput';
+import ButtonLink from '@/components/elements/ButtonLink';
+
+import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import { ColumnDef } from '@/components/elements/table/types';
+import PageContainer from '@/components/layout/PageContainer';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';

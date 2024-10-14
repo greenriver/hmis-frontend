@@ -1,9 +1,9 @@
 import { Card, Collapse } from '@mui/material';
 import React, { useState } from 'react';
+import { STAFF_ASSIGNMENT_COLUMNS } from './StaffAssignmentTable';
 import ExpandInfoButton from '@/components/elements/ExpandInfoButton';
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
-import { STAFF_ASSIGNMENT_COLUMNS } from '@/modules/enrollment/components/staffAssignment/StaffAssignmentTable';
 import {
   StaffAssignmentDetailsFragment,
   useGetHouseholdStaffAssignmentHistoryLazyQuery,

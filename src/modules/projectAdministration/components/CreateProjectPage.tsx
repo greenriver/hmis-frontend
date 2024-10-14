@@ -2,10 +2,9 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import NotFound from '../../../components/pages/NotFound';
-
 import { useOrganizationCrumbs } from '../hooks/useOrganizationCrumbs';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';

@@ -2,15 +2,15 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import { Stack } from '@mui/material';
 
-import ButtonLink from '../../../components/elements/ButtonLink';
-import Loading from '../../../components/elements/Loading';
-import TitleCard from '../../../components/elements/TitleCard';
-import PageTitle from '../../../components/layout/PageTitle';
-
-import NotFound from '../../../components/pages/NotFound';
-
 import { useOrganizationCrumbs } from '../hooks/useOrganizationCrumbs';
+import ButtonLink from '@/components/elements/ButtonLink';
+import Loading from '@/components/elements/Loading';
+import TitleCard from '@/components/elements/TitleCard';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
+import PageTitle from '@/components/layout/PageTitle';
+
+import NotFound from '@/components/pages/NotFound';
+
 import useSafeParams from '@/hooks/useSafeParams';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
