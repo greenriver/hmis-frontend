@@ -1,4 +1,4 @@
-import PageContainer from '../layout/PageContainer';
+import PageContainer from '@/components/layout/PageContainer';
 import ClientSearch from '@/modules/search/components/ClientSearch';
 
 const ClientSearchPage = () => {

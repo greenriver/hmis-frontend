@@ -6,9 +6,9 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
-
 import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
+
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';

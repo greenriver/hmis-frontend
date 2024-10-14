@@ -5,9 +5,9 @@ import { useState } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';

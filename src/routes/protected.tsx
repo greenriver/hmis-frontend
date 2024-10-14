@@ -24,13 +24,10 @@ import {
   useMobileMenuContext,
 } from '@/components/layout/nav/useMobileMenuContext';
 import AllProjects from '@/components/pages/AllProjects';
-import ClientDashboard from '@/components/pages/ClientDashboard';
-import ClientSearchPage from '@/components/pages/ClientSearchPage';
-import CreateClient from '@/components/pages/CreateClient';
+
 import CreateOrganization from '@/components/pages/CreateOrganization';
 import CreateProject from '@/components/pages/CreateProject';
 import EditOrganization from '@/components/pages/EditOrganization';
-import EnrollmentDashboard from '@/components/pages/EnrollmentDashboard';
 import File from '@/components/pages/File';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
@@ -60,22 +57,25 @@ import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHi
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
 
+import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
 import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
+import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
 import EditClientPage from '@/modules/client/components/pages/EditClientPage';
 import ClientFilesPage from '@/modules/clientFiles/components/ClientFilesPage';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
 import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
 import NewClientMerge from '@/modules/clientMerge/components/client/NewClientMerge';
-import ClientEnrollmentsPage from '@/modules/enrollment/components/dashboardPages/ClientEnrollmentsPage';
-import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
-import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
-import EnrollmentCeEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeEventsPage';
-import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
-import EnrollmentEsgFundingReport from '@/modules/enrollment/components/dashboardPages/EnrollmentEsgFundingReport';
-import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/EnrollmentOverview';
-import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
-import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
+import ClientEnrollmentsPage from '@/modules/enrollment/components/pages/ClientEnrollmentsPage';
+import EnrollmentAssessmentsPage from '@/modules/enrollment/components/pages/EnrollmentAssessmentsPage';
+import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/pages/EnrollmentCeAssessmentsPage';
+import EnrollmentCeEventsPage from '@/modules/enrollment/components/pages/EnrollmentCeEventsPage';
+import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/pages/EnrollmentCurrentLivingSituationsPage';
+import EnrollmentDashboard from '@/modules/enrollment/components/pages/EnrollmentDashboard';
+import EnrollmentEsgFundingReport from '@/modules/enrollment/components/pages/EnrollmentEsgFundingReport';
+import EnrollmentOverview from '@/modules/enrollment/components/pages/EnrollmentOverview';
+import EnrollmentServicesPage from '@/modules/enrollment/components/pages/EnrollmentServicesPage';
+import HouseholdPage from '@/modules/enrollment/components/pages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
@@ -103,6 +103,7 @@ import ProjectReferralPosting from '@/modules/projects/components/ProjectReferra
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
+import ClientSearchPage from '@/modules/search/components/ClientSearchPage';
 import BedNightsPage from '@/modules/services/components/bulk/BedNightsPage';
 import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPage';
 import ClientServices from '@/modules/services/components/ClientServices';
@@ -418,7 +419,7 @@ export const protectedRoutes: RouteNode[] = [
         path: Routes.CREATE_CLIENT,
         element: (
           <RootPermissionsFilter permissions='canEditClients'>
-            <CreateClient />
+            <CreateClientPage />
           </RootPermissionsFilter>
         ),
       },

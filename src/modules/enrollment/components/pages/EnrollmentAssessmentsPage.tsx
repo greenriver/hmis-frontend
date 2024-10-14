@@ -6,8 +6,8 @@ import HouseholdAssessmentsTable from '../HouseholdAssessmentsTable';
 import CommonToggle from '@/components/elements/CommonToggle';
 import { HouseholdIcon } from '@/components/elements/SemanticIcons';
 import TitleCard from '@/components/elements/TitleCard';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 
 type Mode = 'current_client' | 'household';

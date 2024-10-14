@@ -1,20 +1,20 @@
 import { Container } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
-import { useClientDashboardNavItems } from '../../modules/client/hooks/useClientDashboardNavItems';
-import Loading from '../elements/Loading';
-import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
-import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
-import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
-
-import NotFound from './NotFound';
-
+import { useClientDashboardNavItems } from '../../hooks/useClientDashboardNavItems';
+import Loading from '@/components/elements/Loading';
+import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
 import {
   useClientBreadcrumbConfig,
   useDashboardBreadcrumbs,
 } from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
+import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
+import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
+
+import NotFound from '@/components/pages/NotFound';
+
 import { useDashboardState } from '@/hooks/useDashboardState';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -102,8 +102,5 @@ export function isClientDashboardContext(
     !!value.hasOwnProperty('client')
   );
 }
-
-export const useClientDashboardContext = () =>
-  useOutletContext<ClientDashboardContext>();
 
 export default ClientDashboard;

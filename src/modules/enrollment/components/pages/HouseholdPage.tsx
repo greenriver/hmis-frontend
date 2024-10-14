@@ -1,9 +1,9 @@
 import { ClickToCopyId } from '@/components/elements/ClickToCopy';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import TitleCard from '@/components/elements/TitleCard';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 
 const HouseholdPage = () => {

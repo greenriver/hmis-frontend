@@ -5,8 +5,8 @@ import EnrollmentDateRangeWithStatus from '../hmis/components/EnrollmentDateRang
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   RecordFormRole,

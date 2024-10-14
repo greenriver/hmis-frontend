@@ -7,9 +7,9 @@ import {
 } from '@/components/elements/CommonDetailGrid';
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import IconButtonContainer from '@/modules/enrollment/components/IconButtonContainer';
 import EditStaffAssignmentDialog from '@/modules/enrollment/components/staffAssignment/EditStaffAssignmentDialog';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import {
   RelationshipToHoH,
   useGetHouseholdStaffAssignmentsQuery,

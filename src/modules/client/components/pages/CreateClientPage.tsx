@@ -2,8 +2,8 @@ import { Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import BasicBreadcrumbPageLayout from '../layout/BasicBreadcrumbPageLayout';
-import { STICKY_BAR_HEIGHT } from '../layout/layoutConstants';
+import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
+import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
 
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -11,7 +11,7 @@ import { Routes } from '@/routes/routes';
 import { ClientFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const CreateClient: React.FC = () => {
+const CreateClientPage: React.FC = () => {
   const navigate = useNavigate();
   const onCompleted = useCallback(
     (data: ClientFieldsFragment) => {
@@ -53,4 +53,4 @@ const CreateClient: React.FC = () => {
   );
 };
 
-export default CreateClient;
+export default CreateClientPage;

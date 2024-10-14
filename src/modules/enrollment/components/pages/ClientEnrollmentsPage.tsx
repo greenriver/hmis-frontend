@@ -4,7 +4,7 @@ import { ReactNode, useCallback } from 'react';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';

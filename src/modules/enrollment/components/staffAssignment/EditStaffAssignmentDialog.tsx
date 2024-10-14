@@ -9,11 +9,11 @@ import {
 import React, { useMemo } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import NewStaffAssignmentForm from '@/modules/enrollment/components/staffAssignment/NewStaffAssignmentForm';
 import StaffAssignmentHistory from '@/modules/enrollment/components/staffAssignment/StaffAssignmentHistory';
 import StaffAssignmentTable from '@/modules/enrollment/components/staffAssignment/StaffAssignmentTable';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {

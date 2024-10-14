@@ -5,9 +5,9 @@ import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../form/hooks/useViewEditRecordDialogs';
 import TitleCard from '@/components/elements/TitleCard';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import {
   getCustomDataElementColumns,
   lastUpdatedBy,

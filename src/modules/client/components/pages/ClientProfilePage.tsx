@@ -1,5 +1,5 @@
 import ClientProfileLayout from '../ClientProfileLayout';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 
 const ClientProfilePage = () => {
   const { client } = useClientDashboardContext();
