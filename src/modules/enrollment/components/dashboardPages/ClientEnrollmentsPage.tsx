@@ -98,7 +98,7 @@ const columns: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
   },
 ];
 
-const ClientEnrollments = () => {
+const ClientEnrollmentsPage = () => {
   const { client } = useClientDashboardContext();
 
   const rowLinkTo = useCallback(
@@ -156,4 +156,4 @@ const ClientEnrollments = () => {
   );
 };
 
-export default ClientEnrollments;
+export default ClientEnrollmentsPage;

@@ -3,8 +3,8 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import EnrollmentDetails from '../EnrollmentDetails';
+import EnrollmentReminders from '../EnrollmentReminders';
 
-import EnrollmentReminders from '@/components/clientDashboard/enrollments/EnrollmentReminders';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';

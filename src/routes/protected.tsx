@@ -17,8 +17,6 @@ import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import ProjectRoute from '@/components/accessWrappers/ProjectRoute';
 
 import EditClient from '@/components/clientDashboard/EditClient';
-import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
-import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import PathHandler from '@/components/elements/PathHandler';
@@ -58,15 +56,18 @@ import ExitAssessmentPage from '@/modules/assessments/components/ExitAssessmentP
 import IndividualAssessmentPage from '@/modules/assessments/components/IndividualAssessmentPage';
 import IntakeAssessmentPage from '@/modules/assessments/components/IntakeAssessmentPage';
 import NewIndividualAssessmentPage from '@/modules/assessments/components/NewIndividualAssessmentPage';
+import ClientAssessmentsPage from '@/modules/assessments/components/pages/ClientAssessmentsPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
+
 import ClientFilesPage from '@/modules/clientFiles/components/ClientFilesPage';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
 import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
 import NewClientMerge from '@/modules/clientMerge/components/client/NewClientMerge';
+import ClientEnrollmentsPage from '@/modules/enrollment/components/dashboardPages/ClientEnrollmentsPage';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
 import EnrollmentCeEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeEventsPage';
@@ -572,7 +573,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ClientEnrollments />
+                <ClientEnrollmentsPage />
               </ClientRoute>
             ),
           },
@@ -605,7 +606,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ClientAssessments />
+                <ClientAssessmentsPage />
               </ClientRoute>
             ),
           },

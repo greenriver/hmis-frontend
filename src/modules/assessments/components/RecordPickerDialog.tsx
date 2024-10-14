@@ -10,7 +10,7 @@ import { ReactNode, useMemo } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { ColumnDef } from '@/components/elements/table/types';
-import AssessmentsForPopulationTable from '@/modules/assessments/AssessmentsForPopulationTable';
+import AssessmentsForPopulationTable from '@/modules/assessments/components/AssessmentsForPopulationTable';
 import { AssessmentForPopulation } from '@/modules/form/types';
 import {
   getFieldOnAssessment,

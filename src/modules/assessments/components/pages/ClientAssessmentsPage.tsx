@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
 import {
   ASSESSMENT_COLUMNS,
   ASSESSMENT_ENROLLMENT_COLUMNS,
@@ -20,10 +21,6 @@ import {
   GetClientAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
 
-export type ClientAssessmentType = NonNullable<
-  NonNullable<GetClientAssessmentsQuery['client']>['assessments']
->['nodes'][0];
-
 const columns: ColumnDef<ClientAssessmentType>[] = [
   ASSESSMENT_COLUMNS.linkedType,
   {
@@ -38,7 +35,7 @@ const columns: ColumnDef<ClientAssessmentType>[] = [
   ASSESSMENT_ENROLLMENT_COLUMNS.period,
 ];
 
-const ClientAssessments = () => {
+const ClientAssessmentsPage = () => {
   const { clientId } = useSafeParams() as { clientId: string };
 
   const rowLinkTo = useCallback(
@@ -75,4 +72,4 @@ const ClientAssessments = () => {
   );
 };
 
-export default ClientAssessments;
+export default ClientAssessmentsPage;
