@@ -10,7 +10,7 @@ export interface Props {
   client: ClientFieldsFragment;
 }
 
-const ProfileLayout: React.FC<Props> = ({ client }) => {
+const ClientProfileLayout: React.FC<Props> = ({ client }) => {
   const { canViewEnrollmentDetails, canViewClientAlerts } = client.access;
   const hasRightColumn = canViewEnrollmentDetails || canViewClientAlerts;
   return (
@@ -42,4 +42,4 @@ const ProfileLayout: React.FC<Props> = ({ client }) => {
   );
 };
 
-export default ProfileLayout;
+export default ClientProfileLayout;

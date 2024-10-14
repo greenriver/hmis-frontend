@@ -16,8 +16,6 @@ import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import ProjectRoute from '@/components/accessWrappers/ProjectRoute';
 
-import EditClient from '@/components/clientDashboard/EditClient';
-import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import PathHandler from '@/components/elements/PathHandler';
 import MainLayout from '@/components/layout/MainLayout';
@@ -62,6 +60,8 @@ import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHi
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
 
+import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
+import EditClientPage from '@/modules/client/components/pages/EditClientPage';
 import ClientFilesPage from '@/modules/clientFiles/components/ClientFilesPage';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
@@ -539,7 +539,7 @@ export const protectedRoutes: RouteNode[] = [
           { path: '', element: <Navigate to='profile' replace /> },
           {
             path: ClientDashboardRoutes.PROFILE,
-            element: <Profile />,
+            element: <ClientProfilePage />,
           },
           {
             path: ClientDashboardRoutes.EDIT,
@@ -550,7 +550,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canEditClient', 'canViewClientName']}
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <EditClient />
+                <EditClientPage />
               </ClientRoute>
             ),
           },

@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import ProfileLayout from './ProfileLayout';
+import ClientProfileLayout from './ClientProfileLayout';
 
 import {
   clientDetailFormsMock,
@@ -11,7 +11,7 @@ import {
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
-  component: ProfileLayout,
+  component: ClientProfileLayout,
   parameters: {
     apolloClient: {
       mocks: [
@@ -21,9 +21,9 @@ export default {
       ],
     },
   },
-} as Meta<typeof ProfileLayout>;
+} as Meta<typeof ClientProfileLayout>;
 
-type Story = StoryObj<typeof ProfileLayout>;
+type Story = StoryObj<typeof ClientProfileLayout>;
 
 export const Default: Story = {
   args: { client: RITA_ACKROYD as ClientFieldsFragment },

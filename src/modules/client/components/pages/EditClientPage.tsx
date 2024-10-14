@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
-} from '../layout/layoutConstants';
-import { useClientDashboardContext } from '../pages/ClientDashboard';
+} from '@/components/layout/layoutConstants';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 
 import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
@@ -17,7 +17,7 @@ import { Routes } from '@/routes/routes';
 import { ClientFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const Profile = () => {
+const EditClientPage = () => {
   const { client } = useClientDashboardContext();
   const navigate = useNavigate();
 
@@ -69,4 +69,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default EditClientPage;
