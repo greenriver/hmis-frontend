@@ -1,8 +1,6 @@
-import ClientAlertCard, {
-  AlertContext,
-} from '@/modules/client/components/clientAlerts/ClientAlertCard';
-import CreateClientAlertButton from '@/modules/client/components/clientAlerts/CreateClientAlertButton';
-import useClientAlerts from '@/modules/client/hooks/useClientAlerts';
+import useClientAlerts from '../hooks/useClientAlerts';
+import ClientAlertCard, { AlertContext } from './ClientAlertCard';
+import CreateClientAlertButton from './CreateClientAlertButton';
 import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
 interface ClientAlertProfileWrapperProps {

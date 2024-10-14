@@ -9,7 +9,7 @@ import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import { ClientAlertHouseholdWrapper } from '@/modules/client/components/clientAlerts/ClientAlertWrappers';
+import { ClientAlertHouseholdWrapper } from '@/modules/clientAlerts/components/ClientAlertWrappers';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';

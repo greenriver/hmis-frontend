@@ -1,9 +1,10 @@
 import { Box, Grid, Stack } from '@mui/material';
 
-import { ClientAlertProfileWrapper } from '@/modules/client/components/clientAlerts/ClientAlertWrappers';
 import ClientCustomDataElementsCard from '@/modules/client/components/ClientCustomDataElementsCard';
 import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
 import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
+
+import { ClientAlertProfileWrapper } from '@/modules/clientAlerts/components/ClientAlertWrappers';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export interface Props {

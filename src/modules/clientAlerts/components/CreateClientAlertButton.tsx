@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useState } from 'react';
-import { CreateClientAlertDialog } from '@/modules/client/components/clientAlerts/CreateClientAlertDialog';
+import { CreateClientAlertDialog } from './CreateClientAlertDialog';
 import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
 interface CreateClientAlertButtonProps {

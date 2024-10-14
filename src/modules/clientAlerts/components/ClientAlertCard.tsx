@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
+import { ClientAlertType } from './ClientAlert';
+import ClientAlertStack from './ClientAlertStack';
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
-import { ClientAlertType } from '@/modules/client/components/clientAlerts/ClientAlert';
-import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
 
 export enum AlertContext {
   Client = 'Client',

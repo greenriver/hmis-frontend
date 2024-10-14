@@ -10,8 +10,9 @@ import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 
 import CommonDialog from '@/components/elements/CommonDialog';
-import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
-import useClientAlerts from '@/modules/client/hooks/useClientAlerts';
+
+import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
+import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';

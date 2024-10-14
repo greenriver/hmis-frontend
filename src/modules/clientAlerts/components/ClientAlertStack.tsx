@@ -1,8 +1,6 @@
 import { Stack } from '@mui/system';
 import { ReactNode } from 'react';
-import ClientAlert, {
-  ClientAlertType,
-} from '@/modules/client/components/clientAlerts/ClientAlert';
+import ClientAlert, { ClientAlertType } from './ClientAlert';
 
 interface ClientAlertStackProps {
   clientAlerts: ClientAlertType[];
