@@ -14,7 +14,7 @@ import useSearchParamsState, {
 } from '@/hooks/useSearchParamState';
 import AddNewClientMenu from '@/modules/household/components/elements/AddNewClientMenu';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import CocPicker from '@/modules/projects/components/CocPicker';
+import CocPicker from '@/modules/projectAdministration/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ProjectDashboardRoutes } from '@/routes/routes';

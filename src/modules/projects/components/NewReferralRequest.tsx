@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
-import { ProjectFormTitle } from './ProjectOverview';
+import { ProjectFormTitle } from './ProjectOverviewPage';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import useAuth from '@/modules/auth/hooks/useAuth';

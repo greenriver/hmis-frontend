@@ -44,7 +44,7 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
   HudRecordMetadataHistoryColumn,
 ];
 
-const FunderTable = () => {
+const FundersPage = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
@@ -95,4 +95,4 @@ const FunderTable = () => {
     </>
   );
 };
-export default FunderTable;
+export default FundersPage;

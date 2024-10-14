@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
-import { ProjectFormTitle } from './ProjectOverview';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
+import { ProjectFormTitle } from '../../projects/components/ProjectOverviewPage';
 
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
@@ -18,7 +18,7 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const Inventory = ({ create = false }: { create?: boolean }) => {
+const EditInventoryPage = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
   const { projectId, inventoryId } = useSafeParams() as {
     projectId: string;
@@ -79,4 +79,4 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     />
   );
 };
-export default Inventory;
+export default EditInventoryPage;

@@ -1,4 +1,4 @@
-import React, { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
@@ -23,12 +23,9 @@ import {
   MobileMenuContext,
   useMobileMenuContext,
 } from '@/components/layout/nav/useMobileMenuContext';
-import AllProjects from '@/components/pages/AllProjects';
 
 import CreateOrganization from '@/components/pages/CreateOrganization';
-import CreateProject from '@/components/pages/CreateProject';
 import EditOrganization from '@/components/pages/EditOrganization';
-import File from '@/components/pages/File';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
 import UserDashboard from '@/components/pages/UserDashboard';
@@ -62,6 +59,7 @@ import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePa
 import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
 import EditClientPage from '@/modules/client/components/pages/EditClientPage';
 import ClientFilesPage from '@/modules/clientFiles/components/ClientFilesPage';
+import EditFilePage from '@/modules/clientFiles/components/EditFilePage';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
 import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
@@ -81,24 +79,26 @@ import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import CeParticipations from '@/modules/projects/components/CeParticipations';
-import Cocs from '@/modules/projects/components/Cocs';
-import EditProject from '@/modules/projects/components/EditProject';
-import Funder from '@/modules/projects/components/Funder';
-import Funders from '@/modules/projects/components/Funders';
-import HmisParticipations from '@/modules/projects/components/HmisParticipations';
-import Inventories from '@/modules/projects/components/Inventories';
-import Inventory from '@/modules/projects/components/Inventory';
+import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
+import CeParticipationsPage from '@/modules/projectAdministration/components/CeParticipationsPage';
+import CreateProjectPage from '@/modules/projectAdministration/components/CreateProjectPage';
+import EditFunderPage from '@/modules/projectAdministration/components/EditFunderPage';
+import EditInventoryPage from '@/modules/projectAdministration/components/EditInventoryPage';
+import EditProjectCocPage from '@/modules/projectAdministration/components/EditProjectCocPage';
+import EditProjectPage from '@/modules/projectAdministration/components/EditProjectPage';
+import FundersPage from '@/modules/projectAdministration/components/FundersPage';
+import HmisParticipationsPage from '@/modules/projectAdministration/components/HmisParticipationsPage';
+import InventoriesPage from '@/modules/projectAdministration/components/InventoriesPage';
+import ProjectCocsPage from '@/modules/projectAdministration/components/ProjectCocsPage';
 import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
 import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
 import ProjectAssessments from '@/modules/projects/components/ProjectAssessments';
-import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectCurrentLivingSituations from '@/modules/projects/components/ProjectCurrentLivingSituations';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
 import ProjectExternalFormSubmissions from '@/modules/projects/components/ProjectExternalFormSubmissions';
-import Project from '@/modules/projects/components/ProjectOverview';
+import ProjectOverviewPage from '@/modules/projects/components/ProjectOverviewPage';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
@@ -152,7 +152,7 @@ export const protectedRoutes: RouteNode[] = [
     path: '/',
     element: <App />,
     children: [
-      { path: Routes.ALL_PROJECTS, element: <AllProjects /> },
+      { path: Routes.ALL_PROJECTS, element: <AllProjectsPage /> },
       { path: Routes.MY_DASHBOARD, element: <UserDashboard /> },
       {
         path: Routes.PROJECT,
@@ -171,7 +171,7 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.OVERVIEW,
-            element: <Project />,
+            element: <ProjectOverviewPage />,
           },
           {
             path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
@@ -283,21 +283,21 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EDIT_PROJECT,
             element: (
               <ProjectEditRoute>
-                <EditProject />
+                <EditProjectPage />
               </ProjectEditRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.INVENTORY,
-            element: <Inventories />,
+            element: <InventoriesPage />,
           },
           {
             path: ProjectDashboardRoutes.HMIS_PARTICIPATION,
-            element: <HmisParticipations />,
+            element: <HmisParticipationsPage />,
           },
           {
             path: ProjectDashboardRoutes.CE_PARTICIPATION,
-            element: <CeParticipations />,
+            element: <CeParticipationsPage />,
           },
           {
             path: ProjectDashboardRoutes.UNITS,
@@ -307,7 +307,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.NEW_INVENTORY,
             element: (
               <ProjectEditRoute>
-                <Inventory create />
+                <EditInventoryPage create />
               </ProjectEditRoute>
             ),
           },
@@ -315,19 +315,19 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EDIT_INVENTORY,
             element: (
               <ProjectEditRoute>
-                <Inventory />
+                <EditInventoryPage />
               </ProjectEditRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.FUNDERS,
-            element: <Funders />,
+            element: <FundersPage />,
           },
           {
             path: ProjectDashboardRoutes.NEW_FUNDER,
             element: (
               <ProjectEditRoute>
-                <Funder create={true} />
+                <EditFunderPage create />
               </ProjectEditRoute>
             ),
           },
@@ -335,19 +335,19 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EDIT_FUNDER,
             element: (
               <ProjectEditRoute>
-                <Funder />
+                <EditFunderPage />
               </ProjectEditRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.COCS,
-            element: <Cocs />,
+            element: <ProjectCocsPage />,
           },
           {
             path: ProjectDashboardRoutes.NEW_COC,
             element: (
               <ProjectEditRoute>
-                <ProjectCoc create />
+                <EditProjectCocPage create />
               </ProjectEditRoute>
             ),
           },
@@ -355,7 +355,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EDIT_COC,
             element: (
               <ProjectEditRoute>
-                <ProjectCoc />
+                <EditProjectCocPage />
               </ProjectEditRoute>
             ),
           },
@@ -398,7 +398,7 @@ export const protectedRoutes: RouteNode[] = [
         path: Routes.CREATE_PROJECT,
         element: (
           <RootPermissionsFilter permissions={['canEditProjectDetails']}>
-            <CreateProject />
+            <CreateProjectPage />
           </RootPermissionsFilter>
         ),
       },
@@ -664,7 +664,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.NEW_FILE,
             element: (
               <FileEditRoute create>
-                <File create />
+                <EditFilePage create />
               </FileEditRoute>
             ),
           },
@@ -672,7 +672,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.EDIT_FILE,
             element: (
               <FileEditRoute>
-                <File />
+                <EditFilePage />
               </FileEditRoute>
             ),
           },

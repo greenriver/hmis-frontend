@@ -3,7 +3,7 @@ import { Button, Paper } from '@mui/material';
 
 import { useCallback, useMemo } from 'react';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -45,7 +45,7 @@ const columns: ColumnDef<HmisParticipationFieldsFragment>[] = [
   HudRecordMetadataHistoryColumn,
 ];
 
-const HmisParticipations = () => {
+const HmisParticipationsPage = () => {
   const { project } = useProjectDashboardContext();
 
   const localConstants = useMemo(
@@ -110,4 +110,4 @@ const HmisParticipations = () => {
     </>
   );
 };
-export default HmisParticipations;
+export default HmisParticipationsPage;

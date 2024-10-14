@@ -1,14 +1,15 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Paper } from '@mui/material';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
-import ProjectCocTable from './tables/ProjectCocTable';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
+import ProjectCocTable from './ProjectCocTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
-const Cocs = () => {
+
+const ProjectCocsPage = () => {
   const { project } = useProjectDashboardContext();
 
   return (
@@ -35,4 +36,4 @@ const Cocs = () => {
     </>
   );
 };
-export default Cocs;
+export default ProjectCocsPage;

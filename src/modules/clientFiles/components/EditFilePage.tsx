@@ -15,7 +15,7 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const File = ({ create = false }: { create?: boolean }) => {
+const EditFilePage = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
   const { clientId, fileId } = useSafeParams() as {
     fileId: string;
@@ -64,4 +64,4 @@ const File = ({ create = false }: { create?: boolean }) => {
     />
   );
 };
-export default File;
+export default EditFilePage;

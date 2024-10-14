@@ -1,8 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Paper } from '@mui/material';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
-import InventoryTable from './tables/InventoryTable';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
+import InventoryTable from './InventoryTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
@@ -10,7 +10,7 @@ import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilte
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const Inventories = () => {
+const InventoriesPage = () => {
   const { project } = useProjectDashboardContext();
 
   return (
@@ -40,4 +40,4 @@ const Inventories = () => {
     </>
   );
 };
-export default Inventories;
+export default InventoriesPage;

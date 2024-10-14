@@ -13,8 +13,8 @@ import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLa
 import useSafeParams from '@/hooks/useSafeParams';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import OrganizationDetails from '@/modules/projects/components/OrganizationDetails';
-import OrganizationProjectsTable from '@/modules/projects/components/tables/OrganizationProjectsTable';
+import OrganizationDetails from '@/modules/projectAdministration/components/OrganizationDetails';
+import OrganizationProjectsTable from '@/modules/projectAdministration/components/OrganizationProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';

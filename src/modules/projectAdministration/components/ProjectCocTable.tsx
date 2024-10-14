@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 
-import { useProjectDashboardContext } from '../ProjectDashboard';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData, {

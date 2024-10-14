@@ -4,7 +4,7 @@ import { Button, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo } from 'react';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -81,7 +81,7 @@ const columns: ColumnDef<CeParticipationFieldsFragment>[] = [
   HudRecordMetadataHistoryColumn,
 ];
 
-const CeParticipations = () => {
+const CeParticipationsPage = () => {
   const { project } = useProjectDashboardContext();
 
   const localConstants = useMemo(
@@ -146,4 +146,4 @@ const CeParticipations = () => {
     </>
   );
 };
-export default CeParticipations;
+export default CeParticipationsPage;

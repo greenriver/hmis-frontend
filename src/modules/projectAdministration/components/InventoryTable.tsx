@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useProjectDashboardContext } from '../ProjectDashboard';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/table/types';

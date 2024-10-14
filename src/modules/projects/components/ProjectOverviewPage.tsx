@@ -94,7 +94,7 @@ export const ProjectFormTitle = ({
   </Stack>
 );
 
-const ProjectOverview = () => {
+const ProjectOverviewPage = () => {
   const { project } = useProjectDashboardContext();
   return (
     <>
@@ -123,4 +123,4 @@ const ProjectOverview = () => {
     </>
   );
 };
-export default ProjectOverview;
+export default ProjectOverviewPage;

@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import NotFound from './NotFound';
+import NotFound from '../../../components/pages/NotFound';
 
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -13,7 +13,7 @@ import { Routes } from '@/routes/routes';
 import { RecordFormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const CreateProject = () => {
+const CreateProjectPage = () => {
   const navigate = useNavigate();
   const { organizationId } = useSafeParams() as {
     organizationId: string;
@@ -51,4 +51,4 @@ const CreateProject = () => {
     </BasicBreadcrumbPageLayout>
   );
 };
-export default CreateProject;
+export default CreateProjectPage;

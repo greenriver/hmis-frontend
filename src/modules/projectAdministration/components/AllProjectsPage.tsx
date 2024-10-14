@@ -3,11 +3,13 @@ import { Grid, Paper } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useCallback, useState } from 'react';
 
-import CommonSearchInput from '../../modules/search/components/CommonSearchInput';
-import ButtonLink from '../elements/ButtonLink';
+import ButtonLink from '../../../components/elements/ButtonLink';
 
-import CommonToggle, { ToggleItem } from '../elements/CommonToggle';
-import PageContainer from '../layout/PageContainer';
+import CommonToggle, {
+  ToggleItem,
+} from '../../../components/elements/CommonToggle';
+import PageContainer from '../../../components/layout/PageContainer';
+import CommonSearchInput from '../../search/components/CommonSearchInput';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -87,7 +89,7 @@ const toggleItemDefinitions: ToggleItem<ViewMode>[] = [
   },
 ];
 
-const AllProjects = () => {
+const AllProjectsPage = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('projects');
 
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
@@ -229,4 +231,4 @@ const AllProjects = () => {
     </PageContainer>
   );
 };
-export default AllProjects;
+export default AllProjectsPage;

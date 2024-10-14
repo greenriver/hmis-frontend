@@ -2,8 +2,8 @@ import { Box } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
-import { ProjectFormTitle } from './ProjectOverview';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
+import { ProjectFormTitle } from '../../projects/components/ProjectOverviewPage';
 
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -21,7 +21,7 @@ import {
 import { evictPickList } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const EditProject = () => {
+const EditProjectPage = () => {
   const navigate = useNavigate();
 
   const { project } = useProjectDashboardContext();
@@ -96,4 +96,4 @@ const EditProject = () => {
     />
   );
 };
-export default EditProject;
+export default EditProjectPage;
