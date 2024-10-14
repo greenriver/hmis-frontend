@@ -24,10 +24,7 @@ import {
   useMobileMenuContext,
 } from '@/components/layout/nav/useMobileMenuContext';
 
-import CreateOrganization from '@/components/pages/CreateOrganization';
-import EditOrganization from '@/components/pages/EditOrganization';
 import NotFound from '@/components/pages/NotFound';
-import Organization from '@/components/pages/Organization';
 import UserDashboard from '@/components/pages/UserDashboard';
 import AdminDashboard, {
   AdminLandingPage,
@@ -81,14 +78,17 @@ import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage'
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
 import CeParticipationsPage from '@/modules/projectAdministration/components/CeParticipationsPage';
+import CreateOrganizationPage from '@/modules/projectAdministration/components/CreateOrganizationPage';
 import CreateProjectPage from '@/modules/projectAdministration/components/CreateProjectPage';
 import EditFunderPage from '@/modules/projectAdministration/components/EditFunderPage';
 import EditInventoryPage from '@/modules/projectAdministration/components/EditInventoryPage';
+import EditOrganizationPage from '@/modules/projectAdministration/components/EditOrganizationPage';
 import EditProjectCocPage from '@/modules/projectAdministration/components/EditProjectCocPage';
 import EditProjectPage from '@/modules/projectAdministration/components/EditProjectPage';
 import FundersPage from '@/modules/projectAdministration/components/FundersPage';
 import HmisParticipationsPage from '@/modules/projectAdministration/components/HmisParticipationsPage';
 import InventoriesPage from '@/modules/projectAdministration/components/InventoriesPage';
+import OrganizationPage from '@/modules/projectAdministration/components/OrganizationPage';
 import ProjectCocsPage from '@/modules/projectAdministration/components/ProjectCocsPage';
 import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
 import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
@@ -402,16 +402,16 @@ export const protectedRoutes: RouteNode[] = [
           </RootPermissionsFilter>
         ),
       },
-      { path: Routes.ORGANIZATION, element: <Organization /> },
+      { path: Routes.ORGANIZATION, element: <OrganizationPage /> },
       {
         path: Routes.EDIT_ORGANIZATION,
-        element: <EditOrganization />,
+        element: <EditOrganizationPage />,
       },
       {
         path: Routes.CREATE_ORGANIZATION,
         element: (
           <RootPermissionsFilter permissions='canEditOrganization'>
-            <CreateOrganization />
+            <CreateOrganizationPage />
           </RootPermissionsFilter>
         ),
       },

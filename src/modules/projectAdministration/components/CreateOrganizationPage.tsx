@@ -2,9 +2,9 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { ALL_PROJECTS_CRUMB } from '../hooks/useOrganizationCrumbs';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import EditRecord from '@/modules/form/components/EditRecord';
-import { ALL_PROJECTS_CRUMB } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import {
   OrganizationFieldsFragment,
@@ -14,7 +14,7 @@ import {
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const CreateOrganization = () => {
+const CreateOrganizationPage = () => {
   const navigate = useNavigate();
 
   const crumbs = [
@@ -51,4 +51,4 @@ const CreateOrganization = () => {
     </BasicBreadcrumbPageLayout>
   );
 };
-export default CreateOrganization;
+export default CreateOrganizationPage;

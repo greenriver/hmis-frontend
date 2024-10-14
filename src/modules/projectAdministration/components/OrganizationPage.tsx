@@ -2,24 +2,24 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import { Stack } from '@mui/material';
 
-import ButtonLink from '../elements/ButtonLink';
-import Loading from '../elements/Loading';
-import TitleCard from '../elements/TitleCard';
-import PageTitle from '../layout/PageTitle';
+import ButtonLink from '../../../components/elements/ButtonLink';
+import Loading from '../../../components/elements/Loading';
+import TitleCard from '../../../components/elements/TitleCard';
+import PageTitle from '../../../components/layout/PageTitle';
 
-import NotFound from './NotFound';
+import NotFound from '../../../components/pages/NotFound';
 
+import { useOrganizationCrumbs } from '../hooks/useOrganizationCrumbs';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import useSafeParams from '@/hooks/useSafeParams';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import OrganizationDetails from '@/modules/projectAdministration/components/OrganizationDetails';
 import OrganizationProjectsTable from '@/modules/projectAdministration/components/OrganizationProjectsTable';
-import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const Organization = () => {
+const OrganizationPage = () => {
   const { organizationId } = useSafeParams() as {
     organizationId: string;
   };
@@ -85,4 +85,4 @@ const Organization = () => {
     </BasicBreadcrumbPageLayout>
   );
 };
-export default Organization;
+export default OrganizationPage;
