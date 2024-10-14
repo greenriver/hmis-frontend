@@ -48,20 +48,21 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
       projectId,
     });
 
-  const { openFormDialog, renderFormDialog, closeDialog } = useFormDialog<T>({
-    formRole,
-    onCompleted: () => {
-      // only gets called on success
-      if (!viewingRecord) evictCache(); // clear cache if new record was created
-      setViewingRecord(undefined);
-      closeViewDialog();
-    },
-    inputVariables,
-    record: viewingRecord,
-    localConstants,
-    projectId,
-    onClose: () => setViewingRecord(undefined),
-  });
+  const { openFormDialog, renderFormDialog, closeDialog, formNotFound } =
+    useFormDialog<T>({
+      formRole,
+      onCompleted: () => {
+        // only gets called on success
+        if (!viewingRecord) evictCache(); // clear cache if new record was created
+        setViewingRecord(undefined);
+        closeViewDialog();
+      },
+      inputVariables,
+      record: viewingRecord,
+      localConstants,
+      projectId,
+      onClose: () => setViewingRecord(undefined),
+    });
 
   const onSuccessfulDelete = useCallback(() => {
     evictCache();
@@ -160,5 +161,6 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
     editRecordDialog,
     onSuccessfulDelete,
     openFormDialog,
+    formNotFound,
   };
 }
