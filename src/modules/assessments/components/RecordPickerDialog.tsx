@@ -7,14 +7,16 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
-import { AssessmentForPopulation } from '../types';
-import { getFieldOnAssessment, getPopulatableChildren } from '../util/formUtil';
-import { assessmentColumns } from '../util/recordPickerUtil';
-
-import AssessmentsForPopulationTable from '@/components/clientDashboard/enrollments/tables/AssessmentsForPopulationTable';
 import CommonDialog from '@/components/elements/CommonDialog';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { ColumnDef } from '@/components/elements/table/types';
+import AssessmentsForPopulationTable from '@/modules/assessments/AssessmentsForPopulationTable';
+import { AssessmentForPopulation } from '@/modules/form/types';
+import {
+  getFieldOnAssessment,
+  getPopulatableChildren,
+} from '@/modules/form/util/formUtil';
+import { assessmentColumns } from '@/modules/form/util/recordPickerUtil';
 import HmisField from '@/modules/hmis/components/HmisField';
 import { AssessmentRole, FormItem, FormRole } from '@/types/gqlTypes';
 
