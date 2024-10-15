@@ -5,7 +5,7 @@ import RouterLink from '@/components/elements/RouterLink';
 interface Props {
   title: string;
   selected: boolean;
-  path?: string;
+  path: string;
 }
 
 const MobileMenuItem: React.FC<Props> = ({ title, selected, path }) => {
