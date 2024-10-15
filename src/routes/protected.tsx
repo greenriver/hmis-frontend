@@ -106,6 +106,7 @@ import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPag
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
+import { DataCollectionFeatureRole } from '@/types/gqlTypes';
 
 const App = () => {
   // Setup mobile menu context - open/closed state and handlers
@@ -485,13 +486,27 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-            // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCurrentLivingSituationsPage />,
+            element: (
+              <EnrollmentRoute
+                permissions={[]} // Only requires enrollment visibility
+                dataCollectionFeature={
+                  DataCollectionFeatureRole.CurrentLivingSituation
+                }
+              >
+                <EnrollmentCurrentLivingSituationsPage />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.EVENTS,
-            // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCeEventsPage />,
+            element: (
+              <EnrollmentRoute
+                permissions={[]} // Only requires enrollment visibility
+                dataCollectionFeature={DataCollectionFeatureRole.CeEvent}
+              >
+                <EnrollmentCeEventsPage />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.AUDIT_HISTORY,
@@ -506,13 +521,26 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
-            // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCeAssessmentsPage />,
+            element: (
+              <EnrollmentRoute
+                permissions={[]} // Only requires enrollment visibility
+                dataCollectionFeature={DataCollectionFeatureRole.CeAssessment}
+              >
+                <EnrollmentCeAssessmentsPage />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
             // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCaseNotes />,
+            element: (
+              <EnrollmentRoute
+                permissions={[]} // Only requires enrollment visibility
+                dataCollectionFeature={DataCollectionFeatureRole.CaseNote}
+              >
+                <EnrollmentCaseNotes />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,

@@ -83,7 +83,12 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       projectId:
         projectId || localConstants?.projectId || inputVariables?.projectId,
     },
-    localDefinition
+    localDefinition,
+    (data) => {
+      if (!data.recordFormDefinition) {
+        throw new Error(`Form not found: ${formRole}`);
+      }
+    }
   );
 
   const hookArgs = useMemo(
