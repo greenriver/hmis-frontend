@@ -220,6 +220,5 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     openFormDialog,
     renderFormDialog,
     closeDialog,
-    formNotFound: !formDefinition,
   };
 }

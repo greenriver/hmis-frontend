@@ -62,27 +62,21 @@ const EnrollmentCeEventsPage = () => {
 
   const canEditCeEvents = enrollment?.access?.canEditEnrollments || false;
 
-  const {
-    onSelectRecord,
-    viewRecordDialog,
-    editRecordDialog,
-    openFormDialog,
-    formNotFound,
-  } = useViewEditRecordDialogs({
-    variant: canEditCeEvents ? 'view_and_edit' : 'view_only',
-    inputVariables: { enrollmentId },
-    formRole: RecordFormRole.CeEvent,
-    recordName: 'CE Event',
-    evictCache,
-    deleteRecordDocument: DeleteCeEventDocument,
-    deleteRecordIdPath: 'deleteCeEvent.ceEvent.id',
-    maxWidth: 'sm',
-    localConstants,
-    projectId: enrollment?.project.id,
-  });
+  const { onSelectRecord, viewRecordDialog, editRecordDialog, openFormDialog } =
+    useViewEditRecordDialogs({
+      variant: canEditCeEvents ? 'view_and_edit' : 'view_only',
+      inputVariables: { enrollmentId },
+      formRole: RecordFormRole.CeEvent,
+      recordName: 'CE Event',
+      evictCache,
+      deleteRecordDocument: DeleteCeEventDocument,
+      deleteRecordIdPath: 'deleteCeEvent.ceEvent.id',
+      maxWidth: 'sm',
+      localConstants,
+      projectId: enrollment?.project.id,
+    });
 
-  if (!enrollment || !enrollmentId || !clientId || formNotFound)
-    return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (
     <>
