@@ -173,3 +173,55 @@ rails driver:hmis:dump_graphql_schema
 ```
 
 To pick up the local schema changes on the frontend, run the `graphql:codegen` script (see above).
+
+## Project Structure
+
+This project uses a module or feature-based structure which is inspired by the [bulletproof-react](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md) structure.
+
+```
+src
+|
++-- api               # graphql queries/mutations/fragments
+|
++-- components        # shared components used across the entire application
+|
++-- modules           # feature-based modules
+|
++-- hooks             # shared hooks used across the entire application
+|
++-- test              # test utilities and mocks
+|
++-- types             # shared types used across the application (auto-generated from the graphql schema)
+|
++-- utils             # shared utility functions
+```
+
+
+Inner structure of a module:
+
+```
+src/modules/awesomeModule
+|
++-- components  # components scoped to a specific feature
+|
++-- hooks       # hooks scoped to a specific feature
+|
++-- myTypes.ts  # typescript types used within the feature, with appropriate filename
+|
++-- myUtils.ts  # utility functions for a specific feature, with appropriate filename
+
+```
+
+#### Guidelines for categorization
+* Prefer to co-locate code that deals with the same type of thing into a shared `module`, even if the components are rendered in different parts of the application. For example, the Project Services table and Client Services table can live in the same "service" module.
+* A `module` should typically contain more than just a couple of files, but not so many that it becomes difficult to navigate or understand.
+* If two potential features are highly interdependent and frequently change together, consider combining them into a single `module`.
+* The top-level `components` folder should contain generic components that are used across the application. For the most part, they should not be domain-specific.
+* Components in the top-level `components` dir should not have dependencies on `module` code.
+* It should be clear what the purpose of a module is and how to use it. An engineer should be able to quickly understand what the module's entry-points are without needing to understand the internals of the module. If this is not obvious from code structure or storybook, include a brief README.md in the module dir with examples/explanation.
+
+#### Examples of modules
+* `modules/service` - includes the service table components, and service-related pages (e.g. ProjectServicesPage, EnrollmentServicesPage)
+* `modules/bulkServices` - includes components to support the bulk service assignment feature. This is separated out from the `services` module to keep the size manageable, and because they are relatively independent implementations.
+* `modules/scanCards` - components to support the Scan Card feature
+
