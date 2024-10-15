@@ -5800,8 +5800,6 @@ export type Query = {
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   esgFundingReport: Array<EsgFundingService>;
-  /** @deprecated use definition from the individual submission to display */
-  externalFormDefinition?: Maybe<FormDefinition>;
   externalFormSubmission?: Maybe<ExternalFormSubmission>;
   file?: Maybe<File>;
   formDefinition?: Maybe<FormDefinition>;
@@ -5899,10 +5897,6 @@ export type QueryEnrollmentArgs = {
 
 export type QueryEsgFundingReportArgs = {
   clientIds: Array<Scalars['ID']['input']>;
-};
-
-export type QueryExternalFormDefinitionArgs = {
-  identifier: Scalars['String']['input'];
 };
 
 export type QueryExternalFormSubmissionArgs = {
