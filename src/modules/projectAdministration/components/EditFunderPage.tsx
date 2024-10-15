@@ -1,8 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
-import { ProjectFormTitle } from '../../projects/components/ProjectOverviewPage';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 
@@ -10,6 +8,8 @@ import useSafeParams from '@/hooks/useSafeParams';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ProjectFormTitle } from '@/modules/projects/components/ProjectOverviewPage';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {

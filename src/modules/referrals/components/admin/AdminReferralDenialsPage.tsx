@@ -6,7 +6,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { useReferralFilter } from '@/modules/referrals/components/useReferralFilter';
+import { useReferralFilter } from '@/modules/referrals/hooks/useReferralFilter';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetDeniedPendingReferralPostingsDocument,
@@ -23,7 +23,7 @@ const rowLinkTo = (row: ReferralPostingFieldsFragment): string => {
   });
 };
 
-const AdminReferralDenials = () => {
+const AdminReferralDenialsPage = () => {
   const { globalFeatureFlags: { externalReferrals } = {} } =
     useHmisAppSettings();
 
@@ -106,4 +106,4 @@ const AdminReferralDenials = () => {
     </>
   );
 };
-export default AdminReferralDenials;
+export default AdminReferralDenialsPage;

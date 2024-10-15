@@ -1,7 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 
-import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData, {
@@ -9,6 +8,7 @@ import GenericTableWithData, {
 } from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {

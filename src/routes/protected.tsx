@@ -29,8 +29,6 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
-import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
-import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
@@ -91,8 +89,6 @@ import HmisParticipationsPage from '@/modules/projectAdministration/components/H
 import InventoriesPage from '@/modules/projectAdministration/components/InventoriesPage';
 import OrganizationPage from '@/modules/projectAdministration/components/OrganizationPage';
 import ProjectCocsPage from '@/modules/projectAdministration/components/ProjectCocsPage';
-import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
-import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
 import ProjectAssessments from '@/modules/projects/components/ProjectAssessments';
 import ProjectCurrentLivingSituations from '@/modules/projects/components/ProjectCurrentLivingSituations';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
@@ -100,9 +96,13 @@ import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments
 import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
 import ProjectExternalFormSubmissions from '@/modules/projects/components/ProjectExternalFormSubmissions';
 import ProjectOverviewPage from '@/modules/projects/components/ProjectOverviewPage';
-import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
-import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
+import AdminReferralDenialsPage from '@/modules/referrals/components/admin/AdminReferralDenialsPage';
+import AdminReferralPosting from '@/modules/referrals/components/admin/AdminReferralPosting';
+import NewOutgoingReferralPage from '@/modules/referrals/components/NewOutgoingReferralPage';
+import NewReferralRequestPage from '@/modules/referrals/components/NewReferralRequestPage';
+import ProjectReferralPostingPage from '@/modules/referrals/components/ProjectReferralPostingPage';
 
+import ProjectReferralsPage from '@/modules/referrals/components/ProjectReferralsPage';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
 import ClientSearchPage from '@/modules/search/components/ClientSearchPage';
 
@@ -234,7 +234,7 @@ export const protectedRoutes: RouteNode[] = [
                 ]}
                 redirectRoute={Routes.PROJECT}
               >
-                <ProjectReferrals />
+                <ProjectReferralsPage />
               </ProjectEditRoute>
             ),
           },
@@ -245,7 +245,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canManageIncomingReferrals']}
                 redirectRoute={Routes.PROJECT}
               >
-                <ProjectReferralPosting />
+                <ProjectReferralPostingPage />
               </ProjectEditRoute>
             ),
           },
@@ -267,7 +267,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canManageIncomingReferrals']}
                 redirectRoute={Routes.PROJECT}
               >
-                <NewReferralRequest />
+                <NewReferralRequestPage />
               </ProjectEditRoute>
             ),
           },
@@ -278,7 +278,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canManageOutgoingReferrals']}
                 redirectRoute={Routes.PROJECT}
               >
-                <NewOutgoingReferral />
+                <NewOutgoingReferralPage />
               </ProjectEditRoute>
             ),
           },
@@ -710,7 +710,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.AC_DENIALS,
             element: (
               <RootPermissionsFilter permissions='canManageDeniedReferrals'>
-                <AdminReferralDenials />
+                <AdminReferralDenialsPage />
               </RootPermissionsFilter>
             ),
           },

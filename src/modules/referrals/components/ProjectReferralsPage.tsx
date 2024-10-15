@@ -1,19 +1,19 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/material';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
-import ProjectOutgoingReferralPostingsTable from './tables/ProjectOutgoingReferralPostingsTable';
-import ProjectReferralPostingsTable from './tables/ProjectReferralPostingsTable';
-import ProjectReferralRequestsTable from './tables/ProjectReferralRequestsTable';
+import ProjectOutgoingReferralPostingsTable from './ProjectOutgoingReferralPostingsTable';
+import ProjectReferralPostingsTable from './ProjectReferralPostingsTable';
+import ProjectReferralRequestsTable from './ProjectReferralRequestsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const ProjectReferrals = () => {
+const ProjectReferralsPage = () => {
   const { globalFeatureFlags: { externalReferrals } = {} } =
     useHmisAppSettings();
   const { project } = useProjectDashboardContext();
@@ -88,4 +88,4 @@ const ProjectReferrals = () => {
     </>
   );
 };
-export default ProjectReferrals;
+export default ProjectReferralsPage;

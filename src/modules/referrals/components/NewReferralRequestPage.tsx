@@ -1,12 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
-import { ProjectFormTitle } from './ProjectOverviewPage';
-
 import useSafeParams from '@/hooks/useSafeParams';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import EditRecord from '@/modules/form/components/EditRecord';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ProjectFormTitle } from '@/modules/projects/components/ProjectOverviewPage';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -15,7 +14,7 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const NewReferralRequest: React.FC = () => {
+const NewReferralRequestPage: React.FC = () => {
   const navigate = useNavigate();
   const { projectId } = useSafeParams() as { projectId: string };
   const { project } = useProjectDashboardContext();
@@ -48,4 +47,4 @@ const NewReferralRequest: React.FC = () => {
     />
   );
 };
-export default NewReferralRequest;
+export default NewReferralRequestPage;

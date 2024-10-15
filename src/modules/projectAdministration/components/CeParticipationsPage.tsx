@@ -4,7 +4,6 @@ import { Button, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo } from 'react';
 
-import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -12,6 +11,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { parseAndFormatDateRange, yesNo } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { cache } from '@/providers/apolloClient';
 import {
   CeParticipationFieldsFragment,

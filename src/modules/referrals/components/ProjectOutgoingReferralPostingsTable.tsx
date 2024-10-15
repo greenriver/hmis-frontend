@@ -4,7 +4,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { useReferralFilter } from '@/modules/referrals/components/useReferralFilter';
+import { useReferralFilter } from '@/modules/referrals/hooks/useReferralFilter';
 import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,

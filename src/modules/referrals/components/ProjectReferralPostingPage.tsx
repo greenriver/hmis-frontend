@@ -1,7 +1,6 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Button, Grid, Stack, Typography } from '@mui/material';
 
-import { fetchPreventionAssessmentReportUrl } from '../api';
 import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -13,8 +12,9 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import ProjectReferralPostingDetails from '@/modules/projects/components/ReferralPostingDetails';
+import { fetchPreventionAssessmentReportUrl } from '@/modules/projects/api';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
+import ProjectReferralPostingDetails from '@/modules/referrals/components/ReferralPostingDetails';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   ReferralPostingStatus,
@@ -22,7 +22,7 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const ProjectReferralPosting: React.FC = () => {
+const ProjectReferralPostingPage: React.FC = () => {
   const { globalFeatureFlags: { externalReferrals } = {} } =
     useHmisAppSettings();
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
@@ -151,4 +151,4 @@ const ProjectReferralPosting: React.FC = () => {
     </>
   );
 };
-export default ProjectReferralPosting;
+export default ProjectReferralPostingPage;

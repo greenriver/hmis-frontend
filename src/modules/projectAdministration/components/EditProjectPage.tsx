@@ -2,12 +2,12 @@ import { Box } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
-import { ProjectFormTitle } from '../../projects/components/ProjectOverviewPage';
 
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ProjectFormTitle } from '@/modules/projects/components/ProjectOverviewPage';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {

@@ -1,9 +1,9 @@
-import { useProjectDashboardContext } from './ProjectDashboard';
 import ProjectOutgoingReferralForm from './ProjectOutgoingReferralForm';
 
 import PageTitle from '@/components/layout/PageTitle';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
-const NewOutgoingReferral: React.FC = () => {
+const NewOutgoingReferralPage: React.FC = () => {
   const { project } = useProjectDashboardContext();
 
   return (
@@ -13,4 +13,4 @@ const NewOutgoingReferral: React.FC = () => {
     </>
   );
 };
-export default NewOutgoingReferral;
+export default NewOutgoingReferralPage;
