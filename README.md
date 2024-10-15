@@ -176,7 +176,7 @@ To pick up the local schema changes on the frontend, run the `graphql:codegen` s
 
 ## Project Structure
 
-This project follows the [bulletproof-react](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md) structure.
+This project uses a module or feature-based structure which is inspired by the [bulletproof-react](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md) structure.
 
 ```
 src
@@ -218,6 +218,7 @@ src/modules/awesomeModule
 * If two potential features are highly interdependent and frequently change together, consider combining them into a single `module`.
 * The top-level `components` folder should contain generic components that are used across the application. For the most part, they should not be domain-specific.
 * Components in the top-level `components` dir should not have dependencies on `module` code.
+* It should be clear what the purpose of a module is and how to use it. An engineer should be able to quickly understand what the module's entry-points are without needing to understand the internals of the module. If this is not obvious from code structure or storybook, include a brief README.md in the module dir with examples/explanation.
 
 #### Examples of modules
 * `modules/service` - includes the service table components, and service-related pages (e.g. ProjectServicesPage, EnrollmentServicesPage)
