@@ -12,9 +12,9 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { fetchPreventionAssessmentReportUrl } from '@/modules/projects/api';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
 import ProjectReferralPostingDetails from '@/modules/referrals/components/ReferralPostingDetails';
+import { fetchPreventionAssessmentReportUrl } from '@/modules/referrals/externalReportApi';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   ReferralPostingStatus,
