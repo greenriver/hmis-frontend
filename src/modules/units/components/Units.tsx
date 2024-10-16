@@ -17,6 +17,7 @@ import UnitManagementTable from './UnitManagementTable';
 import CommonDialog from '@/components/elements/CommonDialog';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
+import NotFound from '@/components/pages/NotFound';
 import {
   emptyErrorState,
   ErrorState,
@@ -71,6 +72,8 @@ const Units = () => {
   );
   const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
 
+  if (!project.access.canViewUnits) return <NotFound />;
+
   return (
     <>
       <PageTitle
@@ -78,7 +81,7 @@ const Units = () => {
         actions={
           <ProjectPermissionsFilter
             id={project.id}
-            permissions='canManageInventory'
+            permissions='canManageUnits'
           >
             <Button
               data-testid='addInventoryButton'
@@ -98,7 +101,7 @@ const Units = () => {
         <Paper>
           <UnitManagementTable
             projectId={project.id}
-            allowDeleteUnits={project.access.canManageInventory}
+            allowDeleteUnits={project.access.canManageUnits}
           />
         </Paper>
       </Stack>

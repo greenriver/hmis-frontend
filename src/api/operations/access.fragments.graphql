@@ -27,6 +27,7 @@ fragment RootPermissions on QueryAccess {
   canViewAnyConfidentialClientFiles
   canViewAnyNonconfidentialClientFiles
   canManageInventory
+  canManageUnits
   canManageDeniedReferrals
   canManageIncomingReferrals
   canManageOutgoingReferrals
@@ -92,6 +93,8 @@ fragment ProjectAccessFields on ProjectAccess {
   canDeleteAssessments
   canEditProjectDetails
   canManageInventory
+  canViewUnits
+  canManageUnits
   canManageDeniedReferrals
   canManageIncomingReferrals
   canManageOutgoingReferrals
