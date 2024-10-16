@@ -1437,11 +1437,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'formDefinitionId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -1916,6 +1912,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'viralLoadAvailable',
         type: { kind: 'ENUM', name: 'ViralLoadAvailable', ofType: null },
+      },
+      {
+        name: 'viralLoadSource',
+        type: {
+          kind: 'ENUM',
+          name: 'TCellSourceViralLoadSource',
+          ofType: null,
+        },
       },
     ],
   },

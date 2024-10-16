@@ -1455,7 +1455,7 @@ export type CustomCaseNote = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
-  formDefinitionId: Scalars['ID']['output'];
+  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<ApplicationUser>;
@@ -2104,6 +2104,7 @@ export type DisabilityGroup = {
   user?: Maybe<ApplicationUser>;
   viralLoad?: Maybe<Scalars['Int']['output']>;
   viralLoadAvailable?: Maybe<ViralLoadAvailable>;
+  viralLoadSource?: Maybe<TCellSourceViralLoadSource>;
 };
 
 /** HUD DisabilityResponse (4.10.2) */
@@ -17086,7 +17087,7 @@ export type CustomCaseNoteFieldsFragment = {
   informationDate?: string | null;
   dateUpdated?: string | null;
   dateCreated?: string | null;
-  formDefinitionId: string;
+  formDefinitionId?: string | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -17172,7 +17173,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
         informationDate?: string | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
-        formDefinitionId: string;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17287,7 +17288,7 @@ export type GetClientCaseNotesQuery = {
         informationDate?: string | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
-        formDefinitionId: string;
+        formDefinitionId?: string | null;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -27121,7 +27122,7 @@ export type SubmitFormMutation = {
           informationDate?: string | null;
           dateUpdated?: string | null;
           dateCreated?: string | null;
-          formDefinitionId: string;
+          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
