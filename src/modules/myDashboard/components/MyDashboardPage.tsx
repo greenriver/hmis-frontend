@@ -1,9 +1,9 @@
 import { Stack } from '@mui/material';
-import MyClients from './MyClients';
 import Loading from '@/components/elements/Loading';
 import PageContainer from '@/components/layout/PageContainer';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
+import MyClients from '@/modules/staffAssignment/components/MyClients';
 
 const MyDashboardPage = () => {
   const { user: { id } = {} } = useAuth();

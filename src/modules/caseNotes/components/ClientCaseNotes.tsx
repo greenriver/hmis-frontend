@@ -1,13 +1,13 @@
 import { Paper } from '@mui/material';
 
-import { useViewEditRecordDialogs } from '../form/hooks/useViewEditRecordDialogs';
-import EnrollmentDateRangeWithStatus from '../hmis/components/EnrollmentDateRangeWithStatus';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import {
   RecordFormRole,
   GetClientCaseNotesDocument,

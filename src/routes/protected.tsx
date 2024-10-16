@@ -48,7 +48,7 @@ import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHi
 import BedNightsPage from '@/modules/bulkServices/components/BedNightsPage';
 import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage';
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
-import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
+import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
 import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
 import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';

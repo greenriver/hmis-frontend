@@ -3,7 +3,7 @@ import { Box, Button } from '@mui/material';
 
 import { useCallback } from 'react';
 
-import { useViewEditRecordDialogs } from '../form/hooks/useViewEditRecordDialogs';
+import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
