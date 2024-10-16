@@ -6,7 +6,7 @@ import { To, useLocation } from 'react-router-dom';
 import ButtonLink, { ButtonLinkProps } from '../elements/ButtonLink';
 
 export interface PrintViewButtonProps
-  extends Omit<ButtonLinkProps, 'to' | 'ref'> {
+  extends Omit<ButtonLinkProps, 'to' | 'ref' | `on${string}`> {
   exit?: boolean;
   to?: To;
   openInNew?: boolean;
