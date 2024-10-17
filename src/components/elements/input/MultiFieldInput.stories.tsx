@@ -8,7 +8,6 @@ import MultiFieldInput, { MultiFieldInputProps } from './MultiFieldInput';
 export default {
   component: MultiFieldInput,
   render: (args: MultiFieldInputProps<any>) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [{ values }, updateArgs] = useArgs();
     const onChange = (values: any) => updateArgs({ values: values });
     return <MultiFieldInput {...args} onChange={onChange} values={values} />;

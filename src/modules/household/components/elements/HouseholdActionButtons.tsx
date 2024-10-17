@@ -41,7 +41,9 @@ const HouseholdActionButtons = ({
     return [true];
   }, [householdMembers]);
 
-  const [canIntake, intakeReason, intakeColor] = useMemo(() => {
+  const [canIntake, intakeReason, intakeColor] = useMemo<
+    [boolean, string | null, 'error' | undefined]
+  >(() => {
     // Single-member household
     // if (householdMembers.length < 2) return [false];
     const numIncomplete = householdMembers.filter(
@@ -81,7 +83,7 @@ const HouseholdActionButtons = ({
           <ButtonLink
             disabled={!canIntake}
             color={intakeColor}
-            icon={PostAddIcon}
+            Icon={PostAddIcon}
             to={generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
               clientId,
               enrollmentId,
@@ -99,7 +101,7 @@ const HouseholdActionButtons = ({
         <ButtonTooltipContainer title={exitReason} placement='bottom'>
           <ButtonLink
             disabled={!canExit}
-            icon={ExitToAppIcon}
+            Icon={ExitToAppIcon}
             to={generateSafePath(EnrollmentDashboardRoutes.EXIT, {
               clientId,
               enrollmentId,
