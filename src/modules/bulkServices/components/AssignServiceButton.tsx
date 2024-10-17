@@ -108,7 +108,7 @@ const AssignServiceButton: React.FC<Props> = ({
     isAssignedOnDate && !localDisabled ? (
       <CheckIcon />
     ) : clientAlerts.length > 0 ? (
-      <WarningAmberRoundedIcon />
+      <WarningAmberRoundedIcon aria-label='Client has an active alert' />
     ) : undefined;
 
   const alertModalTitle = `${
