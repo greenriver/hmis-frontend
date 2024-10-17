@@ -45,11 +45,16 @@ jobs:
       run: |
         yarn storybook --smoke-test
     - name: Run Chromatic
-      # Don't run chromatic on PRs. Only on pushes to release-N or stable
-      if: github.event_name != 'pull_request'
+      id: chromatic
       uses: chromaui/action@latest
       with:
         projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
         zip: true
         exitZeroOnChanges: true
         onlyChanged: true
+    - name: Storybook test
+      run: |
+        npx playwright install --with-deps
+        yarn test-storybook
+      env:
+        TARGET_URL: '${{ steps.chromatic.outputs.storybookUrl }}'
