@@ -2,11 +2,10 @@ import { Box, TextField, TextFieldProps } from '@mui/material';
 import { useArgs } from '@storybook/preview-api';
 import { Meta, StoryObj } from '@storybook/react';
 
-import LabelWithContent from './LabelWithContent';
+import LabelWithContent from '../LabelWithContent';
 import MultiFieldInput, { MultiFieldInputProps } from './MultiFieldInput';
 
 export default {
-  title: 'Input Elements/MultiFieldInput',
   component: MultiFieldInput,
   render: (args: MultiFieldInputProps<any>) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks

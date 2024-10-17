@@ -4,7 +4,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import TextInput from './TextInput';
 
 export default {
-  title: 'Input Elements/TextInput',
   component: TextInput,
   argTypes: { label: { control: 'text' }, horizontal: { control: 'boolean' } },
   decorators: [
