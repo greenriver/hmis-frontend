@@ -26,7 +26,6 @@ fragment RootPermissions on QueryAccess {
   canManageOwnClientFiles
   canViewAnyConfidentialClientFiles
   canViewAnyNonconfidentialClientFiles
-  canManageInventory
   canManageUnits
   canManageDeniedReferrals
   canManageIncomingReferrals

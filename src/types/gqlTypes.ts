@@ -8023,7 +8023,6 @@ export type RootPermissionsFragment = {
   canManageOwnClientFiles: boolean;
   canViewAnyConfidentialClientFiles: boolean;
   canViewAnyNonconfidentialClientFiles: boolean;
-  canManageInventory: boolean;
   canManageUnits: boolean;
   canManageDeniedReferrals: boolean;
   canManageIncomingReferrals: boolean;
@@ -8141,7 +8140,6 @@ export type GetRootPermissionsQuery = {
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
-    canManageInventory: boolean;
     canManageUnits: boolean;
     canManageDeniedReferrals: boolean;
     canManageIncomingReferrals: boolean;
@@ -34877,7 +34875,6 @@ export const RootPermissionsFragmentDoc = gql`
     canManageOwnClientFiles
     canViewAnyConfidentialClientFiles
     canViewAnyNonconfidentialClientFiles
-    canManageInventory
     canManageUnits
     canManageDeniedReferrals
     canManageIncomingReferrals
