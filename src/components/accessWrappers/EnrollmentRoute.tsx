@@ -6,6 +6,7 @@ import NotFound from '../pages/NotFound';
 import { EnrollmentPermissions } from '@/modules/permissions/types';
 import { useHasPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
+import { ensureArray } from '@/utils/arrays';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 /**
@@ -20,10 +21,8 @@ const EnrollmentRoute: React.FC<
 > = ({ permissions, redirectRoute, dataCollectionFeature, children }) => {
   // Use dashboard outlet context that gets set in EnrollmentDashboard
   const { enrollment, enabledFeatures } = useEnrollmentDashboardContext();
-  const hasPermission = useHasPermissions(
-    enrollment?.access,
-    permissions || []
-  );
+  const permissionsArray = ensureArray(permissions);
+  const hasPermission = useHasPermissions(enrollment?.access, permissionsArray);
 
   if (
     dataCollectionFeature &&
@@ -32,7 +31,7 @@ const EnrollmentRoute: React.FC<
     return <NotFound />;
   }
 
-  if (!!permissions && !hasPermission) {
+  if (permissionsArray.length > 0 && !hasPermission) {
     return redirectRoute ? (
       <Navigate
         to={generateSafePath(redirectRoute, {

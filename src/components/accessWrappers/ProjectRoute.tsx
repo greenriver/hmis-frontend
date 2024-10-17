@@ -21,9 +21,10 @@ const ProjectRoute: React.FC<
   }>
 > = ({ permissions, redirectRoute, dataCollectionFeature, children }) => {
   const { project } = useProjectDashboardContext();
+  const permissionsArray = ensureArray(permissions);
   const [hasPermission, { loading }] = useHasProjectPermissions(
     project.id,
-    permissions ? ensureArray(permissions) : []
+    permissionsArray
   );
 
   if (
@@ -37,7 +38,7 @@ const ProjectRoute: React.FC<
 
   if (loading) return <Loading />;
 
-  if (!!permissions && !hasPermission) {
+  if (permissionsArray.length > 0 && !hasPermission) {
     return redirectRoute ? (
       <Navigate
         to={generateSafePath(redirectRoute, {
