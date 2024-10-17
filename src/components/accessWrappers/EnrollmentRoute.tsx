@@ -13,14 +13,17 @@ import { generateSafePath } from '@/utils/pathEncoding';
  */
 const EnrollmentRoute: React.FC<
   React.PropsWithChildren<{
-    permissions: EnrollmentPermissions | EnrollmentPermissions[];
+    permissions?: EnrollmentPermissions | EnrollmentPermissions[];
     redirectRoute?: string;
     dataCollectionFeature?: DataCollectionFeatureRole;
   }>
 > = ({ permissions, redirectRoute, dataCollectionFeature, children }) => {
   // Use dashboard outlet context that gets set in EnrollmentDashboard
   const { enrollment, enabledFeatures } = useEnrollmentDashboardContext();
-  const hasPermission = useHasPermissions(enrollment?.access, permissions);
+  const hasPermission = useHasPermissions(
+    enrollment?.access,
+    permissions || []
+  );
 
   if (
     dataCollectionFeature &&
@@ -29,7 +32,7 @@ const EnrollmentRoute: React.FC<
     return <NotFound />;
   }
 
-  if (!hasPermission) {
+  if (!!permissions && !hasPermission) {
     return redirectRoute ? (
       <Navigate
         to={generateSafePath(redirectRoute, {

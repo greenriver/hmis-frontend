@@ -181,11 +181,25 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
-            element: <ProjectServices />,
+            element: (
+              <ProjectRoute
+                dataCollectionFeature={DataCollectionFeatureRole.Service}
+              >
+                <ProjectServices />
+              </ProjectRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.PROJECT_CURRENT_LIVING_SITUATIONS,
-            element: <ProjectCurrentLivingSituations />,
+            element: (
+              <ProjectRoute
+                dataCollectionFeature={
+                  DataCollectionFeatureRole.CurrentLivingSituation
+                }
+              >
+                <ProjectCurrentLivingSituations />
+              </ProjectRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.BULK_BED_NIGHTS,
@@ -487,8 +501,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
             element: (
-              <EnrollmentRoute
-                permissions={[]} // Only requires enrollment visibility
+              <EnrollmentRoute // Only requires enrollment visibility
                 dataCollectionFeature={
                   DataCollectionFeatureRole.CurrentLivingSituation
                 }
@@ -500,8 +513,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.EVENTS,
             element: (
-              <EnrollmentRoute
-                permissions={[]} // Only requires enrollment visibility
+              <EnrollmentRoute // Only requires enrollment visibility
                 dataCollectionFeature={DataCollectionFeatureRole.CeEvent}
               >
                 <EnrollmentCeEventsPage />
@@ -522,8 +534,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
             element: (
-              <EnrollmentRoute
-                permissions={[]} // Only requires enrollment visibility
+              <EnrollmentRoute // Only requires enrollment visibility
                 dataCollectionFeature={DataCollectionFeatureRole.CeAssessment}
               >
                 <EnrollmentCeAssessmentsPage />
@@ -532,10 +543,8 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
-            // No perm needed because it only requires enrollment visibility
             element: (
-              <EnrollmentRoute
-                permissions={[]} // Only requires enrollment visibility
+              <EnrollmentRoute // Only requires enrollment visibility
                 dataCollectionFeature={DataCollectionFeatureRole.CaseNote}
               >
                 <EnrollmentCaseNotes />

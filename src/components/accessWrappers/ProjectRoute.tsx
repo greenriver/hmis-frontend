@@ -6,6 +6,7 @@ import NotFound from '../pages/NotFound';
 import { ProjectPermissions } from '@/modules/permissions/types';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { DataCollectionFeatureRole } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -14,19 +15,29 @@ import { generateSafePath } from '@/utils/pathEncoding';
  */
 const ProjectRoute: React.FC<
   React.PropsWithChildren<{
-    permissions: ProjectPermissions | ProjectPermissions[];
+    permissions?: ProjectPermissions | ProjectPermissions[];
     redirectRoute?: string;
+    dataCollectionFeature?: DataCollectionFeatureRole;
   }>
-> = ({ permissions, redirectRoute, children }) => {
+> = ({ permissions, redirectRoute, dataCollectionFeature, children }) => {
   const { project } = useProjectDashboardContext();
   const [hasPermission, { loading }] = useHasProjectPermissions(
     project.id,
-    ensureArray(permissions)
+    permissions ? ensureArray(permissions) : []
   );
+
+  if (
+    dataCollectionFeature &&
+    !project.dataCollectionFeatures
+      .map((f) => f.role)
+      .includes(dataCollectionFeature)
+  ) {
+    return <NotFound />;
+  }
 
   if (loading) return <Loading />;
 
-  if (!hasPermission) {
+  if (!!permissions && !hasPermission) {
     return redirectRoute ? (
       <Navigate
         to={generateSafePath(redirectRoute, {
