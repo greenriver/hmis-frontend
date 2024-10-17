@@ -128,6 +128,7 @@ fragment DisabilityGroupValues on DisabilityGroup {
   tCellSource
   viralLoadAvailable
   viralLoad
+  viralLoadSource
   antiRetroviral
 }
 
