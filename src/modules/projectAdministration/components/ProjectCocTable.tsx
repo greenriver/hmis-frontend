@@ -1,7 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 
-
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,

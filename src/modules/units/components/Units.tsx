@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-
 import UnitCapacityTable from './UnitCapacityTable';
 import UnitManagementTable from './UnitManagementTable';
 

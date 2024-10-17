@@ -3,7 +3,6 @@ import { Button, Paper } from '@mui/material';
 
 import { useCallback, useMemo } from 'react';
 
-
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
