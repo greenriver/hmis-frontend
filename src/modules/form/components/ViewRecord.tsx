@@ -43,17 +43,14 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   }, [itemMap, record]);
 
   if (loading) return <Loading />;
+  if (!formDefinition || !itemMap) throw new Error('Form definition not found');
 
   return (
-    <>
-      {formDefinition && (
-        <DynamicView
-          values={values}
-          definition={formDefinition.definition}
-          pickListArgs={pickListArgs}
-        />
-      )}
-    </>
+    <DynamicView
+      values={values}
+      definition={formDefinition.definition}
+      pickListArgs={pickListArgs}
+    />
   );
 };
 

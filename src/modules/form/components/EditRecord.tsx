@@ -107,29 +107,28 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   );
 
   if (definitionLoading) return <Loading />;
+  if (!formDefinition) throw new Error('Form definition not found');
 
   const form = (
     <>
-      {formDefinition && (
-        <DynamicForm
-          ref={formRef}
-          definition={formDefinition.definition}
-          onSubmit={onSubmit}
-          initialValues={initialValues}
-          loading={submitLoading}
-          errors={errors}
-          localConstants={localConstants}
-          {...props}
-          FormActionProps={{
-            submitButtonText: 'Save Changes',
-            ...props.FormActionProps,
-          }}
-          ValidationDialogProps={{
-            confirmText: 'Confirm Change',
-            ...props.ValidationDialogProps,
-          }}
-        />
-      )}
+      <DynamicForm
+        ref={formRef}
+        definition={formDefinition.definition}
+        onSubmit={onSubmit}
+        initialValues={initialValues}
+        loading={submitLoading}
+        errors={errors}
+        localConstants={localConstants}
+        {...props}
+        FormActionProps={{
+          submitButtonText: 'Save Changes',
+          ...props.FormActionProps,
+        }}
+        ValidationDialogProps={{
+          confirmText: 'Confirm Change',
+          ...props.ValidationDialogProps,
+        }}
+      />
     </>
   );
 
