@@ -92,7 +92,6 @@ fragment ProjectAccessFields on ProjectAccess {
   canDeleteEnrollments
   canDeleteAssessments
   canEditProjectDetails
-  canManageInventory
   canViewUnits
   canManageUnits
   canManageDeniedReferrals

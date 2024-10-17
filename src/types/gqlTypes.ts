@@ -8093,7 +8093,6 @@ export type ProjectAccessFieldsFragment = {
   canDeleteEnrollments: boolean;
   canDeleteAssessments: boolean;
   canEditProjectDetails: boolean;
-  canManageInventory: boolean;
   canViewUnits: boolean;
   canManageUnits: boolean;
   canManageDeniedReferrals: boolean;
@@ -18371,7 +18370,6 @@ export type AllEnrollmentDetailsFragment = {
       canDeleteEnrollments: boolean;
       canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
-      canManageInventory: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
       canManageDeniedReferrals: boolean;
@@ -19502,7 +19500,6 @@ export type GetEnrollmentDetailsQuery = {
         canDeleteEnrollments: boolean;
         canDeleteAssessments: boolean;
         canEditProjectDetails: boolean;
-        canManageInventory: boolean;
         canViewUnits: boolean;
         canManageUnits: boolean;
         canManageDeniedReferrals: boolean;
@@ -27599,7 +27596,6 @@ export type SubmitFormMutation = {
             canDeleteEnrollments: boolean;
             canDeleteAssessments: boolean;
             canEditProjectDetails: boolean;
-            canManageInventory: boolean;
             canViewUnits: boolean;
             canManageUnits: boolean;
             canManageDeniedReferrals: boolean;
@@ -30411,7 +30407,6 @@ export type ProjectAllFieldsFragment = {
     canDeleteEnrollments: boolean;
     canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
-    canManageInventory: boolean;
     canViewUnits: boolean;
     canManageUnits: boolean;
     canManageDeniedReferrals: boolean;
@@ -31249,7 +31244,6 @@ export type GetProjectQuery = {
       canDeleteEnrollments: boolean;
       canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
-      canManageInventory: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
       canManageDeniedReferrals: boolean;
@@ -31361,7 +31355,6 @@ export type GetProjectPermissionsQuery = {
       canDeleteEnrollments: boolean;
       canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
-      canManageInventory: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
       canManageDeniedReferrals: boolean;
@@ -36214,7 +36207,6 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canDeleteEnrollments
     canDeleteAssessments
     canEditProjectDetails
-    canManageInventory
     canViewUnits
     canManageUnits
     canManageDeniedReferrals
