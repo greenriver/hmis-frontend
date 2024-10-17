@@ -16,7 +16,6 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormProps,
@@ -108,28 +107,29 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   );
 
   if (definitionLoading) return <Loading />;
-  if (!formDefinition) return <NotFound text='Form definition not found.' />;
 
   const form = (
     <>
-      <DynamicForm
-        ref={formRef}
-        definition={formDefinition.definition}
-        onSubmit={onSubmit}
-        initialValues={initialValues}
-        loading={submitLoading}
-        errors={errors}
-        localConstants={localConstants}
-        {...props}
-        FormActionProps={{
-          submitButtonText: 'Save Changes',
-          ...props.FormActionProps,
-        }}
-        ValidationDialogProps={{
-          confirmText: 'Confirm Change',
-          ...props.ValidationDialogProps,
-        }}
-      />
+      {formDefinition && (
+        <DynamicForm
+          ref={formRef}
+          definition={formDefinition.definition}
+          onSubmit={onSubmit}
+          initialValues={initialValues}
+          loading={submitLoading}
+          errors={errors}
+          localConstants={localConstants}
+          {...props}
+          FormActionProps={{
+            submitButtonText: 'Save Changes',
+            ...props.FormActionProps,
+          }}
+          ValidationDialogProps={{
+            confirmText: 'Confirm Change',
+            ...props.ValidationDialogProps,
+          }}
+        />
+      )}
     </>
   );
 

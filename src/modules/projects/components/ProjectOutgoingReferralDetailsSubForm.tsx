@@ -55,12 +55,6 @@ const ProjectOutgoingReferralDetailsSubForm: React.FC<Props> = ({
   const { initialValues, errors, onSubmit, submitLoading } =
     useDynamicFormHandlersForRecord(hookArgs);
 
-  if (!formDefinitionLoading && !formDefinition) {
-    throw new Error(
-      `Failed to find referral form definition for project ${destinationProjectId}`
-    );
-  }
-
   const { data } = useGetProjectCanAcceptReferralQuery({
     variables: {
       destinationProjectId: destinationProjectId,

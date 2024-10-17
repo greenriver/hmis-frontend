@@ -7,7 +7,6 @@ import { createInitialValuesFromRecord } from '../util/formUtil';
 import DynamicView from './viewable/DynamicView';
 
 import Loading from '@/components/elements/Loading';
-import NotFound from '@/components/pages/NotFound';
 import { RecordFormRole } from '@/types/gqlTypes';
 
 export interface ViewRecordProps<RecordType> {
@@ -44,14 +43,17 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   }, [itemMap, record]);
 
   if (loading) return <Loading />;
-  if (!formDefinition || !itemMap) return <NotFound />;
 
   return (
-    <DynamicView
-      values={values}
-      definition={formDefinition.definition}
-      pickListArgs={pickListArgs}
-    />
+    <>
+      {formDefinition && (
+        <DynamicView
+          values={values}
+          definition={formDefinition.definition}
+          pickListArgs={pickListArgs}
+        />
+      )}
+    </>
   );
 };
 

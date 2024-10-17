@@ -83,12 +83,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       projectId:
         projectId || localConstants?.projectId || inputVariables?.projectId,
     },
-    localDefinition,
-    (data) => {
-      if (!data.recordFormDefinition) {
-        throw new Error(`Form not found: ${formRole}`);
-      }
-    }
+    localDefinition
   );
 
   const hookArgs = useMemo(
@@ -126,9 +121,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   const renderFormDialog = useCallback(
     ({ title, otherActions, DialogProps, ...props }: RenderFormDialogProps) => {
       if (!dialogOpen) return null;
-      if (!definitionLoading && !formDefinition) {
-        throw new Error(`Form not found: ${formRole} `);
-      }
 
       const hasMultipleTopLevelGroups =
         (formDefinition?.definition?.item || []).filter(
@@ -213,7 +205,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       dialogOpen,
       errors,
       formDefinition,
-      formRole,
       initialValues,
       localConstants,
       onSubmit,
