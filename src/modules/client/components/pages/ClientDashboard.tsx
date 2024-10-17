@@ -1,0 +1,106 @@
+import { Container } from '@mui/material';
+import { isNil } from 'lodash-es';
+import { useMemo, useState } from 'react';
+import { Outlet } from 'react-router-dom';
+
+import { useClientDashboardNavItems } from '../../hooks/useClientDashboardNavItems';
+import Loading from '@/components/elements/Loading';
+import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
+import {
+  useClientBreadcrumbConfig,
+  useDashboardBreadcrumbs,
+} from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
+import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
+import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
+
+import NotFound from '@/components/pages/NotFound';
+
+import { useDashboardState } from '@/hooks/useDashboardState';
+import useIsPrintView from '@/hooks/useIsPrintView';
+import useSafeParams from '@/hooks/useSafeParams';
+import ClientCardMini from '@/modules/client/components/ClientCardMini';
+import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
+import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ClientFieldsFragment, useGetClientQuery } from '@/types/gqlTypes';
+
+const ClientDashboard: React.FC = () => {
+  const params = useSafeParams() as { clientId: string };
+  const isPrint = useIsPrintView();
+
+  const [breadcrumbOverrides, overrideBreadcrumbTitles] = useState<
+    Record<string, string> | undefined
+  >();
+
+  const {
+    data: { client } = {},
+    loading,
+    error,
+  } = useGetClientQuery({
+    variables: { id: params.clientId },
+  });
+  if (error) throw error;
+
+  const navItems = useClientDashboardNavItems(client?.enabledFeatures || []);
+
+  const { currentPath, ...dashboardState } = useDashboardState();
+
+  const outletContext: ClientDashboardContext | undefined = useMemo(
+    () => (client ? { client, overrideBreadcrumbTitles } : undefined),
+    [client]
+  );
+
+  const breadCrumbConfig = useClientBreadcrumbConfig(outletContext);
+  const breadcrumbs = useDashboardBreadcrumbs(
+    breadCrumbConfig,
+    breadcrumbOverrides
+  );
+
+  if (loading || !navItems) return <Loading />;
+  if (!client || !outletContext) return <NotFound />;
+
+  if (isPrint) {
+    return (
+      <>
+        <ClientPrintHeader client={client} />
+        <Outlet context={outletContext} />
+      </>
+    );
+  }
+
+  return (
+    <DashboardContentContainer
+      navHeader={<ClientCardMini client={client} />}
+      sidebar={
+        <SideNavMenu
+          items={navItems}
+          access={client.access}
+          pathParams={{ clientId: client.id }}
+        />
+      }
+      contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
+      navLabel='Client'
+      {...dashboardState}
+    >
+      <Container maxWidth='xl' disableGutters>
+        <Outlet context={outletContext} />
+      </Container>
+    </DashboardContentContainer>
+  );
+};
+
+export type ClientDashboardContext = {
+  client: ClientFieldsFragment;
+  overrideBreadcrumbTitles: (crumbs: any) => void;
+};
+
+export function isClientDashboardContext(
+  value: ClientDashboardContext | ProjectDashboardContext
+): value is ClientDashboardContext {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    !!value.hasOwnProperty('client')
+  );
+}
+
+export default ClientDashboard;
