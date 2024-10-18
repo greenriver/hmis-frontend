@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
-import { useEnrollmentDashboardContext } from '../pages/EnrollmentDashboard';
 import NotFound from '../pages/NotFound';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 
 import { EnrollmentPermissions } from '@/modules/permissions/types';
 import { useHasPermissions } from '@/modules/permissions/useHasPermissionsHooks';

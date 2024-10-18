@@ -1,5 +1,5 @@
 import { AlwaysPresentLocalConstants } from '../form/util/formUtil';
-import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
+import { ClientAssessmentType } from './assessmentTypes';
 import { ColumnDef } from '@/components/elements/table/types';
 import { HhmAssessmentType } from '@/modules/enrollment/components/HouseholdAssessmentsTable';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';

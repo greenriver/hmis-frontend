@@ -22,9 +22,9 @@ import {
   getPopulatableChildren,
   gqlValueToFormValue,
 } from '../../util/formUtil';
-import RecordPickerDialog from '../RecordPickerDialog';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import RecordPickerDialog from '@/modules/assessments/components/RecordPickerDialog';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 export interface FormCardProps extends GroupItemComponentProps {

@@ -1,9 +1,9 @@
 import { Navigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
-import { useEnrollmentDashboardContext } from '../pages/EnrollmentDashboard';
 import NotFound from '../pages/NotFound';
 
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { ProjectPermissions } from '@/modules/permissions/types';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ensureArray } from '@/utils/arrays';
