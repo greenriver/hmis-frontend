@@ -9,8 +9,6 @@ import {
 } from '@mui/material';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
-
 import UnitCapacityTable from './UnitCapacityTable';
 import UnitManagementTable from './UnitManagementTable';
 
@@ -30,6 +28,7 @@ import FormDialogActionContent from '@/modules/form/components/FormDialogActionC
 import { UnitsDefinition } from '@/modules/form/data';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { evictUnitsQuery } from '@/modules/units/util';
 import { CreateUnitsInput, useCreateUnitsMutation } from '@/types/gqlTypes';
 
