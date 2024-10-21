@@ -1,4 +1,4 @@
-import React, { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
@@ -15,11 +15,7 @@ import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import ProjectRoute from '@/components/accessWrappers/ProjectRoute';
-import ClientFiles from '@/components/clientDashboard/ClientFiles';
-import EditClient from '@/components/clientDashboard/EditClient';
-import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
-import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
-import Profile from '@/components/clientDashboard/Profile';
+
 import Loading from '@/components/elements/Loading';
 import PathHandler from '@/components/elements/PathHandler';
 import MainLayout from '@/components/layout/MainLayout';
@@ -27,24 +23,12 @@ import {
   MobileMenuContext,
   useMobileMenuContext,
 } from '@/components/layout/nav/useMobileMenuContext';
-import AllProjects from '@/components/pages/AllProjects';
-import ClientDashboard from '@/components/pages/ClientDashboard';
-import ClientSearchPage from '@/components/pages/ClientSearchPage';
-import CreateClient from '@/components/pages/CreateClient';
-import CreateOrganization from '@/components/pages/CreateOrganization';
-import CreateProject from '@/components/pages/CreateProject';
-import EditOrganization from '@/components/pages/EditOrganization';
-import EnrollmentDashboard from '@/components/pages/EnrollmentDashboard';
-import File from '@/components/pages/File';
+
 import NotFound from '@/components/pages/NotFound';
-import Organization from '@/components/pages/Organization';
-import UserDashboard from '@/components/pages/UserDashboard';
 import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
-import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
-import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
@@ -58,54 +42,78 @@ import ExitAssessmentPage from '@/modules/assessments/components/ExitAssessmentP
 import IndividualAssessmentPage from '@/modules/assessments/components/IndividualAssessmentPage';
 import IntakeAssessmentPage from '@/modules/assessments/components/IntakeAssessmentPage';
 import NewIndividualAssessmentPage from '@/modules/assessments/components/NewIndividualAssessmentPage';
+import ClientAssessmentsPage from '@/modules/assessments/components/pages/ClientAssessmentsPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
-import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
-import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
+import BedNightsPage from '@/modules/bulkServices/components/BedNightsPage';
+import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage';
+
+import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
+import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
+
+import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
+import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
+import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
+import EditClientPage from '@/modules/client/components/pages/EditClientPage';
+import ClientFilesPage from '@/modules/clientFiles/components/ClientFilesPage';
+import EditFilePage from '@/modules/clientFiles/components/EditFilePage';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
 import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
 import NewClientMerge from '@/modules/clientMerge/components/client/NewClientMerge';
-import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
-import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
-import EnrollmentCeEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeEventsPage';
-import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
-import EnrollmentEsgFundingReport from '@/modules/enrollment/components/dashboardPages/EnrollmentEsgFundingReport';
-import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/EnrollmentOverview';
-import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
-import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
+import ClientEnrollmentsPage from '@/modules/enrollment/components/pages/ClientEnrollmentsPage';
+import EnrollmentAssessmentsPage from '@/modules/enrollment/components/pages/EnrollmentAssessmentsPage';
+import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/pages/EnrollmentCeAssessmentsPage';
+import EnrollmentCeEventsPage from '@/modules/enrollment/components/pages/EnrollmentCeEventsPage';
+import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/pages/EnrollmentCurrentLivingSituationsPage';
+import EnrollmentDashboard from '@/modules/enrollment/components/pages/EnrollmentDashboard';
+import EnrollmentEsgFundingReport from '@/modules/enrollment/components/pages/EnrollmentEsgFundingReport';
+import EnrollmentOverview from '@/modules/enrollment/components/pages/EnrollmentOverview';
+
+import HouseholdPage from '@/modules/enrollment/components/pages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
+import MyDashboardPage from '@/modules/myDashboard/components/MyDashboardPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import CeParticipations from '@/modules/projects/components/CeParticipations';
-import Cocs from '@/modules/projects/components/Cocs';
-import EditProject from '@/modules/projects/components/EditProject';
-import Funder from '@/modules/projects/components/Funder';
-import Funders from '@/modules/projects/components/Funders';
-import HmisParticipations from '@/modules/projects/components/HmisParticipations';
-import Inventories from '@/modules/projects/components/Inventories';
-import Inventory from '@/modules/projects/components/Inventory';
-import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
-import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
+import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
+import CeParticipationsPage from '@/modules/projectAdministration/components/CeParticipationsPage';
+import CreateOrganizationPage from '@/modules/projectAdministration/components/CreateOrganizationPage';
+import CreateProjectPage from '@/modules/projectAdministration/components/CreateProjectPage';
+import EditFunderPage from '@/modules/projectAdministration/components/EditFunderPage';
+import EditInventoryPage from '@/modules/projectAdministration/components/EditInventoryPage';
+import EditOrganizationPage from '@/modules/projectAdministration/components/EditOrganizationPage';
+import EditProjectCocPage from '@/modules/projectAdministration/components/EditProjectCocPage';
+import EditProjectPage from '@/modules/projectAdministration/components/EditProjectPage';
+import FundersPage from '@/modules/projectAdministration/components/FundersPage';
+import HmisParticipationsPage from '@/modules/projectAdministration/components/HmisParticipationsPage';
+import InventoriesPage from '@/modules/projectAdministration/components/InventoriesPage';
+import OrganizationPage from '@/modules/projectAdministration/components/OrganizationPage';
+import ProjectCocsPage from '@/modules/projectAdministration/components/ProjectCocsPage';
 import ProjectAssessments from '@/modules/projects/components/ProjectAssessments';
-import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectCurrentLivingSituations from '@/modules/projects/components/ProjectCurrentLivingSituations';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
 import ProjectExternalFormSubmissions from '@/modules/projects/components/ProjectExternalFormSubmissions';
-import Project from '@/modules/projects/components/ProjectOverview';
-import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
-import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
-import ProjectServices from '@/modules/projects/components/ProjectServices';
+import ProjectOverviewPage from '@/modules/projects/components/ProjectOverviewPage';
+import AdminReferralDenialsPage from '@/modules/referrals/components/admin/AdminReferralDenialsPage';
+import AdminReferralPosting from '@/modules/referrals/components/admin/AdminReferralPosting';
+import NewOutgoingReferralPage from '@/modules/referrals/components/NewOutgoingReferralPage';
+import NewReferralRequestPage from '@/modules/referrals/components/NewReferralRequestPage';
+import ProjectReferralPostingPage from '@/modules/referrals/components/ProjectReferralPostingPage';
+
+import ProjectReferralsPage from '@/modules/referrals/components/ProjectReferralsPage';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
-import BedNightsPage from '@/modules/services/components/bulk/BedNightsPage';
-import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPage';
-import ClientServices from '@/modules/services/components/ClientServices';
+import ClientSearchPage from '@/modules/search/components/ClientSearchPage';
+
+import ClientServicesPage from '@/modules/services/components/ClientServicesPage';
+import EnrollmentServicesPage from '@/modules/services/components/EnrollmentServicesPage';
+import ProjectServicesPage from '@/modules/services/components/ProjectServicesPage';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
+import { DataCollectionFeatureRole } from '@/types/gqlTypes';
 
 const App = () => {
   // Setup mobile menu context - open/closed state and handlers
@@ -149,8 +157,8 @@ export const protectedRoutes: RouteNode[] = [
     path: '/',
     element: <App />,
     children: [
-      { path: Routes.ALL_PROJECTS, element: <AllProjects /> },
-      { path: Routes.MY_DASHBOARD, element: <UserDashboard /> },
+      { path: Routes.ALL_PROJECTS, element: <AllProjectsPage /> },
+      { path: Routes.MY_DASHBOARD, element: <MyDashboardPage /> },
       {
         path: Routes.PROJECT,
         element: <ProjectDashboard />,
@@ -168,7 +176,7 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.OVERVIEW,
-            element: <Project />,
+            element: <ProjectOverviewPage />,
           },
           {
             path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
@@ -180,11 +188,25 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
-            element: <ProjectServices />,
+            element: (
+              <ProjectRoute
+                dataCollectionFeature={DataCollectionFeatureRole.Service}
+              >
+                <ProjectServicesPage />
+              </ProjectRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.PROJECT_CURRENT_LIVING_SITUATIONS,
-            element: <ProjectCurrentLivingSituations />,
+            element: (
+              <ProjectRoute
+                dataCollectionFeature={
+                  DataCollectionFeatureRole.CurrentLivingSituation
+                }
+              >
+                <ProjectCurrentLivingSituations />
+              </ProjectRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.BULK_BED_NIGHTS,
@@ -228,7 +250,7 @@ export const protectedRoutes: RouteNode[] = [
                 ]}
                 redirectRoute={Routes.PROJECT}
               >
-                <ProjectReferrals />
+                <ProjectReferralsPage />
               </ProjectEditRoute>
             ),
           },
@@ -239,7 +261,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canManageIncomingReferrals']}
                 redirectRoute={Routes.PROJECT}
               >
-                <ProjectReferralPosting />
+                <ProjectReferralPostingPage />
               </ProjectEditRoute>
             ),
           },
@@ -261,7 +283,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canManageIncomingReferrals']}
                 redirectRoute={Routes.PROJECT}
               >
-                <NewReferralRequest />
+                <NewReferralRequestPage />
               </ProjectEditRoute>
             ),
           },
@@ -272,7 +294,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canManageOutgoingReferrals']}
                 redirectRoute={Routes.PROJECT}
               >
-                <NewOutgoingReferral />
+                <NewOutgoingReferralPage />
               </ProjectEditRoute>
             ),
           },
@@ -280,21 +302,21 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EDIT_PROJECT,
             element: (
               <ProjectEditRoute>
-                <EditProject />
+                <EditProjectPage />
               </ProjectEditRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.INVENTORY,
-            element: <Inventories />,
+            element: <InventoriesPage />,
           },
           {
             path: ProjectDashboardRoutes.HMIS_PARTICIPATION,
-            element: <HmisParticipations />,
+            element: <HmisParticipationsPage />,
           },
           {
             path: ProjectDashboardRoutes.CE_PARTICIPATION,
-            element: <CeParticipations />,
+            element: <CeParticipationsPage />,
           },
           {
             path: ProjectDashboardRoutes.UNITS,
@@ -304,7 +326,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.NEW_INVENTORY,
             element: (
               <ProjectEditRoute>
-                <Inventory create />
+                <EditInventoryPage create />
               </ProjectEditRoute>
             ),
           },
@@ -312,19 +334,19 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EDIT_INVENTORY,
             element: (
               <ProjectEditRoute>
-                <Inventory />
+                <EditInventoryPage />
               </ProjectEditRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.FUNDERS,
-            element: <Funders />,
+            element: <FundersPage />,
           },
           {
             path: ProjectDashboardRoutes.NEW_FUNDER,
             element: (
               <ProjectEditRoute>
-                <Funder create={true} />
+                <EditFunderPage create />
               </ProjectEditRoute>
             ),
           },
@@ -332,19 +354,19 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EDIT_FUNDER,
             element: (
               <ProjectEditRoute>
-                <Funder />
+                <EditFunderPage />
               </ProjectEditRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.COCS,
-            element: <Cocs />,
+            element: <ProjectCocsPage />,
           },
           {
             path: ProjectDashboardRoutes.NEW_COC,
             element: (
               <ProjectEditRoute>
-                <ProjectCoc create />
+                <EditProjectCocPage create />
               </ProjectEditRoute>
             ),
           },
@@ -352,7 +374,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EDIT_COC,
             element: (
               <ProjectEditRoute>
-                <ProjectCoc />
+                <EditProjectCocPage />
               </ProjectEditRoute>
             ),
           },
@@ -395,20 +417,20 @@ export const protectedRoutes: RouteNode[] = [
         path: Routes.CREATE_PROJECT,
         element: (
           <RootPermissionsFilter permissions={['canEditProjectDetails']}>
-            <CreateProject />
+            <CreateProjectPage />
           </RootPermissionsFilter>
         ),
       },
-      { path: Routes.ORGANIZATION, element: <Organization /> },
+      { path: Routes.ORGANIZATION, element: <OrganizationPage /> },
       {
         path: Routes.EDIT_ORGANIZATION,
-        element: <EditOrganization />,
+        element: <EditOrganizationPage />,
       },
       {
         path: Routes.CREATE_ORGANIZATION,
         element: (
           <RootPermissionsFilter permissions='canEditOrganization'>
-            <CreateOrganization />
+            <CreateOrganizationPage />
           </RootPermissionsFilter>
         ),
       },
@@ -416,7 +438,7 @@ export const protectedRoutes: RouteNode[] = [
         path: Routes.CREATE_CLIENT,
         element: (
           <RootPermissionsFilter permissions='canEditClients'>
-            <CreateClient />
+            <CreateClientPage />
           </RootPermissionsFilter>
         ),
       },
@@ -485,13 +507,25 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-            // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCurrentLivingSituationsPage />,
+            element: (
+              <EnrollmentRoute // Only requires enrollment visibility
+                dataCollectionFeature={
+                  DataCollectionFeatureRole.CurrentLivingSituation
+                }
+              >
+                <EnrollmentCurrentLivingSituationsPage />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.EVENTS,
-            // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCeEventsPage />,
+            element: (
+              <EnrollmentRoute // Only requires enrollment visibility
+                dataCollectionFeature={DataCollectionFeatureRole.CeEvent}
+              >
+                <EnrollmentCeEventsPage />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.AUDIT_HISTORY,
@@ -506,13 +540,23 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
-            // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCeAssessmentsPage />,
+            element: (
+              <EnrollmentRoute // Only requires enrollment visibility
+                dataCollectionFeature={DataCollectionFeatureRole.CeAssessment}
+              >
+                <EnrollmentCeAssessmentsPage />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
-            // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCaseNotes />,
+            element: (
+              <EnrollmentRoute // Only requires enrollment visibility
+                dataCollectionFeature={DataCollectionFeatureRole.CaseNote}
+              >
+                <EnrollmentCaseNotes />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
@@ -537,7 +581,7 @@ export const protectedRoutes: RouteNode[] = [
           { path: '', element: <Navigate to='profile' replace /> },
           {
             path: ClientDashboardRoutes.PROFILE,
-            element: <Profile />,
+            element: <ClientProfilePage />,
           },
           {
             path: ClientDashboardRoutes.EDIT,
@@ -548,7 +592,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canEditClient', 'canViewClientName']}
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <EditClient />
+                <EditClientPage />
               </ClientRoute>
             ),
           },
@@ -571,7 +615,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ClientEnrollments />
+                <ClientEnrollmentsPage />
               </ClientRoute>
             ),
           },
@@ -604,7 +648,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ClientAssessments />
+                <ClientAssessmentsPage />
               </ClientRoute>
             ),
           },
@@ -615,7 +659,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ClientServices />
+                <ClientServicesPage />
               </ClientRoute>
             ),
           },
@@ -653,7 +697,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewAnyFiles'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ClientFiles />
+                <ClientFilesPage />
               </ClientRoute>
             ),
           },
@@ -661,7 +705,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.NEW_FILE,
             element: (
               <FileEditRoute create>
-                <File create />
+                <EditFilePage create />
               </FileEditRoute>
             ),
           },
@@ -669,7 +713,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.EDIT_FILE,
             element: (
               <FileEditRoute>
-                <File />
+                <EditFilePage />
               </FileEditRoute>
             ),
           },
@@ -704,7 +748,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.AC_DENIALS,
             element: (
               <RootPermissionsFilter permissions='canManageDeniedReferrals'>
-                <AdminReferralDenials />
+                <AdminReferralDenialsPage />
               </RootPermissionsFilter>
             ),
           },

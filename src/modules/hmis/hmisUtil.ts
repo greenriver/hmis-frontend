@@ -15,13 +15,14 @@ import {
 } from 'date-fns';
 import { capitalize, find, isNil, sortBy, startCase } from 'lodash-es';
 
+import { ClientAssessmentType } from '../assessments/assessmentTypes';
 import {
   ClientNameDobVeteranFields,
   hasMeaningfulValue,
 } from '../form/util/formUtil';
 
 import { DashboardEnrollment } from './types';
-import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
+
 import { ColumnDef } from '@/components/elements/table/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';

@@ -16,7 +16,6 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormProps,
@@ -108,7 +107,7 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   );
 
   if (definitionLoading) return <Loading />;
-  if (!formDefinition) return <NotFound text='Form definition not found.' />;
+  if (!formDefinition) throw new Error('Form definition not found');
 
   const form = (
     <>
