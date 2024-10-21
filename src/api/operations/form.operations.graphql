@@ -50,6 +50,19 @@ mutation CreateNextDraftFormDefinition($identifier: String!) {
   }
 }
 
+# used for creating an entirely new FormDefinition that is a duplicate of an existing form
+mutation CreateDuplicateFormDefinition($identifier: String!) {
+  createDuplicateFormDefinition(identifier: $identifier) {
+    formIdentifier {
+      id
+      identifier
+      draftVersion {
+        ...FormDefinitionMetadata
+      }
+    }
+  }
+}
+
 # publish a Draft version of a form
 mutation PublishFormDefinition($id: ID!) {
   publishFormDefinition(id: $id) {

@@ -92,6 +92,7 @@ query GetFormIdentifiers(
     nodes {
       id
       identifier
+      managedInVersionControl
       displayVersion {
         ...FormDefinitionMetadata
         system
