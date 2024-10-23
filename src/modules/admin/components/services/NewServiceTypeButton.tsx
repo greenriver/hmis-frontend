@@ -41,11 +41,11 @@ const NewServiceTypeButton = () => {
   });
 
   const {
-    data: pickListData,
+    data: { pickList } = {},
     loading: pickListLoading,
     error: pickListError,
   } = useGetPickListQuery({
-    variables: { pickListType: PickListType.AllServiceCategories },
+    variables: { pickListType: PickListType.CustomServiceCategories },
   });
 
   if (error) throw error;
@@ -77,7 +77,7 @@ const NewServiceTypeButton = () => {
             />
             <FormSelect
               value={serviceCategory}
-              options={pickListData?.pickList || []}
+              options={pickList || []}
               onChange={(_e, value) => {
                 setServiceCategory(isPickListOption(value) ? value : null);
               }}
