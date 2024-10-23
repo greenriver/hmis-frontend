@@ -9,7 +9,7 @@ import RouterLink from '@/components/elements/RouterLink';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import UpdateServiceTypeDialog from '@/modules/admin/components/services/UpdateServiceTypeDialog';
+import ServiceTypeDialog from '@/modules/admin/components/services/ServiceTypeDialog';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -80,7 +80,7 @@ const ServiceTypeDetailPage = () => {
         }
       />
       {serviceType && (
-        <UpdateServiceTypeDialog
+        <ServiceTypeDialog
           serviceType={serviceType}
           dialogOpen={updateDialogOpen}
           closeDialog={() => setUpdateDialogOpen(!updateDialogOpen)}
