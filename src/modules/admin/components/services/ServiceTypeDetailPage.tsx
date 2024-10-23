@@ -12,6 +12,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import UpdateServiceTypeDialog from '@/modules/admin/components/services/UpdateServiceTypeDialog';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { AdminDashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteServiceTypeDocument,
   DeleteServiceTypeMutation,
@@ -88,15 +89,27 @@ const ServiceTypeDetailPage = () => {
       <Stack gap={2}>
         <Paper sx={{ p: 2 }}>
           <Stack gap={1}>
+            <CommonLabeledTextBlock title='Service Type Name'>
+              {serviceType.name}
+            </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Service Category'>
               {serviceType.category}
-            </CommonLabeledTextBlock>
-            <CommonLabeledTextBlock title='Service Type'>
-              {serviceType.name}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Supports Bulk Assignment?'>
               {serviceType.supportsBulkAssignment ? 'Yes' : 'No'}
             </CommonLabeledTextBlock>
+
+            {serviceType.hudRecordType && (
+              <CommonLabeledTextBlock title='HUD Record Type'>
+                {HmisEnums.RecordType[serviceType.hudRecordType]}
+              </CommonLabeledTextBlock>
+            )}
+            {serviceType.hudTypeProvided && (
+              <CommonLabeledTextBlock title='HUD Type Provided'>
+                {HmisEnums.ServiceTypeProvided[serviceType.hudTypeProvided]}
+              </CommonLabeledTextBlock>
+            )}
+
             <CommonLabeledTextBlock title='Active Forms'>
               <CommonUnstyledList>
                 {serviceType.formDefinitions.map((formDef) => (

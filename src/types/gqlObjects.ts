@@ -7721,11 +7721,11 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'serviceCategoryId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'serviceCategoryName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'supportsBulkAssignment',

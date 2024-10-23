@@ -38,36 +38,3 @@ mutation UpdateServiceType(
     }
   }
 }
-
-mutation CreateServiceCategory($name: String!) {
-  createServiceCategory(name: $name) {
-    serviceCategory {
-      ...ServiceCategoryFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteServiceCategory($id: ID!) {
-  deleteServiceCategory(id: $id) {
-    serviceCategory {
-      id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation RenameServiceCategory($id: ID!, $name: String!) {
-  renameServiceCategory(id: $id, name: $name) {
-    serviceCategory {
-      ...ServiceCategoryFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
