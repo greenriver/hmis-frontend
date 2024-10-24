@@ -9,14 +9,13 @@ import {
 } from '@mui/material';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
-
 import UnitCapacityTable from './UnitCapacityTable';
 import UnitManagementTable from './UnitManagementTable';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
+import NotFound from '@/components/pages/NotFound';
 import {
   emptyErrorState,
   ErrorState,
@@ -30,6 +29,7 @@ import FormDialogActionContent from '@/modules/form/components/FormDialogActionC
 import { UnitsDefinition } from '@/modules/form/data';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { evictUnitsQuery } from '@/modules/units/util';
 import { CreateUnitsInput, useCreateUnitsMutation } from '@/types/gqlTypes';
 
@@ -71,6 +71,8 @@ const Units = () => {
   );
   const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
 
+  if (!project.access.canViewUnits) return <NotFound />;
+
   return (
     <>
       <PageTitle
@@ -78,7 +80,7 @@ const Units = () => {
         actions={
           <ProjectPermissionsFilter
             id={project.id}
-            permissions='canManageInventory'
+            permissions='canManageUnits'
           >
             <Button
               data-testid='addInventoryButton'
@@ -98,7 +100,7 @@ const Units = () => {
         <Paper>
           <UnitManagementTable
             projectId={project.id}
-            allowDeleteUnits={project.access.canManageInventory}
+            allowDeleteUnits={project.access.canManageUnits}
           />
         </Paper>
       </Stack>

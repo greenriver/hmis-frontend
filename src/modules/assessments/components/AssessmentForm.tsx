@@ -28,13 +28,13 @@ import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFo
 import AssessmentHistoryInfo from '@/modules/assessments/components/AssessmentHistory';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 
+import RecordPickerDialog from '@/modules/assessments/components/RecordPickerDialog';
 import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import FormActions from '@/modules/form/components/FormActions';
-import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
