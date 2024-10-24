@@ -7,7 +7,7 @@ import {
   ClientAccess,
   ClientAccessFieldsFragmentDoc,
   OrganizationAccess,
-  ProjectAccess,
+  ProjectAccessFieldsFragment,
   RootPermissionsFragment,
   useGetClientPermissionsQuery,
   useGetOrganizationQuery,
@@ -45,7 +45,7 @@ export type ProjectPermissionsFilterProps<T> = Omit<
 > & { id: string };
 
 export const ProjectPermissionsFilter: React.FC<
-  ProjectPermissionsFilterProps<ProjectAccess>
+  ProjectPermissionsFilterProps<ProjectAccessFieldsFragment>
 > = ({ id, ...props }) => {
   const { data, loading } = useGetProjectPermissionsQuery({
     variables: { id },
