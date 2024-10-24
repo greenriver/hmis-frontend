@@ -52,6 +52,7 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
     return {
       name,
       supportsBulkAssignment,
+      // Relies on custom elements in CreatableFormSelect lacking `label` attr
       serviceCategoryId: !!serviceCategory?.label ? serviceCategory.code : null,
       serviceCategoryName: !serviceCategory?.label
         ? serviceCategory?.code
