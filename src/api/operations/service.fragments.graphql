@@ -4,7 +4,10 @@ fragment ServiceTypeFields on ServiceType {
   hud
   hudRecordType
   hudTypeProvided
-  category
+  categoryRecord {
+    id
+    name
+  }
   dateCreated
   dateUpdated
   supportsBulkAssignment
@@ -45,7 +48,6 @@ fragment ServiceFields on Service {
 fragment ServiceCategoryFields on ServiceCategory {
   id
   name
-  hud
   serviceTypes {
     offset
     limit

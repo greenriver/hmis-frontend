@@ -9,9 +9,10 @@ import RouterLink from '@/components/elements/RouterLink';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import UpdateServiceTypeDialog from '@/modules/admin/components/services/UpdateServiceTypeDialog';
+import ServiceTypeDialog from '@/modules/admin/components/services/ServiceTypeDialog';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { AdminDashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteServiceTypeDocument,
   DeleteServiceTypeMutation,
@@ -45,7 +46,7 @@ const ServiceTypeDetailPage = () => {
   return (
     <>
       <PageTitle
-        overlineText='Manage Service'
+        overlineText={`${serviceType.hud ? 'View' : 'Manage'} Service`}
         title={serviceType.name}
         endElement={
           !serviceType.hud && (
@@ -79,7 +80,7 @@ const ServiceTypeDetailPage = () => {
         }
       />
       {serviceType && (
-        <UpdateServiceTypeDialog
+        <ServiceTypeDialog
           serviceType={serviceType}
           dialogOpen={updateDialogOpen}
           closeDialog={() => setUpdateDialogOpen(!updateDialogOpen)}
@@ -88,15 +89,27 @@ const ServiceTypeDetailPage = () => {
       <Stack gap={2}>
         <Paper sx={{ p: 2 }}>
           <Stack gap={1}>
-            <CommonLabeledTextBlock title='Service Category'>
-              {serviceType.category}
-            </CommonLabeledTextBlock>
-            <CommonLabeledTextBlock title='Service Type'>
+            <CommonLabeledTextBlock title='Service Type Name'>
               {serviceType.name}
+            </CommonLabeledTextBlock>
+            <CommonLabeledTextBlock title='Service Category'>
+              {serviceType.categoryRecord.name}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Supports Bulk Assignment?'>
               {serviceType.supportsBulkAssignment ? 'Yes' : 'No'}
             </CommonLabeledTextBlock>
+
+            {serviceType.hudRecordType && (
+              <CommonLabeledTextBlock title='HUD Record Type'>
+                {HmisEnums.RecordType[serviceType.hudRecordType]}
+              </CommonLabeledTextBlock>
+            )}
+            {serviceType.hudTypeProvided && (
+              <CommonLabeledTextBlock title='HUD Type Provided'>
+                {HmisEnums.ServiceTypeProvided[serviceType.hudTypeProvided]}
+              </CommonLabeledTextBlock>
+            )}
+
             <CommonLabeledTextBlock title='Active Forms'>
               <CommonUnstyledList>
                 {serviceType.formDefinitions.map((formDef) => (
