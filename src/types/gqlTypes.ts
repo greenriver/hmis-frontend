@@ -6828,6 +6828,7 @@ export enum ServiceSubTypeProvided {
 export type ServiceType = {
   __typename?: 'ServiceType';
   category: Scalars['String']['output'];
+  categoryRecord: ServiceCategory;
   createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -14630,10 +14631,14 @@ export type GetClientServicesQuery = {
           hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
-          category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
+          categoryRecord: {
+            __typename?: 'ServiceCategory';
+            id: string;
+            name: string;
+          };
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -16032,10 +16037,14 @@ export type FormRuleFieldsFragment = {
     hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
-    category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
+    categoryRecord: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+    };
   } | null;
 };
 
@@ -16054,7 +16063,6 @@ export type ServiceTypeConfigFieldsFragment = {
   hud: boolean;
   hudRecordType?: RecordType | null;
   hudTypeProvided?: ServiceTypeProvided | null;
-  category: string;
   dateCreated?: string | null;
   dateUpdated?: string | null;
   supportsBulkAssignment: boolean;
@@ -16065,6 +16073,7 @@ export type ServiceTypeConfigFieldsFragment = {
     cacheKey: string;
     title: string;
   }>;
+  categoryRecord: { __typename?: 'ServiceCategory'; id: string; name: string };
 };
 
 export type CreateServiceTypeMutationVariables = Exact<{
@@ -16082,10 +16091,14 @@ export type CreateServiceTypeMutation = {
       hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
-      category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
+      categoryRecord: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -16132,8 +16145,7 @@ export type DeleteServiceTypeMutation = {
 
 export type UpdateServiceTypeMutationVariables = Exact<{
   id: Scalars['ID']['input'];
-  name: Scalars['String']['input'];
-  supportsBulkAssignment: Scalars['Boolean']['input'];
+  input?: InputMaybe<ServiceTypeInput>;
 }>;
 
 export type UpdateServiceTypeMutation = {
@@ -16147,10 +16159,14 @@ export type UpdateServiceTypeMutation = {
       hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
-      category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
+      categoryRecord: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -16226,10 +16242,14 @@ export type GetFormRulesQuery = {
         hud: boolean;
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
+        categoryRecord: {
+          __typename?: 'ServiceCategory';
+          id: string;
+          name: string;
+        };
       } | null;
     }>;
   };
@@ -16324,10 +16344,14 @@ export type GetServiceCategoryRulesQuery = {
           hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
-          category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
+          categoryRecord: {
+            __typename?: 'ServiceCategory';
+            id: string;
+            name: string;
+          };
         } | null;
       }>;
     };
@@ -16383,10 +16407,14 @@ export type GetFormRuleQuery = {
       hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
-      category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
+      categoryRecord: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+      };
     } | null;
   } | null;
 };
@@ -16443,10 +16471,14 @@ export type CreateFormRuleMutation = {
         hud: boolean;
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
+        categoryRecord: {
+          __typename?: 'ServiceCategory';
+          id: string;
+          name: string;
+        };
       } | null;
     } | null;
     errors: Array<{
@@ -16512,7 +16544,6 @@ export type GetServiceTypesQuery = {
       hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
-      category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
@@ -16523,6 +16554,11 @@ export type GetServiceTypesQuery = {
         cacheKey: string;
         title: string;
       }>;
+      categoryRecord: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+      };
     }>;
   };
 };
@@ -16568,7 +16604,6 @@ export type GetServiceTypeDetailsQuery = {
     hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
-    category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
@@ -16579,6 +16614,11 @@ export type GetServiceTypeDetailsQuery = {
       cacheKey: string;
       title: string;
     }>;
+    categoryRecord: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+    };
   } | null;
 };
 
@@ -27546,10 +27586,14 @@ export type SubmitFormMutation = {
             hud: boolean;
             hudRecordType?: RecordType | null;
             hudTypeProvided?: ServiceTypeProvided | null;
-            category: string;
             dateCreated?: string | null;
             dateUpdated?: string | null;
             supportsBulkAssignment: boolean;
+            categoryRecord: {
+              __typename?: 'ServiceCategory';
+              id: string;
+              name: string;
+            };
           }>;
           projectCocs: {
             __typename?: 'ProjectCocsPaginated';
@@ -27628,10 +27672,14 @@ export type SubmitFormMutation = {
             hud: boolean;
             hudRecordType?: RecordType | null;
             hudTypeProvided?: ServiceTypeProvided | null;
-            category: string;
             dateCreated?: string | null;
             dateUpdated?: string | null;
             supportsBulkAssignment: boolean;
+            categoryRecord: {
+              __typename?: 'ServiceCategory';
+              id: string;
+              name: string;
+            };
           } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -30357,10 +30405,14 @@ export type ProjectAllFieldsFragment = {
     hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
-    category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
+    categoryRecord: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+    };
   }>;
   projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
 };
@@ -31194,10 +31246,14 @@ export type GetProjectQuery = {
       hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
-      category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
+      categoryRecord: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+      };
     }>;
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   } | null;
@@ -31455,10 +31511,14 @@ export type GetProjectServicesQuery = {
           hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
-          category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
+          categoryRecord: {
+            __typename?: 'ServiceCategory';
+            id: string;
+            name: string;
+          };
         } | null;
       }>;
     };
@@ -33510,10 +33570,10 @@ export type ServiceTypeFieldsFragment = {
   hud: boolean;
   hudRecordType?: RecordType | null;
   hudTypeProvided?: ServiceTypeProvided | null;
-  category: string;
   dateCreated?: string | null;
   dateUpdated?: string | null;
   supportsBulkAssignment: boolean;
+  categoryRecord: { __typename?: 'ServiceCategory'; id: string; name: string };
 };
 
 export type ServiceBasicFieldsFragment = {
@@ -33527,10 +33587,14 @@ export type ServiceBasicFieldsFragment = {
     hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
-    category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
+    categoryRecord: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+    };
   } | null;
 };
 
@@ -33563,10 +33627,14 @@ export type ServiceFieldsFragment = {
     hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
-    category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
+    categoryRecord: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+    };
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -33670,10 +33738,14 @@ export type GetServiceQuery = {
       hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
-      category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
+      categoryRecord: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+      };
     } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -33742,10 +33814,14 @@ export type GetServiceTypeQuery = {
     hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
-    category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
+    categoryRecord: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+    };
   } | null;
 };
 
@@ -33787,10 +33863,14 @@ export type DeleteServiceMutation = {
         hud: boolean;
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
+        categoryRecord: {
+          __typename?: 'ServiceCategory';
+          id: string;
+          name: string;
+        };
       } | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -33907,10 +33987,14 @@ export type GetEnrollmentServicesQuery = {
           hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
-          category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
+          categoryRecord: {
+            __typename?: 'ServiceCategory';
+            id: string;
+            name: string;
+          };
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -34012,10 +34096,14 @@ export type GetServiceCategoryTypesQuery = {
         hud: boolean;
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
+        categoryRecord: {
+          __typename?: 'ServiceCategory';
+          id: string;
+          name: string;
+        };
       }>;
     };
   } | null;
@@ -35644,7 +35732,10 @@ export const ServiceTypeFieldsFragmentDoc = gql`
     hud
     hudRecordType
     hudTypeProvided
-    category
+    categoryRecord {
+      id
+      name
+    }
     dateCreated
     dateUpdated
     supportsBulkAssignment
@@ -40265,16 +40356,8 @@ export type DeleteServiceTypeMutationOptions = Apollo.BaseMutationOptions<
   DeleteServiceTypeMutationVariables
 >;
 export const UpdateServiceTypeDocument = gql`
-  mutation UpdateServiceType(
-    $id: ID!
-    $name: String!
-    $supportsBulkAssignment: Boolean!
-  ) {
-    updateServiceType(
-      id: $id
-      name: $name
-      supportsBulkAssignment: $supportsBulkAssignment
-    ) {
+  mutation UpdateServiceType($id: ID!, $input: ServiceTypeInput) {
+    updateServiceType(id: $id, input: $input) {
       serviceType {
         ...ServiceTypeFields
       }
@@ -40305,8 +40388,7 @@ export type UpdateServiceTypeMutationFn = Apollo.MutationFunction<
  * const [updateServiceTypeMutation, { data, loading, error }] = useUpdateServiceTypeMutation({
  *   variables: {
  *      id: // value for 'id'
- *      name: // value for 'name'
- *      supportsBulkAssignment: // value for 'supportsBulkAssignment'
+ *      input: // value for 'input'
  *   },
  * });
  */

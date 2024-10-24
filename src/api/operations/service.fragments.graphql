@@ -4,7 +4,10 @@ fragment ServiceTypeFields on ServiceType {
   hud
   hudRecordType
   hudTypeProvided
-  category
+  categoryRecord {
+    id
+    name
+  }
   dateCreated
   dateUpdated
   supportsBulkAssignment

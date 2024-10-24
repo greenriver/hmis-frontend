@@ -46,7 +46,7 @@ const ServiceTypeDetailPage = () => {
   return (
     <>
       <PageTitle
-        overlineText='Manage Service'
+        overlineText={`${serviceType.hud ? 'View' : 'Manage'} Service`}
         title={serviceType.name}
         endElement={
           !serviceType.hud && (
@@ -93,7 +93,7 @@ const ServiceTypeDetailPage = () => {
               {serviceType.name}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Service Category'>
-              {serviceType.category}
+              {serviceType.categoryRecord.name}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Supports Bulk Assignment?'>
               {serviceType.supportsBulkAssignment ? 'Yes' : 'No'}

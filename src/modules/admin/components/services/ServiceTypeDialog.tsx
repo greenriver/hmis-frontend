@@ -2,7 +2,7 @@ import { Alert, AlertTitle, DialogActions, DialogContent } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Stack } from '@mui/system';
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
@@ -28,13 +28,13 @@ import {
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
 
-interface UpdateServiceTypeDialogProps {
+interface ServiceTypeDialogProps {
   serviceType?: ServiceTypeFieldsFragment;
   dialogOpen: boolean;
   closeDialog: () => void;
 }
 
-const ServiceTypeDialog: React.FC<UpdateServiceTypeDialogProps> = ({
+const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
   serviceType,
   dialogOpen,
   closeDialog,
@@ -44,9 +44,25 @@ const ServiceTypeDialog: React.FC<UpdateServiceTypeDialogProps> = ({
     serviceType?.supportsBulkAssignment || false
   );
   const [serviceCategory, setServiceCategory] = useState<PickListOption | null>(
-    null // todo @martha - need to resolve the service type's category ID
+    null
   );
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
+
+  const mutationInput = useMemo(() => {
+    return {
+      name,
+      supportsBulkAssignment,
+      serviceCategoryId: !!serviceCategory?.label ? serviceCategory.code : null,
+      serviceCategoryName: !serviceCategory?.label
+        ? serviceCategory?.code
+        : null,
+    };
+  }, [
+    name,
+    supportsBulkAssignment,
+    serviceCategory?.label,
+    serviceCategory?.code,
+  ]);
 
   const {
     data: { pickList } = {},
@@ -56,22 +72,31 @@ const ServiceTypeDialog: React.FC<UpdateServiceTypeDialogProps> = ({
     variables: { pickListType: PickListType.CustomServiceCategories },
   });
 
+  useEffect(() => {
+    // When serviceType exists (meaning this is an edit dialog, not a new unsaved record),
+    // populate its existing serviceCategory into the Service Category dropdown.
+    // Do this in a useEffect so that it works regardless of whether the pickList is cached or fetched from network
+    if (serviceType && pickList) {
+      // Search in the picklist for the option matching this service's category
+      const pickListOption = pickList.find(
+        (p) => p.code === serviceType.categoryRecord.id
+      );
+      // If we didn't find it, the service category is probably a HUD service category (those aren't loaded in the picklist).
+      // This *shouldn't* happen, since we now disallow adding custom service types to HUD service categories.
+      // But just in case, handle this situation by creating a fake picklist option to display the correct name
+      const fakePickListOption = {
+        code: '', // This is a bit of a hack. It prevents an 'access denied' message when trying to edit other fields on a custom service type whose category contains one or more HUD service types
+        label: serviceType.categoryRecord.name,
+      };
+      setServiceCategory(pickListOption || fakePickListOption);
+    }
+  }, [pickList, serviceType, dialogOpen]);
+
   const onClose = useCallback(() => {
     closeDialog();
-
-    // Reset to defaults
-    setName('');
-    setSupportsBulkAssignment(false);
-    setServiceCategory(null);
-
+    // Don't reset to defaults here - that would cause the update dialog to show null values on reopen
     setErrors(emptyErrorState);
-  }, [
-    setName,
-    setSupportsBulkAssignment,
-    setServiceCategory,
-    setErrors,
-    closeDialog,
-  ]);
+  }, [setErrors, closeDialog]);
 
   const onMutationCompleted = useCallback(
     (errors: ValidationError[] = []) => {
@@ -79,6 +104,9 @@ const ServiceTypeDialog: React.FC<UpdateServiceTypeDialogProps> = ({
         setErrors(partitionValidations(errors));
       } else {
         evictQuery('serviceTypes');
+        evictQuery('pickList', {
+          pickListType: PickListType.CustomServiceCategories,
+        });
         onClose();
       }
     },
@@ -89,8 +117,7 @@ const ServiceTypeDialog: React.FC<UpdateServiceTypeDialogProps> = ({
     useUpdateServiceTypeMutation({
       variables: {
         id: serviceType?.id || '', // will always be present if update mutation is called
-        name: name,
-        supportsBulkAssignment: supportsBulkAssignment,
+        input: mutationInput,
       },
       onCompleted: (data: UpdateServiceTypeMutation) => {
         onMutationCompleted(data.updateServiceType?.errors);
@@ -100,16 +127,7 @@ const ServiceTypeDialog: React.FC<UpdateServiceTypeDialogProps> = ({
   const [createServiceType, { error: createError, loading: createLoading }] =
     useCreateServiceTypeMutation({
       variables: {
-        input: {
-          name,
-          supportsBulkAssignment,
-          serviceCategoryId: !!serviceCategory?.label
-            ? serviceCategory.code
-            : null,
-          serviceCategoryName: !serviceCategory?.label
-            ? serviceCategory?.code
-            : null,
-        },
+        input: mutationInput,
       },
       onCompleted: (data: CreateServiceTypeMutation) => {
         onMutationCompleted(data.createServiceType?.errors);

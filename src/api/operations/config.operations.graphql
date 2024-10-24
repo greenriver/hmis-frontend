@@ -20,16 +20,8 @@ mutation DeleteServiceType($id: ID!) {
   }
 }
 
-mutation UpdateServiceType(
-  $id: ID!
-  $name: String!
-  $supportsBulkAssignment: Boolean!
-) {
-  updateServiceType(
-    id: $id
-    name: $name
-    supportsBulkAssignment: $supportsBulkAssignment
-  ) {
+mutation UpdateServiceType($id: ID!, $input: ServiceTypeInput) {
+  updateServiceType(id: $id, input: $input) {
     serviceType {
       ...ServiceTypeFields
     }
