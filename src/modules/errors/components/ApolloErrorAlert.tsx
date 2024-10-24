@@ -116,11 +116,7 @@ const ApolloErrorAlert: React.FC<Props> = ({
       }
       return isString(result) ? [result] : result?.errors || [];
     }
-    // don't show graphql errors to user in prod
-    if (showDeveloperInfo) {
-      return error.graphQLErrors;
-    }
-    return [];
+    return error.graphQLErrors;
   }, [error]);
 
   const isNetworkError = error
