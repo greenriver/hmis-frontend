@@ -16028,7 +16028,6 @@ export type FormRuleFieldsFragment = {
     __typename?: 'ServiceCategory';
     id: string;
     name: string;
-    hud: boolean;
   } | null;
   serviceType?: {
     __typename?: 'ServiceType';
@@ -16233,7 +16232,6 @@ export type GetFormRulesQuery = {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
-        hud: boolean;
       } | null;
       serviceType?: {
         __typename?: 'ServiceType';
@@ -16335,7 +16333,6 @@ export type GetServiceCategoryRulesQuery = {
           __typename?: 'ServiceCategory';
           id: string;
           name: string;
-          hud: boolean;
         } | null;
         serviceType?: {
           __typename?: 'ServiceType';
@@ -16398,7 +16395,6 @@ export type GetFormRuleQuery = {
       __typename?: 'ServiceCategory';
       id: string;
       name: string;
-      hud: boolean;
     } | null;
     serviceType?: {
       __typename?: 'ServiceType';
@@ -16462,7 +16458,6 @@ export type CreateFormRuleMutation = {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
-        hud: boolean;
       } | null;
       serviceType?: {
         __typename?: 'ServiceType';
@@ -16579,7 +16574,6 @@ export type GetServiceCategoriesQuery = {
       __typename?: 'ServiceCategory';
       id: string;
       name: string;
-      hud: boolean;
       serviceTypes: {
         __typename?: 'ServiceTypesPaginated';
         offset: number;
@@ -33693,7 +33687,6 @@ export type ServiceCategoryFieldsFragment = {
   __typename?: 'ServiceCategory';
   id: string;
   name: string;
-  hud: boolean;
   serviceTypes: {
     __typename?: 'ServiceTypesPaginated';
     offset: number;
@@ -34062,7 +34055,6 @@ export type GetServiceCategoryQuery = {
     __typename?: 'ServiceCategory';
     id: string;
     name: string;
-    hud: boolean;
     serviceTypes: {
       __typename?: 'ServiceTypesPaginated';
       offset: number;
@@ -35768,7 +35760,6 @@ export const FormRuleFieldsFragmentDoc = gql`
     serviceCategory {
       id
       name
-      hud
     }
     serviceType {
       ...ServiceTypeFields
@@ -36949,7 +36940,6 @@ export const ServiceCategoryFieldsFragmentDoc = gql`
   fragment ServiceCategoryFields on ServiceCategory {
     id
     name
-    hud
     serviceTypes {
       offset
       limit
