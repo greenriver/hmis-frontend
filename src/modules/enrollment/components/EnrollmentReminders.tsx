@@ -11,7 +11,7 @@ import NotFound from '@/components/pages/NotFound';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import {
   clientBriefName,
-  featureEnabledForEnrollment,
+  // featureEnabledForEnrollment,
   formatRelativeDate,
   parseAndFormatDate,
   parseHmisDateString,
@@ -206,16 +206,20 @@ const reminderApplicableToEnrollment = (
 ) => {
   switch (reminder.topic) {
     case ReminderTopic.CurrentLivingSituation:
-      return !!enrollment.project.dataCollectionFeatures.find(
+      return !!enrollment.dataCollectionFeatures.find(
         (feature) =>
           feature.role === DataCollectionFeatureRole.CurrentLivingSituation &&
-          featureEnabledForEnrollment(
-            feature,
-            // Evaluate against the client who's reminder this is.
-            // For example if on non-HOH page, you should still see reminder that CLS is due for HOH.
-            reminder.client,
-            reminder.enrollment.relationshipToHoH
-          )
+          !feature.legacy
+        // todo @Martha - getting rid of featureEnabledForEnrollment is complicated here because of the behavior described in the comment below.
+        // arguably, that complexity should not live on the frontend?
+        // but even more arguably, we don't want to duplicate logic of evaluateCollectedAbout
+        // featureEnabledForEnrollment(
+        //   feature,
+        //   // Evaluate against the client who's reminder this is.
+        //   // For example if on non-HOH page, you should still see reminder that CLS is due for HOH.
+        //   reminder.client,
+        //   reminder.enrollment.relationshipToHoH
+        // )
       );
     default:
       return true;

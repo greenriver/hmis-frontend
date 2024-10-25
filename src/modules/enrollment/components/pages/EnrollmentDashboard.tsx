@@ -20,11 +20,11 @@ import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHeader';
 import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnrollment';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
-import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
+// import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
-  DataCollectionFeatureRole,
+  // DataCollectionFeatureRole,
   EnrolledClientFieldsFragment,
 } from '@/types/gqlTypes';
 
@@ -44,20 +44,26 @@ const EnrollmentDashboard: React.FC = () => {
   const client = enrollment?.client;
 
   const enabledFeatures = useMemo(
-    () =>
-      enrollment
-        ? enrollment.project.dataCollectionFeatures
-            .filter((feature) =>
-              featureEnabledForEnrollment(
-                feature,
-                enrollment.client,
-                enrollment.relationshipToHoH
-              )
-            )
-            .map((r) => r.role)
-        : [],
+    () => enrollment?.dataCollectionFeatures.map((f) => f.role) || [],
     [enrollment]
   );
+
+  // todo @martha - to determine - can we fully replace with data collection features on enrollment coming from backend?
+  // const enabledFeatures = useMemo(
+  //   () =>
+  //     enrollment
+  //       ? enrollment.dataCollectionFeatures
+  //           .filter((feature) =>
+  //             featureEnabledForEnrollment(
+  //               feature,
+  //               enrollment.client,
+  //               enrollment.relationshipToHoH
+  //             )
+  //           )
+  //           .map((r) => r.role)
+  //       : [],
+  //   [enrollment]
+  // );
 
   const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
 
@@ -70,11 +76,10 @@ const EnrollmentDashboard: React.FC = () => {
             client,
             overrideBreadcrumbTitles,
             enrollment,
-            enabledFeatures,
             enrollmentLoading: loading,
           }
         : undefined,
-    [client, enrollment, enabledFeatures, loading]
+    [client, enrollment, loading]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
@@ -128,7 +133,6 @@ export type EnrollmentDashboardContext = {
   enrollment?: DashboardEnrollment;
   enrollmentLoading?: boolean; // this would indicate a re-loading, not the initial load
   overrideBreadcrumbTitles: (crumbs: any) => void;
-  enabledFeatures: DataCollectionFeatureRole[];
 };
 
 export function isEnrollmentDashboardContext(

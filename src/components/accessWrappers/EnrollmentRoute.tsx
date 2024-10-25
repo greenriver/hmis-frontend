@@ -20,13 +20,15 @@ const EnrollmentRoute: React.FC<
   }>
 > = ({ permissions, redirectRoute, dataCollectionFeature, children }) => {
   // Use dashboard outlet context that gets set in EnrollmentDashboard
-  const { enrollment, enabledFeatures } = useEnrollmentDashboardContext();
+  const { enrollment } = useEnrollmentDashboardContext();
   const permissionsArray = ensureArray(permissions);
   const hasPermission = useHasPermissions(enrollment?.access, permissionsArray);
 
   if (
     dataCollectionFeature &&
-    !enabledFeatures.includes(dataCollectionFeature)
+    !enrollment?.dataCollectionFeatures.find(
+      (f) => f.role === dataCollectionFeature
+    )
   ) {
     return <NotFound />;
   }

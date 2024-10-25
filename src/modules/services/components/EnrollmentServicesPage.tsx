@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
@@ -13,6 +13,7 @@ import {
   SERVICE_COLUMNS,
 } from '@/modules/services/serviceColumns';
 import {
+  DataCollectionFeatureRole,
   GetEnrollmentServicesDocument,
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables,
@@ -38,6 +39,14 @@ const EnrollmentServicesPage = () => {
     type: 'ServicesForEnrollmentFilterOptions',
   });
 
+  const serviceFeature = useMemo(
+    () =>
+      enrollment?.dataCollectionFeatures.find(
+        (f) => f.role === DataCollectionFeatureRole.Service
+      ),
+    [enrollment?.dataCollectionFeatures]
+  );
+
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   const canEditServices = enrollment.access.canEditEnrollments;
@@ -53,7 +62,8 @@ const EnrollmentServicesPage = () => {
       <TitleCard
         title='Services'
         actions={
-          enrollment.access.canEditEnrollments && (
+          enrollment.access.canEditEnrollments &&
+          !serviceFeature?.legacy && (
             <Button
               onClick={openServiceDialog}
               variant='outlined'

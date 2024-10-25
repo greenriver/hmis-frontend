@@ -22,6 +22,7 @@ import {
   GetEnrollmentEventsDocument,
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables,
+  DataCollectionFeatureRole,
 } from '@/types/gqlTypes';
 
 const columns: ColumnDef<EventFieldsFragment>[] = [
@@ -76,6 +77,14 @@ const EnrollmentCeEventsPage = () => {
       projectId: enrollment?.project.id,
     });
 
+  const ceEventFeature = useMemo(
+    () =>
+      enrollment?.dataCollectionFeatures.find(
+        (f) => f.role === DataCollectionFeatureRole.CeEvent
+      ),
+    [enrollment?.dataCollectionFeatures]
+  );
+
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (
@@ -84,7 +93,8 @@ const EnrollmentCeEventsPage = () => {
         title='Coordinated Entry Events'
         headerVariant='border'
         actions={
-          canEditCeEvents ? (
+          canEditCeEvents &&
+          !ceEventFeature?.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'
@@ -92,7 +102,7 @@ const EnrollmentCeEventsPage = () => {
             >
               Add Coordinated Entry Event
             </Button>
-          ) : null
+          )
         }
       >
         <GenericTableWithData<

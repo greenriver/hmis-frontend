@@ -19,6 +19,7 @@ import {
   GetEnrollmentCeAssessmentsDocument,
   GetEnrollmentCeAssessmentsQuery,
   GetEnrollmentCeAssessmentsQueryVariables,
+  DataCollectionFeatureRole,
 } from '@/types/gqlTypes';
 
 const EnrollmentCeAssessmentsPage = () => {
@@ -100,6 +101,14 @@ const EnrollmentCeAssessmentsPage = () => {
     [canEditCeAssessments]
   );
 
+  const ceAssessmentFeature = useMemo(
+    () =>
+      enrollment?.dataCollectionFeatures.find(
+        (f) => f.role === DataCollectionFeatureRole.CeAssessment
+      ),
+    [enrollment?.dataCollectionFeatures]
+  );
+
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (
@@ -108,7 +117,8 @@ const EnrollmentCeAssessmentsPage = () => {
         title='Coordinated Entry Assessments'
         headerVariant='border'
         actions={
-          canEditCeAssessments ? (
+          canEditCeAssessments &&
+          !ceAssessmentFeature?.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'
@@ -116,7 +126,7 @@ const EnrollmentCeAssessmentsPage = () => {
             >
               Add Coordinated Entry Assessment
             </Button>
-          ) : null
+          )
         }
       >
         <GenericTableWithData<

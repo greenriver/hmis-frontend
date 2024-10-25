@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button } from '@mui/material';
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
 import TitleCard from '@/components/elements/TitleCard';
@@ -16,6 +16,7 @@ import {
 import { cache } from '@/providers/apolloClient';
 import {
   CustomCaseNoteFieldsFragment,
+  DataCollectionFeatureRole,
   DeleteCustomCaseNoteDocument,
   GetEnrollmentCustomCaseNotesDocument,
   GetEnrollmentCustomCaseNotesQuery,
@@ -111,6 +112,14 @@ const EnrollmentCaseNotes = () => {
     ];
   }, []);
 
+  const caseNotesFeature = useMemo(
+    () =>
+      enrollment?.dataCollectionFeatures.find(
+        (f) => f.role === DataCollectionFeatureRole.CaseNote
+      ),
+    [enrollment?.dataCollectionFeatures]
+  );
+
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (
@@ -119,7 +128,8 @@ const EnrollmentCaseNotes = () => {
         title='Case Notes'
         headerVariant='border'
         actions={
-          canEdit ? (
+          canEdit &&
+          !caseNotesFeature?.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'
@@ -127,7 +137,7 @@ const EnrollmentCaseNotes = () => {
             >
               Add Case Note
             </Button>
-          ) : null
+          )
         }
       >
         <GenericTableWithData<

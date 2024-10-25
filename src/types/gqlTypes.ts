@@ -2297,6 +2297,8 @@ export type Enrollment = {
   currentUnit?: Maybe<Unit>;
   customCaseNotes: CustomCaseNotesPaginated;
   customDataElements: Array<CustomDataElement>;
+  /** Data collection features that are enabled for this Project (e.g. Current Living Situations, Events) */
+  dataCollectionFeatures: Array<DataCollectionFeature>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateOfBcpStatus?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -17842,6 +17844,13 @@ export type AllEnrollmentDetailsFragment = {
     projectType: ProjectType;
     canViewEnrollment: boolean;
   }>;
+  dataCollectionFeatures: Array<{
+    __typename?: 'DataCollectionFeature';
+    id: string;
+    role: DataCollectionFeatureRole;
+    dataCollectedAbout: DataCollectedAbout;
+    legacy: boolean;
+  }>;
   project: {
     __typename?: 'Project';
     hasUnits: boolean;
@@ -17849,13 +17858,6 @@ export type AllEnrollmentDetailsFragment = {
     id: string;
     projectName: string;
     projectType?: ProjectType | null;
-    dataCollectionFeatures: Array<{
-      __typename?: 'DataCollectionFeature';
-      id: string;
-      role: DataCollectionFeatureRole;
-      dataCollectedAbout: DataCollectedAbout;
-      legacy: boolean;
-    }>;
     occurrencePointForms: Array<{
       __typename?: 'OccurrencePointForm';
       id: string;
@@ -18972,6 +18974,13 @@ export type GetEnrollmentDetailsQuery = {
       projectType: ProjectType;
       canViewEnrollment: boolean;
     }>;
+    dataCollectionFeatures: Array<{
+      __typename?: 'DataCollectionFeature';
+      id: string;
+      role: DataCollectionFeatureRole;
+      dataCollectedAbout: DataCollectedAbout;
+      legacy: boolean;
+    }>;
     project: {
       __typename?: 'Project';
       hasUnits: boolean;
@@ -18979,13 +18988,6 @@ export type GetEnrollmentDetailsQuery = {
       id: string;
       projectName: string;
       projectType?: ProjectType | null;
-      dataCollectionFeatures: Array<{
-        __typename?: 'DataCollectionFeature';
-        id: string;
-        role: DataCollectionFeatureRole;
-        dataCollectedAbout: DataCollectedAbout;
-        legacy: boolean;
-      }>;
       occurrencePointForms: Array<{
         __typename?: 'OccurrencePointForm';
         id: string;
@@ -36037,19 +36039,19 @@ export const EnrollmentSummaryFieldsFragmentDoc = gql`
     canViewEnrollment
   }
 `;
-export const ProjectCocCountFragmentDoc = gql`
-  fragment ProjectCocCount on Project {
-    projectCocs {
-      nodesCount
-    }
-  }
-`;
 export const DataCollectionFeatureFieldsFragmentDoc = gql`
   fragment DataCollectionFeatureFields on DataCollectionFeature {
     id
     role
     dataCollectedAbout
     legacy
+  }
+`;
+export const ProjectCocCountFragmentDoc = gql`
+  fragment ProjectCocCount on Project {
+    projectCocs {
+      nodesCount
+    }
   }
 `;
 export const FormDefinitionMetadataFragmentDoc = gql`
@@ -36243,13 +36245,13 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     openEnrollmentSummary {
       ...EnrollmentSummaryFields
     }
+    dataCollectionFeatures {
+      ...DataCollectionFeatureFields
+    }
     project {
       ...ProjectNameAndType
       ...ProjectCocCount
       hasUnits
-      dataCollectionFeatures {
-        ...DataCollectionFeatureFields
-      }
       occurrencePointForms {
         ...OccurrencePointFormFields
       }
@@ -36269,9 +36271,9 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   ${CustomDataElementFieldsFragmentDoc}
   ${EnrolledClientFieldsFragmentDoc}
   ${EnrollmentSummaryFieldsFragmentDoc}
+  ${DataCollectionFeatureFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectCocCountFragmentDoc}
-  ${DataCollectionFeatureFieldsFragmentDoc}
   ${OccurrencePointFormFieldsFragmentDoc}
   ${ProjectAccessFieldsFragmentDoc}
 `;
