@@ -26,7 +26,11 @@ const ServiceTypeDetailPage = () => {
     serviceTypeId: string;
   };
 
-  const { data, loading, error } = useGetServiceTypeDetailsQuery({
+  const {
+    data: { serviceType } = {},
+    loading,
+    error,
+  } = useGetServiceTypeDetailsQuery({
     variables: { id: serviceTypeId },
   });
 
@@ -35,44 +39,48 @@ const ServiceTypeDetailPage = () => {
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
   if (error) throw error;
-  if (!data && loading) return <Loading />;
-  if (!data?.serviceType) return <NotFound />;
+  if (!serviceType && loading) return <Loading />;
+  if (!serviceType) return <NotFound />;
 
   return (
     <>
       <PageTitle
         overlineText='Manage Service'
-        title={data.serviceType.name}
+        title={serviceType.name}
         endElement={
-          <EditIconButton
-            title='Edit Service Type'
-            onClick={() => setUpdateDialogOpen(true)}
-            sx={{ ml: 1, mb: 0.5 }}
-          />
+          !serviceType.hud && (
+            <EditIconButton
+              title='Edit Service Type'
+              onClick={() => setUpdateDialogOpen(true)}
+              sx={{ ml: 1, mb: 0.5 }}
+            />
+          )
         }
         actions={
-          <DeleteMutationButton<
-            DeleteServiceTypeMutation,
-            DeleteServiceTypeMutationVariables
-          >
-            queryDocument={DeleteServiceTypeDocument}
-            variables={{ id: data.serviceType.id }}
-            idPath={'deleteServiceType.serviceType.id'}
-            recordName='Service Type'
-            onSuccess={() => {
-              evictQuery('serviceTypes');
-              navigate(
-                generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICES)
-              );
-            }}
-          >
-            Delete
-          </DeleteMutationButton>
+          !serviceType.hud && (
+            <DeleteMutationButton<
+              DeleteServiceTypeMutation,
+              DeleteServiceTypeMutationVariables
+            >
+              queryDocument={DeleteServiceTypeDocument}
+              variables={{ id: serviceType.id }}
+              idPath={'deleteServiceType.serviceType.id'}
+              recordName='Service Type'
+              onSuccess={() => {
+                evictQuery('serviceTypes');
+                navigate(
+                  generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICES)
+                );
+              }}
+            >
+              Delete
+            </DeleteMutationButton>
+          )
         }
       />
-      {data.serviceType && (
+      {serviceType && (
         <UpdateServiceTypeDialog
-          serviceType={data.serviceType}
+          serviceType={serviceType}
           dialogOpen={updateDialogOpen}
           closeDialog={() => setUpdateDialogOpen(!updateDialogOpen)}
         />
@@ -81,17 +89,17 @@ const ServiceTypeDetailPage = () => {
         <Paper sx={{ p: 2 }}>
           <Stack gap={1}>
             <CommonLabeledTextBlock title='Service Category'>
-              {data.serviceType.category}
+              {serviceType.category}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Service Type'>
-              {data.serviceType.name}
+              {serviceType.name}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Supports Bulk Assignment?'>
-              {data.serviceType.supportsBulkAssignment ? 'Yes' : 'No'}
+              {serviceType.supportsBulkAssignment ? 'Yes' : 'No'}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Active Forms'>
               <CommonUnstyledList>
-                {data.serviceType.formDefinitions.map((formDef) => (
+                {serviceType.formDefinitions.map((formDef) => (
                   <li key={formDef.id}>
                     <RouterLink
                       to={generatePath(AdminDashboardRoutes.VIEW_FORM, {
