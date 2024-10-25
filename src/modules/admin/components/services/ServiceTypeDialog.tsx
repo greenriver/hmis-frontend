@@ -78,18 +78,10 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
     // populate its existing serviceCategory into the Service Category dropdown.
     // Do this in a useEffect so that it works regardless of whether the pickList is cached or fetched from network
     if (serviceType && pickList) {
-      // Search in the picklist for the option matching this service's category
       const pickListOption = pickList.find(
         (p) => p.code === serviceType.categoryRecord.id
       );
-      // If we didn't find it, the service category is probably a HUD service category (those aren't loaded in the picklist).
-      // This *shouldn't* happen, since we now disallow adding custom service types to HUD service categories.
-      // But just in case, handle this situation by creating a fake picklist option to display the correct name
-      const fakePickListOption = {
-        code: '', // This is a bit of a hack. It prevents an 'access denied' message when trying to edit other fields on a custom service type whose category contains one or more HUD service types
-        label: serviceType.categoryRecord.name,
-      };
-      setServiceCategory(pickListOption || fakePickListOption);
+      setServiceCategory(pickListOption || null);
     }
   }, [pickList, serviceType, dialogOpen]);
 
