@@ -3,6 +3,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Stack } from '@mui/system';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CommonDialog from '@/components/elements/CommonDialog';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
@@ -15,6 +16,7 @@ import {
 import CreatableFormSelect from '@/modules/form/components/CreatableFormSelect';
 import FormActions from '@/modules/form/components/FormActions';
 import { isPickListOption } from '@/modules/form/types';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   CreateServiceTypeMutation,
   PickListOption,
@@ -27,6 +29,7 @@ import {
   ValidationError,
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface ServiceTypeDialogProps {
   serviceType?: ServiceTypeFieldsFragment;
@@ -39,6 +42,8 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
   dialogOpen,
   closeDialog,
 }) => {
+  const navigate = useNavigate();
+
   const [name, setName] = useState(serviceType?.name || '');
   const [supportsBulkAssignment, setSupportsBulkAssignment] = useState(
     serviceType?.supportsBulkAssignment || false
@@ -124,6 +129,13 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
       },
       onCompleted: (data: CreateServiceTypeMutation) => {
         onMutationCompleted(data.createServiceType?.errors);
+        if (data.createServiceType?.serviceType?.id) {
+          navigate(
+            generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
+              serviceTypeId: data.createServiceType?.serviceType?.id,
+            })
+          );
+        }
       },
     });
 
