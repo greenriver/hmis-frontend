@@ -155,7 +155,7 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
             </Alert>
           )}
           <TextInput
-            label='Name'
+            label='Service Name'
             value={name}
             sx={{ width: 500, maxWidth: '100%' }}
             onChange={(e) => setName(e.target.value)}
