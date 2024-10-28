@@ -120,6 +120,7 @@ const ServiceTypeDetailPage = () => {
 
             <CommonLabeledTextBlock title='Active Forms'>
               <CommonUnstyledList>
+                {serviceType.formDefinitions.length === 0 && 'No active forms'}
                 {serviceType.formDefinitions.map((formDef) => (
                   <li key={formDef.id}>
                     <RouterLink
