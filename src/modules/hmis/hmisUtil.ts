@@ -573,20 +573,6 @@ export const occurrencePointCollectedForEnrollment = (
     enrollment.relationshipToHoH
   );
 };
-//
-// export const featureEnabledForEnrollment = (
-//   feature: DataCollectionFeatureFieldsFragment,
-//   client: ClientNameDobVeteranFields,
-//   relationshipToHoH: RelationshipToHoH
-// ) => {
-//   // todo @martha - ideally, remove this and evaluate on the backend?
-//   // test - should be able to collect on HoH, then change HoH, and see legacy data, but not add new.
-//   return evaluateDataCollectedAbout(
-//     feature.dataCollectedAbout,
-//     client,
-//     relationshipToHoH
-//   );
-// };
 
 export const relationshipToHohForDisplay = (
   relationship: RelationshipToHoH,

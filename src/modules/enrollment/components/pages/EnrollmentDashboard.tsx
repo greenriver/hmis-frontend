@@ -48,23 +48,6 @@ const EnrollmentDashboard: React.FC = () => {
     [enrollment]
   );
 
-  // todo @martha - to determine - can we fully replace with data collection features on enrollment coming from backend?
-  // const enabledFeatures = useMemo(
-  //   () =>
-  //     enrollment
-  //       ? enrollment.dataCollectionFeatures
-  //           .filter((feature) =>
-  //             featureEnabledForEnrollment(
-  //               feature,
-  //               enrollment.client,
-  //               enrollment.relationshipToHoH
-  //             )
-  //           )
-  //           .map((r) => r.role)
-  //       : [],
-  //   [enrollment]
-  // );
-
   const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
 
   const { currentPath, focusMode, ...dashboardState } = useDashboardState();
