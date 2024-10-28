@@ -87,7 +87,7 @@ const ServiceTypeDetailPage = () => {
         />
       )}
       <Stack gap={2}>
-        <Alert color='info'>
+        <Alert severity='info'>
           To enable this service in a project, visit{' '}
           <RouterLink to={generatePath(AdminDashboardRoutes.FORMS)}>
             Forms
