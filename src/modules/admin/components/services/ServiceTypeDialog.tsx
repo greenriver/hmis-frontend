@@ -28,7 +28,6 @@ import {
   useUpdateServiceTypeMutation,
   ValidationError,
 } from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface ServiceTypeDialogProps {
@@ -76,6 +75,7 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
     error: pickListError,
   } = useGetPickListQuery({
     variables: { pickListType: PickListType.CustomServiceCategories },
+    fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
@@ -92,19 +92,19 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
 
   const onClose = useCallback(() => {
     closeDialog();
-    // Don't reset to defaults here - that would cause the update dialog to show null values on reopen
     setErrors(emptyErrorState);
-  }, [setErrors, closeDialog]);
+
+    // Reset to defaults
+    setName(serviceType?.name || '');
+    setSupportsBulkAssignment(serviceType?.supportsBulkAssignment || false);
+    setServiceCategory(null); // for the update dialog, the useEffect will update this when the dialog is reopened
+  }, [closeDialog, serviceType?.name, serviceType?.supportsBulkAssignment]);
 
   const onMutationCompleted = useCallback(
     (errors: ValidationError[] = []) => {
       if (errors.length > 0) {
         setErrors(partitionValidations(errors));
       } else {
-        evictQuery('serviceTypes');
-        evictQuery('pickList', {
-          pickListType: PickListType.CustomServiceCategories,
-        });
         onClose();
       }
     },
