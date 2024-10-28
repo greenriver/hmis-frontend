@@ -22,7 +22,7 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
     render: 'category',
   },
   {
-    header: 'Type',
+    header: 'HUD or Custom',
     render: ({ hud }) => (
       <Chip
         label={hud ? 'HUD' : 'Custom'}
@@ -34,8 +34,7 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
     ),
   },
   {
-    key: 'tags',
-    textAlign: 'right',
+    header: 'Tags',
     render: ({ supportsBulkAssignment }) =>
       supportsBulkAssignment ? (
         <Chip size='small' label='Supports Bulk Assignment' />

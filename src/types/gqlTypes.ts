@@ -4692,6 +4692,7 @@ export enum PickListType {
   /** Continuum Projects */
   ContinuumProjects = 'CONTINUUM_PROJECTS',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  CustomServiceCategories = 'CUSTOM_SERVICE_CATEGORIES',
   Destination = 'DESTINATION',
   /** Current users who are eligible for staff assignment */
   EligibleStaffAssignmentUsers = 'ELIGIBLE_STAFF_ASSIGNMENT_USERS',

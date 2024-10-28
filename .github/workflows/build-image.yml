@@ -79,7 +79,10 @@ jobs:
       - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
         id: vuln_scan
-        uses: aquasecurity/trivy-action@0.11.2
+        uses: aquasecurity/trivy-action@0.28.0
+        env:
+          TRIVY_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-db:2"
+          TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           format: 'table'
@@ -113,7 +116,10 @@ jobs:
       - name: Run scan for medium vulnerabilities
         if: github.event_name != 'pull_request'
         id: scan_medium
-        uses: aquasecurity/trivy-action@0.11.2
+        uses: aquasecurity/trivy-action@0.28.0
+        env:
+          TRIVY_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-db:2"
+          TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
         continue-on-error: true
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
@@ -126,7 +132,10 @@ jobs:
       - name: Run scan for critical and high vulnerabilities
         if: github.event_name != 'pull_request'
         id: scan_crit
-        uses: aquasecurity/trivy-action@0.11.2
+        uses: aquasecurity/trivy-action@0.28.0
+        env:
+          TRIVY_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-db:2"
+          TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           format: 'table'
