@@ -20,9 +20,9 @@ export const SERVICE_BASIC_COLUMNS: {
     header: 'Service Type',
     render: ({ serviceType }) => {
       if (!serviceType) return 'Unknown Service';
-      const { name, categoryRecord } = serviceType;
-      if (name === categoryRecord.name) return name;
-      return `${categoryRecord.name} - ${name}`;
+      const { name, serviceCategory } = serviceType;
+      if (name === serviceCategory.name) return name;
+      return `${serviceCategory.name} - ${name}`;
     },
   },
 };

@@ -56,7 +56,7 @@ const ServiceCategoryAndType = ({
 }) => {
   return (
     <>
-      {service.serviceType?.categoryRecord.name !==
+      {service.serviceType?.serviceCategory.name !==
         service.serviceType?.name && (
         <LabelWithContent
           label='Service Category'
@@ -64,7 +64,7 @@ const ServiceCategoryAndType = ({
           sx={{ mb: 2 }}
         >
           <Typography variant='body2'>
-            {service.serviceType?.categoryRecord.name || 'Unknown'}
+            {service.serviceType?.serviceCategory.name || 'Unknown'}
           </Typography>
         </LabelWithContent>
       )}

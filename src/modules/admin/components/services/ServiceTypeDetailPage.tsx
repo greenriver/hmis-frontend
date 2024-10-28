@@ -93,7 +93,7 @@ const ServiceTypeDetailPage = () => {
               {serviceType.name}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Service Category'>
-              {serviceType.categoryRecord.name}
+              {serviceType.serviceCategory.name}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Supports Bulk Assignment?'>
               {serviceType.supportsBulkAssignment ? 'Yes' : 'No'}

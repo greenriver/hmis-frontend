@@ -79,7 +79,7 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
     // Do this in a useEffect so that it works regardless of whether the pickList is cached or fetched from network
     if (serviceType && pickList) {
       const pickListOption = pickList.find(
-        (p) => p.code === serviceType.categoryRecord.id
+        (p) => p.code === serviceType.serviceCategory.id
       );
       setServiceCategory(pickListOption || null);
     }

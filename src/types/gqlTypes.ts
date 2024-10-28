@@ -6703,6 +6703,7 @@ export type ServiceCategory = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   formRules: FormRulesPaginated;
+  /** @deprecated No longer used */
   hud: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -6828,7 +6829,6 @@ export enum ServiceSubTypeProvided {
 export type ServiceType = {
   __typename?: 'ServiceType';
   category: Scalars['String']['output'];
-  categoryRecord: ServiceCategory;
   createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -6840,6 +6840,7 @@ export type ServiceType = {
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  serviceCategory: ServiceCategory;
   supportsBulkAssignment: Scalars['Boolean']['output'];
   user?: Maybe<ApplicationUser>;
 };
@@ -14634,7 +14635,7 @@ export type GetClientServicesQuery = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
-          categoryRecord: {
+          serviceCategory: {
             __typename?: 'ServiceCategory';
             id: string;
             name: string;
@@ -16039,7 +16040,7 @@ export type FormRuleFieldsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
-    categoryRecord: {
+    serviceCategory: {
       __typename?: 'ServiceCategory';
       id: string;
       name: string;
@@ -16072,7 +16073,7 @@ export type ServiceTypeConfigFieldsFragment = {
     cacheKey: string;
     title: string;
   }>;
-  categoryRecord: { __typename?: 'ServiceCategory'; id: string; name: string };
+  serviceCategory: { __typename?: 'ServiceCategory'; id: string; name: string };
 };
 
 export type CreateServiceTypeMutationVariables = Exact<{
@@ -16093,7 +16094,7 @@ export type CreateServiceTypeMutation = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
-      categoryRecord: {
+      serviceCategory: {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
@@ -16161,7 +16162,7 @@ export type UpdateServiceTypeMutation = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
-      categoryRecord: {
+      serviceCategory: {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
@@ -16243,7 +16244,7 @@ export type GetFormRulesQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
-        categoryRecord: {
+        serviceCategory: {
           __typename?: 'ServiceCategory';
           id: string;
           name: string;
@@ -16344,7 +16345,7 @@ export type GetServiceCategoryRulesQuery = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
-          categoryRecord: {
+          serviceCategory: {
             __typename?: 'ServiceCategory';
             id: string;
             name: string;
@@ -16406,7 +16407,7 @@ export type GetFormRuleQuery = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
-      categoryRecord: {
+      serviceCategory: {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
@@ -16469,7 +16470,7 @@ export type CreateFormRuleMutation = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
-        categoryRecord: {
+        serviceCategory: {
           __typename?: 'ServiceCategory';
           id: string;
           name: string;
@@ -16549,7 +16550,7 @@ export type GetServiceTypesQuery = {
         cacheKey: string;
         title: string;
       }>;
-      categoryRecord: {
+      serviceCategory: {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
@@ -16608,7 +16609,7 @@ export type GetServiceTypeDetailsQuery = {
       cacheKey: string;
       title: string;
     }>;
-    categoryRecord: {
+    serviceCategory: {
       __typename?: 'ServiceCategory';
       id: string;
       name: string;
@@ -27583,7 +27584,7 @@ export type SubmitFormMutation = {
             dateCreated?: string | null;
             dateUpdated?: string | null;
             supportsBulkAssignment: boolean;
-            categoryRecord: {
+            serviceCategory: {
               __typename?: 'ServiceCategory';
               id: string;
               name: string;
@@ -27669,7 +27670,7 @@ export type SubmitFormMutation = {
             dateCreated?: string | null;
             dateUpdated?: string | null;
             supportsBulkAssignment: boolean;
-            categoryRecord: {
+            serviceCategory: {
               __typename?: 'ServiceCategory';
               id: string;
               name: string;
@@ -30402,7 +30403,7 @@ export type ProjectAllFieldsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
-    categoryRecord: {
+    serviceCategory: {
       __typename?: 'ServiceCategory';
       id: string;
       name: string;
@@ -31243,7 +31244,7 @@ export type GetProjectQuery = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
-      categoryRecord: {
+      serviceCategory: {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
@@ -31508,7 +31509,7 @@ export type GetProjectServicesQuery = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
-          categoryRecord: {
+          serviceCategory: {
             __typename?: 'ServiceCategory';
             id: string;
             name: string;
@@ -33567,7 +33568,7 @@ export type ServiceTypeFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   supportsBulkAssignment: boolean;
-  categoryRecord: { __typename?: 'ServiceCategory'; id: string; name: string };
+  serviceCategory: { __typename?: 'ServiceCategory'; id: string; name: string };
 };
 
 export type ServiceBasicFieldsFragment = {
@@ -33584,7 +33585,7 @@ export type ServiceBasicFieldsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
-    categoryRecord: {
+    serviceCategory: {
       __typename?: 'ServiceCategory';
       id: string;
       name: string;
@@ -33624,7 +33625,7 @@ export type ServiceFieldsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
-    categoryRecord: {
+    serviceCategory: {
       __typename?: 'ServiceCategory';
       id: string;
       name: string;
@@ -33734,7 +33735,7 @@ export type GetServiceQuery = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
-      categoryRecord: {
+      serviceCategory: {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
@@ -33810,7 +33811,7 @@ export type GetServiceTypeQuery = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
-    categoryRecord: {
+    serviceCategory: {
       __typename?: 'ServiceCategory';
       id: string;
       name: string;
@@ -33859,7 +33860,7 @@ export type DeleteServiceMutation = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
-        categoryRecord: {
+        serviceCategory: {
           __typename?: 'ServiceCategory';
           id: string;
           name: string;
@@ -33983,7 +33984,7 @@ export type GetEnrollmentServicesQuery = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
-          categoryRecord: {
+          serviceCategory: {
             __typename?: 'ServiceCategory';
             id: string;
             name: string;
@@ -34091,7 +34092,7 @@ export type GetServiceCategoryTypesQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
-        categoryRecord: {
+        serviceCategory: {
           __typename?: 'ServiceCategory';
           id: string;
           name: string;
@@ -35724,7 +35725,7 @@ export const ServiceTypeFieldsFragmentDoc = gql`
     hud
     hudRecordType
     hudTypeProvided
-    categoryRecord {
+    serviceCategory {
       id
       name
     }
