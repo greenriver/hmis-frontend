@@ -172,7 +172,7 @@ const ServiceTypeDialog: React.FC<ServiceTypeDialogProps> = ({
               setServiceCategory(isPickListOption(value) ? value : null);
             }}
             loading={pickListLoading}
-            placeholder='Service Category'
+            placeholder='Select Service Category'
             label='Service Category'
           />
         </Stack>
