@@ -87,14 +87,16 @@ const ServiceTypeDetailPage = () => {
         />
       )}
       <Stack gap={2}>
-        <Alert severity='info'>
-          To enable this service in a project, visit{' '}
-          <RouterLink to={generatePath(AdminDashboardRoutes.FORMS)}>
-            Forms
-          </RouterLink>
-          , create or choose the form that will collect this service, and enable
-          it using a Form Rule.
-        </Alert>
+        {serviceType.formDefinitions.length === 0 && (
+          <Alert severity='info'>
+            To enable this service in a project, visit{' '}
+            <RouterLink to={generatePath(AdminDashboardRoutes.FORMS)}>
+              Forms
+            </RouterLink>
+            , create or choose the form that will collect this service, and
+            enable it using a Form Rule.
+          </Alert>
+        )}
         <Paper sx={{ p: 2 }}>
           <Stack gap={1}>
             <CommonLabeledTextBlock title='Service Type Name'>
