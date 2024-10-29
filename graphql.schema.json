@@ -15635,7 +15635,7 @@
           },
           {
             "name": "dataCollectionFeatures",
-            "description": "Data collection features that are enabled for this Project (e.g. Current Living Situations, Events)",
+            "description": "Data collection features that are enabled for this Enrollment (e.g. Current Living Situations, Events)",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -16551,6 +16551,30 @@
                 "kind": "SCALAR",
                 "name": "Int",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "occurrencePointForms",
+            "description": "Forms for individual data elements that are collected at occurrence for this Enrollment (e.g. Move-In Date)",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "OccurrencePointForm",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -35243,8 +35267,8 @@
                 }
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Occurrence points should now be resolved on Enrollments"
           },
           {
             "name": "operatingEndDate",
