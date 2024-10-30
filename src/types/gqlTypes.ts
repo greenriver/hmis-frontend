@@ -1345,6 +1345,7 @@ export type CurrentLivingSituation = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
+  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   leaseOwn60Day?: Maybe<NoYesReasonsForMissingData>;
@@ -2297,7 +2298,7 @@ export type Enrollment = {
   currentUnit?: Maybe<Unit>;
   customCaseNotes: CustomCaseNotesPaginated;
   customDataElements: Array<CustomDataElement>;
-  /** Data collection features that are enabled for this Project (e.g. Current Living Situations, Events) */
+  /** Data collection features that are enabled for this Enrollment (e.g. Current Living Situations, Events) */
   dataCollectionFeatures: Array<DataCollectionFeature>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -16737,6 +16738,7 @@ export type CurrentLivingSituationFieldsFragment = {
   dateUpdated?: string | null;
   dateCreated?: string | null;
   verifiedByProjectId?: string | null;
+  formDefinitionId?: string | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -16813,6 +16815,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
   dateUpdated?: string | null;
   dateCreated?: string | null;
   verifiedByProjectId?: string | null;
+  formDefinitionId?: string | null;
   client: {
     __typename?: 'Client';
     id: string;
@@ -16921,6 +16924,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         dateUpdated?: string | null;
         dateCreated?: string | null;
         verifiedByProjectId?: string | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17016,6 +17020,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
         dateUpdated?: string | null;
         dateCreated?: string | null;
         verifiedByProjectId?: string | null;
+        formDefinitionId?: string | null;
         client: {
           __typename?: 'Client';
           id: string;
@@ -27073,6 +27078,7 @@ export type SubmitFormMutation = {
           dateUpdated?: string | null;
           dateCreated?: string | null;
           verifiedByProjectId?: string | null;
+          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -35875,6 +35881,7 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    formDefinitionId
   }
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}

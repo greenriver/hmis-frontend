@@ -18,6 +18,7 @@ fragment CurrentLivingSituationFields on CurrentLivingSituation {
   customDataElements {
     ...CustomDataElementFields
   }
+  formDefinitionId
 }
 
 fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {

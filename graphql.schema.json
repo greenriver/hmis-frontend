@@ -9457,6 +9457,18 @@
             "deprecationReason": null
           },
           {
+            "name": "formDefinitionId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "id",
             "description": null,
             "args": [],
@@ -15635,7 +15647,7 @@
           },
           {
             "name": "dataCollectionFeatures",
-            "description": "Data collection features that are enabled for this Project (e.g. Current Living Situations, Events)",
+            "description": "Data collection features that are enabled for this Enrollment (e.g. Current Living Situations, Events)",
             "args": [],
             "type": {
               "kind": "NON_NULL",
