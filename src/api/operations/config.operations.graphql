@@ -20,51 +20,10 @@ mutation DeleteServiceType($id: ID!) {
   }
 }
 
-mutation UpdateServiceType(
-  $id: ID!
-  $name: String!
-  $supportsBulkAssignment: Boolean!
-) {
-  updateServiceType(
-    id: $id
-    name: $name
-    supportsBulkAssignment: $supportsBulkAssignment
-  ) {
+mutation UpdateServiceType($id: ID!, $input: ServiceTypeInput) {
+  updateServiceType(id: $id, input: $input) {
     serviceType {
       ...ServiceTypeFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation CreateServiceCategory($name: String!) {
-  createServiceCategory(name: $name) {
-    serviceCategory {
-      ...ServiceCategoryFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteServiceCategory($id: ID!) {
-  deleteServiceCategory(id: $id) {
-    serviceCategory {
-      id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation RenameServiceCategory($id: ID!, $name: String!) {
-  renameServiceCategory(id: $id, name: $name) {
-    serviceCategory {
-      ...ServiceCategoryFields
     }
     errors {
       ...ValidationErrorFields

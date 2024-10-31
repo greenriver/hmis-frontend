@@ -4795,14 +4795,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageInventory',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canManageOutgoingReferrals',
         type: {
           kind: 'NON_NULL',
@@ -5131,14 +5123,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageIncomingReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canManageInventory',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -7711,21 +7695,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ServiceTypeInput',
     args: [
-      {
-        name: 'name',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
+      { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'serviceCategoryId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'serviceCategoryName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'supportsBulkAssignment',

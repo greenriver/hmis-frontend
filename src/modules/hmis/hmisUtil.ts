@@ -476,8 +476,8 @@ export const customDataElementValueForKey = (
 };
 
 export const serviceTypeSummary = (st: ServiceTypeFieldsFragment) => {
-  if (st.category === st.name) return st.name;
-  return [st.category, st.name].join(': ');
+  if (st.serviceCategory.name === st.name) return st.name;
+  return [st.serviceCategory.name, st.name].join(': ');
 };
 
 export const customDataElementValueAsString = (
