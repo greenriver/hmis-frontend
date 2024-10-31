@@ -1345,7 +1345,6 @@ export type CurrentLivingSituation = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
-  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   leaseOwn60Day?: Maybe<NoYesReasonsForMissingData>;
@@ -16738,7 +16737,6 @@ export type CurrentLivingSituationFieldsFragment = {
   dateUpdated?: string | null;
   dateCreated?: string | null;
   verifiedByProjectId?: string | null;
-  formDefinitionId?: string | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -16815,7 +16813,6 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
   dateUpdated?: string | null;
   dateCreated?: string | null;
   verifiedByProjectId?: string | null;
-  formDefinitionId?: string | null;
   client: {
     __typename?: 'Client';
     id: string;
@@ -16924,7 +16921,6 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         dateUpdated?: string | null;
         dateCreated?: string | null;
         verifiedByProjectId?: string | null;
-        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17020,7 +17016,6 @@ export type GetProjectCurrentLivingSituationsQuery = {
         dateUpdated?: string | null;
         dateCreated?: string | null;
         verifiedByProjectId?: string | null;
-        formDefinitionId?: string | null;
         client: {
           __typename?: 'Client';
           id: string;
@@ -27078,7 +27073,6 @@ export type SubmitFormMutation = {
           dateUpdated?: string | null;
           dateCreated?: string | null;
           verifiedByProjectId?: string | null;
-          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -35881,7 +35875,6 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
-    formDefinitionId
   }
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
