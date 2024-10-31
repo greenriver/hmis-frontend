@@ -1,5 +1,4 @@
 import { LoadingButton } from '@mui/lab';
-import { Typography } from '@mui/material';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
@@ -40,15 +39,8 @@ const DuplicateFormButton: React.FC<Props> = ({ formIdentifier }) => {
         role='link'
         variant='outlined'
       >
-        {'Duplicate Form'}
+        Duplicate Form
       </LoadingButton>
-      {formIdentifier.managedInVersionControl && (
-        <Typography variant='caption'>
-          This is a system-managed form that cannot be edited directly. This
-          form is automatically updated. To make changes, you can either contact
-          support or duplicate the form.
-        </Typography>
-      )}
     </>
   );
 };
