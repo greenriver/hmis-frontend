@@ -4803,14 +4803,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageInventory',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canManageOutgoingReferrals',
         type: {
           kind: 'NON_NULL',
@@ -5139,14 +5131,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageIncomingReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canManageInventory',
         type: {
           kind: 'NON_NULL',
           name: null,
