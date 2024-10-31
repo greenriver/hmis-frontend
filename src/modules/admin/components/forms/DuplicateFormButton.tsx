@@ -36,7 +36,6 @@ const DuplicateFormButton: React.FC<Props> = ({ formIdentifier }) => {
       <LoadingButton
         onClick={() => duplicateForm()}
         loading={loading}
-        role='link'
         variant='outlined'
       >
         Duplicate Form

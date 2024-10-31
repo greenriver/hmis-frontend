@@ -24,7 +24,6 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
       {
         header: 'Form Title',
         render: ({ displayVersion }) => displayVersion.title,
-        width: '300px',
       },
       {
         header: 'Form Type',
