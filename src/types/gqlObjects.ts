@@ -3397,6 +3397,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'DisabledDisplay', ofType: null },
       },
       {
+        name: 'editorUserIds',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
         name: 'enableBehavior',
         type: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
       },
