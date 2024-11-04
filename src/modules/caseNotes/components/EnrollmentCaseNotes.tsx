@@ -1,13 +1,14 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button } from '@mui/material';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
+import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import {
   getCustomDataElementColumns,
   lastUpdatedBy,
@@ -112,13 +113,10 @@ const EnrollmentCaseNotes = () => {
     ];
   }, []);
 
-  const caseNotesFeature = useMemo(
-    () =>
-      enrollment?.dataCollectionFeatures.find(
-        (f) => f.role === DataCollectionFeatureRole.CaseNote
-      ),
-    [enrollment?.dataCollectionFeatures]
-  );
+  const caseNotesFeature = useEnrollmentDataCollectionFeature({
+    enrollment,
+    role: DataCollectionFeatureRole.CaseNote,
+  });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 

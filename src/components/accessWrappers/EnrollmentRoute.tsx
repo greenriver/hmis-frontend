@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 
+import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import { EnrollmentPermissions } from '@/modules/permissions/types';
 import { useHasPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
@@ -24,12 +25,11 @@ const EnrollmentRoute: React.FC<
   const permissionsArray = ensureArray(permissions);
   const hasPermission = useHasPermissions(enrollment?.access, permissionsArray);
 
-  if (
-    dataCollectionFeature &&
-    !enrollment?.dataCollectionFeatures.find(
-      (f) => f.role === dataCollectionFeature
-    )
-  ) {
+  const matchingFeature = useEnrollmentDataCollectionFeature({
+    enrollment,
+    role: dataCollectionFeature,
+  });
+  if (dataCollectionFeature && !matchingFeature) {
     return <NotFound />;
   }
 

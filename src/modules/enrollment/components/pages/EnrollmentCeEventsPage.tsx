@@ -7,6 +7,7 @@ import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
+import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
@@ -77,13 +78,10 @@ const EnrollmentCeEventsPage = () => {
       projectId: enrollment?.project.id,
     });
 
-  const ceEventFeature = useMemo(
-    () =>
-      enrollment?.dataCollectionFeatures.find(
-        (f) => f.role === DataCollectionFeatureRole.CeEvent
-      ),
-    [enrollment?.dataCollectionFeatures]
-  );
+  const ceEventFeature = useEnrollmentDataCollectionFeature({
+    enrollment,
+    role: DataCollectionFeatureRole.CeEvent,
+  });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 

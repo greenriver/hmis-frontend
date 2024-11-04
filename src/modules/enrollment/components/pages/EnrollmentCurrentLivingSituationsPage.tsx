@@ -5,6 +5,7 @@ import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
+import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
@@ -52,13 +53,10 @@ const EnrollmentCurrentLivingSituationsPage = () => {
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
-  const clsFeature = useMemo(
-    () =>
-      enrollment?.dataCollectionFeatures.find(
-        (f) => f.role === DataCollectionFeatureRole.CurrentLivingSituation
-      ),
-    [enrollment?.dataCollectionFeatures]
-  );
+  const clsFeature = useEnrollmentDataCollectionFeature({
+    enrollment,
+    role: DataCollectionFeatureRole.CurrentLivingSituation,
+  });
 
   const evictCache = useCallback(() => {
     cache.evict({

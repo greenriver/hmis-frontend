@@ -7,6 +7,7 @@ import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
+import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -101,13 +102,10 @@ const EnrollmentCeAssessmentsPage = () => {
     [canEditCeAssessments]
   );
 
-  const ceAssessmentFeature = useMemo(
-    () =>
-      enrollment?.dataCollectionFeatures.find(
-        (f) => f.role === DataCollectionFeatureRole.CeAssessment
-      ),
-    [enrollment?.dataCollectionFeatures]
-  );
+  const ceAssessmentFeature = useEnrollmentDataCollectionFeature({
+    enrollment,
+    role: DataCollectionFeatureRole.CeAssessment,
+  });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 

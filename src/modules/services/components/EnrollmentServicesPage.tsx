@@ -1,11 +1,12 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
+import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import {
@@ -39,13 +40,10 @@ const EnrollmentServicesPage = () => {
     type: 'ServicesForEnrollmentFilterOptions',
   });
 
-  const serviceFeature = useMemo(
-    () =>
-      enrollment?.dataCollectionFeatures.find(
-        (f) => f.role === DataCollectionFeatureRole.Service
-      ),
-    [enrollment?.dataCollectionFeatures]
-  );
+  const serviceFeature = useEnrollmentDataCollectionFeature({
+    enrollment,
+    role: DataCollectionFeatureRole.Service,
+  });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
