@@ -19,7 +19,7 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
   },
   {
     header: 'Service Category',
-    render: 'category',
+    render: ({ serviceCategory }) => serviceCategory.name,
   },
   {
     header: 'HUD or Custom',

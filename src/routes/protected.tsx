@@ -34,8 +34,8 @@ import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinition
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
 import JsonFormEditorPage from '@/modules/admin/components/forms/JsonFormEditorPage';
 import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
-import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
 import ServiceTypeDetailPage from '@/modules/admin/components/services/ServiceTypeDetailPage';
+import ServiceTypePage from '@/modules/admin/components/services/ServiceTypePage';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
 import ExitAssessmentPage from '@/modules/assessments/components/ExitAssessmentPage';
@@ -853,7 +853,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CONFIGURE_SERVICES,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <ConfigureServicesPage />
+                <ServiceTypePage />
               </RootPermissionsFilter>
             ),
           },
