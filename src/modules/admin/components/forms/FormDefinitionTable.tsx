@@ -34,6 +34,8 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
       {
         key: 'status',
         header: 'Form Status',
+        // Raw status of the "display version", not the full explanatory status from FormStatus component.
+        // This will be "Published" if there is ANY published version (even if there's  also a draft in progress)
         render: (identifier) => startCase(identifier.displayVersion.status),
       },
       {
@@ -47,6 +49,8 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
         render: ({ managedInVersionControl }) =>
           managedInVersionControl && (
             <Chip
+              // User-facing language is "System Form" instead of "managed in version control" to be more user friendly.
+              // There is an explanation on the form detail page.
               label='System Form'
               size='small'
               variant='outlined'
