@@ -756,11 +756,11 @@ export const formValueToGqlValue = (
     if (typeof date === 'string') {
       date = parseHmisDateString(value);
     }
-    if (date instanceof Date) return formatDateForGql(date) || undefined;
+    if (date instanceof Date) return formatDateForGql(date) || value;
     // This isn't parseable/formattable into a date, so it may cause a backend validation error.
     // Still, return it, so that it doesn't get swallowed without the user's knowledge
     // TODO(#6713) - Frontend should prevent submission of invalid dates
-    return date;
+    return value;
   }
 
   if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
