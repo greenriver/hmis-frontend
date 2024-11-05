@@ -159,6 +159,7 @@ fragment FormDefinitionFieldsForEditor on FormDefinition {
 fragment FormIdentifierDetails on FormIdentifier {
   id
   identifier
+  managedInVersionControl
   displayVersion {
     ...FormDefinitionMetadata
   }

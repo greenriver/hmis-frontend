@@ -1,5 +1,6 @@
 import { Chip } from '@mui/material';
-import React from 'react';
+import { startCase } from 'lodash-es';
+import React, { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 import FormTypeChip from './FormTypeChip';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -10,48 +11,57 @@ import {
   GetFormIdentifiersQuery,
   GetFormIdentifiersQueryVariables,
 } from '@/types/gqlTypes';
-
 export type Row = NonNullable<
   GetFormIdentifiersQuery['formIdentifiers']
 >['nodes'][0];
-
-const columns: ColumnDef<Row>[] = [
-  {
-    header: 'Form Title',
-    render: ({ displayVersion }) => displayVersion.title,
-    width: '300px',
-    linkTreatment: true,
-  },
-  {
-    header: 'Form Type',
-    render: ({ displayVersion }) => <FormTypeChip role={displayVersion.role} />,
-  },
-  {
-    header: 'Applicability Rules',
-    render: ({ displayVersion }) => displayVersion.formRules.nodesCount,
-  },
-  {
-    key: 'system',
-    render: ({ displayVersion }) =>
-      displayVersion.system && (
-        <Chip
-          label='System'
-          size='small'
-          variant='outlined'
-          sx={{ width: 'fit-content' }}
-        />
-      ),
-  },
-  // TODO ADD: # projects active in (based on all rules)
-  // TODO ADD: version
-  // TODO ADD: status
-  // TODO ADD: last updated
-];
 
 interface Props {
   queryVariables: GetFormIdentifiersQueryVariables;
 }
 const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
+  const columns: ColumnDef<Row>[] = useMemo(
+    () => [
+      {
+        header: 'Form Title',
+        render: ({ displayVersion }) => displayVersion.title,
+      },
+      {
+        header: 'Form Type',
+        render: ({ displayVersion }) => (
+          <FormTypeChip role={displayVersion.role} />
+        ),
+      },
+      {
+        key: 'status',
+        header: 'Form Status',
+        // Raw status of the "display version", not the full explanatory status from FormStatus component.
+        // This will be "Published" if there is ANY published version (even if there's  also a draft in progress)
+        render: (identifier) => startCase(identifier.displayVersion.status),
+      },
+      {
+        header: 'Applicability Rules',
+        render: ({ displayVersion }) => displayVersion.formRules.nodesCount,
+      },
+
+      {
+        key: 'system',
+        header: 'Form Tags',
+        render: ({ managedInVersionControl }) =>
+          managedInVersionControl && (
+            <Chip
+              // User-facing language is "System Form" instead of "managed in version control" to be more user friendly.
+              // There is an explanation on the form detail page.
+              label='System Form'
+              size='small'
+              variant='outlined'
+              sx={{ width: 'fit-content', px: 1 }}
+            />
+          ),
+      },
+    ],
+    []
+  );
+
   return (
     <GenericTableWithData<
       GetFormIdentifiersQuery,
