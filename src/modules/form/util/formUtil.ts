@@ -757,14 +757,10 @@ export const formValueToGqlValue = (
       date = parseHmisDateString(value);
     }
     if (date instanceof Date) return formatDateForGql(date) || undefined;
-    // This isn't parseable/formattable into a date, return undefined to ignore it
-    return undefined; // TODO - perhaps preferable to return `date` here and allow the backend to return an error
+    // This isn't parseable/formattable into a date, so it may cause a backend validation error
+    // TODO(#6713) - with client-side validations, the frontend should prevent you from submitting
+    return date;
   }
-
-  // if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
-  //   const num = Number(value);
-  //   return Number.isNaN(num) ? undefined : num;
-  // }
 
   if (
     item.type === ItemType.Choice &&
