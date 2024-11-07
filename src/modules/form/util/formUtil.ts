@@ -759,13 +759,12 @@ export const formValueToGqlValue = (
     if (date instanceof Date) return formatDateForGql(date) || value;
     // This isn't parseable/formattable into a date, so it may cause a backend validation error.
     // Still, return it, so that it doesn't get swallowed without the user's knowledge
-    // TODO(#6713) - Frontend should prevent submission of invalid dates
     return value;
   }
 
   if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
     const num = Number(value);
-    // TODO(#6713) - Frontend should prevent submission of invalid numbers
+    // See note above about unparseable date values; the same logic applies here
     return Number.isNaN(num) ? value : num;
   }
 
