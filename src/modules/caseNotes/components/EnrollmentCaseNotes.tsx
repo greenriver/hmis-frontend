@@ -8,7 +8,6 @@ import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import {
   getCustomDataElementColumns,
   lastUpdatedBy,
@@ -77,7 +76,7 @@ export const CASE_NOTE_COLUMNS = {
 };
 
 const EnrollmentCaseNotes = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -113,12 +112,12 @@ const EnrollmentCaseNotes = () => {
     ];
   }, []);
 
-  const caseNotesFeature = useEnrollmentDataCollectionFeature({
-    enrollment,
-    role: DataCollectionFeatureRole.CaseNote,
-  });
+  const caseNotesFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CaseNote
+  );
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId || !caseNotesFeature)
+    return <NotFound />;
 
   return (
     <>
@@ -127,7 +126,7 @@ const EnrollmentCaseNotes = () => {
         headerVariant='border'
         actions={
           canEdit &&
-          !caseNotesFeature?.legacy && (
+          !caseNotesFeature.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'

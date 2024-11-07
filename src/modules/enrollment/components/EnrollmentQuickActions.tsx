@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
@@ -17,6 +18,7 @@ const EnrollmentQuickActions = ({
 }: {
   enrollment: DashboardEnrollment;
 }) => {
+  const { getEnrollmentFeature } = useEnrollmentDashboardContext();
   const { globalFeatureFlags } = useHmisAppSettings();
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
     enrollment,
@@ -27,16 +29,17 @@ const EnrollmentQuickActions = ({
       clientId: enrollment.client.id,
     });
 
-  const canRecordService = useMemo(() => {
-    const serviceFeature = enrollment.dataCollectionFeatures.find(
-      (f) => f.role === DataCollectionFeatureRole.Service
-    );
-    return (
-      serviceFeature &&
+  const serviceFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.Service
+  );
+
+  const canRecordService = useMemo(
+    () =>
+      !!serviceFeature &&
       !serviceFeature.legacy &&
-      enrollment.access.canEditEnrollments
-    );
-  }, [enrollment.dataCollectionFeatures, enrollment.access.canEditEnrollments]);
+      enrollment.access.canEditEnrollments,
+    [serviceFeature, enrollment.access.canEditEnrollments]
+  );
 
   const canEditClient = enrollment.client.access.canEditClient;
 

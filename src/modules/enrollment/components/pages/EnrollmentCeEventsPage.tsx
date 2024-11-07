@@ -7,7 +7,6 @@ import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
@@ -17,13 +16,13 @@ import {
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  DataCollectionFeatureRole,
   DeleteCeEventDocument,
   EventFieldsFragment,
-  RecordFormRole,
   GetEnrollmentEventsDocument,
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables,
-  DataCollectionFeatureRole,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 const columns: ColumnDef<EventFieldsFragment>[] = [
@@ -43,7 +42,7 @@ const columns: ColumnDef<EventFieldsFragment>[] = [
 ];
 
 const EnrollmentCeEventsPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -78,12 +77,12 @@ const EnrollmentCeEventsPage = () => {
       projectId: enrollment?.project.id,
     });
 
-  const ceEventFeature = useEnrollmentDataCollectionFeature({
-    enrollment,
-    role: DataCollectionFeatureRole.CeEvent,
-  });
+  const ceEventFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CeEvent
+  );
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId || !ceEventFeature)
+    return <NotFound />;
 
   return (
     <>
@@ -92,7 +91,7 @@ const EnrollmentCeEventsPage = () => {
         headerVariant='border'
         actions={
           canEditCeEvents &&
-          !ceEventFeature?.legacy && (
+          !ceEventFeature.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'

@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
@@ -22,7 +22,11 @@ import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnr
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { EnrolledClientFieldsFragment } from '@/types/gqlTypes';
+import {
+  DataCollectionFeature,
+  DataCollectionFeatureRole,
+  EnrolledClientFieldsFragment,
+} from '@/types/gqlTypes';
 
 const EnrollmentDashboard: React.FC = () => {
   const params = useSafeParams() as {
@@ -48,6 +52,12 @@ const EnrollmentDashboard: React.FC = () => {
 
   const { currentPath, focusMode, ...dashboardState } = useDashboardState();
 
+  const getEnrollmentFeature = useCallback(
+    (role: DataCollectionFeatureRole) =>
+      enrollment?.dataCollectionFeatures.find((f) => f.role === role),
+    [enrollment]
+  );
+
   const outletContext: EnrollmentDashboardContext | undefined = useMemo(
     () =>
       client && enrollment
@@ -56,9 +66,10 @@ const EnrollmentDashboard: React.FC = () => {
             overrideBreadcrumbTitles,
             enrollment,
             enrollmentLoading: loading,
+            getEnrollmentFeature,
           }
         : undefined,
-    [client, enrollment, loading]
+    [client, enrollment, loading, getEnrollmentFeature]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
@@ -112,6 +123,9 @@ export type EnrollmentDashboardContext = {
   enrollment?: DashboardEnrollment;
   enrollmentLoading?: boolean; // this would indicate a re-loading, not the initial load
   overrideBreadcrumbTitles: (crumbs: any) => void;
+  getEnrollmentFeature: (
+    role: DataCollectionFeatureRole
+  ) => DataCollectionFeature | void;
 };
 
 export function isEnrollmentDashboardContext(

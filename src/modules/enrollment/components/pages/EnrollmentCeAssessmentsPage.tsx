@@ -7,7 +7,6 @@ import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -15,16 +14,16 @@ import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeAssessmentFieldsFragment,
+  DataCollectionFeatureRole,
   DeleteCeAssessmentDocument,
-  RecordFormRole,
   GetEnrollmentCeAssessmentsDocument,
   GetEnrollmentCeAssessmentsQuery,
   GetEnrollmentCeAssessmentsQueryVariables,
-  DataCollectionFeatureRole,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 const EnrollmentCeAssessmentsPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -102,12 +101,12 @@ const EnrollmentCeAssessmentsPage = () => {
     [canEditCeAssessments]
   );
 
-  const ceAssessmentFeature = useEnrollmentDataCollectionFeature({
-    enrollment,
-    role: DataCollectionFeatureRole.CeAssessment,
-  });
+  const ceAssessmentFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CeAssessment
+  );
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId || !ceAssessmentFeature)
+    return <NotFound />;
 
   return (
     <>
@@ -116,7 +115,7 @@ const EnrollmentCeAssessmentsPage = () => {
         headerVariant='border'
         actions={
           canEditCeAssessments &&
-          !ceAssessmentFeature?.legacy && (
+          !ceAssessmentFeature.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'

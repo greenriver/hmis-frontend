@@ -6,7 +6,6 @@ import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import useEnrollmentDataCollectionFeature from '@/modules/enrollment/hooks/useEnrollmentDataCollectionFeature';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import {
@@ -22,7 +21,7 @@ import {
 } from '@/types/gqlTypes';
 
 const EnrollmentServicesPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -40,12 +39,12 @@ const EnrollmentServicesPage = () => {
     type: 'ServicesForEnrollmentFilterOptions',
   });
 
-  const serviceFeature = useEnrollmentDataCollectionFeature({
-    enrollment,
-    role: DataCollectionFeatureRole.Service,
-  });
+  const serviceFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.Service
+  );
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId || !serviceFeature)
+    return <NotFound />;
 
   const canEditServices = enrollment.access.canEditEnrollments;
 
@@ -61,7 +60,7 @@ const EnrollmentServicesPage = () => {
         title='Services'
         actions={
           enrollment.access.canEditEnrollments &&
-          !serviceFeature?.legacy && (
+          !serviceFeature.legacy && (
             <Button
               onClick={openServiceDialog}
               variant='outlined'
