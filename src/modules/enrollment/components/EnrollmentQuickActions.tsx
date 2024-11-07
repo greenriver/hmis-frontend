@@ -1,7 +1,5 @@
 import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
-
-import { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
@@ -33,13 +31,10 @@ const EnrollmentQuickActions = ({
     DataCollectionFeatureRole.Service
   );
 
-  const canRecordService = useMemo(
-    () =>
-      !!serviceFeature &&
-      !serviceFeature.legacy &&
-      enrollment.access.canEditEnrollments,
-    [serviceFeature, enrollment.access.canEditEnrollments]
-  );
+  const canRecordService =
+    !!serviceFeature &&
+    !serviceFeature.legacy &&
+    enrollment.access.canEditEnrollments;
 
   const canEditClient = enrollment.client.access.canEditClient;
 
