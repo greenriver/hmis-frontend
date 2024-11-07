@@ -459,6 +459,8 @@ export const customDataElementValue = (
     val.valueJson,
     val.valueString,
     val.valueText,
+    val.file, // todo @martha - maybe this is also related. should this just return the file ID as the value?
+    // given the file id can we get the blob and so on, from the uploader component?
   ].filter((e) => !isNil(e))[0];
 };
 

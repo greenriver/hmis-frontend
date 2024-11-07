@@ -9,7 +9,8 @@ export interface ImageProps {
   id: string;
 }
 
-const Image: React.FC<ImageProps> = ({ id }) => {
+const File: React.FC<ImageProps> = ({ id }) => {
+  // todo @martha - consider overriding this to accept an existing file, maybe it wouldn't be that hard
   return (
     <Attachment
       attachmentQuery={GetFileDocument}
@@ -30,4 +31,4 @@ const Image: React.FC<ImageProps> = ({ id }) => {
   );
 };
 
-export default Image;
+export default File;

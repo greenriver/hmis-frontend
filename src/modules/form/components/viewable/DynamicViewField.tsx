@@ -195,9 +195,11 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         />
       );
     case ItemType.Image:
-      return <Image id={value} />;
+      return <Image id={value?.id} />;
     case ItemType.File:
-      return <File id={value} />;
+      // todo @martha - what am I breaking by making this change?
+      // what if we pass the file id (or blob id?) directly as the value
+      return <File id={value?.id} />;
     case ItemType.Object:
       switch (item.component) {
         case Component.Address: // Used in Move-in Date Display

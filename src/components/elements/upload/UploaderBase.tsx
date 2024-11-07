@@ -2,17 +2,17 @@ import { HighlightOff as HighlightOffIcon } from '@mui/icons-material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import {
-  Grid,
-  Typography,
-  Box,
-  Link,
-  Tooltip,
   alpha,
+  Box,
+  Grid,
   LinearProgress,
+  Link,
   SvgIconProps,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import { compact, first, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Accept,
   DropzoneInputProps,
@@ -22,13 +22,13 @@ import {
 
 import useDirectUpload from './useDirectUpload';
 
-import { DirectUpload } from '@/types/gqlTypes';
+import { DirectUpload, FileFieldsFragment } from '@/types/gqlTypes';
 
 export type UploaderProps = {
   id: string;
   onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
   onClear?: (upload?: DirectUpload, file?: File) => any;
-  file?: File;
+  file?: FileFieldsFragment;
   accept?: Accept;
   image?: boolean;
   maxSize?: number;
@@ -214,10 +214,33 @@ const Uploader: React.FC<UploaderProps> = ({
   const [currentUpload, setCurrentUpload] = useState<DirectUpload>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
-  const file = fileProp || currentFile;
+
+  // If a files was already uploaded to Active Storage, fetch it so we can display a preview
+  useEffect(() => {
+    // todo @martha - this works surprisingly well but is overall very bad for a number of reasons
+    // 1. the value is different coming back the 2nd time, that's messy
+    // 2. eslint is not happy and the whole useEffect just one time is kind a code smell / brittle
+    // 3. onUpload with a fake object that's not really an upload, that's also messy
+    if (!fileProp) return;
+
+    fetch(fileProp.url || '')
+      .then((r) => r.blob())
+      .then((blobFile) => {
+        // https://stackoverflow.com/questions/48211124/get-activestorage-blob-as-a-blob
+        const file = new File([blobFile], fileProp.name, {
+          type: fileProp.contentType || undefined,
+        });
+        setCurrentFile(file);
+        // todo @martha - this cast is rather silly
+        onUpload({ blobId: fileProp.fileBlobId || '' } as DirectUpload, file);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onUpload]); // todo @Martha - this is intentional
+
   const fileImageUrl =
-    file && file.type.match(/^image/) ? URL.createObjectURL(file) : undefined;
-  // const isEmpty = !file;
+    currentFile && currentFile.type.match(/^image/)
+      ? URL.createObjectURL(currentFile)
+      : undefined;
 
   const [uploadFile] = useDirectUpload();
   const uploadAndCreate = useCallback(
@@ -293,7 +316,7 @@ const Uploader: React.FC<UploaderProps> = ({
 
   return defaultChildren({
     id,
-    file,
+    file: currentFile,
     loading,
     error,
     previewUrl: fileImageUrl,

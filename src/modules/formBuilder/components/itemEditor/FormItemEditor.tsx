@@ -206,6 +206,13 @@ const FormItemEditor: React.FC<Props> = ({
     }
   }, [errorState]);
 
+  const isSizeEditable = useMemo(() => {
+    // TODO - Not all types that don't respect `size` prop are listed here yet
+    return (
+      itemTypeValue && ![ItemType.File, ItemType.Image].includes(itemTypeValue)
+    );
+  }, [itemTypeValue]);
+
   if (!itemTypeValue) throw Error('Item type must be defined');
 
   return (
@@ -327,7 +334,7 @@ const FormItemEditor: React.FC<Props> = ({
                 minRows={isDisplayItem ? 2 : undefined}
               />
             )}
-            {isQuestionItem && (
+            {isQuestionItem && isSizeEditable && (
               <ControlledSelect
                 name='size'
                 control={control}

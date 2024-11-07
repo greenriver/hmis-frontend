@@ -46,7 +46,13 @@ import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
+import {
+  Component,
+  DirectUpload,
+  FormItem,
+  InputSize,
+  ItemType,
+} from '@/types/gqlTypes';
 
 const getLabel = (
   item: FormItem,
@@ -95,6 +101,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     (_: any, value: any) =>
       itemChanged({ linkId, value, type: ChangeType.User }),
     [linkId, itemChanged]
+  );
+  const onChangeFileValue = useCallback(
+    async (upload: DirectUpload) => onChangeValue(upload.blobId),
+    [onChangeValue]
   );
   const isDisabled = disabled || inputProps?.disabled;
   const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
@@ -406,8 +416,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
+            file={value}
             image
-            onUpload={async (upload) => onChangeValue(upload.blobId)}
+            onUpload={onChangeFileValue}
+            onClear={() => onChangeValue(null)}
           />
         </InputContainer>
       );
@@ -416,7 +428,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
-            onUpload={async (upload) => onChangeValue(upload.blobId)}
+            file={value}
+            onUpload={onChangeFileValue}
+            onClear={() => onChangeValue(null)}
           />
         </InputContainer>
       );

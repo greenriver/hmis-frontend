@@ -1499,6 +1499,7 @@ export type CustomDataElement = {
 export enum CustomDataElementType {
   Boolean = 'boolean',
   Date = 'date',
+  File = 'file',
   Float = 'float',
   Integer = 'integer',
   Json = 'json',
@@ -1512,6 +1513,8 @@ export type CustomDataElementValue = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  file?: Maybe<File>;
+  fileId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   user?: Maybe<ApplicationUser>;
   valueBoolean?: Maybe<Scalars['Boolean']['output']>;
@@ -8442,8 +8445,45 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8463,8 +8503,45 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8612,8 +8689,45 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8633,8 +8747,45 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8744,8 +8895,45 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8765,8 +8953,45 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8821,8 +9046,45 @@ export type AssessmentWithRecordsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -8842,8 +9104,45 @@ export type AssessmentWithRecordsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -9017,8 +9316,45 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9038,8 +9374,45 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9187,8 +9560,45 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9208,8 +9618,45 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9319,8 +9766,45 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9340,8 +9824,45 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9396,8 +9917,45 @@ export type FullAssessmentFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -9417,8 +9975,45 @@ export type FullAssessmentFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -10570,8 +11165,45 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10591,8 +11223,45 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10740,8 +11409,45 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10761,8 +11467,45 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10872,8 +11615,45 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10893,8 +11673,45 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10949,8 +11766,45 @@ export type GetAssessmentQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -10970,8 +11824,45 @@ export type GetAssessmentQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -11403,8 +12294,45 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11424,8 +12352,45 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11573,8 +12538,45 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11594,8 +12596,45 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11705,8 +12744,45 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11726,8 +12802,45 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11782,8 +12895,45 @@ export type SubmitAssessmentMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -11803,8 +12953,45 @@ export type SubmitAssessmentMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -11965,8 +13152,45 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11986,8 +13210,45 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12135,8 +13396,45 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12156,8 +13454,45 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12267,8 +13602,45 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12288,8 +13660,45 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12344,8 +13753,45 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -12365,8 +13811,45 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -12544,8 +14027,45 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12565,8 +14085,45 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12714,8 +14271,45 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12735,8 +14329,45 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12846,8 +14477,45 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12867,8 +14535,45 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12923,8 +14628,45 @@ export type GetAssessmentsForPopulationQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12944,8 +14686,45 @@ export type GetAssessmentsForPopulationQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -13927,8 +15706,45 @@ export type ClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -13948,8 +15764,45 @@ export type ClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -14357,8 +16210,45 @@ export type GetClientQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -14378,8 +16268,45 @@ export type GetClientQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -14671,8 +16598,45 @@ export type GetClientServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -14692,8 +16656,45 @@ export type GetClientServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -15864,8 +17865,45 @@ export type MergeClientsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -15885,8 +17923,45 @@ export type MergeClientsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -16670,8 +18745,45 @@ export type CurrentLivingSituationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -16691,8 +18803,45 @@ export type CurrentLivingSituationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -16762,8 +18911,45 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -16783,8 +18969,45 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -16854,8 +19077,45 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -16875,8 +19135,45 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -16965,8 +19262,45 @@ export type GetProjectCurrentLivingSituationsQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -16986,8 +19320,45 @@ export type GetProjectCurrentLivingSituationsQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17037,8 +19408,45 @@ export type CustomCaseNoteFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17058,8 +19466,45 @@ export type CustomCaseNoteFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17123,8 +19568,45 @@ export type GetEnrollmentCustomCaseNotesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17144,8 +19626,45 @@ export type GetEnrollmentCustomCaseNotesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17258,8 +19777,45 @@ export type GetClientCaseNotesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17279,8 +19835,45 @@ export type GetClientCaseNotesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17306,8 +19899,45 @@ export type CustomDataElementValueFieldsFragment = {
   valueJson?: any | null;
   valueString?: string | null;
   valueText?: string | null;
+  fileId?: string | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  file?: {
+    __typename?: 'File';
+    confidential?: boolean | null;
+    contentType?: string | null;
+    effectiveDate?: string | null;
+    expirationDate?: string | null;
+    id: string;
+    name: string;
+    fileBlobId?: string | null;
+    url?: string | null;
+    tags: Array<string>;
+    ownFile: boolean;
+    redacted: boolean;
+    enrollmentId?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+    uploadedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      email: string;
+    } | null;
+  } | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -17336,8 +19966,45 @@ export type CustomDataElementFieldsFragment = {
     valueJson?: any | null;
     valueString?: string | null;
     valueText?: string | null;
+    fileId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    file?: {
+      __typename?: 'File';
+      confidential?: boolean | null;
+      contentType?: string | null;
+      effectiveDate?: string | null;
+      expirationDate?: string | null;
+      id: string;
+      name: string;
+      fileBlobId?: string | null;
+      url?: string | null;
+      tags: Array<string>;
+      ownFile: boolean;
+      redacted: boolean;
+      enrollmentId?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+      uploadedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -17357,8 +20024,45 @@ export type CustomDataElementFieldsFragment = {
     valueJson?: any | null;
     valueString?: string | null;
     valueText?: string | null;
+    fileId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    file?: {
+      __typename?: 'File';
+      confidential?: boolean | null;
+      contentType?: string | null;
+      effectiveDate?: string | null;
+      expirationDate?: string | null;
+      id: string;
+      name: string;
+      fileBlobId?: string | null;
+      url?: string | null;
+      tags: Array<string>;
+      ownFile: boolean;
+      redacted: boolean;
+      enrollmentId?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+      uploadedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -17512,8 +20216,45 @@ export type EnrolledClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17533,8 +20274,45 @@ export type EnrolledClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17617,8 +20395,45 @@ export type AllEnrollmentDetailsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17638,8 +20453,45 @@ export type AllEnrollmentDetailsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17681,8 +20533,45 @@ export type AllEnrollmentDetailsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17702,8 +20591,45 @@ export type AllEnrollmentDetailsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -18473,8 +21399,45 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -18494,8 +21457,45 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -18747,8 +21747,45 @@ export type GetEnrollmentDetailsQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -18768,8 +21805,45 @@ export type GetEnrollmentDetailsQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -18811,8 +21885,45 @@ export type GetEnrollmentDetailsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -18832,8 +21943,45 @@ export type GetEnrollmentDetailsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -26896,8 +30044,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -26917,8 +30102,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27037,8 +30259,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27058,8 +30317,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27105,8 +30401,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27126,8 +30459,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27181,8 +30551,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27202,8 +30609,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27402,8 +30846,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27423,8 +30904,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27473,8 +30991,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27494,8 +31049,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27577,8 +31169,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27598,8 +31227,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27737,8 +31403,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27758,8 +31461,45 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
+              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              file?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                fileBlobId?: string | null;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -29759,8 +33499,45 @@ export type InventoryFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -29780,8 +33557,45 @@ export type InventoryFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30037,8 +33851,45 @@ export type OrganizationDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30058,8 +33909,45 @@ export type OrganizationDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30109,8 +33997,45 @@ export type OrganizationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30130,8 +34055,45 @@ export type OrganizationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30214,8 +34176,45 @@ export type GetOrganizationQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -30235,8 +34234,45 @@ export type GetOrganizationQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -30396,8 +34432,45 @@ export type ProjectAllFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30417,8 +34490,45 @@ export type ProjectAllFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -31237,8 +35347,45 @@ export type GetProjectQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -31258,8 +35405,45 @@ export type GetProjectQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -31771,8 +35955,45 @@ export type GetInventoryQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -31792,8 +36013,45 @@ export type GetInventoryQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -31901,8 +36159,45 @@ export type GetProjectInventoriesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -31922,8 +36217,45 @@ export type GetProjectInventoriesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -32720,8 +37052,45 @@ export type UpdateReferralPostingMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -32741,8 +37110,45 @@ export type UpdateReferralPostingMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -32915,8 +37321,45 @@ export type GetReferralPostingQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -32936,8 +37379,45 @@ export type GetReferralPostingQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33150,8 +37630,45 @@ export type ReferralPostingDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33171,8 +37688,45 @@ export type ReferralPostingDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33273,8 +37827,45 @@ export type EsgFundingServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33294,8 +37885,45 @@ export type EsgFundingServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33354,8 +37982,45 @@ export type GetEsgFundingReportQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33375,8 +38040,45 @@ export type GetEsgFundingReportQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33692,8 +38394,45 @@ export type ServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33713,8 +38452,45 @@ export type ServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      file?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId?: string | null;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33802,8 +38578,45 @@ export type GetServiceQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33823,8 +38636,45 @@ export type GetServiceQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
+        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        file?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId?: string | null;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33927,8 +38777,45 @@ export type DeleteServiceMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -33948,8 +38835,45 @@ export type DeleteServiceMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
+          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          file?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            fileBlobId?: string | null;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -34051,8 +38975,45 @@ export type GetEnrollmentServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -34072,8 +39033,45 @@ export type GetEnrollmentServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
+            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            file?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              fileBlobId?: string | null;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -35036,6 +40034,39 @@ export const EnrollmentValuesFragmentDoc = gql`
     preferredLanguageDifferent
   }
 `;
+export const FileFieldsFragmentDoc = gql`
+  fragment FileFields on File {
+    confidential
+    contentType
+    effectiveDate
+    expirationDate
+    id
+    name
+    fileBlobId
+    url
+    tags
+    ownFile
+    redacted
+    enrollmentId
+    enrollment {
+      id
+    }
+    uploadedBy {
+      id
+      name
+    }
+    updatedBy {
+      id
+      name
+    }
+    dateCreated
+    dateUpdated
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const CustomDataElementValueFieldsFragmentDoc = gql`
   fragment CustomDataElementValueFields on CustomDataElementValue {
     id
@@ -35046,12 +40077,17 @@ export const CustomDataElementValueFieldsFragmentDoc = gql`
     valueJson
     valueString
     valueText
+    file {
+      ...FileFields
+    }
+    fileId
     user {
       ...UserFields
     }
     dateCreated
     dateUpdated
   }
+  ${FileFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
 `;
 export const CustomDataElementFieldsFragmentDoc = gql`
@@ -36300,39 +41336,6 @@ export const ExternalFormSubmissionFieldsFragmentDoc = gql`
   }
   ${ExternalFormSubmissionSummaryFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
-`;
-export const FileFieldsFragmentDoc = gql`
-  fragment FileFields on File {
-    confidential
-    contentType
-    effectiveDate
-    expirationDate
-    id
-    name
-    fileBlobId
-    url
-    tags
-    ownFile
-    redacted
-    enrollmentId
-    enrollment {
-      id
-    }
-    uploadedBy {
-      id
-      name
-    }
-    updatedBy {
-      id
-      name
-    }
-    dateCreated
-    dateUpdated
-    user {
-      ...UserFields
-    }
-  }
-  ${UserFieldsFragmentDoc}
 `;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
