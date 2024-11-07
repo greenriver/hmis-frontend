@@ -5470,10 +5470,7 @@ export type Project = {
   id: Scalars['ID']['output'];
   incomingReferralPostings: ReferralPostingsPaginated;
   inventories: InventoriesPaginated;
-  /**
-   * Forms for individual data elements that are collected at occurrence for this Project (e.g. Move-In Date)
-   * @deprecated Occurrence points should now be resolved on Enrollments
-   */
+  /** Forms for individual data elements that are collected at occurrence for this Project (e.g. Move-In Date) */
   occurrencePointForms: Array<OccurrencePointForm>;
   operatingEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   operatingStartDate?: Maybe<Scalars['ISO8601Date']['output']>;

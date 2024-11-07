@@ -35165,8 +35165,8 @@
                 }
               }
             },
-            "isDeprecated": true,
-            "deprecationReason": "Occurrence points should now be resolved on Enrollments"
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "operatingEndDate",
