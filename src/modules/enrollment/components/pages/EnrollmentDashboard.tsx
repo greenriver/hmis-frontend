@@ -48,15 +48,15 @@ const EnrollmentDashboard: React.FC = () => {
     [enrollment]
   );
 
-  const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
-
-  const { currentPath, focusMode, ...dashboardState } = useDashboardState();
-
   const getEnrollmentFeature = useCallback(
     (role: DataCollectionFeatureRole) =>
       enrollment?.dataCollectionFeatures.find((f) => f.role === role),
     [enrollment]
   );
+
+  const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
+
+  const { currentPath, focusMode, ...dashboardState } = useDashboardState();
 
   const outletContext: EnrollmentDashboardContext | undefined = useMemo(
     () =>

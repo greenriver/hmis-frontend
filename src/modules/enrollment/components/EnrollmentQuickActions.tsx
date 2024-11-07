@@ -3,20 +3,25 @@ import { Stack } from '@mui/system';
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
-import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { DataCollectionFeatureRole } from '@/types/gqlTypes';
+import {
+  DataCollectionFeature,
+  DataCollectionFeatureRole,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentQuickActions = ({
   enrollment,
+  getEnrollmentFeature,
 }: {
   enrollment: DashboardEnrollment;
+  getEnrollmentFeature: (
+    role: DataCollectionFeatureRole
+  ) => DataCollectionFeature | void;
 }) => {
-  const { getEnrollmentFeature } = useEnrollmentDashboardContext();
   const { globalFeatureFlags } = useHmisAppSettings();
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
     enrollment,

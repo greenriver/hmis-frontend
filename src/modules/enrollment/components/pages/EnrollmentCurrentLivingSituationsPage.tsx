@@ -65,7 +65,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
 
   const canEditCls =
     (enrollment?.access?.canEditEnrollments &&
-      clsFeature &&
+      !!clsFeature &&
       !clsFeature?.legacy) ||
     false;
 

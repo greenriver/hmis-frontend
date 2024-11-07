@@ -28,7 +28,7 @@ import { evictDeletedEnrollment } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentOverview = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const navigate = useNavigate();
   const { clientId, enrollmentId } = useSafeParams() as {
     enrollmentId: string;
@@ -89,7 +89,10 @@ const EnrollmentOverview = () => {
           <Stack spacing={4}>
             <ClientAlertHouseholdWrapper householdId={enrollment.householdId} />
             <EnrollmentReminders enrollmentId={enrollment.id} />
-            <EnrollmentQuickActions enrollment={enrollment} />
+            <EnrollmentQuickActions
+              enrollment={enrollment}
+              getEnrollmentFeature={getEnrollmentFeature}
+            />
             {enrollment.access.canDeleteEnrollments &&
               (enrollment.inProgress || !enrollment.intakeAssessment) && (
                 <DeleteMutationButton<
