@@ -48,16 +48,12 @@ export const baseColumns = {
 };
 
 const EnrollmentCurrentLivingSituationsPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
-  const clsFeature = useMemo(
-    () =>
-      enrollment?.dataCollectionFeatures.find(
-        (f) => f.role === DataCollectionFeatureRole.CurrentLivingSituation
-      ),
-    [enrollment?.dataCollectionFeatures]
+  const clsFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CurrentLivingSituation
   );
 
   const evictCache = useCallback(() => {
@@ -68,7 +64,10 @@ const EnrollmentCurrentLivingSituationsPage = () => {
   }, [enrollmentId]);
 
   const canEditCls =
-    (enrollment?.access?.canEditEnrollments && !clsFeature?.legacy) || false;
+    (enrollment?.access?.canEditEnrollments &&
+      !!clsFeature &&
+      !clsFeature?.legacy) ||
+    false;
 
   const localConstants = useMemo(
     () => ({
@@ -105,7 +104,8 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     []
   );
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId || !clsFeature)
+    return <NotFound />;
 
   return (
     <>

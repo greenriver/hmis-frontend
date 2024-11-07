@@ -28,8 +28,9 @@ const useFormDefinition = (
 
   if (error) throw error;
 
-  if (!formDefinition && !loading)
-    throw new Error(`Form not found: ${JSON.stringify(queryVariables)} `);
+  // TODO(#6113) - turn this explicit error back on
+  // if (!formDefinition && !loading)
+  //   throw new Error(`Form not found: ${JSON.stringify(queryVariables)} `);
 
   return { formDefinition, itemMap, loading };
 };

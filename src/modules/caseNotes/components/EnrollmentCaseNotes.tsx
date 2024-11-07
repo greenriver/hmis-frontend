@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button } from '@mui/material';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
 import TitleCard from '@/components/elements/TitleCard';
@@ -76,7 +76,7 @@ export const CASE_NOTE_COLUMNS = {
 };
 
 const EnrollmentCaseNotes = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -112,15 +112,12 @@ const EnrollmentCaseNotes = () => {
     ];
   }, []);
 
-  const caseNotesFeature = useMemo(
-    () =>
-      enrollment?.dataCollectionFeatures.find(
-        (f) => f.role === DataCollectionFeatureRole.CaseNote
-      ),
-    [enrollment?.dataCollectionFeatures]
+  const caseNotesFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CaseNote
   );
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId || !caseNotesFeature)
+    return <NotFound />;
 
   return (
     <>
@@ -129,7 +126,7 @@ const EnrollmentCaseNotes = () => {
         headerVariant='border'
         actions={
           canEdit &&
-          !caseNotesFeature?.legacy && (
+          !caseNotesFeature.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'

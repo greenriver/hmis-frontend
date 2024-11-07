@@ -14,16 +14,16 @@ import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeAssessmentFieldsFragment,
+  DataCollectionFeatureRole,
   DeleteCeAssessmentDocument,
-  RecordFormRole,
   GetEnrollmentCeAssessmentsDocument,
   GetEnrollmentCeAssessmentsQuery,
   GetEnrollmentCeAssessmentsQueryVariables,
-  DataCollectionFeatureRole,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 const EnrollmentCeAssessmentsPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -101,15 +101,12 @@ const EnrollmentCeAssessmentsPage = () => {
     [canEditCeAssessments]
   );
 
-  const ceAssessmentFeature = useMemo(
-    () =>
-      enrollment?.dataCollectionFeatures.find(
-        (f) => f.role === DataCollectionFeatureRole.CeAssessment
-      ),
-    [enrollment?.dataCollectionFeatures]
+  const ceAssessmentFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CeAssessment
   );
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId || !ceAssessmentFeature)
+    return <NotFound />;
 
   return (
     <>
@@ -118,7 +115,7 @@ const EnrollmentCeAssessmentsPage = () => {
         headerVariant='border'
         actions={
           canEditCeAssessments &&
-          !ceAssessmentFeature?.legacy && (
+          !ceAssessmentFeature.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'
