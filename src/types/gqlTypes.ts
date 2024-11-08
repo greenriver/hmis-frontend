@@ -1513,12 +1513,11 @@ export type CustomDataElementValue = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  file?: Maybe<File>;
-  fileId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   user?: Maybe<ApplicationUser>;
   valueBoolean?: Maybe<Scalars['Boolean']['output']>;
   valueDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  valueFile?: Maybe<File>;
   valueFloat?: Maybe<Scalars['Float']['output']>;
   valueInteger?: Maybe<Scalars['Int']['output']>;
   valueJson?: Maybe<Scalars['JsonObject']['output']>;
@@ -8445,10 +8444,9 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -8503,10 +8501,9 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -8689,10 +8686,9 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -8747,10 +8743,9 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -8895,10 +8890,9 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -8953,10 +8947,9 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -9046,10 +9039,9 @@ export type AssessmentWithRecordsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -9104,10 +9096,9 @@ export type AssessmentWithRecordsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -9316,10 +9307,9 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -9374,10 +9364,9 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -9560,10 +9549,9 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -9618,10 +9606,9 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -9766,10 +9753,9 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -9824,10 +9810,9 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -9917,10 +9902,9 @@ export type FullAssessmentFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -9975,10 +9959,9 @@ export type FullAssessmentFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -11165,10 +11148,9 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -11223,10 +11205,9 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -11409,10 +11390,9 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -11467,10 +11447,9 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -11615,10 +11594,9 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -11673,10 +11651,9 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -11766,10 +11743,9 @@ export type GetAssessmentQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -11824,10 +11800,9 @@ export type GetAssessmentQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -12294,10 +12269,9 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -12352,10 +12326,9 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -12538,10 +12511,9 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -12596,10 +12568,9 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -12744,10 +12715,9 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -12802,10 +12772,9 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -12895,10 +12864,9 @@ export type SubmitAssessmentMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -12953,10 +12921,9 @@ export type SubmitAssessmentMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -13152,10 +13119,9 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -13210,10 +13176,9 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -13396,10 +13361,9 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -13454,10 +13418,9 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -13602,10 +13565,9 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -13660,10 +13622,9 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -13753,10 +13714,9 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -13811,10 +13771,9 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -14027,10 +13986,9 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -14085,10 +14043,9 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -14271,10 +14228,9 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -14329,10 +14285,9 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -14477,10 +14432,9 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -14535,10 +14489,9 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -14628,10 +14581,9 @@ export type GetAssessmentsForPopulationQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -14686,10 +14638,9 @@ export type GetAssessmentsForPopulationQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -15706,10 +15657,9 @@ export type ClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -15764,10 +15714,9 @@ export type ClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -16210,10 +16159,9 @@ export type GetClientQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -16268,10 +16216,9 @@ export type GetClientQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -16598,10 +16545,9 @@ export type GetClientServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -16656,10 +16602,9 @@ export type GetClientServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -17865,10 +17810,9 @@ export type MergeClientsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -17923,10 +17867,9 @@ export type MergeClientsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -18745,10 +18688,9 @@ export type CurrentLivingSituationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -18803,10 +18745,9 @@ export type CurrentLivingSituationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -18911,10 +18852,9 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -18969,10 +18909,9 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -19077,10 +19016,9 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -19135,10 +19073,9 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -19262,10 +19199,9 @@ export type GetProjectCurrentLivingSituationsQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -19320,10 +19256,9 @@ export type GetProjectCurrentLivingSituationsQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -19408,10 +19343,9 @@ export type CustomCaseNoteFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -19466,10 +19400,9 @@ export type CustomCaseNoteFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -19568,10 +19501,9 @@ export type GetEnrollmentCustomCaseNotesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -19626,10 +19558,9 @@ export type GetEnrollmentCustomCaseNotesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -19777,10 +19708,9 @@ export type GetClientCaseNotesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -19835,10 +19765,9 @@ export type GetClientCaseNotesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -19899,10 +19828,9 @@ export type CustomDataElementValueFieldsFragment = {
   valueJson?: any | null;
   valueString?: string | null;
   valueText?: string | null;
-  fileId?: string | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
-  file?: {
+  valueFile?: {
     __typename?: 'File';
     confidential?: boolean | null;
     contentType?: string | null;
@@ -19966,10 +19894,9 @@ export type CustomDataElementFieldsFragment = {
     valueJson?: any | null;
     valueString?: string | null;
     valueText?: string | null;
-    fileId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
-    file?: {
+    valueFile?: {
       __typename?: 'File';
       confidential?: boolean | null;
       contentType?: string | null;
@@ -20024,10 +19951,9 @@ export type CustomDataElementFieldsFragment = {
     valueJson?: any | null;
     valueString?: string | null;
     valueText?: string | null;
-    fileId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
-    file?: {
+    valueFile?: {
       __typename?: 'File';
       confidential?: boolean | null;
       contentType?: string | null;
@@ -20216,10 +20142,9 @@ export type EnrolledClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -20274,10 +20199,9 @@ export type EnrolledClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -20395,10 +20319,9 @@ export type AllEnrollmentDetailsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -20453,10 +20376,9 @@ export type AllEnrollmentDetailsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -20533,10 +20455,9 @@ export type AllEnrollmentDetailsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -20591,10 +20512,9 @@ export type AllEnrollmentDetailsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -21399,10 +21319,9 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -21457,10 +21376,9 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -21747,10 +21665,9 @@ export type GetEnrollmentDetailsQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -21805,10 +21722,9 @@ export type GetEnrollmentDetailsQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -21885,10 +21801,9 @@ export type GetEnrollmentDetailsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -21943,10 +21858,9 @@ export type GetEnrollmentDetailsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -30044,10 +29958,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30102,10 +30015,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30259,10 +30171,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30317,10 +30228,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30401,10 +30311,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30459,10 +30368,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30551,10 +30459,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30609,10 +30516,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30846,10 +30752,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30904,10 +30809,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -30991,10 +30895,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -31049,10 +30952,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -31169,10 +31071,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -31227,10 +31128,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -31403,10 +31303,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -31461,10 +31360,9 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              fileId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              file?: {
+              valueFile?: {
                 __typename?: 'File';
                 confidential?: boolean | null;
                 contentType?: string | null;
@@ -33499,10 +33397,9 @@ export type InventoryFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -33557,10 +33454,9 @@ export type InventoryFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -33851,10 +33747,9 @@ export type OrganizationDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -33909,10 +33804,9 @@ export type OrganizationDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -33997,10 +33891,9 @@ export type OrganizationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -34055,10 +33948,9 @@ export type OrganizationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -34176,10 +34068,9 @@ export type GetOrganizationQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -34234,10 +34125,9 @@ export type GetOrganizationQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -34432,10 +34322,9 @@ export type ProjectAllFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -34490,10 +34379,9 @@ export type ProjectAllFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -35347,10 +35235,9 @@ export type GetProjectQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -35405,10 +35292,9 @@ export type GetProjectQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -35955,10 +35841,9 @@ export type GetInventoryQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -36013,10 +35898,9 @@ export type GetInventoryQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -36159,10 +36043,9 @@ export type GetProjectInventoriesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -36217,10 +36100,9 @@ export type GetProjectInventoriesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -37052,10 +36934,9 @@ export type UpdateReferralPostingMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -37110,10 +36991,9 @@ export type UpdateReferralPostingMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -37321,10 +37201,9 @@ export type GetReferralPostingQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -37379,10 +37258,9 @@ export type GetReferralPostingQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -37630,10 +37508,9 @@ export type ReferralPostingDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -37688,10 +37565,9 @@ export type ReferralPostingDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -37827,10 +37703,9 @@ export type EsgFundingServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -37885,10 +37760,9 @@ export type EsgFundingServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -37982,10 +37856,9 @@ export type GetEsgFundingReportQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -38040,10 +37913,9 @@ export type GetEsgFundingReportQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -38394,10 +38266,9 @@ export type ServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -38452,10 +38323,9 @@ export type ServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      fileId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      file?: {
+      valueFile?: {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType?: string | null;
@@ -38578,10 +38448,9 @@ export type GetServiceQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -38636,10 +38505,9 @@ export type GetServiceQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        fileId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        file?: {
+        valueFile?: {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -38777,10 +38645,9 @@ export type DeleteServiceMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -38835,10 +38702,9 @@ export type DeleteServiceMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          fileId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          file?: {
+          valueFile?: {
             __typename?: 'File';
             confidential?: boolean | null;
             contentType?: string | null;
@@ -38975,10 +38841,9 @@ export type GetEnrollmentServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -39033,10 +38898,9 @@ export type GetEnrollmentServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            fileId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            file?: {
+            valueFile?: {
               __typename?: 'File';
               confidential?: boolean | null;
               contentType?: string | null;
@@ -40077,10 +39941,9 @@ export const CustomDataElementValueFieldsFragmentDoc = gql`
     valueJson
     valueString
     valueText
-    file {
+    valueFile {
       ...FileFields
     }
-    fileId
     user {
       ...UserFields
     }

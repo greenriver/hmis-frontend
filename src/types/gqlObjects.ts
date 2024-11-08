@@ -1529,7 +1529,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'dateUpdated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
-      { name: 'fileId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'id',
         type: {

@@ -7,12 +7,10 @@ fragment CustomDataElementValueFields on CustomDataElementValue {
   valueJson
   valueString
   valueText
-  # todo @Martha - pick just one of these
-  # how does this relate to the problem with the wrong value?
-  files {
+  # todo @Martha - how does this relate to the problem with the wrong value?
+  valueFile {
     ...FileFields
   }
-  fileId
   user {
     ...UserFields
   }
