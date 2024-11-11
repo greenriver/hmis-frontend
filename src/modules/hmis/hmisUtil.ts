@@ -38,7 +38,6 @@ import {
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   DataCollectedAbout,
-  DataCollectionFeatureFieldsFragment,
   DisplayHook,
   EnrollmentFieldsFragment,
   EnrollmentOccurrencePointFieldsFragment,
@@ -572,18 +571,6 @@ export const occurrencePointCollectedForEnrollment = (
     occurrencePoint.dataCollectedAbout,
     enrollment.client,
     enrollment.relationshipToHoH
-  );
-};
-
-export const featureEnabledForEnrollment = (
-  feature: DataCollectionFeatureFieldsFragment,
-  client: ClientNameDobVeteranFields,
-  relationshipToHoH: RelationshipToHoH
-) => {
-  return evaluateDataCollectedAbout(
-    feature.dataCollectedAbout,
-    client,
-    relationshipToHoH
   );
 };
 

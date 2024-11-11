@@ -16,12 +16,13 @@ import {
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  DataCollectionFeatureRole,
   DeleteCeEventDocument,
   EventFieldsFragment,
-  RecordFormRole,
   GetEnrollmentEventsDocument,
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 const columns: ColumnDef<EventFieldsFragment>[] = [
@@ -41,7 +42,7 @@ const columns: ColumnDef<EventFieldsFragment>[] = [
 ];
 
 const EnrollmentCeEventsPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -76,7 +77,12 @@ const EnrollmentCeEventsPage = () => {
       projectId: enrollment?.project.id,
     });
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  const ceEventFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CeEvent
+  );
+
+  if (!enrollment || !enrollmentId || !clientId || !ceEventFeature)
+    return <NotFound />;
 
   return (
     <>
@@ -84,7 +90,8 @@ const EnrollmentCeEventsPage = () => {
         title='Coordinated Entry Events'
         headerVariant='border'
         actions={
-          canEditCeEvents ? (
+          canEditCeEvents &&
+          !ceEventFeature.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'
@@ -92,7 +99,7 @@ const EnrollmentCeEventsPage = () => {
             >
               Add Coordinated Entry Event
             </Button>
-          ) : null
+          )
         }
       >
         <GenericTableWithData<

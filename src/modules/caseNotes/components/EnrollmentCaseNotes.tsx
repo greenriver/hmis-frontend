@@ -16,6 +16,7 @@ import {
 import { cache } from '@/providers/apolloClient';
 import {
   CustomCaseNoteFieldsFragment,
+  DataCollectionFeatureRole,
   DeleteCustomCaseNoteDocument,
   GetEnrollmentCustomCaseNotesDocument,
   GetEnrollmentCustomCaseNotesQuery,
@@ -75,7 +76,7 @@ export const CASE_NOTE_COLUMNS = {
 };
 
 const EnrollmentCaseNotes = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -111,7 +112,12 @@ const EnrollmentCaseNotes = () => {
     ];
   }, []);
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  const caseNotesFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CaseNote
+  );
+
+  if (!enrollment || !enrollmentId || !clientId || !caseNotesFeature)
+    return <NotFound />;
 
   return (
     <>
@@ -119,7 +125,8 @@ const EnrollmentCaseNotes = () => {
         title='Case Notes'
         headerVariant='border'
         actions={
-          canEdit ? (
+          canEdit &&
+          !caseNotesFeature.legacy && (
             <Button
               onClick={openFormDialog}
               variant='outlined'
@@ -127,7 +134,7 @@ const EnrollmentCaseNotes = () => {
             >
               Add Case Note
             </Button>
-          ) : null
+          )
         }
       >
         <GenericTableWithData<

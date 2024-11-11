@@ -13,6 +13,7 @@ import {
   SERVICE_COLUMNS,
 } from '@/modules/services/serviceColumns';
 import {
+  DataCollectionFeatureRole,
   GetEnrollmentServicesDocument,
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables,
@@ -20,7 +21,7 @@ import {
 } from '@/types/gqlTypes';
 
 const EnrollmentServicesPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
@@ -38,7 +39,12 @@ const EnrollmentServicesPage = () => {
     type: 'ServicesForEnrollmentFilterOptions',
   });
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  const serviceFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.Service
+  );
+
+  if (!enrollment || !enrollmentId || !clientId || !serviceFeature)
+    return <NotFound />;
 
   const canEditServices = enrollment.access.canEditEnrollments;
 
@@ -53,7 +59,8 @@ const EnrollmentServicesPage = () => {
       <TitleCard
         title='Services'
         actions={
-          enrollment.access.canEditEnrollments && (
+          enrollment.access.canEditEnrollments &&
+          !serviceFeature.legacy && (
             <Button
               onClick={openServiceDialog}
               variant='outlined'
