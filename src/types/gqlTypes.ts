@@ -2292,6 +2292,8 @@ export type Enrollment = {
   currentUnit?: Maybe<Unit>;
   customCaseNotes: CustomCaseNotesPaginated;
   customDataElements: Array<CustomDataElement>;
+  /** Data collection features that are enabled for this Enrollment (e.g. Current Living Situations, Events) */
+  dataCollectionFeatures: Array<DataCollectionFeature>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateOfBcpStatus?: Maybe<Scalars['ISO8601Date']['output']>;
