@@ -22029,6 +22029,26 @@
             "deprecationReason": null
           },
           {
+            "name": "editorUserIds",
+            "description": "Users who can edit this field. If null, all users can edit",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "enableBehavior",
             "description": null,
             "args": [],
