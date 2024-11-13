@@ -99,11 +99,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   );
 
   const { user: currentUser } = useAuth();
-  const userCanEdit = !currentUser
-    ? false
-    : item.editorUserIds
-      ? item.editorUserIds.includes(currentUser.id)
-      : true;
+  const userCanEdit =
+    !!currentUser?.id &&
+    (!item.editorUserIds || item.editorUserIds.includes(currentUser.id));
 
   const isDisabled = disabled || inputProps?.disabled || !userCanEdit;
   const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
