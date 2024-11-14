@@ -10,25 +10,36 @@ import { forwardRef, useMemo } from 'react';
  */
 
 export interface LoadingButtonProps extends ButtonProps {
-  loading: boolean;
-  loadingPosition: 'start' | 'end' | 'center';
+  loading?: boolean;
+  loadingPosition?: 'start' | 'end' | 'center';
 }
 
-const LoadingButton = forwardRef<LoadingButtonProps, any>((props, ref) => {
-  const extraSx = useMemo(() => {
-    if (props.loading && props.loadingPosition === 'start') {
-      return { pl: 5 };
-    }
-    if (props.loading && props.loadingPosition === 'end') {
-      return { pr: 5 };
-    }
-    return;
-  }, [props.loading, props.loadingPosition]);
+const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
+  function LoadingButton(
+    { loadingPosition = 'start', loading = false, ...props },
+    ref
+  ) {
+    const extraSx = useMemo(() => {
+      if (loading && loadingPosition === 'start') {
+        return { pl: 5 };
+      }
+      if (loading && loadingPosition === 'end') {
+        return { pr: 5 };
+      }
+      return;
+    }, [loading, loadingPosition]);
 
-  return (
-    <MuiLoadingButton ref={ref} {...props} sx={{ ...props.sx, ...extraSx }} />
-  );
-});
+    return (
+      <MuiLoadingButton
+        ref={ref}
+        loadingPosition={loadingPosition}
+        loading={loading}
+        {...props}
+        sx={{ ...props.sx, ...extraSx }}
+      />
+    );
+  }
+);
 
 LoadingButton.displayName = 'LoadingButton';
 

@@ -5,6 +5,7 @@ import LoadingButton from '@/components/elements/LoadingButton';
 import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import ExternalSubmissionsViewModal from '@/modules/projects/components/ExternalSubmissionsViewModal';
@@ -121,8 +122,6 @@ const ProjectExternalSubmissionsTable = ({
     type: 'ExternalFormSubmissionFilterOptions',
   });
 
-  if (bulkError) throw bulkError;
-
   return (
     <>
       <GenericTableWithData<
@@ -179,6 +178,7 @@ const ProjectExternalSubmissionsTable = ({
           onClose={() => setModalOpenId(null)}
         />
       )}
+      {bulkError && <ApolloErrorAlert error={bulkError} />}
     </>
   );
 };

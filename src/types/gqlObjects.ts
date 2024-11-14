@@ -1913,6 +1913,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'viralLoadAvailable',
         type: { kind: 'ENUM', name: 'ViralLoadAvailable', ofType: null },
       },
+      {
+        name: 'viralLoadSource',
+        type: {
+          kind: 'ENUM',
+          name: 'TCellSourceViralLoadSource',
+          ofType: null,
+        },
+      },
     ],
   },
   {

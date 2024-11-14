@@ -2104,6 +2104,7 @@ export type DisabilityGroup = {
   user?: Maybe<ApplicationUser>;
   viralLoad?: Maybe<Scalars['Int']['output']>;
   viralLoadAvailable?: Maybe<ViralLoadAvailable>;
+  viralLoadSource?: Maybe<TCellSourceViralLoadSource>;
 };
 
 /** HUD DisabilityResponse (4.10.2) */
@@ -8683,6 +8684,7 @@ export type AssessmentWithRecordsFragment = {
     tCellSource?: TCellSourceViralLoadSource | null;
     viralLoadAvailable?: ViralLoadAvailable | null;
     viralLoad?: number | null;
+    viralLoadSource?: TCellSourceViralLoadSource | null;
     antiRetroviral?: NoYesReasonsForMissingData | null;
   } | null;
   healthAndDv?: {
@@ -9257,6 +9259,7 @@ export type FullAssessmentFragment = {
     tCellSource?: TCellSourceViralLoadSource | null;
     viralLoadAvailable?: ViralLoadAvailable | null;
     viralLoad?: number | null;
+    viralLoadSource?: TCellSourceViralLoadSource | null;
     antiRetroviral?: NoYesReasonsForMissingData | null;
   } | null;
   healthAndDv?: {
@@ -10809,6 +10812,7 @@ export type GetAssessmentQuery = {
       tCellSource?: TCellSourceViralLoadSource | null;
       viralLoadAvailable?: ViralLoadAvailable | null;
       viralLoad?: number | null;
+      viralLoadSource?: TCellSourceViralLoadSource | null;
       antiRetroviral?: NoYesReasonsForMissingData | null;
     } | null;
     healthAndDv?: {
@@ -11641,6 +11645,7 @@ export type SubmitAssessmentMutation = {
         tCellSource?: TCellSourceViralLoadSource | null;
         viralLoadAvailable?: ViralLoadAvailable | null;
         viralLoad?: number | null;
+        viralLoadSource?: TCellSourceViralLoadSource | null;
         antiRetroviral?: NoYesReasonsForMissingData | null;
       } | null;
       healthAndDv?: {
@@ -12202,6 +12207,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         tCellSource?: TCellSourceViralLoadSource | null;
         viralLoadAvailable?: ViralLoadAvailable | null;
         viralLoad?: number | null;
+        viralLoadSource?: TCellSourceViralLoadSource | null;
         antiRetroviral?: NoYesReasonsForMissingData | null;
       } | null;
       healthAndDv?: {
@@ -12780,6 +12786,7 @@ export type GetAssessmentsForPopulationQuery = {
           tCellSource?: TCellSourceViralLoadSource | null;
           viralLoadAvailable?: ViralLoadAvailable | null;
           viralLoad?: number | null;
+          viralLoadSource?: TCellSourceViralLoadSource | null;
           antiRetroviral?: NoYesReasonsForMissingData | null;
         } | null;
         healthAndDv?: {
@@ -13308,6 +13315,7 @@ export type DisabilityGroupValuesFragment = {
   tCellSource?: TCellSourceViralLoadSource | null;
   viralLoadAvailable?: ViralLoadAvailable | null;
   viralLoad?: number | null;
+  viralLoadSource?: TCellSourceViralLoadSource | null;
   antiRetroviral?: NoYesReasonsForMissingData | null;
 };
 
@@ -13334,6 +13342,7 @@ export type DisabilityGroupFieldsFragment = {
   tCellSource?: TCellSourceViralLoadSource | null;
   viralLoadAvailable?: ViralLoadAvailable | null;
   viralLoad?: number | null;
+  viralLoadSource?: TCellSourceViralLoadSource | null;
   antiRetroviral?: NoYesReasonsForMissingData | null;
   user?: {
     __typename: 'ApplicationUser';
@@ -35203,6 +35212,7 @@ export const DisabilityGroupValuesFragmentDoc = gql`
     tCellSource
     viralLoadAvailable
     viralLoad
+    viralLoadSource
     antiRetroviral
   }
 `;

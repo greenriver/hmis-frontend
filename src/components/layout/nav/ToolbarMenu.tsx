@@ -9,9 +9,12 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import { Routes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
 
-export const TOOLBAR_MENU_ITEMS: (NavItem<RootPermissionsFragment> & {
-  activeItemPathIncludes: string;
-})[] = [
+export const TOOLBAR_MENU_ITEMS: (Required<
+  Pick<NavItem<RootPermissionsFragment>, 'path'>
+> &
+  NavItem<RootPermissionsFragment> & {
+    activeItemPathIncludes: string;
+  })[] = [
   {
     permissions: ['canViewMyDashboard'],
     path: Routes.MY_DASHBOARD,
