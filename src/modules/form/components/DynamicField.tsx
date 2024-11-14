@@ -43,6 +43,7 @@ import TextInput from '@/components/elements/input/TextInput';
 import TimeOfDayPicker from '@/components/elements/input/TimeOfDayPicker';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
+import useAuth from '@/modules/auth/hooks/useAuth';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
@@ -96,7 +97,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       itemChanged({ linkId, value, type: ChangeType.User }),
     [linkId, itemChanged]
   );
-  const isDisabled = disabled || inputProps?.disabled;
+
+  const { user: currentUser } = useAuth();
+  const userCanEdit =
+    !!currentUser?.id &&
+    (!item.editorUserIds || item.editorUserIds.includes(currentUser.id));
+
+  const isDisabled = disabled || inputProps?.disabled || !userCanEdit;
   const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
   let width;
 

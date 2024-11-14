@@ -24,8 +24,11 @@ describe('formValueToGqlValue', () => {
     expect(formValueToGqlValue('2020-01-31T05:00:00.000Z', item)).toBe(
       '2020-01-31'
     );
-    expect(formValueToGqlValue('not-a-valid-date', item)).toBe(undefined);
-    expect(formValueToGqlValue(new Date('invalid'), item)).toBe(undefined);
+    expect(formValueToGqlValue('not-a-valid-date', item)).toBe(
+      'not-a-valid-date'
+    );
+    const invalidDate = new Date('invalid');
+    expect(formValueToGqlValue(invalidDate, item)).toBe(invalidDate);
     expect(formValueToGqlValue('', item)).toBe(null);
   });
 
@@ -36,7 +39,7 @@ describe('formValueToGqlValue', () => {
     expect(formValueToGqlValue(0, item)).toBe(0);
     expect(formValueToGqlValue('100', item)).toBe(100);
     expect(formValueToGqlValue('00100', item)).toBe(100);
-    expect(formValueToGqlValue('not a number', item)).toBe(undefined);
+    expect(formValueToGqlValue('not a number', item)).toBe('not a number');
   });
 
   it('transforms single-select choice', () => {
