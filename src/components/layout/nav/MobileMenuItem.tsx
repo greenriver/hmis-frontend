@@ -1,4 +1,4 @@
-import { ListItemButton, ListItemText } from '@mui/material';
+import { lighten, ListItemButton, ListItemText } from '@mui/material';
 import React from 'react';
 import RouterLink from '@/components/elements/RouterLink';
 
@@ -20,6 +20,11 @@ const MobileMenuItem: React.FC<Props> = ({ title, selected, path }) => {
           // matches styling in `ItemBase` which is used for desktop nav menu items
           color: 'primary.main',
           fontWeight: 600,
+          backgroundColor: (theme) =>
+            lighten(
+              theme.palette.primary.light,
+              theme.palette.lightenCoefficient || 0.9
+            ),
         },
       }}
     >

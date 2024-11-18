@@ -1,9 +1,9 @@
 import { Theme } from '@mui/material';
 import {
+  createTheme,
   PaletteColor,
   SimplePaletteColorOptions,
   ThemeOptions,
-  createTheme,
 } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 
@@ -58,12 +58,14 @@ declare module '@mui/material/styles' {
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
+    lightenCoefficient?: number;
     links: string;
     activeStatus: string;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: AlertPriorityColorOptions;
+    lightenCoefficient?: number;
     links: string;
     activeStatus: string;
   }
@@ -95,6 +97,7 @@ export const baseThemeDef: ThemeOptions = {
     primary: {
       main: '#1976D2',
     },
+    lightenCoefficient: 0.9,
     background: {
       default: '#FCFCFC',
     },

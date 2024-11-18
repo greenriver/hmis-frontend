@@ -89,7 +89,12 @@ const ItemBase = <T extends object>({
                 }
               : undefined,
           backgroundColor: (theme) =>
-            isSelected ? lighten(theme.palette.primary.light, 0.9) : undefined,
+            isSelected
+              ? lighten(
+                  theme.palette.primary.light,
+                  theme.palette.lightenCoefficient || 0.9
+                )
+              : undefined,
         }}
       >
         {item.title && (
