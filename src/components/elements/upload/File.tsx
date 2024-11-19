@@ -5,12 +5,11 @@ import Attachment from './Attachment';
 
 import { GetFileDocument, GetFileQueryResult } from '@/types/gqlTypes';
 
-export interface ImageProps {
+interface FileComponentProps {
   id: string;
 }
 
-const File: React.FC<ImageProps> = ({ id }) => {
-  // todo @martha - consider overriding this to accept an existing file, maybe it wouldn't be that hard
+export const FileComponent: React.FC<FileComponentProps> = ({ id }) => {
   return (
     <Attachment
       attachmentQuery={GetFileDocument}
@@ -29,6 +28,7 @@ const File: React.FC<ImageProps> = ({ id }) => {
       }}
     />
   );
+  // todo @martha - consider overriding this to accept an existing file, maybe it wouldn't be that hard
 };
 
-export default File;
+export default FileComponent;

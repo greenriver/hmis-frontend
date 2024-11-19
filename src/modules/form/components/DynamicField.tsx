@@ -103,8 +103,15 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     [linkId, itemChanged]
   );
   const onChangeFileValue = useCallback(
-    async (upload: DirectUpload) => onChangeValue(upload.blobId),
-    [onChangeValue]
+    (uploads: DirectUpload[]) => {
+      // todo @Martha - make sure changing between [] and nil is ok
+      if (item.repeats) {
+        onChangeValue(uploads.map((u: DirectUpload) => u.blobId));
+      } else {
+        onChangeValue(uploads[0]?.blobId);
+      }
+    },
+    [item.repeats, onChangeValue]
   );
   const isDisabled = disabled || inputProps?.disabled;
   const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
@@ -416,10 +423,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
-            file={value}
+            existingFiles={value}
             image
-            onUpload={onChangeFileValue}
-            onClear={() => onChangeValue(null)}
+            onChange={onChangeFileValue}
+            multiple={!!item.repeats}
           />
         </InputContainer>
       );
@@ -428,9 +435,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
-            file={value}
-            onUpload={onChangeFileValue}
-            onClear={() => onChangeValue(null)}
+            existingFiles={value}
+            onChange={onChangeFileValue}
+            multiple={!!item.repeats}
           />
         </InputContainer>
       );

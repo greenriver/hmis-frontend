@@ -4,53 +4,26 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import {
   alpha,
   Box,
+  Button,
   Grid,
   LinearProgress,
   Link,
+  Stack,
   SvgIconProps,
   Tooltip,
   Typography,
 } from '@mui/material';
-import { compact, first, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  Accept,
-  DropzoneInputProps,
-  DropzoneRootProps,
-  useDropzone,
-} from 'react-dropzone';
+import { compact, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Accept, useDropzone } from 'react-dropzone';
 
 import useDirectUpload from './useDirectUpload';
 
+import FileComponent from '@/components/elements/upload/File';
 import { DirectUpload, FileFieldsFragment } from '@/types/gqlTypes';
+import { ensureArray } from '@/utils/arrays';
 
-export type UploaderProps = {
-  id: string;
-  onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
-  onClear?: (upload?: DirectUpload, file?: File) => any;
-  file?: FileFieldsFragment;
-  accept?: Accept;
-  image?: boolean;
-  maxSize?: number;
-  children?: React.ReactNode | ((args: ChildrenArgs) => React.ReactElement);
-};
-
-export type ChildrenArgs = {
-  id: string;
-  file?: File;
-  loading?: boolean;
-  error?: string | undefined;
-  previewUrl?: string;
-  dragging?: boolean;
-  clearFile?: UploaderProps['onClear'];
-  selectFile?: VoidFunction;
-  rootProps?: DropzoneRootProps;
-  inputProps?: DropzoneInputProps;
-  accept?: Accept;
-  maxSize: number;
-};
-
-const DEFUALT_MAX_BYTES = 3000000;
+const DEFAULT_MAX_BYTES = 3000000;
 const IMAGE_FILE_TYPES = ['.png', '.jpg', '.jpeg', '.gif'];
 
 const FilePreviewIcon: React.FC<{
@@ -72,6 +45,57 @@ const FilePreviewIcon: React.FC<{
   </Box>
 );
 
+const FilePreview: React.FC<{
+  file: File;
+  handleClear: VoidFunction;
+}> = ({ file, handleClear }) => {
+  const previewUrl = useMemo(
+    () => (file.type.match(/^image/) ? URL.createObjectURL(file) : undefined),
+    [file]
+  );
+
+  return (
+    <Grid item sx={{ width: '120px' }}>
+      {previewUrl ? (
+        <Box
+          component='img'
+          alt='file preview'
+          src={previewUrl}
+          sx={{
+            width: '72px',
+            height: '72px',
+            borderRadius: (theme) => `${theme.shape.borderRadius}px`,
+            mb: 1,
+          }}
+        />
+      ) : (
+        <FilePreviewIcon IconComponent={InsertDriveFileIcon} />
+      )}
+      <Typography color='inherit'>{file?.name}</Typography>
+      <Tooltip title='Clear uploaded image'>
+        <Link
+          component='button'
+          underline='none'
+          onClick={(e) => {
+            e.stopPropagation();
+            handleClear();
+          }}
+          variant='body2'
+          color='GrayText'
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            mt: 1,
+          }}
+        >
+          <HighlightOffIcon fontSize='inherit' />
+          &nbsp;Clear
+        </Link>
+      </Tooltip>
+    </Grid>
+  );
+};
+
 const getFileTypesFromAccept = (accept: Accept) => {
   let arr = sortBy(
     compact(uniq(flatten(Object.values(accept)))).map((e) =>
@@ -88,180 +112,51 @@ const getFileTypesFromAccept = (accept: Accept) => {
 const getReadableSize = (maxSize: number) =>
   `${(maxSize / 1000000).toFixed(1)}MB`;
 
-const defaultChildren: NonNullable<UploaderProps['children']> = ({
-  id,
-  file,
-  loading,
-  error,
-  previewUrl,
-  dragging,
-  clearFile = () => {},
-  selectFile = () => {},
-  rootProps = {},
-  inputProps = {},
-  accept,
-  maxSize,
-}) => (
-  <Box
-    sx={({ palette, shape }) => ({
-      minHeight: '150px',
-      transition: 'background 300ms',
-      borderRadius: `${shape.borderRadius}px`,
-      border: `1px dashed ${palette.divider}`,
-      backgroundColor: dragging
-        ? alpha(palette.primary.light, 0.12)
-        : palette.background.paper,
-      overflow: 'hidden',
-    })}
-    {...rootProps}
-    id={id}
-  >
-    <input {...inputProps} />
-    <Grid
-      container
-      sx={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '150px',
-        textAlign: 'center',
-        p: 2,
-      }}
-    >
-      <Grid item>
-        {!loading && !file && (
-          <>
-            <FilePreviewIcon IconComponent={UploadFileIcon} />
-            <Typography variant='subtitle1' color='inherit'>
-              <Link onClick={selectFile} variant='inherit'>
-                Click to upload
-              </Link>{' '}
-              or drag and drop
-            </Typography>
-            <Typography variant='body2' color='GrayText' sx={{ mt: 1 }}>
-              {accept ? getFileTypesFromAccept(accept) : 'Any file type'} (max.{' '}
-              {getReadableSize(maxSize)})
-            </Typography>
-          </>
-        )}
-        {!loading && file && (
-          <>
-            {previewUrl ? (
-              <Box
-                component='img'
-                alt='file preview'
-                src={previewUrl}
-                sx={{
-                  width: '72px',
-                  height: '72px',
-                  borderRadius: (theme) => `${theme.shape.borderRadius}px`,
-                  mb: 1,
-                }}
-              />
-            ) : (
-              <FilePreviewIcon IconComponent={InsertDriveFileIcon} />
-            )}
-            <Typography color='inherit'>{file?.name}</Typography>
-            <Tooltip title='Clear uploaded image'>
-              <Link
-                component='button'
-                underline='none'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  clearFile();
-                }}
-                variant='body2'
-                color='GrayText'
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  mt: 1,
-                }}
-              >
-                <HighlightOffIcon fontSize='inherit' />
-                &nbsp;Clear
-              </Link>
-            </Tooltip>
-          </>
-        )}
-        {loading && (
-          <>
-            <Typography variant='subtitle1' color='inherit' gutterBottom>
-              Uploading
-            </Typography>
-            <LinearProgress variant='indeterminate' />
-          </>
-        )}
-        {error && (
-          <Typography variant='subtitle1' color='error' sx={{ mt: 2 }}>
-            {error}
-          </Typography>
-        )}
-      </Grid>
-    </Grid>
-  </Box>
-);
+export type UploaderProps = {
+  id: string;
+  onChange: (uploads: DirectUpload[], files: File[]) => any | Promise<any>;
+  existingFiles?: FileFieldsFragment[];
+  accept?: Accept;
+  image?: boolean;
+  maxSize?: number;
+  multiple?: boolean;
+};
 
 const Uploader: React.FC<UploaderProps> = ({
   id,
-  onUpload,
-  onClear = () => {},
-  file: fileProp,
+  onChange,
+  existingFiles,
   image: isImage = false,
   accept: acceptProp,
-  maxSize = DEFUALT_MAX_BYTES,
+  maxSize = DEFAULT_MAX_BYTES,
+  multiple = false,
 }) => {
-  const [currentFile, setCurrentFile] = useState<File>();
-  const [currentUpload, setCurrentUpload] = useState<DirectUpload>();
+  const [currentFiles, setCurrentFiles] = useState<File[]>([]);
+  const [currentUploads, setCurrentUploads] = useState<DirectUpload[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | undefined>();
-
-  // If a files was already uploaded to Active Storage, fetch it so we can display a preview
-  useEffect(() => {
-    // todo @martha - this works surprisingly well but is overall very bad for a number of reasons
-    // 1. the value is different coming back the 2nd time, that's messy
-    // 2. eslint is not happy and the whole useEffect just one time is kind a code smell / brittle
-    // 3. onUpload with a fake object that's not really an upload, that's also messy
-    if (!fileProp) return;
-
-    fetch(fileProp.url || '')
-      .then((r) => r.blob())
-      .then((blobFile) => {
-        // https://stackoverflow.com/questions/48211124/get-activestorage-blob-as-a-blob
-        const file = new File([blobFile], fileProp.name, {
-          type: fileProp.contentType || undefined,
-        });
-        setCurrentFile(file);
-        // todo @martha - this cast is rather silly
-        onUpload({ blobId: fileProp.fileBlobId || '' } as DirectUpload, file);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onUpload]); // todo @Martha - this is intentional
-
-  const fileImageUrl =
-    currentFile && currentFile.type.match(/^image/)
-      ? URL.createObjectURL(currentFile)
-      : undefined;
+  const [errors, setErrors] = useState<string[]>([]);
 
   const [uploadFile] = useDirectUpload();
+
   const uploadAndCreate = useCallback(
     (acceptedFiles: File[]) => {
-      const file = first(acceptedFiles);
-      if (file) {
-        setLoading(true);
-        setCurrentFile(file);
-        uploadFile(file)
-          .then((res) => {
-            setCurrentUpload(res);
-            onUpload(res, file);
-          })
-          .then(() => setLoading(false))
-          .catch((error) => {
-            setLoading(false);
-            setError(error.message);
-          });
-      }
+      setLoading(true);
+      const newCurrentFiles = [...currentFiles, ...acceptedFiles];
+      setCurrentFiles(newCurrentFiles);
+
+      Promise.all(acceptedFiles.map((f) => uploadFile(f)))
+        .then((responses) => {
+          const newUploads = [...currentUploads, ...responses];
+          setCurrentUploads(newUploads);
+          onChange(newUploads, newCurrentFiles);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setLoading(false);
+          setErrors([error.message]);
+        });
     },
-    [uploadFile, onUpload]
+    [currentFiles, uploadFile, currentUploads, onChange]
   );
 
   const accept = useMemo(() => {
@@ -273,61 +168,141 @@ const Uploader: React.FC<UploaderProps> = ({
     return isEmpty(base) ? undefined : base;
   }, [isImage, acceptProp]);
 
-  const { getRootProps, isDragActive, getInputProps, open } = useDropzone({
+  const {
+    getRootProps,
+    isDragActive,
+    getInputProps,
+    open: selectFile,
+  } = useDropzone({
     onDropAccepted: uploadAndCreate,
-    multiple: false,
+    multiple,
     accept,
     maxSize,
     noClick: true,
     onDrop: (acceptedFiles, fileRejections) => {
-      fileRejections.forEach((file) => {
-        file.errors.forEach((err) => {
+      const errors = fileRejections.flatMap((file) =>
+        file.errors.map((err) => {
+          const fileName = file.file.name;
           if (err.code === 'file-too-large') {
-            setError(
-              `Image is too large. File size must be under ${getReadableSize(
-                maxSize
-              )}`
-            );
+            return `${fileName} is too large. File size must be under ${getReadableSize(maxSize)}`;
           } else if (err.code === 'file-invalid-type') {
-            setError(
-              `Unsupported file type. ${
-                accept
-                  ? `Supported file types are: ${getFileTypesFromAccept(
-                      accept
-                    )}`
-                  : ''
-              }`
-            );
+            return `${fileName} is an unsupported file type. ${
+              accept
+                ? `Supported file types are: ${getFileTypesFromAccept(accept)}`
+                : ''
+            }`;
           } else {
-            setError(`Error: ${err.message || err.code}`);
+            return `${fileName} Error: ${err.message || err.code}`;
           }
-          setCurrentFile(undefined);
-        });
-      });
-      acceptedFiles.forEach(() => setError(undefined));
+        })
+      );
+      setErrors(errors);
+      setCurrentFiles(
+        currentFiles.filter(
+          (f) => !fileRejections.flatMap((file) => file.file).includes(f)
+        )
+      );
     },
   });
 
-  const handleClear = useCallback<NonNullable<UploaderProps['onClear']>>(() => {
-    onClear(currentUpload, currentFile);
-    setCurrentFile(undefined);
-    setCurrentUpload(undefined);
-  }, [currentUpload, currentFile, onClear]);
+  const clearFile = useCallback(
+    (file: File) => {
+      const newFiles = currentFiles.filter((f) => f !== file);
+      const newUploads = currentUploads.filter(
+        (upload) => upload.filename !== file.name
+      ); // todo @martha - brittle, needs ID
+      setCurrentFiles(newFiles);
+      setCurrentUploads(newUploads);
+      onChange(newUploads, newFiles);
+    },
+    [currentFiles, currentUploads, onChange]
+  );
 
-  return defaultChildren({
-    id,
-    file: currentFile,
-    loading,
-    error,
-    previewUrl: fileImageUrl,
-    dragging: isDragActive,
-    clearFile: handleClear,
-    selectFile: open,
-    rootProps: getRootProps(),
-    inputProps: getInputProps(),
-    accept,
-    maxSize,
-  });
+  const clearAll = useCallback(() => {
+    setCurrentFiles([]);
+    setCurrentUploads([]);
+    onChange([], []);
+  }, [onChange]);
+
+  return (
+    <Stack spacing={1}>
+      <Box
+        sx={({ palette, shape }) => ({
+          minHeight: '150px',
+          transition: 'background 300ms',
+          borderRadius: `${shape.borderRadius}px`,
+          border: `1px dashed ${palette.divider}`,
+          backgroundColor: isDragActive
+            ? alpha(palette.primary.light, 0.12)
+            : palette.background.paper,
+          overflow: 'hidden',
+        })}
+        {...getRootProps()}
+        id={id}
+      >
+        <input {...getInputProps()} />
+        <Stack
+          spacing={1}
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '150px',
+            textAlign: 'center',
+            p: 2,
+          }}
+        >
+          {!loading && (
+            <>
+              <FilePreviewIcon IconComponent={UploadFileIcon} />
+              <Typography variant='subtitle1' color='inherit'>
+                <Link onClick={selectFile} variant='inherit'>
+                  Click to upload
+                </Link>{' '}
+                or drag and drop
+              </Typography>
+              <Typography variant='body2' color='GrayText' sx={{ mt: 1 }}>
+                {accept ? getFileTypesFromAccept(accept) : 'Any file type'}{' '}
+                (max. {getReadableSize(maxSize)})
+              </Typography>
+            </>
+          )}
+          {loading && (
+            <Box>
+              <Typography variant='subtitle1' color='inherit' gutterBottom>
+                Uploading
+              </Typography>
+              <LinearProgress variant='indeterminate' />
+            </Box>
+          )}
+          {errors.map((error) => (
+            <Typography
+              key={error}
+              variant='subtitle1'
+              color='error'
+              sx={{ mt: 2 }}
+            >
+              {error}
+            </Typography>
+          ))}
+        </Stack>
+      </Box>
+      {currentFiles.length > 0 && <Button onClick={clearAll}>Clear all</Button>}
+      <Grid container>
+        {currentFiles.map((file) => (
+          <FilePreview
+            key={file.name}
+            file={file}
+            handleClear={() => clearFile(file)}
+          />
+        ))}
+        {ensureArray(existingFiles).map((file) => {
+          if (file.id) return <FileComponent id={file.id} />;
+          return file.toString();
+        })}
+        {/*todo @Martha - existing files side by side with current files is bad*/}
+      </Grid>
+    </Stack>
+  );
 };
 
 export default Uploader;

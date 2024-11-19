@@ -19,6 +19,7 @@ import Uploader from '../upload/UploaderBase';
 
 import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
 import {
+  DirectUpload,
   useDeleteClientImageMutation,
   useGetClientImageQuery,
   useUpdateClientImageMutation,
@@ -140,13 +141,12 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
               <Grid item xs={12}>
                 <Uploader
                   id='clientImageUploader'
-                  onUpload={(upload, file) => {
-                    setNewBlobId(upload.blobId);
-                    setNewPhotoSrc(URL.createObjectURL(file));
-                  }}
-                  onClear={() => {
-                    setNewBlobId(undefined);
-                    setNewPhotoSrc(undefined);
+                  onChange={(uploads: DirectUpload[], files: File[]) => {
+                    // this is not multi, so expect only 1 upload and 1 file
+                    setNewBlobId(uploads[0]?.blobId);
+                    setNewPhotoSrc(
+                      files[0] ? URL.createObjectURL(files[0]) : undefined
+                    );
                   }}
                 />
               </Grid>

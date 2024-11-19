@@ -343,7 +343,12 @@ const FormItemEditor: React.FC<Props> = ({
                 options={inputSizePickList}
               />
             )}
-            {([ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) ||
+            {([
+              ItemType.Choice,
+              ItemType.OpenChoice,
+              ItemType.File,
+              ItemType.Image,
+            ].includes(itemTypeValue) ||
               (itemTypeValue === ItemType.Object &&
                 itemComponentValue === Component.Address)) && (
               <ControlledCheckbox
