@@ -85,6 +85,7 @@ const Uploader: React.FC<UploaderProps> = ({
   maxSize = DEFAULT_MAX_BYTES,
   multiple = false,
 }) => {
+  // todo @Martha - comments
   const existingFiles = useMemo(
     () => ensureArray(files).filter((f) => typeof f !== 'string'),
     [files]
@@ -96,6 +97,25 @@ const Uploader: React.FC<UploaderProps> = ({
   const [errors, setErrors] = useState<string[]>([]);
 
   const [uploadFile] = useDirectUpload();
+
+  const uniqueNameValidator = useCallback(
+    (file: File) => {
+      const existingNames = [
+        ...existingFiles.map((f) => f.name),
+        ...currentFiles.map((f) => f.name),
+      ];
+
+      if (existingNames.includes(file.name)) {
+        return {
+          code: 'name-not-unique',
+          message: `File name is not unique`,
+        };
+      }
+
+      return null;
+    },
+    [existingFiles, currentFiles]
+  );
 
   const uploadAndCreate = useCallback(
     (acceptedFiles: File[]) => {
@@ -161,6 +181,7 @@ const Uploader: React.FC<UploaderProps> = ({
       );
       setErrors(errors);
     },
+    validator: uniqueNameValidator,
   });
 
   const removeFile = useCallback(
@@ -247,14 +268,14 @@ const Uploader: React.FC<UploaderProps> = ({
           {!loading && !multiple && currentFiles[0] && (
             <CurrentFileSummary
               file={currentFiles[0]}
-              handleRemove={() => removeFile(currentFiles[0])}
+              onRemove={() => removeFile(currentFiles[0])}
               variant='stacked'
             />
           )}
           {!loading && !multiple && existingFiles[0] && (
             <ExistingFileSummary
               file={existingFiles[0]}
-              handleRemove={() => removeFile(existingFiles[0])}
+              onRemove={() => removeFile(existingFiles[0])}
               variant='stacked'
             />
           )}
@@ -280,7 +301,7 @@ const Uploader: React.FC<UploaderProps> = ({
                   <ExistingFileSummary
                     key={file.id}
                     file={file}
-                    handleRemove={() => removeFile(file)}
+                    onRemove={() => removeFile(file)}
                     variant='row'
                   />
                 );
@@ -288,9 +309,9 @@ const Uploader: React.FC<UploaderProps> = ({
             {currentFiles.map((file) => {
               return (
                 <CurrentFileSummary
-                  key={file.name} // todo @martha ugh
+                  key={file.name} // we enforce uniqueness on file names
                   file={file}
-                  handleRemove={() => removeFile(file)}
+                  onRemove={() => removeFile(file)}
                   variant='row'
                 />
               );

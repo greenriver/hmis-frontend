@@ -10,8 +10,9 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 import theme from '@/config/theme';
+import FileDialog from '@/modules/clientFiles/components/FileModal';
 import {
   formatRelativeDate,
   parseHmisDateString,
@@ -40,7 +41,8 @@ export const FilePreviewIcon: React.FC<{
 type FileSummaryProps = {
   fileName: string;
   previewUrl?: string;
-  handleRemove?: VoidFunction;
+  onRemove?: VoidFunction;
+  openPreview?: VoidFunction;
   info?: ReactNode;
   variant: 'row' | 'stacked';
 };
@@ -48,7 +50,8 @@ type FileSummaryProps = {
 const FileSummary: React.FC<FileSummaryProps> = ({
   fileName,
   previewUrl,
-  handleRemove,
+  onRemove,
+  openPreview,
   info,
   variant = 'stacked',
 }) => {
@@ -75,22 +78,20 @@ const FileSummary: React.FC<FileSummaryProps> = ({
     [previewUrl]
   );
 
-  // const [previewOpen, setPreviewOpen] = useState(false);
-
   if (variant === 'stacked') {
     return (
       <>
         {preview}
         <Box>
           <Typography color='inherit'>{fileName}</Typography>
-          {handleRemove && (
+          {onRemove && (
             <Tooltip title='Clear uploaded file'>
               <Link
                 component='button'
                 underline='none'
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleRemove();
+                  onRemove();
                 }}
                 variant='body2'
                 color='GrayText'
@@ -106,19 +107,6 @@ const FileSummary: React.FC<FileSummaryProps> = ({
             </Tooltip>
           )}
         </Box>
-        {/* todo @Martha good luck lol */}
-        {/* <FileDialog
-          open={previewOpen}
-          onClose={() => setPreviewOpen(false)}
-          file={viewingFile}
-          actions={
-            <FileActions
-              clientId={clientId}
-              file={viewingFile}
-              onDone={() => setPreviewOpen(false)}
-            />
-          }
-        /> */}
       </>
     );
   }
@@ -133,15 +121,22 @@ const FileSummary: React.FC<FileSummaryProps> = ({
         {info}
       </Stack>
       <Stack spacing={1} direction='row' alignItems='center'>
-        <Button variant='text' onClick={() => {}}>
-          View
-        </Button>
-        <Button variant='text' onClick={() => {}}>
+        {openPreview && (
+          <Button variant='text' onClick={openPreview}>
+            View
+          </Button>
+        )}
+        <Button // todo @Martha - download often doesn't work for existing files! maybe it expires? we can't have everything
+          component='a'
+          href={previewUrl || ''} // todo @martha! preview url is blank if we don't want to preview, but we should always send it.
+          target='_blank'
+          variant='text'
+        >
           Download
         </Button>
-        {handleRemove && (
+        {onRemove && (
           // It's intentional that we use Delete here in the 'row' variant, vs Clear in the 'stacked' variant
-          <Button variant='text' onClick={handleRemove}>
+          <Button variant='text' onClick={onRemove}>
             Delete
           </Button>
         )}
@@ -154,33 +149,46 @@ const FileSummary: React.FC<FileSummaryProps> = ({
 export const CurrentFileSummary: React.FC<{
   file: File;
   variant: FileSummaryProps['variant'];
-  handleRemove?: FileSummaryProps['handleRemove'];
-}> = ({ file, variant, handleRemove }) => {
+  onRemove?: FileSummaryProps['onRemove'];
+}> = ({ file, variant, onRemove }) => {
   const previewUrl = useMemo(
     () => (file.type.match(/^image/) ? URL.createObjectURL(file) : undefined),
     [file]
   );
+  // const [previewOpen, setPreviewOpen] = useState(false);
 
   return (
-    <FileSummary
-      fileName={file.name}
-      previewUrl={previewUrl}
-      info={
-        <Typography variant='body2' sx={{ color: theme.palette.warning.main }}>
-          (unsaved)
-        </Typography>
-      }
-      variant={variant}
-      handleRemove={handleRemove}
-    />
+    <>
+      <FileSummary
+        fileName={file.name}
+        previewUrl={previewUrl}
+        info={
+          <Typography
+            variant='body2'
+            sx={{ color: theme.palette.warning.main }}
+          >
+            (unsaved)
+          </Typography>
+        }
+        variant={variant}
+        onRemove={onRemove}
+        // openPreview={() => setPreviewOpen(true)}
+      />
+      {/* todo @martha - add ability to preview unsaved file  */}
+      {/*<FileDialog*/}
+      {/*  open={previewOpen}*/}
+      {/*  onClose={() => setPreviewOpen(false)}*/}
+      {/*  file={file}*/}
+      {/*/>*/}
+    </>
   );
 };
 
 export const ExistingFileSummary: React.FC<{
   file: FileFieldsFragment;
   variant: FileSummaryProps['variant'];
-  handleRemove?: FileSummaryProps['handleRemove'];
-}> = ({ file, variant, handleRemove }) => {
+  onRemove?: FileSummaryProps['onRemove'];
+}> = ({ file, variant, onRemove }) => {
   const previewUrl = useMemo(
     () =>
       file.contentType && file.contentType.match(/^image/)
@@ -189,21 +197,30 @@ export const ExistingFileSummary: React.FC<{
     [file]
   );
   const date = parseHmisDateString(file.dateCreated);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   return (
-    <FileSummary
-      fileName={file.name}
-      previewUrl={previewUrl}
-      info={
-        date && (
-          <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-            Uploaded {formatRelativeDate(date)}
-          </Typography>
-        )
-      }
-      variant={variant}
-      handleRemove={handleRemove}
-    />
+    <>
+      <FileSummary
+        fileName={file.name}
+        previewUrl={previewUrl}
+        info={
+          date && (
+            <Typography variant='body2' sx={{ color: 'text.secondary' }}>
+              Uploaded {formatRelativeDate(date)}
+            </Typography>
+          )
+        }
+        variant={variant}
+        onRemove={onRemove}
+        openPreview={() => setPreviewOpen(true)}
+      />
+      <FileDialog
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        file={file}
+      />
+    </>
   );
 };
 
