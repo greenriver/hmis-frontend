@@ -51,10 +51,10 @@ const FilePreviewIcon: React.FC<{
   </Box>
 );
 
-const FilePreview: React.FC<{
+export const FilePreview: React.FC<{
   fileName: string;
   previewUrl?: string;
-  handleClear: VoidFunction;
+  handleClear?: VoidFunction;
   info?: ReactNode;
   variant: 'row' | 'stacked';
 }> = ({ fileName, previewUrl, handleClear, info, variant = 'stacked' }) => {
@@ -87,26 +87,28 @@ const FilePreview: React.FC<{
         {preview}
         <Box>
           <Typography color='inherit'>{fileName}</Typography>
-          <Tooltip title='Clear uploaded file'>
-            <Link
-              component='button'
-              underline='none'
-              onClick={(e) => {
-                e.stopPropagation();
-                handleClear();
-              }}
-              variant='body2'
-              color='GrayText'
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                mt: 1,
-              }}
-            >
-              <HighlightOffIcon fontSize='inherit' />
-              &nbsp;Clear
-            </Link>
-          </Tooltip>
+          {handleClear && (
+            <Tooltip title='Clear uploaded file'>
+              <Link
+                component='button'
+                underline='none'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClear();
+                }}
+                variant='body2'
+                color='GrayText'
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  mt: 1,
+                }}
+              >
+                <HighlightOffIcon fontSize='inherit' />
+                &nbsp;Clear
+              </Link>
+            </Tooltip>
+          )}
         </Box>
       </>
     );
@@ -126,9 +128,11 @@ const FilePreview: React.FC<{
         <Button variant='text' onClick={() => {}}>
           Download
         </Button>
-        <Button variant='text' onClick={handleClear}>
-          Delete
-        </Button>
+        {handleClear && (
+          <Button variant='text' onClick={handleClear}>
+            Delete
+          </Button>
+        )}
       </Stack>
     </Stack>
   );

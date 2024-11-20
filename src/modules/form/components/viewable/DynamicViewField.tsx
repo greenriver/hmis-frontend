@@ -16,8 +16,7 @@ import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDur
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
-import FileComponent from '@/components/elements/upload/File';
-import ImageComponent from '@/components/elements/upload/Image';
+import { FilePreview } from '@/components/elements/upload/UploaderBase';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
@@ -195,11 +194,13 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       );
     case ItemType.Image:
       // todo @martha - return data not collected if no values
-      return ensureArray(value).map((file) => <ImageComponent id={file.id} />);
+      return ensureArray(value).map((file) => (
+        <FilePreview fileName={file.name} previewUrl={''} variant='row' />
+      ));
     case ItemType.File:
-      // todo @martha - what am I breaking by making this change?
-      // what if we pass the file id (or blob id?) directly as the value
-      return ensureArray(value).map((file) => <FileComponent id={file.id} />);
+      return ensureArray(value).map((file) => (
+        <FilePreview fileName={file.name} previewUrl={''} variant='row' />
+      ));
     case ItemType.Object:
       switch (item.component) {
         case Component.Address: // Used in Move-in Date Display

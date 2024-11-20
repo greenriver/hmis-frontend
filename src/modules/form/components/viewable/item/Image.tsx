@@ -7,11 +7,11 @@ import {
   GetClientImageQueryResult,
 } from '@/types/gqlTypes';
 
-interface ImageComponentProps {
+export interface ImageProps {
   id: string;
 }
 
-const ImageComponent: React.FC<ImageComponentProps> = ({ id }) => {
+const Image: React.FC<ImageProps> = ({ id }) => {
   return (
     <Attachment
       attachmentQuery={GetClientImageDocument}
@@ -34,4 +34,4 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ id }) => {
   );
 };
 
-export default ImageComponent;
+export default Image;
