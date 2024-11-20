@@ -115,13 +115,13 @@ fragment AllEnrollmentDetails on Enrollment {
   dataCollectionFeatures {
     ...DataCollectionFeatureFields
   }
+  occurrencePointForms {
+    ...OccurrencePointFormFields
+  }
   project {
     ...ProjectNameAndType
     ...ProjectCocCount
     hasUnits
-    occurrencePointForms {
-      ...OccurrencePointFormFields
-    }
     access {
       ...ProjectAccessFields
     }

@@ -21,8 +21,6 @@ import {
   hasMeaningfulValue,
 } from '../form/util/formUtil';
 
-import { DashboardEnrollment } from './types';
-
 import { ColumnDef } from '@/components/elements/table/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
@@ -47,7 +45,6 @@ import {
   NoYes,
   NoYesMissing,
   NoYesReasonsForMissingData,
-  OccurrencePointFormFieldsFragment,
   ProjectType,
   Race,
   RelationshipToHoH,
@@ -561,17 +558,6 @@ export const evaluateDataCollectedAbout = (
         `Unable to evaluate Data Collected About: ${dataCollectedAbout}`
       );
   }
-};
-
-export const occurrencePointCollectedForEnrollment = (
-  occurrencePoint: OccurrencePointFormFieldsFragment,
-  enrollment: DashboardEnrollment
-) => {
-  return evaluateDataCollectedAbout(
-    occurrencePoint.dataCollectedAbout,
-    enrollment.client,
-    enrollment.relationshipToHoH
-  );
 };
 
 export const relationshipToHohForDisplay = (
