@@ -42,6 +42,7 @@ import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import TimeOfDayPicker from '@/components/elements/input/TimeOfDayPicker';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
+import LabelWithContent from '@/components/elements/LabelWithContent';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
@@ -104,7 +105,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   );
   const onChangeFileValue = useCallback(
     (files: (string | FileFieldsFragment)[]) => {
-      // todo @Martha - make sure changing between [] and nil is ok
       if (item.repeats) {
         onChangeValue(files);
       } else {
@@ -421,24 +421,28 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     case ItemType.Image:
       return (
         <InputContainer {...commonContainerProps}>
-          <Uploader
-            id={linkId}
-            files={value}
-            image
-            onChange={onChangeFileValue}
-            multiple={!!item.repeats}
-          />
+          <LabelWithContent label={item.text} helperText={item.helperText}>
+            <Uploader
+              id={linkId}
+              files={value}
+              image
+              onChange={onChangeFileValue}
+              multiple={!!item.repeats}
+            />
+          </LabelWithContent>
         </InputContainer>
       );
     case ItemType.File:
       return (
         <InputContainer {...commonContainerProps}>
-          <Uploader
-            id={linkId}
-            files={value}
-            onChange={onChangeFileValue}
-            multiple={!!item.repeats}
-          />
+          <LabelWithContent label={item.text} helperText={item.helperText}>
+            <Uploader
+              id={linkId}
+              files={value}
+              onChange={onChangeFileValue}
+              multiple={!!item.repeats}
+            />
+          </LabelWithContent>
         </InputContainer>
       );
     case ItemType.Object:

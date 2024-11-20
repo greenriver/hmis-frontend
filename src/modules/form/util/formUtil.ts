@@ -690,7 +690,7 @@ const cleanTypedObject = (o: TypedObject) => {
     o,
     '__typename',
     'dateUpdated',
-    'dateCreated',
+    // 'dateCreated',  // todo @martha - this is probably bad but I don't know how else to get the upload date
     'dateDeleted',
     'user'
   );

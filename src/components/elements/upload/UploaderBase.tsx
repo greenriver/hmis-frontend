@@ -1,21 +1,16 @@
-import { HighlightOff as HighlightOffIcon } from '@mui/icons-material';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import {
   alpha,
   Box,
-  Button,
   Card,
   Divider,
   LinearProgress,
   Link,
   Stack,
-  SvgIconProps,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import { compact, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
-import React, { ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   Accept,
   DropzoneInputProps,
@@ -23,120 +18,18 @@ import {
   useDropzone,
 } from 'react-dropzone';
 
+import {
+  CurrentFileSummary,
+  ExistingFileSummary,
+  FilePreviewIcon,
+} from './FileSummary';
 import useDirectUpload from './useDirectUpload';
 
-import theme from '@/config/theme';
 import { DirectUpload, FileFieldsFragment } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
 const DEFAULT_MAX_BYTES = 3000000;
 const IMAGE_FILE_TYPES = ['.png', '.jpg', '.jpeg', '.gif'];
-
-const FilePreviewIcon: React.FC<{
-  IconComponent: React.ComponentType<SvgIconProps>;
-}> = ({ IconComponent }) => (
-  <Box
-    sx={{
-      backgroundColor: (theme) => alpha(theme.palette.primary.light, 0.12),
-      lineHeight: 0,
-      display: 'inline-flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      p: 1,
-      borderRadius: 100,
-      mb: 0.5,
-    }}
-  >
-    <IconComponent color='primary' />
-  </Box>
-);
-
-export const FilePreview: React.FC<{
-  fileName: string;
-  previewUrl?: string;
-  handleClear?: VoidFunction;
-  info?: ReactNode;
-  variant: 'row' | 'stacked';
-}> = ({ fileName, previewUrl, handleClear, info, variant = 'stacked' }) => {
-  const preview = useMemo(
-    () => (
-      <>
-        {previewUrl ? (
-          <Box
-            component='img'
-            alt='file preview'
-            src={previewUrl}
-            sx={{
-              width: '72px',
-              height: '72px',
-              borderRadius: (theme) => `${theme.shape.borderRadius}px`,
-              mb: 1,
-            }}
-          />
-        ) : (
-          <FilePreviewIcon IconComponent={InsertDriveFileIcon} />
-        )}
-      </>
-    ),
-    [previewUrl]
-  );
-
-  if (variant === 'stacked') {
-    return (
-      <>
-        {preview}
-        <Box>
-          <Typography color='inherit'>{fileName}</Typography>
-          {handleClear && (
-            <Tooltip title='Clear uploaded file'>
-              <Link
-                component='button'
-                underline='none'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleClear();
-                }}
-                variant='body2'
-                color='GrayText'
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  mt: 1,
-                }}
-              >
-                <HighlightOffIcon fontSize='inherit' />
-                &nbsp;Clear
-              </Link>
-            </Tooltip>
-          )}
-        </Box>
-      </>
-    );
-  }
-
-  return (
-    <Stack sx={{ p: 1 }} direction='row' justifyContent='space-between'>
-      <Stack spacing={1} direction='row' alignItems='center'>
-        {preview}
-        <Typography color='inherit'>{fileName}</Typography>
-        {info}
-      </Stack>
-      <Stack spacing={1} direction='row' alignItems='center'>
-        <Button variant='text' onClick={() => {}}>
-          View
-        </Button>
-        <Button variant='text' onClick={() => {}}>
-          Download
-        </Button>
-        {handleClear && (
-          <Button variant='text' onClick={handleClear}>
-            Delete
-          </Button>
-        )}
-      </Stack>
-    </Stack>
-  );
-};
 
 const getFileTypesFromAccept = (accept: Accept) => {
   let arr = sortBy(
@@ -161,175 +54,13 @@ export type ChildrenArgs = {
   loading?: boolean;
   errors?: string[] | undefined;
   dragging?: boolean;
-  clearFile?: (file: File) => void;
-  selectFile?: VoidFunction; // todo @Martha - this should be renamed
+  removeFile?: (file: File) => void;
+  selectFiles?: VoidFunction;
   rootProps?: DropzoneRootProps;
   inputProps?: DropzoneInputProps;
   accept?: Accept;
   maxSize: number;
   multiple?: boolean;
-};
-
-const defaultChildren: NonNullable<UploaderProps['children']> = ({
-  id,
-  currentFiles = [],
-  existingFiles = [],
-  loading,
-  errors,
-  dragging,
-  clearFile = () => {},
-  selectFile = () => {},
-  rootProps = {},
-  inputProps = {},
-  accept,
-  maxSize,
-  multiple = false,
-}) => {
-  // todo @martha - clear vs. delete language
-  return (
-    <Stack spacing={1}>
-      <Box
-        sx={({ palette, shape }) => ({
-          minHeight: '150px',
-          transition: 'background 300ms',
-          borderRadius: `${shape.borderRadius}px`,
-          border: `1px dashed ${palette.divider}`,
-          backgroundColor: dragging
-            ? alpha(palette.primary.light, 0.12)
-            : palette.background.paper,
-          overflow: 'hidden',
-        })}
-        {...rootProps}
-        id={id}
-      >
-        <input {...inputProps} />
-        <Stack
-          spacing={1}
-          sx={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '150px',
-            textAlign: 'center',
-            p: 2,
-          }}
-        >
-          {loading && (
-            <Box>
-              <Typography variant='subtitle1' color='inherit' gutterBottom>
-                Uploading
-              </Typography>
-              <LinearProgress variant='indeterminate' />
-            </Box>
-          )}
-          {!loading &&
-            (multiple ||
-              (currentFiles.length === 0 && existingFiles.length === 0)) && (
-              <>
-                <FilePreviewIcon IconComponent={UploadFileIcon} />
-                <Typography variant='subtitle1' color='inherit'>
-                  <Link onClick={selectFile} variant='inherit'>
-                    Click to upload
-                  </Link>{' '}
-                  or drag and drop
-                </Typography>
-                <Typography variant='body2' color='GrayText' sx={{ mt: 1 }}>
-                  {accept ? getFileTypesFromAccept(accept) : 'Any file type'}{' '}
-                  (max. {getReadableSize(maxSize)})
-                </Typography>
-              </>
-            )}
-          {/* todo @Martha - in single upload case you still want to bre able to see previously uploaded file */}
-          {/* todo @martha - maybe make a parent of FilePreview for each type of File and FileFieldsFragment? */}
-          {!loading && !multiple && currentFiles[0] && (
-            <FilePreview
-              key={currentFiles[0].name}
-              fileName={currentFiles[0].name}
-              previewUrl={
-                currentFiles[0].type.match(/^image/)
-                  ? URL.createObjectURL(currentFiles[0])
-                  : undefined
-              }
-              handleClear={() => clearFile(currentFiles[0])}
-              variant='stacked'
-            />
-          )}
-          {!loading && !multiple && existingFiles[0] && (
-            <FilePreview
-              key={existingFiles[0].name}
-              fileName={existingFiles[0].name}
-              previewUrl={
-                existingFiles[0].contentType?.match(/^image/)
-                  ? existingFiles[0].url || undefined
-                  : undefined
-              }
-              handleClear={() => {}} // todo @Martha
-              variant='stacked'
-            />
-          )}
-          {errors?.map((error) => (
-            <Typography
-              key={error}
-              variant='subtitle1'
-              color='error'
-              sx={{ mt: 2 }}
-            >
-              {error}
-            </Typography>
-          ))}
-        </Stack>
-      </Box>
-      {multiple && (currentFiles.length > 0 || existingFiles.length > 0) && (
-        <Card sx={{}}>
-          <Stack divider={<Divider />}>
-            {existingFiles
-              .filter((file) => !!file?.id)
-              .map((file) => {
-                // todo @martha - this is more logic that's in two places
-                return (
-                  <FilePreview
-                    key={file.id}
-                    previewUrl={
-                      file.contentType?.match(/^image/)
-                        ? file.url || undefined
-                        : undefined
-                    } // todo @martha well this is a bit silly isnt it
-                    fileName={file.name}
-                    handleClear={() => {}} // todo @martha
-                    variant='row'
-                    info={
-                      <Typography sx={{ color: theme.palette.grey[500] }}>
-                        (saved)
-                      </Typography>
-                    } //  {formatRelativeDate(file.dateCreated) todo @martha
-                  />
-                );
-              })}
-            {currentFiles.map((file) => {
-              // todo @martha - previewUrl logic is now in 2 places and never memoized
-              return (
-                <FilePreview
-                  key={file.name} // todo @martha ugh
-                  fileName={file.name}
-                  previewUrl={
-                    file.type?.match(/^image/)
-                      ? URL.createObjectURL(file)
-                      : undefined
-                  }
-                  handleClear={() => clearFile(file)}
-                  variant='row'
-                  info={
-                    <Typography sx={{ color: theme.palette.warning.main }}>
-                      (unsaved)
-                    </Typography>
-                  }
-                />
-              );
-            })}
-          </Stack>
-        </Card>
-      )}
-    </Stack>
-  );
 };
 
 export type UploaderProps = {
@@ -368,7 +99,6 @@ const Uploader: React.FC<UploaderProps> = ({
 
   const uploadAndCreate = useCallback(
     (acceptedFiles: File[]) => {
-      // todo @martha - confirm that accepted files does not include rejections
       setLoading(true);
       const newFiles = [...currentFiles, ...acceptedFiles];
 
@@ -433,8 +163,7 @@ const Uploader: React.FC<UploaderProps> = ({
     },
   });
 
-  // todo @Martha - also consider with 'clear' and 'delete' internal language in the code, maybe it's 'remove'?
-  const clearFile = useCallback(
+  const removeFile = useCallback(
     (file: File | FileFieldsFragment) => {
       const newFiles = currentFiles.filter((f) => f !== file);
       const newUploads = currentUploads.filter(
@@ -452,21 +181,142 @@ const Uploader: React.FC<UploaderProps> = ({
     [currentFiles, currentUploads, existingFiles, onChange, onUpload]
   );
 
-  return defaultChildren({
-    id,
-    currentFiles,
-    existingFiles,
-    loading,
-    errors,
-    dragging: isDragActive,
-    clearFile,
-    selectFile: open,
-    rootProps: getRootProps(),
-    inputProps: getInputProps(),
-    accept,
-    maxSize,
-    multiple,
-  });
+  const showFileList = useMemo(
+    () => multiple && (currentFiles.length > 0 || existingFiles.length > 0),
+    [currentFiles.length, existingFiles.length, multiple]
+  );
+
+  return (
+    <Stack>
+      <Box
+        sx={({ palette, shape }) => ({
+          minHeight: '150px',
+          transition: 'background 300ms',
+          borderRadius: `${shape.borderRadius}px`,
+          border: `1px dashed ${palette.divider}`,
+          // Adjust bottom border if file list is showing (only for multi)
+          ...(showFileList && {
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            borderBottom: 0,
+          }),
+          backgroundColor: isDragActive
+            ? alpha(palette.primary.light, 0.12)
+            : palette.background.paper,
+          overflow: 'hidden',
+        })}
+        {...getRootProps()}
+        id={id}
+      >
+        <input {...getInputProps()} />
+        <Stack
+          spacing={1}
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '150px',
+            textAlign: 'center',
+            p: 2,
+          }}
+        >
+          {loading && (
+            <Box>
+              <Typography variant='subtitle1' color='inherit' gutterBottom>
+                Uploading
+              </Typography>
+              <LinearProgress variant='indeterminate' />
+            </Box>
+          )}
+          {!loading &&
+            (multiple ||
+              (currentFiles.length === 0 && existingFiles.length === 0)) && (
+              <>
+                <FilePreviewIcon IconComponent={UploadFileIcon} />
+                <Typography variant='subtitle1' color='inherit'>
+                  <Link onClick={open} variant='inherit'>
+                    Click to upload
+                  </Link>{' '}
+                  or drag and drop
+                </Typography>
+                <Typography variant='body2' color='GrayText' sx={{ mt: 1 }}>
+                  {accept ? getFileTypesFromAccept(accept) : 'Any file type'}{' '}
+                  (max. {getReadableSize(maxSize)})
+                </Typography>
+              </>
+            )}
+          {!loading && !multiple && currentFiles[0] && (
+            <CurrentFileSummary
+              file={currentFiles[0]}
+              handleRemove={() => removeFile(currentFiles[0])}
+              variant='stacked'
+            />
+          )}
+          {!loading && !multiple && existingFiles[0] && (
+            <ExistingFileSummary
+              file={existingFiles[0]}
+              handleRemove={() => removeFile(existingFiles[0])}
+              variant='stacked'
+            />
+          )}
+          {errors?.map((error) => (
+            <Typography
+              key={error}
+              variant='subtitle1'
+              color='error'
+              sx={{ mt: 2 }}
+            >
+              {error}
+            </Typography>
+          ))}
+        </Stack>
+      </Box>
+      {showFileList && (
+        <Card sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
+          <Stack divider={<Divider />}>
+            {existingFiles
+              .filter((file) => !!file?.id) // todo @martha comments
+              .map((file) => {
+                return (
+                  <ExistingFileSummary
+                    key={file.id}
+                    file={file}
+                    handleRemove={() => removeFile(file)}
+                    variant='row'
+                  />
+                );
+              })}
+            {currentFiles.map((file) => {
+              return (
+                <CurrentFileSummary
+                  key={file.name} // todo @martha ugh
+                  file={file}
+                  handleRemove={() => removeFile(file)}
+                  variant='row'
+                />
+              );
+            })}
+          </Stack>
+        </Card>
+      )}
+    </Stack>
+  );
+};
+
+// todo @martha comments
+export const SingleUploader: React.FC<
+  Omit<UploaderProps, 'multiple' | 'onUpload'> & {
+    onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
+  }
+> = ({ onUpload, ...props }) => {
+  return (
+    <Uploader
+      multiple={false}
+      onUpload={(uploads: DirectUpload[], files: File[]) => {
+        if (onUpload) onUpload(uploads[0], files[0]);
+      }}
+      {...props}
+    />
+  );
 };
 
 export default Uploader;

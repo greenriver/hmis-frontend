@@ -15,7 +15,7 @@ import React, { useCallback, useState } from 'react';
 
 import CommonDialog from '../CommonDialog';
 import LoadingButton from '../LoadingButton';
-import Uploader from '../upload/UploaderBase';
+import { SingleUploader } from '../upload/UploaderBase';
 
 import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
 import {
@@ -139,15 +139,11 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                 </>
               )}
               <Grid item xs={12}>
-                <Uploader
+                <SingleUploader
                   id='clientImageUploader'
-                  onUpload={(uploads: DirectUpload[], files: File[]) => {
-                    // todo @martha - consider making an Uploader and a MultiUploader so that the api is simpler
-                    // this is not multi, so expect only 1 upload and 1 file
-                    setNewBlobId(uploads[0]?.blobId);
-                    setNewPhotoSrc(
-                      files[0] ? URL.createObjectURL(files[0]) : undefined
-                    );
+                  onUpload={(upload: DirectUpload, file: File) => {
+                    setNewBlobId(upload.blobId);
+                    setNewPhotoSrc(URL.createObjectURL(file));
                   }}
                 />
               </Grid>

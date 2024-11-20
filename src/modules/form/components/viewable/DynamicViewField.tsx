@@ -1,4 +1,4 @@
-import { Skeleton, Stack, Typography } from '@mui/material';
+import { Card, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { formatDuration } from 'date-fns';
 import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
@@ -16,7 +16,7 @@ import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDur
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
-import { FilePreview } from '@/components/elements/upload/UploaderBase';
+import { ExistingFileSummary } from '@/components/elements/upload/FileSummary';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
@@ -193,14 +193,23 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         />
       );
     case ItemType.Image:
-      // todo @martha - return data not collected if no values
-      return ensureArray(value).map((file) => (
-        <FilePreview fileName={file.name} previewUrl={''} variant='row' />
-      ));
     case ItemType.File:
-      return ensureArray(value).map((file) => (
-        <FilePreview fileName={file.name} previewUrl={''} variant='row' />
-      ));
+      const files = ensureArray(value);
+      return (
+        <LabelWithContent {...commonProps}>
+          {files.length === 0 ? (
+            <NotCollectedText variant='body2' />
+          ) : (
+            <Card>
+              <Stack divider={<Divider />}>
+                {files.map((file) => (
+                  <ExistingFileSummary file={file} variant='row' />
+                ))}
+              </Stack>
+            </Card>
+          )}
+        </LabelWithContent>
+      );
     case ItemType.Object:
       switch (item.component) {
         case Component.Address: // Used in Move-in Date Display
