@@ -48,7 +48,7 @@ import SimpleAddressInput from '@/modules/form/components/client/addresses/Simpl
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
   Component,
-  DirectUpload,
+  FileFieldsFragment,
   FormItem,
   InputSize,
   ItemType,
@@ -103,12 +103,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     [linkId, itemChanged]
   );
   const onChangeFileValue = useCallback(
-    (uploads: DirectUpload[]) => {
+    (files: (string | FileFieldsFragment)[]) => {
       // todo @Martha - make sure changing between [] and nil is ok
       if (item.repeats) {
-        onChangeValue(uploads.map((u: DirectUpload) => u.blobId));
+        onChangeValue(files);
       } else {
-        onChangeValue(uploads[0]?.blobId);
+        onChangeValue(files[0]);
       }
     },
     [item.repeats, onChangeValue]
@@ -423,7 +423,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
-            existingFiles={value}
+            files={value}
             image
             onChange={onChangeFileValue}
             multiple={!!item.repeats}
@@ -435,7 +435,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
-            existingFiles={value}
+            files={value}
             onChange={onChangeFileValue}
             multiple={!!item.repeats}
           />

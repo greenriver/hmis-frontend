@@ -141,7 +141,8 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
               <Grid item xs={12}>
                 <Uploader
                   id='clientImageUploader'
-                  onChange={(uploads: DirectUpload[], files: File[]) => {
+                  onUpload={(uploads: DirectUpload[], files: File[]) => {
+                    // todo @martha - consider making an Uploader and a MultiUploader so that the api is simpler
                     // this is not multi, so expect only 1 upload and 1 file
                     setNewBlobId(uploads[0]?.blobId);
                     setNewPhotoSrc(

@@ -7,7 +7,6 @@ fragment CustomDataElementValueFields on CustomDataElementValue {
   valueJson
   valueString
   valueText
-  # todo @Martha - how does this relate to the problem with the wrong value?
   valueFile {
     ...FileFields
   }
