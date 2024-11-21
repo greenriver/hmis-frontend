@@ -30,6 +30,9 @@ const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
     }, [loading, loadingPosition]);
 
     return (
+      // Known issue - this causes a console warning,
+      // 'Failed prop type: MUI: The loadingPosition="start" should be used in combination with startIcon.'
+      // https://github.com/mui/material-ui/issues/31235
       <MuiLoadingButton
         ref={ref}
         loadingPosition={loadingPosition}

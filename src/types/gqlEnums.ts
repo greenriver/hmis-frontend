@@ -932,6 +932,7 @@ export const HmisEnums = {
     COC: 'COC',
     CONTINUUM_PROJECTS: 'Continuum Projects',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
+    CUSTOM_SERVICE_CATEGORIES: 'CUSTOM_SERVICE_CATEGORIES',
     DESTINATION: 'DESTINATION',
     ELIGIBLE_STAFF_ASSIGNMENT_USERS:
       'Current users who are eligible for staff assignment',

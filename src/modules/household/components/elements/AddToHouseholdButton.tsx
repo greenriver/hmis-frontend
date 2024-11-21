@@ -3,8 +3,9 @@ import { useEffect, useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
-import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
-import useClientAlerts from '@/modules/client/hooks/useClientAlerts';
+
+import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
+import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';

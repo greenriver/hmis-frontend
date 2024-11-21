@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import Loading from '@/components/elements/Loading';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessmentFormController from '@/modules/assessments/components/IndividualAssessmentFormController';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { useGetAssessmentQuery } from '@/types/gqlTypes';
 
