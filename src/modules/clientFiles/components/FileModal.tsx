@@ -2,7 +2,9 @@ import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 import {
   Box,
   CircularProgress,
+  DialogContent,
   DialogProps,
+  DialogTitle,
   Link,
   Pagination,
   Paper,
@@ -15,12 +17,14 @@ import { pdfjs, Document, Page } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
+import CommonDialog from '@/components/elements/CommonDialog';
 import useSafeParams from '@/hooks/useSafeParams';
 import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
 import { FileFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 
 export type FileDialogProps = {
-  file: FileFieldsFragment;
+  file: Pick<FileFieldsFragment, 'url' | 'name' | 'contentType'> &
+    Partial<Omit<FileFieldsFragment, 'url' | 'name' | 'contentType'>>;
   actions?: React.ReactNode;
 } & DialogProps;
 
@@ -38,7 +42,9 @@ const LoadingPreview: React.FC = () => (
   </Stack>
 );
 
-const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
+const ImagePreview: React.FC<{ file: FileDialogProps['file'] }> = ({
+  file,
+}) => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
   if (!file.url) return null;
@@ -62,7 +68,7 @@ const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   );
 };
 
-const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({
+const PdfPreview: React.FC<{ file: FileDialogProps['file'] }> = ({
   file: { url },
 }) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -180,10 +186,10 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
 
   return (
     <>
-      {file && (
+      {!!file?.id && (
         <ViewRecordDialog<FileFieldsFragment>
           {...props}
-          record={file}
+          record={file as FileFieldsFragment}
           formRole={RecordFormRole.File}
           title={file.name}
           actions={actions}
@@ -217,6 +223,40 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
             </Paper>
           </Stack>
         </ViewRecordDialog>
+      )}
+      {/* todo @martha! almost there but needs some refactoring. */}
+      {file && !file.id && (
+        <CommonDialog
+          maxWidth='md'
+          scroll='paper'
+          fullWidth
+          enableBackdropClick
+          {...props}
+        >
+          <DialogTitle>{file.name}</DialogTitle>
+          <DialogContent>
+            {/* todo @martha - check for accessibility */}
+            {/* todo @Martha don't repeat */}
+            <Typography p={2} variant='h6' component='p'>
+              File Preview
+            </Typography>
+            <Box
+              sx={(theme) => ({
+                backgroundColor: theme.palette.grey[300],
+                padding: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: `${theme.shape.borderRadius}px`,
+                mx: 2,
+                mb: 2,
+              })}
+            >
+              {previewContent}
+            </Box>
+          </DialogContent>
+        </CommonDialog>
       )}
     </>
   );

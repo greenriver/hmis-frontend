@@ -188,8 +188,9 @@ const Uploader: React.FC<UploaderProps> = ({
     (file: File | FileFieldsFragment) => {
       const newFiles = currentFiles.filter((f) => f !== file);
       const newUploads = currentUploads.filter(
+        // This is probably not ideal, but we do enforce file name uniqueness, so it should work
         (upload) => upload.filename !== file.name
-      ); // todo @martha - brittle, but how to get around? uploads and files are not currently associated together
+      );
       setCurrentFiles(newFiles);
       setCurrentUploads(newUploads);
       if (onUpload) onUpload(newUploads, newFiles);

@@ -690,7 +690,7 @@ const cleanTypedObject = (o: TypedObject) => {
     o,
     '__typename',
     'dateUpdated',
-    // 'dateCreated',  // todo @martha - this is probably bad but I don't know how else to get the upload date
+    // 'dateCreated',  // This is probably bad; is there any other way to get the upload data on the file from within the assessment?
     'dateDeleted',
     'user'
   );

@@ -203,7 +203,11 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
             <Card>
               <Stack divider={<Divider />}>
                 {files.map((file) => (
-                  <ExistingFileSummary file={file} variant='row' />
+                  <ExistingFileSummary
+                    key={file.id}
+                    file={file}
+                    variant='row'
+                  />
                 ))}
               </Stack>
             </Card>

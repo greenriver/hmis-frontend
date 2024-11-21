@@ -40,7 +40,8 @@ export const FilePreviewIcon: React.FC<{
 
 type FileSummaryProps = {
   fileName: string;
-  previewUrl?: string;
+  url: string;
+  showThumbnail?: boolean;
   onRemove?: VoidFunction;
   openPreview?: VoidFunction;
   info?: ReactNode;
@@ -49,20 +50,21 @@ type FileSummaryProps = {
 
 const FileSummary: React.FC<FileSummaryProps> = ({
   fileName,
-  previewUrl,
+  url,
   onRemove,
   openPreview,
   info,
   variant = 'stacked',
+  showThumbnail = false,
 }) => {
   const preview = useMemo(
     () => (
       <>
-        {previewUrl ? (
+        {showThumbnail ? (
           <Box
             component='img'
             alt='file preview'
-            src={previewUrl}
+            src={url}
             sx={{
               width: '72px',
               height: '72px',
@@ -75,7 +77,7 @@ const FileSummary: React.FC<FileSummaryProps> = ({
         )}
       </>
     ),
-    [previewUrl]
+    [showThumbnail, url]
   );
 
   if (variant === 'stacked') {
@@ -126,9 +128,9 @@ const FileSummary: React.FC<FileSummaryProps> = ({
             View
           </Button>
         )}
-        <Button // todo @Martha - download often doesn't work for existing files! maybe it expires? we can't have everything
+        <Button // todo @Martha - download and preview sometimes doesn't work for existing files! IT IS PROBABLY BOTH FOR THE SAME REASON! PROBABLY BECAUSE IT EXPIRES!
           component='a'
-          href={previewUrl || ''} // todo @martha! preview url is blank if we don't want to preview, but we should always send it.
+          href={url}
           target='_blank'
           variant='text'
         >
@@ -151,17 +153,15 @@ export const CurrentFileSummary: React.FC<{
   variant: FileSummaryProps['variant'];
   onRemove?: FileSummaryProps['onRemove'];
 }> = ({ file, variant, onRemove }) => {
-  const previewUrl = useMemo(
-    () => (file.type.match(/^image/) ? URL.createObjectURL(file) : undefined),
-    [file]
-  );
-  // const [previewOpen, setPreviewOpen] = useState(false);
+  const url = useMemo(() => URL.createObjectURL(file), [file]);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   return (
     <>
       <FileSummary
         fileName={file.name}
-        previewUrl={previewUrl}
+        showThumbnail={!!file.type.match(/^image/)}
+        url={url}
         info={
           <Typography
             variant='body2'
@@ -172,14 +172,17 @@ export const CurrentFileSummary: React.FC<{
         }
         variant={variant}
         onRemove={onRemove}
-        // openPreview={() => setPreviewOpen(true)}
+        openPreview={() => setPreviewOpen(true)}
       />
-      {/* todo @martha - add ability to preview unsaved file  */}
-      {/*<FileDialog*/}
-      {/*  open={previewOpen}*/}
-      {/*  onClose={() => setPreviewOpen(false)}*/}
-      {/*  file={file}*/}
-      {/*/>*/}
+      <FileDialog
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        file={{
+          url: url,
+          contentType: file.type,
+          name: file.name,
+        }}
+      />
     </>
   );
 };
@@ -189,13 +192,6 @@ export const ExistingFileSummary: React.FC<{
   variant: FileSummaryProps['variant'];
   onRemove?: FileSummaryProps['onRemove'];
 }> = ({ file, variant, onRemove }) => {
-  const previewUrl = useMemo(
-    () =>
-      file.contentType && file.contentType.match(/^image/)
-        ? file.url || undefined
-        : undefined,
-    [file]
-  );
   const date = parseHmisDateString(file.dateCreated);
   const [previewOpen, setPreviewOpen] = useState(false);
 
@@ -203,7 +199,10 @@ export const ExistingFileSummary: React.FC<{
     <>
       <FileSummary
         fileName={file.name}
-        previewUrl={previewUrl}
+        showThumbnail={Boolean(
+          file.contentType && !!file.contentType.match(/^image/)
+        )}
+        url={file.url || ''}
         info={
           date && (
             <Typography variant='body2' sx={{ color: 'text.secondary' }}>
