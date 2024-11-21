@@ -16527,6 +16527,30 @@
             "deprecationReason": null
           },
           {
+            "name": "occurrencePointForms",
+            "description": "Forms for individual data elements that are collected at occurrence for this Enrollment (e.g. Move-In Date)",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "OccurrencePointForm",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "openEnrollmentSummary",
             "description": null,
             "args": [],
@@ -22042,6 +22066,26 @@
               "kind": "ENUM",
               "name": "DisabledDisplay",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "editorUserIds",
+            "description": "Users who can edit this field. If null, all users can edit",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

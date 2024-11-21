@@ -15,11 +15,7 @@ import RouterLink from '@/components/elements/RouterLink';
 import { parseOccurrencePointFormDefinition } from '@/modules/form/util/formUtil';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import {
-  occurrencePointCollectedForEnrollment,
-  parseAndFormatDate,
-  yesNo,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate, yesNo } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -67,22 +63,20 @@ const EnrollmentDetails = ({
     }
 
     // Occurrence point values (move in date, date of engagement, etc.)
-    enrollment.project.occurrencePointForms
-      .filter((form) => occurrencePointCollectedForEnrollment(form, enrollment))
-      .forEach(({ definition }) => {
-        const { displayTitle, isEditable, readOnlyDefinition } =
-          parseOccurrencePointFormDefinition(definition);
+    enrollment.occurrencePointForms.forEach(({ definition }) => {
+      const { displayTitle, isEditable, readOnlyDefinition } =
+        parseOccurrencePointFormDefinition(definition);
 
-        content[displayTitle] = (
-          <EnrollmentOccurrencePointForm
-            enrollment={enrollment}
-            definition={definition}
-            readOnlyDefinition={readOnlyDefinition}
-            editable={isEditable && enrollment.access.canEditEnrollments}
-            dialogTitle={displayTitle}
-          />
-        );
-      });
+      content[displayTitle] = (
+        <EnrollmentOccurrencePointForm
+          enrollment={enrollment}
+          definition={definition}
+          readOnlyDefinition={readOnlyDefinition}
+          editable={isEditable && enrollment.access.canEditEnrollments}
+          dialogTitle={displayTitle}
+        />
+      );
+    });
 
     // CoC Code. Only show if project operates in multiple CoCs.
     if (enrollment.project.projectCocs.nodesCount > 1) {

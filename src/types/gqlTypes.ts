@@ -2347,6 +2347,8 @@ export type Enrollment = {
   moveInAddresses: Array<ClientAddress>;
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
   numUnitsAssignedToHousehold: Scalars['Int']['output'];
+  /** Forms for individual data elements that are collected at occurrence for this Enrollment (e.g. Move-In Date) */
+  occurrencePointForms: Array<OccurrencePointForm>;
   openEnrollmentSummary: Array<EnrollmentSummary>;
   organizationName: Scalars['String']['output'];
   percentAmi?: Maybe<PercentAmi>;
@@ -3071,6 +3073,8 @@ export type FormItem = {
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
   disabledDisplay?: Maybe<DisabledDisplay>;
+  /** Users who can edit this field. If null, all users can edit */
+  editorUserIds?: Maybe<Array<Scalars['ID']['output']>>;
   enableBehavior?: Maybe<EnableBehavior>;
   enableWhen?: Maybe<Array<EnableWhen>>;
   /** Helper text for the item */
@@ -10093,6 +10097,7 @@ export type GetAssessmentQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -10117,6 +10122,7 @@ export type GetAssessmentQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -10141,6 +10147,7 @@ export type GetAssessmentQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -10165,6 +10172,7 @@ export type GetAssessmentQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -10189,6 +10197,7 @@ export type GetAssessmentQuery = {
                   enableBehavior?: EnableBehavior | null;
                   rule?: any | null;
                   customRule?: any | null;
+                  editorUserIds?: Array<string> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -10597,6 +10606,7 @@ export type GetAssessmentQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -10621,6 +10631,7 @@ export type GetAssessmentQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -10645,6 +10656,7 @@ export type GetAssessmentQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -10669,6 +10681,7 @@ export type GetAssessmentQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -10693,6 +10706,7 @@ export type GetAssessmentQuery = {
                   enableBehavior?: EnableBehavior | null;
                   rule?: any | null;
                   customRule?: any | null;
+                  editorUserIds?: Array<string> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -17109,6 +17123,7 @@ export type ClientDetailFormsQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -17133,6 +17148,7 @@ export type ClientDetailFormsQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -17157,6 +17173,7 @@ export type ClientDetailFormsQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -17181,6 +17198,7 @@ export type ClientDetailFormsQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -17205,6 +17223,7 @@ export type ClientDetailFormsQuery = {
                   enableBehavior?: EnableBehavior | null;
                   rule?: any | null;
                   customRule?: any | null;
+                  editorUserIds?: Array<string> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -20599,36 +20618,54 @@ export type AllEnrollmentDetailsFragment = {
     projectType: ProjectType;
     canViewEnrollment: boolean;
   }>;
-  project: {
-    __typename?: 'Project';
-    hasUnits: boolean;
-    staffAssignmentsEnabled: boolean;
+  dataCollectionFeatures: Array<{
+    __typename?: 'DataCollectionFeature';
     id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-    dataCollectionFeatures: Array<{
-      __typename?: 'DataCollectionFeature';
+    role: DataCollectionFeatureRole;
+    dataCollectedAbout: DataCollectedAbout;
+    legacy: boolean;
+  }>;
+  occurrencePointForms: Array<{
+    __typename?: 'OccurrencePointForm';
+    id: string;
+    dataCollectedAbout: DataCollectedAbout;
+    definition: {
+      __typename?: 'FormDefinition';
       id: string;
-      role: DataCollectionFeatureRole;
-      dataCollectedAbout: DataCollectedAbout;
-      legacy: boolean;
-    }>;
-    occurrencePointForms: Array<{
-      __typename?: 'OccurrencePointForm';
-      id: string;
-      dataCollectedAbout: DataCollectedAbout;
+      role: FormRole;
+      title: string;
+      cacheKey: string;
+      identifier: string;
+      status: FormStatus;
+      dateUpdated: string;
       definition: {
-        __typename?: 'FormDefinition';
-        id: string;
-        role: FormRole;
-        title: string;
-        cacheKey: string;
-        identifier: string;
-        status: FormStatus;
-        dateUpdated: string;
-        definition: {
-          __typename?: 'FormDefinitionJson';
-          item: Array<{
+        __typename?: 'FormDefinitionJson';
+        item: Array<{
+          __typename: 'FormItem';
+          linkId: string;
+          type: ItemType;
+          component?: Component | null;
+          prefix?: string | null;
+          text?: string | null;
+          briefText?: string | null;
+          readonlyText?: string | null;
+          helperText?: string | null;
+          required?: boolean | null;
+          warnIfEmpty?: boolean | null;
+          hidden?: boolean | null;
+          readOnly?: boolean | null;
+          repeats?: boolean | null;
+          pickListReference?: string | null;
+          size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill?: boolean | null;
+          dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay?: DisabledDisplay | null;
+          enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
+          editorUserIds?: Array<string> | null;
+          item?: Array<{
             __typename: 'FormItem';
             linkId: string;
             type: ItemType;
@@ -20652,6 +20689,7 @@ export type AllEnrollmentDetailsFragment = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -20676,6 +20714,7 @@ export type AllEnrollmentDetailsFragment = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -20700,6 +20739,7 @@ export type AllEnrollmentDetailsFragment = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -20724,104 +20764,7 @@ export type AllEnrollmentDetailsFragment = {
                   enableBehavior?: EnableBehavior | null;
                   rule?: any | null;
                   customRule?: any | null;
-                  item?: Array<{
-                    __typename: 'FormItem';
-                    linkId: string;
-                    type: ItemType;
-                    component?: Component | null;
-                    prefix?: string | null;
-                    text?: string | null;
-                    briefText?: string | null;
-                    readonlyText?: string | null;
-                    helperText?: string | null;
-                    required?: boolean | null;
-                    warnIfEmpty?: boolean | null;
-                    hidden?: boolean | null;
-                    readOnly?: boolean | null;
-                    repeats?: boolean | null;
-                    pickListReference?: string | null;
-                    size?: InputSize | null;
-                    assessmentDate?: boolean | null;
-                    prefill?: boolean | null;
-                    dataCollectedAbout?: DataCollectedAbout | null;
-                    disabledDisplay?: DisabledDisplay | null;
-                    enableBehavior?: EnableBehavior | null;
-                    rule?: any | null;
-                    customRule?: any | null;
-                    mapping?: {
-                      __typename?: 'FieldMapping';
-                      recordType?: RelatedRecordType | null;
-                      fieldName?: string | null;
-                      customFieldKey?: string | null;
-                    } | null;
-                    bounds?: Array<{
-                      __typename?: 'ValueBound';
-                      id: string;
-                      severity: ValidationSeverity;
-                      type: BoundType;
-                      question?: string | null;
-                      valueNumber?: number | null;
-                      valueDate?: string | null;
-                      valueLocalConstant?: string | null;
-                      offset?: number | null;
-                    }> | null;
-                    pickListOptions?: Array<{
-                      __typename?: 'PickListOption';
-                      code: string;
-                      label?: string | null;
-                      secondaryLabel?: string | null;
-                      groupLabel?: string | null;
-                      groupCode?: string | null;
-                      initialSelected?: boolean | null;
-                      helperText?: string | null;
-                      numericValue?: number | null;
-                    }> | null;
-                    initial?: Array<{
-                      __typename?: 'InitialValue';
-                      valueCode?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      valueLocalConstant?: string | null;
-                      initialBehavior: InitialBehavior;
-                    }> | null;
-                    enableWhen?: Array<{
-                      __typename?: 'EnableWhen';
-                      question?: string | null;
-                      localConstant?: string | null;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      answerDate?: string | null;
-                      compareQuestion?: string | null;
-                    }> | null;
-                    autofillValues?: Array<{
-                      __typename?: 'AutofillValue';
-                      valueCode?: string | null;
-                      valueQuestion?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      sumQuestions?: Array<string> | null;
-                      formula?: string | null;
-                      autofillBehavior: EnableBehavior;
-                      autofillReadonly?: boolean | null;
-                      autofillWhen: Array<{
-                        __typename?: 'EnableWhen';
-                        question?: string | null;
-                        localConstant?: string | null;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        answerDate?: string | null;
-                        compareQuestion?: string | null;
-                      }>;
-                    }> | null;
-                  }> | null;
+                  editorUserIds?: Array<string> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -21117,11 +21060,92 @@ export type AllEnrollmentDetailsFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-          }>;
-        };
-        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+          }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            id: string;
+            severity: ValidationSeverity;
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
+            valueLocalConstant?: string | null;
+            offset?: number | null;
+          }> | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            groupCode?: string | null;
+            initialSelected?: boolean | null;
+            helperText?: string | null;
+            numericValue?: number | null;
+          }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question?: string | null;
+            localConstant?: string | null;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+            answerDate?: string | null;
+            compareQuestion?: string | null;
+          }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueQuestion?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
+            formula?: string | null;
+            autofillBehavior: EnableBehavior;
+            autofillReadonly?: boolean | null;
+            autofillWhen: Array<{
+              __typename?: 'EnableWhen';
+              question?: string | null;
+              localConstant?: string | null;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              answerDate?: string | null;
+              compareQuestion?: string | null;
+            }>;
+          }> | null;
+        }>;
       };
-    }>;
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    };
+  }>;
+  project: {
+    __typename?: 'Project';
+    hasUnits: boolean;
+    staffAssignmentsEnabled: boolean;
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
     access: {
       __typename?: 'ProjectAccess';
       id: string;
@@ -21945,36 +21969,54 @@ export type GetEnrollmentDetailsQuery = {
       projectType: ProjectType;
       canViewEnrollment: boolean;
     }>;
-    project: {
-      __typename?: 'Project';
-      hasUnits: boolean;
-      staffAssignmentsEnabled: boolean;
+    dataCollectionFeatures: Array<{
+      __typename?: 'DataCollectionFeature';
       id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-      dataCollectionFeatures: Array<{
-        __typename?: 'DataCollectionFeature';
+      role: DataCollectionFeatureRole;
+      dataCollectedAbout: DataCollectedAbout;
+      legacy: boolean;
+    }>;
+    occurrencePointForms: Array<{
+      __typename?: 'OccurrencePointForm';
+      id: string;
+      dataCollectedAbout: DataCollectedAbout;
+      definition: {
+        __typename?: 'FormDefinition';
         id: string;
-        role: DataCollectionFeatureRole;
-        dataCollectedAbout: DataCollectedAbout;
-        legacy: boolean;
-      }>;
-      occurrencePointForms: Array<{
-        __typename?: 'OccurrencePointForm';
-        id: string;
-        dataCollectedAbout: DataCollectedAbout;
+        role: FormRole;
+        title: string;
+        cacheKey: string;
+        identifier: string;
+        status: FormStatus;
+        dateUpdated: string;
         definition: {
-          __typename?: 'FormDefinition';
-          id: string;
-          role: FormRole;
-          title: string;
-          cacheKey: string;
-          identifier: string;
-          status: FormStatus;
-          dateUpdated: string;
-          definition: {
-            __typename?: 'FormDefinitionJson';
-            item: Array<{
+          __typename?: 'FormDefinitionJson';
+          item: Array<{
+            __typename: 'FormItem';
+            linkId: string;
+            type: ItemType;
+            component?: Component | null;
+            prefix?: string | null;
+            text?: string | null;
+            briefText?: string | null;
+            readonlyText?: string | null;
+            helperText?: string | null;
+            required?: boolean | null;
+            warnIfEmpty?: boolean | null;
+            hidden?: boolean | null;
+            readOnly?: boolean | null;
+            repeats?: boolean | null;
+            pickListReference?: string | null;
+            size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill?: boolean | null;
+            dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay?: DisabledDisplay | null;
+            enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
+            editorUserIds?: Array<string> | null;
+            item?: Array<{
               __typename: 'FormItem';
               linkId: string;
               type: ItemType;
@@ -21998,6 +22040,7 @@ export type GetEnrollmentDetailsQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -22022,6 +22065,7 @@ export type GetEnrollmentDetailsQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -22046,6 +22090,7 @@ export type GetEnrollmentDetailsQuery = {
                   enableBehavior?: EnableBehavior | null;
                   rule?: any | null;
                   customRule?: any | null;
+                  editorUserIds?: Array<string> | null;
                   item?: Array<{
                     __typename: 'FormItem';
                     linkId: string;
@@ -22070,104 +22115,7 @@ export type GetEnrollmentDetailsQuery = {
                     enableBehavior?: EnableBehavior | null;
                     rule?: any | null;
                     customRule?: any | null;
-                    item?: Array<{
-                      __typename: 'FormItem';
-                      linkId: string;
-                      type: ItemType;
-                      component?: Component | null;
-                      prefix?: string | null;
-                      text?: string | null;
-                      briefText?: string | null;
-                      readonlyText?: string | null;
-                      helperText?: string | null;
-                      required?: boolean | null;
-                      warnIfEmpty?: boolean | null;
-                      hidden?: boolean | null;
-                      readOnly?: boolean | null;
-                      repeats?: boolean | null;
-                      pickListReference?: string | null;
-                      size?: InputSize | null;
-                      assessmentDate?: boolean | null;
-                      prefill?: boolean | null;
-                      dataCollectedAbout?: DataCollectedAbout | null;
-                      disabledDisplay?: DisabledDisplay | null;
-                      enableBehavior?: EnableBehavior | null;
-                      rule?: any | null;
-                      customRule?: any | null;
-                      mapping?: {
-                        __typename?: 'FieldMapping';
-                        recordType?: RelatedRecordType | null;
-                        fieldName?: string | null;
-                        customFieldKey?: string | null;
-                      } | null;
-                      bounds?: Array<{
-                        __typename?: 'ValueBound';
-                        id: string;
-                        severity: ValidationSeverity;
-                        type: BoundType;
-                        question?: string | null;
-                        valueNumber?: number | null;
-                        valueDate?: string | null;
-                        valueLocalConstant?: string | null;
-                        offset?: number | null;
-                      }> | null;
-                      pickListOptions?: Array<{
-                        __typename?: 'PickListOption';
-                        code: string;
-                        label?: string | null;
-                        secondaryLabel?: string | null;
-                        groupLabel?: string | null;
-                        groupCode?: string | null;
-                        initialSelected?: boolean | null;
-                        helperText?: string | null;
-                        numericValue?: number | null;
-                      }> | null;
-                      initial?: Array<{
-                        __typename?: 'InitialValue';
-                        valueCode?: string | null;
-                        valueBoolean?: boolean | null;
-                        valueNumber?: number | null;
-                        valueLocalConstant?: string | null;
-                        initialBehavior: InitialBehavior;
-                      }> | null;
-                      enableWhen?: Array<{
-                        __typename?: 'EnableWhen';
-                        question?: string | null;
-                        localConstant?: string | null;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        answerDate?: string | null;
-                        compareQuestion?: string | null;
-                      }> | null;
-                      autofillValues?: Array<{
-                        __typename?: 'AutofillValue';
-                        valueCode?: string | null;
-                        valueQuestion?: string | null;
-                        valueBoolean?: boolean | null;
-                        valueNumber?: number | null;
-                        sumQuestions?: Array<string> | null;
-                        formula?: string | null;
-                        autofillBehavior: EnableBehavior;
-                        autofillReadonly?: boolean | null;
-                        autofillWhen: Array<{
-                          __typename?: 'EnableWhen';
-                          question?: string | null;
-                          localConstant?: string | null;
-                          operator: EnableOperator;
-                          answerCode?: string | null;
-                          answerCodes?: Array<string> | null;
-                          answerNumber?: number | null;
-                          answerBoolean?: boolean | null;
-                          answerGroupCode?: string | null;
-                          answerDate?: string | null;
-                          compareQuestion?: string | null;
-                        }>;
-                      }> | null;
-                    }> | null;
+                    editorUserIds?: Array<string> | null;
                     mapping?: {
                       __typename?: 'FieldMapping';
                       recordType?: RelatedRecordType | null;
@@ -22463,11 +22411,92 @@ export type GetEnrollmentDetailsQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-            }>;
-          };
-          updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+            }> | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              id: string;
+              severity: ValidationSeverity;
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
+              valueLocalConstant?: string | null;
+              offset?: number | null;
+            }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              groupCode?: string | null;
+              initialSelected?: boolean | null;
+              helperText?: string | null;
+              numericValue?: number | null;
+            }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question?: string | null;
+              localConstant?: string | null;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              answerDate?: string | null;
+              compareQuestion?: string | null;
+            }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueQuestion?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
+              formula?: string | null;
+              autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
+              autofillWhen: Array<{
+                __typename?: 'EnableWhen';
+                question?: string | null;
+                localConstant?: string | null;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                answerDate?: string | null;
+                compareQuestion?: string | null;
+              }>;
+            }> | null;
+          }>;
         };
-      }>;
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      };
+    }>;
+    project: {
+      __typename?: 'Project';
+      hasUnits: boolean;
+      staffAssignmentsEnabled: boolean;
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
       access: {
         __typename?: 'ProjectAccess';
         id: string;
@@ -23014,6 +23043,7 @@ export type ExternalFormSubmissionFieldsFragment = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -23038,6 +23068,7 @@ export type ExternalFormSubmissionFieldsFragment = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -23062,6 +23093,7 @@ export type ExternalFormSubmissionFieldsFragment = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -23086,6 +23118,7 @@ export type ExternalFormSubmissionFieldsFragment = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -23110,6 +23143,7 @@ export type ExternalFormSubmissionFieldsFragment = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -23683,6 +23717,7 @@ export type GetExternalFormSubmissionQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -23707,6 +23742,7 @@ export type GetExternalFormSubmissionQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -23731,6 +23767,7 @@ export type GetExternalFormSubmissionQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -23755,6 +23792,7 @@ export type GetExternalFormSubmissionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -23779,6 +23817,7 @@ export type GetExternalFormSubmissionQuery = {
                   enableBehavior?: EnableBehavior | null;
                   rule?: any | null;
                   customRule?: any | null;
+                  editorUserIds?: Array<string> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -24262,6 +24301,7 @@ export type ItemFieldsFragment = {
   enableBehavior?: EnableBehavior | null;
   rule?: any | null;
   customRule?: any | null;
+  editorUserIds?: Array<string> | null;
   mapping?: {
     __typename?: 'FieldMapping';
     recordType?: RelatedRecordType | null;
@@ -24363,6 +24403,7 @@ export type FormDefinitionJsonFieldsFragment = {
     enableBehavior?: EnableBehavior | null;
     rule?: any | null;
     customRule?: any | null;
+    editorUserIds?: Array<string> | null;
     item?: Array<{
       __typename: 'FormItem';
       linkId: string;
@@ -24387,6 +24428,7 @@ export type FormDefinitionJsonFieldsFragment = {
       enableBehavior?: EnableBehavior | null;
       rule?: any | null;
       customRule?: any | null;
+      editorUserIds?: Array<string> | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -24411,6 +24453,7 @@ export type FormDefinitionJsonFieldsFragment = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -24435,6 +24478,7 @@ export type FormDefinitionJsonFieldsFragment = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -24459,6 +24503,7 @@ export type FormDefinitionJsonFieldsFragment = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             mapping?: {
               __typename?: 'FieldMapping';
               recordType?: RelatedRecordType | null;
@@ -24878,6 +24923,7 @@ export type FormDefinitionFieldsFragment = {
       enableBehavior?: EnableBehavior | null;
       rule?: any | null;
       customRule?: any | null;
+      editorUserIds?: Array<string> | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -24902,6 +24948,7 @@ export type FormDefinitionFieldsFragment = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -24926,6 +24973,7 @@ export type FormDefinitionFieldsFragment = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -24950,6 +24998,7 @@ export type FormDefinitionFieldsFragment = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -24974,6 +25023,7 @@ export type FormDefinitionFieldsFragment = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -25384,6 +25434,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
       enableBehavior?: EnableBehavior | null;
       rule?: any | null;
       customRule?: any | null;
+      editorUserIds?: Array<string> | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -25408,6 +25459,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -25432,6 +25484,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -25456,6 +25509,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -25480,6 +25534,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -25890,6 +25945,7 @@ export type FormDefinitionFieldsForEditorFragment = {
       enableBehavior?: EnableBehavior | null;
       rule?: any | null;
       customRule?: any | null;
+      editorUserIds?: Array<string> | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -25914,6 +25970,7 @@ export type FormDefinitionFieldsForEditorFragment = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -25938,6 +25995,7 @@ export type FormDefinitionFieldsForEditorFragment = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -25962,6 +26020,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -25986,6 +26045,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -26434,6 +26494,7 @@ export type UpdateFormDefinitionMutation = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -26458,6 +26519,7 @@ export type UpdateFormDefinitionMutation = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -26482,6 +26544,7 @@ export type UpdateFormDefinitionMutation = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -26506,6 +26569,7 @@ export type UpdateFormDefinitionMutation = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -26530,6 +26594,7 @@ export type UpdateFormDefinitionMutation = {
                   enableBehavior?: EnableBehavior | null;
                   rule?: any | null;
                   customRule?: any | null;
+                  editorUserIds?: Array<string> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -26965,6 +27030,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -26989,6 +27055,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -27013,6 +27080,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -27037,6 +27105,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -27061,6 +27130,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   enableBehavior?: EnableBehavior | null;
                   rule?: any | null;
                   customRule?: any | null;
+                  editorUserIds?: Array<string> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -27690,6 +27760,7 @@ export type GetFormDefinitionQuery = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -27714,6 +27785,7 @@ export type GetFormDefinitionQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -27738,6 +27810,7 @@ export type GetFormDefinitionQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -27762,6 +27835,7 @@ export type GetFormDefinitionQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -27786,6 +27860,7 @@ export type GetFormDefinitionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -28202,6 +28277,7 @@ export type GetStaticFormDefinitionQuery = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -28226,6 +28302,7 @@ export type GetStaticFormDefinitionQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -28250,6 +28327,7 @@ export type GetStaticFormDefinitionQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -28274,6 +28352,7 @@ export type GetStaticFormDefinitionQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -28298,6 +28377,7 @@ export type GetStaticFormDefinitionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -28715,6 +28795,7 @@ export type GetServiceFormDefinitionQuery = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -28739,6 +28820,7 @@ export type GetServiceFormDefinitionQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -28763,6 +28845,7 @@ export type GetServiceFormDefinitionQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -28787,6 +28870,7 @@ export type GetServiceFormDefinitionQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -28811,6 +28895,7 @@ export type GetServiceFormDefinitionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -29230,6 +29315,7 @@ export type GetAssessmentFormDefinitionQuery = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -29254,6 +29340,7 @@ export type GetAssessmentFormDefinitionQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -29278,6 +29365,7 @@ export type GetAssessmentFormDefinitionQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -29302,6 +29390,7 @@ export type GetAssessmentFormDefinitionQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -29326,6 +29415,7 @@ export type GetAssessmentFormDefinitionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -31471,6 +31561,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -31495,6 +31586,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -31519,6 +31611,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -31543,6 +31636,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -31567,6 +31661,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -31984,6 +32079,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -32008,6 +32104,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -32032,6 +32129,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -32056,6 +32154,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -32080,6 +32179,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -32490,6 +32590,7 @@ export type GetParsedFormDefinitionQuery = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -32514,6 +32615,7 @@ export type GetParsedFormDefinitionQuery = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -32538,6 +32640,7 @@ export type GetParsedFormDefinitionQuery = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -32562,6 +32665,7 @@ export type GetParsedFormDefinitionQuery = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -32586,6 +32690,7 @@ export type GetParsedFormDefinitionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -34502,6 +34607,7 @@ export type OccurrencePointFormFieldsFragment = {
         enableBehavior?: EnableBehavior | null;
         rule?: any | null;
         customRule?: any | null;
+        editorUserIds?: Array<string> | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -34526,6 +34632,7 @@ export type OccurrencePointFormFieldsFragment = {
           enableBehavior?: EnableBehavior | null;
           rule?: any | null;
           customRule?: any | null;
+          editorUserIds?: Array<string> | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -34550,6 +34657,7 @@ export type OccurrencePointFormFieldsFragment = {
             enableBehavior?: EnableBehavior | null;
             rule?: any | null;
             customRule?: any | null;
+            editorUserIds?: Array<string> | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -34574,6 +34682,7 @@ export type OccurrencePointFormFieldsFragment = {
               enableBehavior?: EnableBehavior | null;
               rule?: any | null;
               customRule?: any | null;
+              editorUserIds?: Array<string> | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -34598,6 +34707,7 @@ export type OccurrencePointFormFieldsFragment = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                editorUserIds?: Array<string> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -40926,13 +41036,6 @@ export const EnrollmentSummaryFieldsFragmentDoc = gql`
     canViewEnrollment
   }
 `;
-export const ProjectCocCountFragmentDoc = gql`
-  fragment ProjectCocCount on Project {
-    projectCocs {
-      nodesCount
-    }
-  }
-`;
 export const DataCollectionFeatureFieldsFragmentDoc = gql`
   fragment DataCollectionFeatureFields on DataCollectionFeature {
     id
@@ -41047,6 +41150,7 @@ export const ItemFieldsFragmentDoc = gql`
     }
     rule
     customRule
+    editorUserIds
   }
   ${PickListOptionFieldsFragmentDoc}
   ${EnableWhenFieldsFragmentDoc}
@@ -41091,6 +41195,13 @@ export const OccurrencePointFormFieldsFragmentDoc = gql`
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
+export const ProjectCocCountFragmentDoc = gql`
+  fragment ProjectCocCount on Project {
+    projectCocs {
+      nodesCount
+    }
+  }
+`;
 export const ProjectAccessFieldsFragmentDoc = gql`
   fragment ProjectAccessFields on ProjectAccess {
     id
@@ -41132,16 +41243,16 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     openEnrollmentSummary {
       ...EnrollmentSummaryFields
     }
+    dataCollectionFeatures {
+      ...DataCollectionFeatureFields
+    }
+    occurrencePointForms {
+      ...OccurrencePointFormFields
+    }
     project {
       ...ProjectNameAndType
       ...ProjectCocCount
       hasUnits
-      dataCollectionFeatures {
-        ...DataCollectionFeatureFields
-      }
-      occurrencePointForms {
-        ...OccurrencePointFormFields
-      }
       access {
         ...ProjectAccessFields
       }
@@ -41158,10 +41269,10 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   ${CustomDataElementFieldsFragmentDoc}
   ${EnrolledClientFieldsFragmentDoc}
   ${EnrollmentSummaryFieldsFragmentDoc}
-  ${ProjectNameAndTypeFragmentDoc}
-  ${ProjectCocCountFragmentDoc}
   ${DataCollectionFeatureFieldsFragmentDoc}
   ${OccurrencePointFormFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+  ${ProjectCocCountFragmentDoc}
   ${ProjectAccessFieldsFragmentDoc}
 `;
 export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`

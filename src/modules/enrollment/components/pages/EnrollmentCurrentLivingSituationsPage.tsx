@@ -15,6 +15,7 @@ import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CurrentLivingSituationFieldsFragment,
+  DataCollectionFeatureRole,
   DeleteCurrentLivingSituationDocument,
   GetEnrollmentCurrentLivingSituationsDocument,
   GetEnrollmentCurrentLivingSituationsQuery,
@@ -47,9 +48,13 @@ export const baseColumns = {
 };
 
 const EnrollmentCurrentLivingSituationsPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
+
+  const clsFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CurrentLivingSituation
+  );
 
   const evictCache = useCallback(() => {
     cache.evict({
@@ -58,7 +63,11 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     });
   }, [enrollmentId]);
 
-  const canEditCls = enrollment?.access?.canEditEnrollments || false;
+  const canEditCls =
+    (enrollment?.access?.canEditEnrollments &&
+      !!clsFeature &&
+      !clsFeature?.legacy) ||
+    false;
 
   const localConstants = useMemo(
     () => ({
@@ -95,7 +104,8 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     []
   );
 
-  if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  if (!enrollment || !enrollmentId || !clientId || !clsFeature)
+    return <NotFound />;
 
   return (
     <>

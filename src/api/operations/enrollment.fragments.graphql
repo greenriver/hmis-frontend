@@ -112,16 +112,16 @@ fragment AllEnrollmentDetails on Enrollment {
   openEnrollmentSummary {
     ...EnrollmentSummaryFields
   }
+  dataCollectionFeatures {
+    ...DataCollectionFeatureFields
+  }
+  occurrencePointForms {
+    ...OccurrencePointFormFields
+  }
   project {
     ...ProjectNameAndType
     ...ProjectCocCount
     hasUnits
-    dataCollectionFeatures {
-      ...DataCollectionFeatureFields
-    }
-    occurrencePointForms {
-      ...OccurrencePointFormFields
-    }
     access {
       ...ProjectAccessFields
     }

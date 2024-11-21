@@ -21,8 +21,6 @@ import {
   hasMeaningfulValue,
 } from '../form/util/formUtil';
 
-import { DashboardEnrollment } from './types';
-
 import { ColumnDef } from '@/components/elements/table/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
@@ -38,7 +36,6 @@ import {
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   DataCollectedAbout,
-  DataCollectionFeatureFieldsFragment,
   DisplayHook,
   EnrollmentFieldsFragment,
   EnrollmentOccurrencePointFieldsFragment,
@@ -48,7 +45,6 @@ import {
   NoYes,
   NoYesMissing,
   NoYesReasonsForMissingData,
-  OccurrencePointFormFieldsFragment,
   ProjectType,
   Race,
   RelationshipToHoH,
@@ -563,29 +559,6 @@ export const evaluateDataCollectedAbout = (
         `Unable to evaluate Data Collected About: ${dataCollectedAbout}`
       );
   }
-};
-
-export const occurrencePointCollectedForEnrollment = (
-  occurrencePoint: OccurrencePointFormFieldsFragment,
-  enrollment: DashboardEnrollment
-) => {
-  return evaluateDataCollectedAbout(
-    occurrencePoint.dataCollectedAbout,
-    enrollment.client,
-    enrollment.relationshipToHoH
-  );
-};
-
-export const featureEnabledForEnrollment = (
-  feature: DataCollectionFeatureFieldsFragment,
-  client: ClientNameDobVeteranFields,
-  relationshipToHoH: RelationshipToHoH
-) => {
-  return evaluateDataCollectedAbout(
-    feature.dataCollectedAbout,
-    client,
-    relationshipToHoH
-  );
 };
 
 export const relationshipToHohForDisplay = (

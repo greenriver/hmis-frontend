@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
@@ -20,10 +20,10 @@ import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHeader';
 import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnrollment';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
-import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
+  DataCollectionFeature,
   DataCollectionFeatureRole,
   EnrolledClientFieldsFragment,
 } from '@/types/gqlTypes';
@@ -44,18 +44,13 @@ const EnrollmentDashboard: React.FC = () => {
   const client = enrollment?.client;
 
   const enabledFeatures = useMemo(
-    () =>
-      enrollment
-        ? enrollment.project.dataCollectionFeatures
-            .filter((feature) =>
-              featureEnabledForEnrollment(
-                feature,
-                enrollment.client,
-                enrollment.relationshipToHoH
-              )
-            )
-            .map((r) => r.role)
-        : [],
+    () => enrollment?.dataCollectionFeatures.map((f) => f.role) || [],
+    [enrollment]
+  );
+
+  const getEnrollmentFeature = useCallback(
+    (role: DataCollectionFeatureRole) =>
+      enrollment?.dataCollectionFeatures.find((f) => f.role === role),
     [enrollment]
   );
 
@@ -70,11 +65,11 @@ const EnrollmentDashboard: React.FC = () => {
             client,
             overrideBreadcrumbTitles,
             enrollment,
-            enabledFeatures,
             enrollmentLoading: loading,
+            getEnrollmentFeature,
           }
         : undefined,
-    [client, enrollment, enabledFeatures, loading]
+    [client, enrollment, loading, getEnrollmentFeature]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
@@ -128,7 +123,9 @@ export type EnrollmentDashboardContext = {
   enrollment?: DashboardEnrollment;
   enrollmentLoading?: boolean; // this would indicate a re-loading, not the initial load
   overrideBreadcrumbTitles: (crumbs: any) => void;
-  enabledFeatures: DataCollectionFeatureRole[];
+  getEnrollmentFeature: (
+    role: DataCollectionFeatureRole
+  ) => DataCollectionFeature | void;
 };
 
 export function isEnrollmentDashboardContext(
