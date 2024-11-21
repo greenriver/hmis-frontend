@@ -25,7 +25,6 @@ import { FileFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 export type FileDialogProps = {
   file: Pick<FileFieldsFragment, 'url' | 'name' | 'contentType'> &
     Partial<Omit<FileFieldsFragment, 'url' | 'name' | 'contentType'>>;
-  actions?: React.ReactNode;
 } & DialogProps;
 
 const LoadingPreview: React.FC = () => (
@@ -126,8 +125,9 @@ const PdfPreview: React.FC<{ file: FileDialogProps['file'] }> = ({
   );
 };
 
-const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
-  const { clientId } = useSafeParams() as { clientId?: string };
+const WrappedPreview: React.FC<{ file: FileDialogProps['file'] }> = ({
+  file,
+}) => {
   const previewContent = useMemo(() => {
     if (
       file.contentType &&
@@ -182,84 +182,81 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
       );
     }
   }, [file]);
-  const pickListArgs = useMemo(() => ({ clientId }), [clientId]);
 
   return (
     <>
-      {!!file?.id && (
-        <ViewRecordDialog<FileFieldsFragment>
-          {...props}
-          record={file as FileFieldsFragment}
-          formRole={RecordFormRole.File}
-          title={file.name}
-          actions={actions}
-          pickListArgs={pickListArgs}
-        >
-          <Stack
-            width='100%'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Paper sx={{ width: '100%' }}>
-              <Typography p={2} variant='h6' component='p'>
-                File Preview
-              </Typography>
-              <Box
-                sx={(theme) => ({
-                  backgroundColor: theme.palette.grey[300],
-                  padding: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: `${theme.shape.borderRadius}px`,
-                  mx: 2,
-                  mb: 2,
-                })}
-              >
-                {previewContent}
-              </Box>
-            </Paper>
-          </Stack>
-        </ViewRecordDialog>
-      )}
-      {/* todo @martha! almost there but needs some refactoring. */}
-      {file && !file.id && (
-        <CommonDialog
-          maxWidth='md'
-          scroll='paper'
-          fullWidth
-          enableBackdropClick
-          {...props}
-        >
-          <DialogTitle>{file.name}</DialogTitle>
-          <DialogContent>
-            {/* todo @martha - check for accessibility */}
-            {/* todo @Martha don't repeat */}
-            <Typography p={2} variant='h6' component='p'>
-              File Preview
-            </Typography>
-            <Box
-              sx={(theme) => ({
-                backgroundColor: theme.palette.grey[300],
-                padding: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: `${theme.shape.borderRadius}px`,
-                mx: 2,
-                mb: 2,
-              })}
-            >
-              {previewContent}
-            </Box>
-          </DialogContent>
-        </CommonDialog>
-      )}
+      <Typography p={2} variant='h6' component='p'>
+        File Preview
+      </Typography>
+      <Box
+        sx={(theme) => ({
+          backgroundColor: theme.palette.grey[300],
+          padding: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: `${theme.shape.borderRadius}px`,
+          mx: 2,
+          mb: 2,
+        })}
+      >
+        {previewContent}
+      </Box>
     </>
   );
 };
 
-export default FileDialog;
+export const FileDialog: React.FC<FileDialogProps> = ({ file, ...props }) => {
+  return (
+    <CommonDialog
+      maxWidth='md'
+      scroll='paper'
+      fullWidth
+      enableBackdropClick
+      {...props}
+    >
+      <DialogTitle>{file.name}</DialogTitle>
+      <DialogContent>
+        <WrappedPreview file={file} />
+      </DialogContent>
+    </CommonDialog>
+  );
+};
+
+export type FileRecordDialogProps = {
+  file: FileFieldsFragment;
+  actions?: React.ReactNode;
+} & DialogProps;
+const FileRecordDialog: React.FC<FileRecordDialogProps> = ({
+  file,
+  actions,
+  ...props
+}) => {
+  const { clientId } = useSafeParams() as { clientId?: string };
+  const pickListArgs = useMemo(() => ({ clientId }), [clientId]);
+
+  return (
+    <ViewRecordDialog<FileFieldsFragment>
+      {...props}
+      record={file as FileFieldsFragment}
+      formRole={RecordFormRole.File}
+      title={file.name}
+      actions={actions}
+      pickListArgs={pickListArgs}
+    >
+      <Stack
+        width='100%'
+        display='flex'
+        alignItems='center'
+        justifyContent='center'
+      >
+        <Paper sx={{ width: '100%' }}>
+          <WrappedPreview file={file} />
+        </Paper>
+      </Stack>
+    </ViewRecordDialog>
+  );
+};
+
+export default FileRecordDialog;

@@ -12,7 +12,9 @@ import {
 } from '@mui/material';
 import React, { ReactNode, useMemo, useState } from 'react';
 import theme from '@/config/theme';
-import FileDialog from '@/modules/clientFiles/components/FileModal';
+import FileRecordDialog, {
+  FileDialog,
+} from '@/modules/clientFiles/components/FileModal';
 import {
   formatRelativeDate,
   parseHmisDateString,
@@ -128,12 +130,7 @@ const FileSummary: React.FC<FileSummaryProps> = ({
             View
           </Button>
         )}
-        <Button // todo @Martha - download and preview sometimes doesn't work for existing files! IT IS PROBABLY BOTH FOR THE SAME REASON! PROBABLY BECAUSE IT EXPIRES!
-          component='a'
-          href={url}
-          target='_blank'
-          variant='text'
-        >
+        <Button component='a' href={url} target='_blank' variant='text'>
           Download
         </Button>
         {onRemove && (
@@ -147,7 +144,9 @@ const FileSummary: React.FC<FileSummaryProps> = ({
   );
 };
 
-// todo @Martha comments
+// CurrentFileSummary and ExistingFileSummary provide wrappers around FileSummary for rendering with a file
+// that's just now been uploaded (type File) or a file that was uploaded previously and saved as a File record
+// in our db (type FileFieldsFragment).
 export const CurrentFileSummary: React.FC<{
   file: File;
   variant: FileSummaryProps['variant'];
@@ -214,7 +213,7 @@ export const ExistingFileSummary: React.FC<{
         onRemove={onRemove}
         openPreview={() => setPreviewOpen(true)}
       />
-      <FileDialog
+      <FileRecordDialog
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
         file={file}
@@ -222,5 +221,3 @@ export const ExistingFileSummary: React.FC<{
     </>
   );
 };
-
-export default FileSummary;

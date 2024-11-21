@@ -3,7 +3,7 @@ import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import useFileActions from '../hooks/useFileActions';
-import FileDialog from './FileModal';
+import FileRecordDialog from './FileModal';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
@@ -171,7 +171,7 @@ const ClientFilesPage = () => {
         />
       </Paper>
       {viewingFile && (
-        <FileDialog
+        <FileRecordDialog
           open={!!viewingFile}
           onClose={() => setViewingFile(undefined)}
           file={viewingFile}

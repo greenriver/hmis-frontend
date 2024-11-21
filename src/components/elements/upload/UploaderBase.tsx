@@ -85,7 +85,11 @@ const Uploader: React.FC<UploaderProps> = ({
   maxSize = DEFAULT_MAX_BYTES,
   multiple = false,
 }) => {
-  // todo @Martha - comments
+  // The uploader accepts a `files` argument which can contain either:
+  // - a STRING which points at a blob ID of a file that has been uploaded within this session, or
+  // - a FileFieldsFragment record which points at a file record in our database, uploaded during a previous session.
+  // `existingFiles` filters the list to only those files that were uploaded some previous time, so we can render them.
+  // The files uploaded during this session, we render this component's internal state, `currentFiles`.
   const existingFiles = useMemo(
     () => ensureArray(files).filter((f) => typeof f !== 'string'),
     [files]
@@ -101,7 +105,7 @@ const Uploader: React.FC<UploaderProps> = ({
   const uniqueNameValidator = useCallback(
     (file: File) => {
       const existingNames = [
-        ...existingFiles.map((f) => f.name),
+        ...existingFiles.map((f) => (f as FileFieldsFragment).name),
         ...currentFiles.map((f) => f.name),
       ];
 
@@ -275,8 +279,10 @@ const Uploader: React.FC<UploaderProps> = ({
           )}
           {!loading && !multiple && existingFiles[0] && (
             <ExistingFileSummary
-              file={existingFiles[0]}
-              onRemove={() => removeFile(existingFiles[0])}
+              file={existingFiles[0] as FileFieldsFragment}
+              onRemove={() =>
+                removeFile(existingFiles[0] as FileFieldsFragment)
+              }
               variant='stacked'
             />
           )}
@@ -295,18 +301,16 @@ const Uploader: React.FC<UploaderProps> = ({
       {showFileList && (
         <Card sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
           <Stack divider={<Divider />}>
-            {existingFiles
-              .filter((file) => !!file?.id) // todo @martha comments
-              .map((file) => {
-                return (
-                  <ExistingFileSummary
-                    key={file.id}
-                    file={file}
-                    onRemove={() => removeFile(file)}
-                    variant='row'
-                  />
-                );
-              })}
+            {existingFiles.map((file) => {
+              return (
+                <ExistingFileSummary
+                  key={(file as FileFieldsFragment).id} // it will always be a FileFieldsFragment, ts is just confused
+                  file={file as FileFieldsFragment}
+                  onRemove={() => removeFile(file as FileFieldsFragment)}
+                  variant='row'
+                />
+              );
+            })}
             {currentFiles.map((file) => {
               return (
                 <CurrentFileSummary
@@ -324,7 +328,10 @@ const Uploader: React.FC<UploaderProps> = ({
   );
 };
 
-// todo @martha comments
+/*
+ * SingleUploader provides a wrapper api around Uploader for callers that want
+ * an uploader that only accepts one file at a time. (E.g. Client Image upload)
+ */
 export const SingleUploader: React.FC<
   Omit<UploaderProps, 'multiple' | 'onUpload'> & {
     onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
