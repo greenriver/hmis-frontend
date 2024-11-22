@@ -3367,6 +3367,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
+      {
+        name: 'managedInVersionControl',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -3395,6 +3403,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'disabledDisplay',
         type: { kind: 'ENUM', name: 'DisabledDisplay', ofType: null },
+      },
+      {
+        name: 'editorUserIds',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
       },
       {
         name: 'enableBehavior',
@@ -4795,7 +4815,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageInventory',
+        name: 'canManageOutgoingReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -4803,7 +4823,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageOutgoingReferrals',
+        name: 'canManageUnits',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -4836,6 +4856,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewPartialSsn',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewUnits',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5122,14 +5150,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageInventory',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canManageOutgoingReferrals',
         type: {
           kind: 'NON_NULL',
@@ -5147,6 +5167,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageScanCards',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageUnits',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5299,6 +5327,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewProject',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewUnits',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -7679,21 +7715,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ServiceTypeInput',
     args: [
-      {
-        name: 'name',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
+      { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'serviceCategoryId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'serviceCategoryName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'supportsBulkAssignment',

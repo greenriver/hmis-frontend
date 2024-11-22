@@ -756,14 +756,16 @@ export const formValueToGqlValue = (
     if (typeof date === 'string') {
       date = parseHmisDateString(value);
     }
-    if (date instanceof Date) return formatDateForGql(date) || undefined;
-    // This isn't parseable/formattable into a date, return undefined to ignore it
-    return undefined;
+    if (date instanceof Date) return formatDateForGql(date) || value;
+    // This isn't parseable/formattable into a date, so it may cause a backend validation error.
+    // Still, return it, so that it doesn't get swallowed without the user's knowledge
+    return value;
   }
 
   if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
     const num = Number(value);
-    return Number.isNaN(num) ? undefined : num;
+    // See note above about unparseable date values; the same logic applies here
+    return Number.isNaN(num) ? value : num;
   }
 
   if (

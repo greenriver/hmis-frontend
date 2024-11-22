@@ -1,6 +1,5 @@
 import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
-
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
@@ -8,15 +7,20 @@ import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { DataCollectionFeatureRole } from '@/types/gqlTypes';
+import {
+  DataCollectionFeature,
+  DataCollectionFeatureRole,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentQuickActions = ({
   enrollment,
-  enabledFeatures,
+  getEnrollmentFeature,
 }: {
   enrollment: DashboardEnrollment;
-  enabledFeatures: DataCollectionFeatureRole[];
+  getEnrollmentFeature: (
+    role: DataCollectionFeatureRole
+  ) => DataCollectionFeature | void;
 }) => {
   const { globalFeatureFlags } = useHmisAppSettings();
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
@@ -28,8 +32,13 @@ const EnrollmentQuickActions = ({
       clientId: enrollment.client.id,
     });
 
+  const serviceFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.Service
+  );
+
   const canRecordService =
-    enabledFeatures.includes(DataCollectionFeatureRole.Service) &&
+    !!serviceFeature &&
+    !serviceFeature.legacy &&
     enrollment.access.canEditEnrollments;
 
   const canEditClient = enrollment.client.access.canEditClient;

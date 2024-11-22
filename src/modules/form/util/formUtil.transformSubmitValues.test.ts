@@ -215,20 +215,6 @@ describe('transformSubmitValues', () => {
     expect(result).toStrictEqual(mapValues(values, () => null));
   });
 
-  it('ignores NaNs for numeric types', () => {
-    const values = {
-      '1.4': 'abc',
-      '1.5': '123abc',
-    };
-    const result = transformSubmitValues({
-      definition,
-      values,
-      keyByFieldName: true,
-    });
-
-    expect(result).toStrictEqual({});
-  });
-
   it('replaces empty strings and undefined with nulls', () => {
     const values = {
       '1.1': '',
