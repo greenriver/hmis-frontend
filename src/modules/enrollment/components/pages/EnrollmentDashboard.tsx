@@ -21,6 +21,7 @@ import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHe
 import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnrollment';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
 import { DashboardEnrollment } from '@/modules/hmis/types';
+import LocalVersionCoordinationPrompt from '@/modules/localVersionCoordination/LocalVersionCoordinationPrompt';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   DataCollectionFeature,
@@ -112,6 +113,16 @@ const EnrollmentDashboard: React.FC = () => {
       focusMode={focusMode}
     >
       <Container maxWidth='xl' disableGutters>
+        <LocalVersionCoordinationPrompt
+          recordType='Enrollment'
+          recordId={enrollment.id}
+          currentVersion={enrollment.lockVersion}
+        />
+        <LocalVersionCoordinationPrompt
+          recordType='Client'
+          recordId={client.id}
+          currentVersion={client.lockVersion}
+        />
         <Outlet context={outletContext} />
       </Container>
     </DashboardContentContainer>
