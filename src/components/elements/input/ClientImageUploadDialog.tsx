@@ -15,7 +15,7 @@ import React, { useCallback, useState } from 'react';
 
 import CommonDialog from '../CommonDialog';
 import LoadingButton from '../LoadingButton';
-import { SingleUploader } from '../upload/UploaderBase';
+import { SingleUploader } from '../upload/Uploader';
 
 import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
 import {

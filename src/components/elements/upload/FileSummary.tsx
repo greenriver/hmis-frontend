@@ -1,46 +1,10 @@
 import { HighlightOff as HighlightOffIcon } from '@mui/icons-material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import {
-  alpha,
-  Box,
-  Button,
-  Link,
-  Stack,
-  SvgIconProps,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import React, { ReactNode, useMemo, useState } from 'react';
-import theme from '@/config/theme';
-import FileRecordDialog, {
-  FileDialog,
-} from '@/modules/clientFiles/components/FileModal';
-import {
-  formatRelativeDate,
-  parseHmisDateString,
-} from '@/modules/hmis/hmisUtil';
-import { FileFieldsFragment } from '@/types/gqlTypes';
+import { Box, Button, Link, Stack, Tooltip, Typography } from '@mui/material';
+import React, { ReactNode, useMemo } from 'react';
+import FilePreviewIcon from '@/components/elements/upload/FilePreviewIcon';
 
-export const FilePreviewIcon: React.FC<{
-  IconComponent: React.ComponentType<SvgIconProps>;
-}> = ({ IconComponent }) => (
-  <Box
-    sx={{
-      backgroundColor: (theme) => alpha(theme.palette.primary.light, 0.12),
-      lineHeight: 0,
-      display: 'inline-flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      p: 1,
-      borderRadius: 100,
-      mb: 0.5,
-    }}
-  >
-    <IconComponent color='primary' />
-  </Box>
-);
-
-type FileSummaryProps = {
+export type FileSummaryProps = {
   fileName: string;
   url: string;
   showThumbnail?: boolean;
@@ -144,80 +108,4 @@ const FileSummary: React.FC<FileSummaryProps> = ({
   );
 };
 
-// CurrentFileSummary and ExistingFileSummary provide wrappers around FileSummary for rendering with a file
-// that's just now been uploaded (type File) or a file that was uploaded previously and saved as a File record
-// in our db (type FileFieldsFragment).
-export const CurrentFileSummary: React.FC<{
-  file: File;
-  variant: FileSummaryProps['variant'];
-  onRemove?: FileSummaryProps['onRemove'];
-}> = ({ file, variant, onRemove }) => {
-  const url = useMemo(() => URL.createObjectURL(file), [file]);
-  const [previewOpen, setPreviewOpen] = useState(false);
-
-  return (
-    <>
-      <FileSummary
-        fileName={file.name}
-        showThumbnail={!!file.type.match(/^image/)}
-        url={url}
-        info={
-          <Typography
-            variant='body2'
-            sx={{ color: theme.palette.warning.main }}
-          >
-            (unsaved)
-          </Typography>
-        }
-        variant={variant}
-        onRemove={onRemove}
-        openPreview={() => setPreviewOpen(true)}
-      />
-      <FileDialog
-        open={previewOpen}
-        onClose={() => setPreviewOpen(false)}
-        file={{
-          url: url,
-          contentType: file.type,
-          name: file.name,
-        }}
-      />
-    </>
-  );
-};
-
-export const ExistingFileSummary: React.FC<{
-  file: FileFieldsFragment;
-  variant: FileSummaryProps['variant'];
-  onRemove?: FileSummaryProps['onRemove'];
-}> = ({ file, variant, onRemove }) => {
-  const date = parseHmisDateString(file.dateCreated);
-  const [previewOpen, setPreviewOpen] = useState(false);
-
-  return (
-    <>
-      <FileSummary
-        fileName={file.name}
-        showThumbnail={Boolean(
-          file.contentType && !!file.contentType.match(/^image/)
-        )}
-        url={file.url || ''}
-        info={
-          date && (
-            <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-              Uploaded {formatRelativeDate(date)}
-            </Typography>
-          )
-        }
-        variant={variant}
-        onRemove={onRemove}
-        openPreview={() => setPreviewOpen(true)}
-      />
-      <FileRecordDialog
-        open={previewOpen}
-        onClose={() => setPreviewOpen(false)}
-        file={file}
-      />
-    </>
-  );
-};
+export default FileSummary;
