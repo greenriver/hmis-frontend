@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material';
 import React, { useState } from 'react';
+import FileRecordDialog from '@/components/elements/upload/fileDialog/FileRecordDialog';
 import FileSummary, {
   FileSummaryProps,
-} from '@/components/elements/upload/FileSummary';
-import FileRecordDialog from '@/modules/clientFiles/components/FileModal';
+} from '@/components/elements/upload/fileSummary/FileSummary';
 import {
   formatRelativeDate,
   parseHmisDateString,
@@ -11,7 +11,7 @@ import {
 import { FileFieldsFragment } from '@/types/gqlTypes';
 
 // Wrapper around FileSummary for representing a FileFieldsFragment, aka a file that has already been saved as a File record in our db
-const SavedFileSummary: React.FC<{
+const FileRecordSummary: React.FC<{
   file: FileFieldsFragment;
   variant: FileSummaryProps['variant'];
   onRemove?: FileSummaryProps['onRemove'];
@@ -47,4 +47,4 @@ const SavedFileSummary: React.FC<{
   );
 };
 
-export default SavedFileSummary;
+export default FileRecordSummary;

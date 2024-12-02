@@ -3,11 +3,11 @@ import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import useFileActions from '../hooks/useFileActions';
-import FileRecordDialog from './FileModal';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
+import FileRecordDialog from '@/components/elements/upload/fileDialog/FileRecordDialog';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';

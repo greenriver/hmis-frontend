@@ -2,25 +2,16 @@ import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 import {
   Box,
   CircularProgress,
-  DialogContent,
   DialogProps,
-  DialogTitle,
   Link,
   Pagination,
   Paper,
   Stack,
   Typography,
 } from '@mui/material';
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.js?url';
 import React, { useMemo, useState } from 'react';
-import { pdfjs, Document, Page } from 'react-pdf';
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
-
-import CommonDialog from '@/components/elements/CommonDialog';
-import useSafeParams from '@/hooks/useSafeParams';
-import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
-import { FileFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
+import { Document, Page } from 'react-pdf';
+import { FileFieldsFragment } from '@/types/gqlTypes';
 
 export type FileDialogProps = {
   file: Pick<FileFieldsFragment, 'url' | 'name' | 'contentType'> &
@@ -125,9 +116,7 @@ const PdfPreview: React.FC<{ file: FileDialogProps['file'] }> = ({
   );
 };
 
-const WrappedPreview: React.FC<{ file: FileDialogProps['file'] }> = ({
-  file,
-}) => {
+const FileDialog: React.FC<{ file: FileDialogProps['file'] }> = ({ file }) => {
   const previewContent = useMemo(() => {
     if (
       file.contentType &&
@@ -207,56 +196,4 @@ const WrappedPreview: React.FC<{ file: FileDialogProps['file'] }> = ({
   );
 };
 
-export const FileDialog: React.FC<FileDialogProps> = ({ file, ...props }) => {
-  return (
-    <CommonDialog
-      maxWidth='md'
-      scroll='paper'
-      fullWidth
-      enableBackdropClick
-      {...props}
-    >
-      <DialogTitle>{file.name}</DialogTitle>
-      <DialogContent>
-        <WrappedPreview file={file} />
-      </DialogContent>
-    </CommonDialog>
-  );
-};
-
-export type FileRecordDialogProps = {
-  file: FileFieldsFragment;
-  actions?: React.ReactNode;
-} & DialogProps;
-const FileRecordDialog: React.FC<FileRecordDialogProps> = ({
-  file,
-  actions,
-  ...props
-}) => {
-  const { clientId } = useSafeParams() as { clientId?: string };
-  const pickListArgs = useMemo(() => ({ clientId }), [clientId]);
-
-  return (
-    <ViewRecordDialog<FileFieldsFragment>
-      {...props}
-      record={file as FileFieldsFragment}
-      formRole={RecordFormRole.File}
-      title={file.name}
-      actions={actions}
-      pickListArgs={pickListArgs}
-    >
-      <Stack
-        width='100%'
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-      >
-        <Paper sx={{ width: '100%' }}>
-          <WrappedPreview file={file} />
-        </Paper>
-      </Stack>
-    </ViewRecordDialog>
-  );
-};
-
-export default FileRecordDialog;
+export default FileDialog;

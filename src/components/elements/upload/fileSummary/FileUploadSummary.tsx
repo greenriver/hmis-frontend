@@ -1,13 +1,13 @@
 import { Typography } from '@mui/material';
 import React, { useMemo, useState } from 'react';
+import FileUploadDialog from '@/components/elements/upload/fileDialog/FileUploadDialog';
 import FileSummary, {
   FileSummaryProps,
-} from '@/components/elements/upload/FileSummary';
+} from '@/components/elements/upload/fileSummary/FileSummary';
 import theme from '@/config/theme';
-import { FileDialog } from '@/modules/clientFiles/components/FileModal';
 
 // Wrapper around FileSummary for representing a File, aka a file that has just now been uploaded to Active Storage but doesn't yet exist as a File record in our db.
-const UploadedFileSummary: React.FC<{
+const FileUploadSummary: React.FC<{
   file: File;
   variant: FileSummaryProps['variant'];
   onRemove?: FileSummaryProps['onRemove'];
@@ -33,7 +33,7 @@ const UploadedFileSummary: React.FC<{
         onRemove={onRemove}
         openPreview={() => setPreviewOpen(true)}
       />
-      <FileDialog
+      <FileUploadDialog
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
         file={{
@@ -46,4 +46,4 @@ const UploadedFileSummary: React.FC<{
   );
 };
 
-export default UploadedFileSummary;
+export default FileUploadSummary;

@@ -20,8 +20,8 @@ import {
 import useDirectUpload from './useDirectUpload';
 
 import FilePreviewIcon from '@/components/elements/upload/FilePreviewIcon';
-import SavedFileSummary from '@/components/elements/upload/SavedFileSummary';
-import UploadedFileSummary from '@/components/elements/upload/UploadedFileSummary';
+import FileRecordSummary from '@/components/elements/upload/fileSummary/FileRecordSummary';
+import FileUploadSummary from '@/components/elements/upload/fileSummary/FileUploadSummary';
 import { DirectUpload, FileFieldsFragment } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
@@ -268,14 +268,14 @@ const Uploader: React.FC<UploaderProps> = ({
               </>
             )}
           {!loading && !multiple && currentFiles[0] && (
-            <UploadedFileSummary
+            <FileUploadSummary
               file={currentFiles[0]}
               onRemove={() => removeFile(currentFiles[0])}
               variant='stacked'
             />
           )}
           {!loading && !multiple && existingFiles[0] && (
-            <SavedFileSummary
+            <FileRecordSummary
               file={existingFiles[0] as FileFieldsFragment}
               onRemove={() =>
                 removeFile(existingFiles[0] as FileFieldsFragment)
@@ -300,7 +300,7 @@ const Uploader: React.FC<UploaderProps> = ({
           <Stack divider={<Divider />}>
             {existingFiles.map((file) => {
               return (
-                <SavedFileSummary
+                <FileRecordSummary
                   key={(file as FileFieldsFragment).id} // it will always be a FileFieldsFragment, ts is just confused
                   file={file as FileFieldsFragment}
                   onRemove={() => removeFile(file as FileFieldsFragment)}
@@ -310,7 +310,7 @@ const Uploader: React.FC<UploaderProps> = ({
             })}
             {currentFiles.map((file) => {
               return (
-                <UploadedFileSummary
+                <FileUploadSummary
                   key={file.name} // we enforce uniqueness on file names
                   file={file}
                   onRemove={() => removeFile(file)}
