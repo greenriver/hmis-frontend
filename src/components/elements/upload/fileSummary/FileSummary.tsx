@@ -1,13 +1,15 @@
 import { HighlightOff as HighlightOffIcon } from '@mui/icons-material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import { Box, Button, Link, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Link, Stack, Tooltip, Typography } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
+import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import FilePreviewIcon from '@/components/elements/upload/FilePreviewIcon';
 
 export type FileSummaryProps = {
   fileName: string;
   url: string;
   showThumbnail?: boolean;
+  permitDownload?: boolean;
   onRemove?: VoidFunction;
   openPreview?: VoidFunction;
   info?: ReactNode;
@@ -22,6 +24,7 @@ const FileSummary: React.FC<FileSummaryProps> = ({
   info,
   variant = 'stacked',
   showThumbnail = false,
+  permitDownload = true,
 }) => {
   const preview = useMemo(() => {
     // For the "row" variant, make the preview the same size as the FilePreviewIcon, so row heights are the same
@@ -46,6 +49,22 @@ const FileSummary: React.FC<FileSummaryProps> = ({
       </>
     );
   }, [showThumbnail, url, variant]);
+
+  const menuItems = useMemo(
+    () => [
+      ...(openPreview
+        ? [{ key: 'View', title: 'View', onClick: openPreview }]
+        : []),
+      ...(permitDownload
+        ? [{ key: 'Download', title: 'Download', to: url }]
+        : []),
+      // It's intentional that we use Delete here in the 'row' variant, vs Clear in the 'stacked' variant
+      ...(onRemove
+        ? [{ key: 'Delete', title: 'Delete', onClick: onRemove }]
+        : []),
+    ],
+    [onRemove, openPreview, permitDownload, url]
+  );
 
   if (variant === 'stacked') {
     return (
@@ -89,22 +108,9 @@ const FileSummary: React.FC<FileSummaryProps> = ({
         </Typography>
         {info}
       </Stack>
-      <Stack spacing={1} direction='row' alignItems='center'>
-        {openPreview && (
-          <Button variant='text' onClick={openPreview}>
-            View
-          </Button>
-        )}
-        <Button component='a' href={url} target='_blank' variant='text'>
-          Download
-        </Button>
-        {onRemove && (
-          // It's intentional that we use Delete here in the 'row' variant, vs Clear in the 'stacked' variant
-          <Button variant='text' onClick={onRemove}>
-            Delete
-          </Button>
-        )}
-      </Stack>
+      {menuItems.length && (
+        <CommonMenuButton iconButton title='File Actions' items={menuItems} />
+      )}
     </Stack>
   );
 };

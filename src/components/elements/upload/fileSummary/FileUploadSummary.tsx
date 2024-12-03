@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material';
-import React, { useMemo, useState } from 'react';
-import FileUploadDialog from '@/components/elements/upload/fileDialog/FileUploadDialog';
+import React, { useMemo } from 'react';
 import FileSummary, {
   FileSummaryProps,
 } from '@/components/elements/upload/fileSummary/FileSummary';
@@ -13,7 +12,6 @@ const FileUploadSummary: React.FC<{
   onRemove?: FileSummaryProps['onRemove'];
 }> = ({ file, variant, onRemove }) => {
   const url = useMemo(() => URL.createObjectURL(file), [file]);
-  const [previewOpen, setPreviewOpen] = useState(false);
 
   return (
     <>
@@ -31,16 +29,7 @@ const FileUploadSummary: React.FC<{
         }
         variant={variant}
         onRemove={onRemove}
-        openPreview={() => setPreviewOpen(true)}
-      />
-      <FileUploadDialog
-        open={previewOpen}
-        onClose={() => setPreviewOpen(false)}
-        file={{
-          url: url,
-          contentType: file.type,
-          name: file.name,
-        }}
+        permitDownload={false}
       />
     </>
   );
