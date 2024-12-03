@@ -626,7 +626,6 @@ export type Client = {
   firstName?: Maybe<Scalars['String']['output']>;
   gender: Array<Gender>;
   healthAndDvs: HealthAndDvsPaginated;
-  /** Meets the definition for HUD chronically homeless as of today (time of API request) */
   hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<ClientImage>;
@@ -5799,7 +5798,6 @@ export type Query = {
   esgFundingReport: Array<EsgFundingService>;
   externalFormSubmission?: Maybe<ExternalFormSubmission>;
   file?: Maybe<File>;
-  fileBlobs?: Maybe<Array<DirectUpload>>;
   formDefinition?: Maybe<FormDefinition>;
   formIdentifier?: Maybe<FormIdentifier>;
   formIdentifiers: FormIdentifiersPaginated;
@@ -5903,10 +5901,6 @@ export type QueryExternalFormSubmissionArgs = {
 
 export type QueryFileArgs = {
   id: Scalars['ID']['input'];
-};
-
-export type QueryFileBlobsArgs = {
-  ids: Array<Scalars['ID']['input']>;
 };
 
 export type QueryFormDefinitionArgs = {
@@ -24240,22 +24234,6 @@ export type FileFieldsFragment = {
     lastName?: string | null;
     email: string;
   } | null;
-};
-
-export type GetFileBlobsQueryVariables = Exact<{
-  ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
-}>;
-
-export type GetFileBlobsQuery = {
-  __typename?: 'Query';
-  fileBlobs?: Array<{
-    __typename?: 'DirectUpload';
-    filename: string;
-    headers: string;
-    url: string;
-    blobId: string;
-    signedBlobId: string;
-  }> | null;
 };
 
 export type ValidationErrorFieldsFragment = {
@@ -47906,87 +47884,6 @@ export type GetExternalFormSubmissionSuspenseQueryHookResult = ReturnType<
 export type GetExternalFormSubmissionQueryResult = Apollo.QueryResult<
   GetExternalFormSubmissionQuery,
   GetExternalFormSubmissionQueryVariables
->;
-export const GetFileBlobsDocument = gql`
-  query GetFileBlobs($ids: [ID!]!) {
-    fileBlobs(ids: $ids) {
-      filename
-      headers
-      url
-      blobId
-      signedBlobId
-    }
-  }
-`;
-
-/**
- * __useGetFileBlobsQuery__
- *
- * To run a query within a React component, call `useGetFileBlobsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFileBlobsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetFileBlobsQuery({
- *   variables: {
- *      ids: // value for 'ids'
- *   },
- * });
- */
-export function useGetFileBlobsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetFileBlobsQuery,
-    GetFileBlobsQueryVariables
-  > &
-    (
-      | { variables: GetFileBlobsQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetFileBlobsQuery, GetFileBlobsQueryVariables>(
-    GetFileBlobsDocument,
-    options
-  );
-}
-export function useGetFileBlobsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetFileBlobsQuery,
-    GetFileBlobsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetFileBlobsQuery, GetFileBlobsQueryVariables>(
-    GetFileBlobsDocument,
-    options
-  );
-}
-export function useGetFileBlobsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetFileBlobsQuery,
-    GetFileBlobsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetFileBlobsQuery, GetFileBlobsQueryVariables>(
-    GetFileBlobsDocument,
-    options
-  );
-}
-export type GetFileBlobsQueryHookResult = ReturnType<
-  typeof useGetFileBlobsQuery
->;
-export type GetFileBlobsLazyQueryHookResult = ReturnType<
-  typeof useGetFileBlobsLazyQuery
->;
-export type GetFileBlobsSuspenseQueryHookResult = ReturnType<
-  typeof useGetFileBlobsSuspenseQuery
->;
-export type GetFileBlobsQueryResult = Apollo.QueryResult<
-  GetFileBlobsQuery,
-  GetFileBlobsQueryVariables
 >;
 export const UpdateFormDefinitionDocument = gql`
   mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {

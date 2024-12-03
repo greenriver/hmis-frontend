@@ -4927,7 +4927,7 @@
           },
           {
             "name": "hudChronic",
-            "description": "Meets the definition for HUD chronically homeless as of today (time of API request)",
+            "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -37778,51 +37778,6 @@
               "kind": "OBJECT",
               "name": "File",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "fileBlobs",
-            "description": null,
-            "args": [
-              {
-                "name": "ids",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "SCALAR",
-                        "name": "ID",
-                        "ofType": null
-                      }
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "DirectUpload",
-                  "ofType": null
-                }
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null
