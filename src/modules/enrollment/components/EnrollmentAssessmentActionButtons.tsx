@@ -6,7 +6,7 @@ import { useAssessmentEligibilities } from '../hooks/useAssessmentEligibilities'
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import CommonMenuButton, {
-  NavMenuItem,
+  CommonMenuItem,
 } from '@/components/elements/CommonMenuButton';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
@@ -77,7 +77,7 @@ const NewAssessmentMenu: React.FC<
     [clientId, enrollmentId]
   );
 
-  const items: NavMenuItem[] = useMemo(
+  const items: CommonMenuItem[] = useMemo(
     () =>
       assessmentEligibilities.map(({ id, title, role, formDefinitionId }) => ({
         key: id,

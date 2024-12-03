@@ -53,17 +53,38 @@ const FileSummary: React.FC<FileSummaryProps> = ({
   const menuItems = useMemo(
     () => [
       ...(openPreview
-        ? [{ key: 'View', title: 'View', onClick: openPreview }]
+        ? [
+            {
+              key: 'View',
+              title: 'View',
+              onClick: openPreview,
+              ariaLabel: `View ${fileName}`,
+            },
+          ]
         : []),
       ...(permitDownload
-        ? [{ key: 'Download', title: 'Download', to: url }]
+        ? [
+            {
+              key: 'Download',
+              title: 'Download',
+              to: url,
+              ariaLabel: `Download ${fileName}`,
+            },
+          ]
         : []),
       // It's intentional that we use Delete here in the 'row' variant, vs Clear in the 'stacked' variant
       ...(onRemove
-        ? [{ key: 'Delete', title: 'Delete', onClick: onRemove }]
+        ? [
+            {
+              key: 'Delete',
+              title: 'Delete',
+              onClick: onRemove,
+              ariaLabel: `Delete ${fileName}`,
+            },
+          ]
         : []),
     ],
-    [onRemove, openPreview, permitDownload, url]
+    [onRemove, openPreview, permitDownload, url, fileName]
   );
 
   if (variant === 'stacked') {

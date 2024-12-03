@@ -415,19 +415,21 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <LabelWithContent label={item.text} helperText={item.helperText}>
             {item.repeats ? (
               <Uploader
+                multiple={true}
                 id={linkId}
                 files={value}
                 image
                 onChange={onChangeValue}
-                multiple={true}
+                ariaLabel={item.text}
               />
             ) : (
               <Uploader
+                multiple={false}
                 id={linkId}
                 file={value}
                 image
                 onChange={onChangeValue}
-                multiple={false}
+                ariaLabel={item.text}
               />
             )}
           </LabelWithContent>
@@ -443,6 +445,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
                 id={linkId}
                 files={value}
                 onChange={onChangeValue}
+                ariaLabel={item.text}
               />
             ) : (
               <Uploader
@@ -450,6 +453,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
                 id={linkId}
                 file={value}
                 onChange={onChangeValue}
+                ariaLabel={item.text}
               />
             )}
           </LabelWithContent>

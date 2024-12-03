@@ -9,8 +9,9 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import { compact, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
 import useDirectUpload from './useDirectUpload';
 
@@ -61,6 +62,7 @@ export type UploaderProps = {
   image?: boolean;
   maxSize?: number;
   id: string;
+  ariaLabel?: string | null;
 } & (SingleUploaderProps | MultipleUploaderProps);
 
 const Uploader = ({
@@ -71,6 +73,7 @@ const Uploader = ({
   image: isImage = false,
   maxSize = DEFAULT_MAX_BYTES,
   multiple,
+  ariaLabel,
   ...rest
 }: UploaderProps) => {
   // The uploader accepts a `files` argument which can contain either:
@@ -195,6 +198,7 @@ const Uploader = ({
       );
       setErrors(errors);
     },
+    onDrop: () => setErrors([]),
     validator: uniqueNameValidator,
   });
 
@@ -230,6 +234,8 @@ const Uploader = ({
     [currentFiles, currentUploads, existingFiles, multiple, onChange, onUpload]
   );
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const showFileList = useMemo(
     () => multiple && (currentFiles.length > 0 || existingFiles.length > 0),
     [currentFiles.length, existingFiles.length, multiple]
@@ -257,7 +263,11 @@ const Uploader = ({
         {...getRootProps()}
         id={id}
       >
-        <input {...getInputProps()} />
+        <input
+          {...getInputProps()}
+          ref={inputRef}
+          aria-label={ariaLabel ? ariaLabel : 'Upload file'}
+        />
         <Stack
           spacing={1}
           sx={{
@@ -276,54 +286,65 @@ const Uploader = ({
               <LinearProgress variant='indeterminate' />
             </Box>
           )}
-          {!loading &&
-            (multiple ||
-              (currentFiles.length === 0 && existingFiles.length === 0)) && (
-              <>
-                <FilePreviewIcon IconComponent={UploadFileIcon} />
-                <Typography variant='subtitle1' color='inherit'>
-                  <Link onClick={open} variant='inherit'>
-                    Click to upload
-                  </Link>{' '}
-                  or drag and drop
-                </Typography>
-                <Typography variant='body2' color='GrayText' sx={{ mt: 1 }}>
-                  {accept ? getFileTypesFromAccept(accept) : 'Any file type'}{' '}
-                  (max. {getReadableSize(maxSize)})
-                </Typography>
-              </>
+          <Box aria-live='polite'>
+            {!loading &&
+              (multiple ||
+                (currentFiles.length === 0 && existingFiles.length === 0)) && (
+                <>
+                  <FilePreviewIcon IconComponent={UploadFileIcon} />
+                  <Typography variant='subtitle1' color='inherit'>
+                    <Link onClick={open} variant='inherit'>
+                      Click to upload
+                    </Link>{' '}
+                    or drag and drop
+                  </Typography>
+                  <Typography variant='body2' color='GrayText' sx={{ mt: 1 }}>
+                    {accept ? getFileTypesFromAccept(accept) : 'Any file type'}{' '}
+                    (max. {getReadableSize(maxSize)})
+                  </Typography>
+                </>
+              )}
+          </Box>
+          <Box aria-live='polite'>
+            {!loading && !multiple && currentFiles[0] && (
+              <FileUploadSummary
+                file={currentFiles[0]}
+                onRemove={() => {
+                  removeFile(currentFiles[0]);
+                  inputRef.current?.focus();
+                }}
+                variant='stacked'
+              />
             )}
-          {!loading && !multiple && currentFiles[0] && (
-            <FileUploadSummary
-              file={currentFiles[0]}
-              onRemove={() => removeFile(currentFiles[0])}
-              variant='stacked'
-            />
-          )}
+          </Box>
           {!loading && !multiple && existingFiles[0] && (
             <FileRecordSummary
               file={existingFiles[0] as FileFieldsFragment}
-              onRemove={() =>
-                removeFile(existingFiles[0] as FileFieldsFragment)
-              }
+              onRemove={() => {
+                removeFile(existingFiles[0] as FileFieldsFragment);
+                inputRef.current?.focus();
+              }}
               variant='stacked'
             />
           )}
-          {errors?.map((error) => (
-            <Typography
-              key={error}
-              variant='subtitle1'
-              color='error'
-              sx={{ mt: 2 }}
-            >
-              {error}
-            </Typography>
-          ))}
+          <Box aria-live='polite'>
+            {errors?.map((error) => (
+              <Typography
+                key={error}
+                variant='subtitle1'
+                color='error'
+                sx={{ mt: 2 }}
+                aria-live='polite'
+              >
+                {error}
+              </Typography>
+            ))}
+          </Box>
         </Stack>
       </Box>
       {showFileList && (
         <Card sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
-          <Stack divider={<Divider />}>
+          <Stack aria-live='polite' divider={<Divider />}>
             {existingFiles.map((file) => {
               return (
                 <FileRecordSummary
@@ -336,12 +357,17 @@ const Uploader = ({
             })}
             {currentFiles.map((file) => {
               return (
-                <FileUploadSummary
-                  key={file.name} // we enforce uniqueness on file names
-                  file={file}
-                  onRemove={() => removeFile(file)}
-                  variant='row'
-                />
+                <>
+                  <FileUploadSummary
+                    key={file.name} // we enforce uniqueness on file names
+                    file={file}
+                    onRemove={() => removeFile(file)}
+                    variant='row'
+                  />
+                  <Box aria-live='polite' sx={visuallyHidden}>
+                    Uploaded {file.name}
+                  </Box>
+                </>
               );
             })}
           </Stack>
