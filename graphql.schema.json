@@ -4927,7 +4927,7 @@
           },
           {
             "name": "hudChronic",
-            "description": null,
+            "description": "Meets the definition for HUD chronically homeless as of today (time of API request)",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -21171,6 +21171,22 @@
               "ofType": {
                 "kind": "ENUM",
                 "name": "FormStatus",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "supportsSaveInProgress",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },
