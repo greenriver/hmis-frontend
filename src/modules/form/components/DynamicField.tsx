@@ -48,13 +48,7 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import {
-  Component,
-  FileFieldsFragment,
-  FormItem,
-  InputSize,
-  ItemType,
-} from '@/types/gqlTypes';
+import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
 const getLabel = (
   item: FormItem,
@@ -103,16 +97,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     (_: any, value: any) =>
       itemChanged({ linkId, value, type: ChangeType.User }),
     [linkId, itemChanged]
-  );
-  const onChangeFileValue = useCallback(
-    (files: (string | FileFieldsFragment)[]) => {
-      if (item.repeats) {
-        onChangeValue(files);
-      } else {
-        onChangeValue(files[0]);
-      }
-    },
-    [item.repeats, onChangeValue]
   );
 
   const { user: currentUser } = useAuth();
@@ -429,13 +413,23 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer {...commonContainerProps}>
           <LabelWithContent label={item.text} helperText={item.helperText}>
-            <Uploader
-              id={linkId}
-              files={value}
-              image
-              onChange={onChangeFileValue}
-              multiple={!!item.repeats}
-            />
+            {item.repeats ? (
+              <Uploader
+                id={linkId}
+                files={value}
+                image
+                onChange={onChangeValue}
+                multiple={true}
+              />
+            ) : (
+              <Uploader
+                id={linkId}
+                file={value}
+                image
+                onChange={onChangeValue}
+                multiple={false}
+              />
+            )}
           </LabelWithContent>
         </InputContainer>
       );
@@ -443,12 +437,21 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer {...commonContainerProps}>
           <LabelWithContent label={item.text} helperText={item.helperText}>
-            <Uploader
-              id={linkId}
-              files={value}
-              onChange={onChangeFileValue}
-              multiple={!!item.repeats}
-            />
+            {item.repeats ? (
+              <Uploader
+                multiple={true}
+                id={linkId}
+                files={value}
+                onChange={onChangeValue}
+              />
+            ) : (
+              <Uploader
+                multiple={false}
+                id={linkId}
+                file={value}
+                onChange={onChangeValue}
+              />
+            )}
           </LabelWithContent>
         </InputContainer>
       );

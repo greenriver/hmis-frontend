@@ -11,12 +11,7 @@ import {
 } from '@mui/material';
 import { compact, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
-import {
-  Accept,
-  DropzoneInputProps,
-  DropzoneRootProps,
-  useDropzone,
-} from 'react-dropzone';
+import { Accept, useDropzone } from 'react-dropzone';
 import useDirectUpload from './useDirectUpload';
 
 import FilePreviewIcon from '@/components/elements/upload/FilePreviewIcon';
@@ -44,59 +39,56 @@ const getFileTypesFromAccept = (accept: Accept) => {
 const getReadableSize = (maxSize: number) =>
   `${(maxSize / 1000000).toFixed(1)}MB`;
 
-export type ChildrenArgs = {
-  id: string;
-  currentFiles?: File[];
-  existingFiles?: FileFieldsFragment[];
-  loading?: boolean;
-  errors?: string[] | undefined;
-  dragging?: boolean;
-  removeFile?: (file: File) => void;
-  selectFiles?: VoidFunction;
-  rootProps?: DropzoneRootProps;
-  inputProps?: DropzoneInputProps;
-  accept?: Accept;
-  maxSize: number;
-  multiple?: boolean;
+type SingleUploaderProps = {
+  multiple?: false;
+  file?: string | FileFieldsFragment;
+  onChange?: (file: string | FileFieldsFragment | undefined) => void;
+  onUpload?: (
+    upload: DirectUpload | undefined,
+    file: File | undefined
+  ) => any | Promise<any>;
 };
 
-export type UploaderProps<Multiple extends boolean = false> = {
-  id: string;
-  files?: Multiple extends true
-    ? (string | FileFieldsFragment)[]
-    : string | FileFieldsFragment;
-  onChange?: Multiple extends true
-    ? (files: (string | FileFieldsFragment)[]) => void
-    : (file: string | FileFieldsFragment) => void;
-  onUpload?: Multiple extends true
-    ? (uploads: DirectUpload[], files: File[]) => any | Promise<any>
-    : (upload: DirectUpload, file: File) => any | Promise<any>;
+type MultipleUploaderProps = {
+  multiple: true;
+  files?: (string | FileFieldsFragment)[];
+  onChange?: (files: (string | FileFieldsFragment)[]) => void;
+  onUpload?: (uploads: DirectUpload[], files: File[]) => any | Promise<any>;
+};
+
+export type UploaderProps = {
   accept?: Accept;
   image?: boolean;
   maxSize?: number;
-  multiple?: Multiple;
-  children?: React.ReactNode | ((args: ChildrenArgs) => React.ReactElement);
-};
+  id: string;
+} & (SingleUploaderProps | MultipleUploaderProps);
 
-const Uploader = <Multiple extends boolean = false>({
+const Uploader = ({
   id,
-  files,
   onChange,
   onUpload,
   accept: acceptProp,
   image: isImage = false,
   maxSize = DEFAULT_MAX_BYTES,
-  multiple = false as Multiple,
-}: UploaderProps<Multiple>) => {
+  multiple,
+  ...rest
+}: UploaderProps) => {
   // The uploader accepts a `files` argument which can contain either:
   // - a STRING which points at a blob ID of a file that has been uploaded within this session, or
   // - a FileFieldsFragment record which points at a file record in our database, uploaded during a previous session.
   // `existingFiles` filters the list to only those files that were uploaded some previous time, so we can render them.
   // The files uploaded during this session, we render this component's internal state, `currentFiles`.
-  const existingFiles = useMemo(
-    () => ensureArray(files).filter((f) => typeof f !== 'string'),
-    [files]
-  );
+  const existingFiles = useMemo(() => {
+    let filesArr;
+    if (multiple) {
+      const { files } = rest as MultipleUploaderProps;
+      filesArr = ensureArray(files);
+    } else {
+      const { file } = rest as SingleUploaderProps;
+      filesArr = ensureArray(file);
+    }
+    return filesArr.filter((f) => typeof f !== 'string');
+  }, [rest, multiple]);
 
   const [currentFiles, setCurrentFiles] = useState<File[]>([]);
   const [currentUploads, setCurrentUploads] = useState<DirectUpload[]>([]);
@@ -136,10 +128,7 @@ const Uploader = <Multiple extends boolean = false>({
           setCurrentUploads(newUploads);
           if (multiple) {
             if (onChange) {
-              onChange([
-                ...existingFiles,
-                ...newUploads.map((u) => u.blobId),
-              ] as (string | FileFieldsFragment)[]);
+              onChange([...existingFiles, ...newUploads.map((u) => u.blobId)]);
             }
             if (onUpload) {
               onUpload(newUploads, newFiles);
@@ -224,7 +213,7 @@ const Uploader = <Multiple extends boolean = false>({
           onChange([
             ...existingFiles.filter((f) => f !== file),
             ...newUploads.map((u) => u.blobId),
-          ] as (string | FileFieldsFragment)[]);
+          ]);
         }
         if (onUpload) {
           onUpload(newUploads, newFiles);
