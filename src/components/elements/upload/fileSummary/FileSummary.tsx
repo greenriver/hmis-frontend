@@ -23,8 +23,10 @@ const FileSummary: React.FC<FileSummaryProps> = ({
   variant = 'stacked',
   showThumbnail = false,
 }) => {
-  const preview = useMemo(
-    () => (
+  const preview = useMemo(() => {
+    // For the "row" variant, make the preview the same size as the FilePreviewIcon, so row heights are the same
+    const size = variant === 'row' ? '40px' : '72px';
+    return (
       <>
         {showThumbnail ? (
           <Box
@@ -32,8 +34,8 @@ const FileSummary: React.FC<FileSummaryProps> = ({
             alt='file preview'
             src={url}
             sx={{
-              width: '72px',
-              height: '72px',
+              width: size,
+              height: size,
               borderRadius: (theme) => `${theme.shape.borderRadius}px`,
               mb: 1,
             }}
@@ -42,9 +44,8 @@ const FileSummary: React.FC<FileSummaryProps> = ({
           <FilePreviewIcon IconComponent={InsertDriveFileIcon} />
         )}
       </>
-    ),
-    [showThumbnail, url]
-  );
+    );
+  }, [showThumbnail, url, variant]);
 
   if (variant === 'stacked') {
     return (
