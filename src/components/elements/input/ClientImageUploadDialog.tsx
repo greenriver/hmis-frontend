@@ -141,7 +141,7 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                 <Uploader
                   id='clientImageUploader'
                   onUpload={(upload, file) => {
-                    setNewBlobId(upload.blobId);
+                    setNewBlobId(upload.signedBlobId);
                     setNewPhotoSrc(URL.createObjectURL(file));
                   }}
                   onClear={() => {
