@@ -17,11 +17,13 @@ import {
   DropzoneRootProps,
   useDropzone,
 } from 'react-dropzone';
+import FileSummary from './fileSummary/FileSummary';
 import useDirectUpload from './useDirectUpload';
 
 import FilePreviewIcon from '@/components/elements/upload/FilePreviewIcon';
 import FileRecordSummary from '@/components/elements/upload/fileSummary/FileRecordSummary';
 import FileUploadSummary from '@/components/elements/upload/fileSummary/FileUploadSummary';
+import usePreviousUploads from '@/components/elements/upload/usePreviousUploads';
 import { DirectUpload, FileFieldsFragment } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
@@ -92,6 +94,14 @@ const Uploader: React.FC<UploaderProps> = ({
     [files]
   );
 
+  const previouslyUploadedBlobIds = useMemo(
+    () => ensureArray(files).filter((f) => typeof f === 'string'),
+    [files]
+  );
+  const { uploads: previousUploads } = usePreviousUploads(
+    previouslyUploadedBlobIds as string[]
+  );
+
   const [currentFiles, setCurrentFiles] = useState<File[]>([]);
   const [currentUploads, setCurrentUploads] = useState<DirectUpload[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -104,6 +114,7 @@ const Uploader: React.FC<UploaderProps> = ({
       const existingNames = [
         ...existingFiles.map((f) => (f as FileFieldsFragment).name),
         ...currentFiles.map((f) => f.name),
+        ...(previousUploads ? previousUploads.map((f) => f.filename) : []),
       ];
 
       if (existingNames.includes(file.name)) {
@@ -115,7 +126,7 @@ const Uploader: React.FC<UploaderProps> = ({
 
       return null;
     },
-    [existingFiles, currentFiles]
+    [existingFiles, currentFiles, previousUploads]
   );
 
   const uploadAndCreate = useCallback(
@@ -205,8 +216,12 @@ const Uploader: React.FC<UploaderProps> = ({
   );
 
   const showFileList = useMemo(
-    () => multiple && (currentFiles.length > 0 || existingFiles.length > 0),
-    [currentFiles.length, existingFiles.length, multiple]
+    () =>
+      multiple &&
+      (currentFiles.length > 0 ||
+        existingFiles.length > 0 ||
+        (previousUploads && previousUploads.length > 0)),
+    [multiple, currentFiles.length, existingFiles.length, previousUploads]
   );
 
   return (
@@ -283,6 +298,7 @@ const Uploader: React.FC<UploaderProps> = ({
               variant='stacked'
             />
           )}
+          {/* todo @martha */}
           {errors?.map((error) => (
             <Typography
               key={error}
@@ -318,6 +334,18 @@ const Uploader: React.FC<UploaderProps> = ({
                 />
               );
             })}
+            {previousUploads &&
+              previousUploads.map((upload) => {
+                return (
+                  <FileSummary
+                    key={upload.filename}
+                    fileName={upload.filename}
+                    url={upload.url}
+                    onRemove={() => alert('todo @martha implement')}
+                    variant='row'
+                  />
+                );
+              })}
           </Stack>
         </Card>
       )}

@@ -1,0 +1,9 @@
+query GetFileBlobs($ids: [ID!]!) {
+  fileBlobs(ids: $ids) {
+    filename
+    headers
+    url
+    blobId
+    signedBlobId
+  }
+}
