@@ -15,7 +15,7 @@ import React, { useCallback, useState } from 'react';
 
 import CommonDialog from '../CommonDialog';
 import LoadingButton from '../LoadingButton';
-import { SingleUploader } from '../upload/Uploader';
+import Uploader from '../upload/Uploader';
 
 import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
 import {
@@ -139,7 +139,7 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                 </>
               )}
               <Grid item xs={12}>
-                <SingleUploader
+                <Uploader
                   id='clientImageUploader'
                   onUpload={(upload: DirectUpload, file: File) => {
                     setNewBlobId(upload.blobId);

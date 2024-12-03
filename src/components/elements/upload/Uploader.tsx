@@ -60,19 +60,25 @@ export type ChildrenArgs = {
   multiple?: boolean;
 };
 
-export type UploaderProps = {
+export type UploaderProps<Multiple extends boolean = false> = {
   id: string;
-  files?: (string | FileFieldsFragment)[];
-  onChange?: (files: (string | FileFieldsFragment)[]) => void;
-  onUpload?: (uploads: DirectUpload[], files: File[]) => any | Promise<any>;
+  files?: Multiple extends true
+    ? (string | FileFieldsFragment)[]
+    : string | FileFieldsFragment;
+  onChange?: Multiple extends true
+    ? (files: (string | FileFieldsFragment)[]) => void
+    : (file: string | FileFieldsFragment) => void;
+  onUpload?: Multiple extends true
+    ? (uploads: DirectUpload[], files: File[]) => any | Promise<any>
+    : (upload: DirectUpload, file: File) => any | Promise<any>;
   accept?: Accept;
   image?: boolean;
   maxSize?: number;
-  multiple?: boolean;
+  multiple?: Multiple;
   children?: React.ReactNode | ((args: ChildrenArgs) => React.ReactElement);
 };
 
-const Uploader: React.FC<UploaderProps> = ({
+const Uploader = <Multiple extends boolean = false>({
   id,
   files,
   onChange,
@@ -80,8 +86,8 @@ const Uploader: React.FC<UploaderProps> = ({
   accept: acceptProp,
   image: isImage = false,
   maxSize = DEFAULT_MAX_BYTES,
-  multiple = false,
-}) => {
+  multiple = false as Multiple,
+}: UploaderProps<Multiple>) => {
   // The uploader accepts a `files` argument which can contain either:
   // - a STRING which points at a blob ID of a file that has been uploaded within this session, or
   // - a FileFieldsFragment record which points at a file record in our database, uploaded during a previous session.
@@ -128,9 +134,26 @@ const Uploader: React.FC<UploaderProps> = ({
           const newUploads = [...currentUploads, ...responses];
           setCurrentFiles(newFiles);
           setCurrentUploads(newUploads);
-          if (onChange)
-            onChange([...existingFiles, ...newUploads.map((u) => u.blobId)]);
-          if (onUpload) onUpload(newUploads, newFiles);
+          if (multiple) {
+            if (onChange) {
+              onChange([
+                ...existingFiles,
+                ...newUploads.map((u) => u.blobId),
+              ] as (string | FileFieldsFragment)[]);
+            }
+            if (onUpload) {
+              onUpload(newUploads, newFiles);
+            }
+          } else {
+            const singleUpload = newUploads[0];
+            const singleFile = newFiles[0];
+            if (onChange && singleUpload) {
+              onChange(singleUpload.blobId);
+            }
+            if (onUpload && singleFile && singleUpload) {
+              onUpload(singleUpload, singleFile);
+            }
+          }
           setLoading(false);
         })
         .catch((error) => {
@@ -145,6 +168,7 @@ const Uploader: React.FC<UploaderProps> = ({
       onChange,
       existingFiles,
       onUpload,
+      multiple,
     ]
   );
 
@@ -194,14 +218,27 @@ const Uploader: React.FC<UploaderProps> = ({
       );
       setCurrentFiles(newFiles);
       setCurrentUploads(newUploads);
-      if (onUpload) onUpload(newUploads, newFiles);
-      if (onChange)
-        onChange([
-          ...existingFiles.filter((f) => f !== file),
-          ...newUploads.map((u) => u.blobId),
-        ]);
+
+      if (multiple) {
+        if (onChange) {
+          onChange([
+            ...existingFiles.filter((f) => f !== file),
+            ...newUploads.map((u) => u.blobId),
+          ] as (string | FileFieldsFragment)[]);
+        }
+        if (onUpload) {
+          onUpload(newUploads, newFiles);
+        }
+      } else {
+        if (onChange) {
+          onChange(undefined);
+        }
+        if (onUpload) {
+          onUpload(undefined, undefined);
+        }
+      }
     },
-    [currentFiles, currentUploads, existingFiles, onChange, onUpload]
+    [currentFiles, currentUploads, existingFiles, multiple, onChange, onUpload]
   );
 
   const showFileList = useMemo(
@@ -322,26 +359,6 @@ const Uploader: React.FC<UploaderProps> = ({
         </Card>
       )}
     </Stack>
-  );
-};
-
-/*
- * SingleUploader provides a wrapper api around Uploader for callers that want
- * an uploader that only accepts one file at a time. (E.g. Client Image upload)
- */
-export const SingleUploader: React.FC<
-  Omit<UploaderProps, 'multiple' | 'onUpload'> & {
-    onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
-  }
-> = ({ onUpload, ...props }) => {
-  return (
-    <Uploader
-      multiple={false}
-      onUpload={(uploads: DirectUpload[], files: File[]) => {
-        if (onUpload) onUpload(uploads[0], files[0]);
-      }}
-      {...props}
-    />
   );
 };
 
