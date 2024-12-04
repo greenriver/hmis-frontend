@@ -40,7 +40,7 @@ const getFileTypesFromAccept = (accept: Accept) => {
 const getReadableSize = (maxSize: number) =>
   `${(maxSize / 1000000).toFixed(1)}MB`;
 
-type SingleUploaderProps = {
+export type SingleUploaderProps = {
   multiple?: false;
   file?: string | FileFieldsFragment;
   onChange?: (file: string | FileFieldsFragment | undefined) => void;
@@ -50,7 +50,7 @@ type SingleUploaderProps = {
   ) => any | Promise<any>;
 };
 
-type MultipleUploaderProps = {
+export type MultipleUploaderProps = {
   multiple: true;
   files?: (string | FileFieldsFragment)[];
   onChange?: (files: (string | FileFieldsFragment)[]) => void;

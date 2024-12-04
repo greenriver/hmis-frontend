@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import { Meta, StoryObj } from '@storybook/react';
 
 import MOCK_IMAGE from './MOCK_IMAGE';
-import Uploader from './Uploader';
+import Uploader, { SingleUploaderProps, UploaderProps } from './Uploader';
 
 import { createDirectUploadMock, getFileMock } from '@/test/__mocks__/requests';
 
@@ -17,8 +17,8 @@ export default {
   render: (args) => (
     <>
       <Uploader
-        {...args}
-        onUpload={async (upload, file) => {
+        {...(args as SingleUploaderProps & UploaderProps)} // keeps Typescript happy, but in reality could be either.
+        onUpload={(upload, file) => {
           const targetElem = document.getElementById('result');
           if (targetElem)
             targetElem.innerHTML = JSON.stringify({ upload, file }, null, 2);
