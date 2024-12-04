@@ -1,4 +1,5 @@
 import {
+  Box,
   Chip,
   Stack,
   TableBody,
@@ -7,6 +8,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import React, { ReactNode, useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -299,7 +301,11 @@ const ProjectHouseholdsTable = ({
       ...(staffAssignmentsEnabled
         ? [{ ...ASSIGNED_STAFF_COL, render: () => '' }]
         : []),
-      { key: 'actions', header: '', render: () => '' },
+      {
+        key: 'actions',
+        header: <Box sx={visuallyHidden}>Actions</Box>,
+        render: () => '',
+      },
     ],
     [staffAssignmentsEnabled]
   );
