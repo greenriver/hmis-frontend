@@ -77,6 +77,7 @@ export interface Props<T> {
   condensed?: boolean;
   overrideTableBody?: boolean; // TODO @MARTHA discuss - and, if keeping, add comments
   tableRowActions?: TableRowAction<T>[];
+  getRowAccessibleName?: (row: T) => string;
 }
 
 const clickableRowStyles = {
@@ -135,6 +136,7 @@ const GenericTable = <T extends { id: string }>({
   rowLinkState,
   overrideTableBody = false, // todo @martha - discuss and add comments
   tableRowActions,
+  getRowAccessibleName,
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -464,6 +466,11 @@ const GenericTable = <T extends { id: string }>({
                       <TableCell>
                         <TableRowActions
                           record={row}
+                          recordName={
+                            getRowAccessibleName
+                              ? getRowAccessibleName(row)
+                              : undefined
+                          }
                           actions={tableRowActions}
                         />
                       </TableCell>

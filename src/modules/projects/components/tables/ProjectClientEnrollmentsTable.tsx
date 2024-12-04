@@ -7,6 +7,7 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
+  clientBriefName,
   formatDateForDisplay,
   formatDateForGql,
   parseAndFormatDate,
@@ -213,6 +214,9 @@ const ProjectClientEnrollmentsTable = ({
           return result;
         }}
         tableRowActions={tableRowActions}
+        getRowAccessibleName={(
+          enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment
+        ) => clientBriefName(enrollment.client)}
       />
     </SsnDobShowContextProvider>
   );

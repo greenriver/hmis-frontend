@@ -20,6 +20,7 @@ const TableRowActions = <T extends { id: string }>({
   actions,
 }: TableRowActionsProps<T>) => {
   const [primaryAction, ...rest] = actions;
+  const accessibleName = recordName || record.id;
 
   const menuItems = useMemo(() => {
     if (!rest.length) return null;
@@ -27,11 +28,11 @@ const TableRowActions = <T extends { id: string }>({
     return rest.map((action) => {
       return {
         to: action.getUrl(record),
-        ariaLabel: `${action.title} - ${recordName}`,
+        ariaLabel: `${action.title} - ${accessibleName}`,
         ...action,
       };
     });
-  }, [rest, record, recordName]);
+  }, [rest, record, accessibleName]);
 
   return (
     <Stack direction='row' alignItems='center' gap={0.5}>
@@ -40,7 +41,7 @@ const TableRowActions = <T extends { id: string }>({
           to={primaryAction.getUrl(record)}
           size='small'
           variant='outlined'
-          aria-label={`${primaryAction.title} - ${recordName}`}
+          aria-label={`${primaryAction.title} - ${accessibleName}`}
         >
           {primaryAction.title}
         </ButtonLink>
@@ -50,7 +51,7 @@ const TableRowActions = <T extends { id: string }>({
           iconButton
           title='Actions'
           items={menuItems}
-          aria-label={`Action menu for ${recordName || record.id}`}
+          aria-label={`Action menu for ${accessibleName}`}
         />
       )}
     </Stack>
