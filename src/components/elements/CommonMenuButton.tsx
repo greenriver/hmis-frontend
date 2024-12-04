@@ -14,18 +14,19 @@ import { To } from 'react-router-dom';
 import RouterLink from './RouterLink';
 import { MoreMenuIcon } from './SemanticIcons';
 
-export type NavMenuItem = {
+export type CommonMenuItem = {
   key: string;
+  title: ReactNode;
   to?: To;
   onClick?: VoidFunction;
-  title?: ReactNode;
   divider?: boolean;
   disabled?: boolean;
+  ariaLabel?: string;
 };
 
 interface Props {
   title: ReactNode;
-  items: NavMenuItem[];
+  items: CommonMenuItem[];
   variant?: ButtonProps['variant'];
   disabled?: ButtonProps['disabled'];
   iconButton?: boolean; // use an icon button instead of a text button
@@ -39,7 +40,7 @@ const CommonMenuButton = ({
   iconButton,
   MenuProps,
   ...buttonProps
-}: Props) => {
+}: Props & ButtonProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -98,28 +99,35 @@ const CommonMenuButton = ({
         }}
         {...MenuProps}
       >
-        {items.map(({ key, to, title, divider, onClick, disabled }) =>
-          divider ? (
-            <Divider key={key} />
-          ) : to ? (
-            <MenuItem key={key} component={RouterLink} to={to}>
-              {title}
-            </MenuItem>
-          ) : (
-            <MenuItem
-              key={key}
-              onClick={() => {
-                if (onClick) {
-                  // close menu before triggering onClick
-                  setAnchorEl(null);
-                  onClick();
-                }
-              }}
-              disabled={disabled}
-            >
-              {title}
-            </MenuItem>
-          )
+        {items.map(
+          ({ key, to, title, divider, onClick, disabled, ariaLabel }) =>
+            divider ? (
+              <Divider key={key} />
+            ) : to ? (
+              <MenuItem
+                key={key}
+                component={RouterLink}
+                to={to}
+                aria-label={ariaLabel}
+              >
+                {title}
+              </MenuItem>
+            ) : (
+              <MenuItem
+                key={key}
+                onClick={() => {
+                  if (onClick) {
+                    // close menu before triggering onClick
+                    setAnchorEl(null);
+                    onClick();
+                  }
+                }}
+                disabled={disabled}
+                aria-label={ariaLabel}
+              >
+                {title}
+              </MenuItem>
+            )
         )}
       </Menu>
     </>

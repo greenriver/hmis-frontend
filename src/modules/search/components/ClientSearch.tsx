@@ -86,6 +86,11 @@ export const CLIENT_COLUMNS: {
     key: 'name',
     render: (client) => <ClientName client={asClient(client)} />,
   },
+  age: {
+    header: 'Age',
+    key: 'age',
+    render: (client) => asClient(client).age,
+  },
   linkedName: {
     header: 'Name',
     key: 'name',

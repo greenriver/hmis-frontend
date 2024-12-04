@@ -20,10 +20,9 @@ const ProjectEnrollmentsTable = ({
   projectId,
   columns,
   openOnDate,
-  linkRowToEnrollment = false,
   searchable = true,
   mode: modeProp,
-  initialMode: initialModeProp = 'households',
+  initialMode: initialModeProp = 'clients',
 }: {
   mode?: Mode;
   initialMode?: Mode;
@@ -67,14 +66,14 @@ const ProjectEnrollmentsTable = ({
                     }}
                     items={[
                       {
-                        value: 'households',
-                        label: 'Households',
-                        Icon: HouseholdIcon,
-                      },
-                      {
                         value: 'clients',
                         label: 'Clients',
                         Icon: PersonIcon,
+                      },
+                      {
+                        value: 'households',
+                        label: 'Households',
+                        Icon: HouseholdIcon,
                       },
                     ]}
                   />
@@ -96,7 +95,6 @@ const ProjectEnrollmentsTable = ({
       {mode === 'clients' && (
         <ProjectClientEnrollmentsTable
           columns={columns}
-          linkRowToEnrollment={linkRowToEnrollment}
           searchTerm={debouncedSearch || undefined}
           projectId={projectId}
           openOnDate={openOnDate}

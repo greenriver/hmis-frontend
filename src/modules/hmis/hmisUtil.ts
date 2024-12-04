@@ -635,3 +635,24 @@ export const raceEthnicityDisplayString = (race?: Race[]) => {
 
   return race.map((r) => HmisEnums.Race[r]).join(', ');
 };
+
+// TODO @MARTHA discuss - it's probably a bit silly to redefine ranks here,
+// see https://github.com/greenriver/hmis-warehouse/blob/1a170c0e869fd3d69880532f86baa104b800d9ed/drivers/hmis/app/graphql/types/hmis_schema/enums/hud.rb#L723-L733
+const hohPriorityMapping: Record<RelationshipToHoH, number> = {
+  [RelationshipToHoH.SelfHeadOfHousehold]: 0,
+  [RelationshipToHoH.SpouseOrPartner]: 1,
+  [RelationshipToHoH.Child]: 2,
+  [RelationshipToHoH.OtherRelative]: 3,
+  [RelationshipToHoH.UnrelatedHouseholdMember]: 4,
+  [RelationshipToHoH.DataNotCollected]: 5,
+  [RelationshipToHoH.Invalid]: 6,
+};
+
+export const hohSort = (
+  client1: { relationshipToHoH: RelationshipToHoH },
+  client2: { relationshipToHoH: RelationshipToHoH }
+): number => {
+  const rank1 = hohPriorityMapping[client1.relationshipToHoH];
+  const rank2 = hohPriorityMapping[client2.relationshipToHoH];
+  return rank1 - rank2;
+};

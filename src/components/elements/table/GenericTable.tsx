@@ -17,8 +17,16 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
-import { get, includes, isNil, without } from 'lodash-es';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { visuallyHidden } from '@mui/utils';
+import { compact, get, includes, isNil, without } from 'lodash-es';
+import {
+  Fragment,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { To } from 'react-router-dom';
 
 import Loading from '../Loading';
@@ -33,6 +41,9 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
+import TableRowActions, {
+  TableRowAction,
+} from '@/components/elements/table/TableRowActions';
 import { LocationState } from '@/routes/routeUtil';
 
 export interface Props<T> {
@@ -62,8 +73,10 @@ export interface Props<T> {
   >;
   filterToolbar?: ReactNode;
   noData?: ReactNode;
-  renderRow?: (row: T) => ReactNode;
+  renderRow?: (row: T, columnKeys: string[]) => ReactNode;
   condensed?: boolean;
+  overrideTableBody?: boolean; // TODO @MARTHA discuss - and, if keeping, add comments
+  tableRowActions?: TableRowAction<T>[];
 }
 
 const clickableRowStyles = {
@@ -120,6 +133,8 @@ const GenericTable = <T extends { id: string }>({
   loadingVariant = 'circular',
   condensed = false,
   rowLinkState,
+  overrideTableBody = false, // todo @martha - discuss and add comments
+  tableRowActions,
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -234,6 +249,11 @@ const GenericTable = <T extends { id: string }>({
               <strong>{def.header}</strong>
             </HeaderCell>
           ))}
+          {tableRowActions && (
+            <HeaderCell>
+              <Box sx={visuallyHidden}>Actions</Box>
+            </HeaderCell>
+          )}
         </TableRow>
       )}
       {loading && loadingVariant === 'linear' && (
@@ -264,6 +284,8 @@ const GenericTable = <T extends { id: string }>({
       </TableRow>
     );
 
+  const TableBodyWrapper = overrideTableBody ? Fragment : TableBody;
+
   return (
     <>
       {EnhancedTableToolbarProps && (
@@ -284,7 +306,7 @@ const GenericTable = <T extends { id: string }>({
           {...tableProps}
         >
           {tableHead}
-          <TableBody>
+          <TableBodyWrapper>
             {vertical &&
               columns.map((def, i) => (
                 <TableRow key={key(def) || i}>
@@ -305,7 +327,8 @@ const GenericTable = <T extends { id: string }>({
             {!vertical &&
               rows.map((row) => {
                 // prop to completely take over row rendering
-                if (renderRow) return renderRow(row);
+                if (renderRow)
+                  return renderRow(row, compact(columns.map((c) => c.key)));
 
                 const isSelectable =
                   selectable && (isRowSelectable ? isRowSelectable(row) : true);
@@ -437,13 +460,21 @@ const GenericTable = <T extends { id: string }>({
                         </TableCell>
                       );
                     })}
+                    {tableRowActions && (
+                      <TableCell>
+                        <TableRowActions
+                          record={row}
+                          actions={tableRowActions}
+                        />
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}
             {actionRow}
             {/* dont show "no data" row if there is an action row, which may be for adding new elements or making another selection (MCI uses it) */}
             {!actionRow && noResultsRow}
-          </TableBody>
+          </TableBodyWrapper>
           {paginated && tablePaginationProps && (
             <TableFooter>
               <TableRow>

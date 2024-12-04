@@ -1,16 +1,10 @@
-import { Stack, Tooltip, Typography } from '@mui/material';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
-import ClientName from '@/modules/client/components/ClientName';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentClientNameWithAge from '@/modules/hmis/components/EnrollmentClientNameWithAge';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-
-import EnrollmentEntryDateWithStatusIndicator from '@/modules/hmis/components/EnrollmentEntryDateWithStatusIndicator';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
-import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   formatDateForDisplay,
@@ -20,7 +14,10 @@ import {
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
@@ -48,6 +45,7 @@ export const ENROLLMENT_STATUS_COL: ColumnDef<
   render: (e) => <EnrollmentStatus enrollment={e} />,
 };
 
+// TODO @martha (#6761) - the this is now only used in the client card. Reorganize where column defs live
 export const ENROLLMENT_PERIOD_COL: ColumnDef<
   | EnrollmentFieldsFragment
   | ProjectEnrollmentFieldsFragment
@@ -72,76 +70,14 @@ export const ENROLLMENT_COLUMNS: {
     | ProjectEnrollmentQueryEnrollmentFieldsFragment
   >;
 } = {
-  clientName: {
-    header: 'Client',
-    render: (e) => <ClientName client={e.client} />,
-    linkTreatment: true,
-  },
-  clientNameLinkedToEnrollment: {
-    header: 'Client',
-    render: (e) => <ClientName client={e.client} linkToEnrollmentId={e.id} />,
-    linkTreatment: true,
-  },
-  clientNameLinkedToEnrollmentWithAge: {
-    header: 'Client',
-    render: (e) => (
-      <EnrollmentClientNameWithAge client={e.client} enrollmentId={e.id} />
-    ),
-    linkTreatment: true,
-  },
-  firstNameLinkedToEnrollment: {
-    header: 'First Name',
-    render: (e) => (
-      <ClientName
-        client={e.client}
-        linkToEnrollmentId={e.id}
-        nameParts='first_only'
-      />
-    ),
-    linkTreatment: true,
-  },
-  lastNameLinkedToEnrollment: {
-    header: 'Last Name',
-    render: (e) => (
-      <ClientName
-        client={e.client}
-        linkToEnrollmentId={e.id}
-        nameParts='last_only'
-      />
-    ),
-    linkTreatment: true,
-  },
   enrollmentStatus: ENROLLMENT_STATUS_COL,
   entryDate: {
     header: 'Entry Date',
-    // should only be used for open enrollments, because it doesnt indicate if closed or not
-    render: (e) => <EnrollmentEntryDateWithStatusIndicator enrollment={e} />,
+    render: (e) => parseAndFormatDate(e.entryDate),
   },
-  enrollmentPeriod: ENROLLMENT_PERIOD_COL,
-  householdId: {
-    header: 'Household ID',
-    key: 'housholdId',
-    optional: true,
-    render: (e) => (
-      <Stack direction='row' alignItems='baseline'>
-        <Tooltip
-          title={`${e.householdSize} member${e.householdSize !== 1 ? 's' : ''}`}
-          arrow
-        >
-          <Typography variant='body2'>
-            {`${e.householdShortId} (${e.householdSize})`}
-          </Typography>
-        </Tooltip>
-        {e.householdSize > 1 && (
-          <HohIndicator relationshipToHoh={e.relationshipToHoH} />
-        )}
-      </Stack>
-    ),
-  },
-  clientId: {
-    header: 'Client ID',
-    key: 'id',
-    render: (e) => e.client.id,
+  exitDate: {
+    header: 'Exit Date',
+    render: (e) => parseAndFormatDate(e.exitDate),
   },
   lastClsDate: {
     header: 'Last Current Living Situation Date',
@@ -170,7 +106,6 @@ const ProjectClientEnrollmentsTable = ({
   projectId,
   columns,
   openOnDate,
-  linkRowToEnrollment = false,
   searchTerm,
 }: {
   projectId: string;
@@ -182,15 +117,6 @@ const ProjectClientEnrollmentsTable = ({
   // TODO: show MCI column if enabled
   // const { globalFeatureFlags } = useHmisAppSettings();
   // globalFeatureFlags?.mciId
-  const rowLinkTo = useCallback(
-    (en: EnrollmentFields) =>
-      generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-        clientId: en.client.id,
-        enrollmentId: en.id,
-      }),
-    []
-  );
-
   const openOnDateString = useMemo(
     () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
     [openOnDate]
@@ -203,11 +129,11 @@ const ProjectClientEnrollmentsTable = ({
   const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
       const cols = [
-        ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
-        CLIENT_COLUMNS.dobAge,
+        CLIENT_COLUMNS.name,
+        CLIENT_COLUMNS.age,
+        ENROLLMENT_COLUMNS.entryDate,
+        ENROLLMENT_COLUMNS.exitDate,
         ENROLLMENT_COLUMNS.enrollmentStatus,
-        ENROLLMENT_COLUMNS.enrollmentPeriod,
-        ENROLLMENT_COLUMNS.lastClsDate,
       ];
 
       if (staffAssignmentsEnabled) cols.push(ENROLLMENT_COLUMNS.assignedStaff);
@@ -224,6 +150,29 @@ const ProjectClientEnrollmentsTable = ({
     ],
     pickListArgs: { projectId: projectId },
   });
+
+  const tableRowActions = useMemo(
+    () => [
+      {
+        title: 'View Enrollment',
+        key: 'enrollment',
+        getUrl: (enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment) =>
+          generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+            clientId: enrollment.client.id,
+            enrollmentId: enrollment.id,
+          }),
+      },
+      {
+        title: 'View Client',
+        key: 'client',
+        getUrl: (enrollment) =>
+          generateSafePath(ClientDashboardRoutes.PROFILE, {
+            clientId: enrollment.client.id,
+          }),
+      },
+    ],
+    []
+  );
 
   return (
     <SsnDobShowContextProvider>
@@ -242,7 +191,6 @@ const ProjectClientEnrollmentsTable = ({
         }}
         queryDocument={GetProjectEnrollmentsDocument}
         columns={columns || defaultColumns}
-        rowLinkTo={linkRowToEnrollment ? rowLinkTo : undefined}
         noData={
           openOnDate
             ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
@@ -264,6 +212,7 @@ const ProjectClientEnrollmentsTable = ({
 
           return result;
         }}
+        tableRowActions={tableRowActions}
       />
     </SsnDobShowContextProvider>
   );
