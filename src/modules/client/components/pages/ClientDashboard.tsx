@@ -63,11 +63,6 @@ const ClientDashboard: React.FC = () => {
     return (
       <>
         <ClientPrintHeader client={client} />
-        <LocalVersionCoordinationPrompt
-          recordType='Client'
-          recordId={client.id}
-          currentVersion={client.lockVersion}
-        />
         <Outlet context={outletContext} />
       </>
     );
@@ -88,6 +83,11 @@ const ClientDashboard: React.FC = () => {
       {...dashboardState}
     >
       <Container maxWidth='xl' disableGutters>
+        <LocalVersionCoordinationPrompt
+          recordType='Client'
+          recordId={client.id}
+          currentVersion={client.lockVersion}
+        />
         <Outlet context={outletContext} />
       </Container>
     </DashboardContentContainer>

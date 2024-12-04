@@ -1,5 +1,7 @@
+import { LoadingButton } from '@mui/lab';
+import { Box } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
-import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import SnackbarAlert from '@/components/elements/SnackbarAlert';
 import useLocalVersionCoordination, {
   LocalVersionedRecordType,
 } from '@/modules/localVersionCoordination/hooks/useLocalVersionCoordination';
@@ -51,21 +53,37 @@ const LocalVersionCoordinationPrompt: React.FC<Props> = ({
     latestVersion > Math.max(acknowledgedVersion, currentVersion);
 
   return (
-    <ConfirmationDialog
+    <SnackbarAlert
       open={showPrompt}
-      title={`New ${recordType} data available`}
-      cancelText='Continue anyway'
-      confirmText='Load new data'
-      onConfirm={handleReload}
-      onCancel={handleContinue}
-      loading={loading}
+      onClose={handleContinue}
+      title='New Data available'
+      alertProps={{ severity: 'warning' }}
     >
-      <div>
-        It looks like you have another tab open with newer data for this record.
-        Would you like to load the new data or
-      </div>
-    </ConfirmationDialog>
+      <Box sx={{ my: 1 }}>
+        The data on this page is out-of-date. You won't be able to save changes
+        to this record until you load with new data.
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        <LoadingButton onClick={handleReload} loading={loading}>
+          Reload with New Data
+        </LoadingButton>
+      </Box>
+    </SnackbarAlert>
   );
+
+  //return (
+  //  <ConfirmationDialog
+  //    title={`New ${recordType} data available`}
+  //    cancelText='Continue anyway'
+  //    confirmText='Load new data'
+  //    onConfirm={handleReload}
+  //    onCancel={handleContinue}
+  //    loading={loading}
+  //  >
+  //    <div>
+  //    </div>
+  //  </ConfirmationDialog>
+  //);
 };
 
 export default LocalVersionCoordinationPrompt;
