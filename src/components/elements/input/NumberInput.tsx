@@ -35,6 +35,9 @@ const NumberInput = ({
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
     (event) => {
+      // Allow copy/paste and undo operations
+      if (event.ctrlKey || event.metaKey) return;
+
       const currentValue = event.currentTarget.value || '';
       const selectionStart = event.currentTarget.selectionStart;
       const key = event.key;
@@ -72,6 +75,41 @@ const NumberInput = ({
       }
     },
     [disableArrowKeys]
+  );
+
+  const handlePaste = useCallback(
+    (event: React.ClipboardEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      const pastedText = event.clipboardData.getData('text');
+      const currentValue = event.currentTarget.value || '';
+      const selectionStart = event.currentTarget.selectionStart || 0;
+      const selectionEnd = event.currentTarget.selectionEnd || 0;
+
+      // Build what the value would be after paste
+      const beforeSelection = currentValue.substring(0, selectionStart);
+      const afterSelection = currentValue.substring(selectionEnd);
+
+      // Clean pasted text - remove commas and whitespace
+      const cleanPastedText = pastedText.replace(/[,\s]/g, '');
+      const newValue = beforeSelection + cleanPastedText + afterSelection;
+
+      // Validate the resulting value
+      const isValidNumber = (str: string) => {
+        if (str === '' || str === '-') return true;
+        const num = Number(str);
+        return !isNaN(num) && isFinite(num);
+      };
+
+      // If valid, trigger change event with new value
+      if (isValidNumber(newValue)) {
+        const inputEvent = new InputEvent('input', { bubbles: true });
+        Object.defineProperty(inputEvent, 'data', { value: cleanPastedText });
+        Object.defineProperty(inputEvent, 'inputType', { value: 'insertText' });
+        event.currentTarget.value = newValue;
+        event.currentTarget.dispatchEvent(inputEvent);
+      }
+    },
+    []
   );
 
   const handleBlur = () => {
@@ -122,9 +160,11 @@ const NumberInput = ({
       type='text'
       inputProps={{
         inputMode: 'numeric',
+        pattern: '[0-9]*', // hint mobile keyboards
         min,
         max,
         onKeyDown: handleKeyDown,
+        onPaste: handlePaste,
         'aria-labelledby': ariaLabelledBy,
         ...inputProps,
       }}
