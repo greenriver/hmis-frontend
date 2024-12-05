@@ -81,7 +81,7 @@ const Uploader = ({
   // - a FileFieldsFragment record which points at a file record in our database, uploaded during a previous session.
   // `existingFiles` filters the list to only those files that were uploaded some previous time, so we can render them.
   // The files uploaded during this session, we render this component's internal state, `currentFiles`.
-  const existingFiles = useMemo(() => {
+  const existingFiles: FileFieldsFragment[] = useMemo(() => {
     let filesArr;
     if (multiple) {
       const { files } = rest as MultipleUploaderProps;
@@ -90,7 +90,9 @@ const Uploader = ({
       const { file } = rest as SingleUploaderProps;
       filesArr = ensureArray(file);
     }
-    return filesArr.filter((f) => typeof f !== 'string');
+    return filesArr.filter(
+      (f) => typeof f !== 'string'
+    ) as FileFieldsFragment[];
   }, [rest, multiple]);
 
   const [currentFiles, setCurrentFiles] = useState<File[]>([]);

@@ -788,6 +788,19 @@ export const formValueToGqlValue = (
     } else if (value) {
       return (value as PickListOption).code;
     }
+  } else if ([ItemType.File, ItemType.Image].includes(item.type)) {
+    // Special case for File types. The frontend receives a FileFieldsFragment
+    // if this file has already been saved, but we don't want to return that whole fragment
+    // to the backend for processing, so just return the ID.
+    if (Array.isArray(value)) {
+      return value.map((file) => (file.hasOwnProperty('id') ? file.id : file));
+    } else {
+      if (value.hasOwnProperty('id')) {
+        return value.id;
+      } else {
+        return value;
+      }
+    }
   }
 
   return value;
