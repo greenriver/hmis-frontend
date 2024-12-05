@@ -70,20 +70,6 @@ const LocalVersionCoordinationPrompt: React.FC<Props> = ({
       </Box>
     </SnackbarAlert>
   );
-
-  //return (
-  //  <ConfirmationDialog
-  //    title={`New ${recordType} data available`}
-  //    cancelText='Continue anyway'
-  //    confirmText='Load new data'
-  //    onConfirm={handleReload}
-  //    onCancel={handleContinue}
-  //    loading={loading}
-  //  >
-  //    <div>
-  //    </div>
-  //  </ConfirmationDialog>
-  //);
 };
 
 export default LocalVersionCoordinationPrompt;

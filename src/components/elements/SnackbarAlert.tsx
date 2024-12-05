@@ -18,7 +18,7 @@ const SnackbarAlert: React.FC<Props> = ({
 }) => {
   return (
     <Snackbar
-      TransitionProps={{ appear: false }} // transition looks kind of junky
+      TransitionProps={{ appear: false }} // disabled transition since it looks a bit junky
       open={open}
       onClose={onClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
