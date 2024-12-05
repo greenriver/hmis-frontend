@@ -56,16 +56,16 @@ const LocalVersionCoordinationPrompt: React.FC<Props> = ({
     <SnackbarAlert
       open={showPrompt}
       onClose={handleContinue}
-      title='New Data available'
+      title='New Data Available'
       alertProps={{ severity: 'warning' }}
     >
       <Box sx={{ my: 1 }}>
         The data on this page is out-of-date. You won't be able to save changes
-        to this record until you load with new data.
+        to this record until you load the new data.
       </Box>
       <Box sx={{ mt: 2 }}>
         <LoadingButton onClick={handleReload} loading={loading}>
-          Reload with New Data
+          Load New Data
         </LoadingButton>
       </Box>
     </SnackbarAlert>
