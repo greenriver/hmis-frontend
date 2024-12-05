@@ -75,7 +75,8 @@ export interface Props<T> {
   noData?: ReactNode;
   renderRow?: (row: T, columnKeys: string[]) => ReactNode;
   condensed?: boolean;
-  overrideTableBody?: boolean; // TODO @MARTHA discuss - and, if keeping, add comments
+  overrideTableBody?: boolean; // TODO @MARTHA discuss - and, if keeping, add comments/rename
+  injectBelowRows?: ReactNode;
   tableRowActions?: TableRowAction<T>[];
   getRowAccessibleName?: (row: T) => string;
 }
@@ -134,7 +135,8 @@ const GenericTable = <T extends { id: string }>({
   loadingVariant = 'circular',
   condensed = false,
   rowLinkState,
-  overrideTableBody = false, // todo @martha - discuss and add comments
+  overrideTableBody = false,
+  injectBelowRows,
   tableRowActions,
   getRowAccessibleName,
 }: Props<T>) => {
@@ -478,6 +480,7 @@ const GenericTable = <T extends { id: string }>({
                   </TableRow>
                 );
               })}
+            {injectBelowRows}
             {actionRow}
             {/* dont show "no data" row if there is an action row, which may be for adding new elements or making another selection (MCI uses it) */}
             {!actionRow && noResultsRow}

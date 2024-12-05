@@ -46,7 +46,7 @@ export const ENROLLMENT_STATUS_COL: ColumnDef<
   render: (e) => <EnrollmentStatus enrollment={e} />,
 };
 
-// TODO @martha (#6761) - the this is now only used in the client card. Reorganize where column defs live
+// TODO(#6761) - this is now only used in the client card. Reorganize where column defs live
 export const ENROLLMENT_PERIOD_COL: ColumnDef<
   | EnrollmentFieldsFragment
   | ProjectEnrollmentFieldsFragment
