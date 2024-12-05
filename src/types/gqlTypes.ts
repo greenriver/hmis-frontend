@@ -5578,7 +5578,6 @@ export type ProjectAccess = {
   canManageDeniedReferrals: Scalars['Boolean']['output'];
   canManageExternalFormSubmissions: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
-  canManageInventory: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
   canManageUnits: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
@@ -6055,7 +6054,6 @@ export type QueryAccess = {
   canManageExternalFormSubmissions: Scalars['Boolean']['output'];
   canManageForms: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
-  canManageInventory: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
   canManageScanCards: Scalars['Boolean']['output'];

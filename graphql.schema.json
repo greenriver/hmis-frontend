@@ -35665,22 +35665,6 @@
             "deprecationReason": null
           },
           {
-            "name": "canManageInventory",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "canManageOutgoingReferrals",
             "description": null,
             "args": [],
@@ -39231,22 +39215,6 @@
           },
           {
             "name": "canManageIncomingReferrals",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "canManageInventory",
             "description": null,
             "args": [],
             "type": {
