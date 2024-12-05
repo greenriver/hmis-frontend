@@ -15,6 +15,7 @@ import {
   GetEnrollmentWithHouseholdDocument,
   GetFileDocument,
   GetPickListDocument,
+  GetProjectHouseholdsDocument,
   GetRootPermissionsDocument,
   NameDataQuality,
   NoYesReasonsForMissingData,
@@ -148,6 +149,80 @@ export const RITA_ACKROYD_WITHOUT_ENROLLMENTS = {
   ...RITA_ACKROYD,
   id: '9998',
   enrollments: [],
+};
+
+export const AMERICAN_LAKE_HOUSE = {
+  id: '441',
+  staffAssignmentsEnabled: true,
+  // TODO: flesh out project mock
+};
+
+export const getProjectHouseholdsMock = {
+  request: {
+    query: GetProjectHouseholdsDocument,
+    variables: {
+      limit: 25,
+      offset: 0,
+      includeStaffAssignment: false,
+      id: undefined,
+      filters: { searchTerm: undefined },
+      openOnDate: undefined,
+      sortOrder: 'MOST_RECENT',
+    },
+  },
+  result: {
+    data: {
+      project: {
+        households: {
+          offset: 0,
+          limit: 25,
+          nodesCount: 2,
+          nodes: [
+            {
+              id: '1',
+              householdSize: 1,
+              householdClients: [
+                {
+                  id: '35871:8678',
+                  relationshipToHoH: 'SELF_HEAD_OF_HOUSEHOLD',
+                  client: {
+                    ...RITA_ACKROYD,
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+              ],
+            },
+            {
+              id: '2',
+              householdSize: 4,
+              householdClients: [
+                {
+                  id: '1:1',
+                  relationshipToHoH: 'SELF_HEAD_OF_HOUSEHOLD',
+                  client: {
+                    ...RITA_ACKROYD,
+                    firstName: 'Elmer',
+                    lastName: 'Smith',
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+                {
+                  id: '1:2',
+                  relationshipToHoH: 'SPOUSE_OR_PARTNER',
+                  client: {
+                    ...RITA_ACKROYD,
+                    firstName: 'Ryan',
+                    lastName: 'Smith',
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+  },
 };
 
 export const projectsForSelectMock = {

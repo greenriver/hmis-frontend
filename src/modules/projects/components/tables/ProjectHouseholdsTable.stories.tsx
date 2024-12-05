@@ -1,24 +1,26 @@
+import { Card } from '@mui/material';
 import { Meta, StoryObj } from '@storybook/react';
 
 import ProjectHouseholdsTable from './ProjectHouseholdsTable';
-
-// import { enrollmentWithHoHMock, RITA_ACKROYD } from '@/test/__mocks__/requests';
+import { getProjectHouseholdsMock } from '@/test/__mocks__/requests';
 
 export default {
   component: ProjectHouseholdsTable,
   parameters: {
-    // dashboardContext: 'enrollment',
-    // apolloClient: {
-    //   mocks: [enrollmentWithHoHMock],
-    // },
+    dashboardContext: 'project',
+    apolloClient: {
+      mocks: [getProjectHouseholdsMock],
+    },
   },
+  decorators: [
+    (Story) => (
+      <Card>
+        <Story />
+      </Card>
+    ),
+  ],
 } as Meta<typeof ProjectHouseholdsTable>;
 
 type Story = StoryObj<typeof ProjectHouseholdsTable>;
 
-export const Default: Story = {
-  args: {
-    // clientId: RITA_ACKROYD.id,
-    // enrollmentId: '5',
-  },
-};
+export const Default: Story = {};
