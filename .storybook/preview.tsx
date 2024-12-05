@@ -67,7 +67,6 @@ export const decorators = [
       case 'project':
         return (
           <RenderRouteWithOutletContext<ProjectDashboardContext>
-            // data doesn't exactly match the fragment type that is used for Enrollment Dashboard, could be improved
             context={{ project: project || AMERICAN_LAKE_HOUSE }}
           >
             {Story()}
