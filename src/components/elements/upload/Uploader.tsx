@@ -131,7 +131,10 @@ const Uploader = ({
           setCurrentUploads(newUploads);
           if (multiple) {
             if (onChange) {
-              onChange([...existingFiles, ...newUploads.map((u) => u.blobId)]);
+              onChange([
+                ...existingFiles,
+                ...newUploads.map((u) => u.signedBlobId),
+              ]);
             }
             if (onUpload) {
               onUpload(newUploads, newFiles);
@@ -140,7 +143,7 @@ const Uploader = ({
             const singleUpload = newUploads[0];
             const singleFile = newFiles[0];
             if (onChange && singleUpload) {
-              onChange(singleUpload.blobId);
+              onChange(singleUpload.signedBlobId);
             }
             if (onUpload && singleFile && singleUpload) {
               onUpload(singleUpload, singleFile);
@@ -216,7 +219,7 @@ const Uploader = ({
         if (onChange) {
           onChange([
             ...existingFiles.filter((f) => f !== file),
-            ...newUploads.map((u) => u.blobId),
+            ...newUploads.map((u) => u.signedBlobId),
           ]);
         }
         if (onUpload) {
