@@ -24,7 +24,6 @@ const IndividualAssessmentPage = () => {
     data: assessmentData,
     loading: assessmentLoading,
     error: assessmentError,
-    refetch,
   } = useGetAssessmentQuery({ variables: { id: assessmentId } });
 
   const assessment = assessmentData?.assessment;
@@ -49,7 +48,6 @@ const IndividualAssessmentPage = () => {
         recordType='Assessment'
         recordId={assessment.id}
         currentVersion={assessment.lockVersion}
-        onReload={refetch}
       />
       <IndividualAssessmentFormController
         enrollment={enrollment}
