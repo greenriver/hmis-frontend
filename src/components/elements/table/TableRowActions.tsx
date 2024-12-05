@@ -4,6 +4,8 @@ import ButtonLink from '../ButtonLink';
 import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
 
 export type TableRowAction<T> = Omit<CommonMenuItem, 'to' | 'onClick'> & {
+  // getUrl: given a record, return the URL this action should link to.
+  // E.g. for the "View Client" action on an Enrollment table, given the Enrollment record, return the link to the Client.
   // getUrl could be made optional and onClick (omitted above) could be re-enabled
   getUrl: (record: T) => string;
 };

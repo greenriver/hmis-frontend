@@ -75,8 +75,10 @@ export interface Props<T> {
   noData?: ReactNode;
   renderRow?: (row: T, columnKeys: string[]) => ReactNode;
   condensed?: boolean;
-  overrideTableBody?: boolean; // TODO @MARTHA discuss - and, if keeping, add comments/rename
-  injectBelowRows?: ReactNode;
+  // if overrideTableBody is true, GenericTable doesn't render a `tbody` element.
+  // This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
+  overrideTableBody?: boolean;
+  injectBelowRows?: ReactNode; // component to inject below all rendered rows, above footer
   tableRowActions?: TableRowAction<T>[];
   getRowAccessibleName?: (row: T) => string;
 }
@@ -471,7 +473,7 @@ const GenericTable = <T extends { id: string }>({
                           recordName={
                             getRowAccessibleName
                               ? getRowAccessibleName(row)
-                              : undefined
+                              : row.id
                           }
                           actions={tableRowActions}
                         />
