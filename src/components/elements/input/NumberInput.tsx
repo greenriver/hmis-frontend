@@ -33,6 +33,47 @@ const NumberInput = ({
       }
     : {};
 
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      const currentValue = event.currentTarget.value || '';
+      const selectionStart = event.currentTarget.selectionStart;
+      const key = event.key;
+
+      // Handle arrow keys first
+      if (key.match(/(ArrowDown|ArrowUp)/)) {
+        if (disableArrowKeys) event.preventDefault();
+        return;
+      }
+
+      // Allow all other special keys (Tab, Delete, etc.)
+      if (key.length > 1) return;
+
+      // Build what the value would be if we allow this keypress
+      const beforeCursor = currentValue.substring(0, selectionStart || 0);
+      const afterCursor = currentValue.substring(selectionStart || 0);
+      const newValue = beforeCursor + key + afterCursor;
+
+      // Always allow empty string and single minus at start
+      if (newValue === '' || newValue === '-') return;
+
+      // Prevent invalid keypresses
+      if (
+        // Invalid characters
+        !key.match(/^[0-9.-]$/) ||
+        // Multiple decimal points
+        (key === '.' && currentValue.includes('.')) ||
+        // Minus sign not at start
+        (key === '-' && selectionStart !== 0) ||
+        // Invalid number
+        isNaN(Number(newValue)) ||
+        !isFinite(Number(newValue))
+      ) {
+        event.preventDefault();
+      }
+    },
+    [disableArrowKeys]
+  );
+
   const handleBlur = () => {
     if (isNil(value) || value === '') {
       setErrorMessage(null);
@@ -61,13 +102,6 @@ const NumberInput = ({
     }
   };
 
-  // Prevent form submission on Enter. Enter should toggle the state.
-  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
-    if (e.key.match(/(ArrowDown|ArrowUp)/)) {
-      e.preventDefault();
-    }
-  }, []);
-
   const preventValueChangeOnScroll: WheelEventHandler<HTMLDivElement> =
     useCallback((e) => {
       // Prevent the input value change
@@ -88,10 +122,9 @@ const NumberInput = ({
       type='text'
       inputProps={{
         inputMode: 'numeric',
-        pattern: '[0-9]*',
         min,
         max,
-        onKeyDown: disableArrowKeys ? onKeyDown : undefined,
+        onKeyDown: handleKeyDown,
         'aria-labelledby': ariaLabelledBy,
         ...inputProps,
       }}
