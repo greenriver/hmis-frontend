@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogProps,
   Grid,
+  Stack,
   Typography,
 } from '@mui/material';
 import { omit } from 'lodash-es';
@@ -18,6 +19,14 @@ import LoadingButton from '../LoadingButton';
 import Uploader from '../upload/UploaderBase';
 
 import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import {
+  emptyErrorState,
+  ErrorState,
+  hasErrors,
+  partitionValidations,
+} from '@/modules/errors/util';
 import {
   useDeleteClientImageMutation,
   useGetClientImageQuery,
@@ -40,7 +49,12 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   } = useGetClientImageQuery({
     variables: { id: clientId },
   });
-  const [mutate, { loading: updating }] = useUpdateClientImageMutation();
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
+  const [mutate, { loading: updating }] = useUpdateClientImageMutation({
+    onError: (apolloError) => {
+      setErrors({ ...emptyErrorState, apolloError });
+    },
+  });
   const [deleteImage, { loading: deleting }] = useDeleteClientImageMutation();
 
   const [newPhotoSrc, setNewPhotoSrc] = useState<string | undefined>();
@@ -59,10 +73,18 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
 
   const handleSave = useCallback<NonNullable<ButtonProps['onClick']>>(
     (e) => {
-      if (newBlobId)
-        mutate({ variables: { clientId, imageBlobId: newBlobId } }).then(() =>
-          handleClose(e)
+      if (newBlobId) {
+        mutate({ variables: { clientId, imageBlobId: newBlobId } }).then(
+          (result) => {
+            const modelErrors = result.data?.updateClientImage?.errors || [];
+            if (modelErrors.length > 0) {
+              setErrors(partitionValidations(modelErrors));
+            } else {
+              handleClose(e);
+            }
+          }
         );
+      }
     },
     [newBlobId, clientId, mutate, handleClose]
   );
@@ -143,13 +165,23 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                   onUpload={(upload, file) => {
                     setNewBlobId(upload.signedBlobId);
                     setNewPhotoSrc(URL.createObjectURL(file));
+                    setErrors(emptyErrorState);
                   }}
                   onClear={() => {
                     setNewBlobId(undefined);
                     setNewPhotoSrc(undefined);
+                    setErrors(emptyErrorState);
                   }}
                 />
               </Grid>
+              {hasErrors(errors) && (
+                <Grid item xs={12}>
+                  <Stack gap={2}>
+                    <ApolloErrorAlert error={errors.apolloError} />
+                    <ErrorAlert errors={errors.errors} fixable />
+                  </Stack>
+                </Grid>
+              )}
             </Grid>
           )
         )}
