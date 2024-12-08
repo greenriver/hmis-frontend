@@ -247,7 +247,7 @@ const JsonFormEditor: React.FC<FormEditorProps> = ({
             </Stack>
             <Stack direction='row' gap={1}>
               <Button
-                variant='gray'
+                color='grayscale'
                 onClick={() => setExtraPanelOpen((prev) => !prev)}
               >
                 {extraPanelOpen ? 'Hide' : 'Show'}
@@ -346,7 +346,10 @@ const JsonFormEditor: React.FC<FormEditorProps> = ({
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button variant='gray' onClick={() => setFormSubmitResult(undefined)}>
+          <Button
+            color='grayscale'
+            onClick={() => setFormSubmitResult(undefined)}
+          >
             Close
           </Button>
           <Button

@@ -474,7 +474,7 @@ const FormItemEditor: React.FC<Props> = ({
         </Box>
         <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
           <Stack direction='row' gap={2}>
-            <Button variant='gray' onClick={onDiscard}>
+            <Button color='grayscale' onClick={onDiscard}>
               Cancel
             </Button>
             <LoadingButton

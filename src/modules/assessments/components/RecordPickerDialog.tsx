@@ -149,7 +149,7 @@ const RecordPickerDialog = ({
         />
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'center' }}>
-        <Button onClick={onCancel} variant='gray'>
+        <Button onClick={onCancel} color='grayscale'>
           Close
         </Button>
       </DialogActions>

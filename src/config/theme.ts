@@ -3,6 +3,7 @@ import {
   PaletteColor,
   SimplePaletteColorOptions,
   ThemeOptions,
+  alpha,
   createTheme,
 } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
@@ -10,7 +11,6 @@ import { deepmerge } from '@mui/utils';
 // to have typed safe, Button need to provide extra type that can be augmented
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
-    gray: true;
     transparent: true;
   }
 }
@@ -55,17 +55,24 @@ declare module '@mui/material/styles' {
       icon?: string;
     };
   }
+  interface GrayPaletteColor extends PaletteColor {
+    p30: string;
+    p12: string;
+    p08: string;
+  }
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
+    grayscale: GrayPaletteColor;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
+    grayscale: SimplePaletteColorOptions & Omit<GrayPaletteColor, 'light'>;
   }
 }
 
@@ -73,6 +80,12 @@ declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     body3: true;
     cardTitle: true;
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    grayscale: true;
   }
 }
 
@@ -126,6 +139,14 @@ export const baseThemeDef: ThemeOptions = {
     },
     links: '#1976D2',
     activeStatus: '#75559F',
+    grayscale: {
+      main: '#6E6E6E',
+      dark: '#4D4D4D',
+      contrastText: '#fff',
+      p30: alpha('#6E6E6E', 0.3),
+      p12: alpha('#6E6E6E', 0.12),
+      p08: alpha('#6E6E6E', 0.08),
+    },
   },
 };
 
@@ -279,6 +300,7 @@ const createThemeOptions = (theme: Theme) => ({
       defaultProps: {
         disableRipple: true,
       },
+
       styleOverrides: {
         root: {
           whiteSpace: 'nowrap',
@@ -418,10 +440,31 @@ const createThemeOptions = (theme: Theme) => ({
       },
       variants: [
         {
-          props: { variant: 'gray' },
-          style: {
-            backgroundColor: '#EDEDED',
-          },
+          props: { color: 'grayscale' },
+          style: theme.unstable_sx({
+            color: 'text.primary',
+            '&:not(:disabled) .MuiButton-icon': {
+              color: theme.palette.grayscale.main,
+            },
+            '&:hover': {
+              backgroundColor: theme.palette.grayscale.p12,
+            },
+          }),
+        },
+        {
+          props: { variant: 'contained', color: 'grayscale' },
+          style: theme.unstable_sx({
+            backgroundColor: theme.palette.grayscale.p08,
+          }),
+        },
+        {
+          props: { variant: 'outlined', color: 'grayscale' },
+          style: theme.unstable_sx({
+            borderColor: theme.palette.grayscale.p30,
+            '&:hover': {
+              borderColor: theme.palette.grayscale.p30,
+            },
+          }),
         },
       ],
       styleOverrides: {
