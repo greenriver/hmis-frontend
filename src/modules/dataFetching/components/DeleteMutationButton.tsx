@@ -1,6 +1,12 @@
 import { DocumentNode, TypedDocumentNode, useMutation } from '@apollo/client';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, ButtonProps, IconButton, Typography } from '@mui/material';
+import {
+  Button,
+  ButtonProps,
+  IconButton,
+  IconButtonProps,
+  Typography,
+} from '@mui/material';
 import { camelCase, capitalize, get } from 'lodash-es';
 import { ReactNode, useCallback, useState } from 'react';
 
@@ -90,7 +96,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
           onClick={onClick}
           size='small'
           className={className}
-          {...ButtonProps}
+          {...(ButtonProps as IconButtonProps)}
         >
           <DeleteIcon fontSize='small' />
         </IconButton>

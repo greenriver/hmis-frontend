@@ -1,5 +1,5 @@
 import CheckIcon from '@mui/icons-material/Check';
-import { Button, ButtonProps, Stack } from '@mui/material';
+import { Button, ButtonProps, Stack, IconButton } from '@mui/material';
 import { Meta, StoryObj } from '@storybook/react';
 
 export default {
@@ -30,40 +30,56 @@ export const Default: Story = {
   },
 };
 
-export const AllColors: Story = {
+// todo: re-expor this button from MUI so we restrict the colors that can be used
+export const IconOnly: StoryObj<typeof IconButton> = {
+  args: {
+    children: <CheckIcon />,
+  },
+  render: (props) => <IconButton {...props} />,
+};
+
+export const AllVariants: Story = {
   args: {
     children: 'Action',
     startIcon: <CheckIcon />,
     // disabled: true,
   },
   render: (props) => (
-    <Stack gap={2}>
-      {(
-        [
-          'grayscale',
-          'primary',
-          'error',
-          'secondary',
-          'warning',
-          'info', // not in figma, should not be used?
-          'success', // not in figma, should not be used?
-        ] as ButtonProps['color'][]
-      ).map((color) => (
-        <Stack direction='row' gap={2} alignItems='center' key={color}>
-          <span style={{ width: '100px' }}>{color}</span>
-          {(['contained', 'outlined', 'text'] as ButtonProps['variant'][]).map(
-            (variant) => (
-              <Button
-                {...props}
-                className='.MuiButton-active'
-                color={color}
-                variant={variant}
-                key={variant}
-              />
-            )
-          )}
-        </Stack>
-      ))}
-    </Stack>
+    <>
+      <Stack gap={2} direction='row'>
+        {(
+          [
+            'grayscale',
+            'primary',
+            'secondary',
+            'error',
+            'warning',
+            'info', // not in figma, should not be used?
+            'success', // not in figma, should not be used?
+          ] as ButtonProps['color'][]
+        ).map((color, idx) => (
+          <Stack gap={2} alignItems='center' key={color}>
+            <Stack direction='row' gap={1}>
+              {idx === 0 && <span style={{ width: '100px' }}></span>}
+              <span style={{ width: '100px' }}>{color}</span>
+            </Stack>
+            {(
+              ['contained', 'outlined', 'text'] as ButtonProps['variant'][]
+            ).map((variant) => (
+              <Stack direction='row' gap={1}>
+                {idx === 0 && <span style={{ width: '100px' }}>{variant}</span>}
+                <Button
+                  {...props}
+                  className='.MuiButton-active'
+                  color={color}
+                  variant={variant}
+                  key={variant}
+                />
+              </Stack>
+            ))}
+          </Stack>
+        ))}
+      </Stack>
+    </>
   ),
 };
