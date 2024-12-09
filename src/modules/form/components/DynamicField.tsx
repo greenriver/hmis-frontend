@@ -46,10 +46,11 @@ import Uploader from '@/components/elements/upload/UploaderBase';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
+import GeolocationInput from '@/modules/geolocation/components/GeolocationInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
-const getLabel = (
+export const getLabel = (
   item: FormItem,
   horizontal?: boolean,
   isDisabled?: boolean
@@ -424,6 +425,16 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <Uploader
             id={linkId}
             onUpload={async (upload) => onChangeValue(upload.blobId)}
+          />
+        </InputContainer>
+      );
+    case ItemType.Geolocation:
+      return (
+        <InputContainer {...commonContainerProps}>
+          <GeolocationInput
+            label={label}
+            value={value}
+            onChange={onChangeValue}
           />
         </InputContainer>
       );

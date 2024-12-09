@@ -1,0 +1,11 @@
+fragment GeolocationFields on Geolocation {
+  id
+  coordinates {
+    # todo make sure this doesnt get cached
+    latitude
+    longitude
+  }
+  collectedBy
+  locatedOn
+  locatedAt
+}

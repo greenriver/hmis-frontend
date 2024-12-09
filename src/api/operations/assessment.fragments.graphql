@@ -71,6 +71,9 @@ fragment AssessmentWithRecords on Assessment {
   access {
     ...AssessmentAccessFields
   }
+  geolocation {
+    ...GeolocationFields
+  }
 }
 
 fragment AssessmentWithValues on Assessment {

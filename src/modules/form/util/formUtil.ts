@@ -1234,12 +1234,14 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
     const recordType = HmisEnums.RelatedRecordType[mapping.recordType];
     if (recordType !== record.__typename) {
       relatedRecordAttribute = lowerFirst(recordType);
-      // if (!record.hasOwnProperty(relatedRecordAttribute)) {
-      //   console.debug(
-      //     `Expected record to have ${relatedRecordAttribute}. FieldMapping:`,
-      //     JSON.stringify(mapping)
-      //   );
-      // }
+      console.log(relatedRecordAttribute, record);
+      if (!record.hasOwnProperty(relatedRecordAttribute)) {
+        // make this an error?
+        console.debug(
+          `Expected record to have ${relatedRecordAttribute}. FieldMapping:`,
+          JSON.stringify(mapping)
+        );
+      }
     }
   }
 
@@ -1250,6 +1252,7 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
     );
     return customDataElementValueForKey(mapping.customFieldKey, cdes);
   } else if (mapping.fieldName) {
+    // this should also raise if the field isn't resolved
     return get(record, compact([relatedRecordAttribute, mapping.fieldName]));
   }
 };

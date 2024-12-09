@@ -266,6 +266,8 @@ export type Assessment = {
   enrollment: Enrollment;
   event?: Maybe<Event>;
   exit?: Maybe<Exit>;
+  /** Client Location where the assessment was performed */
+  geolocation?: Maybe<Geolocation>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
@@ -626,6 +628,7 @@ export type Client = {
   firstName?: Maybe<Scalars['String']['output']>;
   gender: Array<Gender>;
   healthAndDvs: HealthAndDvsPaginated;
+  /** Meets the definition for HUD chronically homeless as of today (time of API request) */
   hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<ClientImage>;
@@ -1345,6 +1348,8 @@ export type CurrentLivingSituation = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
+  /** Client Location where the Current Living Situation was recorded */
+  geolocation?: Maybe<Geolocation>;
   id: Scalars['ID']['output'];
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   leaseOwn60Day?: Maybe<NoYesReasonsForMissingData>;
@@ -2824,6 +2829,8 @@ export type ExternalFormSubmission = {
   definition: FormDefinition;
   /** Enrollment that was generated from this submission, if any */
   enrollmentId?: Maybe<Scalars['ID']['output']>;
+  /** Client Location where the submission was recorded */
+  geolocation?: Maybe<Geolocation>;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   spam?: Maybe<Scalars['Boolean']['output']>;
@@ -3461,6 +3468,25 @@ export enum GeographyType {
   /** (1) Urban */
   Urban = 'URBAN',
 }
+
+export type Geolocation = {
+  __typename?: 'Geolocation';
+  collectedBy?: Maybe<Scalars['String']['output']>;
+  coordinates?: Maybe<GeolocationCoordinates>;
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  id: Scalars['ID']['output'];
+  locatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  locatedOn?: Maybe<Scalars['ISO8601Date']['output']>;
+  processedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type GeolocationCoordinates = {
+  __typename?: 'GeolocationCoordinates';
+  id: Scalars['ID']['output'];
+  latitude?: Maybe<Scalars['String']['output']>;
+  longitude?: Maybe<Scalars['String']['output']>;
+};
 
 /** HUD HMISParticipationType (2.08.1) */
 export enum HmisParticipationType {
@@ -8867,6 +8893,18 @@ export type AssessmentWithRecordsFragment = {
     canDeleteEnrollments: boolean;
     canEditEnrollments: boolean;
   };
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    collectedBy?: string | null;
+    locatedOn?: string | null;
+    locatedAt?: string | null;
+    coordinates?: {
+      __typename?: 'GeolocationCoordinates';
+      latitude?: string | null;
+      longitude?: string | null;
+    } | null;
+  } | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -9442,6 +9480,18 @@ export type FullAssessmentFragment = {
     canDeleteEnrollments: boolean;
     canEditEnrollments: boolean;
   };
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    collectedBy?: string | null;
+    locatedOn?: string | null;
+    locatedAt?: string | null;
+    coordinates?: {
+      __typename?: 'GeolocationCoordinates';
+      latitude?: string | null;
+      longitude?: string | null;
+    } | null;
+  } | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -11005,6 +11055,18 @@ export type GetAssessmentQuery = {
       canDeleteEnrollments: boolean;
       canEditEnrollments: boolean;
     };
+    geolocation?: {
+      __typename?: 'Geolocation';
+      id: string;
+      collectedBy?: string | null;
+      locatedOn?: string | null;
+      locatedAt?: string | null;
+      coordinates?: {
+        __typename?: 'GeolocationCoordinates';
+        latitude?: string | null;
+        longitude?: string | null;
+      } | null;
+    } | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -11838,6 +11900,18 @@ export type SubmitAssessmentMutation = {
         canDeleteEnrollments: boolean;
         canEditEnrollments: boolean;
       };
+      geolocation?: {
+        __typename?: 'Geolocation';
+        id: string;
+        collectedBy?: string | null;
+        locatedOn?: string | null;
+        locatedAt?: string | null;
+        coordinates?: {
+          __typename?: 'GeolocationCoordinates';
+          latitude?: string | null;
+          longitude?: string | null;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -12400,6 +12474,18 @@ export type SubmitHouseholdAssessmentsMutation = {
         canDeleteEnrollments: boolean;
         canEditEnrollments: boolean;
       };
+      geolocation?: {
+        __typename?: 'Geolocation';
+        id: string;
+        collectedBy?: string | null;
+        locatedOn?: string | null;
+        locatedAt?: string | null;
+        coordinates?: {
+          __typename?: 'GeolocationCoordinates';
+          latitude?: string | null;
+          longitude?: string | null;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -12979,6 +13065,18 @@ export type GetAssessmentsForPopulationQuery = {
           canDeleteEnrollments: boolean;
           canEditEnrollments: boolean;
         };
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          collectedBy?: string | null;
+          locatedOn?: string | null;
+          locatedAt?: string | null;
+          coordinates?: {
+            __typename?: 'GeolocationCoordinates';
+            latitude?: string | null;
+            longitude?: string | null;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -16724,6 +16822,18 @@ export type CurrentLivingSituationFieldsFragment = {
       } | null;
     }> | null;
   }>;
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    collectedBy?: string | null;
+    locatedOn?: string | null;
+    locatedAt?: string | null;
+    coordinates?: {
+      __typename?: 'GeolocationCoordinates';
+      latitude?: string | null;
+      longitude?: string | null;
+    } | null;
+  } | null;
 };
 
 export type ProjectCurrentLivingSituationFieldsFragment = {
@@ -16816,6 +16926,18 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       } | null;
     }> | null;
   }>;
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    collectedBy?: string | null;
+    locatedOn?: string | null;
+    locatedAt?: string | null;
+    coordinates?: {
+      __typename?: 'GeolocationCoordinates';
+      latitude?: string | null;
+      longitude?: string | null;
+    } | null;
+  } | null;
 };
 
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
@@ -16908,6 +17030,18 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             } | null;
           }> | null;
         }>;
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          collectedBy?: string | null;
+          locatedOn?: string | null;
+          locatedAt?: string | null;
+          coordinates?: {
+            __typename?: 'GeolocationCoordinates';
+            latitude?: string | null;
+            longitude?: string | null;
+          } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -17019,6 +17153,18 @@ export type GetProjectCurrentLivingSituationsQuery = {
             } | null;
           }> | null;
         }>;
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          collectedBy?: string | null;
+          locatedOn?: string | null;
+          locatedAt?: string | null;
+          coordinates?: {
+            __typename?: 'GeolocationCoordinates';
+            latitude?: string | null;
+            longitude?: string | null;
+          } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -27162,6 +27308,18 @@ export type SubmitFormMutation = {
               } | null;
             }> | null;
           }>;
+          geolocation?: {
+            __typename?: 'Geolocation';
+            id: string;
+            collectedBy?: string | null;
+            locatedOn?: string | null;
+            locatedAt?: string | null;
+            coordinates?: {
+              __typename?: 'GeolocationCoordinates';
+              latitude?: string | null;
+              longitude?: string | null;
+            } | null;
+          } | null;
         }
       | {
           __typename?: 'CustomCaseNote';
@@ -29424,6 +29582,19 @@ export type GetParsedFormDefinitionQuery = {
         }> | null;
       }>;
     } | null;
+  } | null;
+};
+
+export type GeolocationFieldsFragment = {
+  __typename?: 'Geolocation';
+  id: string;
+  collectedBy?: string | null;
+  locatedOn?: string | null;
+  locatedAt?: string | null;
+  coordinates?: {
+    __typename?: 'GeolocationCoordinates';
+    latitude?: string | null;
+    longitude?: string | null;
   } | null;
 };
 
@@ -35419,6 +35590,18 @@ export const AssessmentAccessFieldsFragmentDoc = gql`
     canEditEnrollments
   }
 `;
+export const GeolocationFieldsFragmentDoc = gql`
+  fragment GeolocationFields on Geolocation {
+    id
+    coordinates {
+      latitude
+      longitude
+    }
+    collectedBy
+    locatedOn
+    locatedAt
+  }
+`;
 export const AssessmentWithRecordsFragmentDoc = gql`
   fragment AssessmentWithRecords on Assessment {
     ...AssessmentFields
@@ -35467,6 +35650,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     access {
       ...AssessmentAccessFields
     }
+    geolocation {
+      ...GeolocationFields
+    }
   }
   ${AssessmentFieldsFragmentDoc}
   ${EnrollmentValuesFragmentDoc}
@@ -35480,6 +35666,7 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${YouthEducationStatusValuesFragmentDoc}
   ${EmploymentEducationValuesFragmentDoc}
   ${AssessmentAccessFieldsFragmentDoc}
+  ${GeolocationFieldsFragmentDoc}
 `;
 export const AssessmentWithValuesFragmentDoc = gql`
   fragment AssessmentWithValues on Assessment {
@@ -35973,9 +36160,13 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    geolocation {
+      ...GeolocationFields
+    }
   }
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${GeolocationFieldsFragmentDoc}
 `;
 export const ProjectCurrentLivingSituationFieldsFragmentDoc = gql`
   fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {
