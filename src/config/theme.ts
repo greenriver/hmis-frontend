@@ -458,6 +458,14 @@ const createThemeOptions = (theme: Theme) => ({
           }),
         },
         {
+          props: { variant: 'text', color: 'grayscale' },
+          style: theme.unstable_sx({
+            '&:hover': {
+              backgroundColor: theme.palette.grayscale.p08,
+            },
+          }),
+        },
+        {
           props: { variant: 'outlined', color: 'grayscale' },
           style: theme.unstable_sx({
             borderColor: theme.palette.grayscale.p30,
