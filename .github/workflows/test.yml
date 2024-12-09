@@ -47,7 +47,7 @@ jobs:
     - name: Run Chromatic
       # Don't publish to chromatic on PRs. Only on pushes to release-N or stable.
       # Also, publish to chromatic if commit message starts with '[chromatic]'
-      if: github.event_name != 'pull_request' || startsWith(github.event.head_commit.message, '[chromatic]')
+      # if: github.event_name != 'pull_request' || startsWith(github.event.head_commit.message, '[chromatic]')
       uses: chromaui/action@latest
       with:
         projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
