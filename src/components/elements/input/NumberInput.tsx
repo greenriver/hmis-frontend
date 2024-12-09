@@ -32,6 +32,7 @@ const NumberInput: React.FC<Props> = ({
   currency = false,
   value,
   error,
+  helperText,
   ariaLabelledBy,
   onChange,
   ...props
@@ -85,7 +86,8 @@ const NumberInput: React.FC<Props> = ({
 
   return (
     <NumericFormat
-      error={error}
+      error={!!(error || errorMessage)}
+      helperText={error ? undefined : errorMessage || helperText}
       customInput={TextInput}
       onValueChange={handleChange}
       onBlur={handleBlur}
@@ -106,8 +108,6 @@ const NumberInput: React.FC<Props> = ({
         startAdornment: prefix ? (
           <InputAdornment position='start'>{prefix}</InputAdornment>
         ) : undefined,
-        error: error || !!errorMessage,
-        helperText: error ? undefined : errorMessage || props.helperText,
         ...InputProps,
       }}
       {...(props as any)}
