@@ -35,6 +35,8 @@ const NumberInput: React.FC<Props> = ({
   helperText,
   ariaLabelledBy,
   onChange,
+  defaultValue,
+  type,
   ...props
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -110,7 +112,9 @@ const NumberInput: React.FC<Props> = ({
         ) : undefined,
         ...InputProps,
       }}
-      {...(props as any)}
+      defaultValue={(defaultValue || '') as string}
+      type={type as any}
+      {...props}
     />
   );
 };
