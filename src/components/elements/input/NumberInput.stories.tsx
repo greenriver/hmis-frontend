@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { useArgs } from '@storybook/preview-api';
 import { Meta, StoryObj } from '@storybook/react';
 
 import NumberInput from './NumberInput';
@@ -6,13 +6,11 @@ import NumberInput from './NumberInput';
 export default {
   component: NumberInput,
   argTypes: { label: { control: 'text' } },
-  decorators: [
-    (Story) => (
-      <Box sx={{ width: 400 }}>
-        <Story />
-      </Box>
-    ),
-  ],
+  render: (args: any) => {
+    const [{ value }, updateArgs] = useArgs();
+    const onChange = (event: any) => updateArgs({ value: event.target.value });
+    return <NumberInput {...args} onChange={onChange} value={value} />;
+  },
 } as Meta<typeof NumberInput>;
 
 type Story = StoryObj<typeof NumberInput>;
