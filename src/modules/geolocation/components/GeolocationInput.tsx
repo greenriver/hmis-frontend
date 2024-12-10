@@ -17,7 +17,8 @@ import BaseMap from '@/modules/geolocation/components/BaseMap';
 import GeolocationHelpDialog from '@/modules/geolocation/components/GeolocationHelpDialog';
 import { LatLon } from '@/modules/geolocation/types';
 
-interface GeolocationInputProps extends DynamicInputCommonProps {
+interface GeolocationInputProps
+  extends Pick<DynamicInputCommonProps, 'label' | 'helperText' | 'disabled'> {
   value?: LatLon | null;
   onChange: (value: LatLon | null) => void;
 }
@@ -39,21 +40,7 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
   value: coordinates,
   onChange,
   helperText,
-  // maxWidth,
-  // id?: string;
-  // disabled?: boolean;
-  // label?: ReactNode;
-  // ariaLabel?: string;
-  // error?: boolean;
-  // warnIfEmptyTreatment?: boolean;
-  // helperText?: ReactNode;
-  // min?: any;
-  // max?: any;
-  // placeholder?: string;
-  // breakpoints?: BreakpointOverrides;
-  // ariaLabelledBy?: string;
-  // maxWidth?: number | string; // maximum width of form element (including the label)
-  // inputWidth?: number; // fixed with of input element (does not affect label)
+  disabled,
 }) => {
   const { requestCoordinates, loading, error } = useGeolocation(onChange);
   const [showHelp, setShowHelp] = React.useState(false);
@@ -69,6 +56,7 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
             startIcon={<MyLocationIcon />}
             variant='outlined'
             aria-labelledby={label ? labelId : undefined}
+            disabled={disabled}
           >
             Request Location
           </Button>
@@ -101,7 +89,7 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
 
         {helperText && <FormHelperText>{helperText}</FormHelperText>}
         <Box sx={{ mt: 1 }}>
-          {!coordinates && (
+          {!coordinates && !disabled && (
             <Box
               sx={{
                 display: 'flex',

@@ -8901,6 +8901,7 @@ export type AssessmentWithRecordsFragment = {
     locatedAt?: string | null;
     coordinates?: {
       __typename?: 'GeolocationCoordinates';
+      id: string;
       latitude?: string | null;
       longitude?: string | null;
     } | null;
@@ -9488,6 +9489,7 @@ export type FullAssessmentFragment = {
     locatedAt?: string | null;
     coordinates?: {
       __typename?: 'GeolocationCoordinates';
+      id: string;
       latitude?: string | null;
       longitude?: string | null;
     } | null;
@@ -11063,6 +11065,7 @@ export type GetAssessmentQuery = {
       locatedAt?: string | null;
       coordinates?: {
         __typename?: 'GeolocationCoordinates';
+        id: string;
         latitude?: string | null;
         longitude?: string | null;
       } | null;
@@ -11908,6 +11911,7 @@ export type SubmitAssessmentMutation = {
         locatedAt?: string | null;
         coordinates?: {
           __typename?: 'GeolocationCoordinates';
+          id: string;
           latitude?: string | null;
           longitude?: string | null;
         } | null;
@@ -12482,6 +12486,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         locatedAt?: string | null;
         coordinates?: {
           __typename?: 'GeolocationCoordinates';
+          id: string;
           latitude?: string | null;
           longitude?: string | null;
         } | null;
@@ -13073,6 +13078,7 @@ export type GetAssessmentsForPopulationQuery = {
           locatedAt?: string | null;
           coordinates?: {
             __typename?: 'GeolocationCoordinates';
+            id: string;
             latitude?: string | null;
             longitude?: string | null;
           } | null;
@@ -16830,6 +16836,7 @@ export type CurrentLivingSituationFieldsFragment = {
     locatedAt?: string | null;
     coordinates?: {
       __typename?: 'GeolocationCoordinates';
+      id: string;
       latitude?: string | null;
       longitude?: string | null;
     } | null;
@@ -16934,6 +16941,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
     locatedAt?: string | null;
     coordinates?: {
       __typename?: 'GeolocationCoordinates';
+      id: string;
       latitude?: string | null;
       longitude?: string | null;
     } | null;
@@ -17038,6 +17046,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
           locatedAt?: string | null;
           coordinates?: {
             __typename?: 'GeolocationCoordinates';
+            id: string;
             latitude?: string | null;
             longitude?: string | null;
           } | null;
@@ -17161,6 +17170,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
           locatedAt?: string | null;
           coordinates?: {
             __typename?: 'GeolocationCoordinates';
+            id: string;
             latitude?: string | null;
             longitude?: string | null;
           } | null;
@@ -27316,6 +27326,7 @@ export type SubmitFormMutation = {
             locatedAt?: string | null;
             coordinates?: {
               __typename?: 'GeolocationCoordinates';
+              id: string;
               latitude?: string | null;
               longitude?: string | null;
             } | null;
@@ -29593,6 +29604,7 @@ export type GeolocationFieldsFragment = {
   locatedAt?: string | null;
   coordinates?: {
     __typename?: 'GeolocationCoordinates';
+    id: string;
     latitude?: string | null;
     longitude?: string | null;
   } | null;
@@ -35594,6 +35606,7 @@ export const GeolocationFieldsFragmentDoc = gql`
   fragment GeolocationFields on Geolocation {
     id
     coordinates {
+      id
       latitude
       longitude
     }

@@ -206,7 +206,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
             <BaseMap coordinates={value} />
           ) : (
             <NotCollectedText variant='body2'>
-              Location not collected{' '}
+              Location not collected
             </NotCollectedText>
           )}
         </LabelWithContent>

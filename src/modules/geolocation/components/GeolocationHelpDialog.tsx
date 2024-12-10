@@ -39,21 +39,15 @@ const items = [
     header: <AccordionLabel main='Mobile' secondary='iPhone' />,
     content: (
       <>
-        <Typography>
-          To turn location services back on for your iPhone, follow these steps:
-        </Typography>
         <CommonOrderedList>
           <li>Open the Settings app.</li>
           <li>Scroll down to Privacy.</li>
           <li>Tap Location Services.</li>
           <li>
-            Find the app you want to allow location access to (Safari Websites
-            or other browser used to acces HMIS).
+            Find your browser app (like Safari) and select "While Using the
+            App," or "Ask Next Time" based on your preference.
           </li>
-          <li>
-            Select "While Using the App," or "Ask Next Time" based on your
-            preference.
-          </li>
+          <li>Visit the website and try again.</li>
         </CommonOrderedList>
       </>
     ),
@@ -62,7 +56,18 @@ const items = [
     key: 'android',
     // header: 'Android',
     header: <AccordionLabel main='Mobile' secondary='Android' />,
-    content: 'TODO',
+    content: (
+      <CommonOrderedList>
+        <li>Open the device settings menu.</li>
+        <li>Tap Location. Ensure location is toggled on.</li>
+        <li>Go back to Settings and then select App permissions.</li>
+        <li>
+          Find your browser app (like Chrome) and select Allow for location
+          access.
+        </li>
+        <li>Visit the website and try again.</li>
+      </CommonOrderedList>
+    ),
   },
   {
     key: 'desktop_chrome',

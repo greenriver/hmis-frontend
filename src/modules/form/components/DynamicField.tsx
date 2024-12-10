@@ -435,6 +435,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             label={label}
             value={value}
             onChange={onChangeValue}
+            helperText={commonInputProps.helperText}
+            disabled={commonInputProps.disabled}
           />
         </InputContainer>
       );

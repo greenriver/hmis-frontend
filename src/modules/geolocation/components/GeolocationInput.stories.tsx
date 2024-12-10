@@ -16,7 +16,9 @@ export default {
 
 type Story = StoryObj<typeof GeolocationInput>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {},
+};
 
 export const Labeled: Story = {
   args: {
@@ -26,6 +28,7 @@ export const Labeled: Story = {
       text: 'Current Location',
       linkId: 'geolocation',
     }),
+    disabled: true,
     helperText: 'Helper text here',
   },
 };
