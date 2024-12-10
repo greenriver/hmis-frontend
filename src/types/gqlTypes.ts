@@ -2014,11 +2014,6 @@ export enum Destination {
 /** Represents direct upload credentials */
 export type DirectUpload = {
   __typename?: 'DirectUpload';
-  /**
-   * Created blob record ID
-   * @deprecated Deprecated in favor of signed_blob_id
-   */
-  blobId: Scalars['ID']['output'];
   filename: Scalars['String']['output'];
   /** HTTP request headers (JSON-encoded) */
   headers: Scalars['String']['output'];
@@ -2914,8 +2909,6 @@ export type File = {
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']['output']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']['output']>;
-  /** @deprecated Removing unused blob ID */
-  fileBlobId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   ownFile: Scalars['Boolean']['output'];
@@ -8466,7 +8459,6 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -8523,7 +8515,6 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -8708,7 +8699,6 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -8765,7 +8755,6 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -8912,7 +8901,6 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -8969,7 +8957,6 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -9061,7 +9048,6 @@ export type AssessmentWithRecordsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -9118,7 +9104,6 @@ export type AssessmentWithRecordsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -9329,7 +9314,6 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -9386,7 +9370,6 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -9571,7 +9554,6 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -9628,7 +9610,6 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -9775,7 +9756,6 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -9832,7 +9812,6 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -9924,7 +9903,6 @@ export type FullAssessmentFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -9981,7 +9959,6 @@ export type FullAssessmentFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -11182,7 +11159,6 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -11239,7 +11215,6 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -11424,7 +11399,6 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -11481,7 +11455,6 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -11628,7 +11601,6 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -11685,7 +11657,6 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -11777,7 +11748,6 @@ export type GetAssessmentQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -11834,7 +11804,6 @@ export type GetAssessmentQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -12303,7 +12272,6 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -12360,7 +12328,6 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -12545,7 +12512,6 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -12602,7 +12568,6 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -12749,7 +12714,6 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -12806,7 +12770,6 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -12898,7 +12861,6 @@ export type SubmitAssessmentMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -12955,7 +12917,6 @@ export type SubmitAssessmentMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -13153,7 +13114,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -13210,7 +13170,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -13395,7 +13354,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -13452,7 +13410,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -13599,7 +13556,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -13656,7 +13612,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -13748,7 +13703,6 @@ export type SubmitHouseholdAssessmentsMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -13805,7 +13759,6 @@ export type SubmitHouseholdAssessmentsMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -14020,7 +13973,6 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -14077,7 +14029,6 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -14262,7 +14213,6 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -14319,7 +14269,6 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -14466,7 +14415,6 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -14523,7 +14471,6 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -14615,7 +14562,6 @@ export type GetAssessmentsForPopulationQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -14672,7 +14618,6 @@ export type GetAssessmentsForPopulationQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -15691,7 +15636,6 @@ export type ClientFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -15748,7 +15692,6 @@ export type ClientFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -16193,7 +16136,6 @@ export type GetClientQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -16250,7 +16192,6 @@ export type GetClientQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -16579,7 +16520,6 @@ export type GetClientServicesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -16636,7 +16576,6 @@ export type GetClientServicesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -17847,7 +17786,6 @@ export type MergeClientsMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -17904,7 +17842,6 @@ export type MergeClientsMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -18725,7 +18662,6 @@ export type CurrentLivingSituationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -18782,7 +18718,6 @@ export type CurrentLivingSituationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -18889,7 +18824,6 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -18946,7 +18880,6 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -19053,7 +18986,6 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -19110,7 +19042,6 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -19236,7 +19167,6 @@ export type GetProjectCurrentLivingSituationsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -19293,7 +19223,6 @@ export type GetProjectCurrentLivingSituationsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -19380,7 +19309,6 @@ export type CustomCaseNoteFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -19437,7 +19365,6 @@ export type CustomCaseNoteFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -19538,7 +19465,6 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -19595,7 +19521,6 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -19745,7 +19670,6 @@ export type GetClientCaseNotesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -19802,7 +19726,6 @@ export type GetClientCaseNotesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -19865,7 +19788,6 @@ export type CustomDataElementValueFieldsFragment = {
     expirationDate?: string | null;
     id: string;
     name: string;
-    fileBlobId?: string | null;
     url?: string | null;
     tags: Array<string>;
     ownFile: boolean;
@@ -19931,7 +19853,6 @@ export type CustomDataElementFieldsFragment = {
       expirationDate?: string | null;
       id: string;
       name: string;
-      fileBlobId?: string | null;
       url?: string | null;
       tags: Array<string>;
       ownFile: boolean;
@@ -19988,7 +19909,6 @@ export type CustomDataElementFieldsFragment = {
       expirationDate?: string | null;
       id: string;
       name: string;
-      fileBlobId?: string | null;
       url?: string | null;
       tags: Array<string>;
       ownFile: boolean;
@@ -20179,7 +20099,6 @@ export type EnrolledClientFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -20236,7 +20155,6 @@ export type EnrolledClientFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -20356,7 +20274,6 @@ export type AllEnrollmentDetailsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -20413,7 +20330,6 @@ export type AllEnrollmentDetailsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -20492,7 +20408,6 @@ export type AllEnrollmentDetailsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -20549,7 +20464,6 @@ export type AllEnrollmentDetailsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -21362,7 +21276,6 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -21419,7 +21332,6 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -21708,7 +21620,6 @@ export type GetEnrollmentDetailsQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -21765,7 +21676,6 @@ export type GetEnrollmentDetailsQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -21844,7 +21754,6 @@ export type GetEnrollmentDetailsQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -21901,7 +21810,6 @@ export type GetEnrollmentDetailsQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -30090,7 +29998,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30147,7 +30054,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30303,7 +30209,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30360,7 +30265,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30443,7 +30347,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30500,7 +30403,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30591,7 +30493,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30648,7 +30549,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30883,7 +30783,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -30940,7 +30839,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -31026,7 +30924,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -31083,7 +30980,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -31202,7 +31098,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -31259,7 +31154,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -31434,7 +31328,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -31491,7 +31384,6 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
-                fileBlobId?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 ownFile: boolean;
@@ -33545,7 +33437,6 @@ export type InventoryFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -33602,7 +33493,6 @@ export type InventoryFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -33895,7 +33785,6 @@ export type OrganizationDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -33952,7 +33841,6 @@ export type OrganizationDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -34039,7 +33927,6 @@ export type OrganizationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -34096,7 +33983,6 @@ export type OrganizationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -34216,7 +34102,6 @@ export type GetOrganizationQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -34273,7 +34158,6 @@ export type GetOrganizationQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -34470,7 +34354,6 @@ export type ProjectAllFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -34527,7 +34410,6 @@ export type ProjectAllFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -35389,7 +35271,6 @@ export type GetProjectQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -35446,7 +35327,6 @@ export type GetProjectQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -35995,7 +35875,6 @@ export type GetInventoryQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -36052,7 +35931,6 @@ export type GetInventoryQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -36197,7 +36075,6 @@ export type GetProjectInventoriesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -36254,7 +36131,6 @@ export type GetProjectInventoriesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -37088,7 +36964,6 @@ export type UpdateReferralPostingMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -37145,7 +37020,6 @@ export type UpdateReferralPostingMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -37355,7 +37229,6 @@ export type GetReferralPostingQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -37412,7 +37285,6 @@ export type GetReferralPostingQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -37662,7 +37534,6 @@ export type ReferralPostingDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -37719,7 +37590,6 @@ export type ReferralPostingDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -37857,7 +37727,6 @@ export type EsgFundingServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -37914,7 +37783,6 @@ export type EsgFundingServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -38010,7 +37878,6 @@ export type GetEsgFundingReportQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -38067,7 +37934,6 @@ export type GetEsgFundingReportQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -38420,7 +38286,6 @@ export type ServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -38477,7 +38342,6 @@ export type ServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -38602,7 +38466,6 @@ export type GetServiceQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -38659,7 +38522,6 @@ export type GetServiceQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -38799,7 +38661,6 @@ export type DeleteServiceMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -38856,7 +38717,6 @@ export type DeleteServiceMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
-            fileBlobId?: string | null;
             url?: string | null;
             tags: Array<string>;
             ownFile: boolean;
@@ -38995,7 +38855,6 @@ export type GetEnrollmentServicesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -39052,7 +38911,6 @@ export type GetEnrollmentServicesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
-              fileBlobId?: string | null;
               url?: string | null;
               tags: Array<string>;
               ownFile: boolean;
@@ -40049,7 +39907,6 @@ export const FileFieldsFragmentDoc = gql`
     expirationDate
     id
     name
-    fileBlobId
     url
     tags
     ownFile
@@ -41344,38 +41201,6 @@ export const ExternalFormSubmissionFieldsFragmentDoc = gql`
   }
   ${ExternalFormSubmissionSummaryFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
-`;
-export const FileFieldsFragmentDoc = gql`
-  fragment FileFields on File {
-    confidential
-    contentType
-    effectiveDate
-    expirationDate
-    id
-    name
-    url
-    tags
-    ownFile
-    redacted
-    enrollmentId
-    enrollment {
-      id
-    }
-    uploadedBy {
-      id
-      name
-    }
-    updatedBy {
-      id
-      name
-    }
-    dateCreated
-    dateUpdated
-    user {
-      ...UserFields
-    }
-  }
-  ${UserFieldsFragmentDoc}
 `;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {

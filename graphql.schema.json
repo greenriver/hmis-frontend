@@ -13335,22 +13335,6 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "blobId",
-            "description": "Created blob record ID",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Deprecated in favor of signed_blob_id"
-          },
-          {
             "name": "filename",
             "description": null,
             "args": [],
@@ -20599,18 +20583,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "fileBlobId",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Removing unused blob ID"
           },
           {
             "name": "id",

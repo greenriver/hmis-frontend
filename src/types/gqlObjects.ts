@@ -1612,14 +1612,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'DirectUpload',
     fields: [
       {
-        name: 'blobId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
         name: 'filename',
         type: {
           kind: 'NON_NULL',
@@ -3177,10 +3169,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'expirationDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-      },
-      {
-        name: 'fileBlobId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
