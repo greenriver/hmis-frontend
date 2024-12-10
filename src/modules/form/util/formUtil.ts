@@ -793,7 +793,9 @@ export const formValueToGqlValue = (
     // if this file has already been saved, but we don't want to return that whole fragment
     // to the backend for processing, so just return the ID.
     if (Array.isArray(value)) {
-      return value.map((file) => (file.hasOwnProperty('id') ? file.id : file));
+      return value.map((fileOrBlobId) =>
+        fileOrBlobId.hasOwnProperty('id') ? fileOrBlobId.id : fileOrBlobId
+      );
     } else {
       if (value.hasOwnProperty('id')) {
         return value.id;
