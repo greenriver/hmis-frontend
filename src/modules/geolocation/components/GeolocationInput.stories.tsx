@@ -28,7 +28,7 @@ export const Labeled: Story = {
       text: 'Current Location',
       linkId: 'geolocation',
     }),
-    disabled: true,
+    // disabled: true,
     helperText: 'Helper text here',
   },
 };
