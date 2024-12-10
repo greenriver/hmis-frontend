@@ -2,7 +2,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   Button,
-  ButtonProps,
   CircularProgress,
   DialogActions,
   DialogContent,
@@ -42,60 +41,62 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   onClose,
   ...props
 }) => {
-  const {
-    data: { client } = {},
-    loading: fetching,
-    refetch: refetchClient,
-  } = useGetClientImageQuery({
+  const { data: { client } = {}, loading: fetching } = useGetClientImageQuery({
     variables: { id: clientId },
   });
-  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
-  const [mutate, { loading: updating }] = useUpdateClientImageMutation({
-    onError: (apolloError) => {
-      setErrors({ ...emptyErrorState, apolloError });
-    },
-  });
-  const [deleteImage, { loading: deleting }] = useDeleteClientImageMutation();
 
   const [newPhotoSrc, setNewPhotoSrc] = useState<string | undefined>();
   const [newBlobId, setNewBlobId] = useState<string | undefined>();
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
-  const mutationLoading = updating || deleting;
-
-  const handleClose = useCallback<NonNullable<ButtonProps['onClick']>>(
-    (e) => {
+  // Handle closing the dialog and clearing out state.
+  const handleClose = useCallback<
+    (event?: object, reason?: 'backdropClick' | 'escapeKeyDown') => void
+  >(
+    (evt, reason) => {
       setNewPhotoSrc(undefined);
       setNewBlobId(undefined);
-      if (onClose) onClose(e, 'escapeKeyDown');
+      setErrors(emptyErrorState);
+      // use empty event if not provided
+      if (onClose) onClose(evt || {}, reason || 'escapeKeyDown');
     },
     [onClose]
   );
 
-  const handleSave = useCallback<NonNullable<ButtonProps['onClick']>>(
-    (e) => {
-      if (newBlobId) {
-        mutate({ variables: { clientId, imageBlobId: newBlobId } }).then(
-          (result) => {
-            const modelErrors = result.data?.updateClientImage?.errors || [];
-            if (modelErrors.length > 0) {
-              setErrors(partitionValidations(modelErrors));
-            } else {
-              handleClose(e);
-            }
-          }
-        );
+  // Delete current client image
+  const [deleteImage, { loading: deleting }] = useDeleteClientImageMutation({
+    onCompleted: (data) => {
+      if (data.deleteClientImage) {
+        handleClose(); // close dialog if image was deleted
       }
     },
-    [newBlobId, clientId, mutate, handleClose]
-  );
+    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+  });
 
-  const handleDelete = useCallback<NonNullable<ButtonProps['onClick']>>(
-    (e) => {
-      deleteImage({ variables: { clientId } })
-        .then(() => refetchClient())
-        .then((data) => !data.data?.client?.image && handleClose(e));
+  // Update current client image
+  const [mutate, { loading: updating }] = useUpdateClientImageMutation({
+    onCompleted: (data) => {
+      const { errors: validationErrors = [] } = data.updateClientImage || {};
+      if (validationErrors.length) {
+        setErrors(partitionValidations(validationErrors));
+      } else {
+        handleClose();
+      }
     },
-    [clientId, deleteImage, handleClose, refetchClient]
+    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+  });
+
+  const mutationLoading = updating || deleting;
+
+  const handleSave = useCallback(() => {
+    if (newBlobId) {
+      mutate({ variables: { clientId, imageBlobId: newBlobId } });
+    }
+  }, [newBlobId, clientId, mutate]);
+
+  const handleDelete = useCallback(
+    () => deleteImage({ variables: { clientId } }),
+    [clientId, deleteImage]
   );
 
   if (!fetching && !client) return null;
