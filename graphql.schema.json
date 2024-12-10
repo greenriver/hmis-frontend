@@ -10462,6 +10462,12 @@
             "deprecationReason": null
           },
           {
+            "name": "file",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "float",
             "description": null,
             "isDeprecated": false,
@@ -10595,6 +10601,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "ISO8601Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueFile",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "File",
               "ofType": null
             },
             "isDeprecated": false,
@@ -13316,22 +13334,6 @@
         "description": "Represents direct upload credentials",
         "isOneOf": null,
         "fields": [
-          {
-            "name": "blobId",
-            "description": "Created blob record ID",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Deprecated in favor of signed_blob_id"
-          },
           {
             "name": "filename",
             "description": null,
@@ -20583,18 +20585,6 @@
             "deprecationReason": null
           },
           {
-            "name": "fileBlobId",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Removing unused blob ID"
-          },
-          {
             "name": "id",
             "description": null,
             "args": [],
@@ -21153,6 +21143,22 @@
               "ofType": {
                 "kind": "ENUM",
                 "name": "FormStatus",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "supportsSaveInProgress",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },
