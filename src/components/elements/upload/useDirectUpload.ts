@@ -12,7 +12,6 @@ const OPERATION = gql`
       filename
       headers
       url
-      blobId
       signedBlobId
     }
   }
