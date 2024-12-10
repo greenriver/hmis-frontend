@@ -1500,7 +1500,6 @@ export type CustomDataElement = {
 export enum CustomDataElementType {
   Boolean = 'boolean',
   Date = 'date',
-  File = 'file',
   Float = 'float',
   Integer = 'integer',
   Json = 'json',
@@ -1518,7 +1517,6 @@ export type CustomDataElementValue = {
   user?: Maybe<ApplicationUser>;
   valueBoolean?: Maybe<Scalars['Boolean']['output']>;
   valueDate?: Maybe<Scalars['ISO8601Date']['output']>;
-  valueFile?: Maybe<File>;
   valueFloat?: Maybe<Scalars['Float']['output']>;
   valueInteger?: Maybe<Scalars['Int']['output']>;
   valueJson?: Maybe<Scalars['JsonObject']['output']>;
@@ -2014,6 +2012,11 @@ export enum Destination {
 /** Represents direct upload credentials */
 export type DirectUpload = {
   __typename?: 'DirectUpload';
+  /**
+   * Created blob record ID
+   * @deprecated Deprecated in favor of signed_blob_id
+   */
+  blobId: Scalars['ID']['output'];
   filename: Scalars['String']['output'];
   /** HTTP request headers (JSON-encoded) */
   headers: Scalars['String']['output'];
@@ -2909,6 +2912,8 @@ export type File = {
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']['output']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  /** @deprecated Removing unused blob ID */
+  fileBlobId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   ownFile: Scalars['Boolean']['output'];
@@ -2951,7 +2956,6 @@ export type FormDefinition = {
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
   status: FormStatus;
-  supportsSaveInProgress: Scalars['Boolean']['output'];
   system: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
   updatedBy?: Maybe<ApplicationUser>;
