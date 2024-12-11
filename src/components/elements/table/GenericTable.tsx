@@ -42,7 +42,7 @@ import {
   RenderFunction,
 } from './types';
 import TableRowActions, {
-  TableRowAction,
+  TableRowActionsType,
 } from '@/components/elements/table/TableRowActions';
 import { LocationState } from '@/routes/routeUtil';
 
@@ -79,7 +79,7 @@ export interface Props<T> {
   // This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
   overrideTableBody?: boolean;
   injectBelowRows?: ReactNode; // component to inject below all rendered rows, above footer
-  tableRowActions?: TableRowAction<T>[];
+  getTableRowActions?: (record: T) => TableRowActionsType;
   getRowAccessibleName?: (row: T) => string;
 }
 
@@ -139,7 +139,7 @@ const GenericTable = <T extends { id: string }>({
   rowLinkState,
   overrideTableBody = false,
   injectBelowRows,
-  tableRowActions,
+  getTableRowActions,
   getRowAccessibleName,
 }: Props<T>) => {
   const columns = useMemo(
@@ -255,7 +255,7 @@ const GenericTable = <T extends { id: string }>({
               <strong>{def.header}</strong>
             </HeaderCell>
           ))}
-          {tableRowActions && (
+          {getTableRowActions && (
             <HeaderCell>
               <Box sx={visuallyHidden}>Actions</Box>
             </HeaderCell>
@@ -466,8 +466,8 @@ const GenericTable = <T extends { id: string }>({
                         </TableCell>
                       );
                     })}
-                    {tableRowActions && (
-                      <TableCell>
+                    {getTableRowActions && (
+                      <TableCell sx={{ py: 0 }}>
                         <TableRowActions
                           record={row}
                           recordName={
@@ -475,7 +475,7 @@ const GenericTable = <T extends { id: string }>({
                               ? getRowAccessibleName(row)
                               : row.id
                           }
-                          actions={tableRowActions}
+                          getActions={getTableRowActions}
                         />
                       </TableCell>
                     )}

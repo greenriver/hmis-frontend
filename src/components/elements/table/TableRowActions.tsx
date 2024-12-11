@@ -3,57 +3,55 @@ import { useMemo } from 'react';
 import ButtonLink from '../ButtonLink';
 import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
 
-export type TableRowAction<T> = Omit<CommonMenuItem, 'to' | 'onClick'> & {
-  // getUrl: given a record, return the URL this action should link to.
-  // E.g. for the "View Client" action on an Enrollment table, given the Enrollment record, return the link to the Client.
-  // getUrl could be made optional and onClick (omitted above) could be re-enabled
-  getUrl: (record: T) => string;
+export type TableRowActionsType = {
+  primaryAction?: CommonMenuItem;
+  secondaryActions?: CommonMenuItem[];
 };
 
 interface TableRowActionsProps<T> {
   record: T;
   recordName?: string;
-  actions: TableRowAction<T>[];
+  getActions: (record: T) => TableRowActionsType;
 }
 
 const TableRowActions = <T extends { id: string }>({
   record,
   recordName,
-  actions,
+  getActions,
 }: TableRowActionsProps<T>) => {
-  const [primaryAction, ...rest] = actions;
-  const accessibleName = recordName || record.id;
+  const accessibleName = useMemo(
+    () => recordName || record.id,
+    [record.id, recordName]
+  );
 
-  const menuItems = useMemo(() => {
-    if (!rest.length) return null;
-
-    return rest.map((action) => {
-      return {
-        to: action.getUrl(record),
-        ariaLabel: `${action.title} - ${accessibleName}`,
-        ...action,
-      };
-    });
-  }, [rest, record, accessibleName]);
+  const { primaryAction, secondaryActions } = useMemo(
+    () => getActions(record),
+    [getActions, record]
+  );
 
   return (
     <Stack direction='row' alignItems='center' gap={0.5}>
       {!!primaryAction && (
         <ButtonLink
-          to={primaryAction.getUrl(record)}
+          to={primaryAction.to || ''}
           size='small'
           variant='outlined'
-          aria-label={`${primaryAction.title} - ${accessibleName}`}
+          aria-label={primaryAction.ariaLabel}
         >
           {primaryAction.title}
         </ButtonLink>
       )}
-      {!!menuItems && (
+      {!!secondaryActions && secondaryActions.length > 0 && (
         <CommonMenuButton
           iconButton
           title='Actions'
-          items={menuItems}
+          items={secondaryActions}
           aria-label={`Action menu for ${accessibleName}`}
+          MenuProps={{
+            MenuListProps: {
+              dense: true,
+            },
+          }}
         />
       )}
     </Stack>

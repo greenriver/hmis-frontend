@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
-import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
@@ -152,73 +151,76 @@ const ProjectClientEnrollmentsTable = ({
     pickListArgs: { projectId: projectId },
   });
 
-  const tableRowActions = useMemo(
-    () => [
-      {
-        title: 'View Enrollment',
-        key: 'enrollment',
-        getUrl: (enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment) =>
-          generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+  const getTableRowActions = useCallback(
+    (enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment) => {
+      return {
+        primaryAction: {
+          title: 'View Enrollment',
+          key: 'enrollment',
+          ariaLabel: `View Enrollment, ${clientBriefName(enrollment.client)}`,
+          to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
             clientId: enrollment.client.id,
             enrollmentId: enrollment.id,
           }),
-      },
-      {
-        title: 'View Client',
-        key: 'client',
-        getUrl: (enrollment) =>
-          generateSafePath(ClientDashboardRoutes.PROFILE, {
-            clientId: enrollment.client.id,
-          }),
-      },
-    ],
+        },
+        secondaryActions: [
+          {
+            title: 'View Client',
+            key: 'client',
+            ariaLabel: `View Client, ${clientBriefName(enrollment.client)}`,
+            to: generateSafePath(ClientDashboardRoutes.PROFILE, {
+              clientId: enrollment.client.id,
+            }),
+          },
+        ],
+      };
+    },
     []
   );
 
   return (
-    <SsnDobShowContextProvider>
-      <GenericTableWithData<
-        GetProjectEnrollmentsQuery,
-        GetProjectEnrollmentsQueryVariables,
-        EnrollmentFields,
-        EnrollmentsForProjectFilterOptions
-      >
-        queryVariables={{
-          id: projectId,
-          filters: {
-            searchTerm,
-            openOnDate: openOnDateString,
-          },
-        }}
-        queryDocument={GetProjectEnrollmentsDocument}
-        columns={columns || defaultColumns}
-        noData={
-          openOnDate
-            ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
-            : 'No enrollments'
-        }
-        pagePath='project.enrollments'
-        recordType='Enrollment'
-        filters={filters}
-        defaultSortOption={EnrollmentSortOption.MostRecent}
-        showOptionalColumns
-        applyOptionalColumns={(cols) => {
-          const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
+    <GenericTableWithData<
+      GetProjectEnrollmentsQuery,
+      GetProjectEnrollmentsQueryVariables,
+      EnrollmentFields,
+      EnrollmentsForProjectFilterOptions
+    >
+      queryVariables={{
+        id: projectId,
+        filters: {
+          searchTerm,
+          openOnDate: openOnDateString,
+        },
+      }}
+      queryDocument={GetProjectEnrollmentsDocument}
+      columns={columns || defaultColumns}
+      noData={
+        openOnDate
+          ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
+          : 'No enrollments'
+      }
+      pagePath='project.enrollments'
+      recordType='Enrollment'
+      filters={filters}
+      defaultSortOption={EnrollmentSortOption.MostRecent}
+      showOptionalColumns
+      applyOptionalColumns={(cols) => {
+        const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
 
-          if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
-            result.includeCls = true;
+        if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
+          result.includeCls = true;
 
-          if (cols.includes(ENROLLMENT_COLUMNS.assignedStaff.key || ''))
-            result.includeStaffAssignment = true;
+        if (cols.includes(ENROLLMENT_COLUMNS.assignedStaff.key || ''))
+          result.includeStaffAssignment = true;
 
-          return result;
-        }}
-        tableRowActions={tableRowActions}
-        getRowAccessibleName={(
-          enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment
-        ) => clientBriefName(enrollment.client)}
-      />
-    </SsnDobShowContextProvider>
+        return result;
+      }}
+      getTableRowActions={getTableRowActions}
+      getRowAccessibleName={(
+        enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment
+      ) => clientBriefName(enrollment.client)}
+    />
   );
 };
+
 export default ProjectClientEnrollmentsTable;

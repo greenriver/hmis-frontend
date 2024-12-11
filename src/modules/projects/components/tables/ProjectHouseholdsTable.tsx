@@ -180,29 +180,31 @@ export const HOUSEHOLD_COLUMNS: {
   assignedStaff: ASSIGNED_STAFF_COL,
 };
 
-const tableRowActions = [
-  {
-    title: 'View Enrollment',
-    key: 'enrollment',
-    getUrl: (
-      householdClient: ProjectEnrollmentsHouseholdClientFieldsFragment
-    ) =>
-      generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-        clientId: householdClient.client.id,
-        enrollmentId: householdClient.enrollment.id,
+const getTableRowActions = (
+  record: ProjectEnrollmentsHouseholdClientFieldsFragment
+) => {
+  return {
+    primaryAction: {
+      title: 'View Enrollment',
+      key: 'enrollment',
+      ariaLabel: `View Enrollment, ${clientBriefName(record.client)}`,
+      to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+        clientId: record.client.id,
+        enrollmentId: record.enrollment.id,
       }),
-  },
-  {
-    title: 'View Client',
-    key: 'client',
-    getUrl: (
-      householdClient: ProjectEnrollmentsHouseholdClientFieldsFragment
-    ) =>
-      generateSafePath(ClientDashboardRoutes.PROFILE, {
-        clientId: householdClient.client.id,
-      }),
-  },
-];
+    },
+    secondaryActions: [
+      {
+        title: 'View Client',
+        key: 'client',
+        ariaLabel: `View Client, ${clientBriefName(record.client)}`,
+        to: generateSafePath(ClientDashboardRoutes.PROFILE, {
+          clientId: record.client.id,
+        }),
+      },
+    ],
+  };
+};
 
 interface ProjectHouseholdsClientRowProps {
   household: ProjectEnrollmentsHouseholdFieldsFragment;
@@ -257,7 +259,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
         <TableRowActions
           record={householdClient}
           recordName={clientBriefName(householdClient.client)}
-          actions={tableRowActions}
+          getActions={getTableRowActions}
         />
       </TableCell>
     </TableRow>
