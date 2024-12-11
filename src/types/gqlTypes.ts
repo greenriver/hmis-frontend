@@ -34719,7 +34719,6 @@ export type CreateDirectUploadMutationMutation = {
     filename: string;
     headers: string;
     url: string;
-    blobId: string;
     signedBlobId: string;
   } | null;
 };
@@ -49431,7 +49430,6 @@ export const CreateDirectUploadMutationDocument = gql`
       filename
       headers
       url
-      blobId
       signedBlobId
     }
   }
