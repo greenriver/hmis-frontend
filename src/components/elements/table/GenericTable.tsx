@@ -207,7 +207,8 @@ const GenericTable = <T extends { id: string }>({
   const key = (def: ColumnDef<T>) =>
     def.key || (typeof def.header === 'string' ? def.header : '');
 
-  const fullColSpan = columns.length + (selectable ? 1 : 0);
+  const fullColSpan =
+    columns.length + (selectable ? 1 : 0) + (getTableRowActions ? 1 : 0);
   const tableHead = noHead ? null : vertical ? (
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
