@@ -278,7 +278,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEvent}
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
-            disableArrowKeys={item.type === ItemType.Currency}
             {...commonInputProps}
             inputWidth={120}
           />
@@ -414,7 +413,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <Uploader
             id={linkId}
             image
-            onUpload={async (upload) => onChangeValue(upload.blobId)}
+            onUpload={async (upload) => onChangeValue(upload.signedBlobId)}
           />
         </InputContainer>
       );
@@ -423,7 +422,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
-            onUpload={async (upload) => onChangeValue(upload.blobId)}
+            onUpload={async (upload) => onChangeValue(upload.signedBlobId)}
           />
         </InputContainer>
       );
