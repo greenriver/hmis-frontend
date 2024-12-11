@@ -5,7 +5,6 @@ fragment FileFields on File {
   expirationDate
   id
   name
-  fileBlobId
   url
   tags
   ownFile

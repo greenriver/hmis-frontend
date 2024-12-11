@@ -2016,7 +2016,10 @@ export enum Destination {
 /** Represents direct upload credentials */
 export type DirectUpload = {
   __typename?: 'DirectUpload';
-  /** Created blob record ID */
+  /**
+   * Created blob record ID
+   * @deprecated Deprecated in favor of signed_blob_id
+   */
   blobId: Scalars['ID']['output'];
   filename: Scalars['String']['output'];
   /** HTTP request headers (JSON-encoded) */
@@ -2915,6 +2918,7 @@ export type File = {
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']['output']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  /** @deprecated Removing unused blob ID */
   fileBlobId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -14929,7 +14933,6 @@ export type DeleteClientFileMutation = {
       expirationDate?: string | null;
       id: string;
       name: string;
-      fileBlobId?: string | null;
       url?: string | null;
       tags: Array<string>;
       ownFile: boolean;
@@ -15133,7 +15136,6 @@ export type GetFileQuery = {
     expirationDate?: string | null;
     id: string;
     name: string;
-    fileBlobId?: string | null;
     url?: string | null;
     tags: Array<string>;
     ownFile: boolean;
@@ -15187,7 +15189,6 @@ export type GetClientFilesQuery = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId?: string | null;
         url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
@@ -21301,7 +21302,6 @@ export type FileFieldsFragment = {
   expirationDate?: string | null;
   id: string;
   name: string;
-  fileBlobId?: string | null;
   url?: string | null;
   tags: Array<string>;
   ownFile: boolean;
@@ -27551,7 +27551,6 @@ export type SubmitFormMutation = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId?: string | null;
           url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
@@ -36626,7 +36625,6 @@ export const FileFieldsFragmentDoc = gql`
     expirationDate
     id
     name
-    fileBlobId
     url
     tags
     ownFile
