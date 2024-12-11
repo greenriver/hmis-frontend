@@ -200,10 +200,13 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     case ItemType.File:
       return <File id={value} />;
     case ItemType.Geolocation:
+      // coordinates may be stringified if collected from External Form
+      const coordinates = typeof value === 'string' ? JSON.parse(value) : value;
+
       return (
         <LabelWithContent {...commonProps}>
-          {value ? (
-            <BaseMap coordinates={value} />
+          {coordinates && coordinates.latitude && coordinates.longitude ? (
+            <BaseMap coordinates={coordinates} />
           ) : (
             <NotCollectedText variant='body2'>
               Location not collected
