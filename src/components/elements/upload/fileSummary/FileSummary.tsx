@@ -130,7 +130,12 @@ const FileSummary: React.FC<FileSummaryProps> = ({
         {info}
       </Stack>
       {menuItems.length && (
-        <CommonMenuButton iconButton title='File Actions' items={menuItems} />
+        <CommonMenuButton
+          iconButton
+          title='File Actions'
+          items={menuItems}
+          ButtonProps={{ 'aria-label': `File Actions for ${fileName}` }}
+        />
       )}
     </Stack>
   );
