@@ -105,7 +105,7 @@ const Uploader = ({
   const uniqueNameValidator = useCallback(
     (file: File) => {
       const existingNames = [
-        ...existingFiles.map((f) => (f as FileFieldsFragment).name),
+        ...existingFiles.map((f) => f.name),
         ...currentFiles.map((f) => f.name),
       ];
 
