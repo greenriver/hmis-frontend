@@ -79,9 +79,11 @@ const Uploader = ({
   // The uploader accepts a `files` argument which can contain either:
   // - a STRING which points at a blob ID of a file that has been uploaded within this session, or
   // - a FileFieldsFragment record which points at a file record in our database, uploaded during a previous session.
+  // It needs to accept both because this can be a controlled component, so the parent may be keeping track of both previous and current upload state.
   // `existingFiles` filters the list to only those files that were uploaded some previous time, so we can render them.
   // The files uploaded during this session, we render this component's internal state, `currentFiles`.
   const existingFiles: FileFieldsFragment[] = useMemo(() => {
+    // Handles the differing API for a multi vs. single upload component (files vs. file)
     let filesArr;
     if (multiple) {
       const { files } = rest as MultipleUploaderProps;
@@ -91,10 +93,15 @@ const Uploader = ({
       filesArr = ensureArray(file);
     }
     return filesArr.filter(
+      // Filter out files from the input that are just blob IDs.
+      // These should also be reflected in the currentFiles internal state object.
       (f) => typeof f !== 'string'
-    ) as FileFieldsFragment[];
+    ) as FileFieldsFragment[]; // Cast to keep typescript happy; now that we've filtered out all the strings, they should all be FileFieldsFragments
   }, [rest, multiple]);
 
+  // The currentFiles are File objects (https://developer.mozilla.org/en-US/docs/Web/API/File)
+  // returned by the react-dropzone callbacks. These refer to files we received in the uploader, on this session.
+  // (as opposed to FileFieldsFragments, which correspond to file records in our DB that were previously uploaded)
   const [currentFiles, setCurrentFiles] = useState<File[]>([]);
   const [currentUploads, setCurrentUploads] = useState<DirectUpload[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -105,6 +112,7 @@ const Uploader = ({
   const uniqueNameValidator = useCallback(
     (file: File) => {
       const existingNames = [
+        // Check both current-session and previously-existing files to make sure we're permitting upload of a duplicate name
         ...existingFiles.map((f) => f.name),
         ...currentFiles.map((f) => f.name),
       ];
@@ -324,9 +332,9 @@ const Uploader = ({
           </Box>
           {!loading && !multiple && existingFiles[0] && (
             <FileRecordSummary
-              file={existingFiles[0] as FileFieldsFragment}
+              file={existingFiles[0]}
               onRemove={() => {
-                removeFile(existingFiles[0] as FileFieldsFragment);
+                removeFile(existingFiles[0]);
                 inputRef.current?.focus();
               }}
               variant='stacked'
@@ -353,9 +361,9 @@ const Uploader = ({
             {existingFiles.map((file) => {
               return (
                 <FileRecordSummary
-                  key={(file as FileFieldsFragment).id} // it will always be a FileFieldsFragment, ts is just confused
-                  file={file as FileFieldsFragment}
-                  onRemove={() => removeFile(file as FileFieldsFragment)}
+                  key={file.id}
+                  file={file}
+                  onRemove={() => removeFile(file)}
                   variant='row'
                 />
               );
