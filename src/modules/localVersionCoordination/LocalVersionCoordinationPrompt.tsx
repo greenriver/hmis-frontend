@@ -57,16 +57,25 @@ const LocalVersionCoordinationPrompt: React.FC<Props> = ({
       open={showPrompt}
       onClose={handleContinue}
       title='New Data Available'
-      alertProps={{ severity: 'warning' }}
+      alertProps={{
+        severity: 'warning',
+        action: (
+          <LoadingButton
+            onClick={handleReload}
+            loading={loading}
+            variant='outlined'
+            color='warning'
+            // TODO(PR#991) replace with grayscale variant
+            sx={{ backgroundColor: 'transparent', alignSelf: 'center' }}
+          >
+            Load New Data
+          </LoadingButton>
+        ),
+      }}
     >
       <Box sx={{ my: 1 }}>
         The data on this page is out-of-date. You won't be able to save changes
         to this record until you load the new data.
-      </Box>
-      <Box sx={{ mt: 2 }}>
-        <LoadingButton onClick={handleReload} loading={loading}>
-          Load New Data
-        </LoadingButton>
       </Box>
     </SnackbarAlert>
   );
