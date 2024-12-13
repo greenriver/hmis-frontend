@@ -16,5 +16,8 @@ export default {
 type Story = StoryObj<typeof NumberInput>;
 
 export const Labeled: Story = {
-  args: { label: 'Enter amount', min: 0, max: 10 },
+  args: { label: 'Enter amount', min: 0, max: 5000 },
+};
+export const Currency: Story = {
+  args: { label: 'Income', value: 500.6, currency: true },
 };

@@ -12,7 +12,7 @@ const mockValueForItem = (item: FormItem) => {
     case ItemType.Integer:
       return sample([0, 50, 100]);
     case ItemType.Currency:
-      return sample([0, 50.0, 100.25]);
+      return sample([0, 50.0, 100.5]);
     case ItemType.Date:
       return new Date();
     case ItemType.TimeOfDay:
