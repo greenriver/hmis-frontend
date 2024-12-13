@@ -93,7 +93,7 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
               aria-label="Map displaying the user's current location"
               role='complementary' // aria-label on a div should have a role
             >
-              <BaseMap coordinates={coordinates} height={mapHeight} />
+              <BaseMap coordinates={[coordinates]} height={mapHeight} />
             </Box>
           )}
         </Box>
