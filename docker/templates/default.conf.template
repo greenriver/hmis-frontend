@@ -20,9 +20,6 @@ server {
         # Always revalidate index.html before use
         add_header Cache-Control "no-cache";
 
-        # Allow fetching geolocation. Not added to non_proxy_headers because we don't need it for /assets
-        add_header Permissions-Policy "geolocation=(self)";
-
         # Include default headers
         include /etc/nginx/conf.d/non_proxy_headers.conf;
     }
