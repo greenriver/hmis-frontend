@@ -5,7 +5,10 @@ import React, { useMemo } from 'react';
 
 import { getValueFromPickListData, usePickList } from '../../hooks/usePickList';
 import { DynamicViewFieldProps } from '../../types';
-import { isDataNotCollected } from '../../util/formUtil';
+import {
+  formatNumberWithTrailingZeroes,
+  isDataNotCollected,
+} from '../../util/formUtil';
 import DynamicDisplay from '../DynamicDisplay';
 
 import File from './item/File';
@@ -149,7 +152,12 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       }
       return <TextContent {...commonProps} />;
     case ItemType.Currency:
-      return <TextContent {...commonProps} renderValue={(val) => `$${val}`} />;
+      return (
+        <TextContent
+          {...commonProps}
+          renderValue={(val) => `$${formatNumberWithTrailingZeroes(val)}`}
+        />
+      );
     case ItemType.Date:
       return (
         <TextContent

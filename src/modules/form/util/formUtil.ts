@@ -1545,3 +1545,23 @@ export function findOptionLabel(
   }
   return option.code || '';
 }
+
+// 150    => "150"
+// 150.5  => "150.50"
+// 150.75 => "150.75"
+export const formatNumberWithTrailingZeroes = (value: any) => {
+  // Convert the value to a number
+  const num = parseFloat(value);
+
+  // Check if the conversion was successful
+  if (isNaN(num)) {
+    return value.toString();
+  }
+  // Check if the number has a decimal point
+  if (num % 1 !== 0) {
+    // Format the number to two decimal places
+    return num.toFixed(2);
+  }
+  // Return the number as is if it doesn't have a decimal point
+  return num.toString();
+};
