@@ -21,8 +21,10 @@ const GeolocationErrorAlert: React.FC<Props> = ({ error }) => {
         action={
           error === LocationPositionError.PERMISSION_DENIED && (
             <Button
-              variant='gray'
-              // TODO:
+              variant='outlined'
+              color='error'
+              sx={{ backgroundColor: 'transparent' }}
+              // TODO replace with:
               // variant='outlined'
               // color='grayscale'
               onClick={() => setShowHelp(true)}

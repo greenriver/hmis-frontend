@@ -50,9 +50,8 @@ export function useGeolocation(
   }, [setCoordinates]);
 
   return {
-    // coordinates,
+    requestCoordinates,
     error,
     loading,
-    requestCoordinates,
   };
 }
