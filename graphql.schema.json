@@ -16054,6 +16054,30 @@
             "deprecationReason": null
           },
           {
+            "name": "geolocations",
+            "description": "Client Locations that have been collected during this Enrollment",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Geolocation",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "healthAndDvs",
             "description": null,
             "args": [
@@ -24337,7 +24361,7 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "collectedBy",
+            "name": "collectedByProjectName",
             "description": null,
             "args": [],
             "type": {
@@ -24361,22 +24385,6 @@
             "deprecationReason": null
           },
           {
-            "name": "createdAt",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ISO8601DateTime",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": null,
             "args": [],
@@ -24394,43 +24402,7 @@
           },
           {
             "name": "locatedAt",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ISO8601DateTime",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "locatedOn",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ISO8601Date",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "processedAt",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ISO8601DateTime",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updatedAt",
-            "description": null,
+            "description": "Timestamp when the location was collected",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -24440,6 +24412,30 @@
                 "name": "ISO8601DateTime",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "sourceAssessment",
+            "description": "Associated Assessment record, if this location was collected on an assessment",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Assessment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "sourceCurrentLivingSituation",
+            "description": "Associated Current Living Situation record, if this location was collected on a CurrentLivingSituation form",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CurrentLivingSituation",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -39840,6 +39836,22 @@
           },
           {
             "name": "canViewEnrollmentDetails",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewEnrollmentLocationMap",
             "description": null,
             "args": [],
             "type": {

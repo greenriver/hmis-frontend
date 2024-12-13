@@ -3677,16 +3677,8 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Geolocation',
     fields: [
       {
-        name: 'collectedBy',
+        name: 'collectedByProjectName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'createdAt',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
       },
       {
         name: 'id',
@@ -3698,18 +3690,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'locatedAt',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'locatedOn',
-        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-      },
-      {
-        name: 'processedAt',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'updatedAt',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5337,6 +5317,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewEnrollmentDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewEnrollmentLocationMap',
         type: {
           kind: 'NON_NULL',
           name: null,

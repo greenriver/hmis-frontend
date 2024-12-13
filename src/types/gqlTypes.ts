@@ -2323,6 +2323,8 @@ export type Enrollment = {
   files: FilesPaginated;
   formerWardChildWelfare?: Maybe<NoYesReasonsForMissingData>;
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
+  /** Client Locations that have been collected during this Enrollment */
+  geolocations: Array<Geolocation>;
   healthAndDvs: HealthAndDvsPaginated;
   hh5Plus?: Maybe<NoYesMissing>;
   hohLeaseholder?: Maybe<NoYesMissing>;
@@ -3475,14 +3477,15 @@ export enum GeographyType {
 
 export type Geolocation = {
   __typename?: 'Geolocation';
-  collectedBy?: Maybe<Scalars['String']['output']>;
+  collectedByProjectName?: Maybe<Scalars['String']['output']>;
   coordinates?: Maybe<GeolocationCoordinates>;
-  createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
-  locatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  locatedOn?: Maybe<Scalars['ISO8601Date']['output']>;
-  processedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  updatedAt: Scalars['ISO8601DateTime']['output'];
+  /** Timestamp when the location was collected */
+  locatedAt: Scalars['ISO8601DateTime']['output'];
+  /** Associated Assessment record, if this location was collected on an assessment */
+  sourceAssessment?: Maybe<Assessment>;
+  /** Associated Current Living Situation record, if this location was collected on a CurrentLivingSituation form */
+  sourceCurrentLivingSituation?: Maybe<CurrentLivingSituation>;
 };
 
 export type GeolocationCoordinates = {
@@ -6120,6 +6123,7 @@ export type QueryAccess = {
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
+  canViewEnrollmentLocationMap: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
   canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
@@ -8900,9 +8904,6 @@ export type AssessmentWithRecordsFragment = {
   geolocation?: {
     __typename?: 'Geolocation';
     id: string;
-    collectedBy?: string | null;
-    locatedOn?: string | null;
-    locatedAt?: string | null;
     coordinates?: {
       __typename?: 'GeolocationCoordinates';
       id: string;
@@ -9488,9 +9489,6 @@ export type FullAssessmentFragment = {
   geolocation?: {
     __typename?: 'Geolocation';
     id: string;
-    collectedBy?: string | null;
-    locatedOn?: string | null;
-    locatedAt?: string | null;
     coordinates?: {
       __typename?: 'GeolocationCoordinates';
       id: string;
@@ -11064,9 +11062,6 @@ export type GetAssessmentQuery = {
     geolocation?: {
       __typename?: 'Geolocation';
       id: string;
-      collectedBy?: string | null;
-      locatedOn?: string | null;
-      locatedAt?: string | null;
       coordinates?: {
         __typename?: 'GeolocationCoordinates';
         id: string;
@@ -11910,9 +11905,6 @@ export type SubmitAssessmentMutation = {
       geolocation?: {
         __typename?: 'Geolocation';
         id: string;
-        collectedBy?: string | null;
-        locatedOn?: string | null;
-        locatedAt?: string | null;
         coordinates?: {
           __typename?: 'GeolocationCoordinates';
           id: string;
@@ -12485,9 +12477,6 @@ export type SubmitHouseholdAssessmentsMutation = {
       geolocation?: {
         __typename?: 'Geolocation';
         id: string;
-        collectedBy?: string | null;
-        locatedOn?: string | null;
-        locatedAt?: string | null;
         coordinates?: {
           __typename?: 'GeolocationCoordinates';
           id: string;
@@ -13077,9 +13066,6 @@ export type GetAssessmentsForPopulationQuery = {
         geolocation?: {
           __typename?: 'Geolocation';
           id: string;
-          collectedBy?: string | null;
-          locatedOn?: string | null;
-          locatedAt?: string | null;
           coordinates?: {
             __typename?: 'GeolocationCoordinates';
             id: string;
@@ -16832,9 +16818,6 @@ export type CurrentLivingSituationFieldsFragment = {
   geolocation?: {
     __typename?: 'Geolocation';
     id: string;
-    collectedBy?: string | null;
-    locatedOn?: string | null;
-    locatedAt?: string | null;
     coordinates?: {
       __typename?: 'GeolocationCoordinates';
       id: string;
@@ -16937,9 +16920,6 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
   geolocation?: {
     __typename?: 'Geolocation';
     id: string;
-    collectedBy?: string | null;
-    locatedOn?: string | null;
-    locatedAt?: string | null;
     coordinates?: {
       __typename?: 'GeolocationCoordinates';
       id: string;
@@ -17042,9 +17022,6 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         geolocation?: {
           __typename?: 'Geolocation';
           id: string;
-          collectedBy?: string | null;
-          locatedOn?: string | null;
-          locatedAt?: string | null;
           coordinates?: {
             __typename?: 'GeolocationCoordinates';
             id: string;
@@ -17166,9 +17143,6 @@ export type GetProjectCurrentLivingSituationsQuery = {
         geolocation?: {
           __typename?: 'Geolocation';
           id: string;
-          collectedBy?: string | null;
-          locatedOn?: string | null;
-          locatedAt?: string | null;
           coordinates?: {
             __typename?: 'GeolocationCoordinates';
             id: string;
@@ -27321,9 +27295,6 @@ export type SubmitFormMutation = {
           geolocation?: {
             __typename?: 'Geolocation';
             id: string;
-            collectedBy?: string | null;
-            locatedOn?: string | null;
-            locatedAt?: string | null;
             coordinates?: {
               __typename?: 'GeolocationCoordinates';
               id: string;
@@ -29598,9 +29569,6 @@ export type GetParsedFormDefinitionQuery = {
 export type GeolocationFieldsFragment = {
   __typename?: 'Geolocation';
   id: string;
-  collectedBy?: string | null;
-  locatedOn?: string | null;
-  locatedAt?: string | null;
   coordinates?: {
     __typename?: 'GeolocationCoordinates';
     id: string;
@@ -35609,9 +35577,6 @@ export const GeolocationFieldsFragmentDoc = gql`
       latitude
       longitude
     }
-    collectedBy
-    locatedOn
-    locatedAt
   }
 `;
 export const AssessmentWithRecordsFragmentDoc = gql`
