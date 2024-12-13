@@ -1,6 +1,6 @@
 # use INLINE_RUNTIME_CHECK=false yarn build and nonce / hash to apply a CSP
 # Use add_header Content-Security-Policy "......." always;
-add_header Content-Security-Policy "default-src 'none'; connect-src 'self' *.sentry.io *.s3.amazonaws.com https://*.openstreetmap.org; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' fonts.googleapis.com 'unsafe-inline'; img-src 'self' data: blob: *.s3.amazonaws.com https://*.openstreetmap.org; font-src 'self' fonts.gstatic.com; object-src 'none';" always;
+add_header Content-Security-Policy "default-src 'none'; connect-src 'self' *.sentry.io *.s3.amazonaws.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' fonts.googleapis.com 'unsafe-inline'; img-src 'self' data: blob: *.s3.amazonaws.com https://*.openstreetmap.org; font-src 'self' fonts.gstatic.com; object-src 'none';" always;
 
 add_header Referrer-Policy "strict-origin-when-cross-origin";
 add_header Strict-Transport-Security "max-age=63072000; includeSubdomains;" always;
