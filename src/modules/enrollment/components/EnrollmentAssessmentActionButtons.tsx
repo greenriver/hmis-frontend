@@ -88,6 +88,8 @@ const NewAssessmentMenu: React.FC<
   );
 
   if (items.length === 0) {
+    // Assessment eligibilities will have length 0 for an exited enrollment where no post-exit assessments are enabled.
+    // (Custom Assessments can collected be post-exit)
     return (
       <ButtonTooltipContainer
         title={'Cannot perform new assessments for exited enrollment.'}
