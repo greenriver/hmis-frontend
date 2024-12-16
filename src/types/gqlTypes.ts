@@ -3479,7 +3479,7 @@ export enum GeographyType {
 export type Geolocation = {
   __typename?: 'Geolocation';
   collectedByProjectName?: Maybe<Scalars['String']['output']>;
-  coordinates?: Maybe<GeolocationCoordinates>;
+  coordinates: GeolocationCoordinates;
   id: Scalars['ID']['output'];
   /** Timestamp when the location was collected */
   locatedAt: Scalars['ISO8601DateTime']['output'];
@@ -3492,8 +3492,8 @@ export type Geolocation = {
 export type GeolocationCoordinates = {
   __typename?: 'GeolocationCoordinates';
   id: Scalars['ID']['output'];
-  latitude?: Maybe<Scalars['String']['output']>;
-  longitude?: Maybe<Scalars['String']['output']>;
+  latitude: Scalars['String']['output'];
+  longitude: Scalars['String']['output'];
 };
 
 /** HUD HMISParticipationType (2.08.1) */
@@ -8906,12 +8906,12 @@ export type AssessmentWithRecordsFragment = {
   geolocation?: {
     __typename?: 'Geolocation';
     id: string;
-    coordinates?: {
+    coordinates: {
       __typename?: 'GeolocationCoordinates';
       id: string;
-      latitude?: string | null;
-      longitude?: string | null;
-    } | null;
+      latitude: string;
+      longitude: string;
+    };
   } | null;
   user?: {
     __typename: 'ApplicationUser';
@@ -9491,12 +9491,12 @@ export type FullAssessmentFragment = {
   geolocation?: {
     __typename?: 'Geolocation';
     id: string;
-    coordinates?: {
+    coordinates: {
       __typename?: 'GeolocationCoordinates';
       id: string;
-      latitude?: string | null;
-      longitude?: string | null;
-    } | null;
+      latitude: string;
+      longitude: string;
+    };
   } | null;
   user?: {
     __typename: 'ApplicationUser';
@@ -11064,12 +11064,12 @@ export type GetAssessmentQuery = {
     geolocation?: {
       __typename?: 'Geolocation';
       id: string;
-      coordinates?: {
+      coordinates: {
         __typename?: 'GeolocationCoordinates';
         id: string;
-        latitude?: string | null;
-        longitude?: string | null;
-      } | null;
+        latitude: string;
+        longitude: string;
+      };
     } | null;
     user?: {
       __typename: 'ApplicationUser';
@@ -11907,12 +11907,12 @@ export type SubmitAssessmentMutation = {
       geolocation?: {
         __typename?: 'Geolocation';
         id: string;
-        coordinates?: {
+        coordinates: {
           __typename?: 'GeolocationCoordinates';
           id: string;
-          latitude?: string | null;
-          longitude?: string | null;
-        } | null;
+          latitude: string;
+          longitude: string;
+        };
       } | null;
       user?: {
         __typename: 'ApplicationUser';
@@ -12479,12 +12479,12 @@ export type SubmitHouseholdAssessmentsMutation = {
       geolocation?: {
         __typename?: 'Geolocation';
         id: string;
-        coordinates?: {
+        coordinates: {
           __typename?: 'GeolocationCoordinates';
           id: string;
-          latitude?: string | null;
-          longitude?: string | null;
-        } | null;
+          latitude: string;
+          longitude: string;
+        };
       } | null;
       user?: {
         __typename: 'ApplicationUser';
@@ -13068,12 +13068,12 @@ export type GetAssessmentsForPopulationQuery = {
         geolocation?: {
           __typename?: 'Geolocation';
           id: string;
-          coordinates?: {
+          coordinates: {
             __typename?: 'GeolocationCoordinates';
             id: string;
-            latitude?: string | null;
-            longitude?: string | null;
-          } | null;
+            latitude: string;
+            longitude: string;
+          };
         } | null;
         user?: {
           __typename: 'ApplicationUser';
@@ -16820,12 +16820,12 @@ export type CurrentLivingSituationFieldsFragment = {
   geolocation?: {
     __typename?: 'Geolocation';
     id: string;
-    coordinates?: {
+    coordinates: {
       __typename?: 'GeolocationCoordinates';
       id: string;
-      latitude?: string | null;
-      longitude?: string | null;
-    } | null;
+      latitude: string;
+      longitude: string;
+    };
   } | null;
 };
 
@@ -16922,12 +16922,12 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
   geolocation?: {
     __typename?: 'Geolocation';
     id: string;
-    coordinates?: {
+    coordinates: {
       __typename?: 'GeolocationCoordinates';
       id: string;
-      latitude?: string | null;
-      longitude?: string | null;
-    } | null;
+      latitude: string;
+      longitude: string;
+    };
   } | null;
 };
 
@@ -17024,12 +17024,12 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         geolocation?: {
           __typename?: 'Geolocation';
           id: string;
-          coordinates?: {
+          coordinates: {
             __typename?: 'GeolocationCoordinates';
             id: string;
-            latitude?: string | null;
-            longitude?: string | null;
-          } | null;
+            latitude: string;
+            longitude: string;
+          };
         } | null;
       }>;
     };
@@ -17145,12 +17145,12 @@ export type GetProjectCurrentLivingSituationsQuery = {
         geolocation?: {
           __typename?: 'Geolocation';
           id: string;
-          coordinates?: {
+          coordinates: {
             __typename?: 'GeolocationCoordinates';
             id: string;
-            latitude?: string | null;
-            longitude?: string | null;
-          } | null;
+            latitude: string;
+            longitude: string;
+          };
         } | null;
       }>;
     };
@@ -27304,12 +27304,12 @@ export type SubmitFormMutation = {
           geolocation?: {
             __typename?: 'Geolocation';
             id: string;
-            coordinates?: {
+            coordinates: {
               __typename?: 'GeolocationCoordinates';
               id: string;
-              latitude?: string | null;
-              longitude?: string | null;
-            } | null;
+              latitude: string;
+              longitude: string;
+            };
           } | null;
         }
       | {
@@ -29579,12 +29579,12 @@ export type GetParsedFormDefinitionQuery = {
 export type GeolocationFieldsFragment = {
   __typename?: 'Geolocation';
   id: string;
-  coordinates?: {
+  coordinates: {
     __typename?: 'GeolocationCoordinates';
     id: string;
-    latitude?: string | null;
-    longitude?: string | null;
-  } | null;
+    latitude: string;
+    longitude: string;
+  };
 };
 
 export type GetEnrollmentGeolocationsQueryVariables = Exact<{
@@ -29599,12 +29599,12 @@ export type GetEnrollmentGeolocationsQuery = {
     geolocations: Array<{
       __typename?: 'Geolocation';
       id: string;
-      coordinates?: {
+      coordinates: {
         __typename?: 'GeolocationCoordinates';
         id: string;
-        latitude?: string | null;
-        longitude?: string | null;
-      } | null;
+        latitude: string;
+        longitude: string;
+      };
     }>;
   } | null;
 };
@@ -34902,7 +34902,6 @@ export type CreateDirectUploadMutationMutation = {
     filename: string;
     headers: string;
     url: string;
-    blobId: string;
     signedBlobId: string;
   } | null;
 };
@@ -49714,7 +49713,6 @@ export const CreateDirectUploadMutationDocument = gql`
       filename
       headers
       url
-      blobId
       signedBlobId
     }
   }

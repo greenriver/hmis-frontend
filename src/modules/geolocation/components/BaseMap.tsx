@@ -21,7 +21,10 @@ const BaseMap: React.FC<BaseMapProps> = ({ coordinates, height = 230 }) => {
       doubleClickZoom
       touchZoom
     >
-      <Marker position={[coordinates.latitude, coordinates.longitude]} />
+      <Marker
+        position={[coordinates.latitude, coordinates.longitude]}
+        title='Client Location'
+      />
     </BaseMapContainer>
   );
 };

@@ -24,6 +24,13 @@ module.exports = {
   },
   overrides: [
     {
+      // storybook files
+      files: ['*.stories.tsx'],
+      rules: {
+        'no-console': 'off',
+      },
+    },
+    {
       files: ['*.ts', '*.tsx'],
       extends: [
         'airbnb-typescript',
