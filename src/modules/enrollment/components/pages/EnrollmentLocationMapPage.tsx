@@ -11,16 +11,14 @@ const EnrollmentLocationMapPage = () => {
   if (!enrollment) return <NotFound />;
 
   return (
-    <>
-      <TitleCard title='Location Map' headerVariant='border'>
-        <Box sx={{ p: 2 }}>
-          <EnrollmentLocationMap
-            enrollmentId={enrollment.id}
-            clientName={clientBriefName(enrollment.client)}
-          />
-        </Box>
-      </TitleCard>
-    </>
+    <TitleCard title='Location Map' headerVariant='border'>
+      <Box sx={{ p: 2 }}>
+        <EnrollmentLocationMap
+          enrollmentId={enrollment.id}
+          clientName={clientBriefName(enrollment.client)}
+        />
+      </Box>
+    </TitleCard>
   );
 };
 

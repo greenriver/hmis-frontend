@@ -19,8 +19,7 @@ const EnrollmentLocationMap: React.FC<Props> = ({
   const { data, loading, error } = useGetEnrollmentGeolocationsQuery({
     variables: { id: enrollmentId },
   });
-  console.log(JSON.stringify(data));
-  const mapHeight = 600;
+  const mapHeight = 600; // TODO get viewport height to calculate map height for mobile
 
   if (loading) {
     return (
