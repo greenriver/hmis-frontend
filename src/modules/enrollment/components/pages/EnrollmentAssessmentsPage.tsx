@@ -68,6 +68,7 @@ const AssessmentsTable = () => {
       }
       actions={actions}
       headerVariant='border'
+      headerComponent='h1'
       data-testid='enrollmentAssessmentsCard'
       mobileBreakpoint='md'
     >

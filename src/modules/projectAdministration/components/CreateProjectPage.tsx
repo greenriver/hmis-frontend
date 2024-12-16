@@ -42,7 +42,7 @@ const CreateProjectPage = () => {
         inputVariables={{ organizationId }}
         FormActionProps={{ submitButtonText: 'Create Project' }}
         title={
-          <Typography variant='h3' sx={{ mt: 1, mb: 3 }}>
+          <Typography component='h1' variant='h3' sx={{ mt: 1, mb: 3 }}>
             Add a new Project to {organizationName}
           </Typography>
         }

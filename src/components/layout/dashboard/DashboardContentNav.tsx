@@ -109,7 +109,7 @@ const DashboardContentNav: React.FC<Props> = ({
           },
         })}
       >
-        <Box>
+        <Box component='nav' aria-label='sidebar-nav'>
           <CloseMenuRow onClose={handleCloseDesktopMenu} label={label} />
           <Box
             sx={{

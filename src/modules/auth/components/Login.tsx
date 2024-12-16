@@ -15,7 +15,12 @@ const Login: React.FC = () => {
     <Box sx={{ backgroundColor: 'background.default', height: '100vh' }}>
       <Container component='main' maxWidth='xs'>
         <Box sx={{ pt: { md: 4, xs: 2 } }}>
-          <Typography variant='h5' fontWeight={600} textAlign='center'>
+          <Typography
+            variant='h1'
+            component='h5'
+            fontWeight={600}
+            textAlign='center'
+          >
             OPEN PATH{' '}
             <Box display='inline' color='text.secondary' component='span'>
               HMIS

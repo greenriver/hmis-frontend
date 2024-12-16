@@ -43,7 +43,7 @@ const CreateClientPage: React.FC = () => {
         localConstants={localConstants}
         title={
           <>
-            <Typography variant='h3' sx={{ mt: 2, mb: 3 }}>
+            <Typography component='h1' variant='h3' sx={{ mt: 2, mb: 3 }}>
               Add New Client
             </Typography>
           </>
