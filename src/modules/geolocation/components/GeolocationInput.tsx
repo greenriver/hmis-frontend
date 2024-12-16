@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import React, { useId } from 'react';
+import React, { useId, useRef } from 'react';
 
 import { useGeolocation } from '../hooks/useGeolocation';
 import { ClearIcon, MyLocationIcon } from '@/components/elements/SemanticIcons';
@@ -30,6 +30,7 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
   disabled,
 }) => {
   const { requestCoordinates, loading, error } = useGeolocation(onChange);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const labelId = useId();
   const mapHeight = 230;
 
@@ -45,13 +46,17 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
             variant='outlined'
             aria-labelledby={label ? labelId : undefined}
             disabled={disabled}
+            ref={buttonRef}
           >
             Request Location
           </Button>
           {coordinates && (
             <Button
               variant='gray' // TODO: update to outlined grayscale
-              onClick={() => onChange(null)}
+              onClick={() => {
+                onChange(null);
+                buttonRef.current?.focus(); // move focus to Request Location button
+              }}
               startIcon={<ClearIcon />}
             >
               Clear Map
