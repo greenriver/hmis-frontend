@@ -14,9 +14,8 @@ import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
-import RouterLink from '@/components/elements/RouterLink';
+import { getViewClientAction } from '@/components/elements/table/tableActions/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import { useIsMobile } from '@/hooks/useIsMobile';
 
 import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/ClientSearchResultCard';
@@ -30,13 +29,13 @@ import {
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 import { isEnrollment, isHouseholdClient } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { ClientDashboardRoutes, Routes } from '@/routes/routes';
+import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ClientSearchInput as ClientSearchInputType,
@@ -48,7 +47,6 @@ import {
   SearchClientsQuery,
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 function asClient(
   record:
@@ -67,20 +65,6 @@ export const CLIENT_COLUMNS: {
     | ProjectEnrollmentFieldsFragment
   >;
 } = {
-  id: { header: 'HMIS ID', render: 'id' },
-  linkedId: {
-    header: 'ID',
-    render: (client) => (
-      <RouterLink
-        openInNew={true}
-        to={generateSafePath(Routes.CLIENT_DASHBOARD, {
-          clientId: client.id,
-        })}
-      >
-        {client.id}
-      </RouterLink>
-    ),
-  },
   name: {
     header: 'Name',
     key: 'name',
@@ -90,11 +74,6 @@ export const CLIENT_COLUMNS: {
     header: 'Age',
     key: 'age',
     render: (client) => asClient(client).age,
-  },
-  linkedName: {
-    header: 'Name',
-    key: 'name',
-    render: (client) => <ClientName client={asClient(client)} linkToProfile />,
   },
   linkedNameNewTab: {
     header: 'Name',
@@ -135,27 +114,15 @@ export const CLIENT_COLUMNS: {
   },
 };
 
-export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
-  CLIENT_COLUMNS.id,
-  {
-    ...CLIENT_COLUMNS.first,
-    linkTreatment: true,
-    ariaLabel: (row) => clientNameAllParts(row),
-  },
-  { ...CLIENT_COLUMNS.last, linkTreatment: true },
-  { ...CLIENT_COLUMNS.ssn, width: '150px' },
-  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
-];
+const getSearchResultTableActions = (record: ClientFieldsFragment) => {
+  return {
+    primaryAction: getViewClientAction(record),
+  };
+};
 
-export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
-  CLIENT_COLUMNS.id,
-  {
-    ...CLIENT_COLUMNS.name,
-    linkTreatment: true,
-    ariaLabel: (row) => clientNameAllParts(row),
-  },
-  { ...CLIENT_COLUMNS.ssn },
-  { ...CLIENT_COLUMNS.dobAge },
+const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
+  CLIENT_COLUMNS.name,
+  CLIENT_COLUMNS.age,
 ];
 
 /**
@@ -176,8 +143,6 @@ const ClientSearch = () => {
   // whether search has occurred
   const [hasSearched, setHasSearched] = useState(false);
 
-  const isMobile = useIsMobile();
-
   const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
     null
   );
@@ -195,22 +160,15 @@ const ClientSearch = () => {
     if (displayType === 'cards') {
       return [];
     }
-    let baseColumns = isMobile
-      ? MOBILE_SEARCH_RESULT_COLUMNS
-      : SEARCH_RESULT_COLUMNS;
+    let baseColumns = SEARCH_RESULT_COLUMNS;
     if (globalFeatureFlags?.mciId) {
       baseColumns = [
         externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
         ...baseColumns,
       ];
     }
-    if (!canViewSsn) baseColumns = baseColumns.filter((c) => c.key !== 'ssn');
-    if (!canViewDob)
-      baseColumns = baseColumns.map((c) =>
-        c.key === 'dob' ? { ...c, header: 'Age' } : c
-      );
     return baseColumns;
-  }, [isMobile, globalFeatureFlags, displayType, canViewSsn, canViewDob]);
+  }, [globalFeatureFlags, displayType]);
 
   useEffect(() => {
     // if search params are derived, we don't want to perform a search on them
@@ -230,14 +188,6 @@ const ClientSearch = () => {
       if (!initState.textSearch) setSearchType('specific');
     }
   }, [derivedSearchParams, searchParams]);
-
-  const rowLinkTo = useCallback(
-    (row: ClientFieldsFragment) =>
-      generateSafePath(ClientDashboardRoutes.PROFILE, {
-        clientId: row.id,
-      }),
-    []
-  );
 
   const onClearSearch = useCallback(() => {
     setSearchInput(null);
@@ -324,8 +274,9 @@ const ClientSearch = () => {
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
             onCompleted={() => setHasSearched(true)}
-            rowLinkTo={rowLinkTo}
             columns={columns}
+            getTableRowActions={getSearchResultTableActions}
+            getRowAccessibleName={(record) => clientBriefName(record)}
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
             filters={filters}

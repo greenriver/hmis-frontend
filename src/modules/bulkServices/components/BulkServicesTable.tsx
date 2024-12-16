@@ -3,26 +3,29 @@ import { ServicePeriod } from '../bulkServicesTypes';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import RouterLink from '@/components/elements/RouterLink';
+import {
+  getViewClientAction,
+  getViewEnrollmentAction,
+} from '@/components/elements/table/tableActions/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
+  clientBriefName,
   formatDateForDisplay,
   formatDateForGql,
   formatRelativeDate,
   parseAndFormatDate,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   BulkServicesClientSearchDocument,
   BulkServicesClientSearchQuery,
   BulkServicesClientSearchQueryVariables,
   ClientSortOption,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   projectId: string;
@@ -59,83 +62,74 @@ const BulkServicesTable: React.FC<Props> = ({
     [cocCode, projectId, serviceDate, serviceTypeId]
   );
 
-  const getColumnDefs = useCallback(
-    (_rows: RowType[], loading?: boolean) => {
-      const notEnrolledText = (
-        <NotCollectedText variant='inherit' color='text.disabled'>
-          Not enrolled on {formatDateForDisplay(serviceDate, 'M/d')}
-        </NotCollectedText>
-      );
-      return [
-        { ...CLIENT_COLUMNS.linkedId },
-        CLIENT_COLUMNS.first,
-        CLIENT_COLUMNS.last,
-        CLIENT_COLUMNS.dobAge,
-        {
-          header: 'Entry Date',
-          render: (row: RowType) => {
-            if (!row.activeEnrollment) return notEnrolledText;
+  const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
-            return (
-              <RouterLink
-                to={generateSafePath(
-                  EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-                  { clientId: row.id, enrollmentId: row.activeEnrollment.id }
-                )}
-                openInNew
-              >
-                {parseAndFormatDate(row.activeEnrollment.entryDate)}
-              </RouterLink>
-            );
-          },
+  const columns = useMemo(() => {
+    const notEnrolledText = (
+      <NotCollectedText variant='inherit' color='text.disabled'>
+        Not enrolled on {formatDateForDisplay(serviceDate, 'M/d')}
+      </NotCollectedText>
+    );
+    return [
+      CLIENT_COLUMNS.name,
+      ...(canViewDob ? [CLIENT_COLUMNS.dobAge] : []),
+      {
+        header: 'Entry Date',
+        render: (row: RowType) => {
+          if (!row.activeEnrollment) return notEnrolledText;
+
+          return parseAndFormatDate(row.activeEnrollment.entryDate);
         },
-        {
-          header: `Last ${serviceTypeName} Date`,
-          render: (row: RowType) => {
-            if (!row.activeEnrollment) return notEnrolledText;
+      },
+      {
+        header: `Last ${serviceTypeName} Date`,
+        render: (row: RowType) => {
+          if (!row.activeEnrollment) return notEnrolledText;
 
-            const noService = (
-              <NotCollectedText variant='inherit' color='text.disabled'>
-                No Previous {serviceTypeName}
-              </NotCollectedText>
-            );
-            if (!row.activeEnrollment.lastServiceDate) {
-              return noService;
+          const noService = (
+            <NotCollectedText variant='inherit' color='text.disabled'>
+              No Previous {serviceTypeName}
+            </NotCollectedText>
+          );
+          if (!row.activeEnrollment.lastServiceDate) {
+            return noService;
+          }
+          const dt = parseHmisDateString(row.activeEnrollment.lastServiceDate);
+          if (!dt) return noService;
+          const relative = formatRelativeDate(dt);
+          const formatted = formatDateForDisplay(dt);
+          return `${relative} (${formatted})`;
+        },
+      },
+    ] as ColumnDef<RowType>[];
+  }, [canViewDob, serviceDate, serviceTypeName]);
+
+  const getTableRowActions = useCallback(
+    (record: RowType, loading?: boolean) => {
+      return {
+        primaryAction: (
+          <AssignServiceButton
+            client={record}
+            queryVariables={mutationQueryVariables}
+            tableLoading={loading}
+            disabled={anyRowsSelected}
+            disabledReason={
+              anyRowsSelected
+                ? 'Deselect checkboxes to assign clients individually.'
+                : undefined
             }
-            const dt = parseHmisDateString(
-              row.activeEnrollment.lastServiceDate
-            );
-            if (!dt) return noService;
-            const relative = formatRelativeDate(dt);
-            const formatted = formatDateForDisplay(dt);
-            return `${relative} (${formatted})`;
-          },
-        },
-        {
-          header: `Assign ${serviceTypeName} for ${formatDateForDisplay(
-            serviceDate
-          )}`,
-          width: '180px',
-          render: (row: RowType) => {
-            return (
-              <AssignServiceButton
-                client={row}
-                queryVariables={mutationQueryVariables}
-                tableLoading={loading}
-                disabled={anyRowsSelected}
-                disabledReason={
-                  anyRowsSelected
-                    ? 'Deselect checkboxes to assign clients individually.'
-                    : undefined
-                }
-                serviceTypeName={serviceTypeName}
-              />
-            );
-          },
-        },
-      ] as ColumnDef<RowType>[];
+            serviceTypeName={serviceTypeName}
+          />
+        ),
+        secondaryActions: [
+          getViewClientAction(record),
+          ...(record.activeEnrollment
+            ? [getViewEnrollmentAction(record.activeEnrollment, record)]
+            : []),
+        ],
+      };
     },
-    [serviceDate, serviceTypeName, mutationQueryVariables, anyRowsSelected]
+    [anyRowsSelected, mutationQueryVariables, serviceTypeName]
   );
 
   const defaultFilterValues = useMemo(() => {
@@ -174,7 +168,9 @@ const BulkServicesTable: React.FC<Props> = ({
         onChangeSelectedRowIds={(rows) => setAnyRowsSelected(rows.length > 0)}
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
-        getColumnDefs={getColumnDefs}
+        columns={columns}
+        getTableRowActions={getTableRowActions}
+        getRowAccessibleName={(record: RowType) => clientBriefName(record)}
         recordType='Client'
         // TODO: add user-facing filter options for enrolled clients and bed night date. No filter options for now.
         defaultFilterValues={defaultFilterValues}

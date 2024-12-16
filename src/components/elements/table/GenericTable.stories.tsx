@@ -30,7 +30,6 @@ const Template =
   );
 
 const clientColumns = [
-  CLIENT_COLUMNS.id,
   CLIENT_COLUMNS.first,
   CLIENT_COLUMNS.last,
   CLIENT_COLUMNS.ssn,

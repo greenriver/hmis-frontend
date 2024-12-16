@@ -23,13 +23,12 @@ import {
   RecordFormRole,
 } from '@/types/gqlTypes';
 
-export const baseColumns = {
+export const CLS_COLUMNS = {
   informationDate: {
     header: 'Information Date',
     width: '180px',
     render: (e: CurrentLivingSituationFieldsFragment) =>
       parseAndFormatDate(e.informationDate),
-    linkTreatment: true,
   },
   livingSituation: {
     header: 'Living Situation',
@@ -95,13 +94,27 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     (rows: CurrentLivingSituationFieldsFragment[]) => {
       const customColumns = getCustomDataElementColumns(rows);
       return [
-        baseColumns.informationDate,
-        baseColumns.livingSituation,
-        baseColumns.locationDetails,
+        CLS_COLUMNS.informationDate,
+        CLS_COLUMNS.livingSituation,
+        CLS_COLUMNS.locationDetails,
         ...customColumns,
       ];
     },
     []
+  );
+
+  const getTableRowActions = useCallback(
+    (record: CurrentLivingSituationFieldsFragment) => {
+      return {
+        primaryAction: {
+          title: 'View CLS',
+          key: 'cls',
+          ariaLabel: `View Current Living Situation, ${parseAndFormatDate(record.informationDate) || 'unknown date'}`,
+          onClick: () => onSelectRecord(record),
+        },
+      };
+    },
+    [onSelectRecord]
   );
 
   if (!enrollment || !enrollmentId || !clientId || !clsFeature)
@@ -132,11 +145,14 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCurrentLivingSituationsDocument}
           getColumnDefs={getColumnDefs}
+          getTableRowActions={getTableRowActions}
+          getRowAccessibleName={(record) =>
+            parseAndFormatDate(record.informationDate) || 'unknown date'
+          }
           pagePath='enrollment.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={onSelectRecord}
         />
       </TitleCard>
       {viewRecordDialog()}

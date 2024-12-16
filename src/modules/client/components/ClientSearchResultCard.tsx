@@ -219,7 +219,7 @@ const ClientSearchResultCard: React.FC<Props> = ({
             Icon={PersonIcon}
             leftAlign
           >
-            Client Profile
+            View Client
           </ButtonLink>
           {/* disabled for now #185750557 */}
           {/* <RootPermissionsFilter permissions='canEnrollClients'>

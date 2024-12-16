@@ -44,16 +44,15 @@ import {
 import TableRowActions, {
   TableRowActionsType,
 } from '@/components/elements/table/TableRowActions';
-import { LocationState } from '@/routes/routeUtil';
 
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
   rowLinkTo?: (row: T) => To | null | undefined;
-  rowLinkState?: LocationState;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
+  loadingRegardlessOfData?: boolean; // needed for correctly updating AssignBulkService button
   loadingVariant?: 'circular' | 'linear';
   tablePaginationProps?: TablePaginationProps;
   tableContainerProps?: TableContainerProps;
@@ -74,12 +73,11 @@ export interface Props<T> {
   filterToolbar?: ReactNode;
   noData?: ReactNode;
   renderRow?: (row: T, columnKeys: string[]) => ReactNode;
-  condensed?: boolean;
   // if overrideTableBody is true, GenericTable doesn't render a `tbody` element.
   // This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
   overrideTableBody?: boolean;
   injectBelowRows?: ReactNode; // component to inject below all rendered rows, above footer
-  getTableRowActions?: (record: T) => TableRowActionsType;
+  getTableRowActions?: (record: T, loading?: boolean) => TableRowActionsType;
   getRowAccessibleName?: (row: T) => string;
 }
 
@@ -118,6 +116,7 @@ const GenericTable = <T extends { id: string }>({
   columns: columnProp,
   paginated = false,
   loading = false,
+  loadingRegardlessOfData = false,
   vertical = false,
   renderVerticalHeaderCell,
   tablePaginationProps,
@@ -135,8 +134,6 @@ const GenericTable = <T extends { id: string }>({
   renderRow,
   noData = 'No data',
   loadingVariant = 'circular',
-  condensed = false,
-  rowLinkState,
   overrideTableBody = false,
   injectBelowRows,
   getTableRowActions,
@@ -435,7 +432,6 @@ const GenericTable = <T extends { id: string }>({
                           {isLinked ? (
                             <RouterLink
                               to={rowLink}
-                              state={rowLinkState}
                               aria-label={ariaLabel && ariaLabel(row)}
                               plain={!linkTreatment}
                               data-testid={linkTreatment && 'table-linkedCell'}
@@ -455,7 +451,7 @@ const GenericTable = <T extends { id: string }>({
                                   height: '100%',
                                   alignItems: 'center',
                                   px: 2,
-                                  py: condensed ? 1 : 2,
+                                  py: 2,
                                 }}
                               >
                                 {renderCellContents(row, render)}
@@ -477,6 +473,7 @@ const GenericTable = <T extends { id: string }>({
                               : row.id
                           }
                           getActions={getTableRowActions}
+                          loading={loadingRegardlessOfData}
                         />
                       </TableCell>
                     )}

@@ -1,4 +1,4 @@
-import { Button, Chip, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
@@ -101,19 +101,21 @@ const ProjectExternalSubmissionsTable = ({
           ),
         },
         ...defs,
-        {
-          header: 'Action',
-          render: ({ id }: ExternalFormSubmissionSummaryFragment) => (
-            <Button
-              variant='outlined'
-              onClick={() => setModalOpenId(id)}
-              disabled={bulkLoading}
-            >
-              View
-            </Button>
-          ),
-        },
       ];
+    },
+    []
+  );
+
+  const getTableRowActions = useCallback(
+    ({ id }: ExternalFormSubmissionSummaryFragment) => {
+      return {
+        primaryAction: {
+          title: 'View Submission',
+          key: 'submission',
+          onClick: () => setModalOpenId(id),
+          disabled: bulkLoading,
+        },
+      };
     },
     [setModalOpenId, bulkLoading]
   );
@@ -140,6 +142,7 @@ const ProjectExternalSubmissionsTable = ({
         }
         queryDocument={GetProjectExternalFormSubmissionsDocument}
         getColumnDefs={getColumnDefs}
+        getTableRowActions={getTableRowActions}
         noData='No external form submissions'
         pagePath='project.externalFormSubmissions'
         recordType='ExternalFormSubmission'

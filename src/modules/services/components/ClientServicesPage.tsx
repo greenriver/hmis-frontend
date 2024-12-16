@@ -1,26 +1,28 @@
 import { Paper } from '@mui/material';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import RouterLink from '@/components/elements/RouterLink';
+import {
+  getViewEnrollmentAction,
+  getViewServiceAction,
+} from '@/components/elements/table/tableActions/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
+  getServiceTypeForDisplay,
   SERVICE_BASIC_COLUMNS,
   SERVICE_COLUMNS,
 } from '@/modules/services/serviceColumns';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
   GetClientServicesQuery,
   GetClientServicesQueryVariables,
   ServiceSortOption,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 type ServiceType = NonNullable<
   NonNullable<GetClientServicesQuery['client']>['services']
@@ -36,35 +38,12 @@ const ClientServicesPage: React.FC<{
     () =>
       (
         [
-          SERVICE_BASIC_COLUMNS.dateProvided,
+          SERVICE_BASIC_COLUMNS.serviceDate,
           SERVICE_BASIC_COLUMNS.serviceType,
           {
             key: 'project',
             header: 'Project Name',
-            render: (row) => (
-              <RouterLink
-                to={[
-                  generateSafePath(
-                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-                    {
-                      enrollmentId: row.enrollment.id,
-                      clientId,
-                    }
-                  ),
-                  'services',
-                ].join('#')}
-              >
-                {row.enrollment.projectName}
-              </RouterLink>
-            ),
-          },
-          {
-            key: 'en-period',
-            header: 'Enrollment Period',
-            optional: true,
-            render: (row) => (
-              <EnrollmentDateRangeWithStatus enrollment={row.enrollment} />
-            ),
+            render: (row) => row.enrollment.projectName,
           },
           {
             ...SERVICE_COLUMNS.serviceDetails,
@@ -77,12 +56,32 @@ const ClientServicesPage: React.FC<{
 
         return true;
       }),
-    [clientId, omitColumns]
+    [omitColumns]
   );
 
   const filters = useFilters({
     type: 'ServiceFilterOptions',
   });
+
+  const getTableRowActions = useCallback(
+    (service: ServiceType) => {
+      return {
+        primaryAction: getViewServiceAction(
+          service,
+          service.enrollment.id,
+          clientId
+        ),
+        secondaryActions: [
+          {
+            ...getViewEnrollmentAction(service.enrollment, { id: clientId }),
+            // override the default ariaLabel to provide the project name, since we are in the client context
+            ariaLabel: `View Enrollment at ${service.enrollment.projectName} for ${entryExitRange(service.enrollment)}`,
+          },
+        ],
+      };
+    },
+    [clientId]
+  );
 
   return (
     <>
@@ -97,6 +96,10 @@ const ClientServicesPage: React.FC<{
           queryVariables={{ id: clientId }}
           queryDocument={GetClientServicesDocument}
           columns={columns}
+          getTableRowActions={getTableRowActions}
+          getRowAccessibleName={(record) =>
+            `${getServiceTypeForDisplay(record.serviceType)} on ${parseAndFormatDate(record.dateProvided)}`
+          }
           pagePath='client.services'
           fetchPolicy='cache-and-network'
           noData='No services'

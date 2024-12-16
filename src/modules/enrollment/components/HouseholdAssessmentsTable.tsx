@@ -1,13 +1,12 @@
-import { useCallback } from 'react';
-
+import { getViewAssessmentAction } from '@/components/elements/table/tableActions/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import {
+  ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
-  generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { assessmentDescription } from '@/modules/hmis/hmisUtil';
 import {
   GetHouseholdAssessmentsDocument,
   GetHouseholdAssessmentsQuery,
@@ -18,15 +17,22 @@ export type HhmAssessmentType = NonNullable<
   NonNullable<GetHouseholdAssessmentsQuery['household']>['assessments']
 >['nodes'][0];
 
-const columns: ColumnDef<HhmAssessmentType>[] = [
-  {
-    header: 'Client Name',
-    render: (a) => clientBriefName(a.enrollment.client),
-  },
-  ASSESSMENT_COLUMNS.linkedType,
+const COLUMNS: ColumnDef<HhmAssessmentType>[] = [
+  ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS.date,
+  ASSESSMENT_COLUMNS.type,
   ASSESSMENT_COLUMNS.lastUpdated,
 ];
+
+const getTableRowActions = (assessment: HhmAssessmentType) => {
+  return {
+    primaryAction: getViewAssessmentAction(
+      assessment,
+      assessment.enrollment.client.id,
+      assessment.enrollment.id
+    ),
+  };
+};
 
 interface Props {
   householdId: string;
@@ -37,16 +43,6 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
   householdId,
   projectId,
 }) => {
-  const rowLinkTo = useCallback(
-    (assessment: HhmAssessmentType) =>
-      generateAssessmentPath(
-        assessment,
-        assessment.enrollment.client.id,
-        assessment.enrollment.id
-      ),
-    []
-  );
-
   const filters = useFilters({
     type: 'AssessmentsForHouseholdFilterOptions',
     pickListArgs: { projectId },
@@ -61,8 +57,9 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
       filters={filters}
       queryVariables={{ id: householdId }}
       queryDocument={GetHouseholdAssessmentsDocument}
-      rowLinkTo={rowLinkTo}
-      columns={columns}
+      columns={COLUMNS}
+      getTableRowActions={getTableRowActions}
+      getRowAccessibleName={(record) => assessmentDescription(record)}
       pagePath='household.assessments'
       noData='No assessments'
       recordType='Assessment'

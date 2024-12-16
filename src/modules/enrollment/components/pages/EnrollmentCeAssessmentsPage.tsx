@@ -22,6 +22,38 @@ import {
   RecordFormRole,
 } from '@/types/gqlTypes';
 
+const COLUMNS: ColumnDef<CeAssessmentFieldsFragment>[] = [
+  {
+    header: 'Assessment Date',
+    render: (a) => parseAndFormatDate(a.assessmentDate),
+  },
+  {
+    header: 'Assessment Level',
+    render: (a) => (
+      <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
+    ),
+  },
+  {
+    header: 'Assessment Type',
+    render: (a) => (
+      <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
+    ),
+  },
+  {
+    header: 'Assessment Location',
+    render: (a) => a.assessmentLocation,
+  },
+  {
+    header: 'Prioritization Status',
+    render: (a) => (
+      <HmisEnum
+        value={a.prioritizationStatus}
+        enumMap={HmisEnums.PrioritizationStatus}
+      />
+    ),
+  },
+];
+
 const EnrollmentCeAssessmentsPage = () => {
   const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
@@ -59,50 +91,23 @@ const EnrollmentCeAssessmentsPage = () => {
       projectId: enrollment?.project.id,
     });
 
-  const columns: ColumnDef<CeAssessmentFieldsFragment>[] = useMemo(
-    () => [
-      {
-        header: 'Assessment Date',
-        render: (a) => parseAndFormatDate(a.assessmentDate),
-        linkTreatment: canEditCeAssessments,
-      },
-      {
-        header: 'Level',
-        render: (a) => (
-          <HmisEnum
-            value={a.assessmentLevel}
-            enumMap={HmisEnums.AssessmentLevel}
-          />
-        ),
-      },
-      {
-        header: 'Type',
-        render: (a) => (
-          <HmisEnum
-            value={a.assessmentType}
-            enumMap={HmisEnums.AssessmentType}
-          />
-        ),
-      },
-      {
-        header: 'Location',
-        render: (a) => a.assessmentLocation,
-      },
-      {
-        header: 'Prioritization Status',
-        render: (a) => (
-          <HmisEnum
-            value={a.prioritizationStatus}
-            enumMap={HmisEnums.PrioritizationStatus}
-          />
-        ),
-      },
-    ],
-    [canEditCeAssessments]
-  );
-
   const ceAssessmentFeature = getEnrollmentFeature(
     DataCollectionFeatureRole.CeAssessment
+  );
+
+  const getTableRowActions = useCallback(
+    (record: CeAssessmentFieldsFragment) => {
+      return canEditCeAssessments
+        ? {
+            primaryAction: {
+              title: 'View CE Assessment',
+              key: 'ce assessment',
+              onClick: () => onSelectRecord(record),
+            },
+          }
+        : {};
+    },
+    [onSelectRecord, canEditCeAssessments]
   );
 
   if (!enrollment || !enrollmentId || !clientId || !ceAssessmentFeature)
@@ -133,12 +138,14 @@ const EnrollmentCeAssessmentsPage = () => {
         >
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCeAssessmentsDocument}
-          columns={columns}
+          columns={COLUMNS}
+          getTableRowActions={getTableRowActions}
+          getRowAccessibleName={(record) =>
+            parseAndFormatDate(record.assessmentDate) || 'unknown date'
+          }
           pagePath='enrollment.ceAssessments'
           noData='No Coordinated Entry Assessments'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          // no need for read-only users to click in, because they can see all the information in the table.
-          handleRowClick={canEditCeAssessments ? onSelectRecord : undefined}
         />
       </TitleCard>
       {editRecordDialog()}

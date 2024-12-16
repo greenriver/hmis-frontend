@@ -1,23 +1,25 @@
-import { Stack } from '@mui/material';
-import { useMemo } from 'react';
+import { Button, Stack } from '@mui/material';
+import React, { ReactNode, useMemo } from 'react';
 import ButtonLink from '../ButtonLink';
 import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
 
 export type TableRowActionsType = {
-  primaryAction?: CommonMenuItem;
+  primaryAction?: CommonMenuItem | ReactNode;
   secondaryActions?: CommonMenuItem[];
 };
 
 interface TableRowActionsProps<T> {
   record: T;
   recordName?: string;
-  getActions: (record: T) => TableRowActionsType;
+  loading?: boolean;
+  getActions: (record: T, loading?: boolean) => TableRowActionsType;
 }
 
 const TableRowActions = <T extends { id: string }>({
   record,
   recordName,
   getActions,
+  loading,
 }: TableRowActionsProps<T>) => {
   const accessibleName = useMemo(
     () => recordName || record.id,
@@ -25,27 +27,62 @@ const TableRowActions = <T extends { id: string }>({
   );
 
   const { primaryAction, secondaryActions } = useMemo(
-    () => getActions(record),
-    [getActions, record]
+    () => getActions(record, loading),
+    [getActions, loading, record]
+  );
+
+  const { primaryActionNode, primaryActionTypesafe } = useMemo(() => {
+    return React.isValidElement(primaryAction)
+      ? { primaryActionNode: primaryAction }
+      : { primaryActionTypesafe: primaryAction as CommonMenuItem };
+  }, [primaryAction]);
+
+  const secondariesWithAria = useMemo(
+    () =>
+      secondaryActions?.map((s) => {
+        return {
+          ...s,
+          ariaLabel: s.ariaLabel || `${s.title}, ${recordName}`,
+        };
+      }),
+    [secondaryActions, recordName]
   );
 
   return (
     <Stack direction='row' alignItems='center' gap={0.5}>
-      {!!primaryAction && (
+      {primaryActionNode}
+      {!!primaryActionTypesafe && !!primaryActionTypesafe.to && (
         <ButtonLink
-          to={primaryAction.to || ''}
+          to={primaryActionTypesafe.to}
           size='small'
           variant='outlined'
-          aria-label={primaryAction.ariaLabel}
+          aria-label={
+            primaryActionTypesafe.ariaLabel ||
+            `${primaryActionTypesafe.title}, ${recordName}`
+          }
+          state={primaryActionTypesafe.linkState}
         >
-          {primaryAction.title}
+          {primaryActionTypesafe.title}
         </ButtonLink>
       )}
-      {!!secondaryActions && secondaryActions.length > 0 && (
+      {!!primaryActionTypesafe && !!primaryActionTypesafe.onClick && (
+        <Button
+          onClick={primaryActionTypesafe.onClick}
+          size='small'
+          variant='outlined'
+          aria-label={
+            primaryActionTypesafe.ariaLabel ||
+            `${primaryActionTypesafe.title}, ${recordName}`
+          }
+        >
+          {primaryActionTypesafe.title}
+        </Button>
+      )}
+      {!!secondariesWithAria && secondariesWithAria.length > 0 && (
         <CommonMenuButton
           iconButton
           title='Actions'
-          items={secondaryActions}
+          items={secondariesWithAria}
           aria-label={`Action menu for ${accessibleName}`}
           MenuProps={{
             MenuListProps: {

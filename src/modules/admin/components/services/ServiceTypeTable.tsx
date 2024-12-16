@@ -2,6 +2,7 @@ import { Chip } from '@mui/material';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { getServiceTypeForDisplay } from '@/modules/services/serviceColumns';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetServiceTypesDocument,
@@ -11,11 +12,10 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
+const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
   {
     header: 'Service Name',
     render: 'name',
-    linkTreatment: true,
   },
   {
     header: 'Service Category',
@@ -42,6 +42,18 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
   },
 ];
 
+const getTableRowActions = (row: ServiceTypeConfigFieldsFragment) => {
+  return {
+    primaryAction: {
+      title: 'View Service Type',
+      key: 'service type',
+      to: generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
+        serviceTypeId: row.id,
+      }),
+    },
+  };
+};
+
 const ServiceTypeTable = () => {
   const filters = useFilters({
     type: 'ServiceTypeFilterOptions',
@@ -57,17 +69,14 @@ const ServiceTypeTable = () => {
       >
         queryVariables={{}}
         queryDocument={GetServiceTypesDocument}
-        columns={columns}
+        columns={COLUMNS}
+        getTableRowActions={getTableRowActions}
+        getRowAccessibleName={(record) => getServiceTypeForDisplay(record)}
         pagePath='serviceTypes'
         noData='No service types'
         filters={filters}
         recordType='ServiceType'
         paginationItemName='service type'
-        rowLinkTo={(row) =>
-          generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
-            serviceTypeId: row.id,
-          })
-        }
       />
     </>
   );

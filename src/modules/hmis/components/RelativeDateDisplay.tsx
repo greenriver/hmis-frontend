@@ -7,15 +7,29 @@ import {
 import { useMemo } from 'react';
 
 import {
+  formatDateForDisplay,
   formatDateTimeForDisplay,
   formatRelativeDateTime,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 
+export const getFormattedDates = (
+  dateString: string,
+  preciseTime: boolean = true
+) => {
+  const date = parseHmisDateString(dateString);
+  if (!date) return [];
+  return [
+    preciseTime ? formatDateTimeForDisplay(date) : formatDateForDisplay(date),
+    formatRelativeDateTime(date),
+  ];
+};
+
 export interface RelativeDateDisplayProps {
   dateString: string;
   prefixVerb?: string;
   suffixText?: string;
+  tooltipSuffixText?: string;
   TooltipProps?: Omit<TooltipProps, 'title' | 'children'>;
   TypographyProps?: TypographyProps;
 }
@@ -27,14 +41,14 @@ const RelativeDateDisplay = ({
   dateString,
   prefixVerb,
   suffixText,
+  tooltipSuffixText,
   TooltipProps = {},
   TypographyProps = {},
 }: RelativeDateDisplayProps) => {
-  const [formattedDate, formattedDateRelative] = useMemo(() => {
-    const date = parseHmisDateString(dateString);
-    if (!date) return [];
-    return [formatDateTimeForDisplay(date), formatRelativeDateTime(date)];
-  }, [dateString]);
+  const [formattedDate, formattedDateRelative] = useMemo(
+    () => getFormattedDates(dateString),
+    [dateString]
+  );
 
   if (!dateString || !formattedDate || !formattedDateRelative) return null;
 
@@ -42,7 +56,7 @@ const RelativeDateDisplay = ({
     <Tooltip
       title={
         <Typography component='span' variant='inherit'>
-          {formattedDate}
+          {formattedDate} {tooltipSuffixText}
         </Typography>
       }
       arrow

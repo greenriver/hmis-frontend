@@ -10,9 +10,12 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import React, { ReactNode, useMemo } from 'react';
+import {
+  getViewClientAction,
+  getViewEnrollmentAction,
+} from '@/components/elements/table/tableActions/tableRowActionUtil';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { ColumnDef } from '@/components/elements/table/types';
-import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentClientNameWithAge from '@/modules/hmis/components/EnrollmentClientNameWithAge';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
@@ -25,13 +28,13 @@ import {
   formatDateForDisplay,
   formatDateForGql,
   hohSort,
-  parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
+  ENROLLMENT_COLUMNS,
+  WITH_ENROLLMENT_COLUMNS,
+} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectHouseholdsDocument,
@@ -43,7 +46,6 @@ import {
   ProjectEnrollmentsHouseholdFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
@@ -63,13 +65,15 @@ export const ASSIGNED_STAFF_COL = {
   render: (hh: HouseholdWithStaffAssignmentsFragment) => {
     if (!hh.staffAssignments?.nodes.length) return;
 
-    const first = hh.staffAssignments.nodes[0].user.name;
-    const rest = hh.staffAssignments.nodes
-      .slice(1)
-      .map((staffAssignment) => staffAssignment.user.name);
+    const allNames = hh.staffAssignments.nodes.map(
+      (staffAssignment) => staffAssignment.user.name
+    );
+
+    const first = allNames[0];
+    const rest = allNames.slice(1);
 
     return (
-      <>
+      <Box aria-label={allNames.join(', ')}>
         {first}{' '}
         {rest.length > 0 && (
           <Tooltip arrow title={rest.join(', ')}>
@@ -80,7 +84,7 @@ export const ASSIGNED_STAFF_COL = {
             />
           </Tooltip>
         )}
-      </>
+      </Box>
     );
   },
 };
@@ -184,25 +188,8 @@ const getTableRowActions = (
   record: ProjectEnrollmentsHouseholdClientFieldsFragment
 ) => {
   return {
-    primaryAction: {
-      title: 'View Enrollment',
-      key: 'enrollment',
-      ariaLabel: `View Enrollment, ${clientBriefName(record.client)}`,
-      to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-        clientId: record.client.id,
-        enrollmentId: record.enrollment.id,
-      }),
-    },
-    secondaryActions: [
-      {
-        title: 'View Client',
-        key: 'client',
-        ariaLabel: `View Client, ${clientBriefName(record.client)}`,
-        to: generateSafePath(ClientDashboardRoutes.PROFILE, {
-          clientId: record.client.id,
-        }),
-      },
-    ],
+    primaryAction: getViewEnrollmentAction(record.enrollment, record.client),
+    secondaryActions: [getViewClientAction(record.client)],
   };
 };
 
@@ -212,7 +199,7 @@ interface ProjectHouseholdsClientRowProps {
   lastInGroup?: boolean;
   showAssignedStaff?: boolean;
 }
-// TODO(#6761) it could be nice to keep these in render functions and refer to those
+
 const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
   household,
   householdClient,
@@ -227,9 +214,15 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
   return (
     <TableRow key={household.id + householdClient.id}>
       <TableCell role='rowheader' sx={cellSx}>
-        <ClientName client={householdClient.client} />
+        {(CLIENT_COLUMNS.name.render as CallableFunction)(
+          householdClient.client
+        )}
       </TableCell>
-      <TableCell sx={cellSx}>{householdClient.client.age}</TableCell>
+      <TableCell sx={cellSx}>
+        {(CLIENT_COLUMNS.age.render as CallableFunction)(
+          householdClient.client
+        )}
+      </TableCell>
       <TableCell sx={cellSx}>
         <HmisEnum
           key={householdClient.id}
@@ -239,16 +232,19 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
         />
       </TableCell>
       <TableCell sx={cellSx}>
-        {parseAndFormatDate(householdClient.enrollment.entryDate)}
+        {(WITH_ENROLLMENT_COLUMNS.entryDate.render as CallableFunction)(
+          householdClient
+        )}
       </TableCell>
       <TableCell sx={cellSx}>
-        {parseAndFormatDate(householdClient.enrollment.exitDate)}
+        {(WITH_ENROLLMENT_COLUMNS.exitDate.render as CallableFunction)(
+          householdClient
+        )}
       </TableCell>
       <TableCell sx={cellSx}>
-        <EnrollmentStatus
-          key={householdClient.id}
-          enrollment={householdClient.enrollment}
-        />
+        {(ENROLLMENT_COLUMNS.enrollmentStatus.render as CallableFunction)(
+          householdClient.enrollment
+        )}
       </TableCell>
       {showAssignedStaff && (
         <TableCell sx={cellSx}>
