@@ -199,21 +199,6 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       return <Image id={value} />;
     case ItemType.File:
       return <File id={value} />;
-    case ItemType.Geolocation:
-      // coordinates may be stringified if collected from External Form
-      const coordinates = typeof value === 'string' ? JSON.parse(value) : value;
-
-      return (
-        <LabelWithContent {...commonProps}>
-          {coordinates && coordinates.latitude && coordinates.longitude ? (
-            <BaseMap coordinates={coordinates} />
-          ) : (
-            <NotCollectedText variant='body2'>
-              Location not collected
-            </NotCollectedText>
-          )}
-        </LabelWithContent>
-      );
     case ItemType.Object:
       switch (item.component) {
         case Component.Address: // Used in Move-in Date Display
@@ -270,23 +255,19 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           );
       }
     case ItemType.Geolocation:
-      let collected;
-      try {
-        const valueJson = JSON.parse(value);
-        collected = valueJson && valueJson.latitude && valueJson.longitude;
-      } catch (SyntaxError) {
-        collected = false;
-      }
+      // coordinates may be stringified if collected from External Form
+      const coordinates = typeof value === 'string' ? JSON.parse(value) : value;
       return (
-        <CommonLabeledTextBlock title={label} key={JSON.stringify(value)}>
-          {collected ? (
-            'Location collected'
+        <LabelWithContent {...commonProps}>
+          {coordinates ? (
+            <BaseMap coordinates={coordinates} />
           ) : (
-            <NotCollectedText variant='body2' />
+            <NotCollectedText variant='body2'>
+              Location not collected
+            </NotCollectedText>
           )}
-        </CommonLabeledTextBlock>
+        </LabelWithContent>
       );
-
     default:
       return (
         <RecoverableError
