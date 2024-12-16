@@ -9,7 +9,10 @@ interface BaseMapProps {
 
 // Map for showing 1 pin on a static map.
 // Used for display coordinates in Geolocation Input Field.
-const BaseMap: React.FC<BaseMapProps> = ({ coordinates, height = 230 }) => {
+const SingleGeolocationMap: React.FC<BaseMapProps> = ({
+  coordinates,
+  height = 230,
+}) => {
   return (
     <BaseMapContainer
       key={JSON.stringify(coordinates)}
@@ -29,4 +32,4 @@ const BaseMap: React.FC<BaseMapProps> = ({ coordinates, height = 230 }) => {
   );
 };
 
-export default BaseMap;
+export default SingleGeolocationMap;

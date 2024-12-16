@@ -23,7 +23,7 @@ import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
 import ClientName from '@/modules/client/components/ClientName';
-import BaseMap from '@/modules/geolocation/components/BaseMap';
+import SingleGeolocationMap from '@/modules/geolocation/components/SingleGeolocationMap';
 import {
   formatDateForDisplay,
   formatTimeOfDay,
@@ -260,7 +260,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       return (
         <LabelWithContent {...commonProps}>
           {coordinates ? (
-            <BaseMap coordinates={coordinates} />
+            <SingleGeolocationMap coordinates={coordinates} />
           ) : (
             <NotCollectedText variant='body2'>
               Location not collected

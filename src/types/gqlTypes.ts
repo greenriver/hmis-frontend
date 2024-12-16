@@ -3478,15 +3478,16 @@ export enum GeographyType {
 
 export type Geolocation = {
   __typename?: 'Geolocation';
-  collectedByProjectName?: Maybe<Scalars['String']['output']>;
+  /** User who collected the location */
+  collectedBy?: Maybe<ApplicationUser>;
   coordinates: GeolocationCoordinates;
   id: Scalars['ID']['output'];
   /** Timestamp when the location was collected */
   locatedAt: Scalars['ISO8601DateTime']['output'];
-  /** Associated Assessment record, if this location was collected on an assessment */
-  sourceAssessment?: Maybe<Assessment>;
-  /** Associated Current Living Situation record, if this location was collected on a CurrentLivingSituation form */
-  sourceCurrentLivingSituation?: Maybe<CurrentLivingSituation>;
+  /** Name of the Project that collected the location */
+  projectName?: Maybe<Scalars['String']['output']>;
+  /** Name of the form that collected this location */
+  sourceFormName?: Maybe<Scalars['String']['output']>;
 };
 
 export type GeolocationCoordinates = {
@@ -29587,6 +29588,27 @@ export type GeolocationFieldsFragment = {
   };
 };
 
+export type GeolocationFieldsWithMetadataFragment = {
+  __typename?: 'Geolocation';
+  id: string;
+  locatedAt: string;
+  sourceFormName?: string | null;
+  coordinates: {
+    __typename?: 'GeolocationCoordinates';
+    id: string;
+    latitude: string;
+    longitude: string;
+  };
+  collectedBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
+  } | null;
+};
+
 export type GetEnrollmentGeolocationsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -29599,12 +29621,22 @@ export type GetEnrollmentGeolocationsQuery = {
     geolocations: Array<{
       __typename?: 'Geolocation';
       id: string;
+      locatedAt: string;
+      sourceFormName?: string | null;
       coordinates: {
         __typename?: 'GeolocationCoordinates';
         id: string;
         latitude: string;
         longitude: string;
       };
+      collectedBy?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
     }>;
   } | null;
 };
@@ -36690,6 +36722,22 @@ export const FormIdentifierDetailsFragmentDoc = gql`
     }
   }
   ${FormDefinitionMetadataFragmentDoc}
+`;
+export const GeolocationFieldsWithMetadataFragmentDoc = gql`
+  fragment GeolocationFieldsWithMetadata on Geolocation {
+    id
+    coordinates {
+      id
+      latitude
+      longitude
+    }
+    locatedAt
+    sourceFormName
+    collectedBy {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
@@ -44691,11 +44739,11 @@ export const GetEnrollmentGeolocationsDocument = gql`
     enrollment(id: $id) {
       id
       geolocations {
-        ...GeolocationFields
+        ...GeolocationFieldsWithMetadata
       }
     }
   }
-  ${GeolocationFieldsFragmentDoc}
+  ${GeolocationFieldsWithMetadataFragmentDoc}
 `;
 
 /**

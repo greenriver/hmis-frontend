@@ -24377,12 +24377,12 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "collectedByProjectName",
-            "description": null,
+            "name": "collectedBy",
+            "description": "User who collected the location",
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "OBJECT",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -24437,24 +24437,24 @@
             "deprecationReason": null
           },
           {
-            "name": "sourceAssessment",
-            "description": "Associated Assessment record, if this location was collected on an assessment",
+            "name": "projectName",
+            "description": "Name of the Project that collected the location",
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Assessment",
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "sourceCurrentLivingSituation",
-            "description": "Associated Current Living Situation record, if this location was collected on a CurrentLivingSituation form",
+            "name": "sourceFormName",
+            "description": "Name of the form that collected this location",
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "CurrentLivingSituation",
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,

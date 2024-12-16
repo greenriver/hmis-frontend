@@ -4,23 +4,27 @@ import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextB
 import Loading from '@/components/elements/Loading';
 import GeolocationPlaceholderBox from '@/modules/geolocation/components/GeolocationPlaceholderBox';
 import MultiGeolocationMap from '@/modules/geolocation/components/MultiGeolocationMap';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import {
-  AllEnrollmentDetailsFragment,
-  useGetEnrollmentGeolocationsQuery,
-} from '@/types/gqlTypes';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import { useGetEnrollmentGeolocationsQuery } from '@/types/gqlTypes';
 
 interface Props {
-  enrollment: AllEnrollmentDetailsFragment;
+  enrollmentId: string;
+  clientName: string;
 }
-const EnrollmentLocationMap: React.FC<Props> = ({ enrollment }) => {
+
+const EnrollmentLocationMap: React.FC<Props> = ({
+  enrollmentId,
+  clientName,
+}) => {
   const { data, loading, error } = useGetEnrollmentGeolocationsQuery({
-    variables: { id: enrollment.id },
+    variables: { id: enrollmentId },
   });
+  console.log(JSON.stringify(data));
+  const mapHeight = 600;
 
   if (loading) {
     return (
-      <GeolocationPlaceholderBox height={400}>
+      <GeolocationPlaceholderBox height={mapHeight}>
         <Loading />
       </GeolocationPlaceholderBox>
     );
@@ -30,34 +34,32 @@ const EnrollmentLocationMap: React.FC<Props> = ({ enrollment }) => {
   if (!data?.enrollment) return null;
   if (data.enrollment.geolocations.length === 0) {
     return (
-      <GeolocationPlaceholderBox height={400}>
+      <GeolocationPlaceholderBox height={mapHeight}>
         <Typography color='text.secondary'>Location not collected</Typography>
       </GeolocationPlaceholderBox>
     );
   }
 
-  // TODO:
-  //- resolve the metadata fields on Geolocation and show them here
   return (
     <MultiGeolocationMap
       geolocations={data.enrollment.geolocations}
       BaseMapContainerProps={{
-        height: 400,
+        height: mapHeight,
         sx: { '.leaflet-container': { borderRadius: 1 } },
       }}
       renderMarkerContent={(geolocation) => (
         <Stack gap={1}>
           <CommonLabeledTextBlock title='Client'>
-            {clientBriefName(enrollment.client)}
-          </CommonLabeledTextBlock>
-          <CommonLabeledTextBlock title='Assessment/Form'>
-            {geolocation.id}
+            {clientName}
           </CommonLabeledTextBlock>
           <CommonLabeledTextBlock title='Collected Time'>
-            two
+            {parseAndFormatDateTime(geolocation.locatedAt)}
           </CommonLabeledTextBlock>
           <CommonLabeledTextBlock title='Collected By'>
-            two
+            {geolocation.collectedBy?.name || 'Unknown'}
+          </CommonLabeledTextBlock>
+          <CommonLabeledTextBlock title='Collection Point'>
+            {geolocation.sourceFormName}
           </CommonLabeledTextBlock>
         </Stack>
       )}

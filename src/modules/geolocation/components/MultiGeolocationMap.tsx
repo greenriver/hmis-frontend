@@ -5,17 +5,19 @@ import { FeatureGroup, Marker, Popup } from 'react-leaflet';
 import BaseMapContainer, {
   BaseMapContainerProps,
 } from '@/modules/geolocation/components/BaseMapContainer';
-import { GeolocationFieldsFragment } from '@/types/gqlTypes';
+import { GeolocationFieldsWithMetadataFragment } from '@/types/gqlTypes';
 
 interface Props {
-  geolocations: GeolocationFieldsFragment[];
+  geolocations: GeolocationFieldsWithMetadataFragment[];
   renderMarkerContent?: (
-    geolocation: GeolocationFieldsFragment
+    geolocation: GeolocationFieldsWithMetadataFragment
   ) => React.ReactNode;
   BaseMapContainerProps?: Omit<BaseMapContainerProps, 'children'>;
 }
 
-function locationToLatLngExpression(location: GeolocationFieldsFragment) {
+function locationToLatLngExpression(
+  location: GeolocationFieldsWithMetadataFragment
+) {
   if (
     !location.coordinates ||
     !location.coordinates.latitude ||
@@ -28,6 +30,7 @@ function locationToLatLngExpression(location: GeolocationFieldsFragment) {
     parseFloat(location.coordinates?.longitude as string),
   ];
 }
+
 // Map that displays multiple Geolocations as markers
 const MultiGeolocationMap: React.FC<Props> = ({
   geolocations,
@@ -67,7 +70,9 @@ const MultiGeolocationMap: React.FC<Props> = ({
             position={locationToLatLngExpression(location) as LatLngExpression}
           >
             {renderMarkerContent && (
-              <Popup>{renderMarkerContent(location)}</Popup>
+              <Popup minWidth={200} maxWidth={300}>
+                {renderMarkerContent(location)}
+              </Popup>
             )}
           </Marker>
         ))}

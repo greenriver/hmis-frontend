@@ -5,8 +5,18 @@ fragment GeolocationFields on Geolocation {
     latitude
     longitude
   }
-  # Not needed yet - will resolve these when adding Location Map, maybe on a different fragment
-  # collectedBy
-  # locatedOn
-  # locatedAt
+}
+
+fragment GeolocationFieldsWithMetadata on Geolocation {
+  id
+  coordinates {
+    id
+    latitude
+    longitude
+  }
+  locatedAt
+  sourceFormName
+  collectedBy {
+    ...UserFields
+  }
 }
