@@ -18,16 +18,9 @@ interface Props {
 function locationToLatLngExpression(
   location: GeolocationFieldsWithMetadataFragment
 ) {
-  if (
-    !location.coordinates ||
-    !location.coordinates.latitude ||
-    !location.coordinates.longitude
-  ) {
-    return null;
-  }
   return [
-    parseFloat(location.coordinates?.latitude as string),
-    parseFloat(location.coordinates?.longitude as string),
+    parseFloat(location.coordinates.latitude),
+    parseFloat(location.coordinates.longitude),
   ];
 }
 
