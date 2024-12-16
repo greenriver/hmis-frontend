@@ -3478,15 +3478,16 @@ export enum GeographyType {
 
 export type Geolocation = {
   __typename?: 'Geolocation';
-  collectedByProjectName?: Maybe<Scalars['String']['output']>;
+  /** User who collected the location */
+  collectedBy?: Maybe<ApplicationUser>;
   coordinates: GeolocationCoordinates;
   id: Scalars['ID']['output'];
   /** Timestamp when the location was collected */
   locatedAt: Scalars['ISO8601DateTime']['output'];
-  /** Associated Assessment record, if this location was collected on an assessment */
-  sourceAssessment?: Maybe<Assessment>;
-  /** Associated Current Living Situation record, if this location was collected on a CurrentLivingSituation form */
-  sourceCurrentLivingSituation?: Maybe<CurrentLivingSituation>;
+  /** Name of the Project that collected the location */
+  projectName?: Maybe<Scalars['String']['output']>;
+  /** Name of the form that collected this location */
+  sourceFormName?: Maybe<Scalars['String']['output']>;
 };
 
 export type GeolocationCoordinates = {
