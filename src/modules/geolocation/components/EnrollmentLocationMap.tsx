@@ -59,7 +59,7 @@ const EnrollmentLocationMap: React.FC<Props> = ({
             {geolocation.collectedBy?.name || 'Unknown'}
           </CommonLabeledTextBlock>
           <CommonLabeledTextBlock title='Collection Point'>
-            {geolocation.sourceFormName}
+            {geolocation.sourceFormName || 'Unknown'}
           </CommonLabeledTextBlock>
         </Stack>
       )}
