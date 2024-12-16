@@ -40,7 +40,10 @@ const BaseMap: React.FC<BaseMapProps> = ({ coordinates, height = 230 }) => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           {/* todo: add Popup children for location map */}
-          <Marker position={[coordinates.latitude, coordinates.longitude]} />
+          <Marker
+            position={[coordinates.latitude, coordinates.longitude]}
+            title='Client Location'
+          />
         </>
       </MapContainer>
     </Box>
