@@ -1,37 +1,45 @@
-import { Box } from '@mui/system';
+import { InputAdornment } from '@mui/material';
 import { isFinite, isNil } from 'lodash-es';
-import {
-  KeyboardEventHandler,
-  useCallback,
-  useState,
-  WheelEventHandler,
-} from 'react';
+import { ChangeEventHandler, useState } from 'react';
 
+import {
+  NumberFormatValues,
+  NumericFormat,
+  OnValueChange,
+} from 'react-number-format';
 import TextInput, { TextInputProps } from './TextInput';
 
-const NumberInput = ({
+// protect from integer overflows
+const withValueLimit = ({ floatValue }: NumberFormatValues) => {
+  if (floatValue) {
+    return floatValue > 1
+      ? floatValue < Number.MAX_SAFE_INTEGER
+      : floatValue > Number.MIN_SAFE_INTEGER;
+  }
+  return true;
+};
+
+interface Props extends TextInputProps {
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  currency?: boolean;
+}
+
+const NumberInput: React.FC<Props> = ({
   inputProps,
   min = 0,
   max,
   InputProps,
   currency = false,
-  disableArrowKeys = false,
   value,
   error,
+  helperText,
   ariaLabelledBy,
+  onChange,
+  defaultValue,
+  type,
   ...props
-}: TextInputProps & { currency?: boolean; disableArrowKeys?: boolean }) => {
+}) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const currencyInputProps = currency
-    ? {
-        startAdornment: <Box sx={{ color: 'text.secondary', pr: 1 }}>$</Box>,
-        sx: {
-          pl: 1,
-          '.MuiInputBase-input': { textAlign: 'left' },
-        },
-      }
-    : {};
 
   const handleBlur = () => {
     if (isNil(value) || value === '') {
@@ -61,49 +69,52 @@ const NumberInput = ({
     }
   };
 
-  // Prevent form submission on Enter. Enter should toggle the state.
-  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
-    if (e.key.match(/(ArrowDown|ArrowUp)/)) {
-      e.preventDefault();
-    }
-  }, []);
+  const decimalScale = currency ? 2 : 0;
+  const prefix = currency ? '$' : undefined;
 
-  const preventValueChangeOnScroll: WheelEventHandler<HTMLDivElement> =
-    useCallback((e) => {
-      // Prevent the input value change
-      (e.target as HTMLInputElement).blur();
+  const handleChange: OnValueChange = (v) => {
+    const syntheticEvent = {
+      target: {
+        value: v.value,
+        name: props.name, // If you have a name prop
+      },
+      // Add other event properties you might need
+      preventDefault: () => {},
+      stopPropagation: () => {},
+    } as React.ChangeEvent<HTMLInputElement>;
 
-      // Prevent the page/container scrolling
-      e.stopPropagation();
-
-      // Refocus immediately, on the next tick (after the current
-      // function is done)
-      setTimeout(() => {
-        (e.target as HTMLInputElement).focus();
-      }, 0);
-    }, []);
+    onChange(syntheticEvent);
+  };
 
   return (
-    <TextInput
-      type='text'
+    <NumericFormat
+      error={!!(error || errorMessage)}
+      helperText={error ? undefined : errorMessage || helperText}
+      customInput={TextInput}
+      onValueChange={handleChange}
+      onBlur={handleBlur}
+      value={(value || '') as string}
+      isAllowed={withValueLimit}
+      thousandSeparator
+      decimalScale={decimalScale}
       inputProps={{
+        pattern: '[0-9]*', // hint mobile keyboards
         inputMode: 'numeric',
-        pattern: '[0-9]*',
         min,
         max,
-        onKeyDown: disableArrowKeys ? onKeyDown : undefined,
         'aria-labelledby': ariaLabelledBy,
         ...inputProps,
       }}
-      onWheel={preventValueChangeOnScroll}
-      InputProps={{ ...currencyInputProps, ...InputProps }}
-      onBlur={handleBlur}
-      value={value}
       placeholder={currency ? '0' : undefined}
+      InputProps={{
+        startAdornment: prefix ? (
+          <InputAdornment position='start'>{prefix}</InputAdornment>
+        ) : undefined,
+        ...InputProps,
+      }}
+      defaultValue={(defaultValue || '') as string}
+      type={type as any}
       {...props}
-      error={error || !!errorMessage}
-      // If there is a server error, show that instead of the local message
-      helperText={error ? undefined : errorMessage || props.helperText}
     />
   );
 };
