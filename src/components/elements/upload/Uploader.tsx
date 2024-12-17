@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { compact, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
 import useDirectUpload from './useDirectUpload';
 
@@ -370,7 +370,7 @@ const Uploader = ({
             })}
             {currentFiles.map((file) => {
               return (
-                <>
+                <Fragment key={file.name}>
                   <FileUploadSummary
                     key={file.name} // we enforce uniqueness on file names
                     file={file}
@@ -380,7 +380,7 @@ const Uploader = ({
                   <Box aria-live='polite' sx={visuallyHidden}>
                     Uploaded {file.name}
                   </Box>
-                </>
+                </Fragment>
               );
             })}
           </Stack>
