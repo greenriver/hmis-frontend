@@ -22,7 +22,7 @@ const FileUploadSummary: React.FC<{
         info={
           <Typography
             variant='body2'
-            sx={{ color: theme.palette.warning.main }}
+            color='warning.dark' # TODO(#718) use warning text color
           >
             (unsaved)
           </Typography>
