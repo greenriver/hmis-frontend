@@ -1,5 +1,5 @@
 import CheckIcon from '@mui/icons-material/Check';
-import { Button, ButtonProps, Stack, IconButton } from '@mui/material';
+import { Button, ButtonProps, IconButton, Stack } from '@mui/material';
 import { Meta, StoryObj } from '@storybook/react';
 
 export default {
@@ -30,7 +30,7 @@ export const Default: Story = {
   },
 };
 
-// todo: re-expor this button from MUI so we restrict the colors that can be used
+// todo: re-export this button from MUI so we restrict the colors that can be used
 export const IconOnly: StoryObj<typeof IconButton> = {
   args: {
     children: <CheckIcon />,
@@ -38,24 +38,19 @@ export const IconOnly: StoryObj<typeof IconButton> = {
   render: (props) => <IconButton {...props} />,
 };
 
-export const AllVariants: Story = {
-  args: {
-    children: 'Action',
-    startIcon: <CheckIcon />,
-    // disabled: true,
-  },
-  render: (props) => (
+const ButtonMatrix: React.FC<ButtonProps> = (props) => {
+  return (
     <>
       <Stack gap={2} direction='row'>
         {(
           [
             'grayscale',
             'primary',
-            'secondary',
+            // 'secondary', // todo remove
             'error',
             'warning',
-            'info', // not in figma, should not be used?
-            'success', // not in figma, should not be used?
+            // 'info', // not in figma, should not be used?
+            // 'success', // not in figma, should not be used?
           ] as ButtonProps['color'][]
         ).map((color, idx) => (
           <Stack gap={2} alignItems='center' key={color}>
@@ -70,7 +65,6 @@ export const AllVariants: Story = {
                 {idx === 0 && <span style={{ width: '100px' }}>{variant}</span>}
                 <Button
                   {...props}
-                  className='.MuiButton-active'
                   color={color}
                   variant={variant}
                   key={variant}
@@ -81,5 +75,13 @@ export const AllVariants: Story = {
         ))}
       </Stack>
     </>
-  ),
+  );
+};
+
+export const AllVariants: Story = {
+  args: {
+    children: 'Action',
+    startIcon: <CheckIcon />,
+  },
+  render: (props) => <ButtonMatrix {...props} />,
 };
