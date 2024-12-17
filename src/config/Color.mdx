@@ -33,13 +33,24 @@ export function extractColors(paletteObject, prefix = '') {
 }
 
 export function getColorItems(palette) {
-  return Object.entries(palette).map(([k, v]) => {
-    if (isColor(v)) {
-      return <ColorItem key={k} title={k} colors={{ [k]: v }} subtitle='' />;
-    } else if (typeof v === 'object') {
-      const colors = extractColors(v);
-      return <ColorItem key={k} title={k} colors={colors} subtitle='' />;
-    }
-    return null;
+  // Sort colors to match palette in Figma
+  const entries = Object.entries(palette)
+  const sortOrder = ['primary', 'success', 'warning', 'error', 'grayscale', 'grey', 'text', 'secondary', 'info'];
+  entries.sort((a,b) => {
+    let idx1 = sortOrder.indexOf(a[0]);
+    let idx2 = sortOrder.indexOf(b[0]);
+    if (idx1 === -1) idx1 = 100;
+    if (idx2 === -1) idx2 = 100;
+    return idx1 - idx2;
   });
+
+return entries.map(([k, v]) => {
+if (isColor(v)) {
+return <ColorItem key={k} title={k} colors={{ [k]: v }} subtitle='' />;
+} else if (typeof v === 'object') {
+const colors = extractColors(v);
+return <ColorItem key={k} title={k} colors={colors} subtitle='' />;
+}
+return null;
+});
 }

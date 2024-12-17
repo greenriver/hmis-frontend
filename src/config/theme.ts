@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material';
+import { Color, Theme } from '@mui/material';
 import {
   PaletteColor,
   SimplePaletteColorOptions,
@@ -55,24 +55,25 @@ declare module '@mui/material/styles' {
       icon?: string;
     };
   }
-  interface GrayPaletteColor extends PaletteColor {
-    p30: string;
-    p12: string;
-    p08: string;
+  interface GrayscalePaletteColor
+    extends PaletteColor,
+      Pick<Color, 300 | 200 | 100> {
+    tint: string;
   }
+
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
-    grayscale: GrayPaletteColor;
+    grayscale: GrayscalePaletteColor;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
-    grayscale: SimplePaletteColorOptions & Omit<GrayPaletteColor, 'light'>;
+    grayscale: SimplePaletteColorOptions & GrayscalePaletteColor;
   }
 }
 
@@ -142,10 +143,12 @@ export const baseThemeDef: ThemeOptions = {
     grayscale: {
       main: '#6E6E6E',
       dark: '#4D4D4D',
+      light: '#8b8b8b',
       contrastText: '#fff',
-      p30: alpha('#6E6E6E', 0.3),
-      p12: alpha('#6E6E6E', 0.12),
-      p08: alpha('#6E6E6E', 0.08),
+      tint: '#F3F3F3',
+      300: alpha('#6E6E6E', 0.3),
+      200: alpha('#6E6E6E', 0.12),
+      100: alpha('#6E6E6E', 0.08),
     },
   },
 };
@@ -264,8 +267,7 @@ const createThemeOptions = (theme: Theme) => ({
         },
         root: theme.unstable_sx({
           '&.Mui-disabled': {
-            color: 'red',
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.grayscale.tint,
           },
         }),
         input: {
@@ -440,37 +442,24 @@ const createThemeOptions = (theme: Theme) => ({
       },
       variants: [
         {
+          // Special styles for grayscale button
           props: { color: 'grayscale' },
           style: theme.unstable_sx({
             color: 'text.primary',
             '&:not(:disabled) .MuiButton-icon': {
               color: theme.palette.grayscale.main,
             },
-            '&:hover': {
-              backgroundColor: theme.palette.grayscale.p12,
+            '&.MuiButton-contained': {
+              backgroundColor: theme.palette.grayscale[100],
+              '&:hover': {
+                backgroundColor: theme.palette.grayscale[200],
+              },
             },
-          }),
-        },
-        {
-          props: { variant: 'contained', color: 'grayscale' },
-          style: theme.unstable_sx({
-            backgroundColor: theme.palette.grayscale.p08,
-          }),
-        },
-        {
-          props: { variant: 'text', color: 'grayscale' },
-          style: theme.unstable_sx({
-            '&:hover': {
-              backgroundColor: theme.palette.grayscale.p08,
+            '&.MuiButton-text:hover': {
+              backgroundColor: theme.palette.grayscale[100],
             },
-          }),
-        },
-        {
-          props: { variant: 'outlined', color: 'grayscale' },
-          style: theme.unstable_sx({
-            borderColor: theme.palette.grayscale.p30,
-            '&:hover': {
-              borderColor: theme.palette.grayscale.p30,
+            '&.MuiButton-outlined': {
+              borderColor: theme.palette.grayscale[300],
             },
           }),
         },
