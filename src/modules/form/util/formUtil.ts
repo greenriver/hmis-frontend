@@ -690,7 +690,7 @@ const cleanTypedObject = (o: TypedObject) => {
     o,
     '__typename',
     'dateUpdated',
-    // 'dateCreated',  // This is probably bad; is there any other way to get the upload data on the file from within the assessment?
+    'dateCreated',
     'dateDeleted',
     'user'
   );
@@ -718,6 +718,11 @@ export const gqlValueToFormValue = (
         return compact(value.map((v) => getOptionValue(v, item)));
       }
       return getOptionValue(value, item);
+    case ItemType.File:
+      // Use full File object in form to display metadata.
+      // The metadata fields wont be submitted because of the `formValueToGqlValue`
+      // logic which will transform the file object into an ID before submitting it back.
+      return value;
 
     default:
       // Set the property directly as the initial form value
