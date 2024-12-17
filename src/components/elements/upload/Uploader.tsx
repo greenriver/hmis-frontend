@@ -43,11 +43,8 @@ const getReadableSize = (maxSize: number) =>
 export type SingleUploaderProps = {
   multiple?: false;
   file?: string | FileFieldsFragment;
-  onChange?: (file: string | FileFieldsFragment | undefined) => void;
-  onUpload?: (
-    upload: DirectUpload | undefined,
-    file: File | undefined
-  ) => any | Promise<any>;
+  onChange?: (file?: string | FileFieldsFragment) => void;
+  onUpload?: (upload?: DirectUpload, file?: File) => any | Promise<any>;
 };
 
 export type MultipleUploaderProps = {
