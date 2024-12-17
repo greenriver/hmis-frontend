@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { compact, flatten, isEmpty, isNil, sortBy, uniq } from 'lodash-es';
-import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import React, { Fragment, useCallback, useMemo, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
 import useDirectUpload from './useDirectUpload';
 
@@ -214,7 +214,13 @@ const Uploader = <Multiple extends boolean>({
     return isEmpty(base) ? undefined : base;
   }, [isImage, acceptProp]);
 
-  const { getRootProps, isDragActive, getInputProps, open } = useDropzone({
+  const {
+    rootRef: inputRef,
+    getRootProps,
+    isDragActive,
+    getInputProps,
+    open,
+  } = useDropzone({
     multiple,
     accept,
     maxSize,
@@ -269,6 +275,8 @@ const Uploader = <Multiple extends boolean>({
       if (onUploadSingle) {
         onUploadSingle(undefined, undefined);
       }
+      // favor a timeout here in this callback, rather than a useEffect, to avoid hijacking the focus on pageload
+      setTimeout(() => inputRef.current?.focus(), 100);
     },
     [
       currentFiles,
@@ -278,10 +286,9 @@ const Uploader = <Multiple extends boolean>({
       onChangeSingle,
       onUploadMultiple,
       onUploadSingle,
+      inputRef,
     ]
   );
-
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const showFileList = useMemo(
     () => multiple && (currentFiles.length > 0 || existingFiles.length > 0),
@@ -312,7 +319,7 @@ const Uploader = <Multiple extends boolean>({
       >
         <input
           {...getInputProps()}
-          ref={inputRef}
+          tabIndex={0}
           aria-label={ariaLabel ? ariaLabel : 'Upload file'}
         />
         <Stack
@@ -356,10 +363,7 @@ const Uploader = <Multiple extends boolean>({
             {!loading && !multiple && currentFiles[0] && (
               <UnsavedFileSummary
                 file={currentFiles[0]}
-                onRemove={() => {
-                  removeFile(currentFiles[0]);
-                  inputRef.current?.focus();
-                }}
+                onRemove={() => removeFile(currentFiles[0])}
                 variant='stacked'
               />
             )}
@@ -367,10 +371,7 @@ const Uploader = <Multiple extends boolean>({
           {!loading && !multiple && existingFiles[0] && (
             <SavedFileSummary
               file={existingFiles[0]}
-              onRemove={() => {
-                removeFile(existingFiles[0]);
-                inputRef.current?.focus();
-              }}
+              onRemove={() => removeFile(existingFiles[0])}
               variant='stacked'
             />
           )}
