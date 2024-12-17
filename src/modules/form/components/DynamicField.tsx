@@ -412,25 +412,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer {...commonContainerProps}>
           <LabelWithContent label={item.text} helperText={item.helperText}>
-            {item.repeats ? (
-              <Uploader
-                multiple={true}
-                id={linkId}
-                files={value}
-                image
-                onChange={onChangeValue}
-                ariaLabel={item.text}
-              />
-            ) : (
-              <Uploader
-                multiple={false}
-                id={linkId}
-                file={value}
-                image
-                onChange={onChangeValue}
-                ariaLabel={item.text}
-              />
-            )}
+            <Uploader
+              multiple={item.repeats || false}
+              id={linkId}
+              files={value}
+              image
+              onChange={onChangeValue}
+              ariaLabel={item.text}
+            />
           </LabelWithContent>
         </InputContainer>
       );
@@ -438,23 +427,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer {...commonContainerProps}>
           <LabelWithContent label={item.text} helperText={item.helperText}>
-            {item.repeats ? (
-              <Uploader
-                multiple={true}
-                id={linkId}
-                files={value}
-                onChange={onChangeValue}
-                ariaLabel={item.text}
-              />
-            ) : (
-              <Uploader
-                multiple={false}
-                id={linkId}
-                file={value}
-                onChange={onChangeValue}
-                ariaLabel={item.text}
-              />
-            )}
+            <Uploader
+              multiple={item.repeats || false}
+              id={linkId}
+              files={value}
+              onChange={onChangeValue}
+              ariaLabel={item.text}
+            />
           </LabelWithContent>
         </InputContainer>
       );

@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import { Meta, StoryObj } from '@storybook/react';
 
 import MOCK_IMAGE from './MOCK_IMAGE';
-import Uploader, { SingleUploaderProps, UploaderProps } from './Uploader';
+import Uploader from './Uploader';
 
 import { createDirectUploadMock, getFileMock } from '@/test/__mocks__/requests';
 
@@ -17,7 +17,7 @@ export default {
   render: (args) => (
     <>
       <Uploader
-        {...(args as SingleUploaderProps & UploaderProps)} // keeps Typescript happy, but in reality could be either.
+        {...args}
         onUpload={(upload, file) => {
           const targetElem = document.getElementById('result');
           if (targetElem)

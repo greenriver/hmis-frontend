@@ -45,39 +45,37 @@ const isFileFieldsFragment = (
 ): value is FileFieldsFragment =>
   !isNil(value) && typeof value === 'object' && value.__typename === 'File';
 
-export type SingleUploaderProps = {
-  multiple?: false;
-  file?: string | FileFieldsFragment;
-  onChange?: (file?: string | FileFieldsFragment) => void;
-  onUpload?: (upload?: DirectUpload, file?: File) => any | Promise<any>;
-};
-
-export type MultipleUploaderProps = {
-  multiple: true;
-  files?: (string | FileFieldsFragment)[];
-  onChange?: (files: (string | FileFieldsFragment)[]) => void;
-  onUpload?: (uploads: DirectUpload[], files: File[]) => any | Promise<any>;
-};
-
-export type UploaderProps = {
+type ExistingFileType = string | FileFieldsFragment;
+export interface UploaderProps<Multiple extends boolean> {
+  id: string;
+  multiple?: Multiple;
+  files?: Multiple extends true ? ExistingFileType[] : ExistingFileType;
+  onChange?: (
+    files: Multiple extends true
+      ? ExistingFileType[]
+      : ExistingFileType | undefined
+  ) => void;
+  onUpload?: (
+    uploads: Multiple extends true ? DirectUpload[] : DirectUpload | undefined,
+    files: Multiple extends true ? File[] : File
+  ) => any | Promise<any>;
   accept?: Accept;
   image?: boolean;
   maxSize?: number;
-  id: string;
   ariaLabel?: string | null;
-} & (SingleUploaderProps | MultipleUploaderProps);
+}
 
-const Uploader = ({
+const Uploader = <Multiple extends boolean>({
   id,
+  multiple = false as Multiple,
+  files,
   onChange,
   onUpload,
   accept: acceptProp,
   image: isImage = false,
   maxSize = DEFAULT_MAX_BYTES,
-  multiple,
   ariaLabel,
-  ...rest
-}: UploaderProps) => {
+}: UploaderProps<Multiple>) => {
   // The uploader accepts a `files` argument which can contain either:
   // - a STRING which points at a blob ID of a file that has been uploaded within this session, or
   // - a FileFieldsFragment record which points at a file record in our database, uploaded during a previous session.
@@ -85,21 +83,12 @@ const Uploader = ({
   // `existingFiles` filters the list to only those files that were uploaded some previous time, so we can render them.
   // The files uploaded during this session, we render this component's internal state, `currentFiles`.
   const existingFiles: FileFieldsFragment[] = useMemo(() => {
-    // Handles the differing API for a multi vs. single upload component (files vs. file)
-    let filesArr;
-    if (multiple) {
-      const { files } = rest as MultipleUploaderProps;
-      filesArr = ensureArray(files);
-    } else {
-      const { file } = rest as SingleUploaderProps;
-      filesArr = ensureArray(file);
-    }
-    return filesArr.filter(
+    return ensureArray(files).filter(
       // Filter out files from the input that are just blob IDs.
       // These should also be reflected in the currentFiles internal state object.
       (f) => isFileFieldsFragment(f)
     );
-  }, [rest, multiple]);
+  }, [files]);
 
   // The currentFiles are File objects (https://developer.mozilla.org/en-US/docs/Web/API/File)
   // returned by the react-dropzone callbacks. These refer to files we received in the uploader, on this session.
@@ -131,6 +120,39 @@ const Uploader = ({
     [existingFiles, currentFiles]
   );
 
+  const onChangeMultiple = useMemo(
+    () =>
+      multiple
+        ? (onChange as ((files: ExistingFileType[]) => void) | undefined)
+        : undefined,
+    [multiple, onChange]
+  );
+  const onChangeSingle = useMemo(
+    () =>
+      multiple
+        ? undefined
+        : (onChange as ((file?: ExistingFileType) => void) | undefined),
+    [multiple, onChange]
+  );
+  const onUploadMultiple = useMemo(
+    () =>
+      multiple
+        ? (onUpload as
+            | ((uploads: DirectUpload[], files: File[]) => any)
+            | undefined)
+        : undefined,
+    [multiple, onUpload]
+  );
+  const onUploadSingle = useMemo(
+    () =>
+      multiple
+        ? undefined
+        : (onUpload as
+            | ((upload?: DirectUpload, file?: File) => any)
+            | undefined),
+    [multiple, onUpload]
+  );
+
   const uploadAndCreate = useCallback(
     (acceptedFiles: File[]) => {
       setLoading(true);
@@ -141,24 +163,26 @@ const Uploader = ({
           const newUploads = [...currentUploads, ...responses];
           setCurrentFiles(newFiles);
           setCurrentUploads(newUploads);
+
           if (multiple) {
-            if (onChange) {
-              onChange([
+            if (onChangeMultiple) {
+              onChangeMultiple([
                 ...existingFiles,
                 ...newUploads.map((u) => u.signedBlobId),
               ]);
             }
-            if (onUpload) {
-              onUpload(newUploads, newFiles);
+            if (onUploadMultiple) {
+              onUploadMultiple(newUploads, newFiles);
             }
           } else {
             const singleUpload = newUploads[0];
             const singleFile = newFiles[0];
-            if (onChange && singleUpload) {
-              onChange(singleUpload.signedBlobId);
+
+            if (onChangeSingle && singleUpload) {
+              onChangeSingle(singleUpload.signedBlobId);
             }
-            if (onUpload && singleFile && singleUpload) {
-              onUpload(singleUpload, singleFile);
+            if (onUploadSingle && singleFile && singleUpload) {
+              onUploadSingle(singleUpload, singleFile);
             }
           }
           setLoading(false);
@@ -172,10 +196,12 @@ const Uploader = ({
       currentFiles,
       uploadFile,
       currentUploads,
-      onChange,
-      existingFiles,
-      onUpload,
       multiple,
+      onChangeMultiple,
+      onUploadMultiple,
+      existingFiles,
+      onChangeSingle,
+      onUploadSingle,
     ]
   );
 
@@ -227,26 +253,32 @@ const Uploader = ({
       setCurrentFiles(newFiles);
       setCurrentUploads(newUploads);
 
-      if (multiple) {
-        if (onChange) {
-          onChange([
-            ...existingFiles.filter((f) => f !== file),
-            ...newUploads.map((u) => u.signedBlobId),
-          ]);
-        }
-        if (onUpload) {
-          onUpload(newUploads, newFiles);
-        }
-      } else {
-        if (onChange) {
-          onChange(undefined);
-        }
-        if (onUpload) {
-          onUpload(undefined, undefined);
-        }
+      if (onChangeMultiple) {
+        onChangeMultiple([
+          ...existingFiles.filter((f) => f !== file),
+          ...newUploads.map((u) => u.signedBlobId),
+        ]);
+      }
+      if (onUploadMultiple) {
+        onUploadMultiple(newUploads, newFiles);
+      }
+
+      if (onChangeSingle) {
+        onChangeSingle(undefined);
+      }
+      if (onUploadSingle) {
+        onUploadSingle(undefined, undefined);
       }
     },
-    [currentFiles, currentUploads, existingFiles, multiple, onChange, onUpload]
+    [
+      currentFiles,
+      currentUploads,
+      existingFiles,
+      onChangeMultiple,
+      onChangeSingle,
+      onUploadMultiple,
+      onUploadSingle,
+    ]
   );
 
   const inputRef = useRef<HTMLInputElement | null>(null);

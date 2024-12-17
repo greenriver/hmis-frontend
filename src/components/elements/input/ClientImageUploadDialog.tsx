@@ -164,7 +164,8 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
               <Grid item xs={12}>
                 <Uploader
                   id='clientImageUploader'
-                  onUpload={(upload, file) => {
+                  multiple={false}
+                  onUpload={(upload?: DirectUpload, file?: File) => {
                     setNewBlobId(upload ? upload.signedBlobId : upload);
                     setNewPhotoSrc(file ? URL.createObjectURL(file) : file);
                     setErrors(emptyErrorState);
