@@ -25,7 +25,7 @@ const FileRecordDialog: React.FC<FileRecordDialogProps> = ({
   return (
     <ViewRecordDialog<FileFieldsFragment>
       {...props}
-      record={file as FileFieldsFragment}
+      record={file}
       formRole={RecordFormRole.File}
       title={file.name}
       actions={actions}
