@@ -2,21 +2,17 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import {
   alpha,
   Box,
-  Card,
-  Divider,
   LinearProgress,
   Link,
   Stack,
   Typography,
 } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import { compact, flatten, isEmpty, isNil, sortBy, uniq } from 'lodash-es';
-import React, { Fragment, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
 import useDirectUpload from './useDirectUpload';
-
-import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
-import UnsavedFileSummary from '@/components/elements/upload/fileSummary/UnsavedFileSummary';
+import MultiFileSummaries from '@/components/elements/upload/fileSummary/MultiFileSummaries';
+import SingleFileSummary from '@/components/elements/upload/fileSummary/SingleFileSummary';
 import FileThumbnailIcon from '@/components/elements/upload/FileThumbnailIcon';
 import { DirectUpload, FileFieldsFragment } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
@@ -332,17 +328,18 @@ const Uploader = <Multiple extends boolean>({
             p: 2,
           }}
         >
-          {loading && (
+          {/* If currently uploading (whether multi or single), show "Uploading" and hide the click-to-upload link */}
+          {loading ? (
             <Box>
               <Typography variant='subtitle1' color='inherit' gutterBottom>
                 Uploading
               </Typography>
               <LinearProgress variant='indeterminate' />
             </Box>
-          )}
-          <Box aria-live='polite'>
-            {!loading &&
-              (multiple ||
+          ) : (
+            <Box aria-live='polite'>
+              {/* If multi-upload, always show the click-to-upload link. If not, only show it when there is no uploaded file yet. */}
+              {(multiple ||
                 (currentFiles.length === 0 && existingFiles.length === 0)) && (
                 <>
                   <FileThumbnailIcon IconComponent={UploadFileIcon} />
@@ -358,68 +355,37 @@ const Uploader = <Multiple extends boolean>({
                   </Typography>
                 </>
               )}
-          </Box>
-          <Box aria-live='polite'>
-            {!loading && !multiple && currentFiles[0] && (
-              <UnsavedFileSummary
-                file={currentFiles[0]}
-                onRemove={() => removeFile(currentFiles[0])}
-                variant='stacked'
-              />
-            )}
-          </Box>
-          {!loading && !multiple && existingFiles[0] && (
-            <SavedFileSummary
-              file={existingFiles[0]}
-              onRemove={() => removeFile(existingFiles[0])}
-              variant='stacked'
-            />
+              {/* If it's a single-file upload, render the single summary thumbnail in the input, above the error */}
+              {!multiple && (
+                <SingleFileSummary
+                  savedFile={existingFiles[0]}
+                  unsavedFile={currentFiles[0]}
+                  onRemove={removeFile}
+                />
+              )}
+              {/* Upload errors */}
+              {errors?.map((error) => (
+                <Typography
+                  key={error}
+                  variant='subtitle1'
+                  color='error'
+                  sx={{ mt: 2 }}
+                  aria-live='polite'
+                >
+                  {error}
+                </Typography>
+              ))}
+            </Box>
           )}
-          <Box aria-live='polite'>
-            {errors?.map((error) => (
-              <Typography
-                key={error}
-                variant='subtitle1'
-                color='error'
-                sx={{ mt: 2 }}
-                aria-live='polite'
-              >
-                {error}
-              </Typography>
-            ))}
-          </Box>
         </Stack>
       </Box>
+      {/* If it's a multi-file upload, render the summary rows below the input */}
       {showFileList && (
-        <Card sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
-          <Stack aria-live='polite' divider={<Divider />}>
-            {existingFiles.map((file) => {
-              return (
-                <SavedFileSummary
-                  key={file.id}
-                  file={file}
-                  onRemove={() => removeFile(file)}
-                  variant='row'
-                />
-              );
-            })}
-            {currentFiles.map((file) => {
-              return (
-                <Fragment key={file.name}>
-                  <UnsavedFileSummary
-                    key={file.name} // we enforce uniqueness on file names
-                    file={file}
-                    onRemove={() => removeFile(file)}
-                    variant='row'
-                  />
-                  <Box aria-live='polite' sx={visuallyHidden}>
-                    Uploaded {file.name}
-                  </Box>
-                </Fragment>
-              );
-            })}
-          </Stack>
-        </Card>
+        <MultiFileSummaries
+          savedFiles={existingFiles}
+          unsavedFiles={currentFiles}
+          onRemove={removeFile}
+        />
       )}
     </Stack>
   );
