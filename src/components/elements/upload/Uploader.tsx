@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { compact, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
+import { compact, flatten, isEmpty, isNil, sortBy, uniq } from 'lodash-es';
 import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
 import useDirectUpload from './useDirectUpload';
@@ -39,6 +39,11 @@ const getFileTypesFromAccept = (accept: Accept) => {
 
 const getReadableSize = (maxSize: number) =>
   `${(maxSize / 1000000).toFixed(1)}MB`;
+
+const isFileFieldsFragment = (
+  value: string | FileFieldsFragment
+): value is FileFieldsFragment =>
+  !isNil(value) && typeof value === 'object' && value.__typename === 'File';
 
 export type SingleUploaderProps = {
   multiple?: false;
@@ -92,8 +97,8 @@ const Uploader = ({
     return filesArr.filter(
       // Filter out files from the input that are just blob IDs.
       // These should also be reflected in the currentFiles internal state object.
-      (f) => typeof f !== 'string'
-    ) as FileFieldsFragment[]; // Cast to keep typescript happy; now that we've filtered out all the strings, they should all be FileFieldsFragments
+      (f) => isFileFieldsFragment(f)
+    );
   }, [rest, multiple]);
 
   // The currentFiles are File objects (https://developer.mozilla.org/en-US/docs/Web/API/File)
