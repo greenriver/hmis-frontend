@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import FileSummary, {
   FileSummaryProps,
 } from '@/components/elements/upload/fileSummary/FileSummary';
-import theme from '@/config/theme';
 
 // Wrapper around FileSummary for representing a File, aka a file that has just now been uploaded to Active Storage but doesn't yet exist as a File record in our db.
 const FileUploadSummary: React.FC<{
@@ -22,7 +21,7 @@ const FileUploadSummary: React.FC<{
         info={
           <Typography
             variant='body2'
-            color='warning.dark' # TODO(#718) use warning text color
+            color='warning.dark' // TODO(#718) use warning text color
           >
             (unsaved)
           </Typography>
