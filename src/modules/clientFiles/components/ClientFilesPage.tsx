@@ -7,7 +7,7 @@ import useFileActions from '../hooks/useFileActions';
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
-import FileRecordDialog from '@/components/elements/upload/fileDialog/FileRecordDialog';
+import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -171,7 +171,7 @@ const ClientFilesPage = () => {
         />
       </Paper>
       {viewingFile && (
-        <FileRecordDialog
+        <FilePreviewDialog
           open={!!viewingFile}
           onClose={() => setViewingFile(undefined)}
           file={viewingFile}

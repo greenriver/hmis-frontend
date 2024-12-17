@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import React, { useState } from 'react';
-import FileRecordDialog from '@/components/elements/upload/fileDialog/FileRecordDialog';
+import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import FileSummary, {
   FileSummaryProps,
 } from '@/components/elements/upload/fileSummary/FileSummary';
@@ -11,7 +11,7 @@ import {
 import { FileFieldsFragment } from '@/types/gqlTypes';
 
 // Wrapper around FileSummary for representing a FileFieldsFragment, aka a file that has already been saved as a File record in our db
-const FileRecordSummary: React.FC<{
+const SavedFileSummary: React.FC<{
   file: FileFieldsFragment;
   variant: FileSummaryProps['variant'];
   onRemove?: FileSummaryProps['onRemove'];
@@ -38,7 +38,7 @@ const FileRecordSummary: React.FC<{
         onRemove={onRemove}
         openPreview={() => setPreviewOpen(true)}
       />
-      <FileRecordDialog
+      <FilePreviewDialog
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
         file={file}
@@ -47,4 +47,4 @@ const FileRecordSummary: React.FC<{
   );
 };
 
-export default FileRecordSummary;
+export default SavedFileSummary;

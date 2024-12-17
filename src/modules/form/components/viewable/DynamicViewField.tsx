@@ -16,7 +16,7 @@ import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDur
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
-import FileRecordSummary from '@/components/elements/upload/fileSummary/FileRecordSummary';
+import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
@@ -203,7 +203,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
             <Card>
               <Stack divider={<Divider />}>
                 {files.map((file) => (
-                  <FileRecordSummary key={file.id} file={file} variant='row' />
+                  <SavedFileSummary key={file.id} file={file} variant='row' />
                 ))}
               </Stack>
             </Card>

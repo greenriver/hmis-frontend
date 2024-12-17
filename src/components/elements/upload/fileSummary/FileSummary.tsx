@@ -3,7 +3,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { Box, Link, Stack, Tooltip, Typography } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
-import FilePreviewIcon from '@/components/elements/upload/FilePreviewIcon';
+import FileThumbnailIcon from '@/components/elements/upload/FileThumbnailIcon';
 
 export type FileSummaryProps = {
   fileName: string;
@@ -44,7 +44,7 @@ const FileSummary: React.FC<FileSummaryProps> = ({
             }}
           />
         ) : (
-          <FilePreviewIcon IconComponent={InsertDriveFileIcon} />
+          <FileThumbnailIcon IconComponent={InsertDriveFileIcon} />
         )}
       </>
     );

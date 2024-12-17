@@ -5,7 +5,7 @@ import FileSummary, {
 } from '@/components/elements/upload/fileSummary/FileSummary';
 
 // Wrapper around FileSummary for representing a File, aka a file that has just now been uploaded to Active Storage but doesn't yet exist as a File record in our db.
-const FileUploadSummary: React.FC<{
+const UnsavedFileSummary: React.FC<{
   file: File;
   variant: FileSummaryProps['variant'];
   onRemove?: FileSummaryProps['onRemove'];
@@ -34,4 +34,4 @@ const FileUploadSummary: React.FC<{
   );
 };
 
-export default FileUploadSummary;
+export default UnsavedFileSummary;

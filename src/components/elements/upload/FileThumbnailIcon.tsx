@@ -1,7 +1,7 @@
 import { alpha, Box, SvgIconProps } from '@mui/material';
 import React from 'react';
 
-const FilePreviewIcon: React.FC<{
+const FileThumbnailIcon: React.FC<{
   IconComponent: React.ComponentType<SvgIconProps>;
 }> = ({ IconComponent }) => (
   <Box
@@ -20,4 +20,4 @@ const FilePreviewIcon: React.FC<{
   </Box>
 );
 
-export default FilePreviewIcon;
+export default FileThumbnailIcon;

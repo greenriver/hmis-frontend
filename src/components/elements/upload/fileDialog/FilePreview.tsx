@@ -116,7 +116,7 @@ const PdfPreview: React.FC<{ file: FileDialogProps['file'] }> = ({
   );
 };
 
-const FileDialog: React.FC<{ file: FileDialogProps['file'] }> = ({ file }) => {
+const FilePreview: React.FC<{ file: FileDialogProps['file'] }> = ({ file }) => {
   const previewContent = useMemo(() => {
     if (
       file.contentType &&
@@ -196,4 +196,4 @@ const FileDialog: React.FC<{ file: FileDialogProps['file'] }> = ({ file }) => {
   );
 };
 
-export default FileDialog;
+export default FilePreview;

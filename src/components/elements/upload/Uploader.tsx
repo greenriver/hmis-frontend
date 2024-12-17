@@ -15,9 +15,9 @@ import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
 import useDirectUpload from './useDirectUpload';
 
-import FilePreviewIcon from '@/components/elements/upload/FilePreviewIcon';
-import FileRecordSummary from '@/components/elements/upload/fileSummary/FileRecordSummary';
-import FileUploadSummary from '@/components/elements/upload/fileSummary/FileUploadSummary';
+import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
+import UnsavedFileSummary from '@/components/elements/upload/fileSummary/UnsavedFileSummary';
+import FileThumbnailIcon from '@/components/elements/upload/FileThumbnailIcon';
 import { DirectUpload, FileFieldsFragment } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
@@ -304,7 +304,7 @@ const Uploader = ({
               (multiple ||
                 (currentFiles.length === 0 && existingFiles.length === 0)) && (
                 <>
-                  <FilePreviewIcon IconComponent={UploadFileIcon} />
+                  <FileThumbnailIcon IconComponent={UploadFileIcon} />
                   <Typography variant='subtitle1' color='inherit'>
                     <Link onClick={open} variant='inherit'>
                       Click to upload
@@ -320,7 +320,7 @@ const Uploader = ({
           </Box>
           <Box aria-live='polite'>
             {!loading && !multiple && currentFiles[0] && (
-              <FileUploadSummary
+              <UnsavedFileSummary
                 file={currentFiles[0]}
                 onRemove={() => {
                   removeFile(currentFiles[0]);
@@ -331,7 +331,7 @@ const Uploader = ({
             )}
           </Box>
           {!loading && !multiple && existingFiles[0] && (
-            <FileRecordSummary
+            <SavedFileSummary
               file={existingFiles[0]}
               onRemove={() => {
                 removeFile(existingFiles[0]);
@@ -360,7 +360,7 @@ const Uploader = ({
           <Stack aria-live='polite' divider={<Divider />}>
             {existingFiles.map((file) => {
               return (
-                <FileRecordSummary
+                <SavedFileSummary
                   key={file.id}
                   file={file}
                   onRemove={() => removeFile(file)}
@@ -371,7 +371,7 @@ const Uploader = ({
             {currentFiles.map((file) => {
               return (
                 <Fragment key={file.name}>
-                  <FileUploadSummary
+                  <UnsavedFileSummary
                     key={file.name} // we enforce uniqueness on file names
                     file={file}
                     onRemove={() => removeFile(file)}
