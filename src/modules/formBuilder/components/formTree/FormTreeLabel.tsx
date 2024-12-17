@@ -184,14 +184,16 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           >
             <CommonMenuButton
               title='Actions'
-              aria-label={`${itemId} item actions`}
               iconButton
               items={menuItems}
-              variant='outlined'
-              sx={{
-                color: (theme: Theme) => theme.palette.links,
-                height: '28px',
-                width: '28px',
+              ButtonProps={{
+                'aria-label': `${itemId} item actions`,
+                variant: 'outlined',
+                sx: {
+                  color: (theme: Theme) => theme.palette.links,
+                  height: '28px',
+                  width: '28px',
+                },
               }}
               MenuProps={{
                 sx: {
