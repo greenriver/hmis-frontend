@@ -3,7 +3,10 @@ import { Meta, StoryFn } from '@storybook/react';
 
 import GenericTable, { Props as GenericTableProps } from './GenericTable';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
-import { getCustomDataElementColumns } from '@/modules/hmis/hmisUtil';
+import {
+  clientBriefName,
+  getCustomDataElementColumns,
+} from '@/modules/hmis/hmisUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
@@ -135,8 +138,30 @@ const rowsWithCdes = [
 WithCustomDataElements.args = {
   rows: rowsWithCdes,
   columns: [
-    CLIENT_COLUMNS.id,
     CLIENT_COLUMNS.name,
     ...getCustomDataElementColumns<RowType>(rowsWithCdes),
   ],
+};
+
+export const WithTableRowActions = Template<RowType>().bind({});
+WithTableRowActions.args = {
+  rows: fakeRows,
+  columns: [CLIENT_COLUMNS.name],
+  getTableRowActions: (record) => {
+    return {
+      primaryAction: {
+        title: 'Do something in-app',
+        key: 'onClick',
+        onClick: () => alert(`Hello, ${clientBriefName(record)} ${record.id}`),
+      },
+      secondaryActions: [
+        {
+          title: 'Navigate to a link',
+          key: 'link',
+          to: 'https://storybook.js.org/docs', // just link somewhere random to show `to` prop working
+        },
+      ],
+    };
+  },
+  getRowAccessibleName: (record) => `${clientBriefName(record)} ${record.id}`,
 };
