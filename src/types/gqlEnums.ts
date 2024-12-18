@@ -272,6 +272,7 @@ export const HmisEnums = {
   CustomDataElementType: {
     boolean: 'boolean',
     date: 'date',
+    file: 'file',
     float: 'float',
     integer: 'integer',
     json: 'json',

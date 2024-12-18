@@ -1,4 +1,4 @@
-import { Skeleton, Stack, Typography } from '@mui/material';
+import { Card, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { formatDuration } from 'date-fns';
 import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
@@ -8,9 +8,6 @@ import { DynamicViewFieldProps } from '../../types';
 import { isDataNotCollected } from '../../util/formUtil';
 import DynamicDisplay from '../DynamicDisplay';
 
-import File from './item/File';
-import Image from './item/Image';
-
 import TextContent from './item/TextContent';
 
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
@@ -19,6 +16,7 @@ import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDur
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
+import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
@@ -195,9 +193,23 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         />
       );
     case ItemType.Image:
-      return <Image id={value} />;
     case ItemType.File:
-      return <File id={value} />;
+      const files = ensureArray(value);
+      return (
+        <LabelWithContent {...commonProps}>
+          {files.length === 0 ? (
+            <NotCollectedText variant='body2' />
+          ) : (
+            <Card>
+              <Stack divider={<Divider />}>
+                {files.map((file) => (
+                  <SavedFileSummary key={file.id} file={file} variant='row' />
+                ))}
+              </Stack>
+            </Card>
+          )}
+        </LabelWithContent>
+      );
     case ItemType.Object:
       switch (item.component) {
         case Component.Address: // Used in Move-in Date Display

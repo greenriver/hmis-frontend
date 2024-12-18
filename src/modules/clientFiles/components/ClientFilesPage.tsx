@@ -3,11 +3,11 @@ import { Box, Chip, Paper, Typography } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
 import useFileActions from '../hooks/useFileActions';
-import FileDialog from './FileModal';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
+import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -176,7 +176,7 @@ const ClientFilesPage = () => {
         />
       </Paper>
       {viewingFile && (
-        <FileDialog
+        <FilePreviewDialog
           open={!!viewingFile}
           onClose={() => setViewingFile(undefined)}
           file={viewingFile}

@@ -32,8 +32,8 @@ interface Props {
   variant?: ButtonProps['variant'];
   disabled?: ButtonProps['disabled'];
   iconButton?: boolean; // use an icon button instead of a text button
-  sx?: ButtonProps['sx'];
   MenuProps?: Omit<MenuProps, 'open'>;
+  ButtonProps?: ButtonProps;
 }
 
 const CommonMenuButton = ({
@@ -41,7 +41,7 @@ const CommonMenuButton = ({
   items,
   iconButton,
   MenuProps,
-  ...buttonProps
+  ButtonProps,
 }: Props & ButtonProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -65,7 +65,7 @@ const CommonMenuButton = ({
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
-          {...buttonProps}
+          {...ButtonProps}
         >
           <MoreMenuIcon fontSize='inherit' />
         </IconButton>
@@ -77,7 +77,7 @@ const CommonMenuButton = ({
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<ArrowDropDownIcon />}
-          {...buttonProps}
+          {...ButtonProps}
         >
           {title}
         </Button>
