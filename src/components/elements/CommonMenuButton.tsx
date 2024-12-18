@@ -29,8 +29,6 @@ export type CommonMenuItem = {
 interface Props {
   title: ReactNode;
   items: CommonMenuItem[];
-  variant?: ButtonProps['variant'];
-  disabled?: ButtonProps['disabled'];
   iconButton?: boolean; // use an icon button instead of a text button
   MenuProps?: Omit<MenuProps, 'open'>;
   ButtonProps?: ButtonProps;
@@ -42,7 +40,7 @@ const CommonMenuButton = ({
   iconButton,
   MenuProps,
   ButtonProps,
-}: Props & ButtonProps) => {
+}: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
