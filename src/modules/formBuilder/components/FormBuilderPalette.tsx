@@ -25,12 +25,7 @@ import { FormItemPaletteType } from '@/modules/formBuilder/types';
 import { ItemType } from '@/types/gqlTypes';
 
 // Item types that are excluded from the form builder palette, until we have better support (#6401)
-const EXCLUDED_ITEM_TYPES = [
-  ItemType.Object,
-  ItemType.Image,
-  ItemType.File,
-  ItemType.Geolocation,
-];
+const EXCLUDED_ITEM_TYPES = [ItemType.Object, ItemType.Geolocation];
 
 export const FORM_ITEM_PALETTE = {
   [ItemType.Group]: {

@@ -46,7 +46,9 @@ const TableRowActions = <T extends { id: string }>({
           iconButton
           title='Actions'
           items={secondaryActions}
-          aria-label={`Action menu for ${accessibleName}`}
+          ButtonProps={{
+            'aria-label': `Action menu for ${accessibleName}`,
+          }}
           MenuProps={{
             MenuListProps: {
               dense: true,
