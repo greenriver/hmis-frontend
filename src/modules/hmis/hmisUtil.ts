@@ -230,8 +230,11 @@ export const formatRelativeDate = (date: Date): string => {
   return formatRelativeDateTime(date);
 };
 
-export const formatCurrency = (number?: number | null) => {
-  if (isNil(number)) return number;
+export const formatCurrency = (value?: any) => {
+  if (isNil(value)) return value;
+  const number = parseFloat(value);
+  if (isNaN(number)) return value.toString();
+
   return currencyFormatter.format(number);
 };
 

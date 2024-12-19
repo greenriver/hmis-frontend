@@ -95,7 +95,8 @@ const NumberInput: React.FC<Props> = ({
       onBlur={handleBlur}
       value={(value || '') as string}
       isAllowed={withValueLimit}
-      thousandSeparator
+      // only use thousand separator for currency, not other integer fields which may represent 'Year'
+      thousandSeparator={currency}
       decimalScale={decimalScale}
       inputProps={{
         pattern: '[0-9]*', // hint mobile keyboards
