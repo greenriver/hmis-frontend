@@ -6,7 +6,7 @@ import { useAssessmentEligibilities } from '../hooks/useAssessmentEligibilities'
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import CommonMenuButton, {
-  NavMenuItem,
+  CommonMenuItem,
 } from '@/components/elements/CommonMenuButton';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
@@ -77,7 +77,7 @@ const NewAssessmentMenu: React.FC<
     [clientId, enrollmentId]
   );
 
-  const items: NavMenuItem[] = useMemo(
+  const items: CommonMenuItem[] = useMemo(
     () =>
       assessmentEligibilities.map(({ id, title, role, formDefinitionId }) => ({
         key: id,
@@ -92,7 +92,11 @@ const NewAssessmentMenu: React.FC<
       <ButtonTooltipContainer
         title={'Cannot perform new assessments for exited enrollment.'}
       >
-        <CommonMenuButton title='New Assessment' items={[]} disabled />
+        <CommonMenuButton
+          title='New Assessment'
+          items={[]}
+          ButtonProps={{ disabled: true }}
+        />
       </ButtonTooltipContainer>
     );
   }
@@ -115,7 +119,11 @@ const EnrollmentAssessmentActionButtons: React.FC<Props> = ({ enrollment }) => {
   if (loading && !assessmentEligibilities) {
     return (
       <Skeleton variant='rectangular' aria-live='polite' aria-busy='true'>
-        <CommonMenuButton title='New Assessment' items={[]} disabled />
+        <CommonMenuButton
+          title='New Assessment'
+          items={[]}
+          ButtonProps={{ disabled: true }}
+        />
       </Skeleton>
     );
   }
