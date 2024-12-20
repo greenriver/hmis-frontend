@@ -20,7 +20,10 @@ const EnrollmentLocationMap: React.FC<Props> = ({
     variables: { id: enrollmentId },
     fetchPolicy: 'cache-and-network',
   });
-  const mapHeight = 600; // TODO get viewport height to calculate map height for mobile
+
+  // fill most of page for mobile/tablet
+  // this could be improved by using breakpoints, to make the map smaller on desktop
+  const mapHeight = '60vh';
 
   if (loading) {
     return (

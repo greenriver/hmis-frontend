@@ -16,7 +16,7 @@ const SingleGeolocationMap: React.FC<BaseMapProps> = ({
   return (
     <BaseMapContainer
       key={JSON.stringify(coordinates)}
-      height={height}
+      sx={{ height }}
       center={[coordinates.latitude, coordinates.longitude]}
       zoom={16}
       dragging={false}

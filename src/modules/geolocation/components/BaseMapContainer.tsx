@@ -16,7 +16,7 @@ L.Icon.Default.imagePath = '';
 
 export interface BaseMapContainerProps extends MapContainerProps {
   children: React.ReactNode;
-  height?: number;
+  height: string | number; // require container height
   sx?: SxProps;
 }
 
@@ -27,8 +27,8 @@ const BaseMapContainer: React.FC<BaseMapContainerProps> = ({
   ...props
 }) => {
   return (
-    <Box sx={{ ...sx, height }}>
-      <MapContainer style={{ height }} {...props}>
+    <Box sx={{ height, ...sx }}>
+      <MapContainer style={{ height: '100%' }} {...props}>
         <>
           <TileLayer
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'

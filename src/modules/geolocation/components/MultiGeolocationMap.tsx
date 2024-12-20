@@ -15,14 +15,14 @@ interface Props {
   BaseMapContainerProps?: Omit<BaseMapContainerProps, 'children'>;
 }
 
-function locationToLatLngExpression(
+const locationToLatLngExpression = (
   location: GeolocationFieldsWithMetadataFragment
-) {
+): LatLngExpression => {
   return [
     parseFloat(location.coordinates.latitude),
     parseFloat(location.coordinates.longitude),
-  ];
-}
+  ] as LatLngExpression;
+};
 
 // Map that displays multiple Geolocations as markers
 const MultiGeolocationMap: React.FC<Props> = ({
@@ -30,20 +30,13 @@ const MultiGeolocationMap: React.FC<Props> = ({
   renderMarkerContent,
   BaseMapContainerProps,
 }) => {
-  // filter out any locations that are missing lat/lon
-  const filteredLocations = useMemo(() => {
-    return geolocations.filter(
-      (location) => !!locationToLatLngExpression(location)
-    );
-  }, [geolocations]);
-
   // find bounds for the map
   const bounds = useMemo(() => {
-    const latLngExpressions: LatLngExpression[] = filteredLocations.map(
-      (loc) => locationToLatLngExpression(loc) as LatLngExpression
+    const latLngExpressions: LatLngExpression[] = geolocations.map((loc) =>
+      locationToLatLngExpression(loc)
     );
     return L.latLngBounds(latLngExpressions);
-  }, [filteredLocations]);
+  }, [geolocations]);
 
   return (
     <BaseMapContainer
@@ -57,10 +50,10 @@ const MultiGeolocationMap: React.FC<Props> = ({
       {...BaseMapContainerProps}
     >
       <FeatureGroup>
-        {filteredLocations.map((location) => (
+        {geolocations.map((location) => (
           <Marker
             key={location.id}
-            position={locationToLatLngExpression(location) as LatLngExpression}
+            position={locationToLatLngExpression(location)}
           >
             {renderMarkerContent && (
               <Popup minWidth={200} maxWidth={300}>

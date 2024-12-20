@@ -2,7 +2,7 @@ import { Box, BoxProps } from '@mui/system';
 
 interface Props extends BoxProps {
   children: React.ReactNode;
-  height?: number;
+  height?: string | number;
 }
 const GeolocationPlaceholderBox: React.FC<Props> = ({
   height,
