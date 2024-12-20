@@ -39,7 +39,14 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
       <FormControl sx={{ width: '100%' }}>
         {label && <div id={labelId}>{label}</div>}
         {error && <GeolocationErrorAlert error={error} />}
-        <Stack direction='row' sx={{ my: 0.5 }} gap={2} alignItems='center'>
+        <Stack
+          direction='row'
+          sx={{ my: 0.5 }}
+          columnGap={2}
+          rowGap={1}
+          flexWrap='wrap'
+          alignItems='center'
+        >
           <Button
             onClick={requestCoordinates}
             startIcon={<MyLocationIcon />}
