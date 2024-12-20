@@ -22,6 +22,7 @@ import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
 import ClientName from '@/modules/client/components/ClientName';
 import {
+  formatCurrency,
   formatDateForDisplay,
   formatTimeOfDay,
   parseAndFormatDate,
@@ -147,7 +148,12 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       }
       return <TextContent {...commonProps} />;
     case ItemType.Currency:
-      return <TextContent {...commonProps} renderValue={(val) => `$${val}`} />;
+      return (
+        <TextContent
+          {...commonProps}
+          renderValue={(val) => formatCurrency(val)}
+        />
+      );
     case ItemType.Date:
       return (
         <TextContent
