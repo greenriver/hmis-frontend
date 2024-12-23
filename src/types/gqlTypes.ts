@@ -266,6 +266,8 @@ export type Assessment = {
   enrollment: Enrollment;
   event?: Maybe<Event>;
   exit?: Maybe<Exit>;
+  /** Client Location where the assessment was performed */
+  geolocation?: Maybe<Geolocation>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
@@ -1346,6 +1348,8 @@ export type CurrentLivingSituation = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
+  /** Client Location where the Current Living Situation was recorded */
+  geolocation?: Maybe<Geolocation>;
   id: Scalars['ID']['output'];
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   leaseOwn60Day?: Maybe<NoYesReasonsForMissingData>;
@@ -1500,6 +1504,7 @@ export type CustomDataElement = {
 export enum CustomDataElementType {
   Boolean = 'boolean',
   Date = 'date',
+  File = 'file',
   Float = 'float',
   Integer = 'integer',
   Json = 'json',
@@ -1517,6 +1522,7 @@ export type CustomDataElementValue = {
   user?: Maybe<ApplicationUser>;
   valueBoolean?: Maybe<Scalars['Boolean']['output']>;
   valueDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  valueFile?: Maybe<File>;
   valueFloat?: Maybe<Scalars['Float']['output']>;
   valueInteger?: Maybe<Scalars['Int']['output']>;
   valueJson?: Maybe<Scalars['JsonObject']['output']>;
@@ -2012,11 +2018,6 @@ export enum Destination {
 /** Represents direct upload credentials */
 export type DirectUpload = {
   __typename?: 'DirectUpload';
-  /**
-   * Created blob record ID
-   * @deprecated Deprecated in favor of signed_blob_id
-   */
-  blobId: Scalars['ID']['output'];
   filename: Scalars['String']['output'];
   /** HTTP request headers (JSON-encoded) */
   headers: Scalars['String']['output'];
@@ -2319,6 +2320,8 @@ export type Enrollment = {
   files: FilesPaginated;
   formerWardChildWelfare?: Maybe<NoYesReasonsForMissingData>;
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
+  /** Client Locations that have been collected during this Enrollment */
+  geolocations: Array<Geolocation>;
   healthAndDvs: HealthAndDvsPaginated;
   hh5Plus?: Maybe<NoYesMissing>;
   hohLeaseholder?: Maybe<NoYesMissing>;
@@ -2489,6 +2492,7 @@ export type EnrollmentAccess = {
   canEditEnrollments: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
+  canViewEnrollmentLocationMap: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -2828,6 +2832,8 @@ export type ExternalFormSubmission = {
   definition: FormDefinition;
   /** Enrollment that was generated from this submission, if any */
   enrollmentId?: Maybe<Scalars['ID']['output']>;
+  /** Client Location where the submission was recorded */
+  geolocation?: Maybe<Geolocation>;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   spam?: Maybe<Scalars['Boolean']['output']>;
@@ -2912,8 +2918,6 @@ export type File = {
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']['output']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']['output']>;
-  /** @deprecated Removing unused blob ID */
-  fileBlobId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   ownFile: Scalars['Boolean']['output'];
@@ -2956,6 +2960,7 @@ export type FormDefinition = {
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
   status: FormStatus;
+  supportsSaveInProgress: Scalars['Boolean']['output'];
   system: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
   updatedBy?: Maybe<ApplicationUser>;
@@ -3466,6 +3471,27 @@ export enum GeographyType {
   /** (1) Urban */
   Urban = 'URBAN',
 }
+
+export type Geolocation = {
+  __typename?: 'Geolocation';
+  /** User who collected the location */
+  collectedBy?: Maybe<ApplicationUser>;
+  coordinates: GeolocationCoordinates;
+  id: Scalars['ID']['output'];
+  /** Timestamp when the location was collected */
+  locatedAt: Scalars['ISO8601DateTime']['output'];
+  /** Name of the Project that collected the location */
+  projectName?: Maybe<Scalars['String']['output']>;
+  /** Name of the form that collected this location */
+  sourceFormName?: Maybe<Scalars['String']['output']>;
+};
+
+export type GeolocationCoordinates = {
+  __typename?: 'GeolocationCoordinates';
+  id: Scalars['ID']['output'];
+  latitude: Scalars['String']['output'];
+  longitude: Scalars['String']['output'];
+};
 
 /** HUD HMISParticipationType (2.08.1) */
 export enum HmisParticipationType {
@@ -6095,6 +6121,7 @@ export type QueryAccess = {
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
+  canViewEnrollmentLocationMap: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
   canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
@@ -8455,6 +8482,41 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8476,6 +8538,41 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8625,6 +8722,41 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8646,6 +8778,41 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8757,6 +8924,41 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8778,6 +8980,41 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -8834,6 +9071,41 @@ export type AssessmentWithRecordsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -8855,6 +9127,41 @@ export type AssessmentWithRecordsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -8872,6 +9179,16 @@ export type AssessmentWithRecordsFragment = {
     canDeleteEnrollments: boolean;
     canEditEnrollments: boolean;
   };
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    coordinates: {
+      __typename?: 'GeolocationCoordinates';
+      id: string;
+      latitude: string;
+      longitude: string;
+    };
+  } | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -9030,6 +9347,41 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9051,6 +9403,41 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9200,6 +9587,41 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9221,6 +9643,41 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9332,6 +9789,41 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9353,6 +9845,41 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9409,6 +9936,41 @@ export type FullAssessmentFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -9430,6 +9992,41 @@ export type FullAssessmentFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -9447,6 +10044,16 @@ export type FullAssessmentFragment = {
     canDeleteEnrollments: boolean;
     canEditEnrollments: boolean;
   };
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    coordinates: {
+      __typename?: 'GeolocationCoordinates';
+      id: string;
+      latitude: string;
+      longitude: string;
+    };
+  } | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -9498,6 +10105,7 @@ export type GetAssessmentQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -10007,6 +10615,7 @@ export type GetAssessmentQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -10593,6 +11202,41 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10614,6 +11258,41 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10763,6 +11442,41 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10784,6 +11498,41 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10895,6 +11644,41 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10916,6 +11700,41 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -10972,6 +11791,41 @@ export type GetAssessmentQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -10993,6 +11847,41 @@ export type GetAssessmentQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -11010,6 +11899,16 @@ export type GetAssessmentQuery = {
       canDeleteEnrollments: boolean;
       canEditEnrollments: boolean;
     };
+    geolocation?: {
+      __typename?: 'Geolocation';
+      id: string;
+      coordinates: {
+        __typename?: 'GeolocationCoordinates';
+        id: string;
+        latitude: string;
+        longitude: string;
+      };
+    } | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -11426,6 +12325,41 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11447,6 +12381,41 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11596,6 +12565,41 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11617,6 +12621,41 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11728,6 +12767,41 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11749,6 +12823,41 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -11805,6 +12914,41 @@ export type SubmitAssessmentMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -11826,6 +12970,41 @@ export type SubmitAssessmentMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -11843,6 +13022,16 @@ export type SubmitAssessmentMutation = {
         canDeleteEnrollments: boolean;
         canEditEnrollments: boolean;
       };
+      geolocation?: {
+        __typename?: 'Geolocation';
+        id: string;
+        coordinates: {
+          __typename?: 'GeolocationCoordinates';
+          id: string;
+          latitude: string;
+          longitude: string;
+        };
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -11988,6 +13177,41 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12009,6 +13233,41 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12158,6 +13417,41 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12179,6 +13473,41 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12290,6 +13619,41 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12311,6 +13675,41 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12367,6 +13766,41 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -12388,6 +13822,41 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -12405,6 +13874,16 @@ export type SubmitHouseholdAssessmentsMutation = {
         canDeleteEnrollments: boolean;
         canEditEnrollments: boolean;
       };
+      geolocation?: {
+        __typename?: 'Geolocation';
+        id: string;
+        coordinates: {
+          __typename?: 'GeolocationCoordinates';
+          id: string;
+          latitude: string;
+          longitude: string;
+        };
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -12567,6 +14046,41 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12588,6 +14102,41 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12737,6 +14286,41 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12758,6 +14342,41 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12869,6 +14488,41 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12890,6 +14544,41 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -12946,6 +14635,41 @@ export type GetAssessmentsForPopulationQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12967,6 +14691,41 @@ export type GetAssessmentsForPopulationQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -12984,6 +14743,16 @@ export type GetAssessmentsForPopulationQuery = {
           canDeleteEnrollments: boolean;
           canEditEnrollments: boolean;
         };
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          coordinates: {
+            __typename?: 'GeolocationCoordinates';
+            id: string;
+            latitude: string;
+            longitude: string;
+          };
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -13950,6 +15719,41 @@ export type ClientFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -13971,6 +15775,41 @@ export type ClientFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -14380,6 +16219,41 @@ export type GetClientQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -14401,6 +16275,41 @@ export type GetClientQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -14694,6 +16603,41 @@ export type GetClientServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -14715,6 +16659,41 @@ export type GetClientServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -15153,6 +17132,7 @@ export type ClientDetailFormsQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -15889,6 +17869,41 @@ export type MergeClientsMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -15910,6 +17925,41 @@ export type MergeClientsMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -16695,6 +18745,41 @@ export type CurrentLivingSituationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -16716,6 +18801,41 @@ export type CurrentLivingSituationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -16726,6 +18846,16 @@ export type CurrentLivingSituationFieldsFragment = {
       } | null;
     }> | null;
   }>;
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    coordinates: {
+      __typename?: 'GeolocationCoordinates';
+      id: string;
+      latitude: string;
+      longitude: string;
+    };
+  } | null;
 };
 
 export type ProjectCurrentLivingSituationFieldsFragment = {
@@ -16787,6 +18917,41 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -16808,6 +18973,41 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -16818,6 +19018,16 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       } | null;
     }> | null;
   }>;
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    coordinates: {
+      __typename?: 'GeolocationCoordinates';
+      id: string;
+      latitude: string;
+      longitude: string;
+    };
+  } | null;
 };
 
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
@@ -16879,6 +19089,41 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -16900,6 +19145,41 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -16910,6 +19190,16 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             } | null;
           }> | null;
         }>;
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          coordinates: {
+            __typename?: 'GeolocationCoordinates';
+            id: string;
+            latitude: string;
+            longitude: string;
+          };
+        } | null;
       }>;
     };
   } | null;
@@ -16990,6 +19280,41 @@ export type GetProjectCurrentLivingSituationsQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17011,6 +19336,41 @@ export type GetProjectCurrentLivingSituationsQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17021,6 +19381,16 @@ export type GetProjectCurrentLivingSituationsQuery = {
             } | null;
           }> | null;
         }>;
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          coordinates: {
+            __typename?: 'GeolocationCoordinates';
+            id: string;
+            latitude: string;
+            longitude: string;
+          };
+        } | null;
       }>;
     };
   } | null;
@@ -17062,6 +19432,41 @@ export type CustomCaseNoteFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17083,6 +19488,41 @@ export type CustomCaseNoteFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17148,6 +19588,41 @@ export type GetEnrollmentCustomCaseNotesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17169,6 +19644,41 @@ export type GetEnrollmentCustomCaseNotesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17283,6 +19793,41 @@ export type GetClientCaseNotesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17304,6 +19849,41 @@ export type GetClientCaseNotesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -17331,6 +19911,41 @@ export type CustomDataElementValueFieldsFragment = {
   valueText?: string | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  valueFile?: {
+    __typename?: 'File';
+    confidential?: boolean | null;
+    contentType?: string | null;
+    effectiveDate?: string | null;
+    expirationDate?: string | null;
+    id: string;
+    name: string;
+    url?: string | null;
+    tags: Array<string>;
+    ownFile: boolean;
+    redacted: boolean;
+    enrollmentId?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+    uploadedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      email: string;
+    } | null;
+  } | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -17361,6 +19976,41 @@ export type CustomDataElementFieldsFragment = {
     valueText?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    valueFile?: {
+      __typename?: 'File';
+      confidential?: boolean | null;
+      contentType?: string | null;
+      effectiveDate?: string | null;
+      expirationDate?: string | null;
+      id: string;
+      name: string;
+      url?: string | null;
+      tags: Array<string>;
+      ownFile: boolean;
+      redacted: boolean;
+      enrollmentId?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+      uploadedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -17382,6 +20032,41 @@ export type CustomDataElementFieldsFragment = {
     valueText?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    valueFile?: {
+      __typename?: 'File';
+      confidential?: boolean | null;
+      contentType?: string | null;
+      effectiveDate?: string | null;
+      expirationDate?: string | null;
+      id: string;
+      name: string;
+      url?: string | null;
+      tags: Array<string>;
+      ownFile: boolean;
+      redacted: boolean;
+      enrollmentId?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+      uploadedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -17537,6 +20222,41 @@ export type EnrolledClientFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17558,6 +20278,41 @@ export type EnrolledClientFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17642,6 +20397,41 @@ export type AllEnrollmentDetailsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17663,6 +20453,41 @@ export type AllEnrollmentDetailsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -17706,6 +20531,41 @@ export type AllEnrollmentDetailsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17727,6 +20587,41 @@ export type AllEnrollmentDetailsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17794,6 +20689,7 @@ export type AllEnrollmentDetailsFragment = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -18503,6 +21399,41 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -18524,6 +21455,41 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -18777,6 +21743,41 @@ export type GetEnrollmentDetailsQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -18798,6 +21799,41 @@ export type GetEnrollmentDetailsQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -18841,6 +21877,41 @@ export type GetEnrollmentDetailsQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -18862,6 +21933,41 @@ export type GetEnrollmentDetailsQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -18929,6 +22035,7 @@ export type GetEnrollmentDetailsQuery = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        supportsSaveInProgress: boolean;
         definition: {
           __typename?: 'FormDefinitionJson';
           item: Array<{
@@ -19957,6 +23064,7 @@ export type ExternalFormSubmissionFieldsFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -20631,6 +23739,7 @@ export type GetExternalFormSubmissionQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -21824,6 +24933,7 @@ export type FormDefinitionMetadataFragment = {
   identifier: string;
   status: FormStatus;
   dateUpdated: string;
+  supportsSaveInProgress: boolean;
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
@@ -21836,6 +24946,7 @@ export type FormDefinitionFieldsFragment = {
   identifier: string;
   status: FormStatus;
   dateUpdated: string;
+  supportsSaveInProgress: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -22347,6 +25458,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
   cacheKey: string;
   identifier: string;
   dateUpdated: string;
+  supportsSaveInProgress: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -22858,6 +25970,7 @@ export type FormDefinitionFieldsForEditorFragment = {
   identifier: string;
   status: FormStatus;
   dateUpdated: string;
+  supportsSaveInProgress: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -23373,6 +26486,7 @@ export type FormIdentifierDetailsFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
   draftVersion?: {
@@ -23384,6 +26498,7 @@ export type FormIdentifierDetailsFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
@@ -23407,6 +26522,7 @@ export type UpdateFormDefinitionMutation = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -23943,6 +27059,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
       cacheKey: string;
       identifier: string;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -24477,6 +27594,7 @@ export type CreateFormDefinitionMutation = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     errors: Array<{
@@ -24517,6 +27635,7 @@ export type CreateNextDraftFormDefinitionMutation = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
@@ -24544,6 +27663,7 @@ export type CreateDuplicateFormDefinitionMutation = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
@@ -24572,6 +27692,7 @@ export type PublishFormDefinitionMutation = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
       draftVersion?: {
@@ -24583,6 +27704,7 @@ export type PublishFormDefinitionMutation = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
@@ -24673,6 +27795,7 @@ export type GetFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25190,6 +28313,7 @@ export type GetStaticFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25708,6 +28832,7 @@ export type GetServiceFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26228,6 +29353,7 @@ export type GetAssessmentFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26750,6 +29876,7 @@ export type GetFormIdentifierDetailsQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
     draftVersion?: {
@@ -26761,6 +29888,7 @@ export type GetFormIdentifierDetailsQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
   } | null;
@@ -26793,6 +29921,7 @@ export type GetFormIdentifierVersionsQuery = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        supportsSaveInProgress: boolean;
         updatedBy?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -26834,6 +29963,7 @@ export type GetFormIdentifiersQuery = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        supportsSaveInProgress: boolean;
         formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
@@ -26991,6 +30121,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27012,6 +30177,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27132,6 +30332,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27153,6 +30388,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27163,6 +30433,16 @@ export type SubmitFormMutation = {
               } | null;
             }> | null;
           }>;
+          geolocation?: {
+            __typename?: 'Geolocation';
+            id: string;
+            coordinates: {
+              __typename?: 'GeolocationCoordinates';
+              id: string;
+              latitude: string;
+              longitude: string;
+            };
+          } | null;
         }
       | {
           __typename?: 'CustomCaseNote';
@@ -27200,6 +30480,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27221,6 +30536,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27276,6 +30626,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27297,6 +30682,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27496,6 +30916,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27517,6 +30972,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27567,6 +31057,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27588,6 +31113,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27671,6 +31231,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27692,6 +31287,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27831,6 +31461,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27852,6 +31517,41 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
               user?: {
                 __typename: 'ApplicationUser';
                 id: string;
@@ -27897,6 +31597,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -28415,6 +32116,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
     cacheKey: string;
     identifier: string;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -29427,6 +33129,17 @@ export type GetParsedFormDefinitionQuery = {
   } | null;
 };
 
+export type GeolocationFieldsFragment = {
+  __typename?: 'Geolocation';
+  id: string;
+  coordinates: {
+    __typename?: 'GeolocationCoordinates';
+    id: string;
+    latitude: string;
+    longitude: string;
+  };
+};
+
 export type HouseholdFieldsFragment = {
   __typename?: 'Household';
   id: string;
@@ -29868,6 +33581,41 @@ export type InventoryFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -29889,6 +33637,41 @@ export type InventoryFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30146,6 +33929,41 @@ export type OrganizationDetailFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30167,6 +33985,41 @@ export type OrganizationDetailFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30218,6 +34071,41 @@ export type OrganizationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30239,6 +34127,41 @@ export type OrganizationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30323,6 +34246,41 @@ export type GetOrganizationQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -30344,6 +34302,41 @@ export type GetOrganizationQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -30505,6 +34498,41 @@ export type ProjectAllFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30526,6 +34554,41 @@ export type ProjectAllFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -30583,6 +34646,7 @@ export type OccurrencePointFormFieldsFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    supportsSaveInProgress: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -31351,6 +35415,41 @@ export type GetProjectQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -31372,6 +35471,41 @@ export type GetProjectQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -31885,6 +36019,41 @@ export type GetInventoryQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -31906,6 +36075,41 @@ export type GetInventoryQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -32015,6 +36219,41 @@ export type GetProjectInventoriesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -32036,6 +36275,41 @@ export type GetProjectInventoriesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -32834,6 +37108,41 @@ export type UpdateReferralPostingMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -32855,6 +37164,41 @@ export type UpdateReferralPostingMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -33029,6 +37373,41 @@ export type GetReferralPostingQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33050,6 +37429,41 @@ export type GetReferralPostingQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33264,6 +37678,41 @@ export type ReferralPostingDetailFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33285,6 +37734,41 @@ export type ReferralPostingDetailFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33387,6 +37871,41 @@ export type EsgFundingServiceFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33408,6 +37927,41 @@ export type EsgFundingServiceFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33468,6 +38022,41 @@ export type GetEsgFundingReportQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33489,6 +38078,41 @@ export type GetEsgFundingReportQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33806,6 +38430,41 @@ export type ServiceFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33827,6 +38486,41 @@ export type ServiceFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -33916,6 +38610,41 @@ export type GetServiceQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -33937,6 +38666,41 @@ export type GetServiceQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -34041,6 +38805,41 @@ export type DeleteServiceMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -34062,6 +38861,41 @@ export type DeleteServiceMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -34165,6 +38999,41 @@ export type GetEnrollmentServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -34186,6 +39055,41 @@ export type GetEnrollmentServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
             user?: {
               __typename: 'ApplicationUser';
               id: string;
@@ -35147,6 +40051,38 @@ export const EnrollmentValuesFragmentDoc = gql`
     preferredLanguageDifferent
   }
 `;
+export const FileFieldsFragmentDoc = gql`
+  fragment FileFields on File {
+    confidential
+    contentType
+    effectiveDate
+    expirationDate
+    id
+    name
+    url
+    tags
+    ownFile
+    redacted
+    enrollmentId
+    enrollment {
+      id
+    }
+    uploadedBy {
+      id
+      name
+    }
+    updatedBy {
+      id
+      name
+    }
+    dateCreated
+    dateUpdated
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const CustomDataElementValueFieldsFragmentDoc = gql`
   fragment CustomDataElementValueFields on CustomDataElementValue {
     id
@@ -35157,12 +40093,16 @@ export const CustomDataElementValueFieldsFragmentDoc = gql`
     valueJson
     valueString
     valueText
+    valueFile {
+      ...FileFields
+    }
     user {
       ...UserFields
     }
     dateCreated
     dateUpdated
   }
+  ${FileFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
 `;
 export const CustomDataElementFieldsFragmentDoc = gql`
@@ -35418,6 +40358,16 @@ export const AssessmentAccessFieldsFragmentDoc = gql`
     canEditEnrollments
   }
 `;
+export const GeolocationFieldsFragmentDoc = gql`
+  fragment GeolocationFields on Geolocation {
+    id
+    coordinates {
+      id
+      latitude
+      longitude
+    }
+  }
+`;
 export const AssessmentWithRecordsFragmentDoc = gql`
   fragment AssessmentWithRecords on Assessment {
     ...AssessmentFields
@@ -35466,6 +40416,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     access {
       ...AssessmentAccessFields
     }
+    geolocation {
+      ...GeolocationFields
+    }
   }
   ${AssessmentFieldsFragmentDoc}
   ${EnrollmentValuesFragmentDoc}
@@ -35479,6 +40432,7 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${YouthEducationStatusValuesFragmentDoc}
   ${EmploymentEducationValuesFragmentDoc}
   ${AssessmentAccessFieldsFragmentDoc}
+  ${GeolocationFieldsFragmentDoc}
 `;
 export const AssessmentWithValuesFragmentDoc = gql`
   fragment AssessmentWithValues on Assessment {
@@ -35972,9 +40926,13 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    geolocation {
+      ...GeolocationFields
+    }
   }
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${GeolocationFieldsFragmentDoc}
 `;
 export const ProjectCurrentLivingSituationFieldsFragmentDoc = gql`
   fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {
@@ -36156,6 +41114,7 @@ export const FormDefinitionMetadataFragmentDoc = gql`
       name
     }
     dateUpdated
+    supportsSaveInProgress
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`
@@ -36412,38 +41371,6 @@ export const ExternalFormSubmissionFieldsFragmentDoc = gql`
   }
   ${ExternalFormSubmissionSummaryFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
-`;
-export const FileFieldsFragmentDoc = gql`
-  fragment FileFields on File {
-    confidential
-    contentType
-    effectiveDate
-    expirationDate
-    id
-    name
-    url
-    tags
-    ownFile
-    redacted
-    enrollmentId
-    enrollment {
-      id
-    }
-    uploadedBy {
-      id
-      name
-    }
-    updatedBy {
-      id
-      name
-    }
-    dateCreated
-    dateUpdated
-    user {
-      ...UserFields
-    }
-  }
-  ${UserFieldsFragmentDoc}
 `;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {

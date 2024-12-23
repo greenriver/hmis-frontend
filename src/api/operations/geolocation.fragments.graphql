@@ -1,0 +1,12 @@
+fragment GeolocationFields on Geolocation {
+  id
+  coordinates {
+    id
+    latitude
+    longitude
+  }
+  # Not needed yet - will resolve these when adding Location Map, maybe on a different fragment
+  # collectedBy
+  # locatedOn
+  # locatedAt
+}

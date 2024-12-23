@@ -23,6 +23,7 @@ import {
   Race,
   RelationshipToHoH,
   SsnDataQuality,
+  UserFieldsFragment,
 } from '@/types/gqlTypes';
 
 /**
@@ -55,6 +56,14 @@ const enrollmentAccessMock = {
   ),
   id: '9999:1', // <enrollment id>:<user id>
 } as EnrollmentAccess;
+
+export const applicationUserMock = {
+  id: '1',
+  name: 'Provider User',
+  firstName: 'Provider',
+  lastName: 'User',
+  email: 'fake@email.org',
+} as UserFieldsFragment;
 
 export const fakeEnrollment = () => {
   return {
