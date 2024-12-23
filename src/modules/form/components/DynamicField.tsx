@@ -32,6 +32,7 @@ import RequiredLabel from './RequiredLabel';
 
 import CheckboxGroupInput from '@/components/elements/input/CheckboxGroupInput';
 import DatePicker from '@/components/elements/input/DatePicker';
+import GeolocationInput from '@/components/elements/input/GeolocationInput';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import MinutesDurationInput from '@/components/elements/input/MinutesDurationInput';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
@@ -47,7 +48,6 @@ import Uploader from '@/components/elements/upload/Uploader';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
-import GeolocationInput from '@/modules/geolocation/components/GeolocationInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 

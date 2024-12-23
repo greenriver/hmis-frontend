@@ -7,7 +7,7 @@ import markerIconUrl from 'leaflet/dist/images/marker-icon.png';
 import markerShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
-import { LatLon } from '@/modules/geolocation/types';
+import { LatLon } from '@/types/geolocationTypes';
 
 // Fix for default marker icon issue with Vite
 L.Icon.Default.prototype.options.iconUrl = markerIconUrl;

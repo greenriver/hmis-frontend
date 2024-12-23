@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { LocationPositionError } from '../hooks/useGeolocation';
 import GeolocationErrorAlert from './GeolocationErrorAlert';
+import { LocationPositionError } from '@/hooks/useGeolocation';
 
 export default {
   component: GeolocationErrorAlert,

@@ -9,12 +9,12 @@ import {
 
 import React, { useId, useRef } from 'react';
 
-import { useGeolocation } from '../hooks/useGeolocation';
+import GeolocationErrorAlert from '@/components/elements/input/GeolocationErrorAlert';
+import BaseMap from '@/components/elements/maps/BaseMap';
 import { ClearIcon, MyLocationIcon } from '@/components/elements/SemanticIcons';
+import { useGeolocation } from '@/hooks/useGeolocation';
 import { DynamicInputCommonProps } from '@/modules/form/types';
-import BaseMap from '@/modules/geolocation/components/BaseMap';
-import GeolocationErrorAlert from '@/modules/geolocation/components/GeolocationErrorAlert';
-import { LatLon } from '@/modules/geolocation/types';
+import { LatLon } from '@/types/geolocationTypes';
 
 interface GeolocationInputProps
   extends Pick<DynamicInputCommonProps, 'label' | 'helperText' | 'disabled'> {
