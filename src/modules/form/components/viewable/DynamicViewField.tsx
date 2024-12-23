@@ -14,6 +14,7 @@ import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import BaseMap from '@/components/elements/maps/BaseMap';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
 import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
@@ -272,23 +273,19 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           );
       }
     case ItemType.Geolocation:
-      let collected;
-      try {
-        const valueJson = JSON.parse(value);
-        collected = valueJson && valueJson.latitude && valueJson.longitude;
-      } catch (SyntaxError) {
-        collected = false;
-      }
+      // coordinates may be stringified if collected from External Form
+      const coordinates = typeof value === 'string' ? JSON.parse(value) : value;
       return (
-        <CommonLabeledTextBlock title={label} key={JSON.stringify(value)}>
-          {collected ? (
-            'Location collected'
+        <LabelWithContent {...commonProps}>
+          {coordinates ? (
+            <BaseMap coordinates={coordinates} />
           ) : (
-            <NotCollectedText variant='body2' />
+            <NotCollectedText variant='body2'>
+              Location not collected
+            </NotCollectedText>
           )}
-        </CommonLabeledTextBlock>
+        </LabelWithContent>
       );
-
     default:
       return (
         <RecoverableError

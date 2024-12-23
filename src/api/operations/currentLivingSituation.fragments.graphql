@@ -18,6 +18,9 @@ fragment CurrentLivingSituationFields on CurrentLivingSituation {
   customDataElements {
     ...CustomDataElementFields
   }
+  geolocation {
+    ...GeolocationFields
+  }
 }
 
 fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {
