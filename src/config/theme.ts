@@ -468,9 +468,6 @@ const createThemeOptions = (theme: Theme) => ({
         root: {
           fontWeight: 600,
         },
-        outlined: {
-          backgroundColor: theme.palette.background.paper,
-        },
       },
     },
     MuiAutocomplete: {

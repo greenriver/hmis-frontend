@@ -22,11 +22,7 @@ const GeolocationErrorAlert: React.FC<Props> = ({ error }) => {
           error === LocationPositionError.PERMISSION_DENIED && (
             <Button
               variant='outlined'
-              color='error'
-              sx={{ backgroundColor: 'transparent' }}
-              // TODO(#991) replace with:
-              // variant='outlined'
-              // color='grayscale'
+              color='grayscale'
               onClick={() => setShowHelp(true)}
             >
               Learn More
