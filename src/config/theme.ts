@@ -8,13 +8,6 @@ import {
 } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 
-// to have typed safe, Button need to provide extra type that can be augmented
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    transparent: true;
-  }
-}
-
 declare module '@mui/material/Alert' {
   interface AlertPropsVariantOverrides {
     withHeader: true;
@@ -468,6 +461,8 @@ const createThemeOptions = (theme: Theme) => ({
         root: {
           fontWeight: 600,
         },
+        // Give 'text' variant Buttons the same horiztonal padding as outlined
+        text: theme.unstable_sx({ px: 2 }),
       },
     },
     MuiAutocomplete: {
