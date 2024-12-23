@@ -32,6 +32,7 @@ import RequiredLabel from './RequiredLabel';
 
 import CheckboxGroupInput from '@/components/elements/input/CheckboxGroupInput';
 import DatePicker from '@/components/elements/input/DatePicker';
+import GeolocationInput from '@/components/elements/input/GeolocationInput';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import MinutesDurationInput from '@/components/elements/input/MinutesDurationInput';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
@@ -50,7 +51,7 @@ import SimpleAddressInput from '@/modules/form/components/client/addresses/Simpl
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
-const getLabel = (
+export const getLabel = (
   item: FormItem,
   horizontal?: boolean,
   isDisabled?: boolean
@@ -435,6 +436,18 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               ariaLabel={item.text}
             />
           </LabelWithContent>
+        </InputContainer>
+      );
+    case ItemType.Geolocation:
+      return (
+        <InputContainer {...commonContainerProps}>
+          <GeolocationInput
+            label={label}
+            value={value}
+            onChange={onChangeValue}
+            helperText={commonInputProps.helperText}
+            disabled={commonInputProps.disabled}
+          />
         </InputContainer>
       );
     case ItemType.Object:
