@@ -229,6 +229,7 @@ const OmniSearch: React.FC = () => {
         inputProps={{
           ...values.getInputProps(),
           value: value ? value : '',
+          title: 'Client and Project search',
         }}
         placeholder='Search'
         size='small'
