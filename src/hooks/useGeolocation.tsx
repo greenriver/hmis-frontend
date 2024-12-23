@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { LatLon } from '@/modules/geolocation/types';
+import { LatLon } from '@/types/geolocationTypes';
 
 export enum LocationPositionError {
   PERMISSION_DENIED = 'permission_denied',

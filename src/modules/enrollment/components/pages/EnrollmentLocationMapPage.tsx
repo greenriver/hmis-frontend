@@ -1,8 +1,9 @@
 import { Box } from '@mui/material';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
+import EnrollmentLocationMap from '@/modules/enrollment/components/EnrollmentLocationMap';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import EnrollmentLocationMap from '@/modules/geolocation/components/EnrollmentLocationMap';
+
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 
 const EnrollmentLocationMapPage = () => {

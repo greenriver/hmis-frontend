@@ -1,6 +1,6 @@
 import { Marker } from 'react-leaflet';
-import BaseMapContainer from '@/modules/geolocation/components/BaseMapContainer';
-import { LatLon } from '@/modules/geolocation/types';
+import BaseMapContainer from './BaseMapContainer';
+import { LatLon } from '@/types/geolocationTypes';
 
 interface BaseMapProps {
   coordinates: LatLon;
@@ -16,7 +16,7 @@ const SingleGeolocationMap: React.FC<BaseMapProps> = ({
   return (
     <BaseMapContainer
       key={JSON.stringify(coordinates)}
-      sx={{ height }}
+      height={height}
       center={[coordinates.latitude, coordinates.longitude]}
       zoom={16}
       dragging={false}

@@ -2,8 +2,9 @@ import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
-import GeolocationPlaceholderBox from '@/modules/geolocation/components/GeolocationPlaceholderBox';
-import MultiGeolocationMap from '@/modules/geolocation/components/MultiGeolocationMap';
+import GeolocationPlaceholderBox from '@/components/elements/maps/GeolocationPlaceholderBox';
+import MultiGeolocationMap from '@/components/elements/maps/MultiGeolocationMap';
+
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import { useGetEnrollmentGeolocationsQuery } from '@/types/gqlTypes';
 
@@ -46,8 +47,8 @@ const EnrollmentLocationMap: React.FC<Props> = ({
   return (
     <MultiGeolocationMap
       geolocations={data.enrollment.geolocations}
+      height={mapHeight}
       BaseMapContainerProps={{
-        height: mapHeight,
         sx: { '.leaflet-container': { borderRadius: 1 } },
       }}
       renderMarkerContent={(geolocation) => (

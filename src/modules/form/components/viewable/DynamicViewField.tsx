@@ -14,6 +14,7 @@ import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import SingleGeolocationMap from '@/components/elements/maps/SingleGeolocationMap';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
 import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
@@ -21,7 +22,7 @@ import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
 import ClientName from '@/modules/client/components/ClientName';
-import SingleGeolocationMap from '@/modules/geolocation/components/SingleGeolocationMap';
+
 import {
   formatCurrency,
   formatDateForDisplay,

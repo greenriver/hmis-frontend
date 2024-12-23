@@ -2,9 +2,7 @@ import L, { LatLngExpression } from 'leaflet';
 import { useMemo } from 'react';
 import { FeatureGroup, Marker, Popup } from 'react-leaflet';
 
-import BaseMapContainer, {
-  BaseMapContainerProps,
-} from '@/modules/geolocation/components/BaseMapContainer';
+import BaseMapContainer, { BaseMapContainerProps } from './BaseMapContainer';
 import { GeolocationFieldsWithMetadataFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -12,7 +10,8 @@ interface Props {
   renderMarkerContent?: (
     geolocation: GeolocationFieldsWithMetadataFragment
   ) => React.ReactNode;
-  BaseMapContainerProps?: Omit<BaseMapContainerProps, 'children'>;
+  height: string | number;
+  BaseMapContainerProps?: Omit<BaseMapContainerProps, 'children' | 'height'>;
 }
 
 const locationToLatLngExpression = (
@@ -28,6 +27,7 @@ const locationToLatLngExpression = (
 const MultiGeolocationMap: React.FC<Props> = ({
   geolocations,
   renderMarkerContent,
+  height,
   BaseMapContainerProps,
 }) => {
   // find bounds for the map
@@ -47,6 +47,7 @@ const MultiGeolocationMap: React.FC<Props> = ({
       scrollWheelZoom={false}
       doubleClickZoom
       touchZoom
+      height={height}
       {...BaseMapContainerProps}
     >
       <FeatureGroup>

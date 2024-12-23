@@ -2,8 +2,8 @@ import { Alert, Button } from '@mui/material';
 
 import { useState } from 'react';
 
-import { LocationPositionError } from '../hooks/useGeolocation';
-import GeolocationHelpDialog from '@/modules/geolocation/components/GeolocationHelpDialog';
+import GeolocationHelpDialog from '@/components/elements/input/GeolocationHelpDialog';
+import { LocationPositionError } from '@/hooks/useGeolocation';
 
 interface Props {
   error: LocationPositionError;
@@ -24,7 +24,7 @@ const GeolocationErrorAlert: React.FC<Props> = ({ error }) => {
               variant='outlined'
               color='error'
               sx={{ backgroundColor: 'transparent' }}
-              // TODO replace with:
+              // TODO(#991) replace with:
               // variant='outlined'
               // color='grayscale'
               onClick={() => setShowHelp(true)}
