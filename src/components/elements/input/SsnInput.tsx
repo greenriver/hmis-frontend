@@ -4,7 +4,7 @@ import { isNil, padEnd, padStart } from 'lodash-es';
 import { useMemo } from 'react';
 
 import LabelWithContent from '../LabelWithContent';
-import MultiFieldInput from '../MultiFieldInput';
+import MultiFieldInput from './MultiFieldInput';
 
 import { DynamicInputCommonProps } from '@/modules/form/types';
 
@@ -74,6 +74,10 @@ const SsnInput = ({
           inputProps: {
             ...baseInputProps,
             disabled: onlylast4 ? true : false,
+            inputProps: {
+              ...baseInputProps.inputProps,
+              'aria-label': ariaLabel + ' first 3 digits',
+            },
             placeholder: 'XXX',
             // Allow pasting into first box to fill the entire SSN
             onPaste: (event) => {
@@ -94,6 +98,10 @@ const SsnInput = ({
             ...baseInputProps,
             disabled: onlylast4 ? true : false,
             placeholder: 'XX',
+            inputProps: {
+              ...baseInputProps.inputProps,
+              'aria-label': ariaLabel + ' middle 2 digits',
+            },
           },
         },
         {
@@ -102,6 +110,10 @@ const SsnInput = ({
           inputProps: {
             ...baseInputProps,
             placeholder: 'XXXX',
+            inputProps: {
+              ...baseInputProps.inputProps,
+              'aria-label': ariaLabel + ' last 4 digits',
+            },
           },
         },
       ]}

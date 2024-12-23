@@ -27,7 +27,14 @@ const config = {
       },
     });
   },
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: [
+    // Use implicit paths for all stories
+    '../src/**/*.stories.@(js|jsx|ts|tsx)',
+    '../src/**/*.mdx',
+    // For a better structure, need to reorganize some things. Should first confirm approach that "src" has comment element components and "modules" have components for specific pages or modules, which is the vague pattern right now.
+    // - Move src/components/clientDashboard components into module(s)
+    // - Move src/components/pages into modules too?
+  ],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -49,6 +56,10 @@ const config = {
     checkOptions: {},
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
+      // Makes union prop types like variant and size appear as select controls
+      shouldExtractLiteralValuesFromEnum: true,
+      // Makes string and boolean types that can be undefined appear as inputs and switches
+      shouldRemoveUndefinedFromOptional: true,
       propFilter: (prop: any) => {
         return prop.parent
           ? prop.parent.name !== 'DOMAttributes' &&

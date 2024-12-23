@@ -9,7 +9,6 @@ import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
 
 export default {
-  title: 'GenericTable',
   component: GenericTable,
   decorators: [
     (Story) => (

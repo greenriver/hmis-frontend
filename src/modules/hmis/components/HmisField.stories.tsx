@@ -4,7 +4,6 @@ import HmisField from './HmisField';
 import { Gender, RelationshipToHoH } from '@/types/gqlTypes';
 
 export default {
-  title: 'HmisField',
   component: HmisField,
 } as Meta<typeof HmisField>;
 

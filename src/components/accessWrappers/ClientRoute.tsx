@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
-import { useClientDashboardContext } from '../pages/ClientDashboard';
 import NotFound from '../pages/NotFound';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 
 import { ClientPermissions } from '@/modules/permissions/types';
 import { useHasPermissions } from '@/modules/permissions/useHasPermissionsHooks';

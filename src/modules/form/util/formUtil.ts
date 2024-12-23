@@ -718,6 +718,11 @@ export const gqlValueToFormValue = (
         return compact(value.map((v) => getOptionValue(v, item)));
       }
       return getOptionValue(value, item);
+    case ItemType.File:
+      // Use full File object in form to display metadata.
+      // The metadata fields wont be submitted because of the `formValueToGqlValue`
+      // logic which will transform the file object into an ID before submitting it back.
+      return value;
 
     default:
       // Set the property directly as the initial form value
@@ -756,14 +761,16 @@ export const formValueToGqlValue = (
     if (typeof date === 'string') {
       date = parseHmisDateString(value);
     }
-    if (date instanceof Date) return formatDateForGql(date) || undefined;
-    // This isn't parseable/formattable into a date, return undefined to ignore it
-    return undefined;
+    if (date instanceof Date) return formatDateForGql(date) || value;
+    // This isn't parseable/formattable into a date, so it may cause a backend validation error.
+    // Still, return it, so that it doesn't get swallowed without the user's knowledge
+    return value;
   }
 
   if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
     const num = Number(value);
-    return Number.isNaN(num) ? undefined : num;
+    // See note above about unparseable date values; the same logic applies here
+    return Number.isNaN(num) ? value : num;
   }
 
   if (
@@ -785,6 +792,21 @@ export const formValueToGqlValue = (
       return value.map((option: PickListOption) => option.code);
     } else if (value) {
       return (value as PickListOption).code;
+    }
+  } else if ([ItemType.File, ItemType.Image].includes(item.type)) {
+    // Special case for File types. The frontend receives a FileFieldsFragment
+    // if this file has already been saved, but we don't want to return that whole fragment
+    // to the backend for processing, so just return the ID.
+    if (Array.isArray(value)) {
+      return value.map((fileOrBlobId) =>
+        fileOrBlobId.hasOwnProperty('id') ? fileOrBlobId.id : fileOrBlobId
+      );
+    } else {
+      if (value.hasOwnProperty('id')) {
+        return value.id;
+      } else {
+        return value;
+      }
     }
   }
 

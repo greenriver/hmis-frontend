@@ -4,6 +4,7 @@ fragment CustomCaseNoteFields on CustomCaseNote {
   informationDate
   dateUpdated
   dateCreated
+  formDefinitionId
   user {
     ...UserFields
   }

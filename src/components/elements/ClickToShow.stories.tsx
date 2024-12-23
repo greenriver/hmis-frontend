@@ -4,7 +4,6 @@ import { userEvent, within, expect } from '@storybook/test';
 import ClickToShow from './ClickToShow';
 
 export default {
-  title: 'ClickToShow',
   component: ClickToShow,
 } as Meta<typeof ClickToShow>;
 

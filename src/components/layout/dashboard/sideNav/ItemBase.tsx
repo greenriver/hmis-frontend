@@ -116,7 +116,7 @@ const ItemBase = <T extends object>({
               <RouterLink
                 id={`side-nav-${item.id}-${htmlId}`}
                 data-testid={`sideNav-${item.id}-${htmlId}`}
-                aria-label={item.title}
+                aria-label={item.title.toString()}
                 variant='body1'
                 to={item.path}
                 sx={itemSx}

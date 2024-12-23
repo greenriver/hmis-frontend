@@ -3,7 +3,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import ClientName from './ClientName';
 
 export default {
-  title: 'ClientName',
   component: ClientName,
 } as Meta<typeof ClientName>;
 

@@ -82,6 +82,10 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       // this project will be used to evaluate and "rules" on the resolved form definition.
       projectId:
         projectId || localConstants?.projectId || inputVariables?.projectId,
+      id:
+        record && 'formDefinitionId' in record
+          ? record.formDefinitionId
+          : undefined,
     },
     localDefinition
   );

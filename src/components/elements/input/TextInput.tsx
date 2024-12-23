@@ -71,7 +71,7 @@ const TextInput = ({
       {...props}
       sx={{ maxWidth, ...sx }}
       inputProps={{
-        'aria-label': hiddenLabel ? ariaLabel || String(label) : undefined,
+        'aria-label': ariaLabel || String(label),
         'aria-labelledby': ariaLabelledBy,
         minLength: min,
         maxLength: max,
