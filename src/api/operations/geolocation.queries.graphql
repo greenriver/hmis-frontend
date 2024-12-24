@@ -1,0 +1,8 @@
+query GetEnrollmentGeolocations($id: ID!) {
+  enrollment(id: $id) {
+    id
+    geolocations {
+      ...GeolocationFieldsWithMetadata
+    }
+  }
+}

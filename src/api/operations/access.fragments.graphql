@@ -70,6 +70,7 @@ fragment EnrollmentAccessFields on EnrollmentAccess {
   canEditEnrollments
   canDeleteEnrollments
   canAuditEnrollments
+  canViewEnrollmentLocationMap
 }
 
 fragment AssessmentAccessFields on AssessmentAccess {
