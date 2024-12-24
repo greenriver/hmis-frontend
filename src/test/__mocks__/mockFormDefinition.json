@@ -624,6 +624,18 @@
           ]
         }
       ]
+    },
+    {
+      "type": "GROUP",
+      "linkId": "locationGroup",
+      "text": "Location Collection",
+      "item": [
+        {
+          "linkId": "geo",
+          "type": "GEOLOCATION",
+          "text": "Current Location"
+        }
+      ]
     }
   ]
 }

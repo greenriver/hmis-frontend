@@ -1,10 +1,10 @@
 import CheckIcon from '@mui/icons-material/Check';
-import { Button, ButtonProps, IconButton, Stack } from '@mui/material';
+import { Button, ButtonProps, Stack } from '@mui/material';
 import { Meta, StoryObj } from '@storybook/react';
 
 export default {
   component: Button,
-  // not sure why these won't auto-populate from MUI types
+  // controls don't auto-populate because we are importing Button directly from MUI library
   argTypes: {
     color: {
       options: ['grayscale', 'primary', 'secondary', 'error', 'warning'],
@@ -18,6 +18,7 @@ export default {
       control: { type: 'select' },
       options: ['small', 'medium', 'large'],
     },
+    startIcon: { control: false },
     disabled: { control: 'boolean' },
   },
 } as Meta<typeof Button>;
@@ -30,14 +31,6 @@ export const Default: Story = {
   },
 };
 
-// todo: re-export this button from MUI so we restrict the colors that can be used
-export const IconOnly: StoryObj<typeof IconButton> = {
-  args: {
-    children: <CheckIcon />,
-  },
-  render: (props) => <IconButton {...props} />,
-};
-
 const ButtonMatrix: React.FC<ButtonProps> = (props) => {
   return (
     <>
@@ -46,11 +39,9 @@ const ButtonMatrix: React.FC<ButtonProps> = (props) => {
           [
             'grayscale',
             'primary',
-            // 'secondary', // todo remove
             'error',
             'warning',
-            // 'info', // not in figma, should not be used?
-            // 'success', // not in figma, should not be used?
+            // Note: secondary, info, and success button colors exist in MUI but are not part of HMIS design language.
           ] as ButtonProps['color'][]
         ).map((color, idx) => (
           <Stack gap={2} alignItems='center' key={color}>

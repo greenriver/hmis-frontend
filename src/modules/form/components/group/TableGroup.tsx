@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useMemo } from 'react';
+import { useId, useMemo } from 'react';
 import { GroupItemComponentProps } from '../../types';
 import RequiredLabel from '../RequiredLabel';
 import { ItemType } from '@/types/gqlTypes';
@@ -19,6 +19,8 @@ import { ItemType } from '@/types/gqlTypes';
  *
  * The TableHeader labels and helper text will be pulled from the labels defined
  * on the items in the first "row group".
+ *
+ * Text and helperText are ignored for subsequent row items.
  *
  * {
  *   "type": "GROUP",
@@ -49,6 +51,7 @@ const TableGroup = ({
   viewOnly = false,
 }: GroupItemComponentProps) => {
   const label = viewOnly ? item.readonlyText || item.text : item.text;
+  const baseId = useId();
 
   // Determine header row details by looking at the first row of Items
   const tableHeaderInfo = useMemo(() => {
@@ -62,13 +65,13 @@ const TableGroup = ({
 
     return item.item[0].item.map(
       ({ linkId, text, helperText, readonlyText, required }) => ({
-        id: `${linkId}-id`,
+        id: baseId + linkId,
         label: viewOnly ? readonlyText || text : text,
         helperText,
         required,
       })
     );
-  }, [item, viewOnly]);
+  }, [item, viewOnly, baseId]);
 
   return (
     <Grid item xs>

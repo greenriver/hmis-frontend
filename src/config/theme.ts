@@ -1,6 +1,5 @@
-import { Theme } from '@mui/material';
+import { Color, Theme } from '@mui/material';
 import {
-  Color,
   PaletteColor,
   SimplePaletteColorOptions,
   ThemeOptions,
@@ -8,13 +7,6 @@ import {
   createTheme,
 } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
-
-// to have typed safe, Button need to provide extra type that can be augmented
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    transparent: true;
-  }
-}
 
 declare module '@mui/material/Alert' {
   interface AlertPropsVariantOverrides {
@@ -56,16 +48,18 @@ declare module '@mui/material/styles' {
       icon?: string;
     };
   }
-  interface GrayPaletteColor
+  interface GrayscalePaletteColor
     extends PaletteColor,
-      Pick<Color, '300' | '200' | '100'> {}
+      Pick<Color, 300 | 200 | 100> {
+    tint: string;
+  }
 
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
-    grayscale: GrayPaletteColor;
+    grayscale: GrayscalePaletteColor;
   }
 
   interface PaletteOptions {
@@ -73,7 +67,7 @@ declare module '@mui/material/styles' {
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
-    grayscale: SimplePaletteColorOptions & GrayPaletteColor;
+    grayscale: SimplePaletteColorOptions & GrayscalePaletteColor;
   }
 }
 
@@ -175,6 +169,7 @@ export const baseThemeDef: ThemeOptions = {
       dark: '#4D4D4D',
       light: '#8b8b8b',
       contrastText: '#fff',
+      tint: '#F3F3F3',
       300: alpha('#6E6E6E', 0.3),
       200: alpha('#6E6E6E', 0.12),
       100: alpha('#6E6E6E', 0.08),
@@ -296,8 +291,7 @@ const createThemeOptions = (theme: Theme) => ({
         },
         root: theme.unstable_sx({
           '&.Mui-disabled': {
-            color: 'red',
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.grayscale.tint,
           },
         }),
         input: {
@@ -562,6 +556,8 @@ const createThemeOptions = (theme: Theme) => ({
             backgroundColor: alpha(theme.palette.success.main, 0.12),
           },
         }),
+        // Give 'text' variant Buttons the same horiztonal padding as outlined
+        text: theme.unstable_sx({ px: 2 }),
       },
     },
     MuiAutocomplete: {

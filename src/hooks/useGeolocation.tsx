@@ -1,16 +1,23 @@
 import { useCallback, useState } from 'react';
+import { LatLon } from '@/types/geolocationTypes';
 
-export function useGeolocation() {
-  const [coordinates, setCoordinates] = useState<GeolocationCoordinates | null>(
-    null
-  );
+export enum LocationPositionError {
+  PERMISSION_DENIED = 'permission_denied',
+  POSITION_UNAVAILABLE = 'position_unavailable',
+  TIMEOUT = 'timeout',
+  UNKNOWN_ERROR = 'unknown_error',
+}
+
+export function useGeolocation(
+  setCoordinates: (coords: LatLon | null) => void
+) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<LocationPositionError | undefined>();
 
   const requestCoordinates = useCallback(() => {
-    setError('');
+    setError(undefined);
     setCoordinates(null);
-    const handleSuccess = (position: { coords: GeolocationCoordinates }) => {
+    const handleSuccess = (position: { coords: LatLon }) => {
       setCoordinates(position.coords);
       setLoading(false);
     };
@@ -19,16 +26,16 @@ export function useGeolocation() {
       setLoading(false);
       switch (error.code) {
         case error.PERMISSION_DENIED:
-          setError('User denied the request for Geolocation.');
+          setError(LocationPositionError.PERMISSION_DENIED);
           break;
         case error.POSITION_UNAVAILABLE:
-          setError('Location information is unavailable.');
+          setError(LocationPositionError.POSITION_UNAVAILABLE);
           break;
         case error.TIMEOUT:
-          setError('The request to get user location timed out.');
+          setError(LocationPositionError.TIMEOUT);
           break;
         default:
-          setError('An unknown error occurred.');
+          setError(LocationPositionError.UNKNOWN_ERROR);
           break;
       }
     };
@@ -37,15 +44,14 @@ export function useGeolocation() {
       setLoading(true);
       navigator.geolocation.getCurrentPosition(handleSuccess, handleError);
     } else {
-      setError('Geolocation not supported.');
+      setError(LocationPositionError.POSITION_UNAVAILABLE);
       setLoading(false);
     }
-  }, []);
+  }, [setCoordinates]);
 
   return {
-    coordinates,
+    requestCoordinates,
     error,
     loading,
-    requestCoordinates,
   };
 }

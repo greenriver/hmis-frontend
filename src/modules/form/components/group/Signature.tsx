@@ -57,7 +57,16 @@ const Signature = ({
             }}
           >
             {renderChildItem &&
-              item.item?.map((childItem) => renderChildItem(childItem))}
+              item.item?.map((childItem) =>
+                renderChildItem(childItem, {
+                  inputProps: {
+                    // Aria label special case for signatures: Pass in the parent item text _and_ child text.
+                    // E.g. if this is a Client Signature group with Client Name and Date Signed subfields,
+                    // then the aria labels should be "Client Signature - Client Name" and "Client Signature - Date Signed"
+                    ariaLabel: `${item.text} - ${childItem.text}`,
+                  },
+                })
+              )}
           </Grid>
           {!viewOnly && (
             <Typography variant='body2'>

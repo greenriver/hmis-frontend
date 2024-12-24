@@ -46,6 +46,12 @@ export const useEnrollmentDashboardNavItems = (
             ),
           },
           {
+            id: 'locations',
+            title: 'Location Map',
+            path: EnrollmentDashboardRoutes.LOCATION_MAP,
+            permissions: ['canViewEnrollmentLocationMap'],
+          },
+          {
             id: 'events',
             title: 'CE Events',
             path: EnrollmentDashboardRoutes.EVENTS,

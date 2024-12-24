@@ -73,7 +73,7 @@ const ConfirmationDialog = ({
               color='grayscale'
               data-testid='cancelDialogAction'
             >
-              {cancelText || unconfirmable ? 'Close' : 'Cancel'}
+              {cancelText || (unconfirmable ? 'Close' : 'Cancel')}
             </Button>
           )}
           {!unconfirmable && (

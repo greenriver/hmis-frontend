@@ -9,19 +9,13 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.js?url';
 import React, { useMemo, useState } from 'react';
-import { pdfjs, Document, Page } from 'react-pdf';
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
-
-import useSafeParams from '@/hooks/useSafeParams';
-import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
-import { FileFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
+import { Document, Page } from 'react-pdf';
+import { FileFieldsFragment } from '@/types/gqlTypes';
 
 export type FileDialogProps = {
-  file: FileFieldsFragment;
-  actions?: React.ReactNode;
+  file: Pick<FileFieldsFragment, 'url' | 'name' | 'contentType'> &
+    Partial<Omit<FileFieldsFragment, 'url' | 'name' | 'contentType'>>;
 } & DialogProps;
 
 const LoadingPreview: React.FC = () => (
@@ -38,7 +32,9 @@ const LoadingPreview: React.FC = () => (
   </Stack>
 );
 
-const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
+const ImagePreview: React.FC<{ file: FileDialogProps['file'] }> = ({
+  file,
+}) => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
   if (!file.url) return null;
@@ -62,7 +58,7 @@ const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   );
 };
 
-const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({
+const PdfPreview: React.FC<{ file: FileDialogProps['file'] }> = ({
   file: { url },
 }) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -120,8 +116,7 @@ const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({
   );
 };
 
-const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
-  const { clientId } = useSafeParams() as { clientId?: string };
+const FilePreview: React.FC<{ file: FileDialogProps['file'] }> = ({ file }) => {
   const previewContent = useMemo(() => {
     if (
       file.contentType &&
@@ -176,50 +171,29 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
       );
     }
   }, [file]);
-  const pickListArgs = useMemo(() => ({ clientId }), [clientId]);
 
   return (
     <>
-      {file && (
-        <ViewRecordDialog<FileFieldsFragment>
-          {...props}
-          record={file}
-          formRole={RecordFormRole.File}
-          title={file.name}
-          actions={actions}
-          pickListArgs={pickListArgs}
-        >
-          <Stack
-            width='100%'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Paper sx={{ width: '100%' }}>
-              <Typography p={2} variant='h6' component='p'>
-                File Preview
-              </Typography>
-              <Box
-                sx={(theme) => ({
-                  backgroundColor: theme.palette.grey[300],
-                  padding: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: `${theme.shape.borderRadius}px`,
-                  mx: 2,
-                  mb: 2,
-                })}
-              >
-                {previewContent}
-              </Box>
-            </Paper>
-          </Stack>
-        </ViewRecordDialog>
-      )}
+      <Typography p={2} variant='h6' component='p'>
+        File Preview
+      </Typography>
+      <Box
+        sx={(theme) => ({
+          backgroundColor: theme.palette.grey[300],
+          padding: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: `${theme.shape.borderRadius}px`,
+          mx: 2,
+          mb: 2,
+        })}
+      >
+        {previewContent}
+      </Box>
     </>
   );
 };
 
-export default FileDialog;
+export default FilePreview;

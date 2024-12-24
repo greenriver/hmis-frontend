@@ -47,10 +47,10 @@ const CloseMenuRow = ({
       <Box />
     )}
     <Button
-      variant='transparent'
+      variant='text'
+      color='grayscale'
       onClick={onClose}
-      startIcon={<MenuOpenIcon fontSize='small' />}
-      size='small'
+      startIcon={<MenuOpenIcon />}
     >
       Close
     </Button>
