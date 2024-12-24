@@ -15,14 +15,9 @@ const SingleGeolocationMap: React.FC<BaseMapProps> = ({
 }) => {
   return (
     <BaseMapContainer
-      key={JSON.stringify(coordinates)}
       height={height}
       center={[coordinates.latitude, coordinates.longitude]}
-      zoom={16}
       dragging={false}
-      scrollWheelZoom={false}
-      doubleClickZoom
-      touchZoom
     >
       <Marker
         position={[coordinates.latitude, coordinates.longitude]}

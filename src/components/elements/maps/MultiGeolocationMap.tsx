@@ -42,12 +42,8 @@ const MultiGeolocationMap: React.FC<Props> = ({
     <BaseMapContainer
       bounds={bounds}
       boundsOptions={{ padding: [20, 20] }}
-      zoom={16}
-      dragging
-      scrollWheelZoom={false}
-      doubleClickZoom
-      touchZoom
       height={height}
+      dragging
       {...BaseMapContainerProps}
     >
       <FeatureGroup>

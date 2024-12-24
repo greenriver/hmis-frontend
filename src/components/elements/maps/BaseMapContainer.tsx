@@ -28,7 +28,14 @@ const BaseMapContainer: React.FC<BaseMapContainerProps> = ({
 }) => {
   return (
     <Box sx={{ height, ...sx }}>
-      <MapContainer style={{ height: '100%' }} {...props}>
+      <MapContainer
+        style={{ height: '100%' }}
+        scrollWheelZoom={false}
+        doubleClickZoom
+        touchZoom
+        zoom={16}
+        {...props}
+      >
         <>
           <TileLayer
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
