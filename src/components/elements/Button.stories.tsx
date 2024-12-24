@@ -41,6 +41,9 @@ const ButtonMatrix: React.FC<ButtonProps> = (props) => {
             'primary',
             'error',
             'warning',
+            // 'secondary',
+            // 'info',
+            // 'success',
             // Note: secondary, info, and success button colors exist in MUI but are not part of HMIS design language.
           ] as ButtonProps['color'][]
         ).map((color, idx) => (

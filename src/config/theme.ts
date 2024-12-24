@@ -1,4 +1,4 @@
-import { Color, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
 import {
   PaletteColor,
   SimplePaletteColorOptions,
@@ -48,18 +48,13 @@ declare module '@mui/material/styles' {
       icon?: string;
     };
   }
-  interface GrayscalePaletteColor
-    extends PaletteColor,
-      Pick<Color, 300 | 200 | 100> {
-    tint: string;
-  }
 
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
-    grayscale: GrayscalePaletteColor;
+    grayscale: SimplePaletteColorOptions;
   }
 
   interface PaletteOptions {
@@ -67,17 +62,25 @@ declare module '@mui/material/styles' {
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
-    grayscale: SimplePaletteColorOptions & GrayscalePaletteColor;
+    grayscale: SimplePaletteColorOptions;
   }
 }
 
-// Extend the SimplePaletteColorOptions type to include a 'text' field
+// Extend the SimplePaletteColorOptions
 declare module '@mui/material/styles/createPalette' {
   interface SimplePaletteColorOptions {
-    text?: string;
+    tint?: string;
+    darkest?: string;
+    100?: string;
+    200?: string;
+    300?: string;
   }
   interface PaletteColor {
-    text?: string;
+    tint: string;
+    darkest?: string;
+    100: string;
+    200: string;
+    300: string;
   }
 }
 
@@ -111,35 +114,54 @@ export const baseThemeDef: ThemeOptions = {
   },
   palette: {
     primary: {
-      main: '#5661A5',
-      text: '#17205F',
-      dark: '#1D2877',
+      tint: '#F8F9FB',
       light: '#A4B9DB',
+      main: '#5661A5',
+      dark: '#1D2877',
+      darkest: '#17205F',
+      contrastText: '#FFFFFF',
+      100: alpha('#5661A5', 0.08),
+      200: alpha('#5661A5', 0.12),
+      300: alpha('#5661A5', 0.3),
     },
     success: {
-      main: '#4CAF50',
-      text: '#2A622D',
-      dark: '#357A38',
+      tint: '#F1F9F1',
       light: '#6FBF73',
-      contrastText: '#fff',
+      main: '#4CAF50',
+      dark: '#357A38',
+      darkest: '#263826',
+      contrastText: '#263826',
+      100: alpha('#4CAF50', 0.08),
+      200: alpha('#4CAF50', 0.12),
+      300: alpha('#4CAF50', 0.3),
     },
     warning: {
-      main: '#ED6C02',
-      text: '#A13900',
-      dark: '#E65100',
+      tint: '#FEF3EB',
       light: '#FF9800',
+      main: '#ED6C02',
+      dark: '#D14900',
+      darkest: '#4D1800',
+      contrastText: '#4D1800',
+      100: alpha('#ED6C02', 0.08),
+      200: alpha('#ED6C02', 0.12),
+      300: alpha('#ED6C02', 0.3),
+    },
+    error: {
+      tint: '#FEF0EF',
+      light: '#F6685E',
+      main: '#F44336',
+      dark: '#AA2E25',
+      darkest: '#420400',
+      contrastText: '#420400',
+      100: alpha('#F44336', 0.08),
+      200: alpha('#F44336', 0.12),
+      300: alpha('#F44336', 0.3),
     },
     background: {
       default: '#FCFCFC',
     },
     secondary: {
-      main: '#75559F', // REMOVE
-    },
-    error: {
-      main: '#F44336',
-      text: '#88251E',
-      dark: '#AA2E25',
-      light: '#F6685E',
+      main: '#75559F', // TODO: remove
     },
     borders: {
       light: '#E5E5E5',
@@ -163,16 +185,15 @@ export const baseThemeDef: ThemeOptions = {
     },
     links: '#1976D2',
     activeStatus: '#75559F',
-    // TODO: what is guidance around using `gray[]` color palette? should we avoid?
     grayscale: {
       main: '#6E6E6E',
       dark: '#4D4D4D',
       light: '#8b8b8b',
       contrastText: '#fff',
       tint: '#F3F3F3',
-      300: alpha('#6E6E6E', 0.3),
-      200: alpha('#6E6E6E', 0.12),
       100: alpha('#6E6E6E', 0.08),
+      200: alpha('#6E6E6E', 0.12),
+      300: alpha('#6E6E6E', 0.3),
     },
   },
 };
@@ -491,69 +512,54 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         root: theme.unstable_sx({
           fontWeight: 600,
-          // Overrides to make all `text` buttons use text color
-          '&.MuiButton-text.MuiButton-colorPrimary:not(:disabled)': {
-            color: theme.palette.primary.text,
+          '&.MuiButton-contained.Mui-disabled': {
+            backgroundColor: theme.palette.grayscale[200],
           },
-          '&.MuiButton-text.MuiButton-colorSecondary:not(:disabled)': {
-            color: theme.palette.secondary.text,
+          // Contained Warning and Primary use 'light' for bg instead of usual 'main'
+          '&.MuiButton-contained.MuiButton-colorWarning:not(:disabled)': {
+            backgroundColor: theme.palette.warning.light,
+            '&:hover': { backgroundColor: theme.palette.warning.main },
           },
-          '&.MuiButton-text.MuiButton-colorWarning:not(:disabled)': {
-            color: theme.palette.warning.text,
+          '&.MuiButton-contained.MuiButton-colorError:not(:disabled)': {
+            backgroundColor: theme.palette.error.light,
+            '&:hover': { backgroundColor: theme.palette.error.main },
           },
-          '&.MuiButton-text.MuiButton-colorError:not(:disabled)': {
-            color: theme.palette.error.text,
-          },
-          '&.MuiButton-text.MuiButton-colorSuccess:not(:disabled)': {
-            color: theme.palette.success.text,
-          },
-          // Overrides to make all `outlined` buttons use text color
-          '&.MuiButton-outlined.MuiButton-colorPrimary:not(:disabled)': {
-            color: theme.palette.primary.text,
-          },
-          '&.MuiButton-outlined.MuiButton-colorSecondary:not(:disabled)': {
-            color: theme.palette.secondary.text,
-          },
-          '&.MuiButton-outlined.MuiButton-colorWarning:not(:disabled)': {
-            color: theme.palette.warning.text,
-          },
-          '&.MuiButton-outlined.MuiButton-colorError:not(:disabled)': {
-            color: theme.palette.error.text,
-          },
-          '&.MuiButton-outlined.MuiButton-colorSuccess:not(:disabled)': {
-            color: theme.palette.success.text,
+          '&.MuiButton-contained.MuiButton-colorSuccess:not(:disabled)': {
+            backgroundColor: theme.palette.success.light,
+            '&:hover': { backgroundColor: theme.palette.success.main },
           },
           // Overrides to make all `text buttons use 12% opacity instead of 4%
           '&.MuiButton-text.MuiButton-colorPrimary:hover': {
-            backgroundColor: alpha(theme.palette.primary.main, 0.12),
+            backgroundColor: theme.palette.primary[200],
           },
           '&.MuiButton-text.MuiButton-colorSecondary:hover': {
-            backgroundColor: alpha(theme.palette.secondary.main, 0.12),
+            backgroundColor: theme.palette.secondary[200],
           },
           '&.MuiButton-text.MuiButton-colorWarning:hover': {
-            backgroundColor: alpha(theme.palette.warning.main, 0.12),
+            backgroundColor: theme.palette.warning[200],
           },
           '&.MuiButton-text.MuiButton-colorError:hover': {
-            backgroundColor: alpha(theme.palette.error.main, 0.12),
+            backgroundColor: theme.palette.error[200],
           },
           '&.MuiButton-text.MuiButton-colorSuccess:hover': {
-            backgroundColor: alpha(theme.palette.success.main, 0.12),
+            backgroundColor: theme.palette.success[200],
           },
           // Overrides to make all `outlined` buttons use 12% opacity instead of 4%
           '&.MuiButton-outlined.MuiButton-colorPrimary:hover': {
-            backgroundColor: alpha(theme.palette.primary.main, 0.12),
-          },
-          '&.MuiButton-outlined.MuiButton-colorSecondary:hover': {
-            backgroundColor: alpha(theme.palette.secondary.main, 0.12),
+            backgroundColor: theme.palette.primary[200],
+            borderColor: theme.palette.primary[300],
           },
           '&.MuiButton-outlined.MuiButton-colorWarning:hover': {
-            backgroundColor: alpha(theme.palette.warning.main, 0.12),
+            backgroundColor: theme.palette.warning[200],
+            borderColor: theme.palette.warning[300],
           },
           '&.MuiButton-outlined.MuiButton-colorError:hover': {
-            backgroundColor: alpha(theme.palette.error.main, 0.12),
+            backgroundColor: theme.palette.error[200],
+            borderColor: theme.palette.error[300],
           },
           '&.MuiButton-outlined.MuiButton-colorSuccess:hover': {
-            backgroundColor: alpha(theme.palette.success.main, 0.12),
+            backgroundColor: theme.palette.success[200],
+            borderColor: theme.palette.success[300],
           },
         }),
         // Give 'text' variant Buttons the same horiztonal padding as outlined
