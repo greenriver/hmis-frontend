@@ -42,6 +42,7 @@ import {
   TypedObject,
 } from '../types';
 
+import { HmisUser } from '@/modules/auth/api/sessions';
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 import { collectExpressionReferences } from '@/modules/form/util/expressions/references';
 import {
@@ -1492,7 +1493,8 @@ export const getFieldOnAssessment = (
 };
 
 export const parseOccurrencePointFormDefinition = (
-  definition: FormDefinitionFieldsFragment
+  definition: FormDefinitionFieldsFragment,
+  user?: HmisUser
 ) => {
   let displayTitle = definition.title;
   let isEditable = false;
@@ -1503,21 +1505,35 @@ export const parseOccurrencePointFormDefinition = (
     );
   }
 
-  const readOnlyDefinition = modifyFormDefinition(
+  // Modify form definition into a "read only definition" by removing
+  const definitionForDisplay = modifyFormDefinition(
     definition.definition,
     (item) => {
+      // Delete the 'text' from the item IF the text matches the title of the form.
+      // This is a hacky way to hide redundant labels for tiny Occurrence Point forms like Move-in Date.
       if (definition.title && matchesTitle(item, definition.title)) {
         displayTitle = item.readonlyText || item.text || displayTitle;
         delete item.text;
         delete item.readonlyText;
       }
       if (isQuestionItem(item) && !item.readOnly) {
-        isEditable = true;
+        if (item.editorUserIds && user) {
+          isEditable = item.editorUserIds.includes(user.id);
+        } else {
+          isEditable = true;
+        }
       }
     }
   );
 
-  return { displayTitle, isEditable, readOnlyDefinition };
+  return {
+    // Title to display in the left-hand column of the Enrollment/Client details card
+    displayTitle,
+    // Modified Form Definiton to use to display the form values as a DynamicView in the right-hand column of the Enrollment/Client details card
+    definitionForDisplay,
+    // Whether the form is editable by the current user
+    isEditable,
+  };
 };
 
 export const getFormStepperItems = (

@@ -12,6 +12,7 @@ import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 
 import RouterLink from '@/components/elements/RouterLink';
+import useAuth from '@/modules/auth/hooks/useAuth';
 import { parseOccurrencePointFormDefinition } from '@/modules/form/util/formUtil';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -27,6 +28,7 @@ const EnrollmentDetails = ({
 }: {
   enrollment: DashboardEnrollment;
 }) => {
+  const { user } = useAuth();
   const rows = useMemo(() => {
     const content: Record<string, ReactNode> = {};
     // If enrollment is incomplete, show that first
@@ -64,14 +66,16 @@ const EnrollmentDetails = ({
 
     // Occurrence point values (move in date, date of engagement, etc.)
     enrollment.occurrencePointForms.forEach(({ definition }) => {
-      const { displayTitle, isEditable, readOnlyDefinition } =
-        parseOccurrencePointFormDefinition(definition);
+      // Determine whether this form has any fields that  are editable.
+      // Pass the user because there might be fields that are only editable by some users.
+      const { displayTitle, isEditable, definitionForDisplay } =
+        parseOccurrencePointFormDefinition(definition, user);
 
       content[displayTitle] = (
         <EnrollmentOccurrencePointForm
           enrollment={enrollment}
           definition={definition}
-          readOnlyDefinition={readOnlyDefinition}
+          definitionForDisplay={definitionForDisplay}
           editable={isEditable && enrollment.access.canEditEnrollments}
           dialogTitle={displayTitle}
         />
@@ -136,7 +140,7 @@ const EnrollmentDetails = ({
       ),
       value,
     }));
-  }, [enrollment]);
+  }, [enrollment, user]);
 
   if (!enrollment || !rows) return <Loading />;
 
