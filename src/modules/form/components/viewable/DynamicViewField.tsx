@@ -14,7 +14,7 @@ import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
 import LabelWithContent from '@/components/elements/LabelWithContent';
-import BaseMap from '@/components/elements/maps/BaseMap';
+import SingleGeolocationMap from '@/components/elements/maps/SingleGeolocationMap';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
 import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
@@ -22,6 +22,7 @@ import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
 import ClientName from '@/modules/client/components/ClientName';
+
 import {
   formatCurrency,
   formatDateForDisplay,
@@ -278,7 +279,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       return (
         <LabelWithContent {...commonProps}>
           {coordinates ? (
-            <BaseMap coordinates={coordinates} />
+            <SingleGeolocationMap coordinates={coordinates} />
           ) : (
             <NotCollectedText variant='body2'>
               Location not collected

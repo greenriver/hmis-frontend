@@ -1,13 +1,12 @@
 import 'leaflet/dist/leaflet.css';
 
-import { Box } from '@mui/system';
+import { Box, SxProps } from '@mui/system';
 import L from 'leaflet';
 import markerIconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIconUrl from 'leaflet/dist/images/marker-icon.png';
 import markerShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
-import { MapContainer, Marker, TileLayer } from 'react-leaflet';
-import { LatLon } from '@/types/geolocationTypes';
+import { MapContainer, MapContainerProps, TileLayer } from 'react-leaflet';
 
 // Fix for default marker icon issue with Vite
 L.Icon.Default.prototype.options.iconUrl = markerIconUrl;
@@ -15,39 +14,38 @@ L.Icon.Default.prototype.options.iconRetinaUrl = markerIconRetinaUrl;
 L.Icon.Default.prototype.options.shadowUrl = markerShadowUrl;
 L.Icon.Default.imagePath = '';
 
-interface BaseMapProps {
-  coordinates: LatLon;
-  height?: number;
-  // todo: expand for LocationMap
+export interface BaseMapContainerProps extends MapContainerProps {
+  children: React.ReactNode;
+  height: string | number; // require container height
+  sx?: SxProps;
 }
 
-const BaseMap: React.FC<BaseMapProps> = ({ coordinates, height = 230 }) => {
+const BaseMapContainer: React.FC<BaseMapContainerProps> = ({
+  height,
+  sx,
+  children,
+  ...props
+}) => {
   return (
-    <Box sx={{ height }}>
+    <Box sx={{ height, ...sx }}>
       <MapContainer
-        key={JSON.stringify(coordinates)}
-        center={[coordinates.latitude, coordinates.longitude]}
-        zoom={16}
-        style={{ height }}
-        dragging={false}
+        style={{ height: '100%' }}
         scrollWheelZoom={false}
         doubleClickZoom
         touchZoom
+        zoom={16}
+        {...props}
       >
         <>
           <TileLayer
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-          {/* todo: add Popup children for location map */}
-          <Marker
-            position={[coordinates.latitude, coordinates.longitude]}
-            title='Client Location'
-          />
+          {children}
         </>
       </MapContainer>
     </Box>
   );
 };
 
-export default BaseMap;
+export default BaseMapContainer;

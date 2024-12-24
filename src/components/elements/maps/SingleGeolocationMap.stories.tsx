@@ -1,12 +1,12 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import BaseMap from './BaseMap';
+import SingleGeolocationMap from './SingleGeolocationMap';
 
 export default {
-  component: BaseMap,
-} as Meta<typeof BaseMap>;
+  component: SingleGeolocationMap,
+} as Meta<typeof SingleGeolocationMap>;
 
-type Story = StoryObj<typeof BaseMap>;
+type Story = StoryObj<typeof SingleGeolocationMap>;
 
 export const Default: Story = {
   args: {
