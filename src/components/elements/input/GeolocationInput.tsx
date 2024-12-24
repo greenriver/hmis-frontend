@@ -10,10 +10,12 @@ import {
 import React, { useId, useRef } from 'react';
 
 import GeolocationErrorAlert from '@/components/elements/input/GeolocationErrorAlert';
-import BaseMap from '@/components/elements/maps/BaseMap';
+
+import SingleGeolocationMap from '@/components/elements/maps/SingleGeolocationMap';
 import { ClearIcon, MyLocationIcon } from '@/components/elements/SemanticIcons';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { DynamicInputCommonProps } from '@/modules/form/types';
+
 import { LatLon } from '@/types/geolocationTypes';
 
 interface GeolocationInputProps
@@ -105,7 +107,10 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
               aria-label="Map displaying the user's current location"
               role='complementary' // aria-label on a div should have a role
             >
-              <BaseMap coordinates={coordinates} height={mapHeight} />
+              <SingleGeolocationMap
+                coordinates={coordinates}
+                height={mapHeight}
+              />
             </Box>
           )}
         </Box>
