@@ -20,7 +20,6 @@ import {
 import DynamicField from './DynamicField';
 import DynamicGroup from './DynamicGroup';
 
-import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import DynamicViewField from '@/modules/form/components/viewable/DynamicViewField';
 import {
   DisabledDisplay,
@@ -146,34 +145,33 @@ const DynamicFormFields: React.FC<Props> = ({
         />
       </Grid>
     ) : (
-      <SentryErrorBoundary key={item.linkId}>
-        <DynamicField
-          key={item.linkId}
-          item={item}
-          itemChanged={itemChanged}
-          value={
-            isDisabled &&
-            item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
-              ? undefined
-              : values[item.linkId]
-          }
-          errors={getFieldErrors(item)}
-          horizontal={horizontal}
-          pickListArgs={pickListArgs}
-          warnIfEmpty={warnIfEmpty}
-          localConstants={localConstants}
-          {...props}
-          inputProps={{
-            ...props?.inputProps,
-            ...buildCommonInputProps({
-              item,
-              values,
-              localConstants: localConstants || {},
-            }),
-            disabled: isDisabled || locked || undefined,
-          }}
-        />
-      </SentryErrorBoundary>
+      <DynamicField
+        key={item.linkId}
+        item={item}
+        itemChanged={itemChanged}
+        value={
+          isDisabled &&
+          item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
+            ? undefined
+            : values[item.linkId]
+        }
+        errors={getFieldErrors(item)}
+        horizontal={horizontal}
+        pickListArgs={pickListArgs}
+        warnIfEmpty={warnIfEmpty}
+        // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
+        localConstants={localConstants}
+        {...props}
+        inputProps={{
+          ...props?.inputProps,
+          ...buildCommonInputProps({
+            item,
+            values,
+            localConstants: localConstants || {},
+          }),
+          disabled: isDisabled || locked || undefined,
+        }}
+      />
     );
     if (renderFn) {
       return renderFn(itemComponent);

@@ -1497,6 +1497,8 @@ export const parseOccurrencePointFormDefinition = (
   user?: HmisUser
 ) => {
   let displayTitle = definition.title;
+
+  // Whether this form as any fields that are editable to the current user
   let isEditable = false;
 
   function matchesTitle(item: FormItem, title: string) {
@@ -1505,7 +1507,7 @@ export const parseOccurrencePointFormDefinition = (
     );
   }
 
-  // Modify form definition into a "read only definition" by removing
+  // Created modified "definition for display" that will be used to render values in a DynamicView inside the Enrollment/Client details card
   const definitionForDisplay = modifyFormDefinition(
     definition.definition,
     (item) => {
