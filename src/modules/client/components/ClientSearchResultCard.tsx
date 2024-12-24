@@ -221,30 +221,6 @@ const ClientSearchResultCard: React.FC<Props> = ({
           >
             Client Profile
           </ButtonLink>
-          {/* disabled for now #185750557 */}
-          {/* <RootPermissionsFilter permissions='canEnrollClients'>
-              <ButtonLink
-                fullWidth
-                data-testid='enrollButton'
-                to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
-                  clientId: client.id,
-                })}
-                Icon={LibraryAddIcon}
-                leftAlign
-              >
-                Enroll
-              </ButtonLink>
-            </RootPermissionsFilter> */}
-
-          {/* <Button fullWidth variant='outlined' color='error'>
-              Exit
-            </Button>
-            <Button variant='outlined' color='secondary'>
-              Case Notes
-            </Button>
-            <Button variant='outlined' color='secondary'>
-              Add Service
-            </Button> */}
         </Stack>
       </Grid>
     </Grid>

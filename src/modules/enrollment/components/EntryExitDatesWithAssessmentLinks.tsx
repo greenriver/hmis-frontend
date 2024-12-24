@@ -42,7 +42,7 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
     <Typography
       component='span'
       variant='body2'
-      color='success.main'
+      color='success.dark'
       fontWeight={600}
     >
       Active

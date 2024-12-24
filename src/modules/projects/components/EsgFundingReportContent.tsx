@@ -142,9 +142,7 @@ const EsgFundingReportContent: React.FC<{
         title='ESG Funding Report'
         actions={
           !isPrint && (
-            <PrintViewButton color='secondary' variant='outlined'>
-              Print Report
-            </PrintViewButton>
+            <PrintViewButton variant='outlined'>Print Report</PrintViewButton>
           )
         }
       />

@@ -63,7 +63,6 @@ const CardGroup: React.FC<CardGroupProps> = ({
             (Array.isArray(children) && children.length < maxItems)) && (
             <Button
               onClick={onAddItem}
-              color='secondary'
               variant='text'
               sx={{ width: 'fit-content', color: 'links' }}
               startIcon={<AddIcon />}
