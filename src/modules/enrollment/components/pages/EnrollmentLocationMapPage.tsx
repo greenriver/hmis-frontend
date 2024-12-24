@@ -13,7 +13,7 @@ const EnrollmentLocationMapPage = () => {
 
   return (
     <TitleCard title='Location Map' headerVariant='border'>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: { xs: 0.5, md: 2 } }}>
         <EnrollmentLocationMap
           enrollmentId={enrollment.id}
           clientName={clientBriefName(enrollment.client)}
