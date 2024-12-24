@@ -8,13 +8,21 @@ import { Default as ViewStory } from './viewable/DynamicView.stories';
 import { emptyErrorState } from '@/modules/errors/util';
 import formData from '@/test/__mocks__/mockFormDefinition.json';
 import { generateMockValuesForDefinition } from '@/test/utils/testUtils';
-import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
+import {
+  DisabledDisplay,
+  EnableOperator,
+  FormDefinitionJson,
+  ItemType,
+} from '@/types/gqlTypes';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
 export default {
   component: DynamicForm,
   argTypes: { label: { control: 'text' } },
+  parameters: {
+    docs: { disable: true }, // don't render every story on the docs tab
+  },
   decorators: [
     (Story) => (
       <Box>
@@ -65,6 +73,22 @@ WithValuesAsReadOnly.args = {
     formDefinition,
     (item) => (item.readOnly = true)
   ),
+  initialValues: ViewStory.args?.values,
+  errors: emptyErrorState,
+};
+
+export const WithDisabledInputs = Template.bind({});
+WithDisabledInputs.args = {
+  definition: modifyFormDefinition(formDefinition, (item) => {
+    item.enableWhen = [
+      {
+        question: 'string-1',
+        operator: EnableOperator.Equal,
+        answerCode: 'foo',
+      },
+    ];
+    item.disabledDisplay = DisabledDisplay.ProtectedWithValue; // show values
+  }),
   initialValues: ViewStory.args?.values,
   errors: emptyErrorState,
 };
