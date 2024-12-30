@@ -59,6 +59,7 @@ export interface UploaderProps<Multiple extends boolean> {
   image?: boolean;
   maxSize?: number;
   ariaLabel?: string | null;
+  disabled?: boolean;
 }
 
 const Uploader = <Multiple extends boolean>({
@@ -71,6 +72,7 @@ const Uploader = <Multiple extends boolean>({
   image: isImage = false,
   maxSize = DEFAULT_MAX_BYTES,
   ariaLabel,
+  disabled,
 }: UploaderProps<Multiple>) => {
   // The uploader accepts a `files` argument which can contain either:
   // - a STRING which points at a blob ID of a file that has been uploaded within this session, or
@@ -221,6 +223,7 @@ const Uploader = <Multiple extends boolean>({
     accept,
     maxSize,
     noClick: true,
+    disabled,
     onDropAccepted: uploadAndCreate,
     onDropRejected: (fileRejections) => {
       const errors = fileRejections.flatMap((file) =>
@@ -343,6 +346,7 @@ const Uploader = <Multiple extends boolean>({
                 (currentFiles.length === 0 && existingFiles.length === 0)) && (
                 <>
                   <FileThumbnailIcon IconComponent={UploadFileIcon} />
+
                   <Typography variant='subtitle1' color='inherit'>
                     <Link onClick={open} variant='inherit'>
                       Click to upload
