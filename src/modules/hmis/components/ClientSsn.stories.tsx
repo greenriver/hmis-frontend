@@ -5,7 +5,6 @@ import ClientSsn from './ClientSsn';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
-  title: 'ClientSsn',
   component: ClientSsn,
 } as Meta<typeof ClientSsn>;
 

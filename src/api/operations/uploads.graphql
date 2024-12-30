@@ -3,7 +3,6 @@ mutation CreateDirectUploadMutation($input: DirectUploadInput!) {
     filename
     headers
     url
-    blobId
     signedBlobId
   }
 }

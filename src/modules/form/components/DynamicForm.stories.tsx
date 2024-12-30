@@ -13,7 +13,6 @@ import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
 const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
 export default {
-  title: 'DynamicForm',
   component: DynamicForm,
   argTypes: { label: { control: 'text' } },
   decorators: [
@@ -24,6 +23,8 @@ export default {
     ),
   ],
 } as Meta<typeof DynamicForm>;
+
+//TODO add a story where everything is disabled. you can see that some input labels are not grayed out
 
 const Template: StoryFn<typeof DynamicForm> = (args) => (
   // eslint-disable-next-line no-console

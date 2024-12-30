@@ -12,6 +12,7 @@ import {
   GetClientEnrollmentsDocument,
   GetClientImageDocument,
   GetClientPermissionsDocument,
+  GetEnrollmentGeolocationsDocument,
   GetEnrollmentWithHouseholdDocument,
   GetFileDocument,
   GetPickListDocument,
@@ -23,6 +24,7 @@ import {
   Race,
   RelationshipToHoH,
   SsnDataQuality,
+  UserFieldsFragment,
 } from '@/types/gqlTypes';
 
 /**
@@ -55,6 +57,15 @@ const enrollmentAccessMock = {
   ),
   id: '9999:1', // <enrollment id>:<user id>
 } as EnrollmentAccess;
+
+export const applicationUserMock: UserFieldsFragment = {
+  __typename: 'ApplicationUser',
+  id: '1',
+  name: 'Provider User',
+  firstName: 'Provider',
+  lastName: 'User',
+  email: 'fake@email.org',
+};
 
 export const fakeEnrollment = () => {
   return {
@@ -216,6 +227,62 @@ export const projectsForSelectMock = {
   },
 };
 
+export const getEnrollmentGeolocationsMock = {
+  request: {
+    query: GetEnrollmentGeolocationsDocument,
+    variables: {
+      id: '1',
+    },
+  },
+  result: {
+    data: {
+      enrollment: {
+        id: '1',
+        geolocations: [
+          {
+            id: '15',
+            __typename: 'Geolocation',
+            coordinates: {
+              __typename: 'GeolocationCoordinates',
+              id: '15',
+              latitude: '42.355560',
+              longitude: '-71.067285',
+            },
+            locatedAt: '2024-12-13T11:53:37-05:00',
+            sourceFormName: 'Street Outreach Assessment',
+            collectedBy: applicationUserMock,
+          },
+          {
+            __typename: 'Geolocation',
+            id: '14',
+            coordinates: {
+              __typename: 'GeolocationCoordinates',
+              id: '14',
+              latitude: '42.355060',
+              longitude: '-71.063485',
+            },
+            locatedAt: '2024-12-13T11:53:28-05:00',
+            sourceFormName: 'Current Living Situation',
+            collectedBy: applicationUserMock,
+          },
+          {
+            __typename: 'Geolocation',
+            id: '13',
+            coordinates: {
+              __typename: 'GeolocationCoordinates',
+              id: '13',
+              latitude: '42.355960',
+              longitude: '-71.067485',
+            },
+            locatedAt: '2024-12-13T11:53:14-05:00',
+            sourceFormName: 'Current Living Situation',
+            collectedBy: applicationUserMock,
+          },
+        ],
+      },
+    },
+  },
+};
 // Not used-- keeping around in case we add a storybook story with client search?
 // const clientSearchMock = {
 //   request: {

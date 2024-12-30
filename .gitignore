@@ -23,6 +23,9 @@ bundle_analysis*
 untracked
 docker-compose.yml
 docker-dev
+storybook-static
+*.log
+chromatic-diagnostics.json
 
 npm-debug.log*
 yarn-debug.log*

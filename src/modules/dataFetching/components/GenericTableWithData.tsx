@@ -16,13 +16,13 @@ import {
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import Pagination from '../../../components/elements/table/Pagination';
 import { FilterType } from '../types';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
+import Pagination from '@/components/elements/table/Pagination';
 import { ColumnDef } from '@/components/elements/table/types';
 import TableFilters, {
   TableFiltersProps,

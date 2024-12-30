@@ -77,27 +77,14 @@ mutation CreateFormRule($input: CreateFormRuleInput!) {
   }
 }
 
-mutation UpdateFormRule($input: UpdateFormRuleInput!) {
-  updateFormRule(input: $input) {
-    clientMutationId
-    formRule {
-      ...FormRuleFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeactivateFormRule($id: ID!) {
-  updateFormRule(input: { id: $id, input: { activeStatus: INACTIVE } }) {
-    clientMutationId
+  deleteFormRule(id: $id) {
     formRule {
       id
       active
     }
     errors {
-      message
+      ...ValidationErrorFields
     }
   }
 }

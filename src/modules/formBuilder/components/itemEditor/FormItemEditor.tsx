@@ -206,6 +206,13 @@ const FormItemEditor: React.FC<Props> = ({
     }
   }, [errorState]);
 
+  const isSizeEditable = useMemo(() => {
+    // TODO - Not all types that don't respect `size` prop are listed here yet
+    return (
+      itemTypeValue && ![ItemType.File, ItemType.Image].includes(itemTypeValue)
+    );
+  }, [itemTypeValue]);
+
   if (!itemTypeValue) throw Error('Item type must be defined');
 
   return (
@@ -327,7 +334,7 @@ const FormItemEditor: React.FC<Props> = ({
                 minRows={isDisplayItem ? 2 : undefined}
               />
             )}
-            {isQuestionItem && (
+            {isQuestionItem && isSizeEditable && (
               <ControlledSelect
                 name='size'
                 control={control}
@@ -336,7 +343,12 @@ const FormItemEditor: React.FC<Props> = ({
                 options={inputSizePickList}
               />
             )}
-            {([ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) ||
+            {([
+              ItemType.Choice,
+              ItemType.OpenChoice,
+              ItemType.File,
+              ItemType.Image,
+            ].includes(itemTypeValue) ||
               (itemTypeValue === ItemType.Object &&
                 itemComponentValue === Component.Address)) && (
               <ControlledCheckbox
@@ -474,7 +486,7 @@ const FormItemEditor: React.FC<Props> = ({
         </Box>
         <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
           <Stack direction='row' gap={2}>
-            <Button variant='gray' onClick={onDiscard}>
+            <Button color='grayscale' onClick={onDiscard}>
               Cancel
             </Button>
             <LoadingButton

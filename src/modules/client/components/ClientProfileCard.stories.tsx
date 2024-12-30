@@ -11,7 +11,6 @@ import {
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
-  title: 'ClientProfileCard',
   component: ClientProfileCard,
   parameters: {
     apolloClient: {

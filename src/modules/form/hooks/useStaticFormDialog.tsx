@@ -37,7 +37,6 @@ interface Args<TData, TVariables> {
   pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
   localConstants?: LocalConstants;
-  beforeFormComponent?: ReactNode;
 }
 export function useStaticFormDialog<
   TData extends { __typename?: 'Mutation' },
@@ -52,7 +51,6 @@ export function useStaticFormDialog<
   localConstants,
   initialValues,
   pickListArgs,
-  beforeFormComponent,
 }: Args<TData, TVariables>) {
   const errorRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -87,7 +85,6 @@ export function useStaticFormDialog<
           <DialogTitle>{title}</DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
-              {beforeFormComponent && <Grid item>{beforeFormComponent}</Grid>}
               <Grid item xs>
                 <StaticForm
                   role={formRole}
@@ -143,7 +140,6 @@ export function useStaticFormDialog<
       mutationDocument,
       onCompleted,
       pickListArgs,
-      beforeFormComponent,
     ]
   );
   return {

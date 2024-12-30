@@ -4,7 +4,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import SsnInput from './SsnInput';
 
 export default {
-  title: 'Input Elements/SsnInput',
   component: SsnInput,
   argTypes: {
     label: { control: 'text' },
@@ -12,7 +11,6 @@ export default {
     value: { control: 'text' },
   },
   render: (args: any) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [{ value }, updateArgs] = useArgs();
     const onChange = (value: any) => updateArgs({ value });
     return <SsnInput {...args} onChange={onChange} value={value} />;

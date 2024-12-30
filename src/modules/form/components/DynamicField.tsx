@@ -32,6 +32,7 @@ import RequiredLabel from './RequiredLabel';
 
 import CheckboxGroupInput from '@/components/elements/input/CheckboxGroupInput';
 import DatePicker from '@/components/elements/input/DatePicker';
+import GeolocationInput from '@/components/elements/input/GeolocationInput';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import MinutesDurationInput from '@/components/elements/input/MinutesDurationInput';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
@@ -42,13 +43,15 @@ import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import TimeOfDayPicker from '@/components/elements/input/TimeOfDayPicker';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
-import Uploader from '@/components/elements/upload/UploaderBase';
+import LabelWithContent from '@/components/elements/LabelWithContent';
+import Uploader from '@/components/elements/upload/Uploader';
+import useAuth from '@/modules/auth/hooks/useAuth';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
-const getLabel = (
+export const getLabel = (
   item: FormItem,
   horizontal?: boolean,
   isDisabled?: boolean
@@ -96,7 +99,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       itemChanged({ linkId, value, type: ChangeType.User }),
     [linkId, itemChanged]
   );
-  const isDisabled = disabled || inputProps?.disabled;
+
+  const { user: currentUser } = useAuth();
+  const userCanEdit =
+    !!currentUser?.id &&
+    (!item.editorUserIds || item.editorUserIds.includes(currentUser.id));
+
+  const isDisabled = disabled || inputProps?.disabled || !userCanEdit;
   const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
   let width;
 
@@ -271,7 +280,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEvent}
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
-            disableArrowKeys={item.type === ItemType.Currency}
             {...commonInputProps}
             inputWidth={120}
           />
@@ -404,19 +412,41 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     case ItemType.Image:
       return (
         <InputContainer {...commonContainerProps}>
-          <Uploader
-            id={linkId}
-            image
-            onUpload={async (upload) => onChangeValue(upload.blobId)}
-          />
+          <LabelWithContent label={item.text} helperText={item.helperText}>
+            <Uploader
+              multiple={item.repeats || false}
+              id={linkId}
+              files={value}
+              image
+              onChange={onChangeValue}
+              ariaLabel={item.text}
+            />
+          </LabelWithContent>
         </InputContainer>
       );
     case ItemType.File:
       return (
         <InputContainer {...commonContainerProps}>
-          <Uploader
-            id={linkId}
-            onUpload={async (upload) => onChangeValue(upload.blobId)}
+          <LabelWithContent label={item.text} helperText={item.helperText}>
+            <Uploader
+              multiple={item.repeats || false}
+              id={linkId}
+              files={value}
+              onChange={onChangeValue}
+              ariaLabel={item.text}
+            />
+          </LabelWithContent>
+        </InputContainer>
+      );
+    case ItemType.Geolocation:
+      return (
+        <InputContainer {...commonContainerProps}>
+          <GeolocationInput
+            label={label}
+            value={value}
+            onChange={onChangeValue}
+            helperText={commonInputProps.helperText}
+            disabled={commonInputProps.disabled}
           />
         </InputContainer>
       );

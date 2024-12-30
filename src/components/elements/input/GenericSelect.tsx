@@ -46,8 +46,18 @@ const GenericSelect = <
 
   return (
     <Autocomplete
+      disablePortal // https://mui.com/material-ui/react-autocomplete/#ios-voiceover
       options={options}
       value={value}
+      slotProps={{
+        clearIndicator: {
+          tabIndex: 0,
+          // In order to make the Clear Button focusable, have to disable the default MUI behavior of hiding it except on hover
+          sx: {
+            visibility: 'visible',
+          },
+        },
+      }}
       renderInput={(params) => (
         <TextInput
           {...params}

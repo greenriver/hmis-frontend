@@ -51,7 +51,9 @@ const UserActionsMenu: React.FC<Props> = ({
     <CommonMenuButton
       title='User Actions'
       items={menuItems}
-      variant='outlined'
+      ButtonProps={{
+        variant: 'outlined',
+      }}
     />
   );
 };

@@ -17,14 +17,14 @@ query GetProjectExternalFormSubmissions(
       limit
       nodesCount
       nodes {
-        ...ExternalFormSubmissionFields
+        ...ExternalFormSubmissionSummary
       }
     }
   }
 }
 
-query GetExternalFormDefinition($formDefinitionIdentifier: String!) {
-  externalFormDefinition(identifier: $formDefinitionIdentifier) {
-    ...FormDefinitionFields
+query GetExternalFormSubmission($id: ID!) {
+  externalFormSubmission(id: $id) {
+    ...ExternalFormSubmissionFields
   }
 }

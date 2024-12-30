@@ -68,6 +68,7 @@ const enrollmentDashboardRoutes = {
   NEW_ASSESSMENT: 'assessments/new/:formDefinitionId', // Create new individual assessment
   ESG_FUNDING_REPORT: 'esg-funding-report',
   AUDIT_HISTORY: 'history',
+  LOCATION_MAP: 'locations',
 };
 
 // Routes within the project dashboard

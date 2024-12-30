@@ -42,6 +42,7 @@ import {
   TypedObject,
 } from '../types';
 
+import { HmisUser } from '@/modules/auth/api/sessions';
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 import { collectExpressionReferences } from '@/modules/form/util/expressions/references';
 import {
@@ -718,6 +719,11 @@ export const gqlValueToFormValue = (
         return compact(value.map((v) => getOptionValue(v, item)));
       }
       return getOptionValue(value, item);
+    case ItemType.File:
+      // Use full File object in form to display metadata.
+      // The metadata fields wont be submitted because of the `formValueToGqlValue`
+      // logic which will transform the file object into an ID before submitting it back.
+      return value;
 
     default:
       // Set the property directly as the initial form value
@@ -756,14 +762,16 @@ export const formValueToGqlValue = (
     if (typeof date === 'string') {
       date = parseHmisDateString(value);
     }
-    if (date instanceof Date) return formatDateForGql(date) || undefined;
-    // This isn't parseable/formattable into a date, return undefined to ignore it
-    return undefined;
+    if (date instanceof Date) return formatDateForGql(date) || value;
+    // This isn't parseable/formattable into a date, so it may cause a backend validation error.
+    // Still, return it, so that it doesn't get swallowed without the user's knowledge
+    return value;
   }
 
   if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
     const num = Number(value);
-    return Number.isNaN(num) ? undefined : num;
+    // See note above about unparseable date values; the same logic applies here
+    return Number.isNaN(num) ? value : num;
   }
 
   if (
@@ -785,6 +793,21 @@ export const formValueToGqlValue = (
       return value.map((option: PickListOption) => option.code);
     } else if (value) {
       return (value as PickListOption).code;
+    }
+  } else if ([ItemType.File, ItemType.Image].includes(item.type)) {
+    // Special case for File types. The frontend receives a FileFieldsFragment
+    // if this file has already been saved, but we don't want to return that whole fragment
+    // to the backend for processing, so just return the ID.
+    if (Array.isArray(value)) {
+      return value.map((fileOrBlobId) =>
+        fileOrBlobId.hasOwnProperty('id') ? fileOrBlobId.id : fileOrBlobId
+      );
+    } else {
+      if (value.hasOwnProperty('id')) {
+        return value.id;
+      } else {
+        return value;
+      }
     }
   }
 
@@ -1470,9 +1493,12 @@ export const getFieldOnAssessment = (
 };
 
 export const parseOccurrencePointFormDefinition = (
-  definition: FormDefinitionFieldsFragment
+  definition: FormDefinitionFieldsFragment,
+  user: HmisUser
 ) => {
   let displayTitle = definition.title;
+
+  // Whether this form as any fields that are editable to the current user
   let isEditable = false;
 
   function matchesTitle(item: FormItem, title: string) {
@@ -1481,21 +1507,35 @@ export const parseOccurrencePointFormDefinition = (
     );
   }
 
-  const readOnlyDefinition = modifyFormDefinition(
+  // Created modified "definition for display" that will be used to render values in a DynamicView inside the Enrollment/Client details card
+  const definitionForDisplay = modifyFormDefinition(
     definition.definition,
     (item) => {
+      // Delete the 'text' from the item IF the text matches the title of the form.
+      // This is a hacky way to hide redundant labels for tiny Occurrence Point forms like Move-in Date.
       if (definition.title && matchesTitle(item, definition.title)) {
         displayTitle = item.readonlyText || item.text || displayTitle;
         delete item.text;
         delete item.readonlyText;
       }
       if (isQuestionItem(item) && !item.readOnly) {
-        isEditable = true;
+        if (item.editorUserIds) {
+          isEditable = item.editorUserIds.includes(user.id);
+        } else {
+          isEditable = true;
+        }
       }
     }
   );
 
-  return { displayTitle, isEditable, readOnlyDefinition };
+  return {
+    // Title to display in the left-hand column of the Enrollment/Client details card
+    displayTitle,
+    // Modified Form Definiton to use to display the form values as a DynamicView in the right-hand column of the Enrollment/Client details card
+    definitionForDisplay,
+    // Whether the form is editable by the current user
+    isEditable,
+  };
 };
 
 export const getFormStepperItems = (

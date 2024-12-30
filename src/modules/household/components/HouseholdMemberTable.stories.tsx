@@ -5,7 +5,6 @@ import HouseholdMemberTable from './HouseholdMemberTable';
 import { enrollmentWithHoHMock, RITA_ACKROYD } from '@/test/__mocks__/requests';
 
 export default {
-  title: 'HouseholdMemberTable',
   component: HouseholdMemberTable,
   parameters: {
     dashboardContext: 'enrollment',

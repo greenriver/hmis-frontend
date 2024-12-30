@@ -272,6 +272,7 @@ export const HmisEnums = {
   CustomDataElementType: {
     boolean: 'boolean',
     date: 'date',
+    file: 'file',
     float: 'float',
     integer: 'integer',
     json: 'json',
@@ -771,6 +772,7 @@ export const HmisEnums = {
     DATE: 'DATE',
     DISPLAY: 'DISPLAY',
     FILE: 'FILE',
+    GEOLOCATION: 'GEOLOCATION',
     GROUP: 'GROUP',
     IMAGE: 'IMAGE',
     INTEGER: 'INTEGER',
@@ -931,6 +933,7 @@ export const HmisEnums = {
     COC: 'COC',
     CONTINUUM_PROJECTS: 'Continuum Projects',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
+    CUSTOM_SERVICE_CATEGORIES: 'CUSTOM_SERVICE_CATEGORIES',
     DESTINATION: 'DESTINATION',
     ELIGIBLE_STAFF_ASSIGNMENT_USERS:
       'Current users who are eligible for staff assignment',
@@ -944,6 +947,7 @@ export const HmisEnums = {
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     OPEN_PROJECTS: 'Open Projects that the user can see',
     ORGANIZATION: 'All Organizations that the User can see',
+    OTHER_FUNDERS: 'OtherFunder values for all Funders across the installation',
     POSSIBLE_UNIT_TYPES_FOR_PROJECT:
       'Unit types that are eligible to be added to project',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
@@ -1515,6 +1519,7 @@ export const HmisEnums = {
     ENROLLMENT: 'Enrollment',
     EVENT: 'Event',
     EXIT: 'Exit',
+    GEOLOCATION: 'Geolocation',
     HEALTH_AND_DV: 'HealthAndDv',
     INCOME_BENEFIT: 'IncomeBenefit',
     YOUTH_EDUCATION_STATUS: 'YouthEducationStatus',

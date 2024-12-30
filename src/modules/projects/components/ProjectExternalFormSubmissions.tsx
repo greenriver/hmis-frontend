@@ -32,10 +32,12 @@ const ProjectExternalFormSubmissions: React.FC<Props> = ({}) => {
     useState<PickListOption | null>(null);
   const formType =
     pickList && (pickList.length === 1 ? pickList[0] : selectedFormType);
+  const title =
+    pickList && pickList.length === 1 ? pickList[0].label : 'Submissions';
 
   return (
     <>
-      <PageTitle title='Submissions' />
+      <PageTitle title={title} />
 
       {/* put <Loading> here, rather than using FormSelect's loading attr,
       because the FormSelect is only shown if formTypeList.length > 1 */}

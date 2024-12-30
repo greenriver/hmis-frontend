@@ -26,11 +26,13 @@ interface Props {
 const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
   const [deactivate, { loading, error }] = useDeactivateFormRuleMutation({
     onCompleted: (data) => {
-      cache.evict({ id: `FormRule:${data.updateFormRule?.formRule.id}` });
-      cache.evict({
-        id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
-        fieldName: 'projectMatches',
-      });
+      if (data.deleteFormRule?.formRule) {
+        cache.evict({ id: `FormRule:${data.deleteFormRule?.formRule?.id}` });
+        cache.evict({
+          id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
+          fieldName: 'projectMatches',
+        });
+      }
     },
   });
 

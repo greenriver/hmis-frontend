@@ -1,0 +1,47 @@
+import { LoadingButton } from '@mui/lab';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { AdminDashboardRoutes } from '@/routes/routes';
+import {
+  FormIdentifierDetailsFragment,
+  useCreateDuplicateFormDefinitionMutation,
+} from '@/types/gqlTypes';
+
+interface Props {
+  formIdentifier: FormIdentifierDetailsFragment;
+}
+
+const DuplicateFormButton: React.FC<Props> = ({ formIdentifier }) => {
+  const navigate = useNavigate();
+
+  const [duplicateForm, { loading, error }] =
+    useCreateDuplicateFormDefinitionMutation({
+      variables: { identifier: formIdentifier.identifier },
+      onCompleted: (data) => {
+        const newFormIdentifier =
+          data.createDuplicateFormDefinition?.formIdentifier?.identifier;
+        if (newFormIdentifier) {
+          navigate(
+            generatePath(AdminDashboardRoutes.VIEW_FORM, {
+              identifier: newFormIdentifier,
+            })
+          );
+        }
+      },
+    });
+
+  if (error) throw error;
+
+  return (
+    <>
+      <LoadingButton
+        onClick={() => duplicateForm()}
+        loading={loading}
+        variant='outlined'
+      >
+        Duplicate Form
+      </LoadingButton>
+    </>
+  );
+};
+
+export default DuplicateFormButton;

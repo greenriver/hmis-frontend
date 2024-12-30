@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import Loading from '@/components/elements/Loading';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessmentFormController from '@/modules/assessments/components/IndividualAssessmentFormController';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
+import LocalVersionCoordinationPrompt from '@/modules/localVersionCoordination/components/LocalVersionCoordinationPrompt';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { useGetAssessmentQuery } from '@/types/gqlTypes';
 
@@ -42,15 +43,22 @@ const IndividualAssessmentPage = () => {
   if (!assessment) return <NotFound />;
 
   return (
-    <IndividualAssessmentFormController
-      enrollment={enrollment}
-      client={client}
-      viewingDefinition={assessment.definition}
-      editingDefinition={
-        assessment.upgradedDefinitionForEditing || assessment.definition
-      }
-      assessment={assessment}
-    />
+    <>
+      <LocalVersionCoordinationPrompt
+        recordType='Assessment'
+        recordId={assessment.id}
+        currentVersion={assessment.lockVersion}
+      />
+      <IndividualAssessmentFormController
+        enrollment={enrollment}
+        client={client}
+        viewingDefinition={assessment.definition}
+        editingDefinition={
+          assessment.upgradedDefinitionForEditing || assessment.definition
+        }
+        assessment={assessment}
+      />
+    </>
   );
 };
 
