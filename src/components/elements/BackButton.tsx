@@ -7,7 +7,7 @@ const BackButton: React.FC<ButtonProps> = (props) => {
   return (
     <Button
       startIcon={<BackIcon />}
-      variant='gray'
+      color='grayscale'
       size='small'
       onClick={() => navigate(-1)}
       {...props}

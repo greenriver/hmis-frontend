@@ -288,7 +288,7 @@ const AssessmentForm: React.FC<Props> = ({
             onClick: handleUnlock,
             startIcon: <UnlockIcon />,
             size: 'large',
-            color: 'inherit',
+            color: 'grayscale',
           } as const,
         };
       })

@@ -5,7 +5,7 @@ import React from 'react';
 const ClearSearchButton: React.FC<ButtonProps> = (props) => {
   return (
     <Button
-      variant='gray'
+      color='grayscale'
       startIcon={<ClearIcon />}
       {...props}
       sx={{ px: 3, ...props.sx }}
