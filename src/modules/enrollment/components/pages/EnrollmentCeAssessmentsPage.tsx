@@ -113,6 +113,7 @@ const EnrollmentCeAssessmentsPage = () => {
       <TitleCard
         title='Coordinated Entry Assessments'
         headerVariant='border'
+        headerComponent='h1'
         actions={
           canEditCeAssessments &&
           !ceAssessmentFeature.legacy && (
