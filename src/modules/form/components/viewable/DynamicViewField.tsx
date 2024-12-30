@@ -29,7 +29,7 @@ import {
   formatTimeOfDay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { isLatLon, LatLon } from '@/types/geolocationTypes';
+import { safeParseLatLon } from '@/types/geolocationTypes';
 import {
   ClientContactPointSystem,
   Component,
@@ -38,7 +38,6 @@ import {
   ItemType,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
-import { parseJson } from '@/utils/jsonUtil';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
   const label = item.readonlyText || item.text;
@@ -276,12 +275,10 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           );
       }
     case ItemType.Geolocation:
-      // Coordinates may be stringified if collected from External Form,
-      // so try to parse value as JSON if it's not already in LatLon shape.
-      const coordinates = isLatLon(value) ? value : parseJson<LatLon>(value);
+      const coordinates = safeParseLatLon(value);
       return (
         <LabelWithContent {...commonProps}>
-          {coordinates && coordinates.latitude && coordinates.longitude ? (
+          {coordinates ? (
             <SingleGeolocationMap coordinates={coordinates} />
           ) : (
             <NotCollectedText variant='body2'>
