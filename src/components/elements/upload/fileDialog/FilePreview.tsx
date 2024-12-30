@@ -13,7 +13,6 @@ import React, { useMemo, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { FileFieldsFragment } from '@/types/gqlTypes';
 
-// or: https://github.com/wojtekmaj/react-pdf?tab=readme-ov-file#legacy-pdfjs-worker
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url
