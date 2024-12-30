@@ -9182,6 +9182,13 @@ storybook-addon-apollo-client@^7.3.0:
   resolved "https://registry.yarnpkg.com/storybook-addon-apollo-client/-/storybook-addon-apollo-client-7.3.0.tgz#d9a88def22ccbc087b4a03de145ac5956a30a3bf"
   integrity sha512-Lqp9dn9sy6LdfS4e/Dx6M7cNXXLAiHBT2LKEWynxEkrMen/sgBPRUqQz0cJiLsSVbJLKov4KzWf5359UQaPxRA==
 
+storybook-addon-pseudo-states@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/storybook-addon-pseudo-states/-/storybook-addon-pseudo-states-4.0.2.tgz#f8cb5fa07b343ec36567889e7eadf1797974852b"
+  integrity sha512-dTHkeq4VzqIrJfR8k2BHkX190cQ+aYBZUktWNZpDw3N5tJ8IwaRLzf6ZjHDHY6xwDshaNiTO5UkziRE0Ytukkw==
+  dependencies:
+    "@storybook/icons" "^1.2.10"
+
 storybook@8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/storybook/-/storybook-8.3.2.tgz#264315dd2c1df1136a3f55a8a8ad2be6988248c0"

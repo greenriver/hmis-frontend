@@ -41,7 +41,7 @@ const AssessmentAlert: React.FC<Props> = ({
         variant='contained'
         data-testid='unlockAssessmentButton'
         onClick={onUnlock}
-        color='inherit'
+        color='grayscale'
         sx={{ fontWeight: 600, width: isTiny ? '100%' : 'fit-content' }}
       >
         Unlock Assessment

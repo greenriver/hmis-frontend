@@ -78,7 +78,7 @@ const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
         </Stack>
       </DialogContent>
       <DialogActions sx={{ gap: 2 }}>
-        <Button variant='gray' onClick={onClose}>
+        <Button color='grayscale' onClick={onClose}>
           Close
         </Button>
       </DialogActions>
