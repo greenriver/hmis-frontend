@@ -55,10 +55,14 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
         {canLinkToIntake ? (
           <Stack direction='row' alignItems='center'>
             <span>{parseAndFormatDate(enrollment.entryDate)}</span>
-            <ButtonTooltipContainer title='Go to Intake Assessment'>
+            <ButtonTooltipContainer
+              describeChild
+              title='Go to Intake Assessment'
+            >
               <ButtonLink
                 to={intakePath}
                 variant='text'
+                aria-label='Go to Intake Assessment'
                 sx={{ minWidth: '30px', color: theme.palette.links }}
               >
                 <AssessmentIcon fontSize='small' />
@@ -73,10 +77,11 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
       <Box component='span'>
         <Stack direction='row' alignItems='center'>
           <span>{exitDateOrActive}</span>
-          <ButtonTooltipContainer title='Go to Exit Assessment'>
+          <ButtonTooltipContainer describeChild title='Go to Exit Assessment'>
             <ButtonLink
               to={exitPath}
               variant='text'
+              aria-label='Go to Exit Assessment'
               sx={{ minWidth: '30px', color: theme.palette.links }}
             >
               <AssessmentIcon fontSize='small' />

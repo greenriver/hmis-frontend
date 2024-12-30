@@ -9,7 +9,7 @@ const ButtonTooltipContainer = ({
 
   return (
     <Tooltip title={title} placement='top' arrow {...props}>
-      {children}
+      <span>{children}</span>
     </Tooltip>
   );
 };
