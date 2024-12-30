@@ -108,7 +108,28 @@ const EditFunderPage = ({ create = false }: { create?: boolean }) => {
       formRole={RecordFormRole.Funder}
       inputVariables={{ projectId }}
       record={funder || undefined}
-      title={titleComponent}
+      title={
+        <ProjectFormTitle
+          title={title}
+          project={project}
+          actions={
+            funder && (
+              <DeleteMutationButton<
+                DeleteFunderMutation,
+                DeleteFunderMutationVariables
+              >
+                queryDocument={DeleteFunderDocument}
+                variables={{ input: { id: funder.id } }}
+                idPath={'deleteFunder.funder.id'}
+                recordName='Funder'
+                onSuccess={onSuccessfulDelete}
+              >
+                Delete Record
+              </DeleteMutationButton>
+            )
+          }
+        />
+      }
     />
   );
 };
