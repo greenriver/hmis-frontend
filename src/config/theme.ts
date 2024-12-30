@@ -83,6 +83,12 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsColorOverrides {
+    grayscale: true;
+  }
+}
+
 // Default base theme, to be merged with overlays
 export const baseThemeDef: ThemeOptions = {
   typography: {
