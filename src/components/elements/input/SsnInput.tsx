@@ -73,7 +73,7 @@ const SsnInput = ({
           chars: 3,
           inputProps: {
             ...baseInputProps,
-            disabled: onlylast4 ? true : false,
+            disabled: baseInputProps.disabled || onlylast4 ? true : false,
             inputProps: {
               ...baseInputProps.inputProps,
               'aria-label': ariaLabel + ' first 3 digits',
@@ -96,7 +96,7 @@ const SsnInput = ({
           chars: 2,
           inputProps: {
             ...baseInputProps,
-            disabled: onlylast4 ? true : false,
+            disabled: baseInputProps.disabled || onlylast4 ? true : false,
             placeholder: 'XX',
             inputProps: {
               ...baseInputProps.inputProps,
@@ -135,6 +135,7 @@ const SsnInput = ({
           sx={{ maxWidth, ...sx }}
           label={label}
           helperText={helperText}
+          LabelProps={{ disabled: baseInputProps.disabled }}
         >
           <Box
             sx={{

@@ -420,6 +420,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               image
               onChange={onChangeValue}
               ariaLabel={item.text}
+              disabled={commonInputProps.disabled}
             />
           </LabelWithContent>
         </InputContainer>
@@ -434,6 +435,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               files={value}
               onChange={onChangeValue}
               ariaLabel={item.text}
+              disabled={commonInputProps.disabled}
             />
           </LabelWithContent>
         </InputContainer>
