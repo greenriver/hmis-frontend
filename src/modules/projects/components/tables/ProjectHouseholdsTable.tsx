@@ -273,8 +273,6 @@ const CustomDividerRow = ({ colSpan }: { colSpan: number }) => (
       sx={(theme) => {
         return {
           padding: 0,
-          // TODO - remove after confirming on PR
-          // note: color specified in designs ('#f9f9f9') is slightly lighter than grey[200] ('#eeeeee') and slightly darker than grey[100] ('#f5f5f5')
           backgroundColor: theme.palette.grey[100],
           borderTop: `1px solid ${theme.palette.borders.main}`,
           borderBottom: `1px solid ${theme.palette.borders.main}`,
