@@ -20,7 +20,7 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientCardMini from '@/modules/client/components/ClientCardMini';
 import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
-import LocalVersionCoordinationPrompt from '@/modules/localVersionCoordination/LocalVersionCoordinationPrompt';
+import LocalVersionCoordinationPrompt from '@/modules/localVersionCoordination/components/LocalVersionCoordinationPrompt';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ClientFieldsFragment, useGetClientQuery } from '@/types/gqlTypes';
 

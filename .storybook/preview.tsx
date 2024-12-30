@@ -1,8 +1,11 @@
 import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
+import { HmisAuthContext } from '@/modules/auth/AuthContext';
 import { MockedProvider } from '@apollo/client/testing';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { withThemeFromJSXProvider } from '@storybook/addon-themes';
 import en from 'date-fns/locale/en-US';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
@@ -10,12 +13,11 @@ import theme from '../src/config/theme';
 import '../src/index.css';
 import {
   AMERICAN_LAKE_HOUSE,
+  applicationUserMock,
   fakeEnrollment,
   RITA_ACKROYD,
 } from '../src/test/__mocks__/requests';
 import { RenderRouteWithOutletContext } from './components/RenderRouteWithOutletContext';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { withThemeFromJSXProvider } from '@storybook/addon-themes';
 import { ProjectDashboardContext } from '../src/modules/projects/components/ProjectDashboard';
 
 export const parameters = {
@@ -80,6 +82,11 @@ export const decorators = [
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en}>
       {Story()}
     </LocalizationProvider>
+  ),
+  (Story) => (
+    <HmisAuthContext.Provider value={{ user: applicationUserMock }}>
+      {Story()}
+    </HmisAuthContext.Provider>
   ),
   withThemeFromJSXProvider({
     themes: {

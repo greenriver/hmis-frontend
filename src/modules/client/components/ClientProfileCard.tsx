@@ -388,7 +388,9 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant='h4'>{clientNameAllParts(client)}</Typography>
+            <Typography component='h1' variant='h4'>
+              {clientNameAllParts(client)}
+            </Typography>
           </Grid>
           <Grid item xs={12} sx={{ display: 'flex', gap: 2 }}>
             {canViewClientPhoto &&

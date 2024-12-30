@@ -8,6 +8,7 @@ interface Props {
   title: ReactNode;
   sx?: TypographyProps['sx'];
   variant?: TypographyProps['variant'];
+  component?: TypographyProps['component'];
   horizontal?: boolean;
 }
 
@@ -15,6 +16,7 @@ export const CommonLabeledTextBlock: React.FC<Props> = ({
   title,
   children,
   variant = 'body2',
+  component = 'div',
   sx,
   horizontal = false,
 }) => (
@@ -25,7 +27,7 @@ export const CommonLabeledTextBlock: React.FC<Props> = ({
       ...sx,
     }}
     variant={variant}
-    component='div'
+    component={component}
   >
     <Box sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}>
       {title}

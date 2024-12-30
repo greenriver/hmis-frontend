@@ -29,7 +29,7 @@ export const FormDialogActionContent = ({
       <Stack gap={3} direction='row'>
         <Button
           onClick={onDiscard}
-          variant='gray'
+          color='grayscale'
           data-testid='cancelDialogAction'
         >
           {discardButtonText || 'Cancel'}

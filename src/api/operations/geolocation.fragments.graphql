@@ -1,0 +1,22 @@
+fragment GeolocationFields on Geolocation {
+  id
+  coordinates {
+    id
+    latitude
+    longitude
+  }
+}
+
+fragment GeolocationFieldsWithMetadata on Geolocation {
+  id
+  coordinates {
+    id
+    latitude
+    longitude
+  }
+  locatedAt
+  sourceFormName
+  collectedBy {
+    ...UserFields
+  }
+}

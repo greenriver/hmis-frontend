@@ -66,6 +66,8 @@ const MobileMenu: React.FC<Props> = ({
       })}
     >
       <Stack
+        component='nav'
+        aria-label='sidebar-nav'
         direction='row'
         sx={({ zIndex }) => ({
           boxShadow: children ? 2 : undefined,

@@ -64,9 +64,8 @@ const LocalVersionCoordinationPrompt: React.FC<Props> = ({
             onClick={handleReload}
             loading={loading}
             variant='outlined'
-            color='warning'
-            // TODO(PR#991) replace with grayscale variant
-            sx={{ backgroundColor: 'transparent', alignSelf: 'center' }}
+            color='grayscale'
+            sx={{ alignSelf: 'center' }}
           >
             Load New Data
           </LoadingButton>

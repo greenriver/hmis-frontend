@@ -79,7 +79,7 @@ const useEnrollmentSummaryDialog = ({
             />
           </DialogContent>
           <DialogActions>
-            <Button variant='gray' onClick={closeDialog}>
+            <Button color='grayscale' onClick={closeDialog}>
               Close
             </Button>
           </DialogActions>
