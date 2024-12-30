@@ -49,7 +49,9 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import { isLatLon, LatLon } from '@/types/geolocationTypes';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
+import { parseJson } from '@/utils/jsonUtil';
 
 export const getLabel = (
   item: FormItem,
@@ -439,11 +441,15 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         </InputContainer>
       );
     case ItemType.Geolocation:
+      // Coordinates may be stringified if collected from External Form,
+      // so try to parse value as JSON if it's not already in LatLon shape.
+      const coordinates = isLatLon(value) ? value : parseJson<LatLon>(value);
+
       return (
         <InputContainer {...commonContainerProps}>
           <GeolocationInput
             label={label}
-            value={value}
+            value={coordinates}
             onChange={onChangeValue}
             helperText={commonInputProps.helperText}
             disabled={commonInputProps.disabled}
