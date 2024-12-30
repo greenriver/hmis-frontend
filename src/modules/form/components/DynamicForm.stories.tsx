@@ -32,6 +32,8 @@ export default {
   ],
 } as Meta<typeof DynamicForm>;
 
+//TODO add a story where everything is disabled. you can see that some input labels are not grayed out
+
 const Template: StoryFn<typeof DynamicForm> = (args) => (
   // eslint-disable-next-line no-console
   <DynamicForm {...args} onSubmit={(values) => console.log(values)} />

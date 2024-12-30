@@ -107,7 +107,8 @@ const ContextHeader: React.FC<Props> = ({
         <Box>
           <Button
             onClick={exitFocusMode}
-            variant='transparent'
+            variant='text'
+            color='grayscale'
             startIcon={<ArrowBackIcon fontSize='small' />}
             sx={{ height: '32px', fontWeight: 600, ml: 2 }}
             data-testid='headerBackButton'
@@ -131,7 +132,8 @@ const ContextHeader: React.FC<Props> = ({
             >
               <Button
                 startIcon={<MenuIcon />}
-                variant='transparent'
+                variant='text'
+                color='grayscale'
                 onClick={handleOpenMenu}
               >
                 Menu

@@ -21,7 +21,7 @@ import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHe
 import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnrollment';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
 import { DashboardEnrollment } from '@/modules/hmis/types';
-import LocalVersionCoordinationPrompt from '@/modules/localVersionCoordination/LocalVersionCoordinationPrompt';
+import LocalVersionCoordinationPrompt from '@/modules/localVersionCoordination/components/LocalVersionCoordinationPrompt';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   DataCollectionFeature,

@@ -190,7 +190,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
           >
             <Stack direction='row' justifyContent='end' alignItems='center'>
               <Stack direction='row' gap={2}>
-                <Button variant='gray' onClick={() => reset()}>
+                <Button color='grayscale' onClick={() => reset()}>
                   Discard Changes
                 </Button>
                 <LoadingButton

@@ -100,7 +100,7 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
           id: 'discard',
           label: 'Cancel',
           action: FormActionTypes.Discard,
-          buttonProps: { variant: 'gray' } as const,
+          buttonProps: { variant: 'contained', color: 'grayscale' } as const,
         },
       ],
     };

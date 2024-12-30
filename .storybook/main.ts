@@ -42,6 +42,7 @@ const config = {
     'storybook-addon-apollo-client',
     '@chromatic-com/storybook',
     '@storybook/addon-a11y',
+    'storybook-addon-pseudo-states',
   ],
   framework: {
     name: '@storybook/react-vite',
