@@ -184,8 +184,6 @@ const FilePreview: React.FC<{ file: FileDialogProps['file'] }> = ({ file }) => {
       </Typography>
       <Box
         sx={(theme) => ({
-          backgroundColor: theme.palette.grey[300],
-          padding: 2,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

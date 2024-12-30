@@ -85,6 +85,9 @@ export default defineConfig(({ command, mode }) => {
       // Drop log statements when minifying
       pure: ['console.log', 'console.info', 'console.debug'],
     },
+    optimizeDeps: {
+      include: ['pdfjs-dist/build/pdf.worker.min.mjs'],
+    },
     test: {
       watch: false,
     },
