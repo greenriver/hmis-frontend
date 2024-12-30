@@ -44,13 +44,13 @@ export function getColorItems(palette) {
     return idx1 - idx2;
   });
 
-return entries.map(([k, v]) => {
-if (isColor(v)) {
-return <ColorItem key={k} title={k} colors={{ [k]: v }} subtitle='' />;
-} else if (typeof v === 'object') {
-const colors = extractColors(v);
-return <ColorItem key={k} title={k} colors={colors} subtitle='' />;
-}
-return null;
-});
+  return entries.map(([k, v]) => {
+    if (isColor(v)) {
+      return <ColorItem key={k} title={k} colors={{ [k]: v }} subtitle='' />;
+    } else if (typeof v === 'object') {
+      const colors = extractColors(v);
+      return <ColorItem key={k} title={k} colors={colors} subtitle='' />;
+    }
+    return null;
+  });
 }
