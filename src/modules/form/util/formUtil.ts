@@ -1494,7 +1494,7 @@ export const getFieldOnAssessment = (
 
 export const parseOccurrencePointFormDefinition = (
   definition: FormDefinitionFieldsFragment,
-  user?: HmisUser
+  user: HmisUser
 ) => {
   let displayTitle = definition.title;
 
@@ -1519,7 +1519,7 @@ export const parseOccurrencePointFormDefinition = (
         delete item.readonlyText;
       }
       if (isQuestionItem(item) && !item.readOnly) {
-        if (item.editorUserIds && user) {
+        if (item.editorUserIds) {
           isEditable = item.editorUserIds.includes(user.id);
         } else {
           isEditable = true;

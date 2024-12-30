@@ -69,7 +69,7 @@ const EnrollmentDetails = ({
       // Determine whether this form has any fields that  are editable.
       // Pass the user because there might be fields that are only editable by some users.
       const { displayTitle, isEditable, definitionForDisplay } =
-        parseOccurrencePointFormDefinition(definition, user);
+        parseOccurrencePointFormDefinition(definition, user!);
 
       content[displayTitle] = (
         <EnrollmentOccurrencePointForm
