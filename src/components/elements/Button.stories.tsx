@@ -55,14 +55,9 @@ const ButtonMatrix: React.FC<ButtonProps> = (props) => {
             {(
               ['contained', 'outlined', 'text'] as ButtonProps['variant'][]
             ).map((variant) => (
-              <Stack direction='row' gap={1}>
+              <Stack direction='row' gap={1} key={variant}>
                 {idx === 0 && <span style={{ width: '100px' }}>{variant}</span>}
-                <Button
-                  {...props}
-                  color={color}
-                  variant={variant}
-                  key={variant}
-                />
+                <Button {...props} color={color} variant={variant} />
               </Stack>
             ))}
           </Stack>
