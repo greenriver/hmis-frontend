@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,36 +62,6 @@ const EditFunderPage = ({ create = false }: { create?: boolean }) => {
       projectEndDate: parseHmisDateString(project.operatingEndDate),
     };
   }, [project]);
-
-  const titleComponent = useMemo(() => {
-    if (!create && funder) {
-      return (
-        <ProjectFormTitle
-          title={title}
-          project={project}
-          actions={
-            <DeleteMutationButton<
-              DeleteFunderMutation,
-              DeleteFunderMutationVariables
-            >
-              queryDocument={DeleteFunderDocument}
-              variables={{ input: { id: funder.id } }}
-              idPath={'deleteFunder.funder.id'}
-              recordName='Funder'
-              onSuccess={onSuccessfulDelete}
-            >
-              Delete Record
-            </DeleteMutationButton>
-          }
-        />
-      );
-    }
-    return (
-      <Typography component='h1' variant='h3'>
-        {title}
-      </Typography>
-    );
-  }, [create, funder, onSuccessfulDelete, project, title]);
 
   if (loading) return <Loading />;
   if (!create && !funder) return <NotFound />;
