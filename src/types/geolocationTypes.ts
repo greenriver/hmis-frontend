@@ -7,9 +7,7 @@ export function isLatLon(value: unknown): value is LatLon {
     typeof value === 'object' &&
     value !== null &&
     'latitude' in value &&
-    'longitude' in value &&
-    typeof value.latitude === 'number' &&
-    typeof value.longitude === 'number'
+    'longitude' in value
   );
 }
 
