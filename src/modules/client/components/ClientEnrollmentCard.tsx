@@ -3,11 +3,9 @@ import { useMemo } from 'react';
 
 import GenericTable from '@/components/elements/table/GenericTable';
 import TitleCard from '@/components/elements/TitleCard';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { isRecentEnrollment } from '@/modules/hmis/hmisUtil';
-import {
-  ENROLLMENT_PERIOD_COL,
-  ENROLLMENT_STATUS_COL,
-} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
@@ -71,14 +69,21 @@ const RecentEnrollments = ({
       noHead
       rows={recentEnrollments}
       columns={[
-        ENROLLMENT_STATUS_COL,
+        ENROLLMENT_COLUMNS.enrollmentStatus,
         {
           key: 'name',
           header: 'Name',
-          linkTreatment: true,
           render: 'projectName',
         },
-        ENROLLMENT_PERIOD_COL,
+        {
+          header: 'Enrollment Period',
+          render: (e) => (
+            <EnrollmentDateRangeWithStatus
+              enrollment={e}
+              treatIncompleteAsActive
+            />
+          ),
+        },
       ]}
       rowLinkTo={(row) =>
         row.access.canViewEnrollmentDetails

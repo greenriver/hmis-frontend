@@ -39,7 +39,6 @@ import {
   DisplayHook,
   EnrollmentFieldsFragment,
   EnrollmentOccurrencePointFieldsFragment,
-  EnrollmentSummaryFieldsFragment,
   EventFieldsFragment,
   HouseholdClientFieldsFragment,
   NoYes,
@@ -318,10 +317,7 @@ export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
     : null;
 
 export const entryExitRange = (
-  enrollment:
-    | EnrollmentFieldsFragment
-    | HouseholdClientFieldsFragment['enrollment']
-    | EnrollmentSummaryFieldsFragment,
+  enrollment: Pick<EnrollmentFieldsFragment, 'entryDate' | 'exitDate'>,
   endPlaceholder?: string
 ) => {
   return parseAndFormatDateRange(

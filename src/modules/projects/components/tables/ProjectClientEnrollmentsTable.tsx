@@ -2,10 +2,14 @@ import { Box } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import React, { useMemo } from 'react';
 
+import {
+  getViewClientAction,
+  getViewEnrollmentAction,
+} from '@/components/elements/table/tableActions/tableRowActionUtil';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import DateWithRelativeTooltip from '@/modules/hmis/components/DateWithRelativeTooltip';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
@@ -18,10 +22,6 @@ import { useProjectDashboardContext } from '@/modules/projects/components/Projec
 import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
-import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
   EnrollmentsForProjectFilterOptions,
@@ -33,32 +33,10 @@ import {
   ProjectEnrollmentFieldsFragment,
   ProjectEnrollmentQueryEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 export type EnrollmentFields = NonNullable<
   GetProjectEnrollmentsQuery['project']
 >['enrollments']['nodes'][number];
-
-export const ENROLLMENT_STATUS_COL: ColumnDef<
-  | EnrollmentFieldsFragment
-  | ProjectEnrollmentFieldsFragment
-  | ClientEnrollmentFieldsFragment
-> = {
-  header: 'Status',
-  render: (e) => <EnrollmentStatus enrollment={e} />,
-};
-
-// TODO(#6761) - this is now only used in the client card. Reorganize where column defs live
-export const ENROLLMENT_PERIOD_COL: ColumnDef<
-  | EnrollmentFieldsFragment
-  | ProjectEnrollmentFieldsFragment
-  | ClientEnrollmentFieldsFragment
-> = {
-  header: 'Enrollment Period',
-  render: (e) => (
-    <EnrollmentDateRangeWithStatus enrollment={e} treatIncompleteAsActive />
-  ),
-};
 
 const isHouseholdWithStaff = (
   e: any
@@ -68,20 +46,68 @@ const isHouseholdWithStaff = (
 
 export const ENROLLMENT_COLUMNS: {
   [key: string]: ColumnDef<
-    | EnrollmentFieldsFragment
-    | ProjectEnrollmentFieldsFragment
+    | ClientEnrollmentFieldsFragment
     | ProjectEnrollmentQueryEnrollmentFieldsFragment
   >;
 } = {
-  enrollmentStatus: ENROLLMENT_STATUS_COL,
   entryDate: {
     header: 'Entry Date',
-    render: (e) => parseAndFormatDate(e.entryDate),
+    render: (e) => (
+      <DateWithRelativeTooltip dateString={e.entryDate} preciseTime={false} />
+    ),
   },
   exitDate: {
     header: 'Exit Date',
-    render: (e) => parseAndFormatDate(e.exitDate),
+    render: (e) => {
+      if (e.exitDate)
+        return (
+          <DateWithRelativeTooltip
+            dateString={e.exitDate}
+            preciseTime={false}
+          />
+        );
+    },
   },
+  enrollmentStatus: {
+    header: 'Status',
+    render: (e) => <EnrollmentStatus enrollment={e} />,
+  },
+};
+
+export const WITH_ENROLLMENT_COLUMNS: {
+  [key: string]: ColumnDef<any>;
+} = {
+  entryDate: {
+    ...ENROLLMENT_COLUMNS.entryDate,
+    render: (objectWithEnrollment: any) => (
+      <DateWithRelativeTooltip
+        dateString={objectWithEnrollment.enrollment.entryDate}
+        preciseTime={false}
+      />
+    ),
+  },
+  exitDate: {
+    ...ENROLLMENT_COLUMNS.exitDate,
+    render: (objectWithEnrollment: any) => {
+      if (objectWithEnrollment.enrollment.exitDate)
+        return (
+          <DateWithRelativeTooltip
+            dateString={objectWithEnrollment.enrollment.exitDate}
+            preciseTime={false}
+          />
+        );
+    },
+  },
+};
+
+const COLUMNS: {
+  [key: string]: ColumnDef<
+    | EnrollmentFieldsFragment
+    | ProjectEnrollmentFieldsFragment
+    | ProjectEnrollmentQueryEnrollmentFieldsFragment
+    | ClientEnrollmentFieldsFragment
+  >;
+} = {
   lastClsDate: {
     header: 'Last Current Living Situation Date',
     key: 'lastClsDate',
@@ -137,8 +163,9 @@ const ProjectClientEnrollmentsTable = ({
         ENROLLMENT_COLUMNS.entryDate,
         ENROLLMENT_COLUMNS.exitDate,
         ENROLLMENT_COLUMNS.enrollmentStatus,
-        ...(staffAssignmentsEnabled ? [ENROLLMENT_COLUMNS.assignedStaff] : []),
+        ...(staffAssignmentsEnabled ? [COLUMNS.assignedStaff] : []),
         {
+          // todo @martha - enforce this in GenericTable
           header: <Box sx={visuallyHidden}>Actions</Box>,
           key: 'Actions',
           tableCellProps: { sx: { p: 0 } },
@@ -147,28 +174,8 @@ const ProjectClientEnrollmentsTable = ({
               <TableRowActions
                 record={row}
                 recordName={clientBriefName(row.client)}
-                primaryActionConfig={{
-                  title: 'View Enrollment',
-                  key: 'enrollment',
-                  ariaLabel: `View Enrollment, ${clientBriefName(row.client)}`,
-                  to: generateSafePath(
-                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-                    {
-                      clientId: row.client.id,
-                      enrollmentId: row.id,
-                    }
-                  ),
-                }}
-                secondaryActionConfigs={[
-                  {
-                    title: 'View Client',
-                    key: 'client',
-                    ariaLabel: `View Client, ${clientBriefName(row.client)}`,
-                    to: generateSafePath(ClientDashboardRoutes.PROFILE, {
-                      clientId: row.client.id,
-                    }),
-                  },
-                ]}
+                primaryActionConfig={getViewEnrollmentAction(row, row.client)}
+                secondaryActionConfigs={[getViewClientAction(row.client)]}
               />
             );
           },
@@ -215,10 +222,10 @@ const ProjectClientEnrollmentsTable = ({
       applyOptionalColumns={(cols) => {
         const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
 
-        if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
+        if (cols.includes(COLUMNS.lastClsDate.key || ''))
           result.includeCls = true;
 
-        if (cols.includes(ENROLLMENT_COLUMNS.assignedStaff.key || ''))
+        if (cols.includes(COLUMNS.assignedStaff.key || ''))
           result.includeStaffAssignment = true;
 
         return result;
