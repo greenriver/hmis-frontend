@@ -22,6 +22,7 @@ export type CommonMenuItem = {
   divider?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
+  openInNew?: boolean;
 };
 
 interface Props {
@@ -98,18 +99,29 @@ const CommonMenuButton = ({
         {...MenuProps}
       >
         {items.map(
-          ({ key, to, title, divider, onClick, disabled, ariaLabel }) =>
+          ({
+            key,
+            to,
+            title,
+            divider,
+            onClick,
+            disabled,
+            ariaLabel,
+            openInNew,
+          }) =>
             divider ? (
               <Divider key={key} />
             ) : to ? (
-              <MenuItem
-                key={key}
-                component={RouterLink}
-                to={to}
-                aria-label={ariaLabel}
-              >
-                {title}
-              </MenuItem>
+              <li key={key}>
+                <MenuItem
+                  component={RouterLink}
+                  to={to}
+                  aria-label={ariaLabel}
+                  openInNew={openInNew}
+                >
+                  {title}
+                </MenuItem>
+              </li>
             ) : (
               <MenuItem
                 key={key}
