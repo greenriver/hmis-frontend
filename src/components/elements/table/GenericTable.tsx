@@ -105,6 +105,18 @@ const HeaderCell = ({
   </TableCell>
 );
 
+export const renderCellContents = <T extends { id: string }>(
+  row: T,
+  render: ColumnDef<T>['render']
+) => {
+  if (isRenderFunction<T>(render)) return <>{render(row)}</>;
+  if (isPrimitive<T>(render)) {
+    const val = get(row, render);
+    if (!isNil(val)) return <>{`${val}`}</>;
+  }
+  return null;
+};
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
@@ -180,15 +192,6 @@ const GenericTable = <T extends { id: string }>({
   if (!selected) return <Loading />;
 
   if (loading && loadingVariant === 'circular') return <Loading />;
-
-  const renderCellContents = (row: T, render: ColumnDef<T>['render']) => {
-    if (isRenderFunction<T>(render)) return <>{render(row)}</>;
-    if (isPrimitive<T>(render)) {
-      const val = get(row, render);
-      if (!isNil(val)) return <>{`${val}`}</>;
-    }
-    return null;
-  };
 
   const verticalCellSx = (idx: number): SxProps<Theme> => ({
     border: (theme: Theme) => `1px solid ${theme.palette.grey[200]}`,

@@ -74,12 +74,18 @@ export const ENROLLMENT_COLUMNS: {
   },
 };
 
+type WithEnrollment = {
+  enrollment: Pick<
+    EnrollmentFieldsFragment,
+    'entryDate' | 'exitDate' | 'inProgress' | 'autoExited'
+  >;
+};
 export const WITH_ENROLLMENT_COLUMNS: {
-  [key: string]: ColumnDef<any>;
+  [key: string]: ColumnDef<WithEnrollment>;
 } = {
   entryDate: {
-    ...ENROLLMENT_COLUMNS.entryDate,
-    render: (objectWithEnrollment: any) => (
+    header: ENROLLMENT_COLUMNS.entryDate.header,
+    render: (objectWithEnrollment: WithEnrollment) => (
       <DateWithRelativeTooltip
         dateString={objectWithEnrollment.enrollment.entryDate}
         preciseTime={false}
@@ -87,8 +93,8 @@ export const WITH_ENROLLMENT_COLUMNS: {
     ),
   },
   exitDate: {
-    ...ENROLLMENT_COLUMNS.exitDate,
-    render: (objectWithEnrollment: any) => {
+    header: ENROLLMENT_COLUMNS.exitDate.header,
+    render: (objectWithEnrollment: WithEnrollment) => {
       if (objectWithEnrollment.enrollment.exitDate)
         return (
           <DateWithRelativeTooltip
@@ -97,6 +103,10 @@ export const WITH_ENROLLMENT_COLUMNS: {
           />
         );
     },
+  },
+  enrollmentStatus: {
+    header: ENROLLMENT_COLUMNS.enrollmentStatus.header,
+    render: (e) => <EnrollmentStatus enrollment={e.enrollment} />,
   },
 };
 

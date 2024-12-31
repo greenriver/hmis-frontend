@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import React, { useMemo } from 'react';
+import { renderCellContents } from '@/components/elements/table/GenericTable';
 import {
   getViewClientAction,
   getViewEnrollmentAction,
@@ -24,10 +25,7 @@ import {
   hohSort,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import {
-  ENROLLMENT_COLUMNS,
-  WITH_ENROLLMENT_COLUMNS,
-} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -76,6 +74,41 @@ export const ASSIGNED_STAFF_COL = {
   },
 };
 
+type OneHouseholdClient = HouseholdFields['householdClients'][number];
+const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
+  CLIENT_COLUMNS.name,
+  CLIENT_COLUMNS.age,
+  {
+    header: 'Relationship',
+    render: (householdClient) => (
+      <HmisEnum
+        key={householdClient.id}
+        value={householdClient.relationshipToHoH}
+        enumMap={HmisEnums.RelationshipToHoH}
+        whiteSpace='nowrap'
+      />
+    ),
+  },
+  WITH_ENROLLMENT_COLUMNS.entryDate,
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+  WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
+];
+const ACTION_COL: ColumnDef<OneHouseholdClient> = {
+  key: 'actions',
+  header: <Box sx={visuallyHidden}>Actions</Box>,
+  render: (householdClient) => (
+    <TableRowActions
+      record={householdClient}
+      recordName={clientBriefName(householdClient.client)}
+      primaryActionConfig={getViewEnrollmentAction(
+        householdClient.enrollment,
+        householdClient.client
+      )}
+      secondaryActionConfigs={[getViewClientAction(householdClient.client)]}
+    />
+  ),
+};
+
 interface ProjectHouseholdsClientRowProps {
   household: ProjectEnrollmentsHouseholdFieldsFragment;
   householdClient: ProjectEnrollmentsHouseholdClientFieldsFragment;
@@ -96,55 +129,18 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
 
   return (
     <TableRow key={household.id + householdClient.id}>
-      <TableCell role='rowheader' sx={cellSx}>
-        {(CLIENT_COLUMNS.name.render as CallableFunction)(
-          // todo @martha - fix with refactor
-          householdClient.client
-        )}
-      </TableCell>
-      <TableCell sx={cellSx}>
-        {(CLIENT_COLUMNS.age.render as CallableFunction)(
-          householdClient.client
-        )}
-      </TableCell>
-      <TableCell sx={cellSx}>
-        <HmisEnum
-          key={householdClient.id}
-          value={householdClient.relationshipToHoH}
-          enumMap={HmisEnums.RelationshipToHoH}
-          whiteSpace='nowrap'
-        />
-      </TableCell>
-      <TableCell sx={cellSx}>
-        {(WITH_ENROLLMENT_COLUMNS.entryDate.render as CallableFunction)(
-          householdClient
-        )}
-      </TableCell>
-      <TableCell sx={cellSx}>
-        {(WITH_ENROLLMENT_COLUMNS.exitDate.render as CallableFunction)(
-          householdClient
-        )}
-      </TableCell>
-      <TableCell sx={cellSx}>
-        {(ENROLLMENT_COLUMNS.enrollmentStatus.render as CallableFunction)(
-          householdClient.enrollment
-        )}
-      </TableCell>
+      {BASE_COLUMNS.map((col, i) => (
+        <TableCell role={i === 0 ? 'rowheader' : undefined} sx={cellSx}>
+          {renderCellContents(householdClient, col.render)}
+        </TableCell>
+      ))}
       {showAssignedStaff && (
         <TableCell sx={cellSx}>
-          {ASSIGNED_STAFF_COL.render(household)}
+          {renderCellContents(household, ASSIGNED_STAFF_COL.render)}
         </TableCell>
       )}
       <TableCell sx={cellSx}>
-        <TableRowActions
-          record={householdClient}
-          recordName={clientBriefName(householdClient.client)}
-          primaryActionConfig={getViewEnrollmentAction(
-            householdClient.enrollment,
-            householdClient.client
-          )}
-          secondaryActionConfigs={[getViewClientAction(householdClient.client)]}
-        />
+        {renderCellContents(householdClient, ACTION_COL.render)}
       </TableCell>
     </TableRow>
   );
@@ -186,26 +182,20 @@ const ProjectHouseholdsTable = ({
     project: { staffAssignmentsEnabled },
   } = useProjectDashboardContext();
 
-  const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(
-    () => [
-      // These column defs get empty render functions because we use renderRow to show each household member as an individual row.
-      { header: 'Client Name', render: () => '' },
-      { header: 'Age', render: () => '' },
-      { header: 'Relationship', render: () => '' },
-      { header: 'Entry Date', render: () => '' },
-      { header: 'Exit Date', render: () => '' },
-      { header: 'Status', render: () => '' },
-      ...(staffAssignmentsEnabled
-        ? [{ ...ASSIGNED_STAFF_COL, render: () => '' }]
-        : []),
-      {
-        key: 'actions',
-        header: <Box sx={visuallyHidden}>Actions</Box>,
-        render: () => '',
-      },
-    ],
-    [staffAssignmentsEnabled]
-  );
+  // dummy column defs for Household that are only used for the headers, not for rendering cells
+  const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
+    return [
+      ...BASE_COLUMNS,
+      ...(staffAssignmentsEnabled ? [ASSIGNED_STAFF_COL] : []),
+      ACTION_COL,
+    ].map(({ header, key, optional, defaultHidden }) => ({
+      header,
+      key,
+      optional,
+      defaultHidden,
+      render: () => null,
+    }));
+  }, [staffAssignmentsEnabled]);
 
   const filters = useFilters({
     type: 'HouseholdFilterOptions',

@@ -44,6 +44,7 @@ import {
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
+  ProjectEnrollmentsHouseholdClientFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
@@ -55,6 +56,7 @@ function asClient(
     | ClientFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
+    | ProjectEnrollmentsHouseholdClientFieldsFragment
 ) {
   if (isHouseholdClient(record)) return record.client;
   if (isEnrollment(record)) return record.client;
@@ -65,6 +67,7 @@ export const CLIENT_COLUMNS: {
     | ClientFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
+    | ProjectEnrollmentsHouseholdClientFieldsFragment
   >;
 } = {
   id: { header: 'HMIS ID', render: 'id' },
