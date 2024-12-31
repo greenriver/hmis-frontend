@@ -73,6 +73,7 @@ const RecentEnrollments = ({
         {
           key: 'name',
           header: 'Name',
+          linkTreatment: true,
           render: 'projectName',
         },
         {
