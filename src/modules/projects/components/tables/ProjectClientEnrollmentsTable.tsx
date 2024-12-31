@@ -1,5 +1,8 @@
-import { useCallback, useMemo } from 'react';
+import { Box } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
+import React, { useMemo } from 'react';
 
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
@@ -128,17 +131,49 @@ const ProjectClientEnrollmentsTable = ({
 
   const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
-      const cols = [
+      return [
         CLIENT_COLUMNS.name,
         CLIENT_COLUMNS.age,
         ENROLLMENT_COLUMNS.entryDate,
         ENROLLMENT_COLUMNS.exitDate,
         ENROLLMENT_COLUMNS.enrollmentStatus,
+        ...(staffAssignmentsEnabled ? [ENROLLMENT_COLUMNS.assignedStaff] : []),
+        {
+          header: <Box sx={visuallyHidden}>Actions</Box>,
+          key: 'Actions',
+          tableCellProps: { sx: { p: 0 } },
+          render: (row: ProjectEnrollmentQueryEnrollmentFieldsFragment) => {
+            return (
+              <TableRowActions
+                record={row}
+                recordName={clientBriefName(row.client)}
+                primaryActionConfig={{
+                  title: 'View Enrollment',
+                  key: 'enrollment',
+                  ariaLabel: `View Enrollment, ${clientBriefName(row.client)}`,
+                  to: generateSafePath(
+                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                    {
+                      clientId: row.client.id,
+                      enrollmentId: row.id,
+                    }
+                  ),
+                }}
+                secondaryActionConfigs={[
+                  {
+                    title: 'View Client',
+                    key: 'client',
+                    ariaLabel: `View Client, ${clientBriefName(row.client)}`,
+                    to: generateSafePath(ClientDashboardRoutes.PROFILE, {
+                      clientId: row.client.id,
+                    }),
+                  },
+                ]}
+              />
+            );
+          },
+        },
       ];
-
-      if (staffAssignmentsEnabled) cols.push(ENROLLMENT_COLUMNS.assignedStaff);
-
-      return cols;
     }, [staffAssignmentsEnabled]);
 
   const filters = useFilters({
@@ -150,33 +185,6 @@ const ProjectClientEnrollmentsTable = ({
     ],
     pickListArgs: { projectId: projectId },
   });
-
-  const getTableRowActions = useCallback(
-    (enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment) => {
-      return {
-        primaryAction: {
-          title: 'View Enrollment',
-          key: 'enrollment',
-          ariaLabel: `View Enrollment, ${clientBriefName(enrollment.client)}`,
-          to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-            clientId: enrollment.client.id,
-            enrollmentId: enrollment.id,
-          }),
-        },
-        secondaryActions: [
-          {
-            title: 'View Client',
-            key: 'client',
-            ariaLabel: `View Client, ${clientBriefName(enrollment.client)}`,
-            to: generateSafePath(ClientDashboardRoutes.PROFILE, {
-              clientId: enrollment.client.id,
-            }),
-          },
-        ],
-      };
-    },
-    []
-  );
 
   return (
     <GenericTableWithData<
@@ -215,10 +223,6 @@ const ProjectClientEnrollmentsTable = ({
 
         return result;
       }}
-      getTableRowActions={getTableRowActions}
-      getRowAccessibleName={(
-        enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment
-      ) => clientBriefName(enrollment.client)}
     />
   );
 };

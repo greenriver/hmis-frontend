@@ -73,32 +73,6 @@ export const ASSIGNED_STAFF_COL = {
   },
 };
 
-const getTableRowActions = (
-  record: ProjectEnrollmentsHouseholdClientFieldsFragment
-) => {
-  return {
-    primaryAction: {
-      title: 'View Enrollment',
-      key: 'enrollment',
-      ariaLabel: `View Enrollment, ${clientBriefName(record.client)}`,
-      to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-        clientId: record.client.id,
-        enrollmentId: record.enrollment.id,
-      }),
-    },
-    secondaryActions: [
-      {
-        title: 'View Client',
-        key: 'client',
-        ariaLabel: `View Client, ${clientBriefName(record.client)}`,
-        to: generateSafePath(ClientDashboardRoutes.PROFILE, {
-          clientId: record.client.id,
-        }),
-      },
-    ],
-  };
-};
-
 interface ProjectHouseholdsClientRowProps {
   household: ProjectEnrollmentsHouseholdFieldsFragment;
   householdClient: ProjectEnrollmentsHouseholdClientFieldsFragment;
@@ -152,7 +126,28 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
         <TableRowActions
           record={householdClient}
           recordName={clientBriefName(householdClient.client)}
-          getActions={getTableRowActions}
+          primaryActionConfig={{
+            title: 'View Enrollment',
+            key: 'enrollment',
+            ariaLabel: `View Enrollment, ${clientBriefName(householdClient.client)}`,
+            to: generateSafePath(
+              EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+              {
+                clientId: householdClient.client.id,
+                enrollmentId: householdClient.enrollment.id,
+              }
+            ),
+          }}
+          secondaryActionConfigs={[
+            {
+              title: 'View Client',
+              key: 'client',
+              ariaLabel: `View Client, ${clientBriefName(householdClient.client)}`,
+              to: generateSafePath(ClientDashboardRoutes.PROFILE, {
+                clientId: householdClient.client.id,
+              }),
+            },
+          ]}
         />
       </TableCell>
     </TableRow>
