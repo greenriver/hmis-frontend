@@ -719,6 +719,7 @@ export const gqlValueToFormValue = (
       }
       return getOptionValue(value, item);
     case ItemType.File:
+    case ItemType.Image:
       // Use full File object in form to display metadata.
       // The metadata fields wont be submitted because of the `formValueToGqlValue`
       // logic which will transform the file object into an ID before submitting it back.
