@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   AutocompleteProps,
+  Chip,
   CircularProgress,
   InputAdornment,
 } from '@mui/material';
@@ -83,6 +84,21 @@ const GenericSelect = <
           label={label}
         />
       )}
+      renderTags={(tagValue, getTagProps, ownerState) =>
+        // Augment the accessible text so that it's clear to screenreader users how they can remove options.
+        // TODO - do we want to open an issue in MUI repo?
+        // https://github.com/open-path/hmis-accessibility/issues/37
+        tagValue.map((option: T, index: number) => {
+          return (
+            <Chip
+              size='small'
+              label={ownerState.getOptionLabel(option)}
+              aria-label={`Option: ${ownerState.getOptionLabel(option)}. Press backspace or delete to remove.`}
+              {...getTagProps({ index })}
+            />
+          );
+        })
+      }
       {...rest}
     />
   );
