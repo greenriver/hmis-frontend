@@ -35,8 +35,7 @@ const ClientPrintHeader = ({
     </Typography>
     {enrollment && (
       <>
-        {enrollment.relationshipToHoH !==
-          RelationshipToHoH.DataNotCollected && (
+        {enrollment.relationshipToHoH && (
           <HmisEnum
             variant='body2'
             value={enrollment.relationshipToHoH}

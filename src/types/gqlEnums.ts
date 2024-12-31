@@ -1531,7 +1531,6 @@ export const HmisEnums = {
     SPOUSE_OR_PARTNER: 'Spouse or partner',
     OTHER_RELATIVE: 'Other relative',
     UNRELATED_HOUSEHOLD_MEMBER: 'Unrelated household member',
-    DATA_NOT_COLLECTED: 'Data not collected',
   },
   ReminderTopic: {
     aged_into_adulthood: 'aged_into_adulthood',

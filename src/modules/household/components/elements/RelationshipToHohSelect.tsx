@@ -1,6 +1,4 @@
 import { Typography } from '@mui/material';
-import { omit } from 'lodash-es';
-import { useMemo } from 'react';
 
 import GenericSelect, {
   GenericSelectProps,
@@ -13,34 +11,30 @@ export type Option = { value: RelationshipToHoH; label: string };
 export interface Props
   extends Omit<GenericSelectProps<Option, false, false>, 'options' | 'value'> {
   value: RelationshipToHoH | null;
-  showDataNotCollected?: boolean;
 }
+
+const relationshipToHohOptions = Object.entries(HmisEnums.RelationshipToHoH)
+  .filter(
+    ([k]) =>
+      // HoH is not a valid option, since it is selected using the radio buttons
+      k !== RelationshipToHoH.SelfHeadOfHousehold &&
+      // Invalid is not a valid option
+      k !== RelationshipToHoH.Invalid
+  )
+  .map(
+    ([value, label]) =>
+      ({
+        value,
+        label,
+      }) as Option
+  );
 
 const RelationshipToHohSelect = ({
   disabled,
   value,
-  showDataNotCollected = false,
+  textInputProps,
   ...props
 }: Props) => {
-  const relationshipToHohOptions = useMemo(() => {
-    const excluded = [
-      RelationshipToHoH.SelfHeadOfHousehold,
-      RelationshipToHoH.Invalid,
-    ];
-    if (!showDataNotCollected)
-      excluded.push(RelationshipToHoH.DataNotCollected);
-
-    const filtered = omit(HmisEnums.RelationshipToHoH, excluded);
-    const options = Object.entries(filtered).map(
-      ([value, label]) =>
-        ({
-          value,
-          label,
-        }) as Option
-    );
-    return options;
-  }, [showDataNotCollected]);
-
   // disabled if HoH is selected
   const isHoH = value === RelationshipToHoH.SelfHeadOfHousehold;
   const isDisabled = disabled || isHoH;
@@ -52,15 +46,12 @@ const RelationshipToHohSelect = ({
       </Typography>
     );
   }
+
   return (
     <GenericSelect<Option, false, false>
       options={relationshipToHohOptions}
       disabled={isDisabled}
-      textInputProps={{
-        placeholder: isHoH
-          ? HmisEnums.RelationshipToHoH[value]
-          : 'Select relationship',
-      }}
+      textInputProps={{ placeholder: 'Select Relationship', ...textInputProps }}
       value={
         value && !isHoH
           ? relationshipToHohOptions.find((el) => el.value === value) || null

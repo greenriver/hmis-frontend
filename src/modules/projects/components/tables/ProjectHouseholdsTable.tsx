@@ -106,20 +106,14 @@ export const HOUSEHOLD_COLUMNS: {
     header: 'Relationship to HoH',
     render: (hh) => (
       <TableCellContainer>
-        {hh.householdClients.map((c) =>
-          c.relationshipToHoH === RelationshipToHoH.DataNotCollected ? (
-            <Typography variant='body2' key={c.id}>
-              &#160;
-            </Typography>
-          ) : (
-            <HmisEnum
-              key={c.id}
-              value={c.relationshipToHoH}
-              enumMap={HmisEnums.RelationshipToHoH}
-              whiteSpace='nowrap'
-            />
-          )
-        )}
+        {hh.householdClients.map((c) => (
+          <HmisEnum
+            key={c.id}
+            value={c.relationshipToHoH}
+            enumMap={HmisEnums.RelationshipToHoH}
+            whiteSpace='nowrap'
+          />
+        ))}
       </TableCellContainer>
     ),
   },
