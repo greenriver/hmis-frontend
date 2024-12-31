@@ -67,11 +67,11 @@ export interface Props<T> {
   >;
   filterToolbar?: ReactNode;
   noData?: ReactNode;
+  // columnKeys contains the keys of columns currently rendered, so renderRow knows about which optional columns are shown/hidden.
   renderRow?: (row: T, columnKeys: string[]) => ReactNode;
   // TableBodyComponent can be overridden. This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
   TableBodyComponent?: ComponentType | keyof JSX.IntrinsicElements;
   injectBelowRows?: ReactNode; // component to inject below all rendered rows, above footer
-  getRowAccessibleName?: (row: T) => string; // todo @martha - unused?
 }
 
 const clickableRowStyles = {
@@ -313,8 +313,9 @@ const GenericTable = <T extends { id: string }>({
             {!vertical &&
               rows.map((row) => {
                 // prop to completely take over row rendering
-                if (renderRow)
+                if (renderRow) {
                   return renderRow(row, compact(columns.map((c) => c.key)));
+                }
 
                 const isSelectable =
                   selectable && (isRowSelectable ? isRowSelectable(row) : true);

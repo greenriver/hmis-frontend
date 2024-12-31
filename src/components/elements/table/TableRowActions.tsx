@@ -6,9 +6,11 @@ import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
 interface TableRowActionsProps<T> {
   record: T;
   recordName?: string;
-  // todo @martha - add some commentary here
+  // Use primaryActionConfig if the primary action is a simple navigation that can be represented by a CommonMenuItem
   primaryActionConfig?: CommonMenuItem;
+  // Use primaryAction if the primary action needs to be customized
   primaryAction?: ReactNode;
+  // Secondary actions are assumed to all be simple
   secondaryActionConfigs?: CommonMenuItem[];
 }
 
@@ -24,6 +26,7 @@ const TableRowActions = <T extends { id: string }>({
     [record.id, recordName]
   );
 
+  // todo @martha - still needed?
   const secondariesWithAria = useMemo(
     () =>
       secondaryActionConfigs?.map((s) => {
