@@ -175,7 +175,7 @@ const ProjectClientEnrollmentsTable = ({
         ENROLLMENT_COLUMNS.enrollmentStatus,
         ...(staffAssignmentsEnabled ? [COLUMNS.assignedStaff] : []),
         {
-          // todo @martha - enforce this in GenericTable
+          // TODO(#6761) - enforce header-less columns always have accessible text in GenericTable
           header: <Box sx={visuallyHidden}>Actions</Box>,
           key: 'Actions',
           tableCellProps: { sx: { p: 0 } },
