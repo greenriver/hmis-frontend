@@ -47,7 +47,6 @@ const GenericSelect = <
 
   return (
     <Autocomplete
-      disablePortal // https://mui.com/material-ui/react-autocomplete/#ios-voiceover
       options={options}
       value={value}
       slotProps={{
