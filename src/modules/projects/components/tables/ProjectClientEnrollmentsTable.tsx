@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Chip, Tooltip } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import React, { useMemo } from 'react';
 
@@ -19,7 +19,6 @@ import {
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import {
   ClientEnrollmentFieldsFragment,
@@ -71,6 +70,38 @@ export const ENROLLMENT_COLUMNS: {
   enrollmentStatus: {
     header: 'Status',
     render: (e) => <EnrollmentStatus enrollment={e} />,
+  },
+};
+
+export const ASSIGNED_STAFF_COL = {
+  header: 'Assigned Staff',
+  optional: true,
+  defaultHidden: true,
+  key: 'assigned_staff',
+  render: (hh: HouseholdWithStaffAssignmentsFragment) => {
+    if (!hh.staffAssignments?.nodes.length) return;
+
+    const allNames = hh.staffAssignments.nodes.map(
+      (staffAssignment) => staffAssignment.user.name
+    );
+
+    const first = allNames[0];
+    const rest = allNames.slice(1);
+
+    return (
+      <Box aria-label={allNames.join(', ')}>
+        {first}{' '}
+        {rest.length > 0 && (
+          <Tooltip arrow title={rest.join(', ')}>
+            <Chip
+              sx={{ mb: 0.5 }}
+              size='small'
+              label={`+${rest.length} more`}
+            />
+          </Tooltip>
+        )}
+      </Box>
+    );
   },
 };
 

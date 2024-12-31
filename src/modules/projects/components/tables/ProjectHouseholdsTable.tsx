@@ -1,11 +1,4 @@
-import {
-  Box,
-  Chip,
-  TableBody,
-  TableCell,
-  TableRow,
-  Tooltip,
-} from '@mui/material';
+import { Box, TableBody, TableCell, TableRow } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import React, { useMemo } from 'react';
 import { renderCellContents } from '@/components/elements/table/GenericTable';
@@ -25,7 +18,10 @@ import {
   hohSort,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import {
+  ASSIGNED_STAFF_COL,
+  WITH_ENROLLMENT_COLUMNS,
+} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -33,7 +29,6 @@ import {
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
   HouseholdFilterOptions,
-  HouseholdWithStaffAssignmentsFragment,
   ProjectEnrollmentsHouseholdClientFieldsFragment,
   ProjectEnrollmentsHouseholdFieldsFragment,
 } from '@/types/gqlTypes';
@@ -41,38 +36,6 @@ import {
 export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
 >['households']['nodes'][number];
-
-export const ASSIGNED_STAFF_COL = {
-  header: 'Assigned Staff',
-  optional: true,
-  defaultHidden: true,
-  key: 'assigned_staff',
-  render: (hh: HouseholdWithStaffAssignmentsFragment) => {
-    if (!hh.staffAssignments?.nodes.length) return;
-
-    const allNames = hh.staffAssignments.nodes.map(
-      (staffAssignment) => staffAssignment.user.name
-    );
-
-    const first = allNames[0];
-    const rest = allNames.slice(1);
-
-    return (
-      <Box aria-label={allNames.join(', ')}>
-        {first}{' '}
-        {rest.length > 0 && (
-          <Tooltip arrow title={rest.join(', ')}>
-            <Chip
-              sx={{ mb: 0.5 }}
-              size='small'
-              label={`+${rest.length} more`}
-            />
-          </Tooltip>
-        )}
-      </Box>
-    );
-  },
-};
 
 type OneHouseholdClient = HouseholdFields['householdClients'][number];
 const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
