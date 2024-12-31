@@ -17,7 +17,6 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import { compact, get, includes, isNil, without } from 'lodash-es';
 import {
   ComponentType,
@@ -41,9 +40,6 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
-import TableRowActions, {
-  TableRowActionsType,
-} from '@/components/elements/table/TableRowActions';
 
 export interface Props<T> {
   rows: T[];
@@ -52,7 +48,6 @@ export interface Props<T> {
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
-  loadingRegardlessOfData?: boolean; // needed for correctly updating AssignBulkService button
   loadingVariant?: 'circular' | 'linear';
   tablePaginationProps?: TablePaginationProps;
   tableContainerProps?: TableContainerProps;
@@ -76,8 +71,7 @@ export interface Props<T> {
   // TableBodyComponent can be overridden. This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
   TableBodyComponent?: ComponentType | keyof JSX.IntrinsicElements;
   injectBelowRows?: ReactNode; // component to inject below all rendered rows, above footer
-  getTableRowActions?: (record: T, loading?: boolean) => TableRowActionsType;
-  getRowAccessibleName?: (row: T) => string;
+  getRowAccessibleName?: (row: T) => string; // todo @martha - unused?
 }
 
 const clickableRowStyles = {
@@ -115,7 +109,6 @@ const GenericTable = <T extends { id: string }>({
   columns: columnProp,
   paginated = false,
   loading = false,
-  loadingRegardlessOfData = false,
   vertical = false,
   renderVerticalHeaderCell,
   tablePaginationProps,
@@ -135,8 +128,6 @@ const GenericTable = <T extends { id: string }>({
   loadingVariant = 'circular',
   TableBodyComponent = TableBody,
   injectBelowRows,
-  getTableRowActions,
-  getRowAccessibleName,
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -203,8 +194,7 @@ const GenericTable = <T extends { id: string }>({
   const key = (def: ColumnDef<T>) =>
     def.key || (typeof def.header === 'string' ? def.header : '');
 
-  const fullColSpan =
-    columns.length + (selectable ? 1 : 0) + (getTableRowActions ? 1 : 0);
+  const fullColSpan = columns.length + (selectable ? 1 : 0);
   const tableHead = noHead ? null : vertical ? (
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
@@ -252,11 +242,6 @@ const GenericTable = <T extends { id: string }>({
               <strong>{def.header}</strong>
             </HeaderCell>
           ))}
-          {getTableRowActions && (
-            <HeaderCell>
-              <Box sx={visuallyHidden}>Actions</Box>
-            </HeaderCell>
-          )}
         </TableRow>
       )}
       {loading && loadingVariant === 'linear' && (
@@ -460,20 +445,6 @@ const GenericTable = <T extends { id: string }>({
                         </TableCell>
                       );
                     })}
-                    {getTableRowActions && (
-                      <TableCell sx={{ py: 0 }}>
-                        <TableRowActions
-                          record={row}
-                          recordName={
-                            getRowAccessibleName
-                              ? getRowAccessibleName(row)
-                              : row.id
-                          }
-                          getActions={getTableRowActions}
-                          loading={loadingRegardlessOfData}
-                        />
-                      </TableCell>
-                    )}
                   </TableRow>
                 );
               })}

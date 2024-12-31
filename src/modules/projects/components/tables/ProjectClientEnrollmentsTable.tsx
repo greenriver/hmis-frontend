@@ -1,9 +1,12 @@
-import { useMemo } from 'react';
+import { Box } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
+import React, { useMemo } from 'react';
 
 import {
   getViewClientAction,
   getViewEnrollmentAction,
 } from '@/components/elements/table/tableActions/tableRowActionUtil';
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import DateWithRelativeTooltip from '@/modules/hmis/components/DateWithRelativeTooltip';
@@ -11,7 +14,6 @@ import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   clientBriefName,
-  entryExitRange,
   formatDateForDisplay,
   formatDateForGql,
   parseAndFormatDate,
@@ -129,15 +131,6 @@ const COLUMNS: {
   },
 };
 
-const getTableRowActions = (
-  enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment
-) => {
-  return {
-    primaryAction: getViewEnrollmentAction(enrollment, enrollment.client),
-    secondaryActions: [getViewClientAction(enrollment.client)],
-  };
-};
-
 const ProjectClientEnrollmentsTable = ({
   projectId,
   columns,
@@ -164,17 +157,29 @@ const ProjectClientEnrollmentsTable = ({
 
   const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
-      const cols = [
+      return [
         CLIENT_COLUMNS.name,
         CLIENT_COLUMNS.age,
         ENROLLMENT_COLUMNS.entryDate,
         ENROLLMENT_COLUMNS.exitDate,
         ENROLLMENT_COLUMNS.enrollmentStatus,
+        ...(staffAssignmentsEnabled ? [COLUMNS.assignedStaff] : []),
+        {
+          header: <Box sx={visuallyHidden}>Actions</Box>,
+          key: 'Actions',
+          tableCellProps: { sx: { p: 0 } },
+          render: (row: ProjectEnrollmentQueryEnrollmentFieldsFragment) => {
+            return (
+              <TableRowActions
+                record={row}
+                recordName={clientBriefName(row.client)}
+                primaryActionConfig={getViewEnrollmentAction(row, row.client)}
+                secondaryActionConfigs={[getViewClientAction(row.client)]}
+              />
+            );
+          },
+        },
       ];
-
-      if (staffAssignmentsEnabled) cols.push(COLUMNS.assignedStaff);
-
-      return cols;
     }, [staffAssignmentsEnabled]);
 
   const filters = useFilters({
@@ -224,12 +229,6 @@ const ProjectClientEnrollmentsTable = ({
 
         return result;
       }}
-      getTableRowActions={getTableRowActions}
-      getRowAccessibleName={(
-        enrollment: ProjectEnrollmentQueryEnrollmentFieldsFragment
-      ) =>
-        `${clientBriefName(enrollment.client)} ${entryExitRange(enrollment)}`
-      }
     />
   );
 };

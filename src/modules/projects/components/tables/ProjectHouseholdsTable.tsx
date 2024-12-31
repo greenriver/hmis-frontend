@@ -76,15 +76,6 @@ export const ASSIGNED_STAFF_COL = {
   },
 };
 
-const getTableRowActions = (
-  record: ProjectEnrollmentsHouseholdClientFieldsFragment
-) => {
-  return {
-    primaryAction: getViewEnrollmentAction(record.enrollment, record.client),
-    secondaryActions: [getViewClientAction(record.client)],
-  };
-};
-
 interface ProjectHouseholdsClientRowProps {
   household: ProjectEnrollmentsHouseholdFieldsFragment;
   householdClient: ProjectEnrollmentsHouseholdClientFieldsFragment;
@@ -147,7 +138,11 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
         <TableRowActions
           record={householdClient}
           recordName={clientBriefName(householdClient.client)}
-          getActions={getTableRowActions}
+          primaryActionConfig={getViewEnrollmentAction(
+            householdClient.enrollment,
+            householdClient.client
+          )}
+          secondaryActionConfigs={[getViewClientAction(householdClient.client)]}
         />
       </TableCell>
     </TableRow>
