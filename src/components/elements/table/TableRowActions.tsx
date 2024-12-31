@@ -1,51 +1,47 @@
 import { Stack } from '@mui/material';
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import ButtonLink from '../ButtonLink';
 import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
-
-export type TableRowActionsType = {
-  primaryAction?: CommonMenuItem;
-  secondaryActions?: CommonMenuItem[];
-};
 
 interface TableRowActionsProps<T> {
   record: T;
   recordName?: string;
-  getActions: (record: T) => TableRowActionsType;
+  // todo @martha - add some commentary here
+  primaryActionConfig?: CommonMenuItem;
+  primaryAction?: ReactNode;
+  secondaryActionConfigs?: CommonMenuItem[];
 }
 
 const TableRowActions = <T extends { id: string }>({
   record,
   recordName,
-  getActions,
+  primaryAction,
+  primaryActionConfig,
+  secondaryActionConfigs,
 }: TableRowActionsProps<T>) => {
   const accessibleName = useMemo(
     () => recordName || record.id,
     [record.id, recordName]
   );
 
-  const { primaryAction, secondaryActions } = useMemo(
-    () => getActions(record),
-    [getActions, record]
-  );
-
   return (
     <Stack direction='row' alignItems='center' justifyContent='end' gap={0.5}>
-      {!!primaryAction && (
+      {!!primaryActionConfig && (
         <ButtonLink
-          to={primaryAction.to || ''}
+          to={primaryActionConfig.to || ''}
           size='small'
           variant='outlined'
-          aria-label={primaryAction.ariaLabel}
+          aria-label={primaryActionConfig.ariaLabel}
         >
-          {primaryAction.title}
+          {primaryActionConfig.title}
         </ButtonLink>
       )}
-      {!!secondaryActions && secondaryActions.length > 0 && (
+      {primaryAction}
+      {!!secondaryActionConfigs && secondaryActionConfigs.length > 0 && (
         <CommonMenuButton
           iconButton
           title='Actions'
-          items={secondaryActions}
+          items={secondaryActionConfigs}
           ButtonProps={{
             'aria-label': `Action menu for ${accessibleName}`,
           }}
