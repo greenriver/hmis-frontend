@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import RouterLink from '@/components/elements/RouterLink';
@@ -26,13 +26,16 @@ const AssessmentTitle = ({
   exitDate,
 }: AssessmentTitleProps) => {
   return (
-    <>
-      <Typography variant='h4'>{clientName}</Typography>
+    <Stack gap={1} component='h1' sx={{ m: 0 }}>
+      <Typography variant='h4' component='span'>
+        {clientName}
+      </Typography>
 
       <CommonLabeledTextBlock
         title={assessmentTitle + ':'}
         horizontal
         variant='body1'
+        component='span'
       >
         <RouterLink
           to={generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
@@ -44,7 +47,7 @@ const AssessmentTitle = ({
           {projectName} ({parseAndFormatDateRange(entryDate, exitDate)})
         </RouterLink>
       </CommonLabeledTextBlock>
-    </>
+    </Stack>
   );
 };
 

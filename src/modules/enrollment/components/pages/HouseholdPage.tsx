@@ -19,6 +19,7 @@ const HouseholdPage = () => {
     <TitleCard
       title='Household'
       headerVariant='border'
+      headerComponent='h1'
       actions={
         <CommonLabeledTextBlock title='Household ID' horizontal>
           <ClickToCopyId value={enrollment.householdId} />

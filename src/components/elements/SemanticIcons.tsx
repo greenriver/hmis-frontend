@@ -25,6 +25,7 @@ import LineStyleIcon from '@mui/icons-material/LineStyle';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MediationRoundedIcon from '@mui/icons-material/MediationRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
 import PeopleIcon from '@mui/icons-material/People';
 import Person from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -60,6 +61,7 @@ export {
   AddIcon as AddIcon,
   CloseIcon as CloseIcon,
   MoreVertRoundedIcon as MoreMenuIcon,
+  MyLocationIcon as MyLocationIcon,
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,

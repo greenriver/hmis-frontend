@@ -185,7 +185,11 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
         )}
       </DialogContent>
       <DialogActions sx={{ gap: 2 }}>
-        <Button variant='gray' onClick={handleClose} disabled={mutationLoading}>
+        <Button
+          color='grayscale'
+          onClick={handleClose}
+          disabled={mutationLoading}
+        >
           Cancel
         </Button>
         <LoadingButton

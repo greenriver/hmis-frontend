@@ -125,6 +125,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       <TitleCard
         title='Current Living Situations'
         headerVariant='border'
+        headerComponent='h1'
         actions={
           canEditCls ? (
             <Button

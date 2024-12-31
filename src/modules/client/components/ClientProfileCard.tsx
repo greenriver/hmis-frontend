@@ -14,15 +14,16 @@ import {
 } from '@mui/material';
 import { useCallback, useRef, useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import ClientAddress from './ClientAddress';
 import ClientCardImageElement from './ClientCardImageElement';
 import ClientContactPoint from './ClientContactPoint';
-import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
+import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
@@ -369,6 +370,13 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
 
   const size = 175;
 
+  const navigate = useNavigate();
+  const handleOpenClientForm = useCallback(() => {
+    navigate(
+      generateSafePath(ClientDashboardRoutes.EDIT, { clientId: client.id })
+    );
+  }, [navigate, client.id]);
+
   return (
     <Box>
       <Card
@@ -380,7 +388,9 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant='h4'>{clientNameAllParts(client)}</Typography>
+            <Typography component='h1' variant='h4'>
+              {clientNameAllParts(client)}
+            </Typography>
           </Grid>
           <Grid item xs={12} sx={{ display: 'flex', gap: 2 }}>
             {canViewClientPhoto &&
@@ -427,18 +437,17 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
                   id={client.id}
                   permissions='canEditClient'
                 >
-                  <ButtonLink
+                  <ClientForceRefetchButton
+                    clientId={client.id}
+                    onClick={handleOpenClientForm}
                     data-testid='editClientButton'
                     startIcon={<PersonIcon />}
                     variant='outlined'
                     color='primary'
                     fullWidth
-                    to={generateSafePath(ClientDashboardRoutes.EDIT, {
-                      clientId: client.id,
-                    })}
                   >
                     Update Client Details
-                  </ButtonLink>
+                  </ClientForceRefetchButton>
                 </ClientPermissionsFilter>
                 {client.dateUpdated && (
                   <Typography

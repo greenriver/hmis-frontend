@@ -56,7 +56,7 @@ const EditFilePage = ({ create = false }: { create?: boolean }) => {
       pickListArgs={pickListArgs}
       title={
         <Stack direction={'row'} spacing={2}>
-          <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+          <Typography component='h1' variant='h3' sx={{ pt: 0, mt: 0 }}>
             {title}
           </Typography>
         </Stack>

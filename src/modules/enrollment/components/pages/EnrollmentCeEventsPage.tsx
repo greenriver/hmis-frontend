@@ -101,6 +101,7 @@ const EnrollmentCeEventsPage = () => {
       <TitleCard
         title='Coordinated Entry Events'
         headerVariant='border'
+        headerComponent='h1'
         actions={
           canEditCeEvents &&
           !ceEventFeature.legacy && (

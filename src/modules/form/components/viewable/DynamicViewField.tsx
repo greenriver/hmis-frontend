@@ -14,6 +14,7 @@ import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import SingleGeolocationMap from '@/components/elements/maps/SingleGeolocationMap';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
 import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
@@ -21,7 +22,9 @@ import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
 import ClientName from '@/modules/client/components/ClientName';
+
 import {
+  formatCurrency,
   formatDateForDisplay,
   formatTimeOfDay,
   parseAndFormatDate,
@@ -147,7 +150,12 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       }
       return <TextContent {...commonProps} />;
     case ItemType.Currency:
-      return <TextContent {...commonProps} renderValue={(val) => `$${val}`} />;
+      return (
+        <TextContent
+          {...commonProps}
+          renderValue={(val) => formatCurrency(val)}
+        />
+      );
     case ItemType.Date:
       return (
         <TextContent
@@ -266,23 +274,19 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           );
       }
     case ItemType.Geolocation:
-      let collected;
-      try {
-        const valueJson = JSON.parse(value);
-        collected = valueJson && valueJson.latitude && valueJson.longitude;
-      } catch (SyntaxError) {
-        collected = false;
-      }
+      // coordinates may be stringified if collected from External Form
+      const coordinates = typeof value === 'string' ? JSON.parse(value) : value;
       return (
-        <CommonLabeledTextBlock title={label} key={JSON.stringify(value)}>
-          {collected ? (
-            'Location collected'
+        <LabelWithContent {...commonProps}>
+          {coordinates ? (
+            <SingleGeolocationMap coordinates={coordinates} />
           ) : (
-            <NotCollectedText variant='body2' />
+            <NotCollectedText variant='body2'>
+              Location not collected
+            </NotCollectedText>
           )}
-        </CommonLabeledTextBlock>
+        </LabelWithContent>
       );
-
     default:
       return (
         <RecoverableError

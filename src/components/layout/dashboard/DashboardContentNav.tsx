@@ -47,10 +47,10 @@ const CloseMenuRow = ({
       <Box />
     )}
     <Button
-      variant='transparent'
+      variant='text'
+      color='grayscale'
       onClick={onClose}
-      startIcon={<MenuOpenIcon fontSize='small' />}
-      size='small'
+      startIcon={<MenuOpenIcon />}
     >
       Close
     </Button>
@@ -109,7 +109,7 @@ const DashboardContentNav: React.FC<Props> = ({
           },
         })}
       >
-        <Box>
+        <Box component='nav' aria-label='sidebar-nav'>
           <CloseMenuRow onClose={handleCloseDesktopMenu} label={label} />
           <Box
             sx={{

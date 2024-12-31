@@ -9,6 +9,7 @@ export default {
     label: { control: 'text' },
     onlylast4: { control: 'boolean' },
     value: { control: 'text' },
+    disabled: { control: 'boolean' },
   },
   render: (args: any) => {
     const [{ value }, updateArgs] = useArgs();

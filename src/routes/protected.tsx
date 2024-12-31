@@ -68,6 +68,7 @@ import EnrollmentCeEventsPage from '@/modules/enrollment/components/pages/Enroll
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/pages/EnrollmentCurrentLivingSituationsPage';
 import EnrollmentDashboard from '@/modules/enrollment/components/pages/EnrollmentDashboard';
 import EnrollmentEsgFundingReport from '@/modules/enrollment/components/pages/EnrollmentEsgFundingReport';
+import EnrollmentLocationMapPage from '@/modules/enrollment/components/pages/EnrollmentLocationMapPage';
 import EnrollmentOverview from '@/modules/enrollment/components/pages/EnrollmentOverview';
 
 import HouseholdPage from '@/modules/enrollment/components/pages/HouseholdPage';
@@ -567,6 +568,14 @@ export const protectedRoutes: RouteNode[] = [
               >
                 <EnrollmentEsgFundingReport />
               </EnrollmentProjectRoute>
+            ),
+          },
+          {
+            path: EnrollmentDashboardRoutes.LOCATION_MAP,
+            element: (
+              <EnrollmentRoute permissions='canViewEnrollmentLocationMap'>
+                <EnrollmentLocationMapPage />
+              </EnrollmentRoute>
             ),
           },
           { path: '*', element: <Navigate to='overview' replace /> },

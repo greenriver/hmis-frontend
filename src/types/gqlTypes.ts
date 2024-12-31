@@ -266,6 +266,8 @@ export type Assessment = {
   enrollment: Enrollment;
   event?: Maybe<Event>;
   exit?: Maybe<Exit>;
+  /** Client Location where the assessment was performed */
+  geolocation?: Maybe<Geolocation>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
@@ -1346,6 +1348,8 @@ export type CurrentLivingSituation = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
+  /** Client Location where the Current Living Situation was recorded */
+  geolocation?: Maybe<Geolocation>;
   id: Scalars['ID']['output'];
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   leaseOwn60Day?: Maybe<NoYesReasonsForMissingData>;
@@ -2316,6 +2320,8 @@ export type Enrollment = {
   files: FilesPaginated;
   formerWardChildWelfare?: Maybe<NoYesReasonsForMissingData>;
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
+  /** Client Locations that have been collected during this Enrollment */
+  geolocations: Array<Geolocation>;
   healthAndDvs: HealthAndDvsPaginated;
   hh5Plus?: Maybe<NoYesMissing>;
   hohLeaseholder?: Maybe<NoYesMissing>;
@@ -2486,6 +2492,7 @@ export type EnrollmentAccess = {
   canEditEnrollments: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
+  canViewEnrollmentLocationMap: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -2825,6 +2832,8 @@ export type ExternalFormSubmission = {
   definition: FormDefinition;
   /** Enrollment that was generated from this submission, if any */
   enrollmentId?: Maybe<Scalars['ID']['output']>;
+  /** Client Location where the submission was recorded */
+  geolocation?: Maybe<Geolocation>;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   spam?: Maybe<Scalars['Boolean']['output']>;
@@ -3462,6 +3471,27 @@ export enum GeographyType {
   /** (1) Urban */
   Urban = 'URBAN',
 }
+
+export type Geolocation = {
+  __typename?: 'Geolocation';
+  /** User who collected the location */
+  collectedBy?: Maybe<ApplicationUser>;
+  coordinates: GeolocationCoordinates;
+  id: Scalars['ID']['output'];
+  /** Timestamp when the location was collected */
+  locatedAt: Scalars['ISO8601DateTime']['output'];
+  /** Name of the Project that collected the location */
+  projectName?: Maybe<Scalars['String']['output']>;
+  /** Name of the form that collected this location */
+  sourceFormName?: Maybe<Scalars['String']['output']>;
+};
+
+export type GeolocationCoordinates = {
+  __typename?: 'GeolocationCoordinates';
+  id: Scalars['ID']['output'];
+  latitude: Scalars['String']['output'];
+  longitude: Scalars['String']['output'];
+};
 
 /** HUD HMISParticipationType (2.08.1) */
 export enum HmisParticipationType {
@@ -6091,6 +6121,7 @@ export type QueryAccess = {
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
+  canViewEnrollmentLocationMap: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
   canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
@@ -8057,6 +8088,7 @@ export type EnrollmentAccessFieldsFragment = {
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
   canAuditEnrollments: boolean;
+  canViewEnrollmentLocationMap: boolean;
 };
 
 export type AssessmentAccessFieldsFragment = {
@@ -9148,6 +9180,16 @@ export type AssessmentWithRecordsFragment = {
     canDeleteEnrollments: boolean;
     canEditEnrollments: boolean;
   };
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    coordinates: {
+      __typename?: 'GeolocationCoordinates';
+      id: string;
+      latitude: string;
+      longitude: string;
+    };
+  } | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -10003,6 +10045,16 @@ export type FullAssessmentFragment = {
     canDeleteEnrollments: boolean;
     canEditEnrollments: boolean;
   };
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    coordinates: {
+      __typename?: 'GeolocationCoordinates';
+      id: string;
+      latitude: string;
+      longitude: string;
+    };
+  } | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -11848,6 +11900,16 @@ export type GetAssessmentQuery = {
       canDeleteEnrollments: boolean;
       canEditEnrollments: boolean;
     };
+    geolocation?: {
+      __typename?: 'Geolocation';
+      id: string;
+      coordinates: {
+        __typename?: 'GeolocationCoordinates';
+        id: string;
+        latitude: string;
+        longitude: string;
+      };
+    } | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -12961,6 +13023,16 @@ export type SubmitAssessmentMutation = {
         canDeleteEnrollments: boolean;
         canEditEnrollments: boolean;
       };
+      geolocation?: {
+        __typename?: 'Geolocation';
+        id: string;
+        coordinates: {
+          __typename?: 'GeolocationCoordinates';
+          id: string;
+          latitude: string;
+          longitude: string;
+        };
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -13803,6 +13875,16 @@ export type SubmitHouseholdAssessmentsMutation = {
         canDeleteEnrollments: boolean;
         canEditEnrollments: boolean;
       };
+      geolocation?: {
+        __typename?: 'Geolocation';
+        id: string;
+        coordinates: {
+          __typename?: 'GeolocationCoordinates';
+          id: string;
+          latitude: string;
+          longitude: string;
+        };
+      } | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -14662,6 +14744,16 @@ export type GetAssessmentsForPopulationQuery = {
           canDeleteEnrollments: boolean;
           canEditEnrollments: boolean;
         };
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          coordinates: {
+            __typename?: 'GeolocationCoordinates';
+            id: string;
+            latitude: string;
+            longitude: string;
+          };
+        } | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -18755,6 +18847,16 @@ export type CurrentLivingSituationFieldsFragment = {
       } | null;
     }> | null;
   }>;
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    coordinates: {
+      __typename?: 'GeolocationCoordinates';
+      id: string;
+      latitude: string;
+      longitude: string;
+    };
+  } | null;
 };
 
 export type ProjectCurrentLivingSituationFieldsFragment = {
@@ -18917,6 +19019,16 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
       } | null;
     }> | null;
   }>;
+  geolocation?: {
+    __typename?: 'Geolocation';
+    id: string;
+    coordinates: {
+      __typename?: 'GeolocationCoordinates';
+      id: string;
+      latitude: string;
+      longitude: string;
+    };
+  } | null;
 };
 
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
@@ -19079,6 +19191,16 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             } | null;
           }> | null;
         }>;
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          coordinates: {
+            __typename?: 'GeolocationCoordinates';
+            id: string;
+            latitude: string;
+            longitude: string;
+          };
+        } | null;
       }>;
     };
   } | null;
@@ -19260,6 +19382,16 @@ export type GetProjectCurrentLivingSituationsQuery = {
             } | null;
           }> | null;
         }>;
+        geolocation?: {
+          __typename?: 'Geolocation';
+          id: string;
+          coordinates: {
+            __typename?: 'GeolocationCoordinates';
+            id: string;
+            latitude: string;
+            longitude: string;
+          };
+        } | null;
       }>;
     };
   } | null;
@@ -20040,6 +20172,7 @@ export type EnrollmentFieldsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canAuditEnrollments: boolean;
+    canViewEnrollmentLocationMap: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
@@ -21101,6 +21234,7 @@ export type AllEnrollmentDetailsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canAuditEnrollments: boolean;
+    canViewEnrollmentLocationMap: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   moveInAddresses: Array<{
@@ -21392,6 +21526,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canAuditEnrollments: boolean;
+    canViewEnrollmentLocationMap: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   moveInAddresses: Array<{
@@ -21554,6 +21689,7 @@ export type GetEnrollmentQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canAuditEnrollments: boolean;
+      canViewEnrollmentLocationMap: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
@@ -22447,6 +22583,7 @@ export type GetEnrollmentDetailsQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canAuditEnrollments: boolean;
+      canViewEnrollmentLocationMap: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     moveInAddresses: Array<{
@@ -22599,6 +22736,7 @@ export type GetEnrollmentWithHouseholdQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canAuditEnrollments: boolean;
+      canViewEnrollmentLocationMap: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
@@ -22871,6 +23009,7 @@ export type GetEnrollmentPermissionsQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canAuditEnrollments: boolean;
+      canViewEnrollmentLocationMap: boolean;
     };
   } | null;
 };
@@ -30302,6 +30441,16 @@ export type SubmitFormMutation = {
               } | null;
             }> | null;
           }>;
+          geolocation?: {
+            __typename?: 'Geolocation';
+            id: string;
+            coordinates: {
+              __typename?: 'GeolocationCoordinates';
+              id: string;
+              latitude: string;
+              longitude: string;
+            };
+          } | null;
         }
       | {
           __typename?: 'CustomCaseNote';
@@ -30609,6 +30758,7 @@ export type SubmitFormMutation = {
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canAuditEnrollments: boolean;
+            canViewEnrollmentLocationMap: boolean;
           };
           currentUnit?: {
             __typename?: 'Unit';
@@ -32985,6 +33135,70 @@ export type GetParsedFormDefinitionQuery = {
         }> | null;
       }>;
     } | null;
+  } | null;
+};
+
+export type GeolocationFieldsFragment = {
+  __typename?: 'Geolocation';
+  id: string;
+  coordinates: {
+    __typename?: 'GeolocationCoordinates';
+    id: string;
+    latitude: string;
+    longitude: string;
+  };
+};
+
+export type GeolocationFieldsWithMetadataFragment = {
+  __typename?: 'Geolocation';
+  id: string;
+  locatedAt: string;
+  sourceFormName?: string | null;
+  coordinates: {
+    __typename?: 'GeolocationCoordinates';
+    id: string;
+    latitude: string;
+    longitude: string;
+  };
+  collectedBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
+  } | null;
+};
+
+export type GetEnrollmentGeolocationsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetEnrollmentGeolocationsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    geolocations: Array<{
+      __typename?: 'Geolocation';
+      id: string;
+      locatedAt: string;
+      sourceFormName?: string | null;
+      coordinates: {
+        __typename?: 'GeolocationCoordinates';
+        id: string;
+        latitude: string;
+        longitude: string;
+      };
+      collectedBy?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }>;
   } | null;
 };
 
@@ -35723,6 +35937,7 @@ export type GetProjectAssessmentsQuery = {
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canAuditEnrollments: boolean;
+            canViewEnrollmentLocationMap: boolean;
           };
           currentUnit?: {
             __typename?: 'Unit';
@@ -40206,6 +40421,16 @@ export const AssessmentAccessFieldsFragmentDoc = gql`
     canEditEnrollments
   }
 `;
+export const GeolocationFieldsFragmentDoc = gql`
+  fragment GeolocationFields on Geolocation {
+    id
+    coordinates {
+      id
+      latitude
+      longitude
+    }
+  }
+`;
 export const AssessmentWithRecordsFragmentDoc = gql`
   fragment AssessmentWithRecords on Assessment {
     ...AssessmentFields
@@ -40254,6 +40479,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     access {
       ...AssessmentAccessFields
     }
+    geolocation {
+      ...GeolocationFields
+    }
   }
   ${AssessmentFieldsFragmentDoc}
   ${EnrollmentValuesFragmentDoc}
@@ -40267,6 +40495,7 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${YouthEducationStatusValuesFragmentDoc}
   ${EmploymentEducationValuesFragmentDoc}
   ${AssessmentAccessFieldsFragmentDoc}
+  ${GeolocationFieldsFragmentDoc}
 `;
 export const AssessmentWithValuesFragmentDoc = gql`
   fragment AssessmentWithValues on Assessment {
@@ -40760,9 +40989,13 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    geolocation {
+      ...GeolocationFields
+    }
   }
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${GeolocationFieldsFragmentDoc}
 `;
 export const ProjectCurrentLivingSituationFieldsFragmentDoc = gql`
   fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {
@@ -40832,6 +41065,7 @@ export const EnrollmentAccessFieldsFragmentDoc = gql`
     canEditEnrollments
     canDeleteEnrollments
     canAuditEnrollments
+    canViewEnrollmentLocationMap
   }
 `;
 export const EnrollmentFieldsFragmentDoc = gql`
@@ -41245,6 +41479,22 @@ export const FormIdentifierDetailsFragmentDoc = gql`
     }
   }
   ${FormDefinitionMetadataFragmentDoc}
+`;
+export const GeolocationFieldsWithMetadataFragmentDoc = gql`
+  fragment GeolocationFieldsWithMetadata on Geolocation {
+    id
+    coordinates {
+      id
+      latitude
+      longitude
+    }
+    locatedAt
+    sourceFormName
+    collectedBy {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
@@ -49240,6 +49490,87 @@ export type GetParsedFormDefinitionSuspenseQueryHookResult = ReturnType<
 export type GetParsedFormDefinitionQueryResult = Apollo.QueryResult<
   GetParsedFormDefinitionQuery,
   GetParsedFormDefinitionQueryVariables
+>;
+export const GetEnrollmentGeolocationsDocument = gql`
+  query GetEnrollmentGeolocations($id: ID!) {
+    enrollment(id: $id) {
+      id
+      geolocations {
+        ...GeolocationFieldsWithMetadata
+      }
+    }
+  }
+  ${GeolocationFieldsWithMetadataFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentGeolocationsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentGeolocationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentGeolocationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentGeolocationsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentGeolocationsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentGeolocationsQuery,
+    GetEnrollmentGeolocationsQueryVariables
+  > &
+    (
+      | { variables: GetEnrollmentGeolocationsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentGeolocationsQuery,
+    GetEnrollmentGeolocationsQueryVariables
+  >(GetEnrollmentGeolocationsDocument, options);
+}
+export function useGetEnrollmentGeolocationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentGeolocationsQuery,
+    GetEnrollmentGeolocationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentGeolocationsQuery,
+    GetEnrollmentGeolocationsQueryVariables
+  >(GetEnrollmentGeolocationsDocument, options);
+}
+export function useGetEnrollmentGeolocationsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetEnrollmentGeolocationsQuery,
+    GetEnrollmentGeolocationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetEnrollmentGeolocationsQuery,
+    GetEnrollmentGeolocationsQueryVariables
+  >(GetEnrollmentGeolocationsDocument, options);
+}
+export type GetEnrollmentGeolocationsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentGeolocationsQuery
+>;
+export type GetEnrollmentGeolocationsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentGeolocationsLazyQuery
+>;
+export type GetEnrollmentGeolocationsSuspenseQueryHookResult = ReturnType<
+  typeof useGetEnrollmentGeolocationsSuspenseQuery
+>;
+export type GetEnrollmentGeolocationsQueryResult = Apollo.QueryResult<
+  GetEnrollmentGeolocationsQuery,
+  GetEnrollmentGeolocationsQueryVariables
 >;
 export const GetHouseholdDocument = gql`
   query GetHousehold($id: ID!) {

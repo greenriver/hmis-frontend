@@ -245,7 +245,7 @@ export function useServiceDialog({
             <Stack gap={3} direction='row'>
               <Button
                 onClick={closeDialog}
-                variant='gray'
+                color='grayscale'
                 data-testid='cancelDialogAction'
               >
                 Cancel

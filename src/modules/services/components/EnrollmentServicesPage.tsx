@@ -91,6 +91,7 @@ const EnrollmentServicesPage = () => {
           )
         }
         headerVariant='border'
+        headerComponent='h1'
       >
         <GenericTableWithData<
           GetEnrollmentServicesQuery,

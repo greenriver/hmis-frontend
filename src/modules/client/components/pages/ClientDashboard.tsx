@@ -20,6 +20,7 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientCardMini from '@/modules/client/components/ClientCardMini';
 import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
+import LocalVersionCoordinationPrompt from '@/modules/localVersionCoordination/components/LocalVersionCoordinationPrompt';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ClientFieldsFragment, useGetClientQuery } from '@/types/gqlTypes';
 
@@ -82,6 +83,11 @@ const ClientDashboard: React.FC = () => {
       {...dashboardState}
     >
       <Container maxWidth='xl' disableGutters>
+        <LocalVersionCoordinationPrompt
+          recordType='Client'
+          recordId={client.id}
+          currentVersion={client.lockVersion}
+        />
         <Outlet context={outletContext} />
       </Container>
     </DashboardContentContainer>

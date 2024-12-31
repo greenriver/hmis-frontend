@@ -66,7 +66,7 @@ const EditOrganizationPage = () => {
               sx={{ my: 1 }}
             >
               <Stack direction={'row'} spacing={2}>
-                <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+                <Typography component='h1' variant='h3' sx={{ pt: 0, mt: 0 }}>
                   Edit {organizationName}
                 </Typography>
               </Stack>

@@ -49,7 +49,7 @@ const TableRowActions = <T extends { id: string }>({
   );
 
   return (
-    <Stack direction='row' alignItems='center' gap={0.5}>
+    <Stack direction='row' alignItems='center' justifyContent='end' gap={0.5}>
       {primaryActionNode}
       {!!primaryActionTypesafe && !!primaryActionTypesafe.to && (
         <ButtonLink

@@ -20,7 +20,7 @@ import {
 import { visuallyHidden } from '@mui/utils';
 import { compact, get, includes, isNil, without } from 'lodash-es';
 import {
-  Fragment,
+  ComponentType,
   ReactNode,
   useCallback,
   useEffect,
@@ -73,9 +73,8 @@ export interface Props<T> {
   filterToolbar?: ReactNode;
   noData?: ReactNode;
   renderRow?: (row: T, columnKeys: string[]) => ReactNode;
-  // if overrideTableBody is true, GenericTable doesn't render a `tbody` element.
-  // This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
-  overrideTableBody?: boolean;
+  // TableBodyComponent can be overridden. This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
+  TableBodyComponent?: ComponentType | keyof JSX.IntrinsicElements;
   injectBelowRows?: ReactNode; // component to inject below all rendered rows, above footer
   getTableRowActions?: (record: T, loading?: boolean) => TableRowActionsType;
   getRowAccessibleName?: (row: T) => string;
@@ -134,7 +133,7 @@ const GenericTable = <T extends { id: string }>({
   renderRow,
   noData = 'No data',
   loadingVariant = 'circular',
-  overrideTableBody = false,
+  TableBodyComponent = TableBody,
   injectBelowRows,
   getTableRowActions,
   getRowAccessibleName,
@@ -288,8 +287,6 @@ const GenericTable = <T extends { id: string }>({
       </TableRow>
     );
 
-  const TableBodyWrapper = overrideTableBody ? Fragment : TableBody;
-
   return (
     <>
       {EnhancedTableToolbarProps && (
@@ -310,7 +307,7 @@ const GenericTable = <T extends { id: string }>({
           {...tableProps}
         >
           {tableHead}
-          <TableBodyWrapper>
+          <TableBodyComponent>
             {vertical &&
               columns.map((def, i) => (
                 <TableRow key={key(def) || i}>
@@ -484,7 +481,7 @@ const GenericTable = <T extends { id: string }>({
             {actionRow}
             {/* dont show "no data" row if there is an action row, which may be for adding new elements or making another selection (MCI uses it) */}
             {!actionRow && noResultsRow}
-          </TableBodyWrapper>
+          </TableBodyComponent>
           {paginated && tablePaginationProps && (
             <TableFooter>
               <TableRow>
