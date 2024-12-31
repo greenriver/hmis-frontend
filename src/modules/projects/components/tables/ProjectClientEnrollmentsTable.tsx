@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Chip, Tooltip } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import React, { useMemo } from 'react';
 
@@ -19,7 +19,6 @@ import {
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import {
   ClientEnrollmentFieldsFragment,
@@ -74,12 +73,50 @@ export const ENROLLMENT_COLUMNS: {
   },
 };
 
+export const ASSIGNED_STAFF_COL = {
+  header: 'Assigned Staff',
+  optional: true,
+  defaultHidden: true,
+  key: 'assigned_staff',
+  render: (hh: HouseholdWithStaffAssignmentsFragment) => {
+    if (!hh.staffAssignments?.nodes.length) return;
+
+    const allNames = hh.staffAssignments.nodes.map(
+      (staffAssignment) => staffAssignment.user.name
+    );
+
+    const first = allNames[0];
+    const rest = allNames.slice(1);
+
+    return (
+      <Box aria-label={allNames.join(', ')}>
+        {first}{' '}
+        {rest.length > 0 && (
+          <Tooltip arrow title={rest.join(', ')}>
+            <Chip
+              sx={{ mb: 0.5 }}
+              size='small'
+              label={`+${rest.length} more`}
+            />
+          </Tooltip>
+        )}
+      </Box>
+    );
+  },
+};
+
+type WithEnrollment = {
+  enrollment: Pick<
+    EnrollmentFieldsFragment,
+    'entryDate' | 'exitDate' | 'inProgress' | 'autoExited'
+  >;
+};
 export const WITH_ENROLLMENT_COLUMNS: {
-  [key: string]: ColumnDef<any>;
+  [key: string]: ColumnDef<WithEnrollment>;
 } = {
   entryDate: {
-    ...ENROLLMENT_COLUMNS.entryDate,
-    render: (objectWithEnrollment: any) => (
+    header: ENROLLMENT_COLUMNS.entryDate.header,
+    render: (objectWithEnrollment: WithEnrollment) => (
       <DateWithRelativeTooltip
         dateString={objectWithEnrollment.enrollment.entryDate}
         preciseTime={false}
@@ -87,8 +124,8 @@ export const WITH_ENROLLMENT_COLUMNS: {
     ),
   },
   exitDate: {
-    ...ENROLLMENT_COLUMNS.exitDate,
-    render: (objectWithEnrollment: any) => {
+    header: ENROLLMENT_COLUMNS.exitDate.header,
+    render: (objectWithEnrollment: WithEnrollment) => {
       if (objectWithEnrollment.enrollment.exitDate)
         return (
           <DateWithRelativeTooltip
@@ -97,6 +134,10 @@ export const WITH_ENROLLMENT_COLUMNS: {
           />
         );
     },
+  },
+  enrollmentStatus: {
+    header: ENROLLMENT_COLUMNS.enrollmentStatus.header,
+    render: (e) => <EnrollmentStatus enrollment={e.enrollment} />,
   },
 };
 
@@ -165,6 +206,7 @@ const ProjectClientEnrollmentsTable = ({
         ENROLLMENT_COLUMNS.enrollmentStatus,
         ...(staffAssignmentsEnabled ? [COLUMNS.assignedStaff] : []),
         {
+          // TODO(#6761) - enforce header-less columns always have accessible text in GenericTable
           header: <Box sx={visuallyHidden}>Actions</Box>,
           key: 'Actions',
           tableCellProps: { sx: { p: 0 } },
