@@ -69,6 +69,7 @@ const FileSummary: React.FC<FileSummaryProps> = ({
               title: 'Download',
               to: url,
               ariaLabel: `Download ${fileName}`,
+              openInNew: true,
             },
           ]
         : []),
