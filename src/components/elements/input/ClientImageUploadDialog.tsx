@@ -163,6 +163,7 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
               )}
               <Grid item xs={12}>
                 <Uploader
+                  image
                   id='clientImageUploader'
                   multiple={false}
                   onUpload={(upload?: DirectUpload, file?: File) => {
