@@ -2,11 +2,11 @@ import { Box, TableBody, TableCell, TableRow } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import React, { useMemo } from 'react';
 import { renderCellContents } from '@/components/elements/table/GenericTable';
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   getViewClientAction,
   getViewEnrollmentAction,
-} from '@/components/elements/table/tableActions/tableRowActionUtil';
-import TableRowActions from '@/components/elements/table/TableRowActions';
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';

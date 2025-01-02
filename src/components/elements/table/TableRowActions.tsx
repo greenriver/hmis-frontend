@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import React, { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 import ButtonLink from '../ButtonLink';
 import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
 
@@ -21,23 +21,7 @@ const TableRowActions = <T extends { id: string }>({
   primaryActionConfig,
   secondaryActionConfigs,
 }: TableRowActionsProps<T>) => {
-  const accessibleName = useMemo(
-    () => recordName || record.id,
-    [record.id, recordName]
-  );
-
-  // todo @martha - still needed?
-  const secondariesWithAria = useMemo(
-    () =>
-      secondaryActionConfigs?.map((s) => {
-        return {
-          ...s,
-          ariaLabel: s.ariaLabel || `${s.title}, ${recordName}`,
-        };
-      }),
-    [secondaryActionConfigs, recordName]
-  );
-
+  // todo @martha - confirm that secondary actions have correct aria, maybe require it on the type?
   return (
     <Stack direction='row' alignItems='center' justifyContent='end' gap={0.5}>
       {!!primaryActionConfig && (
@@ -52,13 +36,13 @@ const TableRowActions = <T extends { id: string }>({
         </ButtonLink>
       )}
       {primaryAction}
-      {!!secondariesWithAria && secondariesWithAria.length > 0 && (
+      {!!secondaryActionConfigs && secondaryActionConfigs.length > 0 && (
         <CommonMenuButton
           iconButton
           title='Actions'
-          items={secondariesWithAria}
+          items={secondaryActionConfigs}
           ButtonProps={{
-            'aria-label': `Action menu for ${accessibleName}`,
+            'aria-label': `Action menu for ${recordName || record.id}`,
           }}
           MenuProps={{
             MenuListProps: {
