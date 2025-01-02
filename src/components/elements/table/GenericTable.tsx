@@ -17,6 +17,7 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import { compact, get, includes, isNil, without } from 'lodash-es';
 import {
   ComponentType,
@@ -242,7 +243,12 @@ const GenericTable = <T extends { id: string }>({
                 width: def.width,
               }}
             >
-              <strong>{def.header}</strong>
+              {def.header ? (
+                <strong>{def.header}</strong>
+              ) : (
+                // If header isn't provided, add a visually hidden header with the column key for accessibility
+                <Box sx={visuallyHidden}>{def.key}</Box>
+              )}
             </HeaderCell>
           ))}
         </TableRow>
