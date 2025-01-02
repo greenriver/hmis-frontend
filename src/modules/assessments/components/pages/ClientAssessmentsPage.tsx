@@ -46,7 +46,8 @@ const ClientAssessmentsPage = () => {
             primaryActionConfig={getViewAssessmentAction(
               row,
               clientId,
-              row.enrollment.id
+              row.enrollment.id,
+              true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
             )}
           />
         ),

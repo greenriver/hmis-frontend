@@ -54,13 +54,19 @@ export const getViewEnrollmentAction = (
 export const getViewAssessmentAction = (
   assessment: AssessmentFieldsFragment,
   clientId: string,
-  enrollmentId: string
+  enrollmentId: string,
+  individualViewOnly?: boolean
 ) => {
   return {
     title: 'View Assessment',
     key: 'assessment',
     ariaLabel: `View Assessment, ${assessmentDescription(assessment)}`,
-    to: generateAssessmentPath(assessment, clientId, enrollmentId),
+    to: generateAssessmentPath(
+      assessment,
+      clientId,
+      enrollmentId,
+      individualViewOnly
+    ),
   };
 };
 

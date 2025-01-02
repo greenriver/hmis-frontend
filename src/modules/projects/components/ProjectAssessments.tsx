@@ -51,7 +51,8 @@ const ProjectAssessments = () => {
               ...getViewAssessmentAction(
                 record,
                 record.enrollment.client.id,
-                record.enrollment.id
+                record.enrollment.id,
+                true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
               ),
               linkState: { backToLabel: project.projectName },
             }}
