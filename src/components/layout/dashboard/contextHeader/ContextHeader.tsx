@@ -27,6 +27,8 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
   children,
 }) => (
   <AppBar
+    component='nav'
+    aria-label='breadcrumbs-nav'
     position='sticky'
     color='default'
     elevation={0}

@@ -78,12 +78,11 @@ const EditFunderPage = ({ create = false }: { create?: boolean }) => {
       inputVariables={{ projectId }}
       record={funder || undefined}
       title={
-        !create &&
-        funder && (
-          <ProjectFormTitle
-            title={title}
-            project={project}
-            actions={
+        <ProjectFormTitle
+          title={title}
+          project={project}
+          actions={
+            funder && (
               <DeleteMutationButton<
                 DeleteFunderMutation,
                 DeleteFunderMutationVariables
@@ -96,9 +95,9 @@ const EditFunderPage = ({ create = false }: { create?: boolean }) => {
               >
                 Delete Record
               </DeleteMutationButton>
-            }
-          />
-        )
+            )
+          }
+        />
       }
     />
   );

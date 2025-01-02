@@ -29,6 +29,7 @@ import {
   formatTimeOfDay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
+import { safeParseLatLon } from '@/types/geolocationTypes';
 import {
   ClientContactPointSystem,
   Component,
@@ -274,8 +275,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           );
       }
     case ItemType.Geolocation:
-      // coordinates may be stringified if collected from External Form
-      const coordinates = typeof value === 'string' ? JSON.parse(value) : value;
+      const coordinates = safeParseLatLon(value);
       return (
         <LabelWithContent {...commonProps}>
           {coordinates ? (

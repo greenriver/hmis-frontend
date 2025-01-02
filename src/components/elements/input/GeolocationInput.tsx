@@ -68,6 +68,7 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
                 buttonRef.current?.focus(); // move focus to Request Location button
               }}
               startIcon={<ClearIcon />}
+              disabled={disabled}
             >
               Clear Map
             </Button>

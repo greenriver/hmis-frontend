@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,6 +57,17 @@ const EditInventoryPage = ({ create = false }: { create?: boolean }) => {
   const pickListArgs = useMemo(() => ({ projectId }), [projectId]);
   const inputVariables = useMemo(() => ({ projectId }), [projectId]);
 
+  const titleComponent = useMemo(() => {
+    if (!create && inventory) {
+      return <ProjectFormTitle title={title} project={project} />;
+    }
+    return (
+      <Typography component='h1' variant='h3'>
+        {title}
+      </Typography>
+    );
+  }, [create, inventory, project, title]);
+
   if (loading) return <Loading />;
   if (!create && !inventory) return <NotFound />;
   if (error) throw error;
@@ -71,10 +83,7 @@ const EditInventoryPage = ({ create = false }: { create?: boolean }) => {
       localConstants={localConstants}
       inputVariables={inputVariables}
       pickListArgs={pickListArgs}
-      title={
-        !create &&
-        inventory && <ProjectFormTitle title={title} project={project} />
-      }
+      title={titleComponent}
     />
   );
 };

@@ -124,6 +124,7 @@ const EnrollmentCaseNotes = () => {
       <TitleCard
         title='Case Notes'
         headerVariant='border'
+        headerComponent='h1'
         actions={
           canEdit &&
           !caseNotesFeature.legacy && (

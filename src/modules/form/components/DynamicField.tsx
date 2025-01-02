@@ -49,6 +49,7 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import { safeParseLatLon } from '@/types/geolocationTypes';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
 export const getLabel = (
@@ -420,6 +421,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               image
               onChange={onChangeValue}
               ariaLabel={item.text}
+              disabled={commonInputProps.disabled}
             />
           </LabelWithContent>
         </InputContainer>
@@ -434,16 +436,18 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               files={value}
               onChange={onChangeValue}
               ariaLabel={item.text}
+              disabled={commonInputProps.disabled}
             />
           </LabelWithContent>
         </InputContainer>
       );
     case ItemType.Geolocation:
+      const coordinates = safeParseLatLon(value);
       return (
         <InputContainer {...commonContainerProps}>
           <GeolocationInput
             label={label}
-            value={value}
+            value={coordinates}
             onChange={onChangeValue}
             helperText={commonInputProps.helperText}
             disabled={commonInputProps.disabled}

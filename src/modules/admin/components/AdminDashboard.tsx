@@ -23,6 +23,7 @@ import { RootPermissionsFragment } from '@/types/gqlTypes';
 const ProjectNavHeader: React.FC = () => {
   return (
     <Typography
+      component='p'
       variant='h5'
       sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}
     >

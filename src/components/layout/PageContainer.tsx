@@ -14,7 +14,11 @@ const PageContainer = ({
 }) => {
   const isTiny = useIsMobile('sm');
   return (
-    <Container maxWidth='lg' sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: 4, pb: 6 }}>
+    <Container
+      component='main'
+      maxWidth='lg'
+      sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: 4, pb: 6 }}
+    >
       <Stack
         spacing={2}
         direction={isTiny ? 'column' : 'row'}

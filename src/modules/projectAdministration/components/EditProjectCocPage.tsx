@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import { Typography } from '@mui/material';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
@@ -52,6 +53,37 @@ const EditProjectCocPage = ({ create = false }: { create?: boolean }) => {
     navigate(generateSafePath(ProjectDashboardRoutes.COCS, { projectId }));
   }, [projectId, navigate]);
 
+  const titleComponent = useMemo(() => {
+    if (!create && projectCoc) {
+      return (
+        <ProjectFormTitle
+          title={title}
+          project={project}
+          actions={
+            <DeleteMutationButton<
+              DeleteProjectCocMutation,
+              DeleteProjectCocMutationVariables
+            >
+              queryDocument={DeleteProjectCocDocument}
+              variables={{ input: { id: projectCoc.id } }}
+              idPath={'deleteProjectCoc.projectCoc.id'}
+              recordName='Project CoC record'
+              ConfirmationDialogProps={{ confirmText: 'Yes, delete' }}
+              onSuccess={onSuccessfulDelete}
+            >
+              Delete Record
+            </DeleteMutationButton>
+          }
+        />
+      );
+    }
+    return (
+      <Typography component='h1' variant='h3'>
+        {title}
+      </Typography>
+    );
+  }, [create, onSuccessfulDelete, project, projectCoc, title]);
+
   if (!project.access.canEditProjectDetails) return <NotFound />;
   if (loading) return <Loading />;
   if (error) throw error;
@@ -66,30 +98,7 @@ const EditProjectCocPage = ({ create = false }: { create?: boolean }) => {
         formRole={RecordFormRole.ProjectCoc}
         inputVariables={{ projectId }}
         record={projectCoc || undefined}
-        title={
-          !create &&
-          projectCoc && (
-            <ProjectFormTitle
-              title={title}
-              project={project}
-              actions={
-                <DeleteMutationButton<
-                  DeleteProjectCocMutation,
-                  DeleteProjectCocMutationVariables
-                >
-                  queryDocument={DeleteProjectCocDocument}
-                  variables={{ input: { id: projectCoc.id } }}
-                  idPath={'deleteProjectCoc.projectCoc.id'}
-                  recordName='Project CoC record'
-                  ConfirmationDialogProps={{ confirmText: 'Yes, delete' }}
-                  onSuccess={onSuccessfulDelete}
-                >
-                  Delete Record
-                </DeleteMutationButton>
-              }
-            />
-          )
-        }
+        title={titleComponent}
       />
     </>
   );

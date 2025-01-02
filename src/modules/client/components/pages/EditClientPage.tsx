@@ -45,7 +45,12 @@ const EditClientPage = () => {
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={
         <Stack direction='row' justifyContent='space-between'>
-          <Typography variant='h3' sx={{ pt: 2, pb: 4 }} flexGrow={1}>
+          <Typography
+            component='h1'
+            variant='h3'
+            sx={{ pt: 2, pb: 4 }}
+            flexGrow={1}
+          >
             Update Client Details
           </Typography>
         </Stack>
