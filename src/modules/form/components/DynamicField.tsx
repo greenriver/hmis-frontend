@@ -278,7 +278,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEvent}
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
-            disableArrowKeys={item.type === ItemType.Currency}
             {...commonInputProps}
             inputWidth={120}
           />
