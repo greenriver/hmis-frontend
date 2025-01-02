@@ -1,9 +1,9 @@
 import { Box, Chip, Tooltip } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import React, { useMemo } from 'react';
 
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
+  BASE_ACTION_COLUMN_DEF,
   getViewClientAction,
   getViewEnrollmentAction,
 } from '@/components/elements/table/tableRowActionUtil';
@@ -206,10 +206,7 @@ const ProjectClientEnrollmentsTable = ({
         ENROLLMENT_COLUMNS.enrollmentStatus,
         ...(staffAssignmentsEnabled ? [COLUMNS.assignedStaff] : []),
         {
-          // TODO(#6761) - enforce header-less columns always have accessible text in GenericTable
-          header: <Box sx={visuallyHidden}>Actions</Box>,
-          key: 'Actions',
-          tableCellProps: { sx: { p: 0 } },
+          ...BASE_ACTION_COLUMN_DEF,
           render: (row: ProjectEnrollmentQueryEnrollmentFieldsFragment) => {
             return (
               <TableRowActions

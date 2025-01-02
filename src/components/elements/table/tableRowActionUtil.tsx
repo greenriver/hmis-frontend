@@ -1,3 +1,6 @@
+import { Box } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
+import { ColumnDef } from '@/components/elements/table/types';
 import { generateAssessmentPath } from '@/modules/assessments/util';
 import {
   assessmentDescription,
@@ -17,6 +20,14 @@ import {
   EnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
+
+// TODO(#6761) - enforce header-less columns always have accessible text in GenericTable
+export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
+  header: <Box sx={visuallyHidden}>Actions</Box>,
+  key: 'Actions',
+  tableCellProps: { sx: { p: 0 } },
+  render: '', // gets overridden when used
+};
 
 export const getViewClientAction = (client: ClientNameFragment) => {
   return {
