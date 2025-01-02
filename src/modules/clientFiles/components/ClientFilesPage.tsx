@@ -1,11 +1,13 @@
 import UploadIcon from '@mui/icons-material/Upload';
 import { Box, Chip, Paper, Typography } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import useFileActions from '../hooks/useFileActions';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
@@ -124,23 +126,26 @@ const ClientFilesPage = () => {
           return `Unknown time ${byUser}`;
         },
       },
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (file) => (
+          <TableRowActions
+            record={file}
+            recordName={file.name}
+            primaryActionConfig={
+              file.redacted
+                ? undefined
+                : {
+                    title: 'View File',
+                    key: 'file',
+                    onClick: () => setViewingFile(file),
+                  }
+            }
+          />
+        ),
+      },
     ];
   }, [pickListData]);
-
-  const getTableRowActions = useCallback(
-    (file: ClientFileType) => {
-      return file.redacted
-        ? {}
-        : {
-            primaryAction: {
-              title: 'View File',
-              key: 'file',
-              onClick: () => setViewingFile(file),
-            },
-          };
-    },
-    [setViewingFile]
-  );
 
   return (
     <>
@@ -169,8 +174,6 @@ const ClientFilesPage = () => {
           queryVariables={{ id: clientId }}
           queryDocument={GetClientFilesDocument}
           columns={columns}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(record) => record.name}
           pagePath='client.files'
           noData='No files'
         />

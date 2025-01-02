@@ -1,12 +1,14 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { ServicePeriod } from '../bulkServicesTypes';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
+  BASE_ACTION_COLUMN_DEF,
   getViewClientAction,
   getViewEnrollmentAction,
-} from '@/components/elements/table/tableActions/tableRowActionUtil';
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -101,36 +103,44 @@ const BulkServicesTable: React.FC<Props> = ({
           return `${relative} (${formatted})`;
         },
       },
-    ] as ColumnDef<RowType>[];
-  }, [canViewDob, serviceDate, serviceTypeName]);
-
-  const getTableRowActions = useCallback(
-    (record: RowType, loading?: boolean) => {
-      return {
-        primaryAction: (
-          <AssignServiceButton
-            client={record}
-            queryVariables={mutationQueryVariables}
-            tableLoading={loading}
-            disabled={anyRowsSelected}
-            disabledReason={
-              anyRowsSelected
-                ? 'Deselect checkboxes to assign clients individually.'
-                : undefined
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        // todo @martha - loading not working
+        render: (row: RowType, loading: boolean) => (
+          <TableRowActions
+            record={row}
+            recordName={clientBriefName(row)}
+            primaryAction={
+              <AssignServiceButton
+                client={row}
+                queryVariables={mutationQueryVariables}
+                tableLoading={loading}
+                disabled={anyRowsSelected}
+                disabledReason={
+                  anyRowsSelected
+                    ? 'Deselect checkboxes to assign clients individually.'
+                    : undefined
+                }
+                serviceTypeName={serviceTypeName}
+              />
             }
-            serviceTypeName={serviceTypeName}
+            secondaryActionConfigs={[
+              getViewClientAction(row),
+              ...(row.activeEnrollment
+                ? [getViewEnrollmentAction(row.activeEnrollment, row)]
+                : []),
+            ]}
           />
         ),
-        secondaryActions: [
-          getViewClientAction(record),
-          ...(record.activeEnrollment
-            ? [getViewEnrollmentAction(record.activeEnrollment, record)]
-            : []),
-        ],
-      };
-    },
-    [anyRowsSelected, mutationQueryVariables, serviceTypeName]
-  );
+      },
+    ] as ColumnDef<RowType>[];
+  }, [
+    anyRowsSelected,
+    canViewDob,
+    mutationQueryVariables,
+    serviceDate,
+    serviceTypeName,
+  ]);
 
   const defaultFilterValues = useMemo(() => {
     if (!servicePeriod) return;
@@ -169,8 +179,6 @@ const BulkServicesTable: React.FC<Props> = ({
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
         columns={columns}
-        getTableRowActions={getTableRowActions}
-        getRowAccessibleName={(record: RowType) => clientBriefName(record)}
         recordType='Client'
         // TODO: add user-facing filter options for enrolled clients and bed night date. No filter options for now.
         defaultFilterValues={defaultFilterValues}

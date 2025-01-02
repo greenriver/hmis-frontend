@@ -1,5 +1,9 @@
 import { Paper } from '@mui/material';
-import { getViewEnrollmentAction } from '@/components/elements/table/tableActions/tableRowActionUtil';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewEnrollmentAction,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -28,26 +32,30 @@ const COLUMNS: ColumnDef<ProjectCurrentLivingSituationFieldsFragment>[] = [
   CLS_COLUMNS.livingSituation,
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
+  {
+    ...BASE_ACTION_COLUMN_DEF,
+    render: (cls) => (
+      <TableRowActions
+        record={cls}
+        recordName={`${clientBriefName(cls.client)} ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`}
+        primaryActionConfig={{
+          title: 'View CLS',
+          key: 'cls',
+          to: generateSafePath(
+            EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
+            {
+              clientId: cls.client.id,
+              enrollmentId: cls.enrollment.id,
+            }
+          ),
+        }}
+        secondaryActionConfigs={[
+          getViewEnrollmentAction(cls.enrollment, cls.client),
+        ]}
+      />
+    ),
+  },
 ];
-
-const getTableRowActions = (
-  cls: ProjectCurrentLivingSituationFieldsFragment
-) => {
-  return {
-    primaryAction: {
-      title: 'View CLS',
-      key: 'cls',
-      to: generateSafePath(
-        EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-        {
-          clientId: cls.client.id,
-          enrollmentId: cls.enrollment.id,
-        }
-      ),
-    },
-    secondaryActions: [getViewEnrollmentAction(cls.enrollment, cls.client)],
-  };
-};
 
 const ProjectCurrentLivingSituations = () => {
   const { projectId } = useSafeParams() as {
@@ -66,10 +74,6 @@ const ProjectCurrentLivingSituations = () => {
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectCurrentLivingSituationsDocument}
           columns={COLUMNS}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(record) =>
-            `${clientBriefName(record.client)} ${parseAndFormatDate(record.informationDate) || 'unknown date'}`
-          }
           pagePath='project.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'

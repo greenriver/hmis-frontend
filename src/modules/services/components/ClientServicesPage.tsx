@@ -1,10 +1,12 @@
 import { Paper } from '@mui/material';
-import { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
+  BASE_ACTION_COLUMN_DEF,
   getViewEnrollmentAction,
   getViewServiceAction,
-} from '@/components/elements/table/tableActions/tableRowActionUtil';
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -50,38 +52,41 @@ const ClientServicesPage: React.FC<{
             optional: true,
             defaultHidden: true,
           },
+          {
+            ...BASE_ACTION_COLUMN_DEF,
+            render: (row) => (
+              <TableRowActions
+                record={row}
+                recordName={`${getServiceTypeForDisplay(row.serviceType)} on ${parseAndFormatDate(row.dateProvided)}`}
+                primaryActionConfig={getViewServiceAction(
+                  row,
+                  row.enrollment.id,
+                  clientId
+                )}
+                secondaryActionConfigs={[
+                  {
+                    ...getViewEnrollmentAction(row.enrollment, {
+                      id: clientId,
+                    }),
+                    // override the default ariaLabel to provide the project name, since we are in the client context
+                    ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
+                  },
+                ]}
+              />
+            ),
+          },
         ] as ColumnDef<ServiceType>[]
       ).filter((col) => {
         if (omitColumns.includes(col.key || '')) return false;
 
         return true;
       }),
-    [omitColumns]
+    [clientId, omitColumns]
   );
 
   const filters = useFilters({
     type: 'ServiceFilterOptions',
   });
-
-  const getTableRowActions = useCallback(
-    (service: ServiceType) => {
-      return {
-        primaryAction: getViewServiceAction(
-          service,
-          service.enrollment.id,
-          clientId
-        ),
-        secondaryActions: [
-          {
-            ...getViewEnrollmentAction(service.enrollment, { id: clientId }),
-            // override the default ariaLabel to provide the project name, since we are in the client context
-            ariaLabel: `View Enrollment at ${service.enrollment.projectName} for ${entryExitRange(service.enrollment)}`,
-          },
-        ],
-      };
-    },
-    [clientId]
-  );
 
   return (
     <>
@@ -96,10 +101,6 @@ const ClientServicesPage: React.FC<{
           queryVariables={{ id: clientId }}
           queryDocument={GetClientServicesDocument}
           columns={columns}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(record) =>
-            `${getServiceTypeForDisplay(record.serviceType)} on ${parseAndFormatDate(record.dateProvided)}`
-          }
           pagePath='client.services'
           fetchPolicy='cache-and-network'
           noData='No services'

@@ -1,7 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useMemo, useState } from 'react';
 
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -21,12 +23,6 @@ import {
   GetEnrollmentServicesQueryVariables,
   ServiceFieldsFragment,
 } from '@/types/gqlTypes';
-
-const COLUMNS = [
-  SERVICE_BASIC_COLUMNS.serviceDate,
-  SERVICE_BASIC_COLUMNS.serviceType,
-  SERVICE_COLUMNS.serviceDetails,
-];
 
 const EnrollmentServicesPage = () => {
   const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
@@ -53,23 +49,34 @@ const EnrollmentServicesPage = () => {
 
   const canEditServices = enrollment?.access.canEditEnrollments;
 
-  const getTableRowActions = useCallback(
-    (service: ServiceFieldsFragment) => {
-      return canEditServices
-        ? {
-            primaryAction: {
-              title: 'Update Service',
-              key: 'service',
-              onClick: () => {
-                setViewingRecord(service);
-                openServiceDialog();
-              },
+  const columns = useMemo(() => {
+    return [
+      SERVICE_BASIC_COLUMNS.serviceDate,
+      SERVICE_BASIC_COLUMNS.serviceType,
+      SERVICE_COLUMNS.serviceDetails,
+      ...(canEditServices
+        ? [
+            {
+              ...BASE_ACTION_COLUMN_DEF,
+              render: (service: ServiceFieldsFragment) => (
+                <TableRowActions
+                  record={service}
+                  recordName={`${getServiceTypeForDisplay(service.serviceType)} on ${parseAndFormatDate(service.dateProvided)}`}
+                  primaryActionConfig={{
+                    title: 'Update Service',
+                    key: 'service',
+                    onClick: () => {
+                      setViewingRecord(service);
+                      openServiceDialog();
+                    },
+                  }}
+                />
+              ),
             },
-          }
-        : {};
-    },
-    [canEditServices, openServiceDialog]
-  );
+          ]
+        : []),
+    ];
+  }, [canEditServices, openServiceDialog]);
 
   if (!enrollment || !enrollmentId || !clientId || !serviceFeature)
     return <NotFound />;
@@ -100,11 +107,7 @@ const EnrollmentServicesPage = () => {
         >
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentServicesDocument}
-          columns={COLUMNS}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(record) =>
-            `${getServiceTypeForDisplay(record.serviceType)} on ${parseAndFormatDate(record.dateProvided)}`
-          }
+          columns={columns}
           pagePath='enrollment.services'
           noData='No services'
           recordType='Service'

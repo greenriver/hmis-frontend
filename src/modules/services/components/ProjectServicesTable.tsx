@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
+  BASE_ACTION_COLUMN_DEF,
   getViewEnrollmentAction,
   getViewServiceAction,
-} from '@/components/elements/table/tableActions/tableRowActionUtil';
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -26,19 +28,6 @@ export type ServiceFields = NonNullable<
   GetProjectServicesQuery['project']
 >['services']['nodes'][number];
 
-const getTableRowActions = (service: ServiceFields) => {
-  return {
-    primaryAction: getViewServiceAction(
-      service,
-      service.enrollment.id,
-      service.enrollment.client.id
-    ),
-    secondaryActions: [
-      getViewEnrollmentAction(service.enrollment, service.enrollment.client),
-    ],
-  };
-};
-
 const ProjectServicesTable = ({
   projectId,
   columns,
@@ -59,6 +48,26 @@ const ProjectServicesTable = ({
       SERVICE_BASIC_COLUMNS.serviceType,
       WITH_ENROLLMENT_COLUMNS.entryDate,
       WITH_ENROLLMENT_COLUMNS.exitDate,
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (service: ServiceFields) => (
+          <TableRowActions
+            record={service}
+            recordName={`${clientBriefName(service.enrollment.client)}'s ${getServiceTypeForDisplay(service.serviceType)} on ${parseAndFormatDate(service.dateProvided)}`}
+            primaryActionConfig={getViewServiceAction(
+              service,
+              service.enrollment.id,
+              service.enrollment.client.id
+            )}
+            secondaryActionConfigs={[
+              getViewEnrollmentAction(
+                service.enrollment,
+                service.enrollment.client
+              ),
+            ]}
+          />
+        ),
+      },
     ];
   }, [columns]);
 
@@ -78,10 +87,6 @@ const ProjectServicesTable = ({
       }}
       queryDocument={GetProjectServicesDocument}
       columns={displayColumns}
-      getTableRowActions={getTableRowActions}
-      getRowAccessibleName={(record) =>
-        `${clientBriefName(record.enrollment.client)}'s ${getServiceTypeForDisplay(record.serviceType)} on ${parseAndFormatDate(record.dateProvided)}`
-      }
       noData='No services'
       pagePath='project.services'
       recordType='Service'

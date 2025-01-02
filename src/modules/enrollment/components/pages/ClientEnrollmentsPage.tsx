@@ -1,8 +1,12 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import { getViewEnrollmentAction } from '@/components/elements/table/tableActions/tableRowActionUtil';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewEnrollmentAction,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
@@ -93,16 +97,6 @@ const CLIENT_ENROLLMENT_COLUMNS: {
   },
 };
 
-const COLUMNS: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
-  CLIENT_ENROLLMENT_COLUMNS.projectName,
-  CLIENT_ENROLLMENT_COLUMNS.organizationName,
-  ENROLLMENT_COLUMNS.entryDate,
-  ENROLLMENT_COLUMNS.exitDate,
-  ENROLLMENT_COLUMNS.enrollmentStatus,
-  CLIENT_ENROLLMENT_COLUMNS.projectType,
-  CLIENT_ENROLLMENT_COLUMNS.enrollmentDetails,
-];
-
 const ClientEnrollmentsPage = () => {
   const { client } = useClientDashboardContext();
 
@@ -110,16 +104,30 @@ const ClientEnrollmentsPage = () => {
     type: 'EnrollmentsForClientFilterOptions',
   });
 
-  const getTableRowActions = useCallback(
-    (enrollment: ClientEnrollmentFieldsFragment) => {
-      return {
-        primaryAction: {
-          ...getViewEnrollmentAction(enrollment, client),
-          // override the default ariaLabel to provide the project name, since we are in the client context
-          ariaLabel: `View Enrollment at ${enrollment.projectName} for ${entryExitRange(enrollment)}`,
-        },
-      };
-    },
+  const columns = useMemo(
+    () => [
+      CLIENT_ENROLLMENT_COLUMNS.projectName,
+      CLIENT_ENROLLMENT_COLUMNS.organizationName,
+      ENROLLMENT_COLUMNS.entryDate,
+      ENROLLMENT_COLUMNS.exitDate,
+      ENROLLMENT_COLUMNS.enrollmentStatus,
+      CLIENT_ENROLLMENT_COLUMNS.projectType,
+      CLIENT_ENROLLMENT_COLUMNS.enrollmentDetails,
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (enrollment) => (
+          <TableRowActions
+            record={enrollment}
+            recordName={`${enrollment.projectName} ${entryExitRange(enrollment)}`}
+            primaryActionConfig={{
+              ...getViewEnrollmentAction(enrollment, client),
+              // override the default ariaLabel to provide the project name, since we are in the client context
+              ariaLabel: `View Enrollment at ${enrollment.projectName} for ${entryExitRange(enrollment)}`,
+            }}
+          />
+        ),
+      },
+    ],
     [client]
   );
 
@@ -134,11 +142,7 @@ const ClientEnrollmentsPage = () => {
         >
           queryVariables={{ id: client.id }}
           queryDocument={GetClientEnrollmentsDocument}
-          columns={COLUMNS}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(row) =>
-            `${row.projectName} ${entryExitRange(row)}`
-          }
+          columns={columns}
           pagePath='client.enrollments'
           filters={filters}
           recordType='Enrollment'

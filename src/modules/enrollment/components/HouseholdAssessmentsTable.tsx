@@ -1,4 +1,8 @@
-import { getViewAssessmentAction } from '@/components/elements/table/tableActions/tableRowActionUtil';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewAssessmentAction,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
@@ -6,7 +10,10 @@ import {
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { assessmentDescription } from '@/modules/hmis/hmisUtil';
+import {
+  assessmentDescription,
+  clientBriefName,
+} from '@/modules/hmis/hmisUtil';
 import {
   GetHouseholdAssessmentsDocument,
   GetHouseholdAssessmentsQuery,
@@ -22,17 +29,25 @@ const COLUMNS: ColumnDef<HhmAssessmentType>[] = [
   ASSESSMENT_COLUMNS.date,
   ASSESSMENT_COLUMNS.type,
   ASSESSMENT_COLUMNS.lastUpdated,
-];
-
-const getTableRowActions = (assessment: HhmAssessmentType) => {
-  return {
-    primaryAction: getViewAssessmentAction(
-      assessment,
-      assessment.enrollment.client.id,
-      assessment.enrollment.id
+  {
+    ...BASE_ACTION_COLUMN_DEF,
+    render: (assessment: HhmAssessmentType) => (
+      <TableRowActions
+        record={assessment}
+        recordName={assessmentDescription(assessment)}
+        primaryActionConfig={{
+          ...getViewAssessmentAction(
+            assessment,
+            assessment.enrollment.client.id,
+            assessment.enrollment.id
+          ),
+          // Since this is for all hh members, overwrite the aria label so it includes the specific client name
+          ariaLabel: `View Assessment, ${clientBriefName(assessment.enrollment.client)}'s ${assessmentDescription(assessment)}`,
+        }}
+      />
     ),
-  };
-};
+  },
+];
 
 interface Props {
   householdId: string;
@@ -58,8 +73,6 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
       queryVariables={{ id: householdId }}
       queryDocument={GetHouseholdAssessmentsDocument}
       columns={COLUMNS}
-      getTableRowActions={getTableRowActions}
-      getRowAccessibleName={(record) => assessmentDescription(record)}
       pagePath='household.assessments'
       noData='No assessments'
       recordType='Assessment'

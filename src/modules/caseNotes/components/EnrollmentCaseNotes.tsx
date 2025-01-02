@@ -4,6 +4,8 @@ import { Box, Button } from '@mui/material';
 import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -108,25 +110,31 @@ const EnrollmentCaseNotes = () => {
       projectId: enrollment?.project.id,
     });
 
-  const getColumnDefs = useCallback((rows: CustomCaseNoteFieldsFragment[]) => {
-    const customColumns = getCustomDataElementColumns(rows);
-    return [
-      CASE_NOTE_COLUMNS.InformationDate,
-      ...customColumns,
-      CASE_NOTE_COLUMNS.NoteContent,
-      CASE_NOTE_COLUMNS.LastUpdated,
-    ];
-  }, []);
-
-  const getTableRowActions = useCallback(
-    (record: CustomCaseNoteFieldsFragment) => {
-      return {
-        primaryAction: {
-          title: 'View Case Note',
-          key: 'case note',
-          onClick: () => onSelectRecord(record),
+  const getColumnDefs = useCallback(
+    (rows: CustomCaseNoteFieldsFragment[]) => {
+      const customColumns = getCustomDataElementColumns(rows);
+      return [
+        CASE_NOTE_COLUMNS.InformationDate,
+        ...customColumns,
+        CASE_NOTE_COLUMNS.NoteContent,
+        CASE_NOTE_COLUMNS.LastUpdated,
+        {
+          ...BASE_ACTION_COLUMN_DEF,
+          render: (caseNote: CustomCaseNoteFieldsFragment) => (
+            <TableRowActions
+              record={caseNote}
+              recordName={
+                parseAndFormatDate(caseNote.informationDate) || caseNote.id
+              }
+              primaryActionConfig={{
+                title: 'View Case Note',
+                key: 'case note',
+                onClick: () => onSelectRecord(caseNote),
+              }}
+            />
+          ),
         },
-      };
+      ];
     },
     [onSelectRecord]
   );
@@ -165,10 +173,6 @@ const EnrollmentCaseNotes = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCustomCaseNotesDocument}
           getColumnDefs={getColumnDefs}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(row) =>
-            parseAndFormatDate(row.informationDate) || row.id
-          }
           pagePath='enrollment.customCaseNotes'
           noData='No case notes'
           headerCellSx={() => ({ color: 'text.secondary' })}

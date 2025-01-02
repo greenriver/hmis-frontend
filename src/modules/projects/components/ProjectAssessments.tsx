@@ -1,11 +1,12 @@
 import { Paper } from '@mui/material';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { useProjectDashboardContext } from './ProjectDashboard';
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
+  BASE_ACTION_COLUMN_DEF,
   getViewAssessmentAction,
   getViewEnrollmentAction,
-} from '@/components/elements/table/tableActions/tableRowActionUtil';
-import { ColumnDef } from '@/components/elements/table/types';
+} from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
@@ -27,38 +28,44 @@ export type ProjectAssessmentType = NonNullable<
   GetProjectAssessmentsQuery['project']
 >['assessments']['nodes'][number];
 
-const COLUMNS: ColumnDef<ProjectAssessmentType>[] = [
-  ASSESSMENT_CLIENT_NAME_COL,
-  ASSESSMENT_COLUMNS.date,
-  ASSESSMENT_COLUMNS.type,
-  WITH_ENROLLMENT_COLUMNS.entryDate,
-  WITH_ENROLLMENT_COLUMNS.exitDate,
-];
-
 const ProjectAssessments = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
   const { project } = useProjectDashboardContext();
 
-  const getTableRowActions = useCallback(
-    (record: ProjectAssessmentType) => {
-      return {
-        primaryAction: {
-          ...getViewAssessmentAction(
-            record,
-            record.enrollment.client.id,
-            record.enrollment.id
-          ),
-          state: { backToLabel: project.projectName },
-        },
-        secondaryActions: [
-          getViewEnrollmentAction(record.enrollment, record.enrollment.client),
-        ],
-      };
-    },
-    [project]
-  );
+  const columns = useMemo(() => {
+    return [
+      ASSESSMENT_CLIENT_NAME_COL,
+      ASSESSMENT_COLUMNS.date,
+      ASSESSMENT_COLUMNS.type,
+      WITH_ENROLLMENT_COLUMNS.entryDate,
+      WITH_ENROLLMENT_COLUMNS.exitDate,
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (record: ProjectAssessmentType) => (
+          <TableRowActions
+            record={record}
+            recordName={assessmentDescription(record)}
+            primaryActionConfig={{
+              ...getViewAssessmentAction(
+                record,
+                record.enrollment.client.id,
+                record.enrollment.id
+              ),
+              linkState: { backToLabel: project.projectName },
+            }}
+            secondaryActionConfigs={[
+              getViewEnrollmentAction(
+                record.enrollment,
+                record.enrollment.client
+              ),
+            ]}
+          />
+        ),
+      },
+    ];
+  }, [project]);
 
   const filters = useFilters({
     type: 'AssessmentsForProjectFilterOptions',
@@ -76,9 +83,7 @@ const ProjectAssessments = () => {
         >
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectAssessmentsDocument}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(record) => assessmentDescription(record)}
-          columns={COLUMNS}
+          columns={columns}
           noData='No assessments'
           pagePath='project.assessments'
           recordType='Assessment'

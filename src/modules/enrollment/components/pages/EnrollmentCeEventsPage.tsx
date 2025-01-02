@@ -2,7 +2,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 
-import { ColumnDef } from '@/components/elements/table/types';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -24,21 +25,6 @@ import {
   GetEnrollmentEventsQueryVariables,
   RecordFormRole,
 } from '@/types/gqlTypes';
-
-const COLUMNS: ColumnDef<EventFieldsFragment>[] = [
-  {
-    header: 'Event Type',
-    render: (e) => <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />,
-  },
-  {
-    header: 'Event Date',
-    render: (e) => parseAndFormatDate(e.eventDate),
-  },
-  {
-    header: 'Referral Result',
-    render: (e) => eventReferralResult(e),
-  },
-];
 
 const EnrollmentCeEventsPage = () => {
   const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
@@ -80,16 +66,37 @@ const EnrollmentCeEventsPage = () => {
     DataCollectionFeatureRole.CeEvent
   );
 
-  const getTableRowActions = useCallback(
-    (record: EventFieldsFragment) => {
-      return {
-        primaryAction: {
-          title: 'View CE Event',
-          key: 'ce event',
-          onClick: () => onSelectRecord(record),
-        },
-      };
-    },
+  const columns = useMemo(
+    () => [
+      {
+        header: 'Event Type',
+        render: (e: EventFieldsFragment) => (
+          <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />
+        ),
+      },
+      {
+        header: 'Event Date',
+        render: (e: EventFieldsFragment) => parseAndFormatDate(e.eventDate),
+      },
+      {
+        header: 'Referral Result',
+        render: (e: EventFieldsFragment) => eventReferralResult(e),
+      },
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (e: EventFieldsFragment) => (
+          <TableRowActions
+            record={e}
+            recordName={`${HmisEnums.EventType[e.event]} on ${parseAndFormatDate(e.eventDate)}`}
+            primaryActionConfig={{
+              title: 'View CE Event',
+              key: 'ce event',
+              onClick: () => onSelectRecord(e),
+            }}
+          />
+        ),
+      },
+    ],
     [onSelectRecord]
   );
 
@@ -122,11 +129,7 @@ const EnrollmentCeEventsPage = () => {
         >
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentEventsDocument}
-          columns={COLUMNS}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(record) =>
-            `${HmisEnums.EventType[record.event]} on ${parseAndFormatDate(record.eventDate)}`
-          }
+          columns={columns}
           pagePath='enrollment.events'
           noData='No events'
           headerCellSx={() => ({ color: 'text.secondary' })}

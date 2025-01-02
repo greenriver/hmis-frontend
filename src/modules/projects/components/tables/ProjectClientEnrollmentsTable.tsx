@@ -108,8 +108,9 @@ export const ASSIGNED_STAFF_COL = {
 type WithEnrollment = {
   enrollment: Pick<
     EnrollmentFieldsFragment,
-    'entryDate' | 'exitDate' | 'inProgress' | 'autoExited'
-  >;
+    'entryDate' | 'exitDate' | 'inProgress'
+  > &
+    Partial<Pick<EnrollmentFieldsFragment, 'autoExited'>>;
 };
 export const WITH_ENROLLMENT_COLUMNS: {
   [key: string]: ColumnDef<WithEnrollment>;

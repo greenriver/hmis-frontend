@@ -1,8 +1,9 @@
 import { Paper } from '@mui/material';
 
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
-import { ColumnDef } from '@/components/elements/table/types';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
@@ -20,17 +21,6 @@ type Row = NonNullable<
   GetClientCaseNotesQuery['client']
 >['customCaseNotes']['nodes'][0];
 
-const COLUMNS: ColumnDef<Row>[] = [
-  CASE_NOTE_COLUMNS.InformationDate,
-  {
-    key: 'project',
-    header: 'Project Name',
-    render: (row) => row.enrollment.projectName,
-  },
-  CASE_NOTE_COLUMNS.LastUpdated,
-  CASE_NOTE_COLUMNS.NoteContentPreview,
-];
-
 const ClientCaseNotes = () => {
   const { client } = useClientDashboardContext();
 
@@ -44,16 +34,31 @@ const ClientCaseNotes = () => {
     maxWidth: 'sm',
   });
 
-  const getTableRowActions = useCallback(
-    (record: Row) => {
-      return {
-        primaryAction: {
-          title: 'View Case Note',
-          key: 'case note',
-          onClick: () => onSelectRecord(record),
-        },
-      };
-    },
+  const columns = useMemo(
+    () => [
+      CASE_NOTE_COLUMNS.InformationDate,
+      {
+        key: 'project',
+        header: 'Project Name',
+        render: (row: Row) => row.enrollment.projectName,
+      },
+      CASE_NOTE_COLUMNS.LastUpdated,
+      CASE_NOTE_COLUMNS.NoteContentPreview,
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (row: Row) => (
+          <TableRowActions
+            record={row}
+            recordName={`${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`}
+            primaryActionConfig={{
+              title: 'View Case Note',
+              key: 'case note',
+              onClick: () => onSelectRecord(row),
+            }}
+          />
+        ),
+      },
+    ],
     [onSelectRecord]
   );
 
@@ -70,11 +75,7 @@ const ClientCaseNotes = () => {
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientCaseNotesDocument}
-          columns={COLUMNS}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(row) =>
-            `${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`
-          }
+          columns={columns}
           pagePath='client.customCaseNotes'
           noData='No case notes'
           headerCellSx={() => ({ color: 'text.secondary' })}

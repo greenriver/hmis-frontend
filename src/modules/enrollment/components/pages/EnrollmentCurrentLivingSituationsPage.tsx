@@ -1,6 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -98,21 +100,24 @@ const EnrollmentCurrentLivingSituationsPage = () => {
         CLS_COLUMNS.livingSituation,
         CLS_COLUMNS.locationDetails,
         ...customColumns,
-      ];
-    },
-    []
-  );
-
-  const getTableRowActions = useCallback(
-    (record: CurrentLivingSituationFieldsFragment) => {
-      return {
-        primaryAction: {
-          title: 'View CLS',
-          key: 'cls',
-          ariaLabel: `View Current Living Situation, ${parseAndFormatDate(record.informationDate) || 'unknown date'}`,
-          onClick: () => onSelectRecord(record),
+        {
+          ...BASE_ACTION_COLUMN_DEF,
+          render: (cls: CurrentLivingSituationFieldsFragment) => (
+            <TableRowActions
+              record={cls}
+              recordName={
+                parseAndFormatDate(cls.informationDate) || 'unknown date'
+              }
+              primaryActionConfig={{
+                title: 'View CLS',
+                key: 'cls',
+                ariaLabel: `View Current Living Situation, ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`,
+                onClick: () => onSelectRecord(cls),
+              }}
+            />
+          ),
         },
-      };
+      ];
     },
     [onSelectRecord]
   );
@@ -146,10 +151,6 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCurrentLivingSituationsDocument}
           getColumnDefs={getColumnDefs}
-          getTableRowActions={getTableRowActions}
-          getRowAccessibleName={(record) =>
-            parseAndFormatDate(record.informationDate) || 'unknown date'
-          }
           pagePath='enrollment.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'

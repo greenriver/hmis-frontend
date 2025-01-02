@@ -14,7 +14,11 @@ import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
-import { getViewClientAction } from '@/components/elements/table/tableActions/tableRowActionUtil';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewClientAction,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 
 import ClientName from '@/modules/client/components/ClientName';
@@ -117,15 +121,19 @@ export const CLIENT_COLUMNS: {
   },
 };
 
-const getSearchResultTableActions = (record: ClientFieldsFragment) => {
-  return {
-    primaryAction: getViewClientAction(record),
-  };
-};
-
 const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.name,
   CLIENT_COLUMNS.age,
+  {
+    ...BASE_ACTION_COLUMN_DEF,
+    render: (client) => (
+      <TableRowActions
+        record={client}
+        recordName={clientBriefName(client)}
+        primaryActionConfig={getViewClientAction(client)}
+      />
+    ),
+  },
 ];
 
 /**
@@ -278,8 +286,6 @@ const ClientSearch = () => {
             queryDocument={SearchClientsDocument}
             onCompleted={() => setHasSearched(true)}
             columns={columns}
-            getTableRowActions={getSearchResultTableActions}
-            getRowAccessibleName={(record) => clientBriefName(record)}
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
             filters={filters}

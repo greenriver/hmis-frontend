@@ -326,7 +326,7 @@ const GenericTableWithData = <
       <Box sx={containerSx}>
         <GenericTable<RowDataType>
           loading={loading && !data}
-          loadingRegardlessOfData={loading}
+          //loadingRegardlessOfData={loading} // todo @martha - fix
           rows={rows}
           paginated={!nonTablePagination && !hidePagination}
           tablePaginationProps={

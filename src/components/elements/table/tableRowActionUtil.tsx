@@ -25,7 +25,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
   header: <Box sx={visuallyHidden}>Actions</Box>,
   key: 'Actions',
-  tableCellProps: { sx: { p: 0 } },
+  tableCellProps: { sx: { py: 0 } },
   render: '', // gets overridden when used
 };
 
