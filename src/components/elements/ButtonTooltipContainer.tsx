@@ -8,7 +8,16 @@ const ButtonTooltipContainer = ({
   if (!title) return children;
 
   return (
-    <Tooltip title={title} placement='top' arrow {...props}>
+    <Tooltip
+      title={title}
+      placement='top'
+      // describeChild makes the tooltip text become the `title` of the direct child,
+      // which is a span in this case. Otherwise it would become the `aria-label` of
+      // the direct child, which is not valid for spans.
+      describeChild
+      arrow
+      {...props}
+    >
       <span>{children}</span>
     </Tooltip>
   );
