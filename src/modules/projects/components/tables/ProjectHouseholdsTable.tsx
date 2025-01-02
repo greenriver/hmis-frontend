@@ -1,9 +1,9 @@
-import { Box, TableBody, TableCell, TableRow } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
+import { TableBody, TableCell, TableRow } from '@mui/material';
 import React, { useMemo } from 'react';
 import { renderCellContents } from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
+  BASE_ACTION_COLUMN_DEF,
   getViewClientAction,
   getViewEnrollmentAction,
 } from '@/components/elements/table/tableRowActionUtil';
@@ -57,8 +57,7 @@ const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
 ];
 const ACTION_COL: ColumnDef<OneHouseholdClient> = {
-  key: 'actions',
-  header: <Box sx={visuallyHidden}>Actions</Box>,
+  ...BASE_ACTION_COLUMN_DEF,
   render: (householdClient) => (
     <TableRowActions
       record={householdClient}
