@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 import ButtonLink from '../ButtonLink';
 import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
 
@@ -21,11 +21,6 @@ const TableRowActions = <T extends { id: string }>({
   primaryActionConfig,
   secondaryActionConfigs,
 }: TableRowActionsProps<T>) => {
-  const accessibleName = useMemo(
-    () => recordName || record.id,
-    [record.id, recordName]
-  );
-
   return (
     <Stack direction='row' alignItems='center' justifyContent='end' gap={0.5}>
       {!!primaryActionConfig && (
@@ -45,7 +40,7 @@ const TableRowActions = <T extends { id: string }>({
           title='Actions'
           items={secondaryActionConfigs}
           ButtonProps={{
-            'aria-label': `Action menu for ${accessibleName}`,
+            'aria-label': `Action menu for ${recordName || record.id}`,
           }}
           MenuProps={{
             MenuListProps: {
