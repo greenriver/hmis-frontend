@@ -21,8 +21,6 @@ const TableRowActions = <T extends { id: string }>({
   primaryActionConfig,
   secondaryActionConfigs,
 }: TableRowActionsProps<T>) => {
-  // todo @martha - confirm that secondary actions have correct aria, maybe require it on the type?
-  // proposal is to support alternative way of providing aria for primary, but secondaries its ok
   return (
     <Stack direction='row' alignItems='center' justifyContent='end' gap={0.5}>
       {!!primaryActionConfig && primaryActionConfig.to && (

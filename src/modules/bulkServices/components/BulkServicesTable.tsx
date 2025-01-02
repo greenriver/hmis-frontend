@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { ServicePeriod } from '../bulkServicesTypes';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
@@ -66,81 +66,85 @@ const BulkServicesTable: React.FC<Props> = ({
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
-  const columns = useMemo(() => {
-    const notEnrolledText = (
-      <NotCollectedText variant='inherit' color='text.disabled'>
-        Not enrolled on {formatDateForDisplay(serviceDate, 'M/d')}
-      </NotCollectedText>
-    );
-    return [
-      CLIENT_COLUMNS.name,
-      ...(canViewDob ? [CLIENT_COLUMNS.dobAge] : []),
-      {
-        header: 'Entry Date',
-        render: (row: RowType) => {
-          if (!row.activeEnrollment) return notEnrolledText;
+  const getColumnDefs = useCallback(
+    (_rows: RowType[], loading?: boolean) => {
+      const notEnrolledText = (
+        <NotCollectedText variant='inherit' color='text.disabled'>
+          Not enrolled on {formatDateForDisplay(serviceDate, 'M/d')}
+        </NotCollectedText>
+      );
+      return [
+        CLIENT_COLUMNS.name,
+        ...(canViewDob ? [CLIENT_COLUMNS.dobAge] : []),
+        {
+          header: 'Entry Date',
+          render: (row: RowType) => {
+            if (!row.activeEnrollment) return notEnrolledText;
 
-          return parseAndFormatDate(row.activeEnrollment.entryDate);
+            return parseAndFormatDate(row.activeEnrollment.entryDate);
+          },
         },
-      },
-      {
-        header: `Last ${serviceTypeName} Date`,
-        render: (row: RowType) => {
-          if (!row.activeEnrollment) return notEnrolledText;
+        {
+          header: `Last ${serviceTypeName} Date`,
+          render: (row: RowType) => {
+            if (!row.activeEnrollment) return notEnrolledText;
 
-          const noService = (
-            <NotCollectedText variant='inherit' color='text.disabled'>
-              No Previous {serviceTypeName}
-            </NotCollectedText>
-          );
-          if (!row.activeEnrollment.lastServiceDate) {
-            return noService;
-          }
-          const dt = parseHmisDateString(row.activeEnrollment.lastServiceDate);
-          if (!dt) return noService;
-          const relative = formatRelativeDate(dt);
-          const formatted = formatDateForDisplay(dt);
-          return `${relative} (${formatted})`;
-        },
-      },
-      {
-        ...BASE_ACTION_COLUMN_DEF,
-        // todo @martha - loading not working
-        render: (row: RowType, loading: boolean) => (
-          <TableRowActions
-            record={row}
-            recordName={clientBriefName(row)}
-            primaryAction={
-              <AssignServiceButton
-                client={row}
-                queryVariables={mutationQueryVariables}
-                tableLoading={loading}
-                disabled={anyRowsSelected}
-                disabledReason={
-                  anyRowsSelected
-                    ? 'Deselect checkboxes to assign clients individually.'
-                    : undefined
-                }
-                serviceTypeName={serviceTypeName}
-              />
+            const noService = (
+              <NotCollectedText variant='inherit' color='text.disabled'>
+                No Previous {serviceTypeName}
+              </NotCollectedText>
+            );
+            if (!row.activeEnrollment.lastServiceDate) {
+              return noService;
             }
-            secondaryActionConfigs={[
-              getViewClientAction(row),
-              ...(row.activeEnrollment
-                ? [getViewEnrollmentAction(row.activeEnrollment, row)]
-                : []),
-            ]}
-          />
-        ),
-      },
-    ] as ColumnDef<RowType>[];
-  }, [
-    anyRowsSelected,
-    canViewDob,
-    mutationQueryVariables,
-    serviceDate,
-    serviceTypeName,
-  ]);
+            const dt = parseHmisDateString(
+              row.activeEnrollment.lastServiceDate
+            );
+            if (!dt) return noService;
+            const relative = formatRelativeDate(dt);
+            const formatted = formatDateForDisplay(dt);
+            return `${relative} (${formatted})`;
+          },
+        },
+        {
+          ...BASE_ACTION_COLUMN_DEF,
+          render: (row: RowType) => (
+            <TableRowActions
+              record={row}
+              recordName={clientBriefName(row)}
+              primaryAction={
+                <AssignServiceButton
+                  client={row}
+                  queryVariables={mutationQueryVariables}
+                  tableLoading={loading}
+                  disabled={anyRowsSelected}
+                  disabledReason={
+                    anyRowsSelected
+                      ? 'Deselect checkboxes to assign clients individually.'
+                      : undefined
+                  }
+                  serviceTypeName={serviceTypeName}
+                />
+              }
+              secondaryActionConfigs={[
+                getViewClientAction(row),
+                ...(row.activeEnrollment
+                  ? [getViewEnrollmentAction(row.activeEnrollment, row)]
+                  : []),
+              ]}
+            />
+          ),
+        },
+      ] as ColumnDef<RowType>[];
+    },
+    [
+      anyRowsSelected,
+      canViewDob,
+      mutationQueryVariables,
+      serviceDate,
+      serviceTypeName,
+    ]
+  );
 
   const defaultFilterValues = useMemo(() => {
     if (!servicePeriod) return;
@@ -178,7 +182,7 @@ const BulkServicesTable: React.FC<Props> = ({
         onChangeSelectedRowIds={(rows) => setAnyRowsSelected(rows.length > 0)}
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
-        columns={columns}
+        getColumnDefs={getColumnDefs}
         recordType='Client'
         // TODO: add user-facing filter options for enrolled clients and bed night date. No filter options for now.
         defaultFilterValues={defaultFilterValues}
