@@ -90,6 +90,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
           onClick={onClick}
           size='small'
           className={className}
+          aria-label={`Delete ${recordName}`}
           {...ButtonProps}
         >
           <DeleteIcon fontSize='small' />
