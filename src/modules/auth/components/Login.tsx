@@ -16,8 +16,8 @@ const Login: React.FC = () => {
       <Container component='main' maxWidth='xs'>
         <Box sx={{ pt: { md: 4, xs: 2 } }}>
           <Typography
-            variant='h1'
-            component='h5'
+            component='h1'
+            variant='h5'
             fontWeight={600}
             textAlign='center'
           >
