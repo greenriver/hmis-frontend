@@ -14,6 +14,7 @@ import PrintViewButton from './PrintViewButton';
 import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
+import SkipToContentButton from '@/components/elements/SkipToContentButton';
 import MobileMenu from '@/components/layout/nav/MobileMenu';
 import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
 import { useIsDashboard } from '@/components/layout/nav/useIsDashboard';
@@ -99,6 +100,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
           sx={{ px: isMobile ? 1 : 3, minHeight: APP_BAR_HEIGHT }}
           disableGutters={isMobile}
         >
+          <SkipToContentButton focusTargetId='focusable-main' />
           <RouterLink
             variant='h1'
             noWrap

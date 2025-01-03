@@ -121,6 +121,7 @@ const DashboardContentContainer: React.FC<Props> = ({
           <Box
             key='content'
             component='main'
+            id='focusable-main'
             sx={{
               pt: 2,
               pb: 8,

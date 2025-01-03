@@ -1,6 +1,7 @@
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
+import SkipToContentButton from '@/components/elements/SkipToContentButton';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
 import FormStepper from '@/modules/form/components/FormStepper';
 import { FormItem } from '@/types/gqlTypes';
@@ -28,17 +29,16 @@ const FormNavigation = ({
         }}
       >
         <Paper sx={{ p: 2 }}>
-          {title && (
-            <Typography variant='h6' sx={{ mb: 2 }}>
-              {title}
-            </Typography>
-          )}
-          <FormStepper items={items} />
+          <Stack gap={2}>
+            {title && <Typography variant='h6'>{title}</Typography>}
+            <SkipToContentButton focusTargetId='focusable-form' />
+            <FormStepper items={items} />
+          </Stack>
         </Paper>
         {contentsBelowNavigation}
       </Box>
     </Grid>
-    <Grid item xs={9} sx={{ pt: '0 !important' }}>
+    <Grid id='focusable-form' item xs={9} sx={{ pt: '0 !important' }}>
       {children}
     </Grid>
   </>

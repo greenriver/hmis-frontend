@@ -7,6 +7,7 @@ import {
   DESKTOP_NAV_SIDEBAR_WIDTH,
   STICKY_BAR_HEIGHT,
 } from '../layoutConstants';
+import SkipToContentButton from '@/components/elements/SkipToContentButton';
 import MobileMenu from '@/components/layout/nav/MobileMenu';
 
 interface Props {
@@ -46,6 +47,7 @@ const CloseMenuRow = ({
     ) : (
       <Box />
     )}
+    <SkipToContentButton focusTargetId='focusable-main' />
     <Button
       variant='text'
       color='grayscale'

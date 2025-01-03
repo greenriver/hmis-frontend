@@ -338,7 +338,12 @@ const AssessmentForm: React.FC<Props> = ({
   return (
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
       {showNavigation && navigation}
-      <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
+      <Grid
+        id='focusable-form'
+        item
+        xs={showNavigation ? 9.5 : 12}
+        sx={{ pt: '0 !important' }}
+      >
         <Stack sx={{ mb: 1 }} gap={1}>
           {titleNode}
           {locked && (

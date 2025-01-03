@@ -15,6 +15,7 @@ const PageContainer = ({
   const isTiny = useIsMobile('sm');
   return (
     <Container
+      id='focusable-main'
       component='main'
       maxWidth='lg'
       sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: 4, pb: 6 }}

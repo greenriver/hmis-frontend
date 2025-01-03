@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import DeleteAssessmentButton from './DeleteAssessmentButton';
 
+import SkipToContentButton from '@/components/elements/SkipToContentButton';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -92,9 +93,12 @@ const AssessmentFormSideBar: React.FC<Props> = ({
       }}
     >
       <Box>
-        <Typography variant='body2' component='div'>
-          Assessment Sections
-        </Typography>
+        <Stack gap={2}>
+          <Typography variant='body2' component='div'>
+            Assessment Sections
+          </Typography>
+          <SkipToContentButton focusTargetId='focusable-form' />
+        </Stack>
         <Divider sx={{ my: 2, mx: -2 }} />
       </Box>
       <FormStepper
