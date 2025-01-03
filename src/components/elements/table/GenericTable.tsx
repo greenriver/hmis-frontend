@@ -74,7 +74,7 @@ export interface Props<T> {
   condensed?: boolean;
   // TableBodyComponent can be overridden. This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
   TableBodyComponent?: ComponentType | keyof JSX.IntrinsicElements;
-  injectBelowRows?: ReactNode; // component to inject below all rendered rows, above footer
+  belowRowsContent?: ReactNode; // component to insert below all rendered rows, above footer
 }
 
 const clickableRowStyles = {
@@ -144,7 +144,7 @@ const GenericTable = <T extends { id: string }>({
   condensed = false,
   rowLinkState,
   TableBodyComponent = TableBody,
-  injectBelowRows,
+  belowRowsContent,
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -458,7 +458,7 @@ const GenericTable = <T extends { id: string }>({
                   </TableRow>
                 );
               })}
-            {injectBelowRows}
+            {belowRowsContent}
             {actionRow}
             {/* dont show "no data" row if there is an action row, which may be for adding new elements or making another selection (MCI uses it) */}
             {!actionRow && noResultsRow}

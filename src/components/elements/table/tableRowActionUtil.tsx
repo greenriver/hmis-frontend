@@ -17,7 +17,7 @@ export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
   render: '', // gets overridden when used
 };
 
-export const getViewClientAction = (client: ClientNameFragment) => {
+export const getViewClientMenuItem = (client: ClientNameFragment) => {
   return {
     title: 'View Client',
     key: 'client',
@@ -28,14 +28,14 @@ export const getViewClientAction = (client: ClientNameFragment) => {
   };
 };
 
-export const getViewEnrollmentAction = (
+export const getViewEnrollmentMenuItem = (
   enrollment: Pick<EnrollmentFieldsFragment, 'id' | 'entryDate' | 'exitDate'>,
-  client: Pick<ClientNameFragment, 'id'> | ClientNameFragment
+  client: ClientNameFragment
 ) => {
   return {
     title: 'View Enrollment',
     key: 'enrollment',
-    ariaLabel: `View Enrollment, ${client.hasOwnProperty('firstName') ? clientBriefName(client as ClientNameFragment) : ''} ${entryExitRange(enrollment)}`,
+    ariaLabel: `View Enrollment, ${clientBriefName(client)} ${entryExitRange(enrollment)}`,
     to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
       clientId: client.id,
       enrollmentId: enrollment.id,
