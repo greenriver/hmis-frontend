@@ -6,6 +6,7 @@ import useFileActions from '../hooks/useFileActions';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -13,7 +14,6 @@ import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePrevi
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import RelativeDateDisplay from '@/modules/hmis/components/RelativeDateDisplay';
 import {
   useClientPermissions,
   useHasClientPermissions,

@@ -17,7 +17,7 @@ import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewClientAction,
+  getViewClientMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 
@@ -130,7 +130,7 @@ const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
       <TableRowActions
         record={client}
         recordName={clientBriefName(client)}
-        primaryActionConfig={getViewClientAction(client)}
+        primaryActionConfig={getViewClientMenuItem(client)}
       />
     ),
   },

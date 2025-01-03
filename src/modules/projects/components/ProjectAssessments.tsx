@@ -4,8 +4,8 @@ import { useProjectDashboardContext } from './ProjectDashboard';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewAssessmentAction,
-  getViewEnrollmentAction,
+  getViewAssessmentMenuItem,
+  getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -48,7 +48,7 @@ const ProjectAssessments = () => {
             record={record}
             recordName={assessmentDescription(record)}
             primaryActionConfig={{
-              ...getViewAssessmentAction(
+              ...getViewAssessmentMenuItem(
                 record,
                 record.enrollment.client.id,
                 record.enrollment.id,
@@ -57,7 +57,7 @@ const ProjectAssessments = () => {
               linkState: { backToLabel: project.projectName },
             }}
             secondaryActionConfigs={[
-              getViewEnrollmentAction(
+              getViewEnrollmentMenuItem(
                 record.enrollment,
                 record.enrollment.client
               ),

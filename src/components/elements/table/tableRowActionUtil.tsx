@@ -38,12 +38,12 @@ export const getViewClientMenuItem = (client: ClientNameFragment) => {
 
 export const getViewEnrollmentMenuItem = (
   enrollment: Pick<EnrollmentFieldsFragment, 'id' | 'entryDate' | 'exitDate'>,
-  client: ClientNameFragment
+  client: Pick<ClientNameFragment, 'id'> | ClientNameFragment
 ) => {
   return {
     title: 'View Enrollment',
     key: 'enrollment',
-    ariaLabel: `View Enrollment, ${clientBriefName(client)} ${entryExitRange(enrollment)}`,
+    ariaLabel: `View Enrollment, ${client.hasOwnProperty('firstName') ? clientBriefName(client as ClientNameFragment) : ''} ${entryExitRange(enrollment)}`,
     to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
       clientId: client.id,
       enrollmentId: enrollment.id,
@@ -51,7 +51,7 @@ export const getViewEnrollmentMenuItem = (
   };
 };
 
-export const getViewAssessmentAction = (
+export const getViewAssessmentMenuItem = (
   assessment: AssessmentFieldsFragment,
   clientId: string,
   enrollmentId: string,
@@ -70,7 +70,7 @@ export const getViewAssessmentAction = (
   };
 };
 
-export const getViewServiceAction = (
+export const getViewServiceMenuItem = (
   service: Pick<ServiceFields, 'serviceType' | 'dateProvided'>,
   enrollmentId: string,
   clientId: string

@@ -5,7 +5,7 @@ import NotCollectedText from '@/components/elements/NotCollectedText';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewEnrollmentAction,
+  getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -120,7 +120,7 @@ const ClientEnrollmentsPage = () => {
             record={enrollment}
             recordName={`${enrollment.projectName} ${entryExitRange(enrollment)}`}
             primaryActionConfig={{
-              ...getViewEnrollmentAction(enrollment, client),
+              ...getViewEnrollmentMenuItem(enrollment, client),
               // override the default ariaLabel to provide the project name, since we are in the client context
               ariaLabel: `View Enrollment at ${enrollment.projectName} for ${entryExitRange(enrollment)}`,
             }}

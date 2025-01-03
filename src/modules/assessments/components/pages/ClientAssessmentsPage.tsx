@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewAssessmentAction,
+  getViewAssessmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -43,7 +43,7 @@ const ClientAssessmentsPage = () => {
           <TableRowActions
             record={row}
             recordName={assessmentDescription(row)}
-            primaryActionConfig={getViewAssessmentAction(
+            primaryActionConfig={getViewAssessmentMenuItem(
               row,
               clientId,
               row.enrollment.id,

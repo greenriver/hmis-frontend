@@ -6,8 +6,8 @@ import NotCollectedText from '@/components/elements/NotCollectedText';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewClientAction,
-  getViewEnrollmentAction,
+  getViewClientMenuItem,
+  getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
@@ -127,9 +127,9 @@ const BulkServicesTable: React.FC<Props> = ({
                 />
               }
               secondaryActionConfigs={[
-                getViewClientAction(row),
+                getViewClientMenuItem(row),
                 ...(row.activeEnrollment
-                  ? [getViewEnrollmentAction(row.activeEnrollment, row)]
+                  ? [getViewEnrollmentMenuItem(row.activeEnrollment, row)]
                   : []),
               ]}
             />

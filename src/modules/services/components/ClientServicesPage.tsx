@@ -4,8 +4,8 @@ import React, { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewEnrollmentAction,
-  getViewServiceAction,
+  getViewEnrollmentMenuItem,
+  getViewServiceMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -58,14 +58,14 @@ const ClientServicesPage: React.FC<{
               <TableRowActions
                 record={row}
                 recordName={`${getServiceTypeForDisplay(row.serviceType)} on ${parseAndFormatDate(row.dateProvided)}`}
-                primaryActionConfig={getViewServiceAction(
+                primaryActionConfig={getViewServiceMenuItem(
                   row,
                   row.enrollment.id,
                   clientId
                 )}
                 secondaryActionConfigs={[
                   {
-                    ...getViewEnrollmentAction(row.enrollment, {
+                    ...getViewEnrollmentMenuItem(row.enrollment, {
                       id: clientId,
                     }),
                     // override the default ariaLabel to provide the project name, since we are in the client context

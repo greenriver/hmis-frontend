@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewEnrollmentAction,
+  getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -50,7 +50,7 @@ const COLUMNS: ColumnDef<ProjectCurrentLivingSituationFieldsFragment>[] = [
           ),
         }}
         secondaryActionConfigs={[
-          getViewEnrollmentAction(cls.enrollment, cls.client),
+          getViewEnrollmentMenuItem(cls.enrollment, cls.client),
         ]}
       />
     ),

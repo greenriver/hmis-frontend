@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewAssessmentAction,
+  getViewAssessmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ASSESSMENT_COLUMNS } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -38,7 +38,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
           <TableRowActions
             record={assessment}
             recordName={assessmentDescription(assessment)}
-            primaryActionConfig={getViewAssessmentAction(
+            primaryActionConfig={getViewAssessmentMenuItem(
               assessment,
               clientId,
               enrollmentId

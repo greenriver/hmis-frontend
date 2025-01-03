@@ -1,7 +1,7 @@
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewAssessmentAction,
+  getViewAssessmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import {
@@ -36,7 +36,7 @@ const COLUMNS: ColumnDef<HhmAssessmentType>[] = [
         record={assessment}
         recordName={assessmentDescription(assessment)}
         primaryActionConfig={{
-          ...getViewAssessmentAction(
+          ...getViewAssessmentMenuItem(
             assessment,
             assessment.enrollment.client.id,
             assessment.enrollment.id

@@ -1,6 +1,6 @@
 import { AlwaysPresentLocalConstants } from '../form/util/formUtil';
-import RelativeDateDisplay from '../hmis/components/RelativeDateDisplay';
 import { ClientAssessmentType } from './assessmentTypes';
+import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
 import { HhmAssessmentType } from '@/modules/enrollment/components/HouseholdAssessmentsTable';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';

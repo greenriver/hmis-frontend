@@ -4,13 +4,13 @@ import { Box, Button } from '@mui/material';
 import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
+import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import RelativeDateDisplay from '@/modules/hmis/components/RelativeDateDisplay';
 import {
   getCustomDataElementColumns,
   parseAndFormatDate,

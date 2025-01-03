@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewEnrollmentAction,
-  getViewServiceAction,
+  getViewEnrollmentMenuItem,
+  getViewServiceMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
@@ -54,13 +54,13 @@ const ProjectServicesTable = ({
           <TableRowActions
             record={service}
             recordName={`${clientBriefName(service.enrollment.client)}'s ${getServiceTypeForDisplay(service.serviceType)} on ${parseAndFormatDate(service.dateProvided)}`}
-            primaryActionConfig={getViewServiceAction(
+            primaryActionConfig={getViewServiceMenuItem(
               service,
               service.enrollment.id,
               service.enrollment.client.id
             )}
             secondaryActionConfigs={[
-              getViewEnrollmentAction(
+              getViewEnrollmentMenuItem(
                 service.enrollment,
                 service.enrollment.client
               ),
