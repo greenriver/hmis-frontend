@@ -22,7 +22,6 @@ import {
 } from '../form/util/formUtil';
 
 import { ColumnDef } from '@/components/elements/table/types';
-import { HouseholdFields } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
@@ -421,12 +420,17 @@ const hohPriorityMapping: Record<RelationshipToHoH, number> = {
   [RelationshipToHoH.Invalid]: 6,
 };
 
-export const sortHouseholdMembers = (
-  members?:
-    | HouseholdClientFieldsFragment[]
-    | HouseholdFields['householdClients'],
+type GenericHouseholdClient = Pick<
+  HouseholdClientFieldsFragment,
+  'relationshipToHoH'
+> & {
+  client: Pick<HouseholdClientFieldsFragment['client'], 'id'>;
+  enrollment: Pick<HouseholdClientFieldsFragment['enrollment'], 'id'>;
+};
+export const sortHouseholdMembers = <T extends GenericHouseholdClient>(
+  members?: T[],
   activeEnrollmentId?: string
-) => {
+): T[] => {
   return sortBy(members || [], [
     (c) => (c.enrollment.id === activeEnrollmentId ? -1 : 1),
     (c) => hohPriorityMapping[c.relationshipToHoH], // HoH > spouse > child > relative > unrelated
