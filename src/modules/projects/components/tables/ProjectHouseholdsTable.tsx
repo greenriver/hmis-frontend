@@ -4,8 +4,8 @@ import { renderCellContents } from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewClientAction,
-  getViewEnrollmentAction,
+  getViewClientMenuItem,
+  getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -15,7 +15,7 @@ import {
   clientBriefName,
   formatDateForDisplay,
   formatDateForGql,
-  hohSort,
+  sortHouseholdMembers,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
@@ -62,11 +62,11 @@ const ACTION_COL: ColumnDef<OneHouseholdClient> = {
     <TableRowActions
       record={householdClient}
       recordName={clientBriefName(householdClient.client)}
-      primaryActionConfig={getViewEnrollmentAction(
+      primaryActionConfig={getViewEnrollmentMenuItem(
         householdClient.enrollment,
         householdClient.client
       )}
-      secondaryActionConfigs={[getViewClientAction(householdClient.client)]}
+      secondaryActionConfigs={[getViewClientMenuItem(householdClient.client)]}
     />
   ),
 };
@@ -190,9 +190,8 @@ const ProjectHouseholdsTable = ({
             role='rowgroup'
           >
             <CustomDividerRow colSpan={(columns || defaultColumns).length} />
-            {[...household.householdClients]
-              .sort(hohSort)
-              .map((householdClient, index) => (
+            {sortHouseholdMembers(household.householdClients).map(
+              (householdClient, index) => (
                 <ProjectHouseholdsClientRow
                   key={householdClient.id}
                   household={household}
@@ -202,11 +201,12 @@ const ProjectHouseholdsTable = ({
                     ASSIGNED_STAFF_COL.key || ''
                   )}
                 />
-              ))}
+              )
+            )}
           </TableBody>
         );
       }}
-      injectBelowRows={
+      belowRowsContent={
         <TableBody>
           <CustomDividerRow colSpan={(columns || defaultColumns).length} />
         </TableBody>

@@ -29,7 +29,6 @@ export interface RelativeDateDisplayProps {
   dateString: string;
   prefixVerb?: string;
   suffixText?: string;
-  tooltipSuffixText?: string;
   TooltipProps?: Omit<TooltipProps, 'title' | 'children'>;
   TypographyProps?: TypographyProps;
 }
@@ -41,7 +40,6 @@ const RelativeDateDisplay = ({
   dateString,
   prefixVerb,
   suffixText,
-  tooltipSuffixText,
   TooltipProps = {},
   TypographyProps = {},
 }: RelativeDateDisplayProps) => {
@@ -56,7 +54,7 @@ const RelativeDateDisplay = ({
     <Tooltip
       title={
         <Typography component='span' variant='inherit'>
-          {formattedDate} {tooltipSuffixText}
+          {formattedDate}
         </Typography>
       }
       arrow

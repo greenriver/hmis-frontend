@@ -1,15 +1,15 @@
 import { Box, Chip, Tooltip } from '@mui/material';
 import React, { useMemo } from 'react';
 
+import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
-  getViewClientAction,
-  getViewEnrollmentAction,
+  getViewClientMenuItem,
+  getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import DateWithRelativeTooltip from '@/modules/hmis/components/DateWithRelativeTooltip';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
@@ -213,8 +213,8 @@ const ProjectClientEnrollmentsTable = ({
               <TableRowActions
                 record={row}
                 recordName={clientBriefName(row.client)}
-                primaryActionConfig={getViewEnrollmentAction(row, row.client)}
-                secondaryActionConfigs={[getViewClientAction(row.client)]}
+                primaryActionConfig={getViewEnrollmentMenuItem(row, row.client)}
+                secondaryActionConfigs={[getViewClientMenuItem(row.client)]}
               />
             );
           },
