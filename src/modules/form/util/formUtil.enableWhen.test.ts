@@ -1,3 +1,4 @@
+import { it, describe, expect } from 'vitest';
 import { FormValues } from '../types';
 import { shouldEnableItem } from './formUtil';
 
@@ -18,6 +19,7 @@ const Items: Record<string, any> = {
     ],
   },
   EnableIfNotExists: {
+    enableBehavior: EnableBehavior.All,
     enableWhen: [
       { question: '1', operator: EnableOperator.Exists, answerBoolean: false },
       { question: '2', operator: EnableOperator.Exists, answerBoolean: false },
@@ -25,27 +27,32 @@ const Items: Record<string, any> = {
   },
   // Boolean answers
   EnableIfTrue: {
+    enableBehavior: EnableBehavior.Any,
     enableWhen: [
       { question: '1', operator: EnableOperator.Equal, answerBoolean: true },
     ],
   },
   EnableIfFalse: {
+    enableBehavior: EnableBehavior.Any,
     enableWhen: [
       { question: '1', operator: EnableOperator.Equal, answerBoolean: false },
     ],
   },
   // Code answers
   EnableIfFoo: {
+    enableBehavior: EnableBehavior.Any,
     enableWhen: [
       { question: '2', operator: EnableOperator.Equal, answerCode: 'FOO' },
     ],
   },
   EnableIfNotFoo: {
+    enableBehavior: EnableBehavior.Any,
     enableWhen: [
       { question: '2', operator: EnableOperator.NotEqual, answerCode: 'FOO' },
     ],
   },
   EnableIfInFooBar: {
+    enableBehavior: EnableBehavior.Any,
     enableWhen: [
       {
         question: '2',

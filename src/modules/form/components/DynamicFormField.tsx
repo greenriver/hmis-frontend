@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material';
 import { isEmpty, pick } from 'lodash-es';
 import React, { cloneElement, ReactNode, useCallback } from 'react';
 
@@ -99,7 +100,7 @@ const DynamicFormField: React.FC<Props> = ({
   props: fieldProps,
   renderFn,
 }) => {
-  const values = handlers.getCleanedValues();
+  const values = handlers.getValues();
   const { definition, localConstants, getFieldErrors } = handlers;
 
   const itemChanged: ItemChangedFn = useCallback(
@@ -192,9 +193,7 @@ const DynamicFormField: React.FC<Props> = ({
               name={getAllChildLinkIds(item).map(getSafeLinkId)}
             >
               {/* We're just using this component to watch the group's child values and update the values prop when they change */}
-              {() =>
-                cloneElement(group, { values: handlers.getCleanedValues() })
-              }
+              {() => cloneElement(group, { values: handlers.getValues() })}
             </ValueWrapper>
           );
         }
@@ -203,17 +202,20 @@ const DynamicFormField: React.FC<Props> = ({
       }
 
       const itemComponent = item.readOnly ? (
-        <DynamicViewField
-          item={item}
-          value={values[item.linkId]}
-          disabled={isDisabled}
-          nestingLevel={nestingLevel}
-          horizontal={horizontal}
-          pickListArgs={pickListArgs}
-          // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
-          adjustValue={itemChanged}
-          {...fieldProps}
-        />
+        <Grid item key={item.linkId}>
+          <DynamicViewField
+            item={item}
+            value={values[item.linkId]}
+            disabled={isDisabled}
+            horizontal={horizontal}
+            pickListArgs={pickListArgs}
+            // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
+            adjustValue={itemChanged}
+            // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
+            localConstants={localConstants}
+            {...fieldProps}
+          />
+        </Grid>
       ) : (
         <ValueWrapper name={getSafeLinkId(item.linkId)} handlers={handlers}>
           {(value) => (
@@ -227,6 +229,8 @@ const DynamicFormField: React.FC<Props> = ({
               horizontal={horizontal}
               pickListArgs={pickListArgs}
               warnIfEmpty={warnIfEmpty}
+              // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
+              localConstants={localConstants}
               {...fieldProps}
               inputProps={{
                 ...fieldProps?.inputProps,

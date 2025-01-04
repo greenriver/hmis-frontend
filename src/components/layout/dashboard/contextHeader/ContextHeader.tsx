@@ -8,7 +8,6 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '../../layoutConstants';
-
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
@@ -28,12 +27,15 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
   children,
 }) => (
   <AppBar
+    component='nav'
+    aria-label='breadcrumbs-nav'
     position='sticky'
     color='default'
     elevation={0}
     sx={{
       borderTop: 'unset',
       borderLeft: 'unset',
+      borderRight: 'unset',
       height: CONTEXT_HEADER_HEIGHT,
       alignItems: 'stretch',
       justifyContent: 'center',
@@ -107,7 +109,8 @@ const ContextHeader: React.FC<Props> = ({
         <Box>
           <Button
             onClick={exitFocusMode}
-            variant='transparent'
+            variant='text'
+            color='grayscale'
             startIcon={<ArrowBackIcon fontSize='small' />}
             sx={{ height: '32px', fontWeight: 600, ml: 2 }}
             data-testid='headerBackButton'
@@ -117,7 +120,7 @@ const ContextHeader: React.FC<Props> = ({
         </Box>
       ) : (
         <Box display='flex' alignItems='stretch' width='100%' flex={1}>
-          {(!isOpen || isMobile) && (
+          {!isOpen && !isMobile && (
             <Box
               sx={{
                 display: 'flex',
@@ -131,7 +134,8 @@ const ContextHeader: React.FC<Props> = ({
             >
               <Button
                 startIcon={<MenuIcon />}
-                variant='transparent'
+                variant='text'
+                color='grayscale'
                 onClick={handleOpenMenu}
               >
                 Menu

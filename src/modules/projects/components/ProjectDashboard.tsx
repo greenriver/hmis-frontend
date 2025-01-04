@@ -32,7 +32,7 @@ const ProjectNavHeader = ({
 }) => {
   return (
     <>
-      <Typography variant='h4' sx={{ mb: 2 }}>
+      <Typography component='p' variant='h4' sx={{ mb: 2 }}>
         {project.projectName}
       </Typography>
       <Stack gap={2}>

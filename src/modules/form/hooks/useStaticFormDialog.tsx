@@ -27,7 +27,6 @@ type RenderFormDialogProps = PartialPick<
   DialogProps?: Omit<DialogProps, 'open'>;
 };
 
-// extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'>
 interface Args<TData, TVariables> {
   formRole: StaticFormRole;
   initialValues?: Record<string, any>;
@@ -38,11 +37,10 @@ interface Args<TData, TVariables> {
   pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
   localConstants?: LocalConstants;
-  beforeFormComponent?: ReactNode;
 }
 export function useStaticFormDialog<
   TData extends { __typename?: 'Mutation' },
-  TVariables extends { input: { [key: string]: any } }
+  TVariables extends { input: { [key: string]: any } },
 >({
   formRole,
   onClose,
@@ -53,7 +51,6 @@ export function useStaticFormDialog<
   localConstants,
   initialValues,
   pickListArgs,
-  beforeFormComponent,
 }: Args<TData, TVariables>) {
   const errorRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -86,13 +83,8 @@ export function useStaticFormDialog<
           {...DialogProps}
         >
           <DialogTitle>{title}</DialogTitle>
-          <DialogContent
-            sx={{
-              '.HmisForm-card': { px: 0, pt: 1, pb: 0, border: 'unset' },
-            }}
-          >
+          <DialogContent>
             <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
-              {beforeFormComponent && <Grid item>{beforeFormComponent}</Grid>}
               <Grid item xs>
                 <StaticForm
                   role={formRole}
@@ -113,6 +105,7 @@ export function useStaticFormDialog<
                       onDiscard: () => setDialogOpen(false),
                       ...props.FormActionProps,
                     },
+                    variant: 'without_top_level_cards',
                     hideSubmit: true,
                     pickListArgs,
                     ...props,
@@ -147,7 +140,6 @@ export function useStaticFormDialog<
       mutationDocument,
       onCompleted,
       pickListArgs,
-      beforeFormComponent,
     ]
   );
   return {

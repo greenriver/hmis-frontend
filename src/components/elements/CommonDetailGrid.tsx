@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 
+import { SxProps } from '@mui/system';
 import React, { ReactNode, useId } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -49,13 +50,15 @@ export const CommonDetailGridContainer: React.FC<{
 export const CommonDetailGridItem: React.FC<{
   label: string | ReactNode;
   children: ReactNode;
-}> = ({ label, children }) => {
+  sx?: SxProps;
+}> = ({ label, children, sx = {} }) => {
   const labelId = useId();
   const itemSx = {
     py: 1.5,
     px: 2,
     display: 'flex',
     alignItems: 'center',
+    ...sx,
   };
 
   return (
@@ -92,3 +95,17 @@ export const CommonDetailGridItem: React.FC<{
     </>
   );
 };
+
+interface Props {
+  rows: { id: string; label: ReactNode; value: ReactNode }[];
+}
+const CommonDetailGrid: React.FC<Props> = ({ rows }) => (
+  <CommonDetailGridContainer>
+    {rows.map(({ id, label, value }) => (
+      <CommonDetailGridItem label={label} key={id}>
+        {value}
+      </CommonDetailGridItem>
+    ))}
+  </CommonDetailGridContainer>
+);
+export default CommonDetailGrid;

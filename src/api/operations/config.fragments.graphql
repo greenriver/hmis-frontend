@@ -24,11 +24,17 @@ fragment FormRuleFields on FormRule {
   serviceCategory {
     id
     name
-    hud
   }
   serviceType {
     ...ServiceTypeFields
   }
+}
+
+fragment FormProjectMatchFields on FormProjectMatch {
+  id
+  projectName
+  organizationName
+  dataCollectedAbout
 }
 
 fragment ServiceTypeConfigFields on ServiceType {

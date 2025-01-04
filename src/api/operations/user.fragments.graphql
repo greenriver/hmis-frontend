@@ -2,6 +2,8 @@ fragment UserFields on ApplicationUser {
   __typename
   id
   name
+  firstName
+  lastName
   email
 }
 

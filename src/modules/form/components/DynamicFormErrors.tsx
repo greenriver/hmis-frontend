@@ -9,10 +9,10 @@ export interface DynamicFormErrorsProps {
   errors: ErrorState;
 }
 
-const DynamicFormErrors = forwardRef(
-  ({ errors: errorState }: DynamicFormErrorsProps, ref) => {
+const DynamicFormErrors = forwardRef<HTMLDivElement, DynamicFormErrorsProps>(
+  ({ errors: errorState }, ref) => {
     return (
-      <Stack gap={2} ref={ref}>
+      <Stack gap={2} ref={ref} component='div'>
         <ApolloErrorAlert error={errorState.apolloError} />
         <ErrorAlert errors={errorState.errors} fixable />
       </Stack>

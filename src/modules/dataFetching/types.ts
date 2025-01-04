@@ -1,7 +1,7 @@
 import { PickListArgs } from '../form/types';
 
 import { HmisEnums } from '@/types/gqlEnums';
-import { PickListType } from '@/types/gqlTypes';
+import { PickListOption, PickListType } from '@/types/gqlTypes';
 
 export interface BaseFilter<I> {
   key?: keyof I;
@@ -34,12 +34,13 @@ export interface SelectFilter<I> extends BaseFilter<I> {
 export interface EnumFilter<I> extends BaseFilter<I> {
   type: 'enum';
   enumType: keyof typeof HmisEnums;
+  pickListOptions?: PickListOption[]; // override picklist options
   variant?: SelectElementVariant;
 }
 
 export interface PickListFilter<I> extends BaseFilter<I> {
   type: 'picklist';
-  pickListReference: PickListType;
+  pickListReference: PickListType; // name of remote pick list
   variant?: SelectElementVariant;
   pickListArgs?: PickListArgs;
 }

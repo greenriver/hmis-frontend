@@ -1,3 +1,4 @@
+import { User } from '@sentry/react';
 import {
   HMIS_REMOTE_SESSION_UID_EVENT,
   HMIS_SESSION_UID_HEADER,
@@ -165,9 +166,10 @@ export async function logout() {
   return response;
 }
 
-export const sentryUser = (user?: HmisUser) => {
+export const sentryUser = (user?: HmisUser): User | undefined => {
   if (user && user.email) {
     return {
+      id: user.id,
       email: user.email,
       username: user.name,
     };
@@ -175,6 +177,7 @@ export const sentryUser = (user?: HmisUser) => {
   const storedHmisUser = storage.getUser();
   if (storedHmisUser) {
     return {
+      id: storedHmisUser.id,
       email: storedHmisUser.email,
       username: storedHmisUser.name,
     };

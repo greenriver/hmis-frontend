@@ -61,26 +61,27 @@ const DynamicFormSaveButtons = ({
   // TODO: Handle save draft
   const handleSaveDraft = useCallback(() => {
     if (!onSaveDraft) return;
-    onSaveDraft(handlers.getCleanedValues());
+    onSaveDraft(handlers.getValues());
   }, [onSaveDraft, handlers]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSubmit = useCallback(
     handlers.methods.handleSubmit((values, event) => {
       onSubmit({
-        values: handlers.getCleanedValues(),
+        ...handlers.getValuesForSubmit(),
         confirmed: false,
         event: event?.nativeEvent as React.MouseEvent<HTMLButtonElement>,
       });
     }),
-    [onSubmit, handlers.getCleanedValues]
+    [onSubmit, handlers.getValues]
   );
 
   const handleConfirm = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
       onSubmit({
-        values: handlers.getCleanedValues(),
+        // values: handlers.getValues(),
+        ...handlers.getValuesForSubmit(),
         confirmed: true,
         event,
       });

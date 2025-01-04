@@ -16,6 +16,7 @@ fragment RootPermissions on QueryAccess {
   canViewClientPhoto
   canEnrollClients
   canEditEnrollments
+  canViewMyDashboard
   canViewEnrollmentDetails
   canViewOpenEnrollmentSummary
   canDeleteEnrollments
@@ -25,7 +26,7 @@ fragment RootPermissions on QueryAccess {
   canManageOwnClientFiles
   canViewAnyConfidentialClientFiles
   canViewAnyNonconfidentialClientFiles
-  canManageInventory
+  canManageUnits
   canManageDeniedReferrals
   canManageIncomingReferrals
   canManageOutgoingReferrals
@@ -33,6 +34,8 @@ fragment RootPermissions on QueryAccess {
   canTransferEnrollments
   canSplitHouseholds
   canConfigureDataCollection
+  canManageForms
+  canAdministrateConfig
   canViewClientAlerts
   canManageExternalFormSubmissions
 }
@@ -67,6 +70,7 @@ fragment EnrollmentAccessFields on EnrollmentAccess {
   canEditEnrollments
   canDeleteEnrollments
   canAuditEnrollments
+  canViewEnrollmentLocationMap
 }
 
 fragment AssessmentAccessFields on AssessmentAccess {
@@ -88,7 +92,8 @@ fragment ProjectAccessFields on ProjectAccess {
   canDeleteEnrollments
   canDeleteAssessments
   canEditProjectDetails
-  canManageInventory
+  canViewUnits
+  canManageUnits
   canManageDeniedReferrals
   canManageIncomingReferrals
   canManageOutgoingReferrals

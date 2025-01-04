@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 import { formatDateForDisplay, parseHmisDateString } from '../hmisUtil';
 
-import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
+import { EnrollmentRangeFieldsFragment } from '@/types/gqlTypes';
 
 const ACTIVE_TEXT = 'Ongoing';
 
@@ -11,7 +11,7 @@ const EnrollmentDateRangeWithStatus = ({
   enrollment,
   treatIncompleteAsActive = false,
 }: {
-  enrollment: HouseholdClientFieldsFragment['enrollment'];
+  enrollment: EnrollmentRangeFieldsFragment;
   // if the status is called out separately, use this prop to render
   // incomplete as if it were active
   treatIncompleteAsActive?: boolean;

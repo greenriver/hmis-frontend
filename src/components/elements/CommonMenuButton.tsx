@@ -1,48 +1,89 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Button, ButtonProps, Divider, Menu, MenuItem } from '@mui/material';
+import {
+  Button,
+  ButtonProps,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  MenuProps,
+} from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { To } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
+import { MoreMenuIcon } from './SemanticIcons';
 
-export type NavMenuItem = {
+export type CommonMenuItem = {
   key: string;
   to?: To;
   onClick?: VoidFunction;
   title?: ReactNode;
   divider?: boolean;
   disabled?: boolean;
+  ariaLabel?: string;
+  openInNew?: boolean;
 };
 
 interface Props {
   title: ReactNode;
-  items: NavMenuItem[];
-  variant?: ButtonProps['variant'];
-  disabled?: ButtonProps['disabled'];
+  items: CommonMenuItem[];
+  iconButton?: boolean; // use an icon button instead of a text button
+  MenuProps?: Omit<MenuProps, 'open'>;
+  ButtonProps?: ButtonProps;
 }
 
-const CommonMenuButton = ({ title, items, ...buttonProps }: Props) => {
+const CommonMenuButton = ({
+  title,
+  items,
+  iconButton,
+  MenuProps,
+  ButtonProps,
+}: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     setAnchorEl(null);
   };
+  // pull out variant/color which can't be used for IconButton
+  const { variant, color, ...buttonProps } = ButtonProps || {};
+
   return (
     <>
-      <Button
-        id='menu-button'
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        endIcon={<ArrowDropDownIcon />}
-        {...buttonProps}
-      >
-        {title}
-      </Button>
+      {iconButton ? (
+        <IconButton
+          id='menu-button'
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup='true'
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          {...buttonProps}
+        >
+          <MoreMenuIcon fontSize='inherit' />
+        </IconButton>
+      ) : (
+        <Button
+          id='menu-button'
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup='true'
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          endIcon={<ArrowDropDownIcon />}
+          variant={variant}
+          color={color}
+          {...buttonProps}
+        >
+          {title}
+        </Button>
+      )}
+
       <Menu
         id='basic-menu'
         anchorEl={anchorEl}
@@ -59,19 +100,48 @@ const CommonMenuButton = ({ title, items, ...buttonProps }: Props) => {
           vertical: 'top',
           horizontal: 'right',
         }}
+        {...MenuProps}
       >
-        {items.map(({ key, to, title, divider, onClick, disabled }) =>
-          divider ? (
-            <Divider key={key} />
-          ) : to ? (
-            <MenuItem key={key} component={RouterLink} to={to}>
-              {title}
-            </MenuItem>
-          ) : (
-            <MenuItem key={key} onClick={onClick} disabled={disabled}>
-              {title}
-            </MenuItem>
-          )
+        {items.map(
+          ({
+            key,
+            to,
+            title,
+            divider,
+            onClick,
+            disabled,
+            ariaLabel,
+            openInNew,
+          }) =>
+            divider ? (
+              <Divider key={key} />
+            ) : to ? (
+              <li key={key}>
+                <MenuItem
+                  component={RouterLink}
+                  to={to}
+                  aria-label={ariaLabel}
+                  openInNew={openInNew}
+                >
+                  {title}
+                </MenuItem>
+              </li>
+            ) : (
+              <MenuItem
+                key={key}
+                onClick={() => {
+                  if (onClick) {
+                    // close menu before triggering onClick
+                    setAnchorEl(null);
+                    onClick();
+                  }
+                }}
+                disabled={disabled}
+                aria-label={ariaLabel}
+              >
+                {title}
+              </MenuItem>
+            )
         )}
       </Menu>
     </>

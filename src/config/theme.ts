@@ -1,19 +1,12 @@
-import { Theme } from '@mui/material';
+import { Color, Theme } from '@mui/material';
 import {
   PaletteColor,
   SimplePaletteColorOptions,
   ThemeOptions,
+  alpha,
   createTheme,
 } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
-
-// to have typed safe, Button need to provide extra type that can be augmented
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    gray: true;
-    transparent: true;
-  }
-}
 
 declare module '@mui/material/Alert' {
   interface AlertPropsVariantOverrides {
@@ -55,17 +48,25 @@ declare module '@mui/material/styles' {
       icon?: string;
     };
   }
+  interface GrayscalePaletteColor
+    extends PaletteColor,
+      Pick<Color, 300 | 200 | 100> {
+    tint: string;
+  }
+
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
+    grayscale: GrayscalePaletteColor;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
+    grayscale: SimplePaletteColorOptions & GrayscalePaletteColor;
   }
 }
 
@@ -76,11 +77,32 @@ declare module '@mui/material/Typography' {
   }
 }
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    grayscale: true;
+  }
+}
+
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsColorOverrides {
+    grayscale: true;
+  }
+}
+
 // Default base theme, to be merged with overlays
 export const baseThemeDef: ThemeOptions = {
   typography: {
     fontFamily: '"Open Sans", sans-serif',
     fontWeightBold: 600,
+  },
+  breakpoints: {
+    values: {
+      xs: 0, // MUI default
+      sm: 600, // MUI default
+      md: 768, // Custom (Tablet) - MUI default is 900
+      lg: 1200, // MUI default
+      xl: 1536, // MUI default
+    },
   },
   palette: {
     primary: {
@@ -117,6 +139,16 @@ export const baseThemeDef: ThemeOptions = {
     },
     links: '#1976D2',
     activeStatus: '#75559F',
+    grayscale: {
+      main: '#6E6E6E',
+      dark: '#4D4D4D',
+      light: '#8b8b8b',
+      contrastText: '#fff',
+      tint: '#F3F3F3',
+      300: alpha('#6E6E6E', 0.3),
+      200: alpha('#6E6E6E', 0.12),
+      100: alpha('#6E6E6E', 0.08),
+    },
   },
 };
 
@@ -234,8 +266,7 @@ const createThemeOptions = (theme: Theme) => ({
         },
         root: theme.unstable_sx({
           '&.Mui-disabled': {
-            color: 'red',
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.grayscale.tint,
           },
         }),
         input: {
@@ -243,6 +274,21 @@ const createThemeOptions = (theme: Theme) => ({
             opacity: 0.6,
           },
         },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          typography: 'body2',
+          fontWeight: 600,
+        }),
+      },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: theme.unstable_sx({
+          typography: 'body2',
+        }),
       },
     },
     MuiTextField: {
@@ -255,6 +301,7 @@ const createThemeOptions = (theme: Theme) => ({
       defaultProps: {
         disableRipple: true,
       },
+
       styleOverrides: {
         root: {
           whiteSpace: 'nowrap',
@@ -394,19 +441,34 @@ const createThemeOptions = (theme: Theme) => ({
       },
       variants: [
         {
-          props: { variant: 'gray' },
-          style: {
-            backgroundColor: '#EDEDED',
-          },
+          // Special styles for grayscale button
+          props: { color: 'grayscale' },
+          style: theme.unstable_sx({
+            color: 'text.primary',
+            '&:not(:disabled) .MuiButton-icon': {
+              color: theme.palette.grayscale.main,
+            },
+            '&.MuiButton-contained': {
+              backgroundColor: theme.palette.grayscale[100],
+              '&:hover': {
+                backgroundColor: theme.palette.grayscale[200],
+              },
+            },
+            '&.MuiButton-text:hover': {
+              backgroundColor: theme.palette.grayscale[100],
+            },
+            '&.MuiButton-outlined': {
+              borderColor: theme.palette.grayscale[300],
+            },
+          }),
         },
       ],
       styleOverrides: {
         root: {
           fontWeight: 600,
         },
-        outlined: {
-          backgroundColor: theme.palette.background.paper,
-        },
+        // Give 'text' variant Buttons the same horiztonal padding as outlined
+        text: theme.unstable_sx({ px: 2 }),
       },
     },
     MuiAutocomplete: {
@@ -462,6 +524,17 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         tooltip: {
           fontSize: '1em',
+        },
+      },
+    },
+    MuiTreeItem2: {
+      styleOverrides: {
+        root: {
+          '.MuiTreeItem-groupTransition': {
+            marginLeft: 15,
+            paddingLeft: 18,
+            borderLeft: `1px solid ${theme.palette.borders.dark}`,
+          },
         },
       },
     },

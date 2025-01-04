@@ -5,7 +5,9 @@ fragment ReferralPostingFields on ReferralPosting {
   hohName
   hohMciId
   householdSize
+  referredFrom
   referredBy
+  referredTo
   status
   assignedDate
   statusUpdatedAt
@@ -36,6 +38,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   referralResult
   referredBy
   referredFrom
+  referredTo
   resourceCoordinatorNotes
   score
   status
@@ -85,5 +88,8 @@ fragment ReferralPostingDetailFields on ReferralPosting {
         ...ClientIdentifierFields
       }
     }
+  }
+  customDataElements {
+    ...CustomDataElementFields
   }
 }

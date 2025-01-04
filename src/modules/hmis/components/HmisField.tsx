@@ -108,7 +108,8 @@ const HmisField: React.FC<Props> = ({
 };
 
 export const renderHmisField =
-  (recordType: string, fieldName: string) => (record: any) =>
-    <HmisField recordType={recordType} fieldName={fieldName} record={record} />;
+  (recordType: string, fieldName: string) => (record: any) => (
+    <HmisField recordType={recordType} fieldName={fieldName} record={record} />
+  );
 
 export default HmisField;

@@ -23,7 +23,7 @@ const EnrollmentNavHeader = ({
   return (
     <Stack gap={1.5}>
       <Stack direction={'row'}>
-        <Typography variant='h5'>
+        <Typography component='p' variant='h5'>
           {clientBriefName(enrollment.client)}
         </Typography>
       </Stack>

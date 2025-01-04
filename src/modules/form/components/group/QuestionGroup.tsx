@@ -37,11 +37,11 @@ const QuestionGroup = ({
                   mb: 2, // extra margin below to separate from next question
                 }
               : hasTitle
-              ? {
-                  // mt: 2,
-                  mb: 3,
-                }
-              : undefined
+                ? {
+                    // mt: 2,
+                    mb: 3,
+                  }
+                : undefined
           }
         >
           {label && <Typography sx={{ mb: 2 }}>{label}</Typography>}

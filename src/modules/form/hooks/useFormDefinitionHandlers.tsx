@@ -7,6 +7,8 @@ import { LocalConstants } from '../types';
 import {
   addDescendants,
   autofillValues,
+  createHudValuesForSubmit,
+  createValuesForSubmit,
   dropUnderscorePrefixedKeys,
   getInitialValues,
   shouldEnableItem,
@@ -97,7 +99,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
   );
 
   // Get form state, with "hidden" fields (and their children) removed
-  const getCleanedValues = useCallback(() => {
+  const getValues = useCallback(() => {
     const values = mapKeysToClean(methods.getValues());
     if (!definition) return values;
 
@@ -123,6 +125,20 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
     return dropUnderscorePrefixedKeys(cleaned);
   }, [methods, definition, itemMap, localConstants]);
 
+  const getValuesForSubmit = useCallback(() => {
+    const vals = getValues();
+    return {
+      // Example: { 'favorite_color': { code: 'light_blue', label: 'Light Blue' }, 'assessment_date': <JS Date Object> }
+      rawValues: vals,
+      // Example: { 'favorite_color': 'light_blue', 'assessment_date': '2020-09-01' }
+      // Stored as "values" in FormProcessor, for dynamic form submission
+      valuesByLinkId: createValuesForSubmit(vals, definition),
+      // Example: { 'Client.favorite_color_field_key': 'light_blue', 'assessmentDate': '2020-09-01', 'someOtherHiddenField': '_HIDDEN' }
+      // Stored as "hud_values" in FormProcessor, for dynamic form submission
+      valuesByFieldName: createHudValuesForSubmit(vals, definition),
+    };
+  }, [definition, getValues]);
+
   const getFieldErrors = useCallback(
     (item: FormItem) => {
       if (!errors || !item.mapping) return undefined;
@@ -141,11 +157,15 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
         item,
         itemMap,
         localConstants,
-        values: getCleanedValues(),
+        values: getValues(),
       });
     },
-    [itemMap, localConstants, getCleanedValues]
+    [itemMap, localConstants, getValues]
   );
+
+  const resetDirty = useCallback(() => {
+    methods.reset(undefined, { keepValues: true });
+  }, [methods]);
 
   return useMemo(
     () => ({
@@ -160,9 +180,11 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       // renderFormContainer,
       getFieldErrors,
       // renderFormFields,
-      getCleanedValues,
+      getValues,
       isItemDisabled,
       getAutofillValueForField,
+      getValuesForSubmit,
+      resetDirty,
     }),
     [
       methods,
@@ -176,9 +198,11 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       // renderFormContainer,
       getFieldErrors,
       // renderFormFields,
-      getCleanedValues,
+      getValues,
       isItemDisabled,
       getAutofillValueForField,
+      getValuesForSubmit,
+      resetDirty,
     ]
   );
 };

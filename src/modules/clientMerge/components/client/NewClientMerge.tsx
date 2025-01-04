@@ -10,7 +10,7 @@ import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';

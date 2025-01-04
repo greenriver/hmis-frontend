@@ -74,3 +74,17 @@ query GetUserEnrollmentSummaries(
     }
   }
 }
+
+query GetUserStaffAssignments($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  user(id: $id) {
+    id
+    staffAssignments(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...StaffAssignmentWithClients
+      }
+    }
+  }
+}

@@ -6,7 +6,9 @@ import { ClearanceState } from '../types';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import { ExternalIdentifier } from '@/types/gqlTypes';
 
-export const getClearanceAlertText = (state: ClearanceState) => {
+export const getClearanceAlertText = (
+  state: ClearanceState & { existingClient: boolean }
+) => {
   switch (state.status) {
     case 'initial':
       return {
@@ -25,6 +27,13 @@ export const getClearanceAlertText = (state: ClearanceState) => {
       return {
         title: 'MCI ID Found',
         subtitle: 'An exact match was found.',
+        rightAlignButton: true,
+      };
+    case 'auto_cleared_existing_client':
+      return {
+        title: 'MCI ID Found',
+        // If this is a duplicate but we're editing an existing Client record, skip the message about "cancel and search again", since it doesn't make sense. In this case, the user can create the duplicate MCI ID but the clients should be merged eventually.
+        subtitle: `This client already exists in HMIS. ${state.existingClient ? null : 'Please cancel and search again.'}`,
         rightAlignButton: true,
       };
     case 'one_match':

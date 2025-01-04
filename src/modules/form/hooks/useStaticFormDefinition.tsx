@@ -25,8 +25,7 @@ const useStaticFormDefinition = (
     };
   }, [data, localDefinition]);
 
-  if (error)
-    throw new Error(`Failed to fetch form definition for role ${role}`);
+  if (error) throw error;
 
   return { formDefinition, itemMap, loading };
 };

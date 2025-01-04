@@ -3,8 +3,8 @@ import { RefObject, useCallback, useState } from 'react';
 
 import { DynamicFormOnSubmit } from '../components/DynamicForm';
 import { FormValues } from '../types';
-import { transformSubmitValues } from '../util/formUtil';
 
+import { transformSubmitValues } from '../util/formUtil';
 import {
   emptyErrorState,
   ErrorState,
@@ -28,7 +28,7 @@ export interface GenericFormHandlerArgs<TData, TVariables> {
 // usage of SubmitForm, it uses the specified mutation.
 export function useDynamicFormHandlersForCustomMutation<
   TData extends { __typename?: 'Mutation' },
-  TVariables extends { input: { [key: string]: any } }
+  TVariables extends { input: { [key: string]: any } },
 >({
   mutationDocument,
   getErrors,
@@ -67,11 +67,11 @@ export function useDynamicFormHandlersForCustomMutation<
   });
 
   const onSubmit: DynamicFormOnSubmit = useCallback(
-    ({ values, confirmed = false }) => {
+    ({ rawValues, confirmed = false }) => {
       if (!formDefinition) return;
 
       const input = transformSubmitValues({
-        values,
+        values: rawValues,
         definition: formDefinition.definition,
         keyByFieldName: true,
       });

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { NavItem } from '../../../components/layout/dashboard/sideNav/types';
+import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {

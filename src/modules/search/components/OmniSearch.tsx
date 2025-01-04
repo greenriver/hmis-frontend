@@ -19,6 +19,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientName from '@/modules/client/components/ClientName';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { Routes } from '@/routes/routes';
@@ -41,6 +42,7 @@ const MIN_CHAR_LENGTH_FOR_SEE_MORE = 3;
 const OmniSearch: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const [value, setValue, debouncedSearch] = useDebouncedState<
     string | undefined
@@ -87,7 +89,7 @@ const OmniSearch: React.FC = () => {
 
     return {
       recentItems: recentItems.map(
-        (item) => ({ id: item.id, item, __typename: 'RecentItem' } as const)
+        (item) => ({ id: item.id, item, __typename: 'RecentItem' }) as const
       ),
       clients,
       seeMoreOptions: numClients > MAX_CLIENT_RESULTS ? [seeMoreOption] : [],
@@ -227,6 +229,7 @@ const OmniSearch: React.FC = () => {
         inputProps={{
           ...values.getInputProps(),
           value: value ? value : '',
+          title: 'Client and Project search',
         }}
         placeholder='Search'
         size='small'
@@ -240,7 +243,10 @@ const OmniSearch: React.FC = () => {
           open={values.popupOpen}
           anchorEl={values.anchorEl}
           placement='bottom-end'
-          sx={{ zIndex: (theme) => theme.zIndex.modal, minWidth: '350px' }}
+          sx={{
+            zIndex: (theme) => theme.zIndex.modal,
+            minWidth: isMobile ? '' : '350px',
+          }}
         >
           <Paper
             sx={{
@@ -354,23 +360,26 @@ const OmniSearch: React.FC = () => {
                             <Divider />
                           </Box>
                           {optionGroup.map((option) => {
+                            // it's a run-time error pass key in through spread
+                            const { key, ...optionProps } =
+                              values.getOptionProps({
+                                option,
+                                index: options.findIndex((e) => {
+                                  return (
+                                    getKeyForOption(e) ===
+                                    getKeyForOption(option)
+                                  );
+                                }),
+                              });
                             return (
                               <MenuItem
-                                key={`${option.__typename}:${option.id}`}
                                 selected={
                                   option.__typename !== 'SeeMore' &&
                                   getOptionTargetPath(option) ===
                                     location.pathname
                                 }
-                                {...values.getOptionProps({
-                                  option,
-                                  index: options.findIndex((e) => {
-                                    return (
-                                      getKeyForOption(e) ===
-                                      getKeyForOption(option)
-                                    );
-                                  }),
-                                })}
+                                key={key}
+                                {...optionProps}
                               >
                                 {getOptionLabel(option)}
                               </MenuItem>
@@ -391,7 +400,9 @@ const OmniSearch: React.FC = () => {
   return (
     <>
       <ApolloErrorAlert error={error} />
-      <Box sx={{ mx: 2, height: '44px', div: { height: '100%' } }}>
+      <Box
+        sx={{ px: { md: 1, lg: 2 }, height: '44px', div: { height: '100%' } }}
+      >
         {content}
       </Box>
     </>

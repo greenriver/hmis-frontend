@@ -10,6 +10,7 @@ export const Routes = {
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
   CREATE_PROJECT: '/organizations/:organizationId/new-project',
   CREATE_ORGANIZATION: '/projects/new-organization',
+  MY_DASHBOARD: '/my-dashboard',
 } as const;
 
 const adminDashboardRoutes = {
@@ -26,6 +27,9 @@ const adminDashboardRoutes = {
   FORMS: 'forms',
   VIEW_FORM: 'forms/:identifier',
   EDIT_FORM: 'forms/:identifier/:formId/edit',
+  JSON_EDIT_FORM: 'forms/:identifier/:formId/jsonEdit',
+  PREVIEW_FORM: 'forms/:identifier/:formId/preview',
+  PREVIEW_FORM_DRAFT: 'forms/:identifier/:formId/preview-draft',
   PROJECT_CONFIG: 'project-configs',
 };
 
@@ -64,6 +68,7 @@ const enrollmentDashboardRoutes = {
   NEW_ASSESSMENT: 'assessments/new/:formDefinitionId', // Create new individual assessment
   ESG_FUNDING_REPORT: 'esg-funding-report',
   AUDIT_HISTORY: 'history',
+  LOCATION_MAP: 'locations',
 };
 
 // Routes within the project dashboard
@@ -74,6 +79,7 @@ const projectDashboardRoutes = {
   PROJECT_ENROLLMENTS: 'enrollments',
   PROJECT_ASSESSMENTS: 'assessments',
   PROJECT_SERVICES: 'services',
+  PROJECT_CURRENT_LIVING_SITUATIONS: 'current-living-situations',
   BULK_BED_NIGHTS: 'bed-nights',
   BULK_ASSIGN_SERVICE: 'bulk-service',
   BULK_BED_NIGHTS_NEW_HOUSEHOLD: 'bed-nights/new-household',
@@ -107,24 +113,21 @@ const projectDashboardRoutes = {
 type ClientSubRoutesType = keyof typeof clientDashboardRoutes;
 let key: ClientSubRoutesType;
 for (key in clientDashboardRoutes) {
-  clientDashboardRoutes[
-    key
-  ] = `${Routes.CLIENT_DASHBOARD}/${clientDashboardRoutes[key]}`;
+  clientDashboardRoutes[key] =
+    `${Routes.CLIENT_DASHBOARD}/${clientDashboardRoutes[key]}`;
 }
 type EnrollmentSubRoutesType = keyof typeof enrollmentDashboardRoutes;
 let key2: EnrollmentSubRoutesType;
 for (key2 in enrollmentDashboardRoutes) {
-  enrollmentDashboardRoutes[
-    key2
-  ] = `${Routes.ENROLLMENT_DASHBOARD}/${enrollmentDashboardRoutes[key2]}`;
+  enrollmentDashboardRoutes[key2] =
+    `${Routes.ENROLLMENT_DASHBOARD}/${enrollmentDashboardRoutes[key2]}`;
 }
 
 type ProjectSubRoutesType = keyof typeof projectDashboardRoutes;
 let key3: ProjectSubRoutesType;
 for (key3 in projectDashboardRoutes) {
-  projectDashboardRoutes[
-    key3
-  ] = `${Routes.PROJECT}/${projectDashboardRoutes[key3]}`;
+  projectDashboardRoutes[key3] =
+    `${Routes.PROJECT}/${projectDashboardRoutes[key3]}`;
 }
 
 type AdminSubRoutesType = keyof typeof adminDashboardRoutes;
@@ -148,9 +151,10 @@ export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
 } = adminDashboardRoutes;
 
-// Auto-hide left desktop nav for some routes (unused)
+// Auto-hide left desktop nav for some routes
 export const HIDE_NAV_ROUTES: string[] = [
   // EnrollmentDashboardRoutes.NEW_ASSESSMENT
+  // AdminDashboardRoutes.EDIT_FORM,
 ];
 
 export const FOCUS_MODE_ROUTES = [

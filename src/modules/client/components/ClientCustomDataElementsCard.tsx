@@ -4,6 +4,7 @@ import {
   CommonDetailGridItem,
 } from '@/components/elements/CommonDetailGrid';
 import TitleCard from '@/components/elements/TitleCard';
+import useAuth from '@/modules/auth/hooks/useAuth';
 import OccurrencePointForm from '@/modules/form/components/OccurrencePointForm';
 import { useClientDetailForms } from '@/modules/form/hooks/useClientDetailForms';
 import { parseOccurrencePointFormDefinition } from '@/modules/form/util/formUtil';
@@ -15,12 +16,14 @@ interface Props {
 
 const ClientCustomDataElementsCard: React.FC<Props> = ({ client }) => {
   const { forms, loading } = useClientDetailForms();
-
+  const { user } = useAuth();
   const rows = useMemo(
     () =>
       forms.map((form) => {
-        const { displayTitle, isEditable, readOnlyDefinition } =
-          parseOccurrencePointFormDefinition(form.definition);
+        // Determine whether this form has any fields that  are editable.
+        // Pass the user because there might be fields that are only editable by some users.
+        const { displayTitle, isEditable, definitionForDisplay } =
+          parseOccurrencePointFormDefinition(form.definition, user!);
 
         return {
           id: form.id,
@@ -29,14 +32,14 @@ const ClientCustomDataElementsCard: React.FC<Props> = ({ client }) => {
             <OccurrencePointForm
               record={client}
               definition={form.definition}
-              readOnlyDefinition={readOnlyDefinition}
+              definitionForDisplay={definitionForDisplay}
               editable={isEditable && client.access.canEditClient}
               dialogTitle={displayTitle}
             />
           ),
         };
       }),
-    [client, forms]
+    [client, forms, user]
   );
 
   if (loading) return null;

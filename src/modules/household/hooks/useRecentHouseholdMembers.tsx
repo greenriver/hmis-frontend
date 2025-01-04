@@ -45,6 +45,6 @@ export function useRecentHouseholdMembers(
 
   return [members, loading] as [
     members: RecentHouseholdMember[] | undefined,
-    loading: boolean
+    loading: boolean,
   ];
 }

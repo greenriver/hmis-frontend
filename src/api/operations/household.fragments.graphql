@@ -14,7 +14,7 @@ fragment HouseholdClientFields on HouseholdClient {
     id
     ...ClientName
     ...ClientIdentificationFields
-    veteranStatus
+    ...AssessedClientFields
     access {
       ...ClientAccessFields
     }
@@ -28,9 +28,7 @@ fragment HouseholdClientFields on HouseholdClient {
   enrollment {
     id
     lockVersion
-    entryDate
-    exitDate
-    inProgress
+    ...EnrollmentRangeFields
     autoExited
     currentUnit {
       id
@@ -46,6 +44,7 @@ fragment ProjectEnrollmentsHouseholdFields on Household {
   householdClients {
     ...ProjectEnrollmentsHouseholdClientFields
   }
+  ...HouseholdWithStaffAssignments @include(if: $includeStaffAssignment)
 }
 
 fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {

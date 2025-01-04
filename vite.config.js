@@ -55,16 +55,21 @@ export default defineConfig(({ command, mode }) => {
       ...(env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN
         ? [
             sentryVitePlugin({
-              include: 'dist/assets/',
-              urlPrefix: '~/assets/',
               org: env.SENTRY_ORG,
               project: env.SENTRY_PROJECT,
               authToken: env.SENTRY_AUTH_TOKEN,
-              release: env.PUBLIC_GIT_COMMIT_HASH,
-              setCommits: {
-                repo: 'greenriver/hmis-frontend',
-                commit: env.FULL_GITHASH,
+              release: {
+                uploadLegacySourcemaps: {
+                  paths: ['dist/assets/'],
+                  urlPrefix: '~/assets/',
+                },
+                name: env.PUBLIC_GIT_COMMIT_HASH,
+                setCommits: {
+                  repo: 'greenriver/hmis-frontend',
+                  commit: env.FULL_GITHASH,
+                },
               },
+              // reactComponentAnnotation: { enabled: true, },
               telemetry: false,
               debug: false,
             }),
@@ -79,6 +84,9 @@ export default defineConfig(({ command, mode }) => {
       logOverride: { 'this-is-undefined-in-esm': 'silent' },
       // Drop log statements when minifying
       pure: ['console.log', 'console.info', 'console.debug'],
+    },
+    test: {
+      watch: false,
     },
     build: {
       rollupOptions: {
@@ -102,15 +110,14 @@ export default defineConfig(({ command, mode }) => {
           defaultHandler(warning);
         },
       },
+      commonjsOptions: { transformMixedEsModules: true },
       sourcemap: true,
       minify: mode === 'development' ? false : 'esbuild',
     },
     ...(command !== 'build' && {
       preview: {
-        // don't try to open a browser
         open: false,
-        // cypress expects on 5173
-        port: 5173,
+        port: 5173, // expected in capybara system test instructions
         strictPort: true,
       },
       server: {

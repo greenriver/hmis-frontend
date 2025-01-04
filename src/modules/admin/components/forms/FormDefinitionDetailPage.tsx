@@ -1,127 +1,97 @@
-import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
-import { Grid, IconButton, Stack, Typography } from '@mui/material';
-
-import { generatePath } from 'react-router-dom';
-import FormRuleCard from '../formRules/FormRuleCard';
-import ButtonLink from '@/components/elements/ButtonLink';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import LockIcon from '@mui/icons-material/Lock';
+import { Alert, Chip, Grid, Stack, Typography } from '@mui/material';
+import FormRulesCard from '../formRules/FormRulesCard';
+import FormVersionTable from './FormVersionTable';
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
-import { EditIcon } from '@/components/elements/SemanticIcons';
+import TitleCard from '@/components/elements/TitleCard';
+import PageTitle from '@/components/layout/PageTitle';
+
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import FormDefinitionActionsCard from '@/modules/admin/components/forms/FormDefinitionActionsCard';
+import FormStatusText from '@/modules/admin/components/forms/FormStatusText';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  FormDefinitionInput,
-  MutationUpdateFormDefinitionArgs,
-  StaticFormRole,
-  UpdateFormDefinitionDocument,
-  UpdateFormDefinitionMutation,
-  useGetFormIdentifierDetailsQuery,
-} from '@/types/gqlTypes';
+import { useGetFormIdentifierDetailsQuery } from '@/types/gqlTypes';
 
 const FormDefinitionDetailPage = () => {
   const { identifier } = useSafeParams() as {
     identifier: string;
   };
 
-  const { data: { formIdentifier } = {}, error } =
-    useGetFormIdentifierDetailsQuery({
-      variables: { identifier },
-    });
-
-  // Dialog for updating form definitions
-  const { openFormDialog: openEditDialog, renderFormDialog: renderEditDialog } =
-    useStaticFormDialog<
-      UpdateFormDefinitionMutation,
-      MutationUpdateFormDefinitionArgs
-    >({
-      formRole: StaticFormRole.FormDefinition,
-      initialValues: formIdentifier?.displayVersion || {},
-      localConstants: { definitionId: formIdentifier?.displayVersion.id },
-      mutationDocument: UpdateFormDefinitionDocument,
-      getErrors: (data) => data.updateFormDefinition?.errors || [],
-      getVariables: (values) => ({
-        input: values as FormDefinitionInput,
-        id: formIdentifier?.displayVersion.id || '',
-      }),
-    });
+  const {
+    data: { formIdentifier } = {},
+    error,
+    loading,
+  } = useGetFormIdentifierDetailsQuery({
+    variables: { identifier },
+  });
 
   if (error) throw error;
-  if (!formIdentifier) return <Loading />;
+  if (!formIdentifier && loading) return <Loading />;
+  if (!formIdentifier) return <NotFound />;
 
   return (
     <>
-      <Stack gap={0.5} sx={{ my: 2 }}>
-        <Typography
-          variant='caption'
-          color='links'
-          sx={{ textTransform: 'uppercase', fontWeight: 800 }}
-        >
-          Selected Form
-        </Typography>
-        <Stack direction='row' gap={1}>
-          <Typography variant='h3'>
-            {formIdentifier.displayVersion.title}
-          </Typography>
-          <ButtonTooltipContainer title='Edit Title'>
-            <IconButton
-              aria-label='edit title'
-              onClick={openEditDialog}
-              size='small'
-              sx={{ color: (theme) => theme.palette.links }}
-            >
-              <EditIcon fontSize='inherit' />
-            </IconButton>
-          </ButtonTooltipContainer>
-        </Stack>
-      </Stack>
+      <PageTitle
+        overlineText='Selected Form'
+        title={formIdentifier.displayVersion.title}
+      />
       <Stack gap={2}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
-            <CommonCard title='Form Details'>
-              <Stack gap={1}>
+            <CommonCard title='Details' titleComponent='h5'>
+              <Stack gap={2}>
+                {formIdentifier.managedInVersionControl && (
+                  <Alert severity='info' icon={<LockIcon />}>
+                    <Typography variant='body2'>
+                      This is a system-managed form. To make changes to the form
+                      content, please contact support.
+                    </Typography>
+                  </Alert>
+                )}
+                <CommonLabeledTextBlock title='Form ID'>
+                  {formIdentifier.identifier}
+                </CommonLabeledTextBlock>
                 <CommonLabeledTextBlock title='Form Type'>
-                  <HmisEnum
-                    enumMap={HmisEnums.FormRole}
-                    value={formIdentifier.displayVersion.role}
+                  <Chip
+                    size='small'
+                    sx={{ mt: 0.5 }}
+                    label={
+                      <HmisEnum
+                        enumMap={HmisEnums.FormRole}
+                        value={formIdentifier.displayVersion.role}
+                      />
+                    }
                   />
                 </CommonLabeledTextBlock>
-                <CommonLabeledTextBlock title='Form Identifier'>
-                  {formIdentifier.identifier}
+                <CommonLabeledTextBlock title='Form Status'>
+                  <FormStatusText identifier={formIdentifier} />
                 </CommonLabeledTextBlock>
               </Stack>
             </CommonCard>
           </Grid>
           <Grid item xs={12} md={4}>
-            <CommonCard title='Form Actions'>
-              <Stack direction='row' gap={2}>
-                <ButtonLink
-                  to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
-                    identifier: formIdentifier?.identifier,
-                    formId: formIdentifier?.displayVersion.id,
-                  })}
-                  startIcon={<DashboardCustomizeIcon />}
-                  variant='contained'
-                  fullWidth
-                >
-                  Edit Form
-                </ButtonLink>
-                {/* TODO add: preview */}
-              </Stack>
-            </CommonCard>
+            <FormDefinitionActionsCard formIdentifier={formIdentifier} />
           </Grid>
         </Grid>
-        <FormRuleCard
+        <FormRulesCard
           formId={formIdentifier.displayVersion.id}
           formTitle={formIdentifier.displayVersion.title}
           formRole={formIdentifier.displayVersion.role}
+          formCacheKey={formIdentifier.displayVersion.cacheKey}
         />
+        <TitleCard
+          title='Version History'
+          headerVariant='border'
+          headerTypographyVariant='h5'
+          headerComponent='h2'
+        >
+          <FormVersionTable formIdentifier={formIdentifier.identifier} />
+        </TitleCard>
       </Stack>
-      {renderEditDialog({ title: 'Edit Form Details' })}
     </>
   );
 };

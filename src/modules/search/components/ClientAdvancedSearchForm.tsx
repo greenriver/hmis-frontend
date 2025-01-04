@@ -73,8 +73,8 @@ const ClientSearchAdvancedForm: React.FC<Props> = ({
               item.type === ItemType.String && item.text !== 'SSN'
                 ? { xs: 6 }
                 : item.text === 'SSN'
-                ? { xs: 6, md: 3 }
-                : { xs: 6, md: 3 }
+                  ? { xs: 6, md: 3 }
+                  : { xs: 6, md: 3 }
             }
           />
         ))}

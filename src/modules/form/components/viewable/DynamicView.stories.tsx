@@ -11,7 +11,6 @@ import { FormDefinitionJson } from '@/types/gqlTypes';
 const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
 export default {
-  title: 'DynamicView',
   component: DynamicView,
   decorators: [
     (Story) => (

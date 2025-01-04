@@ -1,3 +1,4 @@
+import { it, describe, expect } from 'vitest';
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 
 function context(

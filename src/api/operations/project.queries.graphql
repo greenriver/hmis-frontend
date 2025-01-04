@@ -46,6 +46,7 @@ query GetProjectEnrollments(
   $limit: Int = 10
   $offset: Int = 0
   $includeCls: Boolean = false
+  $includeStaffAssignment: Boolean = false
 ) {
   project(id: $id) {
     id
@@ -71,6 +72,7 @@ query GetProjectHouseholds(
   $sortOrder: HouseholdSortOption
   $limit: Int = 10
   $offset: Int = 0
+  $includeStaffAssignment: Boolean = false
 ) {
   project(id: $id) {
     id
@@ -112,8 +114,7 @@ query GetProjectServices(
         ...ServiceBasicFields
         enrollment {
           id
-          entryDate
-          exitDate
+          ...EnrollmentRangeFields
           client {
             ...ClientNameDobVet
           }
@@ -209,10 +210,19 @@ query GetProjectReferralRequests($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query GetProjectReferralPostings($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetProjectReferralPostings(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ReferralPostingFilterOptions
+) {
   project(id: $id) {
     id
-    incomingReferralPostings(limit: $limit, offset: $offset) {
+    incomingReferralPostings(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+    ) {
       offset
       limit
       nodesCount
@@ -227,10 +237,15 @@ query GetProjectOutgoingReferralPostings(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
+  $filters: ReferralPostingFilterOptions
 ) {
   project(id: $id) {
     id
-    outgoingReferralPostings(limit: $limit, offset: $offset) {
+    outgoingReferralPostings(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+    ) {
       offset
       limit
       nodesCount

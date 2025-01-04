@@ -11,8 +11,9 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'prettier',
     'plugin:storybook/recommended',
+    'plugin:vitest/recommended',
   ],
-  plugins: ['react', '@typescript-eslint', 'jest'],
+  plugins: ['react', '@typescript-eslint'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -23,12 +24,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.test.ts', '**/*.test.tx'],
-      env: {
-        'jest/globals': true,
+      // storybook files
+      files: ['*.stories.tsx'],
+      rules: {
+        'no-console': 'off',
       },
-      plugins: ['jest'],
-      extends: ['plugin:jest/recommended'],
     },
     {
       files: ['*.ts', '*.tsx'],
@@ -38,11 +38,7 @@ module.exports = {
         // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
       ],
       parserOptions: {
-        project: [
-          './tsconfig.json',
-          './cypress/tsconfig.json',
-          './cypress.config.ts',
-        ],
+        project: ['./tsconfig.json'],
       },
       rules: {
         'import/extensions': 'off',
@@ -113,6 +109,7 @@ module.exports = {
     'react/display-name': 'off',
     'react/no-children-prop': 'error',
     'react/no-danger-with-children': 'error',
+    'react-hooks/exhaustive-deps': 'error',
     'no-restricted-imports': [
       'warn',
       {
@@ -123,5 +120,5 @@ module.exports = {
     ],
     eqeqeq: 'error',
   },
-  ignorePatterns: ['jest.config.ts', 'gqltypes.ts', 'cypress.config.ts'],
+  ignorePatterns: ['gqltypes.ts'],
 };

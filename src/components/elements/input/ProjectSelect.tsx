@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
-import { getOptionLabelFromOptions } from '@/modules/form/components/FormSelect';
+import { findOptionLabel } from '@/modules/form/util/formUtil';
 import {
   PickListOption,
   PickListType,
@@ -17,7 +17,7 @@ export type Option = PickListOption;
 export const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.code}>
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
-      <Typography variant='body2'>{option.label}</Typography>
+      <Typography variant='body2'>{option.label || option.code}</Typography>
       {option.secondaryLabel && (
         <Typography
           variant='body2'
@@ -50,8 +50,7 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
   if (error) console.error(error);
 
   const getOptionLabel = useCallback(
-    (option: Option) =>
-      getOptionLabelFromOptions(option, pickList as PickListOption[]),
+    (option: Option) => findOptionLabel(option, pickList as PickListOption[]),
     [pickList]
   );
 

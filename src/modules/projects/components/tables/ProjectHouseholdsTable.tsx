@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Chip, Stack, Tooltip, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -13,12 +13,14 @@ import {
   formatDateForDisplay,
   formatDateForGql,
 } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
   HouseholdFilterOptions,
+  HouseholdWithStaffAssignmentsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
@@ -31,6 +33,35 @@ const TableCellContainer = ({ children }: { children: ReactNode }) => (
     {children}
   </Stack>
 );
+
+export const ASSIGNED_STAFF_COL = {
+  header: 'Assigned Staff',
+  optional: true,
+  defaultHidden: true,
+  render: (hh: HouseholdWithStaffAssignmentsFragment) => {
+    if (!hh.staffAssignments?.nodes.length) return;
+
+    const first = hh.staffAssignments.nodes[0].user.name;
+    const rest = hh.staffAssignments.nodes
+      .slice(1)
+      .map((staffAssignment) => staffAssignment.user.name);
+
+    return (
+      <>
+        {first}{' '}
+        {rest.length > 0 && (
+          <Tooltip arrow title={rest.join(', ')}>
+            <Chip
+              sx={{ mb: 0.5 }}
+              size='small'
+              label={`+${rest.length} more`}
+            />
+          </Tooltip>
+        )}
+      </>
+    );
+  },
+};
 
 export const HOUSEHOLD_COLUMNS: {
   [key: string]: ColumnDef<HouseholdFields>;
@@ -124,16 +155,8 @@ export const HOUSEHOLD_COLUMNS: {
       </Typography>
     ),
   },
+  assignedStaff: ASSIGNED_STAFF_COL,
 };
-
-const defaultColumns: ColumnDef<HouseholdFields>[] = [
-  HOUSEHOLD_COLUMNS.hohIndicator,
-  HOUSEHOLD_COLUMNS.clients,
-  HOUSEHOLD_COLUMNS.relationshipToHoH,
-  HOUSEHOLD_COLUMNS.status,
-  HOUSEHOLD_COLUMNS.enrollmentPeriod,
-  HOUSEHOLD_COLUMNS.householdId,
-];
 
 const ProjectHouseholdsTable = ({
   projectId,
@@ -142,7 +165,7 @@ const ProjectHouseholdsTable = ({
   searchTerm,
 }: {
   projectId: string;
-  columns?: typeof defaultColumns;
+  columns?: ColumnDef<HouseholdFields>[];
   openOnDate?: Date;
   searchTerm?: string;
 }) => {
@@ -151,9 +174,29 @@ const ProjectHouseholdsTable = ({
     [openOnDate]
   );
 
+  const {
+    project: { staffAssignmentsEnabled },
+  } = useProjectDashboardContext();
+
+  const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
+    const cols: ColumnDef<HouseholdFields>[] = [
+      HOUSEHOLD_COLUMNS.hohIndicator,
+      HOUSEHOLD_COLUMNS.clients,
+      HOUSEHOLD_COLUMNS.relationshipToHoH,
+      HOUSEHOLD_COLUMNS.status,
+      HOUSEHOLD_COLUMNS.enrollmentPeriod,
+      HOUSEHOLD_COLUMNS.householdId,
+    ];
+
+    if (staffAssignmentsEnabled) cols.push(HOUSEHOLD_COLUMNS.assignedStaff);
+
+    return cols;
+  }, [staffAssignmentsEnabled]);
+
   const filters = useFilters({
     type: 'HouseholdFilterOptions',
-    omit: ['searchTerm'],
+    omit: ['searchTerm', staffAssignmentsEnabled ? '' : 'assignedStaff'],
+    pickListArgs: { projectId: projectId },
   });
 
   return (
@@ -180,6 +223,15 @@ const ProjectHouseholdsTable = ({
       pagePath='project.households'
       filters={filters}
       recordType='Household'
+      showOptionalColumns
+      applyOptionalColumns={(cols) => {
+        const result: Partial<GetProjectHouseholdsQueryVariables> = {};
+
+        if (cols.includes(HOUSEHOLD_COLUMNS.assignedStaff.key || ''))
+          result.includeStaffAssignment = true;
+
+        return result;
+      }}
     />
   );
 };

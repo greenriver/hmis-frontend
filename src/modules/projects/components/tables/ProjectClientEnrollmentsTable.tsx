@@ -17,16 +17,19 @@ import {
   formatDateForGql,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
-  EnrollmentSortOption,
   EnrollmentsForProjectFilterOptions,
+  EnrollmentSortOption,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
+  HouseholdWithStaffAssignmentsFragment,
   ProjectEnrollmentFieldsFragment,
   ProjectEnrollmentQueryEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
@@ -55,6 +58,13 @@ export const ENROLLMENT_PERIOD_COL: ColumnDef<
     <EnrollmentDateRangeWithStatus enrollment={e} treatIncompleteAsActive />
   ),
 };
+
+const isHouseholdWithStaff = (
+  e: any
+): e is { household: HouseholdWithStaffAssignmentsFragment } => {
+  return 'household' in e && 'staffAssignments' in e.household;
+};
+
 export const ENROLLMENT_COLUMNS: {
   [key: string]: ColumnDef<
     | EnrollmentFieldsFragment
@@ -146,6 +156,14 @@ export const ENROLLMENT_COLUMNS: {
       return null;
     },
   },
+  assignedStaff: {
+    ...ASSIGNED_STAFF_COL,
+    render: (e) => {
+      return isHouseholdWithStaff(e)
+        ? ASSIGNED_STAFF_COL.render(e.household)
+        : null;
+    },
+  },
 };
 
 const ProjectClientEnrollmentsTable = ({
@@ -178,20 +196,33 @@ const ProjectClientEnrollmentsTable = ({
     [openOnDate]
   );
 
+  const {
+    project: { staffAssignmentsEnabled },
+  } = useProjectDashboardContext();
+
   const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
-      return [
+      const cols = [
         ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
         CLIENT_COLUMNS.dobAge,
         ENROLLMENT_COLUMNS.enrollmentStatus,
         ENROLLMENT_COLUMNS.enrollmentPeriod,
         ENROLLMENT_COLUMNS.lastClsDate,
       ];
-    }, []);
+
+      if (staffAssignmentsEnabled) cols.push(ENROLLMENT_COLUMNS.assignedStaff);
+
+      return cols;
+    }, [staffAssignmentsEnabled]);
 
   const filters = useFilters({
     type: 'EnrollmentsForProjectFilterOptions',
-    omit: ['searchTerm', 'bedNightOnDate'],
+    omit: [
+      'searchTerm',
+      'bedNightOnDate',
+      staffAssignmentsEnabled ? '' : 'assignedStaff',
+    ],
+    pickListArgs: { projectId: projectId },
   });
 
   return (
@@ -227,6 +258,9 @@ const ProjectClientEnrollmentsTable = ({
 
           if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
             result.includeCls = true;
+
+          if (cols.includes(ENROLLMENT_COLUMNS.assignedStaff.key || ''))
+            result.includeStaffAssignment = true;
 
           return result;
         }}

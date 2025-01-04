@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   DataCollectionFeatureRole,
@@ -13,8 +12,6 @@ import {
 export const useProjectDashboardNavItems = (
   project?: ProjectAllFieldsFragment
 ) => {
-  const { globalFeatureFlags } = useHmisAppSettings();
-
   const navItems: NavItem<ProjectAccessFieldsFragment>[] = useMemo(() => {
     if (!project) return [];
     const dataCollectionRoles = project.dataCollectionFeatures.map(
@@ -52,7 +49,15 @@ export const useProjectDashboardNavItems = (
               DataCollectionFeatureRole.Service
             ),
           },
-
+          {
+            id: 'current-living-situations',
+            title: 'Current Living Situations',
+            path: ProjectDashboardRoutes.PROJECT_CURRENT_LIVING_SITUATIONS,
+            permissions: ['canViewEnrollmentDetails'],
+            hide: !dataCollectionRoles.includes(
+              DataCollectionFeatureRole.CurrentLivingSituation
+            ),
+          },
           {
             id: 'externalForms',
             title: 'External Forms',
@@ -87,7 +92,6 @@ export const useProjectDashboardNavItems = (
               'canManageOutgoingReferrals',
             ],
             permissionMode: 'any',
-            hide: !globalFeatureFlags?.externalReferrals,
           },
         ],
       },
@@ -100,7 +104,7 @@ export const useProjectDashboardNavItems = (
             id: 'units',
             title: 'Units',
             path: ProjectDashboardRoutes.UNITS,
-            permissions: ['canManageInventory'],
+            permissions: ['canViewUnits'],
           },
           {
             id: 'inventory',
@@ -130,7 +134,7 @@ export const useProjectDashboardNavItems = (
         ],
       },
     ];
-  }, [globalFeatureFlags, project]);
+  }, [project]);
 
   return navItems;
 };

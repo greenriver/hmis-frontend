@@ -5,7 +5,7 @@ import { FormValues } from '../types';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 type DynamicFormContextType = {
-  getCleanedValues?: () => FormValues;
+  getValues?: () => FormValues;
   definition?: FormDefinitionJson;
 };
 

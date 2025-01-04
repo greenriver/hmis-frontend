@@ -8,16 +8,12 @@ import { AddressInputType } from '../types';
 import TextInput from '@/components/elements/input/TextInput';
 import { usePickList } from '@/modules/form/hooks/usePickList';
 import { isPickListOption } from '@/modules/form/types';
-import {
-  itemDefaults,
-  localResolvePickList,
-} from '@/modules/form/util/formUtil';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { ClientAddressUse, ItemType } from '@/types/gqlTypes';
 
 // const addressTypePicklist = localResolvePickList('ClientAddressType') || [];
 const addressUsePicklist = localResolvePickList('ClientAddressUse') || [];
 const fakeStateItem = {
-  ...itemDefaults,
   linkId: 'fake',
   type: ItemType.Choice,
   pickListReference: 'STATE',

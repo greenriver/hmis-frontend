@@ -45,6 +45,7 @@ const TextInput = ({
   ariaLabelledBy,
   ariaLabel,
   id,
+  value,
   ...props
 }: TextInputProps) => {
   const generatedId = useId();
@@ -66,10 +67,11 @@ const TextInput = ({
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
       autoComplete={formAutoCompleteOff}
+      value={value === null ? '' : value} // always used as controlled input, so don't pass null or undefined. Note, value may be a number, such as 0, which is falsy
       {...props}
       sx={{ maxWidth, ...sx }}
       inputProps={{
-        'aria-label': hiddenLabel ? ariaLabel || String(label) : undefined,
+        'aria-label': ariaLabel || String(label),
         'aria-labelledby': ariaLabelledBy,
         minLength: min,
         maxLength: max,

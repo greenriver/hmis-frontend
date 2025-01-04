@@ -1,8 +1,9 @@
 import { mapValues } from 'lodash-es';
+import { it, describe, expect } from 'vitest';
 
 import { HIDDEN_VALUE } from '../types';
 
-import { itemDefaults, transformSubmitValues } from './formUtil';
+import { transformSubmitValues } from './formUtil';
 
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
@@ -15,49 +16,41 @@ import {
 const definition: FormDefinitionJson = {
   item: [
     {
-      ...itemDefaults,
       type: ItemType.Group,
       linkId: '1',
       item: [
         {
-          ...itemDefaults,
           linkId: '1.1',
           type: ItemType.Boolean,
           mapping: { fieldName: 'boolField' },
         },
         {
-          ...itemDefaults,
           linkId: '1.2',
           type: ItemType.String,
           mapping: { fieldName: 'strField' },
         },
         {
-          ...itemDefaults,
           linkId: '1.3',
           type: ItemType.Date,
           mapping: { fieldName: 'dateField' },
         },
         {
-          ...itemDefaults,
           linkId: '1.4',
           type: ItemType.Integer,
           mapping: { fieldName: 'numField' },
         },
         {
-          ...itemDefaults,
           linkId: '1.5',
           type: ItemType.Currency,
           mapping: { fieldName: 'numField2' },
         },
         {
-          ...itemDefaults,
           linkId: '1.6',
           type: ItemType.Choice,
           mapping: { fieldName: 'choiceField' },
           pickListReference: 'NoYesReasonsForMissingData',
         },
         {
-          ...itemDefaults,
           linkId: '1.7',
           type: ItemType.Text,
           mapping: { fieldName: 'textField' },
@@ -150,17 +143,14 @@ describe('transformSubmitValues', () => {
     const def: FormDefinitionJson = {
       item: [
         {
-          ...itemDefaults,
           type: ItemType.Group,
           linkId: '1',
           item: [
             {
-              ...itemDefaults,
               linkId: '1.1',
               type: ItemType.Group,
               item: [
                 {
-                  ...itemDefaults,
                   linkId: '1.1.1',
                   type: ItemType.Boolean,
                   mapping: {
@@ -223,20 +213,6 @@ describe('transformSubmitValues', () => {
     const result = transformSubmitValues({ definition, values });
 
     expect(result).toStrictEqual(mapValues(values, () => null));
-  });
-
-  it('ignores NaNs for numeric types', () => {
-    const values = {
-      '1.4': 'abc',
-      '1.5': '123abc',
-    };
-    const result = transformSubmitValues({
-      definition,
-      values,
-      keyByFieldName: true,
-    });
-
-    expect(result).toStrictEqual({});
   });
 
   it('replaces empty strings and undefined with nulls', () => {

@@ -15,13 +15,12 @@ import {
 } from 'date-fns';
 import { capitalize, find, isNil, sortBy, startCase } from 'lodash-es';
 
+import { ClientAssessmentType } from '../assessments/assessmentTypes';
 import {
   ClientNameDobVeteranFields,
   hasMeaningfulValue,
 } from '../form/util/formUtil';
 
-import { DashboardEnrollment } from './types';
-import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
 import { ColumnDef } from '@/components/elements/table/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
@@ -37,7 +36,6 @@ import {
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   DataCollectedAbout,
-  DataCollectionFeatureFieldsFragment,
   DisplayHook,
   EnrollmentFieldsFragment,
   EnrollmentOccurrencePointFieldsFragment,
@@ -47,8 +45,8 @@ import {
   NoYes,
   NoYesMissing,
   NoYesReasonsForMissingData,
-  OccurrencePointFormFieldsFragment,
   ProjectType,
+  Race,
   RelationshipToHoH,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
@@ -181,6 +179,9 @@ export const parseAndFormatDate = (
   dateString: string | null | undefined
 ): string | null => {
   if (!dateString) return null;
+  // remove time from ISO8601 date-time string
+  dateString = dateString.slice(0, 10);
+
   const parsed = parseHmisDateString(dateString);
   if (!parsed) return dateString;
   return formatDateForDisplay(parsed) || dateString;
@@ -229,8 +230,11 @@ export const formatRelativeDate = (date: Date): string => {
   return formatRelativeDateTime(date);
 };
 
-export const formatCurrency = (number?: number | null) => {
-  if (isNil(number)) return number;
+export const formatCurrency = (value?: any) => {
+  if (isNil(value)) return value;
+  const number = parseFloat(value);
+  if (isNaN(number)) return value.toString();
+
   return currencyFormatter.format(number);
 };
 
@@ -454,6 +458,7 @@ export const customDataElementValue = (
     val.valueJson,
     val.valueString,
     val.valueText,
+    val.valueFile,
   ].filter((e) => !isNil(e))[0];
 };
 
@@ -472,8 +477,8 @@ export const customDataElementValueForKey = (
 };
 
 export const serviceTypeSummary = (st: ServiceTypeFieldsFragment) => {
-  if (st.category === st.name) return st.name;
-  return [st.category, st.name].join(': ');
+  if (st.serviceCategory.name === st.name) return st.name;
+  return [st.serviceCategory.name, st.name].join(': ');
 };
 
 export const customDataElementValueAsString = (
@@ -550,34 +555,13 @@ export const evaluateDataCollectedAbout = (
         relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
         client.veteranStatus === NoYesReasonsForMissingData.Yes
       );
+    case DataCollectedAbout.AllVeterans:
+      return client.veteranStatus === NoYesReasonsForMissingData.Yes;
     default:
       throw new Error(
         `Unable to evaluate Data Collected About: ${dataCollectedAbout}`
       );
   }
-};
-
-export const occurrencePointCollectedForEnrollment = (
-  occurrencePoint: OccurrencePointFormFieldsFragment,
-  enrollment: DashboardEnrollment
-) => {
-  return evaluateDataCollectedAbout(
-    occurrencePoint.dataCollectedAbout,
-    enrollment.client,
-    enrollment.relationshipToHoH
-  );
-};
-
-export const featureEnabledForEnrollment = (
-  feature: DataCollectionFeatureFieldsFragment,
-  client: ClientNameDobVeteranFields,
-  relationshipToHoH: RelationshipToHoH
-) => {
-  return evaluateDataCollectedAbout(
-    feature.dataCollectedAbout,
-    client,
-    relationshipToHoH
-  );
 };
 
 export const relationshipToHohForDisplay = (
@@ -616,7 +600,7 @@ export const dataUrlForClientImage = (
 // are present on the records.
 //services
 export function getCustomDataElementColumns<
-  RowType extends { customDataElements: CustomDataElementFieldsFragment[] }
+  RowType extends { customDataElements: CustomDataElementFieldsFragment[] },
 >(rows: RowType[]) {
   if (!rows || rows.length === 0) return [];
 
@@ -649,3 +633,9 @@ export function getCustomDataElementColumns<
     .sort()
     .map((key) => columnsByKey[key]);
 }
+
+export const raceEthnicityDisplayString = (race?: Race[]) => {
+  if (!race) return;
+
+  return race.map((r) => HmisEnums.Race[r]).join(', ');
+};

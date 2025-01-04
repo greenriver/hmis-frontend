@@ -1,6 +1,6 @@
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Button, ButtonProps, alpha, useTheme } from '@mui/material';
+import { Button, ButtonProps } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { PropsWithChildren } from 'react';
 import CollapsibleList, {
@@ -40,31 +40,17 @@ export const ContextualCollapsibleList: React.FC<CollapsibleListProps> = (
 const ExpansionToggleButton: React.FC<
   { on?: boolean | null | undefined; onToggle?: VoidFunction } & ButtonProps
 > = ({ on, onToggle = () => {}, ...props }) => {
-  const theme = useTheme();
   return (
     <Button
       onClick={(...args) => {
         onToggle();
         if (props.onClick) props.onClick(...args);
       }}
-      startIcon={
-        on ? (
-          <ExpandLessIcon color='inherit' />
-        ) : (
-          <ExpandMoreIcon sx={{ color: theme.palette.text.secondary }} />
-        )
-      }
+      startIcon={on ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       variant='text'
+      color='grayscale'
       size='small'
       {...props}
-      sx={{
-        color: on ? theme.palette.links : 'inherit',
-        backgroundColor: on
-          ? alpha(theme.palette.links, 0.15)
-          : theme.palette.grey[100],
-        px: 2,
-        ...props.sx,
-      }}
     />
   );
 };

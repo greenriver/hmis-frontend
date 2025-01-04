@@ -20,6 +20,7 @@ export const FullPageError: React.FC<{
   text?: string;
 }> = ({ text = UNKNOWN_ERROR_HEADING }) => (
   <Box
+    component='main'
     display='flex'
     justifyContent='center'
     alignItems='center'
@@ -28,11 +29,17 @@ export const FullPageError: React.FC<{
     flexDirection='column'
     sx={{ p: 10 }}
   >
-    <Typography variant='h4'>{text}</Typography>
+    <Typography variant='h4' component='h1'>
+      {text}
+    </Typography>
   </Box>
 );
 
-export const AlertErrorFallback: React.FC<Parameters<FallbackRender>[0]> = ({
+interface Props extends Omit<Parameters<FallbackRender>[0], 'error'> {
+  error?: any;
+}
+
+export const AlertErrorFallback: React.FC<Props> = ({
   error,
   componentStack,
   resetError,
@@ -40,14 +47,14 @@ export const AlertErrorFallback: React.FC<Parameters<FallbackRender>[0]> = ({
   const { pathname } = useLocation();
   const originalPathname = useRef(pathname);
 
-  // Reset error boundary when navigated awawy
+  // Reset error boundary when navigated away
   useEffect(() => {
     if (pathname !== originalPathname.current) {
       resetError();
     }
   }, [pathname, resetError]);
 
-  if (isApolloError(error)) {
+  if (error && isApolloError(error)) {
     return (
       <ApolloErrorAlert
         error={error}

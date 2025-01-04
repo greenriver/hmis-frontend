@@ -16,8 +16,8 @@ query GetPickList(
   }
 }
 
-query GetFormDefinition($role: RecordFormRole!, $projectId: ID) {
-  recordFormDefinition(role: $role, projectId: $projectId) {
+query GetFormDefinition($role: RecordFormRole!, $projectId: ID, $id: ID) {
+  recordFormDefinition(role: $role, projectId: $projectId, id: $id) {
     ...FormDefinitionFields
   }
 }
@@ -52,17 +52,31 @@ query GetAssessmentFormDefinition(
 
 query GetFormIdentifierDetails($identifier: String!) {
   formIdentifier(identifier: $identifier) {
-    id
-    identifier
-    displayVersion {
-      ...FormDefinitionMetadata
-    }
+    ...FormIdentifierDetails
   }
 }
 
-query GetFormDefinitionFieldsForEditor($id: ID!) {
-  formDefinition(id: $id) {
-    ...FormDefinitionFieldsForEditor
+query GetFormIdentifierVersions(
+  $identifier: String!
+  $limit: Int = 25
+  $offset: Int = 0
+) {
+  formIdentifier(identifier: $identifier) {
+    id
+    identifier
+    allVersions(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FormDefinitionMetadata
+        version
+        dateUpdated
+        updatedBy {
+          ...UserFields
+        }
+      }
+    }
   }
 }
 
@@ -78,23 +92,15 @@ query GetFormIdentifiers(
     nodes {
       id
       identifier
+      managedInVersionControl
       displayVersion {
         ...FormDefinitionMetadata
         system
-        formRules(limit: 1) {
+        formRules(limit: 1, filters: { activeStatus: ACTIVE }) {
           nodesCount
         }
       }
     }
-  }
-}
-
-query GetParsedFormDefinition($input: String!) {
-  parsedFormDefinition(input: $input) {
-    definition {
-      ...FormDefinitionJsonFields
-    }
-    errors
   }
 }
 
@@ -150,9 +156,36 @@ mutation SubmitForm($input: SubmitFormInput!) {
       ... on HmisParticipation {
         ...HmisParticipationFields
       }
+      ... on ReferralPosting {
+        id
+      }
     }
     errors {
       ...ValidationErrorFields
     }
+  }
+}
+
+# Used for Form Builder editor
+query GetFormDefinitionFieldsForEditor($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFieldsForEditor
+  }
+}
+
+# Used for JSON editor
+query GetFormDefinitionFieldsForJsonEditor($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFieldsForJsonEditor
+  }
+}
+
+# used for JSON editor
+query GetParsedFormDefinition($input: String!) {
+  parsedFormDefinition(input: $input) {
+    definition {
+      ...FormDefinitionJsonFields
+    }
+    errors
   }
 }

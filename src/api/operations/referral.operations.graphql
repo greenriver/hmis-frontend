@@ -9,12 +9,6 @@ mutation VoidReferralRequest($id: ID!) {
   }
 }
 
-query GetReferralPosting($id: ID!) {
-  referralPosting(id: $id) {
-    ...ReferralPostingDetailFields
-  }
-}
-
 mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
   updateReferralPosting(id: $id, input: $input) {
     record {
@@ -22,28 +16,6 @@ mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
     }
     errors {
       ...ValidationErrorFields
-    }
-  }
-}
-
-mutation CreateOutgoingReferralPosting($input: OutgoingReferralPostingInput!) {
-  createOutgoingReferralPosting(input: $input) {
-    record {
-      ...ReferralPostingDetailFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-query GetDeniedPendingReferralPostings($limit: Int = 10, $offset: Int = 0) {
-  deniedPendingReferralPostings(limit: $limit, offset: $offset) {
-    offset
-    limit
-    nodesCount
-    nodes {
-      ...ReferralPostingFields
     }
   }
 }

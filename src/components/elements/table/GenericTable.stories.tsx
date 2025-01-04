@@ -9,7 +9,6 @@ import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
 
 export default {
-  title: 'GenericTable',
   component: GenericTable,
   decorators: [
     (Story) => (
@@ -22,14 +21,13 @@ export default {
 
 const Template =
   <T extends { id: string }>(): StoryFn<GenericTableProps<T>> =>
-  (args) =>
-    (
-      <Paper>
-        <SsnDobShowContextProvider>
-          <GenericTable<T> {...args} />
-        </SsnDobShowContextProvider>
-      </Paper>
-    );
+  (args) => (
+    <Paper>
+      <SsnDobShowContextProvider>
+        <GenericTable<T> {...args} />
+      </SsnDobShowContextProvider>
+    </Paper>
+  );
 
 const clientColumns = [
   CLIENT_COLUMNS.id,

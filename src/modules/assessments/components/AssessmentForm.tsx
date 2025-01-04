@@ -1,5 +1,5 @@
 import UnlockIcon from '@mui/icons-material/Lock';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -10,8 +10,10 @@ import {
   useState,
 } from 'react';
 
+import { AssessmentLocalConstants } from '../util';
 import AssessmentAlert from './alerts/AssessmentAlert';
 
+import AssessmentTitle from './AssessmentTitle';
 import FormContainer from '@/components/layout/FormContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -23,26 +25,35 @@ import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
+import AssessmentHistoryInfo from '@/modules/assessments/components/AssessmentHistory';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
-import { ClientNameDobSsn } from '@/modules/assessments/components/IndividualAssessment';
+
+import RecordPickerDialog from '@/modules/assessments/components/RecordPickerDialog';
 import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import FormActions from '@/modules/form/components/FormActions';
-import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
+  applyDefinitionRulesForClient,
   createInitialValuesFromRecord,
   getInitialValues,
   getItemMap,
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
 import {
+  age,
+  clientBriefName,
+  clientNameAllParts,
+  raceEthnicityDisplayString,
+} from '@/modules/hmis/hmisUtil';
+import {
+  AssessedClientFieldsFragment,
   EnrollmentFieldsFragment,
   FormDefinitionFieldsFragment,
   FormRole,
@@ -52,13 +63,14 @@ import {
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
-  client: ClientNameDobSsn;
-  formRole?: FormRole;
-  definition: FormDefinitionFieldsFragment;
+  client: AssessedClientFieldsFragment;
+  // FormDefiniton to use for rendering the assessment in read-only mode
+  viewingDefinition: FormDefinitionFieldsFragment;
+  // FormDefiniton to use for rendering the assessment for editing
+  editingDefinition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
-  assessmentTitle?: ReactNode;
+  alerts?: ReactNode;
   top?: number;
-  navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
   FormActionProps?: DynamicFormProps['FormActionProps'];
   onSubmit: DynamicFormProps['onSubmit'];
@@ -77,10 +89,9 @@ interface Props {
 const AssessmentForm: React.FC<Props> = ({
   assessment,
   client,
-  assessmentTitle,
-  formRole,
-  definition,
-  navigationTitle,
+  alerts,
+  viewingDefinition,
+  editingDefinition,
   enrollment,
   embeddedInWorkflow,
   FormActionProps,
@@ -107,11 +118,25 @@ const AssessmentForm: React.FC<Props> = ({
   useEffect(() => {
     if (!canEdit) return;
     if (assessment && !assessment.inProgress) setLocked(true);
-  }, [assessment, canEdit]);
+  }, [assessment, canEdit]); // re-runs after assessment is refetched, which leads to assessment re-locking after submit
+
+  // Choose the FormDefiniton to use for rendering, and filter it down based on client attributes (Data Collected About rules).
+  const definition = useMemo(() => {
+    const fd = locked ? viewingDefinition : editingDefinition;
+    // Apply "data collected about" rules to filter down the definition to relevant items
+    const relationshipToHoH = enrollment.relationshipToHoH;
+    return applyDefinitionRulesForClient(fd, client, relationshipToHoH);
+  }, [
+    locked,
+    viewingDefinition,
+    editingDefinition,
+    enrollment.relationshipToHoH,
+    client,
+  ]);
 
   // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
-    FullAssessmentFragment | undefined
+    FullAssessmentFragment | AssessmentForPopulation | undefined
   >();
   // Trigger for reloading initial values and form if a source assessment is chosen for autofill.
   // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
@@ -143,16 +168,16 @@ const AssessmentForm: React.FC<Props> = ({
   );
 
   // Local values that may be referenced by the FormDefinition
-  const localConstants = useMemo(
+  const localConstants: AssessmentLocalConstants = useMemo(
     () => ({
-      entryDate: enrollment.entryDate,
-      exitDate: enrollment.exitDate,
-      projectName: enrollment.project.projectName,
-      clientFirstName: client.firstName,
-      clientMiddleInitial: client.middleName ? client.middleName[0] : '',
-      clientLastName: client.lastName,
-      clientDob: client.dob,
-      clientSsn: client.ssn,
+      entryDate: enrollment.entryDate || undefined,
+      exitDate: enrollment.exitDate || undefined,
+      projectName: enrollment.project.projectName || undefined,
+      clientName: clientNameAllParts(client),
+      clientDob: client.dob || undefined,
+      clientSsn: client.ssn || undefined,
+      clientAge: age(client),
+      clientRaceEthnicity: raceEthnicityDisplayString(client.race),
       ...AlwaysPresentLocalConstants,
     }),
     [enrollment, client]
@@ -263,7 +288,7 @@ const AssessmentForm: React.FC<Props> = ({
             onClick: handleUnlock,
             startIcon: <UnlockIcon />,
             size: 'large',
-            color: 'inherit',
+            color: 'grayscale',
           } as const,
         };
       })
@@ -277,8 +302,20 @@ const AssessmentForm: React.FC<Props> = ({
     handleUnlock,
   ]);
 
-  const isCustomAssessment = formRole === FormRole.CustomAssessment;
+  const isCustomAssessment = definition.role === FormRole.CustomAssessment;
   const showAutofill = !isCustomAssessment && !assessment && canEdit;
+
+  const titleNode = (
+    <AssessmentTitle
+      assessmentTitle={definition.title}
+      clientName={clientBriefName(client)}
+      clientId={client.id}
+      projectName={enrollment.project.projectName}
+      enrollmentId={enrollment.id}
+      entryDate={enrollment.entryDate}
+      exitDate={enrollment.exitDate}
+    />
+  );
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
@@ -286,7 +323,6 @@ const AssessmentForm: React.FC<Props> = ({
         enrollment={enrollment}
         definition={definition}
         assessment={assessment}
-        title={navigationTitle}
         isPrintView={isPrintView}
         locked={locked}
         embeddedInWorkflow={embeddedInWorkflow}
@@ -303,7 +339,24 @@ const AssessmentForm: React.FC<Props> = ({
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
       {showNavigation && navigation}
       <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
-        {assessmentTitle}
+        <Stack sx={{ mb: 1 }} gap={1}>
+          {titleNode}
+          {locked && (
+            <Stack gap={0.5}>
+              <AssessmentHistoryInfo
+                label='Created by:'
+                user={assessment?.createdBy}
+                date={assessment?.dateCreated}
+              />
+              <AssessmentHistoryInfo
+                label='Last Edited by:'
+                user={assessment?.user}
+                date={assessment?.dateUpdated}
+              />
+            </Stack>
+          )}
+        </Stack>
+        {alerts}
         {!isPrintView && (
           <AssessmentAlert
             assessment={assessment}
@@ -338,6 +391,7 @@ const AssessmentForm: React.FC<Props> = ({
               values={initialValuesFromAssessment(itemMap, assessment)}
               definition={definition.definition}
               pickListArgs={pickListArgs}
+              localConstants={localConstants}
             />
           </FormContainer>
         ) : (
@@ -376,16 +430,14 @@ const AssessmentForm: React.FC<Props> = ({
           id='assessmentPickerDialog'
           clientId={client.id}
           open={dialogOpen}
-          role={formRole}
+          role={definition.role}
           onSelected={onSelectAutofillRecord}
           onCancel={() => setDialogOpen(false)}
           description={
-            // <Alert severity='info' icon={false} sx={{ mb: 2 }}>
-            <Typography variant='body2' sx={{ mb: 2 }}>
+            <Typography variant='body2' sx={{ my: 2 }}>
               Select a previous assessment to populate the current assessment.
               Any changes you have made will be overwritten.
             </Typography>
-            // </Alert>
           }
         />
       )}

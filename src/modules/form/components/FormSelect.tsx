@@ -1,12 +1,11 @@
 import { Box, Typography, createFilterOptions } from '@mui/material';
 
-import { find } from 'lodash-es';
 import { useCallback } from 'react';
 import { DynamicInputCommonProps } from '../types';
-
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
+import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { INVALID_ENUM, MISSING_DATA_KEYS } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
@@ -56,18 +55,6 @@ const filterOptions = createFilterOptions<Option>({
   },
 });
 
-export function getOptionLabelFromOptions(
-  option: Option,
-  options: readonly Option[]
-): string {
-  if (option.label) return option.label;
-  if (option.code === INVALID_ENUM) return 'Invalid Value';
-  if (options && options.length > 0 && options[0].label) {
-    return find(options, { code: option.code })?.label || '';
-  }
-  return option.code || '';
-}
-
 const isDoesntKnowRefusedOrNotCollected = (option: Option): boolean =>
   (MISSING_DATA_KEYS as string[]).includes(option.code);
 
@@ -91,7 +78,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
   const isGrouped = !!options[0]?.groupLabel;
 
   const getOptionLabel = useCallback(
-    (option: Option) => getOptionLabelFromOptions(option, options),
+    (option: Option) => findOptionLabel(option, options),
     [options]
   );
 

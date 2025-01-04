@@ -1,22 +1,29 @@
 import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
-
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
+import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
 import { DashboardEnrollment } from '@/modules/hmis/types';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { DataCollectionFeatureRole } from '@/types/gqlTypes';
+import {
+  DataCollectionFeature,
+  DataCollectionFeatureRole,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentQuickActions = ({
   enrollment,
-  enabledFeatures,
+  getEnrollmentFeature,
 }: {
   enrollment: DashboardEnrollment;
-  enabledFeatures: DataCollectionFeatureRole[];
+  getEnrollmentFeature: (
+    role: DataCollectionFeatureRole
+  ) => DataCollectionFeature | void;
 }) => {
+  const { globalFeatureFlags } = useHmisAppSettings();
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
     enrollment,
   });
@@ -26,14 +33,20 @@ const EnrollmentQuickActions = ({
       clientId: enrollment.client.id,
     });
 
+  const serviceFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.Service
+  );
+
   const canRecordService =
-    enabledFeatures.includes(DataCollectionFeatureRole.Service) &&
+    !!serviceFeature &&
+    !serviceFeature.legacy &&
     enrollment.access.canEditEnrollments;
 
   const canEditClient = enrollment.client.access.canEditClient;
 
   const canViewEsgFundingReport =
-    enrollment.project.access.canManageIncomingReferrals;
+    enrollment.project.access.canManageIncomingReferrals &&
+    globalFeatureFlags?.externalReferrals;
 
   if (
     ![canRecordService, canEditClient, canViewEsgFundingReport].some((b) => !!b)
@@ -53,12 +66,13 @@ const EnrollmentQuickActions = ({
 
         {/* Edit Client details */}
         {canEditClient && (
-          <Button
-            onClick={clientLoading ? undefined : openClientFormDialog}
+          <ClientForceRefetchButton
+            clientId={enrollment.client.id}
             variant='outlined'
+            onClick={clientLoading ? undefined : openClientFormDialog}
           >
             Update Client Details
-          </Button>
+          </ClientForceRefetchButton>
         )}
 
         {/* View ESG Funding Report */}

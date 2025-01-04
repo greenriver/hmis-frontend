@@ -1,14 +1,21 @@
-fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+fragment ExternalFormSubmissionSummary on ExternalFormSubmission {
   id
   submittedAt
   spam
   status
   notes
+  enrollmentId
+  clientId
+  summaryFields {
+    key
+    value
+  }
+}
+
+fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+  ...ExternalFormSubmissionSummary
   definition {
-    identifier
-    cacheKey
+    ...FormDefinitionFields
   }
-  customDataElements {
-    ...CustomDataElementFields
-  }
+  values
 }

@@ -2,6 +2,7 @@ import { BreakpointOverrides, SxProps } from '@mui/system';
 import { isNil, isObject } from 'lodash-es';
 import { ReactNode } from 'react';
 
+import { RegisterOptions } from 'react-hook-form';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormItem,
@@ -55,17 +56,18 @@ export interface DynamicFieldProps {
   noLabel?: boolean;
   warnIfEmpty?: boolean;
   breakpoints?: BreakpointOverrides;
+  localConstants?: LocalConstants;
 }
 
 export interface DynamicViewFieldProps {
   item: FormItem;
-  nestingLevel: number;
   value: any;
   horizontal?: boolean;
   pickListArgs?: PickListArgs;
   noLabel?: boolean;
   adjustValue?: ItemChangedFn;
   disabled?: boolean;
+  localConstants?: LocalConstants;
 }
 
 // Props accepted by all input components
@@ -195,3 +197,8 @@ export const isTypedObjectWithId = (
 export type AssessmentForPopulation = NonNullable<
   GetAssessmentsForPopulationQuery['client']
 >['assessments']['nodes'][0];
+
+export type RhfRules = Omit<
+  RegisterOptions,
+  'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
+>;

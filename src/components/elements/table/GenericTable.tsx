@@ -417,7 +417,7 @@ const GenericTable = <T extends { id: string }>({
                                   outlineOffset: '-2px',
                                 },
                               }}
-                              tabIndex={enableTabIndex ? 0 : '-1'}
+                              tabIndex={enableTabIndex ? 0 : -1}
                             >
                               <Box
                                 sx={{

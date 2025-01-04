@@ -39,13 +39,12 @@ const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
       {steps.map((step) => (
         <Step key={step.anchor}>
           <StepLabel
-            StepIconComponent={RadioButtonUncheckedIcon}
-            StepIconProps={{
-              color: 'disabled',
-              error: undefined,
-              active: undefined,
-              completed: undefined,
-            }}
+            StepIconComponent={({ className }) => (
+              <RadioButtonUncheckedIcon
+                color='disabled'
+                className={className}
+              />
+            )}
             sx={{ py: 0 }}
           >
             {useUrlHash ? (

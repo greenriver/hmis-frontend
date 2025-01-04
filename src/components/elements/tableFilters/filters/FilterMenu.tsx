@@ -28,6 +28,8 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
       .filter(([k]) => props.filters.hasOwnProperty(k))
       // Count # of filters that have values applied
       .filter(([, v]) => (Array.isArray(v) ? !isEmpty(v) : !isNil(v)))
+      // skip false (unchecked checkboxes)
+      .filter(([, v]) => v !== false)
       // Get the human-readable label of this filter
       .map(([k]) => props.filters[k as keyof T]?.label || startCase(k));
 

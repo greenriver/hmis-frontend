@@ -7,7 +7,7 @@ import { NavItem } from './types';
 
 interface SideNavMenuProps<T> {
   items: NavItem<T>[];
-  access: T;
+  access?: T;
   pathParams?: Record<string, string>;
 }
 

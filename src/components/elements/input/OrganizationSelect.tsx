@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 import { renderOption } from './ProjectSelect';
-import { getOptionLabelFromOptions } from '@/modules/form/components/FormSelect';
 
+import { findOptionLabel } from '@/modules/form/util/formUtil';
 import {
   PickListOption,
   PickListType,
@@ -30,8 +30,7 @@ const OrganizationSelect = <Multiple extends boolean | undefined>({
   if (error) console.error(error);
 
   const getOptionLabel = useCallback(
-    (option: Option) =>
-      getOptionLabelFromOptions(option, pickList as PickListOption[]),
+    (option: Option) => findOptionLabel(option, pickList as PickListOption[]),
     [pickList]
   );
 

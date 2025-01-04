@@ -1,5 +1,5 @@
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Tooltip } from '@mui/material';
+import { Stack, Tooltip } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import EnrollmentOccurrencePointForm from './EnrollmentOccurrencePointForm';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
@@ -11,22 +11,24 @@ import {
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 
+import RouterLink from '@/components/elements/RouterLink';
+import useAuth from '@/modules/auth/hooks/useAuth';
 import { parseOccurrencePointFormDefinition } from '@/modules/form/util/formUtil';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import {
-  occurrencePointCollectedForEnrollment,
-  yesNo,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate, yesNo } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { Destination } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentDetails = ({
   enrollment,
 }: {
   enrollment: DashboardEnrollment;
 }) => {
+  const { user } = useAuth();
   const rows = useMemo(() => {
     const content: Record<string, ReactNode> = {};
     // If enrollment is incomplete, show that first
@@ -63,22 +65,22 @@ const EnrollmentDetails = ({
     }
 
     // Occurrence point values (move in date, date of engagement, etc.)
-    enrollment.project.occurrencePointForms
-      .filter((form) => occurrencePointCollectedForEnrollment(form, enrollment))
-      .forEach(({ definition }) => {
-        const { displayTitle, isEditable, readOnlyDefinition } =
-          parseOccurrencePointFormDefinition(definition);
+    enrollment.occurrencePointForms.forEach(({ definition }) => {
+      // Determine whether this form has any fields that  are editable.
+      // Pass the user because there might be fields that are only editable by some users.
+      const { displayTitle, isEditable, definitionForDisplay } =
+        parseOccurrencePointFormDefinition(definition, user!);
 
-        content[displayTitle] = (
-          <EnrollmentOccurrencePointForm
-            enrollment={enrollment}
-            definition={definition}
-            readOnlyDefinition={readOnlyDefinition}
-            editable={isEditable && enrollment.access.canEditEnrollments}
-            dialogTitle={displayTitle}
-          />
-        );
-      });
+      content[displayTitle] = (
+        <EnrollmentOccurrencePointForm
+          enrollment={enrollment}
+          definition={definition}
+          definitionForDisplay={definitionForDisplay}
+          editable={isEditable && enrollment.access.canEditEnrollments}
+          dialogTitle={displayTitle}
+        />
+      );
+    });
 
     // CoC Code. Only show if project operates in multiple CoCs.
     if (enrollment.project.projectCocs.nodesCount > 1) {
@@ -89,6 +91,31 @@ const EnrollmentDetails = ({
 
     if (enrollment.client.hudChronic !== null) {
       content['HUD Chronic'] = yesNo(enrollment.client.hudChronic);
+    }
+    if (
+      enrollment.sourceReferralPosting &&
+      enrollment.project.access.canManageIncomingReferrals
+    ) {
+      // Basic details about the referral. If this section needs more customization, it could be implemented
+      // as a read-only occurrence point form.
+      content['Referral Source'] = (
+        <Stack direction='row' gap={1}>
+          {`Referred from ${
+            enrollment.sourceReferralPosting.referredFrom
+          } on ${parseAndFormatDate(
+            enrollment.sourceReferralPosting.referralDate
+          )}`}
+          <RouterLink
+            to={generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
+              projectId: enrollment.project.id,
+              referralPostingId: enrollment.sourceReferralPosting.id,
+            })}
+            openInNew
+          >
+            View Referral
+          </RouterLink>
+        </Stack>
+      );
     }
 
     const tooltips: Record<string, string> = {
@@ -113,7 +140,7 @@ const EnrollmentDetails = ({
       ),
       value,
     }));
-  }, [enrollment]);
+  }, [enrollment, user]);
 
   if (!enrollment || !rows) return <Loading />;
 

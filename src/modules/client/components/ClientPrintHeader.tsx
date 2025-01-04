@@ -30,7 +30,7 @@ const ClientPrintHeader = ({
       mb: 2,
     })}
   >
-    <Typography>
+    <Typography component='div'>
       <ClientName client={client} variant='body2' />
     </Typography>
     {enrollment && (

@@ -21,7 +21,6 @@ import {
 import { DynamicFormRef } from '@/modules/form/components/DynamicForm';
 import { FormActionProps } from '@/modules/form/components/FormActions';
 import { FormActionTypes } from '@/modules/form/types';
-import { applyDefinitionRulesForClient } from '@/modules/form/util/formUtil';
 import { FormDefinitionFieldsFragment } from '@/types/gqlTypes';
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
@@ -51,14 +50,12 @@ const HouseholdAssessmentTabPanel = memo(
     enrollmentId,
     assessmentId,
     client,
-    relationshipToHoH,
     nextTab,
     previousTab,
     navigateToTab,
     refetch,
     updateTabStatus,
     assessmentSubmitted,
-    assessmentStatus,
     onFormStateChange,
     formState,
     formDefinition: mainFormDefinition,
@@ -98,29 +95,22 @@ const HouseholdAssessmentTabPanel = memo(
     const { assessment, loading: assessmentLoading } =
       useAssessment(assessmentId);
 
-    const definition = useMemo(() => {
-      if (assessmentId && !assessment) return;
+    const [viewingDefinition, editingDefinition] = useMemo(() => {
+      if (assessmentId && !assessment) return [];
 
       // If we are loading an existing Assessment, always prefer to use
       // the FormDefinition that was resolved on the Assessment. This could
       // be important if it's an older WIP assessment that was saved using a certain
       // form. (It should be re-opened using the same form).
-      const chosenDefinition = assessment?.definition || mainFormDefinition;
+      if (assessment) {
+        return [
+          assessment.definition,
+          assessment.upgradedDefinitionForEditing || assessment.definition,
+        ];
+      }
 
-      // Apply client-specific transformation to FormDefinition. For example,
-      // removing questions that are only for the HoH.
-      return applyDefinitionRulesForClient(
-        chosenDefinition,
-        client,
-        relationshipToHoH
-      );
-    }, [
-      assessment,
-      assessmentId,
-      client,
-      mainFormDefinition,
-      relationshipToHoH,
-    ]);
+      return [mainFormDefinition, mainFormDefinition];
+    }, [assessment, assessmentId, mainFormDefinition]);
 
     const onCompletedMutation = useCallback(
       (status: AssessmentResponseStatus) => {
@@ -151,7 +141,7 @@ const HouseholdAssessmentTabPanel = memo(
 
     const { submitHandler, saveDraftHandler, mutationLoading, errors } =
       useAssessmentHandlers({
-        definition,
+        formDefinitionId: editingDefinition?.id || mainFormDefinition.id,
         enrollmentId,
         assessmentId,
         assessmentLockVersion: assessment?.lockVersion,
@@ -251,22 +241,20 @@ const HouseholdAssessmentTabPanel = memo(
       >
         {assessmentLoading ? (
           <Loading />
-        ) : !definition ? (
+        ) : !viewingDefinition || !editingDefinition ? (
           <MissingDefinitionAlert />
         ) : (
           <IndividualAssessment
-            definition={definition}
+            viewingDefinition={viewingDefinition}
+            editingDefinition={editingDefinition}
             client={client}
             embeddedInWorkflow
             enrollmentId={enrollmentId}
             assessment={assessment}
-            assessmentStatus={assessmentStatus}
-            formRole={definition.role}
             FormActionProps={FormActionProps}
             visible={active}
             formRef={formRef}
             onFormStateChange={onFormStateChange}
-            title={definition.title}
             onSubmit={submitHandler}
             onSaveDraft={saveDraftHandler}
             errors={errors}

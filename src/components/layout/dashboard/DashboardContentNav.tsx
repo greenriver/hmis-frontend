@@ -7,6 +7,8 @@ import {
   DESKTOP_NAV_SIDEBAR_WIDTH,
   STICKY_BAR_HEIGHT,
 } from '../layoutConstants';
+import MobileMenu from '@/components/layout/nav/MobileMenu';
+
 interface Props {
   children: ReactNode;
   navHeader: ReactNode;
@@ -14,7 +16,6 @@ interface Props {
   mobileNavIsOpen: boolean;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
-  window?: () => Window;
   label?: string;
 }
 
@@ -46,10 +47,10 @@ const CloseMenuRow = ({
       <Box />
     )}
     <Button
-      variant='transparent'
+      variant='text'
+      color='grayscale'
       onClick={onClose}
-      startIcon={<MenuOpenIcon fontSize='small' />}
-      size='small'
+      startIcon={<MenuOpenIcon />}
     >
       Close
     </Button>
@@ -63,34 +64,22 @@ const DashboardContentNav: React.FC<Props> = ({
   mobileNavIsOpen,
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
-  window,
   label,
 }) => {
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
   const headerHeight = `${STICKY_BAR_HEIGHT}px`;
   const height = `calc(100vh - ${headerHeight})`;
+
   return (
     <Box
       sx={{ display: 'flex', top: headerHeight, position: 'sticky', height }}
     >
-      <Drawer
-        data-testid='mobileNav'
-        container={container}
-        variant='temporary'
-        open={mobileNavIsOpen}
-        onClose={handleCloseMobileMenu}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
-        sx={{
-          zIndex: 1300,
-          display: { md: 'block', lg: 'none' },
-        }}
+      <MobileMenu
+        mobileNavIsOpen={mobileNavIsOpen}
+        onCloseMobileMenu={handleCloseMobileMenu}
+        navHeader={navHeader}
       >
-        <CloseMenuRow onClose={handleCloseMobileMenu} label={label} />
-        <Box>{children}</Box>
-      </Drawer>
+        {children}
+      </MobileMenu>
       <Drawer
         data-testid='desktopNav'
         anchor='left'
@@ -120,7 +109,7 @@ const DashboardContentNav: React.FC<Props> = ({
           },
         })}
       >
-        <Box>
+        <Box component='nav' aria-label='sidebar-nav'>
           <CloseMenuRow onClose={handleCloseDesktopMenu} label={label} />
           <Box
             sx={{

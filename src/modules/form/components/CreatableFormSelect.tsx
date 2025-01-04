@@ -3,10 +3,10 @@ import { useCallback } from 'react';
 
 import { DynamicInputCommonProps } from '../types';
 
-import { getOptionLabelFromOptions } from './FormSelect';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
+import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 interface CreatableOption extends PickListOption {
@@ -78,7 +78,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
       }
 
       // Value selected by clicking an existing option, or initial option
-      return getOptionLabelFromOptions(option, options);
+      return findOptionLabel(option, options);
     },
     [options]
   );

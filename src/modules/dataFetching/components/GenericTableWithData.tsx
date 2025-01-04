@@ -1,4 +1,5 @@
 import {
+  OperationVariables,
   TypedDocumentNode,
   useQuery,
   WatchQueryFetchPolicy,
@@ -15,13 +16,13 @@ import {
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import Pagination from '../../../components/elements/table/Pagination';
 import { FilterType } from '../types';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
+import Pagination from '@/components/elements/table/Pagination';
 import { ColumnDef } from '@/components/elements/table/types';
 import TableFilters, {
   TableFiltersProps,
@@ -46,7 +47,7 @@ export interface Props<
   QueryVariables,
   RowDataType,
   FilterOptionsType = Record<string, any>,
-  SortOptionsType = Record<string, string>
+  SortOptionsType = Record<string, string>,
 > extends Omit<
     GenericTableProps<RowDataType>,
     'rows' | 'tablePaginationProps' | 'loading' | 'paginated' | 'noData'
@@ -98,10 +99,10 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
 
 const GenericTableWithData = <
   Query,
-  QueryVariables,
+  QueryVariables extends OperationVariables,
   RowDataType extends { id: string },
   FilterOptionsType extends Record<string, any> = Record<string, any>,
-  SortOptionsType extends Record<string, string> = Record<string, string>
+  SortOptionsType extends Record<string, string> = Record<string, string>,
 >({
   filters,
   defaultFilterValues = {},
@@ -151,6 +152,11 @@ const GenericTableWithData = <
         .map((col) => col.key) || []
     )
   );
+
+  // if the filters change, return to the first page
+  useEffect(() => {
+    setPage(0);
+  }, [filterValues]);
 
   const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
     if (sortOrder) return sortOrder;

@@ -1,4 +1,4 @@
-import { Skeleton, Stack, Typography } from '@mui/material';
+import { Card, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { formatDuration } from 'date-fns';
 import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
@@ -8,24 +8,30 @@ import { DynamicViewFieldProps } from '../../types';
 import { isDataNotCollected } from '../../util/formUtil';
 import DynamicDisplay from '../DynamicDisplay';
 
-import File from './item/File';
-import Image from './item/Image';
-
 import TextContent from './item/TextContent';
 
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
-import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import SingleGeolocationMap from '@/components/elements/maps/SingleGeolocationMap';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
+import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
+import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
+import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
+import ClientName from '@/modules/client/components/ClientName';
+
 import {
+  formatCurrency,
   formatDateForDisplay,
   formatTimeOfDay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
+import { safeParseLatLon } from '@/types/geolocationTypes';
 import {
+  ClientContactPointSystem,
   Component,
   DisabledDisplay,
   FormItem,
@@ -52,13 +58,13 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 
 const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   item,
-  // nestingLevel,
   value,
   horizontal = false,
   pickListArgs,
   noLabel = false,
   adjustValue = () => {},
   disabled = false,
+  localConstants,
 }) => {
   const label = noLabel ? null : getLabel(item, horizontal);
 
@@ -98,14 +104,25 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   }
   switch (item.type) {
     case ItemType.Display:
-      return <DynamicDisplay item={item} viewOnly value={value} />;
+      return (
+        <DynamicDisplay
+          item={item}
+          viewOnly
+          value={value}
+          localConstants={localConstants}
+        />
+      );
     case ItemType.Boolean:
+      // value could be true/false (from HMIS form) or "0"/"1" (from external forms), so pass as both boolean and string
       return (
         <TextContent
           {...commonProps}
           value={
-            [TRUE_OPT, FALSE_OPT].find((o) => o.code === String(value))
-              ?.label || <NotCollectedText variant='body2' />
+            <YesNoDisplay
+              booleanValue={value}
+              stringValue={value}
+              fallback={<NotCollectedText variant='body2' />}
+            />
           }
           hasValue={(val) => !isNil(val)}
         />
@@ -134,7 +151,12 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       }
       return <TextContent {...commonProps} />;
     case ItemType.Currency:
-      return <TextContent {...commonProps} renderValue={(val) => `$${val}`} />;
+      return (
+        <TextContent
+          {...commonProps}
+          renderValue={(val) => formatCurrency(val)}
+        />
+      );
     case ItemType.Date:
       return (
         <TextContent
@@ -180,14 +202,68 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         />
       );
     case ItemType.Image:
-      return <Image id={value} />;
     case ItemType.File:
-      return <File id={value} />;
+      const files = ensureArray(value);
+      return (
+        <LabelWithContent {...commonProps}>
+          {files.length === 0 ? (
+            <NotCollectedText variant='body2' />
+          ) : (
+            <Card>
+              <Stack divider={<Divider />}>
+                {files.map((file) => (
+                  <SavedFileSummary key={file.id} file={file} variant='row' />
+                ))}
+              </Stack>
+            </Card>
+          )}
+        </LabelWithContent>
+      );
     case ItemType.Object:
       switch (item.component) {
-        case Component.Address:
+        case Component.Address: // Used in Move-in Date Display
           return ensureArray(value).map((address) => (
-            <ClientAddress address={address} key={JSON.stringify(address)} />
+            <CommonLabeledTextBlock title={label} key={JSON.stringify(address)}>
+              <ClientAddress address={address} />
+            </CommonLabeledTextBlock>
+          ));
+        case Component.Name:
+          // Only used for Form Preview as read-only
+          return ensureArray(value).map((name) => (
+            <CommonLabeledTextBlock title={label} key={JSON.stringify(name)}>
+              <ClientName
+                client={{
+                  firstName: name.first,
+                  middleName: name.middle,
+                  lastName: name.last,
+                  nameSuffix: name.suffix,
+                }}
+              />
+            </CommonLabeledTextBlock>
+          ));
+        case Component.Email:
+          // Only used for Form Preview as read-only
+          return ensureArray(value).map((email) => (
+            <CommonLabeledTextBlock title={label} key={JSON.stringify(email)}>
+              <ClientContactPoint
+                contactPoint={{
+                  ...email,
+                  system: ClientContactPointSystem.Email,
+                }}
+              />
+            </CommonLabeledTextBlock>
+          ));
+        case Component.Phone:
+          // Only used for Form Preview as read-only
+          return ensureArray(value).map((phone) => (
+            <CommonLabeledTextBlock title={label} key={JSON.stringify(phone)}>
+              <ClientContactPoint
+                contactPoint={{
+                  ...phone,
+                  system: ClientContactPointSystem.Phone,
+                }}
+              />
+            </CommonLabeledTextBlock>
           ));
         default:
           return (
@@ -198,7 +274,19 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
             />
           );
       }
-
+    case ItemType.Geolocation:
+      const coordinates = safeParseLatLon(value);
+      return (
+        <LabelWithContent {...commonProps}>
+          {coordinates ? (
+            <SingleGeolocationMap coordinates={coordinates} />
+          ) : (
+            <NotCollectedText variant='body2'>
+              Location not collected
+            </NotCollectedText>
+          )}
+        </LabelWithContent>
+      );
     default:
       return (
         <RecoverableError

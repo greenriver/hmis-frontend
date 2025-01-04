@@ -53,27 +53,34 @@ const ServiceCategoryAndType = ({
   service,
 }: {
   service: ServiceFieldsFragment;
-}) => (
-  <>
-    {service.serviceType.category !== service.serviceType.name && (
+}) => {
+  return (
+    <>
+      {service.serviceType?.serviceCategory.name !==
+        service.serviceType?.name && (
+        <LabelWithContent
+          label='Service Category'
+          LabelProps={{ sx: { fontWeight: 600 } }}
+          sx={{ mb: 2 }}
+        >
+          <Typography variant='body2'>
+            {service.serviceType?.serviceCategory.name || 'Unknown'}
+          </Typography>
+        </LabelWithContent>
+      )}
+
       <LabelWithContent
-        label='Service Category'
+        label='Service Type'
         LabelProps={{ sx: { fontWeight: 600 } }}
         sx={{ mb: 2 }}
       >
-        <Typography variant='body2'>{service.serviceType.category}</Typography>
+        <Typography variant='body2'>
+          {service.serviceType?.name || 'Unknown'}
+        </Typography>
       </LabelWithContent>
-    )}
-
-    <LabelWithContent
-      label='Service Type'
-      LabelProps={{ sx: { fontWeight: 600 } }}
-      sx={{ mb: 2 }}
-    >
-      <Typography variant='body2'>{service.serviceType.name}</Typography>
-    </LabelWithContent>
-  </>
-);
+    </>
+  );
+};
 
 export function useServiceDialog({
   enrollment,
@@ -94,7 +101,8 @@ export function useServiceDialog({
   );
 
   useEffect(() => {
-    if (service) setSelectedService({ code: service.serviceType.id });
+    if (service && service.serviceType)
+      setSelectedService({ code: service.serviceType.id });
   }, [service]);
 
   const { data: { serviceType } = {}, loading: serviceTypeLoading } =
@@ -127,6 +135,12 @@ export function useServiceDialog({
         cache.evict({
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'services',
+        });
+        // evict lock_version to freshen the enrollment
+        // avoids stale object error when editing occurrence point form from dash after adding service
+        cache.evict({
+          id: `Enrollment:${enrollmentId}`,
+          fieldName: 'lockVersion',
         });
         setSelectedService(null);
         setDialogOpen(false);
@@ -231,7 +245,7 @@ export function useServiceDialog({
             <Stack gap={3} direction='row'>
               <Button
                 onClick={closeDialog}
-                variant='gray'
+                color='grayscale'
                 data-testid='cancelDialogAction'
               >
                 Cancel

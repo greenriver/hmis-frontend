@@ -13,7 +13,9 @@ import { firstNavItemWithAccess } from '@/components/layout/dashboard/sideNav/na
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import NotFound from '@/components/pages/NotFound';
+import useCurrentPath from '@/hooks/useCurrentPath';
 import { useDashboardState } from '@/hooks/useDashboardState';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
@@ -21,6 +23,7 @@ import { RootPermissionsFragment } from '@/types/gqlTypes';
 const ProjectNavHeader: React.FC = () => {
   return (
     <Typography
+      component='p'
       variant='h5'
       sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}
     >
@@ -112,6 +115,15 @@ const AdminDashboard: React.FC = () => {
   const dashboardState = useDashboardState();
   const breadCrumbConfig = useAdminBreadcrumbConfig();
   const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
+  const isMobile = useIsMobile();
+
+  const formEditorContentSx = {
+    px: 0,
+    py: 0,
+    maxWidth: '100%',
+  };
+
+  const currentPath = useCurrentPath();
 
   if (!access) return <NotFound />;
 
@@ -125,9 +137,21 @@ const AdminDashboard: React.FC = () => {
           access={access}
         />
       }
+      contentSx={
+        // The form editor needs to take up the whole page because of its layout, so the parent gets custom sx
+        currentPath === AdminDashboardRoutes.EDIT_FORM
+          ? formEditorContentSx
+          : {}
+      }
+      // On desktop, 'Admin' appears in the ProjectNavHeader, so omit it from the nav label.
+      // On mobile, include it. We can remove this special case if we add the ProjectNavHeader info back on mobile.
+      navLabel={isMobile ? 'Admin' : ''}
       {...dashboardState}
     >
-      <Container maxWidth='xl' disableGutters>
+      <Container
+        maxWidth={currentPath === AdminDashboardRoutes.EDIT_FORM ? false : 'xl'}
+        disableGutters
+      >
         <Outlet />
       </Container>
     </DashboardContentContainer>

@@ -32,6 +32,7 @@ fragment EnableWhenFields on EnableWhen {
   answerNumber
   answerBoolean
   answerGroupCode
+  answerDate
   compareQuestion
 }
 fragment ItemFields on FormItem {
@@ -97,6 +98,9 @@ fragment ItemFields on FormItem {
       ...EnableWhenFields
     }
   }
+  rule
+  customRule
+  editorUserIds
 }
 
 # GQL doesnt allow recursive fragments, so we have a max nesting level here
@@ -124,8 +128,15 @@ fragment FormDefinitionMetadata on FormDefinition {
   title
   cacheKey
   identifier
+  status
+  updatedBy {
+    name
+  }
+  dateUpdated
+  supportsSaveInProgress
 }
 
+# FormDefinition to use for rendering a dynamic form
 fragment FormDefinitionFields on FormDefinition {
   ...FormDefinitionMetadata
   definition {
@@ -133,7 +144,28 @@ fragment FormDefinitionFields on FormDefinition {
   }
 }
 
+# Contains raw JSON definition used for JSON editor
+fragment FormDefinitionFieldsForJsonEditor on FormDefinition {
+  ...FormDefinitionFields
+  status
+  rawDefinition
+}
+
+# Leaving this fragment as a separate fragment because it may need to include additional
+# fields like form rules that are not used for form rendering
 fragment FormDefinitionFieldsForEditor on FormDefinition {
   ...FormDefinitionFields
-  rawDefinition
+  version
+}
+
+fragment FormIdentifierDetails on FormIdentifier {
+  id
+  identifier
+  managedInVersionControl
+  displayVersion {
+    ...FormDefinitionMetadata
+  }
+  draftVersion {
+    ...FormDefinitionMetadata
+  }
 }

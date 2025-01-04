@@ -2,6 +2,7 @@ import {
   add,
   getYear,
   isDate,
+  isEqual,
   isValid,
   max,
   min,
@@ -41,6 +42,7 @@ import {
   TypedObject,
 } from '../types';
 
+import { HmisUser } from '@/modules/auth/api/sessions';
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 import { collectExpressionReferences } from '@/modules/form/util/expressions/references';
 import {
@@ -68,12 +70,14 @@ import {
   InitialBehavior,
   InputSize,
   ItemType,
+  Maybe,
   NoYesReasonsForMissingData,
   PickListOption,
   RelatedRecordType,
   RelationshipToHoH,
   ValueBound,
 } from '@/types/gqlTypes';
+import { ensureArray } from '@/utils/arrays';
 
 // Chrome ignores autocomplete="off" in some cases, such street address fields. We use an
 // invalid value here that the browser doesn't understand to prevent this behavior. This
@@ -308,8 +312,8 @@ const evaluateEnableWhen = ({
   let currentValue = en.question
     ? values[en.question]
     : en.localConstant
-    ? localConstants[en.localConstant.replace('$', '')]
-    : null;
+      ? localConstants[en.localConstant.replace('$', '')]
+      : null;
   if (isPickListOption(currentValue)) {
     currentValue = en.answerGroupCode
       ? currentValue.groupCode
@@ -327,6 +331,7 @@ const evaluateEnableWhen = ({
       en.answerGroupCode,
       en.answerNumber,
       en.answerCodes,
+      en.answerDate ? parseHmisDateString(en.answerDate) : undefined,
       en.compareQuestion ? values[en.compareQuestion] : undefined,
     ].filter((e) => !isNil(e))[0];
   }
@@ -334,7 +339,11 @@ const evaluateEnableWhen = ({
   let result;
   switch (en.operator) {
     case EnableOperator.Equal:
-      result = currentValue === comparisonValue;
+      if (isDate(currentValue)) {
+        result = isEqual(currentValue, comparisonValue);
+      } else {
+        result = currentValue === comparisonValue;
+      }
       break;
     case EnableOperator.NotEqual:
       result = currentValue !== comparisonValue;
@@ -453,10 +462,16 @@ export const shouldEnableItem = ({
   );
 
   // console.debug(item.linkId, booleans);
-  if (item.enableBehavior === EnableBehavior.Any) {
-    return booleans.some(Boolean);
-  } else {
+  if (item.enableBehavior === EnableBehavior.All) {
+    // All conditions must be true.
     return booleans.every(Boolean);
+  } else {
+    // Any condition must be true.
+    //
+    // 'Any' is the default behavior, to match legacy API behavior which resolved ANY by default.
+    // Going forward once new validation is in place, we can expect that enable_behavior is always
+    // set if enable_when rules exist.
+    return booleans.some(Boolean);
   }
 };
 
@@ -493,7 +508,13 @@ export const getAutofillComparisonValue = (
   // Choose first present value from Boolean, Number, and Code attributes
   if (!isNil(av.valueBoolean)) return av.valueBoolean;
   if (!isNil(av.valueNumber)) return av.valueNumber;
-  if (!isNil(av.valueCode)) return getOptionValue(av.valueCode, targetItem);
+  if (!isNil(av.valueCode)) {
+    // If the item we're comparing to is a choice item, convert the valueCode to a pick list option.
+    // If it's not, use it as-is (as a string)
+    return [ItemType.Choice, ItemType.OpenChoice].includes(targetItem.type)
+      ? getOptionValue(av.valueCode, targetItem)
+      : av.valueCode;
+  }
   if (!isNil(av.valueQuestion)) return values[av.valueQuestion];
 };
 
@@ -523,30 +544,29 @@ export const autofillValues = ({
   if (!item.autofillValues) return false;
 
   // use `some` to stop iterating when true is returned
-  return item.autofillValues.some((av) => {
+  const autofilled = item.autofillValues.some((av) => {
     // Skip autofills that should not run on read-only views
     if (viewOnly && !av.autofillReadonly) return false;
 
-    // Evaluate all enableWhen conditions
-    const booleans = av.autofillWhen.map((en) =>
-      evaluateEnableWhen({
-        en,
-        values,
-        itemMap,
-        shouldEnableFn: shouldEnableItem,
-        localConstants,
-      })
-    );
+    // Evaluate enableWhen conditions, if present
+    if (av.autofillWhen && av.autofillWhen.length > 0) {
+      const booleans = av.autofillWhen.map((en) =>
+        evaluateEnableWhen({
+          en,
+          values,
+          itemMap,
+          shouldEnableFn: shouldEnableItem,
+          localConstants,
+        })
+      );
 
-    // If there were no conditions specify, it should always be autofilled
-    if (booleans.length === 0) booleans.push(true);
+      const shouldAutofillValue =
+        av.autofillBehavior === EnableBehavior.Any
+          ? booleans.some(Boolean)
+          : booleans.every(Boolean);
 
-    const shouldAutofillValue =
-      av.autofillBehavior === EnableBehavior.Any
-        ? booleans.some(Boolean)
-        : booleans.every(Boolean);
-
-    if (!shouldAutofillValue) return false;
+      if (!shouldAutofillValue) return false;
+    }
 
     const newValue = getAutofillComparisonValue(av, values, item);
 
@@ -560,9 +580,23 @@ export const autofillValues = ({
       values[item.linkId] = newValue;
     }
 
-    // Stop iterating through enable when conditions
+    // Stop iterating through autofill values
     return true;
   });
+
+  // For read-only items that are displayed on editable forms, the autofill value should nullify when its conditions are no longer met.
+  // For example, a read-only field showing the sum of 2 input fields should be cleared if the inputs are cleared.
+  // (In that example, we assume the autofill rule for summing has an autofill_when condition requiring the inputs to be present)
+  if (
+    !autofilled &&
+    (item.readOnly || item.type === ItemType.Display) &&
+    !viewOnly
+  ) {
+    values[item.linkId] = undefined;
+    return true;
+  }
+
+  return autofilled;
 };
 
 const getBoundValue = (
@@ -694,6 +728,12 @@ export const gqlValueToFormValue = (
         return compact(value.map((v) => getOptionValue(v, item)));
       }
       return getOptionValue(value, item);
+    case ItemType.File:
+    case ItemType.Image:
+      // Use full File object in form to display metadata.
+      // The metadata fields wont be submitted because of the `formValueToGqlValue`
+      // logic which will transform the file object into an ID before submitting it back.
+      return value;
 
     default:
       // Set the property directly as the initial form value
@@ -732,14 +772,16 @@ export const formValueToGqlValue = (
     if (typeof date === 'string') {
       date = parseHmisDateString(value);
     }
-    if (date instanceof Date) return formatDateForGql(date) || undefined;
-    // This isn't parseable/formattable into a date, return undefined to ignore it
-    return undefined;
+    if (date instanceof Date) return formatDateForGql(date) || value;
+    // This isn't parseable/formattable into a date, so it may cause a backend validation error.
+    // Still, return it, so that it doesn't get swallowed without the user's knowledge
+    return value;
   }
 
   if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
     const num = Number(value);
-    return Number.isNaN(num) ? undefined : num;
+    // See note above about unparseable date values; the same logic applies here
+    return Number.isNaN(num) ? value : num;
   }
 
   if (
@@ -761,6 +803,21 @@ export const formValueToGqlValue = (
       return value.map((option: PickListOption) => option.code);
     } else if (value) {
       return (value as PickListOption).code;
+    }
+  } else if ([ItemType.File, ItemType.Image].includes(item.type)) {
+    // Special case for File types. The frontend receives a FileFieldsFragment
+    // if this file has already been saved, but we don't want to return that whole fragment
+    // to the backend for processing, so just return the ID.
+    if (Array.isArray(value)) {
+      return value.map((fileOrBlobId) =>
+        fileOrBlobId.hasOwnProperty('id') ? fileOrBlobId.id : fileOrBlobId
+      );
+    } else {
+      if (value.hasOwnProperty('id')) {
+        return value.id;
+      } else {
+        return value;
+      }
     }
   }
 
@@ -794,7 +851,7 @@ export const getInitialValues = (
         return;
       }
 
-      // TODO handle multiple initials for multi-select questions
+      // TODO handle multiple initials for multi-select questions. Only looking at first item in `initial` array for now.
       const initial = item.initial[0];
 
       if (behavior && initial.initialBehavior !== behavior) return;
@@ -804,7 +861,11 @@ export const getInitialValues = (
       } else if (!isNil(initial.valueNumber)) {
         values[item.linkId] = initial.valueNumber;
       } else if (initial.valueCode) {
-        values[item.linkId] = getOptionValue(initial.valueCode, item);
+        if ([ItemType.Choice, ItemType.OpenChoice].includes(item.type)) {
+          values[item.linkId] = getOptionValue(initial.valueCode, item);
+        } else {
+          values[item.linkId] = initial.valueCode; // set code directly for non-choice type (eg string)
+        }
       } else if (initial.valueLocalConstant) {
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
         if (localConstants && varName in localConstants) {
@@ -817,6 +878,12 @@ export const getInitialValues = (
             values[item.linkId] = gqlValueToFormValue(value, item) || value;
           }
         }
+      }
+
+      // If this item repeats, it means that the value should be an array. Wrap the initial value in an array if not already.
+      // We may want to expand this to support setting multiple initial values in a multi-select, if needed.
+      if (item.repeats) {
+        values[item.linkId] = ensureArray(values[item.linkId]);
       }
     });
   }
@@ -952,6 +1019,27 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
     });
     deps[id] = uniq(deps[id]);
   });
+  return deps;
+};
+
+/**
+ * Map { linkId => array of Link IDs that depend on it for min/max bounds }
+ */
+export const buildBoundsDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+  const deps: LinkIdMap = {};
+
+  function addBound(linkId: string, bound: ValueBound) {
+    if (bound.question && itemMap[bound.question]) {
+      if (!deps[bound.question]) deps[bound.question] = [];
+      deps[bound.question].push(linkId);
+    }
+  }
+
+  Object.values(itemMap).forEach((item) => {
+    if (!item.bounds) return;
+    item.bounds.forEach((bound) => addBound(item.linkId, bound));
+  });
+
   return deps;
 };
 
@@ -1092,24 +1180,23 @@ export const transformSubmitValues = ({
   autofillNotCollected = false,
   keyByFieldName = false,
 }: TransformSubmitValuesParams) => {
+  const allLinkIds = new Set();
   // Recursive helper for traversing the FormDefinition
-  function rescursiveFillMap(
-    items: FormItem[],
-    result: Record<string, any>,
-    parentRecordType?: string
-  ) {
+  function rescursiveFillMap(items: FormItem[], result: Record<string, any>) {
     items.forEach((item: FormItem) => {
+      allLinkIds.add(item.linkId);
+
       const mapping = item.mapping || {};
       const recordType = mapping.recordType
         ? HmisEnums.RelatedRecordType[mapping.recordType]
-        : parentRecordType;
+        : undefined;
 
       if (mapping.recordType && !recordType) {
         throw Error(`Unrecognized record type in form definition: ${mapping}`);
       }
 
       if (Array.isArray(item.item)) {
-        rescursiveFillMap(item.item, result, recordType);
+        rescursiveFillMap(item.item, result);
       }
       const fieldName = mapping.fieldName || mapping.customFieldKey;
       if (!fieldName) return; // If there is no field name, it can't be extracted so don't bother sending it
@@ -1159,6 +1246,18 @@ export const transformSubmitValues = ({
 
   const result: Record<string, any> = {};
   rescursiveFillMap(definition.item, result);
+
+  const unrecognizedKeys = Object.keys(values).filter(
+    (linkId) => !allLinkIds.has(linkId)
+  );
+
+  if (unrecognizedKeys.length > 0) {
+    throw new Error(
+      'Failed to transform form values. Unrecognized Keys: ' +
+        unrecognizedKeys.join(', ')
+    );
+  }
+
   return result;
 };
 
@@ -1221,7 +1320,7 @@ export const createInitialValuesFromRecord = (
  * Create initial form values based on saved assessment values.
  *
  * @param itemMap Map of linkId -> Item
- * @param values  Vaved value state
+ * @param values  Saved value state
  *
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
@@ -1239,7 +1338,10 @@ export const createInitialValuesFromSavedValues = (
 
 export const initialValuesFromAssessment = (
   itemMap: ItemMap,
-  assessment: FullAssessmentFragment
+  assessment: Omit<
+    FullAssessmentFragment,
+    'definition' | 'upgradedDefinitionForEditing'
+  >
 ) => {
   // If non-WIP, construct based on related records
   if (!assessment.inProgress) {
@@ -1267,53 +1369,6 @@ export const createHudValuesForSubmit = (
     keyByFieldName: true,
     includeMissingKeys: 'AS_HIDDEN',
   });
-
-export const debugFormValues = (
-  event: React.MouseEvent<HTMLButtonElement>,
-  values: FormValues,
-  definition: FormDefinitionJson,
-  transformValuesFn?: (
-    values: FormValues,
-    definition: FormDefinitionJson
-  ) => FormValues,
-  transformHudValuesFn?: (
-    values: FormValues,
-    definition: FormDefinitionJson
-  ) => FormValues
-) => {
-  if (import.meta.env.MODE === 'production') return false;
-  if (!event.ctrlKey && !event.metaKey) return false;
-
-  // eslint-disable-next-line no-console
-  console.debug('%c FORM STATE:', 'color: #BB7AFF');
-  if (transformValuesFn) {
-    // eslint-disable-next-line no-console
-    console.debug(transformValuesFn(values, definition));
-  } else {
-    // eslint-disable-next-line no-console
-    console.debug(values);
-  }
-
-  let hudValues = transformSubmitValues({
-    definition,
-    values,
-    autofillNotCollected: true,
-    includeMissingKeys: 'AS_NULL',
-    keyByFieldName: true,
-  });
-
-  if (transformHudValuesFn) {
-    hudValues = transformHudValuesFn(values, definition);
-  }
-
-  window.debug = { hudValues };
-  // eslint-disable-next-line no-console
-  console.debug('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
-  // eslint-disable-next-line no-console
-  console.debug(hudValues);
-
-  return true;
-};
 
 type GetDependentItemsDisabledStatus = {
   changedLinkIds?: string[];
@@ -1396,12 +1451,13 @@ export const dropUnderscorePrefixedKeys = (
 };
 
 export const chooseSelectComponentType = (
-  item: FormItem,
-  picklistLength: number,
-  isLocalPickList: boolean
+  component?: Maybe<Component>,
+  repeats?: Maybe<boolean>,
+  picklistLength: number = 0,
+  isLocalPickList?: boolean
 ): Component => {
-  if (item.component) return item.component;
-  if (item.repeats) return Component.Dropdown;
+  if (component) return component;
+  if (repeats) return Component.Dropdown;
   if (picklistLength === 0) return Component.Dropdown;
   if (picklistLength < 4 && isLocalPickList) return Component.RadioButtons;
   return Component.Dropdown;
@@ -1450,21 +1506,13 @@ export const getFieldOnAssessment = (
   return { record, recordType, value };
 };
 
-export const itemDefaults = {
-  disabledDisplay: DisabledDisplay.Hidden,
-  enableBehavior: EnableBehavior.Any,
-  required: false,
-  prefill: false,
-  readOnly: false,
-  warnIfEmpty: false,
-  hidden: false,
-  repeats: false,
-};
-
 export const parseOccurrencePointFormDefinition = (
-  definition: FormDefinitionFieldsFragment
+  definition: FormDefinitionFieldsFragment,
+  user: HmisUser
 ) => {
   let displayTitle = definition.title;
+
+  // Whether this form as any fields that are editable to the current user
   let isEditable = false;
 
   function matchesTitle(item: FormItem, title: string) {
@@ -1473,24 +1521,79 @@ export const parseOccurrencePointFormDefinition = (
     );
   }
 
-  const readOnlyDefinition = modifyFormDefinition(
+  // Created modified "definition for display" that will be used to render values in a DynamicView inside the Enrollment/Client details card
+  const definitionForDisplay = modifyFormDefinition(
     definition.definition,
     (item) => {
+      // Delete the 'text' from the item IF the text matches the title of the form.
+      // This is a hacky way to hide redundant labels for tiny Occurrence Point forms like Move-in Date.
       if (definition.title && matchesTitle(item, definition.title)) {
         displayTitle = item.readonlyText || item.text || displayTitle;
         delete item.text;
         delete item.readonlyText;
       }
       if (isQuestionItem(item) && !item.readOnly) {
-        isEditable = true;
+        if (item.editorUserIds) {
+          isEditable = item.editorUserIds.includes(user.id);
+        } else {
+          isEditable = true;
+        }
       }
     }
   );
 
-  return { displayTitle, isEditable, readOnlyDefinition };
+  return {
+    // Title to display in the left-hand column of the Enrollment/Client details card
+    displayTitle,
+    // Modified Form Definiton to use to display the form values as a DynamicView in the right-hand column of the Enrollment/Client details card
+    definitionForDisplay,
+    // Whether the form is editable by the current user
+    isEditable,
+  };
 };
+
+export const getFormStepperItems = (
+  formDefinition: FormDefinitionFieldsFragment | undefined | null,
+  itemMap: ItemMap | undefined | null,
+  initialValues: Record<string, any>,
+  localConstants: LocalConstants,
+  minGroupsToDisplay: number = 3
+) => {
+  if (!formDefinition || !itemMap) return false;
+
+  let items = formDefinition.definition.item.filter(
+    (i) => i.type === ItemType.Group && !i.hidden
+  );
+
+  // Remove disabled groups
+  items = items.filter((item) =>
+    shouldEnableItem({
+      item,
+      values: initialValues,
+      itemMap,
+      localConstants: localConstants || {},
+    })
+  );
+  if (items.length < minGroupsToDisplay) return false;
+
+  return items;
+};
+
 export const MAX_INPUT_AND_LABEL_WIDTH = 500;
 export const FIXED_WIDTH_MEDIUM = 350;
 export const FIXED_WIDTH_SMALL = 200;
 export const FIXED_WIDTH_X_SMALL = 100;
 export const FIXED_WIDTH_X_LARGE = 800;
+
+export function findOptionLabel(
+  option: PickListOption, // select option, which may or may not have a label
+  options: readonly PickListOption[] // option picklist
+): string {
+  if (option.label) return option.label;
+  if (option.code === INVALID_ENUM) return 'Invalid Value';
+  if (options && options.length > 0) {
+    const found = options.find((opt) => opt.code === option.code);
+    if (found?.label) return found.label;
+  }
+  return option.code || '';
+}

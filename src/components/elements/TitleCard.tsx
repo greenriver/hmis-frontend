@@ -7,7 +7,7 @@ import {
   Typography,
   TypographyVariant,
 } from '@mui/material';
-import { ReactNode } from 'react';
+import { ElementType, ReactNode } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface Props extends PaperProps {
@@ -16,6 +16,7 @@ interface Props extends PaperProps {
   actions?: ReactNode;
   headerVariant?: 'border';
   headerTypographyVariant?: TypographyVariant | 'cardTitle';
+  headerComponent?: ElementType<any>;
   'data-testid'?: string;
   headerSx?: SxProps;
   padded?: boolean;
@@ -27,6 +28,7 @@ const TitleCard: React.FC<Props> = ({
   children,
   actions,
   headerTypographyVariant = 'cardTitle',
+  headerComponent,
   headerVariant,
   headerSx,
   padded = false,
@@ -35,6 +37,8 @@ const TitleCard: React.FC<Props> = ({
   ...props
 }) => {
   const isMobile = useIsMobile(mobileBreakpoint);
+
+  const typographyProps = headerComponent ? { component: headerComponent } : {};
 
   return (
     <Paper data-testid={props['data-testid']} {...props}>
@@ -62,6 +66,7 @@ const TitleCard: React.FC<Props> = ({
         <Typography
           variant={headerTypographyVariant}
           sx={{ py: 1, flexGrow: 1 }}
+          {...typographyProps}
         >
           {title}
         </Typography>

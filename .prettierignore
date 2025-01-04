@@ -10,3 +10,4 @@ docker-compose.yml
 README.md
 *.png
 *.ico
+*.mdx

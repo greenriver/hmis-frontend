@@ -8,6 +8,7 @@ import {
 import {
   ChangeType,
   ItemChangedFn,
+  LocalConstants,
   OverrideableDynamicFieldProps,
   PickListArgs,
 } from '../../types';
@@ -27,6 +28,7 @@ export interface Props {
   item: FormItem;
   props?: OverrideableDynamicFieldProps;
   renderFn?: (children: ReactNode) => ReactNode;
+  localConstants?: LocalConstants;
 }
 
 const DynamicViewFormField: React.FC<Props> = ({
@@ -37,9 +39,10 @@ const DynamicViewFormField: React.FC<Props> = ({
   nestingLevel,
   props: fieldProps,
   renderFn,
+  localConstants,
   ...fieldsProps
 }) => {
-  const values = handlers.getCleanedValues();
+  const values = handlers.getValues();
 
   const itemChanged: ItemChangedFn = useCallback(
     ({ linkId, value: baseValue, type }) => {
@@ -88,9 +91,9 @@ const DynamicViewFormField: React.FC<Props> = ({
               item={item}
               value={value}
               disabled={isDisabled}
-              nestingLevel={nestingLevel}
               horizontal={horizontal}
               pickListArgs={pickListArgs}
+              localConstants={localConstants}
               // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
               adjustValue={itemChanged}
               {...fieldProps}

@@ -12,6 +12,9 @@ fragment AssessmentFields on Assessment {
   user {
     ...UserFields
   }
+  createdBy {
+    ...UserFields
+  }
   definition {
     id
     cacheKey
@@ -67,6 +70,9 @@ fragment AssessmentWithRecords on Assessment {
   # resolve access so we know if user can delete the assessment
   access {
     ...AssessmentAccessFields
+  }
+  geolocation {
+    ...GeolocationFields
   }
 }
 

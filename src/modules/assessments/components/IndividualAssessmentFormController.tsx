@@ -11,7 +11,7 @@ import { DashboardEnrollment } from '@/modules/hmis/types';
 import { cache } from '@/providers/apolloClient';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  ClientNameDobVetFragment,
+  EnrolledClientFieldsFragment,
   FormDefinitionFieldsFragment,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
@@ -19,8 +19,9 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   enrollment: DashboardEnrollment;
-  client: ClientNameDobVetFragment;
-  definition: FormDefinitionFieldsFragment;
+  client: EnrolledClientFieldsFragment;
+  viewingDefinition: FormDefinitionFieldsFragment;
+  editingDefinition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
 }
 
@@ -31,7 +32,8 @@ interface Props {
 const IndividualAssessmentFormController: React.FC<Props> = ({
   client,
   enrollment,
-  definition,
+  viewingDefinition,
+  editingDefinition,
   assessment,
 }) => {
   const navigate = useNavigate();
@@ -60,12 +62,18 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
 
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
-      definition,
+      formDefinitionId: editingDefinition.id,
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
       assessmentLockVersion: assessment?.lockVersion,
       onCompletedMutation,
     });
+
+  const showSaveWipButton = useMemo(() => {
+    if (!editingDefinition.supportsSaveInProgress) return false;
+
+    return !assessment || assessment.inProgress;
+  }, [assessment, editingDefinition.supportsSaveInProgress]);
 
   const FormActionProps = useMemo(() => {
     return {
@@ -78,33 +86,32 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
           action: FormActionTypes.Submit,
           buttonProps: { variant: 'contained' } as const,
         },
-        ...(assessment && !assessment.inProgress
-          ? []
-          : [
+        ...(showSaveWipButton
+          ? [
               {
                 id: 'saveDraft',
                 label: 'Save and finish later',
                 action: FormActionTypes.Save,
                 buttonProps: { variant: 'outlined' } as const,
               },
-            ]),
+            ]
+          : []),
         {
           id: 'discard',
           label: 'Cancel',
           action: FormActionTypes.Discard,
-          buttonProps: { variant: 'gray' } as const,
+          buttonProps: { variant: 'contained', color: 'grayscale' } as const,
         },
       ],
     };
-  }, [assessment, navigateToEnrollment]);
+  }, [navigateToEnrollment, showSaveWipButton]);
 
   return (
     <IndividualAssessment
-      definition={definition}
+      viewingDefinition={viewingDefinition}
+      editingDefinition={editingDefinition}
       assessment={assessment}
-      formRole={definition.role}
       enrollmentId={enrollment.id}
-      title={definition.title}
       client={client}
       onSubmit={submitHandler}
       onSaveDraft={saveDraftHandler}

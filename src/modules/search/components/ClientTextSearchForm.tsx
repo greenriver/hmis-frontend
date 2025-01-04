@@ -39,11 +39,11 @@ const ClientTextSearchForm: React.FC<Props> = ({
 
   useEffect(() => {
     if (!minChars || !tooShort) return;
-    if (value && value.length >= minChars) setTooShort(false);
+    if (value && value.trim().length >= minChars) setTooShort(false);
   }, [minChars, value, tooShort]);
 
   const handleSearch = useCallback(() => {
-    if (minChars && (value || '').length < minChars) {
+    if (minChars && (value || '').trim().length < minChars) {
       setTooShort(true);
     } else {
       onSearch(value);
@@ -78,9 +78,7 @@ const ClientTextSearchForm: React.FC<Props> = ({
         onChange={setValue}
         onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
         error={tooShort}
-        errorMessage={
-          tooShort ? t<string>('clientSearch.inputTooShort') : undefined
-        }
+        errorMessage={tooShort ? t('clientSearch.inputTooShort') : undefined}
         onClearSearch={onClearSearch}
         {...props}
       />

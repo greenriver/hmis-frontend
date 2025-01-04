@@ -1,6 +1,7 @@
 import { ApolloError, ServerError, ServerParseError } from '@apollo/client';
 import { partition } from 'lodash-es';
 
+import { CustomFetchNetworkError } from '@/providers/apolloClient';
 import { ValidationError, ValidationSeverity } from '@/types/gqlTypes';
 
 // This message is shown for unhandled exceptions
@@ -20,6 +21,12 @@ export const isServerError = (
   err: Error | ServerParseError | ServerError | null
 ): err is ServerError => {
   return !!(err && err instanceof Error && err.hasOwnProperty('result'));
+};
+
+export const hasStatusCode = (
+  err: Error | ServerParseError | ServerError | CustomFetchNetworkError | null
+): err is CustomFetchNetworkError | ServerError => {
+  return !!(err && err instanceof Error && 'statusCode' in err);
 };
 
 /*** Error State helpers for storing all relevant error state  */

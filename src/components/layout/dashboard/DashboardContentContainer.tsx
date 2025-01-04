@@ -1,5 +1,6 @@
 import { Box, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { SxProps } from '@mui/system';
 import { ReactNode } from 'react';
 
 import { DESKTOP_NAV_SIDEBAR_WIDTH } from '../layoutConstants';
@@ -8,6 +9,7 @@ import ContextHeader from './contextHeader/ContextHeader';
 import DashboardContentNav from './DashboardContentNav';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
+import useMaxPageWidth from '@/hooks/useMaxPageWidth';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 
 interface Props {
@@ -24,6 +26,7 @@ interface Props {
   handleOpenMobileMenu: VoidFunction;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
+  contentSx?: SxProps;
 }
 
 const DashboardContentContainer: React.FC<Props> = ({
@@ -40,9 +43,10 @@ const DashboardContentContainer: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   navLabel,
+  contentSx,
 }) => {
   const theme = useTheme();
-  const maxPageWidth = theme.breakpoints.values.xl;
+  const maxPageWidth = useMaxPageWidth();
 
   const desktopContainerWidth = desktopNavIsOpen
     ? // FIXME using vw causes horizontal scrollbar when vertical scroll is present
@@ -115,16 +119,17 @@ const DashboardContentContainer: React.FC<Props> = ({
             </Paper>
           )}
           <Box
+            key='content'
+            component='main'
             sx={{
               pt: 2,
               pb: 8,
               px: { xs: 1, sm: 3, lg: 4 },
               maxWidth: `${maxPageWidth}px`,
+              ...contentSx,
             }}
           >
-            <Box key='content' component='main'>
-              <SentryErrorBoundary>{children}</SentryErrorBoundary>
-            </Box>
+            <SentryErrorBoundary>{children}</SentryErrorBoundary>
           </Box>
         </Box>
       </Box>

@@ -4,20 +4,15 @@ import { useEffect } from 'react';
 import { sentryUser } from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
 
-const DEFAULT_THROW = import.meta.env.MODE !== 'production';
-
 interface Props {
   error: Error;
   blocking?: boolean;
 }
 
-const RecoverableError: React.FC<Props> = ({
-  error,
-  blocking = DEFAULT_THROW,
-}) => {
+const RecoverableError: React.FC<Props> = ({ error, blocking = false }) => {
   const { user } = useAuth();
   useEffect(() => {
-    if (blocking) {
+    if (blocking || import.meta.env.MODE !== 'production') {
       throw error;
     } else {
       Sentry.captureException(error, { user: sentryUser(user) });

@@ -3,9 +3,9 @@ import { merge, startCase } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
-import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
+import { ClientDashboardContext } from '@/modules/client/components/pages/ClientDashboard';
+import { EnrollmentDashboardContext } from '@/modules/enrollment/components/pages/EnrollmentDashboard';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
@@ -250,9 +250,21 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         parent: AdminDashboardRoutes.FORMS,
         title: 'View Form Details',
       },
+      [AdminDashboardRoutes.JSON_EDIT_FORM]: {
+        parent: AdminDashboardRoutes.EDIT_FORM,
+        title: 'Edit Form JSON',
+      },
       [AdminDashboardRoutes.EDIT_FORM]: {
         parent: AdminDashboardRoutes.VIEW_FORM,
         title: 'Edit Form',
+      },
+      [AdminDashboardRoutes.PREVIEW_FORM]: {
+        parent: AdminDashboardRoutes.VIEW_FORM,
+        title: 'Preview Form',
+      },
+      [AdminDashboardRoutes.PREVIEW_FORM_DRAFT]: {
+        parent: AdminDashboardRoutes.EDIT_FORM,
+        title: 'Preview Form',
       },
       [AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY]: {
         parent: AdminDashboardRoutes.USERS,

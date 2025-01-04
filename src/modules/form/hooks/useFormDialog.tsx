@@ -82,6 +82,10 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       // this project will be used to evaluate and "rules" on the resolved form definition.
       projectId:
         projectId || localConstants?.projectId || inputVariables?.projectId,
+      id:
+        record && 'formDefinitionId' in record
+          ? record.formDefinitionId
+          : undefined,
     },
     localDefinition
   );
@@ -130,15 +134,10 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
           ({ type }) => type === ItemType.Group
         ).length > 1;
 
-      // If there are multiple top level groups, render form "cards" as usual.
-      // If not, hide the card formatting.
-      const contentSx = hasMultipleTopLevelGroups
-        ? {
-            backgroundColor: 'background.default',
-          }
-        : {
-            '.HmisForm-card': { px: 0, pt: 1, pb: 0, border: 'unset' },
-          };
+      // Variant depends on whether this form has multiple sections (for example Client)
+      const variant = hasMultipleTopLevelGroups
+        ? 'standard'
+        : 'without_top_level_cards';
 
       return (
         <CommonDialog
@@ -148,7 +147,13 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
           {...DialogProps}
         >
           <DialogTitle>{title}</DialogTitle>
-          <DialogContent sx={contentSx}>
+          <DialogContent
+            sx={
+              variant === 'standard'
+                ? { backgroundColor: 'background.default' }
+                : undefined
+            }
+          >
             {definitionLoading ? (
               <Loading />
             ) : formDefinition ? (
@@ -178,6 +183,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                     ValidationDialogProps={{
                       ...props.ValidationDialogProps,
                     }}
+                    variant={variant}
                     hideSubmit
                     {...props}
                     errorRef={errorRef}

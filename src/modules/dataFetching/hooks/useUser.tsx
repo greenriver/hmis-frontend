@@ -14,7 +14,7 @@ export function useUser(userId?: string) {
   // otherwise query for it
   const { loading, error } = useGetUserQuery({
     variables: { id: userId as string },
-    // skip if we already have the fragment, OR if we have no enrollment id
+    // skip if we already have the fragment, OR if we have no user id
     skip: !!user || !userId,
   });
   if (error) throw error;

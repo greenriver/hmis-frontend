@@ -1,5 +1,19 @@
 # HMIS Front End
 
+## Application Stack
+* Node JS
+* React
+* TypeScript
+* Apollo GraphQL Client
+* Material UI
+* GraphQL Codegen
+* Storybook 8
+* Chromatic
+* Vite
+* yarn
+* prettier / eslint
+* [hmis-warehouse](https://github.com/greenriver/hmis-warehouse) backend (Rails, ruby-graphql)
+
 ## Developer Installation
 
 ### Install Node, NPM, and Yarn
@@ -39,7 +53,7 @@
    yarn install
    ```
 
-3. Run dev server with live reload
+3. Run vite dev server with live reload
 
    ```sh
    yarn dev
@@ -67,7 +81,17 @@ yarn build && yarn preview
 Use the `graphql:codegen` script to update generated types.
 
 ```sh
-SCHEMA_PATH=<path to schema.graphql> yarn graphql:codegen
+SCHEMA_PATH=/path/to/warehouse/schema.graphql yarn graphql:codegen
+```
+
+> 💡 If you add `export SCHEMA_PATH=/my-dev-path/hmis-warehouse/drivers/hmis/app/graphql/schema.graphql` to your shell configuration file (eg .zshrc, .bashrc), then you only need to run `yarn graphql:codegen`
+
+### Upgrading Yarn
+
+If you used `corepack` to install yarn, you can also upgrade it using corepack. The Yarn version is not pinned in the repo.
+
+```sh
+corepack prepare yarn@<version> --activate
 ```
 
 ### Upgrading NPM Packages
@@ -85,13 +109,9 @@ git add yarn.lock package.json
 ```
 
 
-### Cypress E2E tests
+### Capybara System Tests
 
-These tests run against a real warehouse backend. Make sure you have the backend running at `https://hmis-warehouse.dev.test`.
-
-1. Run `rails driver:hmis:seed_e2e` in the warehouse repo
-2. Run `yarn cypress open` in the frontend repo
-
+See the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/stable/drivers/hmis/README.md) in the Warehouse repo for instructions on running end-to-end Capybara tests.
 
 ## Backend configuration
 
@@ -153,3 +173,55 @@ rails driver:hmis:dump_graphql_schema
 ```
 
 To pick up the local schema changes on the frontend, run the `graphql:codegen` script (see above).
+
+## Project Structure
+
+This project uses a module or feature-based structure which is inspired by the [bulletproof-react](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md) structure.
+
+```
+src
+|
++-- api               # graphql queries/mutations/fragments
+|
++-- components        # shared components used across the entire application
+|
++-- modules           # feature-based modules
+|
++-- hooks             # shared hooks used across the entire application
+|
++-- test              # test utilities and mocks
+|
++-- types             # shared types used across the application (auto-generated from the graphql schema)
+|
++-- utils             # shared utility functions
+```
+
+
+Inner structure of a module:
+
+```
+src/modules/awesomeModule
+|
++-- components  # components scoped to a specific feature
+|
++-- hooks       # hooks scoped to a specific feature
+|
++-- myTypes.ts  # typescript types used within the feature, with appropriate filename
+|
++-- myUtils.ts  # utility functions for a specific feature, with appropriate filename
+
+```
+
+#### Guidelines for categorization
+* Prefer to co-locate code that deals with the same type of thing into a shared `module`, even if the components are rendered in different parts of the application. For example, the Project Services table and Client Services table can live in the same "service" module.
+* A `module` should typically contain more than just a couple of files, but not so many that it becomes difficult to navigate or understand.
+* If two potential features are highly interdependent and frequently change together, consider combining them into a single `module`.
+* The top-level `components` folder should contain generic components that are used across the application. For the most part, they should not be domain-specific.
+* Components in the top-level `components` dir should not have dependencies on `module` code.
+* It should be clear what the purpose of a module is and how to use it. An engineer should be able to quickly understand what the module's entry-points are without needing to understand the internals of the module. If this is not obvious from code structure or storybook, include a brief README.md in the module dir with examples/explanation.
+
+#### Examples of modules
+* `modules/service` - includes the service table components, and service-related pages (e.g. ProjectServicesPage, EnrollmentServicesPage)
+* `modules/bulkServices` - includes components to support the bulk service assignment feature. This is separated out from the `services` module to keep the size manageable, and because they are relatively independent implementations.
+* `modules/scanCards` - components to support the Scan Card feature
+

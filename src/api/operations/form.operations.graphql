@@ -1,3 +1,4 @@
+# used for updating title, role, and updating form content from Form Builder
 mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
   updateFormDefinition(id: $id, input: $input) {
     formDefinition {
@@ -9,10 +10,14 @@ mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
   }
 }
 
-mutation CreateFormDefinition($input: FormDefinitionInput!) {
-  createFormDefinition(input: $input) {
+# used for updating form content from JSON Editor
+mutation UpdateFormDefinitionFromJsonEditor(
+  $id: ID!
+  $input: FormDefinitionInput!
+) {
+  updateFormDefinition(id: $id, input: $input) {
     formDefinition {
-      ...FormDefinitionFieldsForEditor
+      ...FormDefinitionFieldsForJsonEditor
     }
     errors {
       ...ValidationErrorFields
@@ -20,10 +25,62 @@ mutation CreateFormDefinition($input: FormDefinitionInput!) {
   }
 }
 
-mutation DeleteFormDefinition($id: ID!) {
+# used for creating an entirely new form (form submission of static form)
+mutation CreateFormDefinition($input: FormDefinitionInput!) {
+  createFormDefinition(input: $input) {
+    formDefinition {
+      ...FormDefinitionMetadata
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+# used for creating a new Draft version of an existing form
+mutation CreateNextDraftFormDefinition($identifier: String!) {
+  createNextDraftFormDefinition(identifier: $identifier) {
+    formIdentifier {
+      id
+      identifier
+      draftVersion {
+        ...FormDefinitionMetadata
+      }
+    }
+  }
+}
+
+# used for creating an entirely new FormDefinition that is a duplicate of an existing form
+mutation CreateDuplicateFormDefinition($identifier: String!) {
+  createDuplicateFormDefinition(identifier: $identifier) {
+    formIdentifier {
+      id
+      identifier
+      draftVersion {
+        ...FormDefinitionMetadata
+      }
+    }
+  }
+}
+
+# publish a Draft version of a form
+mutation PublishFormDefinition($id: ID!) {
+  publishFormDefinition(id: $id) {
+    formIdentifier {
+      ...FormIdentifierDetails
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+# used for creating an entirely new form (form submission of static form)
+mutation DeleteFormDefinitionDraft($id: ID!) {
   deleteFormDefinition(id: $id) {
     formDefinition {
-      ...FormDefinitionFieldsForEditor
+      id
+      cacheKey
     }
     errors {
       ...ValidationErrorFields

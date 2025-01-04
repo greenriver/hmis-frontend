@@ -11,10 +11,26 @@ fragment CurrentLivingSituationFields on CurrentLivingSituation {
   subsequentResidence
   dateUpdated
   dateCreated
+  verifiedByProjectId
   user {
     ...UserFields
   }
   customDataElements {
     ...CustomDataElementFields
   }
+  geolocation {
+    ...GeolocationFields
+  }
+}
+
+fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {
+  client {
+    id
+    ...ClientName
+  }
+  enrollment {
+    id
+    ...EnrollmentRangeFields
+  }
+  ...CurrentLivingSituationFields
 }

@@ -7,7 +7,6 @@ import { createInitialValuesFromRecord } from '../util/formUtil';
 import DynamicView from './viewable/DynamicView';
 
 import Loading from '@/components/elements/Loading';
-import NotFound from '@/components/pages/NotFound';
 import { RecordFormRole } from '@/types/gqlTypes';
 
 export interface ViewRecordProps<RecordType> {
@@ -29,6 +28,10 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
 }: ViewRecordProps<RecordType>): JSX.Element => {
   const { formDefinition, itemMap, loading } = useFormDefinition({
     role: formRole,
+    // record.formDefinitionId comes from the form processor. It is the form that was last used to create/edit the record.
+    // If the record has formDefinitionId, then we should just use that definition, rather than trying to find the best
+    // definition based on the role and project ID
+    id: 'formDefinitionId' in record ? record.formDefinitionId : undefined,
     projectId,
   });
 
@@ -40,7 +43,7 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   }, [itemMap, record]);
 
   if (loading) return <Loading />;
-  if (!formDefinition || !itemMap) return <NotFound />;
+  if (!formDefinition || !itemMap) throw new Error('Form definition not found');
 
   return (
     <DynamicView

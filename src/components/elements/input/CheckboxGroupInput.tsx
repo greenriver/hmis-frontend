@@ -19,7 +19,6 @@ export interface Props {
   name?: string;
   options: Option[];
   onChange: (value?: Option[] | null) => void;
-  row?: boolean;
   sx?: SxProps;
   labelSx?: SxProps;
 }
@@ -33,7 +32,6 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
   helperText,
   disabled,
   error,
-  row,
   warnIfEmptyTreatment,
   maxWidth,
   sx,
@@ -74,12 +72,9 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
           </FormLabel>
         )}
         <FormGroup
-          row={row}
           sx={{
-            ...(!row && {
-              'label:first-of-type': { pt: 1 },
-              '.MuiCheckbox-root': { py: 0.5 },
-            }),
+            'label:first-of-type': { pt: 1 },
+            '.MuiCheckbox-root': { py: 0.5 },
             ...(warnIfEmptyTreatment && {
               '[data-checked="false"] svg': {
                 backgroundColor: 'alerts.low.background',
