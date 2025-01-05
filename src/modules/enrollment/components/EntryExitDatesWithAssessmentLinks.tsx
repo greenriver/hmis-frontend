@@ -59,6 +59,7 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
               <ButtonLink
                 to={intakePath}
                 variant='text'
+                aria-label='Go to Intake Assessment'
                 sx={{ minWidth: '30px', color: theme.palette.links }}
               >
                 <AssessmentIcon fontSize='small' />
@@ -77,6 +78,7 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
             <ButtonLink
               to={exitPath}
               variant='text'
+              aria-label='Go to Exit Assessment'
               sx={{ minWidth: '30px', color: theme.palette.links }}
             >
               <AssessmentIcon fontSize='small' />

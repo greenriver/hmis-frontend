@@ -89,9 +89,7 @@ const ProjectConfigTable = ({
                   recordName='Project Config'
                   onSuccess={() => evictProjectConfigs()}
                   onlyIcon
-                >
-                  Delete
-                </DeleteMutationButton>
+                />
               </Box>
             ),
           },
