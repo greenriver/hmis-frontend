@@ -142,6 +142,7 @@ const DynamicFormField: React.FC<Props> = ({
                 item={item}
                 nestingLevel={nestingLevel + 1}
                 warnIfEmpty={warnIfEmpty}
+                pickListArgs={pickListArgs}
                 props={props}
                 renderFn={fn}
               />

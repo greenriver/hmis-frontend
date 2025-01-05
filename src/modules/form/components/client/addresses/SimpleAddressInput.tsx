@@ -27,7 +27,11 @@ const SimpleAddressInput: React.FC<Props> = ({
 
   useEffect(() => {
     if (values.length === 0) {
-      onChange([createInitialValue()]);
+      // setTimeout is needed because if the inputs were not previously rendered, they are not yet registered. So the
+      // timeout allows them to register before we change the value here
+      setTimeout(() => {
+        onChange([createInitialValue()]);
+      });
     }
   }, [values, onChange]);
 

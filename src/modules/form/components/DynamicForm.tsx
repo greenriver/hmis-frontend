@@ -7,6 +7,7 @@ import { FormValues, LocalConstants } from '../types';
 
 import DirtyObserver from './DirtyObserver';
 import DynamicFormBase, { DynamicFormBaseProps } from './DynamicFormBase';
+import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -110,8 +111,11 @@ export const DynamicFormWithoutHandlers = forwardRef<
       [onSubmit, getValuesForSubmit, props, handlers, handleSaveDraft]
     );
 
+    // DynamicFormContext is needed for MciClearance; perhaps there's another way
     return (
-      <>
+      <DynamicFormContext.Provider
+        value={{ getValues: handlers.getValues, definition }}
+      >
         {onDirty && <DirtyObserver onDirty={onDirty} handlers={handlers} />}
         <DynamicFormBase
           {...props}
@@ -120,7 +124,7 @@ export const DynamicFormWithoutHandlers = forwardRef<
           onSubmit={handleSubmit}
           onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
         />
-      </>
+      </DynamicFormContext.Provider>
     );
   }
 );

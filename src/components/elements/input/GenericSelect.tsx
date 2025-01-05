@@ -88,12 +88,14 @@ const GenericSelect = <
         // TODO - do we want to open an issue in MUI repo?
         // https://github.com/open-path/hmis-accessibility/issues/37
         tagValue.map((option: T, index: number) => {
+          const { key, ...chipProps } = getTagProps({ index });
           return (
             <Chip
+              key={key}
               size='small'
               label={ownerState.getOptionLabel(option)}
               aria-label={`Option: ${ownerState.getOptionLabel(option)}. Press backspace or delete to remove.`}
-              {...getTagProps({ index })}
+              {...chipProps}
             />
           );
         })
