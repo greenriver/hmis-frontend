@@ -52,7 +52,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
     autofillInvertedDependencyMap,
     enabledDependencyMap,
     disabledDependencyMap,
-  } = useComputedData({ definition, initialValues, viewOnly, localConstants });
+  } = useComputedData({ definition, viewOnly });
 
   const methods = useForm<T>({
     values: (() => {

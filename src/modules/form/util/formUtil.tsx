@@ -1044,29 +1044,6 @@ export const buildBoundsDependencyMap = (itemMap: ItemMap): LinkIdMap => {
 };
 
 /**
- * List of link IDs that should be disabled, based on provided form values
- */
-export const getDisabledLinkIds = ({
-  itemMap,
-  values,
-  localConstants,
-}: {
-  itemMap: ItemMap;
-  values: FormValues;
-  localConstants: LocalConstants;
-}): string[] => {
-  return Object.keys(itemMap).filter(
-    (linkId) =>
-      !shouldEnableItem({
-        item: itemMap[linkId],
-        values,
-        itemMap,
-        localConstants,
-      })
-  );
-};
-
-/**
  * Given a list of link IDs, returns a list of the same link IDs including
  * all their descendants link IDs.
  */
