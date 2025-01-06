@@ -43,7 +43,7 @@ export const getViewEnrollmentMenuItem = (
   return {
     title: 'View Enrollment',
     key: 'enrollment',
-    ariaLabel: `View Enrollment, ${clientBriefName(client as ClientNameFragment)} ${entryExitRange(enrollment)}`,
+    ariaLabel: `View Enrollment, ${clientBriefName(client)} ${entryExitRange(enrollment)}`,
     to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
       clientId: client.id,
       enrollmentId: enrollment.id,
