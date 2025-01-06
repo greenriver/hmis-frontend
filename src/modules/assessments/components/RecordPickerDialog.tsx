@@ -65,7 +65,7 @@ const RecordPickerDialog = ({
   const columns: ColumnDef<AssessmentForPopulation>[] = useMemo(() => {
     // If no item was passed, that means we're pre-filling the entire assessment.
     // Only metadata columns are shown in that case.
-    if (!item) return [...assessmentColumns, actionColumnDef];
+    if (!item) return [actionColumnDef, ...assessmentColumns];
 
     // Select additional fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item)
@@ -91,7 +91,7 @@ const RecordPickerDialog = ({
           );
         },
       }));
-    return [...assessmentColumns, ...dataColumns, actionColumnDef];
+    return [actionColumnDef, ...assessmentColumns, ...dataColumns];
   }, [actionColumnDef, item]);
 
   const hudRoles = [

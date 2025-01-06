@@ -108,6 +108,17 @@ export const renderCellContents = <T extends { id: string }>(
   return null;
 };
 
+export const renderHeaderCellContents = <T extends { id: string }>(
+  def: ColumnDef<T>
+) => {
+  return def.header ? (
+    <strong>{def.header}</strong>
+  ) : (
+    // If header isn't provided, add a visually hidden header with the column key for accessibility
+    <Box sx={visuallyHidden}>{def.key}</Box>
+  );
+};
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
@@ -170,15 +181,6 @@ const GenericTable = <T extends { id: string }>({
       }),
     []
   );
-
-  const getHeaderCellContents = useCallback((def: ColumnDef<T>) => {
-    return def.header ? (
-      <strong>{def.header}</strong>
-    ) : (
-      // If header isn't provided, add a visually hidden header with the column key for accessibility
-      <Box sx={visuallyHidden}>{def.key}</Box>
-    );
-  }, []);
 
   // Clear selection when data changes
   useEffect(() => setSelected([]), [rows]);
@@ -251,7 +253,7 @@ const GenericTable = <T extends { id: string }>({
                 width: def.width,
               }}
             >
-              {getHeaderCellContents(def)}
+              {renderHeaderCellContents(def)}
             </HeaderCell>
           ))}
         </TableRow>
@@ -313,7 +315,7 @@ const GenericTable = <T extends { id: string }>({
                     key={key(def)}
                     role='rowheader'
                   >
-                    {getHeaderCellContents(def)}
+                    {renderHeaderCellContents(def)}
                   </HeaderCell>
                   {rows.map((row, idx) => (
                     <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>
