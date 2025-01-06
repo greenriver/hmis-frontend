@@ -10,6 +10,7 @@ import {
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -35,6 +36,7 @@ const ClientServicesPage: React.FC<{
   enrollmentId?: string;
 }> = ({ omitColumns = [] }) => {
   const { clientId } = useSafeParams() as { clientId: string };
+  const { client } = useClientDashboardContext();
 
   const columns = useMemo(
     () =>
@@ -65,9 +67,7 @@ const ClientServicesPage: React.FC<{
                 )}
                 secondaryActionConfigs={[
                   {
-                    ...getViewEnrollmentMenuItem(row.enrollment, {
-                      id: clientId,
-                    }),
+                    ...getViewEnrollmentMenuItem(row.enrollment, client),
                     // override the default ariaLabel to provide the project name, since we are in the client context
                     ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
                   },
@@ -81,7 +81,7 @@ const ClientServicesPage: React.FC<{
 
         return true;
       }),
-    [clientId, omitColumns]
+    [client, clientId, omitColumns]
   );
 
   const filters = useFilters({

@@ -38,12 +38,12 @@ export const getViewClientMenuItem = (client: ClientNameFragment) => {
 
 export const getViewEnrollmentMenuItem = (
   enrollment: Pick<EnrollmentFieldsFragment, 'id' | 'entryDate' | 'exitDate'>,
-  client: Pick<ClientNameFragment, 'id'> | ClientNameFragment
+  client: ClientNameFragment
 ) => {
   return {
     title: 'View Enrollment',
     key: 'enrollment',
-    ariaLabel: `View Enrollment, ${client.hasOwnProperty('firstName') ? clientBriefName(client as ClientNameFragment) : ''} ${entryExitRange(enrollment)}`,
+    ariaLabel: `View Enrollment, ${clientBriefName(client as ClientNameFragment)} ${entryExitRange(enrollment)}`,
     to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
       clientId: client.id,
       enrollmentId: enrollment.id,
