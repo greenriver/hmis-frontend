@@ -17,8 +17,16 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
-import { get, includes, isNil, without } from 'lodash-es';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { visuallyHidden } from '@mui/utils';
+import { compact, get, includes, isNil, without } from 'lodash-es';
+import {
+  ComponentType,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { To } from 'react-router-dom';
 
 import Loading from '../Loading';
@@ -33,13 +41,11 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
-import { LocationState } from '@/routes/routeUtil';
 
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
   rowLinkTo?: (row: T) => To | null | undefined;
-  rowLinkState?: LocationState;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
@@ -62,8 +68,11 @@ export interface Props<T> {
   >;
   filterToolbar?: ReactNode;
   noData?: ReactNode;
-  renderRow?: (row: T) => ReactNode;
-  condensed?: boolean;
+  // columnKeys contains the keys of columns currently rendered, so renderRow knows about which optional columns are shown/hidden.
+  renderRow?: (row: T, columnKeys: string[]) => ReactNode;
+  // TableBodyComponent can be overridden. This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
+  TableBodyComponent?: ComponentType | keyof JSX.IntrinsicElements;
+  belowRowsContent?: ReactNode; // component to insert below all rendered rows, above footer
 }
 
 const clickableRowStyles = {
@@ -94,6 +103,18 @@ const HeaderCell = ({
   </TableCell>
 );
 
+export const renderCellContents = <T extends { id: string }>(
+  row: T,
+  render: ColumnDef<T>['render']
+) => {
+  if (isRenderFunction<T>(render)) return <>{render(row)}</>;
+  if (isPrimitive<T>(render)) {
+    const val = get(row, render);
+    if (!isNil(val)) return <>{`${val}`}</>;
+  }
+  return null;
+};
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
@@ -118,8 +139,8 @@ const GenericTable = <T extends { id: string }>({
   renderRow,
   noData = 'No data',
   loadingVariant = 'circular',
-  condensed = false,
-  rowLinkState,
+  TableBodyComponent = TableBody,
+  belowRowsContent,
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -167,15 +188,6 @@ const GenericTable = <T extends { id: string }>({
   if (!selected) return <Loading />;
 
   if (loading && loadingVariant === 'circular') return <Loading />;
-
-  const renderCellContents = (row: T, render: ColumnDef<T>['render']) => {
-    if (isRenderFunction<T>(render)) return <>{render(row)}</>;
-    if (isPrimitive<T>(render)) {
-      const val = get(row, render);
-      if (!isNil(val)) return <>{`${val}`}</>;
-    }
-    return null;
-  };
 
   const verticalCellSx = (idx: number): SxProps<Theme> => ({
     border: (theme: Theme) => `1px solid ${theme.palette.grey[200]}`,
@@ -231,7 +243,12 @@ const GenericTable = <T extends { id: string }>({
                 width: def.width,
               }}
             >
-              <strong>{def.header}</strong>
+              {def.header ? (
+                <strong>{def.header}</strong>
+              ) : (
+                // If header isn't provided, add a visually hidden header with the column key for accessibility
+                <Box sx={visuallyHidden}>{def.key}</Box>
+              )}
             </HeaderCell>
           ))}
         </TableRow>
@@ -284,7 +301,7 @@ const GenericTable = <T extends { id: string }>({
           {...tableProps}
         >
           {tableHead}
-          <TableBody>
+          <TableBodyComponent>
             {vertical &&
               columns.map((def, i) => (
                 <TableRow key={key(def) || i}>
@@ -305,7 +322,9 @@ const GenericTable = <T extends { id: string }>({
             {!vertical &&
               rows.map((row) => {
                 // prop to completely take over row rendering
-                if (renderRow) return renderRow(row);
+                if (renderRow) {
+                  return renderRow(row, compact(columns.map((c) => c.key)));
+                }
 
                 const isSelectable =
                   selectable && (isRowSelectable ? isRowSelectable(row) : true);
@@ -405,7 +424,6 @@ const GenericTable = <T extends { id: string }>({
                           {isLinked ? (
                             <RouterLink
                               to={rowLink}
-                              state={rowLinkState}
                               aria-label={ariaLabel && ariaLabel(row)}
                               plain={!linkTreatment}
                               data-testid={linkTreatment && 'table-linkedCell'}
@@ -425,7 +443,7 @@ const GenericTable = <T extends { id: string }>({
                                   height: '100%',
                                   alignItems: 'center',
                                   px: 2,
-                                  py: condensed ? 1 : 2,
+                                  py: 2,
                                 }}
                               >
                                 {renderCellContents(row, render)}
@@ -440,10 +458,11 @@ const GenericTable = <T extends { id: string }>({
                   </TableRow>
                 );
               })}
+            {belowRowsContent}
             {actionRow}
             {/* dont show "no data" row if there is an action row, which may be for adding new elements or making another selection (MCI uses it) */}
             {!actionRow && noResultsRow}
-          </TableBody>
+          </TableBodyComponent>
           {paginated && tablePaginationProps && (
             <TableFooter>
               <TableRow>

@@ -13,15 +13,17 @@ import { To } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
 import { MoreMenuIcon } from './SemanticIcons';
+import { LocationState } from '@/routes/routeUtil';
 
 export type CommonMenuItem = {
   key: string;
+  title: ReactNode;
   to?: To;
   onClick?: VoidFunction;
-  title?: ReactNode;
   divider?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
+  linkState?: LocationState;
   openInNew?: boolean;
 };
 

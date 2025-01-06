@@ -1,40 +1,25 @@
 import { Paper } from '@mui/material';
 
+import { useMemo } from 'react';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
-import { ColumnDef } from '@/components/elements/table/types';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
-  RecordFormRole,
   GetClientCaseNotesDocument,
   GetClientCaseNotesQuery,
   GetClientCaseNotesQueryVariables,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 type Row = NonNullable<
   GetClientCaseNotesQuery['client']
 >['customCaseNotes']['nodes'][0];
-
-const columns: ColumnDef<Row>[] = [
-  CASE_NOTE_COLUMNS.InformationDate,
-  CASE_NOTE_COLUMNS.NoteContentPreview,
-  {
-    key: 'project',
-    header: 'Project Name',
-    render: (row) => row.enrollment.projectName,
-  },
-  {
-    key: 'en-period',
-    header: 'Enrollment Period',
-    render: (row) => (
-      <EnrollmentDateRangeWithStatus enrollment={row.enrollment} />
-    ),
-  },
-];
 
 const ClientCaseNotes = () => {
   const { client } = useClientDashboardContext();
@@ -48,6 +33,34 @@ const ClientCaseNotes = () => {
     recordName: 'Case Note',
     maxWidth: 'sm',
   });
+
+  const columns = useMemo(
+    () => [
+      CASE_NOTE_COLUMNS.InformationDate,
+      {
+        key: 'project',
+        header: 'Project Name',
+        render: (row: Row) => row.enrollment.projectName,
+      },
+      CASE_NOTE_COLUMNS.LastUpdated,
+      CASE_NOTE_COLUMNS.NoteContentPreview,
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (row: Row) => (
+          <TableRowActions
+            record={row}
+            recordName={`${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`}
+            primaryActionConfig={{
+              title: 'View Case Note',
+              key: 'case note',
+              onClick: () => onSelectRecord(row),
+            }}
+          />
+        ),
+      },
+    ],
+    [onSelectRecord]
+  );
 
   if (!clientId) return <NotFound />;
 
@@ -66,7 +79,6 @@ const ClientCaseNotes = () => {
           pagePath='client.customCaseNotes'
           noData='No case notes'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={onSelectRecord}
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar

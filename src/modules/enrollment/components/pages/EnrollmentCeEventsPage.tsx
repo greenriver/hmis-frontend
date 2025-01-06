@@ -2,7 +2,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 
-import { ColumnDef } from '@/components/elements/table/types';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -24,22 +25,6 @@ import {
   GetEnrollmentEventsQueryVariables,
   RecordFormRole,
 } from '@/types/gqlTypes';
-
-const columns: ColumnDef<EventFieldsFragment>[] = [
-  {
-    header: 'Event Date',
-    render: (e) => parseAndFormatDate(e.eventDate),
-    linkTreatment: true,
-  },
-  {
-    header: 'Event Type',
-    render: (e) => <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />,
-  },
-  {
-    header: 'Result',
-    render: (e) => eventReferralResult(e),
-  },
-];
 
 const EnrollmentCeEventsPage = () => {
   const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
@@ -81,6 +66,40 @@ const EnrollmentCeEventsPage = () => {
     DataCollectionFeatureRole.CeEvent
   );
 
+  const columns = useMemo(
+    () => [
+      {
+        header: 'Event Type',
+        render: (e: EventFieldsFragment) => (
+          <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />
+        ),
+      },
+      {
+        header: 'Event Date',
+        render: (e: EventFieldsFragment) => parseAndFormatDate(e.eventDate),
+      },
+      {
+        header: 'Referral Result',
+        render: (e: EventFieldsFragment) => eventReferralResult(e),
+      },
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (e: EventFieldsFragment) => (
+          <TableRowActions
+            record={e}
+            recordName={`${HmisEnums.EventType[e.event]} on ${parseAndFormatDate(e.eventDate)}`}
+            primaryActionConfig={{
+              title: 'View CE Event',
+              key: 'ce event',
+              onClick: () => onSelectRecord(e),
+            }}
+          />
+        ),
+      },
+    ],
+    [onSelectRecord]
+  );
+
   if (!enrollment || !enrollmentId || !clientId || !ceEventFeature)
     return <NotFound />;
 
@@ -114,7 +133,6 @@ const EnrollmentCeEventsPage = () => {
           pagePath='enrollment.events'
           noData='No events'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={onSelectRecord}
         />
       </TitleCard>
       {viewRecordDialog()}

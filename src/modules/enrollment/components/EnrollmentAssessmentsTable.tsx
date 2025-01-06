@@ -1,24 +1,20 @@
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 
-import { ColumnDef } from '@/components/elements/table/types';
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
-  ASSESSMENT_COLUMNS,
-  generateAssessmentPath,
-} from '@/modules/assessments/util';
+  BASE_ACTION_COLUMN_DEF,
+  getViewAssessmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
+import { ASSESSMENT_COLUMNS } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { assessmentDescription } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
-
-const columns: ColumnDef<AssessmentFieldsFragment>[] = [
-  ASSESSMENT_COLUMNS.linkedType,
-  ASSESSMENT_COLUMNS.date,
-  ASSESSMENT_COLUMNS.lastUpdated,
-];
 
 interface Props {
   enrollmentId: string;
@@ -31,9 +27,26 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
   enrollmentId,
   projectId,
 }) => {
-  const rowLinkTo = useCallback(
-    (assessment: AssessmentFieldsFragment) =>
-      generateAssessmentPath(assessment, clientId, enrollmentId),
+  const columns = useMemo(
+    () => [
+      ASSESSMENT_COLUMNS.date,
+      ASSESSMENT_COLUMNS.type,
+      ASSESSMENT_COLUMNS.lastUpdated,
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (assessment) => (
+          <TableRowActions
+            record={assessment}
+            recordName={assessmentDescription(assessment)}
+            primaryActionConfig={getViewAssessmentMenuItem(
+              assessment,
+              clientId,
+              enrollmentId
+            )}
+          />
+        ),
+      },
+    ],
     [clientId, enrollmentId]
   );
 
@@ -51,7 +64,6 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       filters={filters}
       queryVariables={{ id: enrollmentId }}
       queryDocument={GetEnrollmentAssessmentsDocument}
-      rowLinkTo={rowLinkTo}
       columns={columns}
       pagePath='enrollment.assessments'
       noData='No assessments'

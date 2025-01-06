@@ -2,6 +2,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
@@ -59,16 +61,20 @@ const EnrollmentCeAssessmentsPage = () => {
       projectId: enrollment?.project.id,
     });
 
+  const ceAssessmentFeature = getEnrollmentFeature(
+    DataCollectionFeatureRole.CeAssessment
+  );
+
   const columns: ColumnDef<CeAssessmentFieldsFragment>[] = useMemo(
     () => [
       {
         header: 'Assessment Date',
-        render: (a) => parseAndFormatDate(a.assessmentDate),
-        linkTreatment: canEditCeAssessments,
+        render: (a: CeAssessmentFieldsFragment) =>
+          parseAndFormatDate(a.assessmentDate),
       },
       {
-        header: 'Level',
-        render: (a) => (
+        header: 'Assessment Level',
+        render: (a: CeAssessmentFieldsFragment) => (
           <HmisEnum
             value={a.assessmentLevel}
             enumMap={HmisEnums.AssessmentLevel}
@@ -76,8 +82,8 @@ const EnrollmentCeAssessmentsPage = () => {
         ),
       },
       {
-        header: 'Type',
-        render: (a) => (
+        header: 'Assessment Type',
+        render: (a: CeAssessmentFieldsFragment) => (
           <HmisEnum
             value={a.assessmentType}
             enumMap={HmisEnums.AssessmentType}
@@ -85,24 +91,40 @@ const EnrollmentCeAssessmentsPage = () => {
         ),
       },
       {
-        header: 'Location',
-        render: (a) => a.assessmentLocation,
+        header: 'Assessment Location',
+        render: (a: CeAssessmentFieldsFragment) => a.assessmentLocation,
       },
       {
         header: 'Prioritization Status',
-        render: (a) => (
+        render: (a: CeAssessmentFieldsFragment) => (
           <HmisEnum
             value={a.prioritizationStatus}
             enumMap={HmisEnums.PrioritizationStatus}
           />
         ),
       },
+      ...(canEditCeAssessments
+        ? [
+            {
+              ...BASE_ACTION_COLUMN_DEF,
+              render: (a: CeAssessmentFieldsFragment) => (
+                <TableRowActions
+                  record={a}
+                  recordName={
+                    parseAndFormatDate(a.assessmentDate) || 'unknown date'
+                  }
+                  primaryActionConfig={{
+                    title: 'View CE Assessment',
+                    key: 'ce assessment',
+                    onClick: () => onSelectRecord(a),
+                  }}
+                />
+              ),
+            },
+          ]
+        : []),
     ],
-    [canEditCeAssessments]
-  );
-
-  const ceAssessmentFeature = getEnrollmentFeature(
-    DataCollectionFeatureRole.CeAssessment
+    [canEditCeAssessments, onSelectRecord]
   );
 
   if (!enrollment || !enrollmentId || !clientId || !ceAssessmentFeature)
@@ -138,8 +160,6 @@ const EnrollmentCeAssessmentsPage = () => {
           pagePath='enrollment.ceAssessments'
           noData='No Coordinated Entry Assessments'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          // no need for read-only users to click in, because they can see all the information in the table.
-          handleRowClick={canEditCeAssessments ? onSelectRecord : undefined}
         />
       </TitleCard>
       {editRecordDialog()}

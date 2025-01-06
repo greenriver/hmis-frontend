@@ -1,12 +1,17 @@
 import { Paper } from '@mui/material';
-
-import { useCallback, useMemo } from 'react';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
+import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { baseColumns } from '@/modules/enrollment/components/pages/EnrollmentCurrentLivingSituationsPage';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { CLS_COLUMNS } from '@/modules/enrollment/components/pages/EnrollmentCurrentLivingSituationsPage';
+import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectCurrentLivingSituationsDocument,
@@ -16,50 +21,46 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
+const COLUMNS: ColumnDef<ProjectCurrentLivingSituationFieldsFragment>[] = [
+  {
+    header: 'Client Name',
+    render: (cls: ProjectCurrentLivingSituationFieldsFragment) => (
+      <ClientName client={cls.client} />
+    ),
+  },
+  CLS_COLUMNS.informationDate,
+  CLS_COLUMNS.livingSituation,
+  WITH_ENROLLMENT_COLUMNS.entryDate,
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+  {
+    ...BASE_ACTION_COLUMN_DEF,
+    render: (cls) => (
+      <TableRowActions
+        record={cls}
+        recordName={`${clientBriefName(cls.client)} ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`}
+        primaryActionConfig={{
+          title: 'View CLS',
+          key: 'cls',
+          to: generateSafePath(
+            EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
+            {
+              clientId: cls.client.id,
+              enrollmentId: cls.enrollment.id,
+            }
+          ),
+        }}
+        secondaryActionConfigs={[
+          getViewEnrollmentMenuItem(cls.enrollment, cls.client),
+        ]}
+      />
+    ),
+  },
+];
+
 const ProjectCurrentLivingSituations = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
-
-  const columns = useMemo(() => {
-    return [
-      {
-        header: 'First Name',
-        linkTreatment: true,
-        render: (cls: ProjectCurrentLivingSituationFieldsFragment) => (
-          <ClientName client={cls.client} nameParts='first_only' />
-        ),
-      },
-      {
-        header: 'Last Name',
-        linkTreatment: true,
-        render: (cls: ProjectCurrentLivingSituationFieldsFragment) => (
-          <ClientName client={cls.client} nameParts='last_only' />
-        ),
-      },
-      { ...baseColumns.informationDate, linkTreatment: false },
-      baseColumns.livingSituation,
-      {
-        header: 'Enrollment Period',
-        render: (cls: ProjectCurrentLivingSituationFieldsFragment) => (
-          <EnrollmentDateRangeWithStatus enrollment={cls.enrollment} />
-        ),
-      },
-    ];
-  }, []);
-
-  const rowLinkTo = useCallback(
-    (cls: ProjectCurrentLivingSituationFieldsFragment) => {
-      return generateSafePath(
-        EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-        {
-          clientId: cls.client.id,
-          enrollmentId: cls.enrollment.id,
-        }
-      );
-    },
-    []
-  );
 
   return (
     <>
@@ -72,11 +73,10 @@ const ProjectCurrentLivingSituations = () => {
         >
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectCurrentLivingSituationsDocument}
-          columns={columns}
+          columns={COLUMNS}
           pagePath='project.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'
-          rowLinkTo={rowLinkTo}
         />
       </Paper>
     </>

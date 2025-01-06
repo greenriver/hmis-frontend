@@ -1,6 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -23,13 +25,12 @@ import {
   RecordFormRole,
 } from '@/types/gqlTypes';
 
-export const baseColumns = {
+export const CLS_COLUMNS = {
   informationDate: {
     header: 'Information Date',
     width: '180px',
     render: (e: CurrentLivingSituationFieldsFragment) =>
       parseAndFormatDate(e.informationDate),
-    linkTreatment: true,
   },
   livingSituation: {
     header: 'Living Situation',
@@ -95,13 +96,30 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     (rows: CurrentLivingSituationFieldsFragment[]) => {
       const customColumns = getCustomDataElementColumns(rows);
       return [
-        baseColumns.informationDate,
-        baseColumns.livingSituation,
-        baseColumns.locationDetails,
+        CLS_COLUMNS.informationDate,
+        CLS_COLUMNS.livingSituation,
+        CLS_COLUMNS.locationDetails,
         ...customColumns,
+        {
+          ...BASE_ACTION_COLUMN_DEF,
+          render: (cls: CurrentLivingSituationFieldsFragment) => (
+            <TableRowActions
+              record={cls}
+              recordName={
+                parseAndFormatDate(cls.informationDate) || 'unknown date'
+              }
+              primaryActionConfig={{
+                title: 'View CLS',
+                key: 'cls',
+                ariaLabel: `View Current Living Situation, ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`,
+                onClick: () => onSelectRecord(cls),
+              }}
+            />
+          ),
+        },
       ];
     },
-    []
+    [onSelectRecord]
   );
 
   if (!enrollment || !enrollmentId || !clientId || !clsFeature)
@@ -137,7 +155,6 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           noData='No current living situations'
           recordType='CurrentLivingSituation'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={onSelectRecord}
         />
       </TitleCard>
       {viewRecordDialog()}

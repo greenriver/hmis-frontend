@@ -1,19 +1,24 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
-  PERMANENT_HOUSING_PROJECT_TYPES,
+  entryExitRange,
   parseAndFormatDate,
+  PERMANENT_HOUSING_PROJECT_TYPES,
 } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentSortOption,
@@ -23,7 +28,6 @@ import {
   ProjectType,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 const CaptionedText: React.FC<{ caption: string; children: ReactNode }> = ({
   caption,
@@ -39,30 +43,25 @@ const CaptionedText: React.FC<{ caption: string; children: ReactNode }> = ({
   );
 };
 
-const columns: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
-  {
-    header: 'Enrollment Period',
-    render: (row) => <EnrollmentDateRangeWithStatus enrollment={row} />,
+const CLIENT_ENROLLMENT_COLUMNS: {
+  [key: string]: ColumnDef<ClientEnrollmentFieldsFragment>;
+} = {
+  projectName: {
+    header: 'Project Name',
+    render: 'projectName',
   },
-  {
+  organizationName: {
     header: 'Organization Name',
     render: 'organizationName',
   },
-  {
-    header: 'Project Name',
-    render: 'projectName',
-    linkTreatment: true,
-    ariaLabel: (row) => row.projectName,
-  },
-
-  {
+  projectType: {
     header: 'Project Type',
     render: ({ projectType }) => (
       <ProjectTypeChip projectType={projectType} sx={{ px: 0.5 }} />
     ),
   },
-  {
-    header: 'Details',
+  enrollmentDetails: {
+    header: 'Enrollment Details',
     render: ({
       moveInDate,
       lastBedNightDate,
@@ -96,45 +95,45 @@ const columns: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
       }
     },
   },
-];
+};
 
 const ClientEnrollmentsPage = () => {
   const { client } = useClientDashboardContext();
-
-  const rowLinkTo = useCallback(
-    (enrollment: ClientEnrollmentFieldsFragment) => {
-      if (!enrollment.access.canViewEnrollmentDetails) return null;
-
-      return generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-        clientId: client.id,
-        enrollmentId: enrollment.id,
-      });
-    },
-    [client]
-  );
 
   const filters = useFilters({
     type: 'EnrollmentsForClientFilterOptions',
   });
 
+  const columns = useMemo(
+    () => [
+      CLIENT_ENROLLMENT_COLUMNS.projectName,
+      CLIENT_ENROLLMENT_COLUMNS.organizationName,
+      ENROLLMENT_COLUMNS.entryDate,
+      ENROLLMENT_COLUMNS.exitDate,
+      ENROLLMENT_COLUMNS.enrollmentStatus,
+      CLIENT_ENROLLMENT_COLUMNS.projectType,
+      CLIENT_ENROLLMENT_COLUMNS.enrollmentDetails,
+      {
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (enrollment) => (
+          <TableRowActions
+            record={enrollment}
+            recordName={`${enrollment.projectName} ${entryExitRange(enrollment)}`}
+            primaryActionConfig={{
+              ...getViewEnrollmentMenuItem(enrollment, client),
+              // override the default ariaLabel to provide the project name, since we are in the client context
+              ariaLabel: `View Enrollment at ${enrollment.projectName} for ${entryExitRange(enrollment)}`,
+            }}
+          />
+        ),
+      },
+    ],
+    [client]
+  );
+
   return (
     <>
-      <PageTitle
-        title='Enrollments'
-        // disabled for now #185750557
-        // actions={
-        //   <RootPermissionsFilter permissions={['canEnrollClients']}>
-        //     <ButtonLink
-        //       to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
-        //         clientId,
-        //       })}
-        //       Icon={AddIcon}
-        //     >
-        //       Add Enrollment
-        //     </ButtonLink>
-        //   </RootPermissionsFilter>
-        // }
-      />
+      <PageTitle title='Enrollments' />
       <Paper>
         <GenericTableWithData<
           GetClientEnrollmentsQuery,
@@ -143,7 +142,6 @@ const ClientEnrollmentsPage = () => {
         >
           queryVariables={{ id: client.id }}
           queryDocument={GetClientEnrollmentsDocument}
-          rowLinkTo={rowLinkTo}
           columns={columns}
           pagePath='client.enrollments'
           filters={filters}
