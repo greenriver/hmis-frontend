@@ -1,17 +1,22 @@
 import { Paper } from '@mui/material';
 import { useMemo } from 'react';
 import { useProjectDashboardContext } from './ProjectDashboard';
-import { ColumnDef } from '@/components/elements/table/types';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewAssessmentMenuItem,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
+  ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
-  ASSESSMENT_ENROLLMENT_COLUMNS,
-  assessmentRowLinkTo,
 } from '@/modules/assessments/util';
-import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { assessmentDescription } from '@/modules/hmis/hmisUtil';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   AssessmentSortOption,
   GetProjectAssessmentsDocument,
@@ -29,34 +34,39 @@ const ProjectAssessments = () => {
   };
   const { project } = useProjectDashboardContext();
 
-  const displayColumns: ColumnDef<ProjectAssessmentType>[] = useMemo(() => {
+  const columns = useMemo(() => {
     return [
+      ASSESSMENT_CLIENT_NAME_COL,
+      ASSESSMENT_COLUMNS.date,
+      ASSESSMENT_COLUMNS.type,
+      WITH_ENROLLMENT_COLUMNS.entryDate,
+      WITH_ENROLLMENT_COLUMNS.exitDate,
       {
-        header: 'First Name',
-        linkTreatment: true,
-        render: (a: ProjectAssessmentType) => (
-          <ClientName client={a.enrollment.client} nameParts='first_only' />
-        ),
-      },
-      {
-        header: 'Last Name',
-        linkTreatment: true,
-        render: (a: ProjectAssessmentType) => (
-          <ClientName
-            client={a.enrollment.client}
-            // linkToEnrollmentId={s.enrollment.id}
-            nameParts='last_only'
+        ...BASE_ACTION_COLUMN_DEF,
+        render: (record: ProjectAssessmentType) => (
+          <TableRowActions
+            record={record}
+            recordName={assessmentDescription(record)}
+            primaryActionConfig={{
+              ...getViewAssessmentMenuItem(
+                record,
+                record.enrollment.client.id,
+                record.enrollment.id,
+                true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
+              ),
+              linkState: { backToLabel: project.projectName },
+            }}
+            secondaryActionConfigs={[
+              getViewEnrollmentMenuItem(
+                record.enrollment,
+                record.enrollment.client
+              ),
+            ]}
           />
         ),
       },
-      ASSESSMENT_COLUMNS.date,
-      ASSESSMENT_COLUMNS.type,
-      ASSESSMENT_ENROLLMENT_COLUMNS.period,
     ];
-  }, []);
-
-  const rowLinkTo = (record: ProjectAssessmentType) =>
-    assessmentRowLinkTo(record, record.enrollment.client.id);
+  }, [project]);
 
   const filters = useFilters({
     type: 'AssessmentsForProjectFilterOptions',
@@ -74,9 +84,7 @@ const ProjectAssessments = () => {
         >
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectAssessmentsDocument}
-          rowLinkTo={rowLinkTo}
-          rowLinkState={{ backToLabel: project.projectName }}
-          columns={displayColumns}
+          columns={columns}
           noData='No assessments'
           pagePath='project.assessments'
           recordType='Assessment'

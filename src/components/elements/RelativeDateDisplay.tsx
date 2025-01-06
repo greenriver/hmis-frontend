@@ -1,9 +1,11 @@
 import {
+  Box,
   Tooltip,
   TooltipProps,
   Typography,
   TypographyProps,
 } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import { useMemo } from 'react';
 
 import {
@@ -29,6 +31,7 @@ export interface RelativeDateDisplayProps {
   dateString: string;
   prefixVerb?: string;
   suffixText?: string;
+  tooltipSuffixText?: string;
   TooltipProps?: Omit<TooltipProps, 'title' | 'children'>;
   TypographyProps?: TypographyProps;
 }
@@ -40,6 +43,7 @@ const RelativeDateDisplay = ({
   dateString,
   prefixVerb,
   suffixText,
+  tooltipSuffixText,
   TooltipProps = {},
   TypographyProps = {},
 }: RelativeDateDisplayProps) => {
@@ -54,7 +58,7 @@ const RelativeDateDisplay = ({
     <Tooltip
       title={
         <Typography component='span' variant='inherit'>
-          {formattedDate}
+          {formattedDate} {tooltipSuffixText}
         </Typography>
       }
       arrow
@@ -69,7 +73,12 @@ const RelativeDateDisplay = ({
           ...TypographyProps.sx,
         }}
       >
-        {prefixVerb || null} {formattedDateRelative} {suffixText || null}
+        {/* Include the tooltip text as visually hidden for accessibility */}
+        {prefixVerb || null} {formattedDateRelative}{' '}
+        <Box sx={visuallyHidden}>
+          ({formattedDate} {tooltipSuffixText})
+        </Box>{' '}
+        {suffixText || null}
       </Typography>
     </Tooltip>
   );

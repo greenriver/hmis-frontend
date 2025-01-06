@@ -375,12 +375,18 @@ export const formRoleDisplay = (assessment: AssessmentFieldsFragment) => {
   return defaultTitle;
 };
 
-export const assessmentDescription = (assessment: ClientAssessmentType) => {
+export const assessmentDescription = (
+  assessment: ClientAssessmentType | AssessmentFieldsFragment
+) => {
   const prefix = formRoleDisplay(assessment);
-  const name = prefix ? `${prefix} assessment` : 'Assessment';
-  return `${name} at ${assessment.enrollment.projectName} on ${
-    parseAndFormatDate(assessment.assessmentDate) || 'unknown date'
-  }`;
+  const name = prefix ? `${prefix} assessment ` : 'Assessment ';
+  // `enrollment` may not be present in the type (eg. if we are on the Enrollment Assessments page)
+  const atProject =
+    'enrollment' in assessment && !!assessment.enrollment?.projectName
+      ? `at ${assessment.enrollment.projectName} `
+      : '';
+  const onDate = `on ${parseAndFormatDate(assessment.assessmentDate) || 'unknown date'}`;
+  return name + atProject + onDate;
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {

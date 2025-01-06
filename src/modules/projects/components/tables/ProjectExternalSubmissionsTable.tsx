@@ -1,7 +1,9 @@
-import { Button, Chip, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -102,15 +104,18 @@ const ProjectExternalSubmissionsTable = ({
         },
         ...defs,
         {
-          header: 'Action',
-          render: ({ id }: ExternalFormSubmissionSummaryFragment) => (
-            <Button
-              variant='outlined'
-              onClick={() => setModalOpenId(id)}
-              disabled={bulkLoading}
-            >
-              View
-            </Button>
+          ...BASE_ACTION_COLUMN_DEF,
+          render: (submission: ExternalFormSubmissionSummaryFragment) => (
+            <TableRowActions
+              record={submission}
+              recordName={submission.id}
+              primaryActionConfig={{
+                title: 'View Submission',
+                key: 'submission',
+                onClick: () => setModalOpenId(submission.id),
+                disabled: bulkLoading,
+              }}
+            />
           ),
         },
       ];

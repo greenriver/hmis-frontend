@@ -126,6 +126,7 @@ const AssignServiceButton: React.FC<Props> = ({
           fullWidth
           variant='contained'
           color={isAssignedOnDate ? 'primary' : 'grayscale'}
+          aria-label={`${buttonText}, ${clientBriefName(client)}`}
         >
           {buttonText}
         </LoadingButton>

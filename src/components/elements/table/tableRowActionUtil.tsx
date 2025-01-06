@@ -1,19 +1,27 @@
-import { Box } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import { ColumnDef } from '@/components/elements/table/types';
-import { clientBriefName, entryExitRange } from '@/modules/hmis/hmisUtil';
+import { generateAssessmentPath } from '@/modules/assessments/util';
+import {
+  assessmentDescription,
+  clientBriefName,
+  entryExitRange,
+  parseAndFormatDate,
+} from '@/modules/hmis/hmisUtil';
+import { ServiceFields } from '@/modules/services/components/ProjectServicesTable';
+import { getServiceTypeForDisplay } from '@/modules/services/serviceColumns';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
 } from '@/routes/routes';
-import { ClientNameFragment, EnrollmentFieldsFragment } from '@/types/gqlTypes';
+import {
+  AssessmentFieldsFragment,
+  ClientNameFragment,
+  EnrollmentFieldsFragment,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-// TODO(#6761) - enforce header-less columns always have accessible text in GenericTable
 export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
-  header: <Box sx={visuallyHidden}>Actions</Box>,
   key: 'Actions',
-  tableCellProps: { sx: { p: 0 } },
+  tableCellProps: { sx: { py: 0 } },
   render: '', // gets overridden when used
 };
 
@@ -39,6 +47,41 @@ export const getViewEnrollmentMenuItem = (
     to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
       clientId: client.id,
       enrollmentId: enrollment.id,
+    }),
+  };
+};
+
+export const getViewAssessmentMenuItem = (
+  assessment: AssessmentFieldsFragment,
+  clientId: string,
+  enrollmentId: string,
+  individualViewOnly?: boolean
+) => {
+  return {
+    title: 'View Assessment',
+    key: 'assessment',
+    ariaLabel: `View Assessment, ${assessmentDescription(assessment)}`,
+    to: generateAssessmentPath(
+      assessment,
+      clientId,
+      enrollmentId,
+      individualViewOnly
+    ),
+  };
+};
+
+export const getViewServiceMenuItem = (
+  service: Pick<ServiceFields, 'serviceType' | 'dateProvided'>,
+  enrollmentId: string,
+  clientId: string
+) => {
+  return {
+    title: 'View Service',
+    key: 'service',
+    ariaLabel: `View Service, ${getServiceTypeForDisplay(service.serviceType)} on ${parseAndFormatDate(service.dateProvided)}`,
+    to: generateSafePath(EnrollmentDashboardRoutes.SERVICES, {
+      clientId: clientId,
+      enrollmentId: enrollmentId,
     }),
   };
 };

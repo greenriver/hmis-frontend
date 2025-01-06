@@ -15,7 +15,6 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
@@ -81,17 +80,6 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       <EnrollmentStatus enrollment={hc.enrollment} />
     ),
   },
-  entryDate: {
-    header: 'Entry Date',
-    render: (hc: HouseholdClientFieldsFragment) =>
-      parseAndFormatDate(hc.enrollment.entryDate),
-  },
-  exitDate: (householdMembers: HouseholdClientFieldsFragment[]) => ({
-    header: 'Exit Date',
-    hide: !householdMembers.some((m) => m.enrollment.exitDate),
-    render: (hc: HouseholdClientFieldsFragment) =>
-      parseAndFormatDate(hc.enrollment.exitDate),
-  }),
   relationshipToHoh: {
     header: 'Relationship to HoH',
     render: (hc: HouseholdClientFieldsFragment) => (
@@ -122,25 +110,6 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     ),
   },
   mciIds: externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
-  // {
-  //   header: 'Enrollment Period',
-  //   key: 'enrollment_period',
-  //   render: ({ enrollment }: HouseholdClientFieldsFragment) => (
-  //     <EnrollmentDateRangeWithStatus enrollment={enrollment} />
-  //   ),
-  // },
-  // {
-  //   header: 'Destination',
-  //   key: 'exit_destination',
-  //   hide: !some(householdMembers, (m) => m.enrollment.exitDestination),
-  //   render: (hc: HouseholdClientFieldsFragment) => null,
-  // },
-  // {
-  //   header: 'Move in Date',
-  //   key: 'move_in_date',
-  //   // hide: !some(householdMembers, (m) => m.enrollment.moveInDate),
-  //   render: (hc: HouseholdClientFieldsFragment) => null,
-  // },
 };
 
 /**

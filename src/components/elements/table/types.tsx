@@ -1,16 +1,12 @@
 import { TableCellProps } from '@mui/material';
-import { ReactNode } from 'react';
 
 export type AttributeName<T> = keyof T;
 export type RenderFunction<T> = (value: T) => React.ReactNode;
 
-export interface ColumnDef<T> {
-  header?: string | ReactNode;
+type BaseColumnDef<T> = {
   render: AttributeName<T> | RenderFunction<T>;
   width?: string;
   minWidth?: string;
-  // unique key for element. if not provided, header is used.
-  key?: string;
   // whether to hide this column
   hide?: boolean;
   // whether to show link treatment for this cell. rowLinkTo must be provided.
@@ -23,7 +19,20 @@ export interface ColumnDef<T> {
   tableCellProps?: TableCellProps;
   optional?: boolean;
   defaultHidden?: boolean;
-}
+};
+
+export type ColumnDef<T> =
+  | (BaseColumnDef<T> & {
+      // Header is the text to display in the header cell for this column. It's optional (see below)
+      header: string | React.ReactNode;
+      // key is an optional unique key for this column. If not provided, header is used.
+      key?: string;
+    })
+  | (BaseColumnDef<T> & {
+      // If header is not provided, then key is required
+      header?: never;
+      key: string;
+    });
 
 export function isPrimitive<T>(value: any): value is AttributeName<T> {
   return (

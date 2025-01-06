@@ -13,6 +13,7 @@ import { To } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
 import { MoreMenuIcon } from './SemanticIcons';
+import { LocationState } from '@/routes/routeUtil';
 
 export type CommonMenuItem = {
   key: string;
@@ -22,6 +23,7 @@ export type CommonMenuItem = {
   divider?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
+  linkState?: LocationState;
   openInNew?: boolean;
 };
 

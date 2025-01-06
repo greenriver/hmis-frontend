@@ -17,6 +17,7 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import { compact, get, includes, isNil, without } from 'lodash-es';
 import {
   ComponentType,
@@ -40,13 +41,11 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
-import { LocationState } from '@/routes/routeUtil';
 
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
   rowLinkTo?: (row: T) => To | null | undefined;
-  rowLinkState?: LocationState;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
@@ -71,7 +70,6 @@ export interface Props<T> {
   noData?: ReactNode;
   // columnKeys contains the keys of columns currently rendered, so renderRow knows about which optional columns are shown/hidden.
   renderRow?: (row: T, columnKeys: string[]) => ReactNode;
-  condensed?: boolean;
   // TableBodyComponent can be overridden. This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
   TableBodyComponent?: ComponentType | keyof JSX.IntrinsicElements;
   belowRowsContent?: ReactNode; // component to insert below all rendered rows, above footer
@@ -141,8 +139,6 @@ const GenericTable = <T extends { id: string }>({
   renderRow,
   noData = 'No data',
   loadingVariant = 'circular',
-  condensed = false,
-  rowLinkState,
   TableBodyComponent = TableBody,
   belowRowsContent,
 }: Props<T>) => {
@@ -247,7 +243,12 @@ const GenericTable = <T extends { id: string }>({
                 width: def.width,
               }}
             >
-              <strong>{def.header}</strong>
+              {def.header ? (
+                <strong>{def.header}</strong>
+              ) : (
+                // If header isn't provided, add a visually hidden header with the column key for accessibility
+                <Box sx={visuallyHidden}>{def.key}</Box>
+              )}
             </HeaderCell>
           ))}
         </TableRow>
@@ -423,7 +424,6 @@ const GenericTable = <T extends { id: string }>({
                           {isLinked ? (
                             <RouterLink
                               to={rowLink}
-                              state={rowLinkState}
                               aria-label={ariaLabel && ariaLabel(row)}
                               plain={!linkTreatment}
                               data-testid={linkTreatment && 'table-linkedCell'}
@@ -443,7 +443,7 @@ const GenericTable = <T extends { id: string }>({
                                   height: '100%',
                                   alignItems: 'center',
                                   px: 2,
-                                  py: condensed ? 1 : 2,
+                                  py: 2,
                                 }}
                               >
                                 {renderCellContents(row, render)}

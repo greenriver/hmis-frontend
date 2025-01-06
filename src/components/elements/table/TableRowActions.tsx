@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import ButtonLink from '../ButtonLink';
 import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
@@ -23,15 +23,32 @@ const TableRowActions = <T extends { id: string }>({
 }: TableRowActionsProps<T>) => {
   return (
     <Stack direction='row' alignItems='center' justifyContent='end' gap={0.5}>
-      {!!primaryActionConfig && (
+      {!!primaryActionConfig && primaryActionConfig.to && (
         <ButtonLink
           to={primaryActionConfig.to || ''}
           size='small'
           variant='outlined'
-          aria-label={primaryActionConfig.ariaLabel}
+          aria-label={
+            primaryActionConfig.ariaLabel ||
+            `${primaryActionConfig.title}, ${recordName}`
+          }
+          state={primaryActionConfig.linkState}
         >
           {primaryActionConfig.title}
         </ButtonLink>
+      )}
+      {!!primaryActionConfig && primaryActionConfig.onClick && (
+        <Button
+          onClick={primaryActionConfig.onClick}
+          size='small'
+          variant='outlined'
+          aria-label={
+            primaryActionConfig.ariaLabel ||
+            `${primaryActionConfig.title}, ${recordName}`
+          }
+        >
+          {primaryActionConfig.title}
+        </Button>
       )}
       {primaryAction}
       {!!secondaryActionConfigs && secondaryActionConfigs.length > 0 && (

@@ -1,7 +1,10 @@
 import { Chip } from '@mui/material';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { getServiceTypeForDisplay } from '@/modules/services/serviceColumns';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetServiceTypesDocument,
@@ -11,11 +14,10 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
+const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
   {
     header: 'Service Name',
     render: 'name',
-    linkTreatment: true,
   },
   {
     header: 'Service Category',
@@ -40,6 +42,22 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
         <Chip size='small' label='Supports Bulk Assignment' />
       ) : null,
   },
+  {
+    ...BASE_ACTION_COLUMN_DEF,
+    render: (row: ServiceTypeConfigFieldsFragment) => (
+      <TableRowActions
+        record={row}
+        recordName={getServiceTypeForDisplay(row)}
+        primaryActionConfig={{
+          title: 'View Service Type',
+          key: 'service type',
+          to: generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
+            serviceTypeId: row.id,
+          }),
+        }}
+      />
+    ),
+  },
 ];
 
 const ServiceTypeTable = () => {
@@ -57,17 +75,12 @@ const ServiceTypeTable = () => {
       >
         queryVariables={{}}
         queryDocument={GetServiceTypesDocument}
-        columns={columns}
+        columns={COLUMNS}
         pagePath='serviceTypes'
         noData='No service types'
         filters={filters}
         recordType='ServiceType'
         paginationItemName='service type'
-        rowLinkTo={(row) =>
-          generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
-            serviceTypeId: row.id,
-          })
-        }
       />
     </>
   );

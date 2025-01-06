@@ -2,8 +2,13 @@ import { Box, Paper } from '@mui/material';
 import { Meta, StoryFn } from '@storybook/react';
 
 import GenericTable, { Props as GenericTableProps } from './GenericTable';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
-import { getCustomDataElementColumns } from '@/modules/hmis/hmisUtil';
+import {
+  clientBriefName,
+  getCustomDataElementColumns,
+} from '@/modules/hmis/hmisUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
@@ -30,7 +35,6 @@ const Template =
   );
 
 const clientColumns = [
-  CLIENT_COLUMNS.id,
   CLIENT_COLUMNS.first,
   CLIENT_COLUMNS.last,
   CLIENT_COLUMNS.ssn,
@@ -136,8 +140,37 @@ const rowsWithCdes = [
 WithCustomDataElements.args = {
   rows: rowsWithCdes,
   columns: [
-    CLIENT_COLUMNS.id,
     CLIENT_COLUMNS.name,
     ...getCustomDataElementColumns<RowType>(rowsWithCdes),
+  ],
+};
+
+export const WithTableRowActions = Template<RowType>().bind({});
+WithTableRowActions.args = {
+  rows: fakeRows,
+  columns: [
+    CLIENT_COLUMNS.name,
+    {
+      ...BASE_ACTION_COLUMN_DEF,
+      render: (record) => (
+        <TableRowActions
+          record={record}
+          recordName={clientBriefName(record)}
+          primaryActionConfig={{
+            title: 'Do something in-app',
+            key: 'onClick',
+            onClick: () =>
+              alert(`Hello, ${clientBriefName(record)} ${record.id}`),
+          }}
+          secondaryActionConfigs={[
+            {
+              title: 'Navigate to a link',
+              key: 'link',
+              to: 'https://storybook.js.org/docs', // just link somewhere random to show `to` prop working
+            },
+          ]}
+        />
+      ),
+    },
   ],
 };
