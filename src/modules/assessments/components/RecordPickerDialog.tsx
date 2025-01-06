@@ -137,7 +137,6 @@ const RecordPickerDialog = ({
           columns={columns}
           nonTablePagination
           vertical
-          verticalHiddenHeader={'Assessment attributes'}
           fullHeight
           tableProps={{
             size: 'small',

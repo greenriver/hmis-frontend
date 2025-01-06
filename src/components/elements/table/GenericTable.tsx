@@ -81,9 +81,8 @@ const clickableRowStyles = {
   cursor: 'pointer',
 };
 
-const HeaderCell = ({ children, sx, padding, ...rest }: TableCellProps) => (
+const HeaderCell = ({ children, sx, ...rest }: TableCellProps) => (
   <TableCell
-    padding={padding}
     sx={{
       borderBottomColor: 'borders.dark',
       borderBottomWidth: 2,
