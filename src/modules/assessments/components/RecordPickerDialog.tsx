@@ -1,9 +1,10 @@
-import { Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { visuallyHidden } from '@mui/utils';
 import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
@@ -16,7 +17,10 @@ import {
   getFieldOnAssessment,
   getPopulatableChildren,
 } from '@/modules/form/util/formUtil';
-import { assessmentColumns } from '@/modules/form/util/recordPickerUtil';
+import {
+  ASSESSMENT_COLUMNS,
+  assessmentColumns,
+} from '@/modules/form/util/recordPickerUtil';
 import HmisField from '@/modules/hmis/components/HmisField';
 import { AssessmentRole, FormItem, FormRole } from '@/types/gqlTypes';
 
@@ -40,10 +44,28 @@ const RecordPickerDialog = ({
   clientId,
   ...other
 }: Props) => {
+  const actionColumnDef: ColumnDef<AssessmentForPopulation> = useMemo(() => {
+    return {
+      key: 'Action',
+      render: (record: AssessmentForPopulation) => (
+        <Button
+          onClick={() => onSelected(record)}
+          variant='outlined'
+          size='small'
+          sx={{ backgroundColor: 'white' }}
+          fullWidth
+          aria-label={`Select record from ${record.assessmentDate}`}
+        >
+          Select
+        </Button>
+      ),
+    };
+  }, [onSelected]);
+
   const columns: ColumnDef<AssessmentForPopulation>[] = useMemo(() => {
     // If no item was passed, that means we're pre-filling the entire assessment.
     // Only metadata columns are shown in that case.
-    if (!item) return assessmentColumns;
+    if (!item) return [...assessmentColumns, actionColumnDef];
 
     // Select additional fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item)
@@ -69,8 +91,8 @@ const RecordPickerDialog = ({
           );
         },
       }));
-    return [...assessmentColumns, ...dataColumns];
-  }, [item]);
+    return [...assessmentColumns, ...dataColumns, actionColumnDef];
+  }, [actionColumnDef, item]);
 
   const hudRoles = [
     AssessmentRole.Intake,
@@ -115,6 +137,7 @@ const RecordPickerDialog = ({
           columns={columns}
           nonTablePagination
           vertical
+          verticalHiddenHeader={'Assessment attributes'}
           fullHeight
           tableProps={{
             size: 'small',
@@ -123,7 +146,11 @@ const RecordPickerDialog = ({
           }}
           renderVerticalHeaderCell={(record) => {
             return (
-              <Stack spacing={2} sx={{ py: 1 }}>
+              <>
+                <Box sx={visuallyHidden}>
+                  {/* Additional visually hidden info about this assessment to help with accessibility when navigating the table */}
+                  {ASSESSMENT_COLUMNS.CollectionStage.render(record)}
+                </Box>
                 <RelativeDate
                   dateString={record.assessmentDate}
                   dateUpdated={record.dateUpdated || undefined}
@@ -133,17 +160,7 @@ const RecordPickerDialog = ({
                   withTooltip
                   prefix='Assessment Date: '
                 />
-                <Button
-                  onClick={() => onSelected(record)}
-                  variant='outlined'
-                  size='small'
-                  sx={{ backgroundColor: 'white' }}
-                  fullWidth
-                  aria-label={`Select record from ${record.assessmentDate}`}
-                >
-                  Select
-                </Button>
-              </Stack>
+              </>
             );
           }}
         />
