@@ -29,7 +29,7 @@ interface Props extends TypographyProps {
 const HmisEnum = ({ value, enumMap, noData, ...props }: Props) => {
   const [label, color] = getLabelAndColor(enumMap, value);
   return (
-    <Typography variant='body2' color={color} {...props}>
+    <Typography variant='body2' color={color} component='span' {...props}>
       {label || noData}
     </Typography>
   );
