@@ -80,6 +80,7 @@ export const getLabel = (
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
+  handlers,
   value: formValue,
   disabled = false,
   horizontal = false,
@@ -179,12 +180,15 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   const placeholder = placeholderText(item);
 
   if (item.component === Component.Mci) {
+    if (!handlers) throw new Error('MCI field missing required handlers');
+
     return (
       <MciClearance
         value={value}
         onChange={onChangeValue}
         {...commonInputProps}
         disabled={false}
+        handlers={handlers}
       />
     );
   }

@@ -3,6 +3,7 @@ import { Alert, AlertTitle, Box, lighten, Stack } from '@mui/material';
 import { find, isEqual, pick, transform } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useWatch } from 'react-hook-form';
 import { ClearanceState, ClearanceStatus } from '../types';
 
 import { NEW_MCI_STRING } from '../util';
@@ -20,10 +21,9 @@ import usePrevious from '@/hooks/usePrevious';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
-import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
-import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
 import {
   DobDataQuality,
+  ExternalIdentifier,
   MciClearanceInput,
   NameDataQuality,
   useClearMciMutation,
@@ -296,23 +296,39 @@ const MciClearanceWrapper = ({
  * Wrapper to show existing MCI ID if client already has one.
  */
 const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
-  const { getValues, definition } = useDynamicFormContext();
+  const { getValuesForSubmit, methods } = props.handlers;
+  const { getValues } = methods;
 
-  // currentMciAttributes gets re-calculated any time one of the dependent values changes (because of enableWhen dependency)
-  const [clientId, externalIds, currentMciAttributes] = useMemo(() => {
-    if (!getValues || !definition) return [];
-    const values = getValues();
-    let byKey = createHudValuesForSubmit(values, definition);
+  // watch specific form fields.
+  // FIXME: I suspect that this should translate MCI_CLEARANCE_FIELDS into form fields instead of hard-coding them
+  const fields = [
+    'names[0].first',
+    'names[0].last',
+    'names[0].nameDataQuality',
+    'dob',
+    'dob_dq',
+  ];
+  const valueSignature = Object.values(
+    useWatch({ control: methods.control, name: fields })
+  ).join(',');
+
+  const values = useMemo(() => getValues(), [getValues]);
+  const clientId = values.client_id;
+  const externalIds: ExternalIdentifier[] = values.current_mci_id;
+
+  const [currentMciAttributes] = useMemo(() => {
+    let byKey = getValuesForSubmit().valuesByFieldName;
     byKey = transform(
       byKey,
       (result, v, k) => (result[k.replace('Client.', '')] = v)
     );
-
     const mciFields = pick(byKey, MCI_CLEARANCE_FIELDS);
+
     // Check Link ID 'current_mci_id' in values to see if we already have an MCI ID
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    return [byKey.id, values['current_mci_id'], mciFields];
-  }, [getValues, definition]);
+    return [mciFields, valueSignature]; // return valueSignature to make the dependency linter happy
+  }, [getValuesForSubmit, valueSignature]);
+
+  // console.info('mci values', {clientId, externalIds, currentMciAttributes})
 
   const previousMciAttributes = usePrevious(currentMciAttributes);
 
@@ -323,8 +339,6 @@ const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
     const changed = !isEqual(currentMciAttributes, previousMciAttributes);
     if (changed) setHasChanged(true);
   }, [currentMciAttributes, previousMciAttributes]);
-
-  if (!getValues) return null;
 
   // If client already has an MCI ID, just show that.
   // Post-MVP: allow re-clear

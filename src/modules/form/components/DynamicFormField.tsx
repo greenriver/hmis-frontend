@@ -222,6 +222,7 @@ const DynamicFormField: React.FC<Props> = ({
           {(value) => (
             <DynamicField
               value={value}
+              handlers={handlers}
               key={item.linkId}
               item={item}
               itemChanged={itemChanged}

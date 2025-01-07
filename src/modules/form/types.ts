@@ -3,6 +3,7 @@ import { isNil, isObject } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import { RegisterOptions } from 'react-hook-form';
+import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHandlers';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormItem,
@@ -47,6 +48,7 @@ export type PickListArgs = {
 export interface DynamicFieldProps {
   item: FormItem;
   itemChanged: ItemChangedFn;
+  handlers?: FormDefinitionHandlers;
   value: any;
   disabled?: boolean;
   errors?: ValidationError[];
