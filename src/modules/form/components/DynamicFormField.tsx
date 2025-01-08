@@ -35,8 +35,6 @@ export const renderItemWithWrappers = (
 ) => {
   const { disabledDependencyMap, autofillInvertedDependencyMap } = handlers;
 
-  if (item.hidden) return null;
-
   const hasDependencies =
     disabledDependencyMap[item.linkId] ||
     !isEmpty(item.enableWhen) ||
@@ -128,6 +126,8 @@ const DynamicFormField: React.FC<Props> = ({
 
   const renderChild = useCallback(
     (isDisabled?: boolean) => {
+      if (item.hidden) return null;
+
       if (item.type === ItemType.Group) {
         const group = (
           <DynamicGroup
