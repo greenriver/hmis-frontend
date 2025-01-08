@@ -17,7 +17,7 @@ const SkipToContent: React.FC<SkipToContentProps> = ({
       if (!container.hasAttribute('tabindex')) {
         container.setAttribute('tabindex', '-1');
       }
-      container.focus();
+      container.focus({ preventScroll: true });
     }
   };
 
