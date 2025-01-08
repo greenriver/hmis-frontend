@@ -1546,7 +1546,7 @@ export const getFormStepperItems = (
   localConstants: LocalConstants,
   minGroupsToDisplay: number = 3
 ) => {
-  if (!formDefinition || !itemMap) return false;
+  if (!formDefinition || !itemMap) return undefined;
 
   let items = formDefinition.definition.item.filter(
     (i) => i.type === ItemType.Group && !i.hidden
@@ -1561,7 +1561,7 @@ export const getFormStepperItems = (
       localConstants: localConstants || {},
     })
   );
-  if (items.length < minGroupsToDisplay) return false;
+  if (items.length < minGroupsToDisplay) return undefined;
 
   return items;
 };
