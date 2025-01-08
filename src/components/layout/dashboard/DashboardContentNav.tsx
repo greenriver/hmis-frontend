@@ -18,13 +18,16 @@ interface Props {
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
   label?: string;
+  skipNavFocusTargetId: string;
 }
 
 const CloseMenuRow = ({
   onClose,
   label,
+  skipNavFocusTargetId,
 }: {
   onClose: VoidFunction;
+  skipNavFocusTargetId: string;
   label?: string;
 }) => (
   <Stack
@@ -47,7 +50,7 @@ const CloseMenuRow = ({
     ) : (
       <Box />
     )}
-    <SkipToContentButton focusTargetId='focusable-main' />
+    <SkipToContentButton focusTargetId={skipNavFocusTargetId} />
     <Button
       variant='text'
       color='grayscale'
@@ -67,6 +70,7 @@ const DashboardContentNav: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   label,
+  skipNavFocusTargetId,
 }) => {
   const headerHeight = `${STICKY_BAR_HEIGHT}px`;
   const height = `calc(100vh - ${headerHeight})`;
@@ -112,7 +116,11 @@ const DashboardContentNav: React.FC<Props> = ({
         })}
       >
         <Box component='nav' aria-label='sidebar-nav'>
-          <CloseMenuRow onClose={handleCloseDesktopMenu} label={label} />
+          <CloseMenuRow
+            onClose={handleCloseDesktopMenu}
+            label={label}
+            skipNavFocusTargetId={skipNavFocusTargetId}
+          />
           <Box
             sx={{
               pl: 3,
