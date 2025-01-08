@@ -26,6 +26,7 @@ const FormNavigationContainer = ({
   children,
 }: FormNavigationProps) => {
   const isTiny = useIsMobile('sm');
+  const focusTargetId = 'focusable-form';
 
   return (
     <Grid container spacing={4} sx={{ pb: 20, mt: 0 }}>
@@ -54,7 +55,7 @@ const FormNavigationContainer = ({
             <Stack gap={2}>
               <Typography variant='body2'>{navTitle}</Typography>
               <Divider sx={{ mx: -2 }} />
-              <SkipToContentButton focusTargetId='focusable-form' />
+              <SkipToContentButton focusTargetId={focusTargetId} />
               <FormStepper
                 items={navItems}
                 scrollOffset={navScrollOffset}
@@ -72,7 +73,7 @@ const FormNavigationContainer = ({
       )}
 
       <Grid
-        id='focusable-form'
+        id={focusTargetId}
         item
         xs={12}
         sm={!!navItems ? 8 : 12}
