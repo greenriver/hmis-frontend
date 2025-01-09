@@ -1,5 +1,5 @@
 import UnlockIcon from '@mui/icons-material/Lock';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -24,7 +24,7 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
-import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
+import AssessmentFormActions from '@/modules/assessments/components/AssessmentFormActions';
 import AssessmentHistoryInfo from '@/modules/assessments/components/AssessmentHistory';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 
@@ -35,6 +35,7 @@ import DynamicForm, {
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import FormActions from '@/modules/form/components/FormActions';
+import FormNavigationContainer from '@/modules/form/components/FormNavigationContainer';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
@@ -305,40 +306,53 @@ const AssessmentForm: React.FC<Props> = ({
   const isCustomAssessment = definition.role === FormRole.CustomAssessment;
   const showAutofill = !isCustomAssessment && !assessment && canEdit;
 
-  const titleNode = (
-    <AssessmentTitle
-      assessmentTitle={definition.title}
-      clientName={clientBriefName(client)}
-      clientId={client.id}
-      projectName={enrollment.project.projectName}
-      enrollmentId={enrollment.id}
-      entryDate={enrollment.entryDate}
-      exitDate={enrollment.exitDate}
-    />
+  const titleNode = useMemo(
+    () => (
+      <AssessmentTitle
+        assessmentTitle={definition.title}
+        clientName={clientBriefName(client)}
+        clientId={client.id}
+        projectName={enrollment.project.projectName}
+        enrollmentId={enrollment.id}
+        entryDate={enrollment.entryDate}
+        exitDate={enrollment.exitDate}
+      />
+    ),
+    [
+      client,
+      definition.title,
+      enrollment.entryDate,
+      enrollment.exitDate,
+      enrollment.id,
+      enrollment.project.projectName,
+    ]
   );
 
-  const navigation = (
-    <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
-      <AssessmentFormSideBar
+  const formActionsNode = useMemo(
+    () => (
+      <AssessmentFormActions
         enrollment={enrollment}
-        definition={definition}
         assessment={assessment}
         isPrintView={isPrintView}
         locked={locked}
-        embeddedInWorkflow={embeddedInWorkflow}
         showAutofill={showAutofill}
         onAutofill={() => setDialogOpen(true)}
-        top={top}
       />
-    </Grid>
+    ),
+    [assessment, enrollment, isPrintView, locked, showAutofill]
   );
 
   const showNavigation = !isPrintView && !isMobile;
 
   return (
-    <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-      {showNavigation && navigation}
-      <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
+    <>
+      <FormNavigationContainer
+        navTitle={'Assessment Sections'}
+        navItems={showNavigation ? definition.definition.item : undefined}
+        navScrollOffset={top}
+        useUrlHash={!embeddedInWorkflow}
+        contentsBelowNavigation={formActionsNode}
+      >
         <Stack sx={{ mb: 1 }} gap={1}>
           {titleNode}
           {locked && (
@@ -422,26 +436,24 @@ const AssessmentForm: React.FC<Props> = ({
             warnIfEmpty={!!assessment || hasAnyValue(errors)}
           />
         )}
-      </Grid>
+      </FormNavigationContainer>
 
       {/* Dialog for selecting autofill record */}
-      {definition && (
-        <RecordPickerDialog
-          id='assessmentPickerDialog'
-          clientId={client.id}
-          open={dialogOpen}
-          role={definition.role}
-          onSelected={onSelectAutofillRecord}
-          onCancel={() => setDialogOpen(false)}
-          description={
-            <Typography variant='body2' sx={{ my: 2 }}>
-              Select a previous assessment to populate the current assessment.
-              Any changes you have made will be overwritten.
-            </Typography>
-          }
-        />
-      )}
-    </Grid>
+      <RecordPickerDialog
+        id='assessmentPickerDialog'
+        clientId={client.id}
+        open={dialogOpen}
+        role={definition.role}
+        onSelected={onSelectAutofillRecord}
+        onCancel={() => setDialogOpen(false)}
+        description={
+          <Typography variant='body2' sx={{ my: 2 }}>
+            Select a previous assessment to populate the current assessment. Any
+            changes you have made will be overwritten.
+          </Typography>
+        }
+      />
+    </>
   );
 };
 
