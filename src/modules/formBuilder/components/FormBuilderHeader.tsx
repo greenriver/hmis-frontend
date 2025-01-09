@@ -134,7 +134,7 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
               </Stack>
             }
             onlyIcon
-          ></DeleteMutationButton>
+          />
         </Stack>
       </Stack>
     </>
