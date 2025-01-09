@@ -134,6 +134,7 @@ const DynamicFormWithHandlers = forwardRef<
     definition,
     initialValues,
     localConstants,
+    errors: props.errors.errors,
   });
 
   return (
