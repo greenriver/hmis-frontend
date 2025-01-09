@@ -2,6 +2,7 @@ import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
+import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
@@ -65,12 +66,13 @@ const EnrollmentQuickActions = ({
 
         {/* Edit Client details */}
         {canEditClient && (
-          <Button
-            onClick={clientLoading ? undefined : openClientFormDialog}
+          <ClientForceRefetchButton
+            clientId={enrollment.client.id}
             variant='outlined'
+            onClick={clientLoading ? undefined : openClientFormDialog}
           >
             Update Client Details
-          </Button>
+          </ClientForceRefetchButton>
         )}
 
         {/* View ESG Funding Report */}

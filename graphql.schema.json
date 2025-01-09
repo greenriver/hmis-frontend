@@ -4927,7 +4927,7 @@
           },
           {
             "name": "hudChronic",
-            "description": null,
+            "description": "Meets the definition for HUD chronically homeless as of today (time of API request)",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -13329,8 +13329,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Deprecated in favor of signed_blob_id"
           },
           {
             "name": "filename",
@@ -20591,8 +20591,8 @@
               "name": "ID",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Removing unused blob ID"
           },
           {
             "name": "id",
