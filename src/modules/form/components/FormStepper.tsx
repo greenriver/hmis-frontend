@@ -9,10 +9,10 @@ import { FormItem } from '@/types/gqlTypes';
 
 export interface Props {
   items: FormItem[];
-  useUrlHash?: boolean;
+  useUrlHash: boolean;
   scrollOffset?: number;
 }
-const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
+const FormStepper = ({ items, useUrlHash, scrollOffset }: Props) => {
   const { pathname } = useLocation();
   const steps = useMemo(
     () =>
