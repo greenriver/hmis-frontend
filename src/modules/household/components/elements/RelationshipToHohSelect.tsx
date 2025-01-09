@@ -3,8 +3,9 @@ import { Typography } from '@mui/material';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { HmisEnums } from '@/types/gqlEnums';
-import { RelationshipToHoH } from '@/types/gqlTypes';
+import { PickListOption, RelationshipToHoH } from '@/types/gqlTypes';
 
 export type Option = { value: RelationshipToHoH; label: string };
 
@@ -12,21 +13,13 @@ export interface Props
   extends Omit<GenericSelectProps<Option, false, false>, 'options' | 'value'> {
   value: RelationshipToHoH | null;
 }
-
-const relationshipToHohOptions = Object.entries(HmisEnums.RelationshipToHoH)
-  .filter(
-    ([k]) =>
-      // HoH is not a valid option, since it is selected using the radio buttons
-      k !== RelationshipToHoH.SelfHeadOfHousehold &&
-      // Invalid is not a valid option
-      k !== RelationshipToHoH.Invalid
-  )
-  .map(
-    ([value, label]) =>
-      ({
-        value,
-        label,
-      }) as Option
+const relationshipToHohOptions: Option[] =
+  // safe to cast because we know that RelationshipToHoH is resolvable
+  (localResolvePickList('RelationshipToHoH') as PickListOption[]).map(
+    ({ code, label }) => ({
+      value: code as RelationshipToHoH,
+      label: label as string,
+    })
   );
 
 const RelationshipToHohSelect = ({

@@ -42056,6 +42056,12 @@
             "deprecationReason": null
           },
           {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "INVALID",
             "description": "Invalid Value",
             "isDeprecated": false,

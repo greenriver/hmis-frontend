@@ -6534,6 +6534,8 @@ export enum RelatedRecordType {
 export enum RelationshipToHoH {
   /** (2) Child */
   Child = 'CHILD',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (4) Other relative */
