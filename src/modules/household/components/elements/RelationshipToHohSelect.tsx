@@ -15,12 +15,12 @@ export interface Props
 }
 const relationshipToHohOptions: Option[] =
   // safe to cast because we know that RelationshipToHoH is resolvable
-  (localResolvePickList('RelationshipToHoH') as PickListOption[]).map(
-    ({ code, label }) => ({
+  (localResolvePickList('RelationshipToHoH') as PickListOption[])
+    .filter(({ code }) => code !== RelationshipToHoH.SelfHeadOfHousehold) // Exclude HoH from option list
+    .map(({ code, label }) => ({
       value: code as RelationshipToHoH,
       label: label as string,
-    })
-  );
+    }));
 
 const RelationshipToHohSelect = ({
   disabled,
