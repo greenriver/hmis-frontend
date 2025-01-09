@@ -110,7 +110,6 @@ export const DynamicFormWithoutHandlers = forwardRef<
       [onSubmit, getValuesForSubmit, props, handlers, handleSaveDraft]
     );
 
-    // DynamicFormContext is needed for MciClearance; perhaps there's another way
     return (
       <>
         {onDirty && <DirtyObserver onDirty={onDirty} handlers={handlers} />}
