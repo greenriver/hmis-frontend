@@ -570,7 +570,8 @@ export const relationshipToHohForDisplay = (
 ) => {
   if (
     hideDataNotCollectedAndInvalid &&
-    relationship === RelationshipToHoH.Invalid
+    (relationship === RelationshipToHoH.DataNotCollected ||
+      relationship === RelationshipToHoH.Invalid)
   ) {
     return '';
   }
