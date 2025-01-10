@@ -5,7 +5,7 @@ import GenericSelect, {
 } from '@/components/elements/input/GenericSelect';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { HmisEnums } from '@/types/gqlEnums';
-import { PickListOption, RelationshipToHoH } from '@/types/gqlTypes';
+import { RelationshipToHoH } from '@/types/gqlTypes';
 
 export type Option = { value: RelationshipToHoH; label: string };
 
@@ -13,14 +13,14 @@ export interface Props
   extends Omit<GenericSelectProps<Option, false, false>, 'options' | 'value'> {
   value: RelationshipToHoH | null;
 }
-const relationshipToHohOptions: Option[] =
-  // safe to cast because we know that RelationshipToHoH is resolvable
-  (localResolvePickList('RelationshipToHoH') as PickListOption[])
-    .filter(({ code }) => code !== RelationshipToHoH.SelfHeadOfHousehold) // Exclude HoH from option list
-    .map(({ code, label }) => ({
-      value: code as RelationshipToHoH,
-      label: label as string,
-    }));
+const relationshipToHohOptions: Option[] = (
+  localResolvePickList('RelationshipToHoH') || []
+)
+  .filter(({ code }) => code !== RelationshipToHoH.SelfHeadOfHousehold) // Exclude HoH from option list
+  .map(({ code, label }) => ({
+    value: code as RelationshipToHoH,
+    label: label as string,
+  }));
 
 const RelationshipToHohSelect = ({
   disabled,
