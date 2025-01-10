@@ -72,7 +72,7 @@ export const MultiHmisEnum = ({
   }
 
   return (
-    <Typography variant='body2' color={color} {...props}>
+    <Typography variant='body2' component='span' color={color} {...props}>
       {label || noData}
     </Typography>
   );
