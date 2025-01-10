@@ -41,16 +41,15 @@ const RelationshipToHoHInput = ({
 
   const onChange = useMemo(
     () => (_: any, selected: Option | null) => {
+      if (!selected) return; // this should never happen because `disableClearable` is passed
       setCompleted(false);
-      setRelationship(selected ? selected.value : null);
+      setRelationship(selected.value);
       void updateRelationship({
         variables: {
           input: {
             enrollmentId,
             enrollmentLockVersion,
-            relationshipToHoH: selected
-              ? selected.value
-              : RelationshipToHoH.DataNotCollected,
+            relationshipToHoH: selected.value,
             confirmed: true, // we don't support displaying warnings in this view, so ignore them
           },
         },
@@ -68,8 +67,8 @@ const RelationshipToHoHInput = ({
       <RelationshipToHohSelect
         value={relationship || null}
         onChange={onChange}
-        showDataNotCollected
         disabled={loading}
+        disableClearable
         {...props}
       />
     </InputIndicatorContainer>
