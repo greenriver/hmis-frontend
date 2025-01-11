@@ -36,7 +36,7 @@ export interface DynamicFormSaveButtonsProps
   >;
 }
 
-const DynamicFormSaveButtons = ({
+const DynamicFormSaveButtons: React.FC<DynamicFormSaveButtonsProps> = ({
   handlers,
   onSubmit,
   onSaveDraft,
@@ -49,7 +49,7 @@ const DynamicFormSaveButtons = ({
   hideSubmit = false,
   FormActionProps = {},
   ...props
-}: DynamicFormSaveButtonsProps) => {
+}) => {
   const saveButtonsRef = React.createRef<HTMLDivElement>();
   const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
 
@@ -58,43 +58,41 @@ const DynamicFormSaveButtons = ({
 
   const actionProps = { ...props, ...FormActionProps };
 
-  // TODO: Handle save draft
+  const handleSubmit = handlers.methods.handleSubmit;
+  const { getValuesForSubmit } = handlers;
+
+  const doSubmit = useCallback(
+    (confirmed: boolean) => {
+      return handleSubmit(() => {
+        onSubmit({
+          ...getValuesForSubmit(),
+          confirmed,
+        });
+      })();
+    },
+    [getValuesForSubmit, handleSubmit, onSubmit]
+  );
+
+  const handleUnconfirmedSubmit = useCallback(
+    () => doSubmit(false),
+    [doSubmit]
+  );
+  const handleConfirmedSubmit = useCallback(() => doSubmit(true), [doSubmit]);
   const handleSaveDraft = useCallback(() => {
     if (!onSaveDraft) return;
-    onSaveDraft(handlers.getValues());
-  }, [onSaveDraft, handlers]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleSubmit = useCallback(
-    handlers.methods.handleSubmit((values, event) => {
-      onSubmit({
-        ...handlers.getValuesForSubmit(),
-        confirmed: false,
-        event: event?.nativeEvent as React.MouseEvent<HTMLButtonElement>,
+    return handleSubmit(() => {
+      onSaveDraft({
+        ...getValuesForSubmit(),
       });
-    }),
-    [onSubmit, handlers.getValues]
-  );
-
-  const handleConfirm = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      onSubmit({
-        // values: handlers.getValues(),
-        ...handlers.getValuesForSubmit(),
-        confirmed: true,
-        event,
-      });
-    },
-    [onSubmit, handlers]
-  );
+    })();
+  }, [getValuesForSubmit, handleSubmit, onSaveDraft]);
 
   const { renderValidationDialog, validationDialogVisible } =
     useValidationDialog({ errorState });
 
   const saveButtons = (
     <FormActions
-      onSubmit={handleSubmit}
+      onSubmit={handleUnconfirmedSubmit}
       onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
       disabled={locked || !!loading || validationDialogVisible}
       loading={loading}
@@ -110,7 +108,7 @@ const DynamicFormSaveButtons = ({
         </Box>
       )}
       {renderValidationDialog({
-        onConfirm: handleConfirm,
+        onConfirm: handleConfirmedSubmit,
         loading: loading || false,
         confirmText: actionProps?.submitButtonText || 'Confirm',
         ...ValidationDialogProps,

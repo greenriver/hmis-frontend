@@ -2,18 +2,14 @@ import React, { ReactNode } from 'react';
 
 import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 
-export interface DynamicFormContainerProps {
+interface Props {
   children: ReactNode;
 }
 
-const DynamicFormContainer = ({ children }: DynamicFormContainerProps) => {
+const noOpSubmit = (e: React.FormEvent<HTMLFormElement>) => e.preventDefault();
+const DynamicFormContainer: React.FC<Props> = (props) => {
   return (
-    <form
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
-      autoComplete={formAutoCompleteOff}
-    >
-      {children}
-    </form>
+    <form onSubmit={noOpSubmit} autoComplete={formAutoCompleteOff} {...props} />
   );
 };
 

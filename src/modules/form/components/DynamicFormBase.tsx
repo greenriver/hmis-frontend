@@ -1,4 +1,3 @@
-import { Grid } from '@mui/material';
 import { RefObject } from 'react';
 
 import DynamicFormContainer from './DynamicFormContainer';
@@ -10,7 +9,6 @@ import DynamicFormLayout from './DynamicFormLayout';
 import DynamicFormSaveButtons, {
   DynamicFormSaveButtonsProps,
 } from './DynamicFormSaveButtons';
-import { hasErrors } from '@/modules/errors/util';
 
 export interface DynamicFormBaseProps
   extends DynamicFormSaveButtonsProps,
@@ -23,15 +21,7 @@ const DynamicFormBase = ({ errorRef, ...props }: DynamicFormBaseProps) => {
   return (
     <DynamicFormContainer>
       <DynamicFormLayout
-        errors={
-          <>
-            {hasErrors(props.errors) && (
-              <Grid item>
-                <DynamicFormErrors {...props} ref={errorRef} />
-              </Grid>
-            )}
-          </>
-        }
+        errors={<DynamicFormErrors {...props} ref={errorRef} />}
         saveButtons={<DynamicFormSaveButtons {...props} />}
       >
         <DynamicFormFields {...props} />
