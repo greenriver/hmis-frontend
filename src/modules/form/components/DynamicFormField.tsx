@@ -28,6 +28,9 @@ import DynamicViewField from './viewable/DynamicViewField';
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, ItemType } from '@/types/gqlTypes';
 
+/**
+ * Wraps a form item with appropriate dependency and autofill handlers based on its configuration
+ */
 export const renderItemWithWrappers = (
   renderChild: (disabled?: boolean) => ReactNode,
   item: FormItem,
@@ -39,9 +42,11 @@ export const renderItemWithWrappers = (
     disabledDependencyMap[item.linkId] ||
     !isEmpty(item.enableWhen) ||
     item.item?.every((item) => item.enableWhen);
+
   const hasAutofill =
     autofillInvertedDependencyMap[item.linkId] || !isEmpty(item.autofillValues);
 
+  // Apply dependency and autofill wrappers as needed
   if (hasDependencies && hasAutofill) {
     return (
       <DependentFormItemWrapper handlers={handlers} item={item}>
@@ -86,6 +91,10 @@ export interface Props {
   renderFn?: (children: ReactNode) => ReactNode;
 }
 
+/**
+ * Renders form field components based on FormItem definitions, handling dependencies,
+ * autofill behavior, and conditional rendering
+ */
 const DynamicFormField: React.FC<Props> = ({
   handlers,
   clientId,
@@ -101,10 +110,12 @@ const DynamicFormField: React.FC<Props> = ({
   const values = handlers.getValues();
   const { definition, localConstants, getFieldErrors } = handlers;
 
+  // Handles changes to individual form items, converting values as needed
   const itemChanged: ItemChangedFn = useCallback(
     ({ linkId, value: baseValue, type }) => {
       const item = handlers.itemMap[linkId];
       let value = baseValue;
+      // Convert string values to appropriate number types
       if (item) {
         if (item.type === ItemType.Integer) value = parseInt(value) || 0;
         if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
@@ -115,6 +126,8 @@ const DynamicFormField: React.FC<Props> = ({
     },
     [handlers]
   );
+
+  // Handles batch changes to multiple form items
   const severalItemsChanged: SeveralItemsChangedFn = useCallback(
     ({ values, type }) => {
       Object.entries(values).forEach(([linkId, value]) =>
@@ -124,6 +137,7 @@ const DynamicFormField: React.FC<Props> = ({
     [itemChanged]
   );
 
+  // Renders the appropriate field component based on item type and configuration
   const renderChild = useCallback(
     (isDisabled?: boolean) => {
       if (item.hidden) return null;

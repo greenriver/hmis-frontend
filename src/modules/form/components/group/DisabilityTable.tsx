@@ -52,7 +52,7 @@ const DisabilityTable = ({
       ?.linkId;
   }, [item]);
 
-  // Link IDs for items that, if YES, consitute a Disabling Condition per HUD spec.
+  // Link IDs for items that, if YES, constitute a Disabling Condition per HUD spec.
   // This is highly dependent on the structure of the item group.
   const dependentLinkIds = useMemo(() => {
     if (!isValidDisabilityGroup(item))
@@ -252,7 +252,7 @@ const DisabilityTable = ({
                         cellItem,
                         idx,
                         disabilityTypeLabelId
-                        // dont pass a label because it is labelled-by the header cells
+                        // don't pass a label because it is labelled-by the header cells
                       )}
                     </TableCell>
                   ))}

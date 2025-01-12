@@ -11,6 +11,11 @@ export type ValueWrapperProps = {
   children: (value: any) => ReactNode;
 };
 
+/**
+ * Wraps form fields to isolate re-renders.
+ *
+ * It uses react-hook-form's useWatch to track field value changes and only re-render when those specific fields change.
+ */
 const ValueWrapper: React.FC<ValueWrapperProps> = ({
   handlers,
   name,
