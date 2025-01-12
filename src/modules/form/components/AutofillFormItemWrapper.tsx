@@ -11,50 +11,48 @@ export interface Props {
   handlers: FormDefinitionHandlers;
   item: FormItem;
   children: (value: any) => ReactNode;
-  getDependentLinkIds?: (item: FormItem) => string[];
 }
 
+/**
+ * A wrapper component that manages automatic field value population based on dependencies.
+ *
+ * This component handles the auto-population of form fields based on the values of other fields.
+ * It watches for changes in dependent fields and updates the wrapped field's value accordingly.
+ * The autofill behavior is skipped if the field has been manually edited by the user.
+ *
+ */
 const AutofillFormItemWrapper: React.FC<Props> = ({
   handlers,
   item,
   children,
-  getDependentLinkIds,
 }) => {
+  const linkId = getSafeLinkId(item.linkId);
+  // dependentLinkIds are referenced from the 'autofill_when' property of item
+  // example:
+  //   link_id: item.id,
+  //   autofill_values: [ { autofill_when: [{ question: dependentLinkIds[0] }] } ],
   const { autofillInvertedDependencyMap, getAutofillValueForField } = handlers;
-  const dependentLinkIds = (
-    getDependentLinkIds
-      ? getDependentLinkIds(item)
-      : autofillInvertedDependencyMap[item.linkId]
-  )?.map(getSafeLinkId);
+  const dependentLinkIds =
+    autofillInvertedDependencyMap[item.linkId].map(getSafeLinkId);
+  const { setValue, getValues, control } = handlers.methods;
 
-  // Listen for dependent field value changes
-  useWatch({
-    control: handlers.methods.control,
-    name: dependentLinkIds,
-  });
-  // Listen to see if this field is changed
-  const { isDirty } = useFormState({
-    control: handlers.methods.control,
-    name: item.linkId,
-  });
-
+  // subscribe to changes in the dependent field values
+  useWatch({ control: control, name: dependentLinkIds });
+  // not memoized, we rely on useWatch to re-render here when dependentLinkIds change
   const autofillValue = getAutofillValueForField(item);
+
+  // Listen to see if this field has been edited by the user
+  const { isDirty } = useFormState({ control: control, name: linkId });
 
   useEffect(() => {
     // Don't autofill this field if it's been edited (i.e. is dirty)
     if (isDirty) return;
 
-    const linkId = getSafeLinkId(item.linkId);
-    // Dont autofill if this is already the same value
-    if (
-      autofillValue === handlers.methods.getValues()[getSafeLinkId(item.linkId)]
-    )
-      return;
+    // Don't autofill if this is already the same value
+    if (autofillValue === getValues(linkId)) return;
 
-    handlers.methods.setValue(getSafeLinkId(linkId), autofillValue, {
-      shouldDirty: false,
-    });
-  }, [autofillValue, item, handlers.methods, isDirty]);
+    setValue(linkId, autofillValue, { shouldDirty: false });
+  }, [autofillValue, linkId, getValues, setValue, isDirty]);
 
   return <>{children(autofillValue)}</>;
 };
