@@ -1,0 +1,7 @@
+mutation JoinHouseholds($input: JoinHouseholdsInput!) {
+  joinHouseholds(input: $input) {
+    household {
+      ...HouseholdFields
+    }
+  }
+}

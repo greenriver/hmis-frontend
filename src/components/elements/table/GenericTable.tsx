@@ -60,6 +60,7 @@ export interface Props<T> {
   rowSx?: (row: T) => SxProps<Theme>;
   headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
   selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
+  selected?: readonly string[]; // can optionally be used as a controlled component
   isRowSelectable?: (row: T) => boolean;
   onChangeSelectedRowIds?: (ids: readonly string[]) => void;
   EnhancedTableToolbarProps?: Omit<
@@ -133,6 +134,7 @@ const GenericTable = <T extends { id: string }>({
   headerCellSx,
   selectable,
   isRowSelectable,
+  selected: selectedProp,
   onChangeSelectedRowIds,
   EnhancedTableToolbarProps,
   filterToolbar,
@@ -150,6 +152,11 @@ const GenericTable = <T extends { id: string }>({
 
   // initially undefined so we can early return and avoid state flicker
   const [selected, setSelected] = useState<string[]>();
+  const isSelectControlled = selectedProp !== undefined;
+  const selectedValue = useMemo(
+    () => (isSelectControlled ? selectedProp : selected || []),
+    [isSelectControlled, selected, selectedProp]
+  );
 
   const selectableRowIds = useMemo(() => {
     if (!selectable) return [];
@@ -160,29 +167,39 @@ const GenericTable = <T extends { id: string }>({
   const handleSelectAllClick = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {
-        setSelected(selectableRowIds);
+        if (!isSelectControlled) {
+          setSelected(selectableRowIds);
+        }
+
+        onChangeSelectedRowIds?.(selectableRowIds);
       } else {
-        setSelected([]);
+        if (!isSelectControlled) {
+          setSelected([]);
+        }
+
+        onChangeSelectedRowIds?.([]);
       }
     },
-    [selectableRowIds]
+    [isSelectControlled, onChangeSelectedRowIds, selectableRowIds]
   );
 
   const handleSelectRow = useCallback(
-    (row: T) =>
-      setSelected((old) => {
-        if (!old) return undefined;
-        return old.includes(row.id) ? without(old, row.id) : [...old, row.id];
-      }),
-    []
+    (row: T) => {
+      const newValue = selectedValue.includes(row.id)
+        ? without(selectedValue, row.id)
+        : [...selectedValue, row.id];
+
+      if (!isSelectControlled) {
+        setSelected(newValue);
+      }
+
+      onChangeSelectedRowIds?.(newValue);
+    },
+    [isSelectControlled, onChangeSelectedRowIds, selectedValue]
   );
 
   // Clear selection when data changes
   useEffect(() => setSelected([]), [rows]);
-
-  useEffect(() => {
-    if (selected) onChangeSelectedRowIds?.(selected);
-  }, [selected, onChangeSelectedRowIds]);
 
   // avoid state flicker due to state reset
   if (!selected) return <Loading />;
@@ -221,12 +238,12 @@ const GenericTable = <T extends { id: string }>({
               <Checkbox
                 color='primary'
                 indeterminate={
-                  selected.length > 0 &&
-                  selected.length < selectableRowIds.length
+                  selectedValue.length > 0 &&
+                  selectedValue.length < selectableRowIds.length
                 }
                 checked={
                   selectableRowIds.length > 0 &&
-                  selected.length === selectableRowIds.length
+                  selectedValue.length === selectableRowIds.length
                 }
                 disabled={selectableRowIds.length === 0}
                 onChange={handleSelectAllClick}
@@ -286,7 +303,7 @@ const GenericTable = <T extends { id: string }>({
       {EnhancedTableToolbarProps && (
         <EnhancedTableToolbar
           {...EnhancedTableToolbarProps}
-          selectedIds={selected}
+          selectedIds={selectedValue}
           rows={rows}
         />
       )}
@@ -353,7 +370,7 @@ const GenericTable = <T extends { id: string }>({
                       onClickHandler ? onClickHandler(row) : undefined
                     }
                     selected={
-                      selectable === 'row' && includes(selected, row.id)
+                      selectable === 'row' && includes(selectedValue, row.id)
                     }
                     onKeyUp={
                       !!handleRowClick
@@ -368,7 +385,7 @@ const GenericTable = <T extends { id: string }>({
                         <Checkbox
                           color='primary'
                           disabled={!isSelectable}
-                          checked={includes(selected, row.id)}
+                          checked={includes(selectedValue, row.id)}
                           inputProps={{ 'aria-label': `Select ${row.id} ` }}
                           onClick={
                             selectable === 'checkbox' && isSelectable

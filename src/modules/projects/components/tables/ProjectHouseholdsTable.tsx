@@ -38,7 +38,7 @@ export type HouseholdFields = NonNullable<
 >['households']['nodes'][number];
 
 type OneHouseholdClient = HouseholdFields['householdClients'][number];
-const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
+export const PROJECT_HOUSEHOLD_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   CLIENT_COLUMNS.name,
   CLIENT_COLUMNS.age,
   {
@@ -91,7 +91,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
 
   return (
     <TableRow key={household.id + householdClient.id}>
-      {BASE_COLUMNS.map((col, i) => (
+      {PROJECT_HOUSEHOLD_COLUMNS.map((col, i) => (
         <TableCell role={i === 0 ? 'rowheader' : undefined} sx={cellSx}>
           {renderCellContents(householdClient, col.render)}
         </TableCell>
@@ -147,7 +147,7 @@ const ProjectHouseholdsTable = ({
   // dummy column defs for Household that are only used for the headers, not for rendering cells
   const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
     return [
-      ...BASE_COLUMNS,
+      ...PROJECT_HOUSEHOLD_COLUMNS,
       ...(staffAssignmentsEnabled ? [ASSIGNED_STAFF_COL] : []),
       ACTION_COL,
     ].map(({ header, key, optional, defaultHidden }) => ({

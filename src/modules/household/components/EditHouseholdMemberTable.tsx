@@ -175,6 +175,7 @@ const EditHouseholdMemberTable = ({
         },
       },
       {
+        // todo @martha - this is interesting, maybe consolidate?
         header: <Box sx={{ pl: 4 }}>Relationship to HoH</Box>,
         width: '25%',
         key: 'relationship',

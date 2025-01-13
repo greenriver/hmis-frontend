@@ -4893,6 +4893,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canSplitHouseholds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewDob',
         type: {
           kind: 'NON_NULL',
@@ -7075,6 +7083,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
         name: 'projectType',
         type: {
           kind: 'LIST',
@@ -7389,6 +7409,60 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               ofType: null,
             },
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'JoinHouseholdsInput',
+    args: [
+      {
+        name: 'joiningEnrollmentInputs',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'INPUT_OBJECT',
+                name: 'JoiningEnrollmentInput',
+                ofType: null,
+              },
+            },
+          },
+        },
+      },
+      {
+        name: 'receivingHouseholdId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'JoiningEnrollmentInput',
+    args: [
+      {
+        name: 'enrollmentId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'relationshipToHoh',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
         },
       },
     ],

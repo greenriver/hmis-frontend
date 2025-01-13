@@ -48,6 +48,7 @@ interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
   onClose?: VoidFunction;
   localDefinition?: FormDefinitionFieldsFragment;
   projectId?: string; // Project context for fetching form definition
+  onFieldChange?: (linkId?: string, value?: any) => void;
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
@@ -59,6 +60,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   localDefinition,
   pickListArgs,
   projectId,
+  onFieldChange,
 }: Args<T>) {
   const errorRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -187,6 +189,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                     hideSubmit
                     {...props}
                     errorRef={errorRef}
+                    onFieldChange={onFieldChange}
                   />
                 </Grid>
               </Grid>
@@ -215,6 +218,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       formRole,
       initialValues,
       localConstants,
+      onFieldChange,
       onSubmit,
       pickListArgs,
       submitLoading,

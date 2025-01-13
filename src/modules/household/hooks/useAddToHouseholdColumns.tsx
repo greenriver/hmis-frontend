@@ -77,12 +77,13 @@ export default function useAddToHouseholdColumns({
               projectId={projectId}
               isMember={currentMembersMap.has(client.id)}
               onSuccess={onSuccess}
+              household={data?.household || undefined}
             />
           );
         },
       },
     ];
-  }, [currentMembersMap, householdId, projectId, onSuccess]);
+  }, [householdId, projectId, currentMembersMap, onSuccess, data?.household]);
 
   if (error) throw error;
 

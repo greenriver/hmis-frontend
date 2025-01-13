@@ -270,3 +270,10 @@ fragment EnrollmentRangeFields on Enrollment {
   exitDate
   inProgress
 }
+
+fragment EnrollmentWithHouseholdFields on Enrollment {
+  ...EnrollmentFields
+  household {
+    ...HouseholdFields
+  }
+}

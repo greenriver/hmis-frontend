@@ -79,6 +79,7 @@ export interface DynamicFormProps
   localConstants?: LocalConstants;
   errorRef?: RefObject<HTMLDivElement>;
   variant?: 'standard' | 'without_top_level_cards';
+  onFieldChange?: (linkId?: string, value?: any) => void;
 }
 export interface DynamicFormRef {
   SaveIfDirty: VoidFunction;
@@ -110,6 +111,7 @@ const DynamicForm = forwardRef(
       errorRef,
       onDirty,
       variant = 'standard',
+      onFieldChange: onFieldChangeProp,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
@@ -119,12 +121,16 @@ const DynamicForm = forwardRef(
     }, [dirty, onDirty]);
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
 
-    const onFieldChange = useCallback((type: ChangeType) => {
-      if (type === ChangeType.User) {
-        setPromptSave(true);
-        setDirty(true);
-      }
-    }, []);
+    const onFieldChange = useCallback(
+      (type: ChangeType, linkId?: string, value?: any) => {
+        onFieldChangeProp?.(linkId, value);
+        if (type === ChangeType.User) {
+          setPromptSave(true);
+          setDirty(true);
+        }
+      },
+      [onFieldChangeProp]
+    );
 
     // getValues: returns form state (used by some nested components, like MciClearance)
     // getValuesForSubmit: returns submittable form state (used for onSubmit/onSaveDraft)

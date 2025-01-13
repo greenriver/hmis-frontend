@@ -74,6 +74,31 @@ query GetClientEnrollments(
   }
 }
 
+query GetClientEnrollmentWithHousehold(
+  $id: ID!
+  $limit: Int = 1
+  $offset: Int = 0
+  $filters: EnrollmentsForClientFilterOptions
+) {
+  client(id: $id) {
+    id
+    enrollments(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      filters: $filters
+      includeEnrollmentsWithLimitedAccess: true
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentWithHouseholdFields
+      }
+    }
+  }
+}
+
 query GetClientServices(
   $id: ID!
   $limit: Int = 10
