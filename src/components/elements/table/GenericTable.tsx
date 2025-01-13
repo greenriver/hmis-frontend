@@ -80,6 +80,47 @@ const clickableRowStyles = {
   cursor: 'pointer',
 };
 
+export const getStickyCellStyles = (
+  sticky?: 'left' | 'right' | undefined
+): SxProps<Theme> => {
+  if (!sticky) return {} as SxProps<Theme>;
+
+  const base = {
+    backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
+    position: 'sticky',
+  };
+
+  // Pseudo-element to achieve a border on sticky cells. `position: sticky` doesn't work with regular border
+  const pseudo = {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: '1px',
+    backgroundColor: 'borders.light',
+    pointerEvents: 'none', // Don't interfere with interactions
+  };
+
+  if (sticky === 'right')
+    return {
+      ...base,
+      right: 0,
+      '&::before': {
+        ...pseudo,
+        left: 0,
+      },
+    } as SxProps<Theme>;
+
+  return {
+    ...base,
+    left: 0,
+    '&::after': {
+      ...pseudo,
+      right: 0,
+    },
+  } as SxProps<Theme>;
+};
+
 const HeaderCell = ({
   children,
   sx,
@@ -237,11 +278,14 @@ const GenericTable = <T extends { id: string }>({
           {columns.map((def, i) => (
             <HeaderCell
               key={key(def) || i}
-              sx={{
-                ...(headerCellSx ? headerCellSx(def) : undefined),
-                textAlign: def.textAlign,
-                width: def.width,
-              }}
+              sx={
+                {
+                  ...getStickyCellStyles(def.sticky),
+                  ...(headerCellSx ? headerCellSx(def) : {}),
+                  textAlign: def.textAlign,
+                  width: def.width,
+                } as SxProps<Theme>
+              }
             >
               {def.header ? (
                 <strong>{def.header}</strong>
@@ -411,15 +455,18 @@ const GenericTable = <T extends { id: string }>({
                         <TableCell
                           key={key(def) || index}
                           {...tableCellProps}
-                          sx={{
-                            width,
-                            minWidth,
-                            ...(isLinked ? { p: 0 } : undefined),
-                            textAlign,
-                            whiteSpace: 'initial',
-                            ...onClickLinkTreatment,
-                            ...tableCellProps?.sx,
-                          }}
+                          sx={
+                            {
+                              ...getStickyCellStyles(def.sticky),
+                              width,
+                              minWidth,
+                              ...(isLinked ? { p: 0 } : undefined),
+                              textAlign,
+                              whiteSpace: 'initial',
+                              ...onClickLinkTreatment,
+                              ...tableCellProps?.sx,
+                            } as SxProps<Theme>
+                          }
                         >
                           {isLinked ? (
                             <RouterLink

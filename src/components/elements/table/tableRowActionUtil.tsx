@@ -23,6 +23,7 @@ export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
   key: 'Actions',
   tableCellProps: { sx: { py: 0 } },
   render: '', // gets overridden when used
+  sticky: 'right',
 };
 
 export const getViewClientMenuItem = (client: ClientNameFragment) => {
