@@ -1,5 +1,5 @@
-import { compact, flattenDeep, uniq } from 'lodash-es';
-import React, { ReactNode, useMemo } from 'react';
+import { compact, flattenDeep, isNil, uniq } from 'lodash-es';
+import React, { ReactNode, useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import {
@@ -30,6 +30,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
   item,
   children,
 }) => {
+  const { linkId } = item;
   const { disabledDependencyMap, itemMap, isItemDisabled } = handlers;
 
   const childItems = useMemo(
@@ -51,7 +52,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
   const dependentLinkIds = useMemo(() => {
     const list: string[] = [
       // All of this component's dependencies
-      ...(disabledDependencyMap[item.linkId] || []),
+      ...(disabledDependencyMap[linkId] || []),
       // All of this component's children
       ...flattenDeep(
         childItems
@@ -61,7 +62,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
     ];
 
     return uniq(list.map(getSafeLinkId));
-  }, [item, childItems, disabledDependencyMap]);
+  }, [linkId, childItems, disabledDependencyMap]);
 
   // Listen for dependent field value changes
   const dependantValues = useWatch({
@@ -99,6 +100,15 @@ const DependentFormItemWrapper: React.FC<Props> = ({
     childItems,
     dependantValues,
   ]);
+
+  // If the element has become disabled, clear the value
+  const { getValues, setValue } = handlers.methods;
+  useEffect(() => {
+    if (!isDisabled) return;
+    if (isNil(getValues(linkId))) return;
+
+    setValue(linkId, null, { shouldDirty: false });
+  }, [isDisabled, getValues, linkId, setValue]);
 
   if (hidden) return null;
 

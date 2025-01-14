@@ -33,7 +33,8 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
   //   autofill_values: [ { autofill_when: [{ question: dependentLinkIds[0] }] } ],
   const { autofillInvertedDependencyMap, getAutofillValueForField } = handlers;
   const dependentLinkIds =
-    autofillInvertedDependencyMap[item.linkId].map(getSafeLinkId);
+    autofillInvertedDependencyMap[item.linkId]?.map(getSafeLinkId);
+
   const { setValue, getValues, control } = handlers.methods;
 
   // subscribe to changes in the dependent field values
