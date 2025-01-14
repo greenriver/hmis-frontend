@@ -52,7 +52,9 @@ const GenericSelect = <
       slotProps={{
         clearIndicator: {
           tabIndex: 0,
-          // In order to make the Clear Button focusable, have to disable the default MUI behavior of hiding it except on hover
+          // In order to make the Clear Button focusable, have to disable the default MUI behavior of hiding it except on hover.
+          // However, it can only be activated using Space, and not Enter.
+          // See https://github.com/mui/material-ui/issues/44936
           sx: {
             visibility: 'visible',
           },
@@ -85,15 +87,17 @@ const GenericSelect = <
       )}
       renderTags={(tagValue, getTagProps, ownerState) =>
         // Augment the accessible text so that it's clear to screenreader users how they can remove options.
-        // TODO - do we want to open an issue in MUI repo?
-        // https://github.com/open-path/hmis-accessibility/issues/37
+        // Relates to open MUI issue: https://github.com/mui/material-ui/issues/20470
         tagValue.map((option: T, index: number) => {
+          // Avoid console warning: A props object containing a "key" prop is being spread into JSX
+          const { key, ...rest } = getTagProps({ index });
           return (
             <Chip
+              key={key}
               size='small'
               label={ownerState.getOptionLabel(option)}
               aria-label={`Option: ${ownerState.getOptionLabel(option)}. Press backspace or delete to remove.`}
-              {...getTagProps({ index })}
+              {...rest}
             />
           );
         })

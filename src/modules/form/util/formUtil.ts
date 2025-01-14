@@ -115,13 +115,31 @@ export const hasMeaningfulValue = (value: any): boolean => {
   return true;
 };
 
+/**
+ * Resolves a GQL Enum name into an array of PickListOptions
+ * that can be used for selection components (dropdowns, radio buttons, etc).
+ *
+ * Optionally specify whether to include "Data Not Collected" (99) equivalent in the list,
+ * if the enum contains it.
+ *
+ * There is a special case to always exclude 99 for the RelationshipToHoH picklist,
+ * because 99 is not a valid value for collection, but we keep it in the GQL Enum
+ * because we need to treat it as a valid value for display. This is because there may
+ * be unfixable migrated-in data with 99s or nulls, and we want to display those as
+ * 'Data not collected' rather than 'Invalid'.
+ *
+ * @param pickListReference - The name of the GraphQL Enum to resolve as a pick list
+ * @param excludeDataNotCollected - Whether to exlude Data Not Collected from the pick list
+ * @returns The resolved array of PickListOptions, or null if pick list reference was not found.
+ */
 export const localResolvePickList = (
   pickListReference: string,
   excludeDataNotCollected = false
 ): PickListOption[] | null => {
   if (isHmisEnum(pickListReference)) {
     let values = Object.entries(HmisEnums[pickListReference]);
-    if (excludeDataNotCollected) {
+
+    if (excludeDataNotCollected || pickListReference === 'RelationshipToHoH') {
       values = values.filter(([code]) => !isDataNotCollected(code));
     }
     return values
@@ -1546,7 +1564,7 @@ export const getFormStepperItems = (
   localConstants: LocalConstants,
   minGroupsToDisplay: number = 3
 ) => {
-  if (!formDefinition || !itemMap) return false;
+  if (!formDefinition || !itemMap) return undefined;
 
   let items = formDefinition.definition.item.filter(
     (i) => i.type === ItemType.Group && !i.hidden
@@ -1561,7 +1579,7 @@ export const getFormStepperItems = (
       localConstants: localConstants || {},
     })
   );
-  if (items.length < minGroupsToDisplay) return false;
+  if (items.length < minGroupsToDisplay) return undefined;
 
   return items;
 };

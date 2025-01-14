@@ -7,5 +7,5 @@ add_header Strict-Transport-Security "max-age=63072000; includeSubdomains;" alwa
 add_header X-Frame-Options "SAMEORIGIN" always;
 add_header X-XSS-Protection "1; mode=block" always;
 add_header X-Content-Type-Options "nosniff" always;
-add_header Feature-Policy "geolocation 'self'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none'; usb 'none';";
+add_header Feature-Policy "geolocation 'self'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none'; usb 'none';";
 add_header Permissions-Policy "geolocation=(self)";
