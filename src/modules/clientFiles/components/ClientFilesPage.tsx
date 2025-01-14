@@ -79,6 +79,7 @@ const ClientFilesPage = () => {
         render: (file) => (
           <Typography variant='inherit'>{file.name}</Typography>
         ),
+        sticky: 'left',
       },
       {
         header: 'File Tags',

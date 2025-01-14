@@ -89,6 +89,8 @@ export const getStickyCellStyles = (
     backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
     position: 'sticky',
     zIndex: 1,
+    maxWidth: '200px', // Mitigates the risk that the column may be so wide as to obscure any scrollable columns
+    overflow: 'clip',
   };
 
   // Pseudo-element to achieve a border on sticky cells. `position: sticky` doesn't work with regular border
