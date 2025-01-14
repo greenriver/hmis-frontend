@@ -30,7 +30,7 @@ const ClientAssessmentsPage = () => {
 
   const columns: ColumnDef<ClientAssessmentType>[] = useMemo(
     () => [
-      ASSESSMENT_COLUMNS.date,
+      { ...ASSESSMENT_COLUMNS.date, sticky: 'left' },
       {
         header: 'Project Name',
         render: (row: ClientAssessmentType) => row.enrollment.projectName,

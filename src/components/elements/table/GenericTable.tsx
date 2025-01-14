@@ -88,6 +88,7 @@ export const getStickyCellStyles = (
   const base = {
     backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
     position: 'sticky',
+    zIndex: 1,
   };
 
   // Pseudo-element to achieve a border on sticky cells. `position: sticky` doesn't work with regular border

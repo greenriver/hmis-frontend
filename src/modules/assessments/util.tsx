@@ -99,5 +99,6 @@ export const ASSESSMENT_CLIENT_NAME_COL: ColumnDef<
   ProjectAssessmentType | HhmAssessmentType
 > = {
   header: 'Client Name',
+  sticky: 'left',
   render: (a) => clientBriefName(a.enrollment.client),
 };
