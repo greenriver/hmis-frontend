@@ -90,7 +90,14 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
   );
 
   return (
-    <TableRow key={household.id + householdClient.id}>
+    <TableRow
+      sx={{
+        '&:hover': {
+          backgroundColor: 'grayscale.tint',
+        },
+      }}
+      key={household.id + householdClient.id}
+    >
       {BASE_COLUMNS.map((col, i) => (
         <TableCell role={i === 0 ? 'rowheader' : undefined} sx={cellSx}>
           {renderCellContents(householdClient, col.render)}

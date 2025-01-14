@@ -347,6 +347,9 @@ const GenericTable = <T extends { id: string }>({
                     sx={{
                       ...(isClickable && clickableRowStyles),
                       ...(!!rowSx && rowSx(row)),
+                      '&:hover': {
+                        backgroundColor: 'grayscale.tint',
+                      },
                     }}
                     hover={isClickable}
                     onClick={() =>
