@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { isEmpty, pick } from 'lodash-es';
+import { isEmpty, omit, pick } from 'lodash-es';
 import React, { cloneElement, ReactNode, useCallback } from 'react';
 
 import {
@@ -240,14 +240,14 @@ const DynamicFormField: React.FC<Props> = ({
               key={item.linkId}
               item={item}
               itemChanged={itemChanged}
-              disabled={isDisabled}
+              disabled={isDisabled || fieldProps?.disabled}
               errors={getFieldErrors(item)}
               horizontal={horizontal}
               pickListArgs={pickListArgs}
               warnIfEmpty={warnIfEmpty}
               // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
               localConstants={localConstants}
-              {...fieldProps}
+              {...omit(fieldProps, ['disabled'])}
               inputProps={{
                 ...fieldProps?.inputProps,
                 ...buildCommonInputProps({
