@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import { Box, Container, Stack } from '@mui/system';
 import { ReactNode } from 'react';
+import { FOCUSABLE_MAIN_TARGET_ID } from '@/components/layout/MainLayout';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 const PageContainer = ({
@@ -15,6 +16,7 @@ const PageContainer = ({
   const isTiny = useIsMobile('sm');
   return (
     <Container
+      id={FOCUSABLE_MAIN_TARGET_ID}
       component='main'
       maxWidth='lg'
       sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: 4, pb: 6 }}
