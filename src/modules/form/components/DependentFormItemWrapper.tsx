@@ -70,6 +70,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
     name: dependentLinkIds,
   });
 
+  // include dependantValues in the return to sync the memoized value on dependency change
   const [isDisabled] = useMemo(
     () => [isItemDisabled(item), dependantValues],
     [isItemDisabled, item, dependantValues]
