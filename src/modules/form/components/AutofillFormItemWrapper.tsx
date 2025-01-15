@@ -43,10 +43,12 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
   const autofillValue = getAutofillValueForField(item);
 
   // Listen to see if this field has been edited by the user
-  const { isDirty } = useFormState({ control: control, name: linkId });
+  const { dirtyFields } = useFormState({ control: control, name: linkId });
+  const isDirty = !!dirtyFields[linkId];
 
   useEffect(() => {
     // Don't autofill this field if it's been edited (i.e. is dirty)
+    // for example, we automatically set the radio choice for Income Source to true if any of the income fields are non-zero
     if (isDirty) return;
 
     // Don't autofill if this is already the same value

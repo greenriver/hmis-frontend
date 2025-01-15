@@ -10,24 +10,16 @@ export interface DirtyObserverProps {
 }
 
 /**
- * DirtyObserver - A headless React component that monitors form field modifications.
- *
- * This component tracks the "dirty" state of a form (whether fields have been modified
- * from their initial values) and notifies parent components of state changes. It can
- * observe either an entire form or specific fields.
- *
+ * DirtyObserver - A headless React component that  tracks the "dirty" state of a form (whether fields have been
+ * modified from their initial values) and notifies parent components of state changes.
  */
 const DirtyObserver: React.FC<DirtyObserverProps> = ({
   onDirty,
   handlers: {
     methods: { control },
   },
-  fields,
 }) => {
-  const { isDirty } = useFormState({
-    control,
-    name: fields,
-  });
+  const { isDirty } = useFormState({ control });
   const prevDirty = usePrevious(isDirty);
 
   useEffect(() => {
