@@ -86,7 +86,10 @@ const TableRowActions = <T extends { id: string }>({
         <CommonMenuButton
           iconButton
           title='Actions'
-          items={secondaryActionConfigs}
+          items={[
+            ...(primaryActionConfig ? [primaryActionConfig] : []),
+            ...secondaryActionConfigs,
+          ]}
           ButtonProps={{
             'aria-label': `Action menu for ${recordName || record.id}`,
           }}
