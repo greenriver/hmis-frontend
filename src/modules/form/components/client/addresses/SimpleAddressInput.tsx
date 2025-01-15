@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 
 import { DynamicInputCommonProps } from '../../../types';
 import { AddressInputType } from '../types';
@@ -24,21 +24,12 @@ const SimpleAddressInput: React.FC<Props> = ({
   label,
 }) => {
   const values = value ? value : initialValue;
-
-  useEffect(() => {
-    if (values.length === 0) {
-      // setTimeout is needed because if the inputs were not previously rendered, they are not yet registered. So the
-      // timeout allows them to register before we change the value here
-      setTimeout(() => {
-        onChange([createInitialValue()]);
-      });
-    }
-  }, [values, onChange]);
+  const [defaultValues] = useState(() => [createInitialValue()]);
 
   return (
     <SimpleInputContainer
       id={id}
-      values={values}
+      values={values.length > 0 ? values : defaultValues}
       valueKey={(addrValue) => addrValue._key || addrValue.id || ''}
       renderChild={(addrValue, idx) => {
         return (
