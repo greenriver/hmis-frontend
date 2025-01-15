@@ -291,15 +291,19 @@ const GenericTable = <T extends { id: string }>({
           )}
           {columns.map((def, i) => {
             const headerStyles = headerCellSx ? headerCellSx(def) : {};
-            const sx: SxProps<Theme> = {
-              ...getStickyCellStyles(def.sticky),
-              textAlign: def.textAlign,
-              width: def.width,
-              // headerStyles has SxProps type so we can't spread it directly. https://mui.com/system/getting-started/the-sx-prop/#passing-the-sx-prop
-              ...(Array.isArray(headerStyles) ? headerStyles : [headerStyles]),
-            };
             return (
-              <HeaderCell key={key(def) || i} sx={sx}>
+              <HeaderCell
+                key={key(def) || i}
+                sx={{
+                  ...getStickyCellStyles(def.sticky),
+                  textAlign: def.textAlign,
+                  width: def.width,
+                  // headerStyles has SxProps type so we can't spread it directly. https://mui.com/system/getting-started/the-sx-prop/#passing-the-sx-prop
+                  ...(Array.isArray(headerStyles)
+                    ? headerStyles
+                    : [headerStyles]),
+                }}
+              >
                 {renderHeaderCellContents(def)}
               </HeaderCell>
             );
@@ -461,22 +465,20 @@ const GenericTable = <T extends { id: string }>({
                             }
                           : undefined;
 
-                      const sx: SxProps<Theme> = {
-                        ...getStickyCellStyles(def.sticky),
-                        width,
-                        minWidth,
-                        ...(isLinked ? { p: 0 } : undefined),
-                        textAlign,
-                        whiteSpace: 'initial',
-                        ...onClickLinkTreatment,
-                        ...tableCellProps?.sx,
-                      };
-
                       return (
                         <TableCell
                           key={key(def) || index}
                           {...tableCellProps}
-                          sx={sx}
+                          sx={{
+                            ...getStickyCellStyles(def.sticky),
+                            width,
+                            minWidth,
+                            ...(isLinked ? { p: 0 } : undefined),
+                            textAlign,
+                            whiteSpace: 'initial',
+                            ...onClickLinkTreatment,
+                            ...tableCellProps?.sx,
+                          }}
                         >
                           {isLinked ? (
                             <RouterLink
