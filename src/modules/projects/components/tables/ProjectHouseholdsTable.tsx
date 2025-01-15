@@ -92,7 +92,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
       return {
         py: 0.5,
         ...(lastInGroup ? { borderBottom: 0 } : {}),
-        ...getStickyCellStyles(col?.sticky),
+        ...getStickyCellStyles({ sticky: col?.sticky }),
       };
     },
     [lastInGroup]
