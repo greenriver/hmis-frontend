@@ -1,5 +1,4 @@
-import { Box, TableBody, TableCell, TableRow } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
+import { TableBody, TableCell, TableRow } from '@mui/material';
 import React, { useMemo } from 'react';
 import { renderCellContents } from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
@@ -32,7 +31,6 @@ import {
   HouseholdFilterOptions,
   ProjectEnrollmentsHouseholdClientFieldsFragment,
   ProjectEnrollmentsHouseholdFieldsFragment,
-  RelationshipToHoH,
 } from '@/types/gqlTypes';
 
 export type HouseholdFields = NonNullable<
@@ -45,24 +43,14 @@ const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   CLIENT_COLUMNS.age,
   {
     header: 'Relationship',
-    render: (householdClient) => {
-      const relationship = (
-        <HmisEnum
-          key={householdClient.id}
-          value={householdClient.relationshipToHoH}
-          enumMap={HmisEnums.RelationshipToHoH}
-          whiteSpace='nowrap'
-        />
-      );
-
-      if (
-        householdClient.relationshipToHoH === RelationshipToHoH.DataNotCollected
-      ) {
-        return <Box sx={visuallyHidden}>{relationship}</Box>;
-      }
-
-      return relationship;
-    },
+    render: (householdClient) => (
+      <HmisEnum
+        key={householdClient.id}
+        value={householdClient.relationshipToHoH}
+        enumMap={HmisEnums.RelationshipToHoH}
+        whiteSpace='nowrap'
+      />
+    ),
   },
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
