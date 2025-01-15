@@ -2,7 +2,6 @@ import { Button, Stack } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import Loading from '@/components/elements/Loading';
 import usePrevious from '@/hooks/usePrevious';
 
 import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
@@ -18,7 +17,6 @@ import {
   HouseholdFieldsFragment,
   RecordFormRole,
   SubmittedEnrollmentResultFieldsFragment,
-  useGetEnrollmentWithHouseholdQuery,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -82,8 +80,6 @@ const AddToHouseholdButton = ({
         );
         if (error) {
           setConflictingEnrollmentId(error.data.conflictingEnrollmentId);
-        } else {
-          setConflictingEnrollmentId(undefined);
         }
       },
     }),
@@ -95,21 +91,7 @@ const AddToHouseholdButton = ({
 
   const [joinHouseholdDialogOpen, setJoinHouseholdDialogOpen] = useState(false);
 
-  // todo @martha - need to use enrollmentLockVersion?
-  const {
-    data: { enrollment: conflictingEnrollment } = {},
-    loading: conflictingEnrollmentLoading,
-    error,
-  } = useGetEnrollmentWithHouseholdQuery({
-    variables: {
-      id: conflictingEnrollmentId || '',
-    },
-    skip: !conflictingEnrollmentId,
-  });
-
   const { clientAlerts } = useClientAlerts({ client: client });
-
-  if (error) throw error;
 
   return (
     <>
@@ -135,29 +117,25 @@ const AddToHouseholdButton = ({
             {clientAlerts.length > 0 && (
               <ClientAlertStack clientAlerts={clientAlerts} />
             )}
-            {household &&
-              conflictingEnrollmentId &&
-              (conflictingEnrollmentLoading || !conflictingEnrollment ? (
-                <Loading />
-              ) : (
-                <ConflictingEnrollmentAlert
-                  joiningClient={client}
-                  receivingHousehold={household}
-                  conflictingEnrollment={conflictingEnrollment}
-                  onClickJoinEnrollment={() => {
-                    closeDialog();
-                    setJoinHouseholdDialogOpen(true);
-                  }}
-                />
-              ))}
+            {household && conflictingEnrollmentId && (
+              <ConflictingEnrollmentAlert
+                joiningClient={client}
+                receivingHousehold={household}
+                conflictingEnrollmentId={conflictingEnrollmentId}
+                onClickJoinEnrollment={() => {
+                  closeDialog();
+                  setJoinHouseholdDialogOpen(true);
+                }}
+              />
+            )}
           </Stack>
         ),
       })}
       {/*todo @martha - don't forget to put all household alerts in the new join dialog*/}
-      {household && !!conflictingEnrollment && (
+      {household && conflictingEnrollmentId && (
         <JoinHouseholdDialog
           open={joinHouseholdDialogOpen}
-          conflictingEnrollment={conflictingEnrollment}
+          conflictingEnrollmentId={conflictingEnrollmentId}
           onClose={() => setJoinHouseholdDialogOpen(false)} // todo @martha - clear out rest of state on close
           receivingHousehold={household}
         />

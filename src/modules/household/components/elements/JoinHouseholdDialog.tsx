@@ -1,21 +1,22 @@
 import { Alert, AlertTitle, Button, Stack } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
+import Loading from '@/components/elements/Loading';
 import StepDialog from '@/components/elements/StepDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import JoinHouseholdAddRelationships from '@/modules/household/components/elements/JoinHouseholdAddRelationships';
 import JoinHouseholdReviewJoin from '@/modules/household/components/elements/JoinHouseholdReviewJoin';
 import JoinHouseholdSelectClients from '@/modules/household/components/elements/JoinHouseholdSelectClients';
 import {
-  EnrollmentWithHouseholdFieldsFragment,
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
   RelationshipToHoH,
+  useGetEnrollmentWithHouseholdQuery,
   useJoinHouseholdsMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
   open: boolean;
-  conflictingEnrollment: EnrollmentWithHouseholdFieldsFragment;
+  conflictingEnrollmentId: string;
   onClose: VoidFunction;
   receivingHousehold: HouseholdFieldsFragment;
 }
@@ -23,25 +24,37 @@ interface Props {
 const JoinHouseholdDialog = ({
   open,
   onClose,
-  conflictingEnrollment,
+  conflictingEnrollmentId,
   receivingHousehold,
 }: Props) => {
+  // todo @martha - need to use enrollmentLockVersion?
+  const {
+    data: { enrollment: conflictingEnrollment } = {},
+    loading,
+    error,
+  } = useGetEnrollmentWithHouseholdQuery({
+    variables: {
+      id: conflictingEnrollmentId,
+    },
+  });
+  console.log(loading); //todo @martha
+
   const initiator = useMemo(() => {
-    // todo @martha - cast is safe, there will always be an initiator
-    // but add comments about why doing this - need to get the HouseholdClient object
-    return conflictingEnrollment.household.householdClients.find(
+    return conflictingEnrollment?.household.householdClients.find(
       (hc) => hc.client.id === conflictingEnrollment.client.id
-    ) as HouseholdClientFieldsFragment;
+    );
   }, [
-    conflictingEnrollment.client.id,
-    conflictingEnrollment.household.householdClients,
+    conflictingEnrollment?.client.id,
+    conflictingEnrollment?.household.householdClients,
   ]);
 
-  const initiatorClientName = clientBriefName(initiator.client);
+  const initiatorClientName = initiator?.client
+    ? clientBriefName(initiator.client)
+    : '';
 
   const [joiningClients, setJoiningClients] = useState<
     HouseholdClientFieldsFragment[]
-  >([initiator]);
+  >([]); // todo @martha - initially select joining client
 
   // todo @martha = |nul here allows to set the dropdown back to null, but we want to disable the action (going to the next step) unless all are fileld out
   const [relationships, setRelationships] = useState<
@@ -78,6 +91,10 @@ const JoinHouseholdDialog = ({
       },
     });
   }, [joinHousehold, receivingHousehold.id, joiningClients, relationships]);
+
+  if (error) throw error;
+
+  if (!conflictingEnrollment) return <Loading />;
 
   return (
     <StepDialog
