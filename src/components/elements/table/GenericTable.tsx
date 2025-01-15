@@ -17,6 +17,7 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
+import { SystemStyleObject } from '@mui/system';
 import { visuallyHidden } from '@mui/utils';
 import { compact, get, includes, isNil, without } from 'lodash-es';
 import {
@@ -83,8 +84,8 @@ const clickableRowStyles = {
 
 export const getStickyCellStyles = (
   sticky?: 'left' | 'right' | undefined
-): SxProps<Theme> => {
-  if (!sticky) return {} as SxProps<Theme>;
+): SystemStyleObject<Theme> => {
+  if (!sticky) return {};
 
   const base = {
     backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
@@ -113,7 +114,7 @@ export const getStickyCellStyles = (
         ...pseudo,
         left: 0,
       },
-    } as SxProps<Theme>;
+    };
 
   return {
     ...base,
@@ -122,7 +123,7 @@ export const getStickyCellStyles = (
       ...pseudo,
       right: 0,
     },
-  } as SxProps<Theme>;
+  };
 };
 
 const HeaderCell = ({ children, sx, ...rest }: TableCellProps) => (
@@ -288,21 +289,21 @@ const GenericTable = <T extends { id: string }>({
               />
             </HeaderCell>
           )}
-          {columns.map((def, i) => (
-            <HeaderCell
-              key={key(def) || i}
-              sx={
-                {
-                  ...getStickyCellStyles(def.sticky),
-                  ...(headerCellSx ? headerCellSx(def) : {}),
-                  textAlign: def.textAlign,
-                  width: def.width,
-                } as SxProps<Theme>
-              }
-            >
-              {renderHeaderCellContents(def)}
-            </HeaderCell>
-          ))}
+          {columns.map((def, i) => {
+            const headerStyles = headerCellSx ? headerCellSx(def) : {};
+            const sx: SxProps<Theme> = {
+              ...getStickyCellStyles(def.sticky),
+              textAlign: def.textAlign,
+              width: def.width,
+              // headerStyles has SxProps type so we can't spread it directly. https://mui.com/system/getting-started/the-sx-prop/#passing-the-sx-prop
+              ...(Array.isArray(headerStyles) ? headerStyles : [headerStyles]),
+            };
+            return (
+              <HeaderCell key={key(def) || i} sx={sx}>
+                {renderHeaderCellContents(def)}
+              </HeaderCell>
+            );
+          })}
         </TableRow>
       )}
       {loading && loadingVariant === 'linear' && (
@@ -459,22 +460,23 @@ const GenericTable = <T extends { id: string }>({
                               textDecorationColor: 'links',
                             }
                           : undefined;
+
+                      const sx: SxProps<Theme> = {
+                        ...getStickyCellStyles(def.sticky),
+                        width,
+                        minWidth,
+                        ...(isLinked ? { p: 0 } : undefined),
+                        textAlign,
+                        whiteSpace: 'initial',
+                        ...onClickLinkTreatment,
+                        ...tableCellProps?.sx,
+                      };
+
                       return (
                         <TableCell
                           key={key(def) || index}
                           {...tableCellProps}
-                          sx={
-                            {
-                              ...getStickyCellStyles(def.sticky),
-                              width,
-                              minWidth,
-                              ...(isLinked ? { p: 0 } : undefined),
-                              textAlign,
-                              whiteSpace: 'initial',
-                              ...onClickLinkTreatment,
-                              ...tableCellProps?.sx,
-                            } as SxProps<Theme>
-                          }
+                          sx={sx}
                         >
                           {isLinked ? (
                             <RouterLink
