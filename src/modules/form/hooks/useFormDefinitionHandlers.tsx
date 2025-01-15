@@ -1,7 +1,7 @@
 import { cloneDeep } from '@apollo/client/utilities';
 import { mapKeys, omit } from 'lodash-es';
-import { useCallback, useMemo } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
+import { useCallback, useEffect, useMemo } from 'react';
+import { FieldValues, Path, useForm } from 'react-hook-form';
 
 import { LocalConstants } from '../types';
 import {
@@ -10,6 +10,7 @@ import {
   createHudValuesForSubmit,
   createValuesForSubmit,
   dropUnderscorePrefixedKeys,
+  getAllChildLinkIds,
   getInitialValues,
   shouldEnableItem,
 } from '../util/formUtil';
@@ -72,6 +73,13 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       return mapKeysToSafe(newValues) as T;
     })(),
   });
+
+  // Register all fields from the definition on initialization
+  useEffect(() => {
+    for (const linkId of getAllChildLinkIds(definition)) {
+      methods.register(linkId as Path<T>); // Explicitly register the field
+    }
+  }, [definition, methods]);
 
   // Updates localValues map in-place
   const getAutofillValueForField = useCallback(

@@ -911,7 +911,7 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
 };
 
 export const getAllChildLinkIds = (
-  item: FormItem,
+  root: FormItem | FormDefinitionJson,
   { onlyQuestions = true }: { onlyQuestions?: boolean } = {}
 ): string[] => {
   function recursiveFind(items: FormItem[], ids: string[]) {
@@ -927,7 +927,7 @@ export const getAllChildLinkIds = (
   }
 
   const result: string[] = [];
-  recursiveFind(item.item || [], result);
+  recursiveFind(root.item || [], result);
   return result;
 };
 
