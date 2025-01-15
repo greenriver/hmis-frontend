@@ -18,6 +18,8 @@ const ButtonTooltipContainer = ({
       arrow
       {...props}
     >
+      {/* This inner `span` allows Tooltips to appear on disabled Button elements.
+      We sometimes do this to explain why the button is disabled.*/}
       <span>{children}</span>
     </Tooltip>
   );

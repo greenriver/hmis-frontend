@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { ServicePeriod } from '../bulkServicesTypes';
 import AssignServiceButton from './AssignServiceButton';
@@ -108,23 +109,26 @@ const BulkServicesTable: React.FC<Props> = ({
         },
         {
           ...BASE_ACTION_COLUMN_DEF,
+          width: '180px',
           render: (row: RowType) => (
             <TableRowActions
               record={row}
               recordName={clientBriefName(row)}
               primaryAction={
-                <AssignServiceButton
-                  client={row}
-                  queryVariables={mutationQueryVariables}
-                  tableLoading={loading}
-                  disabled={anyRowsSelected}
-                  disabledReason={
-                    anyRowsSelected
-                      ? 'Deselect checkboxes to assign clients individually.'
-                      : undefined
-                  }
-                  serviceTypeName={serviceTypeName}
-                />
+                <Box sx={{ width: '100%' }}>
+                  <AssignServiceButton
+                    client={row}
+                    queryVariables={mutationQueryVariables}
+                    tableLoading={loading}
+                    disabled={anyRowsSelected}
+                    disabledReason={
+                      anyRowsSelected
+                        ? 'Deselect checkboxes to assign clients individually.'
+                        : undefined
+                    }
+                    serviceTypeName={serviceTypeName}
+                  />
+                </Box>
               }
               secondaryActionConfigs={[
                 getViewClientMenuItem(row),
