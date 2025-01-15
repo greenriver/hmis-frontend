@@ -83,7 +83,10 @@ const clickableRowStyles = {
 };
 
 export const getStickyCellStyles = (
-  sticky?: 'left' | 'right' | undefined
+  sticky: 'left' | 'right' | undefined,
+  stickyBorder: boolean,
+  leftOffset: string | number = 0,
+  rightOffset: string | number = 0
 ): SystemStyleObject<Theme> => {
   if (!sticky) return {};
 
@@ -96,20 +99,22 @@ export const getStickyCellStyles = (
   };
 
   // Pseudo-element to achieve a border on sticky cells. `position: sticky` doesn't work with regular border
-  const pseudo = {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    width: '1px',
-    backgroundColor: 'borders.light',
-    pointerEvents: 'none', // Don't interfere with interactions
-  };
+  const pseudo = stickyBorder
+    ? {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        width: '1px',
+        backgroundColor: 'borders.light',
+        pointerEvents: 'none', // Don't interfere with interactions
+      }
+    : {};
 
   if (sticky === 'right')
     return {
       ...base,
-      right: 0,
+      right: rightOffset,
       '&::before': {
         ...pseudo,
         left: 0,
@@ -118,7 +123,7 @@ export const getStickyCellStyles = (
 
   return {
     ...base,
-    left: 0,
+    left: leftOffset,
     '&::after': {
       ...pseudo,
       right: 0,
@@ -272,7 +277,10 @@ const GenericTable = <T extends { id: string }>({
       {hasHeaders && (
         <TableRow>
           {selectable && (
-            <HeaderCell padding='checkbox'>
+            <HeaderCell
+              padding='checkbox'
+              sx={getStickyCellStyles('left', false)}
+            >
               <Checkbox
                 color='primary'
                 indeterminate={
@@ -295,7 +303,12 @@ const GenericTable = <T extends { id: string }>({
               <HeaderCell
                 key={key(def) || i}
                 sx={{
-                  ...getStickyCellStyles(def.sticky),
+                  ...getStickyCellStyles(
+                    def.sticky,
+                    true,
+                    selectable ? '46px' : 0,
+                    0
+                  ),
                   textAlign: def.textAlign,
                   width: def.width,
                   // headerStyles has SxProps type so we can't spread it directly. https://mui.com/system/getting-started/the-sx-prop/#passing-the-sx-prop
@@ -421,7 +434,11 @@ const GenericTable = <T extends { id: string }>({
                     tabIndex={handleRowClick ? 0 : undefined}
                   >
                     {selectable && (
-                      <TableCell padding='checkbox' key='selection'>
+                      <TableCell
+                        padding='checkbox'
+                        key='selection'
+                        sx={getStickyCellStyles('left', false)}
+                      >
                         <Checkbox
                           color='primary'
                           disabled={!isSelectable}
@@ -470,7 +487,12 @@ const GenericTable = <T extends { id: string }>({
                           key={key(def) || index}
                           {...tableCellProps}
                           sx={{
-                            ...getStickyCellStyles(def.sticky),
+                            ...getStickyCellStyles(
+                              def.sticky,
+                              true,
+                              selectable ? '46px' : 0,
+                              0
+                            ),
                             width,
                             minWidth,
                             ...(isLinked ? { p: 0 } : undefined),
