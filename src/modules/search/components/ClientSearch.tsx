@@ -73,7 +73,7 @@ export const CLIENT_COLUMNS: {
   >;
 } = {
   name: {
-    header: 'Name',
+    header: 'Client Name',
     key: 'name',
     render: (client) => <ClientName client={asClient(client)} />,
   },

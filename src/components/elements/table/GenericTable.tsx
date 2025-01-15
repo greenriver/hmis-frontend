@@ -55,6 +55,7 @@ export interface Props<T> {
   actionRow?: ReactNode;
   tableProps?: TableProps;
   vertical?: boolean;
+  verticalHiddenHeader?: string; // For vertically oriented tables, this is the hidden header of the first column
   noHead?: boolean;
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
@@ -124,17 +125,8 @@ export const getStickyCellStyles = (
   } as SxProps<Theme>;
 };
 
-const HeaderCell = ({
-  children,
-  sx,
-  padding,
-}: {
-  children: ReactNode;
-  padding?: TableCellProps['padding'];
-  sx?: SxProps<Theme>;
-}) => (
+const HeaderCell = ({ children, sx, ...rest }: TableCellProps) => (
   <TableCell
-    padding={padding}
     sx={{
       borderBottomColor: 'borders.dark',
       borderBottomWidth: 2,
@@ -142,6 +134,7 @@ const HeaderCell = ({
       pb: 1,
       ...sx,
     }}
+    {...rest}
   >
     {children}
   </TableCell>
@@ -159,6 +152,17 @@ export const renderCellContents = <T extends { id: string }>(
   return null;
 };
 
+export const renderHeaderCellContents = <T extends { id: string }>(
+  def: ColumnDef<T>
+) => {
+  return def.header ? (
+    <strong>{def.header}</strong>
+  ) : (
+    // If header isn't provided, add a visually hidden header with the column key for accessibility
+    <Box sx={visuallyHidden}>{def.key}</Box>
+  );
+};
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
@@ -167,6 +171,7 @@ const GenericTable = <T extends { id: string }>({
   paginated = false,
   loading = false,
   vertical = false,
+  verticalHiddenHeader,
   renderVerticalHeaderCell,
   tablePaginationProps,
   tableContainerProps,
@@ -247,7 +252,12 @@ const GenericTable = <T extends { id: string }>({
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
         <TableRow>
-          <TableCell key='empty' sx={{ backgroundColor: 'background.paper' }} />
+          <TableCell
+            key='empty'
+            sx={{ ...verticalCellSx(0), backgroundColor: 'background.paper' }}
+          >
+            <Box sx={visuallyHidden}>{verticalHiddenHeader}</Box>
+          </TableCell>
           {rows.map((row, idx) => (
             <TableCell key={row.id} sx={verticalCellSx(idx)}>
               {renderVerticalHeaderCell(row)}
@@ -290,12 +300,7 @@ const GenericTable = <T extends { id: string }>({
                 } as SxProps<Theme>
               }
             >
-              {def.header ? (
-                <strong>{def.header}</strong>
-              ) : (
-                // If header isn't provided, add a visually hidden header with the column key for accessibility
-                <Box sx={visuallyHidden}>{def.key}</Box>
-              )}
+              {renderHeaderCellContents(def)}
             </HeaderCell>
           ))}
         </TableRow>
@@ -355,9 +360,9 @@ const GenericTable = <T extends { id: string }>({
                   <HeaderCell
                     sx={{ ...verticalCellSx(1), width: '350px' }}
                     key={key(def)}
+                    role='rowheader'
                   >
-                    {' '}
-                    <strong>{def.header}</strong>
+                    {renderHeaderCellContents(def)}
                   </HeaderCell>
                   {rows.map((row, idx) => (
                     <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>
