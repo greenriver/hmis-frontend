@@ -910,24 +910,34 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
   return result;
 };
 
-export const getAllChildLinkIds = (
+export const walkDefinitionItems = (
   root: FormItem | FormDefinitionJson,
-  { onlyQuestions = true }: { onlyQuestions?: boolean } = {}
-): string[] => {
+  cb: (i: FormItem) => void
+) => {
   function recursiveFind(items: FormItem[], ids: string[]) {
     items.forEach((item) => {
       if (Array.isArray(item.item)) {
         recursiveFind(item.item, ids);
       }
 
-      if (onlyQuestions === false || (onlyQuestions && isQuestionItem(item))) {
-        ids.push(item.linkId);
-      }
+      cb(item);
     });
   }
 
   const result: string[] = [];
   recursiveFind(root.item || [], result);
+  return result;
+};
+
+export const getAllChildLinkIds = (
+  root: FormItem | FormDefinitionJson,
+  { onlyQuestions = true }: { onlyQuestions?: boolean } = {}
+): string[] => {
+  const result: string[] = [];
+  walkDefinitionItems(root, (item) => {
+    if (onlyQuestions === false || (onlyQuestions && isQuestionItem(item)))
+      result.push(item.linkId);
+  });
   return result;
 };
 

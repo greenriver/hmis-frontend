@@ -1,7 +1,7 @@
 import { cloneDeep } from '@apollo/client/utilities';
 import { mapKeys, omit } from 'lodash-es';
-import { useCallback, useEffect, useMemo } from 'react';
-import { FieldValues, Path, useForm } from 'react-hook-form';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { DefaultValues, FieldValues, Path, useForm } from 'react-hook-form';
 
 import { LocalConstants } from '../types';
 import {
@@ -10,9 +10,9 @@ import {
   createHudValuesForSubmit,
   createValuesForSubmit,
   dropUnderscorePrefixedKeys,
-  getAllChildLinkIds,
   getInitialValues,
   shouldEnableItem,
+  walkDefinitionItems,
 } from '../util/formUtil';
 import useComputedData from './useComputedData';
 import {
@@ -55,30 +55,35 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
     disabledDependencyMap,
   } = useComputedData({ definition, viewOnly });
 
-  const methods = useForm<T>({
-    values: (() => {
-      const newValues = {
-        ...getInitialValues(definition, localConstants),
-        ...cloneDeep(initialValues),
-      };
-      Object.keys(itemMap).forEach((linkId) => {
-        autofillValues({
-          item: itemMap[linkId],
-          values: newValues,
-          itemMap,
-          localConstants: localConstants || {},
-          viewOnly,
-        });
+  const [defaultValues] = useState(() => {
+    const newValues = {
+      ...getInitialValues(definition, localConstants),
+      ...cloneDeep(initialValues),
+    };
+    Object.keys(itemMap).forEach((linkId) => {
+      autofillValues({
+        item: itemMap[linkId],
+        values: newValues,
+        itemMap,
+        localConstants: localConstants || {},
+        viewOnly,
       });
-      return mapKeysToSafe(newValues) as T;
-    })(),
+    });
+    const result = mapKeysToSafe(newValues) as DefaultValues<T>;
+    return result;
+  });
+
+  const methods = useForm<T>({
+    defaultValues,
   });
 
   // Register all fields from the definition on initialization
   useEffect(() => {
-    for (const linkId of getAllChildLinkIds(definition)) {
-      methods.register(linkId as Path<T>); // Explicitly register the field
-    }
+    walkDefinitionItems(definition, (item) => {
+      if (item.mapping) {
+        methods.register(item.linkId as Path<T>);
+      }
+    });
   }, [definition, methods]);
 
   // Updates localValues map in-place
