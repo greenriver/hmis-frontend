@@ -2,12 +2,14 @@ import { Button, Stack } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import Loading from '@/components/elements/Loading';
 import usePrevious from '@/hooks/usePrevious';
 
 import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
 import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
+import { ErrorState } from '@/modules/errors/util';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { clientBriefName, formatDateForGql } from '@/modules/hmis/hmisUtil';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import ConflictingEnrollmentAlert from '@/modules/household/components/elements/ConflictingEnrollmentAlert';
 import JoinHouseholdDialog from '@/modules/household/components/elements/JoinHouseholdDialog';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
@@ -16,7 +18,8 @@ import {
   HouseholdFieldsFragment,
   RecordFormRole,
   SubmittedEnrollmentResultFieldsFragment,
-  useGetClientEnrollmentWithHouseholdQuery,
+  useGetEnrollmentWithHouseholdQuery,
+  ValidationError,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -52,9 +55,9 @@ const AddToHouseholdButton = ({
   if (added) text = 'Added';
   const clientId = client.id;
 
-  // todo @martha - if this is initially selected, it doesn't load
-  // todo @martha - need to add some kind of indication in the UI that this is loading, maybe just the enroll button is disabled
-  const [entryDate, setEntryDate] = useState<Date | null>(new Date());
+  const [conflictingEnrollmentId, setConflictingEnrollmentId] = useState<
+    string | undefined
+  >();
 
   const memoedArgs = useMemo(
     () => ({
@@ -66,41 +69,47 @@ const AddToHouseholdButton = ({
       inputVariables: { projectId, clientId },
       pickListArgs: { projectId, householdId },
       localConstants: { householdId, projectCocCount: cocCount },
-      onFieldChange: (linkId?: string, value?: any) => {
-        if (linkId === 'entry_date') {
-          setEntryDate(value);
+      errorFilter: (error: ValidationError) => {
+        // If there's an error about a conflicting enrollment, we will show the ConflictingEnrollmentAlert,
+        // so here, we filter that error out of the ErrorAlert displayed by the form dialog.
+        if (!householdId) return true; // Except if this is a new household. Then show the error, since we can't Join Households.
+        if (!error.data) return true;
+        return !error.data?.hasOwnProperty('conflictingEnrollmentId');
+      },
+      onChangeErrors: (errors: ErrorState) => {
+        const error = errors.errors.find((e) =>
+          e.data?.hasOwnProperty('conflictingEnrollmentId')
+        );
+        if (error) {
+          setConflictingEnrollmentId(error.data.conflictingEnrollmentId);
+        } else {
+          setConflictingEnrollmentId(undefined);
         }
       },
     }),
     [projectId, clientId, householdId, cocCount, onSuccess]
   );
 
-  const { openFormDialog, renderFormDialog } =
+  const { openFormDialog, renderFormDialog, closeDialog } =
     useFormDialog<SubmittedEnrollmentResultFieldsFragment>(memoedArgs);
+
+  const [joinHouseholdDialogOpen, setJoinHouseholdDialogOpen] = useState(false);
+
+  // todo @martha - need to use enrollmentLockVersion?
+  const {
+    data: { enrollment: conflictingEnrollment } = {},
+    loading: conflictingEnrollmentLoading,
+    error,
+  } = useGetEnrollmentWithHouseholdQuery({
+    variables: {
+      id: conflictingEnrollmentId || '',
+    },
+    skip: !conflictingEnrollmentId,
+  });
 
   const { clientAlerts } = useClientAlerts({ client: client });
 
-  // todo @martha - add error
-  const { data: { client: clientWithEnrollment } = {}, loading } =
-    useGetClientEnrollmentWithHouseholdQuery({
-      variables: {
-        id: client.id,
-        filters: {
-          openOnDate: formatDateForGql(entryDate || new Date()), // entryDate will be non-null bc of skip
-          project: [projectId],
-        },
-      },
-      skip: !entryDate,
-    });
-  console.log(loading); // todo @martha - improve the loading experience
-
-  const openEnrollmentOnDate = useMemo(() => {
-    const nodes = clientWithEnrollment?.enrollments.nodes;
-    if (nodes && nodes.length > 0) return nodes[0];
-  }, [clientWithEnrollment]);
-  // todo @martha - if it has a conflicting enrollment, disable the Enroll button
-
-  const [joinHouseholdDialogOpen, setJoinHouseholdDialogOpen] = useState(false);
+  if (error) throw error;
 
   return (
     <>
@@ -126,27 +135,29 @@ const AddToHouseholdButton = ({
             {clientAlerts.length > 0 && (
               <ClientAlertStack clientAlerts={clientAlerts} />
             )}
-            {/*todo @martha - test this more thoroughly with a past enrollment*/}
-            {/*todo @martha - what about enrolling someone for the 1st time (not in a household) but they already have a conflicting enrollment - should be no change to behavior*/}
-            {household && openEnrollmentOnDate && (
-              <ConflictingEnrollmentAlert
-                joiningClient={client}
-                receivingHousehold={household}
-                conflictingEnrollmentId={openEnrollmentOnDate.id}
-                onClickJoinEnrollment={() => {
-                  // todo @martha - close the regular dialog
-                  setJoinHouseholdDialogOpen(true);
-                }}
-              />
-            )}
+            {household &&
+              conflictingEnrollmentId &&
+              (conflictingEnrollmentLoading || !conflictingEnrollment ? (
+                <Loading />
+              ) : (
+                <ConflictingEnrollmentAlert
+                  joiningClient={client}
+                  receivingHousehold={household}
+                  conflictingEnrollment={conflictingEnrollment}
+                  onClickJoinEnrollment={() => {
+                    closeDialog();
+                    setJoinHouseholdDialogOpen(true);
+                  }}
+                />
+              ))}
           </Stack>
         ),
       })}
       {/*todo @martha - don't forget to put all household alerts in the new join dialog*/}
-      {household && openEnrollmentOnDate && (
+      {household && !!conflictingEnrollment && (
         <JoinHouseholdDialog
           open={joinHouseholdDialogOpen}
-          conflictingEnrollment={openEnrollmentOnDate}
+          conflictingEnrollment={conflictingEnrollment}
           onClose={() => setJoinHouseholdDialogOpen(false)} // todo @martha - clear out rest of state on close
           receivingHousehold={household}
         />

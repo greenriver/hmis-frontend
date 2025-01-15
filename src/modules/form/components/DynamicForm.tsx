@@ -22,7 +22,7 @@ import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ValidationDialogProps } from '@/modules/errors/components/ValidationDialog';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
-import { ErrorState, hasErrors } from '@/modules/errors/util';
+import { ErrorFilterFn, ErrorState, hasErrors } from '@/modules/errors/util';
 import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
@@ -79,7 +79,7 @@ export interface DynamicFormProps
   localConstants?: LocalConstants;
   errorRef?: RefObject<HTMLDivElement>;
   variant?: 'standard' | 'without_top_level_cards';
-  onFieldChange?: (linkId?: string, value?: any) => void;
+  errorFilter?: ErrorFilterFn;
 }
 export interface DynamicFormRef {
   SaveIfDirty: VoidFunction;
@@ -111,7 +111,7 @@ const DynamicForm = forwardRef(
       errorRef,
       onDirty,
       variant = 'standard',
-      onFieldChange: onFieldChangeProp,
+      errorFilter,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
@@ -121,16 +121,12 @@ const DynamicForm = forwardRef(
     }, [dirty, onDirty]);
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
 
-    const onFieldChange = useCallback(
-      (type: ChangeType, linkId?: string, value?: any) => {
-        onFieldChangeProp?.(linkId, value);
-        if (type === ChangeType.User) {
-          setPromptSave(true);
-          setDirty(true);
-        }
-      },
-      [onFieldChangeProp]
-    );
+    const onFieldChange = useCallback((type: ChangeType) => {
+      if (type === ChangeType.User) {
+        setPromptSave(true);
+        setDirty(true);
+      }
+    }, []);
 
     // getValues: returns form state (used by some nested components, like MciClearance)
     // getValuesForSubmit: returns submittable form state (used for onSubmit/onSaveDraft)
@@ -248,7 +244,11 @@ const DynamicForm = forwardRef(
             <Grid item>
               <Stack gap={2}>
                 <ApolloErrorAlert error={errorState.apolloError} />
-                <ErrorAlert errors={errorState.errors} fixable />
+                <ErrorAlert
+                  errors={errorState.errors}
+                  fixable
+                  errorFilter={errorFilter}
+                />
               </Stack>
             </Grid>
           )}

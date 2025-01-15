@@ -41,7 +41,7 @@ const useDynamicFields = ({
   initialValues?: Record<string, any>;
   viewOnly?: boolean;
   localConstants?: LocalConstants;
-  onFieldChange?: (type: ChangeType, linkId?: string, value?: any) => void;
+  onFieldChange?: (type: ChangeType) => void;
 }) => {
   const [values, setValues] = useState<FormValues>(
     Object.assign({}, initialValues)
@@ -158,8 +158,8 @@ const useDynamicFields = ({
 
   const itemChanged: ItemChangedFn = useCallback(
     (input) => {
+      if (onFieldChange) onFieldChange(input.type);
       const { linkId, value } = input;
-      if (onFieldChange) onFieldChange(input.type, linkId, value); // todo @martha - incompatible with severalItemsChanged but maybe that is OK
       setValues((currentValues) => {
         const newValues = { ...currentValues };
         newValues[linkId] = value;

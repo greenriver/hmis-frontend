@@ -14,6 +14,7 @@ import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientWithAlertFieldsFragment,
+  EnrollmentWithHouseholdFieldsFragment,
   HouseholdFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -28,14 +29,14 @@ function stringifyArray(arr: string[]) {
 interface Props {
   joiningClient: ClientWithAlertFieldsFragment;
   receivingHousehold: HouseholdFieldsFragment;
-  conflictingEnrollmentId: string;
+  conflictingEnrollment: EnrollmentWithHouseholdFieldsFragment;
   onClickJoinEnrollment: VoidFunction;
 }
 
 const ConflictingEnrollmentAlert = ({
   joiningClient,
   receivingHousehold,
-  conflictingEnrollmentId,
+  conflictingEnrollment,
   onClickJoinEnrollment,
 }: Props) => {
   const joiningClientName = clientBriefName(joiningClient);
@@ -49,12 +50,12 @@ const ConflictingEnrollmentAlert = ({
   }, [receivingHousehold.householdClients]);
 
   const additionalMemberNames = useMemo(() => {
-    return receivingHousehold.householdClients
+    return conflictingEnrollment.household.householdClients
       .filter(
         (hc) => hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
       )
       .map((hc) => clientBriefName(hc.client));
-  }, [receivingHousehold.householdClients]);
+  }, [conflictingEnrollment.household.householdClients]);
 
   return (
     <Alert severity='warning'>
@@ -80,14 +81,13 @@ const ConflictingEnrollmentAlert = ({
         </ListItem>
       </List>
       <Stack direction='row' gap={2}>
-        {/*todo @martha - what does this button do*/}
         <Button color='warning' onClick={onClickJoinEnrollment}>
           Join Enrollment
         </Button>
         <ButtonLink
           to={generatePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
             clientId: joiningClient.id,
-            enrollmentId: conflictingEnrollmentId,
+            enrollmentId: conflictingEnrollment.id,
           })}
           variant='contained'
           color='grayscale'
