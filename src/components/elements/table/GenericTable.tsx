@@ -95,7 +95,7 @@ export const getStickyCellStyles = ({
   if (!sticky) return {};
 
   const base = {
-    backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
+    backgroundColor: 'inherit', // Otherwise it's transparent and other cell content appears beneath it
     position: 'sticky',
     zIndex: 1,
     maxWidth: '200px', // Mitigates the risk that the column may be so wide as to obscure any scrollable columns
@@ -279,7 +279,7 @@ const GenericTable = <T extends { id: string }>({
   ) : (
     <TableHead>
       {hasHeaders && (
-        <TableRow>
+        <TableRow sx={{ backgroundColor: 'background.paper' }}>
           {selectable && (
             <HeaderCell
               padding='checkbox'
@@ -417,11 +417,12 @@ const GenericTable = <T extends { id: string }>({
                   <TableRow
                     key={row.id}
                     sx={{
-                      ...(isClickable && clickableRowStyles),
-                      ...(!!rowSx && rowSx(row)),
+                      backgroundColor: 'background.paper',
                       '&:hover': {
                         backgroundColor: 'grayscale.tint',
                       },
+                      ...(isClickable && clickableRowStyles),
+                      ...(!!rowSx && rowSx(row)),
                     }}
                     hover={isClickable}
                     onClick={() =>
