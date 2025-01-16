@@ -657,3 +657,30 @@ export const raceEthnicityDisplayString = (race?: Race[]) => {
 
   return race.map((r) => HmisEnums.Race[r]).join(', ');
 };
+
+function stringifyArray(arr: string[]) {
+  if (arr.length === 1) return arr[0];
+  const firsts = arr.slice(0, arr.length - 1);
+  const last = arr[arr.length - 1];
+  const finalJoiner = arr.length === 2 ? ' and ' : ', and '; // oxford comma
+  return firsts.join(', ') + finalJoiner + last;
+}
+
+export const stringifyHousehold = (
+  householdClients: HouseholdClientFieldsFragment[]
+) => {
+  return stringifyArray(
+    householdClients.map((hc) => clientBriefName(hc.client))
+  );
+};
+
+export const findHohOrRep = (
+  householdClients: HouseholdClientFieldsFragment[]
+) => {
+  // It's invalid, but possible in case of bad data, to have no HoH. If so (rare), return the first household member
+  return (
+    householdClients.find(
+      (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+    ) || householdClients[0]
+  );
+};

@@ -1,3 +1,4 @@
+import { InfoOutlined } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -7,11 +8,21 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useMemo,
+} from 'react';
 import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import GenericTable from '@/components/elements/table/GenericTable';
-import { PROJECT_HOUSEHOLD_COLUMNS } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
+import { ColumnDef } from '@/components/elements/table/types';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { HOUSEHOLD_CLIENT_COLUMNS } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   HouseholdClientFieldsFragment,
@@ -19,35 +30,55 @@ import {
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
+export const JOIN_HOUSEHOLD_COLUMNS: ColumnDef<HouseholdClientFieldsFragment>[] =
+  [
+    { ...CLIENT_COLUMNS.name, sticky: 'left' },
+    CLIENT_COLUMNS.age,
+    HOUSEHOLD_CLIENT_COLUMNS.relationship,
+    WITH_ENROLLMENT_COLUMNS.entryDate,
+    WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
+  ];
+
 interface Props {
   donorHousehold: HouseholdFieldsFragment;
   selectedClients: HouseholdClientFieldsFragment[];
   setSelectedClients: Dispatch<SetStateAction<HouseholdClientFieldsFragment[]>>;
-  // todo @martha - need receivingHouseholdHohName
+  receivingHohName?: string;
+  clientAlertsComponent: ReactNode;
 }
 
 const JoinHouseholdSelectClients = ({
   donorHousehold,
   selectedClients,
   setSelectedClients,
+  receivingHohName,
+  clientAlertsComponent,
 }: Props) => {
+  const donorHoh = useMemo(
+    () =>
+      donorHousehold.householdClients.find(
+        (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+      ),
+    [donorHousehold.householdClients]
+  );
+  const donorHouseholdMembers = useMemo(
+    () => sortHouseholdMembers(donorHousehold.householdClients),
+    [donorHousehold.householdClients]
+  );
+
+  // Selection is controlled, so the selection state is stored in the parent.
+  // Here, translate the list of selected HouseholdClients from the parent to a list of row IDs for GenericTable.
   const selectedClientIds = useMemo(
     () => selectedClients.map((hc) => hc.id),
     [selectedClients]
   );
 
-  // todo @martha - add some comments here
-  const hoh = useMemo(
-    () =>
-      donorHousehold.householdClients.find(
-        (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-      ) as HouseholdClientFieldsFragment,
-    [donorHousehold.householdClients]
-  );
-
+  // .. and here, translate back again
   const setSelectedClientIds = useCallback(
     (clientIds: readonly string[]) => {
-      if (hoh && clientIds.includes(hoh.id)) {
+      // If the HoH from the donor household is selected, all other hh members must be selected.
+      // (Can't leave behind a household without a HoH)
+      if (donorHoh && clientIds.includes(donorHoh.id)) {
         setSelectedClients(donorHousehold.householdClients);
       } else {
         setSelectedClients(
@@ -57,7 +88,21 @@ const JoinHouseholdSelectClients = ({
         );
       }
     },
-    [donorHousehold.householdClients, hoh, setSelectedClients]
+    [donorHousehold.householdClients, donorHoh, setSelectedClients]
+  );
+
+  const isRowSelectable = useCallback(
+    (row: HouseholdClientFieldsFragment) => {
+      // todo @martha - want to be able to select all and then deselect all.
+      if (donorHoh && selectedClientIds.includes(donorHoh.id)) {
+        // Visually disable de-selecting other clients if the HoH is selected
+        // (This is also functionally disabled by the logic in setSelectedClientIds above)
+        return row.id === donorHoh.id;
+      }
+
+      return true;
+    },
+    [donorHoh, selectedClientIds]
   );
 
   return (
@@ -65,24 +110,25 @@ const JoinHouseholdSelectClients = ({
       <Box>
         <Typography variant='overline'>Step 1</Typography>
         <Typography variant='h3'>Select Clients</Typography>
-        {/*  todo @martha - should it really be an h3?*/}
       </Box>
       <Typography variant='body1'>
-        Select which clients you would like to join to [HoH]’s enrollment.
+        Select which clients you would like to join{' '}
+        {receivingHohName ? `${receivingHohName}’s` : 'this'} household.
       </Typography>
-      {/*todo @martha - this (above) refers to the NEW hoh*/}
-      {hoh &&
-        selectedClientIds.includes(hoh.id) &&
+      {clientAlertsComponent}
+      {donorHoh &&
+        selectedClientIds.includes(donorHoh.id) &&
         donorHousehold.householdSize > 1 && (
           <Alert
             color='info'
+            icon={<InfoOutlined />}
             action={
               <ButtonLink
                 variant='contained'
                 color='grayscale'
                 to={generatePath(EnrollmentDashboardRoutes.EDIT_HOUSEHOLD, {
-                  clientId: hoh.client.id,
-                  enrollmentId: hoh.enrollment.id,
+                  clientId: donorHoh.client.id,
+                  enrollmentId: donorHoh.enrollment.id,
                 })}
               >
                 Edit Household
@@ -90,20 +136,19 @@ const JoinHouseholdSelectClients = ({
             }
           >
             <AlertTitle>Head of Household Selected</AlertTitle>
-            All members must accompany the Head of Household. Select a different
-            Head of Household if this is not your intention.
+            If the current Head of Household is selected, all members must also
+            join. Edit {clientBriefName(donorHoh.client)}’s household and select
+            a different Head of Household if this is not your intention.
           </Alert>
         )}
-      {/* todo @martha - could be nice to disable unselection on the other members, and add a tooltip*/}
       <Paper>
-        {/*todo @martha - put these in the expected order*/}
         <GenericTable<HouseholdClientFieldsFragment>
-          rows={donorHousehold.householdClients}
-          // todo @martha - remove exit date? (the enrollment is, probably, unexited? or it could be exited...)
-          columns={PROJECT_HOUSEHOLD_COLUMNS}
+          rows={donorHouseholdMembers}
+          columns={JOIN_HOUSEHOLD_COLUMNS}
           selectable={'checkbox'}
           selected={selectedClientIds}
           onChangeSelectedRowIds={setSelectedClientIds}
+          isRowSelectable={isRowSelectable}
         />
       </Paper>
     </Stack>

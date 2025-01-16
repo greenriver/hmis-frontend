@@ -11,11 +11,13 @@ import {
 interface Args {
   householdId?: string;
   projectId: string;
+  projectName: string;
 }
 
 export default function useAddToHouseholdColumns({
   householdId: initialHouseholdId,
   projectId,
+  projectName,
 }: Args) {
   const [householdId, setHouseholdId] = useState(initialHouseholdId);
   const [getHousehold, { data, loading, error }] = useGetHouseholdLazyQuery({
@@ -75,6 +77,7 @@ export default function useAddToHouseholdColumns({
               client={client}
               householdId={householdId}
               projectId={projectId}
+              projectName={projectName}
               isMember={currentMembersMap.has(client.id)}
               onSuccess={onSuccess}
               household={data?.household || undefined}
@@ -83,7 +86,14 @@ export default function useAddToHouseholdColumns({
         },
       },
     ];
-  }, [householdId, projectId, currentMembersMap, onSuccess, data?.household]);
+  }, [
+    householdId,
+    projectId,
+    projectName,
+    currentMembersMap,
+    onSuccess,
+    data?.household,
+  ]);
 
   if (error) throw error;
 

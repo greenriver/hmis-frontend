@@ -3948,8 +3948,9 @@ export type JoinHouseholdsPayload = {
   __typename?: 'JoinHouseholdsPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  donorHousehold?: Maybe<Household>;
   errors: Array<ValidationError>;
-  household: Household;
+  receivingHousehold: Household;
 };
 
 export type JoiningEnrollmentInput = {
@@ -33624,7 +33625,7 @@ export type JoinHouseholdsMutation = {
   __typename?: 'Mutation';
   joinHouseholds?: {
     __typename?: 'JoinHouseholdsPayload';
-    household: {
+    receivingHousehold: {
       __typename?: 'Household';
       id: string;
       householdSize: number;
@@ -33713,6 +33714,95 @@ export type JoinHouseholdsMutation = {
         };
       }>;
     };
+    donorHousehold?: {
+      __typename?: 'Household';
+      id: string;
+      householdSize: number;
+      shortId: string;
+      householdClients: Array<{
+        __typename?: 'HouseholdClient';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          lockVersion: number;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+          dob?: string | null;
+          age?: number | null;
+          ssn?: string | null;
+          gender: Array<Gender>;
+          race: Array<Race>;
+          veteranStatus: NoYesReasonsForMissingData;
+          access: {
+            __typename?: 'ClientAccess';
+            id: string;
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
+            canEditClient: boolean;
+            canDeleteClient: boolean;
+            canViewDob: boolean;
+            canViewClientName: boolean;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+            canViewEnrollmentDetails: boolean;
+            canDeleteAssessments: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canViewAnyConfidentialClientFiles: boolean;
+            canViewAnyNonconfidentialClientFiles: boolean;
+            canUploadClientFiles: boolean;
+            canViewAnyFiles: boolean;
+            canAuditClients: boolean;
+            canManageScanCards: boolean;
+            canMergeClients: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
+          };
+          externalIds: Array<{
+            __typename?: 'ExternalIdentifier';
+            id: string;
+            identifier?: string | null;
+            url?: string | null;
+            label: string;
+            type: ExternalIdentifierType;
+          }>;
+          alerts: Array<{
+            __typename?: 'ClientAlert';
+            id: string;
+            note: string;
+            expirationDate?: string | null;
+            createdAt: string;
+            priority: ClientAlertPriorityLevel;
+            createdBy?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }>;
+        };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          lockVersion: number;
+          autoExited: boolean;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+          } | null;
+        };
+      }>;
+    } | null;
   } | null;
 };
 
@@ -49842,7 +49932,10 @@ export type GetEnrollmentGeolocationsQueryResult = Apollo.QueryResult<
 export const JoinHouseholdsDocument = gql`
   mutation JoinHouseholds($input: JoinHouseholdsInput!) {
     joinHouseholds(input: $input) {
-      household {
+      receivingHousehold {
+        ...HouseholdFields
+      }
+      donorHousehold {
         ...HouseholdFields
       }
     }

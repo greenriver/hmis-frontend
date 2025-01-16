@@ -28120,6 +28120,18 @@
             "deprecationReason": null
           },
           {
+            "name": "donorHousehold",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Household",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "errors",
             "description": null,
             "args": [],
@@ -28144,7 +28156,7 @@
             "deprecationReason": null
           },
           {
-            "name": "household",
+            "name": "receivingHousehold",
             "description": null,
             "args": [],
             "type": {

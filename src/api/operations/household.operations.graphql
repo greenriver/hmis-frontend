@@ -1,6 +1,9 @@
 mutation JoinHouseholds($input: JoinHouseholdsInput!) {
   joinHouseholds(input: $input) {
-    household {
+    receivingHousehold {
+      ...HouseholdFields
+    }
+    donorHousehold {
       ...HouseholdFields
     }
   }

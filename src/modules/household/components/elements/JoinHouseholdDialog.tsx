@@ -1,11 +1,12 @@
-import { Alert, AlertTitle, Button, Stack } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { MergeTypeRounded } from '@mui/icons-material';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
-import StepDialog from '@/components/elements/StepDialog';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import StepDialog, { TabDefinition } from '@/components/elements/StepDialog';
+import { clientBriefName, findHohOrRep } from '@/modules/hmis/hmisUtil';
 import JoinHouseholdAddRelationships from '@/modules/household/components/elements/JoinHouseholdAddRelationships';
-import JoinHouseholdReviewJoin from '@/modules/household/components/elements/JoinHouseholdReviewJoin';
+import JoinHouseholdReview from '@/modules/household/components/elements/JoinHouseholdReview';
 import JoinHouseholdSelectClients from '@/modules/household/components/elements/JoinHouseholdSelectClients';
+import JoinHouseholdSuccess from '@/modules/household/components/elements/JoinHouseholdSuccess';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -19,6 +20,9 @@ interface Props {
   conflictingEnrollmentId: string;
   onClose: VoidFunction;
   receivingHousehold: HouseholdFieldsFragment;
+  clientAlertsComponent: ReactNode;
+  projectId: string;
+  projectName: string;
 }
 
 const JoinHouseholdDialog = ({
@@ -26,55 +30,82 @@ const JoinHouseholdDialog = ({
   onClose,
   conflictingEnrollmentId,
   receivingHousehold,
+  clientAlertsComponent,
+  projectId,
+  projectName,
 }: Props) => {
+  const [joiningClients, setJoiningClients] = useState<
+    HouseholdClientFieldsFragment[]
+  >([]);
+
   // todo @martha - need to use enrollmentLockVersion?
   const {
     data: { enrollment: conflictingEnrollment } = {},
-    loading,
-    error,
+    loading: fetchLoading,
+    error: fetchError,
   } = useGetEnrollmentWithHouseholdQuery({
     variables: {
       id: conflictingEnrollmentId,
     },
+    onCompleted: (data) => {
+      if (data?.enrollment?.household) {
+        const household = data?.enrollment?.household;
+        const initiator = household?.householdClients.find(
+          (hc) => hc.enrollment.id === conflictingEnrollmentId
+        );
+
+        if (initiator) {
+          // Once the household loads, set the joining clients list to the initiating client
+          // (the one with the conflicting enrollment), plus if they are the HoH, all their household members.
+          if (
+            initiator.relationshipToHoH ===
+            RelationshipToHoH.SelfHeadOfHousehold
+          ) {
+            setJoiningClients(household.householdClients);
+          } else {
+            setJoiningClients([initiator]);
+          }
+        }
+      }
+    },
   });
-  console.log(loading); //todo @martha
 
-  const initiator = useMemo(() => {
-    return conflictingEnrollment?.household.householdClients.find(
-      (hc) => hc.client.id === conflictingEnrollment.client.id
-    );
-  }, [
-    conflictingEnrollment?.client.id,
-    conflictingEnrollment?.household.householdClients,
-  ]);
+  const donorHousehold = useMemo(
+    () => conflictingEnrollment?.household,
+    [conflictingEnrollment]
+  );
 
-  const initiatorClientName = initiator?.client
-    ? clientBriefName(initiator.client)
-    : '';
+  const receivingHoh = useMemo(
+    () => findHohOrRep(receivingHousehold.householdClients),
+    [receivingHousehold.householdClients]
+  );
 
-  const [joiningClients, setJoiningClients] = useState<
-    HouseholdClientFieldsFragment[]
-  >([]); // todo @martha - initially select joining client
+  const receivingHohName = useMemo(() => {
+    return clientBriefName(receivingHoh.client);
+  }, [receivingHoh]);
 
-  // todo @martha = |nul here allows to set the dropdown back to null, but we want to disable the action (going to the next step) unless all are fileld out
   const [relationships, setRelationships] = useState<
     Record<string, RelationshipToHoH | null>
   >({});
 
-  // on success - move this
-  const [joinedHousehold, setJoinedHousehold] =
-    useState<HouseholdFieldsFragment | null>(null);
+  // todo @martha on success - move this, make this prettier, it's so messy now, deal with errors
+  const [joinedHousehold, setJoinedHousehold] = useState<
+    HouseholdFieldsFragment | undefined
+  >(undefined);
+  const [remainingHousehold, setRemainingHousehold] = useState<
+    HouseholdFieldsFragment | undefined
+  >(undefined);
   const [joinHousehold, { loading: joinLoading, error: joinError }] =
     useJoinHouseholdsMutation({
       onCompleted: (data) => {
-        if (data.joinHouseholds?.household) {
-          setJoinedHousehold(receivingHousehold);
+        if (data.joinHouseholds?.receivingHousehold) {
+          setJoinedHousehold(data.joinHouseholds?.receivingHousehold);
+        }
+        if (data.joinHouseholds?.donorHousehold) {
+          setRemainingHousehold(data.joinHouseholds.donorHousehold);
         }
       },
     });
-  // todo @martha - deal with errors and loading
-  console.log(joinLoading);
-  console.log(joinError);
 
   const onSubmit = useCallback(() => {
     joinHousehold({
@@ -84,7 +115,10 @@ const JoinHouseholdDialog = ({
           joiningEnrollmentInputs: joiningClients.map((hc) => {
             return {
               enrollmentId: hc.enrollment.id,
-              relationshipToHoh: relationships[hc.id],
+              relationshipToHoh:
+                relationships[hc.enrollment.id] ||
+                RelationshipToHoH.DataNotCollected, // todo @martha 1 - this should never be dnc,
+              // also the fact that I specify it twice is its own problem
             };
           }),
         },
@@ -92,75 +126,128 @@ const JoinHouseholdDialog = ({
     });
   }, [joinHousehold, receivingHousehold.id, joiningClients, relationships]);
 
-  if (error) throw error;
+  const missingRelationshipsCount = useMemo(
+    () =>
+      joiningClients.filter((jc) => !relationships[jc.enrollment.id]).length,
+    [joiningClients, relationships]
+  );
 
-  if (!conflictingEnrollment) return <Loading />;
+  const missingRelationshipsProps = useMemo(() => {
+    return {
+      disabled: missingRelationshipsCount > 0,
+      disabledReason:
+        missingRelationshipsCount > 0
+          ? `Missing ${missingRelationshipsCount} required fields`
+          : undefined,
+    };
+  }, [missingRelationshipsCount]);
+
+  const tabDefinitions: TabDefinition[] = useMemo(
+    () => [
+      {
+        title: 'Select Clients',
+        content: (
+          <>
+            {donorHousehold && (
+              <JoinHouseholdSelectClients
+                donorHousehold={donorHousehold}
+                selectedClients={joiningClients}
+                setSelectedClients={setJoiningClients}
+                receivingHohName={receivingHohName}
+                clientAlertsComponent={clientAlertsComponent}
+              />
+            )}
+          </>
+        ),
+        FormDialogActionProps: {
+          disabled: joiningClients.length === 0,
+          disabledReason: 'Select a client',
+        },
+      },
+      {
+        title: 'Add Relationships',
+        content: (
+          <JoinHouseholdAddRelationships
+            joiningClients={joiningClients}
+            relationships={relationships}
+            updateRelationship={(enrollmentId, relationship) => {
+              setRelationships((prev) => {
+                return {
+                  ...prev,
+                  [enrollmentId]: relationship,
+                };
+              });
+            }}
+            receivingHousehold={receivingHousehold}
+            receivingHohName={receivingHohName}
+          />
+        ),
+        FormDialogActionProps: missingRelationshipsProps,
+      },
+      {
+        // todo @martha - actually test what happens if there is an error (like server error). you want to stay inside the dialog
+        title: 'Review Join',
+        content: !donorHousehold ? (
+          <Loading />
+        ) : (
+          <JoinHouseholdReview
+            joiningClients={joiningClients}
+            receivingHousehold={receivingHousehold}
+            donorHousehold={donorHousehold}
+            relationships={relationships}
+          />
+        ),
+        FormDialogActionProps: {
+          ...missingRelationshipsProps,
+          submitLoading: joinLoading,
+          disabled: joinLoading || missingRelationshipsCount > 0,
+        },
+      },
+    ],
+    [
+      clientAlertsComponent,
+      donorHousehold,
+      joinLoading,
+      joiningClients,
+      missingRelationshipsCount,
+      missingRelationshipsProps,
+      receivingHohName,
+      receivingHousehold,
+      relationships,
+    ]
+  );
+
+  // const handleClose
+
+  if (fetchError) throw fetchError;
+  if (joinError) throw joinError;
 
   return (
     <StepDialog
-      title={`Enroll ${initiatorClientName}`}
+      title={'Join Enrollments'}
+      submitButtonTitle={'Join Enrollments'}
+      SubmitButtonProps={{
+        endIcon: <MergeTypeRounded />,
+      }}
+      successContent={
+        joinedHousehold && (
+          <JoinHouseholdSuccess
+            receivingHohName={receivingHohName}
+            joinedClients={joiningClients}
+            remainingHousehold={remainingHousehold}
+            projectId={projectId}
+            projectName={projectName}
+            onClose={onClose}
+          />
+        )
+      }
+      loading={fetchLoading}
       open={open}
       fullWidth
       maxWidth='lg'
       onClose={onClose}
       onSubmit={onSubmit}
-      tabDefinitions={[
-        {
-          title: 'Select Clients',
-          content: (
-            <JoinHouseholdSelectClients
-              donorHousehold={conflictingEnrollment.household}
-              selectedClients={joiningClients}
-              setSelectedClients={setJoiningClients}
-            />
-          ),
-        },
-        {
-          title: 'Add Relationships',
-          content: (
-            <JoinHouseholdAddRelationships
-              joiningClients={joiningClients}
-              relationships={relationships}
-              updateRelationship={(householdClientId, relationship) => {
-                setRelationships((prev) => {
-                  return {
-                    ...prev,
-                    [householdClientId]: relationship,
-                  };
-                });
-              }}
-              receivingHousehold={receivingHousehold}
-            />
-          ),
-        },
-        {
-          title: 'Review Join',
-          content: joinedHousehold ? (
-            <>
-              <Stack gap={2}>
-                <Alert color='success'>
-                  <AlertTitle>Successful join</AlertTitle>
-                  [Client name] and [x] other members enrollment[s] have have
-                  been successfully joined to [hoh name]’s Enrollment at
-                  [project name]
-                </Alert>
-                <Button>Return to [Client 1]'s Enrollment</Button>
-                <Button variant='outlined'>View [Client 2]'s Enrollment</Button>
-                <Button variant='outlined'>
-                  View Enrollments at [Project]
-                </Button>
-              </Stack>
-            </>
-          ) : (
-            <JoinHouseholdReviewJoin
-              joiningClients={joiningClients}
-              receivingHousehold={receivingHousehold}
-              donorHousehold={conflictingEnrollment.household}
-              relationships={relationships}
-            />
-          ),
-        },
-      ]}
+      tabDefinitions={tabDefinitions}
     />
   );
 };

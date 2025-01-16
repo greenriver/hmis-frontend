@@ -1,9 +1,16 @@
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
+import React from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
+import ClientName from '@/modules/client/components/ClientName';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import RelationshipToHohSelect from '@/modules/household/components/elements/RelationshipToHohSelect';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
-import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import {
+  asClient,
+  CLIENT_COLUMNS,
+} from '@/modules/search/components/ClientSearch';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -12,12 +19,13 @@ import {
 
 interface Props {
   joiningClients: HouseholdClientFieldsFragment[];
-  relationships: Record<string, RelationshipToHoH>;
+  relationships: Record<string, RelationshipToHoH | null>;
   updateRelationship: (
-    householdClientId: string,
+    enrollmentId: string,
     relationship: RelationshipToHoH | null
   ) => void;
   receivingHousehold: HouseholdFieldsFragment;
+  receivingHohName?: string;
 }
 
 const JoinHouseholdAddRelationships = ({
@@ -25,9 +33,8 @@ const JoinHouseholdAddRelationships = ({
   relationships,
   updateRelationship,
   receivingHousehold,
+  receivingHohName,
 }: Props) => {
-  // todo @martha - updated entry dates
-
   return (
     <Stack gap={2}>
       <Box>
@@ -35,29 +42,45 @@ const JoinHouseholdAddRelationships = ({
         <Typography variant='h3'>Add Relationships</Typography>
       </Box>
       <Typography variant='body1'>
-        Update joining clients' relationship to [HoH]
-        {/*  todo @martha - new HoH*/}
+        Update joining clients' relationships{' '}
+        {receivingHohName && <>to {receivingHohName}</>}
       </Typography>
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>
           rows={[...receivingHousehold.householdClients, ...joiningClients]}
-          // todo @martha - remove exit date? (the enrollment is, probably, unexited? or it could be exited...)
           columns={[
-            CLIENT_COLUMNS.name,
+            {
+              ...CLIENT_COLUMNS.name,
+              render: (client) => (
+                <Stack direction='row' gap={1}>
+                  <ClientName client={asClient(client)} />
+                  {joiningClients.includes(client) && (
+                    <Chip label='New' size='small' variant='outlined' />
+                  )}
+                </Stack>
+              ),
+              sticky: 'left',
+            },
             CLIENT_COLUMNS.age,
             {
-              header: 'Relationship',
+              header: 'Relationship', // todo @martha - add required indicator. star for required is not an existing pattern?
               key: 'relationship',
+              // todo @martha - padding issue on these cells
+              // header should also have table cell props applied?
               render: (hc: HouseholdClientFieldsFragment) => {
                 if (joiningClients.includes(hc)) {
                   return (
+                    // todo @martha - associate with column header as input
                     <RelationshipToHohSelect
-                      value={relationships[hc.id] || null}
+                      value={relationships[hc.enrollment.id] || null}
                       onChange={(_event, selected) => {
-                        updateRelationship(hc.id, selected?.value || null);
+                        updateRelationship(
+                          hc.enrollment.id,
+                          selected?.value || null
+                        );
                       }}
                       textInputProps={{
-                        highlight: true,
+                        highlight: true, // todo @martha - use WarnIfEmpty treatment (?)
                         placeholder: 'Select Relationship',
                         inputProps: {
                           'aria-label': `Relationship to HoH for ${clientBriefName(
@@ -68,12 +91,19 @@ const JoinHouseholdAddRelationships = ({
                     />
                   );
                 } else {
-                  return hc.relationshipToHoH; // todo @martha - in an enum
+                  return (
+                    <HmisEnum
+                      key={hc.id}
+                      value={hc.relationshipToHoH}
+                      enumMap={HmisEnums.RelationshipToHoH}
+                      whiteSpace='nowrap'
+                    />
+                  );
                 }
               },
+              tableCellProps: { sx: { p: 0 } },
             },
             WITH_ENROLLMENT_COLUMNS.entryDate,
-            WITH_ENROLLMENT_COLUMNS.exitDate,
             WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
           ]}
         />

@@ -39,6 +39,7 @@ import {
 interface Props {
   householdId?: string;
   projectId: string;
+  projectName: string;
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
 }
@@ -46,6 +47,7 @@ interface Props {
 const ManageHousehold = ({
   householdId: initialHouseholdId,
   projectId,
+  projectName,
   BackButton,
   renderBackButton,
 }: Props) => {
@@ -65,6 +67,7 @@ const ManageHousehold = ({
   } = useAddToHouseholdColumns({
     householdId: initialHouseholdId,
     projectId,
+    projectName,
   });
 
   // Fetch members to show in "previously associated" table

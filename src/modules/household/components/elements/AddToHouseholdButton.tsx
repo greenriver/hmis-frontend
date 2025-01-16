@@ -25,6 +25,7 @@ interface Props {
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
   projectId: string;
+  projectName: string;
   onSuccess: (householdId: string) => void;
   household?: HouseholdFieldsFragment;
 }
@@ -35,6 +36,7 @@ const AddToHouseholdButton = ({
   householdId,
   onSuccess,
   projectId,
+  projectName,
   household,
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
@@ -93,6 +95,14 @@ const AddToHouseholdButton = ({
 
   const { clientAlerts } = useClientAlerts({ client: client });
 
+  const clientAlertsComponent = useMemo(
+    () =>
+      clientAlerts.length > 0 ? (
+        <ClientAlertStack clientAlerts={clientAlerts} />
+      ) : undefined,
+    [clientAlerts]
+  );
+
   return (
     <>
       <ButtonTooltipContainer
@@ -112,24 +122,25 @@ const AddToHouseholdButton = ({
       {renderFormDialog({
         title: <>Enroll {clientBriefName(client)}</>,
         submitButtonText: `Enroll`,
-        preFormComponent: (
-          <Stack gap={2}>
-            {clientAlerts.length > 0 && (
-              <ClientAlertStack clientAlerts={clientAlerts} />
-            )}
-            {household && conflictingEnrollmentId && (
-              <ConflictingEnrollmentAlert
-                joiningClient={client}
-                receivingHousehold={household}
-                conflictingEnrollmentId={conflictingEnrollmentId}
-                onClickJoinEnrollment={() => {
-                  closeDialog();
-                  setJoinHouseholdDialogOpen(true);
-                }}
-              />
-            )}
-          </Stack>
-        ),
+        // This wrapper is necessary around the preFormComponent Stack,
+        // otherwise the form dialog renders some awkward extra spacing.
+        // It could be fixed more systematically with some updates to renderFormDialog's internals.
+        preFormComponent:
+          !!clientAlertsComponent || (household && conflictingEnrollmentId) ? (
+            <Stack gap={2}>
+              {clientAlertsComponent}
+              {household && conflictingEnrollmentId && (
+                <ConflictingEnrollmentAlert
+                  joiningClient={client}
+                  conflictingEnrollmentId={conflictingEnrollmentId}
+                  onClickJoinEnrollment={() => {
+                    closeDialog();
+                    setJoinHouseholdDialogOpen(true);
+                  }}
+                />
+              )}
+            </Stack>
+          ) : undefined,
       })}
       {/*todo @martha - don't forget to put all household alerts in the new join dialog*/}
       {household && conflictingEnrollmentId && (
@@ -138,6 +149,9 @@ const AddToHouseholdButton = ({
           conflictingEnrollmentId={conflictingEnrollmentId}
           onClose={() => setJoinHouseholdDialogOpen(false)} // todo @martha - clear out rest of state on close
           receivingHousehold={household}
+          clientAlertsComponent={clientAlertsComponent} // todo @martha - client alerts should include household member names
+          projectId={projectId}
+          projectName={projectName}
         />
       )}
     </>

@@ -31,6 +31,7 @@ import {
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
+  HouseholdClientFieldsFragment,
   HouseholdFilterOptions,
   ProjectEnrollmentsHouseholdClientFieldsFragment,
   ProjectEnrollmentsHouseholdFieldsFragment,
@@ -40,13 +41,15 @@ export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
 >['households']['nodes'][number];
 
-type OneHouseholdClient = HouseholdFields['householdClients'][number];
-export const PROJECT_HOUSEHOLD_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
-  { ...CLIENT_COLUMNS.name, sticky: 'left' },
-  CLIENT_COLUMNS.age,
-  {
+export const HOUSEHOLD_CLIENT_COLUMNS: Record<
+  string,
+  ColumnDef<OneHouseholdClient | HouseholdClientFieldsFragment>
+> = {
+  relationship: {
     header: 'Relationship',
-    render: (householdClient) => (
+    render: (
+      householdClient: OneHouseholdClient | HouseholdClientFieldsFragment
+    ) => (
       <HmisEnum
         key={householdClient.id}
         value={householdClient.relationshipToHoH}
@@ -55,6 +58,13 @@ export const PROJECT_HOUSEHOLD_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
       />
     ),
   },
+};
+
+type OneHouseholdClient = HouseholdFields['householdClients'][number];
+export const PROJECT_HOUSEHOLD_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
+  { ...CLIENT_COLUMNS.name, sticky: 'left' },
+  CLIENT_COLUMNS.age,
+  HOUSEHOLD_CLIENT_COLUMNS.relationship,
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
