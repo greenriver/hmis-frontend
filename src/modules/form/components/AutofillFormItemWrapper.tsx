@@ -1,10 +1,7 @@
 import React, { ReactNode, useEffect } from 'react';
 import { useFormState, useWatch } from 'react-hook-form';
 
-import {
-  FormDefinitionHandlers,
-  getSafeLinkId,
-} from '../hooks/useFormDefinitionHandlers';
+import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import { FormItem } from '@/types/gqlTypes';
 
 export interface Props {
@@ -26,14 +23,13 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
   item,
   children,
 }) => {
-  const linkId = getSafeLinkId(item.linkId);
+  const linkId = item.linkId;
   // dependentLinkIds are referenced from the 'autofill_when' property of item
   // example:
   //   link_id: item.id,
   //   autofill_values: [ { autofill_when: [{ question: dependentLinkIds[0] }] } ],
   const { autofillInvertedDependencyMap, getAutofillValueForField } = handlers;
-  const dependentLinkIds =
-    autofillInvertedDependencyMap[item.linkId]?.map(getSafeLinkId);
+  const dependentLinkIds = autofillInvertedDependencyMap[item.linkId];
 
   const { setValue, getValues, control } = handlers.methods;
 

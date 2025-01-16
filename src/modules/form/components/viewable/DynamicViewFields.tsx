@@ -1,10 +1,7 @@
 import { Grid } from '@mui/material';
 import React, { ReactNode, useCallback } from 'react';
 
-import {
-  FormDefinitionHandlers,
-  getSafeLinkId,
-} from '../../hooks/useFormDefinitionHandlers';
+import { FormDefinitionHandlers } from '../../hooks/useFormDefinitionHandlers';
 import {
   ChangeType,
   ItemChangedFn,
@@ -52,7 +49,7 @@ const DynamicViewFormField: React.FC<Props> = ({
         if (item.type === ItemType.Integer) value = parseInt(value) || 0;
         if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
       }
-      handlers.methods.setValue(getSafeLinkId(linkId), value, {
+      handlers.methods.setValue(linkId, value, {
         shouldDirty: type === ChangeType.User,
       });
     },
@@ -85,7 +82,7 @@ const DynamicViewFormField: React.FC<Props> = ({
 
     const itemComponent = (
       <Grid item key={item.linkId}>
-        <ValueWrapper name={getSafeLinkId(item.linkId)} handlers={handlers}>
+        <ValueWrapper name={item.linkId} handlers={handlers}>
           {(value) => (
             <DynamicViewField
               item={item}

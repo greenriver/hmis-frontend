@@ -2,10 +2,7 @@ import { compact, flattenDeep, uniq } from 'lodash-es';
 import React, { ReactNode, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import {
-  FormDefinitionHandlers,
-  getSafeLinkId,
-} from '../hooks/useFormDefinitionHandlers';
+import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import { getAllChildLinkIds } from '../util/formUtil';
 import { DisabledDisplay, FormItem } from '@/types/gqlTypes';
 
@@ -61,7 +58,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
       ),
     ];
 
-    return uniq(list.map(getSafeLinkId));
+    return uniq(list);
   }, [linkId, childItems, disabledDependencyMap]);
 
   // Listen for dependent field value changes

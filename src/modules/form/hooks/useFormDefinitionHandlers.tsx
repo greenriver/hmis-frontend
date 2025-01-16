@@ -1,5 +1,5 @@
 import { cloneDeep } from '@apollo/client/utilities';
-import { mapKeys, omit } from 'lodash-es';
+import { omit } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 import { DefaultValues, FieldValues, useForm } from 'react-hook-form';
 
@@ -28,16 +28,6 @@ export interface UseDynamicFormArgs<T extends FieldValues> {
   errors?: ValidationError[];
   viewOnly?: boolean;
 }
-
-export const getSafeLinkId = (linkId: string) =>
-  String(linkId).replace(/\./g, '__');
-export const getCleanedLinkId = (linkId: string) =>
-  String(linkId).replace(/__/g, '.');
-
-export const mapKeysToSafe = (values: FieldValues) =>
-  mapKeys(values, (val, key) => getSafeLinkId(key));
-export const mapKeysToClean = (values: FieldValues) =>
-  mapKeys(values, (val, key) => getCleanedLinkId(key));
 
 const useFormDefinitionHandlers = <T extends FieldValues>({
   definition,
@@ -68,7 +58,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
         viewOnly,
       });
     });
-    const result = mapKeysToSafe(newValues) as DefaultValues<T>;
+    const result = newValues as DefaultValues<T>;
     return result;
   });
 
@@ -78,9 +68,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
   const getAutofillValueForField = useCallback(
     (item: FormItem) => {
       const { linkId } = item;
-      const values = mapKeys(methods.getValues(), (v, k) =>
-        getCleanedLinkId(k)
-      );
+      const values = methods.getValues();
       if (!autofillInvertedDependencyMap[linkId]) return;
       const shouldAutofill = autofillValues({
         item,
@@ -101,7 +89,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
 
   // Get form state, with "hidden" fields (and their children) removed
   const getValues = useCallback(() => {
-    const values = mapKeysToClean(methods.getValues());
+    const values = methods.getValues();
     if (!definition) return values;
 
     const excluded = addDescendants(

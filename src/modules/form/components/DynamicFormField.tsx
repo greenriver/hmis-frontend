@@ -2,10 +2,7 @@ import { Grid } from '@mui/material';
 import { isEmpty, omit, pick } from 'lodash-es';
 import React, { cloneElement, ReactNode, useCallback } from 'react';
 
-import {
-  FormDefinitionHandlers,
-  getSafeLinkId,
-} from '../hooks/useFormDefinitionHandlers';
+import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import {
   ChangeType,
   ItemChangedFn,
@@ -120,7 +117,7 @@ const DynamicFormField: React.FC<Props> = ({
         if (item.type === ItemType.Integer) value = parseInt(value) || 0;
         if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
       }
-      handlers.methods.setValue(getSafeLinkId(linkId), value, {
+      handlers.methods.setValue(linkId, value, {
         shouldDirty: type === ChangeType.User,
       });
     },
@@ -203,10 +200,7 @@ const DynamicFormField: React.FC<Props> = ({
         // Disability group actually needs accurate values for its own mechanics, so provide them
         if (item.component === Component.DisabilityTable) {
           return (
-            <ValueWrapper
-              handlers={handlers}
-              name={getAllChildLinkIds(item).map(getSafeLinkId)}
-            >
+            <ValueWrapper handlers={handlers} name={getAllChildLinkIds(item)}>
               {/* We're just using this component to watch the group's child values and update the values prop when they change */}
               {() => cloneElement(group, { values: handlers.getValues() })}
             </ValueWrapper>
@@ -232,7 +226,7 @@ const DynamicFormField: React.FC<Props> = ({
           />
         </Grid>
       ) : (
-        <ValueWrapper name={getSafeLinkId(item.linkId)} handlers={handlers}>
+        <ValueWrapper name={item.linkId} handlers={handlers}>
           {(value) => (
             <DynamicField
               value={value}
