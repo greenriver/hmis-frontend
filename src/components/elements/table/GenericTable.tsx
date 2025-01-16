@@ -17,6 +17,7 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
+import { SystemStyleObject } from '@mui/system';
 import { visuallyHidden } from '@mui/utils';
 import { compact, get, includes, isNil, without } from 'lodash-es';
 import {
@@ -55,6 +56,7 @@ export interface Props<T> {
   actionRow?: ReactNode;
   tableProps?: TableProps;
   vertical?: boolean;
+  verticalHiddenHeader?: string; // For vertically oriented tables, this is the hidden header of the first column
   noHead?: boolean;
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
@@ -79,18 +81,62 @@ const clickableRowStyles = {
   '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
   cursor: 'pointer',
 };
-
-const HeaderCell = ({
-  children,
-  sx,
-  padding,
+export const getStickyCellStyles = ({
+  sticky,
+  stickyBorder = true,
+  leftOffset = 0,
+  rightOffset = 0,
 }: {
-  children: ReactNode;
-  padding?: TableCellProps['padding'];
-  sx?: SxProps<Theme>;
-}) => (
+  sticky?: 'left' | 'right';
+  stickyBorder?: boolean;
+  leftOffset?: string | number;
+  rightOffset?: string | number;
+}): SystemStyleObject<Theme> => {
+  if (!sticky) return {};
+
+  const base = {
+    backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
+    position: 'sticky',
+    zIndex: 1,
+    maxWidth: '200px', // Mitigates the risk that the column may be so wide as to obscure any scrollable columns
+    overflow: 'clip',
+  };
+
+  // Pseudo-element to achieve a border on sticky cells. `position: sticky` doesn't work with regular border
+  const pseudo = stickyBorder
+    ? {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        width: '1px',
+        backgroundColor: 'borders.light',
+        pointerEvents: 'none', // Don't interfere with interactions
+      }
+    : {};
+
+  if (sticky === 'right')
+    return {
+      ...base,
+      right: rightOffset,
+      '&::before': {
+        ...pseudo,
+        left: 0,
+      },
+    };
+
+  return {
+    ...base,
+    left: leftOffset,
+    '&::after': {
+      ...pseudo,
+      right: 0,
+    },
+  };
+};
+
+const HeaderCell = ({ children, sx, ...rest }: TableCellProps) => (
   <TableCell
-    padding={padding}
     sx={{
       borderBottomColor: 'borders.dark',
       borderBottomWidth: 2,
@@ -98,6 +144,7 @@ const HeaderCell = ({
       pb: 1,
       ...sx,
     }}
+    {...rest}
   >
     {children}
   </TableCell>
@@ -115,6 +162,17 @@ export const renderCellContents = <T extends { id: string }>(
   return null;
 };
 
+export const renderHeaderCellContents = <T extends { id: string }>(
+  def: ColumnDef<T>
+) => {
+  return def.header ? (
+    <strong>{def.header}</strong>
+  ) : (
+    // If header isn't provided, add a visually hidden header with the column key for accessibility
+    <Box sx={visuallyHidden}>{def.key}</Box>
+  );
+};
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
@@ -123,6 +181,7 @@ const GenericTable = <T extends { id: string }>({
   paginated = false,
   loading = false,
   vertical = false,
+  verticalHiddenHeader,
   renderVerticalHeaderCell,
   tablePaginationProps,
   tableContainerProps,
@@ -203,7 +262,12 @@ const GenericTable = <T extends { id: string }>({
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
         <TableRow>
-          <TableCell key='empty' sx={{ backgroundColor: 'background.paper' }} />
+          <TableCell
+            key='empty'
+            sx={{ ...verticalCellSx(0), backgroundColor: 'background.paper' }}
+          >
+            <Box sx={visuallyHidden}>{verticalHiddenHeader}</Box>
+          </TableCell>
           {rows.map((row, idx) => (
             <TableCell key={row.id} sx={verticalCellSx(idx)}>
               {renderVerticalHeaderCell(row)}
@@ -217,7 +281,10 @@ const GenericTable = <T extends { id: string }>({
       {hasHeaders && (
         <TableRow>
           {selectable && (
-            <HeaderCell padding='checkbox'>
+            <HeaderCell
+              padding='checkbox'
+              sx={getStickyCellStyles({ sticky: 'left', stickyBorder: false })}
+            >
               <Checkbox
                 color='primary'
                 indeterminate={
@@ -234,23 +301,28 @@ const GenericTable = <T extends { id: string }>({
               />
             </HeaderCell>
           )}
-          {columns.map((def, i) => (
-            <HeaderCell
-              key={key(def) || i}
-              sx={{
-                ...(headerCellSx ? headerCellSx(def) : undefined),
-                textAlign: def.textAlign,
-                width: def.width,
-              }}
-            >
-              {def.header ? (
-                <strong>{def.header}</strong>
-              ) : (
-                // If header isn't provided, add a visually hidden header with the column key for accessibility
-                <Box sx={visuallyHidden}>{def.key}</Box>
-              )}
-            </HeaderCell>
-          ))}
+          {columns.map((def, i) => {
+            const headerStyles = headerCellSx ? headerCellSx(def) : {};
+            return (
+              <HeaderCell
+                key={key(def) || i}
+                sx={{
+                  ...getStickyCellStyles({
+                    sticky: def.sticky,
+                    leftOffset: selectable ? '46px' : 0,
+                  }),
+                  textAlign: def.textAlign,
+                  width: def.width,
+                  // headerStyles has SxProps type so we can't spread it directly. https://mui.com/system/getting-started/the-sx-prop/#passing-the-sx-prop
+                  ...(Array.isArray(headerStyles)
+                    ? headerStyles
+                    : [headerStyles]),
+                }}
+              >
+                {renderHeaderCellContents(def)}
+              </HeaderCell>
+            );
+          })}
         </TableRow>
       )}
       {loading && loadingVariant === 'linear' && (
@@ -308,9 +380,9 @@ const GenericTable = <T extends { id: string }>({
                   <HeaderCell
                     sx={{ ...verticalCellSx(1), width: '350px' }}
                     key={key(def)}
+                    role='rowheader'
                   >
-                    {' '}
-                    <strong>{def.header}</strong>
+                    {renderHeaderCellContents(def)}
                   </HeaderCell>
                   {rows.map((row, idx) => (
                     <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>
@@ -367,7 +439,14 @@ const GenericTable = <T extends { id: string }>({
                     tabIndex={handleRowClick ? 0 : undefined}
                   >
                     {selectable && (
-                      <TableCell padding='checkbox' key='selection'>
+                      <TableCell
+                        padding='checkbox'
+                        key='selection'
+                        sx={getStickyCellStyles({
+                          sticky: 'left',
+                          stickyBorder: false,
+                        })}
+                      >
                         <Checkbox
                           color='primary'
                           disabled={!isSelectable}
@@ -410,11 +489,16 @@ const GenericTable = <T extends { id: string }>({
                               textDecorationColor: 'links',
                             }
                           : undefined;
+
                       return (
                         <TableCell
                           key={key(def) || index}
                           {...tableCellProps}
                           sx={{
+                            ...getStickyCellStyles({
+                              sticky: def.sticky,
+                              leftOffset: selectable ? '46px' : 0,
+                            }),
                             width,
                             minWidth,
                             ...(isLinked ? { p: 0 } : undefined),

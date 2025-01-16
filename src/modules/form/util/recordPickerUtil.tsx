@@ -14,15 +14,15 @@ const dataCollectionVerb = {
 const COLLECTION_DATE = 'Date Collected';
 const COLLECTION_STAGE = 'Collection Point';
 
-export const assessmentColumns = [
-  {
+export const ASSESSMENT_COLUMNS = {
+  CollectionDate: {
     header: COLLECTION_DATE,
     render: (record: AssessmentForPopulation) =>
       [parseAndFormatDate(record.assessmentDate), record.user?.name]
         .filter((s) => !!s)
         .join(' by '),
   },
-  {
+  CollectionStage: {
     header: COLLECTION_STAGE,
     render: (record: AssessmentForPopulation) =>
       [
@@ -34,4 +34,9 @@ export const assessmentColumns = [
         .filter((s) => !!s)
         .join(' '),
   },
+};
+
+export const assessmentColumns = [
+  ASSESSMENT_COLUMNS.CollectionDate,
+  ASSESSMENT_COLUMNS.CollectionStage,
 ];

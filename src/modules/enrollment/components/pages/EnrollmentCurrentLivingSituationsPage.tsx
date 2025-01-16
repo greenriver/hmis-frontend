@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
+import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -93,10 +94,12 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     });
 
   const getColumnDefs = useCallback(
-    (rows: CurrentLivingSituationFieldsFragment[]) => {
+    (
+      rows: CurrentLivingSituationFieldsFragment[]
+    ): ColumnDef<CurrentLivingSituationFieldsFragment>[] => {
       const customColumns = getCustomDataElementColumns(rows);
       return [
-        CLS_COLUMNS.informationDate,
+        { ...CLS_COLUMNS.informationDate, sticky: 'left' },
         CLS_COLUMNS.livingSituation,
         CLS_COLUMNS.locationDetails,
         ...customColumns,

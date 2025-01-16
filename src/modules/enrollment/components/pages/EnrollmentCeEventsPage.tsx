@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react';
 
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
+import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -66,13 +67,14 @@ const EnrollmentCeEventsPage = () => {
     DataCollectionFeatureRole.CeEvent
   );
 
-  const columns = useMemo(
+  const columns: ColumnDef<EventFieldsFragment>[] = useMemo(
     () => [
       {
         header: 'Event Type',
         render: (e: EventFieldsFragment) => (
           <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />
         ),
+        sticky: 'left',
       },
       {
         header: 'Event Date',
