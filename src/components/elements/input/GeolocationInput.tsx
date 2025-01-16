@@ -1,42 +1,120 @@
-import { Typography } from '@mui/material';
-import React, { ReactNode } from 'react';
-import { useGeolocation } from '../../../hooks/useGeolocation';
-import LoadingButton from '../LoadingButton';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  Stack,
+  Typography,
+} from '@mui/material';
 
-/**
- * WIP! Proof of concept component for getting coordinates from HTML5 geolocation API.
- * - Needs to be wired up with Props to be used as an Input component.
- * - Likely needs to use a mapping API to display the coordinates on a map.
- */
+import React, { useId, useRef } from 'react';
 
-interface GeolocationInputProps {
-  children?: ReactNode;
+import GeolocationErrorAlert from '@/components/elements/input/GeolocationErrorAlert';
+
+import SingleGeolocationMap from '@/components/elements/maps/SingleGeolocationMap';
+import { ClearIcon, MyLocationIcon } from '@/components/elements/SemanticIcons';
+import { useGeolocation } from '@/hooks/useGeolocation';
+import { DynamicInputCommonProps } from '@/modules/form/types';
+
+import { LatLon } from '@/types/geolocationTypes';
+
+interface GeolocationInputProps
+  extends Pick<DynamicInputCommonProps, 'label' | 'helperText' | 'disabled'> {
+  value?: LatLon | null;
+  onChange: (value: LatLon | null) => void;
 }
 
-const GeolocationInput: React.FC<GeolocationInputProps> = ({ children }) => {
-  const { coordinates, requestCoordinates, loading, error } = useGeolocation();
+const GeolocationInput: React.FC<GeolocationInputProps> = ({
+  label,
+  value: coordinates,
+  onChange,
+  helperText,
+  disabled,
+}) => {
+  const { requestCoordinates, loading, error } = useGeolocation(onChange);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const labelId = useId();
+  const mapHeight = 230;
 
   return (
     <>
-      <LoadingButton onClick={requestCoordinates} loading={loading}>
-        {children || 'Request Location'}
-      </LoadingButton>
-      {error && <Typography color='error'>{error}</Typography>}
-      <div>
-        {/* {location && (
-          <img
-            alt='Map Holder'
-            src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude + ',' + location.longitude}&zoom=16&size=400x300&output=embed`}
-          />
-        )} */}
-        {coordinates && (
-          <Typography>
-            Latitude: {coordinates.latitude}
-            <br />
-            Longitude: {coordinates.longitude}
-          </Typography>
-        )}
-      </div>
+      <FormControl sx={{ width: '100%' }}>
+        {label && <div id={labelId}>{label}</div>}
+        {error && <GeolocationErrorAlert error={error} />}
+        <Stack
+          direction='row'
+          sx={{ my: 0.5 }}
+          columnGap={2}
+          rowGap={1}
+          flexWrap='wrap'
+          alignItems='center'
+        >
+          <Button
+            onClick={requestCoordinates}
+            startIcon={<MyLocationIcon />}
+            variant='outlined'
+            aria-labelledby={label ? labelId : undefined}
+            disabled={disabled}
+            ref={buttonRef}
+          >
+            Request Location
+          </Button>
+          {coordinates && (
+            <Button
+              variant='gray' // TODO: update to outlined grayscale
+              onClick={() => {
+                onChange(null);
+                buttonRef.current?.focus(); // move focus to Request Location button
+              }}
+              startIcon={<ClearIcon />}
+            >
+              Clear Map
+            </Button>
+          )}
+        </Stack>
+
+        {helperText && <FormHelperText>{helperText}</FormHelperText>}
+        <Box sx={{ mt: 1 }}>
+          {!coordinates && !disabled && (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'background.default',
+                borderColor: 'borders.dark',
+                borderRadius: 1,
+                borderWidth: 1,
+                borderStyle: 'solid',
+                height: mapHeight,
+              }}
+              aria-live='polite' // Notify screen readers of content updates
+            >
+              {loading ? (
+                <Typography color='links' fontWeight={700}>
+                  Getting Location ...
+                </Typography>
+              ) : (
+                <Typography color='text.secondary'>
+                  Location not collected
+                </Typography>
+              )}
+            </Box>
+          )}
+          {coordinates && (
+            <Box
+              aria-live='polite' // Announce when the map is displayed
+              aria-label="Map displaying the user's current location"
+              role='complementary' // aria-label on a div should have a role
+            >
+              <SingleGeolocationMap
+                coordinates={coordinates}
+                height={mapHeight}
+              />
+            </Box>
+          )}
+        </Box>
+      </FormControl>
     </>
   );
 };

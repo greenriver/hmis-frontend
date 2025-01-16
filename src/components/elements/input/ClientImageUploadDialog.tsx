@@ -15,7 +15,7 @@ import React, { useCallback, useState } from 'react';
 
 import CommonDialog from '../CommonDialog';
 import LoadingButton from '../LoadingButton';
-import Uploader from '../upload/UploaderBase';
+import Uploader from '../upload/Uploader';
 
 import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -27,6 +27,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import {
+  DirectUpload,
   useDeleteClientImageMutation,
   useGetClientImageQuery,
   useUpdateClientImageMutation,
@@ -162,15 +163,12 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
               )}
               <Grid item xs={12}>
                 <Uploader
+                  image
                   id='clientImageUploader'
-                  onUpload={(upload, file) => {
-                    setNewBlobId(upload.signedBlobId);
-                    setNewPhotoSrc(URL.createObjectURL(file));
-                    setErrors(emptyErrorState);
-                  }}
-                  onClear={() => {
-                    setNewBlobId(undefined);
-                    setNewPhotoSrc(undefined);
+                  multiple={false}
+                  onUpload={(upload?: DirectUpload, file?: File) => {
+                    setNewBlobId(upload ? upload.signedBlobId : upload);
+                    setNewPhotoSrc(file ? URL.createObjectURL(file) : file);
                     setErrors(emptyErrorState);
                   }}
                 />

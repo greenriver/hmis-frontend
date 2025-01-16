@@ -14,23 +14,23 @@ import { To } from 'react-router-dom';
 import RouterLink from './RouterLink';
 import { MoreMenuIcon } from './SemanticIcons';
 
-export type NavMenuItem = {
+export type CommonMenuItem = {
   key: string;
   to?: To;
   onClick?: VoidFunction;
   title?: ReactNode;
   divider?: boolean;
   disabled?: boolean;
+  ariaLabel?: string;
+  openInNew?: boolean;
 };
 
 interface Props {
   title: ReactNode;
-  items: NavMenuItem[];
-  variant?: ButtonProps['variant'];
-  disabled?: ButtonProps['disabled'];
+  items: CommonMenuItem[];
   iconButton?: boolean; // use an icon button instead of a text button
-  sx?: ButtonProps['sx'];
   MenuProps?: Omit<MenuProps, 'open'>;
+  ButtonProps?: ButtonProps;
 }
 
 const CommonMenuButton = ({
@@ -38,7 +38,7 @@ const CommonMenuButton = ({
   items,
   iconButton,
   MenuProps,
-  ...buttonProps
+  ButtonProps,
 }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -62,7 +62,7 @@ const CommonMenuButton = ({
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
-          {...buttonProps}
+          {...ButtonProps}
         >
           <MoreMenuIcon fontSize='inherit' />
         </IconButton>
@@ -74,7 +74,7 @@ const CommonMenuButton = ({
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<ArrowDropDownIcon />}
-          {...buttonProps}
+          {...ButtonProps}
         >
           {title}
         </Button>
@@ -98,28 +98,46 @@ const CommonMenuButton = ({
         }}
         {...MenuProps}
       >
-        {items.map(({ key, to, title, divider, onClick, disabled }) =>
-          divider ? (
-            <Divider key={key} />
-          ) : to ? (
-            <MenuItem key={key} component={RouterLink} to={to}>
-              {title}
-            </MenuItem>
-          ) : (
-            <MenuItem
-              key={key}
-              onClick={() => {
-                if (onClick) {
-                  // close menu before triggering onClick
-                  setAnchorEl(null);
-                  onClick();
-                }
-              }}
-              disabled={disabled}
-            >
-              {title}
-            </MenuItem>
-          )
+        {items.map(
+          ({
+            key,
+            to,
+            title,
+            divider,
+            onClick,
+            disabled,
+            ariaLabel,
+            openInNew,
+          }) =>
+            divider ? (
+              <Divider key={key} />
+            ) : to ? (
+              <li key={key}>
+                <MenuItem
+                  component={RouterLink}
+                  to={to}
+                  aria-label={ariaLabel}
+                  openInNew={openInNew}
+                >
+                  {title}
+                </MenuItem>
+              </li>
+            ) : (
+              <MenuItem
+                key={key}
+                onClick={() => {
+                  if (onClick) {
+                    // close menu before triggering onClick
+                    setAnchorEl(null);
+                    onClick();
+                  }
+                }}
+                disabled={disabled}
+                aria-label={ariaLabel}
+              >
+                {title}
+              </MenuItem>
+            )
         )}
       </Menu>
     </>

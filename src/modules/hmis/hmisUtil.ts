@@ -458,6 +458,7 @@ export const customDataElementValue = (
     val.valueJson,
     val.valueString,
     val.valueText,
+    val.valueFile,
   ].filter((e) => !isNil(e))[0];
 };
 

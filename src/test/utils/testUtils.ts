@@ -27,6 +27,8 @@ const mockValueForItem = (item: FormItem) => {
         return sample(options);
       }
       return { code: 'option-1', label: 'Selected Option' };
+    case ItemType.Geolocation:
+      return { latitude: 42.355513, longitude: -71.066939 };
     default:
       return null;
   }
