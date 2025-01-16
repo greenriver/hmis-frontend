@@ -19,6 +19,7 @@ type BaseColumnDef<T> = {
   tableCellProps?: TableCellProps;
   optional?: boolean;
   defaultHidden?: boolean;
+  sticky?: 'left' | 'right';
 };
 
 export type ColumnDef<T> =

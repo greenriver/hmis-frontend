@@ -42,7 +42,7 @@ const ClientServicesPage: React.FC<{
     () =>
       (
         [
-          SERVICE_BASIC_COLUMNS.serviceDate,
+          { ...SERVICE_BASIC_COLUMNS.serviceDate, sticky: 'left' },
           SERVICE_BASIC_COLUMNS.serviceType,
           {
             key: 'project',

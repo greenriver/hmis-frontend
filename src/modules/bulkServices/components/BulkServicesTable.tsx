@@ -75,7 +75,7 @@ const BulkServicesTable: React.FC<Props> = ({
         </NotCollectedText>
       );
       return [
-        CLIENT_COLUMNS.name,
+        { ...CLIENT_COLUMNS.name, sticky: 'left' },
         ...(canViewDob ? [CLIENT_COLUMNS.dobAge] : []),
         {
           header: 'Entry Date',

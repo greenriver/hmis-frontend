@@ -21,8 +21,10 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
   key: 'Actions',
-  tableCellProps: { sx: { py: 0 } },
+  tableCellProps: { sx: { py: 0, px: { xs: 1, sm: 2 } } },
   render: '', // gets overridden when used
+  sticky: 'right',
+  width: '0px',
 };
 
 export const getViewClientMenuItem = (client: ClientNameFragment) => {

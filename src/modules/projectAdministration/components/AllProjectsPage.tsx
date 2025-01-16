@@ -40,6 +40,7 @@ const PROJECT_COLUMNS: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Name',
     render: 'projectName',
+    sticky: 'left',
   },
   {
     header: 'Organization Name',
@@ -81,6 +82,7 @@ const ORGANIZATION_COLUMNS: ColumnDef<OrganizationType>[] = [
   {
     header: 'Organization Name',
     render: 'organizationName',
+    sticky: 'left',
   },
   {
     header: 'Project Count',

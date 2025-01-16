@@ -71,6 +71,7 @@ const EnrollmentCeAssessmentsPage = () => {
         header: 'Assessment Date',
         render: (a: CeAssessmentFieldsFragment) =>
           parseAndFormatDate(a.assessmentDate),
+        sticky: 'left',
       },
       {
         header: 'Assessment Level',

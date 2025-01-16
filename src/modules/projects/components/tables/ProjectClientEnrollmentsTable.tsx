@@ -200,7 +200,7 @@ const ProjectClientEnrollmentsTable = ({
   const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
       return [
-        CLIENT_COLUMNS.name,
+        { ...CLIENT_COLUMNS.name, sticky: 'left' },
         CLIENT_COLUMNS.age,
         ENROLLMENT_COLUMNS.entryDate,
         ENROLLMENT_COLUMNS.exitDate,
