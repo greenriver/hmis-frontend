@@ -102,6 +102,9 @@ const CommonMenuButton = ({
           vertical: 'top',
           horizontal: 'right',
         }}
+        // Bug: Opening the CommonMenu applies padding to the body, which can look weird on mobile.
+        // It's sort of fixable with disableScrollLock, but that seems to introduce other scroll problems.
+        // disableScrollLock={true}
         {...MenuProps}
       >
         {items.map(

@@ -40,6 +40,7 @@ const ProjectServicesTable = ({
     return [
       {
         header: 'Client Name',
+        sticky: 'left',
         render: (s: ServiceFields) => (
           <ClientName client={s.enrollment.client} />
         ),

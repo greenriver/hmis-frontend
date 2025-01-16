@@ -5,6 +5,7 @@ import {
   BASE_ACTION_COLUMN_DEF,
   getViewAssessmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
+import { ColumnDef } from '@/components/elements/table/types';
 import { ASSESSMENT_COLUMNS } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -27,9 +28,9 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
   enrollmentId,
   projectId,
 }) => {
-  const columns = useMemo(
+  const columns: ColumnDef<AssessmentFieldsFragment>[] = useMemo(
     () => [
-      ASSESSMENT_COLUMNS.date,
+      { ...ASSESSMENT_COLUMNS.date, sticky: 'left' },
       ASSESSMENT_COLUMNS.type,
       ASSESSMENT_COLUMNS.lastUpdated,
       {

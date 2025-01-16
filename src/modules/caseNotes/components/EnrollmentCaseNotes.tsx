@@ -7,6 +7,7 @@ import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDial
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
+import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -26,12 +27,16 @@ import {
   RecordFormRole,
 } from '@/types/gqlTypes';
 
-export const CASE_NOTE_COLUMNS = {
+export const CASE_NOTE_COLUMNS: Record<
+  string,
+  ColumnDef<CustomCaseNoteFieldsFragment>
+> = {
   InformationDate: {
     header: 'Information Date',
     width: '150px',
     render: ({ informationDate }: CustomCaseNoteFieldsFragment) =>
       parseAndFormatDate(informationDate),
+    sticky: 'left',
   },
   NoteContent: {
     header: 'Note Content',
@@ -52,7 +57,6 @@ export const CASE_NOTE_COLUMNS = {
   NoteContentPreview: {
     key: 'content-preview',
     header: 'Note Content Preview',
-    maxWidth: '450px',
     render: ({ content }: CustomCaseNoteFieldsFragment) => (
       <Box
         sx={{

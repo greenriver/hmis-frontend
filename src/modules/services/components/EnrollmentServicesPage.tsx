@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
+import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -49,9 +50,9 @@ const EnrollmentServicesPage = () => {
 
   const canEditServices = enrollment?.access.canEditEnrollments;
 
-  const columns = useMemo(() => {
+  const columns: ColumnDef<ServiceFieldsFragment>[] = useMemo(() => {
     return [
-      SERVICE_BASIC_COLUMNS.serviceDate,
+      { ...SERVICE_BASIC_COLUMNS.serviceDate, sticky: 'left' },
       SERVICE_BASIC_COLUMNS.serviceType,
       SERVICE_COLUMNS.serviceDetails,
       ...(canEditServices

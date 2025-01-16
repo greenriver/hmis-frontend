@@ -49,6 +49,7 @@ const CLIENT_ENROLLMENT_COLUMNS: {
   projectName: {
     header: 'Project Name',
     render: 'projectName',
+    sticky: 'left',
   },
   organizationName: {
     header: 'Organization Name',

@@ -1,6 +1,7 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowCircleRight from '@mui/icons-material/ArrowCircleRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
@@ -62,6 +63,7 @@ export {
   CloseIcon as CloseIcon,
   MoreVertRoundedIcon as MoreMenuIcon,
   MyLocationIcon as MyLocationIcon,
+  ArrowCircleRight as GoIcon,
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
