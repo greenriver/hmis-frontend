@@ -177,7 +177,10 @@ const DynamicFormField: React.FC<Props> = ({
             debug={
               import.meta.env.MODE === 'development'
                 ? (keys?: string[]) => {
-                    const sectionValues = keys ? pick(values, keys) : values;
+                    const currentValues = handlers.getValues();
+                    const sectionValues = keys
+                      ? pick(currentValues, keys)
+                      : currentValues;
                     const valuesByKey = transformSubmitValues({
                       definition,
                       values: sectionValues,
