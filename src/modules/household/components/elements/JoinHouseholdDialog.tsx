@@ -138,7 +138,7 @@ const JoinHouseholdDialog = ({
           receivingHouseholdId: receivingHousehold.id,
           joiningEnrollmentInputs: joiningClients.map((hc) => {
             return {
-              // todo @martha - need to use enrollmentLockVersion?
+              // todo @martha - discuss, should we use enrollmentLockVersion?
               enrollmentId: hc.enrollment.id,
               // `|| RelationshipToHoH.DataNotCollected` is to keep typescript happy;
               // thanks to the missingRelationshipsCount logic, we know the relationships will be non-null

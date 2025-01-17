@@ -47,7 +47,7 @@ const JoinHouseholdAddRelationships = ({
       <Typography variant='body1'>
         Update joining clients' relationships{' '}
         {receivingHohName && <>to {receivingHohName}</>}
-        {/*  todo @martha - add warning here about entry dates. see design ? */}
+        {/* todo @martha - add warning here about entry dates, pending conversation with design */}
       </Typography>
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>

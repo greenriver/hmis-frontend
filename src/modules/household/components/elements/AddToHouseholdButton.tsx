@@ -151,6 +151,7 @@ const AddToHouseholdButton = ({
               {household && conflictingEnrollmentId && (
                 <ConflictingEnrollmentAlert
                   joiningClient={client}
+                  receivingHousehold={household}
                   conflictingEnrollmentId={conflictingEnrollmentId}
                   onClickJoinEnrollment={() => {
                     closeDialog();
