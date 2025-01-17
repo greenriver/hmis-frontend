@@ -31,7 +31,7 @@ const JoinHouseholdReview = ({
           relationshipToHoH:
             relationships[jc.enrollment.id] ||
             RelationshipToHoH.DataNotCollected,
-        }; // todo @martha 1 - figure out typescript so this is never dnc
+        };
       }),
     ];
   }, [joiningClients, receivingHousehold.householdClients, relationships]);

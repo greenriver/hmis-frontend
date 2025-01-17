@@ -1,5 +1,5 @@
 import { Button, Stack } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
@@ -103,6 +103,13 @@ const AddToHouseholdButton = ({
     [clientAlerts]
   );
 
+  const onCloseJoinHouseholds = useCallback(() => {
+    setJoinHouseholdDialogOpen(false);
+    setConflictingEnrollmentId(undefined);
+  }, []);
+
+  // todo @martha - the button should say "Added" after the join workflow is complete
+
   return (
     <>
       <ButtonTooltipContainer
@@ -147,7 +154,7 @@ const AddToHouseholdButton = ({
         <JoinHouseholdDialog
           open={joinHouseholdDialogOpen}
           conflictingEnrollmentId={conflictingEnrollmentId}
-          onClose={() => setJoinHouseholdDialogOpen(false)} // todo @martha - clear out rest of state on close
+          onClose={onCloseJoinHouseholds}
           receivingHousehold={household}
           clientAlertsComponent={clientAlertsComponent} // todo @martha - client alerts should include household member names
           projectId={projectId}

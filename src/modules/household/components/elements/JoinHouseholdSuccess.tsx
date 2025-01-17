@@ -33,7 +33,6 @@ const JoinHouseholdSuccess = ({
   projectName,
   onClose,
 }: Props) => {
-  // todo @martha - test what actually happens if there is no HoH
   const remainingHouseholdClient = findHohOrRep(
     remainingHousehold?.householdClients || []
   );

@@ -34,11 +34,15 @@ const JoinHouseholdDialog = ({
   projectId,
   projectName,
 }: Props) => {
+  // Data this join workflow is collecting: What clients are joining and what their relationships are
   const [joiningClients, setJoiningClients] = useState<
     HouseholdClientFieldsFragment[]
   >([]);
+  const [relationships, setRelationships] = useState<
+    Record<string, RelationshipToHoH | null>
+  >({});
 
-  // todo @martha - need to use enrollmentLockVersion?
+  // Fetch the conflicting enrollment by ID since we need the full EnrollmentWithHousehold
   const {
     data: { enrollment: conflictingEnrollment } = {},
     loading: fetchLoading,
@@ -84,48 +88,6 @@ const JoinHouseholdDialog = ({
     return clientBriefName(receivingHoh.client);
   }, [receivingHoh]);
 
-  const [relationships, setRelationships] = useState<
-    Record<string, RelationshipToHoH | null>
-  >({});
-
-  // todo @martha on success - move this, make this prettier, it's so messy now, deal with errors
-  const [joinedHousehold, setJoinedHousehold] = useState<
-    HouseholdFieldsFragment | undefined
-  >(undefined);
-  const [remainingHousehold, setRemainingHousehold] = useState<
-    HouseholdFieldsFragment | undefined
-  >(undefined);
-  const [joinHousehold, { loading: joinLoading, error: joinError }] =
-    useJoinHouseholdsMutation({
-      onCompleted: (data) => {
-        if (data.joinHouseholds?.receivingHousehold) {
-          setJoinedHousehold(data.joinHouseholds?.receivingHousehold);
-        }
-        if (data.joinHouseholds?.donorHousehold) {
-          setRemainingHousehold(data.joinHouseholds.donorHousehold);
-        }
-      },
-    });
-
-  const onSubmit = useCallback(() => {
-    joinHousehold({
-      variables: {
-        input: {
-          receivingHouseholdId: receivingHousehold.id,
-          joiningEnrollmentInputs: joiningClients.map((hc) => {
-            return {
-              enrollmentId: hc.enrollment.id,
-              relationshipToHoh:
-                relationships[hc.enrollment.id] ||
-                RelationshipToHoH.DataNotCollected, // todo @martha 1 - this should never be dnc,
-              // also the fact that I specify it twice is its own problem
-            };
-          }),
-        },
-      },
-    });
-  }, [joinHousehold, receivingHousehold.id, joiningClients, relationships]);
-
   const missingRelationshipsCount = useMemo(
     () =>
       joiningClients.filter((jc) => !relationships[jc.enrollment.id]).length,
@@ -141,6 +103,53 @@ const JoinHouseholdDialog = ({
           : undefined,
     };
   }, [missingRelationshipsCount]);
+
+  const [joinedHousehold, setJoinedHousehold] = useState<
+    HouseholdFieldsFragment | undefined
+  >(undefined);
+  const [remainingHousehold, setRemainingHousehold] = useState<
+    HouseholdFieldsFragment | undefined
+  >(undefined);
+  const [joinHousehold, { loading: joinLoading, error: joinError }] =
+    useJoinHouseholdsMutation({
+      onCompleted: (data) => {
+        if (data.joinHouseholds) {
+          setJoinedHousehold(data.joinHouseholds.receivingHousehold);
+          setRemainingHousehold(
+            data.joinHouseholds.donorHousehold || undefined
+          );
+        }
+      },
+    });
+
+  const onSubmit = useCallback(() => {
+    if (missingRelationshipsCount > 0) return; // This should never happen; the button will be disabled
+
+    joinHousehold({
+      variables: {
+        input: {
+          receivingHouseholdId: receivingHousehold.id,
+          joiningEnrollmentInputs: joiningClients.map((hc) => {
+            return {
+              // todo @martha - need to use enrollmentLockVersion?
+              enrollmentId: hc.enrollment.id,
+              // `|| RelationshipToHoH.DataNotCollected` is to keep typescript happy;
+              // thanks to the missingRelationshipsCount logic, we know the relationships will be non-null
+              relationshipToHoh:
+                relationships[hc.enrollment.id] ||
+                RelationshipToHoH.DataNotCollected,
+            };
+          }),
+        },
+      },
+    });
+  }, [
+    missingRelationshipsCount,
+    joinHousehold,
+    receivingHousehold.id,
+    joiningClients,
+    relationships,
+  ]);
 
   const tabDefinitions: TabDefinition[] = useMemo(
     () => [
@@ -185,7 +194,6 @@ const JoinHouseholdDialog = ({
         FormDialogActionProps: missingRelationshipsProps,
       },
       {
-        // todo @martha - actually test what happens if there is an error (like server error). you want to stay inside the dialog
         title: 'Review Join',
         content: !donorHousehold ? (
           <Loading />
@@ -216,8 +224,6 @@ const JoinHouseholdDialog = ({
       relationships,
     ]
   );
-
-  // const handleClose
 
   if (fetchError) throw fetchError;
   if (joinError) throw joinError;
