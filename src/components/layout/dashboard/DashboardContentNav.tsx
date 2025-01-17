@@ -17,18 +17,21 @@ interface Props {
   mobileNavIsOpen: boolean;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
-  label?: string;
+  label: string;
+  hideLabel?: boolean;
   skipNavFocusTargetId: string;
 }
 
 const CloseMenuRow = ({
   onClose,
   label,
+  hideLabel,
   skipNavFocusTargetId,
 }: {
   onClose: VoidFunction;
   skipNavFocusTargetId: string;
-  label?: string;
+  label: string;
+  hideLabel?: boolean;
 }) => (
   <Stack
     justifyContent='space-between'
@@ -43,14 +46,16 @@ const CloseMenuRow = ({
       height: CONTEXT_HEADER_HEIGHT,
     }}
   >
-    {label ? (
+    {hideLabel ? (
+      <Box />
+    ) : (
       <Typography variant='body2' color='text.secondary'>
         {label}
       </Typography>
-    ) : (
-      <Box />
     )}
-    <SkipToContentButton focusTargetId={skipNavFocusTargetId} />
+    <SkipToContentButton focusTargetId={skipNavFocusTargetId}>
+      Skip {label} navigation
+    </SkipToContentButton>
     <Button
       variant='text'
       color='grayscale'
@@ -70,6 +75,7 @@ const DashboardContentNav: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   label,
+  hideLabel,
   skipNavFocusTargetId,
 }) => {
   const headerHeight = `${STICKY_BAR_HEIGHT}px`;
@@ -119,6 +125,7 @@ const DashboardContentNav: React.FC<Props> = ({
           <CloseMenuRow
             onClose={handleCloseDesktopMenu}
             label={label}
+            hideLabel={hideLabel}
             skipNavFocusTargetId={skipNavFocusTargetId}
           />
           <Box

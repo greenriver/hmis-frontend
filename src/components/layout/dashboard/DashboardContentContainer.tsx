@@ -8,10 +8,11 @@ import { DESKTOP_NAV_SIDEBAR_WIDTH } from '../layoutConstants';
 import ContextHeader from './contextHeader/ContextHeader';
 import DashboardContentNav from './DashboardContentNav';
 
-import { FOCUSABLE_MAIN_TARGET_ID } from '@/components/layout/MainLayout';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useMaxPageWidth from '@/hooks/useMaxPageWidth';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+
+const FOCUS_TARGET_ID = 'focusable-dashboard-content';
 
 interface Props {
   children: ReactNode;
@@ -22,7 +23,8 @@ interface Props {
   desktopNavIsOpen: boolean;
   mobileNavIsOpen: boolean;
   focusMode?: string;
-  navLabel?: string;
+  navLabel: string;
+  hideLabel?: boolean;
   handleOpenDesktopMenu: VoidFunction;
   handleOpenMobileMenu: VoidFunction;
   handleCloseMobileMenu: VoidFunction;
@@ -44,6 +46,7 @@ const DashboardContentContainer: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   navLabel,
+  hideLabel,
   contentSx,
 }) => {
   const theme = useTheme();
@@ -86,7 +89,8 @@ const DashboardContentContainer: React.FC<Props> = ({
             handleCloseMobileMenu={handleCloseMobileMenu}
             handleCloseDesktopMenu={handleCloseDesktopMenu}
             label={navLabel}
-            skipNavFocusTargetId={FOCUSABLE_MAIN_TARGET_ID}
+            hideLabel={hideLabel}
+            skipNavFocusTargetId={FOCUS_TARGET_ID}
           >
             {sidebar}
           </DashboardContentNav>
@@ -123,7 +127,7 @@ const DashboardContentContainer: React.FC<Props> = ({
           <Box
             key='content'
             component='main'
-            id={FOCUSABLE_MAIN_TARGET_ID}
+            id={FOCUS_TARGET_ID}
             sx={{
               pt: 2,
               pb: 8,

@@ -30,7 +30,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const FOCUSABLE_MAIN_TARGET_ID = 'focusable-main';
+const FOCUS_TARGET_ID = 'focusable-main';
 
 const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
   const { appName } = useHmisAppSettings();
@@ -102,7 +102,9 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
           sx={{ px: isMobile ? 1 : 3, minHeight: APP_BAR_HEIGHT }}
           disableGutters={isMobile}
         >
-          <SkipToContentButton focusTargetId={FOCUSABLE_MAIN_TARGET_ID} />
+          <SkipToContentButton focusTargetId={FOCUS_TARGET_ID}>
+            Skip main navigation
+          </SkipToContentButton>
           <RouterLink
             variant='h1'
             noWrap
@@ -149,7 +151,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
         </Toolbar>
       </AppBar>
       <CssBaseline />
-      {children}
+      <Box id={FOCUS_TARGET_ID}>{children}</Box>
     </React.Fragment>
   );
 };
