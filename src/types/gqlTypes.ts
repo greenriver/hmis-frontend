@@ -2624,7 +2624,6 @@ export type EnrollmentSummary = {
 export type EnrollmentsForClientFilterOptions = {
   householdTasks?: InputMaybe<Array<EnrollmentFilterOptionHouseholdTask>>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
-  project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
 };

@@ -7083,18 +7083,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
-        name: 'project',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
-      },
-      {
         name: 'projectType',
         type: {
           kind: 'LIST',
