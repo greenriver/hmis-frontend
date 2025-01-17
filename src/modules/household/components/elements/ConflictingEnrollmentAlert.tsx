@@ -51,20 +51,20 @@ const ConflictingEnrollmentAlert = ({
       <AlertTitle>Conflicting Enrollment</AlertTitle>
       <Stack direction='column' gap={1}>
         <Box>
-          {joiningClientName} has another enrollment in this project that
-          conflicts with this enrollment.{' '}
+          {joiningClientName} has a conflicting enrollment in this project that
+          overlaps with the selected entry date.{' '}
           {canSplitHouseholds && (
             <>
               You have two options:
               <List sx={{ listStyle: 'decimal', pl: 4 }} component='ol'>
                 <ListItem sx={{ display: 'list-item' }}>
-                  {joiningClientName}’s enrollment can be joined with {hohName}
-                  ’s household.
+                  The conflicting enrollment can be joined with {hohName}’s
+                  household.
                 </ListItem>
                 <ListItem sx={{ display: 'list-item' }}>
-                  To retain {joiningClientName}’s enrollment, you must first
-                  edit the entry and/or exit dates so that it does not conflict,
-                  before re-enrolling.
+                  To retain the conflicting enrollment, update the entry and/or
+                  exit dates to not overlap with this new entry date before
+                  attempting again to enroll.
                 </ListItem>
               </List>
             </>
