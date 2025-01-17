@@ -54,7 +54,10 @@ const DateWithRelativeTooltip = ({
       >
         {formattedDate}
         {/* Include the tooltip text as visually hidden for accessibility */}
-        <Box sx={visuallyHidden}>, {formattedDateRelative}</Box>
+        {/* Add position: fixed to address visual bug when visuallyHidden is used inside dialog */}
+        <Box sx={{ ...visuallyHidden, position: 'fixed' }}>
+          , {formattedDateRelative}
+        </Box>
       </Typography>
     </Tooltip>
   );

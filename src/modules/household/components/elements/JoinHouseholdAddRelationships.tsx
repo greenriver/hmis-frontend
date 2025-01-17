@@ -1,7 +1,8 @@
 import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useId } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
+import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import RelationshipToHohSelect from '@/modules/household/components/elements/RelationshipToHohSelect';
@@ -35,6 +36,8 @@ const JoinHouseholdAddRelationships = ({
   receivingHousehold,
   receivingHohName,
 }: Props) => {
+  const relationshipHeaderId = useId();
+
   return (
     <Stack gap={2}>
       <Box>
@@ -64,15 +67,22 @@ const JoinHouseholdAddRelationships = ({
             },
             CLIENT_COLUMNS.age,
             {
-              header: 'Relationship', // todo @martha - add required indicator. star for required is not an existing pattern?
+              header: (
+                <RequiredLabel
+                  text='Relationship'
+                  TypographyProps={{
+                    fontWeight: 'bold',
+                    id: relationshipHeaderId,
+                  }}
+                  required={true}
+                />
+              ),
               key: 'relationship',
-              // todo @martha - padding issue on these cells
-              // header should also have table cell props applied?
               render: (hc: HouseholdClientFieldsFragment) => {
                 if (joiningClients.includes(hc)) {
                   return (
-                    // todo @martha - associate with column header as input
                     <RelationshipToHohSelect
+                      aria-labelledby={`client-${hc.id} ${relationshipHeaderId}`}
                       value={relationships[hc.enrollment.id] || null}
                       onChange={(_event, selected) => {
                         updateRelationship(
@@ -81,7 +91,7 @@ const JoinHouseholdAddRelationships = ({
                         );
                       }}
                       textInputProps={{
-                        highlight: true, // todo @martha - use WarnIfEmpty treatment (?)
+                        warnIfEmptyTreatment: !relationships[hc.enrollment.id],
                         placeholder: 'Select Relationship',
                         inputProps: {
                           'aria-label': `Relationship to HoH for ${clientBriefName(
@@ -102,7 +112,7 @@ const JoinHouseholdAddRelationships = ({
                   );
                 }
               },
-              tableCellProps: { sx: { p: 0 } },
+              tableCellProps: { sx: { py: 0 } },
             },
             WITH_ENROLLMENT_COLUMNS.entryDate,
             WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
