@@ -1,5 +1,5 @@
 import { MergeTypeRounded } from '@mui/icons-material';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import StepDialog, { TabDefinition } from '@/components/elements/StepDialog';
 import { clientBriefName, findHohOrRep } from '@/modules/hmis/hmisUtil';
@@ -20,7 +20,6 @@ interface Props {
   conflictingEnrollmentId: string;
   onClose: VoidFunction;
   receivingHousehold: HouseholdFieldsFragment;
-  clientAlertsComponent: ReactNode;
   projectId: string;
   projectName: string;
 }
@@ -30,7 +29,6 @@ const JoinHouseholdDialog = ({
   onClose,
   conflictingEnrollmentId,
   receivingHousehold,
-  clientAlertsComponent,
   projectId,
   projectName,
 }: Props) => {
@@ -163,7 +161,6 @@ const JoinHouseholdDialog = ({
                 selectedClients={joiningClients}
                 setSelectedClients={setJoiningClients}
                 receivingHohName={receivingHohName}
-                clientAlertsComponent={clientAlertsComponent}
               />
             )}
           </>
@@ -213,7 +210,6 @@ const JoinHouseholdDialog = ({
       },
     ],
     [
-      clientAlertsComponent,
       donorHousehold,
       joinLoading,
       joiningClients,

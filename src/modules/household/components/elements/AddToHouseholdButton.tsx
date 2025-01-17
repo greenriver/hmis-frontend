@@ -149,14 +149,12 @@ const AddToHouseholdButton = ({
             </Stack>
           ) : undefined,
       })}
-      {/*todo @martha - don't forget to put all household alerts in the new join dialog*/}
       {household && conflictingEnrollmentId && (
         <JoinHouseholdDialog
           open={joinHouseholdDialogOpen}
           conflictingEnrollmentId={conflictingEnrollmentId}
           onClose={onCloseJoinHouseholds}
           receivingHousehold={household}
-          clientAlertsComponent={clientAlertsComponent} // todo @martha - client alerts should include household member names
           projectId={projectId}
           projectName={projectName}
         />

@@ -8,17 +8,13 @@ import {
   Typography,
 } from '@mui/material';
 
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useCallback,
-  useMemo,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
+import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
+import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { HOUSEHOLD_CLIENT_COLUMNS } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
@@ -44,7 +40,6 @@ interface Props {
   selectedClients: HouseholdClientFieldsFragment[];
   setSelectedClients: Dispatch<SetStateAction<HouseholdClientFieldsFragment[]>>;
   receivingHohName?: string;
-  clientAlertsComponent: ReactNode;
 }
 
 const JoinHouseholdSelectClients = ({
@@ -52,7 +47,6 @@ const JoinHouseholdSelectClients = ({
   selectedClients,
   setSelectedClients,
   receivingHohName,
-  clientAlertsComponent,
 }: Props) => {
   const donorHoh = useMemo(
     () =>
@@ -105,6 +99,11 @@ const JoinHouseholdSelectClients = ({
     [donorHoh, selectedClientIds]
   );
 
+  const { clientAlerts } = useClientAlerts({
+    household: donorHousehold,
+    showClientName: true,
+  });
+
   return (
     <Stack gap={2}>
       <Box>
@@ -115,7 +114,7 @@ const JoinHouseholdSelectClients = ({
         Select which clients you would like to join{' '}
         {receivingHohName ? `${receivingHohName}’s` : 'this'} household.
       </Typography>
-      {clientAlertsComponent}
+      {<ClientAlertStack clientAlerts={clientAlerts} />}
       {donorHoh &&
         selectedClientIds.includes(donorHoh.id) &&
         donorHousehold.householdSize > 1 && (
