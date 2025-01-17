@@ -1,6 +1,7 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
 import {
+  getColumnKey,
   getStickyCellStyles,
   renderCellContents,
 } from '@/components/elements/table/GenericTable';
@@ -101,7 +102,11 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
   return (
     <TableRow key={household.id + householdClient.id}>
       {BASE_COLUMNS.map((col, i) => (
-        <TableCell role={i === 0 ? 'rowheader' : undefined} sx={cellSx(col)}>
+        <TableCell
+          key={getColumnKey(col) || i}
+          role={i === 0 ? 'rowheader' : undefined}
+          sx={cellSx(col)}
+        >
           {renderCellContents(householdClient, col.render)}
         </TableCell>
       ))}

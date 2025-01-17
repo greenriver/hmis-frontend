@@ -5,15 +5,17 @@ import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
   BASE_ACTION_COLUMN_DEF,
   getViewAssessmentMenuItem,
+  getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
 import { ASSESSMENT_COLUMNS } from '@/modules/assessments/util';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { assessmentDescription } from '@/modules/hmis/hmisUtil';
+import { assessmentDescription, entryExitRange } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentSortOption,
   GetClientAssessmentsDocument,
@@ -23,6 +25,7 @@ import {
 
 const ClientAssessmentsPage = () => {
   const { clientId } = useSafeParams() as { clientId: string };
+  const { client } = useClientDashboardContext();
 
   const filters = useFilters({
     type: 'AssessmentFilterOptions',
@@ -49,11 +52,18 @@ const ClientAssessmentsPage = () => {
               row.enrollment.id,
               true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
             )}
+            secondaryActionConfigs={[
+              {
+                ...getViewEnrollmentMenuItem(row.enrollment, client),
+                // override the default ariaLabel to provide the project name, since we are in the client context
+                ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
+              },
+            ]}
           />
         ),
       },
     ],
-    [clientId]
+    [client, clientId]
   );
 
   return (
