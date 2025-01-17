@@ -108,7 +108,19 @@ const AddToHouseholdButton = ({
     setConflictingEnrollmentId(undefined);
   }, []);
 
-  // todo @martha - the button should say "Added" after the join workflow is complete
+  const onCompleteJoinHouseholds = useCallback(
+    (joinedHousehold: HouseholdFieldsFragment) => {
+      // This only updates the initiating client's button
+      if (
+        joinedHousehold.householdClients.find(
+          (hc) => hc.client.id === client.id
+        )
+      ) {
+        setAdded(true);
+      }
+    },
+    [client.id]
+  );
 
   return (
     <>
@@ -154,6 +166,7 @@ const AddToHouseholdButton = ({
           open={joinHouseholdDialogOpen}
           conflictingEnrollmentId={conflictingEnrollmentId}
           onClose={onCloseJoinHouseholds}
+          onComplete={onCompleteJoinHouseholds}
           receivingHousehold={household}
           projectId={projectId}
           projectName={projectName}

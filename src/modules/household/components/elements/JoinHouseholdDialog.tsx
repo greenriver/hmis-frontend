@@ -19,6 +19,10 @@ interface Props {
   open: boolean;
   conflictingEnrollmentId: string;
   onClose: VoidFunction;
+  onComplete?: (
+    joinedHousehold: HouseholdFieldsFragment,
+    remainingHousehold?: HouseholdFieldsFragment | null
+  ) => void;
   receivingHousehold: HouseholdFieldsFragment;
   projectId: string;
   projectName: string;
@@ -27,6 +31,7 @@ interface Props {
 const JoinHouseholdDialog = ({
   open,
   onClose,
+  onComplete,
   conflictingEnrollmentId,
   receivingHousehold,
   projectId,
@@ -115,6 +120,10 @@ const JoinHouseholdDialog = ({
           setJoinedHousehold(data.joinHouseholds.receivingHousehold);
           setRemainingHousehold(
             data.joinHouseholds.donorHousehold || undefined
+          );
+          onComplete?.(
+            data.joinHouseholds.receivingHousehold,
+            data.joinHouseholds.donorHousehold
           );
         }
       },
