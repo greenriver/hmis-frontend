@@ -310,7 +310,8 @@ const GenericTable = <T extends { id: string }>({
                 }
                 checked={
                   selectableRowIds.length > 0 &&
-                  selectedValue.length === selectableRowIds.length
+                  // >= instead of === accommodates disabling de-selection on rows that are selected
+                  selectedValue.length >= selectableRowIds.length
                 }
                 disabled={selectableRowIds.length === 0}
                 onChange={handleSelectAllClick}

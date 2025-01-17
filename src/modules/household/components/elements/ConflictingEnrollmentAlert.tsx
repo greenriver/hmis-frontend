@@ -22,6 +22,7 @@ const ConflictingEnrollmentAlert = ({
       <Stack direction='column' gap={2}>
         {clientBriefName(joiningClient)} has another enrollment in this project
         that conflicts with this entry date. You have two options:
+        {/*todo @martha - add back, see designg*/}
         <Stack direction='row' gap={2}>
           <Button color='warning' onClick={onClickJoinEnrollment}>
             Join Enrollments

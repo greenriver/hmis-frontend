@@ -87,7 +87,6 @@ const JoinHouseholdSelectClients = ({
 
   const isRowSelectable = useCallback(
     (row: HouseholdClientFieldsFragment) => {
-      // todo @martha - want to be able to select all and then deselect all.
       if (donorHoh && selectedClientIds.includes(donorHoh.id)) {
         // Visually disable de-selecting other clients if the HoH is selected
         // (This is also functionally disabled by the logic in setSelectedClientIds above)
