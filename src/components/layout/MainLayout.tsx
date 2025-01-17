@@ -151,7 +151,12 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
         </Toolbar>
       </AppBar>
       <CssBaseline />
-      <Box id={FOCUS_TARGET_ID}>{children}</Box>
+      <Box
+        // "Skip to content" button should always have a destination, even when content is loading
+        id={FOCUS_TARGET_ID}
+      >
+        {children}
+      </Box>
     </React.Fragment>
   );
 };

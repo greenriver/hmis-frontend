@@ -20,7 +20,7 @@ import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
 
-const ProjectNavHeader: React.FC = () => {
+const AdminNavHeader: React.FC = () => {
   return (
     <Typography
       component='p'
@@ -129,7 +129,7 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <DashboardContentContainer
-      navHeader={<ProjectNavHeader />}
+      navHeader={<AdminNavHeader />}
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       sidebar={
         <SideNavMenu<RootPermissionsFragment>
@@ -143,8 +143,11 @@ const AdminDashboard: React.FC = () => {
           ? formEditorContentSx
           : {}
       }
-      navLabel={'Admin'}
+      // On desktop, 'Admin' appears in the AdminNavHeader, so hide it from the dashboard Close Menu row.
+      // On mobile, include it. We can remove this special case if we add the AdminNavHeader info back on mobile.
       hideLabel={!isMobile}
+      // (Still provide the navLabel for accessible text)
+      navLabel={'Admin'}
       {...dashboardState}
     >
       <Container
