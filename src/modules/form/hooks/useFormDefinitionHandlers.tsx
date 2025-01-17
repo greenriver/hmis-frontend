@@ -40,6 +40,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
     itemMap,
     autofillDependencyMap,
     autofillInvertedDependencyMap,
+    boundsInvertedDependencyMap,
     enabledDependencyMap,
     disabledDependencyMap,
   } = useComputedData({ definition, viewOnly });
@@ -164,6 +165,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       itemMap,
       autofillDependencyMap,
       autofillInvertedDependencyMap,
+      boundsInvertedDependencyMap,
       enabledDependencyMap,
       disabledDependencyMap,
       // renderFormContainer,
@@ -182,6 +184,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       itemMap,
       autofillDependencyMap,
       autofillInvertedDependencyMap,
+      boundsInvertedDependencyMap,
       enabledDependencyMap,
       disabledDependencyMap,
       // renderFormContainer,

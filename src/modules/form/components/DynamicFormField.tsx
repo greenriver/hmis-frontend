@@ -10,11 +10,7 @@ import {
   PickListArgs,
   SeveralItemsChangedFn,
 } from '../types';
-import {
-  buildCommonInputProps,
-  getAllChildLinkIds,
-  transformSubmitValues,
-} from '../util/formUtil';
+import { buildCommonInputProps, transformSubmitValues } from '../util/formUtil';
 
 import AutofillFormItemWrapper from './AutofillFormItemWrapper';
 import DependentFormItemWrapper from './DependentFormItemWrapper';
@@ -203,9 +199,9 @@ const DynamicFormField: React.FC<Props> = ({
         // Disability group actually needs accurate values for its own mechanics, so provide them
         if (item.component === Component.DisabilityTable) {
           return (
-            <ValueWrapper handlers={handlers} name={getAllChildLinkIds(item)}>
+            <ValueWrapper handlers={handlers} item={item}>
               {/* We're just using this component to watch the group's child values and update the values prop when they change */}
-              {() => cloneElement(group, { values: handlers.getValues() })}
+              {(values) => cloneElement(group, { values })}
             </ValueWrapper>
           );
         }
@@ -229,10 +225,10 @@ const DynamicFormField: React.FC<Props> = ({
           />
         </Grid>
       ) : (
-        <ValueWrapper name={item.linkId} handlers={handlers}>
-          {(value) => (
+        <ValueWrapper item={item} handlers={handlers}>
+          {(values) => (
             <DynamicField
-              value={value}
+              value={values[item.linkId]}
               handlers={handlers}
               key={item.linkId}
               item={item}

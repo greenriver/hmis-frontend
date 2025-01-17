@@ -1,14 +1,16 @@
-import { first } from 'lodash-es';
-import React, { ReactNode } from 'react';
+import { uniq } from 'lodash-es';
+import React, { ReactNode, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
-import { ensureArray } from '@/utils/arrays';
+import { FormValues } from '@/modules/form/types';
+import { getAllChildLinkIds } from '@/modules/form/util/formUtil';
+import { FormItem } from '@/types/gqlTypes';
 
 export type ValueWrapperProps = {
-  name: string | string[];
+  item: FormItem;
   handlers: FormDefinitionHandlers;
-  children: (value: any) => ReactNode;
+  children: (value: FormValues) => ReactNode;
 };
 
 /**
@@ -17,15 +19,36 @@ export type ValueWrapperProps = {
  * It uses react-hook-form's useWatch to track field value changes and only re-render when those specific fields change.
  */
 const ValueWrapper: React.FC<ValueWrapperProps> = ({
+  item,
   handlers,
-  name,
   children,
 }) => {
-  const value = useWatch({
+  const { boundsInvertedDependencyMap } = handlers;
+
+  const watchFields = useMemo(() => {
+    const childs = getAllChildLinkIds(item);
+    const deps = boundsInvertedDependencyMap[item.linkId] || [];
+    return uniq([item.linkId, ...childs, ...deps]);
+  }, [item, boundsInvertedDependencyMap]);
+
+  const valueArray = useWatch({
     control: handlers.methods.control,
-    name: ensureArray(name),
+    name: watchFields,
   });
-  return children(first(value));
+
+  const values = useMemo(
+    () =>
+      watchFields.reduce(
+        (acc, fieldName, index) => ({
+          ...acc,
+          [fieldName]: valueArray[index],
+        }),
+        {}
+      ),
+    [watchFields, valueArray]
+  );
+
+  return children(values);
 };
 
 export default ValueWrapper;

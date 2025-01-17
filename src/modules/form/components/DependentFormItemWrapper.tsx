@@ -67,8 +67,8 @@ const DependentFormItemWrapper: React.FC<Props> = ({
     name: dependentLinkIds,
   });
 
-  // include dependantValues in the return to sync the memoized value on dependency change
   const [isDisabled] = useMemo(
+    // include dependantValues in the return to sync the memoized value on dependency change
     () => [isItemDisabled(item), dependantValues],
     [isItemDisabled, item, dependantValues]
   );
@@ -90,6 +90,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
         isItemDisabled(child) &&
         child.disabledDisplay === DisabledDisplay.Hidden
     );
+    // include dependantValues in the return to sync the memoized value on dependency change
     return [childrenHidden, dependantValues];
   }, [
     isDisabled,

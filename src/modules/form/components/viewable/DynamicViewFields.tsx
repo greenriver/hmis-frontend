@@ -82,11 +82,11 @@ const DynamicViewFormField: React.FC<Props> = ({
 
     const itemComponent = (
       <Grid item key={item.linkId}>
-        <ValueWrapper name={item.linkId} handlers={handlers}>
-          {(value) => (
+        <ValueWrapper item={item} handlers={handlers}>
+          {(values) => (
             <DynamicViewField
               item={item}
-              value={value}
+              value={values[item.linkId]}
               disabled={isDisabled}
               horizontal={horizontal}
               pickListArgs={pickListArgs}

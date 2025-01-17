@@ -1,6 +1,6 @@
 import { InputAdornment } from '@mui/material';
-import { isFinite, isNil } from 'lodash-es';
-import { ChangeEventHandler, useState } from 'react';
+import { isEmpty, isFinite, isNil } from 'lodash-es';
+import { ChangeEventHandler, useEffect, useState } from 'react';
 
 import {
   NumberFormatValues,
@@ -46,8 +46,15 @@ const NumberInput: React.FC<Props> = ({
       setErrorMessage(null);
       return;
     }
+  };
 
+  useEffect(() => {
     let val: number;
+
+    if (isEmpty(value)) {
+      setErrorMessage(null);
+      return;
+    }
 
     if (typeof value === 'string') {
       val = currency ? parseFloat(value) : parseInt(value);
@@ -67,7 +74,7 @@ const NumberInput: React.FC<Props> = ({
     } else {
       setErrorMessage(null);
     }
-  };
+  }, [value, min, max, currency]);
 
   const decimalScale = currency ? 2 : 0;
   const prefix = currency ? '$' : undefined;

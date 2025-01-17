@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
   buildAutofillDependencyMap,
+  buildBoundsDependencyMap,
   buildEnabledDependencyMap,
   getItemMap,
   invertDependencyMap,
@@ -24,11 +25,15 @@ const useComputedData = ({ definition, viewOnly = false }: Args) => {
     // { linkId => array of Link IDs that depend on it for enabled status }
     const enabledDependencyMap = buildEnabledDependencyMap(itemMap);
     const disabledDependencyMap = invertDependencyMap(enabledDependencyMap);
+    const boundsDependencyMap = buildBoundsDependencyMap(itemMap);
+    const boundsInvertedDependencyMap =
+      invertDependencyMap(boundsDependencyMap);
 
     return {
       itemMap,
       autofillDependencyMap,
       autofillInvertedDependencyMap,
+      boundsInvertedDependencyMap,
       enabledDependencyMap,
       disabledDependencyMap,
     };
