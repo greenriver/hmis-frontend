@@ -10,6 +10,7 @@ import JoinHouseholdSuccess from '@/modules/household/components/elements/JoinHo
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
+  ProjectAllFieldsFragment,
   RelationshipToHoH,
   useGetEnrollmentWithHouseholdQuery,
   useJoinHouseholdsMutation,
@@ -24,8 +25,7 @@ interface Props {
     remainingHousehold?: HouseholdFieldsFragment | null
   ) => void;
   receivingHousehold: HouseholdFieldsFragment;
-  projectId: string;
-  projectName: string;
+  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName'>;
 }
 
 const JoinHouseholdDialog = ({
@@ -34,8 +34,7 @@ const JoinHouseholdDialog = ({
   onComplete,
   conflictingEnrollmentId,
   receivingHousehold,
-  projectId,
-  projectName,
+  project,
 }: Props) => {
   // Data this join workflow is collecting: What clients are joining and what their relationships are
   const [joiningClients, setJoiningClients] = useState<
@@ -246,8 +245,7 @@ const JoinHouseholdDialog = ({
             receivingHohName={receivingHohName}
             joinedClients={joiningClients}
             remainingHousehold={remainingHousehold}
-            projectId={projectId}
-            projectName={projectName}
+            project={project}
             onClose={onClose}
           />
         )

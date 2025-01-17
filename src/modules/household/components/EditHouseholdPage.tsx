@@ -23,8 +23,7 @@ const EditHousehold = () => {
 
       <ManageHousehold
         householdId={enrollment.householdId}
-        projectId={enrollment.project.id}
-        projectName={enrollment.project.projectName}
+        project={enrollment.project}
         BackButton={
           <BackButtonLink
             to={generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, {

@@ -14,14 +14,14 @@ import {
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
+  ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
 
 interface Props {
   receivingHohName: string;
   joinedClients: HouseholdClientFieldsFragment[];
   remainingHousehold?: HouseholdFieldsFragment;
-  projectId: string;
-  projectName: string;
+  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName'>;
   onClose: VoidFunction;
 }
 
@@ -29,8 +29,7 @@ const JoinHouseholdSuccess = ({
   receivingHohName,
   joinedClients,
   remainingHousehold,
-  projectId,
-  projectName,
+  project,
   onClose,
 }: Props) => {
   const remainingHouseholdClient = findHohOrRep(
@@ -46,7 +45,7 @@ const JoinHouseholdSuccess = ({
         <AlertTitle>Successful Join</AlertTitle>
         {stringifyHousehold(joinedClients)}{' '}
         {joinedClients.length > 1 ? 'have' : 'has'} been successfully joined to{' '}
-        {receivingHohName}’s Enrollment at {projectName}
+        {receivingHohName}’s Enrollment at {project.projectName}
       </Alert>
       <Button onClick={onClose} variant='contained'>
         Return to {receivingHohName}’s Enrollment
@@ -64,11 +63,11 @@ const JoinHouseholdSuccess = ({
       )}
       <ButtonLink
         to={generatePath(ProjectDashboardRoutes.PROJECT_ENROLLMENTS, {
-          projectId: projectId,
+          projectId: project.id,
         })}
         variant='outlined'
       >
-        View Enrollments at {projectName}
+        View Enrollments at {project.projectName}
       </ButtonLink>
     </Stack>
   );

@@ -31,6 +31,7 @@ import {
   ClientSortOption,
   EnrollmentFieldsFragment,
   ExternalIdentifierType,
+  ProjectAllFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
@@ -38,16 +39,14 @@ import {
 
 interface Props {
   householdId?: string;
-  projectId: string;
-  projectName: string;
+  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
 }
 
 const ManageHousehold = ({
   householdId: initialHouseholdId,
-  projectId,
-  projectName,
+  project,
   BackButton,
   renderBackButton,
 }: Props) => {
@@ -66,8 +65,7 @@ const ManageHousehold = ({
     householdId,
   } = useAddToHouseholdColumns({
     householdId: initialHouseholdId,
-    projectId,
-    projectName,
+    project,
   });
 
   // Fetch members to show in "previously associated" table
@@ -152,7 +150,7 @@ const ManageHousehold = ({
             currentDashboardEnrollmentId={currentDashboardEnrollmentId}
             refetchHousehold={refetchHousehold}
             loading={loading}
-            projectId={projectId}
+            projectId={project.id}
           />
         </TitleCard>
       )}
@@ -187,7 +185,7 @@ const ManageHousehold = ({
               {hasSearched && (
                 <RootPermissionsFilter permissions='canEditClients'>
                   <AddNewClientButton
-                    projectId={projectId}
+                    projectId={project.id}
                     householdId={householdId}
                     onCompleted={handleNewClientAdded}
                   />

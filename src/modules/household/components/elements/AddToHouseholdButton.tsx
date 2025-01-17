@@ -15,6 +15,7 @@ import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjec
 import {
   ClientWithAlertFieldsFragment,
   HouseholdFieldsFragment,
+  ProjectAllFieldsFragment,
   RecordFormRole,
   SubmittedEnrollmentResultFieldsFragment,
   ValidationError,
@@ -24,8 +25,7 @@ interface Props {
   client: ClientWithAlertFieldsFragment;
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
-  projectId: string;
-  projectName: string;
+  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
   onSuccess: (householdId: string) => void;
   household?: HouseholdFieldsFragment;
 }
@@ -35,13 +35,12 @@ const AddToHouseholdButton = ({
   isMember,
   householdId,
   onSuccess,
-  projectId,
-  projectName,
+  project,
   household,
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
-  const cocCount = useProjectCocsCountFromCache(projectId);
+  const cocCount = useProjectCocsCountFromCache(project.id);
 
   useEffect(() => {
     // If client was previously added but has since been removed
@@ -66,8 +65,8 @@ const AddToHouseholdButton = ({
         setAdded(true);
         onSuccess(data.householdId);
       },
-      inputVariables: { projectId, clientId },
-      pickListArgs: { projectId, householdId },
+      inputVariables: { projectId: project.id, clientId },
+      pickListArgs: { projectId: project.id, householdId },
       localConstants: { householdId, projectCocCount: cocCount },
       errorFilter: (error: ValidationError) => {
         // If there's an error about a conflicting enrollment, we will show the ConflictingEnrollmentAlert,
@@ -85,7 +84,7 @@ const AddToHouseholdButton = ({
         }
       },
     }),
-    [projectId, clientId, householdId, cocCount, onSuccess]
+    [project.id, clientId, householdId, cocCount, onSuccess]
   );
 
   const { openFormDialog, renderFormDialog, closeDialog } =
@@ -150,6 +149,7 @@ const AddToHouseholdButton = ({
               {clientAlertsComponent}
               {household && conflictingEnrollmentId && (
                 <ConflictingEnrollmentAlert
+                  project={project}
                   joiningClient={client}
                   receivingHousehold={household}
                   conflictingEnrollmentId={conflictingEnrollmentId}
@@ -169,8 +169,7 @@ const AddToHouseholdButton = ({
           onClose={onCloseJoinHouseholds}
           onComplete={onCompleteJoinHouseholds}
           receivingHousehold={household}
-          projectId={projectId}
-          projectName={projectName}
+          project={project}
         />
       )}
     </>

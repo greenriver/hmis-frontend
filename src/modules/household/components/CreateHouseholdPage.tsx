@@ -27,8 +27,7 @@ const CreateHouseholdPage = () => {
     <>
       <PageTitle title={`Enroll Household in ${project.projectName}`} />
       <ManageHousehold
-        projectId={project.id}
-        projectName={project.projectName}
+        project={project}
         renderBackButton={(householdId) => (
           <BackButton
             onClick={() => {

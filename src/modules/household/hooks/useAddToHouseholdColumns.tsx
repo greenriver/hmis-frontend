@@ -5,19 +5,18 @@ import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
 import {
   ClientFieldsFragment,
+  ProjectAllFieldsFragment,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
 
 interface Args {
   householdId?: string;
-  projectId: string;
-  projectName: string;
+  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
 }
 
 export default function useAddToHouseholdColumns({
   householdId: initialHouseholdId,
-  projectId,
-  projectName,
+  project,
 }: Args) {
   const [householdId, setHouseholdId] = useState(initialHouseholdId);
   const [getHousehold, { data, loading, error }] = useGetHouseholdLazyQuery({
@@ -76,8 +75,7 @@ export default function useAddToHouseholdColumns({
             <AddToHouseholdButton
               client={client}
               householdId={householdId}
-              projectId={projectId}
-              projectName={projectName}
+              project={project}
               isMember={currentMembersMap.has(client.id)}
               onSuccess={onSuccess}
               household={data?.household || undefined}
@@ -86,14 +84,7 @@ export default function useAddToHouseholdColumns({
         },
       },
     ];
-  }, [
-    householdId,
-    projectId,
-    projectName,
-    currentMembersMap,
-    onSuccess,
-    data?.household,
-  ]);
+  }, [householdId, project, currentMembersMap, onSuccess, data?.household]);
 
   if (error) throw error;
 
