@@ -543,7 +543,7 @@ export const getAutofillComparisonValue = (
  *
  * Changes `values` in place.
  *
- * @return boolen true if values changed
+ * @return boolean true if values changed
  */
 type AutofillValuesArgs = {
   item: FormItem;

@@ -4,7 +4,6 @@ import { useWatch } from 'react-hook-form';
 
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import { FormValues } from '@/modules/form/types';
-import { getAllChildLinkIds } from '@/modules/form/util/formUtil';
 import { FormItem } from '@/types/gqlTypes';
 
 export type ValueWrapperProps = {
@@ -26,9 +25,8 @@ const ValueWrapper: React.FC<ValueWrapperProps> = ({
   const { boundsInvertedDependencyMap } = handlers;
 
   const watchFields = useMemo(() => {
-    const childs = getAllChildLinkIds(item);
     const deps = boundsInvertedDependencyMap[item.linkId] || [];
-    return uniq([item.linkId, ...childs, ...deps]);
+    return uniq([item.linkId, ...deps]);
   }, [item, boundsInvertedDependencyMap]);
 
   const valueArray = useWatch({

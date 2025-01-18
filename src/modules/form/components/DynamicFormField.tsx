@@ -4,7 +4,6 @@ import React, { cloneElement, ReactNode, useCallback } from 'react';
 
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import {
-  ChangeType,
   ItemChangedFn,
   OverrideableDynamicFieldProps,
   PickListArgs,
@@ -27,7 +26,8 @@ import { Component, FormItem, ItemType } from '@/types/gqlTypes';
 export const renderItemWithWrappers = (
   renderChild: (disabled?: boolean) => ReactNode,
   item: FormItem,
-  handlers: FormDefinitionHandlers
+  handlers: FormDefinitionHandlers,
+  viewOnly: boolean
 ) => {
   const { disabledDependencyMap, autofillInvertedDependencyMap } = handlers;
 
@@ -36,8 +36,12 @@ export const renderItemWithWrappers = (
     !isEmpty(item.enableWhen) ||
     item.item?.every((item) => item.enableWhen);
 
-  const hasAutofill =
-    autofillInvertedDependencyMap[item.linkId] || !isEmpty(item.autofillValues);
+  const hasAutofill = viewOnly
+    ? false
+    : autofillInvertedDependencyMap[item.linkId] ||
+      !isEmpty(item.autofillValues);
+
+  // if (viewOnly && !av.autofillReadonly) return;
 
   // Apply dependency and autofill wrappers as needed
   if (hasDependencies && hasAutofill) {
@@ -80,6 +84,8 @@ export interface Props {
   pickListArgs?: PickListArgs;
   nestingLevel: number;
   item: FormItem;
+  itemChanged: ItemChangedFn;
+  severalItemsChanged: SeveralItemsChangedFn;
   props?: OverrideableDynamicFieldProps;
   renderFn?: (children: ReactNode) => ReactNode;
 }
@@ -98,37 +104,11 @@ const DynamicFormField: React.FC<Props> = ({
   item,
   nestingLevel,
   props: fieldProps,
+  itemChanged,
+  severalItemsChanged,
   renderFn,
 }) => {
-  const values = handlers.getValues();
   const { definition, localConstants, getFieldErrors } = handlers;
-
-  // Handles changes to individual form items, converting values as needed
-  const itemChanged: ItemChangedFn = useCallback(
-    ({ linkId, value: baseValue, type }) => {
-      const item = handlers.itemMap[linkId];
-      let value = baseValue;
-      // Convert string values to appropriate number types
-      if (item) {
-        if (item.type === ItemType.Integer) value = parseInt(value) || 0;
-        if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
-      }
-      handlers.methods.setValue(linkId, value, {
-        shouldDirty: type === ChangeType.User,
-      });
-    },
-    [handlers]
-  );
-
-  // Handles batch changes to multiple form items
-  const severalItemsChanged: SeveralItemsChangedFn = useCallback(
-    ({ values, type }) => {
-      Object.entries(values).forEach(([linkId, value]) =>
-        itemChanged({ linkId, value, type })
-      );
-    },
-    [itemChanged]
-  );
 
   // Renders the appropriate field component based on item type and configuration
   const renderChild = useCallback(
@@ -137,63 +117,69 @@ const DynamicFormField: React.FC<Props> = ({
 
       if (item.type === ItemType.Group) {
         const group = (
-          <DynamicGroup
-            item={item}
-            clientId={clientId}
-            key={item.linkId}
-            nestingLevel={nestingLevel}
-            renderChildItem={(item, props, fn) => (
-              <DynamicFormField
-                key={item.linkId}
-                handlers={handlers}
+          <ValueWrapper handlers={handlers} item={item}>
+            {(values) => (
+              <DynamicGroup
                 item={item}
-                nestingLevel={nestingLevel + 1}
-                warnIfEmpty={warnIfEmpty}
-                pickListArgs={pickListArgs}
-                props={props}
-                renderFn={fn}
+                clientId={clientId}
+                key={item.linkId}
+                nestingLevel={nestingLevel}
+                renderChildItem={(item, props, fn) => (
+                  <DynamicFormField
+                    key={item.linkId}
+                    handlers={handlers}
+                    item={item}
+                    nestingLevel={nestingLevel + 1}
+                    warnIfEmpty={warnIfEmpty}
+                    pickListArgs={pickListArgs}
+                    props={props}
+                    itemChanged={itemChanged}
+                    severalItemsChanged={severalItemsChanged}
+                    renderFn={fn}
+                  />
+                )}
+                renderSummaryItem={(item, isCurrency) => {
+                  if (!item) return null;
+                  return (
+                    <AutofillFormItemWrapper handlers={handlers} item={item}>
+                      {(autofillValue) => {
+                        return isCurrency
+                          ? formatCurrency(autofillValue || 0)
+                          : autofillValue || 0;
+                      }}
+                    </AutofillFormItemWrapper>
+                  );
+                }}
+                values={values}
+                itemChanged={itemChanged}
+                severalItemsChanged={severalItemsChanged}
+                visible={visible}
+                debug={
+                  import.meta.env.MODE === 'development'
+                    ? (keys?: string[]) => {
+                        const currentValues = handlers.getValues();
+                        const sectionValues = keys
+                          ? pick(currentValues, keys)
+                          : currentValues;
+                        const valuesByKey = transformSubmitValues({
+                          definition,
+                          values: sectionValues,
+                          keyByFieldName: true,
+                        });
+                        // eslint-disable-next-line no-console
+                        console.group(item.text || item.linkId);
+                        // eslint-disable-next-line no-console
+                        console.log(sectionValues);
+                        // eslint-disable-next-line no-console
+                        console.log(valuesByKey);
+                        // eslint-disable-next-line no-console
+                        console.groupEnd();
+                      }
+                    : undefined
+                }
               />
             )}
-            renderSummaryItem={(item, isCurrency) => {
-              if (!item) return null;
-              return (
-                <AutofillFormItemWrapper handlers={handlers} item={item}>
-                  {(autofillValue) => {
-                    return isCurrency
-                      ? formatCurrency(autofillValue || 0)
-                      : autofillValue || 0;
-                  }}
-                </AutofillFormItemWrapper>
-              );
-            }}
-            values={values}
-            itemChanged={itemChanged}
-            severalItemsChanged={severalItemsChanged}
-            visible={visible}
-            debug={
-              import.meta.env.MODE === 'development'
-                ? (keys?: string[]) => {
-                    const currentValues = handlers.getValues();
-                    const sectionValues = keys
-                      ? pick(currentValues, keys)
-                      : currentValues;
-                    const valuesByKey = transformSubmitValues({
-                      definition,
-                      values: sectionValues,
-                      keyByFieldName: true,
-                    });
-                    // eslint-disable-next-line no-console
-                    console.group(item.text || item.linkId);
-                    // eslint-disable-next-line no-console
-                    console.log(sectionValues);
-                    // eslint-disable-next-line no-console
-                    console.log(valuesByKey);
-                    // eslint-disable-next-line no-console
-                    console.groupEnd();
-                  }
-                : undefined
-            }
-          />
+          </ValueWrapper>
         );
 
         // Disability group actually needs accurate values for its own mechanics, so provide them
@@ -211,18 +197,22 @@ const DynamicFormField: React.FC<Props> = ({
 
       const itemComponent = item.readOnly ? (
         <Grid item key={item.linkId}>
-          <DynamicViewField
-            item={item}
-            value={values[item.linkId]}
-            disabled={isDisabled}
-            horizontal={horizontal}
-            pickListArgs={pickListArgs}
-            // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
-            adjustValue={itemChanged}
-            // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
-            localConstants={localConstants}
-            {...fieldProps}
-          />
+          <ValueWrapper handlers={handlers} item={item}>
+            {(values) => (
+              <DynamicViewField
+                item={item}
+                value={values[item.linkId]}
+                disabled={isDisabled}
+                horizontal={horizontal}
+                pickListArgs={pickListArgs}
+                // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
+                adjustValue={itemChanged}
+                // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
+                localConstants={localConstants}
+                {...fieldProps}
+              />
+            )}
+          </ValueWrapper>
         </Grid>
       ) : (
         <ValueWrapper item={item} handlers={handlers}>
@@ -273,13 +263,12 @@ const DynamicFormField: React.FC<Props> = ({
       pickListArgs,
       renderFn,
       severalItemsChanged,
-      values,
       visible,
       warnIfEmpty,
     ]
   );
 
-  return renderItemWithWrappers(renderChild, item, handlers);
+  return renderItemWithWrappers(renderChild, item, handlers, false);
 };
 
 export default DynamicFormField;

@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash-es';
 import React, { ReactNode, useEffect } from 'react';
 import { useFormState, useWatch } from 'react-hook-form';
 
@@ -35,12 +36,16 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
 
   // subscribe to changes in the dependent field values
   useWatch({ control: control, name: dependentLinkIds });
+
   // not memoized, we rely on useWatch to re-render here when dependentLinkIds change
   const autofillValue = getAutofillValueForField(item);
 
   // Listen to see if this field has been edited by the user
   const { dirtyFields } = useFormState({ control: control, name: linkId });
   const isDirty = !!dirtyFields[linkId];
+
+  if (isEmpty(dependentLinkIds))
+    throw new Error(`${linkId} has no dependencies`);
 
   useEffect(() => {
     // Don't autofill this field if it's been edited (i.e. is dirty)

@@ -76,7 +76,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
         values,
         itemMap,
         localConstants,
-        viewOnly, // TODO: Handle this
+        viewOnly,
       });
 
       if (!shouldAutofill) return undefined;
