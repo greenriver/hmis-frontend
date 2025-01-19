@@ -1,9 +1,11 @@
 import { Grid, GridProps } from '@mui/material';
 
+import { FormProvider } from 'react-hook-form';
 import useFormDefinitionHandlers from '../../hooks/useFormDefinitionHandlers';
 import { LocalConstants, PickListArgs } from '../../types';
 import DynamicViewFields from './DynamicViewFields';
 
+import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 export interface DynamicViewProps {
@@ -22,7 +24,7 @@ const DynamicView = ({
   horizontal = false,
   visible = true,
   pickListArgs,
-  localConstants,
+  localConstants = {},
   GridProps,
 }: DynamicViewProps): JSX.Element => {
   const handlers = useFormDefinitionHandlers({
@@ -32,21 +34,40 @@ const DynamicView = ({
     localConstants,
   });
 
+  const {
+    itemMap,
+    viewOnly,
+    autofillInvertedDependencyMap,
+    disabledDependencyMap,
+  } = handlers;
   return (
-    <Grid
-      container
-      direction='column'
-      spacing={2}
-      data-testid='dynamicView'
-      {...GridProps}
-    >
-      <DynamicViewFields
-        horizontal={horizontal}
-        pickListArgs={pickListArgs}
-        visible={visible}
-        handlers={handlers}
-      />
-    </Grid>
+    <FormProvider {...handlers.methods}>
+      <DynamicFormContext.Provider
+        value={{
+          definition,
+          itemMap,
+          localConstants,
+          viewOnly,
+          autofillInvertedDependencyMap,
+          disabledDependencyMap,
+        }}
+      >
+        <Grid
+          container
+          direction='column'
+          spacing={2}
+          data-testid='dynamicView'
+          {...GridProps}
+        >
+          <DynamicViewFields
+            horizontal={horizontal}
+            pickListArgs={pickListArgs}
+            visible={visible}
+            handlers={handlers}
+          />
+        </Grid>
+      </DynamicFormContext.Provider>
+    </FormProvider>
   );
 };
 

@@ -1,8 +1,8 @@
 import { uniq } from 'lodash-es';
 import React, { ReactNode, useMemo } from 'react';
-import { useWatch } from 'react-hook-form';
 
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
+import { useDynamicFormWatchValues } from '@/modules/form/hooks/rhf/useDynamicFormWatchValues';
 import { FormValues } from '@/modules/form/types';
 import { FormItem } from '@/types/gqlTypes';
 
@@ -29,22 +29,7 @@ const ValueWrapper: React.FC<ValueWrapperProps> = ({
     return uniq([item.linkId, ...deps]);
   }, [item, boundsInvertedDependencyMap]);
 
-  const valueArray = useWatch({
-    control: handlers.methods.control,
-    name: watchFields,
-  });
-
-  const values = useMemo(
-    () =>
-      watchFields.reduce(
-        (acc, fieldName, index) => ({
-          ...acc,
-          [fieldName]: valueArray[index],
-        }),
-        {}
-      ),
-    [watchFields, valueArray]
-  );
+  const values = useDynamicFormWatchValues(watchFields);
 
   return children(values);
 };

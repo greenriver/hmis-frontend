@@ -1,5 +1,6 @@
 import { forwardRef, useCallback, useImperativeHandle } from 'react';
 
+import { FormProvider } from 'react-hook-form';
 import useFormDefinitionHandlers, {
   FormDefinitionHandlers,
 } from '../hooks/useFormDefinitionHandlers';
@@ -7,6 +8,7 @@ import { FormValues, LocalConstants } from '../types';
 
 import DirtyObserver from './DirtyObserver';
 import DynamicFormBase, { DynamicFormBaseProps } from './DynamicFormBase';
+import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -38,7 +40,7 @@ export interface DynamicFormProps
   onSaveDraft?: DynamicFormOnSaveDraft;
   onDirty?: (value: boolean) => void;
   initialValues?: Record<string, any>;
-  localConstants?: LocalConstants;
+  localConstants: LocalConstants;
   variant?: 'standard' | 'without_top_level_cards';
 }
 
@@ -137,8 +139,27 @@ const DynamicFormWithHandlers = forwardRef<
     errors: props.errors.errors,
   });
 
+  const {
+    itemMap,
+    viewOnly,
+    autofillInvertedDependencyMap,
+    disabledDependencyMap,
+  } = handlers;
   return (
-    <DynamicFormWithoutHandlers {...props} handlers={handlers} ref={ref} />
+    <FormProvider {...handlers.methods}>
+      <DynamicFormContext.Provider
+        value={{
+          definition,
+          itemMap,
+          localConstants,
+          viewOnly,
+          autofillInvertedDependencyMap,
+          disabledDependencyMap,
+        }}
+      >
+        <DynamicFormWithoutHandlers {...props} handlers={handlers} ref={ref} />
+      </DynamicFormContext.Provider>
+    </FormProvider>
   );
 });
 

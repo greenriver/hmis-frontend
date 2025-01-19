@@ -46,47 +46,26 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
   } = useComputedData({ definition, viewOnly });
 
   const [defaultValues] = useState(() => {
-    const newValues = {
+    const newValues: Record<string, any> = {
       ...getInitialValues(definition, localConstants),
       ...cloneDeep(initialValues),
     };
     Object.keys(itemMap).forEach((linkId) => {
-      autofillValues({
+      const change = autofillValues({
         item: itemMap[linkId],
         values: newValues,
         itemMap,
         localConstants: localConstants || {},
         viewOnly,
       });
+      //console.info('form init autofill', linkId, change)
+      if (change) newValues[linkId] = change.value;
     });
     const result = newValues as DefaultValues<T>;
     return result;
   });
 
   const methods = useForm<T>({ defaultValues });
-
-  // Updates localValues map in-place
-  const getAutofillValueForField = useCallback(
-    (item: FormItem) => {
-      const { linkId } = item;
-      const values = methods.getValues();
-      if (!autofillInvertedDependencyMap[linkId]) return;
-      const shouldAutofill = autofillValues({
-        item,
-        values,
-        itemMap,
-        localConstants,
-        viewOnly,
-      });
-
-      if (!shouldAutofill) return undefined;
-
-      const result = values[linkId];
-
-      return result;
-    },
-    [itemMap, autofillInvertedDependencyMap, localConstants, viewOnly, methods]
-  );
 
   // Get form state, with "hidden" fields (and their children) removed
   const getValues = useCallback(() => {
@@ -173,9 +152,9 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       // renderFormFields,
       getValues,
       isItemDisabled,
-      getAutofillValueForField,
       getValuesForSubmit,
       resetDirty,
+      viewOnly,
     }),
     [
       methods,
@@ -192,9 +171,9 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       // renderFormFields,
       getValues,
       isItemDisabled,
-      getAutofillValueForField,
       getValuesForSubmit,
       resetDirty,
+      viewOnly,
     ]
   );
 };

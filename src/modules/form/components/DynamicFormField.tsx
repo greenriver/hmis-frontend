@@ -29,12 +29,7 @@ export const renderItemWithWrappers = (
   handlers: FormDefinitionHandlers,
   viewOnly: boolean
 ) => {
-  const { disabledDependencyMap, autofillInvertedDependencyMap } = handlers;
-
-  const hasDependencies =
-    disabledDependencyMap[item.linkId] ||
-    !isEmpty(item.enableWhen) ||
-    item.item?.every((item) => item.enableWhen);
+  const { autofillInvertedDependencyMap } = handlers;
 
   const hasAutofill = viewOnly
     ? false
@@ -44,11 +39,11 @@ export const renderItemWithWrappers = (
   // if (viewOnly && !av.autofillReadonly) return;
 
   // Apply dependency and autofill wrappers as needed
-  if (hasDependencies && hasAutofill) {
+  if (hasAutofill) {
     return (
-      <DependentFormItemWrapper handlers={handlers} item={item}>
+      <DependentFormItemWrapper item={item}>
         {(disabled) => (
-          <AutofillFormItemWrapper handlers={handlers} item={item}>
+          <AutofillFormItemWrapper item={item}>
             {() => renderChild(disabled)}
           </AutofillFormItemWrapper>
         )}
@@ -56,23 +51,11 @@ export const renderItemWithWrappers = (
     );
   }
 
-  if (hasDependencies) {
-    return (
-      <DependentFormItemWrapper handlers={handlers} item={item}>
-        {renderChild}
-      </DependentFormItemWrapper>
-    );
-  }
-
-  if (hasAutofill) {
-    return (
-      <AutofillFormItemWrapper handlers={handlers} item={item}>
-        {() => renderChild()}
-      </AutofillFormItemWrapper>
-    );
-  }
-
-  return renderChild();
+  return (
+    <DependentFormItemWrapper item={item}>
+      {renderChild}
+    </DependentFormItemWrapper>
+  );
 };
 
 export interface Props {
@@ -141,7 +124,7 @@ const DynamicFormField: React.FC<Props> = ({
                 renderSummaryItem={(item, isCurrency) => {
                   if (!item) return null;
                   return (
-                    <AutofillFormItemWrapper handlers={handlers} item={item}>
+                    <AutofillFormItemWrapper item={item}>
                       {(autofillValue) => {
                         return isCurrency
                           ? formatCurrency(autofillValue || 0)
