@@ -40,7 +40,7 @@ export interface DynamicFormProps
   onSaveDraft?: DynamicFormOnSaveDraft;
   onDirty?: (value: boolean) => void;
   initialValues?: Record<string, any>;
-  localConstants: LocalConstants;
+  localConstants?: LocalConstants;
   variant?: 'standard' | 'without_top_level_cards';
 }
 
@@ -127,11 +127,12 @@ export const DynamicFormWithoutHandlers = forwardRef<
   }
 );
 
+const BLANK = {};
 const DynamicFormWithHandlers = forwardRef<
   DynamicFormRef,
   Omit<DynamicFormProps, 'handlers'>
 >((props, ref) => {
-  const { definition, initialValues, localConstants } = props;
+  const { definition, initialValues, localConstants = BLANK } = props;
   const handlers = useFormDefinitionHandlers({
     definition,
     initialValues,

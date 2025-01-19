@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { FieldValues, useFormContext, useWatch } from 'react-hook-form';
 
-export const useDynamicFormWatchValues = (watchFields: string[]) => {
+export const useDynamicFieldWatchValues = (watchFields: string[]) => {
   const { control } = useFormContext();
   const valueArray = useWatch({
     control,
@@ -10,7 +10,7 @@ export const useDynamicFormWatchValues = (watchFields: string[]) => {
 
   return useMemo<FieldValues>(
     () =>
-      watchFields.reduce(
+      (watchFields || []).reduce(
         (acc, fieldName, index) => ({
           ...acc,
           [fieldName]: valueArray[index],

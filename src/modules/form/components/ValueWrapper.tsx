@@ -2,7 +2,7 @@ import { uniq } from 'lodash-es';
 import React, { ReactNode, useMemo } from 'react';
 
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
-import { useDynamicFormWatchValues } from '@/modules/form/hooks/rhf/useDynamicFormWatchValues';
+import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import { FormValues } from '@/modules/form/types';
 import { FormItem } from '@/types/gqlTypes';
 
@@ -29,7 +29,7 @@ const ValueWrapper: React.FC<ValueWrapperProps> = ({
     return uniq([item.linkId, ...deps]);
   }, [item, boundsInvertedDependencyMap]);
 
-  const values = useDynamicFormWatchValues(watchFields);
+  const values = useDynamicFieldWatchValues(watchFields);
 
   return children(values);
 };

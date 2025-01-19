@@ -10,11 +10,10 @@ import {
   OverrideableDynamicFieldProps,
   PickListArgs,
 } from '../../types';
-import { renderItemWithWrappers } from '../DynamicFormField';
 import ValueWrapper from '../ValueWrapper';
 import DynamicViewField from './DynamicViewField';
 import DynamicViewGroup from './DynamicViewGroup';
-
+import DependentFormItemWrapper from '@/modules/form/components/DependentFormItemWrapper';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
 export interface Props {
@@ -95,7 +94,7 @@ const DynamicViewFormField: React.FC<Props> = ({
     return itemComponent;
   };
 
-  return renderItemWithWrappers(renderChild, item, handlers, true);
+  return <DependentFormItemWrapper item={item} renderChild={renderChild} />;
 };
 
 export interface DynamicViewFieldsProps {

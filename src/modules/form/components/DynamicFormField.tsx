@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { isEmpty, omit, pick } from 'lodash-es';
+import { omit, pick } from 'lodash-es';
 import React, { cloneElement, ReactNode, useCallback } from 'react';
 
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
@@ -11,52 +11,13 @@ import {
 } from '../types';
 import { buildCommonInputProps, transformSubmitValues } from '../util/formUtil';
 
-import AutofillFormItemWrapper from './AutofillFormItemWrapper';
 import DependentFormItemWrapper from './DependentFormItemWrapper';
 import DynamicField from './DynamicField';
 import DynamicGroup from './DynamicGroup';
 import ValueWrapper from './ValueWrapper';
 import DynamicViewField from './viewable/DynamicViewField';
-import { formatCurrency } from '@/modules/hmis/hmisUtil';
+import DynamicFormFieldAutofillSummary from '@/modules/form/components/DynamicFormFieldAutofillSummary';
 import { Component, FormItem, ItemType } from '@/types/gqlTypes';
-
-/**
- * Wraps a form item with appropriate dependency and autofill handlers based on its configuration
- */
-export const renderItemWithWrappers = (
-  renderChild: (disabled?: boolean) => ReactNode,
-  item: FormItem,
-  handlers: FormDefinitionHandlers,
-  viewOnly: boolean
-) => {
-  const { autofillInvertedDependencyMap } = handlers;
-
-  const hasAutofill = viewOnly
-    ? false
-    : autofillInvertedDependencyMap[item.linkId] ||
-      !isEmpty(item.autofillValues);
-
-  // if (viewOnly && !av.autofillReadonly) return;
-
-  // Apply dependency and autofill wrappers as needed
-  if (hasAutofill) {
-    return (
-      <DependentFormItemWrapper item={item}>
-        {(disabled) => (
-          <AutofillFormItemWrapper item={item}>
-            {() => renderChild(disabled)}
-          </AutofillFormItemWrapper>
-        )}
-      </DependentFormItemWrapper>
-    );
-  }
-
-  return (
-    <DependentFormItemWrapper item={item}>
-      {renderChild}
-    </DependentFormItemWrapper>
-  );
-};
 
 export interface Props {
   handlers: FormDefinitionHandlers;
@@ -96,8 +57,6 @@ const DynamicFormField: React.FC<Props> = ({
   // Renders the appropriate field component based on item type and configuration
   const renderChild = useCallback(
     (isDisabled?: boolean) => {
-      if (item.hidden) return null;
-
       if (item.type === ItemType.Group) {
         const group = (
           <ValueWrapper handlers={handlers} item={item}>
@@ -122,16 +81,14 @@ const DynamicFormField: React.FC<Props> = ({
                   />
                 )}
                 renderSummaryItem={(item, isCurrency) => {
-                  if (!item) return null;
-                  return (
-                    <AutofillFormItemWrapper item={item}>
-                      {(autofillValue) => {
-                        return isCurrency
-                          ? formatCurrency(autofillValue || 0)
-                          : autofillValue || 0;
-                      }}
-                    </AutofillFormItemWrapper>
-                  );
+                  if (item)
+                    return (
+                      <DynamicFormFieldAutofillSummary
+                        item={item}
+                        isCurrency={isCurrency}
+                      />
+                    );
+                  return null;
                 }}
                 values={values}
                 itemChanged={itemChanged}
@@ -251,7 +208,7 @@ const DynamicFormField: React.FC<Props> = ({
     ]
   );
 
-  return renderItemWithWrappers(renderChild, item, handlers, false);
+  return <DependentFormItemWrapper item={item} renderChild={renderChild} />;
 };
 
 export default DynamicFormField;

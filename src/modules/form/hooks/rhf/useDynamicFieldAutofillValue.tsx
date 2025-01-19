@@ -1,13 +1,18 @@
 import { useMemo } from 'react';
-import { useDynamicFormWatchValues } from '@/modules/form/hooks/rhf/useDynamicFormWatchValues';
+import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
 import { autofillValues } from '@/modules/form/util/formUtil';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
-export const useDynamicFormAutofill = (item: FormItem) => {
+interface AutoFillValueResult {
+  value: any;
+}
+export const useDynamicFieldAutofillValue = (
+  item: FormItem
+): AutoFillValueResult | null => {
   const { itemMap, localConstants, viewOnly, autofillInvertedDependencyMap } =
     useDynamicFormContext();
-  const values = useDynamicFormWatchValues(
+  const values = useDynamicFieldWatchValues(
     autofillInvertedDependencyMap[item.linkId]
   );
 

@@ -19,6 +19,7 @@ import {
 
 import { yesCode } from '../../util/formUtil';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
 interface DisabilityGroupRow extends FormItem {
@@ -39,11 +40,11 @@ function isValidDisabilityGroup(item: FormItem): item is DisabilityGroupItem {
 }
 
 const DisabilityTable = ({
-  values,
   item,
   renderChildItem,
   itemChanged,
   severalItemsChanged,
+  // values, - values are not used, this component manages it's own value subscription
 }: GroupItemComponentProps) => {
   // Link ID for DisablingCondition, which is the last row in the table
   const disablingConditionLinkId = useMemo(() => {
@@ -58,9 +59,11 @@ const DisabilityTable = ({
     if (!isValidDisabilityGroup(item))
       throw new Error('incorrectly formatted disability table');
 
-    return item.item
-      .map((i, idx) => {
-        if (idx === item.item.length - 1) return; // Skip last, which is DisablingCondition
+    // Get all rows except the last one (Disabling Condition)
+    const disabilityRows = item.item.slice(0, -1);
+
+    return disabilityRows
+      .map((i) => {
         if (i.item[1].type === ItemType.Choice) {
           return i.item[1].linkId;
         } else {
@@ -70,13 +73,14 @@ const DisabilityTable = ({
       .filter((id) => !!id);
   }, [item]);
 
-  const dependentsThatAreYes = useMemo(
-    () =>
-      Object.keys(values).filter(
-        (k) => dependentLinkIds.indexOf(k) !== -1 && values[k]?.code === 'YES'
-      ),
-    [dependentLinkIds, values]
-  );
+  const values = useDynamicFieldWatchValues(dependentLinkIds);
+
+  const dependentsThatAreYes = useMemo(() => {
+    const result = Object.keys(values).filter(
+      (k) => dependentLinkIds.indexOf(k) !== -1 && values[k]?.code === 'YES'
+    );
+    return result;
+  }, [dependentLinkIds, values]);
 
   // Set DisablingCondition initially to YES if applicable.
   useEffect(() => {

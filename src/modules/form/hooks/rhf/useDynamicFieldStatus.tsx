@@ -1,6 +1,6 @@
 import { isEmpty, uniq } from 'lodash-es';
 import { useMemo } from 'react';
-import { useDynamicFormWatchValues } from '@/modules/form/hooks/rhf/useDynamicFormWatchValues';
+import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
 import {
   getAllChildLinkIds,
@@ -46,7 +46,7 @@ export const useDynamicFieldStatus = (item: FormItem): FieldStatus => {
     [childDependencyIds, linkId, disabledDependencyMap]
   );
 
-  const dependentValues = useDynamicFormWatchValues(dependentIds);
+  const dependentValues = useDynamicFieldWatchValues(dependentIds);
 
   const isDisabled = useMemo(() => {
     return !shouldEnableItem({
@@ -63,7 +63,7 @@ export const useDynamicFieldStatus = (item: FormItem): FieldStatus => {
     if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
       return false;
 
-    if (isEmpty(dependentValues)) return true;
+    if (isEmpty(childIds)) return true;
 
     const isChildVisible = (id: string) => {
       const child = itemMap[id];
