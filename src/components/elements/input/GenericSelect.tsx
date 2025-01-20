@@ -52,11 +52,16 @@ const GenericSelect = <
       slotProps={{
         clearIndicator: {
           tabIndex: 0,
-          // In order to make the Clear Button focusable, have to disable the default MUI behavior of hiding it except on hover.
-          // However, it can only be activated using Space, and not Enter.
-          // See https://github.com/mui/material-ui/issues/44936
+          // In order to make the Clear Button focusable, disable the default MUI behavior of hiding it except on hover.
+          // However, it can only be activated using Space, and not Enter. https://github.com/mui/material-ui/issues/44936
           sx: {
             visibility: 'visible',
+          },
+          // Now that the Clear button is focusable, prevent the Down Arrow key from opening the dropdown (#7197)
+          onKeyDown: (event) => {
+            if (event.key === 'ArrowDown') {
+              event.stopPropagation();
+            }
           },
         },
       }}
