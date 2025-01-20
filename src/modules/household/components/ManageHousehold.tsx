@@ -210,6 +210,9 @@ const ManageHousehold = ({
                 recordType='Client'
                 defaultSortOption={ClientSortOption.BestMatch}
                 onCompleted={() => setHasSearched(true)}
+                tableProps={{
+                  'aria-label': 'Search results',
+                }}
               />
             </SsnDobShowContextProvider>
           )}

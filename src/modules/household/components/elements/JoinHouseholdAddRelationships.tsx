@@ -117,6 +117,9 @@ const JoinHouseholdAddRelationships = ({
             WITH_ENROLLMENT_COLUMNS.entryDate,
             WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
           ]}
+          tableProps={{
+            'aria-label': 'Add Relationships for Join',
+          }}
         />
       </Paper>
     </Stack>

@@ -147,6 +147,9 @@ const JoinHouseholdSelectClients = ({
           selected={selectedClientIds}
           onChangeSelectedRowIds={setSelectedClientIds}
           isRowSelectable={isRowSelectable}
+          tableProps={{
+            'aria-label': 'Select Clients for Join',
+          }}
         />
       </Paper>
     </Stack>
