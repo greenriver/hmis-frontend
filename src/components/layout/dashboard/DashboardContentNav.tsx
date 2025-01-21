@@ -12,26 +12,23 @@ import MobileMenu from '@/components/layout/nav/MobileMenu';
 
 interface Props {
   children: ReactNode;
-  navHeader: ReactNode;
+  navHeader?: ReactNode;
   desktopNavIsOpen: boolean;
   mobileNavIsOpen: boolean;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
   label: string;
-  hideLabel?: boolean;
   skipNavFocusTargetId: string;
 }
 
 const CloseMenuRow = ({
   onClose,
   label,
-  hideLabel,
   skipNavFocusTargetId,
 }: {
   onClose: VoidFunction;
   skipNavFocusTargetId: string;
   label: string;
-  hideLabel?: boolean;
 }) => (
   <Stack
     justifyContent='space-between'
@@ -46,13 +43,9 @@ const CloseMenuRow = ({
       height: CONTEXT_HEADER_HEIGHT,
     }}
   >
-    {hideLabel ? (
-      <Box />
-    ) : (
-      <Typography variant='body2' color='text.secondary'>
-        {label}
-      </Typography>
-    )}
+    <Typography variant='body2' color='text.secondary'>
+      {label}
+    </Typography>
     <SkipToContentButton focusTargetId={skipNavFocusTargetId}>
       Skip {label} navigation
     </SkipToContentButton>
@@ -75,7 +68,6 @@ const DashboardContentNav: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   label,
-  hideLabel,
   skipNavFocusTargetId,
 }) => {
   const headerHeight = `${STICKY_BAR_HEIGHT}px`;
@@ -125,21 +117,22 @@ const DashboardContentNav: React.FC<Props> = ({
           <CloseMenuRow
             onClose={handleCloseDesktopMenu}
             label={label}
-            hideLabel={hideLabel}
             skipNavFocusTargetId={skipNavFocusTargetId}
           />
-          <Box
-            sx={{
-              pl: 3,
-              pr: 2,
-              py: 2,
-              borderBottomColor: 'borders.light',
-              borderBottomWidth: 1,
-              borderBottomStyle: 'solid',
-            }}
-          >
-            {navHeader}
-          </Box>
+          {navHeader && (
+            <Box
+              sx={{
+                pl: 3,
+                pr: 2,
+                py: 2,
+                borderBottomColor: 'borders.light',
+                borderBottomWidth: 1,
+                borderBottomStyle: 'solid',
+              }}
+            >
+              {navHeader}
+            </Box>
+          )}
           {children}
         </Box>
       </Drawer>

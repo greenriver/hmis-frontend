@@ -19,12 +19,11 @@ interface Props {
   sidebar?: ReactNode;
   header?: ReactNode;
   contextHeader?: ReactNode;
-  navHeader: ReactNode;
+  navHeader?: ReactNode;
   desktopNavIsOpen: boolean;
   mobileNavIsOpen: boolean;
   focusMode?: string;
   navLabel: string;
-  hideLabel?: boolean;
   handleOpenDesktopMenu: VoidFunction;
   handleOpenMobileMenu: VoidFunction;
   handleCloseMobileMenu: VoidFunction;
@@ -46,7 +45,6 @@ const DashboardContentContainer: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   navLabel,
-  hideLabel,
   contentSx,
 }) => {
   const theme = useTheme();
@@ -89,7 +87,6 @@ const DashboardContentContainer: React.FC<Props> = ({
             handleCloseMobileMenu={handleCloseMobileMenu}
             handleCloseDesktopMenu={handleCloseDesktopMenu}
             label={navLabel}
-            hideLabel={hideLabel}
             skipNavFocusTargetId={FOCUS_TARGET_ID}
           >
             {sidebar}

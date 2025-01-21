@@ -26,7 +26,7 @@ const FormNavigationContainer = ({
   children,
 }: FormNavigationProps) => {
   const isTiny = useIsMobile('sm');
-  const focusTargetId = 'focusable-form'; // This expects that only 1 form is rendered at a time.
+  const focusTargetId = 'focusable-form'; // This expects that only 1 form with form navigation is rendered at a time.
 
   return (
     <Grid container spacing={4} sx={{ pb: 20, mt: 0 }}>
