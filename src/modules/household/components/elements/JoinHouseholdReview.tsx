@@ -65,6 +65,9 @@ const JoinHouseholdReview = ({
         <GenericTable<HouseholdClientFieldsFragment>
           rows={joinedHouseholdClients}
           columns={JOIN_HOUSEHOLD_COLUMNS}
+          tableProps={{
+            'aria-label': 'Review Joined Household',
+          }}
         />
       </Paper>
       {remainingHouseholdClients.length > 0 && (
@@ -78,7 +81,7 @@ const JoinHouseholdReview = ({
               rows={remainingHouseholdClients}
               columns={JOIN_HOUSEHOLD_COLUMNS}
               tableProps={{
-                'aria-label': 'Review Join',
+                'aria-label': 'Review Remaining Household',
               }}
             />
           </Paper>
