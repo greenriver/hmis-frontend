@@ -4,6 +4,7 @@ import GenericTable from '@/components/elements/table/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import RelationshipToHohSelect from '@/modules/household/components/elements/RelationshipToHohSelect';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
@@ -50,7 +51,10 @@ const JoinHouseholdAddRelationships = ({
       </Typography>
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>
-          rows={[...receivingHousehold.householdClients, ...joiningClients]}
+          rows={[
+            ...sortHouseholdMembers(receivingHousehold.householdClients),
+            ...joiningClients,
+          ]}
           columns={[
             {
               ...CLIENT_COLUMNS.name,

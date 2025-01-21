@@ -2,7 +2,11 @@ import { MergeTypeRounded } from '@mui/icons-material';
 import { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import StepDialog, { TabDefinition } from '@/components/elements/StepDialog';
-import { clientBriefName, findHohOrRep } from '@/modules/hmis/hmisUtil';
+import {
+  clientBriefName,
+  findHohOrRep,
+  sortHouseholdMembers,
+} from '@/modules/hmis/hmisUtil';
 import JoinHouseholdAddRelationships from '@/modules/household/components/elements/JoinHouseholdAddRelationships';
 import JoinHouseholdReview from '@/modules/household/components/elements/JoinHouseholdReview';
 import JoinHouseholdSelectClients from '@/modules/household/components/elements/JoinHouseholdSelectClients';
@@ -67,7 +71,7 @@ const JoinHouseholdDialog = ({
             initiator.relationshipToHoH ===
             RelationshipToHoH.SelfHeadOfHousehold
           ) {
-            setJoiningClients(household.householdClients);
+            setJoiningClients(sortHouseholdMembers(household.householdClients));
           } else {
             setJoiningClients([initiator]);
           }

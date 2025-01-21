@@ -73,11 +73,15 @@ const JoinHouseholdSelectClients = ({
       // If the HoH from the donor household is selected, all other hh members must be selected.
       // (Can't leave behind a household without a HoH)
       if (donorHoh && clientIds.includes(donorHoh.id)) {
-        setSelectedClients(donorHousehold.householdClients);
+        setSelectedClients(
+          sortHouseholdMembers(donorHousehold.householdClients)
+        );
       } else {
         setSelectedClients(
-          donorHousehold.householdClients.filter((hc) =>
-            clientIds.includes(hc.id)
+          sortHouseholdMembers(
+            donorHousehold.householdClients.filter((hc) =>
+              clientIds.includes(hc.id)
+            )
           )
         );
       }

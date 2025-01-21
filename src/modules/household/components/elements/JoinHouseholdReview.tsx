@@ -1,7 +1,10 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
-import { stringifyHousehold } from '@/modules/hmis/hmisUtil';
+import {
+  sortHouseholdMembers,
+  stringifyHousehold,
+} from '@/modules/hmis/hmisUtil';
 import { JOIN_HOUSEHOLD_COLUMNS } from '@/modules/household/components/elements/JoinHouseholdSelectClients';
 import {
   HouseholdClientFieldsFragment,
@@ -24,7 +27,7 @@ const JoinHouseholdReview = ({
 }: Props) => {
   const joinedHouseholdClients = useMemo(() => {
     return [
-      ...receivingHousehold.householdClients,
+      ...sortHouseholdMembers(receivingHousehold.householdClients),
       ...joiningClients.map((jc) => {
         return {
           ...jc,
@@ -37,8 +40,10 @@ const JoinHouseholdReview = ({
   }, [joiningClients, receivingHousehold.householdClients, relationships]);
 
   const remainingHouseholdClients = useMemo(() => {
-    return donorHousehold.householdClients.filter(
-      (hc) => !joiningClients.includes(hc)
+    return sortHouseholdMembers(
+      donorHousehold.householdClients.filter(
+        (hc) => !joiningClients.includes(hc)
+      )
     );
   }, [donorHousehold.householdClients, joiningClients]);
 
