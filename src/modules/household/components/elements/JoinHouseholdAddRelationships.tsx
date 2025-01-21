@@ -4,7 +4,6 @@ import GenericTable from '@/components/elements/table/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import RelationshipToHohSelect from '@/modules/household/components/elements/RelationshipToHohSelect';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
@@ -82,7 +81,6 @@ const JoinHouseholdAddRelationships = ({
                 if (joiningClients.includes(hc)) {
                   return (
                     <RelationshipToHohSelect
-                      aria-labelledby={`client-${hc.id} ${relationshipHeaderId}`}
                       value={relationships[hc.enrollment.id] || null}
                       onChange={(_event, selected) => {
                         updateRelationship(
@@ -94,9 +92,7 @@ const JoinHouseholdAddRelationships = ({
                         warnIfEmptyTreatment: !relationships[hc.enrollment.id],
                         placeholder: 'Select Relationship',
                         inputProps: {
-                          'aria-label': `Relationship to HoH for ${clientBriefName(
-                            hc.client
-                          )}`,
+                          'aria-labelledby': `client-${hc.id} ${relationshipHeaderId}`,
                         },
                       }}
                     />
