@@ -336,6 +336,7 @@ const GenericTable = <T extends { id: string }>({
                     ? headerStyles
                     : [headerStyles]),
                 }}
+                {...def.headerCellProps}
               >
                 {renderHeaderCellContents(def)}
               </HeaderCell>
@@ -399,6 +400,7 @@ const GenericTable = <T extends { id: string }>({
                     sx={{ ...verticalCellSx(1), width: '350px' }}
                     key={key(def)}
                     role='rowheader'
+                    {...def.headerCellProps}
                   >
                     {renderHeaderCellContents(def)}
                   </HeaderCell>
@@ -505,10 +507,15 @@ const GenericTable = <T extends { id: string }>({
                             }
                           : undefined;
 
+                      const cellProps =
+                        typeof tableCellProps === 'function'
+                          ? tableCellProps(row)
+                          : tableCellProps;
+
                       return (
                         <TableCell
                           key={key(def) || index}
-                          {...tableCellProps}
+                          {...cellProps}
                           sx={{
                             ...getStickyCellStyles({
                               sticky: def.sticky,
@@ -520,7 +527,7 @@ const GenericTable = <T extends { id: string }>({
                             textAlign,
                             whiteSpace: 'initial',
                             ...onClickLinkTreatment,
-                            ...tableCellProps?.sx,
+                            ...cellProps?.sx,
                           }}
                         >
                           {isLinked ? (

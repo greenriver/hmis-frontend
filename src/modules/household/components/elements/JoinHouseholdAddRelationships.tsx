@@ -63,6 +63,11 @@ const JoinHouseholdAddRelationships = ({
                 </Stack>
               ),
               sticky: 'left',
+              tableCellProps: (client) => {
+                return {
+                  id: `client-${client.id}`,
+                };
+              },
             },
             CLIENT_COLUMNS.age,
             {
@@ -71,11 +76,13 @@ const JoinHouseholdAddRelationships = ({
                   text='Relationship'
                   TypographyProps={{
                     fontWeight: 'bold',
-                    id: relationshipHeaderId,
                   }}
                   required={true}
                 />
               ),
+              headerCellProps: {
+                id: relationshipHeaderId,
+              },
               key: 'relationship',
               render: (hc: HouseholdClientFieldsFragment) => {
                 if (joiningClients.includes(hc)) {

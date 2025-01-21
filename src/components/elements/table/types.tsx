@@ -16,7 +16,8 @@ type BaseColumnDef<T> = {
   // aria label, for use with linkTreatment
   ariaLabel?: (row: T) => string;
   textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
-  tableCellProps?: TableCellProps;
+  tableCellProps?: TableCellProps | ((row: T) => TableCellProps);
+  headerCellProps?: TableCellProps;
   optional?: boolean;
   defaultHidden?: boolean;
   sticky?: 'left' | 'right';
