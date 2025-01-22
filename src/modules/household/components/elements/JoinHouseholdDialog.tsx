@@ -105,7 +105,7 @@ const JoinHouseholdDialog = ({
       disabled: missingRelationshipsCount > 0,
       disabledReason:
         missingRelationshipsCount > 0
-          ? `Missing ${missingRelationshipsCount} required fields`
+          ? `Required fields missing (${missingRelationshipsCount})`
           : undefined,
     };
   }, [missingRelationshipsCount]);

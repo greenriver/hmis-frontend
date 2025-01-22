@@ -45,7 +45,7 @@ const JoinHouseholdAddRelationships = ({
         <Typography variant='h3'>Add Relationships</Typography>
       </Box>
       <Typography variant='body1'>
-        Update joining clients' relationships{' '}
+        Update joining clients’ relationships{' '}
         {receivingHohName && <>to {receivingHohName}</>}
         {/* todo @martha - add warning here about entry dates, pending conversation with design */}
       </Typography>

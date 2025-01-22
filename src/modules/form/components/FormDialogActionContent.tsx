@@ -60,7 +60,7 @@ export const FormDialogActionContent = ({
         </Button>
 
         {disabled && disabledReason ? (
-          <ButtonTooltipContainer title={disabledReason} placement='bottom'>
+          <ButtonTooltipContainer title={disabledReason} placement='top-start'>
             {primaryAction}
           </ButtonTooltipContainer>
         ) : (
