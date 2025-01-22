@@ -16,7 +16,6 @@ import DynamicField from './DynamicField';
 import DynamicGroup from './DynamicGroup';
 import ValueWrapper from './ValueWrapper';
 import DynamicViewField from './viewable/DynamicViewField';
-import DynamicFormFieldAutofillSummary from '@/modules/form/components/DynamicFormFieldAutofillSummary';
 import { Component, FormItem, ItemType } from '@/types/gqlTypes';
 
 export interface Props {
@@ -58,68 +57,54 @@ const DynamicFormField: React.FC<Props> = ({
   const renderChild = useCallback(
     (isDisabled?: boolean) => {
       if (item.type === ItemType.Group) {
+        // No need to wrap DynamicGroup in ValueWrapper because the group item itself can't have a value
         const group = (
-          <ValueWrapper handlers={handlers} item={item}>
-            {(values) => (
-              <DynamicGroup
-                item={item}
-                clientId={clientId}
+          <DynamicGroup
+            item={item}
+            clientId={clientId}
+            key={item.linkId}
+            nestingLevel={nestingLevel}
+            renderChildItem={(item, props, fn) => (
+              <DynamicFormField
                 key={item.linkId}
-                nestingLevel={nestingLevel}
-                renderChildItem={(item, props, fn) => (
-                  <DynamicFormField
-                    key={item.linkId}
-                    handlers={handlers}
-                    item={item}
-                    nestingLevel={nestingLevel + 1}
-                    warnIfEmpty={warnIfEmpty}
-                    pickListArgs={pickListArgs}
-                    props={props}
-                    itemChanged={itemChanged}
-                    severalItemsChanged={severalItemsChanged}
-                    renderFn={fn}
-                  />
-                )}
-                renderSummaryItem={(item, isCurrency) => {
-                  if (item)
-                    return (
-                      <DynamicFormFieldAutofillSummary
-                        item={item}
-                        isCurrency={isCurrency}
-                      />
-                    );
-                  return null;
-                }}
-                values={values}
+                handlers={handlers}
+                item={item}
+                nestingLevel={nestingLevel + 1}
+                warnIfEmpty={warnIfEmpty}
+                pickListArgs={pickListArgs}
+                props={props}
                 itemChanged={itemChanged}
                 severalItemsChanged={severalItemsChanged}
-                visible={visible}
-                debug={
-                  import.meta.env.MODE === 'development'
-                    ? (keys?: string[]) => {
-                        const currentValues = handlers.getValues();
-                        const sectionValues = keys
-                          ? pick(currentValues, keys)
-                          : currentValues;
-                        const valuesByKey = transformSubmitValues({
-                          definition,
-                          values: sectionValues,
-                          keyByFieldName: true,
-                        });
-                        // eslint-disable-next-line no-console
-                        console.group(item.text || item.linkId);
-                        // eslint-disable-next-line no-console
-                        console.log(sectionValues);
-                        // eslint-disable-next-line no-console
-                        console.log(valuesByKey);
-                        // eslint-disable-next-line no-console
-                        console.groupEnd();
-                      }
-                    : undefined
-                }
+                renderFn={fn}
               />
             )}
-          </ValueWrapper>
+            itemChanged={itemChanged}
+            severalItemsChanged={severalItemsChanged}
+            visible={visible}
+            debug={
+              import.meta.env.MODE === 'development'
+                ? (keys?: string[]) => {
+                    const currentValues = handlers.getValues();
+                    const sectionValues = keys
+                      ? pick(currentValues, keys)
+                      : currentValues;
+                    const valuesByKey = transformSubmitValues({
+                      definition,
+                      values: sectionValues,
+                      keyByFieldName: true,
+                    });
+                    // eslint-disable-next-line no-console
+                    console.group(item.text || item.linkId);
+                    // eslint-disable-next-line no-console
+                    console.log(sectionValues);
+                    // eslint-disable-next-line no-console
+                    console.log(valuesByKey);
+                    // eslint-disable-next-line no-console
+                    console.groupEnd();
+                  }
+                : undefined
+            }
+          />
         );
 
         // Disability group actually needs accurate values for its own mechanics, so provide them

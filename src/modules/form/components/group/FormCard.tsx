@@ -8,9 +8,10 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import { includes, isNil, zipObject } from 'lodash-es';
+import { isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
+import { useFormContext } from 'react-hook-form';
 import {
   AssessmentForPopulation,
   ChangeType,
@@ -42,13 +43,13 @@ const FormCard: React.FC<FormCardProps> = ({
   severalItemsChanged = () => {},
   renderChildItem,
   anchor,
-  values,
   debug,
   TitleIcon,
   helperTextProps,
   titleProps,
   viewOnly,
 }) => {
+  const { getValues } = useFormContext();
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
   const [sourceRecord, setSourceRecord] = useState<
@@ -56,19 +57,19 @@ const FormCard: React.FC<FormCardProps> = ({
   >();
 
   const childLinkIds = useMemo(() => getAllChildLinkIds(item), [item]);
-  const hasAnyChildValues = useMemo(
-    () =>
-      !!Object.keys(values).find(
-        (linkId) => includes(childLinkIds, linkId) && !isNil(values[linkId])
-      ),
-    [childLinkIds, values]
-  );
+
+  // Enable the "Clear Section" button if any child item has a value initially.
+  // We don't watch for changes in child values, because it's not worth the re-renders. (top-level groups may be very large)
+  const enableClearSectionButton = useMemo(() => {
+    const childValues = getValues(childLinkIds);
+    return childValues.some((value) => !isNil(value));
+  }, [getValues, childLinkIds]);
+
   const onClear = useCallback(() => {
     const updatedValues = zipObject(
       childLinkIds,
       new Array(childLinkIds.length).fill(null)
     );
-
     severalItemsChanged({ values: updatedValues, type: ChangeType.User });
     setSourceRecord(undefined);
     setClearDialogOpen(false);
@@ -145,7 +146,7 @@ const FormCard: React.FC<FormCardProps> = ({
                       data-testid='clearButton'
                       color='error'
                       onClick={() => setClearDialogOpen(true)}
-                      disabled={!hasAnyChildValues}
+                      disabled={!enableClearSectionButton}
                       {...buttonProps}
                     >
                       Clear Section
