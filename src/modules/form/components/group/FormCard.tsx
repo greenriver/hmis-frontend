@@ -26,12 +26,12 @@ import {
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import RecordPickerDialog from '@/modules/assessments/components/RecordPickerDialog';
+import { useDebugDynamicFormValues } from '@/modules/form/hooks/rhf/useDebugDynamicFormValues';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 export interface FormCardProps extends GroupItemComponentProps {
   anchor?: string;
   clientId?: string;
-  debug?: (ids?: string[]) => void;
   TitleIcon?: SvgIconComponent;
   titleProps?: TypographyProps;
   helperTextProps?: TypographyProps;
@@ -43,7 +43,6 @@ const FormCard: React.FC<FormCardProps> = ({
   severalItemsChanged = () => {},
   renderChildItem,
   anchor,
-  debug,
   TitleIcon,
   helperTextProps,
   titleProps,
@@ -92,6 +91,8 @@ const FormCard: React.FC<FormCardProps> = ({
     [setFillDialogOpen, severalItemsChanged, item]
   );
 
+  const consoleDebugValues = useDebugDynamicFormValues(childLinkIds);
+
   const buttonProps: ButtonProps = {
     variant: 'outlined',
     size: 'small',
@@ -122,17 +123,15 @@ const FormCard: React.FC<FormCardProps> = ({
               </Typography>
 
               <Stack direction='row' spacing={2}>
-                {debug &&
-                  import.meta.env.MODE === 'development' &&
-                  !viewOnly && (
-                    <Button
-                      {...buttonProps}
-                      onClick={() => debug(childLinkIds)}
-                      variant='text'
-                    >
-                      Debug
-                    </Button>
-                  )}
+                {import.meta.env.MODE === 'development' && !viewOnly && (
+                  <Button
+                    {...buttonProps}
+                    onClick={consoleDebugValues}
+                    variant='text'
+                  >
+                    Debug
+                  </Button>
+                )}
                 {item.prefill && !viewOnly && (
                   <>
                     <Button

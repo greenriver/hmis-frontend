@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
-import { omit, pick } from 'lodash-es';
-import React, { cloneElement, ReactNode, useCallback } from 'react';
+import { omit } from 'lodash-es';
+import React, { ReactNode, useCallback } from 'react';
 
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import {
@@ -9,14 +9,14 @@ import {
   PickListArgs,
   SeveralItemsChangedFn,
 } from '../types';
-import { buildCommonInputProps, transformSubmitValues } from '../util/formUtil';
+import { buildCommonInputProps } from '../util/formUtil';
 
 import DependentFormItemWrapper from './DependentFormItemWrapper';
 import DynamicField from './DynamicField';
 import DynamicGroup from './DynamicGroup';
 import ValueWrapper from './ValueWrapper';
 import DynamicViewField from './viewable/DynamicViewField';
-import { Component, FormItem, ItemType } from '@/types/gqlTypes';
+import { FormItem, ItemType } from '@/types/gqlTypes';
 
 export interface Props {
   handlers: FormDefinitionHandlers;
@@ -51,14 +51,13 @@ const DynamicFormField: React.FC<Props> = ({
   severalItemsChanged,
   renderFn,
 }) => {
-  const { definition, localConstants, getFieldErrors } = handlers;
+  const { localConstants, getFieldErrors } = handlers;
 
   // Renders the appropriate field component based on item type and configuration
   const renderChild = useCallback(
     (isDisabled?: boolean) => {
       if (item.type === ItemType.Group) {
-        // No need to wrap DynamicGroup in ValueWrapper because the group item itself can't have a value
-        const group = (
+        return (
           <DynamicGroup
             item={item}
             clientId={clientId}
@@ -81,43 +80,8 @@ const DynamicFormField: React.FC<Props> = ({
             itemChanged={itemChanged}
             severalItemsChanged={severalItemsChanged}
             visible={visible}
-            debug={
-              import.meta.env.MODE === 'development'
-                ? (keys?: string[]) => {
-                    const currentValues = handlers.getValues();
-                    const sectionValues = keys
-                      ? pick(currentValues, keys)
-                      : currentValues;
-                    const valuesByKey = transformSubmitValues({
-                      definition,
-                      values: sectionValues,
-                      keyByFieldName: true,
-                    });
-                    // eslint-disable-next-line no-console
-                    console.group(item.text || item.linkId);
-                    // eslint-disable-next-line no-console
-                    console.log(sectionValues);
-                    // eslint-disable-next-line no-console
-                    console.log(valuesByKey);
-                    // eslint-disable-next-line no-console
-                    console.groupEnd();
-                  }
-                : undefined
-            }
           />
         );
-
-        // Disability group actually needs accurate values for its own mechanics, so provide them
-        if (item.component === Component.DisabilityTable) {
-          return (
-            <ValueWrapper handlers={handlers} item={item}>
-              {/* We're just using this component to watch the group's child values and update the values prop when they change */}
-              {(values) => cloneElement(group, { values })}
-            </ValueWrapper>
-          );
-        }
-
-        return group;
       }
 
       const itemComponent = item.readOnly ? (
@@ -176,7 +140,6 @@ const DynamicFormField: React.FC<Props> = ({
     },
     [
       clientId,
-      definition,
       fieldProps,
       getFieldErrors,
       handlers,
