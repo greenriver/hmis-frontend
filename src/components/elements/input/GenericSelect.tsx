@@ -49,17 +49,6 @@ const GenericSelect = <
     <Autocomplete
       options={options}
       value={value}
-      slotProps={{
-        clearIndicator: {
-          tabIndex: 0,
-          // In order to make the Clear Button focusable, have to disable the default MUI behavior of hiding it except on hover.
-          // However, it can only be activated using Space, and not Enter.
-          // See https://github.com/mui/material-ui/issues/44936
-          sx: {
-            visibility: 'visible',
-          },
-        },
-      }}
       renderInput={(params) => (
         <TextInput
           {...params}

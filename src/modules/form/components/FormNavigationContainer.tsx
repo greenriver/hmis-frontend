@@ -26,7 +26,7 @@ const FormNavigationContainer = ({
   children,
 }: FormNavigationProps) => {
   const isTiny = useIsMobile('sm');
-  const focusTargetId = 'focusable-form';
+  const focusTargetId = 'focusable-form'; // This expects that only 1 form with form navigation is rendered at a time.
 
   return (
     <Grid container spacing={4} sx={{ pb: 20, mt: 0 }}>
@@ -55,7 +55,9 @@ const FormNavigationContainer = ({
             <Stack gap={2}>
               <Typography variant='body2'>{navTitle}</Typography>
               <Divider sx={{ mx: -2 }} />
-              <SkipToContentButton focusTargetId={focusTargetId} />
+              <SkipToContentButton focusTargetId={focusTargetId}>
+                Skip form navigation
+              </SkipToContentButton>
               <FormStepper
                 items={navItems}
                 scrollOffset={navScrollOffset}

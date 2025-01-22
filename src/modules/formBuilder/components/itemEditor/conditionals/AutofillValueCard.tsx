@@ -5,7 +5,6 @@ import { Controller, UseFormSetValue, useWatch } from 'react-hook-form';
 import { FormItemControl, FormItemState } from '../types';
 import ManageEnableWhen from './ManageEnableWhen';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
-import NumberInput from '@/components/elements/input/NumberInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
@@ -83,24 +82,12 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
               />
             )}
             {fieldType === 'valueNumber' && (
-              <Controller
+              <ControlledTextInput
                 name={`autofillValues.${index}.valueNumber`}
                 control={control}
-                shouldUnregister
-                rules={{ required: 'This field is required' }}
-                render={({
-                  field: { ref, disabled, ...field },
-                  fieldState: { error },
-                }) => (
-                  <NumberInput
-                    sx={disabled ? { display: 'none' } : undefined}
-                    label='Value'
-                    inputRef={ref}
-                    error={!!error}
-                    helperText={error?.message}
-                    {...field}
-                  />
-                )}
+                label='Value (Numeric)'
+                type='number'
+                required
               />
             )}
           </>
