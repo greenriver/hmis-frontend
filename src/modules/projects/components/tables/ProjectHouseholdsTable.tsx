@@ -179,6 +179,7 @@ const ProjectHouseholdsTable = ({
     ].map(({ render, ariaLabel, ...rest }) => ({
       ...rest,
       render: () => null,
+      tableCellProps: undefined,
     }));
   }, [staffAssignmentsEnabled]);
 
