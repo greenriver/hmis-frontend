@@ -3,13 +3,16 @@ import { Paper } from '@mui/material';
 import { useMemo } from 'react';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   GetClientCaseNotesDocument,
   GetClientCaseNotesQuery,
@@ -55,11 +58,18 @@ const ClientCaseNotes = () => {
               key: 'case note',
               onClick: () => onSelectRecord(row),
             }}
+            secondaryActionConfigs={[
+              {
+                ...getViewEnrollmentMenuItem(row.enrollment, client),
+                // override the default ariaLabel to provide the project name, since we are in the client context
+                ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
+              },
+            ]}
           />
         ),
       },
     ],
-    [onSelectRecord]
+    [client, onSelectRecord]
   );
 
   if (!clientId) return <NotFound />;

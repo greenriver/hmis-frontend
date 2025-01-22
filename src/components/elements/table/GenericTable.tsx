@@ -43,6 +43,9 @@ import {
   RenderFunction,
 } from './types';
 
+export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
+  def.key || (typeof def.header === 'string' ? def.header : '');
+
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
@@ -271,9 +274,6 @@ const GenericTable = <T extends { id: string }>({
       idx & 1 ? undefined : theme.palette.background.default,
   });
 
-  const key = (def: ColumnDef<T>) =>
-    def.key || (typeof def.header === 'string' ? def.header : '');
-
   const fullColSpan = columns.length + (selectable ? 1 : 0);
   const tableHead = noHead ? null : vertical ? (
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
@@ -323,7 +323,7 @@ const GenericTable = <T extends { id: string }>({
             const headerStyles = headerCellSx ? headerCellSx(def) : {};
             return (
               <HeaderCell
-                key={key(def) || i}
+                key={getColumnKey(def) || i}
                 sx={{
                   ...getStickyCellStyles({
                     sticky: def.sticky,
@@ -395,10 +395,10 @@ const GenericTable = <T extends { id: string }>({
           <TableBodyComponent>
             {vertical &&
               columns.map((def, i) => (
-                <TableRow key={key(def) || i}>
+                <TableRow key={getColumnKey(def) || i}>
                   <HeaderCell
                     sx={{ ...verticalCellSx(1), width: '350px' }}
-                    key={key(def)}
+                    key={getColumnKey(def)}
                     role='rowheader'
                     {...def.headerCellProps}
                   >
@@ -514,7 +514,7 @@ const GenericTable = <T extends { id: string }>({
 
                       return (
                         <TableCell
-                          key={key(def) || index}
+                          key={getColumnKey(def) || index}
                           {...cellProps}
                           sx={{
                             ...getStickyCellStyles({
