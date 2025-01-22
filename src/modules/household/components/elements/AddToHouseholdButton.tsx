@@ -102,12 +102,12 @@ const AddToHouseholdButton = ({
     [clientAlerts]
   );
 
-  const onCloseJoinHouseholds = useCallback(() => {
+  const onCloseJoinHousehold = useCallback(() => {
     setJoinHouseholdDialogOpen(false);
     setConflictingEnrollmentId(undefined);
   }, []);
 
-  const onCompleteJoinHouseholds = useCallback(
+  const onCompleteJoinHousehold = useCallback(
     (joinedHousehold: HouseholdFieldsFragment) => {
       // This only updates the initiating client's button
       if (
@@ -166,8 +166,8 @@ const AddToHouseholdButton = ({
         <JoinHouseholdDialog
           open={joinHouseholdDialogOpen}
           conflictingEnrollmentId={conflictingEnrollmentId}
-          onClose={onCloseJoinHouseholds}
-          onComplete={onCompleteJoinHouseholds}
+          onClose={onCloseJoinHousehold}
+          onComplete={onCompleteJoinHousehold}
           receivingHousehold={household}
           project={project}
         />

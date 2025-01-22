@@ -7060,6 +7060,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'EnrollmentRelationshipInput',
+    args: [
+      {
+        name: 'enrollmentId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'relationshipToHoh',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'EnrollmentsForClientFilterOptions',
     args: [
       {
@@ -7402,7 +7423,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'JoinHouseholdsInput',
+    name: 'JoinHouseholdInput',
     args: [
       {
         name: 'joiningEnrollmentInputs',
@@ -7417,7 +7438,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               name: null,
               ofType: {
                 kind: 'INPUT_OBJECT',
-                name: 'JoiningEnrollmentInput',
+                name: 'EnrollmentRelationshipInput',
                 ofType: null,
               },
             },
@@ -7430,27 +7451,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'JoiningEnrollmentInput',
-    args: [
-      {
-        name: 'enrollmentId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'relationshipToHoh',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
         },
       },
     ],

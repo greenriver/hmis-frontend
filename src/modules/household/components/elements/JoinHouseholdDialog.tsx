@@ -17,7 +17,7 @@ import {
   ProjectAllFieldsFragment,
   RelationshipToHoH,
   useGetEnrollmentWithHouseholdQuery,
-  useJoinHouseholdsMutation,
+  useJoinHouseholdMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -117,16 +117,14 @@ const JoinHouseholdDialog = ({
     HouseholdFieldsFragment | undefined
   >(undefined);
   const [joinHousehold, { loading: joinLoading, error: joinError }] =
-    useJoinHouseholdsMutation({
+    useJoinHouseholdMutation({
       onCompleted: (data) => {
-        if (data.joinHouseholds) {
-          setJoinedHousehold(data.joinHouseholds.receivingHousehold);
-          setRemainingHousehold(
-            data.joinHouseholds.donorHousehold || undefined
-          );
+        if (data.joinHousehold) {
+          setJoinedHousehold(data.joinHousehold.receivingHousehold);
+          setRemainingHousehold(data.joinHousehold.donorHousehold || undefined);
           onComplete?.(
-            data.joinHouseholds.receivingHousehold,
-            data.joinHouseholds.donorHousehold
+            data.joinHousehold.receivingHousehold,
+            data.joinHousehold.donorHousehold
           );
         }
       },

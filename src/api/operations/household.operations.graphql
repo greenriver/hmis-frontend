@@ -1,5 +1,5 @@
-mutation JoinHouseholds($input: JoinHouseholdsInput!) {
-  joinHouseholds(input: $input) {
+mutation JoinHousehold($input: JoinHouseholdInput!) {
+  joinHousehold(input: $input) {
     receivingHousehold {
       ...HouseholdFields
     }
