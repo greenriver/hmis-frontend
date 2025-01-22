@@ -1,4 +1,4 @@
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import { useMemo } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -15,22 +15,9 @@ import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import NotFound from '@/components/pages/NotFound';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { useDashboardState } from '@/hooks/useDashboardState';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
-
-const ProjectNavHeader: React.FC = () => {
-  return (
-    <Typography
-      component='p'
-      variant='h5'
-      sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}
-    >
-      Admin
-    </Typography>
-  );
-};
 
 const navItems: NavItem<RootPermissionsFragment>[] = [
   {
@@ -115,7 +102,6 @@ const AdminDashboard: React.FC = () => {
   const dashboardState = useDashboardState();
   const breadCrumbConfig = useAdminBreadcrumbConfig();
   const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
-  const isMobile = useIsMobile();
 
   const formEditorContentSx = {
     px: 0,
@@ -129,7 +115,6 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <DashboardContentContainer
-      navHeader={<ProjectNavHeader />}
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       sidebar={
         <SideNavMenu<RootPermissionsFragment>
@@ -143,9 +128,8 @@ const AdminDashboard: React.FC = () => {
           ? formEditorContentSx
           : {}
       }
-      // On desktop, 'Admin' appears in the ProjectNavHeader, so omit it from the nav label.
-      // On mobile, include it. We can remove this special case if we add the ProjectNavHeader info back on mobile.
-      navLabel={isMobile ? 'Admin' : ''}
+      // (Still provide the navLabel for accessible text)
+      navLabel={'Admin'}
       {...dashboardState}
     >
       <Container
