@@ -12,7 +12,6 @@ import RemoveFromHouseholdButton from './elements/RemoveFromHouseholdButton';
 import { HOUSEHOLD_MEMBER_COLUMNS } from './HouseholdMemberTable';
 
 import GenericTable from '@/components/elements/table/GenericTable';
-import usePrevious from '@/hooks/usePrevious';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
@@ -20,7 +19,7 @@ import {
   ErrorState,
   partitionValidations,
 } from '@/modules/errors/util';
-import { sortHouseholdMembers, clientBriefName } from '@/modules/hmis/hmisUtil';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -60,8 +59,6 @@ const EditHouseholdMemberTable = ({
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
     ) || null
   );
-  const previousMembers =
-    usePrevious<HouseholdClientFieldsFragment[]>(currentMembers);
 
   // client to highlight for relationship input
   const [highlight, setHighlight] = useState<string[]>([]);
@@ -108,21 +105,6 @@ const EditHouseholdMemberTable = ({
       return prev;
     });
   }, [currentMembers]);
-
-  // If new members have beed added highlight their relationship field if it's DNC
-  useEffect(() => {
-    if (!previousMembers || !currentMembers) return;
-    if (previousMembers.length < currentMembers.length) {
-      const old = new Set(previousMembers.map((m) => m.client.id));
-      const newMembers = currentMembers
-        .filter(
-          (hc) => hc.relationshipToHoH === RelationshipToHoH.DataNotCollected
-        )
-        .map((m) => m.client.id)
-        .filter((id) => !old.has(id));
-      setHighlight((old) => [...old, ...newMembers]);
-    }
-  }, [previousMembers, currentMembers]);
 
   const onChangeHoH = useCallback(
     (hc: HouseholdClientFieldsFragment, confirmed = false) => {

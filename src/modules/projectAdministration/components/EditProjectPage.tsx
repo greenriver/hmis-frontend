@@ -70,26 +70,24 @@ const EditProjectPage = () => {
       }
       FormNavigationProps={{
         contentsBelowNavigation: (
-          <Box sx={{ mt: 3 }}>
-            <ProjectPermissionsFilter
-              id={project.id}
-              permissions={'canDeleteProject'}
+          <ProjectPermissionsFilter
+            id={project.id}
+            permissions={'canDeleteProject'}
+          >
+            <DeleteMutationButton<
+              DeleteProjectMutation,
+              DeleteProjectMutationVariables
             >
-              <DeleteMutationButton<
-                DeleteProjectMutation,
-                DeleteProjectMutationVariables
-              >
-                queryDocument={DeleteProjectDocument}
-                variables={{ input: { id: project.id } }}
-                idPath='deleteProject.project.id'
-                recordName='Project'
-                onSuccess={onSuccessfulDelete}
-                ButtonProps={{ fullWidth: true }}
-              >
-                Delete Project
-              </DeleteMutationButton>
-            </ProjectPermissionsFilter>
-          </Box>
+              queryDocument={DeleteProjectDocument}
+              variables={{ input: { id: project.id } }}
+              idPath='deleteProject.project.id'
+              recordName='Project'
+              onSuccess={onSuccessfulDelete}
+              ButtonProps={{ fullWidth: true }}
+            >
+              Delete Project
+            </DeleteMutationButton>
+          </ProjectPermissionsFilter>
         ),
       }}
     />

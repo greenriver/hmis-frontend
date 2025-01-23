@@ -9,8 +9,6 @@ import {
   getFormStepperItems,
 } from '../util/formUtil';
 
-import FormNavigation, { FormNavigationProps } from './FormNavigation';
-
 import Loading from '@/components/elements/Loading';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -21,6 +19,9 @@ import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
+import FormNavigationContainer, {
+  FormNavigationProps,
+} from '@/modules/form/components/FormNavigationContainer';
 import { FormInput, RecordFormRole } from '@/types/gqlTypes';
 
 export interface Props<RecordType>
@@ -42,7 +43,7 @@ export interface Props<RecordType>
   localConstants?: LocalConstants;
   onCompleted: (data: RecordType) => void;
   title: ReactNode;
-  FormNavigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
+  FormNavigationProps?: Omit<FormNavigationProps, 'navItems' | 'children'>;
   top?: number;
   minGroupsForLeftNav?: number;
   formRef?: Ref<DynamicFormRef>;
@@ -143,15 +144,13 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
         >
           {title}
         </Box>
-        <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-          <FormNavigation
-            items={leftNavItems}
-            top={top}
-            {...FormNavigationProps}
-          >
-            {form}
-          </FormNavigation>
-        </Grid>
+        <FormNavigationContainer
+          navItems={leftNavItems}
+          navScrollOffset={top}
+          {...FormNavigationProps}
+        >
+          {form}
+        </FormNavigationContainer>
       </>
     );
   }

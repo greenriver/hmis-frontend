@@ -3,7 +3,6 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
-import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
 
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -39,7 +38,6 @@ const CreateClientPage: React.FC = () => {
         formRole={RecordFormRole.Client}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Client' }}
-        top={STICKY_BAR_HEIGHT}
         localConstants={localConstants}
         title={
           <>
