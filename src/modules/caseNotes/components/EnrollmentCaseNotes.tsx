@@ -65,7 +65,7 @@ export const CASE_NOTE_COLUMNS: Record<
           WebkitBoxOrient: 'vertical',
           WebkitLineClamp: '1',
           overflow: 'hidden',
-          // maxWidth: '500px',
+          maxWidth: '200px',
         }}
       >
         {content}
