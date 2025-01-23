@@ -94,6 +94,7 @@ const EnrollmentCeEventsPage = () => {
               {
                 title: 'View CE Event',
                 key: 'ce event',
+                ariaLabel: `View CE Event, ${HmisEnums.EventType[e.event]} on ${parseAndFormatDate(e.eventDate)}`,
                 onClick: () => onSelectRecord(e),
               },
             ]}

@@ -69,6 +69,7 @@ const PROJECT_COLUMNS: ColumnDef<ProjectAllFieldsFragment>[] = [
         menuActionConfigs={[
           {
             title: 'View Project',
+            ariaLabel: `View Project, ${project.projectName}`,
             key: 'project',
             to: generateSafePath(Routes.PROJECT, {
               projectId: project.id,
@@ -100,6 +101,7 @@ const ORGANIZATION_COLUMNS: ColumnDef<OrganizationType>[] = [
           {
             title: 'View Organization',
             key: 'organization',
+            ariaLabel: `View Organization, ${organization.organizationName}`,
             to: generateSafePath(Routes.ORGANIZATION, {
               organizationId: organization.id,
             }),

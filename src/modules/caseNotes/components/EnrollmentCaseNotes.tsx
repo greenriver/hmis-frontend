@@ -134,6 +134,7 @@ const EnrollmentCaseNotes = () => {
                 {
                   title: 'View Case Note',
                   key: 'case note',
+                  ariaLabel: `View Case Note, ${parseAndFormatDate(caseNote.informationDate) || caseNote.id}`,
                   onClick: () => onSelectRecord(caseNote),
                 },
               ]}

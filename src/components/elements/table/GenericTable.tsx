@@ -83,6 +83,7 @@ export interface Props<T> {
 }
 
 export const clickableRowStyles = {
+  backgroundColor: 'background.paper',
   '&:hover': { backgroundColor: 'grayscale.tint' },
   cursor: 'pointer',
 };

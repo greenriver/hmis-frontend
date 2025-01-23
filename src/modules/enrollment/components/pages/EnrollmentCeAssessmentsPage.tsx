@@ -117,6 +117,7 @@ const EnrollmentCeAssessmentsPage = () => {
                   menuActionConfigs={[
                     {
                       title: 'View CE Assessment',
+                      ariaLabel: `View CE Assessment, ${parseAndFormatDate(a.assessmentDate) || 'unknown date'}`,
                       key: 'ce assessment',
                       onClick: () => onSelectRecord(a),
                     },

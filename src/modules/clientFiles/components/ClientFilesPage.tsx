@@ -140,6 +140,7 @@ const ClientFilesPage = () => {
                     {
                       title: 'View File',
                       key: 'file',
+                      ariaLabel: `View File, ${file.name}`,
                       onClick: () => setViewingFile(file),
                     },
                   ]

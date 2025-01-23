@@ -23,8 +23,9 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const getPrimaryAction = (cls: ProjectCurrentLivingSituationFieldsFragment) => {
   return {
-    title: 'View CLS',
+    title: 'View Current Living Situation',
     key: 'cls',
+    ariaLabel: `View Current Living Situation, ${clientBriefName(cls.client)} ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`,
     to: generateSafePath(EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS, {
       clientId: cls.client.id,
       enrollmentId: cls.enrollment.id,

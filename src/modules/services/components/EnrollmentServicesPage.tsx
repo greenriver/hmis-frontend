@@ -75,6 +75,7 @@ const EnrollmentServicesPage = () => {
                     {
                       title: 'Update Service',
                       key: 'service',
+                      ariaLabel: `Update Service, ${getServiceTypeForDisplay(service.serviceType)} on ${parseAndFormatDate(service.dateProvided)}`,
                       onClick: () => {
                         openService(service);
                       },

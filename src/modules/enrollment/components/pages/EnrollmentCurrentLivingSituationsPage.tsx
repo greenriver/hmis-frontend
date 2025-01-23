@@ -113,7 +113,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
               }
               menuActionConfigs={[
                 {
-                  title: 'View CLS',
+                  title: 'View Current Living Situation',
                   key: 'cls',
                   ariaLabel: `View Current Living Situation, ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`,
                   onClick: () => onSelectRecord(cls),
