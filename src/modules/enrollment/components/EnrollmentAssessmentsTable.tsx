@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -28,6 +28,12 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
   enrollmentId,
   projectId,
 }) => {
+  const getPrimaryAction = useCallback(
+    (assessment: AssessmentFieldsFragment) =>
+      getViewAssessmentMenuItem(assessment, clientId, enrollmentId),
+    [clientId, enrollmentId]
+  );
+
   const columns: ColumnDef<AssessmentFieldsFragment>[] = useMemo(
     () => [
       { ...ASSESSMENT_COLUMNS.date, sticky: 'left' },
@@ -39,16 +45,12 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
           <TableRowActions
             record={assessment}
             recordName={assessmentDescription(assessment)}
-            primaryActionConfig={getViewAssessmentMenuItem(
-              assessment,
-              clientId,
-              enrollmentId
-            )}
+            menuActionConfigs={[getPrimaryAction(assessment)]}
           />
         ),
       },
     ],
-    [clientId, enrollmentId]
+    [getPrimaryAction]
   );
 
   const filters = useFilters({
@@ -66,6 +68,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       queryVariables={{ id: enrollmentId }}
       queryDocument={GetEnrollmentAssessmentsDocument}
       columns={columns}
+      rowLinkTo={(row) => getPrimaryAction(row).to}
       pagePath='enrollment.assessments'
       noData='No assessments'
       recordType='Assessment'

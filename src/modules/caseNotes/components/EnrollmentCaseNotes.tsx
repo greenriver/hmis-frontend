@@ -65,7 +65,7 @@ export const CASE_NOTE_COLUMNS: Record<
           WebkitBoxOrient: 'vertical',
           WebkitLineClamp: '1',
           overflow: 'hidden',
-          maxWidth: '200px',
+          // maxWidth: '500px',
         }}
       >
         {content}
@@ -130,11 +130,13 @@ const EnrollmentCaseNotes = () => {
               recordName={
                 parseAndFormatDate(caseNote.informationDate) || caseNote.id
               }
-              primaryActionConfig={{
-                title: 'View Case Note',
-                key: 'case note',
-                onClick: () => onSelectRecord(caseNote),
-              }}
+              menuActionConfigs={[
+                {
+                  title: 'View Case Note',
+                  key: 'case note',
+                  onClick: () => onSelectRecord(caseNote),
+                },
+              ]}
             />
           ),
         },
@@ -177,6 +179,7 @@ const EnrollmentCaseNotes = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCustomCaseNotesDocument}
           getColumnDefs={getColumnDefs}
+          handleRowClick={(row) => onSelectRecord(row)}
           pagePath='enrollment.customCaseNotes'
           noData='No case notes'
           headerCellSx={() => ({ color: 'text.secondary' })}

@@ -1,9 +1,11 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
 import {
+  clickableRowStyles,
   getColumnKey,
   getStickyCellStyles,
   renderCellContents,
+  renderLinkedCellContents,
 } from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -66,11 +68,13 @@ const ACTION_COL: ColumnDef<OneHouseholdClient> = {
     <TableRowActions
       record={householdClient}
       recordName={clientBriefName(householdClient.client)}
-      primaryActionConfig={getViewEnrollmentMenuItem(
-        householdClient.enrollment,
-        householdClient.client
-      )}
-      secondaryActionConfigs={[getViewClientMenuItem(householdClient.client)]}
+      menuActionConfigs={[
+        getViewEnrollmentMenuItem(
+          householdClient.enrollment,
+          householdClient.client
+        ),
+        getViewClientMenuItem(householdClient.client),
+      ]}
     />
   ),
 };
@@ -99,20 +103,30 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
     [lastInGroup]
   );
 
+  const rowLink = getViewEnrollmentMenuItem(
+    householdClient.enrollment,
+    householdClient.client
+  ).to;
+
   return (
-    <TableRow key={household.id + householdClient.id}>
+    <TableRow sx={clickableRowStyles} key={household.id + householdClient.id}>
       {BASE_COLUMNS.map((col, i) => (
         <TableCell
           key={getColumnKey(col) || i}
           role={i === 0 ? 'rowheader' : undefined}
           sx={cellSx(col)}
         >
-          {renderCellContents(householdClient, col.render)}
+          {renderLinkedCellContents(rowLink, householdClient, col.render, i)}
         </TableCell>
       ))}
       {showAssignedStaff && (
         <TableCell sx={cellSx()}>
-          {renderCellContents(household, ASSIGNED_STAFF_COL.render)}
+          {renderLinkedCellContents(
+            rowLink,
+            household,
+            ASSIGNED_STAFF_COL.render,
+            -1
+          )}
         </TableCell>
       )}
       <TableCell sx={cellSx(ACTION_COL)}>
@@ -162,11 +176,9 @@ const ProjectHouseholdsTable = ({
   const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
     return [
       ...BASE_COLUMNS,
-      ...(staffAssignmentsEnabled
-        ? [{ ...ASSIGNED_STAFF_COL, ariaLabel: undefined }]
-        : []), // typescript appeasement
+      ...(staffAssignmentsEnabled ? [{ ...ASSIGNED_STAFF_COL }] : []), // typescript appeasement
       ACTION_COL,
-    ].map(({ render, ariaLabel, ...rest }) => ({
+    ].map(({ render, ...rest }) => ({
       ...rest,
       render: () => null,
     }));

@@ -111,12 +111,14 @@ const EnrollmentCurrentLivingSituationsPage = () => {
               recordName={
                 parseAndFormatDate(cls.informationDate) || 'unknown date'
               }
-              primaryActionConfig={{
-                title: 'View CLS',
-                key: 'cls',
-                ariaLabel: `View Current Living Situation, ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`,
-                onClick: () => onSelectRecord(cls),
-              }}
+              menuActionConfigs={[
+                {
+                  title: 'View CLS',
+                  key: 'cls',
+                  ariaLabel: `View Current Living Situation, ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`,
+                  onClick: () => onSelectRecord(cls),
+                },
+              ]}
             />
           ),
         },
@@ -154,6 +156,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCurrentLivingSituationsDocument}
           getColumnDefs={getColumnDefs}
+          handleRowClick={(row) => onSelectRecord(row)}
           pagePath='enrollment.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'

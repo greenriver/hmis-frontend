@@ -114,11 +114,13 @@ const EnrollmentCeAssessmentsPage = () => {
                   recordName={
                     parseAndFormatDate(a.assessmentDate) || 'unknown date'
                   }
-                  primaryActionConfig={{
-                    title: 'View CE Assessment',
-                    key: 'ce assessment',
-                    onClick: () => onSelectRecord(a),
-                  }}
+                  menuActionConfigs={[
+                    {
+                      title: 'View CE Assessment',
+                      key: 'ce assessment',
+                      onClick: () => onSelectRecord(a),
+                    },
+                  ]}
                 />
               ),
             },
@@ -158,6 +160,7 @@ const EnrollmentCeAssessmentsPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCeAssessmentsDocument}
           columns={columns}
+          handleRowClick={(row) => onSelectRecord(row)}
           pagePath='enrollment.ceAssessments'
           noData='No Coordinated Entry Assessments'
           headerCellSx={() => ({ color: 'text.secondary' })}

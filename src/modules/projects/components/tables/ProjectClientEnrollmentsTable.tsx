@@ -1,6 +1,5 @@
 import { Box, Chip, Tooltip } from '@mui/material';
 import React, { useMemo } from 'react';
-
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -213,8 +212,10 @@ const ProjectClientEnrollmentsTable = ({
               <TableRowActions
                 record={row}
                 recordName={clientBriefName(row.client)}
-                primaryActionConfig={getViewEnrollmentMenuItem(row, row.client)}
-                secondaryActionConfigs={[getViewClientMenuItem(row.client)]}
+                menuActionConfigs={[
+                  getViewEnrollmentMenuItem(row, row.client),
+                  getViewClientMenuItem(row.client),
+                ]}
               />
             );
           },
@@ -248,6 +249,7 @@ const ProjectClientEnrollmentsTable = ({
       }}
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns || defaultColumns}
+      rowLinkTo={(row) => getViewEnrollmentMenuItem(row, row.client).to}
       noData={
         openOnDate
           ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`

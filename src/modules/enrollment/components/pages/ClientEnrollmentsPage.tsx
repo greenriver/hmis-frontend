@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import TableRowActions from '@/components/elements/table/TableRowActions';
@@ -105,6 +105,17 @@ const ClientEnrollmentsPage = () => {
     type: 'EnrollmentsForClientFilterOptions',
   });
 
+  const getPrimaryAction = useCallback(
+    (enrollment: ClientEnrollmentFieldsFragment) => {
+      return {
+        ...getViewEnrollmentMenuItem(enrollment, client),
+        // override the default ariaLabel to provide the project name, since we are in the client context
+        ariaLabel: `View Enrollment at ${enrollment.projectName} for ${entryExitRange(enrollment)}`,
+      };
+    },
+    [client]
+  );
+
   const columns = useMemo(
     () => [
       CLIENT_ENROLLMENT_COLUMNS.projectName,
@@ -120,16 +131,12 @@ const ClientEnrollmentsPage = () => {
           <TableRowActions
             record={enrollment}
             recordName={`${enrollment.projectName} ${entryExitRange(enrollment)}`}
-            primaryActionConfig={{
-              ...getViewEnrollmentMenuItem(enrollment, client),
-              // override the default ariaLabel to provide the project name, since we are in the client context
-              ariaLabel: `View Enrollment at ${enrollment.projectName} for ${entryExitRange(enrollment)}`,
-            }}
+            menuActionConfigs={[getPrimaryAction(enrollment)]}
           />
         ),
       },
     ],
-    [client]
+    [getPrimaryAction]
   );
 
   return (
@@ -144,6 +151,7 @@ const ClientEnrollmentsPage = () => {
           queryVariables={{ id: client.id }}
           queryDocument={GetClientEnrollmentsDocument}
           columns={columns}
+          rowLinkTo={(enrollment) => getPrimaryAction(enrollment).to}
           pagePath='client.enrollments'
           filters={filters}
           recordType='Enrollment'

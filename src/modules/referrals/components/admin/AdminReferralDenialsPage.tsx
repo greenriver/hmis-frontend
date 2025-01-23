@@ -31,7 +31,6 @@ const AdminReferralDenialsPage = () => {
     () => [
       {
         header: 'Referral ID',
-        linkTreatment: true,
         render: (row: ReferralPostingFieldsFragment) =>
           row.referralIdentifier || 'N/A',
         hide: !externalReferrals, // only show for external referral which have ID from another system

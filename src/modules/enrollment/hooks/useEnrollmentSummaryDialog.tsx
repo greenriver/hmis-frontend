@@ -24,7 +24,6 @@ const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragment>[] = [
   },
   {
     header: 'Project',
-    linkTreatment: true,
     render: (e) => e.projectName,
   },
   {

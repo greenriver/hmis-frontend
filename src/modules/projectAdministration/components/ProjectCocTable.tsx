@@ -21,7 +21,6 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const columns: ColumnDef<ProjectCocFieldsFragment>[] = [
   {
     header: 'CoC Code',
-    linkTreatment: true,
     render: 'cocCode',
   },
   {

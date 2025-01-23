@@ -48,13 +48,15 @@ const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
       <TableRowActions
         record={row}
         recordName={getServiceTypeForDisplay(row)}
-        primaryActionConfig={{
-          title: 'View Service Type',
-          key: 'service type',
-          to: generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
-            serviceTypeId: row.id,
-          }),
-        }}
+        menuActionConfigs={[
+          {
+            title: 'View Service Type',
+            key: 'service type',
+            to: generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
+              serviceTypeId: row.id,
+            }),
+          },
+        ]}
       />
     ),
   },
@@ -76,6 +78,11 @@ const ServiceTypeTable = () => {
         queryVariables={{}}
         queryDocument={GetServiceTypesDocument}
         columns={COLUMNS}
+        rowLinkTo={(row) =>
+          generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
+            serviceTypeId: row.id,
+          })
+        }
         pagePath='serviceTypes'
         noData='No service types'
         filters={filters}

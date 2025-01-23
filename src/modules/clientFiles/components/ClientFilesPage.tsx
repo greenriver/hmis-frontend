@@ -133,14 +133,16 @@ const ClientFilesPage = () => {
           <TableRowActions
             record={file}
             recordName={file.name}
-            primaryActionConfig={
+            menuActionConfigs={
               file.redacted
                 ? undefined
-                : {
-                    title: 'View File',
-                    key: 'file',
-                    onClick: () => setViewingFile(file),
-                  }
+                : [
+                    {
+                      title: 'View File',
+                      key: 'file',
+                      onClick: () => setViewingFile(file),
+                    },
+                  ]
             }
           />
         ),
@@ -175,6 +177,7 @@ const ClientFilesPage = () => {
           queryVariables={{ id: clientId }}
           queryDocument={GetClientFilesDocument}
           columns={columns}
+          handleRowClick={(file) => setViewingFile(file)}
           pagePath='client.files'
           noData='No files'
         />

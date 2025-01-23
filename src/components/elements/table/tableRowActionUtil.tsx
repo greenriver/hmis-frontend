@@ -25,6 +25,7 @@ export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
   render: '', // gets overridden when used
   sticky: 'right',
   width: '0px',
+  dontLink: true,
 };
 
 export const getViewClientMenuItem = (client: ClientNameFragment) => {

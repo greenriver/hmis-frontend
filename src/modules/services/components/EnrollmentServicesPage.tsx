@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
@@ -50,6 +50,14 @@ const EnrollmentServicesPage = () => {
 
   const canEditServices = enrollment?.access.canEditEnrollments;
 
+  const openService = useCallback(
+    (service: ServiceFieldsFragment) => {
+      setViewingRecord(service);
+      openServiceDialog();
+    },
+    [openServiceDialog]
+  );
+
   const columns: ColumnDef<ServiceFieldsFragment>[] = useMemo(() => {
     return [
       { ...SERVICE_BASIC_COLUMNS.serviceDate, sticky: 'left' },
@@ -63,21 +71,22 @@ const EnrollmentServicesPage = () => {
                 <TableRowActions
                   record={service}
                   recordName={`${getServiceTypeForDisplay(service.serviceType)} on ${parseAndFormatDate(service.dateProvided)}`}
-                  primaryActionConfig={{
-                    title: 'Update Service',
-                    key: 'service',
-                    onClick: () => {
-                      setViewingRecord(service);
-                      openServiceDialog();
+                  menuActionConfigs={[
+                    {
+                      title: 'Update Service',
+                      key: 'service',
+                      onClick: () => {
+                        openService(service);
+                      },
                     },
-                  }}
+                  ]}
                 />
               ),
             },
           ]
         : []),
     ];
-  }, [canEditServices, openServiceDialog]);
+  }, [canEditServices, openService]);
 
   if (!enrollment || !enrollmentId || !clientId || !serviceFeature)
     return <NotFound />;
@@ -109,6 +118,7 @@ const EnrollmentServicesPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentServicesDocument}
           columns={columns}
+          handleRowClick={(service) => openService(service)}
           pagePath='enrollment.services'
           noData='No services'
           recordType='Service'

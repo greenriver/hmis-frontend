@@ -90,11 +90,13 @@ const EnrollmentCeEventsPage = () => {
           <TableRowActions
             record={e}
             recordName={`${HmisEnums.EventType[e.event]} on ${parseAndFormatDate(e.eventDate)}`}
-            primaryActionConfig={{
-              title: 'View CE Event',
-              key: 'ce event',
-              onClick: () => onSelectRecord(e),
-            }}
+            menuActionConfigs={[
+              {
+                title: 'View CE Event',
+                key: 'ce event',
+                onClick: () => onSelectRecord(e),
+              },
+            ]}
           />
         ),
       },
@@ -132,6 +134,7 @@ const EnrollmentCeEventsPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentEventsDocument}
           columns={columns}
+          handleRowClick={(row) => onSelectRecord(row)}
           pagePath='enrollment.events'
           noData='No events'
           headerCellSx={() => ({ color: 'text.secondary' })}

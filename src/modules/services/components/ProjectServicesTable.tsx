@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -35,6 +35,16 @@ const ProjectServicesTable = ({
   projectId: string;
   columns?: ColumnDef<ServiceFields>[];
 }) => {
+  const getPrimaryAction = useCallback(
+    (service: ServiceFields) =>
+      getViewServiceMenuItem(
+        service,
+        service.enrollment.id,
+        service.enrollment.client.id
+      ),
+    []
+  );
+
   const displayColumns: ColumnDef<ServiceFields>[] = useMemo(() => {
     if (columns) return columns;
     return [
@@ -45,7 +55,7 @@ const ProjectServicesTable = ({
           <ClientName client={s.enrollment.client} />
         ),
       },
-      { ...SERVICE_BASIC_COLUMNS.serviceDate, linkTreatment: false },
+      SERVICE_BASIC_COLUMNS.serviceDate,
       SERVICE_BASIC_COLUMNS.serviceType,
       WITH_ENROLLMENT_COLUMNS.entryDate,
       WITH_ENROLLMENT_COLUMNS.exitDate,
@@ -55,12 +65,8 @@ const ProjectServicesTable = ({
           <TableRowActions
             record={service}
             recordName={`${clientBriefName(service.enrollment.client)}'s ${getServiceTypeForDisplay(service.serviceType)} on ${parseAndFormatDate(service.dateProvided)}`}
-            primaryActionConfig={getViewServiceMenuItem(
-              service,
-              service.enrollment.id,
-              service.enrollment.client.id
-            )}
-            secondaryActionConfigs={[
+            menuActionConfigs={[
+              getPrimaryAction(service),
               getViewEnrollmentMenuItem(
                 service.enrollment,
                 service.enrollment.client
@@ -70,7 +76,7 @@ const ProjectServicesTable = ({
         ),
       },
     ];
-  }, [columns]);
+  }, [columns, getPrimaryAction]);
 
   const filters = useFilters({
     type: 'ServicesForProjectFilterOptions',
@@ -88,6 +94,7 @@ const ProjectServicesTable = ({
       }}
       queryDocument={GetProjectServicesDocument}
       columns={displayColumns}
+      rowLinkTo={(row) => getPrimaryAction(row).to}
       noData='No services'
       pagePath='project.services'
       recordType='Service'

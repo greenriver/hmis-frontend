@@ -66,13 +66,15 @@ const PROJECT_COLUMNS: ColumnDef<ProjectAllFieldsFragment>[] = [
       <TableRowActions
         record={project}
         recordName={project.projectName}
-        primaryActionConfig={{
-          title: 'View Project',
-          key: 'project',
-          to: generateSafePath(Routes.PROJECT, {
-            projectId: project.id,
-          }),
-        }}
+        menuActionConfigs={[
+          {
+            title: 'View Project',
+            key: 'project',
+            to: generateSafePath(Routes.PROJECT, {
+              projectId: project.id,
+            }),
+          },
+        ]}
       />
     ),
   },
@@ -94,13 +96,15 @@ const ORGANIZATION_COLUMNS: ColumnDef<OrganizationType>[] = [
       <TableRowActions
         record={organization}
         recordName={organization.organizationName}
-        primaryActionConfig={{
-          title: 'View Organization',
-          key: 'organization',
-          to: generateSafePath(Routes.ORGANIZATION, {
-            organizationId: organization.id,
-          }),
-        }}
+        menuActionConfigs={[
+          {
+            title: 'View Organization',
+            key: 'organization',
+            to: generateSafePath(Routes.ORGANIZATION, {
+              organizationId: organization.id,
+            }),
+          },
+        ]}
       />
     ),
   },
@@ -160,6 +164,11 @@ const ProjectsTable = ({
           defaultSortOption={ProjectSortOption.OrganizationAndName}
           queryDocument={GetProjectsDocument}
           columns={PROJECT_COLUMNS}
+          rowLinkTo={(project) =>
+            generateSafePath(Routes.PROJECT, {
+              projectId: project.id,
+            })
+          }
           noData='No projects'
           pagePath='projects'
           recordType='Project'
@@ -227,6 +236,11 @@ const OrganizationsTable = ({
           key='organizationTable'
           queryDocument={GetOrganizationsDocument}
           columns={ORGANIZATION_COLUMNS}
+          rowLinkTo={(organization) =>
+            generateSafePath(Routes.ORGANIZATION, {
+              organizationId: organization.id,
+            })
+          }
           noData='No organizations'
           pagePath='organizations'
           recordType='Organization'

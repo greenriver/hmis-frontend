@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -38,6 +38,12 @@ const ClientServicesPage: React.FC<{
   const { clientId } = useSafeParams() as { clientId: string };
   const { client } = useClientDashboardContext();
 
+  const getPrimaryAction = useCallback(
+    (service: ServiceType) =>
+      getViewServiceMenuItem(service, service.enrollment.id, clientId),
+    [clientId]
+  );
+
   const columns = useMemo(
     () =>
       (
@@ -60,12 +66,8 @@ const ClientServicesPage: React.FC<{
               <TableRowActions
                 record={row}
                 recordName={`${getServiceTypeForDisplay(row.serviceType)} on ${parseAndFormatDate(row.dateProvided)}`}
-                primaryActionConfig={getViewServiceMenuItem(
-                  row,
-                  row.enrollment.id,
-                  clientId
-                )}
-                secondaryActionConfigs={[
+                menuActionConfigs={[
+                  getPrimaryAction(row),
                   {
                     ...getViewEnrollmentMenuItem(row.enrollment, client),
                     // override the default ariaLabel to provide the project name, since we are in the client context
@@ -81,7 +83,7 @@ const ClientServicesPage: React.FC<{
 
         return true;
       }),
-    [client, clientId, omitColumns]
+    [client, getPrimaryAction, omitColumns]
   );
 
   const filters = useFilters({
@@ -101,6 +103,7 @@ const ClientServicesPage: React.FC<{
           queryVariables={{ id: clientId }}
           queryDocument={GetClientServicesDocument}
           columns={columns}
+          rowLinkTo={(row) => getPrimaryAction(row).to}
           pagePath='client.services'
           fetchPolicy='cache-and-network'
           noData='No services'

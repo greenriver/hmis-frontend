@@ -24,6 +24,18 @@ export type HhmAssessmentType = NonNullable<
   NonNullable<GetHouseholdAssessmentsQuery['household']>['assessments']
 >['nodes'][0];
 
+const getPrimaryAction = (assessment: HhmAssessmentType) => {
+  return {
+    ...getViewAssessmentMenuItem(
+      assessment,
+      assessment.enrollment.client.id,
+      assessment.enrollment.id
+    ),
+    // Since this is for all hh members, overwrite the aria label so it includes the specific client name
+    ariaLabel: `View Assessment, ${clientBriefName(assessment.enrollment.client)}'s ${assessmentDescription(assessment)}`,
+  };
+};
+
 const COLUMNS: ColumnDef<HhmAssessmentType>[] = [
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS.date,
@@ -35,15 +47,7 @@ const COLUMNS: ColumnDef<HhmAssessmentType>[] = [
       <TableRowActions
         record={assessment}
         recordName={assessmentDescription(assessment)}
-        primaryActionConfig={{
-          ...getViewAssessmentMenuItem(
-            assessment,
-            assessment.enrollment.client.id,
-            assessment.enrollment.id
-          ),
-          // Since this is for all hh members, overwrite the aria label so it includes the specific client name
-          ariaLabel: `View Assessment, ${clientBriefName(assessment.enrollment.client)}'s ${assessmentDescription(assessment)}`,
-        }}
+        menuActionConfigs={[getPrimaryAction(assessment)]}
       />
     ),
   },
@@ -73,6 +77,7 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
       queryVariables={{ id: householdId }}
       queryDocument={GetHouseholdAssessmentsDocument}
       columns={COLUMNS}
+      rowLinkTo={(assessment) => getPrimaryAction(assessment).to}
       pagePath='household.assessments'
       noData='No assessments'
       recordType='Assessment'

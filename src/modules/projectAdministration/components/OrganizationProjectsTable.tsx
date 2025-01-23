@@ -21,8 +21,6 @@ const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Name',
     render: 'projectName',
-    linkTreatment: true,
-    ariaLabel: (row) => row.projectName,
   },
   {
     header: 'Project Type',

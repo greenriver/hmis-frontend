@@ -130,7 +130,7 @@ const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
       <TableRowActions
         record={client}
         recordName={clientBriefName(client)}
-        primaryActionConfig={getViewClientMenuItem(client)}
+        menuActionConfigs={[getViewClientMenuItem(client)]}
       />
     ),
   },
@@ -286,6 +286,7 @@ const ClientSearch = () => {
             queryDocument={SearchClientsDocument}
             onCompleted={() => setHasSearched(true)}
             columns={columns}
+            rowLinkTo={(client) => getViewClientMenuItem(client).to}
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
             filters={filters}

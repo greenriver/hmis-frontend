@@ -21,6 +21,17 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
+const getPrimaryAction = (cls: ProjectCurrentLivingSituationFieldsFragment) => {
+  return {
+    title: 'View CLS',
+    key: 'cls',
+    to: generateSafePath(EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS, {
+      clientId: cls.client.id,
+      enrollmentId: cls.enrollment.id,
+    }),
+  };
+};
+
 const COLUMNS: ColumnDef<ProjectCurrentLivingSituationFieldsFragment>[] = [
   {
     header: 'Client Name',
@@ -39,18 +50,8 @@ const COLUMNS: ColumnDef<ProjectCurrentLivingSituationFieldsFragment>[] = [
       <TableRowActions
         record={cls}
         recordName={`${clientBriefName(cls.client)} ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`}
-        primaryActionConfig={{
-          title: 'View CLS',
-          key: 'cls',
-          to: generateSafePath(
-            EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-            {
-              clientId: cls.client.id,
-              enrollmentId: cls.enrollment.id,
-            }
-          ),
-        }}
-        secondaryActionConfigs={[
+        menuActionConfigs={[
+          getPrimaryAction(cls),
           getViewEnrollmentMenuItem(cls.enrollment, cls.client),
         ]}
       />
@@ -75,6 +76,7 @@ const ProjectCurrentLivingSituations = () => {
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectCurrentLivingSituationsDocument}
           columns={COLUMNS}
+          rowLinkTo={(row) => getPrimaryAction(row).to}
           pagePath='project.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'

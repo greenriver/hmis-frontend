@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -34,6 +34,21 @@ const ProjectAssessments = () => {
   };
   const { project } = useProjectDashboardContext();
 
+  const getPrimaryAction = useCallback(
+    (assessment: ProjectAssessmentType) => {
+      return {
+        ...getViewAssessmentMenuItem(
+          assessment,
+          assessment.enrollment.client.id,
+          assessment.enrollment.id,
+          true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
+        ),
+        linkState: { backToLabel: project.projectName },
+      };
+    },
+    [project.projectName]
+  );
+
   const columns = useMemo(() => {
     return [
       ASSESSMENT_CLIENT_NAME_COL,
@@ -47,16 +62,8 @@ const ProjectAssessments = () => {
           <TableRowActions
             record={record}
             recordName={assessmentDescription(record)}
-            primaryActionConfig={{
-              ...getViewAssessmentMenuItem(
-                record,
-                record.enrollment.client.id,
-                record.enrollment.id,
-                true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
-              ),
-              linkState: { backToLabel: project.projectName },
-            }}
-            secondaryActionConfigs={[
+            menuActionConfigs={[
+              getPrimaryAction(record),
               getViewEnrollmentMenuItem(
                 record.enrollment,
                 record.enrollment.client
@@ -66,7 +73,7 @@ const ProjectAssessments = () => {
         ),
       },
     ];
-  }, [project]);
+  }, [getPrimaryAction]);
 
   const filters = useFilters({
     type: 'AssessmentsForProjectFilterOptions',
@@ -85,6 +92,8 @@ const ProjectAssessments = () => {
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectAssessmentsDocument}
           columns={columns}
+          rowLinkTo={(row) => getPrimaryAction(row).to}
+          rowLinkState={{ backToLabel: project.projectName }}
           noData='No assessments'
           pagePath='project.assessments'
           recordType='Assessment'

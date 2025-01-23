@@ -31,7 +31,6 @@ import {
 import { To } from 'react-router-dom';
 
 import Loading from '../Loading';
-import RouterLink from '../RouterLink';
 
 import EnhancedTableToolbar, {
   EnhancedTableToolbarProps,
@@ -42,6 +41,8 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
+import RouterLink from '@/components/elements/RouterLink';
+import { LocationState } from '@/routes/routeUtil';
 
 export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
   def.key || (typeof def.header === 'string' ? def.header : '');
@@ -50,6 +51,7 @@ export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
   rowLinkTo?: (row: T) => To | null | undefined;
+  rowLinkState?: LocationState;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
@@ -80,10 +82,19 @@ export interface Props<T> {
   belowRowsContent?: ReactNode; // component to insert below all rendered rows, above footer
 }
 
-const clickableRowStyles = {
-  '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+export const clickableRowStyles = {
+  '&:hover': { backgroundColor: 'grayscale.tint' },
   cursor: 'pointer',
 };
+
+const dontClickProps = {
+  // Prevent event propagation if the column disallows click
+  onClick: (event: { stopPropagation: VoidFunction }) =>
+    event.stopPropagation(),
+  onKeyUp: (event: { stopPropagation: VoidFunction }) =>
+    event.stopPropagation(),
+};
+
 export const getStickyCellStyles = ({
   sticky,
   stickyBorder = true,
@@ -98,7 +109,7 @@ export const getStickyCellStyles = ({
   if (!sticky) return {};
 
   const base = {
-    backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
+    backgroundColor: 'inherit', // Otherwise it's transparent and other cell content appears beneath it
     position: 'sticky',
     zIndex: 1,
     maxWidth: '200px', // Mitigates the risk that the column may be so wide as to obscure any scrollable columns
@@ -176,10 +187,48 @@ export const renderHeaderCellContents = <T extends { id: string }>(
   );
 };
 
+export const renderLinkedCellContents = <T extends { id: string }>(
+  rowLink: To,
+  row: T,
+  render: ColumnDef<T>['render'],
+  index: number,
+  rowLinkState: LocationState | undefined = undefined
+) => {
+  return (
+    <RouterLink
+      to={rowLink}
+      state={rowLinkState}
+      plain
+      sx={{
+        height: '100%',
+        verticalAlign: 'middle',
+        display: 'block',
+        '&.Mui-focusVisible': {
+          outlineOffset: '-2px',
+        },
+      }}
+      tabIndex={index === 0 ? 0 : -1}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          height: '100%',
+          alignItems: 'center',
+          px: 2,
+          py: 2,
+        }}
+      >
+        {renderCellContents(row, render)}
+      </Box>
+    </RouterLink>
+  );
+};
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
   rowLinkTo,
+  rowLinkState,
   columns: columnProp,
   paginated = false,
   loading = false,
@@ -279,7 +328,7 @@ const GenericTable = <T extends { id: string }>({
   ) : (
     <TableHead>
       {hasHeaders && (
-        <TableRow>
+        <TableRow sx={{ backgroundColor: 'background.paper' }}>
           {selectable && (
             <HeaderCell
               padding='checkbox'
@@ -410,17 +459,15 @@ const GenericTable = <T extends { id: string }>({
 
                 const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
                 const isClickable = !!onClickHandler || !!rowLink;
-                const firstIndexWithLinkTreatment = columns.findIndex(
-                  (c) => c.linkTreatment
-                );
+
                 return (
                   <TableRow
                     key={row.id}
                     sx={{
+                      backgroundColor: 'background.paper',
                       ...(isClickable && clickableRowStyles),
                       ...(!!rowSx && rowSx(row)),
                     }}
-                    hover={isClickable}
                     onClick={() =>
                       onClickHandler ? onClickHandler(row) : undefined
                     }
@@ -433,7 +480,6 @@ const GenericTable = <T extends { id: string }>({
                             event.key === 'Enter' && handleRowClick(row)
                         : undefined
                     }
-                    tabIndex={handleRowClick ? 0 : undefined}
                   >
                     {selectable && (
                       <TableCell
@@ -443,6 +489,7 @@ const GenericTable = <T extends { id: string }>({
                           sticky: 'left',
                           stickyBorder: false,
                         })}
+                        {...dontClickProps}
                       >
                         <Checkbox
                           color='primary'
@@ -462,30 +509,13 @@ const GenericTable = <T extends { id: string }>({
                         render,
                         width,
                         minWidth,
-                        linkTreatment,
-                        ariaLabel,
                         dontLink = false,
                         textAlign,
                         tableCellProps,
+                        sticky,
                       } = def;
 
                       const isLinked = rowLink && !dontLink;
-
-                      const enableTabIndex =
-                        firstIndexWithLinkTreatment === index ||
-                        // if none have link treatment, we still need tab index. default to first col.
-                        (isLinked &&
-                          firstIndexWithLinkTreatment === -1 &&
-                          index === 0);
-
-                      const onClickLinkTreatment =
-                        handleRowClick && !dontLink && linkTreatment
-                          ? {
-                              color: 'links',
-                              textDecoration: 'underline',
-                              textDecorationColor: 'links',
-                            }
-                          : undefined;
 
                       return (
                         <TableCell
@@ -493,7 +523,7 @@ const GenericTable = <T extends { id: string }>({
                           {...tableCellProps}
                           sx={{
                             ...getStickyCellStyles({
-                              sticky: def.sticky,
+                              sticky,
                               leftOffset: selectable ? '46px' : 0,
                             }),
                             width,
@@ -501,41 +531,21 @@ const GenericTable = <T extends { id: string }>({
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
                             whiteSpace: 'initial',
-                            ...onClickLinkTreatment,
                             ...tableCellProps?.sx,
                           }}
+                          role={sticky === 'left' ? 'rowheader' : undefined}
+                          tabIndex={index === 0 && handleRowClick ? 0 : -1}
+                          {...(dontLink ? dontClickProps : {})}
                         >
-                          {isLinked ? (
-                            <RouterLink
-                              to={rowLink}
-                              aria-label={ariaLabel && ariaLabel(row)}
-                              plain={!linkTreatment}
-                              data-testid={linkTreatment && 'table-linkedCell'}
-                              sx={{
-                                height: '100%',
-                                verticalAlign: 'middle',
-                                display: 'block',
-                                '&.Mui-focusVisible': {
-                                  outlineOffset: '-2px',
-                                },
-                              }}
-                              tabIndex={enableTabIndex ? 0 : -1}
-                            >
-                              <Box
-                                sx={{
-                                  display: 'flex',
-                                  height: '100%',
-                                  alignItems: 'center',
-                                  px: 2,
-                                  py: 2,
-                                }}
-                              >
-                                {renderCellContents(row, render)}
-                              </Box>
-                            </RouterLink>
-                          ) : (
-                            renderCellContents(row, render)
-                          )}
+                          {isLinked
+                            ? renderLinkedCellContents(
+                                rowLink,
+                                row,
+                                render,
+                                index,
+                                rowLinkState
+                              )
+                            : renderCellContents(row, render)}
                         </TableCell>
                       );
                     })}

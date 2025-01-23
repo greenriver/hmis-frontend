@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -31,6 +31,17 @@ const ClientAssessmentsPage = () => {
     type: 'AssessmentFilterOptions',
   });
 
+  const getPrimaryAction = useCallback(
+    (assessment: ClientAssessmentType) =>
+      getViewAssessmentMenuItem(
+        assessment,
+        clientId,
+        assessment.enrollment.id,
+        true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
+      ),
+    [clientId]
+  );
+
   const columns: ColumnDef<ClientAssessmentType>[] = useMemo(
     () => [
       { ...ASSESSMENT_COLUMNS.date, sticky: 'left' },
@@ -46,13 +57,8 @@ const ClientAssessmentsPage = () => {
           <TableRowActions
             record={row}
             recordName={assessmentDescription(row)}
-            primaryActionConfig={getViewAssessmentMenuItem(
-              row,
-              clientId,
-              row.enrollment.id,
-              true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
-            )}
-            secondaryActionConfigs={[
+            menuActionConfigs={[
+              getPrimaryAction(row),
               {
                 ...getViewEnrollmentMenuItem(row.enrollment, client),
                 // override the default ariaLabel to provide the project name, since we are in the client context
@@ -63,7 +69,7 @@ const ClientAssessmentsPage = () => {
         ),
       },
     ],
-    [client, clientId]
+    [client, getPrimaryAction]
   );
 
   return (
@@ -79,6 +85,7 @@ const ClientAssessmentsPage = () => {
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
           columns={columns}
+          rowLinkTo={(assessment) => getPrimaryAction(assessment).to}
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
           noData='No assessments'

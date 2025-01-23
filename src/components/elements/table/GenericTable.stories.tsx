@@ -156,13 +156,13 @@ WithTableRowActions.args = {
         <TableRowActions
           record={record}
           recordName={clientBriefName(record)}
-          primaryActionConfig={{
-            title: 'Do something in-app',
-            key: 'onClick',
-            onClick: () =>
-              alert(`Hello, ${clientBriefName(record)} ${record.id}`),
-          }}
-          secondaryActionConfigs={[
+          menuActionConfigs={[
+            {
+              title: 'Do something in-app',
+              key: 'onClick',
+              onClick: () =>
+                alert(`Hello, ${clientBriefName(record)} ${record.id}`),
+            },
             {
               title: 'Navigate to a link',
               key: 'link',

@@ -23,7 +23,6 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const columns: ColumnDef<FunderFieldsFragment>[] = [
   {
     header: 'Funder',
-    linkTreatment: true,
     render: (f: FunderFieldsFragment) =>
       f.funder === FundingSource.LocalOrOtherFundingSource && f.otherFunder ? (
         f.otherFunder

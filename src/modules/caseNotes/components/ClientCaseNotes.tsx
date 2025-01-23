@@ -45,7 +45,10 @@ const ClientCaseNotes = () => {
         header: 'Project Name',
         render: (row: Row) => row.enrollment.projectName,
       },
-      CASE_NOTE_COLUMNS.LastUpdated,
+      {
+        ...CASE_NOTE_COLUMNS.LastUpdated,
+        minWidth: '0',
+      },
       CASE_NOTE_COLUMNS.NoteContentPreview,
       {
         ...BASE_ACTION_COLUMN_DEF,
@@ -53,12 +56,12 @@ const ClientCaseNotes = () => {
           <TableRowActions
             record={row}
             recordName={`${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`}
-            primaryActionConfig={{
-              title: 'View Case Note',
-              key: 'case note',
-              onClick: () => onSelectRecord(row),
-            }}
-            secondaryActionConfigs={[
+            menuActionConfigs={[
+              {
+                title: 'View Case Note',
+                key: 'case note',
+                onClick: () => onSelectRecord(row),
+              },
               {
                 ...getViewEnrollmentMenuItem(row.enrollment, client),
                 // override the default ariaLabel to provide the project name, since we are in the client context
@@ -86,6 +89,7 @@ const ClientCaseNotes = () => {
           queryVariables={{ id: clientId }}
           queryDocument={GetClientCaseNotesDocument}
           columns={columns}
+          handleRowClick={(row) => onSelectRecord(row)}
           pagePath='client.customCaseNotes'
           noData='No case notes'
           headerCellSx={() => ({ color: 'text.secondary' })}

@@ -67,7 +67,6 @@ const ProjectExternalSubmissionsTable = ({
         },
         {
           header: 'Status',
-          linkTreatment: false,
           render: ({ status, spam }: ExternalFormSubmissionSummaryFragment) => {
             const isNew = status === ExternalFormSubmissionStatus.New;
             return (
@@ -94,7 +93,6 @@ const ProjectExternalSubmissionsTable = ({
         },
         {
           header: 'Date Submitted',
-          linkTreatment: false,
           render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) => (
             <RelativeDateTableCellContents
               dateTimeString={submittedAt}
@@ -109,12 +107,14 @@ const ProjectExternalSubmissionsTable = ({
             <TableRowActions
               record={submission}
               recordName={submission.id}
-              primaryActionConfig={{
-                title: 'View Submission',
-                key: 'submission',
-                onClick: () => setModalOpenId(submission.id),
-                disabled: bulkLoading,
-              }}
+              menuActionConfigs={[
+                {
+                  title: 'View Submission',
+                  key: 'submission',
+                  onClick: () => setModalOpenId(submission.id),
+                  disabled: bulkLoading,
+                },
+              ]}
             />
           ),
         },
@@ -145,6 +145,7 @@ const ProjectExternalSubmissionsTable = ({
         }
         queryDocument={GetProjectExternalFormSubmissionsDocument}
         getColumnDefs={getColumnDefs}
+        handleRowClick={(submission) => setModalOpenId(submission.id)}
         noData='No external form submissions'
         pagePath='project.externalFormSubmissions'
         recordType='ExternalFormSubmission'

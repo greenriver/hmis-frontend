@@ -53,7 +53,6 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
         header: 'HoH',
         render: ({ hohName }: ReferralPostingFieldsFragment) =>
           hohName || 'Unnamed Client',
-        linkTreatment: true,
       },
       {
         header: 'Referred By',
