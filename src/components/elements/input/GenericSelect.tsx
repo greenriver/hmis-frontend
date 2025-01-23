@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   AutocompleteProps,
+  Chip,
   CircularProgress,
   InputAdornment,
 } from '@mui/material';
@@ -48,6 +49,17 @@ const GenericSelect = <
     <Autocomplete
       options={options}
       value={value}
+      slotProps={{
+        clearIndicator: {
+          tabIndex: 0,
+          // In order to make the Clear Button focusable, have to disable the default MUI behavior of hiding it except on hover.
+          // However, it can only be activated using Space, and not Enter.
+          // See https://github.com/mui/material-ui/issues/44936
+          sx: {
+            visibility: 'visible',
+          },
+        },
+      }}
       renderInput={(params) => (
         <TextInput
           {...params}
@@ -73,6 +85,23 @@ const GenericSelect = <
           label={label}
         />
       )}
+      renderTags={(tagValue, getTagProps, ownerState) =>
+        // Augment the accessible text so that it's clear to screenreader users how they can remove options.
+        // Relates to open MUI issue: https://github.com/mui/material-ui/issues/20470
+        tagValue.map((option: T, index: number) => {
+          // Avoid console warning: A props object containing a "key" prop is being spread into JSX
+          const { key, ...rest } = getTagProps({ index });
+          return (
+            <Chip
+              key={key}
+              size='small'
+              label={ownerState.getOptionLabel(option)}
+              aria-label={`Option: ${ownerState.getOptionLabel(option)}. Press backspace or delete to remove.`}
+              {...rest}
+            />
+          );
+        })
+      }
       {...rest}
     />
   );

@@ -61,12 +61,14 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
           </Button>
           {coordinates && (
             <Button
-              variant='gray' // TODO: update to outlined grayscale
+              variant='outlined'
+              color='grayscale'
               onClick={() => {
                 onChange(null);
                 buttonRef.current?.focus(); // move focus to Request Location button
               }}
               startIcon={<ClearIcon />}
+              disabled={disabled}
             >
               Clear Map
             </Button>

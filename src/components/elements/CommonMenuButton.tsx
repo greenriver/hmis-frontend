@@ -52,6 +52,8 @@ const CommonMenuButton = ({
     event.stopPropagation();
     setAnchorEl(null);
   };
+  // pull out variant/color which can't be used for IconButton
+  const { variant, color, ...buttonProps } = ButtonProps || {};
 
   return (
     <>
@@ -62,7 +64,7 @@ const CommonMenuButton = ({
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
-          {...ButtonProps}
+          {...buttonProps}
         >
           <MoreMenuIcon fontSize='inherit' />
         </IconButton>
@@ -74,7 +76,9 @@ const CommonMenuButton = ({
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<ArrowDropDownIcon />}
-          {...ButtonProps}
+          variant={variant}
+          color={color}
+          {...buttonProps}
         >
           {title}
         </Button>

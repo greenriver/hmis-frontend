@@ -1,5 +1,5 @@
 import { Meta } from '@storybook/blocks';
-import { ThemeProvider, Typography } from '@mui/material';
+import { ThemeProvider, Typography, Stack } from '@mui/material';
 import theme from '@/config/theme';
 
 <Meta title='Typography' />
@@ -12,22 +12,21 @@ export const SampleText =
 The typography below reflects the default theme of the application.
 
 <ThemeProvider theme={theme}>
-  {Object.entries(theme.typography).map(([k, v]) => {
-    // We haven't used Storybook's built-in Typeset here, which is more useful for displaying a flexible type system
-    // (different font weights in combination with different sizes).
-    if (typeof v === 'object' && k !== 'inherit') {
-      return (
-        <>
-          <Typography variant={k}>
+  <Stack gap={2}>
+    {Object.entries(theme.typography).map(([k, v]) => {
+      // We haven't used Storybook's built-in Typeset here, which is more useful for displaying a flexible type system
+      // (different font weights in combination with different sizes).
+      if (typeof v === 'object' && k !== 'inherit') {
+        return (
+          <Typography variant={k} key={k}>
             {formatTypeString(k)}
             {k.startsWith('body') && ': ' + SampleText}
           </Typography>
-          <br />
-        </>
-      );
-    }
-    // else - the non-object items in the theme.typography map are default MUI values like fontWeightRegular, fontWeightBold.
-  })}
+        );
+      }
+      // else - the non-object items in the theme.typography map are default MUI values like fontWeightRegular, fontWeightBold.
+    })}
+  </Stack>
 </ThemeProvider>
 
 export function formatTypeString(input) {

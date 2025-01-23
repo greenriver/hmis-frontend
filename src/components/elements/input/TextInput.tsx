@@ -32,7 +32,6 @@ export const horizontalInputSx: SxProps<Theme> = {
 const TextInput = ({
   inputProps = {},
   label,
-  hiddenLabel = false,
   fullWidth = true,
   horizontal = false,
   min,
@@ -62,7 +61,7 @@ const TextInput = ({
     <TextField
       id={htmlId}
       fullWidth={fullWidth}
-      label={hiddenLabel || horizontal ? undefined : label}
+      label={horizontal ? undefined : label} // hide the label if this text input is part of a horizontal group (informally deprecated)
       onKeyDown={(e) =>
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
@@ -71,7 +70,7 @@ const TextInput = ({
       {...props}
       sx={{ maxWidth, ...sx }}
       inputProps={{
-        'aria-label': hiddenLabel ? ariaLabel || String(label) : undefined,
+        'aria-label': ariaLabel,
         'aria-labelledby': ariaLabelledBy,
         minLength: min,
         maxLength: max,
@@ -97,7 +96,6 @@ const TextInput = ({
       }}
       InputLabelProps={{
         ...(props.InputLabelProps as InputLabelProps),
-        hidden: hiddenLabel,
         shrink: true,
         variant: 'standard',
         sx: {

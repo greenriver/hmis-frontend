@@ -43,7 +43,7 @@ const CreateOrganizationPage = () => {
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Organization' }}
         title={
-          <Typography variant='h3' sx={{ mt: 2, mb: 1 }}>
+          <Typography component='h1' variant='h3' sx={{ mt: 2, mb: 1 }}>
             Create a new organization
           </Typography>
         }

@@ -70,7 +70,7 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
             <IconButtonContainer
               onClick={() => setEditDialogOpen(true)}
               Icon={EditIcon}
-              ButtonProps={{ 'aria-label': `Edit Staff Assignment` }}
+              IconButtonProps={{ 'aria-label': `Edit Staff Assignment` }}
             />
           )
         }

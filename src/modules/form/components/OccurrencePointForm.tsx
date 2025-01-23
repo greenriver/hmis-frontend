@@ -29,9 +29,12 @@ import {
 
 export interface OccurrencePointFormProps {
   record: SubmitFormAllowedTypes;
-  definition: FormDefinitionFieldsFragment;
   submitFormInputVariables?: SubmitFormInputVariables;
-  readOnlyDefinition: FormDefinitionJson;
+  /** Definition to use for displaying the occurrence point as a DynamicView */
+  definitionForDisplay: FormDefinitionJson;
+  /** Definition to use for editing the Occurrence Point form values (if allowed) */
+  definition: FormDefinitionFieldsFragment;
+  /** Whether the Occurence Point form is editable. Some Occurrence Point forms are always read-only (like 'number of units assigned'), and some are only editable by certain users (via editor_user_ids). */
   editable?: boolean;
   dialogTitle?: string;
   localConstants?: LocalConstants;
@@ -52,7 +55,7 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
   localConstants: localConstantsProp,
   definition,
   editable,
-  readOnlyDefinition,
+  definitionForDisplay,
   dialogTitle,
   pickListArgs,
   submitFormInputVariables,
@@ -114,7 +117,7 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
     <DynamicView
       key={JSON.stringify(values)}
       values={values}
-      definition={readOnlyDefinition}
+      definition={definitionForDisplay}
       pickListArgs={pickListArgs}
     />
   ) : (
@@ -130,7 +133,7 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
       <IconButtonContainer
         onClick={openFormDialog}
         Icon={EditIcon}
-        ButtonProps={{ 'aria-label': `Edit ${dialogTitle}` }}
+        IconButtonProps={{ 'aria-label': `Edit ${dialogTitle}` }}
       >
         {dynamicView}
       </IconButtonContainer>
