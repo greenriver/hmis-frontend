@@ -14,22 +14,20 @@ export interface Props {
  * A wrapper component that manages conditional status for form items as well as auto filled values
  */
 const DependentFormItemWrapper: React.FC<Props> = ({ item, renderChild }) => {
-  const { setValue } = useFormContext();
+  const { unregister } = useFormContext();
   const { visible, disabled } = useDynamicFieldStatus(item);
   useDynamicFieldAutofillSync(item);
 
-  // If this item is disabled and has a "protected" display, clear the value for this field
-  // (For DisabledDisplay.Hidden, it's cleared automatically when the input is unregistered.)
-  // (For DisabledDisplay.ProtectedWithValue, the value intentionally remains when the item is disabled.)
+  // Unregisted disabled item _unless_ it's configured as "disabled_display: PROTECTED_WITH_VALUE"
+  // which indicates that the field value should remain even when it is disabled.
   useEffect(() => {
     if (
       disabled &&
-      visible &&
-      item.disabledDisplay === DisabledDisplay.Protected
+      item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
     ) {
-      setValue(item.linkId, null);
+      unregister(item.linkId);
     }
-  }, [disabled, visible, setValue, item]);
+  }, [disabled, visible, unregister, item]);
 
   if (visible) return renderChild(disabled);
   return null;
