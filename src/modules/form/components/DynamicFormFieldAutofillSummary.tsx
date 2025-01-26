@@ -14,7 +14,7 @@ export interface Props {
  * Component for rendering the optional "summary item" at the end of a from Group that uses the INPUT_GROUP component.
  * An item is considered a "summary item" if it has type:DISPLAY, and is the last item in the input group.
  *
- * All this really does it implement the currency formatting. If we had a better way to do that for display items,
+ * All this really does is implement the currency formatting. If we had a better way to do that for display items,
  * we might be able to remove this component and use standard dynamic rendering for this item. (eg `renderChild` from InputGroup)
  *
  * Usage notes:
