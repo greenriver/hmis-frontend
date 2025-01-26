@@ -11,14 +11,17 @@ export interface Props {
 }
 
 /**
- * A wrapper component that manages conditional status for form items as well as auto filled values
+ * A wrapper component that manages conditional status for form items as well as auto filled values.
+ *
+ * It's important that the autofill sync runs for all items, even if they are not visible, so that
+ * autofill/initial values can be set on always-hidden calculated field (like LOS Under Threshold)
  */
 const DependentFormItemWrapper: React.FC<Props> = ({ item, renderChild }) => {
   const { unregister } = useFormContext();
   const { visible, disabled } = useDynamicFieldStatus(item);
   useDynamicFieldAutofillSync(item);
 
-  // Unregisted disabled item _unless_ it's configured as "disabled_display: PROTECTED_WITH_VALUE"
+  // Unregister disabled item, unless it's configured as "disabled_display: PROTECTED_WITH_VALUE"
   // which indicates that the field value should remain even when it is disabled.
   useEffect(() => {
     if (
