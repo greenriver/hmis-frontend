@@ -53,6 +53,7 @@ const JoinHouseholdReview = ({
 
   return (
     <ReviewHouseholdsStep
+      title='Review Join'
       reviewableHouseholds={[
         {
           title: 'Joining Household',

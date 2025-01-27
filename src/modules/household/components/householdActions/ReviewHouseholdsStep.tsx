@@ -11,16 +11,21 @@ type ReviewableHousehold = {
 };
 
 interface Props {
+  title: string;
   reviewableHouseholds: ReviewableHousehold[];
   children?: ReactNode;
 }
 
-const ReviewHouseholdsStep = ({ reviewableHouseholds, children }: Props) => {
+const ReviewHouseholdsStep = ({
+  reviewableHouseholds,
+  title,
+  children,
+}: Props) => {
   return (
     <Stack gap={2}>
       <Box>
         <Typography variant='overline'>Step 3</Typography>
-        <Typography variant='h3'>Review Join</Typography>
+        <Typography variant='h3'>{title}</Typography>
       </Box>
       {children}
       {reviewableHouseholds.map((household) => {
