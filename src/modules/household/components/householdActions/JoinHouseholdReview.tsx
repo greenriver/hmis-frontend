@@ -1,11 +1,10 @@
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useMemo } from 'react';
-import GenericTable from '@/components/elements/table/GenericTable';
 import {
   sortHouseholdMembers,
   stringifyHousehold,
 } from '@/modules/hmis/hmisUtil';
-import { JOIN_HOUSEHOLD_COLUMNS } from '@/modules/household/components/elements/JoinHouseholdSelectClients';
+import ReviewHouseholdsStep from '@/modules/household/components/householdActions/ReviewHouseholdsStep';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -53,46 +52,29 @@ const JoinHouseholdReview = ({
   );
 
   return (
-    <Stack gap={2}>
-      <Box>
-        <Typography variant='overline'>Step 3</Typography>
-        <Typography variant='h3'>Review Join</Typography>
-      </Box>
+    <ReviewHouseholdsStep
+      reviewableHouseholds={[
+        {
+          title: 'Joining Household',
+          description: `The household that ${joining} will join`,
+          members: joinedHouseholdClients,
+        },
+        ...(remainingHouseholdClients
+          ? [
+              {
+                title: 'Remaining Household',
+                description: `The household that ${joining} will leave`,
+                members: remainingHouseholdClients,
+              },
+            ]
+          : []),
+      ]}
+    >
       <Typography variant='body1'>
         Check that the joined and remaining household members and details are
         correct
       </Typography>
-      <Typography variant='h4'>Joining Household</Typography>
-      <Typography variant='body2'>
-        The household that {joining} will join
-      </Typography>
-      <Paper>
-        <GenericTable<HouseholdClientFieldsFragment>
-          rows={joinedHouseholdClients}
-          columns={JOIN_HOUSEHOLD_COLUMNS}
-          tableProps={{
-            'aria-label': 'Review Joined Household',
-          }}
-        />
-      </Paper>
-      {remainingHouseholdClients.length > 0 && (
-        <>
-          <Typography variant='h4'>Remaining Household</Typography>
-          <Typography variant='body2'>
-            The household that {joining} will leave
-          </Typography>
-          <Paper>
-            <GenericTable<HouseholdClientFieldsFragment>
-              rows={remainingHouseholdClients}
-              columns={JOIN_HOUSEHOLD_COLUMNS}
-              tableProps={{
-                'aria-label': 'Review Remaining Household',
-              }}
-            />
-          </Paper>
-        </>
-      )}
-    </Stack>
+    </ReviewHouseholdsStep>
   );
 };
 

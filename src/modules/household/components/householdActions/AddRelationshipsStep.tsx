@@ -1,10 +1,9 @@
 import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
-import React, { useId } from 'react';
+import React, { ReactNode, useId } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import RelationshipToHohSelect from '@/modules/household/components/elements/RelationshipToHohSelect';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
@@ -14,27 +13,28 @@ import {
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   HouseholdClientFieldsFragment,
-  HouseholdFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
 interface Props {
-  joiningClients: HouseholdClientFieldsFragment[];
+  existingClients: HouseholdClientFieldsFragment[];
+  newClients: HouseholdClientFieldsFragment[];
   relationships: Record<string, RelationshipToHoH | null>;
   updateRelationship: (
     enrollmentId: string,
     relationship: RelationshipToHoH | null
   ) => void;
-  receivingHousehold: HouseholdFieldsFragment;
-  receivingHohName?: string;
+  showNewIndicator?: boolean;
+  children?: ReactNode;
 }
 
-const JoinHouseholdAddRelationships = ({
-  joiningClients,
+const AddRelationshipsStep = ({
+  existingClients,
+  newClients,
   relationships,
   updateRelationship,
-  receivingHousehold,
-  receivingHohName,
+  showNewIndicator,
+  children,
 }: Props) => {
   const relationshipHeaderId = useId();
 
@@ -44,24 +44,17 @@ const JoinHouseholdAddRelationships = ({
         <Typography variant='overline'>Step 2</Typography>
         <Typography variant='h3'>Add Relationships</Typography>
       </Box>
-      <Typography variant='body1'>
-        Update joining clients’ relationships{' '}
-        {receivingHohName && <>to {receivingHohName}</>}
-        {/* todo @martha - add warning here about entry dates, pending conversation with design */}
-      </Typography>
+      {children}
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>
-          rows={[
-            ...sortHouseholdMembers(receivingHousehold.householdClients),
-            ...joiningClients,
-          ]}
+          rows={[...existingClients, ...newClients]}
           columns={[
             {
               ...CLIENT_COLUMNS.name,
               render: (client) => (
                 <Stack direction='row' gap={1}>
                   <ClientName client={asClient(client)} />
-                  {joiningClients.includes(client) && (
+                  {showNewIndicator && newClients.includes(client) && (
                     <Chip label='New' size='small' variant='outlined' />
                   )}
                 </Stack>
@@ -89,7 +82,7 @@ const JoinHouseholdAddRelationships = ({
               },
               key: 'relationship',
               render: (hc: HouseholdClientFieldsFragment) => {
-                if (joiningClients.includes(hc)) {
+                if (newClients.includes(hc)) {
                   return (
                     <RelationshipToHohSelect
                       value={relationships[hc.enrollment.id] || null}
@@ -125,7 +118,7 @@ const JoinHouseholdAddRelationships = ({
             WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
           ]}
           tableProps={{
-            'aria-label': 'Add Relationships for Join',
+            'aria-label': 'Add Relationships',
           }}
         />
       </Paper>
@@ -133,4 +126,4 @@ const JoinHouseholdAddRelationships = ({
   );
 };
 
-export default JoinHouseholdAddRelationships;
+export default AddRelationshipsStep;

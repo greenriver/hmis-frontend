@@ -1,16 +1,18 @@
 import { MergeTypeRounded } from '@mui/icons-material';
-import { useCallback, useMemo, useState } from 'react';
+import { Typography } from '@mui/material';
+import React, { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import StepDialog, { TabDefinition } from '@/components/elements/StepDialog';
 import {
   clientBriefName,
   findHohOrRep,
   sortHouseholdMembers,
+  stringifyHousehold,
 } from '@/modules/hmis/hmisUtil';
-import JoinHouseholdAddRelationships from '@/modules/household/components/elements/JoinHouseholdAddRelationships';
-import JoinHouseholdReview from '@/modules/household/components/elements/JoinHouseholdReview';
-import JoinHouseholdSelectClients from '@/modules/household/components/elements/JoinHouseholdSelectClients';
-import JoinHouseholdSuccess from '@/modules/household/components/elements/JoinHouseholdSuccess';
+import AddRelationshipsStep from '@/modules/household/components/householdActions/AddRelationshipsStep';
+import JoinHouseholdReview from '@/modules/household/components/householdActions/JoinHouseholdReview';
+import JoinHouseholdSelectClients from '@/modules/household/components/householdActions/JoinHouseholdSelectClients';
+import SuccessWayfindingStep from '@/modules/household/components/householdActions/SuccessWayfindingStep';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -183,8 +185,12 @@ const JoinHouseholdDialog = ({
       {
         title: 'Add Relationships',
         content: (
-          <JoinHouseholdAddRelationships
-            joiningClients={joiningClients}
+          <AddRelationshipsStep
+            existingClients={sortHouseholdMembers(
+              receivingHousehold.householdClients
+            )}
+            newClients={joiningClients}
+            showNewIndicator={true}
             relationships={relationships}
             updateRelationship={(enrollmentId, relationship) => {
               setRelationships((prev) => {
@@ -194,9 +200,13 @@ const JoinHouseholdDialog = ({
                 };
               });
             }}
-            receivingHousehold={receivingHousehold}
-            receivingHohName={receivingHohName}
-          />
+          >
+            <Typography variant='body1'>
+              Update joining clients’ relationships{' '}
+              {receivingHohName && <>to {receivingHohName}</>}
+              {/* todo @martha - add warning here about entry dates, pending conversation with design */}
+            </Typography>
+          </AddRelationshipsStep>
         ),
         FormDialogActionProps: missingRelationshipsProps,
       },
@@ -243,10 +253,11 @@ const JoinHouseholdDialog = ({
       }}
       successContent={
         joinedHousehold && (
-          <JoinHouseholdSuccess
-            receivingHohName={receivingHohName}
-            joinedClients={joiningClients}
-            remainingHousehold={remainingHousehold}
+          <SuccessWayfindingStep
+            title={'Successful Join'}
+            description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}`}
+            primaryClientName={receivingHohName}
+            secondary={findHohOrRep(remainingHousehold?.householdClients || [])}
             project={project}
             onClose={onClose}
           />

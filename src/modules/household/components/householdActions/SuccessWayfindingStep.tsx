@@ -2,63 +2,55 @@ import { Alert, AlertTitle, Button, Stack } from '@mui/material';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
-import {
-  clientBriefName,
-  findHohOrRep,
-  stringifyHousehold,
-} from '@/modules/hmis/hmisUtil';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
 } from '@/routes/routes';
 import {
   HouseholdClientFieldsFragment,
-  HouseholdFieldsFragment,
   ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
 
 interface Props {
-  receivingHohName: string;
-  joinedClients: HouseholdClientFieldsFragment[];
-  remainingHousehold?: HouseholdFieldsFragment;
+  title: string;
+  description: string;
+  primaryClientName: string;
+  secondary?: HouseholdClientFieldsFragment;
   project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName'>;
   onClose: VoidFunction;
 }
 
-const JoinHouseholdSuccess = ({
-  receivingHohName,
-  joinedClients,
-  remainingHousehold,
+const SuccessWayfindingStep = ({
+  title,
+  description,
+  primaryClientName,
+  secondary,
   project,
   onClose,
 }: Props) => {
-  const remainingHouseholdClient = findHohOrRep(
-    remainingHousehold?.householdClients || []
-  );
-  const remainingName = remainingHouseholdClient
-    ? clientBriefName(remainingHouseholdClient.client)
+  const secondaryName = secondary
+    ? clientBriefName(secondary.client)
     : undefined;
 
   return (
     <Stack gap={2}>
       <Alert color='success'>
-        <AlertTitle>Successful Join</AlertTitle>
-        {stringifyHousehold(joinedClients)}{' '}
-        {joinedClients.length > 1 ? 'have' : 'has'} been successfully joined to{' '}
-        {receivingHohName}’s Enrollment at {project.projectName}
+        <AlertTitle>{title}</AlertTitle>
+        {description}
       </Alert>
       <Button onClick={onClose} variant='contained'>
-        Return to {receivingHohName}’s Enrollment
+        Return to {primaryClientName}’s Enrollment
       </Button>
-      {remainingHousehold && remainingHouseholdClient && (
+      {secondary && (
         <ButtonLink
           to={generatePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-            clientId: remainingHouseholdClient.client.id,
-            enrollmentId: remainingHouseholdClient.enrollment.id,
+            clientId: secondary.client.id,
+            enrollmentId: secondary.enrollment.id,
           })}
           variant='outlined'
         >
-          View {remainingName}’s Enrollment
+          View {secondaryName}’s Enrollment
         </ButtonLink>
       )}
       <ButtonLink
@@ -73,4 +65,4 @@ const JoinHouseholdSuccess = ({
   );
 };
 
-export default JoinHouseholdSuccess;
+export default SuccessWayfindingStep;

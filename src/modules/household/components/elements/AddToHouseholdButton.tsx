@@ -10,7 +10,7 @@ import { ErrorState } from '@/modules/errors/util';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import ConflictingEnrollmentAlert from '@/modules/household/components/elements/ConflictingEnrollmentAlert';
-import JoinHouseholdDialog from '@/modules/household/components/elements/JoinHouseholdDialog';
+import JoinHouseholdDialog from '@/modules/household/components/householdActions/JoinHouseholdDialog';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
   ClientWithAlertFieldsFragment,
