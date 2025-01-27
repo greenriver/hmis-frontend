@@ -8,6 +8,7 @@ import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import ArticleIcon from '@mui/icons-material/Article';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import CallSplitRounded from '@mui/icons-material/CallSplitRounded';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
@@ -25,6 +26,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MediationRoundedIcon from '@mui/icons-material/MediationRounded';
+import MergeTypeRounded from '@mui/icons-material/MergeTypeRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import PeopleIcon from '@mui/icons-material/People';
@@ -64,6 +66,8 @@ export {
   MoreVertRoundedIcon as MoreMenuIcon,
   MyLocationIcon as MyLocationIcon,
   ArrowCircleRight as GoIcon,
+  MergeTypeRounded as JoinIcon,
+  CallSplitRounded as SplitIcon,
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,

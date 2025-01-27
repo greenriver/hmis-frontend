@@ -27,6 +27,9 @@ interface Props {
   setSelectedClients: (clients: HouseholdClientFieldsFragment[]) => void;
   children?: ReactNode;
   isRowSelectable?: (client: HouseholdClientFieldsFragment) => boolean;
+  getRowSelectDisabledReason?: (
+    client: HouseholdClientFieldsFragment
+  ) => string | undefined;
 }
 
 const SelectClientsStep = ({
@@ -34,6 +37,7 @@ const SelectClientsStep = ({
   selectedClients,
   setSelectedClients,
   isRowSelectable,
+  getRowSelectDisabledReason,
   children,
 }: Props) => {
   const donorHouseholdMembers = useMemo(
@@ -77,6 +81,7 @@ const SelectClientsStep = ({
           selected={selectedClientIds}
           onChangeSelectedRowIds={setSelectedClientIds}
           isRowSelectable={isRowSelectable}
+          getRowSelectDisabledReason={getRowSelectDisabledReason}
           tableProps={{ 'aria-label': 'Select Clients' }}
         />
       </Paper>

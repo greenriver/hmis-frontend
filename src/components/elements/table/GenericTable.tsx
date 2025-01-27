@@ -42,6 +42,7 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 
 export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
   def.key || (typeof def.header === 'string' ? def.header : '');
@@ -67,6 +68,7 @@ export interface Props<T> {
   selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
   selected?: readonly string[]; // can optionally be used as a controlled component
   isRowSelectable?: (row: T) => boolean;
+  getRowSelectDisabledReason?: (row: T) => string | undefined;
   onChangeSelectedRowIds?: (ids: readonly string[]) => void;
   EnhancedTableToolbarProps?: Omit<
     EnhancedTableToolbarProps<T>,
@@ -196,6 +198,7 @@ const GenericTable = <T extends { id: string }>({
   headerCellSx,
   selectable,
   isRowSelectable,
+  getRowSelectDisabledReason,
   selected: selectedProp,
   onChangeSelectedRowIds,
   EnhancedTableToolbarProps,
@@ -420,6 +423,7 @@ const GenericTable = <T extends { id: string }>({
 
                 const isSelectable =
                   selectable && (isRowSelectable ? isRowSelectable(row) : true);
+                const disabledReason = getRowSelectDisabledReason?.(row);
 
                 let onClickHandler: undefined | ((row: T) => void) = undefined;
                 if (!!handleRowClick) {
@@ -464,17 +468,26 @@ const GenericTable = <T extends { id: string }>({
                           stickyBorder: false,
                         })}
                       >
-                        <Checkbox
-                          color='primary'
-                          disabled={!isSelectable}
-                          checked={includes(selectedValue, row.id)}
-                          inputProps={{ 'aria-label': `Select ${row.id} ` }}
-                          onClick={
-                            selectable === 'checkbox' && isSelectable
-                              ? () => handleSelectRow(row)
-                              : undefined
+                        <ButtonTooltipContainer
+                          title={
+                            !isSelectable && disabledReason
+                              ? disabledReason
+                              : ''
                           }
-                        />
+                          placement={'top-end'}
+                        >
+                          <Checkbox
+                            color='primary'
+                            disabled={!isSelectable}
+                            checked={includes(selectedValue, row.id)}
+                            inputProps={{ 'aria-label': `Select ${row.id} ` }}
+                            onClick={
+                              selectable === 'checkbox' && isSelectable
+                                ? () => handleSelectRow(row)
+                                : undefined
+                            }
+                          />
+                        </ButtonTooltipContainer>
                       </TableCell>
                     )}
                     {columns.map((def, index) => {

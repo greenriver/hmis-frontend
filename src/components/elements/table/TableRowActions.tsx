@@ -16,6 +16,7 @@ interface TableRowActionsProps<T> {
   primaryAction?: ReactNode;
   // Secondary actions are assumed to all be simple
   secondaryActionConfigs?: CommonMenuItem[];
+  preMenuComponent?: ReactNode;
 }
 
 const TableRowActions = <T extends { id: string }>({
@@ -24,6 +25,7 @@ const TableRowActions = <T extends { id: string }>({
   primaryAction,
   primaryActionConfig,
   secondaryActionConfigs,
+  preMenuComponent,
 }: TableRowActionsProps<T>) => {
   const isTiny = useIsMobile('sm');
 
@@ -98,6 +100,7 @@ const TableRowActions = <T extends { id: string }>({
               dense: true,
             },
           }}
+          preMenuComponent={preMenuComponent}
         />
       )}
     </Stack>

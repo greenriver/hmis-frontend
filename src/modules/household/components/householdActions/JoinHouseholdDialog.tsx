@@ -191,6 +191,7 @@ const JoinHouseholdDialog = ({
             )}
             newClients={joiningClients}
             showNewIndicator={true}
+            enableSelectingHoh={false}
             relationships={relationships}
             updateRelationship={(enrollmentId, relationship) => {
               setRelationships((prev) => {

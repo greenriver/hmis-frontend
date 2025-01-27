@@ -150,7 +150,7 @@ const ManageHousehold = ({
             currentDashboardEnrollmentId={currentDashboardEnrollmentId}
             refetchHousehold={refetchHousehold}
             loading={loading}
-            projectId={project.id}
+            project={project}
           />
         </TitleCard>
       )}

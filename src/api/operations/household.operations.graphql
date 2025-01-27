@@ -8,3 +8,14 @@ mutation JoinHousehold($input: JoinHouseholdInput!) {
     }
   }
 }
+
+mutation SplitHousehold($input: SplitHouseholdInput!) {
+  splitHousehold(input: $input) {
+    newHousehold {
+      ...HouseholdFields
+    }
+    remainingHousehold {
+      ...HouseholdFields
+    }
+  }
+}

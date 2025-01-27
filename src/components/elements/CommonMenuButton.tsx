@@ -1,9 +1,11 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
   Button,
   ButtonProps,
   Divider,
   IconButton,
+  ListItemIcon,
   Menu,
   MenuItem,
   MenuProps,
@@ -18,10 +20,12 @@ import { LocationState } from '@/routes/routeUtil';
 export type CommonMenuItem = {
   key: string;
   title: ReactNode;
+  Icon?: SvgIconComponent;
   to?: To;
   onClick?: VoidFunction;
   divider?: boolean;
   disabled?: boolean;
+  disabledReason?: string;
   ariaLabel?: string;
   linkState?: LocationState;
   openInNew?: boolean;
@@ -33,6 +37,7 @@ interface Props {
   iconButton?: boolean; // use an icon button instead of a text button
   MenuProps?: Omit<MenuProps, 'open'>;
   ButtonProps?: ButtonProps;
+  preMenuComponent?: ReactNode;
 }
 
 const CommonMenuButton = ({
@@ -41,6 +46,7 @@ const CommonMenuButton = ({
   iconButton,
   MenuProps,
   ButtonProps,
+  preMenuComponent,
 }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -107,11 +113,13 @@ const CommonMenuButton = ({
         // disableScrollLock={true}
         {...MenuProps}
       >
+        {preMenuComponent}
         {items.map(
           ({
             key,
             to,
             title,
+            Icon,
             divider,
             onClick,
             disabled,
@@ -128,6 +136,11 @@ const CommonMenuButton = ({
                   aria-label={ariaLabel}
                   openInNew={openInNew}
                 >
+                  {Icon && (
+                    <ListItemIcon>
+                      <Icon />
+                    </ListItemIcon>
+                  )}
                   {title}
                 </MenuItem>
               </li>
@@ -144,6 +157,11 @@ const CommonMenuButton = ({
                 disabled={disabled}
                 aria-label={ariaLabel}
               >
+                {Icon && (
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                )}
                 {title}
               </MenuItem>
             )

@@ -7929,6 +7929,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'SplitHouseholdInput',
+    args: [
+      {
+        name: 'splittingEnrollmentInputs',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'INPUT_OBJECT',
+                name: 'EnrollmentRelationshipInput',
+                ofType: null,
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'SubmitAssessmentInput',
     args: [
       {

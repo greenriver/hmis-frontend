@@ -29,6 +29,7 @@ export type TabDefinition = {
   content: ReactNode;
   FormDialogActionProps?: Partial<FormDialogActionProps>;
   disableSubmit?: boolean;
+  onOpen?: VoidFunction;
 };
 
 interface Props extends Omit<CommonDialogProps, 'onSubmit' | 'onClose'> {
@@ -77,6 +78,7 @@ const StepDialog = ({
   const handleSubmit = useCallback(() => {
     if (nextTab) {
       setTabValue(nextTab.title);
+      nextTab.onOpen?.();
     } else {
       onSubmit();
     }

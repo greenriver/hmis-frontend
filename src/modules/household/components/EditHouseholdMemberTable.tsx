@@ -4,6 +4,7 @@ import {
   FormControlLabel,
   Radio,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -11,7 +12,10 @@ import RelationshipToHoHInput from './elements/RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './elements/RemoveFromHouseholdButton';
 import { HOUSEHOLD_MEMBER_COLUMNS } from './HouseholdMemberTable';
 
+import { SplitIcon } from '@/components/elements/SemanticIcons';
 import GenericTable from '@/components/elements/table/GenericTable';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
@@ -20,16 +24,18 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import SplitHouseholdDialog from '@/modules/household/components/householdActions/SplitHouseholdDialog';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
+  ProjectAllFieldsFragment,
   RelationshipToHoH,
   useUpdateRelationshipToHoHMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
   household: HouseholdFieldsFragment;
-  projectId: string;
+  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
   currentDashboardEnrollmentId?: string;
   refetchHousehold: any;
   loading?: boolean;
@@ -37,6 +43,7 @@ interface Props {
 
 const EditHouseholdMemberTable = ({
   household,
+  project,
   refetchHousehold,
   currentDashboardEnrollmentId,
   loading,
@@ -127,6 +134,10 @@ const EditHouseholdMemberTable = ({
     includeErrors: true,
   });
 
+  const [splitInitiator, setSplitInitiator] =
+    useState<HouseholdClientFieldsFragment | null>(null);
+  const canSplitHouseholds = project.access.canSplitHouseholds;
+
   const columns = useMemo(() => {
     return [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
@@ -180,6 +191,7 @@ const EditHouseholdMemberTable = ({
         key: 'relationship',
         render: (hc: HouseholdClientFieldsFragment) => (
           <RelationshipToHoHInput
+            variant='excludeHoh'
             enrollmentId={hc.enrollment.id}
             enrollmentLockVersion={hc.enrollment.lockVersion}
             relationshipToHoH={hc.relationshipToHoH}
@@ -199,18 +211,59 @@ const EditHouseholdMemberTable = ({
       },
       HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(currentMembers),
       {
-        header: '',
-        key: 'action',
-        width: '1%',
+        ...BASE_ACTION_COLUMN_DEF,
         render: (hc: HouseholdClientFieldsFragment) => (
-          // No extra perm check is required, because this button only allows removing WIP Enrollments,
-          // which only requires Can Edit Enrollments, which is already required for this page
-          <RemoveFromHouseholdButton
-            currentDashboardEnrollmentId={currentDashboardEnrollmentId}
-            householdClient={hc}
-            onSuccess={refetchHousehold}
-            householdSize={currentMembers.length}
-            ariaLabel={`Remove ${clientBriefName(hc.client)}`}
+          <TableRowActions
+            record={hc}
+            recordName={clientBriefName(hc.client)}
+            primaryAction={
+              // No extra perm check is required, because this button only allows removing WIP Enrollments,
+              // which only requires Can Edit Enrollments, which is already required for this page
+              <RemoveFromHouseholdButton
+                currentDashboardEnrollmentId={currentDashboardEnrollmentId}
+                householdClient={hc}
+                onSuccess={refetchHousehold}
+                householdSize={currentMembers.length}
+                ariaLabel={`Remove ${clientBriefName(hc.client)}`}
+              />
+            }
+            secondaryActionConfigs={
+              canSplitHouseholds && currentMembers.length > 0
+                ? [
+                    {
+                      key: 'split',
+                      title: 'Split → New Household',
+                      onClick: () => setSplitInitiator(hc),
+                      ariaLabel: `Split ${clientBriefName(hc.client)} to new household`,
+                      disabled:
+                        hc.relationshipToHoH ===
+                        RelationshipToHoH.SelfHeadOfHousehold,
+                      Icon: SplitIcon,
+                    },
+                  ]
+                : []
+            }
+            preMenuComponent={
+              hc.relationshipToHoH ===
+                RelationshipToHoH.SelfHeadOfHousehold && (
+                <Box
+                  sx={{
+                    p: 2,
+                    minWidth: '100%',
+                    width: '300px',
+                    backgroundColor: 'alerts.high.background', // todo @martha - pending conversation with design
+                  }}
+                >
+                  <Typography fontWeight='bold' color='error.dark' pb={1}>
+                    HoH Alert
+                  </Typography>
+                  <Typography variant='body2'>
+                    Head of household must be changed before you can split,
+                    remove, or exit.
+                  </Typography>
+                </Box>
+              )
+            }
           />
         ),
       },
@@ -224,6 +277,7 @@ const EditHouseholdMemberTable = ({
     onChangeHoH,
     highlight,
     refetchHousehold,
+    canSplitHouseholds,
   ]);
 
   return (
@@ -252,6 +306,15 @@ const EditHouseholdMemberTable = ({
         },
         loading: hohChangeLoading,
       })}
+      {!!splitInitiator && (
+        <SplitHouseholdDialog
+          donorHousehold={household}
+          initiator={splitInitiator}
+          open={!!splitInitiator}
+          onClose={() => setSplitInitiator(null)}
+          project={project}
+        />
+      )}
     </>
   );
 };

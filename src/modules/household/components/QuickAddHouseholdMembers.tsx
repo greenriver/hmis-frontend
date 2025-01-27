@@ -108,6 +108,7 @@ const QuickAddHouseholdMembers = ({
       width: '120px',
       render: ({ client }) => (
         <RelationshipToHohSelect
+          variant='excludeHoh'
           disabled={!(client.id in members)}
           value={members[client.id] || null}
           onClose={() =>
