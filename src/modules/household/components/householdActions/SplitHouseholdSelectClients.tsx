@@ -1,6 +1,8 @@
 import { Typography } from '@mui/material';
 
 import { Dispatch, SetStateAction, useMemo } from 'react';
+import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
+import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import { clientBriefName, findHohOrRep } from '@/modules/hmis/hmisUtil';
 import SelectClientsStep from '@/modules/household/components/householdActions/SelectClientsStep';
 import {
@@ -24,6 +26,12 @@ const SplitHouseholdSelectClients = ({
     () => findHohOrRep(donorHousehold.householdClients || []),
     [donorHousehold.householdClients]
   );
+
+  const { clientAlerts } = useClientAlerts({
+    household: donorHousehold,
+    showClientName: true,
+  });
+
   return (
     <SelectClientsStep
       donorHousehold={donorHousehold}
@@ -42,6 +50,7 @@ const SplitHouseholdSelectClients = ({
         Select which clients from {clientBriefName(donorHoh.client)}’s household
         to split into a new household.
       </Typography>
+      {<ClientAlertStack clientAlerts={clientAlerts} />}
     </SelectClientsStep>
   );
 };
