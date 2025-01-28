@@ -21,10 +21,16 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
   key: 'Actions',
-  tableCellProps: { sx: { py: 0, px: { xs: 1, sm: 2 } } },
+  tableCellProps: {
+    sx: {
+      py: 0,
+      px: 1,
+      whiteSpace: 'nowrap',
+    },
+  },
   render: '', // gets overridden when used
   sticky: 'right',
-  width: '0px',
+  width: '1%',
   dontLink: true,
 };
 

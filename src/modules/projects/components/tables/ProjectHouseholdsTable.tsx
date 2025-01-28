@@ -5,7 +5,7 @@ import {
   getColumnKey,
   getStickyCellStyles,
   renderCellContents,
-  renderLinkedCellContents,
+  renderLinkedRowCellContents,
 } from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -116,12 +116,12 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           role={i === 0 ? 'rowheader' : undefined}
           sx={cellSx(col)}
         >
-          {renderLinkedCellContents(rowLink, householdClient, col.render, i)}
+          {renderLinkedRowCellContents(rowLink, householdClient, col.render, i)}
         </TableCell>
       ))}
       {showAssignedStaff && (
         <TableCell sx={cellSx()}>
-          {renderLinkedCellContents(
+          {renderLinkedRowCellContents(
             rowLink,
             household,
             ASSIGNED_STAFF_COL.render,

@@ -188,7 +188,15 @@ export const renderHeaderCellContents = <T extends { id: string }>(
   );
 };
 
-export const renderLinkedCellContents = <T extends { id: string }>(
+/*
+ * When a row is linked (`rowLinkTo` is defined), we render an `<a>` inside
+ * every cell, so the whole row is clickable. But only the first cell is
+ * tabbable and has a focus treatment.
+ *
+ * It's factored out here in order to be reused by tables that use renderRow,
+ * such as the ProjectHouseholdsTable.
+ */
+export const renderLinkedRowCellContents = <T extends { id: string }>(
   rowLink: To,
   row: T,
   render: ColumnDef<T>['render'],
@@ -205,10 +213,14 @@ export const renderLinkedCellContents = <T extends { id: string }>(
         verticalAlign: 'middle',
         display: 'block',
         '&.Mui-focusVisible': {
-          outlineOffset: '-2px',
+          outline: 'auto',
+          outlineColor: '-webkit-focus-ring-color',
+          outlineOffset: '-5px',
         },
       }}
-      tabIndex={index === 0 ? 0 : -1}
+      // Unless this is the first cell in the row (primary column), make the link NOT tabbable by passing -1.
+      // (links are tabbable by default so passing `undefined` keeps the default behavior)
+      tabIndex={index > 0 ? -1 : undefined}
     >
       <Box
         sx={{
@@ -539,7 +551,7 @@ const GenericTable = <T extends { id: string }>({
                           {...(dontLink ? dontClickProps : {})}
                         >
                           {isLinked
-                            ? renderLinkedCellContents(
+                            ? renderLinkedRowCellContents(
                                 rowLink,
                                 row,
                                 render,
