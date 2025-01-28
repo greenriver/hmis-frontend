@@ -116,7 +116,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           role={i === 0 ? 'rowheader' : undefined}
           sx={cellSx(col)}
         >
-          {renderLinkedRowCellContents(rowLink, householdClient, col.render, i)}
+          {renderLinkedRowCellContents(rowLink, householdClient, col.render)}
         </TableCell>
       ))}
       {showAssignedStaff && (
@@ -124,8 +124,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           {renderLinkedRowCellContents(
             rowLink,
             household,
-            ASSIGNED_STAFF_COL.render,
-            -1
+            ASSIGNED_STAFF_COL.render
           )}
         </TableCell>
       )}
