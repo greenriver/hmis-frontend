@@ -129,21 +129,20 @@ const CommonMenuButton = ({
             divider ? (
               <Divider key={key} />
             ) : to ? (
-              <li key={key}>
-                <MenuItem
-                  component={RouterLink}
-                  to={to}
-                  aria-label={ariaLabel}
-                  openInNew={openInNew}
-                >
-                  {Icon && (
-                    <ListItemIcon>
-                      <Icon />
-                    </ListItemIcon>
-                  )}
-                  {title}
-                </MenuItem>
-              </li>
+              <MenuItem
+                key={key}
+                component={RouterLink}
+                to={to}
+                aria-label={ariaLabel}
+                openInNew={openInNew}
+              >
+                {Icon && (
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                )}
+                {title}
+              </MenuItem>
             ) : (
               <MenuItem
                 key={key}
