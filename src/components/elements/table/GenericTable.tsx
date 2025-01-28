@@ -493,7 +493,7 @@ const GenericTable = <T extends { id: string }>({
                 const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
                 const isClickable = !!onClickHandler || !!rowLink;
 
-                const recordName = rowName?.(row);
+                const recordName = rowName?.(row) || row.id;
                 const ariaLabel = `${rowActionTitle}, ${recordName}`;
                 const secondaryActions = rowSecondaryActionConfigs?.(row);
                 const hideRowMenu =
@@ -551,7 +551,7 @@ const GenericTable = <T extends { id: string }>({
                           disabled={!isSelectable}
                           checked={includes(selected, row.id)}
                           inputProps={{
-                            'aria-label': `Select ${recordName || row.id}`,
+                            'aria-label': `Select ${recordName}`,
                           }}
                           onClick={
                             selectable === 'checkbox' && isSelectable
