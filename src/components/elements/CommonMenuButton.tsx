@@ -1,6 +1,7 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
+  Box,
   Button,
   ButtonProps,
   Divider,
@@ -63,6 +64,8 @@ const CommonMenuButton = ({
   // pull out variant/color which can't be used for IconButton
   const { variant, color, ...buttonProps } = ButtonProps || {};
 
+  const { MenuListProps, ...menuProps } = MenuProps || {};
+
   return (
     <>
       {iconButton ? (
@@ -99,6 +102,10 @@ const CommonMenuButton = ({
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'menu-button',
+          sx: {
+            pt: !!preMenuComponent ? 0 : undefined,
+          },
+          ...MenuListProps,
         }}
         anchorOrigin={{
           vertical: 'bottom',
@@ -111,9 +118,9 @@ const CommonMenuButton = ({
         // Bug: Opening the CommonMenu applies padding to the body, which can look weird on mobile.
         // It's sort of fixable with disableScrollLock, but that seems to introduce other scroll problems.
         // disableScrollLock={true}
-        {...MenuProps}
+        {...menuProps}
       >
-        {preMenuComponent}
+        {!!preMenuComponent && <Box sx={{ mb: 1 }}>{preMenuComponent}</Box>}
         {items.map(
           ({
             key,

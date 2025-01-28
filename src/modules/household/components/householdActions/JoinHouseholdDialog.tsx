@@ -1,7 +1,7 @@
-import { MergeTypeRounded } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
+import { JoinIcon } from '@/components/elements/SemanticIcons';
 import StepDialog, { TabDefinition } from '@/components/elements/StepDialog';
 import {
   clientBriefName,
@@ -250,7 +250,7 @@ const JoinHouseholdDialog = ({
       title={'Join Enrollments'}
       submitButtonTitle={'Join Enrollments'}
       SubmitButtonProps={{
-        endIcon: <MergeTypeRounded />,
+        endIcon: <JoinIcon />,
       }}
       successContent={
         joinedHousehold && (

@@ -251,10 +251,11 @@ const EditHouseholdMemberTable = ({
                     p: 2,
                     minWidth: '100%',
                     width: '300px',
-                    backgroundColor: 'alerts.high.background', // todo @martha - pending conversation with design
+                    // TODO(#7108) - Use theme colors
+                    backgroundColor: 'primary.surface',
                   }}
                 >
-                  <Typography fontWeight='bold' color='error.dark' pb={1}>
+                  <Typography fontWeight='bold' color='primary.dark' pb={1}>
                     HoH Alert
                   </Typography>
                   <Typography variant='body2'>
