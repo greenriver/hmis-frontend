@@ -94,6 +94,7 @@ const AdminReferralDenialsPage = () => {
           noData='No denials'
           pagePath='deniedPendingReferralPostings'
           rowLinkTo={rowLinkTo}
+          rowActionTitle='View Referral'
           defaultPageSize={25}
           filters={{ status: referralFilter }}
           defaultFilterValues={{

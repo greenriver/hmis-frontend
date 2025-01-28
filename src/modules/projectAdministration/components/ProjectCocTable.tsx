@@ -78,6 +78,8 @@ const ProjectCocTable = (props: Props) => {
                 })
             : undefined
         }
+        rowActionTitle='Edit CoC'
+        rowName={(row) => row.cocCode || row.id}
         {...props}
       />
     </>

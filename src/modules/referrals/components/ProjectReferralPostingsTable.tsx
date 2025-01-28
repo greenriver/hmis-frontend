@@ -102,6 +102,7 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
       noData='No referrals'
       pagePath='project.incomingReferralPostings'
       rowLinkTo={rowLinkTo}
+      rowActionTitle='View Referral'
       defaultPageSize={10}
       filters={{ status: referralFilter }}
       defaultFilterValues={{

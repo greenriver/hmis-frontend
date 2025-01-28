@@ -89,6 +89,8 @@ const FundersPage = () => {
                   })
               : undefined
           }
+          rowActionTitle='Edit Funder'
+          rowName={(row) => HmisEnums.FundingSource[row.funder]}
         />
       </Paper>
     </>

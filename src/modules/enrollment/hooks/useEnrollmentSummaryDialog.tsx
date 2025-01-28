@@ -75,6 +75,7 @@ const useEnrollmentSummaryDialog = ({
                     })
                   : ''
               }
+              hideMenu
             />
           </DialogContent>
           <DialogActions>

@@ -89,6 +89,8 @@ const OrganizationProjectsTable = ({
       queryDocument={GetOrganizationProjectsDocument}
       columns={columns}
       rowLinkTo={rowLinkTo}
+      rowActionTitle='View Project'
+      rowName={(row) => row.projectName}
       noData='No projects'
       pagePath='organization.projects'
       filters={hideFilters ? undefined : filters}

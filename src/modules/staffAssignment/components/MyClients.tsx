@@ -102,6 +102,8 @@ const MyClients = () => {
               }
             );
           }}
+          rowName={(row) => clientBriefName(memoizedHoh(row).client)}
+          rowActionTitle='View Household'
         />
       </Paper>
     </>
