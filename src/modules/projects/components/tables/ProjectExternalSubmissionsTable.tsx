@@ -2,8 +2,6 @@ import { Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -101,26 +99,9 @@ const ProjectExternalSubmissionsTable = ({
           ),
         },
         ...defs,
-        {
-          ...BASE_ACTION_COLUMN_DEF,
-          render: (submission: ExternalFormSubmissionSummaryFragment) => (
-            <TableRowActions
-              record={submission}
-              recordName={submission.id}
-              menuActionConfigs={[
-                {
-                  title: 'View Submission',
-                  key: 'submission',
-                  onClick: () => setModalOpenId(submission.id),
-                  disabled: bulkLoading,
-                },
-              ]}
-            />
-          ),
-        },
       ];
     },
-    [setModalOpenId, bulkLoading]
+    []
   );
 
   const filters = useFilters({
@@ -146,6 +127,9 @@ const ProjectExternalSubmissionsTable = ({
         queryDocument={GetProjectExternalFormSubmissionsDocument}
         getColumnDefs={getColumnDefs}
         handleRowClick={(submission) => setModalOpenId(submission.id)}
+        rowActionDisabled={bulkLoading}
+        rowName={(row) => row.id}
+        rowActionTitle='View Submission'
         noData='No external form submissions'
         pagePath='project.externalFormSubmissions'
         recordType='ExternalFormSubmission'

@@ -95,7 +95,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
   const cellSx = useCallback(
     (col?: ColumnDef<ProjectEnrollmentsHouseholdClientFieldsFragment>) => {
       return {
-        py: 0.5,
+        p: 0,
         ...(lastInGroup ? { borderBottom: 0 } : {}),
         ...getStickyCellStyles({ sticky: col?.sticky }),
       };
@@ -128,7 +128,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           )}
         </TableCell>
       )}
-      <TableCell sx={cellSx(ACTION_COL)}>
+      <TableCell sx={{ ...cellSx(ACTION_COL), px: 1 }}>
         {renderCellContents(householdClient, ACTION_COL.render)}
       </TableCell>
     </TableRow>

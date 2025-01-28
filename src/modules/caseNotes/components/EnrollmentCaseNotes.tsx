@@ -5,8 +5,6 @@ import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
@@ -114,37 +112,15 @@ const EnrollmentCaseNotes = () => {
       projectId: enrollment?.project.id,
     });
 
-  const getColumnDefs = useCallback(
-    (rows: CustomCaseNoteFieldsFragment[]) => {
-      const customColumns = getCustomDataElementColumns(rows);
-      return [
-        CASE_NOTE_COLUMNS.InformationDate,
-        ...customColumns,
-        CASE_NOTE_COLUMNS.NoteContent,
-        CASE_NOTE_COLUMNS.LastUpdated,
-        {
-          ...BASE_ACTION_COLUMN_DEF,
-          render: (caseNote: CustomCaseNoteFieldsFragment) => (
-            <TableRowActions
-              record={caseNote}
-              recordName={
-                parseAndFormatDate(caseNote.informationDate) || caseNote.id
-              }
-              menuActionConfigs={[
-                {
-                  title: 'View Case Note',
-                  key: 'case note',
-                  ariaLabel: `View Case Note, ${parseAndFormatDate(caseNote.informationDate) || caseNote.id}`,
-                  onClick: () => onSelectRecord(caseNote),
-                },
-              ]}
-            />
-          ),
-        },
-      ];
-    },
-    [onSelectRecord]
-  );
+  const getColumnDefs = useCallback((rows: CustomCaseNoteFieldsFragment[]) => {
+    const customColumns = getCustomDataElementColumns(rows);
+    return [
+      CASE_NOTE_COLUMNS.InformationDate,
+      ...customColumns,
+      CASE_NOTE_COLUMNS.NoteContent,
+      CASE_NOTE_COLUMNS.LastUpdated,
+    ];
+  }, []);
 
   const caseNotesFeature = getEnrollmentFeature(
     DataCollectionFeatureRole.CaseNote
@@ -181,6 +157,8 @@ const EnrollmentCaseNotes = () => {
           queryDocument={GetEnrollmentCustomCaseNotesDocument}
           getColumnDefs={getColumnDefs}
           handleRowClick={(row) => onSelectRecord(row)}
+          rowName={(row) => parseAndFormatDate(row.informationDate) || row.id}
+          rowActionTitle='View Case Note'
           pagePath='enrollment.customCaseNotes'
           noData='No case notes'
           headerCellSx={() => ({ color: 'text.secondary' })}

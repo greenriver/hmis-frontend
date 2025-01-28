@@ -1,9 +1,7 @@
 import { Box, Chip, Tooltip } from '@mui/material';
 import React, { useMemo } from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
-import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
-  BASE_ACTION_COLUMN_DEF,
   getViewClientMenuItem,
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
@@ -205,21 +203,6 @@ const ProjectClientEnrollmentsTable = ({
         ENROLLMENT_COLUMNS.exitDate,
         ENROLLMENT_COLUMNS.enrollmentStatus,
         ...(staffAssignmentsEnabled ? [COLUMNS.assignedStaff] : []),
-        {
-          ...BASE_ACTION_COLUMN_DEF,
-          render: (row: ProjectEnrollmentQueryEnrollmentFieldsFragment) => {
-            return (
-              <TableRowActions
-                record={row}
-                recordName={clientBriefName(row.client)}
-                menuActionConfigs={[
-                  getViewEnrollmentMenuItem(row, row.client),
-                  getViewClientMenuItem(row.client),
-                ]}
-              />
-            );
-          },
-        },
       ];
     }, [staffAssignmentsEnabled]);
 
@@ -250,6 +233,9 @@ const ProjectClientEnrollmentsTable = ({
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns || defaultColumns}
       rowLinkTo={(row) => getViewEnrollmentMenuItem(row, row.client).to}
+      rowActionTitle='View Enrollment'
+      rowName={(row) => clientBriefName(row.client)}
+      rowSecondaryActionConfigs={(row) => [getViewClientMenuItem(row.client)]}
       noData={
         openOnDate
           ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`

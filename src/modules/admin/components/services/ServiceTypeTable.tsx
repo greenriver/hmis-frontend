@@ -1,6 +1,4 @@
 import { Chip } from '@mui/material';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -42,24 +40,6 @@ const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
         <Chip size='small' label='Supports Bulk Assignment' />
       ) : null,
   },
-  {
-    ...BASE_ACTION_COLUMN_DEF,
-    render: (row: ServiceTypeConfigFieldsFragment) => (
-      <TableRowActions
-        record={row}
-        recordName={getServiceTypeForDisplay(row)}
-        menuActionConfigs={[
-          {
-            title: 'View Service Type',
-            key: 'service type',
-            to: generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
-              serviceTypeId: row.id,
-            }),
-          },
-        ]}
-      />
-    ),
-  },
 ];
 
 const ServiceTypeTable = () => {
@@ -83,6 +63,8 @@ const ServiceTypeTable = () => {
             serviceTypeId: row.id,
           })
         }
+        rowName={(row) => getServiceTypeForDisplay(row)}
+        rowActionTitle='View Service Type'
         pagePath='serviceTypes'
         noData='No service types'
         filters={filters}

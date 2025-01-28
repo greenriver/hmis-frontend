@@ -41,7 +41,9 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
+import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import RouterLink from '@/components/elements/RouterLink';
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import { LocationState } from '@/routes/routeUtil';
 
 export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
@@ -52,6 +54,13 @@ export interface Props<T> {
   handleRowClick?: (row: T) => void;
   rowLinkTo?: (row: T) => To | null | undefined;
   rowLinkState?: LocationState;
+  rowName?: (row: T) => string; // e.g. "Client X's Intake Assessment at Project Y"
+  rowActionTitle?: string; // e.g. "View Assessment"
+  rowSecondaryActionConfigs?: (row: T) => CommonMenuItem[];
+  // hideMenu is either a boolean, which hides the actions menu for the whole table;
+  // or a function returning a boolean, which indicates that only some rows should have an action menu.
+  hideMenu?: boolean | ((row: T) => boolean);
+  rowActionDisabled?: boolean;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
@@ -91,8 +100,6 @@ export const clickableRowStyles = {
 const dontClickProps = {
   // Prevent event propagation if the column disallows click
   onClick: (event: { stopPropagation: VoidFunction }) =>
-    event.stopPropagation(),
-  onKeyUp: (event: { stopPropagation: VoidFunction }) =>
     event.stopPropagation(),
 };
 
@@ -192,7 +199,6 @@ export const renderHeaderCellContents = <T extends { id: string }>(
  * When a row is linked (`rowLinkTo` is defined), we render an `<a>` inside
  * every cell, so the whole row is clickable. But the cells are not tabbable
  * and don't have focus treatment, to enable tabbing through the table quickly.
- * The `rowLinkTo` action should always be the first action in the row actions menu.
  *
  * This is factored out here in order to be reused by tables that use renderRow,
  * such as the ProjectHouseholdsTable.
@@ -235,6 +241,11 @@ const GenericTable = <T extends { id: string }>({
   handleRowClick,
   rowLinkTo,
   rowLinkState,
+  rowName,
+  rowActionTitle,
+  rowSecondaryActionConfigs,
+  hideMenu,
+  rowActionDisabled,
   columns: columnProp,
   paginated = false,
   loading = false,
@@ -312,7 +323,12 @@ const GenericTable = <T extends { id: string }>({
       idx & 1 ? undefined : theme.palette.background.default,
   });
 
-  const fullColSpan = columns.length + (selectable ? 1 : 0);
+  const hasTableRowActions =
+    (!!rowLinkTo || !!handleRowClick || !!rowSecondaryActionConfigs) &&
+    !(typeof hideMenu === 'boolean' && hideMenu);
+
+  const fullColSpan =
+    columns.length + (selectable ? 1 : 0) + (hasTableRowActions ? 1 : 0);
   const tableHead = noHead ? null : vertical ? (
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
@@ -378,6 +394,17 @@ const GenericTable = <T extends { id: string }>({
               </HeaderCell>
             );
           })}
+          {hasTableRowActions && (
+            <HeaderCell
+              sx={{
+                ...getStickyCellStyles({
+                  sticky: 'right',
+                }),
+              }}
+            >
+              <Box sx={visuallyHidden}>{'Action'}</Box>
+            </HeaderCell>
+          )}
         </TableRow>
       )}
       {loading && loadingVariant === 'linear' && (
@@ -466,6 +493,34 @@ const GenericTable = <T extends { id: string }>({
                 const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
                 const isClickable = !!onClickHandler || !!rowLink;
 
+                const recordName = rowName?.(row);
+                const ariaLabel = `${rowActionTitle}, ${recordName}`;
+                const secondaryActions = rowSecondaryActionConfigs?.(row);
+                const hideRowMenu =
+                  typeof hideMenu === 'function' ? hideMenu(row) : hideMenu;
+
+                const tableRowActions = (
+                  <TableRowActions
+                    record={row}
+                    recordName={recordName}
+                    menuActionConfigs={[
+                      ...(rowLink || handleRowClick
+                        ? [
+                            {
+                              title: rowActionTitle,
+                              ariaLabel: ariaLabel,
+                              to: rowLink,
+                              onClick: () => handleRowClick?.(row),
+                              key: 'primary',
+                              disabled: rowActionDisabled,
+                            },
+                          ]
+                        : []),
+                      ...(secondaryActions || []),
+                    ]}
+                  />
+                );
+
                 return (
                   <TableRow
                     key={row.id}
@@ -479,12 +534,6 @@ const GenericTable = <T extends { id: string }>({
                     }
                     selected={
                       selectable === 'row' && includes(selected, row.id)
-                    }
-                    onKeyUp={
-                      !!handleRowClick
-                        ? (event) =>
-                            event.key === 'Enter' && handleRowClick(row)
-                        : undefined
                     }
                   >
                     {selectable && (
@@ -501,7 +550,9 @@ const GenericTable = <T extends { id: string }>({
                           color='primary'
                           disabled={!isSelectable}
                           checked={includes(selected, row.id)}
-                          inputProps={{ 'aria-label': `Select ${row.id} ` }}
+                          inputProps={{
+                            'aria-label': `Select ${recordName || row.id}`,
+                          }}
                           onClick={
                             selectable === 'checkbox' && isSelectable
                               ? () => handleSelectRow(row)
@@ -540,7 +591,7 @@ const GenericTable = <T extends { id: string }>({
                             ...tableCellProps?.sx,
                           }}
                           role={sticky === 'left' ? 'rowheader' : undefined}
-                          tabIndex={index === 0 && handleRowClick ? 0 : -1}
+                          tabIndex={-1}
                           {...(dontLink ? dontClickProps : {})}
                         >
                           {isLinked
@@ -554,6 +605,22 @@ const GenericTable = <T extends { id: string }>({
                         </TableCell>
                       );
                     })}
+                    {hasTableRowActions && (
+                      <TableCell
+                        sx={{
+                          ...getStickyCellStyles({
+                            sticky: 'right',
+                          }),
+                          width: '1%',
+                          py: 0,
+                          px: 1,
+                          whiteSpace: 'nowrap',
+                        }}
+                        {...dontClickProps}
+                      >
+                        {!hideRowMenu && tableRowActions}
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}

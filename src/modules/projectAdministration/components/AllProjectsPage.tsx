@@ -7,8 +7,6 @@ import CommonSearchInput from '../../search/components/CommonSearchInput';
 import ButtonLink from '@/components/elements/ButtonLink';
 
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageContainer from '@/components/layout/PageContainer';
 import useDebouncedState from '@/hooks/useDebouncedState';
@@ -60,25 +58,6 @@ const PROJECT_COLUMNS: ColumnDef<ProjectAllFieldsFragment>[] = [
         project.operatingEndDate
       ),
   },
-  {
-    ...BASE_ACTION_COLUMN_DEF,
-    render: (project: ProjectAllFieldsFragment) => (
-      <TableRowActions
-        record={project}
-        recordName={project.projectName}
-        menuActionConfigs={[
-          {
-            title: 'View Project',
-            ariaLabel: `View Project, ${project.projectName}`,
-            key: 'project',
-            to: generateSafePath(Routes.PROJECT, {
-              projectId: project.id,
-            }),
-          },
-        ]}
-      />
-    ),
-  },
 ];
 
 const ORGANIZATION_COLUMNS: ColumnDef<OrganizationType>[] = [
@@ -90,25 +69,6 @@ const ORGANIZATION_COLUMNS: ColumnDef<OrganizationType>[] = [
   {
     header: 'Project Count',
     render: 'projects.nodesCount' as keyof OrganizationType,
-  },
-  {
-    ...BASE_ACTION_COLUMN_DEF,
-    render: (organization: OrganizationType) => (
-      <TableRowActions
-        record={organization}
-        recordName={organization.organizationName}
-        menuActionConfigs={[
-          {
-            title: 'View Organization',
-            key: 'organization',
-            ariaLabel: `View Organization, ${organization.organizationName}`,
-            to: generateSafePath(Routes.ORGANIZATION, {
-              organizationId: organization.id,
-            }),
-          },
-        ]}
-      />
-    ),
   },
 ];
 
@@ -171,6 +131,8 @@ const ProjectsTable = ({
               projectId: project.id,
             })
           }
+          rowName={(project) => project.projectName}
+          rowActionTitle='View Project'
           noData='No projects'
           pagePath='projects'
           recordType='Project'
@@ -243,6 +205,8 @@ const OrganizationsTable = ({
               organizationId: organization.id,
             })
           }
+          rowName={(organization) => organization.organizationName}
+          rowActionTitle='View Organization'
           noData='No organizations'
           pagePath='organizations'
           recordType='Organization'

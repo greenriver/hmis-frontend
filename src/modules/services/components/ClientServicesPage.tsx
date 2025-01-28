@@ -1,12 +1,6 @@
 import { Paper } from '@mui/material';
-import React, { useCallback, useMemo } from 'react';
-
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import {
-  BASE_ACTION_COLUMN_DEF,
-  getViewEnrollmentMenuItem,
-  getViewServiceMenuItem,
-} from '@/components/elements/table/tableRowActionUtil';
+import React, { useMemo } from 'react';
+import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -20,12 +14,14 @@ import {
   SERVICE_BASIC_COLUMNS,
   SERVICE_COLUMNS,
 } from '@/modules/services/serviceColumns';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
   GetClientServicesQuery,
   GetClientServicesQueryVariables,
   ServiceSortOption,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type ServiceType = NonNullable<
   NonNullable<GetClientServicesQuery['client']>['services']
@@ -37,12 +33,6 @@ const ClientServicesPage: React.FC<{
 }> = ({ omitColumns = [] }) => {
   const { clientId } = useSafeParams() as { clientId: string };
   const { client } = useClientDashboardContext();
-
-  const getPrimaryAction = useCallback(
-    (service: ServiceType) =>
-      getViewServiceMenuItem(service, service.enrollment.id, clientId),
-    [clientId]
-  );
 
   const columns = useMemo(
     () =>
@@ -60,30 +50,13 @@ const ClientServicesPage: React.FC<{
             optional: true,
             defaultHidden: true,
           },
-          {
-            ...BASE_ACTION_COLUMN_DEF,
-            render: (row) => (
-              <TableRowActions
-                record={row}
-                recordName={`${getServiceTypeForDisplay(row.serviceType)} on ${parseAndFormatDate(row.dateProvided)}`}
-                menuActionConfigs={[
-                  getPrimaryAction(row),
-                  {
-                    ...getViewEnrollmentMenuItem(row.enrollment, client),
-                    // override the default ariaLabel to provide the project name, since we are in the client context
-                    ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
-                  },
-                ]}
-              />
-            ),
-          },
         ] as ColumnDef<ServiceType>[]
       ).filter((col) => {
         if (omitColumns.includes(col.key || '')) return false;
 
         return true;
       }),
-    [client, getPrimaryAction, omitColumns]
+    [omitColumns]
   );
 
   const filters = useFilters({
@@ -103,7 +76,23 @@ const ClientServicesPage: React.FC<{
           queryVariables={{ id: clientId }}
           queryDocument={GetClientServicesDocument}
           columns={columns}
-          rowLinkTo={(row) => getPrimaryAction(row).to}
+          rowLinkTo={(row) =>
+            generateSafePath(EnrollmentDashboardRoutes.SERVICES, {
+              clientId: clientId,
+              enrollmentId: row.enrollment.id,
+            })
+          }
+          rowName={(row) =>
+            `${getServiceTypeForDisplay(row.serviceType)} on ${parseAndFormatDate(row.dateProvided)}`
+          }
+          rowActionTitle='View Service'
+          rowSecondaryActionConfigs={(row) => [
+            {
+              ...getViewEnrollmentMenuItem(row.enrollment, client),
+              // override the default ariaLabel to provide the project name, since we are in the client context
+              ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
+            },
+          ]}
           pagePath='client.services'
           fetchPolicy='cache-and-network'
           noData='No services'

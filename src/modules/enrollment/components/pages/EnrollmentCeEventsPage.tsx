@@ -1,9 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
@@ -26,6 +23,24 @@ import {
   GetEnrollmentEventsQueryVariables,
   RecordFormRole,
 } from '@/types/gqlTypes';
+
+const COLUMNS: ColumnDef<EventFieldsFragment>[] = [
+  {
+    header: 'Event Type',
+    render: (e: EventFieldsFragment) => (
+      <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />
+    ),
+    sticky: 'left',
+  },
+  {
+    header: 'Event Date',
+    render: (e: EventFieldsFragment) => parseAndFormatDate(e.eventDate),
+  },
+  {
+    header: 'Referral Result',
+    render: (e: EventFieldsFragment) => eventReferralResult(e),
+  },
+];
 
 const EnrollmentCeEventsPage = () => {
   const { enrollment, getEnrollmentFeature } = useEnrollmentDashboardContext();
@@ -67,44 +82,6 @@ const EnrollmentCeEventsPage = () => {
     DataCollectionFeatureRole.CeEvent
   );
 
-  const columns: ColumnDef<EventFieldsFragment>[] = useMemo(
-    () => [
-      {
-        header: 'Event Type',
-        render: (e: EventFieldsFragment) => (
-          <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />
-        ),
-        sticky: 'left',
-      },
-      {
-        header: 'Event Date',
-        render: (e: EventFieldsFragment) => parseAndFormatDate(e.eventDate),
-      },
-      {
-        header: 'Referral Result',
-        render: (e: EventFieldsFragment) => eventReferralResult(e),
-      },
-      {
-        ...BASE_ACTION_COLUMN_DEF,
-        render: (e: EventFieldsFragment) => (
-          <TableRowActions
-            record={e}
-            recordName={`${HmisEnums.EventType[e.event]} on ${parseAndFormatDate(e.eventDate)}`}
-            menuActionConfigs={[
-              {
-                title: 'View CE Event',
-                key: 'ce event',
-                ariaLabel: `View CE Event, ${HmisEnums.EventType[e.event]} on ${parseAndFormatDate(e.eventDate)}`,
-                onClick: () => onSelectRecord(e),
-              },
-            ]}
-          />
-        ),
-      },
-    ],
-    [onSelectRecord]
-  );
-
   if (!enrollment || !enrollmentId || !clientId || !ceEventFeature)
     return <NotFound />;
 
@@ -134,8 +111,12 @@ const EnrollmentCeEventsPage = () => {
         >
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentEventsDocument}
-          columns={columns}
-          handleRowClick={(row) => onSelectRecord(row)}
+          columns={COLUMNS}
+          rowActionTitle='View CE Event'
+          rowName={(row) =>
+            `${HmisEnums.EventType[row.event]} on ${parseAndFormatDate(row.eventDate)}`
+          }
+          handleRowClick={onSelectRecord}
           pagePath='enrollment.events'
           noData='No events'
           headerCellSx={() => ({ color: 'text.secondary' })}
