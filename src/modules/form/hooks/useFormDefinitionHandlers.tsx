@@ -67,8 +67,10 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
 
   const methods = useForm<T>({ defaultValues });
 
-  // Get form state, with "hidden" fields (and their children) removed
-  const getValues = useCallback(() => {
+  // Transforms form state by removing fields that are disabled and not visible.
+  // Most hidden disabled fields should already be removed from the form state by DependentFormItemWrapper,
+  // but this method ensures that all children of hidden items are removed as well.
+  const getRawValuesForSubmit = useCallback(() => {
     const values = methods.getValues();
     if (!definition) return values;
 
@@ -91,11 +93,13 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
 
     // Drop "hidden" fields and their children
     const cleaned = omit(values, excluded);
+    // Drop any keys that are prefixed with an underscore, which is a convention for attributes
+    // that should not be submitted to the backend (introduced in PR #281 for keys on multi-Name and multi-Address inputs)
     return dropUnderscorePrefixedKeys(cleaned);
   }, [methods, definition, itemMap, localConstants]);
 
   const getValuesForSubmit = useCallback(() => {
-    const vals = getValues();
+    const vals = getRawValuesForSubmit();
     return {
       // Example: { 'favorite_color': { code: 'light_blue', label: 'Light Blue' }, 'assessment_date': <JS Date Object> }
       rawValues: vals,
@@ -106,7 +110,7 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       // Stored as "hud_values" in FormProcessor, for dynamic form submission
       valuesByFieldName: createHudValuesForSubmit(vals, definition),
     };
-  }, [definition, getValues]);
+  }, [definition, getRawValuesForSubmit]);
 
   const getFieldErrors = useCallback(
     (item: FormItem) => {
@@ -136,7 +140,6 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       enabledDependencyMap,
       disabledDependencyMap,
       getFieldErrors,
-      getValues,
       getValuesForSubmit,
       resetDirty,
       viewOnly,
@@ -152,7 +155,6 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       enabledDependencyMap,
       disabledDependencyMap,
       getFieldErrors,
-      getValues,
       getValuesForSubmit,
       resetDirty,
       viewOnly,
