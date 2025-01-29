@@ -45,9 +45,8 @@ export interface DynamicFormProps
 }
 
 export interface DynamicFormRef {
-  SaveIfDirty: VoidFunction;
-  SubmitIfDirty: (ignoreWarnings: boolean) => void;
   SubmitForm: VoidFunction;
+  SaveDraftForm: VoidFunction;
 }
 
 export const DynamicFormWithoutHandlers = forwardRef<
@@ -91,25 +90,14 @@ export const DynamicFormWithoutHandlers = forwardRef<
       ref,
       () => ({
         SubmitForm: () => {
-          // onSubmit({ values: getCleanedValues(), confirmed: false, });
           onSubmit({ ...getValuesForSubmit(), confirmed: false });
         },
-        SaveIfDirty: () => {
-          if (!handlers.methods.formState.isDirty || props.locked) return;
+        SaveDraftForm: () => {
+          if (props.locked) return;
           handleSaveDraft();
         },
-        SubmitIfDirty: (ignoreWarnings: boolean) => {
-          if (!onSubmit || !handlers.methods.formState.isDirty || props.locked)
-            return;
-          onSubmit({
-            //values: getCleanedValues(),
-            ...getValuesForSubmit(),
-            confirmed: ignoreWarnings,
-            onSuccess: () => {},
-          });
-        },
       }),
-      [onSubmit, getValuesForSubmit, props, handlers, handleSaveDraft]
+      [onSubmit, getValuesForSubmit, props.locked, handleSaveDraft]
     );
 
     return (
