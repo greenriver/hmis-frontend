@@ -120,18 +120,6 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
     [errors]
   );
 
-  const isItemDisabled = useCallback(
-    (item: FormItem) => {
-      return !shouldEnableItem({
-        item,
-        itemMap,
-        localConstants,
-        values: getValues(),
-      });
-    },
-    [itemMap, localConstants, getValues]
-  );
-
   const resetDirty = useCallback(() => {
     methods.reset(undefined, { keepValues: true });
   }, [methods]);
@@ -147,11 +135,8 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       boundsInvertedDependencyMap,
       enabledDependencyMap,
       disabledDependencyMap,
-      // renderFormContainer,
       getFieldErrors,
-      // renderFormFields,
       getValues,
-      isItemDisabled,
       getValuesForSubmit,
       resetDirty,
       viewOnly,
@@ -166,11 +151,8 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
       boundsInvertedDependencyMap,
       enabledDependencyMap,
       disabledDependencyMap,
-      // renderFormContainer,
       getFieldErrors,
-      // renderFormFields,
       getValues,
-      isItemDisabled,
       getValuesForSubmit,
       resetDirty,
       viewOnly,
