@@ -10,6 +10,10 @@ import {
 } from '../util/formUtil';
 
 import Loading from '@/components/elements/Loading';
+import {
+  CONTEXT_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormProps,
@@ -56,7 +60,7 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   FormNavigationProps,
   inputVariables,
   localConstants: localConstantsProp,
-  top,
+  top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   minGroupsForLeftNav = 3,
   formRef,
   ...props
