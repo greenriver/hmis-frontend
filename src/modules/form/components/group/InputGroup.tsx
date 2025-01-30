@@ -4,17 +4,15 @@ import { ReactNode, useCallback, useId, useMemo } from 'react';
 
 import { GroupItemComponentProps } from '../../types';
 
+import DynamicFormFieldAutofillSummary from '@/modules/form/components/DynamicFormFieldAutofillSummary';
 import { FIXED_WIDTH_X_LARGE } from '@/modules/form/util/formUtil';
-import { formatCurrency } from '@/modules/hmis/hmisUtil';
 
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
 const InputGroup = ({
   item,
-  values,
   renderChildItem,
   viewOnly = false,
-  renderSummaryItem: renderSummaryItemProp,
   rowSx,
 }: GroupItemComponentProps) => {
   const [childItems, summaryItem] = useMemo(() => {
@@ -34,18 +32,6 @@ const InputGroup = ({
       [ItemType.Currency, ItemType.Integer].includes(childItemType),
     [childItemType]
   );
-
-  const defaultRenderSummaryItem = useCallback<
-    NonNullable<typeof renderSummaryItemProp>
-  >(
-    (item, isCurrency) => {
-      const value = values[item.linkId];
-      return isCurrency ? formatCurrency(value || 0) : value || 0;
-    },
-    [values]
-  );
-
-  const renderSummaryItem = renderSummaryItemProp || defaultRenderSummaryItem;
 
   const childProps = useMemo(
     () => ({ horizontal: isNumeric || viewOnly ? true : undefined }),
@@ -176,10 +162,11 @@ const InputGroup = ({
             sx={{ width: '120px', fontWeight: 600 }}
             data-testid='inputSum'
           >
-            {renderSummaryItem(
-              summaryItem,
-              childItemType === ItemType.Currency
-            )}
+            {/* this component watches form state to show an autofilled value (if specified on the item) */}
+            <DynamicFormFieldAutofillSummary
+              item={summaryItem}
+              isCurrency={childItemType === ItemType.Currency}
+            />
           </Typography>
         </Stack>
       )}

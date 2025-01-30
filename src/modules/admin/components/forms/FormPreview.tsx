@@ -17,11 +17,12 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import DynamicForm, {
+  DynamicFormOnSaveDraft,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import FormNavigationContainer from '@/modules/form/components/FormNavigationContainer';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
-import { FormValues } from '@/modules/form/types';
+
 import {
   AlwaysPresentLocalConstants,
   createInitialValuesFromSavedValues,
@@ -98,9 +99,11 @@ const FormPreview = () => {
   );
 
   const onSaveFormValues = useCallback(
-    (values: FormValues) =>
+    (values: Parameters<DynamicFormOnSaveDraft>[0]) =>
       formDefinition &&
-      setFormValues(createValuesForSubmit(values, formDefinition.definition)),
+      setFormValues(
+        createValuesForSubmit(values.rawValues, formDefinition.definition)
+      ),
     [formDefinition]
   );
 
@@ -164,9 +167,12 @@ const FormPreview = () => {
       <Stack direction='row' justifyContent='space-between' sx={{ mb: 4 }}>
         <CommonToggle
           value={toggleValue}
-          onChange={(value) => {
+          onChange={(value: PreviewMode) => {
             setToggleValue(value);
-            formRef.current?.SaveIfDirty();
+            // Trigger save to update `formValues` state when toggling away from Edit-mode
+            if (value === 'readOnly') {
+              formRef.current?.SaveDraftForm();
+            }
           }}
           items={toggleItems}
           size='small'

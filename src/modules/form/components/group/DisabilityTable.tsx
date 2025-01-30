@@ -62,15 +62,13 @@ const DisabilityTable = ({
     // Get all rows except the last one (Disabling Condition)
     const disabilityRows = item.item.slice(0, -1);
 
-    return disabilityRows
-      .map((i) => {
-        if (i.item[1].type === ItemType.Choice) {
-          return i.item[1].linkId;
-        } else {
-          return i.item[0].linkId;
-        }
-      })
-      .filter((id) => !!id);
+    return disabilityRows.map((i) => {
+      if (i.item[1].type === ItemType.Choice) {
+        return i.item[1].linkId; // second col is "indefinite and impairs"
+      } else {
+        return i.item[0].linkId; // lack of second col indicates that disability is alway considered indefinite and impairing
+      }
+    });
   }, [item]);
 
   const values = useDynamicFieldWatchValues(dependentLinkIds);

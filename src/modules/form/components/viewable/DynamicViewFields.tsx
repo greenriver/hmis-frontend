@@ -111,7 +111,7 @@ const DynamicViewFields: React.FC<DynamicViewFieldsProps> = ({
   ...props
 }) => {
   const definition = handlers.definition;
-  const values = handlers.getValues();
+  const values = handlers.methods.getValues();
 
   const itemChanged: ItemChangedFn = useCallback(
     ({ linkId, value: baseValue, type }) => {
