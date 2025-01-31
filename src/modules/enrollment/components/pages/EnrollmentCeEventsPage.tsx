@@ -30,6 +30,7 @@ const COLUMNS: ColumnDef<EventFieldsFragment>[] = [
     render: (e: EventFieldsFragment) => (
       <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />
     ),
+    maxWidth: '200px',
     sticky: 'left',
   },
   {
