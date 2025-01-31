@@ -259,6 +259,16 @@ const createThemeOptions = (theme: Theme) => ({
         }),
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          '&.Mui-focusVisible': {
+            outlineOffset: '0px',
+            backgroundColor: theme.palette.grayscale[200],
+          },
+        }),
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         sizeSmall: {

@@ -23,6 +23,7 @@ import { compact, get, includes, isNil, without } from 'lodash-es';
 import {
   ComponentType,
   ReactNode,
+  SyntheticEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -97,11 +98,7 @@ export const clickableRowStyles = {
   cursor: 'pointer',
 };
 
-const dontClickProps = {
-  // Prevent event propagation if the column disallows click
-  onClick: (event: { stopPropagation: VoidFunction }) =>
-    event.stopPropagation(),
-};
+const stopClickPropagation = (event: SyntheticEvent) => event.stopPropagation();
 
 export const getStickyCellStyles = ({
   sticky,
@@ -323,6 +320,8 @@ const GenericTable = <T extends { id: string }>({
       idx & 1 ? undefined : theme.palette.background.default,
   });
 
+  // The "table row actions" column is rendered by default if there are ANY row-click actions, unless explicitly hidden by `hideMenu`.
+  // If `hideMenu` is a function, we infer the menu is only hidden for certain rows, so the action col is still rendered.
   const hasTableRowActions =
     (!!rowLinkTo || !!handleRowClick || !!rowSecondaryActionConfigs) &&
     !(typeof hideMenu === 'boolean' && hideMenu);
@@ -394,15 +393,10 @@ const GenericTable = <T extends { id: string }>({
               </HeaderCell>
             );
           })}
+          {/* right-most column for row actions */}
           {hasTableRowActions && (
-            <HeaderCell
-              sx={{
-                ...getStickyCellStyles({
-                  sticky: 'right',
-                }),
-              }}
-            >
-              <Box sx={visuallyHidden}>{'Action'}</Box>
+            <HeaderCell sx={{ ...getStickyCellStyles({ sticky: 'right' }) }}>
+              <Box sx={visuallyHidden}>Action</Box>
             </HeaderCell>
           )}
         </TableRow>
@@ -494,21 +488,20 @@ const GenericTable = <T extends { id: string }>({
                 const isClickable = !!onClickHandler || !!rowLink;
 
                 const recordName = rowName?.(row) || row.id;
-                const ariaLabel = `${rowActionTitle}, ${recordName}`;
-                const secondaryActions = rowSecondaryActionConfigs?.(row);
                 const hideRowMenu =
                   typeof hideMenu === 'function' ? hideMenu(row) : hideMenu;
 
-                const tableRowActions = (
+                const tableRowActions = hasTableRowActions && !hideRowMenu && (
                   <TableRowActions
                     record={row}
                     recordName={recordName}
                     menuActionConfigs={[
+                      // first action in the menu is the row link or handleRowClick, if defined
                       ...(rowLink || handleRowClick
                         ? [
                             {
                               title: rowActionTitle,
-                              ariaLabel: ariaLabel,
+                              ariaLabel: `${rowActionTitle}, ${recordName}`,
                               to: rowLink,
                               onClick: () => handleRowClick?.(row),
                               key: 'primary',
@@ -516,7 +509,7 @@ const GenericTable = <T extends { id: string }>({
                             },
                           ]
                         : []),
-                      ...(secondaryActions || []),
+                      ...(rowSecondaryActionConfigs?.(row) || []),
                     ]}
                   />
                 );
@@ -544,15 +537,13 @@ const GenericTable = <T extends { id: string }>({
                           sticky: 'left',
                           stickyBorder: false,
                         })}
-                        {...dontClickProps}
+                        onClick={stopClickPropagation}
                       >
                         <Checkbox
                           color='primary'
                           disabled={!isSelectable}
                           checked={includes(selected, row.id)}
-                          inputProps={{
-                            'aria-label': `Select ${recordName}`,
-                          }}
+                          inputProps={{ 'aria-label': `Select ${recordName}` }}
                           onClick={
                             selectable === 'checkbox' && isSelectable
                               ? () => handleSelectRow(row)
@@ -591,8 +582,6 @@ const GenericTable = <T extends { id: string }>({
                             ...tableCellProps?.sx,
                           }}
                           role={sticky === 'left' ? 'rowheader' : undefined}
-                          tabIndex={-1}
-                          {...(dontLink ? dontClickProps : {})}
                         >
                           {isLinked
                             ? renderLinkedRowCellContents(
@@ -605,20 +594,18 @@ const GenericTable = <T extends { id: string }>({
                         </TableCell>
                       );
                     })}
-                    {hasTableRowActions && (
+                    {tableRowActions && (
                       <TableCell
                         sx={{
-                          ...getStickyCellStyles({
-                            sticky: 'right',
-                          }),
+                          ...getStickyCellStyles({ sticky: 'right' }),
                           width: '1%',
                           py: 0,
                           px: 1,
                           whiteSpace: 'nowrap',
                         }}
-                        {...dontClickProps}
+                        onClick={stopClickPropagation}
                       >
-                        {!hideRowMenu && tableRowActions}
+                        {tableRowActions}
                       </TableCell>
                     )}
                   </TableRow>
