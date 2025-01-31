@@ -78,17 +78,6 @@ export const CLIENT_COLUMNS: {
     key: 'age',
     render: (client) => asClient(client).age,
   },
-  linkedNameNewTab: {
-    header: 'Name',
-    key: 'name',
-    render: (client) => (
-      <ClientName
-        client={asClient(client)}
-        linkToProfile
-        routerLinkProps={{ openInNew: true }}
-      />
-    ),
-  },
   first: {
     header: 'First Name',
     render: (client) => asClient(client).firstName,
