@@ -25,6 +25,7 @@ const COLUMNS: ColumnDef<Row>[] = [
     key: 'project',
     header: 'Project Name',
     render: (row: Row) => row.enrollment.projectName,
+    maxWidth: '200px',
   },
   {
     ...CASE_NOTE_COLUMNS.LastUpdated,

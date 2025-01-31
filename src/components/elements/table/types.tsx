@@ -7,6 +7,7 @@ type BaseColumnDef<T> = {
   render: AttributeName<T> | RenderFunction<T>;
   width?: string;
   minWidth?: string;
+  maxWidth?: string;
   // whether to hide this column
   hide?: boolean;
   // whether to NOT link this cell even when the whole row is linked using rowLinkTo. Use if there are clickable elements in the cell.

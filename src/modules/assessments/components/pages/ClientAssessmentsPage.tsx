@@ -1,4 +1,5 @@
 import { Paper } from '@mui/material';
+import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -37,6 +38,28 @@ const ClientAssessmentsPage = () => {
     type: 'AssessmentFilterOptions',
   });
 
+  const rowLinkTo = useCallback(
+    (assessment: ClientAssessmentType) =>
+      generateAssessmentPath(
+        assessment,
+        client.id,
+        assessment.enrollment.id,
+        true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
+      ),
+    [client]
+  );
+
+  const rowSecondaryActionConfigs = useCallback(
+    (assessment: ClientAssessmentType) => [
+      {
+        ...getViewEnrollmentMenuItem(assessment.enrollment, client),
+        // override the default ariaLabel to provide the project name, since we are in the client context
+        ariaLabel: `View Enrollment at ${assessment.enrollment.projectName} for ${entryExitRange(assessment.enrollment)}`,
+      },
+    ],
+    [client]
+  );
+
   return (
     <>
       <PageTitle title='Assessments' />
@@ -50,23 +73,10 @@ const ClientAssessmentsPage = () => {
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
           columns={COLUMNS}
-          rowLinkTo={(assessment) =>
-            generateAssessmentPath(
-              assessment,
-              client.id,
-              assessment.enrollment.id,
-              true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
-            )
-          }
+          rowLinkTo={rowLinkTo}
           rowName={(assessment) => assessmentDescription(assessment)}
           rowActionTitle='View Assessment'
-          rowSecondaryActionConfigs={(assessment) => [
-            {
-              ...getViewEnrollmentMenuItem(assessment.enrollment, client),
-              // override the default ariaLabel to provide the project name, since we are in the client context
-              ariaLabel: `View Enrollment at ${assessment.enrollment.projectName} for ${entryExitRange(assessment.enrollment)}`,
-            },
-          ]}
+          rowSecondaryActionConfigs={rowSecondaryActionConfigs}
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
           noData='No assessments'

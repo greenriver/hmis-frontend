@@ -200,12 +200,20 @@ export const renderHeaderCellContents = <T extends { id: string }>(
  * This is factored out here in order to be reused by tables that use renderRow,
  * such as the ProjectHouseholdsTable.
  */
-export const renderLinkedRowCellContents = <T extends { id: string }>(
-  rowLink: To,
-  row: T,
-  render: ColumnDef<T>['render'],
-  rowLinkState: LocationState | undefined = undefined
-) => {
+type RenderLinkedRowCellContentsParams<T> = {
+  rowLink: To;
+  row: T;
+  render: ColumnDef<T>['render'];
+  rowLinkState?: LocationState;
+  tabbable?: boolean; // whether cell should be tabbable (usually first cell in row if there is no row action menu)
+};
+export const renderLinkedRowCellContents = <T extends { id: string }>({
+  rowLink,
+  row,
+  render,
+  rowLinkState = undefined,
+  tabbable = false,
+}: RenderLinkedRowCellContentsParams<T>) => {
   return (
     <RouterLink
       to={rowLink}
@@ -215,8 +223,10 @@ export const renderLinkedRowCellContents = <T extends { id: string }>(
         height: '100%',
         verticalAlign: 'middle',
         display: 'block',
+        // Offset the focus outline so it doesn't overlap the border
+        '&.Mui-focusVisible': { outlineOffset: '-2px' },
       }}
-      tabIndex={-1}
+      tabIndex={tabbable ? undefined : -1}
     >
       <Box
         sx={{
@@ -557,6 +567,7 @@ const GenericTable = <T extends { id: string }>({
                         render,
                         width,
                         minWidth,
+                        maxWidth,
                         dontLink = false,
                         textAlign,
                         tableCellProps,
@@ -576,6 +587,7 @@ const GenericTable = <T extends { id: string }>({
                             }),
                             width,
                             minWidth,
+                            maxWidth,
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
                             whiteSpace: 'initial',
@@ -584,12 +596,13 @@ const GenericTable = <T extends { id: string }>({
                           role={sticky === 'left' ? 'rowheader' : undefined}
                         >
                           {isLinked
-                            ? renderLinkedRowCellContents(
+                            ? renderLinkedRowCellContents({
                                 rowLink,
                                 row,
                                 render,
-                                rowLinkState
-                              )
+                                rowLinkState,
+                                tabbable: index === 0 && !tableRowActions,
+                              })
                             : renderCellContents(row, render)}
                         </TableCell>
                       );

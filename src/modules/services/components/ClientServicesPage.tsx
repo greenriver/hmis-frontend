@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -27,37 +27,24 @@ type ServiceType = NonNullable<
   NonNullable<GetClientServicesQuery['client']>['services']
 >['nodes'][0];
 
-const ClientServicesPage: React.FC<{
-  omitColumns?: string[];
-  enrollmentId?: string;
-}> = ({ omitColumns = [] }) => {
+const columns: ColumnDef<ServiceType>[] = [
+  { ...SERVICE_BASIC_COLUMNS.serviceDate, sticky: 'left' },
+  SERVICE_BASIC_COLUMNS.serviceType,
+  {
+    key: 'project',
+    header: 'Project Name',
+    render: (row) => row.enrollment.projectName,
+  },
+  {
+    ...SERVICE_COLUMNS.serviceDetails,
+    optional: true,
+    defaultHidden: true,
+  },
+];
+
+const ClientServicesPage: React.FC = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const { client } = useClientDashboardContext();
-
-  const columns = useMemo(
-    () =>
-      (
-        [
-          { ...SERVICE_BASIC_COLUMNS.serviceDate, sticky: 'left' },
-          SERVICE_BASIC_COLUMNS.serviceType,
-          {
-            key: 'project',
-            header: 'Project Name',
-            render: (row) => row.enrollment.projectName,
-          },
-          {
-            ...SERVICE_COLUMNS.serviceDetails,
-            optional: true,
-            defaultHidden: true,
-          },
-        ] as ColumnDef<ServiceType>[]
-      ).filter((col) => {
-        if (omitColumns.includes(col.key || '')) return false;
-
-        return true;
-      }),
-    [omitColumns]
-  );
 
   const filters = useFilters({
     type: 'ServiceFilterOptions',
