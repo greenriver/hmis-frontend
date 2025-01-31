@@ -51,7 +51,6 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       pagePath='enrollment.assessments'
       noData='No assessments'
       recordType='Assessment'
-      headerCellSx={() => ({ color: 'text.secondary' })}
     />
   );
 };

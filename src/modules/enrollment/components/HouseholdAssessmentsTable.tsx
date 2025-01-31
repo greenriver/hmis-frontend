@@ -66,7 +66,6 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
       pagePath='household.assessments'
       noData='No assessments'
       recordType='Assessment'
-      headerCellSx={() => ({ color: 'text.secondary' })}
     />
   );
 };

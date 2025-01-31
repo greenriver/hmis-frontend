@@ -143,7 +143,6 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           pagePath='enrollment.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'
-          headerCellSx={() => ({ color: 'text.secondary' })}
         />
       </TitleCard>
       {viewRecordDialog()}

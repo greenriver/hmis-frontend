@@ -134,7 +134,6 @@ const EnrollmentCeAssessmentsPage = () => {
           handleRowClick={canEditCeAssessments ? onSelectRecord : undefined}
           pagePath='enrollment.ceAssessments'
           noData='No Coordinated Entry Assessments'
-          headerCellSx={() => ({ color: 'text.secondary' })}
         />
       </TitleCard>
       {editRecordDialog()}

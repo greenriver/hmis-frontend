@@ -75,7 +75,6 @@ export interface Props<T> {
   noHead?: boolean;
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
-  headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
   selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
   isRowSelectable?: (row: T) => boolean;
   onChangeSelectedRowIds?: (ids: readonly string[]) => void;
@@ -265,7 +264,6 @@ const GenericTable = <T extends { id: string }>({
   tableProps,
   noHead = false,
   rowSx,
-  headerCellSx,
   selectable,
   isRowSelectable,
   onChangeSelectedRowIds,
@@ -382,7 +380,6 @@ const GenericTable = <T extends { id: string }>({
             </HeaderCell>
           )}
           {columns.map((def, i) => {
-            const headerStyles = headerCellSx ? headerCellSx(def) : {};
             return (
               <HeaderCell
                 key={getColumnKey(def) || i}
@@ -393,10 +390,6 @@ const GenericTable = <T extends { id: string }>({
                   }),
                   textAlign: def.textAlign,
                   width: def.width,
-                  // headerStyles has SxProps type so we can't spread it directly. https://mui.com/system/getting-started/the-sx-prop/#passing-the-sx-prop
-                  ...(Array.isArray(headerStyles)
-                    ? headerStyles
-                    : [headerStyles]),
                 }}
               >
                 {renderHeaderCellContents(def)}

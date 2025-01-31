@@ -119,7 +119,6 @@ const EnrollmentCeEventsPage = () => {
           handleRowClick={onSelectRecord}
           pagePath='enrollment.events'
           noData='No events'
-          headerCellSx={() => ({ color: 'text.secondary' })}
         />
       </TitleCard>
       {viewRecordDialog()}

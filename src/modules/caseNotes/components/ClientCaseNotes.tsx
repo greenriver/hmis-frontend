@@ -75,7 +75,6 @@ const ClientCaseNotes = () => {
           ]}
           pagePath='client.customCaseNotes'
           noData='No case notes'
-          headerCellSx={() => ({ color: 'text.secondary' })}
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar

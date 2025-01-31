@@ -103,7 +103,6 @@ const EnrollmentServicesPage = () => {
           noData='No services'
           recordType='Service'
           filters={filters}
-          headerCellSx={() => ({ color: 'text.secondary' })}
           noSort
         />
       </TitleCard>

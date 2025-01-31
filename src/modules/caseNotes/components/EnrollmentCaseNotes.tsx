@@ -161,7 +161,6 @@ const EnrollmentCaseNotes = () => {
           rowActionTitle='View Case Note'
           pagePath='enrollment.customCaseNotes'
           noData='No case notes'
-          headerCellSx={() => ({ color: 'text.secondary' })}
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar
