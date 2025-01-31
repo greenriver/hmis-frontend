@@ -2,10 +2,14 @@ import { useMemo } from 'react';
 
 import { RecentHouseholdMember } from '../types';
 
+import RelativeDate from '@/components/elements/RelativeDate';
 import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
-import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
+import {
+  getViewClientMenuItem,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
@@ -34,6 +38,17 @@ const AssociatedHouseholdMembers = ({
       CLIENT_COLUMNS.name,
       CLIENT_COLUMNS.age,
       { header: 'Project', render: (row) => row.projectName },
+      {
+        header: 'Date Associated',
+        render: (row) => (
+          <RelativeDate
+            dateString={row.enrollment.entryDate}
+            variant='body2'
+            prefix='Enrolled&nbsp;'
+            withTooltip
+          />
+        ),
+      },
       ...(additionalColumns || []),
     ];
   }, [additionalColumns]);
@@ -45,7 +60,10 @@ const AssociatedHouseholdMembers = ({
       <GenericTable<RecentHouseholdMember>
         rows={recentMembers || []}
         columns={columns}
-        rowSecondaryActionConfigs={(row) => [getViewClientMenuItem(row.client)]}
+        rowSecondaryActionConfigs={(row) => [
+          getViewClientMenuItem(row.client),
+          getViewEnrollmentMenuItem(row.enrollment, row.client),
+        ]}
         {...props}
       />
     </SsnDobShowContextProvider>
