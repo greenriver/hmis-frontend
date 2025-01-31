@@ -31,6 +31,7 @@ export const SERVICE_BASIC_COLUMNS: {
   serviceType: {
     header: 'Service Type',
     render: (s) => getServiceTypeForDisplay(s.serviceType),
+    maxWidth: '200px',
   },
 };
 

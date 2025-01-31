@@ -130,7 +130,7 @@ const BulkServicesTable: React.FC<Props> = ({
                   />
                 </Box>
               }
-              secondaryActionConfigs={[
+              menuActionConfigs={[
                 getViewClientMenuItem(row),
                 ...(row.activeEnrollment
                   ? [getViewEnrollmentMenuItem(row.activeEnrollment, row)]

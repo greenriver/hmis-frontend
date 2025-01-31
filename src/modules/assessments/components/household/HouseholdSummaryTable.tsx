@@ -58,7 +58,6 @@ const HouseholdSummaryTable = ({
       {
         header: 'Name',
         key: 'name',
-        linkTreatment: true,
         render: ({ clientName }) => (
           <Typography variant='body2'>{clientName}</Typography>
         ),

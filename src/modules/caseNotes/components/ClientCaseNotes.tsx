@@ -1,12 +1,7 @@
 import { Paper } from '@mui/material';
-
-import { useMemo } from 'react';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import {
-  BASE_ACTION_COLUMN_DEF,
-  getViewEnrollmentMenuItem,
-} from '@/components/elements/table/tableRowActionUtil';
+import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
+import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
@@ -24,6 +19,21 @@ type Row = NonNullable<
   GetClientCaseNotesQuery['client']
 >['customCaseNotes']['nodes'][0];
 
+const COLUMNS: ColumnDef<Row>[] = [
+  CASE_NOTE_COLUMNS.InformationDate,
+  {
+    key: 'project',
+    header: 'Project Name',
+    render: (row: Row) => row.enrollment.projectName,
+    maxWidth: '200px',
+  },
+  {
+    ...CASE_NOTE_COLUMNS.LastUpdated,
+    minWidth: '0',
+  },
+  CASE_NOTE_COLUMNS.NoteContentPreview,
+];
+
 const ClientCaseNotes = () => {
   const { client } = useClientDashboardContext();
 
@@ -36,41 +46,6 @@ const ClientCaseNotes = () => {
     recordName: 'Case Note',
     maxWidth: 'sm',
   });
-
-  const columns = useMemo(
-    () => [
-      CASE_NOTE_COLUMNS.InformationDate,
-      {
-        key: 'project',
-        header: 'Project Name',
-        render: (row: Row) => row.enrollment.projectName,
-      },
-      CASE_NOTE_COLUMNS.LastUpdated,
-      CASE_NOTE_COLUMNS.NoteContentPreview,
-      {
-        ...BASE_ACTION_COLUMN_DEF,
-        render: (row: Row) => (
-          <TableRowActions
-            record={row}
-            recordName={`${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`}
-            primaryActionConfig={{
-              title: 'View Case Note',
-              key: 'case note',
-              onClick: () => onSelectRecord(row),
-            }}
-            secondaryActionConfigs={[
-              {
-                ...getViewEnrollmentMenuItem(row.enrollment, client),
-                // override the default ariaLabel to provide the project name, since we are in the client context
-                ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
-              },
-            ]}
-          />
-        ),
-      },
-    ],
-    [client, onSelectRecord]
-  );
 
   if (!clientId) return <NotFound />;
 
@@ -85,10 +60,21 @@ const ClientCaseNotes = () => {
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientCaseNotesDocument}
-          columns={columns}
+          columns={COLUMNS}
+          handleRowClick={(row) => onSelectRecord(row)}
+          rowName={(row) =>
+            `${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`
+          }
+          rowActionTitle='View Case Note'
+          rowSecondaryActionConfigs={(row) => [
+            {
+              ...getViewEnrollmentMenuItem(row.enrollment, client),
+              // override the default ariaLabel to provide the project name, since we are in the client context
+              ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
+            },
+          ]}
           pagePath='client.customCaseNotes'
           noData='No case notes'
-          headerCellSx={() => ({ color: 'text.secondary' })}
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar

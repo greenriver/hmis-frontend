@@ -259,6 +259,16 @@ const createThemeOptions = (theme: Theme) => ({
         }),
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          '&.Mui-focusVisible': {
+            outlineOffset: '0px',
+            backgroundColor: theme.palette.grayscale[200],
+          },
+        }),
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         sizeSmall: {
@@ -309,16 +319,6 @@ const createThemeOptions = (theme: Theme) => ({
             outlineColor: '-webkit-focus-ring-color',
             outlineWidth: '2px',
             outlineStyle: 'auto',
-            outlineOffset: '4px',
-          },
-        },
-      },
-    },
-    MuiRadio: {
-      styleOverrides: {
-        root: {
-          '&.Mui-focusVisible': {
-            outlineOffset: '-6px',
           },
         },
       },
@@ -466,6 +466,10 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         root: {
           fontWeight: 600,
+          '&.Mui-focusVisible': {
+            // Expand outline on MuiButton (not MuiButtonBase) because this doesn't work for menu items, accordion, etc.
+            outlineOffset: '4px',
+          },
         },
         // Give 'text' variant Buttons the same horiztonal padding as outlined
         text: theme.unstable_sx({ px: 2 }),

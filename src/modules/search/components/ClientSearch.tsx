@@ -14,11 +14,7 @@ import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import {
-  BASE_ACTION_COLUMN_DEF,
-  getViewClientMenuItem,
-} from '@/components/elements/table/tableRowActionUtil';
+import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 
 import ClientName from '@/modules/client/components/ClientName';
@@ -82,17 +78,6 @@ export const CLIENT_COLUMNS: {
     key: 'age',
     render: (client) => asClient(client).age,
   },
-  linkedNameNewTab: {
-    header: 'Name',
-    key: 'name',
-    render: (client) => (
-      <ClientName
-        client={asClient(client)}
-        linkToProfile
-        routerLinkProps={{ openInNew: true }}
-      />
-    ),
-  },
   first: {
     header: 'First Name',
     render: (client) => asClient(client).firstName,
@@ -124,16 +109,6 @@ export const CLIENT_COLUMNS: {
 const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.name,
   CLIENT_COLUMNS.age,
-  {
-    ...BASE_ACTION_COLUMN_DEF,
-    render: (client) => (
-      <TableRowActions
-        record={client}
-        recordName={clientBriefName(client)}
-        primaryActionConfig={getViewClientMenuItem(client)}
-      />
-    ),
-  },
 ];
 
 /**
@@ -286,6 +261,9 @@ const ClientSearch = () => {
             queryDocument={SearchClientsDocument}
             onCompleted={() => setHasSearched(true)}
             columns={columns}
+            rowLinkTo={(client) => getViewClientMenuItem(client).to}
+            rowName={(row) => clientBriefName(row)}
+            rowActionTitle='View Client'
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
             filters={filters}

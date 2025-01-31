@@ -1,8 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
@@ -103,26 +101,9 @@ const EnrollmentCurrentLivingSituationsPage = () => {
         CLS_COLUMNS.livingSituation,
         CLS_COLUMNS.locationDetails,
         ...customColumns,
-        {
-          ...BASE_ACTION_COLUMN_DEF,
-          render: (cls: CurrentLivingSituationFieldsFragment) => (
-            <TableRowActions
-              record={cls}
-              recordName={
-                parseAndFormatDate(cls.informationDate) || 'unknown date'
-              }
-              primaryActionConfig={{
-                title: 'View CLS',
-                key: 'cls',
-                ariaLabel: `View Current Living Situation, ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`,
-                onClick: () => onSelectRecord(cls),
-              }}
-            />
-          ),
-        },
       ];
     },
-    [onSelectRecord]
+    []
   );
 
   if (!enrollment || !enrollmentId || !clientId || !clsFeature)
@@ -154,10 +135,14 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCurrentLivingSituationsDocument}
           getColumnDefs={getColumnDefs}
+          rowActionTitle='View Current Living Situation'
+          rowName={(row) =>
+            parseAndFormatDate(row.informationDate) || 'unknown date'
+          }
+          handleRowClick={onSelectRecord}
           pagePath='enrollment.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'
-          headerCellSx={() => ({ color: 'text.secondary' })}
         />
       </TitleCard>
       {viewRecordDialog()}
