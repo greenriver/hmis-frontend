@@ -27,8 +27,8 @@ import { RecentHouseholdMember } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import {
-  ClientFieldsFragment,
   ClientSearchInput,
+  ClientSearchResultFieldsFragment,
   ClientSortOption,
   EnrollmentFieldsFragment,
   ExternalIdentifierType,
@@ -90,24 +90,25 @@ const ManageHousehold = ({
   useScrollToHash(loading || recentMembersLoading);
   const isMobile = useIsMobile();
 
-  const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] =
-    useMemo(() => {
-      const defaults = [...householdMemberColumns];
-      if (isMobile) {
-        // On mobile, show enrollment button right next to the client name so user
-        // doesn't have to scroll to the right.
-        defaults.splice(1, 0, ...addToEnrollmentColumns);
-      } else {
-        defaults.push(...addToEnrollmentColumns);
-      }
-      if (globalFeatureFlags?.mciId) {
-        return [
-          externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
-          ...defaults,
-        ];
-      }
-      return defaults;
-    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
+  const columns: ColumnDef<
+    ClientSearchResultFieldsFragment | RecentHouseholdMember
+  >[] = useMemo(() => {
+    const defaults = [...householdMemberColumns];
+    if (isMobile) {
+      // On mobile, show enrollment button right next to the client name so user
+      // doesn't have to scroll to the right.
+      defaults.splice(1, 0, ...addToEnrollmentColumns);
+    } else {
+      defaults.push(...addToEnrollmentColumns);
+    }
+    if (globalFeatureFlags?.mciId) {
+      return [
+        externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
+        ...defaults,
+      ];
+    }
+    return defaults;
+  }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
 
   const filters = useFilters({
     type: 'ClientFilterOptions',
@@ -205,7 +206,7 @@ const ManageHousehold = ({
                 <GenericTableWithData<
                   SearchClientsQuery,
                   SearchClientsQueryVariables,
-                  ClientFieldsFragment
+                  ClientSearchResultFieldsFragment
                 >
                   queryVariables={{ input: searchInput }}
                   queryDocument={SearchClientsDocument}

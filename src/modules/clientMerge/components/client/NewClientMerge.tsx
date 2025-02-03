@@ -22,8 +22,8 @@ import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchFo
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  ClientFieldsFragment,
   ClientSearchInput,
+  ClientSearchResultFieldsFragment,
   ClientSortOption,
   SearchClientsDocument,
   SearchClientsQuery,
@@ -36,7 +36,7 @@ const NewClientMerge = () => {
   const { client } = useClientDashboardContext();
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [candidate, setCandidate] = useState<
-    ClientFieldsFragment | undefined
+    ClientSearchResultFieldsFragment | undefined
   >();
   const navigate = useNavigate();
 
@@ -65,22 +65,26 @@ const NewClientMerge = () => {
     });
   }, [candidate, client.id, mutation]);
 
-  const clientColumns: ColumnDef<ClientFieldsFragment>[] = useMemo(
+  const clientColumns: ColumnDef<ClientSearchResultFieldsFragment>[] = useMemo(
     () => [
       { header: 'HMIS ID', render: 'id' },
       CLIENT_COLUMNS.first,
       CLIENT_COLUMNS.last,
-      { ...CLIENT_COLUMNS.ssn, width: '150px' },
+      {
+        ...CLIENT_COLUMNS.ssn,
+        width: '150px',
+        hide: !client.access.canViewFullSsn && !client.access.canViewPartialSsn,
+      },
       { ...CLIENT_COLUMNS.dobAge, width: '180px' },
       {
         header: 'Gender',
-        render: (client: ClientFieldsFragment) => (
+        render: (client: ClientSearchResultFieldsFragment) => (
           <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
         ),
       },
       HudRecordMetadataHistoryColumn,
     ],
-    []
+    [client.access]
   );
 
   const filters = useFilters({
@@ -92,7 +96,7 @@ const NewClientMerge = () => {
       ...clientColumns,
       {
         key: 'mergeAction',
-        render: (record: ClientFieldsFragment) =>
+        render: (record: ClientSearchResultFieldsFragment) =>
           record.id === client.id ? (
             <Typography
               textAlign='center'
@@ -116,7 +120,7 @@ const NewClientMerge = () => {
       <Stack gap={4}>
         <TitleCard title='Current Client Record'>
           <SsnDobShowContextProvider>
-            <GenericTable<ClientFieldsFragment>
+            <GenericTable<ClientSearchResultFieldsFragment>
               columns={clientColumns}
               rows={[client]}
             />
@@ -148,9 +152,9 @@ const NewClientMerge = () => {
                 <GenericTableWithData<
                   SearchClientsQuery,
                   SearchClientsQueryVariables,
-                  ClientFieldsFragment
+                  ClientSearchResultFieldsFragment
                 >
-                  queryVariables={{ input: searchInput }}
+                  queryVariables={{ input: searchInput, includeSsn: true }}
                   queryDocument={SearchClientsDocument}
                   columns={columns}
                   pagePath='clientSearch'

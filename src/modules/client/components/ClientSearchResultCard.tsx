@@ -3,10 +3,7 @@ import { Grid, Skeleton, Stack, Typography } from '@mui/material';
 import { isEmpty, isNil } from 'lodash-es';
 import { Fragment, useMemo } from 'react';
 
-import {
-  ContextualClientDobAge,
-  ContextualClientSsn,
-} from '../providers/ClientSsnDobVisibility';
+import { ContextualClientDobAge } from '../providers/ClientSsnDobVisibility';
 
 import ClientCardImageElement from './ClientCardImageElement';
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -21,7 +18,6 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
@@ -169,16 +165,6 @@ const ClientSearchResultCard: React.FC<Props> = ({
                 >
                   <ContextualClientDobAge client={client} />
                 </CommonLabeledTextBlock>
-              )}
-              {client.ssn && (
-                <ClientPermissionsFilter
-                  id={client.id}
-                  permissions={['canViewFullSsn', 'canViewPartialSsn']}
-                >
-                  <CommonLabeledTextBlock title='SSN:' horizontal>
-                    <ContextualClientSsn client={client} />
-                  </CommonLabeledTextBlock>
-                </ClientPermissionsFilter>
               )}
             </Stack>
           </Stack>

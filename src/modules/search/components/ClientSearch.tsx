@@ -16,6 +16,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/ClientSearchResultCard';
@@ -37,8 +38,8 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { Routes } from '@/routes/routes';
 import {
-  ClientFieldsFragment,
   ClientSearchInput as ClientSearchInputType,
+  ClientSearchResultFieldsFragment,
   ClientSortOption,
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
@@ -51,7 +52,7 @@ import {
 
 function asClient(
   record:
-    | ClientFieldsFragment
+    | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
     | ProjectEnrollmentsHouseholdClientFieldsFragment
@@ -62,12 +63,14 @@ function asClient(
 }
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<
-    | ClientFieldsFragment
+    // | ClientFieldsFragment
+    | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
     | ProjectEnrollmentsHouseholdClientFieldsFragment
   >;
 } = {
+  id: { header: 'HMIS ID', render: 'id' },
   name: {
     header: 'Client Name',
     key: 'name',
@@ -106,10 +109,16 @@ export const CLIENT_COLUMNS: {
   },
 };
 
-const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
-  CLIENT_COLUMNS.name,
-  CLIENT_COLUMNS.age,
-];
+export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
+  [
+    CLIENT_COLUMNS.id,
+    CLIENT_COLUMNS.first,
+    CLIENT_COLUMNS.last,
+    { ...CLIENT_COLUMNS.dobAge, width: '180px' },
+  ];
+
+export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
+  [CLIENT_COLUMNS.id, CLIENT_COLUMNS.name, CLIENT_COLUMNS.dobAge];
 
 /**
  * Client Search page
@@ -129,14 +138,11 @@ const ClientSearch = () => {
   // whether search has occurred
   const [hasSearched, setHasSearched] = useState(false);
 
+  const isMobile = useIsMobile();
+
   const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
     null
   );
-
-  const [canViewSsn] = useHasRootPermissions([
-    'canViewFullSsn',
-    'canViewPartialSsn',
-  ]);
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
@@ -146,15 +152,21 @@ const ClientSearch = () => {
     if (displayType === 'cards') {
       return [];
     }
-    let baseColumns = SEARCH_RESULT_COLUMNS;
+    let baseColumns = isMobile
+      ? MOBILE_SEARCH_RESULT_COLUMNS
+      : SEARCH_RESULT_COLUMNS;
     if (globalFeatureFlags?.mciId) {
       baseColumns = [
         externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
         ...baseColumns,
       ];
     }
+    if (!canViewDob)
+      baseColumns = baseColumns.map((c) =>
+        c.key === 'dob' ? { ...c, header: 'Age' } : c
+      );
     return baseColumns;
-  }, [globalFeatureFlags, displayType]);
+  }, [isMobile, globalFeatureFlags, displayType, canViewDob]);
 
   useEffect(() => {
     // if search params are derived, we don't want to perform a search on them
@@ -255,7 +267,7 @@ const ClientSearch = () => {
           <GenericTableWithData<
             SearchClientsQuery,
             SearchClientsQueryVariables,
-            ClientFieldsFragment
+            ClientSearchResultFieldsFragment
           >
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
@@ -294,18 +306,11 @@ const ClientSearch = () => {
                 : undefined
             }
             toolbars={
-              displayType === 'cards' && (canViewDob || canViewSsn)
+              displayType === 'cards' && canViewDob
                 ? [
                     <Stack direction='row-reverse' gap={2}>
                       {canViewDob && (
                         <ContextualDobToggleButton
-                          sx={{ p: 0 }}
-                          variant='text'
-                          size='small'
-                        />
-                      )}
-                      {canViewSsn && (
-                        <ContextualSsnToggleButton
                           sx={{ p: 0 }}
                           variant='text'
                           size='small'

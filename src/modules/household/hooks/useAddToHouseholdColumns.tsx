@@ -4,7 +4,7 @@ import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
 import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
 import {
-  ClientFieldsFragment,
+  ClientSearchResultFieldsFragment,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
 
@@ -66,7 +66,9 @@ export default function useAddToHouseholdColumns({
         key: 'add',
         width: '10%',
         minWidth: '180px',
-        render: (record: ClientFieldsFragment | RecentHouseholdMember) => {
+        render: (
+          record: ClientSearchResultFieldsFragment | RecentHouseholdMember
+        ) => {
           const client = isRecentHouseholdMember(record)
             ? record.client
             : record;

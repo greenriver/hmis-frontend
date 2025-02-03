@@ -7,9 +7,12 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientIdentificationFieldsFragment,
   ClientNameFragment,
+  ClientSsnFieldsFragment,
 } from '@/types/gqlTypes';
 
-type ClientType = ClientNameFragment & ClientIdentificationFieldsFragment;
+type ClientType = ClientNameFragment &
+  ClientIdentificationFieldsFragment &
+  ClientSsnFieldsFragment;
 
 interface Props {
   clients: ClientType[];
