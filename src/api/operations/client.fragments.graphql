@@ -134,6 +134,7 @@ fragment ClientIdentificationFields on Client {
   dob
   age
   gender
+  pronouns
 }
 
 fragment ClientSsnFields on Client {

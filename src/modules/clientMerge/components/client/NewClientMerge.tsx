@@ -17,7 +17,10 @@ import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import {
+  CLIENT_COLUMNS,
+  CLIENT_SSN_COLUMN,
+} from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -71,7 +74,7 @@ const NewClientMerge = () => {
       CLIENT_COLUMNS.first,
       CLIENT_COLUMNS.last,
       {
-        ...CLIENT_COLUMNS.ssn,
+        ...CLIENT_SSN_COLUMN,
         width: '150px',
         hide: !client.access.canViewFullSsn && !client.access.canViewPartialSsn,
       },

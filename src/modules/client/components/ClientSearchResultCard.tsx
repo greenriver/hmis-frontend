@@ -23,7 +23,7 @@ import {
   EnrollmentDashboardRoutes,
 } from '@/routes/routes';
 import {
-  ClientFieldsFragment,
+  ClientSearchResultFieldsFragment,
   ExternalIdentifierType,
   GetClientEnrollmentsQuery,
   useGetClientEnrollmentsQuery,
@@ -76,7 +76,7 @@ const RecentEnrollments = ({
 };
 
 interface Props {
-  client: ClientFieldsFragment;
+  client: ClientSearchResultFieldsFragment;
   linkTargetBlank?: boolean;
   hideImage?: boolean;
 }
@@ -170,26 +170,24 @@ const ClientSearchResultCard: React.FC<Props> = ({
           </Stack>
           {client.dateUpdated && (
             <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-              Last Updated on {lastUpdatedBy(client.dateUpdated, client.user)}
+              Last Updated on {lastUpdatedBy(client.dateUpdated)}
             </Typography>
           )}
         </Stack>
       </Grid>
 
       <Grid item xs={5} lg={6}>
-        {client.access.canViewEnrollmentDetails &&
-          recentEnrollments &&
-          recentEnrollments?.length > 0 && (
-            <>
-              <Typography variant='h6' sx={{ mb: 1 }}>
-                Recent Enrollments
-              </Typography>
-              <RecentEnrollments
-                recentEnrollments={recentEnrollments}
-                clientId={client.id}
-              />
-            </>
-          )}
+        {recentEnrollments && recentEnrollments?.length > 0 && (
+          <>
+            <Typography variant='h6' sx={{ mb: 1 }}>
+              Recent Enrollments
+            </Typography>
+            <RecentEnrollments
+              recentEnrollments={recentEnrollments}
+              clientId={client.id}
+            />
+          </>
+        )}
       </Grid>
       <Grid item xs={2}>
         <Typography variant='h6' sx={{ mb: 1 }}>

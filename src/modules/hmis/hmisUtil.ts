@@ -33,6 +33,7 @@ import {
   ClientImageFieldsFragment,
   ClientNameDobVetFragment,
   ClientNameFragment,
+  ClientSearchResultFieldsFragment,
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   DataCollectedAbout,
@@ -311,7 +312,9 @@ export const lastUpdatedBy = (
   return dateString;
 };
 
-export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
+export const pronouns = (
+  client: ClientSearchResultFieldsFragment | ClientFieldsFragment
+): React.ReactNode =>
   client.pronouns && client.pronouns.length > 0
     ? client.pronouns.join(', ')
     : null;

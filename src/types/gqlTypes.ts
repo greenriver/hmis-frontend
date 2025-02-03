@@ -8065,6 +8065,7 @@ export type ClientAccessFieldsFragment = {
   canViewFullSsn: boolean;
   canViewPartialSsn: boolean;
   canViewClientName: boolean;
+  canViewClientPhoto: boolean;
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
@@ -15465,6 +15466,7 @@ export type BulkServicesClientSearchQuery = {
       dob?: string | null;
       age?: number | null;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       alerts: Array<{
         __typename?: 'ClientAlert';
         id: string;
@@ -15565,6 +15567,7 @@ export type ClientSearchResultFieldsFragment = {
   dob?: string | null;
   age?: number | null;
   gender: Array<Gender>;
+  pronouns: Array<string>;
   ssn?: string | null;
   externalIds: Array<{
     __typename?: 'ExternalIdentifier';
@@ -15660,6 +15663,7 @@ export type ClientFieldsFragment = {
     canDeleteClient: boolean;
     canViewDob: boolean;
     canViewClientName: boolean;
+    canViewClientPhoto: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -15954,6 +15958,7 @@ export type ClientIdentificationFieldsFragment = {
   dob?: string | null;
   age?: number | null;
   gender: Array<Gender>;
+  pronouns: Array<string>;
 };
 
 export type ClientSsnFieldsFragment = {
@@ -16046,6 +16051,7 @@ export type SearchClientsQuery = {
       dob?: string | null;
       age?: number | null;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       ssn?: string | null;
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -16149,6 +16155,7 @@ export type GetClientQuery = {
       canDeleteClient: boolean;
       canViewDob: boolean;
       canViewClientName: boolean;
+      canViewClientPhoto: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -16390,6 +16397,7 @@ export type GetClientPermissionsQuery = {
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
+      canViewClientPhoto: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -16893,6 +16901,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               dob?: string | null;
               age?: number | null;
               gender: Array<Gender>;
+              pronouns: Array<string>;
               ssn?: string | null;
               race: Array<Race>;
               veteranStatus: NoYesReasonsForMissingData;
@@ -16905,6 +16914,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canViewFullSsn: boolean;
                 canViewPartialSsn: boolean;
                 canViewClientName: boolean;
+                canViewClientPhoto: boolean;
                 canEditEnrollments: boolean;
                 canDeleteEnrollments: boolean;
                 canViewEnrollmentDetails: boolean;
@@ -17647,6 +17657,7 @@ export type GetMergeCandidatesQuery = {
         dob?: string | null;
         age?: number | null;
         gender: Array<Gender>;
+        pronouns: Array<string>;
         ssn?: string | null;
         access: {
           __typename?: 'ClientAccess';
@@ -17802,6 +17813,7 @@ export type MergeClientsMutation = {
         canDeleteClient: boolean;
         canViewDob: boolean;
         canViewClientName: boolean;
+        canViewClientPhoto: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -20068,6 +20080,7 @@ export type ProjectEnrollmentFieldsFragment = {
     lockVersion: number;
     age?: number | null;
     gender: Array<Gender>;
+    pronouns: Array<string>;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -20295,6 +20308,7 @@ export type EnrolledClientFieldsFragment = {
     canViewFullSsn: boolean;
     canViewPartialSsn: boolean;
     canViewClientName: boolean;
+    canViewClientPhoto: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -20604,6 +20618,7 @@ export type AllEnrollmentDetailsFragment = {
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
+      canViewClientPhoto: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -21953,6 +21968,7 @@ export type GetEnrollmentDetailsQuery = {
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
         canViewClientName: boolean;
+        canViewClientPhoto: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -22605,6 +22621,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           dob?: string | null;
           age?: number | null;
           gender: Array<Gender>;
+          pronouns: Array<string>;
           ssn?: string | null;
           race: Array<Race>;
           veteranStatus: NoYesReasonsForMissingData;
@@ -22617,6 +22634,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canViewFullSsn: boolean;
             canViewPartialSsn: boolean;
             canViewClientName: boolean;
+            canViewClientPhoto: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -30054,6 +30072,7 @@ export type SubmitFormMutation = {
             canDeleteClient: boolean;
             canViewDob: boolean;
             canViewClientName: boolean;
+            canViewClientPhoto: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -33183,6 +33202,7 @@ export type HouseholdFieldsFragment = {
       dob?: string | null;
       age?: number | null;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       ssn?: string | null;
       race: Array<Race>;
       veteranStatus: NoYesReasonsForMissingData;
@@ -33195,6 +33215,7 @@ export type HouseholdFieldsFragment = {
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
         canViewClientName: boolean;
+        canViewClientPhoto: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -33264,6 +33285,7 @@ export type HouseholdClientFieldsFragment = {
     dob?: string | null;
     age?: number | null;
     gender: Array<Gender>;
+    pronouns: Array<string>;
     ssn?: string | null;
     race: Array<Race>;
     veteranStatus: NoYesReasonsForMissingData;
@@ -33276,6 +33298,7 @@ export type HouseholdClientFieldsFragment = {
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
+      canViewClientPhoto: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -33349,6 +33372,7 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       dob?: string | null;
       age?: number | null;
       gender: Array<Gender>;
+      pronouns: Array<string>;
     };
     enrollment: {
       __typename?: 'Enrollment';
@@ -33390,6 +33414,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     dob?: string | null;
     age?: number | null;
     gender: Array<Gender>;
+    pronouns: Array<string>;
   };
   enrollment: {
     __typename?: 'Enrollment';
@@ -33428,6 +33453,7 @@ export type GetHouseholdQuery = {
         dob?: string | null;
         age?: number | null;
         gender: Array<Gender>;
+        pronouns: Array<string>;
         ssn?: string | null;
         race: Array<Race>;
         veteranStatus: NoYesReasonsForMissingData;
@@ -33440,6 +33466,7 @@ export type GetHouseholdQuery = {
           canViewFullSsn: boolean;
           canViewPartialSsn: boolean;
           canViewClientName: boolean;
+          canViewClientPhoto: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -35301,6 +35328,7 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
     lockVersion: number;
     age?: number | null;
     gender: Array<Gender>;
+    pronouns: Array<string>;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -35658,6 +35686,7 @@ export type GetProjectEnrollmentsQuery = {
           lockVersion: number;
           age?: number | null;
           gender: Array<Gender>;
+          pronouns: Array<string>;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -35707,6 +35736,7 @@ export type GetProjectHouseholdsQuery = {
             dob?: string | null;
             age?: number | null;
             gender: Array<Gender>;
+            pronouns: Array<string>;
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -37041,6 +37071,7 @@ export type UpdateReferralPostingMutation = {
           nameSuffix?: string | null;
           dob?: string | null;
           age?: number | null;
+          pronouns: Array<string>;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -37050,6 +37081,7 @@ export type UpdateReferralPostingMutation = {
             canViewFullSsn: boolean;
             canViewPartialSsn: boolean;
             canViewClientName: boolean;
+            canViewClientPhoto: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -37305,6 +37337,7 @@ export type GetReferralPostingQuery = {
         nameSuffix?: string | null;
         dob?: string | null;
         age?: number | null;
+        pronouns: Array<string>;
         access: {
           __typename?: 'ClientAccess';
           id: string;
@@ -37314,6 +37347,7 @@ export type GetReferralPostingQuery = {
           canViewFullSsn: boolean;
           canViewPartialSsn: boolean;
           canViewClientName: boolean;
+          canViewClientPhoto: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -37609,6 +37643,7 @@ export type ReferralPostingDetailFieldsFragment = {
       nameSuffix?: string | null;
       dob?: string | null;
       age?: number | null;
+      pronouns: Array<string>;
       access: {
         __typename?: 'ClientAccess';
         id: string;
@@ -37618,6 +37653,7 @@ export type ReferralPostingDetailFieldsFragment = {
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
         canViewClientName: boolean;
+        canViewClientPhoto: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -40579,6 +40615,7 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
     dob
     age
     gender
+    pronouns
   }
 `;
 export const ClientSsnFieldsFragmentDoc = gql`
@@ -40649,6 +40686,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewFullSsn
     canViewPartialSsn
     canViewClientName
+    canViewClientPhoto
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails

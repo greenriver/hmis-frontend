@@ -41,6 +41,7 @@ import {
   ClientSearchInput as ClientSearchInputType,
   ClientSearchResultFieldsFragment,
   ClientSortOption,
+  ClientSsnFieldsFragment,
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
@@ -61,6 +62,7 @@ function asClient(
   if (isEnrollment(record)) return record.client;
   return record;
 }
+
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<
     // | ClientFieldsFragment
@@ -89,14 +91,6 @@ export const CLIENT_COLUMNS: {
     header: 'Last Name',
     render: (client) => asClient(client).lastName,
   },
-  ssn: {
-    header: (
-      <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
-    ),
-    key: 'ssn',
-    render: (client) => <ContextualClientSsn client={asClient(client)} />,
-    dontLink: true,
-  },
   dobAge: {
     header: (
       <Stack direction='row' justifyContent='space-between'>
@@ -107,6 +101,15 @@ export const CLIENT_COLUMNS: {
     render: (client) => <ContextualClientDobAge client={asClient(client)} />,
     dontLink: true,
   },
+};
+
+export const CLIENT_SSN_COLUMN: ColumnDef<ClientSsnFieldsFragment> = {
+  header: (
+    <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
+  ),
+  key: 'ssn',
+  render: (client) => <ContextualClientSsn client={client} />,
+  dontLink: true,
 };
 
 export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =

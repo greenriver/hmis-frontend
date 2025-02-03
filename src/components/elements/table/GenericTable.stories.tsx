@@ -9,7 +9,10 @@ import {
   clientBriefName,
   getCustomDataElementColumns,
 } from '@/modules/hmis/hmisUtil';
-import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import {
+  CLIENT_COLUMNS,
+  CLIENT_SSN_COLUMN,
+} from '@/modules/search/components/ClientSearch';
 import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
 
@@ -37,7 +40,7 @@ const Template =
 const clientColumns = [
   CLIENT_COLUMNS.first,
   CLIENT_COLUMNS.last,
-  CLIENT_COLUMNS.ssn,
+  CLIENT_SSN_COLUMN,
   CLIENT_COLUMNS.dobAge,
 ];
 
