@@ -509,6 +509,7 @@ const GenericTable = <T extends { id: string }>({
                               onClick: () => handleRowClick?.(row),
                               key: 'primary',
                               disabled: rowActionDisabled,
+                              linkState: rowLinkState,
                             },
                           ]
                         : []),

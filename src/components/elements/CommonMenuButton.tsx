@@ -117,6 +117,7 @@ const CommonMenuButton = ({
             disabled,
             ariaLabel,
             openInNew,
+            linkState,
           }) =>
             divider ? (
               <Divider key={key} />
@@ -127,6 +128,7 @@ const CommonMenuButton = ({
                 to={to}
                 aria-label={ariaLabel}
                 openInNew={openInNew}
+                state={linkState}
               >
                 {title}
               </MenuItem>
