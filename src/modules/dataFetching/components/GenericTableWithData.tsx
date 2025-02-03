@@ -89,7 +89,6 @@ export interface Props<
   applyOptionalColumns?: (columns: string[]) => Partial<QueryVariables>;
   onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
-  labelRowsPerPage?: string;
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -137,7 +136,6 @@ const GenericTableWithData = <
   paginationItemName,
   filterRows,
   vertical,
-  labelRowsPerPage,
   ...props
 }: Props<
   Query,
@@ -253,7 +251,7 @@ const GenericTableWithData = <
         setPage(0);
       },
       count: nodesCount,
-      labelRowsPerPage,
+      labelRowsPerPage: `${pluralize(startCase(paginationItemName || recordType || 'Row'))} per page:`,
     };
   }, [
     nonTablePagination,
@@ -261,7 +259,8 @@ const GenericTableWithData = <
     rowsPerPage,
     page,
     rowsPerPageOptions,
-    labelRowsPerPage,
+    recordType,
+    paginationItemName,
     defaultPageSize,
   ]);
 
