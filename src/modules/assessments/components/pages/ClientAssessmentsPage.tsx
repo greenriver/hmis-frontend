@@ -22,12 +22,12 @@ import {
 
 const COLUMNS: ColumnDef<ClientAssessmentType>[] = [
   { ...ASSESSMENT_COLUMNS.date, sticky: 'left' },
+  ASSESSMENT_COLUMNS.type,
+  ASSESSMENT_COLUMNS.lastUpdated,
   {
     header: 'Project Name',
     render: (row: ClientAssessmentType) => row.enrollment.projectName,
   },
-  ASSESSMENT_COLUMNS.type,
-  ASSESSMENT_COLUMNS.lastUpdated,
 ];
 
 const ClientAssessmentsPage = () => {
