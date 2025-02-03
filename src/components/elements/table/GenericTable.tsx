@@ -213,32 +213,47 @@ export const renderLinkedRowCellContents = <T extends { id: string }>({
   rowLinkState = undefined,
   tabbable = false,
 }: RenderLinkedRowCellContentsParams<T>) => {
+  // Rendering a RouterLink inside every cell degrades tab-navigation and screen-reader UX.
+  // Therefore, normally, we place the row's link action in the TableRowActions menu, ensuring accessibility
+  // for tab and screen-reader users. Each cell is then made non-tabbable, and links are hidden
+  // from screen-readers using `aria-hidden`. To maintain accessibility, cell contents are
+  // rendered as `visuallyHidden` so they are still read aloud without being announced as links.
+  // HOWEVER, for some tables that don't have a TableRowActions menu, we make at least one cell
+  // in the row (usually the first one) tabbable and accessible by screen-reader.
+  const isInaccessibleLink = !tabbable;
+
   return (
-    <RouterLink
-      to={rowLink}
-      state={rowLinkState}
-      plain
-      sx={{
-        height: '100%',
-        verticalAlign: 'middle',
-        display: 'block',
-        // Offset the focus outline so it doesn't overlap the border
-        '&.Mui-focusVisible': { outlineOffset: '-2px' },
-      }}
-      tabIndex={tabbable ? undefined : -1}
-    >
-      <Box
+    <>
+      <RouterLink
+        to={rowLink}
+        state={rowLinkState}
+        plain
+        aria-hidden={isInaccessibleLink}
         sx={{
-          display: 'flex',
           height: '100%',
-          alignItems: 'center',
-          px: 2,
-          py: 2,
+          verticalAlign: 'middle',
+          display: 'block',
+          // Offset the focus outline so it doesn't overlap the border
+          '&.Mui-focusVisible': { outlineOffset: '-2px' },
         }}
+        tabIndex={tabbable ? undefined : -1}
       >
-        {renderCellContents(row, render)}
-      </Box>
-    </RouterLink>
+        <Box
+          sx={{
+            display: 'flex',
+            height: '100%',
+            alignItems: 'center',
+            px: 2,
+            py: 2,
+          }}
+        >
+          {renderCellContents(row, render)}
+        </Box>
+      </RouterLink>
+      {isInaccessibleLink && (
+        <Box sx={visuallyHidden}>{renderCellContents(row, render)}</Box>
+      )}
+    </>
   );
 };
 
