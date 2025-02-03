@@ -234,6 +234,7 @@ const ProjectHouseholdsTable = ({
           </TableBody>
         );
       }}
+      labelRowsPerPage='Households per page: '
       belowRowsContent={
         <TableBody>
           <CustomDividerRow colSpan={(columns || defaultColumns).length} />
