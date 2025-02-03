@@ -357,6 +357,7 @@ const GenericTable = <T extends { id: string }>({
   ) : (
     <TableHead>
       {hasHeaders && (
+        // Set backgroundColor here in order to make sticky columns non-transparent
         <TableRow sx={{ backgroundColor: 'background.paper' }}>
           {selectable && (
             <HeaderCell
@@ -386,6 +387,7 @@ const GenericTable = <T extends { id: string }>({
                 sx={{
                   ...getStickyCellStyles({
                     sticky: def.sticky,
+                    // The select (checkbox) col is always sticky, so add additional sticky offset here if it is present
                     leftOffset: selectable ? '46px' : 0,
                   }),
                   textAlign: def.textAlign,
@@ -499,7 +501,7 @@ const GenericTable = <T extends { id: string }>({
                     record={row}
                     recordName={recordName}
                     menuActionConfigs={[
-                      // first action in the menu is the row link or handleRowClick, if defined
+                      // first action in the menu is the row link or handleRowClick, if defined, for accessibility
                       ...(rowLink || handleRowClick
                         ? [
                             {
@@ -522,6 +524,7 @@ const GenericTable = <T extends { id: string }>({
                   <TableRow
                     key={row.id}
                     sx={{
+                      // Set backgroundColor here in order to make sticky columns non-transparent
                       backgroundColor: 'background.paper',
                       ...(isClickable && clickableRowStyles),
                       ...(!!rowSx && rowSx(row)),
@@ -588,6 +591,8 @@ const GenericTable = <T extends { id: string }>({
                             ...tableCellProps?.sx,
                           }}
                           role={sticky === 'left' ? 'rowheader' : undefined}
+                          // Reuse `dontLink` to prevent click propagation if the row has a click handler, but the cell has a more specific click target
+                          onClick={dontLink ? stopClickPropagation : undefined}
                         >
                           {isLinked
                             ? renderLinkedRowCellContents({
