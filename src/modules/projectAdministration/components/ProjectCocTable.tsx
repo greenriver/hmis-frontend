@@ -21,7 +21,6 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const columns: ColumnDef<ProjectCocFieldsFragment>[] = [
   {
     header: 'CoC Code',
-    linkTreatment: true,
     render: 'cocCode',
   },
   {
@@ -79,6 +78,8 @@ const ProjectCocTable = (props: Props) => {
                 })
             : undefined
         }
+        rowActionTitle='Edit CoC'
+        rowName={(row) => row.cocCode || row.id}
         {...props}
       />
     </>

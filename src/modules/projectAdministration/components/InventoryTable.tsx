@@ -103,6 +103,7 @@ const InventoryTable = () => {
         pagePath='project.inventories'
         noData='No inventory'
         handleRowClick={(record) => setViewingRecord(record)}
+        rowActionTitle='View Inventory'
       />
       {viewingRecord && (
         <ViewRecordDialog<InventoryFieldsFragment>

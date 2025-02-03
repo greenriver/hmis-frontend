@@ -51,7 +51,6 @@ const columns: ColumnDef<OutgoingReferral>[] = [
   },
   {
     header: 'Project Referred To',
-    linkTreatment: true,
     render: ({ id, referredTo, project }: OutgoingReferral) => {
       if (!project) return referredTo; // user does not have access to the full project object, so just show the project name
 

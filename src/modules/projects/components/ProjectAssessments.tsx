@@ -1,17 +1,13 @@
 import { Paper } from '@mui/material';
-import { useMemo } from 'react';
 import { useProjectDashboardContext } from './ProjectDashboard';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import {
-  BASE_ACTION_COLUMN_DEF,
-  getViewAssessmentMenuItem,
-  getViewEnrollmentMenuItem,
-} from '@/components/elements/table/tableRowActionUtil';
+import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
+import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
+  generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -28,45 +24,19 @@ export type ProjectAssessmentType = NonNullable<
   GetProjectAssessmentsQuery['project']
 >['assessments']['nodes'][number];
 
+const COLUMNS: ColumnDef<ProjectAssessmentType>[] = [
+  ASSESSMENT_CLIENT_NAME_COL,
+  ASSESSMENT_COLUMNS.date,
+  ASSESSMENT_COLUMNS.type,
+  WITH_ENROLLMENT_COLUMNS.entryDate,
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+];
+
 const ProjectAssessments = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
   const { project } = useProjectDashboardContext();
-
-  const columns = useMemo(() => {
-    return [
-      ASSESSMENT_CLIENT_NAME_COL,
-      ASSESSMENT_COLUMNS.date,
-      ASSESSMENT_COLUMNS.type,
-      WITH_ENROLLMENT_COLUMNS.entryDate,
-      WITH_ENROLLMENT_COLUMNS.exitDate,
-      {
-        ...BASE_ACTION_COLUMN_DEF,
-        render: (record: ProjectAssessmentType) => (
-          <TableRowActions
-            record={record}
-            recordName={assessmentDescription(record)}
-            primaryActionConfig={{
-              ...getViewAssessmentMenuItem(
-                record,
-                record.enrollment.client.id,
-                record.enrollment.id,
-                true // open the assessment for individual viewing, even if it's an intake/exit in a multimember household
-              ),
-              linkState: { backToLabel: project.projectName },
-            }}
-            secondaryActionConfigs={[
-              getViewEnrollmentMenuItem(
-                record.enrollment,
-                record.enrollment.client
-              ),
-            ]}
-          />
-        ),
-      },
-    ];
-  }, [project]);
 
   const filters = useFilters({
     type: 'AssessmentsForProjectFilterOptions',
@@ -84,7 +54,21 @@ const ProjectAssessments = () => {
         >
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectAssessmentsDocument}
-          columns={columns}
+          columns={COLUMNS}
+          rowLinkTo={(row) =>
+            generateAssessmentPath(
+              row,
+              row.enrollment.client.id,
+              row.enrollment.id,
+              true
+            )
+          }
+          rowLinkState={{ backToLabel: project.projectName }}
+          rowName={(row) => assessmentDescription(row)}
+          rowActionTitle='View Assessment'
+          rowSecondaryActionConfigs={(row) => [
+            getViewEnrollmentMenuItem(row.enrollment, row.enrollment.client),
+          ]}
           noData='No assessments'
           pagePath='project.assessments'
           recordType='Assessment'

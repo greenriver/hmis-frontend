@@ -1,9 +1,5 @@
 import { Paper } from '@mui/material';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import {
-  BASE_ACTION_COLUMN_DEF,
-  getViewEnrollmentMenuItem,
-} from '@/components/elements/table/tableRowActionUtil';
+import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -33,29 +29,6 @@ const COLUMNS: ColumnDef<ProjectCurrentLivingSituationFieldsFragment>[] = [
   CLS_COLUMNS.livingSituation,
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
-  {
-    ...BASE_ACTION_COLUMN_DEF,
-    render: (cls) => (
-      <TableRowActions
-        record={cls}
-        recordName={`${clientBriefName(cls.client)} ${parseAndFormatDate(cls.informationDate) || 'unknown date'}`}
-        primaryActionConfig={{
-          title: 'View CLS',
-          key: 'cls',
-          to: generateSafePath(
-            EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-            {
-              clientId: cls.client.id,
-              enrollmentId: cls.enrollment.id,
-            }
-          ),
-        }}
-        secondaryActionConfigs={[
-          getViewEnrollmentMenuItem(cls.enrollment, cls.client),
-        ]}
-      />
-    ),
-  },
 ];
 
 const ProjectCurrentLivingSituations = () => {
@@ -75,6 +48,22 @@ const ProjectCurrentLivingSituations = () => {
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectCurrentLivingSituationsDocument}
           columns={COLUMNS}
+          rowLinkTo={(row) =>
+            generateSafePath(
+              EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
+              {
+                clientId: row.client.id,
+                enrollmentId: row.enrollment.id,
+              }
+            )
+          }
+          rowName={(row) =>
+            `${clientBriefName(row.client)} ${parseAndFormatDate(row.informationDate) || 'unknown date'}`
+          }
+          rowActionTitle='View Current Living Situation'
+          rowSecondaryActionConfigs={(row) => [
+            getViewEnrollmentMenuItem(row.enrollment, row.client),
+          ]}
           pagePath='project.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'

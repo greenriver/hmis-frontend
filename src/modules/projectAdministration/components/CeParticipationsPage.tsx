@@ -139,6 +139,7 @@ const CeParticipationsPage = () => {
           handleRowClick={
             project.access.canEditProjectDetails ? onSelectRecord : undefined
           }
+          rowActionTitle='Edit CE Participation'
         />
       </Paper>
       {editRecordDialog()}

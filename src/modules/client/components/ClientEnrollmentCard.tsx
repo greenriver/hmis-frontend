@@ -93,6 +93,7 @@ const RecentEnrollments = ({
             })
           : null
       }
+      hideMenu
     />
   );
 };

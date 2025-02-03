@@ -103,6 +103,7 @@ const HmisParticipationsPage = () => {
           handleRowClick={
             project.access.canEditProjectDetails ? onSelectRecord : undefined
           }
+          rowActionTitle='Edit HMIS Participation'
         />
       </Paper>
       {editRecordDialog()}
