@@ -678,9 +678,11 @@ export const findHohOrRep = (
   householdClients: HouseholdClientFieldsFragment[]
 ) => {
   // It's invalid, but possible in case of bad data, to have no HoH. If so (rare), return the first household member
+  const sorted = sortHouseholdMembers(householdClients);
   return (
-    householdClients.find(
-      (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-    ) || householdClients[0]
+    sorted.find(
+      ({ relationshipToHoH }) =>
+        relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+    ) || sorted[0]
   );
 };

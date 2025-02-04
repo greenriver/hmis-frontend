@@ -24,21 +24,21 @@ import {
 
 interface Props {
   open: boolean;
-  conflictingEnrollmentId: string;
+  initiatorEnrollmentId: string;
+  receivingHousehold: HouseholdFieldsFragment;
+  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName'>;
   onClose: VoidFunction;
   onComplete?: (
     joinedHousehold: HouseholdFieldsFragment,
     remainingHousehold?: HouseholdFieldsFragment | null
   ) => void;
-  receivingHousehold: HouseholdFieldsFragment;
-  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName'>;
 }
 
 const JoinHouseholdDialog = ({
   open,
   onClose,
   onComplete,
-  conflictingEnrollmentId,
+  initiatorEnrollmentId,
   receivingHousehold,
   project,
 }: Props) => {
@@ -50,41 +50,38 @@ const JoinHouseholdDialog = ({
     Record<string, RelationshipToHoH | null>
   >({});
 
-  // Fetch the conflicting enrollment by ID since we need the full EnrollmentWithHousehold
+  // Fetch the initiator's enrollment by ID since we need the full EnrollmentWithHousehold
   const {
-    data: { enrollment: conflictingEnrollment } = {},
+    data: { enrollment: initiatorEnrollment } = {},
     loading: fetchLoading,
     error: fetchError,
   } = useGetEnrollmentWithHouseholdQuery({
-    variables: {
-      id: conflictingEnrollmentId,
-    },
+    variables: { id: initiatorEnrollmentId },
     onCompleted: (data) => {
-      if (data?.enrollment?.household) {
-        const household = data?.enrollment?.household;
-        const initiator = household?.householdClients.find(
-          (hc) => hc.enrollment.id === conflictingEnrollmentId
-        );
+      const household = data?.enrollment?.household;
 
-        if (initiator) {
-          // Once the household loads, set the joining clients list to the initiating client
-          // (the one with the conflicting enrollment), plus if they are the HoH, all their household members.
-          if (
-            initiator.relationshipToHoH ===
-            RelationshipToHoH.SelfHeadOfHousehold
-          ) {
-            setJoiningClients(sortHouseholdMembers(household.householdClients));
-          } else {
-            setJoiningClients([initiator]);
-          }
-        }
+      const initiator = household?.householdClients.find(
+        (hc) => hc.enrollment.id === initiatorEnrollmentId
+      );
+
+      if (!household || !initiator) {
+        throw new Error(`Enrollment ${initiatorEnrollmentId} not found`);
+      }
+
+      // Set the joining clients list to the initiator client, plus, if they are the HoH, all their household members.
+      if (
+        initiator.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+      ) {
+        setJoiningClients(sortHouseholdMembers(household.householdClients));
+      } else {
+        setJoiningClients([initiator]);
       }
     },
   });
 
   const donorHousehold = useMemo(
-    () => conflictingEnrollment?.household,
-    [conflictingEnrollment]
+    () => initiatorEnrollment?.household,
+    [initiatorEnrollment]
   );
 
   const receivingHoh = useMemo(
