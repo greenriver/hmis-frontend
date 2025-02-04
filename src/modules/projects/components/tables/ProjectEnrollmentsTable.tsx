@@ -1,46 +1,31 @@
 import PersonIcon from '@mui/icons-material/Person';
 import { Box, Grid } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-import ProjectClientEnrollmentsTable, {
-  EnrollmentFields,
-} from './ProjectClientEnrollmentsTable';
+import ProjectClientEnrollmentsTable from './ProjectClientEnrollmentsTable';
 import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 
 import CommonToggle from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import { HouseholdIcon } from '@/components/elements/SemanticIcons';
-import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ClientSearchInput from '@/modules/search/components/ClientTextSearchInput';
 
 type Mode = 'clients' | 'households';
 
-const ProjectEnrollmentsTable = ({
-  projectId,
-  columns,
-  openOnDate,
-  searchable = true,
-  mode: modeProp,
-  initialMode: initialModeProp = 'clients',
-}: {
-  mode?: Mode;
-  initialMode?: Mode;
+interface Props {
   projectId: string;
-  columns?: ColumnDef<EnrollmentFields>[];
-  linkRowToEnrollment?: boolean;
-  openOnDate?: Date;
-  searchable?: boolean;
-}) => {
+}
+const ProjectEnrollmentsTable: React.FC<Props> = ({ projectId }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const [mode, setMode] = useState<Mode>(modeProp || initialModeProp);
+  const [mode, setMode] = useState<Mode>('clients');
 
   return (
     <>
       <Box py={2} px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Grid container direction='row' rowSpacing={2} columnSpacing={4}>
-          {!modeProp && (
+          {
             <Grid item>
               <LabelWithContent
                 label='View enrollments by'
@@ -80,9 +65,9 @@ const ProjectEnrollmentsTable = ({
                 )}
               />
             </Grid>
-          )}
+          }
           <Grid item flexGrow={1}>
-            {searchable ? (
+            {true ? (
               <ClientSearchInput
                 value={search || ''}
                 onChange={setSearch}
@@ -94,17 +79,14 @@ const ProjectEnrollmentsTable = ({
       </Box>
       {mode === 'clients' && (
         <ProjectClientEnrollmentsTable
-          columns={columns}
           searchTerm={debouncedSearch || undefined}
           projectId={projectId}
-          openOnDate={openOnDate}
         />
       )}
       {mode === 'households' && (
         <ProjectHouseholdsTable
           searchTerm={debouncedSearch || undefined}
           projectId={projectId}
-          openOnDate={openOnDate}
         />
       )}
     </>
