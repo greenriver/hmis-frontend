@@ -28,16 +28,13 @@ interface Props {
   receivingHousehold: HouseholdFieldsFragment;
   project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName'>;
   onClose: VoidFunction;
-  onComplete?: (
-    joinedHousehold: HouseholdFieldsFragment,
-    remainingHousehold?: HouseholdFieldsFragment | null
-  ) => void;
+  onSuccess?: (joinedHousehold: HouseholdFieldsFragment) => void;
 }
 
 const JoinHouseholdDialog = ({
   open,
   onClose,
-  onComplete,
+  onSuccess,
   initiatorEnrollmentId,
   receivingHousehold,
   project,
@@ -116,7 +113,7 @@ const JoinHouseholdDialog = ({
     joinedHousehold,
     remainingEnrollment,
   } = usePerformJoinHousehold({
-    onComplete,
+    onSuccess,
     receivingHousehold,
     joiningClients,
     relationships,

@@ -8,16 +8,14 @@ import {
 } from '@/types/gqlTypes';
 
 export function usePerformJoinHousehold({
-  onComplete,
+  // todo @martha - move these into arguments to the onSubmit
+  onSuccess,
   receivingHousehold,
   joiningClients,
   relationships,
   missingRelationshipsCount,
 }: {
-  onComplete?: (
-    joinedHousehold: HouseholdFieldsFragment,
-    remainingHousehold?: HouseholdFieldsFragment | null
-  ) => void;
+  onSuccess?: (joinedHousehold: HouseholdFieldsFragment) => void;
   receivingHousehold: HouseholdFieldsFragment;
   joiningClients: HouseholdClientFieldsFragment[];
   relationships: Record<string, RelationshipToHoH | null>;
@@ -36,7 +34,7 @@ export function usePerformJoinHousehold({
       if (data.joinHousehold) {
         setJoinedHousehold(data.joinHousehold.receivingHousehold);
         setRemainingEnrollment(data.joinHousehold.donorEnrollment || undefined);
-        onComplete?.(data.joinHousehold.receivingHousehold);
+        onSuccess?.(data.joinHousehold.receivingHousehold);
       }
     },
   });
