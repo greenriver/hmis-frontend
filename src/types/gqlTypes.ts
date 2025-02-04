@@ -3952,7 +3952,7 @@ export type JoinHouseholdPayload = {
   __typename?: 'JoinHouseholdPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
-  donorHousehold?: Maybe<Household>;
+  donorEnrollment?: Maybe<Enrollment>;
   errors: Array<ValidationError>;
   receivingHousehold: Household;
 };
@@ -33616,6 +33616,20 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
   };
 };
 
+export type EnrollmentWithClientNameFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  client: {
+    __typename?: 'Client';
+    id: string;
+    lockVersion: number;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+};
+
 export type JoinHouseholdMutationVariables = Exact<{
   input: JoinHouseholdInput;
 }>;
@@ -33713,94 +33727,18 @@ export type JoinHouseholdMutation = {
         };
       }>;
     };
-    donorHousehold?: {
-      __typename?: 'Household';
+    donorEnrollment?: {
+      __typename?: 'Enrollment';
       id: string;
-      householdSize: number;
-      shortId: string;
-      householdClients: Array<{
-        __typename?: 'HouseholdClient';
+      client: {
+        __typename?: 'Client';
         id: string;
-        relationshipToHoH: RelationshipToHoH;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-          dob?: string | null;
-          age?: number | null;
-          ssn?: string | null;
-          gender: Array<Gender>;
-          race: Array<Race>;
-          veteranStatus: NoYesReasonsForMissingData;
-          access: {
-            __typename?: 'ClientAccess';
-            id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-            canEditClient: boolean;
-            canDeleteClient: boolean;
-            canViewDob: boolean;
-            canViewClientName: boolean;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-            canViewEnrollmentDetails: boolean;
-            canDeleteAssessments: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canViewAnyConfidentialClientFiles: boolean;
-            canViewAnyNonconfidentialClientFiles: boolean;
-            canUploadClientFiles: boolean;
-            canViewAnyFiles: boolean;
-            canAuditClients: boolean;
-            canManageScanCards: boolean;
-            canMergeClients: boolean;
-            canViewClientAlerts: boolean;
-            canManageClientAlerts: boolean;
-          };
-          externalIds: Array<{
-            __typename?: 'ExternalIdentifier';
-            id: string;
-            identifier?: string | null;
-            url?: string | null;
-            label: string;
-            type: ExternalIdentifierType;
-          }>;
-          alerts: Array<{
-            __typename?: 'ClientAlert';
-            id: string;
-            note: string;
-            expirationDate?: string | null;
-            createdAt: string;
-            priority: ClientAlertPriorityLevel;
-            createdBy?: {
-              __typename: 'ApplicationUser';
-              id: string;
-              name: string;
-              firstName?: string | null;
-              lastName?: string | null;
-              email: string;
-            } | null;
-          }>;
-        };
-        enrollment: {
-          __typename?: 'Enrollment';
-          id: string;
-          lockVersion: number;
-          autoExited: boolean;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
-          currentUnit?: {
-            __typename?: 'Unit';
-            id: string;
-            name: string;
-          } | null;
-        };
-      }>;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
     } | null;
   } | null;
 };
@@ -41979,6 +41917,15 @@ export const ProjectEnrollmentsHouseholdFieldsFragmentDoc = gql`
   ${ProjectEnrollmentsHouseholdClientFieldsFragmentDoc}
   ${HouseholdWithStaffAssignmentsFragmentDoc}
 `;
+export const EnrollmentWithClientNameFieldsFragmentDoc = gql`
+  fragment EnrollmentWithClientNameFields on Enrollment {
+    id
+    client {
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
 export const InventoryFieldsFragmentDoc = gql`
   fragment InventoryFields on Inventory {
     availability
@@ -49934,12 +49881,13 @@ export const JoinHouseholdDocument = gql`
       receivingHousehold {
         ...HouseholdFields
       }
-      donorHousehold {
-        ...HouseholdFields
+      donorEnrollment {
+        ...EnrollmentWithClientNameFields
       }
     }
   }
   ${HouseholdFieldsFragmentDoc}
+  ${EnrollmentWithClientNameFieldsFragmentDoc}
 `;
 export type JoinHouseholdMutationFn = Apollo.MutationFunction<
   JoinHouseholdMutation,

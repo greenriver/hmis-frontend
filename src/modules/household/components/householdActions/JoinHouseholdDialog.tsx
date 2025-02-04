@@ -1,6 +1,6 @@
 import { MergeTypeRounded } from '@mui/icons-material';
 import { Typography } from '@mui/material';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import StepDialog, { TabDefinition } from '@/components/elements/StepDialog';
 import {
@@ -13,13 +13,13 @@ import AddRelationshipsStep from '@/modules/household/components/householdAction
 import JoinHouseholdReview from '@/modules/household/components/householdActions/JoinHouseholdReview';
 import JoinHouseholdSelectClients from '@/modules/household/components/householdActions/JoinHouseholdSelectClients';
 import SuccessWayfindingStep from '@/modules/household/components/householdActions/SuccessWayfindingStep';
+import { usePerformJoinHousehold } from '@/modules/household/hooks/usePerformJoinHousehold';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
   ProjectAllFieldsFragment,
   RelationshipToHoH,
   useGetEnrollmentWithHouseholdQuery,
-  useJoinHouseholdMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -112,54 +112,19 @@ const JoinHouseholdDialog = ({
     };
   }, [missingRelationshipsCount]);
 
-  const [joinedHousehold, setJoinedHousehold] = useState<
-    HouseholdFieldsFragment | undefined
-  >(undefined);
-  const [remainingHousehold, setRemainingHousehold] = useState<
-    HouseholdFieldsFragment | undefined
-  >(undefined);
-  const [joinHousehold, { loading: joinLoading, error: joinError }] =
-    useJoinHouseholdMutation({
-      onCompleted: (data) => {
-        if (data.joinHousehold) {
-          setJoinedHousehold(data.joinHousehold.receivingHousehold);
-          setRemainingHousehold(data.joinHousehold.donorHousehold || undefined);
-          onComplete?.(
-            data.joinHousehold.receivingHousehold,
-            data.joinHousehold.donorHousehold
-          );
-        }
-      },
-    });
-
-  const onSubmit = useCallback(() => {
-    if (missingRelationshipsCount > 0) return; // This should never happen; the button will be disabled
-
-    joinHousehold({
-      variables: {
-        input: {
-          receivingHouseholdId: receivingHousehold.id,
-          joiningEnrollmentInputs: joiningClients.map((hc) => {
-            return {
-              // todo @martha - discuss, should we use enrollmentLockVersion?
-              enrollmentId: hc.enrollment.id,
-              // `|| RelationshipToHoH.DataNotCollected` is to keep typescript happy;
-              // thanks to the missingRelationshipsCount logic, we know the relationships will be non-null
-              relationshipToHoh:
-                relationships[hc.enrollment.id] ||
-                RelationshipToHoH.DataNotCollected,
-            };
-          }),
-        },
-      },
-    });
-  }, [
-    missingRelationshipsCount,
+  const {
     joinHousehold,
-    receivingHousehold.id,
+    loading: joinLoading,
+    error: joinError,
+    joinedHousehold,
+    remainingEnrollment,
+  } = usePerformJoinHousehold({
+    onComplete,
+    receivingHousehold,
     joiningClients,
     relationships,
-  ]);
+    missingRelationshipsCount,
+  });
 
   const tabDefinitions: TabDefinition[] = useMemo(
     () => [
@@ -257,7 +222,7 @@ const JoinHouseholdDialog = ({
             title={'Successful Join'}
             description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}`}
             primaryClientName={receivingHohName}
-            secondary={findHohOrRep(remainingHousehold?.householdClients || [])}
+            secondary={remainingEnrollment}
             project={project}
             onClose={onClose}
           />
@@ -268,7 +233,7 @@ const JoinHouseholdDialog = ({
       fullWidth
       maxWidth='lg'
       onClose={onClose}
-      onSubmit={onSubmit}
+      onSubmit={joinHousehold}
       tabDefinitions={tabDefinitions}
     />
   );

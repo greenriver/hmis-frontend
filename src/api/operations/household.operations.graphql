@@ -3,8 +3,8 @@ mutation JoinHousehold($input: JoinHouseholdInput!) {
     receivingHousehold {
       ...HouseholdFields
     }
-    donorHousehold {
-      ...HouseholdFields
+    donorEnrollment {
+      ...EnrollmentWithClientNameFields
     }
   }
 }
