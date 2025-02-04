@@ -67,13 +67,11 @@ const ProjectEnrollmentsTable: React.FC<Props> = ({ projectId }) => {
             </Grid>
           }
           <Grid item flexGrow={1}>
-            {true ? (
-              <ClientSearchInput
-                value={search || ''}
-                onChange={setSearch}
-                helperText={null}
-              />
-            ) : undefined}
+            <ClientSearchInput
+              value={search || ''}
+              onChange={setSearch}
+              helperText={null}
+            />
           </Grid>
         </Grid>
       </Box>
