@@ -192,12 +192,8 @@ export const renderHeaderCellContents = <T extends { id: string }>(
 };
 
 /*
- * When a row is linked (`rowLinkTo` is defined), we render an `<a>` inside
- * every cell, so the whole row is clickable. But the cells are not tabbable
- * and don't have focus treatment, to enable tabbing through the table quickly.
- *
- * This is factored out here in order to be reused by tables that use renderRow,
- * such as the ProjectHouseholdsTable.
+ * When a row is linked (`rowLinkTo` is defined), we render an `<a>` inside every cell, so the whole row is clickable.
+ * This is factored out here in order to be reused by tables that use renderRow, such as the ProjectHouseholdsTable.
  */
 type RenderLinkedRowCellContentsParams<T> = {
   rowLink: To;
@@ -213,21 +209,39 @@ export const renderLinkedRowCellContents = <T extends { id: string }>({
   rowLinkState = undefined,
   tabbable = false,
 }: RenderLinkedRowCellContentsParams<T>) => {
-  // Rendering a RouterLink inside every cell degrades tab-navigation and screen-reader UX.
-  // Therefore, normally, we place the row's link action in the TableRowActions menu, ensuring accessibility
-  // for tab and screen-reader users. Each cell is then made non-tabbable, and links are hidden
-  // from screen-readers using `aria-hidden`. To maintain accessibility, cell contents are
-  // rendered as `visuallyHidden` so they are still read aloud without being announced as links.
+  // Rendering <a> inside every cell degrades tab-navigation and screen-reader UX.
+  // So, we normally *also* put the row link as an action in the TableRowActions menu,
+  // and then make each cell link non-tabbable and hidden from screenreaders.
   // HOWEVER, for some tables that don't have a TableRowActions menu, we make at least one cell
-  // in the row (usually the first one) tabbable and accessible by screen-reader.
+  // in the row (usually the first one) tabbable and accessible.
   const isInaccessibleLink = !tabbable;
+
+  const cellContents = (
+    <Box
+      sx={{
+        display: 'flex',
+        height: '100%',
+        alignItems: 'center',
+        px: 2,
+        py: 2,
+      }}
+    >
+      {renderCellContents(row, render)}
+    </Box>
+  );
 
   return (
     <>
+      {/* Render contents inside an `a` tag, to ensure each cell is clickable. */}
       <RouterLink
         to={rowLink}
         state={rowLinkState}
         plain
+        // Make cells non-tabbable, to enable tabbing through the table quickly,
+        // UNLESS tabbable is explicitly specified (usually for the first cell in row if there is no row action menu).
+        tabIndex={tabbable ? undefined : -1}
+        // For isInaccessibleLink cells (non-tabbable), use aria-hidden to hide the link element.
+        // Contents are rendered alongside as visually-hidden, so the screenreader still reads them (see below)
         aria-hidden={isInaccessibleLink}
         sx={{
           height: '100%',
@@ -236,23 +250,11 @@ export const renderLinkedRowCellContents = <T extends { id: string }>({
           // Offset the focus outline so it doesn't overlap the border
           '&.Mui-focusVisible': { outlineOffset: '-2px' },
         }}
-        tabIndex={tabbable ? undefined : -1}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            height: '100%',
-            alignItems: 'center',
-            px: 2,
-            py: 2,
-          }}
-        >
-          {renderCellContents(row, render)}
-        </Box>
+        {cellContents}
       </RouterLink>
-      {isInaccessibleLink && (
-        <Box sx={visuallyHidden}>{renderCellContents(row, render)}</Box>
-      )}
+      {/* If the RouterLink was aria-hidden, render the contents as visually hidden alongside */}
+      {isInaccessibleLink && <Box sx={visuallyHidden}>{cellContents}</Box>}
     </>
   );
 };
