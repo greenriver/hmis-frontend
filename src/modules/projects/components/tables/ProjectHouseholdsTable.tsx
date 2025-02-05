@@ -1,9 +1,11 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
 import {
+  clickableRowStyles,
   getColumnKey,
   getStickyCellStyles,
   renderCellContents,
+  renderLinkedRowCellContents,
 } from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -15,12 +17,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import {
-  clientBriefName,
-  formatDateForDisplay,
-  formatDateForGql,
-  sortHouseholdMembers,
-} from '@/modules/hmis/hmisUtil';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   ASSIGNED_STAFF_COL,
@@ -54,7 +51,10 @@ export const HOUSEHOLD_CLIENT_COLUMNS: Record<
       <HmisEnum
         key={householdClient.id}
         value={householdClient.relationshipToHoH}
-        enumMap={HmisEnums.RelationshipToHoH}
+        enumMap={{
+          ...HmisEnums.RelationshipToHoH,
+          SELF_HEAD_OF_HOUSEHOLD: 'HoH', // HoH, instead of "Self (HoH)"
+        }}
         whiteSpace='nowrap'
       />
     ),
@@ -76,11 +76,13 @@ const ACTION_COL: ColumnDef<OneHouseholdClient> = {
     <TableRowActions
       record={householdClient}
       recordName={clientBriefName(householdClient.client)}
-      primaryActionConfig={getViewEnrollmentMenuItem(
-        householdClient.enrollment,
-        householdClient.client
-      )}
-      secondaryActionConfigs={[getViewClientMenuItem(householdClient.client)]}
+      menuActionConfigs={[
+        getViewEnrollmentMenuItem(
+          householdClient.enrollment,
+          householdClient.client
+        ),
+        getViewClientMenuItem(householdClient.client),
+      ]}
     />
   ),
 };
@@ -101,7 +103,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
   const cellSx = useCallback(
     (col?: ColumnDef<ProjectEnrollmentsHouseholdClientFieldsFragment>) => {
       return {
-        py: 0.5,
+        p: 0,
         ...(lastInGroup ? { borderBottom: 0 } : {}),
         ...getStickyCellStyles({ sticky: col?.sticky }),
       };
@@ -109,23 +111,36 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
     [lastInGroup]
   );
 
+  const rowLink = getViewEnrollmentMenuItem(
+    householdClient.enrollment,
+    householdClient.client
+  ).to;
+
   return (
-    <TableRow key={household.id + householdClient.id}>
+    <TableRow sx={clickableRowStyles} key={household.id + householdClient.id}>
       {PROJECT_HOUSEHOLD_COLUMNS.map((col, i) => (
         <TableCell
           key={getColumnKey(col) || i}
           role={i === 0 ? 'rowheader' : undefined}
           sx={cellSx(col)}
         >
-          {renderCellContents(householdClient, col.render)}
+          {renderLinkedRowCellContents({
+            rowLink,
+            row: householdClient,
+            render: col.render,
+          })}
         </TableCell>
       ))}
       {showAssignedStaff && (
         <TableCell sx={cellSx()}>
-          {renderCellContents(household, ASSIGNED_STAFF_COL.render)}
+          {renderLinkedRowCellContents({
+            rowLink,
+            row: household,
+            render: ASSIGNED_STAFF_COL.render,
+          })}
         </TableCell>
       )}
-      <TableCell sx={cellSx(ACTION_COL)}>
+      <TableCell sx={{ ...cellSx(ACTION_COL), px: 1 }}>
         {renderCellContents(householdClient, ACTION_COL.render)}
       </TableCell>
     </TableRow>
@@ -148,35 +163,23 @@ const CustomDividerRow = ({ colSpan }: { colSpan: number }) => (
   </TableRow>
 );
 
-const ProjectHouseholdsTable = ({
-  projectId,
-  columns,
-  openOnDate,
-  searchTerm,
-}: {
+interface Props {
   projectId: string;
-  columns?: ColumnDef<HouseholdFields>[];
-  openOnDate?: Date;
   searchTerm?: string;
-}) => {
-  const openOnDateString = useMemo(
-    () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
-    [openOnDate]
-  );
+}
 
+const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
   const {
     project: { staffAssignmentsEnabled },
   } = useProjectDashboardContext();
 
   // dummy column defs for Household that are only used for the headers, not for rendering cells
-  const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
+  const columns: ColumnDef<HouseholdFields>[] = useMemo(() => {
     return [
       ...PROJECT_HOUSEHOLD_COLUMNS,
-      ...(staffAssignmentsEnabled
-        ? [{ ...ASSIGNED_STAFF_COL, ariaLabel: undefined }]
-        : []), // typescript appeasement
+      ...(staffAssignmentsEnabled ? [{ ...ASSIGNED_STAFF_COL }] : []), // typescript appeasement
       ACTION_COL,
-    ].map(({ render, ariaLabel, ...rest }) => ({
+    ].map(({ render, ...rest }) => ({
       ...rest,
       render: () => null,
       tableCellProps: undefined,
@@ -198,13 +201,11 @@ const ProjectHouseholdsTable = ({
     >
       queryVariables={{
         id: projectId,
-        filters: {
-          searchTerm,
-          openOnDate: openOnDateString,
-        },
+        // filter from parent component gets merged with any filters selected on the table
+        filters: { searchTerm },
       }}
       queryDocument={GetProjectHouseholdsDocument}
-      columns={columns || defaultColumns}
+      columns={columns}
       TableBodyComponent={React.Fragment}
       renderRow={(household, columnKeys) => {
         return (
@@ -213,7 +214,7 @@ const ProjectHouseholdsTable = ({
             key={household.id}
             role='rowgroup'
           >
-            <CustomDividerRow colSpan={(columns || defaultColumns).length} />
+            <CustomDividerRow colSpan={columns.length} />
             {sortHouseholdMembers(household.householdClients).map(
               (householdClient, index) => (
                 <ProjectHouseholdsClientRow
@@ -232,14 +233,10 @@ const ProjectHouseholdsTable = ({
       }}
       belowRowsContent={
         <TableBody>
-          <CustomDividerRow colSpan={(columns || defaultColumns).length} />
+          <CustomDividerRow colSpan={columns.length} />
         </TableBody>
       }
-      noData={
-        openOnDate
-          ? `No households open on ${formatDateForDisplay(openOnDate)}`
-          : 'No households'
-      }
+      noData='No households'
       pagePath='project.households'
       filters={filters}
       recordType='Household'

@@ -1,4 +1,4 @@
-import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
@@ -6,129 +6,186 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Tab,
+  Stack,
+  Typography,
 } from '@mui/material';
 import { ArrowLeftIcon, ArrowRightIcon } from '@mui/x-date-pickers';
-import {
-  ReactNode,
-  SyntheticEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import CommonDialog, {
   CommonDialogProps,
 } from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
-import FormDialogActionContent, {
-  FormDialogActionProps,
-} from '@/modules/form/components/FormDialogActionContent';
 
-export type TabDefinition = {
-  title: string;
+export type StepDefinition = {
+  title: string; // must be unique, since it is used as the step's key
   content: ReactNode;
-  FormDialogActionProps?: Partial<FormDialogActionProps>;
-  disableSubmit?: boolean;
+
+  // if onSubmit is not provided, the default action is to just go to the next step
+  onSubmit?: () => Promise<any>; // after onSubmit promise resolves, go to the next step if there is one
+  submitButtonText?: string;
+  submitLoading?: boolean;
+  ButtonProps?: ButtonProps;
+  omitStepTitle?: boolean;
+
+  // `disableProceeding` can be used to disable either the onSubmit action, or the default 'next' action
+  disableProceeding?: boolean;
+  disabledReason?: string;
+
+  // todo @martha - add comment here
   onOpen?: VoidFunction;
 };
 
 interface Props extends Omit<CommonDialogProps, 'onSubmit' | 'onClose'> {
   title: string;
-  tabDefinitions: TabDefinition[];
-  submitButtonTitle?: string;
-  SubmitButtonProps?: ButtonProps;
-  successContent?: ReactNode;
-  onSubmit: VoidFunction;
+  stepDefinitions: StepDefinition[];
   onClose: VoidFunction;
   loading?: boolean;
 }
 
+/**
+ * StepDialog is a Dialog that guides the user through several steps (StepDefinitions).
+ * Each step may render a title, content, and buttons to cancel, go back, or proceed.
+ *
+ * If a step has an onSubmit action specified, the proceed button triggers that action,
+ * waits for the promise to resolve, and then renders the next step.
+ * Note that this means a step with an `onSubmit` action does not necessarily need
+ * to be the last step in the workflow. The last step can, for example, be a
+ * successful response/wayfinding step.
+ *
+ * If no onSubmit is specified, the proceed button just renders the next step
+ * (it is purely navigational and does not submit anything).
+ *
+ * StepDialog only manages the state of which step is currently selected.
+ * If Steps have inputs that update some shared pieces of state, that state
+ * should live in StepDialog's parent (or wherever the StepDefinitions are defined).
+ */
 const StepDialog = ({
   title,
-  submitButtonTitle,
-  SubmitButtonProps,
-  successContent,
-  tabDefinitions,
-  onSubmit,
+  stepDefinitions,
   onClose,
   loading,
   ...rest
 }: Props) => {
-  const [tabValue, setTabValue] = useState(tabDefinitions[0].title);
-
-  const handleChange = useCallback(
-    (event: SyntheticEvent, newValue: string) => {
-      setTabValue(newValue);
-    },
-    []
+  const [currentStepKey, setCurrentStepKey] = useState(
+    stepDefinitions[0].title
   );
 
-  const [previousTab, currentTab, nextTab] = useMemo(() => {
-    const currentTabIndex = tabDefinitions.findIndex(
-      (t) => t.title === tabValue
-    );
+  const currentStepIndex = useMemo(
+    () => stepDefinitions.findIndex((t) => t.title === currentStepKey),
+    [currentStepKey, stepDefinitions]
+  );
 
+  const [prevStep, thisStep, nextStep] = useMemo(() => {
     return [
-      tabDefinitions[currentTabIndex - 1],
-      tabDefinitions[currentTabIndex],
-      tabDefinitions[currentTabIndex + 1],
+      stepDefinitions[currentStepIndex - 1],
+      stepDefinitions[currentStepIndex],
+      stepDefinitions[currentStepIndex + 1],
     ];
-  }, [tabDefinitions, tabValue]);
+  }, [stepDefinitions, currentStepIndex]);
 
-  const handleSubmit = useCallback(() => {
-    if (nextTab) {
-      setTabValue(nextTab.title);
-      nextTab.onOpen?.();
-    } else {
-      onSubmit();
-    }
-  }, [nextTab, onSubmit]);
+  const {
+    title: stepTitle,
+    content,
+    onSubmit,
+    submitButtonText,
+    submitLoading,
+    disableProceeding,
+    disabledReason,
+    ButtonProps,
+    omitStepTitle,
+  } = thisStep;
+
+  const nextButton = useMemo(() => {
+    if (!onSubmit && !nextStep) return undefined;
+
+    const handleClick = async () => {
+      if (onSubmit) await onSubmit();
+      if (nextStep) {
+        setCurrentStepKey(nextStep.title);
+        nextStep.onOpen?.();
+      }
+    };
+
+    return (
+      <LoadingButton
+        onClick={handleClick}
+        type={!!onSubmit ? 'submit' : 'button'}
+        loading={submitLoading}
+        sx={{ minWidth: '120px' }}
+        disabled={disableProceeding}
+        endIcon={nextStep ? <ArrowRightIcon /> : undefined}
+        {...ButtonProps}
+      >
+        {!!onSubmit && (submitButtonText || 'Submit')}
+        {!onSubmit && !!nextStep && (nextStep.title || 'Next')}
+      </LoadingButton>
+    );
+  }, [
+    ButtonProps,
+    disableProceeding,
+    nextStep,
+    onSubmit,
+    submitButtonText,
+    submitLoading,
+  ]);
 
   return (
     <CommonDialog onClose={onClose} {...rest}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        {loading && <Loading />}
-        {!loading && !successContent && (
-          <TabContext value={tabValue}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleChange} aria-label={`${title} steps`}>
-                {tabDefinitions.map((tab: TabDefinition) => (
-                  <Tab key={tab.title} label={tab.title} value={tab.title} />
-                ))}
-              </TabList>
-            </Box>
-            {tabDefinitions.map((tab: TabDefinition) => (
-              <TabPanel key={tab.title} value={tab.title}>
-                {tab.content}
-              </TabPanel>
-            ))}
-          </TabContext>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Stack sx={{ mt: 2 }} gap={2}>
+            {!omitStepTitle && (
+              <Box>
+                <Typography variant='overline'>
+                  Step {currentStepIndex + 1}
+                </Typography>
+                <Typography variant='h3'>{stepTitle}</Typography>
+              </Box>
+            )}
+            {content}
+          </Stack>
         )}
-        {successContent && <Box mt={2}>{successContent}</Box>}
       </DialogContent>
-      {!successContent && (
+      {!!nextButton && (
         <DialogActions>
-          <FormDialogActionContent
-            onSubmit={handleSubmit}
-            submitButtonText={nextTab?.title || submitButtonTitle}
-            PrimaryActionProps={
-              !!nextTab ? { endIcon: <ArrowRightIcon /> } : SubmitButtonProps
-            }
-            onDiscard={onClose}
-            otherActions={
-              previousTab && (
+          <Stack
+            direction='row'
+            justifyContent={'space-between'}
+            sx={{ width: '100%' }}
+          >
+            <Box flexGrow={1}>
+              {prevStep && (
                 <Button
                   startIcon={<ArrowLeftIcon />}
                   color='grayscale'
-                  onClick={() => setTabValue(previousTab.title)}
+                  onClick={() => setCurrentStepKey(prevStep.title)}
                 >
                   Back
                 </Button>
-              )
-            }
-            {...currentTab.FormDialogActionProps}
-          />
+              )}
+            </Box>
+
+            <Stack gap={3} direction='row'>
+              <Button onClick={onClose} color='grayscale'>
+                Cancel
+              </Button>
+
+              {disableProceeding && disabledReason ? (
+                <ButtonTooltipContainer
+                  title={disabledReason}
+                  placement='top-start'
+                >
+                  {nextButton}
+                </ButtonTooltipContainer>
+              ) : (
+                nextButton
+              )}
+            </Stack>
+          </Stack>
         </DialogActions>
       )}
     </CommonDialog>

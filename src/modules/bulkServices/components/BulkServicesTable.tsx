@@ -110,6 +110,7 @@ const BulkServicesTable: React.FC<Props> = ({
         {
           ...BASE_ACTION_COLUMN_DEF,
           width: '180px',
+          tableCellProps: { sx: { pl: 2, pr: 1 } },
           render: (row: RowType) => (
             <TableRowActions
               record={row}
@@ -130,7 +131,7 @@ const BulkServicesTable: React.FC<Props> = ({
                   />
                 </Box>
               }
-              secondaryActionConfigs={[
+              menuActionConfigs={[
                 getViewClientMenuItem(row),
                 ...(row.activeEnrollment
                   ? [getViewEnrollmentMenuItem(row.activeEnrollment, row)]

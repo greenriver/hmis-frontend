@@ -1,5 +1,5 @@
-import { Box, Paper, Stack, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { Paper, Stack, Typography } from '@mui/material';
+import { Fragment, ReactNode } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { MANAGE_HOUSEHOLD_COLUMNS } from '@/modules/household/components/householdActions/SelectClientsStep';
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
@@ -11,26 +11,19 @@ type ReviewableHousehold = {
 };
 
 interface Props {
-  title: string;
   reviewableHouseholds: ReviewableHousehold[];
   children?: ReactNode;
 }
 
-const ReviewHouseholdsStep = ({
-  reviewableHouseholds,
-  title,
-  children,
-}: Props) => {
+const ReviewHouseholdsStep = ({ reviewableHouseholds, children }: Props) => {
   return (
     <Stack gap={2}>
-      <Box>
-        <Typography variant='overline'>Step 3</Typography>
-        <Typography variant='h3'>{title}</Typography>
-      </Box>
       {children}
       {reviewableHouseholds.map((household) => {
+        if (household.members.length === 0) return;
+
         return (
-          <>
+          <Fragment key={household.title}>
             <Typography variant='h4'>{household.title}</Typography>
             <Typography variant='body2'>{household.description}</Typography>
             <Paper>
@@ -40,7 +33,7 @@ const ReviewHouseholdsStep = ({
                 tableProps={{ 'aria-label': household.title }}
               />
             </Paper>
-          </>
+          </Fragment>
         );
       })}
     </Stack>

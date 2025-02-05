@@ -10,6 +10,7 @@ import {
 import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
@@ -71,10 +72,20 @@ const ConflictingEnrollmentAlert = ({
           )}
         </Box>
         <Stack direction='row' gap={2}>
-          {canSplitHouseholds && (
+          {canSplitHouseholds ? (
             <Button color='warning' onClick={onClickJoinEnrollment}>
               Join Enrollments
             </Button>
+          ) : (
+            <ButtonTooltipContainer
+              title={
+                "You don't have permission to join enrollments. Request permission from your HMIS administrator."
+              }
+            >
+              <Button disabled color='warning'>
+                Join Enrollments
+              </Button>
+            </ButtonTooltipContainer>
           )}
           <ButtonLink
             to={generatePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {

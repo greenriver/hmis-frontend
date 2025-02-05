@@ -19,19 +19,11 @@ import {
 } from '@mui/material';
 import { SystemStyleObject } from '@mui/system';
 import { visuallyHidden } from '@mui/utils';
-import { compact, get, includes, isNil, without } from 'lodash-es';
-import {
-  ComponentType,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { compact, get, includes, isNil } from 'lodash-es';
+import { ComponentType, ReactNode, SyntheticEvent, useMemo } from 'react';
 import { To } from 'react-router-dom';
 
 import Loading from '../Loading';
-import RouterLink from '../RouterLink';
 
 import EnhancedTableToolbar, {
   EnhancedTableToolbarProps,
@@ -43,6 +35,11 @@ import {
   RenderFunction,
 } from './types';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
+import RouterLink from '@/components/elements/RouterLink';
+import { useTableSelection } from '@/components/elements/table/hooks/useTableSelection';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import { LocationState } from '@/routes/routeUtil';
 
 export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
   def.key || (typeof def.header === 'string' ? def.header : '');
@@ -51,6 +48,14 @@ export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
   rowLinkTo?: (row: T) => To | null | undefined;
+  rowLinkState?: LocationState;
+  rowName?: (row: T) => string; // e.g. "Client X's Intake Assessment at Project Y"
+  rowActionTitle?: string; // e.g. "View Assessment"
+  rowSecondaryActionConfigs?: (row: T) => CommonMenuItem[];
+  // hideMenu is either a boolean, which hides the actions menu for the whole table;
+  // or a function returning a boolean, which indicates that only some rows should have an action menu.
+  hideMenu?: boolean | ((row: T) => boolean);
+  rowActionDisabled?: boolean;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
@@ -64,9 +69,8 @@ export interface Props<T> {
   noHead?: boolean;
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
-  headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
   selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
-  selected?: readonly string[]; // can optionally be used as a controlled component
+  selected?: readonly string[]; // selection can optionally be controlled by the parent
   isRowSelectable?: (row: T) => boolean;
   getRowSelectDisabledReason?: (row: T) => string | undefined;
   onChangeSelectedRowIds?: (ids: readonly string[]) => void;
@@ -83,10 +87,14 @@ export interface Props<T> {
   belowRowsContent?: ReactNode; // component to insert below all rendered rows, above footer
 }
 
-const clickableRowStyles = {
-  '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+export const clickableRowStyles = {
+  backgroundColor: 'background.paper',
+  '&:hover': { backgroundColor: 'grayscale.tint' },
   cursor: 'pointer',
 };
+
+const stopClickPropagation = (event: SyntheticEvent) => event.stopPropagation();
+
 export const getStickyCellStyles = ({
   sticky,
   stickyBorder = true,
@@ -101,7 +109,7 @@ export const getStickyCellStyles = ({
   if (!sticky) return {};
 
   const base = {
-    backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
+    backgroundColor: 'inherit', // Otherwise it's transparent and other cell content appears beneath it
     position: 'sticky',
     zIndex: 1,
     maxWidth: '200px', // Mitigates the risk that the column may be so wide as to obscure any scrollable columns
@@ -179,10 +187,84 @@ export const renderHeaderCellContents = <T extends { id: string }>(
   );
 };
 
+/*
+ * When a row is linked (`rowLinkTo` is defined), we render an `<a>` inside every cell, so the whole row is clickable.
+ * This is factored out here in order to be reused by tables that use renderRow, such as the ProjectHouseholdsTable.
+ */
+type RenderLinkedRowCellContentsParams<T> = {
+  rowLink: To;
+  row: T;
+  render: ColumnDef<T>['render'];
+  rowLinkState?: LocationState;
+  tabbable?: boolean; // whether cell should be tabbable (usually first cell in row if there is no row action menu)
+};
+export const renderLinkedRowCellContents = <T extends { id: string }>({
+  rowLink,
+  row,
+  render,
+  rowLinkState = undefined,
+  tabbable = false,
+}: RenderLinkedRowCellContentsParams<T>) => {
+  // Rendering <a> inside every cell degrades tab-navigation and screen-reader UX.
+  // So, we normally *also* put the row link as an action in the TableRowActions menu,
+  // and then make each cell link non-tabbable and hidden from screenreaders.
+  // HOWEVER, for some tables that don't have a TableRowActions menu, we make at least one cell
+  // in the row (usually the first one) tabbable and accessible.
+  const isInaccessibleLink = !tabbable;
+
+  const cellContents = (
+    <Box
+      sx={{
+        display: 'flex',
+        height: '100%',
+        alignItems: 'center',
+        px: 2,
+        py: 2,
+      }}
+    >
+      {renderCellContents(row, render)}
+    </Box>
+  );
+
+  return (
+    <>
+      {/* Render contents inside an `a` tag, to ensure each cell is clickable. */}
+      <RouterLink
+        to={rowLink}
+        state={rowLinkState}
+        plain
+        // Make cells non-tabbable, to enable tabbing through the table quickly,
+        // UNLESS tabbable is explicitly specified (usually for the first cell in row if there is no row action menu).
+        tabIndex={tabbable ? undefined : -1}
+        // For isInaccessibleLink cells (non-tabbable), use aria-hidden to hide the link element.
+        // Contents are rendered alongside as visually-hidden, so the screenreader still reads them (see below)
+        aria-hidden={isInaccessibleLink}
+        sx={{
+          height: '100%',
+          verticalAlign: 'middle',
+          display: 'block',
+          // Offset the focus outline so it doesn't overlap the border
+          '&.Mui-focusVisible': { outlineOffset: '-2px' },
+        }}
+      >
+        {cellContents}
+      </RouterLink>
+      {/* If the RouterLink was aria-hidden, render the contents as visually hidden alongside */}
+      {isInaccessibleLink && <Box sx={visuallyHidden}>{cellContents}</Box>}
+    </>
+  );
+};
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
   rowLinkTo,
+  rowLinkState,
+  rowName,
+  rowActionTitle,
+  rowSecondaryActionConfigs,
+  hideMenu,
+  rowActionDisabled,
   columns: columnProp,
   paginated = false,
   loading = false,
@@ -195,7 +277,6 @@ const GenericTable = <T extends { id: string }>({
   tableProps,
   noHead = false,
   rowSx,
-  headerCellSx,
   selectable,
   isRowSelectable,
   getRowSelectDisabledReason,
@@ -215,56 +296,14 @@ const GenericTable = <T extends { id: string }>({
   );
   const hasHeaders = columns.find((c) => !!c.header);
 
-  // initially undefined so we can early return and avoid state flicker
-  const [selected, setSelected] = useState<string[]>();
-  const isSelectControlled = selectedProp !== undefined;
-  const selectedValue = useMemo(
-    () => (isSelectControlled ? selectedProp : selected || []),
-    [isSelectControlled, selected, selectedProp]
-  );
-
-  const selectableRowIds = useMemo(() => {
-    if (!selectable) return [];
-    if (!isRowSelectable) return rows.map((r) => r.id);
-    return rows.filter(isRowSelectable).map((r) => r.id);
-  }, [rows, selectable, isRowSelectable]);
-
-  const handleSelectAllClick = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.checked) {
-        if (!isSelectControlled) {
-          setSelected(selectableRowIds);
-        }
-
-        onChangeSelectedRowIds?.(selectableRowIds);
-      } else {
-        if (!isSelectControlled) {
-          setSelected([]);
-        }
-
-        onChangeSelectedRowIds?.([]);
-      }
-    },
-    [isSelectControlled, onChangeSelectedRowIds, selectableRowIds]
-  );
-
-  const handleSelectRow = useCallback(
-    (row: T) => {
-      const newValue = selectedValue.includes(row.id)
-        ? without(selectedValue, row.id)
-        : [...selectedValue, row.id];
-
-      if (!isSelectControlled) {
-        setSelected(newValue);
-      }
-
-      onChangeSelectedRowIds?.(newValue);
-    },
-    [isSelectControlled, onChangeSelectedRowIds, selectedValue]
-  );
-
-  // Clear selection when data changes
-  useEffect(() => setSelected([]), [rows]);
+  const { selected, selectableRowIds, handleSelectAllClick, handleSelectRow } =
+    useTableSelection({
+      selectable: !!selectable,
+      isRowSelectable,
+      rows,
+      selectedCtrl: selectedProp,
+      onChangeSelectedCtrl: onChangeSelectedRowIds,
+    });
 
   // avoid state flicker due to state reset
   if (!selected) return <Loading />;
@@ -277,7 +316,14 @@ const GenericTable = <T extends { id: string }>({
       idx & 1 ? undefined : theme.palette.background.default,
   });
 
-  const fullColSpan = columns.length + (selectable ? 1 : 0);
+  // The "table row actions" column is rendered by default if there are ANY row-click actions, unless explicitly hidden by `hideMenu`.
+  // If `hideMenu` is a function, we infer the menu is only hidden for certain rows, so the action col is still rendered.
+  const hasTableRowActions =
+    (!!rowLinkTo || !!handleRowClick || !!rowSecondaryActionConfigs) &&
+    !(typeof hideMenu === 'boolean' && hideMenu);
+
+  const fullColSpan =
+    columns.length + (selectable ? 1 : 0) + (hasTableRowActions ? 1 : 0);
   const tableHead = noHead ? null : vertical ? (
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
@@ -299,7 +345,8 @@ const GenericTable = <T extends { id: string }>({
   ) : (
     <TableHead>
       {hasHeaders && (
-        <TableRow>
+        // Set backgroundColor here in order to make sticky columns non-transparent
+        <TableRow sx={{ backgroundColor: 'background.paper' }}>
           {selectable && (
             <HeaderCell
               padding='checkbox'
@@ -308,13 +355,13 @@ const GenericTable = <T extends { id: string }>({
               <Checkbox
                 color='primary'
                 indeterminate={
-                  selectedValue.length > 0 &&
-                  selectedValue.length < selectableRowIds.length
+                  selected.length > 0 &&
+                  selected.length < selectableRowIds.length
                 }
                 checked={
                   selectableRowIds.length > 0 &&
                   // >= instead of === accommodates rows that are selected but disabled
-                  selectedValue.length >= selectableRowIds.length
+                  selected.length >= selectableRowIds.length
                 }
                 disabled={selectableRowIds.length === 0}
                 onChange={handleSelectAllClick}
@@ -323,21 +370,17 @@ const GenericTable = <T extends { id: string }>({
             </HeaderCell>
           )}
           {columns.map((def, i) => {
-            const headerStyles = headerCellSx ? headerCellSx(def) : {};
             return (
               <HeaderCell
                 key={getColumnKey(def) || i}
                 sx={{
                   ...getStickyCellStyles({
                     sticky: def.sticky,
+                    // The select (checkbox) col is always sticky, so add additional sticky offset here if it is present
                     leftOffset: selectable ? '46px' : 0,
                   }),
                   textAlign: def.textAlign,
                   width: def.width,
-                  // headerStyles has SxProps type so we can't spread it directly. https://mui.com/system/getting-started/the-sx-prop/#passing-the-sx-prop
-                  ...(Array.isArray(headerStyles)
-                    ? headerStyles
-                    : [headerStyles]),
                 }}
                 {...def.headerCellProps}
               >
@@ -345,6 +388,12 @@ const GenericTable = <T extends { id: string }>({
               </HeaderCell>
             );
           })}
+          {/* right-most column for row actions */}
+          {hasTableRowActions && (
+            <HeaderCell sx={{ ...getStickyCellStyles({ sticky: 'right' }) }}>
+              <Box sx={visuallyHidden}>Action</Box>
+            </HeaderCell>
+          )}
         </TableRow>
       )}
       {loading && loadingVariant === 'linear' && (
@@ -380,7 +429,7 @@ const GenericTable = <T extends { id: string }>({
       {EnhancedTableToolbarProps && (
         <EnhancedTableToolbar
           {...EnhancedTableToolbarProps}
-          selectedIds={selectedValue}
+          selectedIds={selected}
           rows={rows}
         />
       )}
@@ -434,30 +483,50 @@ const GenericTable = <T extends { id: string }>({
 
                 const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
                 const isClickable = !!onClickHandler || !!rowLink;
-                const firstIndexWithLinkTreatment = columns.findIndex(
-                  (c) => c.linkTreatment
+
+                const recordName = rowName?.(row) || row.id;
+                const hideRowMenu =
+                  typeof hideMenu === 'function' ? hideMenu(row) : hideMenu;
+
+                const tableRowActions = hasTableRowActions && !hideRowMenu && (
+                  <TableRowActions
+                    record={row}
+                    recordName={recordName}
+                    menuActionConfigs={[
+                      // first action in the menu is the row link or handleRowClick, if defined, for accessibility
+                      ...(rowLink || handleRowClick
+                        ? [
+                            {
+                              title: rowActionTitle,
+                              ariaLabel: `${rowActionTitle}, ${recordName}`,
+                              to: rowLink,
+                              onClick: () => handleRowClick?.(row),
+                              key: 'primary',
+                              disabled: rowActionDisabled,
+                              linkState: rowLinkState,
+                            },
+                          ]
+                        : []),
+                      ...(rowSecondaryActionConfigs?.(row) || []),
+                    ]}
+                  />
                 );
+
                 return (
                   <TableRow
                     key={row.id}
                     sx={{
+                      // Set backgroundColor here in order to make sticky columns non-transparent
+                      backgroundColor: 'background.paper',
                       ...(isClickable && clickableRowStyles),
                       ...(!!rowSx && rowSx(row)),
                     }}
-                    hover={isClickable}
                     onClick={() =>
                       onClickHandler ? onClickHandler(row) : undefined
                     }
                     selected={
-                      selectable === 'row' && includes(selectedValue, row.id)
+                      selectable === 'row' && includes(selected, row.id)
                     }
-                    onKeyUp={
-                      !!handleRowClick
-                        ? (event) =>
-                            event.key === 'Enter' && handleRowClick(row)
-                        : undefined
-                    }
-                    tabIndex={handleRowClick ? 0 : undefined}
                   >
                     {selectable && (
                       <TableCell
@@ -467,6 +536,7 @@ const GenericTable = <T extends { id: string }>({
                           sticky: 'left',
                           stickyBorder: false,
                         })}
+                        onClick={stopClickPropagation}
                       >
                         <ButtonTooltipContainer
                           title={
@@ -479,8 +549,10 @@ const GenericTable = <T extends { id: string }>({
                           <Checkbox
                             color='primary'
                             disabled={!isSelectable}
-                            checked={includes(selectedValue, row.id)}
-                            inputProps={{ 'aria-label': `Select ${row.id} ` }}
+                            checked={includes(selected, row.id)}
+                            inputProps={{
+                              'aria-label': `Select ${recordName}`,
+                            }}
                             onClick={
                               selectable === 'checkbox' && isSelectable
                                 ? () => handleSelectRow(row)
@@ -495,30 +567,14 @@ const GenericTable = <T extends { id: string }>({
                         render,
                         width,
                         minWidth,
-                        linkTreatment,
-                        ariaLabel,
+                        maxWidth,
                         dontLink = false,
                         textAlign,
                         tableCellProps,
+                        sticky,
                       } = def;
 
                       const isLinked = rowLink && !dontLink;
-
-                      const enableTabIndex =
-                        firstIndexWithLinkTreatment === index ||
-                        // if none have link treatment, we still need tab index. default to first col.
-                        (isLinked &&
-                          firstIndexWithLinkTreatment === -1 &&
-                          index === 0);
-
-                      const onClickLinkTreatment =
-                        handleRowClick && !dontLink && linkTreatment
-                          ? {
-                              color: 'links',
-                              textDecoration: 'underline',
-                              textDecorationColor: 'links',
-                            }
-                          : undefined;
 
                       const cellProps =
                         typeof tableCellProps === 'function'
@@ -531,52 +587,47 @@ const GenericTable = <T extends { id: string }>({
                           {...cellProps}
                           sx={{
                             ...getStickyCellStyles({
-                              sticky: def.sticky,
+                              sticky,
                               leftOffset: selectable ? '46px' : 0,
                             }),
                             width,
                             minWidth,
+                            maxWidth,
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
                             whiteSpace: 'initial',
-                            ...onClickLinkTreatment,
                             ...cellProps?.sx,
                           }}
+                          role={sticky === 'left' ? 'rowheader' : undefined}
+                          // Reuse `dontLink` to prevent click propagation if the row has a click handler, but the cell has a more specific click target
+                          onClick={dontLink ? stopClickPropagation : undefined}
                         >
-                          {isLinked ? (
-                            <RouterLink
-                              to={rowLink}
-                              aria-label={ariaLabel && ariaLabel(row)}
-                              plain={!linkTreatment}
-                              data-testid={linkTreatment && 'table-linkedCell'}
-                              sx={{
-                                height: '100%',
-                                verticalAlign: 'middle',
-                                display: 'block',
-                                '&.Mui-focusVisible': {
-                                  outlineOffset: '-2px',
-                                },
-                              }}
-                              tabIndex={enableTabIndex ? 0 : -1}
-                            >
-                              <Box
-                                sx={{
-                                  display: 'flex',
-                                  height: '100%',
-                                  alignItems: 'center',
-                                  px: 2,
-                                  py: 2,
-                                }}
-                              >
-                                {renderCellContents(row, render)}
-                              </Box>
-                            </RouterLink>
-                          ) : (
-                            renderCellContents(row, render)
-                          )}
+                          {isLinked
+                            ? renderLinkedRowCellContents({
+                                rowLink,
+                                row,
+                                render,
+                                rowLinkState,
+                                tabbable: index === 0 && !tableRowActions,
+                              })
+                            : renderCellContents(row, render)}
                         </TableCell>
                       );
                     })}
+                    {tableRowActions && (
+                      <TableCell
+                        sx={{
+                          ...getStickyCellStyles({ sticky: 'right' }),
+                          width: '1%',
+                          py: 0,
+                          px: 1,
+                          whiteSpace: 'nowrap',
+                        }}
+                        onClick={stopClickPropagation}
+                      >
+                        {tableRowActions}
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}

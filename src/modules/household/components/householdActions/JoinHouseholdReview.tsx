@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import { uniqBy } from 'lodash-es';
 import { useMemo } from 'react';
 import {
   sortHouseholdMembers,
@@ -25,17 +26,21 @@ const JoinHouseholdReview = ({
   relationships,
 }: Props) => {
   const joinedHouseholdClients = useMemo(() => {
-    return [
-      ...sortHouseholdMembers(receivingHousehold.householdClients),
-      ...joiningClients.map((jc) => {
-        return {
-          ...jc,
-          relationshipToHoH:
-            relationships[jc.enrollment.id] ||
-            RelationshipToHoH.DataNotCollected,
-        };
-      }),
-    ];
+    return uniqBy(
+      [
+        // use uniqBy to avoid console warning after the household has been updated in the cache
+        ...sortHouseholdMembers(receivingHousehold.householdClients),
+        ...joiningClients.map((jc) => {
+          return {
+            ...jc,
+            relationshipToHoH:
+              relationships[jc.enrollment.id] ||
+              RelationshipToHoH.DataNotCollected,
+          };
+        }),
+      ],
+      'id'
+    );
   }, [joiningClients, receivingHousehold.householdClients, relationships]);
 
   const remainingHouseholdClients = useMemo(() => {
@@ -72,8 +77,9 @@ const JoinHouseholdReview = ({
       ]}
     >
       <Typography variant='body1'>
-        Check that the joined and remaining household members and details are
-        correct
+        Check that the joined{' '}
+        {remainingHouseholdClients.length > 0 && 'and remaining '}household
+        members and details are correct
       </Typography>
     </ReviewHouseholdsStep>
   );

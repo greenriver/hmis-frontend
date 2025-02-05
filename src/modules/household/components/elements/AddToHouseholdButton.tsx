@@ -107,7 +107,7 @@ const AddToHouseholdButton = ({
     setConflictingEnrollmentId(undefined);
   }, []);
 
-  const onCompleteJoinHousehold = useCallback(
+  const onJoinHouseholdSuccess = useCallback(
     (joinedHousehold: HouseholdFieldsFragment) => {
       // This only updates the initiating client's button
       if (
@@ -140,7 +140,7 @@ const AddToHouseholdButton = ({
       {renderFormDialog({
         title: <>Enroll {clientBriefName(client)}</>,
         submitButtonText: `Enroll`,
-        // This wrapper is necessary around the preFormComponent Stack,
+        // TODO(#7234) This wrapper is necessary around the preFormComponent Stack,
         // otherwise the form dialog renders some awkward extra spacing.
         // It could be fixed more systematically with some updates to renderFormDialog's internals.
         preFormComponent:
@@ -165,9 +165,9 @@ const AddToHouseholdButton = ({
       {household && conflictingEnrollmentId && (
         <JoinHouseholdDialog
           open={joinHouseholdDialogOpen}
-          conflictingEnrollmentId={conflictingEnrollmentId}
+          initiatorEnrollmentId={conflictingEnrollmentId}
           onClose={onCloseJoinHousehold}
-          onComplete={onCompleteJoinHousehold}
+          onSuccess={onJoinHouseholdSuccess}
           receivingHousehold={household}
           project={project}
         />

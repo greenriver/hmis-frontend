@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 
 import { ReactNode, useCallback, useMemo } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -68,10 +68,6 @@ const SelectClientsStep = ({
 
   return (
     <Stack gap={2}>
-      <Box>
-        <Typography variant='overline'>Step 1</Typography>
-        <Typography variant='h3'>Select Clients</Typography>
-      </Box>
       {children}
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>

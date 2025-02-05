@@ -37,7 +37,6 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
   {
     header: 'Head of Household',
     render: (assignment) => clientBriefName(memoizedHoh(assignment).client),
-    linkTreatment: true,
   },
   {
     header: 'Members',
@@ -103,6 +102,8 @@ const MyClients = () => {
               }
             );
           }}
+          rowName={(row) => clientBriefName(memoizedHoh(row).client)}
+          rowActionTitle='View Household'
         />
       </Paper>
     </>

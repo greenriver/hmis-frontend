@@ -658,7 +658,7 @@ export const raceEthnicityDisplayString = (race?: Race[]) => {
   return race.map((r) => HmisEnums.Race[r]).join(', ');
 };
 
-function stringifyArray(arr: string[]) {
+export function stringifyArray(arr: string[]) {
   if (arr.length === 1) return arr[0];
   const firsts = arr.slice(0, arr.length - 1);
   const last = arr[arr.length - 1];
@@ -677,10 +677,12 @@ export const stringifyHousehold = (
 export const findHohOrRep = (
   householdClients: HouseholdClientFieldsFragment[]
 ) => {
-  // It's invalid, but possible in case of bad data, to have no HoH. If so (rare), return the first household member
+  // It's invalid, but possible in case of bad data, to have no HoH. If so, return the first household member
+  const sorted = sortHouseholdMembers(householdClients);
   return (
-    householdClients.find(
-      (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-    ) || householdClients[0]
+    sorted.find(
+      ({ relationshipToHoH }) =>
+        relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+    ) || sorted[0]
   );
 };

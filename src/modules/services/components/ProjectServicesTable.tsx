@@ -1,11 +1,5 @@
 import { useMemo } from 'react';
-
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import {
-  BASE_ACTION_COLUMN_DEF,
-  getViewEnrollmentMenuItem,
-  getViewServiceMenuItem,
-} from '@/components/elements/table/tableRowActionUtil';
+import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -17,12 +11,14 @@ import {
   getServiceTypeForDisplay,
   SERVICE_BASIC_COLUMNS,
 } from '@/modules/services/serviceColumns';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectServicesDocument,
   GetProjectServicesQuery,
   GetProjectServicesQueryVariables,
   ServicesForProjectFilterOptions,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export type ServiceFields = NonNullable<
   GetProjectServicesQuery['project']
@@ -45,30 +41,10 @@ const ProjectServicesTable = ({
           <ClientName client={s.enrollment.client} />
         ),
       },
-      { ...SERVICE_BASIC_COLUMNS.serviceDate, linkTreatment: false },
+      SERVICE_BASIC_COLUMNS.serviceDate,
       SERVICE_BASIC_COLUMNS.serviceType,
       WITH_ENROLLMENT_COLUMNS.entryDate,
       WITH_ENROLLMENT_COLUMNS.exitDate,
-      {
-        ...BASE_ACTION_COLUMN_DEF,
-        render: (service: ServiceFields) => (
-          <TableRowActions
-            record={service}
-            recordName={`${clientBriefName(service.enrollment.client)}'s ${getServiceTypeForDisplay(service.serviceType)} on ${parseAndFormatDate(service.dateProvided)}`}
-            primaryActionConfig={getViewServiceMenuItem(
-              service,
-              service.enrollment.id,
-              service.enrollment.client.id
-            )}
-            secondaryActionConfigs={[
-              getViewEnrollmentMenuItem(
-                service.enrollment,
-                service.enrollment.client
-              ),
-            ]}
-          />
-        ),
-      },
     ];
   }, [columns]);
 
@@ -88,6 +64,19 @@ const ProjectServicesTable = ({
       }}
       queryDocument={GetProjectServicesDocument}
       columns={displayColumns}
+      rowLinkTo={(row) =>
+        generateSafePath(EnrollmentDashboardRoutes.SERVICES, {
+          clientId: row.enrollment.client.id,
+          enrollmentId: row.enrollment.id,
+        })
+      }
+      rowName={(row) =>
+        `${clientBriefName(row.enrollment.client)}'s ${getServiceTypeForDisplay(row.serviceType)} on ${parseAndFormatDate(row.dateProvided)}`
+      }
+      rowActionTitle='View Service'
+      rowSecondaryActionConfigs={(row) => [
+        getViewEnrollmentMenuItem(row.enrollment, row.enrollment.client),
+      ]}
       noData='No services'
       pagePath='project.services'
       recordType='Service'

@@ -7,14 +7,11 @@ type BaseColumnDef<T> = {
   render: AttributeName<T> | RenderFunction<T>;
   width?: string;
   minWidth?: string;
+  maxWidth?: string;
   // whether to hide this column
   hide?: boolean;
-  // whether to show link treatment for this cell. rowLinkTo must be provided.
-  linkTreatment?: boolean;
   // whether to NOT link this cell even when the whole row is linked using rowLinkTo. Use if there are clickable elements in the cell.
   dontLink?: boolean;
-  // aria label, for use with linkTreatment
-  ariaLabel?: (row: T) => string;
   textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
   tableCellProps?: TableCellProps | ((row: T) => TableCellProps);
   headerCellProps?: TableCellProps;
