@@ -3,7 +3,7 @@ import { Paper, Stack } from '@mui/material';
 import { ReactNode, useCallback, useMemo } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
-import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { HOUSEHOLD_CLIENT_COLUMNS } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
@@ -72,6 +72,7 @@ const SelectClientsStep = ({
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>
           rows={donorHouseholdMembers}
+          rowName={(row) => clientBriefName(row.client)}
           columns={MANAGE_HOUSEHOLD_COLUMNS}
           selectable={'checkbox'}
           selected={selectedClientIds}
