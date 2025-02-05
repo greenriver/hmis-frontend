@@ -240,7 +240,7 @@ const EditHouseholdMemberTable = ({
                 key: 'remove',
                 title: 'Delete Enrollment',
                 Icon: DeleteIcon,
-                ariaLabel: `Delete ${clientBriefName(hc.client)}'s enrollment'`,
+                ariaLabel: `Delete ${clientBriefName(hc.client)}'s enrollment`,
                 onClick: () => {
                   deleteEnrollment({
                     variables: {
