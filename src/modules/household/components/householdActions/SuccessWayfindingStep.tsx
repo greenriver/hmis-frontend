@@ -8,7 +8,7 @@ import {
   ProjectDashboardRoutes,
 } from '@/routes/routes';
 import {
-  EnrollmentWithClientNameFieldsFragment,
+  HouseholdClientFieldsFragment,
   ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
 
@@ -16,7 +16,7 @@ interface Props {
   title: string;
   description: string;
   primaryClientName: string;
-  secondary?: EnrollmentWithClientNameFieldsFragment;
+  secondary?: HouseholdClientFieldsFragment;
   project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName'>;
   onClose: VoidFunction;
 }
@@ -46,7 +46,7 @@ const SuccessWayfindingStep = ({
         <ButtonLink
           to={generatePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
             clientId: secondary.client.id,
-            enrollmentId: secondary.id,
+            enrollmentId: secondary.enrollment.id,
           })}
           variant='outlined'
         >

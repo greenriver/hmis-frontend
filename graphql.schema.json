@@ -28144,12 +28144,12 @@
             "deprecationReason": null
           },
           {
-            "name": "donorEnrollment",
+            "name": "donorHousehold",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Enrollment",
+              "name": "Household",
               "ofType": null
             },
             "isDeprecated": false,

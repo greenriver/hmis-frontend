@@ -114,7 +114,7 @@ const JoinHouseholdDialog = ({
     loading: joinLoading,
     error: joinError,
     joinedHousehold,
-    remainingEnrollment,
+    remainingHousehold,
   } = usePerformJoinHousehold({ onSuccess });
 
   const onSubmit = useCallback(
@@ -202,7 +202,7 @@ const JoinHouseholdDialog = ({
             title={'Successful Join'}
             description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}`}
             primaryClientName={receivingHohName}
-            secondary={remainingEnrollment}
+            secondary={findHohOrRep(remainingHousehold?.householdClients || [])}
             project={project}
             onClose={onClose}
           />
@@ -224,7 +224,7 @@ const JoinHouseholdDialog = ({
       receivingHohName,
       receivingHousehold,
       relationships,
-      remainingEnrollment,
+      remainingHousehold?.householdClients,
     ]
   );
 

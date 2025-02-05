@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
-  EnrollmentWithClientNameFieldsFragment,
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
   RelationshipToHoH,
@@ -17,15 +16,15 @@ export function usePerformJoinHousehold({
     HouseholdFieldsFragment | undefined
   >(undefined);
 
-  const [remainingEnrollment, setRemainingEnrollment] = useState<
-    EnrollmentWithClientNameFieldsFragment | undefined
+  const [remainingHousehold, setRemainingHousehold] = useState<
+    HouseholdFieldsFragment | undefined
   >(undefined);
 
   const [joinHousehold, { loading, error }] = useJoinHouseholdMutation({
     onCompleted: (data) => {
       if (data.joinHousehold) {
         setJoinedHousehold(data.joinHousehold.receivingHousehold);
-        setRemainingEnrollment(data.joinHousehold.donorEnrollment || undefined);
+        setRemainingHousehold(data.joinHousehold.donorHousehold || undefined);
         onSuccess?.(data.joinHousehold.receivingHousehold);
       }
     },
@@ -78,6 +77,6 @@ export function usePerformJoinHousehold({
     loading,
     error,
     joinedHousehold,
-    remainingEnrollment,
+    remainingHousehold,
   };
 }

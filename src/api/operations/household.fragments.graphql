@@ -64,10 +64,3 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
     autoExited
   }
 }
-
-fragment EnrollmentWithClientNameFields on Enrollment {
-  id
-  client {
-    ...ClientName
-  }
-}
