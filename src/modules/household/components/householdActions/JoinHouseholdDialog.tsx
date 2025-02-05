@@ -1,6 +1,6 @@
 import { MergeTypeRounded } from '@mui/icons-material';
 import { Typography } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
 import {
@@ -110,18 +110,29 @@ const JoinHouseholdDialog = ({
   }, [missingRelationshipsCount]);
 
   const {
-    joinHousehold,
+    performJoinHousehold,
     loading: joinLoading,
     error: joinError,
     joinedHousehold,
     remainingEnrollment,
-  } = usePerformJoinHousehold({
-    onSuccess,
-    receivingHousehold,
-    joiningClients,
-    relationships,
-    missingRelationshipsCount,
-  });
+  } = usePerformJoinHousehold();
+
+  const onSubmit = useCallback(
+    () =>
+      performJoinHousehold({
+        receivingHouseholdId: receivingHousehold.id,
+        joiningClients,
+        relationships,
+        onSuccess,
+      }),
+    [
+      joiningClients,
+      onSuccess,
+      performJoinHousehold,
+      receivingHousehold.id,
+      relationships,
+    ]
+  );
 
   const stepDefinitions: StepDefinition[] = useMemo(
     () => [
@@ -182,7 +193,7 @@ const JoinHouseholdDialog = ({
           />
         ),
         ...missingRelationshipsProps,
-        onSubmit: joinHousehold,
+        onSubmit,
         submitLoading: joinLoading,
         submitButtonTitle: 'Join Enrollments',
         ButtonProps: {
@@ -209,13 +220,13 @@ const JoinHouseholdDialog = ({
     ],
     [
       donorHousehold,
-      joinHousehold,
       joinLoading,
       joinedHousehold,
       joiningClients,
       missingRelationshipsCount,
       missingRelationshipsProps,
       onClose,
+      onSubmit,
       project,
       receivingHohName,
       receivingHousehold,

@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   EnrollmentWithClientNameFieldsFragment,
   HouseholdClientFieldsFragment,
@@ -7,20 +8,7 @@ import {
   useJoinHouseholdMutation,
 } from '@/types/gqlTypes';
 
-export function usePerformJoinHousehold({
-  // todo @martha - move these into arguments to the onSubmit
-  onSuccess,
-  receivingHousehold,
-  joiningClients,
-  relationships,
-  missingRelationshipsCount,
-}: {
-  onSuccess?: (joinedHousehold: HouseholdFieldsFragment) => void;
-  receivingHousehold: HouseholdFieldsFragment;
-  joiningClients: HouseholdClientFieldsFragment[];
-  relationships: Record<string, RelationshipToHoH | null>;
-  missingRelationshipsCount: number;
-}) {
+export function usePerformJoinHousehold() {
   const [joinedHousehold, setJoinedHousehold] = useState<
     HouseholdFieldsFragment | undefined
   >(undefined);
@@ -34,41 +22,61 @@ export function usePerformJoinHousehold({
       if (data.joinHousehold) {
         setJoinedHousehold(data.joinHousehold.receivingHousehold);
         setRemainingEnrollment(data.joinHousehold.donorEnrollment || undefined);
-        onSuccess?.(data.joinHousehold.receivingHousehold);
       }
     },
   });
 
-  const onSubmit = useCallback(() => {
-    if (missingRelationshipsCount > 0) return Promise.resolve(); // This should never happen; the button will be disabled
+  const performJoinHousehold = useCallback(
+    ({
+      receivingHouseholdId,
+      joiningClients,
+      relationships,
+      onSuccess,
+    }: {
+      receivingHouseholdId: string;
+      joiningClients: HouseholdClientFieldsFragment[];
+      relationships: Record<string, RelationshipToHoH | null>;
+      onSuccess?: (joinedHousehold: HouseholdFieldsFragment) => void;
+    }) => {
+      const joiningEnrollmentInputs = joiningClients.map((hc) => {
+        const relationship = relationships[hc.enrollment.id];
 
-    return joinHousehold({
-      variables: {
-        input: {
-          receivingHouseholdId: receivingHousehold.id,
-          joiningEnrollmentInputs: joiningClients.map((hc) => {
-            return {
-              enrollmentId: hc.enrollment.id,
-              // `|| RelationshipToHoH.DataNotCollected` is to keep typescript happy;
-              // thanks to the missingRelationshipsCount logic, we know the relationships will be non-null
-              relationshipToHoh:
-                relationships[hc.enrollment.id] ||
-                RelationshipToHoH.DataNotCollected,
-            };
-          }),
+        if (!relationship) {
+          // don't really need to aggregate failures here; expect the caller to guard against this by disabling the submit button
+          throw new Error(
+            `Select relationship for ${clientBriefName(hc.client)}`
+          );
+        }
+
+        return {
+          enrollmentId: hc.enrollment.id,
+          relationshipToHoh: relationship,
+        };
+      });
+
+      if (joiningEnrollmentInputs.length === 0) {
+        throw new Error('Select at least one client to join');
+      }
+
+      return joinHousehold({
+        variables: {
+          input: {
+            receivingHouseholdId,
+            joiningEnrollmentInputs,
+          },
         },
-      },
-    });
-  }, [
-    missingRelationshipsCount,
-    joinHousehold,
-    receivingHousehold.id,
-    joiningClients,
-    relationships,
-  ]);
+        onCompleted: (data) => {
+          if (data.joinHousehold) {
+            onSuccess?.(data.joinHousehold.receivingHousehold);
+          }
+        },
+      });
+    },
+    [joinHousehold]
+  );
 
   return {
-    joinHousehold: onSubmit,
+    performJoinHousehold,
     loading,
     error,
     joinedHousehold,

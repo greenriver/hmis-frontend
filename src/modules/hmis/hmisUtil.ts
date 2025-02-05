@@ -658,7 +658,7 @@ export const raceEthnicityDisplayString = (race?: Race[]) => {
   return race.map((r) => HmisEnums.Race[r]).join(', ');
 };
 
-function stringifyArray(arr: string[]) {
+export function stringifyArray(arr: string[]) {
   if (arr.length === 1) return arr[0];
   const firsts = arr.slice(0, arr.length - 1);
   const last = arr[arr.length - 1];
