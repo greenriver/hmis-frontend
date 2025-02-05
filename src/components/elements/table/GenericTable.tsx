@@ -19,16 +19,8 @@ import {
 } from '@mui/material';
 import { SystemStyleObject } from '@mui/system';
 import { visuallyHidden } from '@mui/utils';
-import { compact, get, includes, isNil, without } from 'lodash-es';
-import {
-  ComponentType,
-  ReactNode,
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { compact, get, includes, isNil } from 'lodash-es';
+import { ComponentType, ReactNode, SyntheticEvent, useMemo } from 'react';
 import { To } from 'react-router-dom';
 
 import Loading from '../Loading';
@@ -44,6 +36,7 @@ import {
 } from './types';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import RouterLink from '@/components/elements/RouterLink';
+import { useTableSelection } from '@/components/elements/table/hooks/useTableSelection';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { LocationState } from '@/routes/routeUtil';
 
@@ -76,7 +69,7 @@ export interface Props<T> {
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
   selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
-  selected?: readonly string[]; // can optionally be used as a controlled component
+  selected?: readonly string[]; // selection can optionally be controlled by the parent
   isRowSelectable?: (row: T) => boolean;
   onChangeSelectedRowIds?: (ids: readonly string[]) => void;
   EnhancedTableToolbarProps?: Omit<
@@ -283,56 +276,14 @@ const GenericTable = <T extends { id: string }>({
   );
   const hasHeaders = columns.find((c) => !!c.header);
 
-  // initially undefined so we can early return and avoid state flicker
-  const [selected, setSelected] = useState<string[]>();
-  const isSelectControlled = selectedProp !== undefined;
-  const selectedValue = useMemo(
-    () => (isSelectControlled ? selectedProp : selected || []),
-    [isSelectControlled, selected, selectedProp]
-  );
-
-  const selectableRowIds = useMemo(() => {
-    if (!selectable) return [];
-    if (!isRowSelectable) return rows.map((r) => r.id);
-    return rows.filter(isRowSelectable).map((r) => r.id);
-  }, [rows, selectable, isRowSelectable]);
-
-  const handleSelectAllClick = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.checked) {
-        if (!isSelectControlled) {
-          setSelected(selectableRowIds);
-        }
-
-        onChangeSelectedRowIds?.(selectableRowIds);
-      } else {
-        if (!isSelectControlled) {
-          setSelected([]);
-        }
-
-        onChangeSelectedRowIds?.([]);
-      }
-    },
-    [isSelectControlled, onChangeSelectedRowIds, selectableRowIds]
-  );
-
-  const handleSelectRow = useCallback(
-    (row: T) => {
-      const newValue = selectedValue.includes(row.id)
-        ? without(selectedValue, row.id)
-        : [...selectedValue, row.id];
-
-      if (!isSelectControlled) {
-        setSelected(newValue);
-      }
-
-      onChangeSelectedRowIds?.(newValue);
-    },
-    [isSelectControlled, onChangeSelectedRowIds, selectedValue]
-  );
-
-  // Clear selection when data changes
-  useEffect(() => setSelected([]), [rows]);
+  const { selected, selectableRowIds, handleSelectAllClick, handleSelectRow } =
+    useTableSelection({
+      selectable: !!selectable,
+      isRowSelectable,
+      rows,
+      selectedCtrl: selectedProp,
+      onChangeSelectedCtrl: onChangeSelectedRowIds,
+    });
 
   // avoid state flicker due to state reset
   if (!selected) return <Loading />;
@@ -383,13 +334,13 @@ const GenericTable = <T extends { id: string }>({
               <Checkbox
                 color='primary'
                 indeterminate={
-                  selectedValue.length > 0 &&
-                  selectedValue.length < selectableRowIds.length
+                  selected.length > 0 &&
+                  selected.length < selectableRowIds.length
                 }
                 checked={
                   selectableRowIds.length > 0 &&
                   // >= instead of === accommodates rows that are selected but disabled
-                  selectedValue.length >= selectableRowIds.length
+                  selected.length >= selectableRowIds.length
                 }
                 disabled={selectableRowIds.length === 0}
                 onChange={handleSelectAllClick}
@@ -456,7 +407,7 @@ const GenericTable = <T extends { id: string }>({
       {EnhancedTableToolbarProps && (
         <EnhancedTableToolbar
           {...EnhancedTableToolbarProps}
-          selectedIds={selectedValue}
+          selectedIds={selected}
           rows={rows}
         />
       )}
@@ -549,7 +500,7 @@ const GenericTable = <T extends { id: string }>({
                       onClickHandler ? onClickHandler(row) : undefined
                     }
                     selected={
-                      selectable === 'row' && includes(selectedValue, row.id)
+                      selectable === 'row' && includes(selected, row.id)
                     }
                   >
                     {selectable && (
@@ -565,7 +516,7 @@ const GenericTable = <T extends { id: string }>({
                         <Checkbox
                           color='primary'
                           disabled={!isSelectable}
-                          checked={includes(selectedValue, row.id)}
+                          checked={includes(selected, row.id)}
                           inputProps={{ 'aria-label': `Select ${recordName}` }}
                           onClick={
                             selectable === 'checkbox' && isSelectable
