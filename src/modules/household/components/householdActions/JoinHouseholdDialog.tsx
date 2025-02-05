@@ -188,17 +188,35 @@ const JoinHouseholdDialog = ({
         },
         disabled: joinLoading || missingRelationshipsCount > 0,
       },
+      {
+        title: 'Successful Join',
+        content: joinedHousehold ? (
+          <SuccessWayfindingStep
+            title={'Successful Join'}
+            description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}`}
+            primaryClientName={receivingHohName}
+            // todo @martha - some bug here with the secondary client just returning the primary (ginger twice)
+            secondary={remainingEnrollment}
+            project={project}
+            onClose={onClose}
+          />
+        ) : undefined, // todo @martha - return sth else not undefined - error. or comment
+      },
     ],
     [
       donorHousehold,
       joinHousehold,
       joinLoading,
+      joinedHousehold,
       joiningClients,
       missingRelationshipsCount,
       missingRelationshipsProps,
+      onClose,
+      project,
       receivingHohName,
       receivingHousehold,
       relationships,
+      remainingEnrollment,
     ]
   );
 
@@ -208,18 +226,6 @@ const JoinHouseholdDialog = ({
   return (
     <StepDialog
       title={'Join Enrollments'}
-      successContent={
-        joinedHousehold && (
-          <SuccessWayfindingStep
-            title={'Successful Join'}
-            description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}`}
-            primaryClientName={receivingHohName}
-            secondary={remainingEnrollment}
-            project={project}
-            onClose={onClose}
-          />
-        )
-      }
       loading={fetchLoading}
       open={open}
       fullWidth

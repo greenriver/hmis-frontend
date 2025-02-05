@@ -20,10 +20,10 @@ import Loading from '@/components/elements/Loading';
 export type StepDefinition = {
   title: string;
   content: ReactNode;
-  disableProceeding?: boolean; // can be used to disable either the onSubmit action, or proceeding to the next tab
+  disableProceeding?: boolean; // can be used to disable either the onSubmit action, or proceeding to the next step
   disabledReason?: string;
-  // if onSubmit is not provided, the default action is to go to the next tab
-  onSubmit?: ButtonProps['onClick'];
+  // if onSubmit is not provided, the default action is to go to the next step
+  onSubmit?: () => Promise<any>;
   submitButtonText?: string;
   submitLoading?: boolean;
   ButtonProps?: ButtonProps;
@@ -32,14 +32,12 @@ export type StepDefinition = {
 interface Props extends Omit<CommonDialogProps, 'onSubmit' | 'onClose'> {
   title: string;
   stepDefinitions: StepDefinition[];
-  successContent?: ReactNode; // todo @martha success content can be generified into the last step?
   onClose: VoidFunction;
   loading?: boolean;
 }
 
 const StepDialog = ({
   title,
-  successContent,
   stepDefinitions,
   onClose,
   loading,
@@ -49,21 +47,21 @@ const StepDialog = ({
     stepDefinitions[0].title
   );
 
-  const currentTabIndex = useMemo(
+  const currentStepIndex = useMemo(
     () => stepDefinitions.findIndex((t) => t.title === currentStepKey),
     [currentStepKey, stepDefinitions]
   );
 
   const [prevStep, thisStep, nextStep] = useMemo(() => {
     return [
-      stepDefinitions[currentTabIndex - 1],
-      stepDefinitions[currentTabIndex],
-      stepDefinitions[currentTabIndex + 1],
+      stepDefinitions[currentStepIndex - 1],
+      stepDefinitions[currentStepIndex],
+      stepDefinitions[currentStepIndex + 1],
     ];
-  }, [stepDefinitions, currentTabIndex]);
+  }, [stepDefinitions, currentStepIndex]);
 
   const {
-    title: tabTitle,
+    title: stepTitle,
     content,
     onSubmit,
     submitButtonText,
@@ -76,14 +74,9 @@ const StepDialog = ({
   const nextButton = useMemo(() => {
     if (!onSubmit && !nextStep) return undefined;
 
-    const handleClick = (
-      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-      if (onSubmit) {
-        onSubmit(event);
-      } else if (nextStep) {
-        setCurrentStepKey(nextStep.title);
-      }
+    const handleClick = async () => {
+      if (onSubmit) await onSubmit();
+      if (nextStep) setCurrentStepKey(nextStep.title);
     };
 
     return (
@@ -97,7 +90,7 @@ const StepDialog = ({
         {...ButtonProps}
       >
         {!!onSubmit && (submitButtonText || 'Submit')}
-        {!!nextStep && (nextStep.title || 'Next')}
+        {!onSubmit && !!nextStep && (nextStep.title || 'Next')}
       </LoadingButton>
     );
   }, [
@@ -109,30 +102,25 @@ const StepDialog = ({
     submitLoading,
   ]);
 
-  if (!nextButton) return;
-
   return (
     <CommonDialog onClose={onClose} {...rest}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        {loading && <Loading />}
-        {/*todo @martha - add horizontal stepper, if easy*/}
-        {!loading && !successContent && (
-          <>
-            <Stack sx={{ mt: 2 }} gap={2}>
-              <Box>
-                <Typography variant='overline'>
-                  Step {currentTabIndex + 1}
-                </Typography>
-                <Typography variant='h3'>{tabTitle}</Typography>
-              </Box>
-              {content}
-            </Stack>
-          </>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Stack sx={{ mt: 2 }} gap={2}>
+            <Box>
+              <Typography variant='overline'>
+                Step {currentStepIndex + 1}
+              </Typography>
+              <Typography variant='h3'>{stepTitle}</Typography>
+            </Box>
+            {content}
+          </Stack>
         )}
-        {successContent && <Box mt={2}>{successContent}</Box>}
       </DialogContent>
-      {!successContent && (
+      {!!nextButton && (
         <DialogActions>
           <Stack
             direction='row'

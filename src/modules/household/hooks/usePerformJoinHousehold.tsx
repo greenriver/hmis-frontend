@@ -40,9 +40,9 @@ export function usePerformJoinHousehold({
   });
 
   const onSubmit = useCallback(() => {
-    if (missingRelationshipsCount > 0) return; // This should never happen; the button will be disabled
+    if (missingRelationshipsCount > 0) return Promise.resolve(); // This should never happen; the button will be disabled
 
-    joinHousehold({
+    return joinHousehold({
       variables: {
         input: {
           receivingHouseholdId: receivingHousehold.id,
