@@ -147,8 +147,6 @@ const EditHouseholdMemberTable = ({
     useDeleteEnrollmentMutation({
       onCompleted: () => {
         refetchHousehold();
-        // setDone(true);
-        // onSuccess();
       },
     });
 
@@ -237,11 +235,12 @@ const EditHouseholdMemberTable = ({
             }}
             menuActionConfigs={[
               {
-                // No extra perm check is required for Delete, because this button only allows removing WIP Enrollments,
+                // No extra perm check is required for Delete, because this action only allows removing WIP Enrollments,
                 // which only requires Can Edit Enrollments, which is already required for this page
                 key: 'remove',
                 title: 'Delete Enrollment',
                 Icon: DeleteIcon,
+                ariaLabel: `Delete ${clientBriefName(hc.client)}'s enrollment'`,
                 onClick: () => {
                   deleteEnrollment({
                     variables: {
