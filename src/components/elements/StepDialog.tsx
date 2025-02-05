@@ -1,4 +1,4 @@
-import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
@@ -6,127 +6,168 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Tab,
+  Stack,
+  Typography,
 } from '@mui/material';
 import { ArrowLeftIcon, ArrowRightIcon } from '@mui/x-date-pickers';
-import {
-  ReactNode,
-  SyntheticEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import CommonDialog, {
   CommonDialogProps,
 } from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
-import FormDialogActionContent, {
-  FormDialogActionProps,
-} from '@/modules/form/components/FormDialogActionContent';
 
-export type TabDefinition = {
+export type StepDefinition = {
   title: string;
   content: ReactNode;
-  FormDialogActionProps?: Partial<FormDialogActionProps>;
-  disableSubmit?: boolean;
+  disableProceeding?: boolean; // can be used to disable either the onSubmit action, or proceeding to the next tab
+  disabledReason?: string;
+  // if onSubmit is not provided, the default action is to go to the next tab
+  onSubmit?: ButtonProps['onClick'];
+  submitButtonText?: string;
+  submitLoading?: boolean;
+  ButtonProps?: ButtonProps;
 };
 
 interface Props extends Omit<CommonDialogProps, 'onSubmit' | 'onClose'> {
   title: string;
-  tabDefinitions: TabDefinition[];
-  submitButtonTitle?: string;
-  SubmitButtonProps?: ButtonProps;
-  successContent?: ReactNode;
-  onSubmit: VoidFunction;
+  stepDefinitions: StepDefinition[];
+  successContent?: ReactNode; // todo @martha success content can be generified into the last step?
   onClose: VoidFunction;
   loading?: boolean;
 }
 
 const StepDialog = ({
   title,
-  submitButtonTitle,
-  SubmitButtonProps,
   successContent,
-  tabDefinitions,
-  onSubmit,
+  stepDefinitions,
   onClose,
   loading,
   ...rest
 }: Props) => {
-  const [tabValue, setTabValue] = useState(tabDefinitions[0].title);
-
-  const handleChange = useCallback(
-    (event: SyntheticEvent, newValue: string) => {
-      setTabValue(newValue);
-    },
-    []
+  const [currentStepKey, setCurrentStepKey] = useState(
+    stepDefinitions[0].title
   );
 
-  const [previousTab, currentTab, nextTab] = useMemo(() => {
-    const currentTabIndex = tabDefinitions.findIndex(
-      (t) => t.title === tabValue
-    );
+  const currentTabIndex = useMemo(
+    () => stepDefinitions.findIndex((t) => t.title === currentStepKey),
+    [currentStepKey, stepDefinitions]
+  );
 
+  const [prevStep, thisStep, nextStep] = useMemo(() => {
     return [
-      tabDefinitions[currentTabIndex - 1],
-      tabDefinitions[currentTabIndex],
-      tabDefinitions[currentTabIndex + 1],
+      stepDefinitions[currentTabIndex - 1],
+      stepDefinitions[currentTabIndex],
+      stepDefinitions[currentTabIndex + 1],
     ];
-  }, [tabDefinitions, tabValue]);
+  }, [stepDefinitions, currentTabIndex]);
 
-  const handleSubmit = useCallback(() => {
-    if (nextTab) {
-      setTabValue(nextTab.title);
-    } else {
-      onSubmit();
-    }
-  }, [nextTab, onSubmit]);
+  const {
+    title: tabTitle,
+    content,
+    onSubmit,
+    submitButtonText,
+    submitLoading,
+    disableProceeding,
+    disabledReason,
+    ButtonProps,
+  } = thisStep;
+
+  const nextButton = useMemo(() => {
+    if (!onSubmit && !nextStep) return undefined;
+
+    const handleClick = (
+      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+      if (onSubmit) {
+        onSubmit(event);
+      } else if (nextStep) {
+        setCurrentStepKey(nextStep.title);
+      }
+    };
+
+    return (
+      <LoadingButton
+        onClick={handleClick}
+        type={!!onSubmit ? 'submit' : 'button'}
+        loading={submitLoading}
+        sx={{ minWidth: '120px' }}
+        disabled={disableProceeding}
+        endIcon={nextStep ? <ArrowRightIcon /> : undefined}
+        {...ButtonProps}
+      >
+        {!!onSubmit && (submitButtonText || 'Submit')}
+        {!!nextStep && (nextStep.title || 'Next')}
+      </LoadingButton>
+    );
+  }, [
+    ButtonProps,
+    disableProceeding,
+    nextStep,
+    onSubmit,
+    submitButtonText,
+    submitLoading,
+  ]);
+
+  if (!nextButton) return;
 
   return (
     <CommonDialog onClose={onClose} {...rest}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         {loading && <Loading />}
+        {/*todo @martha - add horizontal stepper, if easy*/}
         {!loading && !successContent && (
-          <TabContext value={tabValue}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleChange} aria-label={`${title} steps`}>
-                {tabDefinitions.map((tab: TabDefinition) => (
-                  <Tab key={tab.title} label={tab.title} value={tab.title} />
-                ))}
-              </TabList>
-            </Box>
-            {tabDefinitions.map((tab: TabDefinition) => (
-              <TabPanel key={tab.title} value={tab.title}>
-                {tab.content}
-              </TabPanel>
-            ))}
-          </TabContext>
+          <>
+            <Stack sx={{ mt: 2 }} gap={2}>
+              <Box>
+                <Typography variant='overline'>
+                  Step {currentTabIndex + 1}
+                </Typography>
+                <Typography variant='h3'>{tabTitle}</Typography>
+              </Box>
+              {content}
+            </Stack>
+          </>
         )}
         {successContent && <Box mt={2}>{successContent}</Box>}
       </DialogContent>
       {!successContent && (
         <DialogActions>
-          <FormDialogActionContent
-            onSubmit={handleSubmit}
-            submitButtonText={nextTab?.title || submitButtonTitle}
-            PrimaryActionProps={
-              !!nextTab ? { endIcon: <ArrowRightIcon /> } : SubmitButtonProps
-            }
-            onDiscard={onClose}
-            otherActions={
-              previousTab && (
+          <Stack
+            direction='row'
+            justifyContent={'space-between'}
+            sx={{ width: '100%' }}
+          >
+            <Box flexGrow={1}>
+              {prevStep && (
                 <Button
                   startIcon={<ArrowLeftIcon />}
                   color='grayscale'
-                  onClick={() => setTabValue(previousTab.title)}
+                  onClick={() => setCurrentStepKey(prevStep.title)}
                 >
                   Back
                 </Button>
-              )
-            }
-            {...currentTab.FormDialogActionProps}
-          />
+              )}
+            </Box>
+
+            <Stack gap={3} direction='row'>
+              <Button onClick={onClose} color='grayscale'>
+                Cancel
+              </Button>
+
+              {disableProceeding && disabledReason ? (
+                <ButtonTooltipContainer
+                  title={disabledReason}
+                  placement='top-start'
+                >
+                  {nextButton}
+                </ButtonTooltipContainer>
+              ) : (
+                nextButton
+              )}
+            </Stack>
+          </Stack>
         </DialogActions>
       )}
     </CommonDialog>

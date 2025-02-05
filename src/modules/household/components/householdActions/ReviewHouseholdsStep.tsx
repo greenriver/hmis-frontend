@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { MANAGE_HOUSEHOLD_COLUMNS } from '@/modules/household/components/householdActions/SelectClientsStep';
@@ -18,10 +18,6 @@ interface Props {
 const ReviewHouseholdsStep = ({ reviewableHouseholds, children }: Props) => {
   return (
     <Stack gap={2}>
-      <Box>
-        <Typography variant='overline'>Step 3</Typography>
-        <Typography variant='h3'>Review Join</Typography>
-      </Box>
       {children}
       {reviewableHouseholds.map((household) => {
         return (

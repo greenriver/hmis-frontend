@@ -11,7 +11,7 @@ export const Default: Story = {
   args: {
     open: true,
     title: 'Stepper Dialog Demo',
-    tabDefinitions: [
+    stepDefinitions: [
       {
         title: 'One',
         content: 'hello first tab',

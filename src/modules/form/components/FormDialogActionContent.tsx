@@ -1,19 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, ButtonProps, Stack } from '@mui/material';
-import React, { ReactNode, useMemo } from 'react';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-
-export interface FormDialogActionProps {
-  onDiscard: ButtonProps['onClick'];
-  onSubmit: ButtonProps['onClick'];
-  submitLoading?: boolean;
-  discardButtonText?: string;
-  submitButtonText?: string;
-  disabled?: boolean;
-  disabledReason?: string;
-  otherActions?: ReactNode;
-  PrimaryActionProps?: ButtonProps;
-}
+import { ReactNode } from 'react';
 
 export const FormDialogActionContent = ({
   onDiscard,
@@ -22,27 +9,16 @@ export const FormDialogActionContent = ({
   submitButtonText,
   submitLoading,
   disabled,
-  disabledReason,
   otherActions,
-  PrimaryActionProps,
-}: FormDialogActionProps) => {
-  const primaryAction = useMemo(
-    () => (
-      <LoadingButton
-        onClick={onSubmit}
-        type='submit'
-        loading={submitLoading}
-        data-testid='confirmDialogAction'
-        sx={{ minWidth: '120px' }}
-        disabled={disabled}
-        {...PrimaryActionProps}
-      >
-        {submitButtonText || 'Save'}
-      </LoadingButton>
-    ),
-    [PrimaryActionProps, disabled, onSubmit, submitButtonText, submitLoading]
-  );
-
+}: {
+  onDiscard: ButtonProps['onClick'];
+  onSubmit: ButtonProps['onClick'];
+  submitLoading?: boolean;
+  discardButtonText?: string;
+  submitButtonText?: string;
+  disabled?: boolean;
+  otherActions?: ReactNode;
+}) => {
   return (
     <Stack
       direction='row'
@@ -58,14 +34,16 @@ export const FormDialogActionContent = ({
         >
           {discardButtonText || 'Cancel'}
         </Button>
-
-        {disabled && disabledReason ? (
-          <ButtonTooltipContainer title={disabledReason} placement='top-start'>
-            {primaryAction}
-          </ButtonTooltipContainer>
-        ) : (
-          primaryAction
-        )}
+        <LoadingButton
+          onClick={onSubmit}
+          type='submit'
+          loading={submitLoading}
+          data-testid='confirmDialogAction'
+          sx={{ minWidth: '120px' }}
+          disabled={disabled}
+        >
+          {submitButtonText || 'Save'}
+        </LoadingButton>
       </Stack>
     </Stack>
   );

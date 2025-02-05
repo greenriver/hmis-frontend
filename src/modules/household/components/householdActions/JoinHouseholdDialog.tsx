@@ -2,7 +2,7 @@ import { MergeTypeRounded } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
-import StepDialog, { TabDefinition } from '@/components/elements/StepDialog';
+import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
 import {
   clientBriefName,
   findHohOrRep,
@@ -98,7 +98,7 @@ const JoinHouseholdDialog = ({
 
   const missingRelationshipsProps = useMemo(() => {
     return {
-      disabled: missingRelationshipsCount > 0,
+      disableProceeding: missingRelationshipsCount > 0,
       disabledReason:
         missingRelationshipsCount > 0
           ? `Required fields missing (${missingRelationshipsCount})`
@@ -120,7 +120,7 @@ const JoinHouseholdDialog = ({
     missingRelationshipsCount,
   });
 
-  const tabDefinitions: TabDefinition[] = useMemo(
+  const stepDefinitions: StepDefinition[] = useMemo(
     () => [
       {
         title: 'Select Clients',
@@ -136,10 +136,8 @@ const JoinHouseholdDialog = ({
             )}
           </>
         ),
-        FormDialogActionProps: {
-          disabled: joiningClients.length === 0,
-          disabledReason: 'Select a client',
-        },
+        disableProceeding: joiningClients.length === 0,
+        disabledReason: 'Select a client',
       },
       {
         title: 'Add Relationships',
@@ -167,7 +165,7 @@ const JoinHouseholdDialog = ({
             </Typography>
           </AddRelationshipsStep>
         ),
-        FormDialogActionProps: missingRelationshipsProps,
+        ...missingRelationshipsProps,
       },
       {
         title: 'Review Join',
@@ -181,15 +179,19 @@ const JoinHouseholdDialog = ({
             relationships={relationships}
           />
         ),
-        FormDialogActionProps: {
-          ...missingRelationshipsProps,
-          submitLoading: joinLoading,
-          disabled: joinLoading || missingRelationshipsCount > 0,
+        ...missingRelationshipsProps,
+        onSubmit: joinHousehold,
+        submitLoading: joinLoading,
+        submitButtonTitle: 'Join Enrollments',
+        ButtonProps: {
+          endIcon: <MergeTypeRounded />,
         },
+        disabled: joinLoading || missingRelationshipsCount > 0,
       },
     ],
     [
       donorHousehold,
+      joinHousehold,
       joinLoading,
       joiningClients,
       missingRelationshipsCount,
@@ -206,10 +208,6 @@ const JoinHouseholdDialog = ({
   return (
     <StepDialog
       title={'Join Enrollments'}
-      submitButtonTitle={'Join Enrollments'}
-      SubmitButtonProps={{
-        endIcon: <MergeTypeRounded />,
-      }}
       successContent={
         joinedHousehold && (
           <SuccessWayfindingStep
@@ -227,8 +225,7 @@ const JoinHouseholdDialog = ({
       fullWidth
       maxWidth='lg'
       onClose={onClose}
-      onSubmit={joinHousehold}
-      tabDefinitions={tabDefinitions}
+      stepDefinitions={stepDefinitions}
     />
   );
 };

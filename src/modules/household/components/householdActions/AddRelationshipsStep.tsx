@@ -1,4 +1,4 @@
-import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
+import { Chip, Paper, Stack } from '@mui/material';
 import React, { ReactNode, useId } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
@@ -40,10 +40,6 @@ const AddRelationshipsStep = ({
 
   return (
     <Stack gap={2}>
-      <Box>
-        <Typography variant='overline'>Step 2</Typography>
-        <Typography variant='h3'>Add Relationships</Typography>
-      </Box>
       {children}
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>
