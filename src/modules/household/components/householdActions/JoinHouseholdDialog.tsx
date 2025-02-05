@@ -1,5 +1,5 @@
 import { MergeTypeRounded } from '@mui/icons-material';
-import { Alert, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
@@ -113,7 +113,6 @@ const JoinHouseholdDialog = ({
     performJoinHousehold,
     loading: joinLoading,
     error: joinError,
-    joinedHousehold,
     remainingHousehold,
   } = usePerformJoinHousehold({ onSuccess });
 
@@ -197,7 +196,7 @@ const JoinHouseholdDialog = ({
       {
         title: 'Successful Join',
         omitStepTitle: true,
-        content: joinedHousehold ? (
+        content: (
           <SuccessWayfindingStep
             title={'Successful Join'}
             description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}`}
@@ -206,15 +205,12 @@ const JoinHouseholdDialog = ({
             project={project}
             onClose={onClose}
           />
-        ) : (
-          <Alert severity={'error'}>Something went wrong</Alert>
         ),
       },
     ],
     [
       donorHousehold,
       joinLoading,
-      joinedHousehold,
       joiningClients,
       missingRelationshipsCount,
       missingRelationshipsProps,
