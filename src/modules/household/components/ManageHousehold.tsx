@@ -1,5 +1,5 @@
-import { Grid } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Grid, Paper } from '@mui/material';
+import { Stack } from '@mui/system';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
@@ -197,12 +197,7 @@ const ManageHousehold = ({
 
           {searchInput && (
             <SsnDobShowContextProvider>
-              <Box
-                sx={{
-                  border: (theme) => `1px solid ${theme.palette.borders.light}`,
-                  borderRadius: 1,
-                }}
-              >
+              <Paper>
                 <GenericTableWithData<
                   SearchClientsQuery,
                   SearchClientsQueryVariables,
@@ -224,7 +219,7 @@ const ManageHousehold = ({
                     'aria-label': 'Search results',
                   }}
                 />
-              </Box>
+              </Paper>
             </SsnDobShowContextProvider>
           )}
         </Stack>

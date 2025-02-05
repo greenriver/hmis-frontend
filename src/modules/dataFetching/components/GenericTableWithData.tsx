@@ -251,14 +251,17 @@ const GenericTableWithData = <
         setPage(0);
       },
       count: nodesCount,
+      labelRowsPerPage: `${pluralize(startCase(paginationItemName || recordType || 'Row'))} per page:`,
     };
   }, [
-    nodesCount,
-    page,
-    rowsPerPage,
-    defaultPageSize,
     nonTablePagination,
+    nodesCount,
+    rowsPerPage,
+    page,
     rowsPerPageOptions,
+    recordType,
+    paginationItemName,
+    defaultPageSize,
   ]);
 
   const columnDefs = useMemo(() => {
