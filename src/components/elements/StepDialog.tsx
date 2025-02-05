@@ -18,16 +18,19 @@ import CommonDialog, {
 import Loading from '@/components/elements/Loading';
 
 export type StepDefinition = {
-  title: string;
+  title: string; // must be unique, since it is used as the step's key
   content: ReactNode;
-  disableProceeding?: boolean; // can be used to disable either the onSubmit action, or proceeding to the next step
-  disabledReason?: string;
-  // if onSubmit is not provided, the default action is to go to the next step
-  onSubmit?: () => Promise<any>;
+
+  // if onSubmit is not provided, the default action is to just go to the next step
+  onSubmit?: () => Promise<any>; // after onSubmit promise resolves, go to the next step if there is one
   submitButtonText?: string;
   submitLoading?: boolean;
   ButtonProps?: ButtonProps;
   omitStepTitle?: boolean;
+
+  // `disableProceeding` can be used to disable either the onSubmit action, or the default 'next' action
+  disableProceeding?: boolean;
+  disabledReason?: string;
 };
 
 interface Props extends Omit<CommonDialogProps, 'onSubmit' | 'onClose'> {
@@ -37,6 +40,23 @@ interface Props extends Omit<CommonDialogProps, 'onSubmit' | 'onClose'> {
   loading?: boolean;
 }
 
+/**
+ * StepDialog is a Dialog that guides the user through several steps (StepDefinitions).
+ * Each step may render a title, content, and buttons to cancel, go back, or proceed.
+ *
+ * If a step has an onSubmit action specified, the proceed button triggers that action,
+ * waits for the promise to resolve, and then renders the next step.
+ * Note that this means a step with an `onSubmit` action does not necessarily need
+ * to be the last step in the workflow. The last step can, for example, be a
+ * successful response/wayfinding step.
+ *
+ * If no onSubmit is specified, the proceed button just renders the next step
+ * (it is purely navigational and does not submit anything).
+ *
+ * StepDialog only manages the state of which step is currently selected.
+ * If Steps have inputs that update some shared pieces of state, that state
+ * should live in StepDialog's parent (or wherever the StepDefinitions are defined).
+ */
 const StepDialog = ({
   title,
   stepDefinitions,

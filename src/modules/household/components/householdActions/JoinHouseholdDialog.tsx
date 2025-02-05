@@ -39,7 +39,10 @@ const JoinHouseholdDialog = ({
   receivingHousehold,
   project,
 }: Props) => {
-  // Data this join workflow is collecting: What clients are joining and what their relationships are
+  // `joiningClients` and `relationships` are shared across steps, so they are hoisted up and managed here.
+  // These pieces of state are updated live as soon as a user makes a selection within a step.
+  // Except for the `onSubmit` (joinHousehold mutation), the buttons to navigate between steps
+  // are purely navigational and don't submit anything.
   const [joiningClients, setJoiningClients] = useState<
     HouseholdClientFieldsFragment[]
   >([]);
