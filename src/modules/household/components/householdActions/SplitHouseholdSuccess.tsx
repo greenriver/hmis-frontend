@@ -6,13 +6,15 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import SuccessWayfindingStep from '@/modules/household/components/householdActions/SuccessWayfindingStep';
 import {
+  HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
   ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
 
 interface Props {
-  splitHousehold: HouseholdFieldsFragment;
-  donorHousehold: HouseholdFieldsFragment;
+  splitHousehold?: HouseholdFieldsFragment;
+  donorHousehold?: HouseholdFieldsFragment;
+  initiator: HouseholdClientFieldsFragment;
   project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName'>;
   onClose: VoidFunction;
 }
@@ -20,9 +22,18 @@ interface Props {
 const SplitHouseholdSuccess = ({
   splitHousehold,
   donorHousehold,
+  initiator,
   project,
   onClose,
 }: Props) => {
+  if (!splitHousehold || !donorHousehold) {
+    // This is unexpected; if we get here, the split mutation succeeded, but didn't return the expected info.
+    // Throw so that we get alerted.
+    throw new Error(
+      `Something went wrong with splitting ${initiator.id} out of project ${project.id}`
+    );
+  }
+
   const donorHoh = findHohOrRep(donorHousehold.householdClients);
   const donorHohName = clientBriefName(donorHoh.client);
   const splitHoh = findHohOrRep(splitHousehold.householdClients);

@@ -1,4 +1,3 @@
-import { Alert } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SplitIcon } from '@/components/elements/SemanticIcons';
 import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
@@ -146,17 +145,15 @@ const SplitHouseholdDialog = ({
       {
         title: 'Successful Join',
         omitStepTitle: true,
-        content:
-          newHousehold && remainingHousehold ? (
-            <SplitHouseholdSuccess
-              splitHousehold={newHousehold}
-              donorHousehold={remainingHousehold}
-              project={project}
-              onClose={onClose}
-            />
-          ) : (
-            <Alert severity={'error'}>Something went wrong</Alert>
-          ),
+        content: (
+          <SplitHouseholdSuccess
+            splitHousehold={newHousehold}
+            donorHousehold={remainingHousehold}
+            initiator={initiator}
+            project={project}
+            onClose={onClose}
+          />
+        ),
       },
     ],
     [
@@ -169,6 +166,7 @@ const SplitHouseholdDialog = ({
       loading,
       newHousehold,
       remainingHousehold,
+      initiator,
       project,
       onClose,
     ]
