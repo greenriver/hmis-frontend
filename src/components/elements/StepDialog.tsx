@@ -27,6 +27,7 @@ export type StepDefinition = {
   submitButtonText?: string;
   submitLoading?: boolean;
   ButtonProps?: ButtonProps;
+  omitStepTitle?: boolean;
 };
 
 interface Props extends Omit<CommonDialogProps, 'onSubmit' | 'onClose'> {
@@ -69,6 +70,7 @@ const StepDialog = ({
     disableProceeding,
     disabledReason,
     ButtonProps,
+    omitStepTitle,
   } = thisStep;
 
   const nextButton = useMemo(() => {
@@ -110,12 +112,14 @@ const StepDialog = ({
           <Loading />
         ) : (
           <Stack sx={{ mt: 2 }} gap={2}>
-            <Box>
-              <Typography variant='overline'>
-                Step {currentStepIndex + 1}
-              </Typography>
-              <Typography variant='h3'>{stepTitle}</Typography>
-            </Box>
+            {!omitStepTitle && (
+              <Box>
+                <Typography variant='overline'>
+                  Step {currentStepIndex + 1}
+                </Typography>
+                <Typography variant='h3'>{stepTitle}</Typography>
+              </Box>
+            )}
             {content}
           </Stack>
         )}

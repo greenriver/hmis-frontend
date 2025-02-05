@@ -20,6 +20,8 @@ const ReviewHouseholdsStep = ({ reviewableHouseholds, children }: Props) => {
     <Stack gap={2}>
       {children}
       {reviewableHouseholds.map((household) => {
+        if (household.members.length === 0) return;
+
         return (
           <>
             <Typography variant='h4'>{household.title}</Typography>

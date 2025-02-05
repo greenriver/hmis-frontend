@@ -161,7 +161,6 @@ const JoinHouseholdDialog = ({
             <Typography variant='body1'>
               Update joining clients’ relationships{' '}
               {receivingHohName && <>to {receivingHohName}</>}
-              {/* todo @martha - add warning here about entry dates, pending conversation with design */}
             </Typography>
           </AddRelationshipsStep>
         ),
@@ -190,17 +189,19 @@ const JoinHouseholdDialog = ({
       },
       {
         title: 'Successful Join',
+        omitStepTitle: true,
         content: joinedHousehold ? (
           <SuccessWayfindingStep
             title={'Successful Join'}
             description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}`}
             primaryClientName={receivingHohName}
-            // todo @martha - some bug here with the secondary client just returning the primary (ginger twice)
             secondary={remainingEnrollment}
             project={project}
             onClose={onClose}
           />
-        ) : undefined, // todo @martha - return sth else not undefined - error. or comment
+        ) : (
+          <Loading />
+        ),
       },
     ],
     [
