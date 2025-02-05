@@ -33,6 +33,8 @@ export function usePerformSplitHousehold() {
       splittingClients: HouseholdClientFieldsFragment[];
       relationships: Record<string, RelationshipToHoH | null>;
     }) => {
+      // This intentionally re-validates some of the same error cases that the caller also guards against.
+      // This hook throws a hard failure, because the caller is expected to guard in a more friendly way (disabled buttons, helper text)
       let hohCount = 0;
 
       const splittingInputs = splittingClients.map((hc) => {
