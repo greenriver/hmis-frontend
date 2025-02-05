@@ -188,7 +188,7 @@ const JoinHouseholdDialog = ({
         ...missingRelationshipsProps,
         onSubmit,
         submitLoading: joinLoading,
-        submitButtonTitle: 'Join Enrollments',
+        submitButtonText: 'Join Enrollments',
         ButtonProps: {
           endIcon: <MergeTypeRounded />,
         },
