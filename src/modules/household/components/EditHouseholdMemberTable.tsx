@@ -1,15 +1,14 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   CircularProgress,
   FormControlLabel,
   Radio,
   Tooltip,
-  Typography,
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import RelationshipToHoHInput from './elements/RelationshipToHoHInput';
-import RemoveFromHouseholdButton from './elements/RemoveFromHouseholdButton';
 import { HOUSEHOLD_MEMBER_COLUMNS } from './HouseholdMemberTable';
 
 import { SplitIcon } from '@/components/elements/SemanticIcons';
@@ -26,10 +25,15 @@ import {
 import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import SplitHouseholdDialog from '@/modules/household/components/householdActions/SplitHouseholdDialog';
 import {
+  getDeleteEnrollmentDisabledAttrs,
+  getSplitDisabledAttrs,
+} from '@/modules/household/components/householdActions/util';
+import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
   ProjectAllFieldsFragment,
   RelationshipToHoH,
+  useDeleteEnrollmentMutation,
   useUpdateRelationshipToHoHMutation,
 } from '@/types/gqlTypes';
 
@@ -136,7 +140,17 @@ const EditHouseholdMemberTable = ({
 
   const [splitInitiator, setSplitInitiator] =
     useState<HouseholdClientFieldsFragment | null>(null);
+
   const canSplitHouseholds = project.access.canSplitHouseholds;
+
+  const [deleteEnrollment, { loading: deleteLoading, error: deleteError }] =
+    useDeleteEnrollmentMutation({
+      onCompleted: () => {
+        refetchHousehold();
+        // setDone(true);
+        // onSuccess();
+      },
+    });
 
   const columns = useMemo(() => {
     return [
@@ -216,55 +230,48 @@ const EditHouseholdMemberTable = ({
           <TableRowActions
             record={hc}
             recordName={clientBriefName(hc.client)}
-            primaryAction={
-              // No extra perm check is required, because this button only allows removing WIP Enrollments,
-              // which only requires Can Edit Enrollments, which is already required for this page
-              <RemoveFromHouseholdButton
-                currentDashboardEnrollmentId={currentDashboardEnrollmentId}
-                householdClient={hc}
-                onSuccess={refetchHousehold}
-                householdSize={currentMembers.length}
-                ariaLabel={`Remove ${clientBriefName(hc.client)}`}
-              />
-            }
-            secondaryActionConfigs={
-              canSplitHouseholds && currentMembers.length > 0
-                ? [
-                    {
-                      key: 'split',
-                      title: 'Split → New Household',
-                      onClick: () => setSplitInitiator(hc),
-                      ariaLabel: `Split ${clientBriefName(hc.client)} to new household`,
-                      disabled:
-                        hc.relationshipToHoH ===
-                        RelationshipToHoH.SelfHeadOfHousehold,
-                      Icon: SplitIcon,
+            MenuProps={{
+              MenuListProps: {
+                dense: false,
+              },
+            }}
+            menuActionConfigs={[
+              {
+                // No extra perm check is required for Delete, because this button only allows removing WIP Enrollments,
+                // which only requires Can Edit Enrollments, which is already required for this page
+                key: 'remove',
+                title: 'Delete Enrollment',
+                Icon: DeleteIcon,
+                onClick: () => {
+                  deleteEnrollment({
+                    variables: {
+                      input: {
+                        id: hc.enrollment.id,
+                      },
                     },
-                  ]
-                : []
-            }
-            preMenuComponent={
-              hc.relationshipToHoH ===
-                RelationshipToHoH.SelfHeadOfHousehold && (
-                <Box
-                  sx={{
-                    p: 2,
-                    minWidth: '100%',
-                    width: '300px',
-                    // TODO(#7108) - Use theme colors
-                    backgroundColor: 'primary.surface',
-                  }}
-                >
-                  <Typography fontWeight='bold' color='primary.dark' pb={1}>
-                    HoH Alert
-                  </Typography>
-                  <Typography variant='body2'>
-                    Head of household must be changed before you can split,
-                    remove, or exit.
-                  </Typography>
-                </Box>
-              )
-            }
+                  });
+                },
+                ...getDeleteEnrollmentDisabledAttrs({
+                  loading: loading || deleteLoading,
+                  currentDashboardEnrollmentId,
+                  householdClient: hc,
+                  householdSize: currentMembers.length,
+                }),
+              },
+              {
+                key: 'split',
+                title: 'Split → New Household',
+                Icon: SplitIcon,
+                onClick: () => setSplitInitiator(hc),
+                ariaLabel: `Split ${clientBriefName(hc.client)} to new household`,
+                ...getSplitDisabledAttrs({
+                  canSplitHouseholds,
+                  loading: loading || deleteLoading,
+                  householdClient: hc,
+                  householdSize: currentMembers.length,
+                }),
+              },
+            ]}
           />
         ),
       },
@@ -277,9 +284,13 @@ const EditHouseholdMemberTable = ({
     proposedHoH,
     onChangeHoH,
     highlight,
-    refetchHousehold,
+    loading,
+    deleteLoading,
     canSplitHouseholds,
+    deleteEnrollment,
   ]);
+
+  if (deleteError) throw deleteError;
 
   return (
     <>
@@ -291,7 +302,7 @@ const EditHouseholdMemberTable = ({
             // HoH indicator column
             'td:nth-of-type(1)': { px: 0 },
           })}
-          loading={loading}
+          loading={loading || deleteLoading}
           loadingVariant='linear'
           tableProps={{
             'aria-label': 'Manage Household',

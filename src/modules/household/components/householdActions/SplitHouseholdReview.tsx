@@ -47,7 +47,6 @@ const SplitHouseholdReview = ({
 
   return (
     <ReviewHouseholdsStep
-      title='Review Split'
       reviewableHouseholds={[
         {
           title: 'Remaining Household',

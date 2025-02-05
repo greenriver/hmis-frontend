@@ -11,8 +11,7 @@ export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
   key: 'Actions',
   tableCellProps: {
     sx: {
-      py: 0,
-      px: 0,
+      p: 1,
       whiteSpace: 'nowrap',
     },
   },

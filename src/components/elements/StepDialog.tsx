@@ -19,21 +19,19 @@ import Loading from '@/components/elements/Loading';
 
 export type StepDefinition = {
   title: string; // must be unique, since it is used as the step's key
+  omitStepTitle?: boolean;
   content: ReactNode;
+  onOpen?: VoidFunction; // callback to invoke when the step is first opened
 
   // if onSubmit is not provided, the default action is to just go to the next step
   onSubmit?: () => Promise<any>; // after onSubmit promise resolves, go to the next step if there is one
   submitButtonText?: string;
   submitLoading?: boolean;
   ButtonProps?: ButtonProps;
-  omitStepTitle?: boolean;
 
   // `disableProceeding` can be used to disable either the onSubmit action, or the default 'next' action
   disableProceeding?: boolean;
   disabledReason?: string;
-
-  // todo @martha - add comment here
-  onOpen?: VoidFunction;
 };
 
 interface Props extends Omit<CommonDialogProps, 'onSubmit' | 'onClose'> {

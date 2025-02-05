@@ -1,7 +1,6 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
-  Box,
   Button,
   ButtonProps,
   Divider,
@@ -10,6 +9,8 @@ import {
   Menu,
   MenuItem,
   MenuProps,
+  Stack,
+  Typography,
 } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { To } from 'react-router-dom';
@@ -38,7 +39,6 @@ interface Props {
   iconButton?: boolean; // use an icon button instead of a text button
   MenuProps?: Omit<MenuProps, 'open'>;
   ButtonProps?: ButtonProps;
-  preMenuComponent?: ReactNode;
 }
 
 const CommonMenuButton = ({
@@ -47,7 +47,6 @@ const CommonMenuButton = ({
   iconButton,
   MenuProps,
   ButtonProps,
-  preMenuComponent,
 }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -102,9 +101,6 @@ const CommonMenuButton = ({
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'menu-button',
-          sx: {
-            pt: !!preMenuComponent ? 0 : undefined,
-          },
           ...MenuListProps,
         }}
         anchorOrigin={{
@@ -120,7 +116,6 @@ const CommonMenuButton = ({
         // disableScrollLock={true}
         {...menuProps}
       >
-        {!!preMenuComponent && <Box sx={{ mb: 1 }}>{preMenuComponent}</Box>}
         {items.map(
           ({
             key,
@@ -130,31 +125,61 @@ const CommonMenuButton = ({
             divider,
             onClick,
             disabled,
+            disabledReason,
             ariaLabel,
             openInNew,
             linkState,
-          }) =>
-            divider ? (
-              <Divider key={key} />
-            ) : to ? (
-              <MenuItem
-                key={key}
-                component={RouterLink}
-                to={to}
-                aria-label={ariaLabel}
-                openInNew={openInNew}
-                state={linkState}
-              >
+          }) => {
+            if (divider) return <Divider key={key} />;
+
+            const props = {
+              key,
+              'aria-label': ariaLabel,
+              disabled,
+            };
+
+            const menuItemLabel = (
+              <Stack direction='row'>
                 {Icon && (
                   <ListItemIcon>
                     <Icon />
                   </ListItemIcon>
                 )}
-                {title}
-              </MenuItem>
-            ) : (
+                <Stack direction='column'>
+                  {title}
+                  {disabled && disabledReason && (
+                    // We often use tooltips to indicate the reason something is disabled,
+                    // but in this case it's more difficult because the MenuItem must be the direct child of Menu
+                    // (otherwise tab navigation doesn't work correctly).
+                    // As a quick-fix, just put the disabled reason here below the label
+                    <Typography
+                      variant={'caption'}
+                      sx={{ fontStyle: 'italic' }}
+                    >
+                      {disabledReason}
+                    </Typography>
+                  )}
+                </Stack>
+              </Stack>
+            );
+
+            if (to) {
+              return (
+                <MenuItem
+                  {...props}
+                  component={RouterLink}
+                  to={to}
+                  state={linkState}
+                  openInNew={openInNew}
+                >
+                  {menuItemLabel}
+                </MenuItem>
+              );
+            }
+
+            return (
               <MenuItem
-                key={key}
+                {...props}
                 onClick={() => {
                   if (onClick) {
                     // close menu before triggering onClick
@@ -162,17 +187,11 @@ const CommonMenuButton = ({
                     onClick();
                   }
                 }}
-                disabled={disabled}
-                aria-label={ariaLabel}
               >
-                {Icon && (
-                  <ListItemIcon>
-                    <Icon />
-                  </ListItemIcon>
-                )}
-                {title}
+                {menuItemLabel}
               </MenuItem>
-            )
+            );
+          }
         )}
       </Menu>
     </>
