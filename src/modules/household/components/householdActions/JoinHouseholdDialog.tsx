@@ -1,5 +1,5 @@
 import { MergeTypeRounded } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import { Alert, Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
@@ -115,7 +115,7 @@ const JoinHouseholdDialog = ({
     error: joinError,
     joinedHousehold,
     remainingEnrollment,
-  } = usePerformJoinHousehold();
+  } = usePerformJoinHousehold({ onSuccess });
 
   const onSubmit = useCallback(
     () =>
@@ -123,15 +123,8 @@ const JoinHouseholdDialog = ({
         receivingHouseholdId: receivingHousehold.id,
         joiningClients,
         relationships,
-        onSuccess,
       }),
-    [
-      joiningClients,
-      onSuccess,
-      performJoinHousehold,
-      receivingHousehold.id,
-      relationships,
-    ]
+    [joiningClients, performJoinHousehold, receivingHousehold.id, relationships]
   );
 
   const stepDefinitions: StepDefinition[] = useMemo(
@@ -214,7 +207,7 @@ const JoinHouseholdDialog = ({
             onClose={onClose}
           />
         ) : (
-          <Loading />
+          <Alert severity={'error'}>Something went wrong</Alert>
         ),
       },
     ],

@@ -58,6 +58,7 @@ const AddRelationshipsStep = ({
               sticky: 'left',
               tableCellProps: (client) => {
                 return {
+                  // enables using aria-labelledby on inputs in this row
                   id: `client-${client.id}`,
                 };
               },

@@ -677,7 +677,7 @@ export const stringifyHousehold = (
 export const findHohOrRep = (
   householdClients: HouseholdClientFieldsFragment[]
 ) => {
-  // It's invalid, but possible in case of bad data, to have no HoH. If so (rare), return the first household member
+  // It's invalid, but possible in case of bad data, to have no HoH. If so, return the first household member
   const sorted = sortHouseholdMembers(householdClients);
   return (
     sorted.find(

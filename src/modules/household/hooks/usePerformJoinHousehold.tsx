@@ -8,7 +8,11 @@ import {
   useJoinHouseholdMutation,
 } from '@/types/gqlTypes';
 
-export function usePerformJoinHousehold() {
+export function usePerformJoinHousehold({
+  onSuccess,
+}: {
+  onSuccess?: (joinedHousehold: HouseholdFieldsFragment) => void;
+}) {
   const [joinedHousehold, setJoinedHousehold] = useState<
     HouseholdFieldsFragment | undefined
   >(undefined);
@@ -22,6 +26,7 @@ export function usePerformJoinHousehold() {
       if (data.joinHousehold) {
         setJoinedHousehold(data.joinHousehold.receivingHousehold);
         setRemainingEnrollment(data.joinHousehold.donorEnrollment || undefined);
+        onSuccess?.(data.joinHousehold.receivingHousehold);
       }
     },
   });
@@ -31,12 +36,10 @@ export function usePerformJoinHousehold() {
       receivingHouseholdId,
       joiningClients,
       relationships,
-      onSuccess,
     }: {
       receivingHouseholdId: string;
       joiningClients: HouseholdClientFieldsFragment[];
       relationships: Record<string, RelationshipToHoH | null>;
-      onSuccess?: (joinedHousehold: HouseholdFieldsFragment) => void;
     }) => {
       const joiningEnrollmentInputs = joiningClients.map((hc) => {
         const relationship = relationships[hc.enrollment.id];
@@ -64,11 +67,6 @@ export function usePerformJoinHousehold() {
             receivingHouseholdId,
             joiningEnrollmentInputs,
           },
-        },
-        onCompleted: (data) => {
-          if (data.joinHousehold) {
-            onSuccess?.(data.joinHousehold.receivingHousehold);
-          }
         },
       });
     },
