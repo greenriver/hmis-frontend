@@ -21059,16 +21059,7 @@ export type AllEnrollmentDetailsFragment = {
     access: {
       __typename?: 'ProjectAccess';
       id: string;
-      canDeleteProject: boolean;
-      canEnrollClients: boolean;
-      canEditEnrollments: boolean;
-      canViewEnrollmentDetails: boolean;
-      canEditProjectDetails: boolean;
-      canViewUnits: boolean;
-      canManageUnits: boolean;
       canManageIncomingReferrals: boolean;
-      canManageOutgoingReferrals: boolean;
-      canManageExternalFormSubmissions: boolean;
     };
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   };
@@ -22378,16 +22369,7 @@ export type GetEnrollmentDetailsQuery = {
       access: {
         __typename?: 'ProjectAccess';
         id: string;
-        canDeleteProject: boolean;
-        canEnrollClients: boolean;
-        canEditEnrollments: boolean;
-        canViewEnrollmentDetails: boolean;
-        canEditProjectDetails: boolean;
-        canViewUnits: boolean;
-        canManageUnits: boolean;
         canManageIncomingReferrals: boolean;
-        canManageOutgoingReferrals: boolean;
-        canManageExternalFormSubmissions: boolean;
       };
       projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
     };
@@ -40986,21 +40968,6 @@ export const ProjectCocCountFragmentDoc = gql`
     }
   }
 `;
-export const ProjectAccessFieldsFragmentDoc = gql`
-  fragment ProjectAccessFields on ProjectAccess {
-    id
-    canDeleteProject
-    canEnrollClients
-    canEditEnrollments
-    canViewEnrollmentDetails
-    canEditProjectDetails
-    canViewUnits
-    canManageUnits
-    canManageIncomingReferrals
-    canManageOutgoingReferrals
-    canManageExternalFormSubmissions
-  }
-`;
 export const AllEnrollmentDetailsFragmentDoc = gql`
   fragment AllEnrollmentDetails on Enrollment {
     ...EnrollmentFields
@@ -41032,7 +40999,8 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       ...ProjectCocCount
       hasUnits
       access {
-        ...ProjectAccessFields
+        id
+        canManageIncomingReferrals
       }
       staffAssignmentsEnabled
     }
@@ -41051,7 +41019,6 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   ${OccurrencePointFormFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectCocCountFragmentDoc}
-  ${ProjectAccessFieldsFragmentDoc}
 `;
 export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   fragment SubmittedEnrollmentResultFields on Enrollment {
@@ -41351,6 +41318,21 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
     id
     operatingEndDate
     operatingStartDate
+  }
+`;
+export const ProjectAccessFieldsFragmentDoc = gql`
+  fragment ProjectAccessFields on ProjectAccess {
+    id
+    canDeleteProject
+    canEnrollClients
+    canEditEnrollments
+    canViewEnrollmentDetails
+    canEditProjectDetails
+    canViewUnits
+    canManageUnits
+    canManageIncomingReferrals
+    canManageOutgoingReferrals
+    canManageExternalFormSubmissions
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
