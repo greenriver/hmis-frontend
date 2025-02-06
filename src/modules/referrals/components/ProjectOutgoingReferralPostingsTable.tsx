@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -63,6 +64,47 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
     ReferralPostingStatus.DeniedStatus,
   ]);
 
+  const rowSecondaryActionConfigs = useCallback(
+    ({ id, project, hohEnrollment }: OutgoingReferral) => {
+      if (!project) return []; // user does not have access to the receiving project
+
+      // If we have a hohEnrollment (meaning the referral was accepted), link to it.
+      // NOTE: its possible that "hohName" and the actual person on "hohEnrollment" don't actually match up,
+      // if the Hoh was changed over time. Thats probably OK, the user can at least get to the right household.
+
+      const enrollmentLinks = hohEnrollment
+        ? [
+            {
+              title: 'View Enrollment',
+              key: 'referral',
+              ariaLabel: `View Enrollment at ${project.projectName}`,
+              to: generateSafePath(
+                EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                {
+                  clientId: hohEnrollment.client.id,
+                  enrollmentId: hohEnrollment.id,
+                }
+              ),
+            },
+          ]
+        : [];
+
+      return [
+        ...enrollmentLinks,
+        {
+          title: 'View Referral',
+          key: 'referral',
+          ariaLabel: `View Referral, ${project.projectName}`,
+          to: generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
+            projectId: project.id,
+            referralPostingId: id,
+          }),
+        },
+      ];
+    },
+    []
+  );
+
   return (
     <GenericTableWithData<
       GetProjectOutgoingReferralPostingsQuery,
@@ -78,43 +120,7 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
       defaultPageSize={15}
       paginationItemName='outgoing referral'
       // If User has access to the receiving project, link to the Referral
-      rowSecondaryActionConfigs={({ id, project, hohEnrollment }) => {
-        if (!project) return []; // user does not have access to the receiving project
-
-        // If we have a hohEnrollment (meaning the referral was accepted), link to it.
-        // NOTE: its possible that "hohName" and the actual person on "hohEnrollment" don't actually match up,
-        // if the Hoh was changed over time. Thats probably OK, the user can at least get to the right household.
-
-        const enrollmentLinks = hohEnrollment
-          ? [
-              {
-                title: 'View Enrollment',
-                key: 'referral',
-                ariaLabel: `View Enrollment at ${project.projectName}`,
-                to: generateSafePath(
-                  EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-                  {
-                    clientId: hohEnrollment.client.id,
-                    enrollmentId: hohEnrollment.id,
-                  }
-                ),
-              },
-            ]
-          : [];
-
-        return [
-          ...enrollmentLinks,
-          {
-            title: 'View Referral',
-            key: 'referral',
-            ariaLabel: `View Referral, ${project.projectName}`,
-            to: generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
-              projectId: project.id,
-              referralPostingId: id,
-            }),
-          },
-        ];
-      }}
+      rowSecondaryActionConfigs={rowSecondaryActionConfigs}
     />
   );
 };
