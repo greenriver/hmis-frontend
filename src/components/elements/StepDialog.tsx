@@ -18,7 +18,8 @@ import CommonDialog, {
 import Loading from '@/components/elements/Loading';
 
 export type StepDefinition = {
-  title: string; // must be unique, since it is used as the step's key
+  key: string;
+  title?: string;
   content: ReactNode;
 
   // if onSubmit is not provided, the default action is to just go to the next step
@@ -26,7 +27,6 @@ export type StepDefinition = {
   submitButtonText?: string;
   submitLoading?: boolean;
   ButtonProps?: ButtonProps;
-  omitStepTitle?: boolean;
 
   // `disableProceeding` can be used to disable either the onSubmit action, or the default 'next' action
   disableProceeding?: boolean;
@@ -64,12 +64,10 @@ const StepDialog = ({
   loading,
   ...rest
 }: Props) => {
-  const [currentStepKey, setCurrentStepKey] = useState(
-    stepDefinitions[0].title
-  );
+  const [currentStepKey, setCurrentStepKey] = useState(stepDefinitions[0].key);
 
   const currentStepIndex = useMemo(
-    () => stepDefinitions.findIndex((t) => t.title === currentStepKey),
+    () => stepDefinitions.findIndex((t) => t.key === currentStepKey),
     [currentStepKey, stepDefinitions]
   );
 
@@ -90,7 +88,6 @@ const StepDialog = ({
     disableProceeding,
     disabledReason,
     ButtonProps,
-    omitStepTitle,
   } = thisStep;
 
   const nextButton = useMemo(() => {
@@ -98,7 +95,7 @@ const StepDialog = ({
 
     const handleClick = async () => {
       if (onSubmit) await onSubmit();
-      if (nextStep) setCurrentStepKey(nextStep.title);
+      if (nextStep) setCurrentStepKey(nextStep.key);
     };
 
     return (
@@ -132,7 +129,7 @@ const StepDialog = ({
           <Loading />
         ) : (
           <Stack sx={{ mt: 2 }} gap={2}>
-            {!omitStepTitle && (
+            {stepTitle && (
               <Box>
                 <Typography variant='overline'>
                   Step {currentStepIndex + 1}
@@ -156,7 +153,7 @@ const StepDialog = ({
                 <Button
                   startIcon={<ArrowLeftIcon />}
                   color='grayscale'
-                  onClick={() => setCurrentStepKey(prevStep.title)}
+                  onClick={() => setCurrentStepKey(prevStep.key)}
                 >
                   Back
                 </Button>

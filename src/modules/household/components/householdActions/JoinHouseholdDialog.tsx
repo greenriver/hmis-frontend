@@ -129,6 +129,7 @@ const JoinHouseholdDialog = ({
   const stepDefinitions: StepDefinition[] = useMemo(
     () => [
       {
+        key: 'select',
         title: 'Select Clients',
         content: (
           <>
@@ -146,6 +147,7 @@ const JoinHouseholdDialog = ({
         disabledReason: 'Select a client',
       },
       {
+        key: 'relationships',
         title: 'Add Relationships',
         content: (
           <AddRelationshipsStep
@@ -173,6 +175,7 @@ const JoinHouseholdDialog = ({
         ...missingRelationshipsProps,
       },
       {
+        key: 'review',
         title: 'Review Join',
         content: !donorHousehold ? (
           <Loading />
@@ -194,8 +197,7 @@ const JoinHouseholdDialog = ({
         disabled: joinLoading || missingRelationshipsCount > 0,
       },
       {
-        title: 'Successful Join',
-        omitStepTitle: true,
+        key: 'success',
         content: (
           <SuccessWayfindingStep
             title={'Successful Join'}
