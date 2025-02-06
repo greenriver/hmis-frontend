@@ -15,21 +15,19 @@ import {
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   ASSIGNED_STAFF_COL,
+  ENROLLMENT_RELATIONSHIP_COL,
   WITH_ENROLLMENT_COLUMNS,
 } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
-  HouseholdClientFieldsFragment,
   HouseholdFilterOptions,
   ProjectEnrollmentsHouseholdClientFieldsFragment,
   ProjectEnrollmentsHouseholdFieldsFragment,
@@ -39,33 +37,11 @@ export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
 >['households']['nodes'][number];
 
-export const HOUSEHOLD_CLIENT_COLUMNS: Record<
-  string,
-  ColumnDef<OneHouseholdClient | HouseholdClientFieldsFragment>
-> = {
-  relationship: {
-    header: 'Relationship',
-    render: (
-      householdClient: OneHouseholdClient | HouseholdClientFieldsFragment
-    ) => (
-      <HmisEnum
-        key={householdClient.id}
-        value={householdClient.relationshipToHoH}
-        enumMap={{
-          ...HmisEnums.RelationshipToHoH,
-          SELF_HEAD_OF_HOUSEHOLD: 'HoH', // HoH, instead of "Self (HoH)"
-        }}
-        whiteSpace='nowrap'
-      />
-    ),
-  },
-};
-
 type OneHouseholdClient = HouseholdFields['householdClients'][number];
-export const PROJECT_HOUSEHOLD_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
+const PROJECT_HOUSEHOLD_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   { ...CLIENT_COLUMNS.name, sticky: 'left' },
   CLIENT_COLUMNS.age,
-  HOUSEHOLD_CLIENT_COLUMNS.relationship,
+  ENROLLMENT_RELATIONSHIP_COL,
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.enrollmentStatus,

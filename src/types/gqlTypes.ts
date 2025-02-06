@@ -17012,6 +17012,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               __typename?: 'Enrollment';
               id: string;
               lockVersion: number;
+              relationshipToHoH: RelationshipToHoH;
               autoExited: boolean;
               entryDate: string;
               exitDate?: string | null;
@@ -22861,6 +22862,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           __typename?: 'Enrollment';
           id: string;
           lockVersion: number;
+          relationshipToHoH: RelationshipToHoH;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -33440,6 +33442,7 @@ export type HouseholdFieldsFragment = {
       __typename?: 'Enrollment';
       id: string;
       lockVersion: number;
+      relationshipToHoH: RelationshipToHoH;
       autoExited: boolean;
       entryDate: string;
       exitDate?: string | null;
@@ -33521,6 +33524,7 @@ export type HouseholdClientFieldsFragment = {
     __typename?: 'Enrollment';
     id: string;
     lockVersion: number;
+    relationshipToHoH: RelationshipToHoH;
     autoExited: boolean;
     entryDate: string;
     exitDate?: string | null;
@@ -33888,6 +33892,7 @@ export type GetHouseholdQuery = {
         __typename?: 'Enrollment';
         id: string;
         lockVersion: number;
+        relationshipToHoH: RelationshipToHoH;
         autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
@@ -41908,6 +41913,56 @@ export const GeolocationFieldsWithMetadataFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const HouseholdClientFieldsFragmentDoc = gql`
+  fragment HouseholdClientFields on HouseholdClient {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+      ...ClientIdentificationFields
+      ...AssessedClientFields
+      access {
+        ...ClientAccessFields
+      }
+      externalIds {
+        ...ClientIdentifierFields
+      }
+      alerts {
+        ...ClientAlertFields
+      }
+    }
+    enrollment {
+      id
+      lockVersion
+      relationshipToHoH
+      ...EnrollmentRangeFields
+      autoExited
+      currentUnit {
+        id
+        name
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+  ${AssessedClientFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
+`;
+export const HouseholdFieldsFragmentDoc = gql`
+  fragment HouseholdFields on Household {
+    id
+    householdSize
+    shortId
+    householdClients {
+      ...HouseholdClientFields
+    }
+  }
+  ${HouseholdClientFieldsFragmentDoc}
 `;
 export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
   fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
