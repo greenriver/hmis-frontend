@@ -4702,6 +4702,12 @@ export type PickListOption = {
 };
 
 export enum PickListType {
+  /**
+   * Units available for the given Enrollment at the given project. Includes all
+   * available units at project even if they have a different type from what the
+   * household is currently occupying.
+   */
+  AdminAvailableUnitsForEnrollment = 'ADMIN_AVAILABLE_UNITS_FOR_ENROLLMENT',
   AllServiceCategories = 'ALL_SERVICE_CATEGORIES',
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
@@ -4717,7 +4723,10 @@ export enum PickListType {
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
-  /** Units available for the given household at the given project */
+  /**
+   * Units available for the given Enrollment at the given project. List is limited
+   * to units with the same unit type currently occupied by the household, if any.
+   */
   AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
@@ -21710,6 +21719,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
         __typename?: 'Enrollment';
         id: string;
         lockVersion: number;
+        relationshipToHoH: RelationshipToHoH;
         autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
@@ -33705,6 +33715,7 @@ export type JoinHouseholdMutation = {
           __typename?: 'Enrollment';
           id: string;
           lockVersion: number;
+          relationshipToHoH: RelationshipToHoH;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -33794,6 +33805,7 @@ export type JoinHouseholdMutation = {
           __typename?: 'Enrollment';
           id: string;
           lockVersion: number;
+          relationshipToHoH: RelationshipToHoH;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -41791,6 +41803,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
     enrollment {
       id
       lockVersion
+      relationshipToHoH
       ...EnrollmentRangeFields
       autoExited
       currentUnit {
@@ -41913,56 +41926,6 @@ export const GeolocationFieldsWithMetadataFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
-`;
-export const HouseholdClientFieldsFragmentDoc = gql`
-  fragment HouseholdClientFields on HouseholdClient {
-    id
-    relationshipToHoH
-    client {
-      id
-      ...ClientName
-      ...ClientIdentificationFields
-      ...AssessedClientFields
-      access {
-        ...ClientAccessFields
-      }
-      externalIds {
-        ...ClientIdentifierFields
-      }
-      alerts {
-        ...ClientAlertFields
-      }
-    }
-    enrollment {
-      id
-      lockVersion
-      relationshipToHoH
-      ...EnrollmentRangeFields
-      autoExited
-      currentUnit {
-        id
-        name
-      }
-    }
-  }
-  ${ClientNameFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
-  ${AssessedClientFieldsFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
-  ${ClientIdentifierFieldsFragmentDoc}
-  ${ClientAlertFieldsFragmentDoc}
-  ${EnrollmentRangeFieldsFragmentDoc}
-`;
-export const HouseholdFieldsFragmentDoc = gql`
-  fragment HouseholdFields on Household {
-    id
-    householdSize
-    shortId
-    householdClients {
-      ...HouseholdClientFields
-    }
-  }
-  ${HouseholdClientFieldsFragmentDoc}
 `;
 export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
   fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {

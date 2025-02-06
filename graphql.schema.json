@@ -32365,6 +32365,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "ADMIN_AVAILABLE_UNITS_FOR_ENROLLMENT",
+            "description": "Units available for the given Enrollment at the given project. Includes all\navailable units at project even if they have a different type from what the\nhousehold is currently occupying.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ALL_SERVICE_CATEGORIES",
             "description": null,
             "isDeprecated": false,
@@ -32414,7 +32420,7 @@
           },
           {
             "name": "AVAILABLE_UNITS_FOR_ENROLLMENT",
-            "description": "Units available for the given household at the given project",
+            "description": "Units available for the given Enrollment at the given project. List is limited\nto units with the same unit type currently occupied by the household, if any.",
             "isDeprecated": false,
             "deprecationReason": null
           },
