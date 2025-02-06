@@ -6,7 +6,6 @@ import useClientDashboardContext from '@/modules/client/hooks/useClientDashboard
 
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { ClientFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
@@ -50,14 +49,12 @@ const EditClientPage = () => {
         </Stack>
       }
       FormNavigationProps={{
-        contentsBelowNavigation: (
-          <RootPermissionsFilter permissions='canDeleteClients'>
-            <DeleteClientButton
-              clientId={client.id}
-              clientLockVersion={client.lockVersion}
-              onSuccess={() => navigate(generateSafePath(Routes.CLIENT_SEARCH))}
-            />
-          </RootPermissionsFilter>
+        contentsBelowNavigation: client.access.canDeleteClient && (
+          <DeleteClientButton
+            clientId={client.id}
+            clientLockVersion={client.lockVersion}
+            onSuccess={() => navigate(generateSafePath(Routes.CLIENT_SEARCH))}
+          />
         ),
       }}
     />

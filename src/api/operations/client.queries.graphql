@@ -36,6 +36,7 @@ query GetClientName($id: ID!) {
   }
 }
 
+# do we need this?
 query GetClientPermissions($id: ID!) {
   client(id: $id) {
     id

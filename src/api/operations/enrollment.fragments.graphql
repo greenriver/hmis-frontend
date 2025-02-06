@@ -86,7 +86,7 @@ fragment EnrolledClientFields on Client {
     ...CustomDataElementFields
   }
   access {
-    ...ClientAccessFields
+    ...ClientAccessFields # todo: use specific fragment or resolve on enrollment?
   }
 }
 

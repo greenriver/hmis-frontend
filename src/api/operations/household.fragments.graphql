@@ -16,7 +16,7 @@ fragment HouseholdClientFields on HouseholdClient {
     ...ClientIdentificationFields
     ...AssessedClientFields
     access {
-      ...ClientAccessFields
+      ...ClientAccessFields # reduce scope of whats in here?
     }
     externalIds {
       ...ClientIdentifierFields
