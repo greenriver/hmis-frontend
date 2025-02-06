@@ -8092,7 +8092,6 @@ export type ProjectAccessFieldsFragment = {
   canEditProjectDetails: boolean;
   canViewUnits: boolean;
   canManageUnits: boolean;
-  canManageDeniedReferrals: boolean;
   canManageIncomingReferrals: boolean;
   canManageOutgoingReferrals: boolean;
   canManageExternalFormSubmissions: boolean;
@@ -21107,7 +21106,6 @@ export type AllEnrollmentDetailsFragment = {
       canEditProjectDetails: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
-      canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
@@ -22447,7 +22445,6 @@ export type GetEnrollmentDetailsQuery = {
         canEditProjectDetails: boolean;
         canViewUnits: boolean;
         canManageUnits: boolean;
-        canManageDeniedReferrals: boolean;
         canManageIncomingReferrals: boolean;
         canManageOutgoingReferrals: boolean;
         canManageExternalFormSubmissions: boolean;
@@ -31079,7 +31076,6 @@ export type SubmitFormMutation = {
             canEditProjectDetails: boolean;
             canViewUnits: boolean;
             canManageUnits: boolean;
-            canManageDeniedReferrals: boolean;
             canManageIncomingReferrals: boolean;
             canManageOutgoingReferrals: boolean;
             canManageExternalFormSubmissions: boolean;
@@ -34376,7 +34372,6 @@ export type ProjectAllFieldsFragment = {
     canEditProjectDetails: boolean;
     canViewUnits: boolean;
     canManageUnits: boolean;
-    canManageDeniedReferrals: boolean;
     canManageIncomingReferrals: boolean;
     canManageOutgoingReferrals: boolean;
     canManageExternalFormSubmissions: boolean;
@@ -35282,7 +35277,6 @@ export type GetProjectQuery = {
       canEditProjectDetails: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
-      canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
@@ -35462,7 +35456,6 @@ export type GetProjectPermissionsQuery = {
       canEditProjectDetails: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
-      canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
@@ -41064,7 +41057,6 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canEditProjectDetails
     canViewUnits
     canManageUnits
-    canManageDeniedReferrals
     canManageIncomingReferrals
     canManageOutgoingReferrals
     canManageExternalFormSubmissions
