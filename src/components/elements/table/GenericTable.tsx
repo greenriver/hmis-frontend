@@ -71,7 +71,7 @@ export interface Props<T> {
   selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
   selected?: readonly string[]; // selection can optionally be controlled by the parent
   isRowSelectable?: (row: T) => boolean;
-  onChangeSelectedRowIds?: (ids: readonly string[]) => void;
+  onChangeSelectedRowIds?: (ids: readonly string[]) => void; // Used BOTH by parents that control selection, AND those with uncontrolled selection to know what rows are currently selected
   EnhancedTableToolbarProps?: Omit<
     EnhancedTableToolbarProps<T>,
     'selectedIds' | 'rows'
@@ -298,8 +298,8 @@ const GenericTable = <T extends { id: string }>({
       selectable: !!selectable,
       isRowSelectable,
       rows,
-      selectedCtrl: selectedProp,
-      onChangeSelectedCtrl: onChangeSelectedRowIds,
+      selectedControlled: selectedProp,
+      onChangeSelected: onChangeSelectedRowIds,
     });
 
   // avoid state flicker due to state reset

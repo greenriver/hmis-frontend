@@ -5,14 +5,14 @@ export function useTableSelection<T extends { id: string }>({
   selectable = false,
   isRowSelectable,
   rows,
-  selectedCtrl,
-  onChangeSelectedCtrl,
+  selectedControlled,
+  onChangeSelected,
 }: {
   selectable?: boolean;
   isRowSelectable?: (row: T) => boolean;
   rows: T[];
-  selectedCtrl?: readonly string[];
-  onChangeSelectedCtrl?: (ids: readonly string[]) => void;
+  selectedControlled?: readonly string[];
+  onChangeSelected?: (ids: readonly string[]) => void;
 }) {
   // Initially set selected to undefined, so we can early return and avoid state flicker
   const [selectedState, setSelectedState] = useState<string[]>();
@@ -20,11 +20,11 @@ export function useTableSelection<T extends { id: string }>({
   // Table row selection can be either controlled or uncontrolled:
   // - controlled: `selectedCtrl` and `onChangeSelectedCtrl` props passed from parent
   // - uncontrolled: managed internally in `selectedState`
-  const isSelectControlled = selectedCtrl !== undefined;
+  const isSelectControlled = selectedControlled !== undefined;
 
   const selected = useMemo(
-    () => (isSelectControlled ? selectedCtrl : selectedState || []),
-    [isSelectControlled, selectedState, selectedCtrl]
+    () => (isSelectControlled ? selectedControlled : selectedState || []),
+    [isSelectControlled, selectedState, selectedControlled]
   );
 
   const selectableRowIds = useMemo(() => {
@@ -38,14 +38,14 @@ export function useTableSelection<T extends { id: string }>({
       if (event.target.checked) {
         // select all
         if (!isSelectControlled) setSelectedState(selectableRowIds);
-        onChangeSelectedCtrl?.(selectableRowIds);
+        onChangeSelected?.(selectableRowIds);
       } else {
         // deselect all
         if (!isSelectControlled) setSelectedState([]);
-        onChangeSelectedCtrl?.([]);
+        onChangeSelected?.([]);
       }
     },
-    [isSelectControlled, onChangeSelectedCtrl, selectableRowIds]
+    [isSelectControlled, onChangeSelected, selectableRowIds]
   );
 
   const handleSelectRow = useCallback(
@@ -55,9 +55,9 @@ export function useTableSelection<T extends { id: string }>({
         : [...selected, row.id];
 
       if (!isSelectControlled) setSelectedState(newValue);
-      onChangeSelectedCtrl?.(newValue);
+      onChangeSelected?.(newValue);
     },
-    [isSelectControlled, onChangeSelectedCtrl, selected]
+    [isSelectControlled, onChangeSelected, selected]
   );
 
   // Clear selection when data changes
