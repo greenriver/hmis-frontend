@@ -23,10 +23,7 @@ import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings
 import AssociatedHouseholdMembers from '@/modules/household/components/AssociatedHouseholdMembers';
 import { RecentHouseholdMember } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import {
-  CLIENT_COLUMNS,
-  CLIENT_SSN_COLUMN,
-} from '@/modules/search/components/ClientSearch';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import {
   ClientSearchInput,
@@ -45,12 +42,6 @@ interface Props {
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
 }
-
-const householdMemberColumns: ColumnDef<ClientSearchResultFieldsFragment>[] = [
-  CLIENT_COLUMNS.name,
-  { ...CLIENT_SSN_COLUMN, width: '150px' },
-  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
-];
 
 const ManageHousehold = ({
   householdId: initialHouseholdId,
@@ -98,8 +89,10 @@ const ManageHousehold = ({
   useScrollToHash(loading || recentMembersLoading);
   const isMobile = useIsMobile();
 
-  const columns: ColumnDef<ClientSearchResultFieldsFragment>[] = useMemo(() => {
-    const defaults = [...householdMemberColumns];
+  const columns = useMemo(() => {
+    const defaults: ColumnDef<
+      ClientSearchResultFieldsFragment | RecentHouseholdMember
+    >[] = [CLIENT_COLUMNS.name, CLIENT_COLUMNS.dobAge];
     if (isMobile) {
       // On mobile, show enrollment button right next to the client name so user
       // doesn't have to scroll to the right.
@@ -114,7 +107,7 @@ const ManageHousehold = ({
       ];
     }
     return defaults;
-  }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
+  }, [addToEnrollmentColumns, isMobile, globalFeatureFlags?.mciId]);
 
   const filters = useFilters({
     type: 'ClientFilterOptions',

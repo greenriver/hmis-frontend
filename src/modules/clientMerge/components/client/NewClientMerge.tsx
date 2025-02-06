@@ -11,16 +11,17 @@ import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
-import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
+import {
+  ContextualClientSsn,
+  ContextualSsnToggleButton,
+  SsnDobShowContextProvider,
+} from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import {
-  CLIENT_COLUMNS,
-  CLIENT_SSN_COLUMN,
-} from '@/modules/search/components/ClientSearch';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -28,12 +29,25 @@ import {
   ClientSearchInput,
   ClientSearchResultFieldsFragment,
   ClientSortOption,
+  ClientSsnFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
   useMergeClientsMutation,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
+
+const clientSsnColumn: ColumnDef<ClientSsnFieldsFragment> = {
+  header: (
+    <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
+  ),
+  key: 'ssn',
+  render: (record) => <ContextualClientSsn client={record} />,
+  // Don't link cell even if row is linked because of click target
+  dontLink: true,
+  // Fixed width so it doesn't move around when visibility is toggled
+  width: '150px',
+};
 
 const NewClientMerge = () => {
   const { client } = useClientDashboardContext();
@@ -73,12 +87,8 @@ const NewClientMerge = () => {
       { header: 'HMIS ID', render: 'id' },
       CLIENT_COLUMNS.first,
       CLIENT_COLUMNS.last,
-      {
-        ...CLIENT_SSN_COLUMN,
-        width: '150px',
-        hide: !client.access.canViewFullSsn && !client.access.canViewPartialSsn,
-      },
-      { ...CLIENT_COLUMNS.dobAge, width: '180px' },
+      clientSsnColumn,
+      CLIENT_COLUMNS.dobAge,
       {
         header: 'Gender',
         render: (client: ClientSearchResultFieldsFragment) => (
@@ -87,7 +97,7 @@ const NewClientMerge = () => {
       },
       HudRecordMetadataHistoryColumn,
     ],
-    [client.access]
+    []
   );
 
   const filters = useFilters({

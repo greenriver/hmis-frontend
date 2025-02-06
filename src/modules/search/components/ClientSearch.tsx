@@ -22,9 +22,7 @@ import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/ClientSearchResultCard';
 import {
   ContextualClientDobAge,
-  ContextualClientSsn,
   ContextualDobToggleButton,
-  ContextualSsnToggleButton,
   SsnDobShowContextProvider,
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -41,7 +39,6 @@ import {
   ClientSearchInput as ClientSearchInputType,
   ClientSearchResultFieldsFragment,
   ClientSortOption,
-  ClientSsnFieldsFragment,
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
@@ -98,16 +95,11 @@ export const CLIENT_COLUMNS: {
     ),
     key: 'dob',
     render: (client) => <ContextualClientDobAge client={asClient(client)} />,
+    // Don't link cell even if row is linked, because of internal click target
     dontLink: true,
+    // Fixed width so it doesn't move around when visibility is toggled
+    width: '180px',
   },
-};
-export const CLIENT_SSN_COLUMN: ColumnDef<ClientSsnFieldsFragment> = {
-  header: (
-    <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
-  ),
-  key: 'ssn',
-  render: (record) => <ContextualClientSsn client={record} />,
-  dontLink: true,
 };
 
 export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
@@ -115,7 +107,7 @@ export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[
     CLIENT_COLUMNS.id,
     CLIENT_COLUMNS.first,
     CLIENT_COLUMNS.last,
-    { ...CLIENT_COLUMNS.dobAge, width: '180px' },
+    CLIENT_COLUMNS.dobAge,
   ];
 
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
