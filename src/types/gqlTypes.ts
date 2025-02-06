@@ -8074,6 +8074,7 @@ export type ClientAccessFieldsFragment = {
   canViewFullSsn: boolean;
   canViewPartialSsn: boolean;
   canViewClientName: boolean;
+  canViewClientPhoto: boolean;
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
@@ -8210,6 +8211,7 @@ export type ClientWithAlertFieldsFragment = {
   }>;
   access: {
     __typename?: 'ClientAccess';
+    id: string;
     canViewClientAlerts: boolean;
     canManageClientAlerts: boolean;
   };
@@ -8352,6 +8354,7 @@ export type GetHouseholdClientAlertsQuery = {
         }>;
         access: {
           __typename?: 'ClientAccess';
+          id: string;
           canViewClientAlerts: boolean;
           canManageClientAlerts: boolean;
         };
@@ -15471,8 +15474,8 @@ export type BulkServicesClientSearchQuery = {
       nameSuffix?: string | null;
       dob?: string | null;
       age?: number | null;
-      ssn?: string | null;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       alerts: Array<{
         __typename?: 'ClientAlert';
         id: string;
@@ -15502,12 +15505,6 @@ export type BulkServicesClientSearchQuery = {
           nodes: Array<{ __typename?: 'Service'; id: string }>;
         };
       } | null;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-      };
     }>;
   };
 };
@@ -15578,8 +15575,9 @@ export type ClientSearchResultFieldsFragment = {
   nameSuffix?: string | null;
   dob?: string | null;
   age?: number | null;
-  ssn?: string | null;
   gender: Array<Gender>;
+  pronouns: Array<string>;
+  ssn?: string | null;
   externalIds: Array<{
     __typename?: 'ExternalIdentifier';
     id: string;
@@ -15588,31 +15586,6 @@ export type ClientSearchResultFieldsFragment = {
     label: string;
     type: ExternalIdentifierType;
   }>;
-  access: {
-    __typename?: 'ClientAccess';
-    id: string;
-    canViewFullSsn: boolean;
-    canViewPartialSsn: boolean;
-    canEditClient: boolean;
-    canDeleteClient: boolean;
-    canViewDob: boolean;
-    canViewClientName: boolean;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
-    canViewEnrollmentDetails: boolean;
-    canDeleteAssessments: boolean;
-    canManageAnyClientFiles: boolean;
-    canManageOwnClientFiles: boolean;
-    canViewAnyConfidentialClientFiles: boolean;
-    canViewAnyNonconfidentialClientFiles: boolean;
-    canUploadClientFiles: boolean;
-    canViewAnyFiles: boolean;
-    canAuditClients: boolean;
-    canManageScanCards: boolean;
-    canMergeClients: boolean;
-    canViewClientAlerts: boolean;
-    canManageClientAlerts: boolean;
-  };
   alerts: Array<{
     __typename?: 'ClientAlert';
     id: string;
@@ -15629,6 +15602,12 @@ export type ClientSearchResultFieldsFragment = {
       email: string;
     } | null;
   }>;
+  access: {
+    __typename?: 'ClientAccess';
+    id: string;
+    canViewFullSsn: boolean;
+    canViewPartialSsn: boolean;
+  };
 };
 
 export type ClientFieldsFragment = {
@@ -15693,6 +15672,7 @@ export type ClientFieldsFragment = {
     canDeleteClient: boolean;
     canViewDob: boolean;
     canViewClientName: boolean;
+    canViewClientPhoto: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -15974,6 +15954,7 @@ export type ClientImageFragment = {
   } | null;
   access: {
     __typename?: 'ClientAccess';
+    id: string;
     canEditClient: boolean;
     canViewClientPhoto: boolean;
   };
@@ -15985,8 +15966,15 @@ export type ClientIdentificationFieldsFragment = {
   lockVersion: number;
   dob?: string | null;
   age?: number | null;
-  ssn?: string | null;
   gender: Array<Gender>;
+  pronouns: Array<string>;
+};
+
+export type ClientSsnFieldsFragment = {
+  __typename?: 'Client';
+  id: string;
+  lockVersion: number;
+  ssn?: string | null;
   access: {
     __typename?: 'ClientAccess';
     id: string;
@@ -16048,6 +16036,7 @@ export type SearchClientsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ClientSortOption>;
+  includeSsn?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type SearchClientsQuery = {
@@ -16070,8 +16059,9 @@ export type SearchClientsQuery = {
       nameSuffix?: string | null;
       dob?: string | null;
       age?: number | null;
-      ssn?: string | null;
       gender: Array<Gender>;
+      pronouns: Array<string>;
+      ssn?: string | null;
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
         id: string;
@@ -16080,31 +16070,6 @@ export type SearchClientsQuery = {
         label: string;
         type: ExternalIdentifierType;
       }>;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-        canEditClient: boolean;
-        canDeleteClient: boolean;
-        canViewDob: boolean;
-        canViewClientName: boolean;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
-        canViewEnrollmentDetails: boolean;
-        canDeleteAssessments: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canViewAnyConfidentialClientFiles: boolean;
-        canViewAnyNonconfidentialClientFiles: boolean;
-        canUploadClientFiles: boolean;
-        canViewAnyFiles: boolean;
-        canAuditClients: boolean;
-        canManageScanCards: boolean;
-        canMergeClients: boolean;
-        canViewClientAlerts: boolean;
-        canManageClientAlerts: boolean;
-      };
       alerts: Array<{
         __typename?: 'ClientAlert';
         id: string;
@@ -16121,6 +16086,12 @@ export type SearchClientsQuery = {
           email: string;
         } | null;
       }>;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
     }>;
   };
 };
@@ -16193,6 +16164,7 @@ export type GetClientQuery = {
       canDeleteClient: boolean;
       canViewDob: boolean;
       canViewClientName: boolean;
+      canViewClientPhoto: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -16434,6 +16406,7 @@ export type GetClientPermissionsQuery = {
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
+      canViewClientPhoto: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -16470,6 +16443,7 @@ export type GetClientImageQuery = {
     } | null;
     access: {
       __typename?: 'ClientAccess';
+      id: string;
       canEditClient: boolean;
       canViewClientPhoto: boolean;
     };
@@ -16740,6 +16714,7 @@ export type UpdateClientImageMutation = {
       } | null;
       access: {
         __typename?: 'ClientAccess';
+        id: string;
         canEditClient: boolean;
         canViewClientPhoto: boolean;
       };
@@ -16781,6 +16756,7 @@ export type DeleteClientImageMutation = {
       } | null;
       access: {
         __typename?: 'ClientAccess';
+        id: string;
         canEditClient: boolean;
         canViewClientPhoto: boolean;
       };
@@ -16933,19 +16909,21 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               nameSuffix?: string | null;
               dob?: string | null;
               age?: number | null;
-              ssn?: string | null;
               gender: Array<Gender>;
+              pronouns: Array<string>;
+              ssn?: string | null;
               race: Array<Race>;
               veteranStatus: NoYesReasonsForMissingData;
               access: {
                 __typename?: 'ClientAccess';
                 id: string;
-                canViewFullSsn: boolean;
-                canViewPartialSsn: boolean;
                 canEditClient: boolean;
                 canDeleteClient: boolean;
                 canViewDob: boolean;
+                canViewFullSsn: boolean;
+                canViewPartialSsn: boolean;
                 canViewClientName: boolean;
+                canViewClientPhoto: boolean;
                 canEditEnrollments: boolean;
                 canDeleteEnrollments: boolean;
                 canViewEnrollmentDetails: boolean;
@@ -17688,8 +17666,9 @@ export type GetMergeCandidatesQuery = {
         nameSuffix?: string | null;
         dob?: string | null;
         age?: number | null;
-        ssn?: string | null;
         gender: Array<Gender>;
+        pronouns: Array<string>;
+        ssn?: string | null;
         access: {
           __typename?: 'ClientAccess';
           id: string;
@@ -17844,6 +17823,7 @@ export type MergeClientsMutation = {
         canDeleteClient: boolean;
         canViewDob: boolean;
         canViewClientName: boolean;
+        canViewClientPhoto: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -20109,18 +20089,12 @@ export type ProjectEnrollmentFieldsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
     age?: number | null;
-    ssn?: string | null;
     gender: Array<Gender>;
+    pronouns: Array<string>;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
-    access: {
-      __typename?: 'ClientAccess';
-      id: string;
-      canViewFullSsn: boolean;
-      canViewPartialSsn: boolean;
-    };
   };
 };
 
@@ -20344,6 +20318,7 @@ export type EnrolledClientFieldsFragment = {
     canViewFullSsn: boolean;
     canViewPartialSsn: boolean;
     canViewClientName: boolean;
+    canViewClientPhoto: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -20653,6 +20628,7 @@ export type AllEnrollmentDetailsFragment = {
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
+      canViewClientPhoto: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -22002,6 +21978,7 @@ export type GetEnrollmentDetailsQuery = {
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
         canViewClientName: boolean;
+        canViewClientPhoto: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -22653,19 +22630,21 @@ export type GetEnrollmentWithHouseholdQuery = {
           nameSuffix?: string | null;
           dob?: string | null;
           age?: number | null;
-          ssn?: string | null;
           gender: Array<Gender>;
+          pronouns: Array<string>;
+          ssn?: string | null;
           race: Array<Race>;
           veteranStatus: NoYesReasonsForMissingData;
           access: {
             __typename?: 'ClientAccess';
             id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
             canViewClientName: boolean;
+            canViewClientPhoto: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -30104,6 +30083,7 @@ export type SubmitFormMutation = {
             canDeleteClient: boolean;
             canViewDob: boolean;
             canViewClientName: boolean;
+            canViewClientPhoto: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -33232,19 +33212,21 @@ export type HouseholdFieldsFragment = {
       nameSuffix?: string | null;
       dob?: string | null;
       age?: number | null;
-      ssn?: string | null;
       gender: Array<Gender>;
+      pronouns: Array<string>;
+      ssn?: string | null;
       race: Array<Race>;
       veteranStatus: NoYesReasonsForMissingData;
       access: {
         __typename?: 'ClientAccess';
         id: string;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
         canViewClientName: boolean;
+        canViewClientPhoto: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -33314,19 +33296,21 @@ export type HouseholdClientFieldsFragment = {
     nameSuffix?: string | null;
     dob?: string | null;
     age?: number | null;
-    ssn?: string | null;
     gender: Array<Gender>;
+    pronouns: Array<string>;
+    ssn?: string | null;
     race: Array<Race>;
     veteranStatus: NoYesReasonsForMissingData;
     access: {
       __typename?: 'ClientAccess';
       id: string;
-      canViewFullSsn: boolean;
-      canViewPartialSsn: boolean;
       canEditClient: boolean;
       canDeleteClient: boolean;
       canViewDob: boolean;
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
       canViewClientName: boolean;
+      canViewClientPhoto: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -33400,14 +33384,8 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       nameSuffix?: string | null;
       dob?: string | null;
       age?: number | null;
-      ssn?: string | null;
       gender: Array<Gender>;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-      };
+      pronouns: Array<string>;
     };
     enrollment: {
       __typename?: 'Enrollment';
@@ -33448,14 +33426,8 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     nameSuffix?: string | null;
     dob?: string | null;
     age?: number | null;
-    ssn?: string | null;
     gender: Array<Gender>;
-    access: {
-      __typename?: 'ClientAccess';
-      id: string;
-      canViewFullSsn: boolean;
-      canViewPartialSsn: boolean;
-    };
+    pronouns: Array<string>;
   };
   enrollment: {
     __typename?: 'Enrollment';
@@ -33493,19 +33465,21 @@ export type GetHouseholdQuery = {
         nameSuffix?: string | null;
         dob?: string | null;
         age?: number | null;
-        ssn?: string | null;
         gender: Array<Gender>;
+        pronouns: Array<string>;
+        ssn?: string | null;
         race: Array<Race>;
         veteranStatus: NoYesReasonsForMissingData;
         access: {
           __typename?: 'ClientAccess';
           id: string;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
           canEditClient: boolean;
           canDeleteClient: boolean;
           canViewDob: boolean;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
           canViewClientName: boolean;
+          canViewClientPhoto: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -35367,18 +35341,12 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
     age?: number | null;
-    ssn?: string | null;
     gender: Array<Gender>;
+    pronouns: Array<string>;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
-    access: {
-      __typename?: 'ClientAccess';
-      id: string;
-      canViewFullSsn: boolean;
-      canViewPartialSsn: boolean;
-    };
   };
 };
 
@@ -35731,18 +35699,12 @@ export type GetProjectEnrollmentsQuery = {
           veteranStatus: NoYesReasonsForMissingData;
           lockVersion: number;
           age?: number | null;
-          ssn?: string | null;
           gender: Array<Gender>;
+          pronouns: Array<string>;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
-          access: {
-            __typename?: 'ClientAccess';
-            id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-          };
         };
       }>;
     };
@@ -35787,14 +35749,8 @@ export type GetProjectHouseholdsQuery = {
             nameSuffix?: string | null;
             dob?: string | null;
             age?: number | null;
-            ssn?: string | null;
             gender: Array<Gender>;
-            access: {
-              __typename?: 'ClientAccess';
-              id: string;
-              canViewFullSsn: boolean;
-              canViewPartialSsn: boolean;
-            };
+            pronouns: Array<string>;
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -37129,16 +37085,17 @@ export type UpdateReferralPostingMutation = {
           nameSuffix?: string | null;
           dob?: string | null;
           age?: number | null;
-          ssn?: string | null;
+          pronouns: Array<string>;
           access: {
             __typename?: 'ClientAccess';
             id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
             canViewClientName: boolean;
+            canViewClientPhoto: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -37394,16 +37351,17 @@ export type GetReferralPostingQuery = {
         nameSuffix?: string | null;
         dob?: string | null;
         age?: number | null;
-        ssn?: string | null;
+        pronouns: Array<string>;
         access: {
           __typename?: 'ClientAccess';
           id: string;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
           canEditClient: boolean;
           canDeleteClient: boolean;
           canViewDob: boolean;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
           canViewClientName: boolean;
+          canViewClientPhoto: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -37699,16 +37657,17 @@ export type ReferralPostingDetailFieldsFragment = {
       nameSuffix?: string | null;
       dob?: string | null;
       age?: number | null;
-      ssn?: string | null;
+      pronouns: Array<string>;
       access: {
         __typename?: 'ClientAccess';
         id: string;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
         canViewClientName: boolean;
+        canViewClientPhoto: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -40024,6 +39983,7 @@ export const ClientWithAlertFieldsFragmentDoc = gql`
       ...ClientAlertFields
     }
     access {
+      id
       canViewClientAlerts
       canManageClientAlerts
     }
@@ -40668,8 +40628,15 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
     lockVersion
     dob
     age
-    ssn
     gender
+    pronouns
+  }
+`;
+export const ClientSsnFieldsFragmentDoc = gql`
+  fragment ClientSsnFields on Client {
+    id
+    lockVersion
+    ssn
     access {
       id
       canViewFullSsn
@@ -40686,44 +40653,16 @@ export const ClientIdentifierFieldsFragmentDoc = gql`
     type
   }
 `;
-export const ClientAccessFieldsFragmentDoc = gql`
-  fragment ClientAccessFields on ClientAccess {
-    id
-    canEditClient
-    canDeleteClient
-    canViewDob
-    canViewFullSsn
-    canViewPartialSsn
-    canViewClientName
-    canEditEnrollments
-    canDeleteEnrollments
-    canViewEnrollmentDetails
-    canDeleteAssessments
-    canManageAnyClientFiles
-    canManageOwnClientFiles
-    canViewAnyConfidentialClientFiles
-    canViewAnyNonconfidentialClientFiles
-    canUploadClientFiles
-    canViewAnyFiles
-    canAuditClients
-    canManageScanCards
-    canMergeClients
-    canViewClientAlerts
-    canManageClientAlerts
-  }
-`;
 export const ClientSearchResultFieldsFragmentDoc = gql`
   fragment ClientSearchResultFields on Client {
     ...ClientName
     ...ClientIdentificationFields
+    ...ClientSsnFields @include(if: $includeSsn)
     dateCreated
     dateDeleted
     dateUpdated
     externalIds {
       ...ClientIdentifierFields
-    }
-    access {
-      ...ClientAccessFields
     }
     alerts {
       ...ClientAlertFields
@@ -40731,8 +40670,8 @@ export const ClientSearchResultFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientSsnFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
   ${ClientAlertFieldsFragmentDoc}
 `;
 export const ClientVeteranInfoFieldsFragmentDoc = gql`
@@ -40750,6 +40689,33 @@ export const ClientVeteranInfoFieldsFragmentDoc = gql`
     otherTheater
     militaryBranch
     dischargeStatus
+  }
+`;
+export const ClientAccessFieldsFragmentDoc = gql`
+  fragment ClientAccessFields on ClientAccess {
+    id
+    canEditClient
+    canDeleteClient
+    canViewDob
+    canViewFullSsn
+    canViewPartialSsn
+    canViewClientName
+    canViewClientPhoto
+    canEditEnrollments
+    canDeleteEnrollments
+    canViewEnrollmentDetails
+    canDeleteAssessments
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canViewAnyConfidentialClientFiles
+    canViewAnyNonconfidentialClientFiles
+    canUploadClientFiles
+    canViewAnyFiles
+    canAuditClients
+    canManageScanCards
+    canMergeClients
+    canViewClientAlerts
+    canManageClientAlerts
   }
 `;
 export const ClientNameObjectFieldsFragmentDoc = gql`
@@ -40798,6 +40764,7 @@ export const ClientContactPointFieldsFragmentDoc = gql`
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
+    ...ClientSsnFields
     ...ClientVeteranInfoFields
     dobDataQuality
     gender
@@ -40843,6 +40810,7 @@ export const ClientFieldsFragmentDoc = gql`
     }
   }
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientSsnFieldsFragmentDoc}
   ${ClientVeteranInfoFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
@@ -40868,6 +40836,7 @@ export const ClientImageFragmentDoc = gql`
       ...ClientImageFields
     }
     access {
+      id
       canEditClient
       canViewClientPhoto
     }
@@ -43859,6 +43828,7 @@ export const SearchClientsDocument = gql`
     $limit: Int
     $offset: Int
     $sortOrder: ClientSortOption = LAST_NAME_A_TO_Z
+    $includeSsn: Boolean = false
   ) {
     clientSearch(
       input: $input
@@ -43895,6 +43865,7 @@ export const SearchClientsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      sortOrder: // value for 'sortOrder'
+ *      includeSsn: // value for 'includeSsn'
  *   },
  * });
  */
@@ -45048,12 +45019,14 @@ export const GetMergeCandidatesDocument = gql`
         clients {
           ...ClientName
           ...ClientIdentificationFields
+          ...ClientSsnFields
         }
       }
     }
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientSsnFieldsFragmentDoc}
 `;
 
 /**

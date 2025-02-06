@@ -11,7 +11,11 @@ import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
-import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
+import {
+  ContextualClientSsn,
+  ContextualSsnToggleButton,
+  SsnDobShowContextProvider,
+} from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
@@ -22,9 +26,10 @@ import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchFo
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  ClientFieldsFragment,
   ClientSearchInput,
+  ClientSearchResultFieldsFragment,
   ClientSortOption,
+  ClientSsnFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
@@ -32,11 +37,26 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
+// Defined here because it's only used in search results for merging, in order to identify duplicates.
+// SSN should not be shown in most search results.
+// SSN will only appear if `includeSsn` directive is used in the query.
+export const CLIENT_SSN_COLUMN: ColumnDef<ClientSsnFieldsFragment> = {
+  header: (
+    <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
+  ),
+  key: 'ssn',
+  render: (record) => <ContextualClientSsn client={record} />,
+  // Don't link cell even if row is linked because of click target
+  dontLink: true,
+  // Fixed width so it doesn't move around when visibility is toggled
+  width: '150px',
+};
+
 const NewClientMerge = () => {
   const { client } = useClientDashboardContext();
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [candidate, setCandidate] = useState<
-    ClientFieldsFragment | undefined
+    ClientSearchResultFieldsFragment | undefined
   >();
   const navigate = useNavigate();
 
@@ -65,16 +85,16 @@ const NewClientMerge = () => {
     });
   }, [candidate, client.id, mutation]);
 
-  const clientColumns: ColumnDef<ClientFieldsFragment>[] = useMemo(
+  const clientColumns: ColumnDef<ClientSearchResultFieldsFragment>[] = useMemo(
     () => [
       { header: 'HMIS ID', render: 'id' },
       CLIENT_COLUMNS.first,
       CLIENT_COLUMNS.last,
-      { ...CLIENT_COLUMNS.ssn, width: '150px' },
-      { ...CLIENT_COLUMNS.dobAge, width: '180px' },
+      CLIENT_SSN_COLUMN,
+      CLIENT_COLUMNS.dobAge,
       {
         header: 'Gender',
-        render: (client: ClientFieldsFragment) => (
+        render: (client: ClientSearchResultFieldsFragment) => (
           <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
         ),
       },
@@ -92,7 +112,7 @@ const NewClientMerge = () => {
       ...clientColumns,
       {
         key: 'mergeAction',
-        render: (record: ClientFieldsFragment) =>
+        render: (record: ClientSearchResultFieldsFragment) =>
           record.id === client.id ? (
             <Typography
               textAlign='center'
@@ -116,7 +136,7 @@ const NewClientMerge = () => {
       <Stack gap={4}>
         <TitleCard title='Current Client Record'>
           <SsnDobShowContextProvider>
-            <GenericTable<ClientFieldsFragment>
+            <GenericTable<ClientSearchResultFieldsFragment>
               columns={clientColumns}
               rows={[client]}
             />
@@ -148,9 +168,9 @@ const NewClientMerge = () => {
                 <GenericTableWithData<
                   SearchClientsQuery,
                   SearchClientsQueryVariables,
-                  ClientFieldsFragment
+                  ClientSearchResultFieldsFragment
                 >
-                  queryVariables={{ input: searchInput }}
+                  queryVariables={{ input: searchInput, includeSsn: true }}
                   queryDocument={SearchClientsDocument}
                   columns={columns}
                   pagePath='clientSearch'

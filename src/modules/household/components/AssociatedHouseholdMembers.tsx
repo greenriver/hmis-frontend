@@ -13,15 +13,6 @@ import {
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { ClientFieldsFragment } from '@/types/gqlTypes';
-
-export const householdMemberColumns: ColumnDef<
-  ClientFieldsFragment | RecentHouseholdMember
->[] = [
-  CLIENT_COLUMNS.name,
-  { ...CLIENT_COLUMNS.ssn, width: '150px' },
-  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
-];
 
 interface Props
   extends Omit<GenericTableProps<RecentHouseholdMember>, 'rows' | 'columns'> {

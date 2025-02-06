@@ -7,7 +7,7 @@ import ExternalLink from './ExternalLink';
 
 import { isHouseholdClient } from '@/modules/household/types';
 import {
-  ClientFieldsFragment,
+  ClientSearchResultFieldsFragment,
   ExternalIdentifier,
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
@@ -55,7 +55,7 @@ export const externalIdColumn = (
 ) => ({
   header: label,
   render: (
-    record: ClientFieldsFragment | HouseholdClientFieldsFragment,
+    record: ClientSearchResultFieldsFragment | HouseholdClientFieldsFragment,
     props?: ExternalIdDisplayProps
   ) => {
     const client = isHouseholdClient(record) ? record.client : record;

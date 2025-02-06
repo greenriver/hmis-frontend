@@ -48,6 +48,7 @@ fragment ClientAccessFields on ClientAccess {
   canViewFullSsn
   canViewPartialSsn
   canViewClientName
+  canViewClientPhoto
   canEditEnrollments
   canDeleteEnrollments
   canViewEnrollmentDetails
