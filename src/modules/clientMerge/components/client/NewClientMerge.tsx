@@ -40,7 +40,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 // Defined here because it's only used in search results for merging, in order to identify duplicates.
 // SSN should not be shown in most search results.
 // SSN will only appear if `includeSsn` directive is used in the query.
-export const clientSsnColumn: ColumnDef<ClientSsnFieldsFragment> = {
+export const CLIENT_SSN_COLUMN: ColumnDef<ClientSsnFieldsFragment> = {
   header: (
     <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
   ),
@@ -90,7 +90,7 @@ const NewClientMerge = () => {
       { header: 'HMIS ID', render: 'id' },
       CLIENT_COLUMNS.first,
       CLIENT_COLUMNS.last,
-      clientSsnColumn,
+      CLIENT_SSN_COLUMN,
       CLIENT_COLUMNS.dobAge,
       {
         header: 'Gender',
