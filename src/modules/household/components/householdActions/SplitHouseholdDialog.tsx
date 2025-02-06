@@ -85,6 +85,7 @@ const SplitHouseholdDialog = ({
     () => [
       {
         title: 'Select Clients',
+        key: 'select',
         content: (
           <>
             {donorHousehold && (
@@ -101,6 +102,7 @@ const SplitHouseholdDialog = ({
       },
       {
         title: 'Add Relationships',
+        key: 'relationships',
         content: (
           <SplitHouseholdAddRelationships
             householdClients={splittingClients}
@@ -128,6 +130,7 @@ const SplitHouseholdDialog = ({
       },
       {
         title: 'Review Split',
+        key: 'review',
         content: (
           <SplitHouseholdReview
             splittingClients={splittingClients}
@@ -143,8 +146,7 @@ const SplitHouseholdDialog = ({
         disableProceeding: loading || disabledProps.disableProceeding,
       },
       {
-        title: 'Successful Join',
-        omitStepTitle: true,
+        key: 'success',
         content: (
           <SplitHouseholdSuccess
             splitHousehold={newHousehold}
