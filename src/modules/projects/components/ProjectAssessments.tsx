@@ -11,7 +11,10 @@ import {
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { assessmentDescription } from '@/modules/hmis/hmisUtil';
+import {
+  assessmentDescription,
+  clientBriefName,
+} from '@/modules/hmis/hmisUtil';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   AssessmentSortOption,
@@ -64,7 +67,9 @@ const ProjectAssessments = () => {
             )
           }
           rowLinkState={{ backToLabel: project.projectName }}
-          rowName={(row) => assessmentDescription(row)}
+          rowName={(row) =>
+            `${clientBriefName(row.enrollment.client)}'s ${assessmentDescription(row)}`
+          }
           rowActionTitle='View Assessment'
           rowSecondaryActionConfigs={(row) => [
             getViewEnrollmentMenuItem(row.enrollment, row.enrollment.client),

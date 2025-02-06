@@ -65,7 +65,6 @@ function asClient(
 
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<
-    // | ClientFieldsFragment
     | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
@@ -102,13 +101,12 @@ export const CLIENT_COLUMNS: {
     dontLink: true,
   },
 };
-
 export const CLIENT_SSN_COLUMN: ColumnDef<ClientSsnFieldsFragment> = {
   header: (
     <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
   ),
   key: 'ssn',
-  render: (client) => <ContextualClientSsn client={client} />,
+  render: (record) => <ContextualClientSsn client={record} />,
   dontLink: true,
 };
 

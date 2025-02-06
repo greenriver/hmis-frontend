@@ -2,8 +2,6 @@ import { Box, Paper } from '@mui/material';
 import { Meta, StoryFn } from '@storybook/react';
 
 import GenericTable, { Props as GenericTableProps } from './GenericTable';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import {
   clientBriefName,
@@ -148,32 +146,27 @@ WithCustomDataElements.args = {
   ],
 };
 
-export const WithTableRowActions = Template<RowType>().bind({});
-WithTableRowActions.args = {
+export const WithLinkedTableRows = Template<RowType>().bind({});
+WithLinkedTableRows.args = {
   rows: fakeRows,
-  columns: [
-    CLIENT_COLUMNS.name,
+  rowLinkTo: () => 'https://storybook.js.org/docs',
+  rowName: (row) => row.id + ' ' + clientBriefName(row),
+  rowActionTitle: 'Navigate to an external link',
+  columns: clientColumns,
+};
+
+export const WithMultiActionTableRows = Template<RowType>().bind({});
+WithMultiActionTableRows.args = {
+  rows: fakeRows,
+  handleRowClick: (row) => alert(`Hello, ${clientBriefName(row)} ${row.id}`),
+  rowName: (row) => row.id + ' ' + clientBriefName(row),
+  rowActionTitle: 'Do something in-app',
+  columns: clientColumns,
+  rowSecondaryActionConfigs: () => [
     {
-      ...BASE_ACTION_COLUMN_DEF,
-      render: (record) => (
-        <TableRowActions
-          record={record}
-          recordName={clientBriefName(record)}
-          menuActionConfigs={[
-            {
-              title: 'Do something in-app',
-              key: 'onClick',
-              onClick: () =>
-                alert(`Hello, ${clientBriefName(record)} ${record.id}`),
-            },
-            {
-              title: 'Navigate to a link',
-              key: 'link',
-              to: 'https://storybook.js.org/docs', // just link somewhere random to show `to` prop working
-            },
-          ]}
-        />
-      ),
+      title: 'Navigate to an external link',
+      key: 'link',
+      to: 'https://storybook.js.org/docs',
     },
   ],
 };

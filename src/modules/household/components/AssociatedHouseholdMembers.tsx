@@ -12,24 +12,7 @@ import {
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
-import {
-  CLIENT_COLUMNS,
-  CLIENT_SSN_COLUMN,
-} from '@/modules/search/components/ClientSearch';
-import {
-  ClientFieldsFragment,
-  ClientSearchResultFieldsFragment,
-} from '@/types/gqlTypes';
-
-export const householdMemberColumns: ColumnDef<
-  | ClientFieldsFragment
-  | ClientSearchResultFieldsFragment
-  | RecentHouseholdMember
->[] = [
-  CLIENT_COLUMNS.name,
-  { ...CLIENT_SSN_COLUMN, width: '150px' }, //??? TODO GIG determine if we need this
-  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
-];
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 
 interface Props
   extends Omit<GenericTableProps<RecentHouseholdMember>, 'rows' | 'columns'> {

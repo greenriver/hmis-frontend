@@ -15,21 +15,15 @@ import {
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import {
-  clientBriefName,
-  formatDateForDisplay,
-  formatDateForGql,
-  sortHouseholdMembers,
-} from '@/modules/hmis/hmisUtil';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   ASSIGNED_STAFF_COL,
+  ENROLLMENT_RELATIONSHIP_COL,
   WITH_ENROLLMENT_COLUMNS,
 } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
@@ -47,17 +41,7 @@ type OneHouseholdClient = HouseholdFields['householdClients'][number];
 const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   { ...CLIENT_COLUMNS.name, sticky: 'left' },
   CLIENT_COLUMNS.age,
-  {
-    header: 'Relationship',
-    render: (householdClient) => (
-      <HmisEnum
-        key={householdClient.id}
-        value={householdClient.relationshipToHoH}
-        enumMap={HmisEnums.RelationshipToHoH}
-        whiteSpace='nowrap'
-      />
-    ),
-  },
+  ENROLLMENT_RELATIONSHIP_COL,
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
@@ -155,28 +139,18 @@ const CustomDividerRow = ({ colSpan }: { colSpan: number }) => (
   </TableRow>
 );
 
-const ProjectHouseholdsTable = ({
-  projectId,
-  columns,
-  openOnDate,
-  searchTerm,
-}: {
+interface Props {
   projectId: string;
-  columns?: ColumnDef<HouseholdFields>[];
-  openOnDate?: Date;
   searchTerm?: string;
-}) => {
-  const openOnDateString = useMemo(
-    () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
-    [openOnDate]
-  );
+}
 
+const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
   const {
     project: { staffAssignmentsEnabled },
   } = useProjectDashboardContext();
 
   // dummy column defs for Household that are only used for the headers, not for rendering cells
-  const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
+  const columns: ColumnDef<HouseholdFields>[] = useMemo(() => {
     return [
       ...BASE_COLUMNS,
       ...(staffAssignmentsEnabled ? [{ ...ASSIGNED_STAFF_COL }] : []), // typescript appeasement
@@ -202,13 +176,11 @@ const ProjectHouseholdsTable = ({
     >
       queryVariables={{
         id: projectId,
-        filters: {
-          searchTerm,
-          openOnDate: openOnDateString,
-        },
+        // filter from parent component gets merged with any filters selected on the table
+        filters: { searchTerm },
       }}
       queryDocument={GetProjectHouseholdsDocument}
-      columns={columns || defaultColumns}
+      columns={columns}
       TableBodyComponent={React.Fragment}
       renderRow={(household, columnKeys) => {
         return (
@@ -217,7 +189,7 @@ const ProjectHouseholdsTable = ({
             key={household.id}
             role='rowgroup'
           >
-            <CustomDividerRow colSpan={(columns || defaultColumns).length} />
+            <CustomDividerRow colSpan={columns.length} />
             {sortHouseholdMembers(household.householdClients).map(
               (householdClient, index) => (
                 <ProjectHouseholdsClientRow
@@ -236,14 +208,10 @@ const ProjectHouseholdsTable = ({
       }}
       belowRowsContent={
         <TableBody>
-          <CustomDividerRow colSpan={(columns || defaultColumns).length} />
+          <CustomDividerRow colSpan={columns.length} />
         </TableBody>
       }
-      noData={
-        openOnDate
-          ? `No households open on ${formatDateForDisplay(openOnDate)}`
-          : 'No households'
-      }
+      noData='No households'
       pagePath='project.households'
       filters={filters}
       recordType='Household'

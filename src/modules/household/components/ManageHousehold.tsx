@@ -1,5 +1,5 @@
-import { Grid } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Grid, Paper } from '@mui/material';
+import { Stack } from '@mui/system';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
@@ -20,11 +20,13 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import AssociatedHouseholdMembers, {
-  householdMemberColumns,
-} from '@/modules/household/components/AssociatedHouseholdMembers';
+import AssociatedHouseholdMembers from '@/modules/household/components/AssociatedHouseholdMembers';
 import { RecentHouseholdMember } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import {
+  CLIENT_COLUMNS,
+  CLIENT_SSN_COLUMN,
+} from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import {
   ClientSearchInput,
@@ -43,6 +45,12 @@ interface Props {
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
 }
+
+const householdMemberColumns: ColumnDef<ClientSearchResultFieldsFragment>[] = [
+  CLIENT_COLUMNS.name,
+  { ...CLIENT_SSN_COLUMN, width: '150px' },
+  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
+];
 
 const ManageHousehold = ({
   householdId: initialHouseholdId,
@@ -90,9 +98,7 @@ const ManageHousehold = ({
   useScrollToHash(loading || recentMembersLoading);
   const isMobile = useIsMobile();
 
-  const columns: ColumnDef<
-    ClientSearchResultFieldsFragment | RecentHouseholdMember
-  >[] = useMemo(() => {
+  const columns: ColumnDef<ClientSearchResultFieldsFragment>[] = useMemo(() => {
     const defaults = [...householdMemberColumns];
     if (isMobile) {
       // On mobile, show enrollment button right next to the client name so user
@@ -197,12 +203,7 @@ const ManageHousehold = ({
 
           {searchInput && (
             <SsnDobShowContextProvider>
-              <Box
-                sx={{
-                  border: (theme) => `1px solid ${theme.palette.borders.light}`,
-                  borderRadius: 1,
-                }}
-              >
+              <Paper>
                 <GenericTableWithData<
                   SearchClientsQuery,
                   SearchClientsQueryVariables,
@@ -221,7 +222,7 @@ const ManageHousehold = ({
                     getViewClientMenuItem(row),
                   ]}
                 />
-              </Box>
+              </Paper>
             </SsnDobShowContextProvider>
           )}
         </Stack>
