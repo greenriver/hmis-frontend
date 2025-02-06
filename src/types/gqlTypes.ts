@@ -8026,43 +8026,21 @@ export type RootPermissionsFragment = {
   __typename?: 'QueryAccess';
   id: string;
   canAdministerHmis: boolean;
-  canImpersonateUsers: boolean;
-  canAuditUsers: boolean;
-  canEditClients: boolean;
-  canViewClients: boolean;
-  canViewClientName: boolean;
-  canDeleteClients: boolean;
-  canEditOrganization: boolean;
-  canDeleteOrganization: boolean;
-  canViewDob: boolean;
-  canViewFullSsn: boolean;
-  canDeleteProject: boolean;
-  canViewPartialSsn: boolean;
-  canViewClientPhoto: boolean;
-  canEnrollClients: boolean;
-  canEditEnrollments: boolean;
-  canViewMyDashboard: boolean;
-  canViewEnrollmentDetails: boolean;
-  canViewOpenEnrollmentSummary: boolean;
-  canDeleteEnrollments: boolean;
-  canDeleteAssessments: boolean;
-  canEditProjectDetails: boolean;
-  canManageAnyClientFiles: boolean;
-  canManageOwnClientFiles: boolean;
-  canViewAnyConfidentialClientFiles: boolean;
-  canViewAnyNonconfidentialClientFiles: boolean;
-  canManageUnits: boolean;
-  canManageDeniedReferrals: boolean;
-  canManageIncomingReferrals: boolean;
-  canManageOutgoingReferrals: boolean;
-  canMergeClients: boolean;
-  canTransferEnrollments: boolean;
-  canSplitHouseholds: boolean;
-  canConfigureDataCollection: boolean;
   canManageForms: boolean;
   canAdministrateConfig: boolean;
+  canConfigureDataCollection: boolean;
+  canImpersonateUsers: boolean;
+  canAuditUsers: boolean;
+  canManageDeniedReferrals: boolean;
+  canMergeClients: boolean;
+  canTransferEnrollments: boolean;
+  canViewClients: boolean;
+  canEditClients: boolean;
+  canViewDob: boolean;
   canViewClientAlerts: boolean;
-  canManageExternalFormSubmissions: boolean;
+  canViewMyDashboard: boolean;
+  canEditOrganization: boolean;
+  canEditProjectDetails: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -8075,21 +8053,16 @@ export type ClientAccessFieldsFragment = {
   canViewPartialSsn: boolean;
   canViewClientName: boolean;
   canViewClientPhoto: boolean;
-  canEditEnrollments: boolean;
-  canDeleteEnrollments: boolean;
+  canViewClientAlerts: boolean;
+  canManageClientAlerts: boolean;
   canViewEnrollmentDetails: boolean;
-  canDeleteAssessments: boolean;
-  canManageAnyClientFiles: boolean;
-  canManageOwnClientFiles: boolean;
-  canViewAnyConfidentialClientFiles: boolean;
-  canViewAnyNonconfidentialClientFiles: boolean;
-  canUploadClientFiles: boolean;
-  canViewAnyFiles: boolean;
   canAuditClients: boolean;
   canManageScanCards: boolean;
   canMergeClients: boolean;
-  canViewClientAlerts: boolean;
-  canManageClientAlerts: boolean;
+  canViewAnyFiles: boolean;
+  canManageAnyClientFiles: boolean;
+  canManageOwnClientFiles: boolean;
+  canUploadClientFiles: boolean;
 };
 
 export type EnrollmentAccessFieldsFragment = {
@@ -8112,19 +8085,13 @@ export type AssessmentAccessFieldsFragment = {
 export type ProjectAccessFieldsFragment = {
   __typename?: 'ProjectAccess';
   id: string;
-  canViewDob: boolean;
-  canViewFullSsn: boolean;
   canDeleteProject: boolean;
-  canViewPartialSsn: boolean;
   canEnrollClients: boolean;
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
-  canDeleteEnrollments: boolean;
-  canDeleteAssessments: boolean;
   canEditProjectDetails: boolean;
   canViewUnits: boolean;
   canManageUnits: boolean;
-  canManageDeniedReferrals: boolean;
   canManageIncomingReferrals: boolean;
   canManageOutgoingReferrals: boolean;
   canManageExternalFormSubmissions: boolean;
@@ -8145,43 +8112,21 @@ export type GetRootPermissionsQuery = {
     __typename?: 'QueryAccess';
     id: string;
     canAdministerHmis: boolean;
-    canImpersonateUsers: boolean;
-    canAuditUsers: boolean;
-    canEditClients: boolean;
-    canViewClients: boolean;
-    canViewClientName: boolean;
-    canDeleteClients: boolean;
-    canEditOrganization: boolean;
-    canDeleteOrganization: boolean;
-    canViewDob: boolean;
-    canViewFullSsn: boolean;
-    canDeleteProject: boolean;
-    canViewPartialSsn: boolean;
-    canViewClientPhoto: boolean;
-    canEnrollClients: boolean;
-    canEditEnrollments: boolean;
-    canViewMyDashboard: boolean;
-    canViewEnrollmentDetails: boolean;
-    canViewOpenEnrollmentSummary: boolean;
-    canDeleteEnrollments: boolean;
-    canDeleteAssessments: boolean;
-    canEditProjectDetails: boolean;
-    canManageAnyClientFiles: boolean;
-    canManageOwnClientFiles: boolean;
-    canViewAnyConfidentialClientFiles: boolean;
-    canViewAnyNonconfidentialClientFiles: boolean;
-    canManageUnits: boolean;
-    canManageDeniedReferrals: boolean;
-    canManageIncomingReferrals: boolean;
-    canManageOutgoingReferrals: boolean;
-    canMergeClients: boolean;
-    canTransferEnrollments: boolean;
-    canSplitHouseholds: boolean;
-    canConfigureDataCollection: boolean;
     canManageForms: boolean;
     canAdministrateConfig: boolean;
+    canConfigureDataCollection: boolean;
+    canImpersonateUsers: boolean;
+    canAuditUsers: boolean;
+    canManageDeniedReferrals: boolean;
+    canMergeClients: boolean;
+    canTransferEnrollments: boolean;
+    canViewClients: boolean;
+    canEditClients: boolean;
+    canViewDob: boolean;
     canViewClientAlerts: boolean;
-    canManageExternalFormSubmissions: boolean;
+    canViewMyDashboard: boolean;
+    canEditOrganization: boolean;
+    canEditProjectDetails: boolean;
   };
 };
 
@@ -15673,21 +15618,16 @@ export type ClientFieldsFragment = {
     canViewDob: boolean;
     canViewClientName: boolean;
     canViewClientPhoto: boolean;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
+    canViewClientAlerts: boolean;
+    canManageClientAlerts: boolean;
     canViewEnrollmentDetails: boolean;
-    canDeleteAssessments: boolean;
-    canManageAnyClientFiles: boolean;
-    canManageOwnClientFiles: boolean;
-    canViewAnyConfidentialClientFiles: boolean;
-    canViewAnyNonconfidentialClientFiles: boolean;
-    canUploadClientFiles: boolean;
-    canViewAnyFiles: boolean;
     canAuditClients: boolean;
     canManageScanCards: boolean;
     canMergeClients: boolean;
-    canViewClientAlerts: boolean;
-    canManageClientAlerts: boolean;
+    canViewAnyFiles: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canUploadClientFiles: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -16165,21 +16105,16 @@ export type GetClientQuery = {
       canViewDob: boolean;
       canViewClientName: boolean;
       canViewClientPhoto: boolean;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
       canViewEnrollmentDetails: boolean;
-      canDeleteAssessments: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canViewAnyConfidentialClientFiles: boolean;
-      canViewAnyNonconfidentialClientFiles: boolean;
-      canUploadClientFiles: boolean;
-      canViewAnyFiles: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewClientAlerts: boolean;
-      canManageClientAlerts: boolean;
+      canViewAnyFiles: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canUploadClientFiles: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -16407,21 +16342,16 @@ export type GetClientPermissionsQuery = {
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
       canViewClientPhoto: boolean;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
       canViewEnrollmentDetails: boolean;
-      canDeleteAssessments: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canViewAnyConfidentialClientFiles: boolean;
-      canViewAnyNonconfidentialClientFiles: boolean;
-      canUploadClientFiles: boolean;
-      canViewAnyFiles: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewClientAlerts: boolean;
-      canManageClientAlerts: boolean;
+      canViewAnyFiles: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canUploadClientFiles: boolean;
     };
   } | null;
 };
@@ -16924,21 +16854,16 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canViewPartialSsn: boolean;
                 canViewClientName: boolean;
                 canViewClientPhoto: boolean;
-                canEditEnrollments: boolean;
-                canDeleteEnrollments: boolean;
+                canViewClientAlerts: boolean;
+                canManageClientAlerts: boolean;
                 canViewEnrollmentDetails: boolean;
-                canDeleteAssessments: boolean;
-                canManageAnyClientFiles: boolean;
-                canManageOwnClientFiles: boolean;
-                canViewAnyConfidentialClientFiles: boolean;
-                canViewAnyNonconfidentialClientFiles: boolean;
-                canUploadClientFiles: boolean;
-                canViewAnyFiles: boolean;
                 canAuditClients: boolean;
                 canManageScanCards: boolean;
                 canMergeClients: boolean;
-                canViewClientAlerts: boolean;
-                canManageClientAlerts: boolean;
+                canViewAnyFiles: boolean;
+                canManageAnyClientFiles: boolean;
+                canManageOwnClientFiles: boolean;
+                canUploadClientFiles: boolean;
               };
               externalIds: Array<{
                 __typename?: 'ExternalIdentifier';
@@ -17824,21 +17749,16 @@ export type MergeClientsMutation = {
         canViewDob: boolean;
         canViewClientName: boolean;
         canViewClientPhoto: boolean;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
         canViewEnrollmentDetails: boolean;
-        canDeleteAssessments: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canViewAnyConfidentialClientFiles: boolean;
-        canViewAnyNonconfidentialClientFiles: boolean;
-        canUploadClientFiles: boolean;
-        canViewAnyFiles: boolean;
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
-        canViewClientAlerts: boolean;
-        canManageClientAlerts: boolean;
+        canViewAnyFiles: boolean;
+        canManageAnyClientFiles: boolean;
+        canManageOwnClientFiles: boolean;
+        canUploadClientFiles: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -20309,32 +20229,7 @@ export type EnrolledClientFieldsFragment = {
       } | null;
     }> | null;
   }>;
-  access: {
-    __typename?: 'ClientAccess';
-    id: string;
-    canEditClient: boolean;
-    canDeleteClient: boolean;
-    canViewDob: boolean;
-    canViewFullSsn: boolean;
-    canViewPartialSsn: boolean;
-    canViewClientName: boolean;
-    canViewClientPhoto: boolean;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
-    canViewEnrollmentDetails: boolean;
-    canDeleteAssessments: boolean;
-    canManageAnyClientFiles: boolean;
-    canManageOwnClientFiles: boolean;
-    canViewAnyConfidentialClientFiles: boolean;
-    canViewAnyNonconfidentialClientFiles: boolean;
-    canUploadClientFiles: boolean;
-    canViewAnyFiles: boolean;
-    canAuditClients: boolean;
-    canManageScanCards: boolean;
-    canMergeClients: boolean;
-    canViewClientAlerts: boolean;
-    canManageClientAlerts: boolean;
-  };
+  access: { __typename?: 'ClientAccess'; canEditClient: boolean };
 };
 
 export type AllEnrollmentDetailsFragment = {
@@ -20619,32 +20514,7 @@ export type AllEnrollmentDetailsFragment = {
         } | null;
       }> | null;
     }>;
-    access: {
-      __typename?: 'ClientAccess';
-      id: string;
-      canEditClient: boolean;
-      canDeleteClient: boolean;
-      canViewDob: boolean;
-      canViewFullSsn: boolean;
-      canViewPartialSsn: boolean;
-      canViewClientName: boolean;
-      canViewClientPhoto: boolean;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
-      canViewEnrollmentDetails: boolean;
-      canDeleteAssessments: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canViewAnyConfidentialClientFiles: boolean;
-      canViewAnyNonconfidentialClientFiles: boolean;
-      canUploadClientFiles: boolean;
-      canViewAnyFiles: boolean;
-      canAuditClients: boolean;
-      canManageScanCards: boolean;
-      canMergeClients: boolean;
-      canViewClientAlerts: boolean;
-      canManageClientAlerts: boolean;
-    };
+    access: { __typename?: 'ClientAccess'; canEditClient: boolean };
   };
   openEnrollmentSummary: Array<{
     __typename?: 'EnrollmentSummary';
@@ -21189,22 +21059,7 @@ export type AllEnrollmentDetailsFragment = {
     access: {
       __typename?: 'ProjectAccess';
       id: string;
-      canViewDob: boolean;
-      canViewFullSsn: boolean;
-      canDeleteProject: boolean;
-      canViewPartialSsn: boolean;
-      canEnrollClients: boolean;
-      canEditEnrollments: boolean;
-      canViewEnrollmentDetails: boolean;
-      canDeleteEnrollments: boolean;
-      canDeleteAssessments: boolean;
-      canEditProjectDetails: boolean;
-      canViewUnits: boolean;
-      canManageUnits: boolean;
-      canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
-      canManageOutgoingReferrals: boolean;
-      canManageExternalFormSubmissions: boolean;
     };
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   };
@@ -21969,32 +21824,7 @@ export type GetEnrollmentDetailsQuery = {
           } | null;
         }> | null;
       }>;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canEditClient: boolean;
-        canDeleteClient: boolean;
-        canViewDob: boolean;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-        canViewClientName: boolean;
-        canViewClientPhoto: boolean;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
-        canViewEnrollmentDetails: boolean;
-        canDeleteAssessments: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canViewAnyConfidentialClientFiles: boolean;
-        canViewAnyNonconfidentialClientFiles: boolean;
-        canUploadClientFiles: boolean;
-        canViewAnyFiles: boolean;
-        canAuditClients: boolean;
-        canManageScanCards: boolean;
-        canMergeClients: boolean;
-        canViewClientAlerts: boolean;
-        canManageClientAlerts: boolean;
-      };
+      access: { __typename?: 'ClientAccess'; canEditClient: boolean };
     };
     openEnrollmentSummary: Array<{
       __typename?: 'EnrollmentSummary';
@@ -22539,22 +22369,7 @@ export type GetEnrollmentDetailsQuery = {
       access: {
         __typename?: 'ProjectAccess';
         id: string;
-        canViewDob: boolean;
-        canViewFullSsn: boolean;
-        canDeleteProject: boolean;
-        canViewPartialSsn: boolean;
-        canEnrollClients: boolean;
-        canEditEnrollments: boolean;
-        canViewEnrollmentDetails: boolean;
-        canDeleteEnrollments: boolean;
-        canDeleteAssessments: boolean;
-        canEditProjectDetails: boolean;
-        canViewUnits: boolean;
-        canManageUnits: boolean;
-        canManageDeniedReferrals: boolean;
         canManageIncomingReferrals: boolean;
-        canManageOutgoingReferrals: boolean;
-        canManageExternalFormSubmissions: boolean;
       };
       projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
     };
@@ -22645,21 +22460,16 @@ export type GetEnrollmentWithHouseholdQuery = {
             canViewPartialSsn: boolean;
             canViewClientName: boolean;
             canViewClientPhoto: boolean;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
             canViewEnrollmentDetails: boolean;
-            canDeleteAssessments: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canViewAnyConfidentialClientFiles: boolean;
-            canViewAnyNonconfidentialClientFiles: boolean;
-            canUploadClientFiles: boolean;
-            canViewAnyFiles: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewClientAlerts: boolean;
-            canManageClientAlerts: boolean;
+            canViewAnyFiles: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canUploadClientFiles: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -30084,21 +29894,16 @@ export type SubmitFormMutation = {
             canViewDob: boolean;
             canViewClientName: boolean;
             canViewClientPhoto: boolean;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
             canViewEnrollmentDetails: boolean;
-            canDeleteAssessments: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canViewAnyConfidentialClientFiles: boolean;
-            canViewAnyNonconfidentialClientFiles: boolean;
-            canUploadClientFiles: boolean;
-            canViewAnyFiles: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewClientAlerts: boolean;
-            canManageClientAlerts: boolean;
+            canViewAnyFiles: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canUploadClientFiles: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -31186,19 +30991,13 @@ export type SubmitFormMutation = {
           access: {
             __typename?: 'ProjectAccess';
             id: string;
-            canViewDob: boolean;
-            canViewFullSsn: boolean;
             canDeleteProject: boolean;
-            canViewPartialSsn: boolean;
             canEnrollClients: boolean;
             canEditEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
-            canDeleteEnrollments: boolean;
-            canDeleteAssessments: boolean;
             canEditProjectDetails: boolean;
             canViewUnits: boolean;
             canManageUnits: boolean;
-            canManageDeniedReferrals: boolean;
             canManageIncomingReferrals: boolean;
             canManageOutgoingReferrals: boolean;
             canManageExternalFormSubmissions: boolean;
@@ -33227,21 +33026,16 @@ export type HouseholdFieldsFragment = {
         canViewPartialSsn: boolean;
         canViewClientName: boolean;
         canViewClientPhoto: boolean;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
         canViewEnrollmentDetails: boolean;
-        canDeleteAssessments: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canViewAnyConfidentialClientFiles: boolean;
-        canViewAnyNonconfidentialClientFiles: boolean;
-        canUploadClientFiles: boolean;
-        canViewAnyFiles: boolean;
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
-        canViewClientAlerts: boolean;
-        canManageClientAlerts: boolean;
+        canViewAnyFiles: boolean;
+        canManageAnyClientFiles: boolean;
+        canManageOwnClientFiles: boolean;
+        canUploadClientFiles: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -33311,21 +33105,16 @@ export type HouseholdClientFieldsFragment = {
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
       canViewClientPhoto: boolean;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
       canViewEnrollmentDetails: boolean;
-      canDeleteAssessments: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canViewAnyConfidentialClientFiles: boolean;
-      canViewAnyNonconfidentialClientFiles: boolean;
-      canUploadClientFiles: boolean;
-      canViewAnyFiles: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewClientAlerts: boolean;
-      canManageClientAlerts: boolean;
+      canViewAnyFiles: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canUploadClientFiles: boolean;
     };
     externalIds: Array<{
       __typename?: 'ExternalIdentifier';
@@ -33480,21 +33269,16 @@ export type GetHouseholdQuery = {
           canViewPartialSsn: boolean;
           canViewClientName: boolean;
           canViewClientPhoto: boolean;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
+          canViewClientAlerts: boolean;
+          canManageClientAlerts: boolean;
           canViewEnrollmentDetails: boolean;
-          canDeleteAssessments: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canViewAnyConfidentialClientFiles: boolean;
-          canViewAnyNonconfidentialClientFiles: boolean;
-          canUploadClientFiles: boolean;
-          canViewAnyFiles: boolean;
           canAuditClients: boolean;
           canManageScanCards: boolean;
           canMergeClients: boolean;
-          canViewClientAlerts: boolean;
-          canManageClientAlerts: boolean;
+          canViewAnyFiles: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canUploadClientFiles: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -34503,19 +34287,13 @@ export type ProjectAllFieldsFragment = {
   access: {
     __typename?: 'ProjectAccess';
     id: string;
-    canViewDob: boolean;
-    canViewFullSsn: boolean;
     canDeleteProject: boolean;
-    canViewPartialSsn: boolean;
     canEnrollClients: boolean;
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
-    canDeleteEnrollments: boolean;
-    canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
     canViewUnits: boolean;
     canManageUnits: boolean;
-    canManageDeniedReferrals: boolean;
     canManageIncomingReferrals: boolean;
     canManageOutgoingReferrals: boolean;
     canManageExternalFormSubmissions: boolean;
@@ -35414,19 +35192,13 @@ export type GetProjectQuery = {
     access: {
       __typename?: 'ProjectAccess';
       id: string;
-      canViewDob: boolean;
-      canViewFullSsn: boolean;
       canDeleteProject: boolean;
-      canViewPartialSsn: boolean;
       canEnrollClients: boolean;
       canEditEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
-      canDeleteEnrollments: boolean;
-      canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
-      canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
@@ -35599,19 +35371,13 @@ export type GetProjectPermissionsQuery = {
     access: {
       __typename?: 'ProjectAccess';
       id: string;
-      canViewDob: boolean;
-      canViewFullSsn: boolean;
       canDeleteProject: boolean;
-      canViewPartialSsn: boolean;
       canEnrollClients: boolean;
       canEditEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
-      canDeleteEnrollments: boolean;
-      canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
-      canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
@@ -37086,32 +36852,6 @@ export type UpdateReferralPostingMutation = {
           dob?: string | null;
           age?: number | null;
           pronouns: Array<string>;
-          access: {
-            __typename?: 'ClientAccess';
-            id: string;
-            canEditClient: boolean;
-            canDeleteClient: boolean;
-            canViewDob: boolean;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-            canViewClientName: boolean;
-            canViewClientPhoto: boolean;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-            canViewEnrollmentDetails: boolean;
-            canDeleteAssessments: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canViewAnyConfidentialClientFiles: boolean;
-            canViewAnyNonconfidentialClientFiles: boolean;
-            canUploadClientFiles: boolean;
-            canViewAnyFiles: boolean;
-            canAuditClients: boolean;
-            canManageScanCards: boolean;
-            canMergeClients: boolean;
-            canViewClientAlerts: boolean;
-            canManageClientAlerts: boolean;
-          };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
             id: string;
@@ -37352,32 +37092,6 @@ export type GetReferralPostingQuery = {
         dob?: string | null;
         age?: number | null;
         pronouns: Array<string>;
-        access: {
-          __typename?: 'ClientAccess';
-          id: string;
-          canEditClient: boolean;
-          canDeleteClient: boolean;
-          canViewDob: boolean;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
-          canViewClientName: boolean;
-          canViewClientPhoto: boolean;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-          canViewEnrollmentDetails: boolean;
-          canDeleteAssessments: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canViewAnyConfidentialClientFiles: boolean;
-          canViewAnyNonconfidentialClientFiles: boolean;
-          canUploadClientFiles: boolean;
-          canViewAnyFiles: boolean;
-          canAuditClients: boolean;
-          canManageScanCards: boolean;
-          canMergeClients: boolean;
-          canViewClientAlerts: boolean;
-          canManageClientAlerts: boolean;
-        };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
           id: string;
@@ -37658,32 +37372,6 @@ export type ReferralPostingDetailFieldsFragment = {
       dob?: string | null;
       age?: number | null;
       pronouns: Array<string>;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canEditClient: boolean;
-        canDeleteClient: boolean;
-        canViewDob: boolean;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-        canViewClientName: boolean;
-        canViewClientPhoto: boolean;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
-        canViewEnrollmentDetails: boolean;
-        canDeleteAssessments: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canViewAnyConfidentialClientFiles: boolean;
-        canViewAnyNonconfidentialClientFiles: boolean;
-        canUploadClientFiles: boolean;
-        canViewAnyFiles: boolean;
-        canAuditClients: boolean;
-        canManageScanCards: boolean;
-        canMergeClients: boolean;
-        canViewClientAlerts: boolean;
-        canManageClientAlerts: boolean;
-      };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
         id: string;
@@ -39897,43 +39585,21 @@ export const RootPermissionsFragmentDoc = gql`
   fragment RootPermissions on QueryAccess {
     id
     canAdministerHmis
-    canImpersonateUsers
-    canAuditUsers
-    canEditClients
-    canViewClients
-    canViewClientName
-    canDeleteClients
-    canEditOrganization
-    canDeleteOrganization
-    canViewDob
-    canViewFullSsn
-    canDeleteProject
-    canViewPartialSsn
-    canViewClientPhoto
-    canEnrollClients
-    canEditEnrollments
-    canViewMyDashboard
-    canViewEnrollmentDetails
-    canViewOpenEnrollmentSummary
-    canDeleteEnrollments
-    canDeleteAssessments
-    canEditProjectDetails
-    canManageAnyClientFiles
-    canManageOwnClientFiles
-    canViewAnyConfidentialClientFiles
-    canViewAnyNonconfidentialClientFiles
-    canManageUnits
-    canManageDeniedReferrals
-    canManageIncomingReferrals
-    canManageOutgoingReferrals
-    canMergeClients
-    canTransferEnrollments
-    canSplitHouseholds
-    canConfigureDataCollection
     canManageForms
     canAdministrateConfig
+    canConfigureDataCollection
+    canImpersonateUsers
+    canAuditUsers
+    canManageDeniedReferrals
+    canMergeClients
+    canTransferEnrollments
+    canViewClients
+    canEditClients
+    canViewDob
     canViewClientAlerts
-    canManageExternalFormSubmissions
+    canViewMyDashboard
+    canEditOrganization
+    canEditProjectDetails
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`
@@ -40701,21 +40367,16 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewPartialSsn
     canViewClientName
     canViewClientPhoto
-    canEditEnrollments
-    canDeleteEnrollments
+    canViewClientAlerts
+    canManageClientAlerts
     canViewEnrollmentDetails
-    canDeleteAssessments
-    canManageAnyClientFiles
-    canManageOwnClientFiles
-    canViewAnyConfidentialClientFiles
-    canViewAnyNonconfidentialClientFiles
-    canUploadClientFiles
-    canViewAnyFiles
     canAuditClients
     canManageScanCards
     canMergeClients
-    canViewClientAlerts
-    canManageClientAlerts
+    canViewAnyFiles
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canUploadClientFiles
   }
 `;
 export const ClientNameObjectFieldsFragmentDoc = gql`
@@ -41122,12 +40783,11 @@ export const EnrolledClientFieldsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     access {
-      ...ClientAccessFields
+      canEditClient
     }
   }
   ${AssessedClientFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
 `;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {
@@ -41308,27 +40968,6 @@ export const ProjectCocCountFragmentDoc = gql`
     }
   }
 `;
-export const ProjectAccessFieldsFragmentDoc = gql`
-  fragment ProjectAccessFields on ProjectAccess {
-    id
-    canViewDob
-    canViewFullSsn
-    canDeleteProject
-    canViewPartialSsn
-    canEnrollClients
-    canEditEnrollments
-    canViewEnrollmentDetails
-    canDeleteEnrollments
-    canDeleteAssessments
-    canEditProjectDetails
-    canViewUnits
-    canManageUnits
-    canManageDeniedReferrals
-    canManageIncomingReferrals
-    canManageOutgoingReferrals
-    canManageExternalFormSubmissions
-  }
-`;
 export const AllEnrollmentDetailsFragmentDoc = gql`
   fragment AllEnrollmentDetails on Enrollment {
     ...EnrollmentFields
@@ -41360,7 +40999,8 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       ...ProjectCocCount
       hasUnits
       access {
-        ...ProjectAccessFields
+        id
+        canManageIncomingReferrals
       }
       staffAssignmentsEnabled
     }
@@ -41379,7 +41019,6 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   ${OccurrencePointFormFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectCocCountFragmentDoc}
-  ${ProjectAccessFieldsFragmentDoc}
 `;
 export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   fragment SubmittedEnrollmentResultFields on Enrollment {
@@ -41681,6 +41320,21 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
     operatingStartDate
   }
 `;
+export const ProjectAccessFieldsFragmentDoc = gql`
+  fragment ProjectAccessFields on ProjectAccess {
+    id
+    canDeleteProject
+    canEnrollClients
+    canEditEnrollments
+    canViewEnrollmentDetails
+    canEditProjectDetails
+    canViewUnits
+    canManageUnits
+    canManageIncomingReferrals
+    canManageOutgoingReferrals
+    canManageExternalFormSubmissions
+  }
+`;
 export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
     id
@@ -41937,9 +41591,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
         ...ClientIdentificationFields
         veteranStatus
         gender
-        access {
-          ...ClientAccessFields
-        }
         externalIds {
           ...ClientIdentifierFields
         }
@@ -41952,7 +41603,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
   ${EnrollmentSummaryFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
 `;

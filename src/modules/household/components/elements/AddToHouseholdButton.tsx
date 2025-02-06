@@ -16,7 +16,7 @@ import {
 } from '@/types/gqlTypes';
 
 interface Props {
-  client: ClientSearchResultFieldsFragment; //ClientWithAlertFieldsFragment;
+  client: ClientSearchResultFieldsFragment;
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
   projectId: string;
