@@ -9,7 +9,7 @@ import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import { ErrorState } from '@/modules/errors/util';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import ConflictingEnrollmentAlert from '@/modules/household/components/elements/ConflictingEnrollmentAlert';
+import ConflictingEnrollmentAlert from '@/modules/household/components/householdActions/ConflictingEnrollmentAlert';
 import JoinHouseholdDialog from '@/modules/household/components/householdActions/JoinHouseholdDialog';
 import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
