@@ -59,7 +59,7 @@ const SplitHouseholdDialog = ({
       disabledReason = `Required fields missing (${missingRelationshipsCount})`;
 
     return {
-      disableProceeding: hohCount !== 1 || missingRelationshipsCount > 0,
+      disableProceed: hohCount !== 1 || missingRelationshipsCount > 0,
       disabledReason: disabledReason,
     };
   }, [hohCount, missingRelationshipsCount]);
@@ -97,7 +97,7 @@ const SplitHouseholdDialog = ({
             )}
           </>
         ),
-        disableProceeding: splittingClients.length === 0,
+        disableProceed: splittingClients.length === 0,
         disabledReason: 'Select a client',
       },
       {
@@ -138,12 +138,12 @@ const SplitHouseholdDialog = ({
             relationships={relationships}
           />
         ),
-        onSubmit,
-        submitLoading: loading,
-        submitButtonText: 'Split Enrollments',
+        onProceed: onSubmit,
+        proceedLoading: loading,
+        proceedButtonText: 'Split Enrollments',
         ButtonProps: { endIcon: <SplitIcon /> },
         ...disabledProps,
-        disableProceeding: loading || disabledProps.disableProceeding,
+        disableProceed: loading || disabledProps.disableProceed,
       },
       {
         key: 'success',
@@ -181,7 +181,7 @@ const SplitHouseholdDialog = ({
       title={'Split Enrollments'}
       open={open}
       fullWidth
-      maxWidth='lg'
+      maxWidth='md'
       onClose={onClose}
       stepDefinitions={stepDefinitions}
     />
