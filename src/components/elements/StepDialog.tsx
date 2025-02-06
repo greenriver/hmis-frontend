@@ -100,7 +100,7 @@ const StepDialog = ({
       if (nextStep) setCurrentStepKey(nextStep.key);
     };
 
-    const defaultButtonText = nextStep ? 'Next' : 'Finish';
+    const defaultButtonText = nextStep ? nextStep.title || 'Next' : 'Finish';
     const buttonText = proceedButtonText || defaultButtonText;
 
     return (
