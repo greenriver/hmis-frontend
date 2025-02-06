@@ -8053,12 +8053,12 @@ export type ClientAccessFieldsFragment = {
   canViewPartialSsn: boolean;
   canViewClientName: boolean;
   canViewClientPhoto: boolean;
+  canViewClientAlerts: boolean;
+  canManageClientAlerts: boolean;
   canViewEnrollmentDetails: boolean;
   canAuditClients: boolean;
   canManageScanCards: boolean;
   canMergeClients: boolean;
-  canViewClientAlerts: boolean;
-  canManageClientAlerts: boolean;
   canViewAnyFiles: boolean;
   canManageAnyClientFiles: boolean;
   canManageOwnClientFiles: boolean;
@@ -15618,12 +15618,12 @@ export type ClientFieldsFragment = {
     canViewDob: boolean;
     canViewClientName: boolean;
     canViewClientPhoto: boolean;
+    canViewClientAlerts: boolean;
+    canManageClientAlerts: boolean;
     canViewEnrollmentDetails: boolean;
     canAuditClients: boolean;
     canManageScanCards: boolean;
     canMergeClients: boolean;
-    canViewClientAlerts: boolean;
-    canManageClientAlerts: boolean;
     canViewAnyFiles: boolean;
     canManageAnyClientFiles: boolean;
     canManageOwnClientFiles: boolean;
@@ -16105,12 +16105,12 @@ export type GetClientQuery = {
       canViewDob: boolean;
       canViewClientName: boolean;
       canViewClientPhoto: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewClientAlerts: boolean;
-      canManageClientAlerts: boolean;
       canViewAnyFiles: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
@@ -16342,12 +16342,12 @@ export type GetClientPermissionsQuery = {
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
       canViewClientPhoto: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewClientAlerts: boolean;
-      canManageClientAlerts: boolean;
       canViewAnyFiles: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
@@ -16854,12 +16854,12 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canViewPartialSsn: boolean;
                 canViewClientName: boolean;
                 canViewClientPhoto: boolean;
+                canViewClientAlerts: boolean;
+                canManageClientAlerts: boolean;
                 canViewEnrollmentDetails: boolean;
                 canAuditClients: boolean;
                 canManageScanCards: boolean;
                 canMergeClients: boolean;
-                canViewClientAlerts: boolean;
-                canManageClientAlerts: boolean;
                 canViewAnyFiles: boolean;
                 canManageAnyClientFiles: boolean;
                 canManageOwnClientFiles: boolean;
@@ -17749,12 +17749,12 @@ export type MergeClientsMutation = {
         canViewDob: boolean;
         canViewClientName: boolean;
         canViewClientPhoto: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
         canViewEnrollmentDetails: boolean;
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
-        canViewClientAlerts: boolean;
-        canManageClientAlerts: boolean;
         canViewAnyFiles: boolean;
         canManageAnyClientFiles: boolean;
         canManageOwnClientFiles: boolean;
@@ -20229,27 +20229,7 @@ export type EnrolledClientFieldsFragment = {
       } | null;
     }> | null;
   }>;
-  access: {
-    __typename?: 'ClientAccess';
-    id: string;
-    canEditClient: boolean;
-    canDeleteClient: boolean;
-    canViewDob: boolean;
-    canViewFullSsn: boolean;
-    canViewPartialSsn: boolean;
-    canViewClientName: boolean;
-    canViewClientPhoto: boolean;
-    canViewEnrollmentDetails: boolean;
-    canAuditClients: boolean;
-    canManageScanCards: boolean;
-    canMergeClients: boolean;
-    canViewClientAlerts: boolean;
-    canManageClientAlerts: boolean;
-    canViewAnyFiles: boolean;
-    canManageAnyClientFiles: boolean;
-    canManageOwnClientFiles: boolean;
-    canUploadClientFiles: boolean;
-  };
+  access: { __typename?: 'ClientAccess'; canEditClient: boolean };
 };
 
 export type AllEnrollmentDetailsFragment = {
@@ -20534,27 +20514,7 @@ export type AllEnrollmentDetailsFragment = {
         } | null;
       }> | null;
     }>;
-    access: {
-      __typename?: 'ClientAccess';
-      id: string;
-      canEditClient: boolean;
-      canDeleteClient: boolean;
-      canViewDob: boolean;
-      canViewFullSsn: boolean;
-      canViewPartialSsn: boolean;
-      canViewClientName: boolean;
-      canViewClientPhoto: boolean;
-      canViewEnrollmentDetails: boolean;
-      canAuditClients: boolean;
-      canManageScanCards: boolean;
-      canMergeClients: boolean;
-      canViewClientAlerts: boolean;
-      canManageClientAlerts: boolean;
-      canViewAnyFiles: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canUploadClientFiles: boolean;
-    };
+    access: { __typename?: 'ClientAccess'; canEditClient: boolean };
   };
   openEnrollmentSummary: Array<{
     __typename?: 'EnrollmentSummary';
@@ -21873,27 +21833,7 @@ export type GetEnrollmentDetailsQuery = {
           } | null;
         }> | null;
       }>;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canEditClient: boolean;
-        canDeleteClient: boolean;
-        canViewDob: boolean;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-        canViewClientName: boolean;
-        canViewClientPhoto: boolean;
-        canViewEnrollmentDetails: boolean;
-        canAuditClients: boolean;
-        canManageScanCards: boolean;
-        canMergeClients: boolean;
-        canViewClientAlerts: boolean;
-        canManageClientAlerts: boolean;
-        canViewAnyFiles: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canUploadClientFiles: boolean;
-      };
+      access: { __typename?: 'ClientAccess'; canEditClient: boolean };
     };
     openEnrollmentSummary: Array<{
       __typename?: 'EnrollmentSummary';
@@ -22538,12 +22478,12 @@ export type GetEnrollmentWithHouseholdQuery = {
             canViewPartialSsn: boolean;
             canViewClientName: boolean;
             canViewClientPhoto: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewClientAlerts: boolean;
-            canManageClientAlerts: boolean;
             canViewAnyFiles: boolean;
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
@@ -29972,12 +29912,12 @@ export type SubmitFormMutation = {
             canViewDob: boolean;
             canViewClientName: boolean;
             canViewClientPhoto: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewClientAlerts: boolean;
-            canManageClientAlerts: boolean;
             canViewAnyFiles: boolean;
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
@@ -33104,12 +33044,12 @@ export type HouseholdFieldsFragment = {
         canViewPartialSsn: boolean;
         canViewClientName: boolean;
         canViewClientPhoto: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
         canViewEnrollmentDetails: boolean;
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
-        canViewClientAlerts: boolean;
-        canManageClientAlerts: boolean;
         canViewAnyFiles: boolean;
         canManageAnyClientFiles: boolean;
         canManageOwnClientFiles: boolean;
@@ -33183,12 +33123,12 @@ export type HouseholdClientFieldsFragment = {
       canViewPartialSsn: boolean;
       canViewClientName: boolean;
       canViewClientPhoto: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewClientAlerts: boolean;
-      canManageClientAlerts: boolean;
       canViewAnyFiles: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
@@ -33347,12 +33287,12 @@ export type GetHouseholdQuery = {
           canViewPartialSsn: boolean;
           canViewClientName: boolean;
           canViewClientPhoto: boolean;
+          canViewClientAlerts: boolean;
+          canManageClientAlerts: boolean;
           canViewEnrollmentDetails: boolean;
           canAuditClients: boolean;
           canManageScanCards: boolean;
           canMergeClients: boolean;
-          canViewClientAlerts: boolean;
-          canManageClientAlerts: boolean;
           canViewAnyFiles: boolean;
           canManageAnyClientFiles: boolean;
           canManageOwnClientFiles: boolean;
@@ -40445,12 +40385,12 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewPartialSsn
     canViewClientName
     canViewClientPhoto
+    canViewClientAlerts
+    canManageClientAlerts
     canViewEnrollmentDetails
     canAuditClients
     canManageScanCards
     canMergeClients
-    canViewClientAlerts
-    canManageClientAlerts
     canViewAnyFiles
     canManageAnyClientFiles
     canManageOwnClientFiles
@@ -40861,12 +40801,11 @@ export const EnrolledClientFieldsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     access {
-      ...ClientAccessFields
+      canEditClient
     }
   }
   ${AssessedClientFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
 `;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {

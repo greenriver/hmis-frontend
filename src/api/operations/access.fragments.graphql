@@ -32,8 +32,7 @@ fragment RootPermissions on QueryAccess {
 
 # Permissions on Client to determine what to show on the Client Dashboard
 #
-# Note: This often also gets resolved on Enrollment. It would be better if we split that out into a separate fragment,
-# because the Enrollment often doesn't need many of these fields (e.g. canMergeClients, canManagScanCards, ..)
+# Note: This gets resolved on multiple fragments, it could be further split out to resolve only what we need (to improve perf)
 fragment ClientAccessFields on ClientAccess {
   id
   canEditClient
@@ -43,12 +42,14 @@ fragment ClientAccessFields on ClientAccess {
   canViewPartialSsn
   canViewClientName
   canViewClientPhoto
+  canViewClientAlerts
+  canManageClientAlerts
+
+  # Perms for determining which tabs to show on Client dashboard:
   canViewEnrollmentDetails
   canAuditClients
   canManageScanCards
   canMergeClients
-  canViewClientAlerts
-  canManageClientAlerts
   canViewAnyFiles
 
   # The below perms could be pulled out and fetched on Client Files tab, for perf improvement
@@ -59,6 +60,7 @@ fragment ClientAccessFields on ClientAccess {
 
 fragment EnrollmentAccessFields on EnrollmentAccess {
   id
+  # canEditClient # TODO(BACKEND)
   canEditEnrollments
   canDeleteEnrollments
   canAuditEnrollments

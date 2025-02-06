@@ -86,7 +86,7 @@ fragment EnrolledClientFields on Client {
     ...CustomDataElementFields
   }
   access {
-    ...ClientAccessFields # todo: use specific fragment or resolve on enrollment?
+    canEditClient # TODO(move to EnrollmentAccess object)
   }
 }
 
@@ -123,7 +123,7 @@ fragment AllEnrollmentDetails on Enrollment {
     ...ProjectCocCount
     hasUnits
     access {
-      ...ProjectAccessFields
+      ...ProjectAccessFields # do we need this?
     }
     staffAssignmentsEnabled
   }
