@@ -66,7 +66,8 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
 
   const rowSecondaryActionConfigs = useCallback(
     ({ id, project, hohEnrollment }: OutgoingReferral) => {
-      if (!project) return []; // user does not have access to the receiving project
+      // User does not have access to the receiving project, so we can't link to anything.
+      if (!project) return [];
 
       // If we have a hohEnrollment (meaning the referral was accepted), link to it.
       // NOTE: its possible that "hohName" and the actual person on "hohEnrollment" don't actually match up,
@@ -76,7 +77,7 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
         ? [
             {
               title: 'View Enrollment',
-              key: 'referral',
+              key: 'enrollment',
               ariaLabel: `View Enrollment at ${project.projectName}`,
               to: generateSafePath(
                 EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
@@ -119,7 +120,6 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
       filters={{ status: referralFilter }}
       defaultPageSize={15}
       paginationItemName='outgoing referral'
-      // If User has access to the receiving project, link to the Referral
       rowSecondaryActionConfigs={rowSecondaryActionConfigs}
     />
   );
