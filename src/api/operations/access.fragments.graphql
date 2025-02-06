@@ -60,7 +60,6 @@ fragment ClientAccessFields on ClientAccess {
 
 fragment EnrollmentAccessFields on EnrollmentAccess {
   id
-  # canEditClient # TODO(BACKEND)
   canEditEnrollments
   canDeleteEnrollments
   canAuditEnrollments
