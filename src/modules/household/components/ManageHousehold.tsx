@@ -31,15 +31,23 @@ import {
   ClientSortOption,
   EnrollmentFieldsFragment,
   ExternalIdentifierType,
+  ProjectAccessFieldsFragment,
   ProjectAllFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
 
+export type ManageHouseholdProject = Pick<
+  ProjectAllFieldsFragment,
+  'id' | 'projectName'
+> & {
+  access: Pick<ProjectAccessFieldsFragment, 'canSplitHouseholds'>;
+};
+
 interface Props {
   householdId?: string;
-  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
+  project: ManageHouseholdProject;
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
 }

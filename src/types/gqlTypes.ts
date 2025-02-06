@@ -21089,6 +21089,7 @@ export type AllEnrollmentDetailsFragment = {
     access: {
       __typename?: 'ProjectAccess';
       id: string;
+      canSplitHouseholds: boolean;
       canManageIncomingReferrals: boolean;
     };
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
@@ -22524,6 +22525,7 @@ export type GetEnrollmentDetailsQuery = {
       access: {
         __typename?: 'ProjectAccess';
         id: string;
+        canSplitHouseholds: boolean;
         canManageIncomingReferrals: boolean;
       };
       projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
@@ -41345,6 +41347,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       hasUnits
       access {
         id
+        canSplitHouseholds
         canManageIncomingReferrals
       }
       staffAssignmentsEnabled

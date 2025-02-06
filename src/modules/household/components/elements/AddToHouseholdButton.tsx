@@ -11,11 +11,11 @@ import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import ConflictingEnrollmentAlert from '@/modules/household/components/elements/ConflictingEnrollmentAlert';
 import JoinHouseholdDialog from '@/modules/household/components/householdActions/JoinHouseholdDialog';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
   ClientSearchResultFieldsFragment,
   HouseholdFieldsFragment,
-  ProjectAllFieldsFragment,
   RecordFormRole,
   SubmittedEnrollmentResultFieldsFragment,
   ValidationError,
@@ -25,7 +25,7 @@ interface Props {
   client: ClientSearchResultFieldsFragment;
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
-  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
+  project: ManageHouseholdProject;
   onSuccess: (householdId: string) => void;
   household?: HouseholdFieldsFragment;
 }

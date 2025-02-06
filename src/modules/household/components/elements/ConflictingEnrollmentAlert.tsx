@@ -12,17 +12,17 @@ import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  ClientWithAlertFieldsFragment,
+  ClientSearchResultFieldsFragment,
   HouseholdFieldsFragment,
-  ProjectAllFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
 interface Props {
-  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
-  joiningClient: ClientWithAlertFieldsFragment;
+  project: ManageHouseholdProject;
+  joiningClient: ClientSearchResultFieldsFragment;
   conflictingEnrollmentId: string;
   receivingHousehold: HouseholdFieldsFragment;
   onClickJoinEnrollment: VoidFunction;

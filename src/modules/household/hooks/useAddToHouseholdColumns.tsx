@@ -4,15 +4,15 @@ import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
 import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
 import { ColumnDef } from '@/components/elements/table/types';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import {
   ClientSearchResultFieldsFragment,
-  ProjectAllFieldsFragment,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
 
 interface Args {
   householdId?: string;
-  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
+  project: ManageHouseholdProject;
 }
 
 export default function useAddToHouseholdColumns({
