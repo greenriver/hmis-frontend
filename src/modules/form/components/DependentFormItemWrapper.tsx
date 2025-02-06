@@ -17,7 +17,7 @@ export interface Props {
  * autofill/initial values can be set on always-hidden calculated field (like LOS Under Threshold)
  */
 const DependentFormItemWrapper: React.FC<Props> = ({ item, renderChild }) => {
-  const { unregister } = useFormContext();
+  const { unregister, register } = useFormContext();
   const { visible, disabled } = useDynamicFieldStatus(item);
   useDynamicFieldAutofillSync(item);
 
@@ -29,8 +29,13 @@ const DependentFormItemWrapper: React.FC<Props> = ({ item, renderChild }) => {
       item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
     ) {
       unregister(item.linkId);
+    } else {
+      register(item.linkId);
     }
-  }, [disabled, visible, unregister, item]);
+    return () => {
+      unregister(item.linkId);
+    };
+  }, [disabled, visible, unregister, register, item]);
 
   if (visible) return renderChild(disabled);
   return null;

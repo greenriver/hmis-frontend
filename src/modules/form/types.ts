@@ -141,6 +141,7 @@ export enum FormActionTypes {
 export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
+export type PartialLinkIdMap = Record<string, string[] | undefined>;
 export type LocalConstants = Record<string, any>;
 export type TypedObject = { __typename: string };
 

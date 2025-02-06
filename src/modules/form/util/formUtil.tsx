@@ -39,6 +39,7 @@ import {
   ItemMap,
   LinkIdMap,
   LocalConstants,
+  PartialLinkIdMap,
   TypedObject,
 } from '../types';
 
@@ -84,7 +85,7 @@ import { ensureArray } from '@/utils/arrays';
 // works in current versions of chrome as of 2023 but is not valid HTML.
 export const formAutoCompleteOff = 'do-not-autocomplete';
 
-export const invertDependencyMap = (depMap: LinkIdMap): LinkIdMap =>
+export const invertDependencyMap = (depMap: LinkIdMap): PartialLinkIdMap =>
   Object.entries(depMap).reduce((acc, [linkId, childLinkIds]) => {
     const result = { ...acc };
     childLinkIds.forEach((childLinkId) => {
