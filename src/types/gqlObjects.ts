@@ -7423,39 +7423,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'JoinHouseholdInput',
-    args: [
-      {
-        name: 'joiningEnrollmentInputs',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: {
-                kind: 'INPUT_OBJECT',
-                name: 'EnrollmentRelationshipInput',
-                ofType: null,
-              },
-            },
-          },
-        },
-      },
-      {
-        name: 'receivingHouseholdId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-    ],
-  },
-  {
     name: 'MciClearanceInput',
     args: [
       {

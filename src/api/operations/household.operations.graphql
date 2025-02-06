@@ -1,5 +1,11 @@
-mutation JoinHousehold($input: JoinHouseholdInput!) {
-  joinHousehold(input: $input) {
+mutation JoinHousehold(
+  $receivingHouseholdId: ID!
+  $joiningEnrollmentInputs: [EnrollmentRelationshipInput!]!
+) {
+  joinHousehold(
+    receivingHouseholdId: $receivingHouseholdId
+    joiningEnrollmentInputs: $joiningEnrollmentInputs
+  ) {
     receivingHousehold {
       ...HouseholdFields
     }

@@ -62,10 +62,8 @@ export function usePerformJoinHousehold({
 
       return joinHousehold({
         variables: {
-          input: {
-            receivingHouseholdId,
-            joiningEnrollmentInputs,
-          },
+          receivingHouseholdId,
+          joiningEnrollmentInputs,
         },
       });
     },
