@@ -22,14 +22,15 @@ export type StepDefinition = {
   title?: string;
   content: ReactNode;
 
-  // if onSubmit is not provided, the default action is to just go to the next step
-  onSubmit?: () => Promise<any>; // after onSubmit promise resolves, go to the next step if there is one
-  submitButtonText?: string;
-  submitLoading?: boolean;
+  // if onProceed is not provided, the default action is to just go to the next step
+  onProceed?: () => Promise<any> | VoidFunction; // after promise resolves, go to the next step if there is one
+  proceedButtonText?: string;
+  proceedButtonType?: 'submit' | 'button';
+  proceedLoading?: boolean;
   ButtonProps?: ButtonProps;
 
-  // `disableProceeding` can be used to disable either the onSubmit action, or the default 'next' action
-  disableProceeding?: boolean;
+  // `disableProceed` can be used to disable the proceed action
+  disableProceed?: boolean;
   disabledReason?: string;
 };
 
@@ -82,43 +83,47 @@ const StepDialog = ({
   const {
     title: stepTitle,
     content,
-    onSubmit,
-    submitButtonText,
-    submitLoading,
-    disableProceeding,
+    onProceed,
+    proceedButtonText,
+    proceedButtonType = 'button',
+    proceedLoading,
+    disableProceed,
     disabledReason,
     ButtonProps,
   } = thisStep;
 
   const nextButton = useMemo(() => {
-    if (!onSubmit && !nextStep) return undefined;
+    if (!onProceed && !nextStep) return undefined;
 
     const handleClick = async () => {
-      if (onSubmit) await onSubmit();
+      if (onProceed) await onProceed();
       if (nextStep) setCurrentStepKey(nextStep.key);
     };
+
+    const defaultButtonText = nextStep ? 'Next' : 'Finish';
+    const buttonText = proceedButtonText || defaultButtonText;
 
     return (
       <LoadingButton
         onClick={handleClick}
-        type={!!onSubmit ? 'submit' : 'button'}
-        loading={submitLoading}
+        type={proceedButtonType}
+        loading={proceedLoading}
         sx={{ minWidth: '120px' }}
-        disabled={disableProceeding}
+        disabled={disableProceed}
         endIcon={nextStep ? <ArrowRightIcon /> : undefined}
         {...ButtonProps}
       >
-        {!!onSubmit && (submitButtonText || 'Submit')}
-        {!onSubmit && !!nextStep && (nextStep.title || 'Next')}
+        {buttonText}
       </LoadingButton>
     );
   }, [
     ButtonProps,
-    disableProceeding,
+    disableProceed,
     nextStep,
-    onSubmit,
-    submitButtonText,
-    submitLoading,
+    onProceed,
+    proceedButtonText,
+    proceedButtonType,
+    proceedLoading,
   ]);
 
   return (
@@ -165,7 +170,7 @@ const StepDialog = ({
                 Cancel
               </Button>
 
-              {disableProceeding && disabledReason ? (
+              {disableProceed && disabledReason ? (
                 <ButtonTooltipContainer
                   title={disabledReason}
                   placement='top-start'

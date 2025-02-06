@@ -101,7 +101,7 @@ const JoinHouseholdDialog = ({
 
   const missingRelationshipsProps = useMemo(() => {
     return {
-      disableProceeding: missingRelationshipsCount > 0,
+      disableProceed: missingRelationshipsCount > 0,
       disabledReason:
         missingRelationshipsCount > 0
           ? `Required fields missing (${missingRelationshipsCount})`
@@ -143,7 +143,7 @@ const JoinHouseholdDialog = ({
             )}
           </>
         ),
-        disableProceeding: joiningClients.length === 0,
+        disableProceed: joiningClients.length === 0,
         disabledReason: 'Select a client',
       },
       {
@@ -188,9 +188,9 @@ const JoinHouseholdDialog = ({
           />
         ),
         ...missingRelationshipsProps,
-        onSubmit,
-        submitLoading: joinLoading,
-        submitButtonText: 'Join Enrollments',
+        onProceed: onSubmit,
+        proceedLoading: joinLoading,
+        proceedButtonText: 'Join Enrollments',
         ButtonProps: {
           endIcon: <MergeTypeRounded />,
         },
