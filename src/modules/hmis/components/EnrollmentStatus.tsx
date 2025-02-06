@@ -3,7 +3,11 @@ import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
 import { Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import { Enrollment, Household } from '@/types/gqlTypes';
+import {
+  Enrollment,
+  EnrollmentFieldsFragment,
+  Household,
+} from '@/types/gqlTypes';
 
 interface CommonStatusProps {
   variant: 'inProgress' | 'open' | 'autoExited' | 'exited';
@@ -57,7 +61,8 @@ const CommonStatus: React.FC<CommonStatusProps> = ({ variant }) => {
 const EnrollmentStatus = ({
   enrollment,
 }: {
-  enrollment: Pick<Enrollment, 'inProgress' | 'autoExited' | 'exitDate'>;
+  enrollment: Pick<Enrollment, 'inProgress' | 'exitDate'> &
+    Partial<Pick<EnrollmentFieldsFragment, 'autoExited'>>;
 }) => {
   if (enrollment.inProgress) return <CommonStatus variant='inProgress' />;
   if (enrollment.autoExited) return <CommonStatus variant='autoExited' />;

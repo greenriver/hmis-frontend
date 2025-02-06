@@ -64,7 +64,6 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
       },
       {
         key: 'action',
-        linkTreatment: true,
         render: (referralRequest: ReferralRequestFieldsFragment) => (
           <DeleteMutationButton<
             VoidReferralRequestMutation,

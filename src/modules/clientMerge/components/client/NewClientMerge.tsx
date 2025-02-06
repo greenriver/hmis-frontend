@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
 import BackButtonLink from '@/components/elements/BackButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import RouterLink from '@/components/elements/RouterLink';
 import GenericTable from '@/components/elements/table/GenericTable';
+import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
@@ -19,7 +19,7 @@ import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRec
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
-import { ClientDashboardRoutes, Routes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
@@ -67,22 +67,7 @@ const NewClientMerge = () => {
 
   const clientColumns: ColumnDef<ClientFieldsFragment>[] = useMemo(
     () => [
-      {
-        header: 'HMIS ID',
-        render: ({ id }: ClientFieldsFragment) =>
-          id === client.id ? (
-            id
-          ) : (
-            <RouterLink
-              to={generateSafePath(Routes.CLIENT_DASHBOARD, {
-                clientId: id,
-              })}
-              openInNew
-            >
-              {id}
-            </RouterLink>
-          ),
-      },
+      { header: 'HMIS ID', render: 'id' },
       CLIENT_COLUMNS.first,
       CLIENT_COLUMNS.last,
       { ...CLIENT_COLUMNS.ssn, width: '150px' },
@@ -95,7 +80,7 @@ const NewClientMerge = () => {
       },
       HudRecordMetadataHistoryColumn,
     ],
-    [client.id]
+    []
   );
 
   const filters = useFilters({
@@ -175,6 +160,9 @@ const NewClientMerge = () => {
                   filters={filters}
                   recordType='Client'
                   defaultSortOption={ClientSortOption.BestMatch}
+                  rowSecondaryActionConfigs={(row) => [
+                    getViewClientMenuItem(row),
+                  ]}
                 />
               </SsnDobShowContextProvider>
             )}

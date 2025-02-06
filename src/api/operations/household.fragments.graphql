@@ -28,6 +28,7 @@ fragment HouseholdClientFields on HouseholdClient {
   enrollment {
     id
     lockVersion
+    relationshipToHoH
     ...EnrollmentRangeFields
     autoExited
     currentUnit {

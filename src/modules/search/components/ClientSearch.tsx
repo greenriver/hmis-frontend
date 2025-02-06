@@ -14,7 +14,7 @@ import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
-import RouterLink from '@/components/elements/RouterLink';
+import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -30,13 +30,13 @@ import {
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 import { isEnrollment, isHouseholdClient } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { ClientDashboardRoutes, Routes } from '@/routes/routes';
+import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ClientSearchInput as ClientSearchInputType,
@@ -44,63 +44,43 @@ import {
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
+  ProjectEnrollmentsHouseholdClientFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 function asClient(
   record:
     | ClientFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
+    | ProjectEnrollmentsHouseholdClientFieldsFragment
 ) {
   if (isHouseholdClient(record)) return record.client;
   if (isEnrollment(record)) return record.client;
   return record;
 }
+
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<
+    // | ClientFieldsFragment
     | ClientFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
+    | ProjectEnrollmentsHouseholdClientFieldsFragment
   >;
 } = {
   id: { header: 'HMIS ID', render: 'id' },
-  linkedId: {
-    header: 'ID',
-    render: (client) => (
-      <RouterLink
-        openInNew={true}
-        to={generateSafePath(Routes.CLIENT_DASHBOARD, {
-          clientId: client.id,
-        })}
-      >
-        {client.id}
-      </RouterLink>
-    ),
-  },
   name: {
-    header: 'Name',
+    header: 'Client Name',
     key: 'name',
     render: (client) => <ClientName client={asClient(client)} />,
   },
-  linkedName: {
-    header: 'Name',
-    key: 'name',
-    render: (client) => <ClientName client={asClient(client)} linkToProfile />,
-  },
-  linkedNameNewTab: {
-    header: 'Name',
-    key: 'name',
-    render: (client) => (
-      <ClientName
-        client={asClient(client)}
-        linkToProfile
-        routerLinkProps={{ openInNew: true }}
-      />
-    ),
+  age: {
+    header: 'Age',
+    key: 'age',
+    render: (client) => asClient(client).age,
   },
   first: {
     header: 'First Name',
@@ -132,25 +112,15 @@ export const CLIENT_COLUMNS: {
 
 export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
-  {
-    ...CLIENT_COLUMNS.first,
-    linkTreatment: true,
-    ariaLabel: (row) => clientNameAllParts(row),
-  },
-  { ...CLIENT_COLUMNS.last, linkTreatment: true },
-  { ...CLIENT_COLUMNS.ssn, width: '150px' },
+  CLIENT_COLUMNS.first,
+  CLIENT_COLUMNS.last,
   { ...CLIENT_COLUMNS.dobAge, width: '180px' },
 ];
 
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
-  {
-    ...CLIENT_COLUMNS.name,
-    linkTreatment: true,
-    ariaLabel: (row) => clientNameAllParts(row),
-  },
-  { ...CLIENT_COLUMNS.ssn },
-  { ...CLIENT_COLUMNS.dobAge },
+  CLIENT_COLUMNS.name,
+  CLIENT_COLUMNS.dobAge,
 ];
 
 /**
@@ -177,11 +147,6 @@ const ClientSearch = () => {
     null
   );
 
-  const [canViewSsn] = useHasRootPermissions([
-    'canViewFullSsn',
-    'canViewPartialSsn',
-  ]);
-
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
   const { globalFeatureFlags } = useHmisAppSettings();
@@ -199,13 +164,12 @@ const ClientSearch = () => {
         ...baseColumns,
       ];
     }
-    if (!canViewSsn) baseColumns = baseColumns.filter((c) => c.key !== 'ssn');
     if (!canViewDob)
       baseColumns = baseColumns.map((c) =>
         c.key === 'dob' ? { ...c, header: 'Age' } : c
       );
     return baseColumns;
-  }, [isMobile, globalFeatureFlags, displayType, canViewSsn, canViewDob]);
+  }, [isMobile, globalFeatureFlags, displayType, canViewDob]);
 
   useEffect(() => {
     // if search params are derived, we don't want to perform a search on them
@@ -225,14 +189,6 @@ const ClientSearch = () => {
       if (!initState.textSearch) setSearchType('specific');
     }
   }, [derivedSearchParams, searchParams]);
-
-  const rowLinkTo = useCallback(
-    (row: ClientFieldsFragment) =>
-      generateSafePath(ClientDashboardRoutes.PROFILE, {
-        clientId: row.id,
-      }),
-    []
-  );
 
   const onClearSearch = useCallback(() => {
     setSearchInput(null);
@@ -319,8 +275,10 @@ const ClientSearch = () => {
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
             onCompleted={() => setHasSearched(true)}
-            rowLinkTo={rowLinkTo}
             columns={columns}
+            rowLinkTo={(client) => getViewClientMenuItem(client).to}
+            rowName={(row) => clientBriefName(row)}
+            rowActionTitle='View Client'
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
             filters={filters}
@@ -351,18 +309,11 @@ const ClientSearch = () => {
                 : undefined
             }
             toolbars={
-              displayType === 'cards' && (canViewDob || canViewSsn)
+              displayType === 'cards' && canViewDob
                 ? [
                     <Stack direction='row-reverse' gap={2}>
                       {canViewDob && (
                         <ContextualDobToggleButton
-                          sx={{ p: 0 }}
-                          variant='text'
-                          size='small'
-                        />
-                      )}
-                      {canViewSsn && (
-                        <ContextualSsnToggleButton
                           sx={{ p: 0 }}
                           variant='text'
                           size='small'

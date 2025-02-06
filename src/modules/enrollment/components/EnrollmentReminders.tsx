@@ -273,6 +273,7 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           rowLinkTo={
             enrollment.access.canEditEnrollments ? rowLinkTo : undefined
           }
+          hideMenu
           rowSx={() => ({ '&:nth-last-of-type(1) td': { pb: 1 } })}
           noData={
             <Stack

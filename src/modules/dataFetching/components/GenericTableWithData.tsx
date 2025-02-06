@@ -50,7 +50,12 @@ export interface Props<
   SortOptionsType = Record<string, string>,
 > extends Omit<
     GenericTableProps<RowDataType>,
-    'rows' | 'tablePaginationProps' | 'loading' | 'paginated' | 'noData'
+    | 'rows'
+    | 'tablePaginationProps'
+    | 'loading'
+    | 'paginated'
+    | 'noData'
+    | 'verticalHiddenHeader'
   > {
   getColumnDefs?: (
     rows: RowDataType[],
@@ -130,6 +135,7 @@ const GenericTableWithData = <
   onCompleted,
   paginationItemName,
   filterRows,
+  vertical,
   ...props
 }: Props<
   Query,
@@ -245,14 +251,17 @@ const GenericTableWithData = <
         setPage(0);
       },
       count: nodesCount,
+      labelRowsPerPage: `${pluralize(startCase(paginationItemName || recordType || 'Row'))} per page:`,
     };
   }, [
-    nodesCount,
-    page,
-    rowsPerPage,
-    defaultPageSize,
     nonTablePagination,
+    nodesCount,
+    rowsPerPage,
+    page,
     rowsPerPageOptions,
+    recordType,
+    paginationItemName,
+    defaultPageSize,
   ]);
 
   const columnDefs = useMemo(() => {
@@ -333,6 +342,10 @@ const GenericTableWithData = <
           }
           columns={showColumnDefs}
           noData={loading ? 'Loading...' : noDataValue}
+          vertical={vertical}
+          verticalHiddenHeader={
+            vertical ? `${recordType} attributes` : undefined
+          }
           filterToolbar={
             showTopToolbar && (
               <>

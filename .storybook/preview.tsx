@@ -12,11 +12,13 @@ import { MemoryRouter } from 'react-router-dom';
 import theme from '../src/config/theme';
 import '../src/index.css';
 import {
+  AMERICAN_LAKE_HOUSE,
   applicationUserMock,
   fakeEnrollment,
   RITA_ACKROYD,
 } from '../src/test/__mocks__/requests';
 import { RenderRouteWithOutletContext } from './components/RenderRouteWithOutletContext';
+import { ProjectDashboardContext } from '../src/modules/projects/components/ProjectDashboard';
 
 export const parameters = {
   layout: 'padded',
@@ -40,7 +42,7 @@ export const decorators = [
     // React Router decorator can optionally provide a dashboard context if `dashboardContext` is passed.
     // Caller can optionally specify the client/enrollemnt mocks that should be used in the context by
     // passing `client` or `enrollment` parameters.
-    const { dashboardContext, client, enrollment } = parameters;
+    const { dashboardContext, client, enrollment, project } = parameters;
     switch (dashboardContext) {
       case 'enrollment':
         return (
@@ -60,6 +62,14 @@ export const decorators = [
           <RenderRouteWithOutletContext<ClientDashboardContext>
             // data doesn't exactly match the fragment type that is used for Enrollment Dashboard, could be improved
             context={{ client: client || RITA_ACKROYD }}
+          >
+            {Story()}
+          </RenderRouteWithOutletContext>
+        );
+      case 'project':
+        return (
+          <RenderRouteWithOutletContext<ProjectDashboardContext>
+            context={{ project: project || AMERICAN_LAKE_HOUSE }}
           >
             {Story()}
           </RenderRouteWithOutletContext>

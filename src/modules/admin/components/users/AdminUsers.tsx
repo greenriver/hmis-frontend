@@ -39,6 +39,7 @@ const AdminUsers = () => {
         render: ({ email }) => email,
       },
       {
+        key: 'Actions',
         textAlign: 'right',
         render: (user) =>
           access && (

@@ -1,18 +1,17 @@
 import UploadIcon from '@mui/icons-material/Upload';
-import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import useFileActions from '../hooks/useFileActions';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
 import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
   useClientPermissions,
   useHasClientPermissions,
@@ -75,19 +74,10 @@ const ClientFilesPage = () => {
     return [
       {
         header: 'File Name',
-        render: (file) =>
-          file.redacted ? (
-            <Typography variant='inherit'>{file.name}</Typography>
-          ) : (
-            <Link
-              component='button'
-              onClick={() => setViewingFile(file)}
-              align='left'
-              tabIndex={-1}
-            >
-              {file.name}
-            </Link>
-          ),
+        render: (file) => (
+          <Typography variant='inherit'>{file.name}</Typography>
+        ),
+        sticky: 'left',
       },
       {
         header: 'File Tags',
@@ -111,28 +101,28 @@ const ClientFilesPage = () => {
           ) : null,
       },
       {
-        header: 'Enrollment',
-        render: ({ enrollment }) => {
-          if (!enrollment) return <NotCollectedText>N/A</NotCollectedText>;
-
-          return (
-            <Stack gap={1}>
-              {enrollment.projectName}
-              <EnrollmentDateRangeWithStatus enrollment={enrollment} />
-            </Stack>
-          );
-        },
+        header: 'Project Name',
+        render: ({ enrollment }) =>
+          enrollment ? (
+            enrollment.projectName
+          ) : (
+            <NotCollectedText>N/A</NotCollectedText>
+          ),
       },
       {
-        header: 'Uploaded At',
-        render: (file) => {
-          const uploadedAt = file.dateCreated
-            ? parseAndFormatDateTime(file.dateCreated)
-            : 'Unknown time';
-          const uploadedBy = file.uploadedBy?.name
-            ? `by ${file.uploadedBy?.name}`
+        header: 'Uploaded',
+        render: ({ dateCreated, uploadedBy }) => {
+          const byUser = uploadedBy?.name
+            ? `by ${uploadedBy?.name}`
             : 'by unknown user';
-          return `${uploadedAt} ${uploadedBy}`;
+          if (dateCreated)
+            return (
+              <RelativeDateDisplay
+                dateString={dateCreated}
+                tooltipSuffixText={byUser}
+              />
+            );
+          return `Unknown time ${byUser}`;
         },
       },
     ];
@@ -165,8 +155,11 @@ const ClientFilesPage = () => {
           queryVariables={{ id: clientId }}
           queryDocument={GetClientFilesDocument}
           columns={columns}
+          rowName={(file) => file.name}
+          rowActionTitle='View File'
+          hideMenu={(file) => file.redacted}
+          handleRowClick={(file) => (file.redacted ? {} : setViewingFile(file))}
           pagePath='client.files'
-          handleRowClick={(file) => !file.redacted && setViewingFile(file)}
           noData='No files'
         />
       </Paper>

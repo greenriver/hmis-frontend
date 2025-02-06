@@ -72,7 +72,6 @@ const ClientScanCards = () => {
           columns={columns}
           pagePath='client.scanCardCodes'
           noData='No scan cards'
-          headerCellSx={() => ({ color: 'text.secondary' })}
           recordType='ScanCardCode'
           paginationItemName='scan card'
           showTopToolbar

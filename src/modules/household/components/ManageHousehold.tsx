@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -10,6 +10,7 @@ import AddNewClientButton from './elements/AddNewClientButton';
 import { CommonCard } from '@/components/elements/CommonCard';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
+import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -195,21 +196,26 @@ const ManageHousehold = ({
 
           {searchInput && (
             <SsnDobShowContextProvider>
-              <GenericTableWithData<
-                SearchClientsQuery,
-                SearchClientsQueryVariables,
-                ClientFieldsFragment
-              >
-                queryVariables={{ input: searchInput }}
-                queryDocument={SearchClientsDocument}
-                columns={columns}
-                pagePath='clientSearch'
-                fetchPolicy='cache-and-network'
-                filters={filters}
-                recordType='Client'
-                defaultSortOption={ClientSortOption.BestMatch}
-                onCompleted={() => setHasSearched(true)}
-              />
+              <Paper>
+                <GenericTableWithData<
+                  SearchClientsQuery,
+                  SearchClientsQueryVariables,
+                  ClientFieldsFragment
+                >
+                  queryVariables={{ input: searchInput }}
+                  queryDocument={SearchClientsDocument}
+                  columns={columns}
+                  pagePath='clientSearch'
+                  fetchPolicy='cache-and-network'
+                  filters={filters}
+                  recordType='Client'
+                  defaultSortOption={ClientSortOption.BestMatch}
+                  onCompleted={() => setHasSearched(true)}
+                  rowSecondaryActionConfigs={(row) => [
+                    getViewClientMenuItem(row),
+                  ]}
+                />
+              </Paper>
             </SsnDobShowContextProvider>
           )}
         </Stack>

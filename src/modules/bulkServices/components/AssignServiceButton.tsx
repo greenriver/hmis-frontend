@@ -3,7 +3,7 @@ import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import { LoadingButton } from '@mui/lab';
 import { ButtonProps, DialogActions, DialogContent } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import * as React from 'react';
 import { useBulkAssignMutations } from '../hooks/useBulkAssignMutations';
@@ -126,6 +126,7 @@ const AssignServiceButton: React.FC<Props> = ({
           fullWidth
           variant='contained'
           color={isAssignedOnDate ? 'primary' : 'grayscale'}
+          aria-label={`${buttonText}, ${clientBriefName(client)}`}
         >
           {buttonText}
         </LoadingButton>
@@ -160,4 +161,4 @@ const AssignServiceButton: React.FC<Props> = ({
   );
 };
 
-export default AssignServiceButton;
+export default memo(AssignServiceButton);

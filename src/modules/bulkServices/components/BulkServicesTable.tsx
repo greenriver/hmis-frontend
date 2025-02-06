@@ -1,28 +1,34 @@
+import { Box } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { ServicePeriod } from '../bulkServicesTypes';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import RouterLink from '@/components/elements/RouterLink';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewClientMenuItem,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
+  clientBriefName,
   formatDateForDisplay,
   formatDateForGql,
   formatRelativeDate,
   parseAndFormatDate,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   BulkServicesClientSearchDocument,
   BulkServicesClientSearchQuery,
   BulkServicesClientSearchQueryVariables,
   ClientSortOption,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   projectId: string;
@@ -59,6 +65,8 @@ const BulkServicesTable: React.FC<Props> = ({
     [cocCode, projectId, serviceDate, serviceTypeId]
   );
 
+  const [canViewDob] = useHasRootPermissions(['canViewDob']);
+
   const getColumnDefs = useCallback(
     (_rows: RowType[], loading?: boolean) => {
       const notEnrolledText = (
@@ -67,26 +75,14 @@ const BulkServicesTable: React.FC<Props> = ({
         </NotCollectedText>
       );
       return [
-        { ...CLIENT_COLUMNS.linkedId },
-        CLIENT_COLUMNS.first,
-        CLIENT_COLUMNS.last,
-        CLIENT_COLUMNS.dobAge,
+        { ...CLIENT_COLUMNS.name, sticky: 'left' },
+        ...(canViewDob ? [CLIENT_COLUMNS.dobAge] : []),
         {
           header: 'Entry Date',
           render: (row: RowType) => {
             if (!row.activeEnrollment) return notEnrolledText;
 
-            return (
-              <RouterLink
-                to={generateSafePath(
-                  EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-                  { clientId: row.id, enrollmentId: row.activeEnrollment.id }
-                )}
-                openInNew
-              >
-                {parseAndFormatDate(row.activeEnrollment.entryDate)}
-              </RouterLink>
-            );
+            return parseAndFormatDate(row.activeEnrollment.entryDate);
           },
         },
         {
@@ -112,30 +108,47 @@ const BulkServicesTable: React.FC<Props> = ({
           },
         },
         {
-          header: `Assign ${serviceTypeName} for ${formatDateForDisplay(
-            serviceDate
-          )}`,
+          ...BASE_ACTION_COLUMN_DEF,
           width: '180px',
-          render: (row: RowType) => {
-            return (
-              <AssignServiceButton
-                client={row}
-                queryVariables={mutationQueryVariables}
-                tableLoading={loading}
-                disabled={anyRowsSelected}
-                disabledReason={
-                  anyRowsSelected
-                    ? 'Deselect checkboxes to assign clients individually.'
-                    : undefined
-                }
-                serviceTypeName={serviceTypeName}
-              />
-            );
-          },
+          tableCellProps: { sx: { pl: 2, pr: 1 } },
+          render: (row: RowType) => (
+            <TableRowActions
+              record={row}
+              recordName={clientBriefName(row)}
+              primaryAction={
+                <Box sx={{ width: '100%' }}>
+                  <AssignServiceButton
+                    client={row}
+                    queryVariables={mutationQueryVariables}
+                    tableLoading={loading}
+                    disabled={anyRowsSelected}
+                    disabledReason={
+                      anyRowsSelected
+                        ? 'Deselect checkboxes to assign clients individually.'
+                        : undefined
+                    }
+                    serviceTypeName={serviceTypeName}
+                  />
+                </Box>
+              }
+              menuActionConfigs={[
+                getViewClientMenuItem(row),
+                ...(row.activeEnrollment
+                  ? [getViewEnrollmentMenuItem(row.activeEnrollment, row)]
+                  : []),
+              ]}
+            />
+          ),
         },
       ] as ColumnDef<RowType>[];
     },
-    [serviceDate, serviceTypeName, mutationQueryVariables, anyRowsSelected]
+    [
+      anyRowsSelected,
+      canViewDob,
+      mutationQueryVariables,
+      serviceDate,
+      serviceTypeName,
+    ]
   );
 
   const defaultFilterValues = useMemo(() => {
