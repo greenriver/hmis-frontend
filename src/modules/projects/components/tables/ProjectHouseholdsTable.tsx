@@ -38,7 +38,7 @@ export type HouseholdFields = NonNullable<
 >['households']['nodes'][number];
 
 type OneHouseholdClient = HouseholdFields['householdClients'][number];
-const PROJECT_HOUSEHOLD_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
+const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   { ...CLIENT_COLUMNS.name, sticky: 'left' },
   CLIENT_COLUMNS.age,
   ENROLLMENT_RELATIONSHIP_COL,
@@ -94,7 +94,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
 
   return (
     <TableRow sx={clickableRowStyles} key={household.id + householdClient.id}>
-      {PROJECT_HOUSEHOLD_COLUMNS.map((col, i) => (
+      {BASE_COLUMNS.map((col, i) => (
         <TableCell
           key={getColumnKey(col) || i}
           role={i === 0 ? 'rowheader' : undefined}
@@ -152,13 +152,13 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
   // dummy column defs for Household that are only used for the headers, not for rendering cells
   const columns: ColumnDef<HouseholdFields>[] = useMemo(() => {
     return [
-      ...PROJECT_HOUSEHOLD_COLUMNS,
-      ...(staffAssignmentsEnabled ? [{ ...ASSIGNED_STAFF_COL }] : []), // typescript appeasement
+      ...BASE_COLUMNS,
+      ...(staffAssignmentsEnabled ? [{ ...ASSIGNED_STAFF_COL }] : []),
       ACTION_COL,
     ].map(({ render, ...rest }) => ({
       ...rest,
       render: () => null,
-      tableCellProps: undefined,
+      tableCellProps: undefined, // typescript appeasement
     }));
   }, [staffAssignmentsEnabled]);
 
