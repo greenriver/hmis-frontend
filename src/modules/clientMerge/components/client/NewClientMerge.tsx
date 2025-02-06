@@ -37,7 +37,10 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const clientSsnColumn: ColumnDef<ClientSsnFieldsFragment> = {
+// Defined here because it's only used in search results for merging, in order to identify duplicates.
+// SSN should not be shown in most search results.
+// SSN will only appear if `includeSsn` directive is used in the query.
+export const clientSsnColumn: ColumnDef<ClientSsnFieldsFragment> = {
   header: (
     <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
   ),

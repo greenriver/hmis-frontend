@@ -3,14 +3,12 @@ import { Meta, StoryFn } from '@storybook/react';
 
 import GenericTable, { Props as GenericTableProps } from './GenericTable';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
+import { clientSsnColumn } from '@/modules/clientMerge/components/client/NewClientMerge';
 import {
   clientBriefName,
   getCustomDataElementColumns,
 } from '@/modules/hmis/hmisUtil';
-import {
-  CLIENT_COLUMNS,
-  CLIENT_SSN_COLUMN,
-} from '@/modules/search/components/ClientSearch';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
 
@@ -38,7 +36,7 @@ const Template =
 const clientColumns = [
   CLIENT_COLUMNS.first,
   CLIENT_COLUMNS.last,
-  CLIENT_SSN_COLUMN,
+  clientSsnColumn,
   CLIENT_COLUMNS.dobAge,
 ];
 
