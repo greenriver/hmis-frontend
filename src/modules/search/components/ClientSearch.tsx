@@ -102,16 +102,12 @@ export const CLIENT_COLUMNS: {
   },
 };
 
+// Desktop and Mobile have same columns currently, but keeping separated for future flexibility.
 export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
-  [
-    CLIENT_COLUMNS.id,
-    CLIENT_COLUMNS.first,
-    CLIENT_COLUMNS.last,
-    CLIENT_COLUMNS.dobAge,
-  ];
+  [CLIENT_COLUMNS.name, CLIENT_COLUMNS.id, CLIENT_COLUMNS.dobAge];
 
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
-  [CLIENT_COLUMNS.id, CLIENT_COLUMNS.name, CLIENT_COLUMNS.dobAge];
+  [CLIENT_COLUMNS.name, CLIENT_COLUMNS.id, CLIENT_COLUMNS.dobAge];
 
 /**
  * Client Search page

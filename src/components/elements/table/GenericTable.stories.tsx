@@ -3,7 +3,7 @@ import { Meta, StoryFn } from '@storybook/react';
 
 import GenericTable, { Props as GenericTableProps } from './GenericTable';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
-import { clientSsnColumn } from '@/modules/clientMerge/components/client/NewClientMerge';
+import { CLIENT_SSN_COLUMN } from '@/modules/clientMerge/components/client/NewClientMerge';
 import {
   clientBriefName,
   getCustomDataElementColumns,
@@ -36,7 +36,7 @@ const Template =
 const clientColumns = [
   CLIENT_COLUMNS.first,
   CLIENT_COLUMNS.last,
-  clientSsnColumn,
+  CLIENT_SSN_COLUMN,
   CLIENT_COLUMNS.dobAge,
 ];
 
