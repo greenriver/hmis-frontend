@@ -3,15 +3,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
 import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
+import { ColumnDef } from '@/components/elements/table/types';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import {
-  ClientFieldsFragment,
-  ProjectAllFieldsFragment,
+  ClientSearchResultFieldsFragment,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
 
 interface Args {
   householdId?: string;
-  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
+  project: ManageHouseholdProject;
 }
 
 export default function useAddToHouseholdColumns({
@@ -60,14 +61,16 @@ export default function useAddToHouseholdColumns({
     [getHousehold]
   );
 
-  const addToEnrollmentColumns = useMemo(() => {
+  const addToEnrollmentColumns: ColumnDef<
+    ClientSearchResultFieldsFragment | RecentHouseholdMember
+  >[] = useMemo(() => {
     return [
       {
         header: '',
         key: 'add',
         width: '10%',
         minWidth: '180px',
-        render: (record: ClientFieldsFragment | RecentHouseholdMember) => {
+        render: (record) => {
           const client = isRecentHouseholdMember(record)
             ? record.client
             : record;

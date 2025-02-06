@@ -101,7 +101,7 @@ const JoinHouseholdDialog = ({
 
   const missingRelationshipsProps = useMemo(() => {
     return {
-      disableProceeding: missingRelationshipsCount > 0,
+      disableProceed: missingRelationshipsCount > 0,
       disabledReason:
         missingRelationshipsCount > 0
           ? `Required fields missing (${missingRelationshipsCount})`
@@ -129,6 +129,7 @@ const JoinHouseholdDialog = ({
   const stepDefinitions: StepDefinition[] = useMemo(
     () => [
       {
+        key: 'select',
         title: 'Select Clients',
         content: (
           <>
@@ -142,10 +143,11 @@ const JoinHouseholdDialog = ({
             )}
           </>
         ),
-        disableProceeding: joiningClients.length === 0,
+        disableProceed: joiningClients.length === 0,
         disabledReason: 'Select a client',
       },
       {
+        key: 'relationships',
         title: 'Add Relationships',
         content: (
           <AddRelationshipsStep
@@ -174,6 +176,7 @@ const JoinHouseholdDialog = ({
         ...missingRelationshipsProps,
       },
       {
+        key: 'review',
         title: 'Review Join',
         content: !donorHousehold ? (
           <Loading />
@@ -186,17 +189,16 @@ const JoinHouseholdDialog = ({
           />
         ),
         ...missingRelationshipsProps,
-        onSubmit,
-        submitLoading: joinLoading,
-        submitButtonText: 'Join Enrollments',
+        onProceed: onSubmit,
+        proceedLoading: joinLoading,
+        proceedButtonText: 'Join Enrollments',
         ButtonProps: {
           endIcon: <JoinIcon />,
         },
         disabled: joinLoading || missingRelationshipsCount > 0,
       },
       {
-        title: 'Successful Join',
-        omitStepTitle: true,
+        key: 'success',
         content: (
           <SuccessWayfindingStep
             title={'Successful Join'}
@@ -234,7 +236,7 @@ const JoinHouseholdDialog = ({
       loading={fetchLoading}
       open={open}
       fullWidth
-      maxWidth='lg'
+      maxWidth='md'
       onClose={onClose}
       stepDefinitions={stepDefinitions}
     />

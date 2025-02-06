@@ -35,9 +35,6 @@ const ClientProfileLayout: React.FC<Props> = ({ client }) => {
             </Stack>
           </Grid>
         )}
-        {/* disabled "quick actions" card because the only action was Enroll in Project, which
-          we are disabling for now #185750557 */}
-        {/* <ClientActionsCard client={client} /> */}
       </Grid>
     </Box>
   );

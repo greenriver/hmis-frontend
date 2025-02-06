@@ -13,10 +13,12 @@ export const Default: Story = {
     title: 'Stepper Dialog Demo',
     stepDefinitions: [
       {
+        key: 'one',
         title: 'One',
         content: 'hello first tab',
       },
       {
+        key: 'two',
         title: 'Two',
         content: 'this is the second tab',
       },

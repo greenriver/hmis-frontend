@@ -9,23 +9,23 @@ import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import { ErrorState } from '@/modules/errors/util';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import ConflictingEnrollmentAlert from '@/modules/household/components/elements/ConflictingEnrollmentAlert';
+import ConflictingEnrollmentAlert from '@/modules/household/components/householdActions/ConflictingEnrollmentAlert';
 import JoinHouseholdDialog from '@/modules/household/components/householdActions/JoinHouseholdDialog';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
-  ClientWithAlertFieldsFragment,
+  ClientSearchResultFieldsFragment,
   HouseholdFieldsFragment,
-  ProjectAllFieldsFragment,
   RecordFormRole,
   SubmittedEnrollmentResultFieldsFragment,
   ValidationError,
 } from '@/types/gqlTypes';
 
 interface Props {
-  client: ClientWithAlertFieldsFragment;
+  client: ClientSearchResultFieldsFragment;
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
-  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
+  project: ManageHouseholdProject;
   onSuccess: (householdId: string) => void;
   household?: HouseholdFieldsFragment;
 }
@@ -69,11 +69,11 @@ const AddToHouseholdButton = ({
       pickListArgs: { projectId: project.id, householdId },
       localConstants: { householdId, projectCocCount: cocCount },
       errorFilter: (error: ValidationError) => {
-        // If there's an error about a conflicting enrollment, we will show the ConflictingEnrollmentAlert,
-        // so here, we filter that error out of the ErrorAlert displayed by the form dialog.
-        if (!householdId) return true; // Except if this is a new household. Then show the error, since we can't Join Households.
-        if (!error.data) return true;
-        return !error.data?.hasOwnProperty('conflictingEnrollmentId');
+        // If there's an error about a conflicting enrollment, and we're adding to an existing household,
+        // then we will show the ConflictingEnrollmentAlert (so filter it out from the ErrorAlert display)
+        return !(
+          household && error.data?.hasOwnProperty('conflictingEnrollmentId')
+        );
       },
       onChangeErrors: (errors: ErrorState) => {
         const error = errors.errors.find((e) =>
@@ -84,7 +84,7 @@ const AddToHouseholdButton = ({
         }
       },
     }),
-    [project.id, clientId, householdId, cocCount, onSuccess]
+    [project.id, clientId, householdId, cocCount, onSuccess, household]
   );
 
   const { openFormDialog, renderFormDialog, closeDialog } =

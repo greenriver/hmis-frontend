@@ -6,7 +6,10 @@ import { isNil } from 'lodash-es';
 import { PropsWithChildren } from 'react';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
-import { ClientIdentificationFieldsFragment } from '@/types/gqlTypes';
+import {
+  ClientIdentificationFieldsFragment,
+  ClientSsnFieldsFragment,
+} from '@/types/gqlTypes';
 import { BuildStateContext } from '@/utils/context';
 
 type ValueType = boolean | undefined | null;
@@ -107,7 +110,7 @@ export const ContextualClientDobAge: React.FC<{
 );
 
 export const ContextualClientSsn: React.FC<{
-  client: ClientIdentificationFieldsFragment;
+  client: ClientSsnFieldsFragment;
 }> = ({ client }) => (
   <SsnShowValueContext.Consumer>
     {(show) => <ClientSsn client={client} hide={show ? false : undefined} />}
