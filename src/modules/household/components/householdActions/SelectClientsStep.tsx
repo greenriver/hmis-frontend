@@ -4,8 +4,10 @@ import { ReactNode, useCallback, useMemo } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
-import { HOUSEHOLD_CLIENT_COLUMNS } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
+import {
+  ENROLLMENT_RELATIONSHIP_COL,
+  WITH_ENROLLMENT_COLUMNS,
+} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import {
   HouseholdClientFieldsFragment,
@@ -16,7 +18,7 @@ export const MANAGE_HOUSEHOLD_COLUMNS: ColumnDef<HouseholdClientFieldsFragment>[
   [
     { ...CLIENT_COLUMNS.name, sticky: 'left' },
     CLIENT_COLUMNS.age,
-    HOUSEHOLD_CLIENT_COLUMNS.relationship,
+    ENROLLMENT_RELATIONSHIP_COL,
     WITH_ENROLLMENT_COLUMNS.entryDate,
     WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
   ];
