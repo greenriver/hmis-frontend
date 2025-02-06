@@ -91,7 +91,6 @@ const AddRelationshipsStep = ({
                       }}
                       textInputProps={{
                         warnIfEmptyTreatment: !relationships[hc.enrollment.id],
-                        placeholder: 'Select Relationship',
                         inputProps: {
                           'aria-labelledby': `client-${hc.id} ${relationshipHeaderId}`,
                         },

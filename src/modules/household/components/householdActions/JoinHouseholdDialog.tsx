@@ -235,7 +235,7 @@ const JoinHouseholdDialog = ({
       loading={fetchLoading}
       open={open}
       fullWidth
-      maxWidth='lg'
+      maxWidth='md'
       onClose={onClose}
       stepDefinitions={stepDefinitions}
     />
