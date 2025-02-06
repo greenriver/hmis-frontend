@@ -65,9 +65,7 @@ export function usePerformSplitHousehold() {
 
       return splitHousehold({
         variables: {
-          input: {
-            splittingEnrollmentInputs: splittingInputs,
-          },
+          splittingEnrollmentInputs: splittingInputs,
         },
       });
     },

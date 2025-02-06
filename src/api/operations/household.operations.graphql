@@ -15,8 +15,10 @@ mutation JoinHousehold(
   }
 }
 
-mutation SplitHousehold($input: SplitHouseholdInput!) {
-  splitHousehold(input: $input) {
+mutation SplitHousehold(
+  $splittingEnrollmentInputs: [EnrollmentRelationshipInput!]!
+) {
+  splitHousehold(splittingEnrollmentInputs: $splittingEnrollmentInputs) {
     newHousehold {
       ...HouseholdFields
     }
