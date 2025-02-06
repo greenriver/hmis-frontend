@@ -4674,6 +4674,12 @@ export type PickListOption = {
 };
 
 export enum PickListType {
+  /**
+   * Units available for the given Enrollment at the given project. Includes all
+   * available units at project even if they have a different type from what the
+   * household is currently occupying.
+   */
+  AdminAvailableUnitsForEnrollment = 'ADMIN_AVAILABLE_UNITS_FOR_ENROLLMENT',
   AllServiceCategories = 'ALL_SERVICE_CATEGORIES',
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
@@ -4689,7 +4695,10 @@ export enum PickListType {
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
-  /** Units available for the given household at the given project */
+  /**
+   * Units available for the given Enrollment at the given project. List is limited
+   * to units with the same unit type currently occupied by the household, if any.
+   */
   AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
