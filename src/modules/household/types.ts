@@ -3,6 +3,7 @@ import { isNil } from 'lodash-es';
 import {
   ClientFieldsFragment,
   ClientIdentificationFieldsFragment,
+  ClientSearchResultFieldsFragment,
   EnrollmentFieldsFragment,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
@@ -16,6 +17,7 @@ export type RecentHouseholdMember = HouseholdClientFieldsFragment & {
 export function isHouseholdClient(
   value:
     | ClientFieldsFragment
+    | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | EnrollmentFieldsFragment
     | ProjectEnrollmentFieldsFragment
@@ -34,6 +36,7 @@ export function isHouseholdClient(
 export function isEnrollment(
   value:
     | ClientFieldsFragment
+    | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | EnrollmentFieldsFragment
     | ProjectEnrollmentFieldsFragment
@@ -47,7 +50,7 @@ export function isEnrollment(
 }
 
 export function isRecentHouseholdMember(
-  value: ClientFieldsFragment | RecentHouseholdMember
+  value: ClientSearchResultFieldsFragment | RecentHouseholdMember
 ): value is RecentHouseholdMember {
   return (
     !isNil(value) &&

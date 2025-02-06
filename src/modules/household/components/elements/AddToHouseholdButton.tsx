@@ -13,7 +13,7 @@ import ConflictingEnrollmentAlert from '@/modules/household/components/elements/
 import JoinHouseholdDialog from '@/modules/household/components/householdActions/JoinHouseholdDialog';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
-  ClientWithAlertFieldsFragment,
+  ClientSearchResultFieldsFragment,
   HouseholdFieldsFragment,
   ProjectAllFieldsFragment,
   RecordFormRole,
@@ -22,7 +22,7 @@ import {
 } from '@/types/gqlTypes';
 
 interface Props {
-  client: ClientWithAlertFieldsFragment;
+  client: ClientSearchResultFieldsFragment;
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
   project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;

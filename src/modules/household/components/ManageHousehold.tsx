@@ -20,15 +20,14 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import AssociatedHouseholdMembers, {
-  householdMemberColumns,
-} from '@/modules/household/components/AssociatedHouseholdMembers';
+import AssociatedHouseholdMembers from '@/modules/household/components/AssociatedHouseholdMembers';
 import { RecentHouseholdMember } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import {
-  ClientFieldsFragment,
   ClientSearchInput,
+  ClientSearchResultFieldsFragment,
   ClientSortOption,
   EnrollmentFieldsFragment,
   ExternalIdentifierType,
@@ -91,24 +90,25 @@ const ManageHousehold = ({
   useScrollToHash(loading || recentMembersLoading);
   const isMobile = useIsMobile();
 
-  const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] =
-    useMemo(() => {
-      const defaults = [...householdMemberColumns];
-      if (isMobile) {
-        // On mobile, show enrollment button right next to the client name so user
-        // doesn't have to scroll to the right.
-        defaults.splice(1, 0, ...addToEnrollmentColumns);
-      } else {
-        defaults.push(...addToEnrollmentColumns);
-      }
-      if (globalFeatureFlags?.mciId) {
-        return [
-          externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
-          ...defaults,
-        ];
-      }
-      return defaults;
-    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
+  const columns = useMemo(() => {
+    const defaults: ColumnDef<
+      ClientSearchResultFieldsFragment | RecentHouseholdMember
+    >[] = [CLIENT_COLUMNS.name, CLIENT_COLUMNS.dobAge];
+    if (isMobile) {
+      // On mobile, show enrollment button right next to the client name so user
+      // doesn't have to scroll to the right.
+      defaults.splice(1, 0, ...addToEnrollmentColumns);
+    } else {
+      defaults.push(...addToEnrollmentColumns);
+    }
+    if (globalFeatureFlags?.mciId) {
+      return [
+        externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
+        ...defaults,
+      ];
+    }
+    return defaults;
+  }, [addToEnrollmentColumns, isMobile, globalFeatureFlags?.mciId]);
 
   const filters = useFilters({
     type: 'ClientFilterOptions',
@@ -201,7 +201,7 @@ const ManageHousehold = ({
                 <GenericTableWithData<
                   SearchClientsQuery,
                   SearchClientsQueryVariables,
-                  ClientFieldsFragment
+                  ClientSearchResultFieldsFragment
                 >
                   queryVariables={{ input: searchInput }}
                   queryDocument={SearchClientsDocument}

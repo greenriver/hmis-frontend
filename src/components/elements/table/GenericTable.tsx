@@ -540,7 +540,7 @@ const GenericTable = <T extends { id: string }>({
                           checked={includes(selected, row.id)}
                           inputProps={{ 'aria-label': `Select ${recordName}` }}
                           onClick={
-                            selectable === 'checkbox' && isSelectable
+                            isSelectable
                               ? () => handleSelectRow(row)
                               : undefined
                           }

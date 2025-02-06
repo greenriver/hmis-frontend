@@ -22,9 +22,7 @@ import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/ClientSearchResultCard';
 import {
   ContextualClientDobAge,
-  ContextualClientSsn,
   ContextualDobToggleButton,
-  ContextualSsnToggleButton,
   SsnDobShowContextProvider,
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -38,8 +36,8 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { Routes } from '@/routes/routes';
 import {
-  ClientFieldsFragment,
   ClientSearchInput as ClientSearchInputType,
+  ClientSearchResultFieldsFragment,
   ClientSortOption,
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
@@ -52,7 +50,7 @@ import {
 
 export function asClient(
   record:
-    | ClientFieldsFragment
+    | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
     | ProjectEnrollmentsHouseholdClientFieldsFragment
@@ -64,8 +62,7 @@ export function asClient(
 
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<
-    // | ClientFieldsFragment
-    | ClientFieldsFragment
+    | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | ProjectEnrollmentFieldsFragment
     | ProjectEnrollmentsHouseholdClientFieldsFragment
@@ -90,14 +87,6 @@ export const CLIENT_COLUMNS: {
     header: 'Last Name',
     render: (client) => asClient(client).lastName,
   },
-  ssn: {
-    header: (
-      <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
-    ),
-    key: 'ssn',
-    render: (client) => <ContextualClientSsn client={asClient(client)} />,
-    dontLink: true,
-  },
   dobAge: {
     header: (
       <Stack direction='row' justifyContent='space-between'>
@@ -106,22 +95,19 @@ export const CLIENT_COLUMNS: {
     ),
     key: 'dob',
     render: (client) => <ContextualClientDobAge client={asClient(client)} />,
+    // Don't link cell even if row is linked, because of internal click target
     dontLink: true,
+    // Fixed width so it doesn't move around when visibility is toggled
+    width: '180px',
   },
 };
 
-export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
-  CLIENT_COLUMNS.id,
-  CLIENT_COLUMNS.first,
-  CLIENT_COLUMNS.last,
-  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
-];
+// Desktop and Mobile have same columns currently, but keeping separated for future flexibility.
+export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
+  [CLIENT_COLUMNS.name, CLIENT_COLUMNS.id, CLIENT_COLUMNS.dobAge];
 
-export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
-  CLIENT_COLUMNS.id,
-  CLIENT_COLUMNS.name,
-  CLIENT_COLUMNS.dobAge,
-];
+export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
+  [CLIENT_COLUMNS.name, CLIENT_COLUMNS.id, CLIENT_COLUMNS.dobAge];
 
 /**
  * Client Search page
@@ -270,7 +256,7 @@ const ClientSearch = () => {
           <GenericTableWithData<
             SearchClientsQuery,
             SearchClientsQueryVariables,
-            ClientFieldsFragment
+            ClientSearchResultFieldsFragment
           >
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}

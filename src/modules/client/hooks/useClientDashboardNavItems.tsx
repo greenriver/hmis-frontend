@@ -3,15 +3,12 @@ import { useMemo } from 'react';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 
 import { ClientDashboardRoutes } from '@/routes/routes';
-import {
-  ClientAccessFieldsFragment,
-  ClientDashboardFeature,
-} from '@/types/gqlTypes';
+import { ClientDashboardFeature, ClientFieldsFragment } from '@/types/gqlTypes';
 
 export const useClientDashboardNavItems = (
   enabledFeatures: ClientDashboardFeature[]
 ) => {
-  const navItems: NavItem<ClientAccessFieldsFragment>[] = useMemo(() => {
+  const navItems: NavItem<ClientFieldsFragment['access']>[] = useMemo(() => {
     return [
       {
         id: 'client-nav',

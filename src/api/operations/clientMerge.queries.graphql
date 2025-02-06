@@ -9,6 +9,7 @@ query GetMergeCandidates($limit: Int, $offset: Int) {
       clients {
         ...ClientName
         ...ClientIdentificationFields
+        ...ClientSsnFields
       }
     }
   }
