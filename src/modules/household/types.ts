@@ -3,9 +3,11 @@ import { isNil } from 'lodash-es';
 import {
   ClientFieldsFragment,
   ClientIdentificationFieldsFragment,
+  ClientSearchResultFieldsFragment,
   EnrollmentFieldsFragment,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
+  ProjectEnrollmentsHouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
 
 export type RecentHouseholdMember = HouseholdClientFieldsFragment & {
@@ -15,10 +17,14 @@ export type RecentHouseholdMember = HouseholdClientFieldsFragment & {
 export function isHouseholdClient(
   value:
     | ClientFieldsFragment
+    | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | EnrollmentFieldsFragment
     | ProjectEnrollmentFieldsFragment
-): value is HouseholdClientFieldsFragment {
+    | ProjectEnrollmentsHouseholdClientFieldsFragment
+): value is
+  | HouseholdClientFieldsFragment
+  | ProjectEnrollmentsHouseholdClientFieldsFragment {
   return (
     !isNil(value) &&
     typeof value === 'object' &&
@@ -30,6 +36,7 @@ export function isHouseholdClient(
 export function isEnrollment(
   value:
     | ClientFieldsFragment
+    | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment
     | EnrollmentFieldsFragment
     | ProjectEnrollmentFieldsFragment
@@ -43,7 +50,7 @@ export function isEnrollment(
 }
 
 export function isRecentHouseholdMember(
-  value: ClientFieldsFragment | RecentHouseholdMember
+  value: ClientSearchResultFieldsFragment | RecentHouseholdMember
 ): value is RecentHouseholdMember {
   return (
     !isNil(value) &&

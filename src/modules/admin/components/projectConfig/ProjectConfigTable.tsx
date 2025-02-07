@@ -89,9 +89,7 @@ const ProjectConfigTable = ({
                   recordName='Project Config'
                   onSuccess={() => evictProjectConfigs()}
                   onlyIcon
-                >
-                  Delete
-                </DeleteMutationButton>
+                />
               </Box>
             ),
           },
@@ -101,6 +99,7 @@ const ProjectConfigTable = ({
         recordType='ProjectConfig'
         paginationItemName='project config'
         handleRowClick={onClickRow}
+        rowActionTitle='Edit Project Config'
         showTopToolbar
       />
     </>

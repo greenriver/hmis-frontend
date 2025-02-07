@@ -86,13 +86,11 @@ fragment EnrolledClientFields on Client {
     ...CustomDataElementFields
   }
   access {
-    ...ClientAccessFields
+    canEditClient # TODO: move to EnrollmentAccess object
   }
 }
 
 # Fields when you're resolving an individual Enrollment and all its details
-# FIXME: stop resolving client/project access objects. Instead, put what we need to know
-# inside of the Enrollment access obj
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentFields
   ...EnrollmentOccurrencePointFields
@@ -123,7 +121,8 @@ fragment AllEnrollmentDetails on Enrollment {
     ...ProjectCocCount
     hasUnits
     access {
-      ...ProjectAccessFields
+      id
+      canManageIncomingReferrals # determine whether to link to source referral
     }
     staffAssignmentsEnabled
   }

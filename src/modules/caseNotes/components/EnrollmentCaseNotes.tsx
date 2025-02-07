@@ -4,13 +4,14 @@ import { Box, Button } from '@mui/material';
 import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
+import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
+import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import {
   getCustomDataElementColumns,
-  lastUpdatedBy,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
@@ -24,16 +25,19 @@ import {
   RecordFormRole,
 } from '@/types/gqlTypes';
 
-export const CASE_NOTE_COLUMNS = {
+export const CASE_NOTE_COLUMNS: Record<
+  string,
+  ColumnDef<CustomCaseNoteFieldsFragment>
+> = {
   InformationDate: {
     header: 'Information Date',
     width: '150px',
     render: ({ informationDate }: CustomCaseNoteFieldsFragment) =>
       parseAndFormatDate(informationDate),
-    linkTreatment: true,
+    sticky: 'left',
   },
   NoteContent: {
-    header: 'Note',
+    header: 'Note Content',
     render: ({ content }: CustomCaseNoteFieldsFragment) => (
       <Box
         sx={{
@@ -50,8 +54,7 @@ export const CASE_NOTE_COLUMNS = {
   },
   NoteContentPreview: {
     key: 'content-preview',
-    header: 'Note',
-    maxWidth: '450px',
+    header: 'Note Content Preview',
     render: ({ content }: CustomCaseNoteFieldsFragment) => (
       <Box
         sx={{
@@ -70,8 +73,15 @@ export const CASE_NOTE_COLUMNS = {
   LastUpdated: {
     header: 'Last Updated',
     minWidth: '200px',
-    render: ({ dateUpdated, user }: CustomCaseNoteFieldsFragment) =>
-      lastUpdatedBy(dateUpdated, user),
+    render: ({ dateUpdated, user }: CustomCaseNoteFieldsFragment) => {
+      if (dateUpdated)
+        return (
+          <RelativeDateDisplay
+            dateString={dateUpdated}
+            tooltipSuffixText={user ? `by ${user.name}` : undefined}
+          />
+        );
+    },
   },
 };
 
@@ -124,6 +134,7 @@ const EnrollmentCaseNotes = () => {
       <TitleCard
         title='Case Notes'
         headerVariant='border'
+        headerComponent='h1'
         actions={
           canEdit &&
           !caseNotesFeature.legacy && (
@@ -145,10 +156,11 @@ const EnrollmentCaseNotes = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCustomCaseNotesDocument}
           getColumnDefs={getColumnDefs}
+          handleRowClick={(row) => onSelectRecord(row)}
+          rowName={(row) => parseAndFormatDate(row.informationDate) || row.id}
+          rowActionTitle='View Case Note'
           pagePath='enrollment.customCaseNotes'
           noData='No case notes'
-          headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={onSelectRecord}
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar

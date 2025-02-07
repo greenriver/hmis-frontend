@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
+import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -23,13 +24,12 @@ import {
   RecordFormRole,
 } from '@/types/gqlTypes';
 
-export const baseColumns = {
+export const CLS_COLUMNS = {
   informationDate: {
     header: 'Information Date',
     width: '180px',
     render: (e: CurrentLivingSituationFieldsFragment) =>
       parseAndFormatDate(e.informationDate),
-    linkTreatment: true,
   },
   livingSituation: {
     header: 'Living Situation',
@@ -92,12 +92,14 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     });
 
   const getColumnDefs = useCallback(
-    (rows: CurrentLivingSituationFieldsFragment[]) => {
+    (
+      rows: CurrentLivingSituationFieldsFragment[]
+    ): ColumnDef<CurrentLivingSituationFieldsFragment>[] => {
       const customColumns = getCustomDataElementColumns(rows);
       return [
-        baseColumns.informationDate,
-        baseColumns.livingSituation,
-        baseColumns.locationDetails,
+        { ...CLS_COLUMNS.informationDate, sticky: 'left' },
+        CLS_COLUMNS.livingSituation,
+        CLS_COLUMNS.locationDetails,
         ...customColumns,
       ];
     },
@@ -112,6 +114,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       <TitleCard
         title='Current Living Situations'
         headerVariant='border'
+        headerComponent='h1'
         actions={
           canEditCls ? (
             <Button
@@ -132,11 +135,14 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCurrentLivingSituationsDocument}
           getColumnDefs={getColumnDefs}
+          rowActionTitle='View Current Living Situation'
+          rowName={(row) =>
+            parseAndFormatDate(row.informationDate) || 'unknown date'
+          }
+          handleRowClick={onSelectRecord}
           pagePath='enrollment.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'
-          headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={onSelectRecord}
         />
       </TitleCard>
       {viewRecordDialog()}

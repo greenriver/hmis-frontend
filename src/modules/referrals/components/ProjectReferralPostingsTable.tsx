@@ -53,7 +53,6 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
         header: 'HoH',
         render: ({ hohName }: ReferralPostingFieldsFragment) =>
           hohName || 'Unnamed Client',
-        linkTreatment: true,
       },
       {
         header: 'Referred By',
@@ -103,6 +102,7 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
       noData='No referrals'
       pagePath='project.incomingReferralPostings'
       rowLinkTo={rowLinkTo}
+      rowActionTitle='View Referral'
       defaultPageSize={10}
       filters={{ status: referralFilter }}
       defaultFilterValues={{

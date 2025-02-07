@@ -1,7 +1,6 @@
-import RouterLink from '@/components/elements/RouterLink';
+import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { useReferralFilter } from '@/modules/referrals/hooks/useReferralFilter';
@@ -9,7 +8,6 @@ import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
 } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectOutgoingReferralPostingsDocument,
   GetProjectOutgoingReferralPostingsQuery,
@@ -28,52 +26,12 @@ const columns: ColumnDef<OutgoingReferral>[] = [
     render: (row: OutgoingReferral) => parseAndFormatDate(row.referralDate),
   },
   {
-    header: 'HoH',
-    render: ({ hohName, hohEnrollment }: OutgoingReferral) => {
-      if (!hohEnrollment) return hohName;
-
-      // If we have a hohEnrollment, link to it.
-      // NOTE: its possible that "hohName" and the actual person on "hohEnrollment" don't actually match up,
-      // if the Hoh was changed over time. Thats probably OK, the user can at least get to the right household.
-      const enrollmentPath = generateSafePath(
-        EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-        {
-          clientId: hohEnrollment.client.id,
-          enrollmentId: hohEnrollment.id,
-        }
-      );
-      return (
-        <RouterLink to={enrollmentPath} openInNew>
-          {hohName}
-        </RouterLink>
-      );
-    },
+    header: 'HoH Name',
+    render: 'hohName',
   },
   {
     header: 'Project Referred To',
-    linkTreatment: true,
-    render: ({ id, referredTo, project }: OutgoingReferral) => {
-      if (!project) return referredTo; // user does not have access to the full project object, so just show the project name
-
-      const projectPath = generateSafePath(
-        ProjectDashboardRoutes.REFERRAL_POSTING,
-        {
-          projectId: project.id,
-          referralPostingId: id,
-        }
-      );
-      return (
-        <>
-          <RouterLink to={projectPath} openInNew>
-            {project.projectName}
-          </RouterLink>
-          <HmisEnum
-            value={project.projectType}
-            enumMap={HmisEnums.ProjectType}
-          />
-        </>
-      );
-    },
+    render: 'referredTo',
   },
   {
     header: 'Referred By',
@@ -106,6 +64,48 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
     ReferralPostingStatus.DeniedStatus,
   ]);
 
+  const rowSecondaryActionConfigs = useCallback(
+    ({ id, project, hohEnrollment }: OutgoingReferral) => {
+      // User does not have access to the receiving project, so we can't link to anything.
+      if (!project) return [];
+
+      // If we have a hohEnrollment (meaning the referral was accepted), link to it.
+      // NOTE: its possible that "hohName" and the actual person on "hohEnrollment" don't actually match up,
+      // if the Hoh was changed over time. Thats probably OK, the user can at least get to the right household.
+
+      const enrollmentLinks = hohEnrollment
+        ? [
+            {
+              title: 'View Enrollment',
+              key: 'enrollment',
+              ariaLabel: `View Enrollment at ${project.projectName}`,
+              to: generateSafePath(
+                EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                {
+                  clientId: hohEnrollment.client.id,
+                  enrollmentId: hohEnrollment.id,
+                }
+              ),
+            },
+          ]
+        : [];
+
+      return [
+        ...enrollmentLinks,
+        {
+          title: 'View Referral',
+          key: 'referral',
+          ariaLabel: `View Referral, ${project.projectName}`,
+          to: generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
+            projectId: project.id,
+            referralPostingId: id,
+          }),
+        },
+      ];
+    },
+    []
+  );
+
   return (
     <GenericTableWithData<
       GetProjectOutgoingReferralPostingsQuery,
@@ -120,6 +120,7 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
       filters={{ status: referralFilter }}
       defaultPageSize={15}
       paginationItemName='outgoing referral'
+      rowSecondaryActionConfigs={rowSecondaryActionConfigs}
     />
   );
 };

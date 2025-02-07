@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 
 import RelativeDateDisplay, {
   RelativeDateDisplayProps,
-} from './RelativeDateDisplay';
+} from '../../../components/elements/RelativeDateDisplay';
 
 import { UserFieldsFragment } from '@/types/gqlTypes';
 

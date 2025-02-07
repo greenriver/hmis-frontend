@@ -33,7 +33,6 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -361,12 +360,9 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
     variables: { id: client.id },
   });
 
-  const [canViewClientPhoto] = useHasRootPermissions(['canViewClientPhoto']);
-
-  const [canViewSsn] = useHasRootPermissions([
-    'canViewFullSsn',
-    'canViewPartialSsn',
-  ]);
+  const canViewClientPhoto = client.access.canViewClientPhoto;
+  const canViewSsn =
+    client.access.canViewFullSsn || client.access.canViewPartialSsn;
 
   const size = 175;
 
@@ -388,7 +384,9 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant='h4'>{clientNameAllParts(client)}</Typography>
+            <Typography component='h1' variant='h4'>
+              {clientNameAllParts(client)}
+            </Typography>
           </Grid>
           <Grid item xs={12} sx={{ display: 'flex', gap: 2 }}>
             {canViewClientPhoto &&

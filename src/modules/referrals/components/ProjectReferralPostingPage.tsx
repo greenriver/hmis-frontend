@@ -46,7 +46,7 @@ const ProjectReferralPostingPage: React.FC = () => {
     <>
       <PageTitle
         title={
-          <Typography variant='h3'>
+          <Typography component='h1' variant='h3'>
             {`Referral from `}
             <b>{referralPosting.referredBy}</b>
           </Typography>

@@ -10,13 +10,13 @@ import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
+  ClientSearchResultFieldsFragment,
   RecordFormRole,
-  ClientWithAlertFieldsFragment,
   SubmittedEnrollmentResultFieldsFragment,
 } from '@/types/gqlTypes';
 
 interface Props {
-  client: ClientWithAlertFieldsFragment;
+  client: ClientSearchResultFieldsFragment;
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
   projectId: string;

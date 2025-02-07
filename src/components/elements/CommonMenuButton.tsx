@@ -13,15 +13,18 @@ import { To } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
 import { MoreMenuIcon } from './SemanticIcons';
+import { LocationState } from '@/routes/routeUtil';
 
 export type CommonMenuItem = {
   key: string;
+  title: ReactNode;
   to?: To;
   onClick?: VoidFunction;
-  title?: ReactNode;
   divider?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
+  linkState?: LocationState;
+  openInNew?: boolean;
 };
 
 interface Props {
@@ -99,10 +102,23 @@ const CommonMenuButton = ({
           vertical: 'top',
           horizontal: 'right',
         }}
+        // Bug: Opening the CommonMenu applies padding to the body, which can look weird on mobile.
+        // It's sort of fixable with disableScrollLock, but that seems to introduce other scroll problems.
+        // disableScrollLock={true}
         {...MenuProps}
       >
         {items.map(
-          ({ key, to, title, divider, onClick, disabled, ariaLabel }) =>
+          ({
+            key,
+            to,
+            title,
+            divider,
+            onClick,
+            disabled,
+            ariaLabel,
+            openInNew,
+            linkState,
+          }) =>
             divider ? (
               <Divider key={key} />
             ) : to ? (
@@ -111,6 +127,8 @@ const CommonMenuButton = ({
                 component={RouterLink}
                 to={to}
                 aria-label={ariaLabel}
+                openInNew={openInNew}
+                state={linkState}
               >
                 {title}
               </MenuItem>

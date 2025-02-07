@@ -31,7 +31,6 @@ const AdminReferralDenialsPage = () => {
     () => [
       {
         header: 'Referral ID',
-        linkTreatment: true,
         render: (row: ReferralPostingFieldsFragment) =>
           row.referralIdentifier || 'N/A',
         hide: !externalReferrals, // only show for external referral which have ID from another system
@@ -95,6 +94,7 @@ const AdminReferralDenialsPage = () => {
           noData='No denials'
           pagePath='deniedPendingReferralPostings'
           rowLinkTo={rowLinkTo}
+          rowActionTitle='View Referral'
           defaultPageSize={25}
           filters={{ status: referralFilter }}
           defaultFilterValues={{

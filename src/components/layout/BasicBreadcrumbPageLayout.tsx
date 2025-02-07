@@ -21,7 +21,7 @@ const BasicBreadcrumbPageLayout = ({
           <Breadcrumbs crumbs={crumbs} />
         </Container>
       </ContextHeaderAppBar>
-      <Container maxWidth={maxWidth} sx={{ pt: 2, pb: 6 }}>
+      <Container component='main' maxWidth={maxWidth} sx={{ pt: 2, pb: 6 }}>
         {children}
       </Container>
     </>

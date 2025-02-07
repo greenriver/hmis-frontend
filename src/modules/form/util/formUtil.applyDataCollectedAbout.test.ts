@@ -21,7 +21,7 @@ describe('applyDataCollectedAbout', () => {
       applyDataCollectedAbout(
         items as FormDefinitionFieldsFragment['definition']['item'],
         client,
-        RelationshipToHoH.DataNotCollected
+        RelationshipToHoH.UnrelatedHouseholdMember
       )
     ).toMatchObject(items);
   });
@@ -34,7 +34,7 @@ describe('applyDataCollectedAbout', () => {
       applyDataCollectedAbout(
         items as FormDefinitionFieldsFragment['definition']['item'],
         { ...client, dob: '1960-01-01' },
-        RelationshipToHoH.DataNotCollected
+        RelationshipToHoH.UnrelatedHouseholdMember
       )
     ).toMatchObject(items);
   });
@@ -61,7 +61,7 @@ describe('applyDataCollectedAbout', () => {
       applyDataCollectedAbout(
         items as FormDefinitionFieldsFragment['definition']['item'],
         client,
-        RelationshipToHoH.DataNotCollected
+        RelationshipToHoH.UnrelatedHouseholdMember
       )
     ).toMatchObject(items);
   });
@@ -76,7 +76,7 @@ describe('applyDataCollectedAbout', () => {
           ...client,
           dob: '2022-01-01',
         },
-        RelationshipToHoH.DataNotCollected
+        RelationshipToHoH.UnrelatedHouseholdMember
       )
     ).toHaveLength(0);
   });

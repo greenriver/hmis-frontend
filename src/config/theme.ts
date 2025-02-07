@@ -204,6 +204,11 @@ export const baseThemeDef: ThemeOptions = {
   },
 };
 
+const outlineStyles = {
+  outlineColor: '-webkit-focus-ring-color',
+  outlineWidth: '2px',
+  outlineStyle: 'auto',
+};
 // Create theme options to use for composition
 // See: https://mui.com/material-ui/customization/theming/#createtheme-options-args-theme
 const createThemeOptions = (theme: Theme) => ({
@@ -268,6 +273,11 @@ const createThemeOptions = (theme: Theme) => ({
   },
 
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        '&.Mui-focusVisible': outlineStyles,
+      },
+    },
     MuiTypography: {
       styleOverrides: {
         h3: {
@@ -307,6 +317,16 @@ const createThemeOptions = (theme: Theme) => ({
           cursor: 'pointer',
           '&.Mui-focusVisible': {
             outlineOffset: '4px',
+          },
+        }),
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          '&.Mui-focusVisible': {
+            outlineOffset: 0,
+            backgroundColor: theme.palette.grayscale[200],
           },
         }),
       },
@@ -353,14 +373,11 @@ const createThemeOptions = (theme: Theme) => ({
       defaultProps: {
         disableRipple: true,
       },
-
       styleOverrides: {
         root: {
           whiteSpace: 'nowrap',
           '&.Mui-focusVisible': {
-            outlineColor: '-webkit-focus-ring-color',
-            outlineWidth: '2px',
-            outlineStyle: 'auto',
+            ...outlineStyles,
             outlineOffset: '4px',
           },
         },
@@ -393,7 +410,7 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         switchBase: {
           '&.Mui-focusVisible': {
-            outline: '2px solid -webkit-focus-ring-color',
+            ...outlineStyles,
             outlineOffset: '-2px',
           },
         },
@@ -605,11 +622,6 @@ const createThemeOptions = (theme: Theme) => ({
         }),
       },
     },
-    // MuiDialogContent: {
-    //   styleOverrides: {
-    //     root: theme.unstable_sx({}),
-    //   },
-    // },
     MuiDialogActions: {
       styleOverrides: {
         root: theme.unstable_sx({

@@ -20,6 +20,7 @@ export const FullPageError: React.FC<{
   text?: string;
 }> = ({ text = UNKNOWN_ERROR_HEADING }) => (
   <Box
+    component='main'
     display='flex'
     justifyContent='center'
     alignItems='center'
@@ -28,7 +29,9 @@ export const FullPageError: React.FC<{
     flexDirection='column'
     sx={{ p: 10 }}
   >
-    <Typography variant='h4'>{text}</Typography>
+    <Typography variant='h4' component='h1'>
+      {text}
+    </Typography>
   </Box>
 );
 

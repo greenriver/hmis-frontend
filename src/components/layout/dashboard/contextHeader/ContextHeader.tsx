@@ -27,6 +27,7 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
   children,
 }) => (
   <AppBar
+    component='div'
     position='sticky'
     color='default'
     elevation={0}
