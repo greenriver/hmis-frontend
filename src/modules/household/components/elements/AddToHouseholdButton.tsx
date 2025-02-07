@@ -73,7 +73,7 @@ const AddToHouseholdButton = ({
         // If there's an error about a conflicting enrollment, and we're adding to an existing household,
         // then we will show the ConflictingEnrollmentAlert (so filter it out from the ErrorAlert display)
         return !(
-          household && error.data?.hasOwnProperty('conflictingEnrollmentId')
+          household?.id && error.data?.hasOwnProperty('conflictingEnrollmentId')
         );
       },
       onChangeErrors: (errors: ErrorState) => {
@@ -85,7 +85,7 @@ const AddToHouseholdButton = ({
         }
       },
     }),
-    [project.id, clientId, cocCount, onSuccess, household]
+    [project.id, clientId, cocCount, onSuccess, household?.id]
   );
 
   const { openFormDialog, renderFormDialog, closeDialog } =
