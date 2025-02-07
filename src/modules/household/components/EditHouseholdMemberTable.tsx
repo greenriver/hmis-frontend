@@ -28,10 +28,10 @@ import {
   getDeleteEnrollmentDisabledAttrs,
   getSplitDisabledAttrs,
 } from '@/modules/household/components/householdActions/util';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
-  ProjectAllFieldsFragment,
   RelationshipToHoH,
   useDeleteEnrollmentMutation,
   useUpdateRelationshipToHoHMutation,
@@ -39,7 +39,7 @@ import {
 
 interface Props {
   household: HouseholdFieldsFragment;
-  project: Pick<ProjectAllFieldsFragment, 'id' | 'projectName' | 'access'>;
+  project: ManageHouseholdProject;
   currentDashboardEnrollmentId?: string;
   refetchHousehold: any;
   loading?: boolean;
