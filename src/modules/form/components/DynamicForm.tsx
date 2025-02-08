@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useImperativeHandle } from 'react';
 
-import { FormProvider } from 'react-hook-form';
+import { DefaultValues, FormProvider } from 'react-hook-form';
 import useFormDefinitionHandlers, {
   FormDefinitionHandlers,
 } from '../hooks/useFormDefinitionHandlers';
@@ -8,6 +8,8 @@ import { FormValues, LocalConstants } from '../types';
 
 import DirtyObserver from './DirtyObserver';
 import DynamicFormBase, { DynamicFormBaseProps } from './DynamicFormBase';
+import Loading from '@/components/elements/Loading';
+import { useEnrichedFormData } from '@/modules/form/hooks/rhf/useEnrichedFormData';
 import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
@@ -32,6 +34,7 @@ interface DynamicFormSaveDraftInput {
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 export type DynamicFormOnSaveDraft = (input: DynamicFormSaveDraftInput) => void;
 
+type InitialValues = Record<string, any>;
 export interface DynamicFormProps
   extends Omit<DynamicFormBaseProps, 'handlers' | 'onSaveDraft'> {
   clientId?: string;
@@ -39,7 +42,7 @@ export interface DynamicFormProps
   onSubmit: (input: DynamicFormSubmitInput) => void;
   onSaveDraft?: DynamicFormOnSaveDraft;
   onDirty?: (value: boolean) => void;
-  initialValues?: Record<string, any>;
+  initialValues?: InitialValues;
   localConstants?: LocalConstants;
   variant?: 'standard' | 'without_top_level_cards';
 }
@@ -118,12 +121,12 @@ export const DynamicFormWithoutHandlers = forwardRef<
 const BLANK = {};
 const DynamicFormWithHandlers = forwardRef<
   DynamicFormRef,
-  Omit<DynamicFormProps, 'handlers'>
+  DynamicFormProps & { defaultValues: DefaultValues<InitialValues> }
 >((props, ref) => {
-  const { definition, initialValues, localConstants = BLANK } = props;
+  const { definition, defaultValues, localConstants = BLANK } = props;
   const handlers = useFormDefinitionHandlers({
     definition,
-    initialValues,
+    defaultValues,
     localConstants,
     errors: props.errors.errors,
   });
@@ -152,4 +155,29 @@ const DynamicFormWithHandlers = forwardRef<
   );
 });
 
-export default DynamicFormWithHandlers;
+// load remote data (picklists) to augment form data
+
+const DynamicFormEnrichedDataLoader = forwardRef<
+  DynamicFormRef,
+  DynamicFormProps
+>((props, ref) => {
+  const { defaultValues, loading } = useEnrichedFormData({
+    pickListArgs: props.pickListArgs,
+    definition: props.definition,
+    initialValues: props.initialValues,
+    localConstants: props.localConstants,
+    viewOnly: false,
+  });
+  if (loading || !defaultValues) {
+    return <Loading />;
+  }
+  return (
+    <DynamicFormWithHandlers
+      defaultValues={defaultValues}
+      {...props}
+      ref={ref}
+    />
+  );
+});
+
+export default DynamicFormEnrichedDataLoader;

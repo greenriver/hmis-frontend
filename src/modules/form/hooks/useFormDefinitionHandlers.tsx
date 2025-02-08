@@ -1,16 +1,13 @@
-import { cloneDeep } from '@apollo/client/utilities';
 import { omit } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { DefaultValues, FieldValues, useForm } from 'react-hook-form';
 
 import { LocalConstants } from '../types';
 import {
   addDescendants,
-  autofillValues,
   createHudValuesForSubmit,
   createValuesForSubmit,
   dropUnderscorePrefixedKeys,
-  getInitialValues,
   shouldEnableItem,
 } from '../util/formUtil';
 import useComputedData from './useComputedData';
@@ -23,15 +20,15 @@ import {
 
 export interface UseDynamicFormArgs<T extends FieldValues> {
   definition: FormDefinitionJson;
-  initialValues?: T;
   localConstants?: LocalConstants;
+  defaultValues: DefaultValues<T>;
   errors?: ValidationError[];
   viewOnly?: boolean;
 }
 
 const useFormDefinitionHandlers = <T extends FieldValues>({
   definition,
-  initialValues = {} as T,
+  defaultValues,
   localConstants = {},
   errors,
   viewOnly = false,
@@ -44,26 +41,6 @@ const useFormDefinitionHandlers = <T extends FieldValues>({
     enabledDependencyMap,
     disabledDependencyMap,
   } = useComputedData({ definition, viewOnly });
-
-  const [defaultValues] = useState(() => {
-    const newValues: Record<string, any> = {
-      ...getInitialValues(definition, localConstants),
-      ...cloneDeep(initialValues),
-    };
-    Object.keys(itemMap).forEach((linkId) => {
-      const change = autofillValues({
-        item: itemMap[linkId],
-        values: newValues,
-        itemMap,
-        localConstants: localConstants || {},
-        viewOnly,
-      });
-      //console.info('form init autofill', linkId, change)
-      if (change) newValues[linkId] = change.value;
-    });
-    const result = newValues as DefaultValues<T>;
-    return result;
-  });
 
   const methods = useForm<T>({ defaultValues });
 

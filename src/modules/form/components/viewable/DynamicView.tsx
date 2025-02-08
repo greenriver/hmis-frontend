@@ -5,12 +5,13 @@ import useFormDefinitionHandlers from '../../hooks/useFormDefinitionHandlers';
 import { LocalConstants, PickListArgs } from '../../types';
 import DynamicViewFields from './DynamicViewFields';
 
+import Loading from '@/components/elements/Loading';
+import { useEnrichedFormData } from '@/modules/form/hooks/rhf/useEnrichedFormData';
 import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 export interface DynamicViewProps {
   definition: FormDefinitionJson;
-  values: Record<string, any>;
   horizontal?: boolean;
   pickListArgs?: PickListArgs;
   visible?: boolean;
@@ -18,18 +19,20 @@ export interface DynamicViewProps {
   localConstants?: LocalConstants;
 }
 
-const DynamicView = ({
+const DynamicView: React.FC<
+  DynamicViewProps & { defaultValues: Record<string, any> }
+> = ({
   definition,
-  values,
   horizontal = false,
   visible = true,
   pickListArgs,
   localConstants = {},
   GridProps,
-}: DynamicViewProps): JSX.Element => {
+  defaultValues,
+}): JSX.Element => {
   const handlers = useFormDefinitionHandlers({
     definition,
-    initialValues: values,
+    defaultValues,
     viewOnly: true,
     localConstants,
   });
@@ -71,4 +74,20 @@ const DynamicView = ({
   );
 };
 
-export default DynamicView;
+const DynamicViewEnrichmentLoader: React.FC<
+  DynamicViewProps & { values: Record<string, any> }
+> = (props): JSX.Element => {
+  const { defaultValues, loading } = useEnrichedFormData({
+    pickListArgs: props.pickListArgs,
+    definition: props.definition,
+    initialValues: props.values,
+    localConstants: props.localConstants,
+    viewOnly: false,
+  });
+  if (loading || !defaultValues) {
+    return <Loading />;
+  }
+  return <DynamicView {...props} defaultValues={defaultValues} />;
+};
+
+export default DynamicViewEnrichmentLoader;

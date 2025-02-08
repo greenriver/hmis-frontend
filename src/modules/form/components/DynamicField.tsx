@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
-import { getValueFromPickListData, usePickList } from '../hooks/usePickList';
+import { usePickList } from '../hooks/usePickList';
 import {
   ChangeType,
   DynamicFieldProps,
@@ -163,18 +163,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   } = usePickList({
     item,
     ...pickListArgs,
-    fetchOptions: {
-      onCompleted: (data) => {
-        const newValue = getValueFromPickListData({
-          item,
-          value,
-          linkId: item.linkId,
-          data,
-        });
-        // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
-        if (newValue) setTimeout(() => itemChanged(newValue));
-      },
-    },
   });
 
   const placeholder = placeholderText(item);
