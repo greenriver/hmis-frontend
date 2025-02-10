@@ -5,10 +5,10 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import { useMemo } from 'react';
 
 import { getFormattedDates } from './RelativeDateDisplay';
+import { customVisuallyHidden } from '@/config/theme';
 
 export interface DateWithRelativeTooltipProps {
   dateString: string;
@@ -54,7 +54,7 @@ const DateWithRelativeTooltip = ({
       >
         {formattedDate}
         {/* Include the tooltip text as visually hidden for accessibility */}
-        <Box sx={visuallyHidden}>, {formattedDateRelative}</Box>
+        <Box sx={customVisuallyHidden}>, {formattedDateRelative}</Box>
       </Typography>
     </Tooltip>
   );
