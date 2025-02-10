@@ -130,7 +130,7 @@ const CustomDividerRow = ({ colSpan }: { colSpan: number }) => (
       sx={(theme) => {
         return {
           padding: 0,
-          backgroundColor: theme.palette.grey[100],
+          backgroundColor: theme.palette.grey[200],
           borderTop: `1px solid ${theme.palette.borders.main}`,
           borderBottom: `1px solid ${theme.palette.borders.main}`,
         };
