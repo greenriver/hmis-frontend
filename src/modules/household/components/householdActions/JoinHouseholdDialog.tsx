@@ -137,7 +137,10 @@ const JoinHouseholdDialog = ({
               <JoinHouseholdSelectClients
                 donorHousehold={donorHousehold}
                 selectedClients={joiningClients}
-                setSelectedClients={setJoiningClients}
+                setSelectedClients={(clients) => {
+                  setJoiningClients(clients);
+                  setRelationships({});
+                }}
                 receivingHohName={receivingHohName}
               />
             )}

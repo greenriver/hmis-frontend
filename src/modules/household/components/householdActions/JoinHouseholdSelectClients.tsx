@@ -1,7 +1,7 @@
 import { InfoOutlined } from '@mui/icons-material';
 import { Alert, AlertTitle, Typography } from '@mui/material';
 
-import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
@@ -18,7 +18,7 @@ import {
 interface Props {
   donorHousehold: HouseholdFieldsFragment;
   selectedClients: HouseholdClientFieldsFragment[];
-  setSelectedClients: Dispatch<SetStateAction<HouseholdClientFieldsFragment[]>>;
+  setSelectedClients: (clients: HouseholdClientFieldsFragment[]) => void;
   receivingHohName?: string;
 }
 
