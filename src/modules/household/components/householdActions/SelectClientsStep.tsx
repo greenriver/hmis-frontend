@@ -7,10 +7,7 @@ import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { ENROLLMENT_RELATIONSHIP_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import {
-  HouseholdClientFieldsFragment,
-  HouseholdFieldsFragment,
-} from '@/types/gqlTypes';
+import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 
 export const MANAGE_HOUSEHOLD_COLUMNS: ColumnDef<HouseholdClientFieldsFragment>[] =
   [
@@ -22,27 +19,23 @@ export const MANAGE_HOUSEHOLD_COLUMNS: ColumnDef<HouseholdClientFieldsFragment>[
   ];
 
 interface Props {
-  donorHousehold: HouseholdFieldsFragment;
+  clients: HouseholdClientFieldsFragment[];
   selectedClients: HouseholdClientFieldsFragment[];
   setSelectedClients: (clients: HouseholdClientFieldsFragment[]) => void;
   children?: ReactNode;
   isRowSelectable?: (client: HouseholdClientFieldsFragment) => boolean;
-  getRowSelectDisabledReason?: (
-    client: HouseholdClientFieldsFragment
-  ) => string | undefined;
 }
 
 const SelectClientsStep = ({
-  donorHousehold,
+  clients: clientsProp,
   selectedClients,
   setSelectedClients,
   isRowSelectable,
-  getRowSelectDisabledReason,
   children,
 }: Props) => {
-  const donorHouseholdMembers = useMemo(
-    () => sortHouseholdMembers(donorHousehold.householdClients),
-    [donorHousehold.householdClients]
+  const clients = useMemo(
+    () => sortHouseholdMembers(clientsProp),
+    [clientsProp]
   );
 
   // Selection is controlled, so the selection state is stored in the parent.
@@ -56,14 +49,10 @@ const SelectClientsStep = ({
   const setSelectedClientIds = useCallback(
     (clientIds: readonly string[]) => {
       setSelectedClients(
-        sortHouseholdMembers(
-          donorHousehold.householdClients.filter((hc) =>
-            clientIds.includes(hc.id)
-          )
-        )
+        sortHouseholdMembers(clients.filter((hc) => clientIds.includes(hc.id)))
       );
     },
-    [donorHousehold.householdClients, setSelectedClients]
+    [clients, setSelectedClients]
   );
 
   return (
@@ -71,14 +60,13 @@ const SelectClientsStep = ({
       {children}
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>
-          rows={donorHouseholdMembers}
+          rows={clients}
           rowName={(row) => clientBriefName(row.client)}
           columns={MANAGE_HOUSEHOLD_COLUMNS}
           selectable={'checkbox'}
           selected={selectedClientIds}
           onChangeSelectedRowIds={setSelectedClientIds}
           isRowSelectable={isRowSelectable}
-          getRowSelectDisabledReason={getRowSelectDisabledReason}
           tableProps={{ 'aria-label': 'Select Clients' }}
         />
       </Paper>

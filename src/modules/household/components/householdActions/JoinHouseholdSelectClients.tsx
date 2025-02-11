@@ -77,7 +77,7 @@ const JoinHouseholdSelectClients = ({
 
   return (
     <SelectClientsStep
-      donorHousehold={donorHousehold}
+      clients={donorHousehold.householdClients}
       selectedClients={selectedClients}
       setSelectedClients={setSelectedClients}
       isRowSelectable={isRowSelectable}
