@@ -603,7 +603,8 @@ const GenericTable = <T extends { id: string }>({
                             }),
                             width,
                             minWidth,
-                            maxWidth,
+                            // don't override maxWidth from sticky styles if it is undefined on column def
+                            ...(maxWidth ? { maxWidth: maxWidth } : undefined),
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
                             whiteSpace: 'initial',
