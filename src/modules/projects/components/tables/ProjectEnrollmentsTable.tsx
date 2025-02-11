@@ -51,14 +51,14 @@ const ProjectEnrollmentsTable: React.FC<Props> = ({ projectId }) => {
                     }}
                     items={[
                       {
-                        value: 'clients',
-                        label: 'Clients',
-                        Icon: PersonIcon,
-                      },
-                      {
                         value: 'households',
                         label: 'Households',
                         Icon: HouseholdIcon,
+                      },
+                      {
+                        value: 'clients',
+                        label: 'Clients',
+                        Icon: PersonIcon,
                       },
                     ]}
                   />
