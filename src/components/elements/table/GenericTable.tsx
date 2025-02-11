@@ -538,7 +538,9 @@ const GenericTable = <T extends { id: string }>({
                           color='primary'
                           disabled={!isSelectable}
                           checked={includes(selected, row.id)}
-                          inputProps={{ 'aria-label': `Select ${recordName}` }}
+                          inputProps={{
+                            'aria-label': `Select ${recordName}`,
+                          }}
                           onClick={
                             isSelectable
                               ? () => handleSelectRow(row)

@@ -17,13 +17,14 @@ import {
 } from '@/types/gqlTypes';
 
 interface Props {
-  existingClients: HouseholdClientFieldsFragment[];
+  existingClients?: HouseholdClientFieldsFragment[];
   newClients: HouseholdClientFieldsFragment[];
   relationships: Record<string, RelationshipToHoH | null>;
   updateRelationship: (
     enrollmentId: string,
     relationship: RelationshipToHoH | null
   ) => void;
+  enableSelectingHoh: boolean;
   showNewIndicator?: boolean;
   children?: ReactNode;
 }
@@ -33,6 +34,7 @@ const AddRelationshipsStep = ({
   newClients,
   relationships,
   updateRelationship,
+  enableSelectingHoh,
   showNewIndicator,
   children,
 }: Props) => {
@@ -43,7 +45,7 @@ const AddRelationshipsStep = ({
       {children}
       <Paper>
         <GenericTable<HouseholdClientFieldsFragment>
-          rows={[...existingClients, ...newClients]}
+          rows={[...(existingClients || []), ...newClients]}
           columns={[
             {
               ...CLIENT_COLUMNS.name,
@@ -82,6 +84,7 @@ const AddRelationshipsStep = ({
                 if (newClients.includes(hc)) {
                   return (
                     <RelationshipToHohSelect
+                      variant={enableSelectingHoh ? 'includeHoh' : 'excludeHoh'}
                       value={relationships[hc.enrollment.id] || null}
                       onChange={(_event, selected) => {
                         updateRelationship(

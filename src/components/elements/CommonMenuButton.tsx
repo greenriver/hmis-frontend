@@ -1,12 +1,16 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
   Button,
   ButtonProps,
   Divider,
   IconButton,
+  ListItemIcon,
   Menu,
   MenuItem,
   MenuProps,
+  Stack,
+  Typography,
 } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { To } from 'react-router-dom';
@@ -18,10 +22,12 @@ import { LocationState } from '@/routes/routeUtil';
 export type CommonMenuItem = {
   key: string;
   title: ReactNode;
+  Icon?: SvgIconComponent;
   to?: To;
   onClick?: VoidFunction;
   divider?: boolean;
   disabled?: boolean;
+  disabledReason?: string;
   ariaLabel?: string;
   linkState?: LocationState;
   openInNew?: boolean;
@@ -56,6 +62,8 @@ const CommonMenuButton = ({
   };
   // pull out variant/color which can't be used for IconButton
   const { variant, color, ...buttonProps } = ButtonProps || {};
+
+  const { MenuListProps, ...menuProps } = MenuProps || {};
 
   return (
     <>
@@ -93,6 +101,7 @@ const CommonMenuButton = ({
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'menu-button',
+          ...MenuListProps,
         }}
         anchorOrigin={{
           vertical: 'bottom',
@@ -105,36 +114,72 @@ const CommonMenuButton = ({
         // Bug: Opening the CommonMenu applies padding to the body, which can look weird on mobile.
         // It's sort of fixable with disableScrollLock, but that seems to introduce other scroll problems.
         // disableScrollLock={true}
-        {...MenuProps}
+        {...menuProps}
       >
         {items.map(
           ({
             key,
             to,
             title,
+            Icon,
             divider,
             onClick,
             disabled,
+            disabledReason,
             ariaLabel,
             openInNew,
             linkState,
-          }) =>
-            divider ? (
-              <Divider key={key} />
-            ) : to ? (
+          }) => {
+            if (divider) return <Divider key={key} />;
+
+            const props = {
+              key,
+              'aria-label': ariaLabel,
+              disabled,
+            };
+
+            const menuItemLabel = (
+              <Stack direction='row'>
+                {Icon && (
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                )}
+                <Stack direction='column'>
+                  {title}
+                  {disabled && disabledReason && (
+                    // We often use tooltips to indicate the reason something is disabled,
+                    // but in this case it's more difficult because the MenuItem must be the direct child of Menu
+                    // (otherwise tab navigation doesn't work correctly).
+                    // As a quick-fix, just put the disabled reason here below the label
+                    <Typography
+                      variant={'caption'}
+                      sx={{ fontStyle: 'italic' }}
+                    >
+                      {disabledReason}
+                    </Typography>
+                  )}
+                </Stack>
+              </Stack>
+            );
+
+            if (to) {
+              return (
+                <MenuItem
+                  {...props}
+                  component={RouterLink}
+                  to={to}
+                  state={linkState}
+                  openInNew={openInNew}
+                >
+                  {menuItemLabel}
+                </MenuItem>
+              );
+            }
+
+            return (
               <MenuItem
-                key={key}
-                component={RouterLink}
-                to={to}
-                aria-label={ariaLabel}
-                openInNew={openInNew}
-                state={linkState}
-              >
-                {title}
-              </MenuItem>
-            ) : (
-              <MenuItem
-                key={key}
+                {...props}
                 onClick={() => {
                   if (onClick) {
                     // close menu before triggering onClick
@@ -142,12 +187,11 @@ const CommonMenuButton = ({
                     onClick();
                   }
                 }}
-                disabled={disabled}
-                aria-label={ariaLabel}
               >
-                {title}
+                {menuItemLabel}
               </MenuItem>
-            )
+            );
+          }
         )}
       </Menu>
     </>

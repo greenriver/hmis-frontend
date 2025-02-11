@@ -14,3 +14,16 @@ mutation JoinHousehold(
     }
   }
 }
+
+mutation SplitHousehold(
+  $splittingEnrollmentInputs: [EnrollmentRelationshipInput!]!
+) {
+  splitHousehold(splittingEnrollmentInputs: $splittingEnrollmentInputs) {
+    newHousehold {
+      ...HouseholdFields
+    }
+    remainingHousehold {
+      ...HouseholdFields
+    }
+  }
+}

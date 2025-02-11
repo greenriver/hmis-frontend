@@ -1,7 +1,7 @@
-import { MergeTypeRounded } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
+import { JoinIcon } from '@/components/elements/SemanticIcons';
 import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
 import {
   clientBriefName,
@@ -137,7 +137,10 @@ const JoinHouseholdDialog = ({
               <JoinHouseholdSelectClients
                 donorHousehold={donorHousehold}
                 selectedClients={joiningClients}
-                setSelectedClients={setJoiningClients}
+                setSelectedClients={(clients) => {
+                  setJoiningClients(clients);
+                  setRelationships({});
+                }}
                 receivingHohName={receivingHohName}
               />
             )}
@@ -156,6 +159,7 @@ const JoinHouseholdDialog = ({
             )}
             newClients={joiningClients}
             showNewIndicator={true}
+            enableSelectingHoh={false}
             relationships={relationships}
             updateRelationship={(enrollmentId, relationship) => {
               setRelationships((prev) => {
@@ -192,7 +196,7 @@ const JoinHouseholdDialog = ({
         proceedLoading: joinLoading,
         proceedButtonText: 'Join Enrollments',
         ButtonProps: {
-          endIcon: <MergeTypeRounded />,
+          endIcon: <JoinIcon />,
         },
         disabled: joinLoading || missingRelationshipsCount > 0,
       },
