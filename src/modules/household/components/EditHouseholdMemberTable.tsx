@@ -13,8 +13,6 @@ import { HOUSEHOLD_MEMBER_COLUMNS } from './HouseholdMemberTable';
 
 import { SplitIcon } from '@/components/elements/SemanticIcons';
 import GenericTable from '@/components/elements/table/GenericTable';
-import TableRowActions from '@/components/elements/table/TableRowActions';
-import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
@@ -222,58 +220,6 @@ const EditHouseholdMemberTable = ({
         ),
       },
       HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(currentMembers),
-      {
-        ...BASE_ACTION_COLUMN_DEF,
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <TableRowActions
-            record={hc}
-            recordName={clientBriefName(hc.client)}
-            MenuProps={{
-              MenuListProps: {
-                dense: false,
-              },
-            }}
-            menuActionConfigs={[
-              {
-                // No extra perm check is required for Delete, because this action only allows removing WIP Enrollments,
-                // which only requires Can Edit Enrollments, which is already required for this page
-                key: 'remove',
-                title: 'Delete Enrollment',
-                Icon: DeleteIcon,
-                ariaLabel: `Delete ${clientBriefName(hc.client)}'s enrollment`,
-                onClick: () => {
-                  deleteEnrollment({
-                    variables: {
-                      input: {
-                        id: hc.enrollment.id,
-                      },
-                    },
-                  });
-                },
-                ...getDeleteEnrollmentDisabledAttrs({
-                  loading: loading || deleteLoading,
-                  currentDashboardEnrollmentId,
-                  householdClient: hc,
-                  householdSize: currentMembers.length,
-                }),
-              },
-              {
-                key: 'split',
-                title: 'Split → New Household',
-                Icon: SplitIcon,
-                onClick: () => setSplitInitiator(hc),
-                ariaLabel: `Split ${clientBriefName(hc.client)} to new household`,
-                ...getSplitDisabledAttrs({
-                  canSplitHouseholds,
-                  loading: loading || deleteLoading,
-                  householdClient: hc,
-                  householdSize: currentMembers.length,
-                }),
-              },
-            ]}
-          />
-        ),
-      },
     ];
   }, [
     currentDashboardEnrollmentId,
@@ -283,11 +229,58 @@ const EditHouseholdMemberTable = ({
     proposedHoH,
     onChangeHoH,
     highlight,
-    loading,
-    deleteLoading,
-    canSplitHouseholds,
-    deleteEnrollment,
   ]);
+
+  const getRowSecondaryActionConfigs = useCallback(
+    (row: HouseholdClientFieldsFragment) => {
+      return [
+        {
+          // No extra perm check is required for Delete, because this action only allows removing WIP Enrollments,
+          // which only requires Can Edit Enrollments, which is already required for this page
+          key: 'remove',
+          title: 'Delete Enrollment',
+          Icon: DeleteIcon,
+          ariaLabel: `Delete ${clientBriefName(row.client)}'s enrollment`,
+          onClick: () => {
+            deleteEnrollment({
+              variables: {
+                input: {
+                  id: row.enrollment.id,
+                },
+              },
+            });
+          },
+          ...getDeleteEnrollmentDisabledAttrs({
+            loading: loading || deleteLoading,
+            currentDashboardEnrollmentId,
+            householdClient: row,
+            householdSize: currentMembers.length,
+          }),
+        },
+        {
+          key: 'split',
+          title: 'Split → New Household',
+          Icon: SplitIcon,
+          onClick: () => setSplitInitiator(row),
+          ariaLabel: `Split ${clientBriefName(row.client)} to new household`,
+          ...getSplitDisabledAttrs({
+            canSplitHouseholds,
+            loading: loading || deleteLoading,
+            householdClient: row,
+            householdSize: currentMembers.length,
+          }),
+        },
+      ];
+    },
+    [
+      canSplitHouseholds,
+      currentDashboardEnrollmentId,
+      currentMembers.length,
+      deleteEnrollment,
+      deleteLoading,
+      loading,
+    ]
+  );
 
   if (deleteError) throw deleteError;
 
@@ -296,6 +289,8 @@ const EditHouseholdMemberTable = ({
       <SsnDobShowContextProvider>
         <GenericTable<HouseholdClientFieldsFragment>
           rows={currentMembers}
+          rowName={(row) => clientBriefName(row.client)}
+          rowSecondaryActionConfigs={getRowSecondaryActionConfigs}
           columns={columns}
           rowSx={() => ({
             // HoH indicator column
