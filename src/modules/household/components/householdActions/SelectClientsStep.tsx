@@ -4,10 +4,8 @@ import { ReactNode, useCallback, useMemo } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
-import {
-  ENROLLMENT_RELATIONSHIP_COL,
-  WITH_ENROLLMENT_COLUMNS,
-} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { ENROLLMENT_RELATIONSHIP_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import {
   HouseholdClientFieldsFragment,
