@@ -92,7 +92,19 @@ const SplitHouseholdDialog = ({
               <SplitHouseholdSelectClients
                 donorHousehold={donorHousehold}
                 selectedClients={splittingClients}
-                setSelectedClients={setSplittingClients}
+                setSelectedClients={(clients) => {
+                  setSplittingClients(clients);
+                  if (clients.length === 1) {
+                    // If exactly 1 client is selected, make them the HoH
+                    setRelationships({
+                      [clients[0].enrollment.id]:
+                        RelationshipToHoH.SelfHeadOfHousehold,
+                    });
+                  } else {
+                    // Clear all relationships if selected clients change.
+                    setRelationships({});
+                  }
+                }}
               />
             )}
           </>
@@ -119,14 +131,6 @@ const SplitHouseholdDialog = ({
           />
         ),
         ...disabledProps,
-        onOpen: () => {
-          if (splittingClients.length === 1) {
-            setRelationships({
-              [splittingClients[0].enrollment.id]:
-                RelationshipToHoH.SelfHeadOfHousehold,
-            });
-          }
-        },
       },
       {
         title: 'Review Split',

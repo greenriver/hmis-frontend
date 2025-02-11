@@ -21,7 +21,6 @@ export type StepDefinition = {
   key: string;
   title?: string;
   content: ReactNode;
-  onOpen?: VoidFunction; // callback to invoke when the step is first opened
 
   // if onProceed is not provided, the default action is to just go to the next step
   onProceed?: () => Promise<any> | VoidFunction; // after promise resolves, go to the next step if there is one
@@ -98,10 +97,7 @@ const StepDialog = ({
 
     const handleClick = async () => {
       if (onProceed) await onProceed();
-      if (nextStep) {
-        setCurrentStepKey(nextStep.key);
-        nextStep.onOpen?.();
-      }
+      if (nextStep) setCurrentStepKey(nextStep.key);
     };
 
     const defaultButtonText = nextStep ? nextStep.title || 'Next' : 'Finish';

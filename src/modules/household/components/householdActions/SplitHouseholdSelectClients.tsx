@@ -1,6 +1,4 @@
 import { Typography } from '@mui/material';
-
-import { Dispatch, SetStateAction } from 'react';
 import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
 import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import SelectClientsStep from '@/modules/household/components/householdActions/SelectClientsStep';
@@ -13,7 +11,7 @@ import {
 interface Props {
   donorHousehold: HouseholdFieldsFragment;
   selectedClients: HouseholdClientFieldsFragment[];
-  setSelectedClients: Dispatch<SetStateAction<HouseholdClientFieldsFragment[]>>;
+  setSelectedClients: (clients: HouseholdClientFieldsFragment[]) => void;
 }
 
 const SplitHouseholdSelectClients = ({
