@@ -4893,6 +4893,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canSplitHouseholds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewDob',
         type: {
           kind: 'NON_NULL',
@@ -7047,6 +7055,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             name: null,
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentRelationshipInput',
+    args: [
+      {
+        name: 'enrollmentId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'relationshipToHoh',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
         },
       },
     ],

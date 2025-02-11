@@ -31,21 +31,30 @@ import {
   ClientSortOption,
   EnrollmentFieldsFragment,
   ExternalIdentifierType,
+  ProjectAccessFieldsFragment,
+  ProjectAllFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
 
+export type ManageHouseholdProject = Pick<
+  ProjectAllFieldsFragment,
+  'id' | 'projectName'
+> & {
+  access: Pick<ProjectAccessFieldsFragment, 'canSplitHouseholds'>;
+};
+
 interface Props {
   householdId?: string;
-  projectId: string;
+  project: ManageHouseholdProject;
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
 }
 
 const ManageHousehold = ({
   householdId: initialHouseholdId,
-  projectId,
+  project,
   BackButton,
   renderBackButton,
 }: Props) => {
@@ -64,7 +73,7 @@ const ManageHousehold = ({
     householdId,
   } = useAddToHouseholdColumns({
     householdId: initialHouseholdId,
-    projectId,
+    project,
   });
 
   // Fetch members to show in "previously associated" table
@@ -150,7 +159,7 @@ const ManageHousehold = ({
             currentDashboardEnrollmentId={currentDashboardEnrollmentId}
             refetchHousehold={refetchHousehold}
             loading={loading}
-            projectId={projectId}
+            projectId={project.id}
           />
         </TitleCard>
       )}
@@ -185,7 +194,7 @@ const ManageHousehold = ({
               {hasSearched && (
                 <RootPermissionsFilter permissions='canEditClients'>
                   <AddNewClientButton
-                    projectId={projectId}
+                    projectId={project.id}
                     householdId={householdId}
                     onCompleted={handleNewClientAdded}
                   />
@@ -214,6 +223,9 @@ const ManageHousehold = ({
                   rowSecondaryActionConfigs={(row) => [
                     getViewClientMenuItem(row),
                   ]}
+                  tableProps={{
+                    'aria-label': 'Search results',
+                  }}
                 />
               </Paper>
             </SsnDobShowContextProvider>

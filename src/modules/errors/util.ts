@@ -41,6 +41,9 @@ export type ErrorRenderFn = (
   args?: { attributeOnly?: boolean }
 ) => React.ReactNode;
 
+export type ErrorFilterFn = (error: ValidationError) => boolean;
+export type OnChangeErrorsFn = (errors: ErrorState) => void;
+
 export const hasAnyValue = (state: ErrorState): boolean =>
   !!state.apolloError || state.errors.length > 0 || state.warnings.length > 0;
 

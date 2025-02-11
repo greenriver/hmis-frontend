@@ -48,7 +48,7 @@ import {
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
 
-function asClient(
+export function asClient(
   record:
     | ClientSearchResultFieldsFragment
     | HouseholdClientFieldsFragment

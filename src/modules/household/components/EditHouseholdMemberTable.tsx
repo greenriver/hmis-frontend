@@ -238,6 +238,9 @@ const EditHouseholdMemberTable = ({
           })}
           loading={loading}
           loadingVariant='linear'
+          tableProps={{
+            'aria-label': 'Manage Household',
+          }}
         />
       </SsnDobShowContextProvider>
       {renderValidationDialog({

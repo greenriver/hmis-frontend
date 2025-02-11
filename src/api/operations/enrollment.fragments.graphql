@@ -122,6 +122,7 @@ fragment AllEnrollmentDetails on Enrollment {
     hasUnits
     access {
       id
+      canSplitHouseholds
       canManageIncomingReferrals # determine whether to link to source referral
     }
     staffAssignmentsEnabled
@@ -268,4 +269,11 @@ fragment EnrollmentRangeFields on Enrollment {
   entryDate
   exitDate
   inProgress
+}
+
+fragment EnrollmentWithHouseholdFields on Enrollment {
+  ...EnrollmentFields
+  household {
+    ...HouseholdFields
+  }
 }

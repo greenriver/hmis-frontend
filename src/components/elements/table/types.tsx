@@ -13,7 +13,8 @@ type BaseColumnDef<T> = {
   // whether to NOT link this cell even when the whole row is linked using rowLinkTo. Use if there are clickable elements in the cell.
   dontLink?: boolean;
   textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
-  tableCellProps?: TableCellProps;
+  tableCellProps?: TableCellProps | ((row: T) => TableCellProps);
+  headerCellProps?: TableCellProps;
   optional?: boolean;
   defaultHidden?: boolean;
   sticky?: 'left' | 'right';

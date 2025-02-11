@@ -171,11 +171,12 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
   const columns: ColumnDef<HouseholdFields>[] = useMemo(() => {
     return [
       ...BASE_COLUMNS,
-      ...(staffAssignmentsEnabled ? [{ ...ASSIGNED_STAFF_COL }] : []), // typescript appeasement
+      ...(staffAssignmentsEnabled ? [{ ...ASSIGNED_STAFF_COL }] : []),
       ACTION_COL,
     ].map(({ render, ...rest }) => ({
       ...rest,
       render: () => null,
+      tableCellProps: undefined, // typescript appeasement
     }));
   }, [staffAssignmentsEnabled]);
 
