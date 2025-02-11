@@ -87,6 +87,7 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
   const referralFilter = useReferralFilter([
     ReferralPostingStatus.AssignedStatus,
     ReferralPostingStatus.AcceptedPendingStatus,
+    ReferralPostingStatus.DeniedPendingStatus,
     ReferralPostingStatus.AcceptedStatus,
   ]);
 
@@ -109,6 +110,7 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
         status: [
           ReferralPostingStatus.AssignedStatus,
           ReferralPostingStatus.AcceptedPendingStatus,
+          ReferralPostingStatus.DeniedPendingStatus,
         ],
       }}
       paginationItemName='incoming referral'
