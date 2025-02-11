@@ -19,7 +19,7 @@ interface Props {
 const ProjectEnrollmentsTable: React.FC<Props> = ({ projectId }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const [mode, setMode] = useState<Mode>('clients');
+  const [mode, setMode] = useState<Mode>('households');
 
   return (
     <>
