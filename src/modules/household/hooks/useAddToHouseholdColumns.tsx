@@ -77,17 +77,25 @@ export default function useAddToHouseholdColumns({
           return (
             <AddToHouseholdButton
               client={client}
-              householdId={householdId}
               project={project}
               isMember={currentMembersMap.has(client.id)}
               onSuccess={onSuccess}
               household={data?.household || undefined}
+              // Disable button until `household` is fetched
+              disabled={loading && !!householdId && !data?.household}
             />
           );
         },
       },
     ];
-  }, [householdId, project, currentMembersMap, onSuccess, data?.household]);
+  }, [
+    project,
+    currentMembersMap,
+    onSuccess,
+    data?.household,
+    loading,
+    householdId,
+  ]);
 
   if (error) throw error;
 

@@ -15,15 +15,17 @@ import {
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   ASSIGNED_STAFF_COL,
-  ENROLLMENT_RELATIONSHIP_COL,
+  EnrollmentFields,
   WITH_ENROLLMENT_COLUMNS,
 } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
@@ -36,6 +38,22 @@ import {
 export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
 >['households']['nodes'][number];
+
+export const ENROLLMENT_RELATIONSHIP_COL = {
+  header: 'Relationship',
+  render: (e: Pick<EnrollmentFields, 'id' | 'relationshipToHoH'>) => (
+    <HmisEnum
+      key={e.id}
+      value={e.relationshipToHoH}
+      enumMap={{
+        ...HmisEnums.RelationshipToHoH,
+        // Display "HoH", instead of "Self (HoH)"
+        SELF_HEAD_OF_HOUSEHOLD: 'HoH',
+      }}
+      whiteSpace='nowrap'
+    />
+  ),
+};
 
 type OneHouseholdClient = HouseholdFields['householdClients'][number];
 const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
@@ -134,7 +152,7 @@ const CustomDividerRow = ({ colSpan }: { colSpan: number }) => (
       sx={(theme) => {
         return {
           padding: 0,
-          backgroundColor: theme.palette.grey[100],
+          backgroundColor: theme.palette.grey[200],
           borderTop: `1px solid ${theme.palette.borders.main}`,
           borderBottom: `1px solid ${theme.palette.borders.main}`,
         };

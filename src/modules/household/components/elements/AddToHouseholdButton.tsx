@@ -28,15 +28,16 @@ interface Props {
   project: ManageHouseholdProject;
   onSuccess: (householdId: string) => void;
   household?: HouseholdFieldsFragment;
+  disabled?: boolean;
 }
 
 const AddToHouseholdButton = ({
   client,
   isMember,
-  householdId,
   onSuccess,
   project,
   household,
+  disabled,
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
@@ -49,7 +50,7 @@ const AddToHouseholdButton = ({
     }
   }, [prevIsMember, isMember, setAdded]);
 
-  let text = householdId ? 'Add to Household' : 'Enroll Client';
+  let text = household ? 'Add to Household' : 'Enroll Client';
   const color: 'secondary' | 'error' = 'secondary';
   if (added) text = 'Added';
   const clientId = client.id;
@@ -66,13 +67,13 @@ const AddToHouseholdButton = ({
         onSuccess(data.householdId);
       },
       inputVariables: { projectId: project.id, clientId },
-      pickListArgs: { projectId: project.id, householdId },
-      localConstants: { householdId, projectCocCount: cocCount },
+      pickListArgs: { projectId: project.id, householdId: household?.id },
+      localConstants: { householdId: household?.id, projectCocCount: cocCount },
       errorFilter: (error: ValidationError) => {
         // If there's an error about a conflicting enrollment, and we're adding to an existing household,
         // then we will show the ConflictingEnrollmentAlert (so filter it out from the ErrorAlert display)
         return !(
-          household && error.data?.hasOwnProperty('conflictingEnrollmentId')
+          household?.id && error.data?.hasOwnProperty('conflictingEnrollmentId')
         );
       },
       onChangeErrors: (errors: ErrorState) => {
@@ -84,7 +85,7 @@ const AddToHouseholdButton = ({
         }
       },
     }),
-    [project.id, clientId, householdId, cocCount, onSuccess, household]
+    [project.id, clientId, cocCount, onSuccess, household?.id]
   );
 
   const { openFormDialog, renderFormDialog, closeDialog } =
@@ -127,7 +128,7 @@ const AddToHouseholdButton = ({
         title={added ? 'Client is already a member of this household' : null}
       >
         <Button
-          disabled={added}
+          disabled={added || disabled}
           color={color}
           fullWidth
           size='small'
