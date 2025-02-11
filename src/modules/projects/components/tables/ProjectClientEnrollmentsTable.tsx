@@ -8,7 +8,6 @@ import {
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   clientBriefName,
@@ -18,7 +17,6 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
@@ -70,22 +68,6 @@ export const ENROLLMENT_COLUMNS: {
     header: 'Status',
     render: (e) => <EnrollmentStatus enrollment={e} />,
   },
-};
-
-export const ENROLLMENT_RELATIONSHIP_COL = {
-  header: 'Relationship',
-  render: (e: Pick<EnrollmentFields, 'id' | 'relationshipToHoH'>) => (
-    <HmisEnum
-      key={e.id}
-      value={e.relationshipToHoH}
-      enumMap={{
-        ...HmisEnums.RelationshipToHoH,
-        // Display "HoH", instead of "Self (HoH)"
-        SELF_HEAD_OF_HOUSEHOLD: 'HoH',
-      }}
-      whiteSpace='nowrap'
-    />
-  ),
 };
 
 export const ASSIGNED_STAFF_COL = {
@@ -217,7 +199,6 @@ const ProjectClientEnrollmentsTable = ({
       return [
         { ...CLIENT_COLUMNS.name, sticky: 'left' },
         CLIENT_COLUMNS.age,
-        ENROLLMENT_RELATIONSHIP_COL,
         ENROLLMENT_COLUMNS.entryDate,
         ENROLLMENT_COLUMNS.exitDate,
         ENROLLMENT_COLUMNS.enrollmentStatus,
