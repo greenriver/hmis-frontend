@@ -563,6 +563,8 @@ export const createFullTheme = (options?: ThemeOptions) => {
 // Export default theme with no overlay options
 export default createFullTheme();
 
+// MUI's visuallyHidden sometimes takes up space and otherwise causes visual bugs,
+// so we override it here with our own version that sets position to `fixed`
 export const customVisuallyHidden: SxProps = {
   ...visuallyHidden,
   position: 'fixed',
