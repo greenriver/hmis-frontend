@@ -7,7 +7,6 @@ import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
 
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
 import AddNewClientButton from './elements/AddNewClientButton';
-import { CommonCard } from '@/components/elements/CommonCard';
 import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
@@ -51,13 +50,15 @@ interface Props {
   project: ManageHouseholdProject;
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
+  onFirstMemberAdded?: (householdId: string) => void;
 }
 
 const ManageHousehold = ({
-  householdId: initialHouseholdId,
+  householdId,
   project,
   BackButton,
   renderBackButton,
+  onFirstMemberAdded,
 }: Props) => {
   const { globalFeatureFlags } = useHmisAppSettings();
   // This may be rendered either on the Project Dashboard or the Enrollment Dashboard. If on the Enrollment Dash, we need to treat the "current" client differently.
@@ -65,17 +66,25 @@ const ManageHousehold = ({
   const currentDashboardClientId = enrollmentContext?.client?.id;
   const currentDashboardEnrollmentId = enrollmentContext?.enrollment?.id;
 
-  const {
-    addToEnrollmentColumns,
-    refetchHousehold,
-    household,
-    onHouseholdIdChange,
-    loading,
-    householdId,
-  } = useAddToHouseholdColumns({
-    householdId: initialHouseholdId,
-    project,
-  });
+  const onSuccess = useCallback(
+    (newHouseholdId: string) => {
+      if (!householdId && onFirstMemberAdded) {
+        console.log('RELOAD TO', newHouseholdId);
+        onFirstMemberAdded(newHouseholdId);
+      }
+    },
+    [householdId, onFirstMemberAdded]
+  );
+  const { addToEnrollmentColumns, refetchHousehold, household, loading } =
+    useAddToHouseholdColumns({
+      householdId,
+      project,
+      onSuccess,
+    });
+
+  // useEffect(() => {
+  //   if (householdId) refetchHousehold();
+  // }, [refetchHousehold, householdId]);
 
   // Fetch members to show in "previously associated" table
   const [recentMembers, recentMembersLoading] = useRecentHouseholdMembers(
@@ -129,18 +138,19 @@ const ManageHousehold = ({
   const handleNewClientAdded = useCallback(
     (data: EnrollmentFieldsFragment) => {
       if (data.householdId !== householdId) {
-        onHouseholdIdChange(data.householdId);
+        // onHouseholdIdChange(data.householdId);
+        onSuccess(data.householdId);
       } else {
         refetchHousehold();
       }
     },
-    [householdId, onHouseholdIdChange, refetchHousehold]
+    [householdId, onSuccess, refetchHousehold]
   );
 
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [hasSearched, setHasSearched] = useState(false);
 
-  if (initialHouseholdId && !household) return <Loading />;
+  if (householdId && !household) return <Loading />;
 
   return (
     <Stack gap={4}>

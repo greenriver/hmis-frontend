@@ -101,7 +101,7 @@ const getFilterForType = (
     };
   }
 
-  if (!filter) console.error(`Failed to create filter for ${fieldName}`);
+  // if (!filter) console.error(`Failed to create filter for ${fieldName}`);
 
   return filter || null;
 };
@@ -145,7 +145,7 @@ export function useFilters<T>({
       if (filter) {
         result[name as keyof T] = filter;
       } else {
-        console.error(`Unable to create filter for ${name}`);
+        // console.error(`Unable to create filter for ${name}`);
       }
     });
 
