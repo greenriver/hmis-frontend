@@ -172,7 +172,7 @@ const JoinHouseholdDialog = ({
           >
             <Typography variant='body1'>
               Update joining clients’ relationships{' '}
-              {receivingHohName && <>to {receivingHohName}</>}
+              {receivingHohName && <>to {receivingHohName}</>}.
             </Typography>
           </AddRelationshipsStep>
         ),
@@ -205,7 +205,7 @@ const JoinHouseholdDialog = ({
         content: (
           <SuccessWayfindingStep
             title={'Successful Join'}
-            description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}`}
+            description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}.`}
             primaryClientName={receivingHohName}
             secondary={findHohOrRep(remainingHousehold?.householdClients || [])}
             project={project}
