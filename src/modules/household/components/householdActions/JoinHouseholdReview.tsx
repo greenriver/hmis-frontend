@@ -61,14 +61,14 @@ const JoinHouseholdReview = ({
       reviewableHouseholds={[
         {
           title: 'Joining Household',
-          description: `The household that ${joining} will join`,
+          description: `The household that ${joining} will join.`,
           members: joinedHouseholdClients,
         },
         ...(remainingHouseholdClients
           ? [
               {
                 title: 'Remaining Household',
-                description: `The household that ${joining} will leave`,
+                description: `The household that ${joining} will leave.`,
                 members: remainingHouseholdClients,
               },
             ]
@@ -78,7 +78,7 @@ const JoinHouseholdReview = ({
       <Typography variant='body1'>
         Check that the joined{' '}
         {remainingHouseholdClients.length > 0 && 'and remaining '}household
-        members and details are correct
+        members and details are correct.
       </Typography>
     </ReviewHouseholdsStep>
   );

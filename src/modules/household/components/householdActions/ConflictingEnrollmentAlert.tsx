@@ -59,8 +59,7 @@ const ConflictingEnrollmentAlert = ({
               You have two options:
               <List sx={{ listStyle: 'decimal', pl: 4 }} component='ol'>
                 <ListItem sx={{ display: 'list-item' }}>
-                  The conflicting enrollment can be joined with {hohName}’s
-                  household.
+                  Join the conflicting enrollment with {hohName}’s household.
                 </ListItem>
                 <ListItem sx={{ display: 'list-item' }}>
                   To retain the conflicting enrollment, update the entry and/or

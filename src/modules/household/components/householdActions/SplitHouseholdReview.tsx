@@ -50,19 +50,19 @@ const SplitHouseholdReview = ({
       reviewableHouseholds={[
         {
           title: 'Remaining Household',
-          description: `The household that ${splitSummary} will leave`,
+          description: `The household that ${splitSummary} will leave.`,
           members: remaining,
         },
         {
           title: 'Split Household',
-          description: `New household that ${splitSummary} will form`,
+          description: `New household that ${splitSummary} will form.`,
           members: splittingClients,
         },
       ]}
     >
       <Typography variant='body1'>
         Check that the remaining and split household members and details are
-        correct
+        correct.
       </Typography>
     </ReviewHouseholdsStep>
   );
