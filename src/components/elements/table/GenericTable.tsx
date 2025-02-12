@@ -18,7 +18,6 @@ import {
   Theme,
 } from '@mui/material';
 import { SystemStyleObject } from '@mui/system';
-import { visuallyHidden } from '@mui/utils';
 import { compact, get, includes, isNil, without } from 'lodash-es';
 import {
   ComponentType,
@@ -45,6 +44,7 @@ import {
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import RouterLink from '@/components/elements/RouterLink';
 import TableRowActions from '@/components/elements/table/TableRowActions';
+import { customVisuallyHidden } from '@/config/theme';
 import { LocationState } from '@/routes/routeUtil';
 
 export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
@@ -187,7 +187,7 @@ export const renderHeaderCellContents = <T extends { id: string }>(
     <strong>{def.header}</strong>
   ) : (
     // If header isn't provided, add a visually hidden header with the column key for accessibility
-    <Box sx={visuallyHidden}>{def.key}</Box>
+    <Box sx={customVisuallyHidden}>{def.key}</Box>
   );
 };
 
@@ -254,7 +254,9 @@ export const renderLinkedRowCellContents = <T extends { id: string }>({
         {cellContents}
       </RouterLink>
       {/* If the RouterLink was aria-hidden, render the contents as visually hidden alongside */}
-      {isInaccessibleLink && <Box sx={visuallyHidden}>{cellContents}</Box>}
+      {isInaccessibleLink && (
+        <Box sx={customVisuallyHidden}>{cellContents}</Box>
+      )}
     </>
   );
 };
@@ -361,7 +363,7 @@ const GenericTable = <T extends { id: string }>({
             key='empty'
             sx={{ ...verticalCellSx(0), backgroundColor: 'background.paper' }}
           >
-            <Box sx={visuallyHidden}>{verticalHiddenHeader}</Box>
+            <Box sx={customVisuallyHidden}>{verticalHiddenHeader}</Box>
           </TableCell>
           {rows.map((row, idx) => (
             <TableCell key={row.id} sx={verticalCellSx(idx)}>
@@ -418,7 +420,7 @@ const GenericTable = <T extends { id: string }>({
           {/* right-most column for row actions */}
           {hasTableRowActions && (
             <HeaderCell sx={{ ...getStickyCellStyles({ sticky: 'right' }) }}>
-              <Box sx={visuallyHidden}>Action</Box>
+              <Box sx={customVisuallyHidden}>Action</Box>
             </HeaderCell>
           )}
         </TableRow>
@@ -601,7 +603,8 @@ const GenericTable = <T extends { id: string }>({
                             }),
                             width,
                             minWidth,
-                            maxWidth,
+                            // don't override maxWidth from sticky styles if it is undefined on column def
+                            ...(maxWidth ? { maxWidth: maxWidth } : undefined),
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
                             whiteSpace: 'initial',

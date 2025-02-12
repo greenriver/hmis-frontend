@@ -11,6 +11,7 @@ import {
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -67,6 +68,8 @@ const BulkServicesTable: React.FC<Props> = ({
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
+  const isTiny = useIsMobile('sm');
+
   const getColumnDefs = useCallback(
     (_rows: RowType[], loading?: boolean) => {
       const notEnrolledText = (
@@ -111,6 +114,8 @@ const BulkServicesTable: React.FC<Props> = ({
           ...BASE_ACTION_COLUMN_DEF,
           width: '180px',
           tableCellProps: { sx: { pl: 2, pr: 1 } },
+          // Prevent stickiness on tiny screens, so that non-sticky columns are still scrollable
+          sticky: isTiny ? undefined : 'right',
           render: (row: RowType) => (
             <TableRowActions
               record={row}
@@ -145,6 +150,7 @@ const BulkServicesTable: React.FC<Props> = ({
     [
       anyRowsSelected,
       canViewDob,
+      isTiny,
       mutationQueryVariables,
       serviceDate,
       serviceTypeName,
