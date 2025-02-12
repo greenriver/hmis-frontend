@@ -62,14 +62,10 @@ export function useTableSelection<T extends { id: string }>({
   );
 
   // Clear selection when data changes
-  useEffect(() => setSelectedState([]), [rows]);
-
-  // Call onChangeSelected callback if selection changes.
-  // (Usually we call onChangeSelected directly when changing the value, but
-  // it doesn't work for the useEffect above, so we still need this effect too)
   useEffect(() => {
-    if (selected) onChangeSelected?.(selected);
-  }, [selected, onChangeSelected]);
+    setSelectedState([]);
+    onChangeSelected?.([]);
+  }, [onChangeSelected, rows]);
 
   return {
     selected,
