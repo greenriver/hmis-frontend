@@ -203,13 +203,16 @@ const ClientSearch = () => {
     omit: ['searchTerm'],
   });
 
+  const isTiny = useIsMobile('sm');
+
   return (
     <SsnDobShowContextProvider>
       <Stack
         mb={2}
-        direction='row'
+        gap={2}
+        direction={isTiny ? 'column' : 'row'}
         justifyContent='space-between'
-        alignItems={'flex-end'}
+        alignItems={isTiny ? undefined : 'flex-end'}
       >
         <ClientSearchTypeToggle value={searchType} onChange={setSearchType} />
         {hasSearched && (

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useBulkAssignMutations } from '../hooks/useBulkAssignMutations';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import LoadingButton from '@/components/elements/LoadingButton';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import {
   BulkAssignServiceInput,
@@ -97,9 +98,15 @@ const MultiAssignServiceButton: React.FC<Props> = ({
       ? `To remove multiple services, please only select clients that are assigned on the specified date.`
       : null;
 
+  const isTiny = useIsMobile('sm');
+
   return (
     <>
-      <Stack direction='row' gap={2}>
+      <Stack
+        direction={isTiny ? 'column' : 'row'}
+        gap={isTiny ? 1 : 2}
+        mb={isTiny ? 1 : 0}
+      >
         <LoadingButton
           onClick={handleAssign}
           disabled={clientIdsToAssign.length === 0}

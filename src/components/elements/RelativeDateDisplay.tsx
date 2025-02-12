@@ -5,9 +5,9 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import { useMemo } from 'react';
 
+import { customVisuallyHidden } from '@/config/theme';
 import {
   formatDateForDisplay,
   formatDateTimeForDisplay,
@@ -75,7 +75,7 @@ const RelativeDateDisplay = ({
       >
         {/* Include the tooltip text as visually hidden for accessibility */}
         {prefixVerb || null} {formattedDateRelative}{' '}
-        <Box sx={visuallyHidden}>
+        <Box sx={customVisuallyHidden}>
           ({formattedDate} {tooltipSuffixText})
         </Box>{' '}
         {suffixText || null}
