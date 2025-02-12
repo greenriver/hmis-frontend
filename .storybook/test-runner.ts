@@ -1,5 +1,5 @@
 import type { TestRunnerConfig } from '@storybook/test-runner';
-// import { injectAxe, checkA11y } from 'axe-playwright';
+import { injectAxe, checkA11y } from 'axe-playwright';
 
 /*
  * See https://storybook.js.org/docs/writing-tests/test-runner#test-hook-api
@@ -7,17 +7,17 @@ import type { TestRunnerConfig } from '@storybook/test-runner';
  */
 const config: TestRunnerConfig = {
   // COMMENTED OUT for now
-  // async preVisit(page) {
-  //   await injectAxe(page);
-  // },
-  // async postVisit(page) {
-  //   await checkA11y(page, '#storybook-root', {
-  //     detailedReport: true,
-  //     detailedReportOptions: {
-  //       html: true,
-  //     },
-  //   });
-  // },
+  async preVisit(page) {
+    await injectAxe(page);
+  },
+  async postVisit(page) {
+    await checkA11y(page, '#storybook-root', {
+      detailedReport: true,
+      detailedReportOptions: {
+        html: true,
+      },
+    });
+  },
 };
 
 export default config;
