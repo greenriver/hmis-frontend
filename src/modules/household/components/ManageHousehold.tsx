@@ -8,6 +8,7 @@ import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
 import AddNewClientButton from './elements/AddNewClientButton';
 import { CommonCard } from '@/components/elements/CommonCard';
+import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
@@ -101,7 +102,10 @@ const ManageHousehold = ({
   const columns = useMemo(() => {
     const defaults: ColumnDef<
       ClientSearchResultFieldsFragment | RecentHouseholdMember
-    >[] = [CLIENT_COLUMNS.name, CLIENT_COLUMNS.dobAge];
+    >[] = [
+      { ...CLIENT_COLUMNS.name, sticky: 'left', width: '25%' }, // why does sticky make it so wide?
+      CLIENT_COLUMNS.dobAge,
+    ];
     if (isMobile) {
       // On mobile, show enrollment button right next to the client name so user
       // doesn't have to scroll to the right.
@@ -140,20 +144,28 @@ const ManageHousehold = ({
 
   return (
     <Stack gap={4}>
-      {!household && loading && <Loading />}
-      {!household && !loading && (
-        <CommonCard
-          sx={{ py: 4, textAlign: 'center', color: 'text.secondary' }}
-        >
-          No Members, Search to Add Clients
-        </CommonCard>
-      )}
-      {household && (
-        <TitleCard
-          title='Current Household'
-          headerVariant='border'
-          data-testid='editHouseholdMemberTable'
-        >
+      {/* FIXME: align on titlecard and commoncard */}
+      <TitleCard
+        title='Household'
+        headerVariant={household ? 'border' : undefined}
+      >
+        {!household && loading && <Loading />}
+        {!household && !loading && (
+          <Paper
+            sx={{
+              py: 2,
+              mx: 2,
+              mb: 2,
+              textAlign: 'center',
+              color: 'text.secondary',
+              backgroundColor: 'grayscale.tint',
+              border: 'none',
+            }}
+          >
+            No household members have been added to this enrollment
+          </Paper>
+        )}
+        {household && (
           <EditHouseholdMemberTable
             household={household}
             currentDashboardEnrollmentId={currentDashboardEnrollmentId}
@@ -161,8 +173,8 @@ const ManageHousehold = ({
             loading={loading}
             project={project}
           />
-        </TitleCard>
-      )}
+        )}
+      </TitleCard>
       {BackButton}
       {renderBackButton && renderBackButton(householdId)}
       {recentEligibleMembers && recentEligibleMembers.length > 0 && (
@@ -179,13 +191,14 @@ const ManageHousehold = ({
         </>
       )}
 
-      <CommonCard title='Client Search'>
-        <Stack gap={6}>
-          <Grid container alignItems={'flex-start'}>
+      <CommonCollapsibleCard title='Add Household Member'>
+        <Stack gap={2} sx={{ py: 2 }}>
+          <Grid container alignItems={'flex-start'} sx={{ px: 2 }}>
             <Grid item xs={12} md={9} lg={8}>
               <ClientTextSearchForm
                 onSearch={(text) => setSearchInput({ textSearch: text })}
                 searchAdornment
+                label='Search for Client'
                 minChars={3}
               />
             </Grid>
@@ -205,33 +218,31 @@ const ManageHousehold = ({
 
           {searchInput && (
             <SsnDobShowContextProvider>
-              <Paper>
-                <GenericTableWithData<
-                  SearchClientsQuery,
-                  SearchClientsQueryVariables,
-                  ClientSearchResultFieldsFragment
-                >
-                  queryVariables={{ input: searchInput }}
-                  queryDocument={SearchClientsDocument}
-                  columns={columns}
-                  pagePath='clientSearch'
-                  fetchPolicy='cache-and-network'
-                  filters={filters}
-                  recordType='Client'
-                  defaultSortOption={ClientSortOption.BestMatch}
-                  onCompleted={() => setHasSearched(true)}
-                  rowSecondaryActionConfigs={(row) => [
-                    getViewClientMenuItem(row),
-                  ]}
-                  tableProps={{
-                    'aria-label': 'Search results',
-                  }}
-                />
-              </Paper>
+              <GenericTableWithData<
+                SearchClientsQuery,
+                SearchClientsQueryVariables,
+                ClientSearchResultFieldsFragment
+              >
+                queryVariables={{ input: searchInput }}
+                queryDocument={SearchClientsDocument}
+                columns={columns}
+                pagePath='clientSearch'
+                fetchPolicy='cache-and-network'
+                filters={filters}
+                recordType='Client'
+                defaultSortOption={ClientSortOption.BestMatch}
+                onCompleted={() => setHasSearched(true)}
+                rowSecondaryActionConfigs={(row) => [
+                  getViewClientMenuItem(row),
+                ]}
+                tableProps={{
+                  'aria-label': 'Search results',
+                }}
+              />
             </SsnDobShowContextProvider>
           )}
         </Stack>
-      </CommonCard>
+      </CommonCollapsibleCard>
     </Stack>
   );
 };

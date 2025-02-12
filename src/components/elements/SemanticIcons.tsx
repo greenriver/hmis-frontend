@@ -19,6 +19,8 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import DownloadIcon from '@mui/icons-material/Download';
 import Draw from '@mui/icons-material/Draw';
 import EditIcon from '@mui/icons-material/Edit';
+import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Home from '@mui/icons-material/Home';
 import ImageIcon from '@mui/icons-material/Image';
@@ -66,6 +68,8 @@ export {
   MyLocationIcon as MyLocationIcon,
   MergeTypeRounded as JoinIcon,
   CallSplitRounded as SplitIcon,
+  ExpandLessRoundedIcon as ExpandLessIcon,
+  ExpandMoreRoundedIcon as ExpandMoreIcon,
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
