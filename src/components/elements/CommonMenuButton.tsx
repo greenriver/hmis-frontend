@@ -1,36 +1,44 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
   Button,
   ButtonProps,
   Divider,
   IconButton,
+  ListItemIcon,
   Menu,
   MenuItem,
   MenuProps,
+  Stack,
+  Typography,
 } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { To } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
 import { MoreMenuIcon } from './SemanticIcons';
+import { LocationState } from '@/routes/routeUtil';
 
-export type NavMenuItem = {
+export type CommonMenuItem = {
   key: string;
+  title: ReactNode;
+  Icon?: SvgIconComponent;
   to?: To;
   onClick?: VoidFunction;
-  title?: ReactNode;
   divider?: boolean;
   disabled?: boolean;
+  disabledReason?: string;
+  ariaLabel?: string;
+  linkState?: LocationState;
+  openInNew?: boolean;
 };
 
 interface Props {
   title: ReactNode;
-  items: NavMenuItem[];
-  variant?: ButtonProps['variant'];
-  disabled?: ButtonProps['disabled'];
+  items: CommonMenuItem[];
   iconButton?: boolean; // use an icon button instead of a text button
-  sx?: ButtonProps['sx'];
   MenuProps?: Omit<MenuProps, 'open'>;
+  ButtonProps?: ButtonProps;
 }
 
 const CommonMenuButton = ({
@@ -38,7 +46,7 @@ const CommonMenuButton = ({
   items,
   iconButton,
   MenuProps,
-  ...buttonProps
+  ButtonProps,
 }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -52,6 +60,10 @@ const CommonMenuButton = ({
     event.stopPropagation();
     setAnchorEl(null);
   };
+  // pull out variant/color which can't be used for IconButton
+  const { variant, color, ...buttonProps } = ButtonProps || {};
+
+  const { MenuListProps, ...menuProps } = MenuProps || {};
 
   return (
     <>
@@ -74,6 +86,8 @@ const CommonMenuButton = ({
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<ArrowDropDownIcon />}
+          variant={variant}
+          color={color}
           {...buttonProps}
         >
           {title}
@@ -87,6 +101,7 @@ const CommonMenuButton = ({
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'menu-button',
+          ...MenuListProps,
         }}
         anchorOrigin={{
           vertical: 'bottom',
@@ -96,30 +111,87 @@ const CommonMenuButton = ({
           vertical: 'top',
           horizontal: 'right',
         }}
-        {...MenuProps}
+        // Bug: Opening the CommonMenu applies padding to the body, which can look weird on mobile.
+        // It's sort of fixable with disableScrollLock, but that seems to introduce other scroll problems.
+        // disableScrollLock={true}
+        {...menuProps}
       >
-        {items.map(({ key, to, title, divider, onClick, disabled }) =>
-          divider ? (
-            <Divider key={key} />
-          ) : to ? (
-            <MenuItem key={key} component={RouterLink} to={to}>
-              {title}
-            </MenuItem>
-          ) : (
-            <MenuItem
-              key={key}
-              onClick={() => {
-                if (onClick) {
-                  // close menu before triggering onClick
-                  setAnchorEl(null);
-                  onClick();
-                }
-              }}
-              disabled={disabled}
-            >
-              {title}
-            </MenuItem>
-          )
+        {items.map(
+          ({
+            key,
+            to,
+            title,
+            Icon,
+            divider,
+            onClick,
+            disabled,
+            disabledReason,
+            ariaLabel,
+            openInNew,
+            linkState,
+          }) => {
+            if (divider) return <Divider key={key} />;
+
+            const props = {
+              key,
+              'aria-label': ariaLabel,
+              disabled,
+            };
+
+            const menuItemLabel = (
+              <Stack direction='row'>
+                {Icon && (
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                )}
+                <Stack direction='column'>
+                  {title}
+                  {disabled && disabledReason && (
+                    // We often use tooltips to indicate the reason something is disabled,
+                    // but in this case it's more difficult because the MenuItem must be the direct child of Menu
+                    // (otherwise tab navigation doesn't work correctly).
+                    // As a quick-fix, just put the disabled reason here below the label
+                    <Typography
+                      variant={'caption'}
+                      sx={{ fontStyle: 'italic' }}
+                    >
+                      {disabledReason}
+                    </Typography>
+                  )}
+                </Stack>
+              </Stack>
+            );
+
+            if (to) {
+              return (
+                <MenuItem
+                  {...props}
+                  component={RouterLink}
+                  to={to}
+                  state={linkState}
+                  openInNew={openInNew}
+                >
+                  {menuItemLabel}
+                </MenuItem>
+              );
+            }
+
+            return (
+              <MenuItem
+                {...props}
+                onClick={() => {
+                  if (onClick) {
+                    // close menu before triggering onClick
+                    setAnchorEl(null);
+                    onClick();
+                  }
+                }}
+              >
+                {menuItemLabel}
+              </MenuItem>
+            );
+          }
         )}
       </Menu>
     </>

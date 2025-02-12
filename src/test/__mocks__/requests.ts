@@ -12,9 +12,11 @@ import {
   GetClientEnrollmentsDocument,
   GetClientImageDocument,
   GetClientPermissionsDocument,
+  GetEnrollmentGeolocationsDocument,
   GetEnrollmentWithHouseholdDocument,
   GetFileDocument,
   GetPickListDocument,
+  GetProjectHouseholdsDocument,
   GetRootPermissionsDocument,
   NameDataQuality,
   NoYesReasonsForMissingData,
@@ -23,6 +25,7 @@ import {
   Race,
   RelationshipToHoH,
   SsnDataQuality,
+  UserFieldsFragment,
 } from '@/types/gqlTypes';
 
 /**
@@ -55,6 +58,15 @@ const enrollmentAccessMock = {
   ),
   id: '9999:1', // <enrollment id>:<user id>
 } as EnrollmentAccess;
+
+export const applicationUserMock: UserFieldsFragment = {
+  __typename: 'ApplicationUser',
+  id: '1',
+  name: 'Provider User',
+  firstName: 'Provider',
+  lastName: 'User',
+  email: 'fake@email.org',
+};
 
 export const fakeEnrollment = () => {
   return {
@@ -150,6 +162,80 @@ export const RITA_ACKROYD_WITHOUT_ENROLLMENTS = {
   enrollments: [],
 };
 
+export const AMERICAN_LAKE_HOUSE = {
+  id: '441',
+  staffAssignmentsEnabled: true,
+  // TODO: flesh out project mock
+};
+
+export const getProjectHouseholdsMock = {
+  request: {
+    query: GetProjectHouseholdsDocument,
+    variables: {
+      limit: 25,
+      offset: 0,
+      includeStaffAssignment: false,
+      id: undefined,
+      filters: { searchTerm: undefined },
+      openOnDate: undefined,
+      sortOrder: 'MOST_RECENT',
+    },
+  },
+  result: {
+    data: {
+      project: {
+        households: {
+          offset: 0,
+          limit: 25,
+          nodesCount: 2,
+          nodes: [
+            {
+              id: '1',
+              householdSize: 1,
+              householdClients: [
+                {
+                  id: '35871:8678',
+                  relationshipToHoH: 'SELF_HEAD_OF_HOUSEHOLD',
+                  client: {
+                    ...RITA_ACKROYD,
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+              ],
+            },
+            {
+              id: '2',
+              householdSize: 4,
+              householdClients: [
+                {
+                  id: '1:1',
+                  relationshipToHoH: 'SELF_HEAD_OF_HOUSEHOLD',
+                  client: {
+                    ...RITA_ACKROYD,
+                    firstName: 'Elmer',
+                    lastName: 'Smith',
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+                {
+                  id: '1:2',
+                  relationshipToHoH: 'SPOUSE_OR_PARTNER',
+                  client: {
+                    ...RITA_ACKROYD,
+                    firstName: 'Ryan',
+                    lastName: 'Smith',
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+  },
+};
+
 export const projectsForSelectMock = {
   request: {
     query: GetPickListDocument,
@@ -216,6 +302,62 @@ export const projectsForSelectMock = {
   },
 };
 
+export const getEnrollmentGeolocationsMock = {
+  request: {
+    query: GetEnrollmentGeolocationsDocument,
+    variables: {
+      id: '1',
+    },
+  },
+  result: {
+    data: {
+      enrollment: {
+        id: '1',
+        geolocations: [
+          {
+            id: '15',
+            __typename: 'Geolocation',
+            coordinates: {
+              __typename: 'GeolocationCoordinates',
+              id: '15',
+              latitude: '42.355560',
+              longitude: '-71.067285',
+            },
+            locatedAt: '2024-12-13T11:53:37-05:00',
+            sourceFormName: 'Street Outreach Assessment',
+            collectedBy: applicationUserMock,
+          },
+          {
+            __typename: 'Geolocation',
+            id: '14',
+            coordinates: {
+              __typename: 'GeolocationCoordinates',
+              id: '14',
+              latitude: '42.355060',
+              longitude: '-71.063485',
+            },
+            locatedAt: '2024-12-13T11:53:28-05:00',
+            sourceFormName: 'Current Living Situation',
+            collectedBy: applicationUserMock,
+          },
+          {
+            __typename: 'Geolocation',
+            id: '13',
+            coordinates: {
+              __typename: 'GeolocationCoordinates',
+              id: '13',
+              latitude: '42.355960',
+              longitude: '-71.067485',
+            },
+            locatedAt: '2024-12-13T11:53:14-05:00',
+            sourceFormName: 'Current Living Situation',
+            collectedBy: applicationUserMock,
+          },
+        ],
+      },
+    },
+  },
+};
 // Not used-- keeping around in case we add a storybook story with client search?
 // const clientSearchMock = {
 //   request: {

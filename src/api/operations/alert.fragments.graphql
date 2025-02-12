@@ -4,6 +4,7 @@ fragment ClientWithAlertFields on Client {
     ...ClientAlertFields
   }
   access {
+    id
     canViewClientAlerts
     canManageClientAlerts
   }

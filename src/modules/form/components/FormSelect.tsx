@@ -1,10 +1,10 @@
-import { Box, Typography, createFilterOptions } from '@mui/material';
-
+import { Box, createFilterOptions, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { DynamicInputCommonProps } from '../types';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
+import { customVisuallyHidden } from '@/config/theme';
 import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { INVALID_ENUM, MISSING_DATA_KEYS } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
@@ -28,6 +28,13 @@ const renderOption = (props: object, option: Option) => (
     data-testid={`option-${optionId(option)}`}
   >
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
+      {/* Insert the group label or group code as a visually hidden element.
+          Temp fix for https://github.com/mui/material-ui/issues/42782 */}
+      {(option.groupLabel || option.groupCode) && (
+        <Box sx={customVisuallyHidden}>
+          {option.groupLabel || option.groupCode}:{' '}
+        </Box>
+      )}
       <Typography variant='body2'>{optionLabel(option)}</Typography>
       {option.secondaryLabel && (
         <Typography

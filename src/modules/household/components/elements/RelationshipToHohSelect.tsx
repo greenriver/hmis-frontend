@@ -1,10 +1,9 @@
 import { Typography } from '@mui/material';
-import { omit } from 'lodash-es';
-import { useMemo } from 'react';
 
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { RelationshipToHoH } from '@/types/gqlTypes';
 
@@ -12,60 +11,46 @@ export type Option = { value: RelationshipToHoH; label: string };
 
 export interface Props
   extends Omit<GenericSelectProps<Option, false, false>, 'options' | 'value'> {
+  variant: 'includeHoh' | 'excludeHoh';
   value: RelationshipToHoH | null;
-  showDataNotCollected?: boolean;
 }
 
+const relationshipOptions: Option[] = (
+  localResolvePickList('RelationshipToHoH') || []
+).map(({ code, label }) => ({
+  value: code as RelationshipToHoH,
+  label: label as string,
+}));
+
+const relationshipOptionsNoHoh: Option[] = relationshipOptions
+  // Exclude HoH from option list
+  .filter(({ value }) => value !== RelationshipToHoH.SelfHeadOfHousehold);
+
 const RelationshipToHohSelect = ({
-  disabled,
   value,
-  showDataNotCollected = false,
+  textInputProps,
+  variant = 'excludeHoh',
   ...props
 }: Props) => {
-  const relationshipToHohOptions = useMemo(() => {
-    const excluded = [
-      RelationshipToHoH.SelfHeadOfHousehold,
-      RelationshipToHoH.Invalid,
-    ];
-    if (!showDataNotCollected)
-      excluded.push(RelationshipToHoH.DataNotCollected);
-
-    const filtered = omit(HmisEnums.RelationshipToHoH, excluded);
-    const options = Object.entries(filtered).map(
-      ([value, label]) =>
-        ({
-          value,
-          label,
-        }) as Option
-    );
-    return options;
-  }, [showDataNotCollected]);
-
-  // disabled if HoH is selected
   const isHoH = value === RelationshipToHoH.SelfHeadOfHousehold;
-  const isDisabled = disabled || isHoH;
 
-  if (isHoH) {
+  const excludeHoh = variant === 'excludeHoh';
+
+  if (isHoH && excludeHoh) {
     return (
       <Typography variant='body2' sx={{ pl: 0.5 }}>
         {HmisEnums.RelationshipToHoH[value]}
       </Typography>
     );
   }
+
+  const options = excludeHoh ? relationshipOptionsNoHoh : relationshipOptions;
+
   return (
     <GenericSelect<Option, false, false>
-      options={relationshipToHohOptions}
-      disabled={isDisabled}
-      textInputProps={{
-        placeholder: isHoH
-          ? HmisEnums.RelationshipToHoH[value]
-          : 'Select relationship',
-      }}
-      value={
-        value && !isHoH
-          ? relationshipToHohOptions.find((el) => el.value === value) || null
-          : null
-      }
+      options={options}
+      textInputProps={{ placeholder: 'Select Relationship', ...textInputProps }}
+      value={options.find((el) => el.value === value) || null}
       size='small'
       renderOption={(props, option) => (
         <li {...props} key={option.value}>

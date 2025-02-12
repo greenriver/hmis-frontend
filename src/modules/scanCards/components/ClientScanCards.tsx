@@ -7,7 +7,7 @@ import {
 } from './ManageCardButtons';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import { lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import {
   GetClientScanCardCodesDocument,
@@ -72,7 +72,6 @@ const ClientScanCards = () => {
           columns={columns}
           pagePath='client.scanCardCodes'
           noData='No scan cards'
-          headerCellSx={() => ({ color: 'text.secondary' })}
           recordType='ScanCardCode'
           paginationItemName='scan card'
           showTopToolbar

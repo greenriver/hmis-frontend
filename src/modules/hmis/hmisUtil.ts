@@ -15,13 +15,12 @@ import {
 } from 'date-fns';
 import { capitalize, find, isNil, sortBy, startCase } from 'lodash-es';
 
+import { ClientAssessmentType } from '../assessments/assessmentTypes';
 import {
   ClientNameDobVeteranFields,
   hasMeaningfulValue,
 } from '../form/util/formUtil';
 
-import { DashboardEnrollment } from './types';
-import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
 import { ColumnDef } from '@/components/elements/table/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
@@ -34,20 +33,18 @@ import {
   ClientImageFieldsFragment,
   ClientNameDobVetFragment,
   ClientNameFragment,
+  ClientSearchResultFieldsFragment,
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   DataCollectedAbout,
-  DataCollectionFeatureFieldsFragment,
   DisplayHook,
   EnrollmentFieldsFragment,
   EnrollmentOccurrencePointFieldsFragment,
-  EnrollmentSummaryFieldsFragment,
   EventFieldsFragment,
   HouseholdClientFieldsFragment,
   NoYes,
   NoYesMissing,
   NoYesReasonsForMissingData,
-  OccurrencePointFormFieldsFragment,
   ProjectType,
   Race,
   RelationshipToHoH,
@@ -233,8 +230,11 @@ export const formatRelativeDate = (date: Date): string => {
   return formatRelativeDateTime(date);
 };
 
-export const formatCurrency = (number?: number | null) => {
-  if (isNil(number)) return number;
+export const formatCurrency = (value?: any) => {
+  if (isNil(value)) return value;
+  const number = parseFloat(value);
+  if (isNaN(number)) return value.toString();
+
   return currencyFormatter.format(number);
 };
 
@@ -312,16 +312,15 @@ export const lastUpdatedBy = (
   return dateString;
 };
 
-export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
+export const pronouns = (
+  client: ClientSearchResultFieldsFragment | ClientFieldsFragment
+): React.ReactNode =>
   client.pronouns && client.pronouns.length > 0
     ? client.pronouns.join(', ')
     : null;
 
 export const entryExitRange = (
-  enrollment:
-    | EnrollmentFieldsFragment
-    | HouseholdClientFieldsFragment['enrollment']
-    | EnrollmentSummaryFieldsFragment,
+  enrollment: Pick<EnrollmentFieldsFragment, 'entryDate' | 'exitDate'>,
   endPlaceholder?: string
 ) => {
   return parseAndFormatDateRange(
@@ -379,12 +378,18 @@ export const formRoleDisplay = (assessment: AssessmentFieldsFragment) => {
   return defaultTitle;
 };
 
-export const assessmentDescription = (assessment: ClientAssessmentType) => {
+export const assessmentDescription = (
+  assessment: ClientAssessmentType | AssessmentFieldsFragment
+) => {
   const prefix = formRoleDisplay(assessment);
-  const name = prefix ? `${prefix} assessment` : 'Assessment';
-  return `${name} at ${assessment.enrollment.projectName} on ${
-    parseAndFormatDate(assessment.assessmentDate) || 'unknown date'
-  }`;
+  const name = prefix ? `${prefix} assessment ` : 'Assessment ';
+  // `enrollment` may not be present in the type (eg. if we are on the Enrollment Assessments page)
+  const atProject =
+    'enrollment' in assessment && !!assessment.enrollment?.projectName
+      ? `at ${assessment.enrollment.projectName} `
+      : '';
+  const onDate = `on ${parseAndFormatDate(assessment.assessmentDate) || 'unknown date'}`;
+  return name + atProject + onDate;
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
@@ -414,16 +419,32 @@ export const eventReferralResult = (e: EventFieldsFragment) => {
   return result;
 };
 
-export const sortHouseholdMembers = (
-  members?: HouseholdClientFieldsFragment[],
+const hohPriorityMapping: Record<RelationshipToHoH, number> = {
+  [RelationshipToHoH.SelfHeadOfHousehold]: 0,
+  [RelationshipToHoH.SpouseOrPartner]: 1,
+  [RelationshipToHoH.Child]: 2,
+  [RelationshipToHoH.OtherRelative]: 3,
+  [RelationshipToHoH.UnrelatedHouseholdMember]: 4,
+  [RelationshipToHoH.DataNotCollected]: 5,
+  [RelationshipToHoH.Invalid]: 6,
+};
+
+type GenericHouseholdClient = Pick<
+  HouseholdClientFieldsFragment,
+  'relationshipToHoH'
+> & {
+  client: Pick<HouseholdClientFieldsFragment['client'], 'id'>;
+  enrollment: Pick<HouseholdClientFieldsFragment['enrollment'], 'id'>;
+};
+export const sortHouseholdMembers = <T extends GenericHouseholdClient>(
+  members?: T[],
   activeEnrollmentId?: string
-) => {
-  const sorted = sortBy(members || [], [
+): T[] => {
+  return sortBy(members || [], [
     (c) => (c.enrollment.id === activeEnrollmentId ? -1 : 1),
-    (c) => c.client.lastName,
-    (c) => c.client.id,
+    (c) => hohPriorityMapping[c.relationshipToHoH], // HoH > spouse > child > relative > unrelated
+    (c) => c.client.id, // deterministic tie-breaker
   ]);
-  return sorted;
 };
 
 export const getSchemaForType = (type: string) => {
@@ -458,6 +479,7 @@ export const customDataElementValue = (
     val.valueJson,
     val.valueString,
     val.valueText,
+    val.valueFile,
   ].filter((e) => !isNil(e))[0];
 };
 
@@ -476,8 +498,8 @@ export const customDataElementValueForKey = (
 };
 
 export const serviceTypeSummary = (st: ServiceTypeFieldsFragment) => {
-  if (st.category === st.name) return st.name;
-  return [st.category, st.name].join(': ');
+  if (st.serviceCategory.name === st.name) return st.name;
+  return [st.serviceCategory.name, st.name].join(': ');
 };
 
 export const customDataElementValueAsString = (
@@ -563,29 +585,6 @@ export const evaluateDataCollectedAbout = (
   }
 };
 
-export const occurrencePointCollectedForEnrollment = (
-  occurrencePoint: OccurrencePointFormFieldsFragment,
-  enrollment: DashboardEnrollment
-) => {
-  return evaluateDataCollectedAbout(
-    occurrencePoint.dataCollectedAbout,
-    enrollment.client,
-    enrollment.relationshipToHoH
-  );
-};
-
-export const featureEnabledForEnrollment = (
-  feature: DataCollectionFeatureFieldsFragment,
-  client: ClientNameDobVeteranFields,
-  relationshipToHoH: RelationshipToHoH
-) => {
-  return evaluateDataCollectedAbout(
-    feature.dataCollectedAbout,
-    client,
-    relationshipToHoH
-  );
-};
-
 export const relationshipToHohForDisplay = (
   relationship: RelationshipToHoH,
   hideDataNotCollectedAndInvalid: boolean
@@ -660,4 +659,33 @@ export const raceEthnicityDisplayString = (race?: Race[]) => {
   if (!race) return;
 
   return race.map((r) => HmisEnums.Race[r]).join(', ');
+};
+
+export function stringifyArray(arr: string[]) {
+  if (arr.length === 1) return arr[0];
+  const firsts = arr.slice(0, arr.length - 1);
+  const last = arr[arr.length - 1];
+  const finalJoiner = arr.length === 2 ? ' and ' : ', and '; // oxford comma
+  return firsts.join(', ') + finalJoiner + last;
+}
+
+export const stringifyHousehold = (
+  householdClients: HouseholdClientFieldsFragment[]
+) => {
+  return stringifyArray(
+    householdClients.map((hc) => clientBriefName(hc.client))
+  );
+};
+
+export const findHohOrRep = (
+  householdClients: HouseholdClientFieldsFragment[]
+) => {
+  // It's invalid, but possible in case of bad data, to have no HoH. If so, return the first household member
+  const sorted = sortHouseholdMembers(householdClients);
+  return (
+    sorted.find(
+      ({ relationshipToHoH }) =>
+        relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+    ) || sorted[0]
+  );
 };

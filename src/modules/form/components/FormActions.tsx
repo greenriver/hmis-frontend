@@ -24,7 +24,7 @@ type ButtonConfig = {
   action: FormActionTypes;
   onClick?: VoidFunction;
   centerAlign?: boolean;
-  buttonProps?: Omit<ButtonProps, 'ref'>;
+  buttonProps?: Omit<ButtonProps, 'ref' | `on${string}`>;
   tooltip?: ReactNode;
 };
 

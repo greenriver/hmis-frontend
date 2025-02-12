@@ -3,19 +3,21 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
 import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
+import { ColumnDef } from '@/components/elements/table/types';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import {
-  ClientFieldsFragment,
+  ClientSearchResultFieldsFragment,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
 
 interface Args {
   householdId?: string;
-  projectId: string;
+  project: ManageHouseholdProject;
 }
 
 export default function useAddToHouseholdColumns({
   householdId: initialHouseholdId,
-  projectId,
+  project,
 }: Args) {
   const [householdId, setHouseholdId] = useState(initialHouseholdId);
   const [getHousehold, { data, loading, error }] = useGetHouseholdLazyQuery({
@@ -59,30 +61,41 @@ export default function useAddToHouseholdColumns({
     [getHousehold]
   );
 
-  const addToEnrollmentColumns = useMemo(() => {
+  const addToEnrollmentColumns: ColumnDef<
+    ClientSearchResultFieldsFragment | RecentHouseholdMember
+  >[] = useMemo(() => {
     return [
       {
         header: '',
         key: 'add',
         width: '10%',
         minWidth: '180px',
-        render: (record: ClientFieldsFragment | RecentHouseholdMember) => {
+        render: (record) => {
           const client = isRecentHouseholdMember(record)
             ? record.client
             : record;
           return (
             <AddToHouseholdButton
               client={client}
-              householdId={householdId}
-              projectId={projectId}
+              project={project}
               isMember={currentMembersMap.has(client.id)}
               onSuccess={onSuccess}
+              household={data?.household || undefined}
+              // Disable button until `household` is fetched
+              disabled={loading && !!householdId && !data?.household}
             />
           );
         },
       },
     ];
-  }, [currentMembersMap, householdId, projectId, onSuccess]);
+  }, [
+    project,
+    currentMembersMap,
+    onSuccess,
+    data?.household,
+    loading,
+    householdId,
+  ]);
 
   if (error) throw error;
 

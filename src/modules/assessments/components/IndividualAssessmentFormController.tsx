@@ -69,6 +69,12 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
       onCompletedMutation,
     });
 
+  const showSaveWipButton = useMemo(() => {
+    if (!editingDefinition.supportsSaveInProgress) return false;
+
+    return !assessment || assessment.inProgress;
+  }, [assessment, editingDefinition.supportsSaveInProgress]);
+
   const FormActionProps = useMemo(() => {
     return {
       onDiscard: navigateToEnrollment,
@@ -80,25 +86,25 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
           action: FormActionTypes.Submit,
           buttonProps: { variant: 'contained' } as const,
         },
-        ...(assessment && !assessment.inProgress
-          ? []
-          : [
+        ...(showSaveWipButton
+          ? [
               {
                 id: 'saveDraft',
                 label: 'Save and finish later',
                 action: FormActionTypes.Save,
                 buttonProps: { variant: 'outlined' } as const,
               },
-            ]),
+            ]
+          : []),
         {
           id: 'discard',
           label: 'Cancel',
           action: FormActionTypes.Discard,
-          buttonProps: { variant: 'gray' } as const,
+          buttonProps: { variant: 'contained', color: 'grayscale' } as const,
         },
       ],
     };
-  }, [assessment, navigateToEnrollment]);
+  }, [navigateToEnrollment, showSaveWipButton]);
 
   return (
     <IndividualAssessment

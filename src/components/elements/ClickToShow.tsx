@@ -10,6 +10,8 @@ export interface Props extends TypographyProps {
   // Use these to control the component from without
   hide?: boolean | null;
   onToggle?: (val?: boolean) => any;
+  hiddenAriaLabel?: string;
+  shownAriaLabel?: string;
 }
 
 const ClickToShow: React.FC<Props> = ({
@@ -17,6 +19,8 @@ const ClickToShow: React.FC<Props> = ({
   text = 'Hidden',
   hide,
   onToggle: onToggleProp,
+  hiddenAriaLabel,
+  shownAriaLabel,
   ...props
 }) => {
   const [hiddenState, setHiddenState] = useState(true);
@@ -34,10 +38,19 @@ const ClickToShow: React.FC<Props> = ({
     if (!isNil(hide)) setHiddenState(!hide);
   }, [hide]);
 
+  const ariaLabel = useMemo(() => {
+    if (hidden && hiddenAriaLabel) return hiddenAriaLabel;
+    if (!hidden && shownAriaLabel) return shownAriaLabel;
+  }, [hiddenAriaLabel, shownAriaLabel, hidden]);
+
   return (
     <Button
       variant='text'
-      aria-label={text}
+      // Unintuitively, aria-live="off" means to announce changes only when this element has focus.
+      // (See https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+      // This prevents all hidden items in a column from announcing changes when the show/hide button in the column header is clicked.
+      aria-live='off'
+      aria-label={ariaLabel}
       sx={(theme) => ({
         textDecoration: 'none',
         userSelect: 'text',
@@ -50,6 +63,7 @@ const ClickToShow: React.FC<Props> = ({
       })}
       onClick={onToggle}
       size='small'
+      data-testid='clickToShow'
     >
       <Stack direction='row' alignItems='center' gap={0.8}>
         {hidden ? (

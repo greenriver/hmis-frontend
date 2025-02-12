@@ -16,8 +16,8 @@ query GetPickList(
   }
 }
 
-query GetFormDefinition($role: RecordFormRole!, $projectId: ID) {
-  recordFormDefinition(role: $role, projectId: $projectId) {
+query GetFormDefinition($role: RecordFormRole!, $projectId: ID, $id: ID) {
+  recordFormDefinition(role: $role, projectId: $projectId, id: $id) {
     ...FormDefinitionFields
   }
 }
@@ -92,6 +92,7 @@ query GetFormIdentifiers(
     nodes {
       id
       identifier
+      managedInVersionControl
       displayVersion {
         ...FormDefinitionMetadata
         system

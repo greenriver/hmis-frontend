@@ -272,6 +272,7 @@ export const HmisEnums = {
   CustomDataElementType: {
     boolean: 'boolean',
     date: 'date',
+    file: 'file',
     float: 'float',
     integer: 'integer',
     json: 'json',
@@ -914,6 +915,8 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   PickListType: {
+    ADMIN_AVAILABLE_UNITS_FOR_ENROLLMENT:
+      'Units available for the given Enrollment at the given project. Includes all available units at project even if they have a different type from what the household is currently occupying.',
     ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ALL_UNIT_TYPES: 'All unit types.',
@@ -924,7 +927,7 @@ export const HmisEnums = {
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS_FOR_ENROLLMENT:
-      'Units available for the given household at the given project',
+      'Units available for the given Enrollment at the given project. List is limited to units with the same unit type currently occupied by the household, if any.',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',
@@ -932,6 +935,7 @@ export const HmisEnums = {
     COC: 'COC',
     CONTINUUM_PROJECTS: 'Continuum Projects',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
+    CUSTOM_SERVICE_CATEGORIES: 'CUSTOM_SERVICE_CATEGORIES',
     DESTINATION: 'DESTINATION',
     ELIGIBLE_STAFF_ASSIGNMENT_USERS:
       'Current users who are eligible for staff assignment',

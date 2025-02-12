@@ -1,16 +1,24 @@
 import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
+import { HmisAuthContext } from '@/modules/auth/AuthContext';
 import { MockedProvider } from '@apollo/client/testing';
-import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { withThemeFromJSXProvider } from '@storybook/addon-themes';
 import en from 'date-fns/locale/en-US';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import theme from '../src/config/theme';
 import '../src/index.css';
-import { fakeEnrollment, RITA_ACKROYD } from '../src/test/__mocks__/requests';
+import {
+  AMERICAN_LAKE_HOUSE,
+  applicationUserMock,
+  fakeEnrollment,
+  RITA_ACKROYD,
+} from '../src/test/__mocks__/requests';
 import { RenderRouteWithOutletContext } from './components/RenderRouteWithOutletContext';
+import { ProjectDashboardContext } from '../src/modules/projects/components/ProjectDashboard';
 
 export const parameters = {
   layout: 'padded',
@@ -34,7 +42,7 @@ export const decorators = [
     // React Router decorator can optionally provide a dashboard context if `dashboardContext` is passed.
     // Caller can optionally specify the client/enrollemnt mocks that should be used in the context by
     // passing `client` or `enrollment` parameters.
-    const { dashboardContext, client, enrollment } = parameters;
+    const { dashboardContext, client, enrollment, project } = parameters;
     switch (dashboardContext) {
       case 'enrollment':
         return (
@@ -58,15 +66,36 @@ export const decorators = [
             {Story()}
           </RenderRouteWithOutletContext>
         );
+      case 'project':
+        return (
+          <RenderRouteWithOutletContext<ProjectDashboardContext>
+            context={{ project: project || AMERICAN_LAKE_HOUSE }}
+          >
+            {Story()}
+          </RenderRouteWithOutletContext>
+        );
       default:
         return <MemoryRouter>{Story()}</MemoryRouter>;
     }
   },
   (Story) => (
-    <ThemeProvider theme={theme}>
-      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en}>
-        {Story()}
-      </LocalizationProvider>
-    </ThemeProvider>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en}>
+      {Story()}
+    </LocalizationProvider>
   ),
+  (Story) => (
+    <HmisAuthContext.Provider value={{ user: applicationUserMock }}>
+      {Story()}
+    </HmisAuthContext.Provider>
+  ),
+  withThemeFromJSXProvider({
+    themes: {
+      // If we provide more than one theme here, a toolbar menu will appear in
+      // the Storybook UI to select among them
+      default: theme,
+    },
+    defaultTheme: 'default',
+    Provider: ThemeProvider,
+    GlobalStyles: CssBaseline,
+  }),
 ];

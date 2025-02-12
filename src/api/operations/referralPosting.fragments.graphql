@@ -81,9 +81,6 @@ fragment ReferralPostingDetailFields on ReferralPosting {
       ...ClientIdentificationFields
       veteranStatus
       gender
-      access {
-        ...ClientAccessFields
-      }
       externalIds {
         ...ClientIdentifierFields
       }

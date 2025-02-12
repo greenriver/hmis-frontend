@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogProps,
   DialogTitle,
+  Paper,
 } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -24,7 +25,6 @@ const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragment>[] = [
   },
   {
     header: 'Project',
-    linkTreatment: true,
     render: (e) => e.projectName,
   },
   {
@@ -58,28 +58,32 @@ const useEnrollmentSummaryDialog = ({
       return (
         <CommonDialog
           fullWidth
-          maxWidth='md'
+          maxWidth='lg'
           {...props}
           open={!!dialogOpen}
           onClose={closeDialog}
         >
           <DialogTitle>Open Enrollment Summary</DialogTitle>
           <DialogContent sx={{ my: 2 }}>
-            <GenericTable<EnrollmentSummaryFieldsFragment>
-              columns={baseColumns}
-              rows={enrollmentSummary}
-              rowLinkTo={(row) =>
-                row.canViewEnrollment && clientId
-                  ? generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
-                      enrollmentId: row.id,
-                      clientId,
-                    })
-                  : ''
-              }
-            />
+            <Paper>
+              <GenericTable<EnrollmentSummaryFieldsFragment>
+                columns={baseColumns}
+                rows={enrollmentSummary}
+                rowLinkTo={(row) =>
+                  row.canViewEnrollment && clientId
+                    ? generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
+                        enrollmentId: row.id,
+                        clientId,
+                      })
+                    : undefined
+                }
+                rowActionTitle='View Enrollment'
+                rowName={(row) => `Enrollment at ${row.projectName}`}
+              />
+            </Paper>
           </DialogContent>
           <DialogActions>
-            <Button variant='gray' onClick={closeDialog}>
+            <Button color='grayscale' onClick={closeDialog}>
               Close
             </Button>
           </DialogActions>

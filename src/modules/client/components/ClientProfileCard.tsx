@@ -14,15 +14,17 @@ import {
 } from '@mui/material';
 import { useCallback, useRef, useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import ClientAddress from './ClientAddress';
 import ClientCardImageElement from './ClientCardImageElement';
 import ClientContactPoint from './ClientContactPoint';
-import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
@@ -32,7 +34,6 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -360,14 +361,20 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
     variables: { id: client.id },
   });
 
-  const [canViewClientPhoto] = useHasRootPermissions(['canViewClientPhoto']);
-
-  const [canViewSsn] = useHasRootPermissions([
-    'canViewFullSsn',
-    'canViewPartialSsn',
-  ]);
+  const canViewClientPhoto = client.access.canViewClientPhoto;
+  const canViewSsn =
+    client.access.canViewFullSsn || client.access.canViewPartialSsn;
 
   const size = 175;
+
+  const navigate = useNavigate();
+  const handleOpenClientForm = useCallback(() => {
+    navigate(
+      generateSafePath(ClientDashboardRoutes.EDIT, { clientId: client.id })
+    );
+  }, [navigate, client.id]);
+
+  const isTiny = useIsMobile('sm');
 
   return (
     <Box>
@@ -380,9 +387,19 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant='h4'>{clientNameAllParts(client)}</Typography>
+            <Typography component='h1' variant='h4'>
+              {clientNameAllParts(client)}
+            </Typography>
           </Grid>
-          <Grid item xs={12} sx={{ display: 'flex', gap: 2 }}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: 'flex',
+              gap: 2,
+              flexDirection: isTiny ? 'column' : 'row',
+            }}
+          >
             {canViewClientPhoto &&
               (imageLoading ? (
                 <Skeleton
@@ -427,18 +444,17 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
                   id={client.id}
                   permissions='canEditClient'
                 >
-                  <ButtonLink
+                  <ClientForceRefetchButton
+                    clientId={client.id}
+                    onClick={handleOpenClientForm}
                     data-testid='editClientButton'
                     startIcon={<PersonIcon />}
                     variant='outlined'
                     color='primary'
                     fullWidth
-                    to={generateSafePath(ClientDashboardRoutes.EDIT, {
-                      clientId: client.id,
-                    })}
                   >
                     Update Client Details
-                  </ButtonLink>
+                  </ClientForceRefetchButton>
                 </ClientPermissionsFilter>
                 {client.dateUpdated && (
                   <Typography

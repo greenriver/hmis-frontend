@@ -73,7 +73,11 @@ const SsnInput = ({
           chars: 3,
           inputProps: {
             ...baseInputProps,
-            disabled: onlylast4 ? true : false,
+            disabled: baseInputProps.disabled || onlylast4 ? true : false,
+            inputProps: {
+              ...baseInputProps.inputProps,
+              'aria-label': ariaLabel + ' first 3 digits',
+            },
             placeholder: 'XXX',
             // Allow pasting into first box to fill the entire SSN
             onPaste: (event) => {
@@ -92,8 +96,12 @@ const SsnInput = ({
           chars: 2,
           inputProps: {
             ...baseInputProps,
-            disabled: onlylast4 ? true : false,
+            disabled: baseInputProps.disabled || onlylast4 ? true : false,
             placeholder: 'XX',
+            inputProps: {
+              ...baseInputProps.inputProps,
+              'aria-label': ariaLabel + ' middle 2 digits',
+            },
           },
         },
         {
@@ -102,6 +110,10 @@ const SsnInput = ({
           inputProps: {
             ...baseInputProps,
             placeholder: 'XXXX',
+            inputProps: {
+              ...baseInputProps.inputProps,
+              'aria-label': ariaLabel + ' last 4 digits',
+            },
           },
         },
       ]}
@@ -123,6 +135,7 @@ const SsnInput = ({
           sx={{ maxWidth, ...sx }}
           label={label}
           helperText={helperText}
+          LabelProps={{ disabled: baseInputProps.disabled }}
         >
           <Box
             sx={{

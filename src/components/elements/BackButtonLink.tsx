@@ -5,7 +5,8 @@ import { BackIcon } from './SemanticIcons';
 const BackButtonLink = forwardRef<ButtonLinkProps, any>(({ ...props }, ref) => (
   <ButtonLink
     startIcon={<BackIcon />}
-    variant='gray'
+    variant='contained'
+    color='grayscale'
     size='small'
     {...props}
     sx={{ width: 'fit-content', ...props.sx }}

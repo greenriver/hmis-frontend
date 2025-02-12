@@ -1,3 +1,4 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   CircularProgress,
@@ -8,11 +9,10 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import RelationshipToHoHInput from './elements/RelationshipToHoHInput';
-import RemoveFromHouseholdButton from './elements/RemoveFromHouseholdButton';
 import { HOUSEHOLD_MEMBER_COLUMNS } from './HouseholdMemberTable';
 
+import { SplitIcon } from '@/components/elements/SemanticIcons';
 import GenericTable from '@/components/elements/table/GenericTable';
-import usePrevious from '@/hooks/usePrevious';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
@@ -20,17 +20,24 @@ import {
   ErrorState,
   partitionValidations,
 } from '@/modules/errors/util';
-import { sortHouseholdMembers, clientBriefName } from '@/modules/hmis/hmisUtil';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import SplitHouseholdDialog from '@/modules/household/components/householdActions/SplitHouseholdDialog';
+import {
+  getDeleteEnrollmentDisabledAttrs,
+  getSplitDisabledAttrs,
+} from '@/modules/household/components/householdActions/util';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
   RelationshipToHoH,
+  useDeleteEnrollmentMutation,
   useUpdateRelationshipToHoHMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
   household: HouseholdFieldsFragment;
-  projectId: string;
+  project: ManageHouseholdProject;
   currentDashboardEnrollmentId?: string;
   refetchHousehold: any;
   loading?: boolean;
@@ -38,6 +45,7 @@ interface Props {
 
 const EditHouseholdMemberTable = ({
   household,
+  project,
   refetchHousehold,
   currentDashboardEnrollmentId,
   loading,
@@ -60,8 +68,6 @@ const EditHouseholdMemberTable = ({
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
     ) || null
   );
-  const previousMembers =
-    usePrevious<HouseholdClientFieldsFragment[]>(currentMembers);
 
   // client to highlight for relationship input
   const [highlight, setHighlight] = useState<string[]>([]);
@@ -109,21 +115,6 @@ const EditHouseholdMemberTable = ({
     });
   }, [currentMembers]);
 
-  // If new members have beed added highlight their relationship field if it's DNC
-  useEffect(() => {
-    if (!previousMembers || !currentMembers) return;
-    if (previousMembers.length < currentMembers.length) {
-      const old = new Set(previousMembers.map((m) => m.client.id));
-      const newMembers = currentMembers
-        .filter(
-          (hc) => hc.relationshipToHoH === RelationshipToHoH.DataNotCollected
-        )
-        .map((m) => m.client.id)
-        .filter((id) => !old.has(id));
-      setHighlight((old) => [...old, ...newMembers]);
-    }
-  }, [previousMembers, currentMembers]);
-
   const onChangeHoH = useCallback(
     (hc: HouseholdClientFieldsFragment, confirmed = false) => {
       setProposedHoH(hc);
@@ -144,6 +135,18 @@ const EditHouseholdMemberTable = ({
     errorState,
     includeErrors: true,
   });
+
+  const [splitInitiator, setSplitInitiator] =
+    useState<HouseholdClientFieldsFragment | null>(null);
+
+  const canSplitHouseholds = project.access.canSplitHouseholds;
+
+  const [deleteEnrollment, { loading: deleteLoading, error: deleteError }] =
+    useDeleteEnrollmentMutation({
+      onCompleted: () => {
+        refetchHousehold();
+      },
+    });
 
   const columns = useMemo(() => {
     return [
@@ -198,6 +201,7 @@ const EditHouseholdMemberTable = ({
         key: 'relationship',
         render: (hc: HouseholdClientFieldsFragment) => (
           <RelationshipToHoHInput
+            variant='excludeHoh'
             enrollmentId={hc.enrollment.id}
             enrollmentLockVersion={hc.enrollment.lockVersion}
             relationshipToHoH={hc.relationshipToHoH}
@@ -216,22 +220,6 @@ const EditHouseholdMemberTable = ({
         ),
       },
       HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(currentMembers),
-      {
-        header: '',
-        key: 'action',
-        width: '1%',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          // No extra perm check is required, because this button only allows removing WIP Enrollments,
-          // which only requires Can Edit Enrollments, which is already required for this page
-          <RemoveFromHouseholdButton
-            currentDashboardEnrollmentId={currentDashboardEnrollmentId}
-            householdClient={hc}
-            onSuccess={refetchHousehold}
-            householdSize={currentMembers.length}
-            ariaLabel={`Remove ${clientBriefName(hc.client)}`}
-          />
-        ),
-      },
     ];
   }, [
     currentDashboardEnrollmentId,
@@ -241,21 +229,78 @@ const EditHouseholdMemberTable = ({
     proposedHoH,
     onChangeHoH,
     highlight,
-    refetchHousehold,
   ]);
+
+  const getRowSecondaryActionConfigs = useCallback(
+    (row: HouseholdClientFieldsFragment) => {
+      return [
+        {
+          // No extra perm check is required for Delete, because this action only allows removing WIP Enrollments,
+          // which only requires Can Edit Enrollments, which is already required for this page
+          key: 'remove',
+          title: 'Delete Enrollment',
+          Icon: DeleteIcon,
+          ariaLabel: `Delete ${clientBriefName(row.client)}'s enrollment`,
+          onClick: () => {
+            deleteEnrollment({
+              variables: {
+                input: {
+                  id: row.enrollment.id,
+                },
+              },
+            });
+          },
+          ...getDeleteEnrollmentDisabledAttrs({
+            loading: loading || deleteLoading,
+            currentDashboardEnrollmentId,
+            householdClient: row,
+            householdSize: currentMembers.length,
+          }),
+        },
+        {
+          key: 'split',
+          title: 'Split → New Household',
+          Icon: SplitIcon,
+          onClick: () => setSplitInitiator(row),
+          ariaLabel: `Split ${clientBriefName(row.client)} to new household`,
+          ...getSplitDisabledAttrs({
+            canSplitHouseholds,
+            loading: loading || deleteLoading,
+            householdClient: row,
+            householdSize: currentMembers.length,
+          }),
+        },
+      ];
+    },
+    [
+      canSplitHouseholds,
+      currentDashboardEnrollmentId,
+      currentMembers.length,
+      deleteEnrollment,
+      deleteLoading,
+      loading,
+    ]
+  );
+
+  if (deleteError) throw deleteError;
 
   return (
     <>
       <SsnDobShowContextProvider>
         <GenericTable<HouseholdClientFieldsFragment>
           rows={currentMembers}
+          rowName={(row) => clientBriefName(row.client)}
+          rowSecondaryActionConfigs={getRowSecondaryActionConfigs}
           columns={columns}
           rowSx={() => ({
             // HoH indicator column
             'td:nth-of-type(1)': { px: 0 },
           })}
-          loading={loading}
+          loading={loading || deleteLoading}
           loadingVariant='linear'
+          tableProps={{
+            'aria-label': 'Manage Household',
+          }}
         />
       </SsnDobShowContextProvider>
       {renderValidationDialog({
@@ -267,6 +312,15 @@ const EditHouseholdMemberTable = ({
         },
         loading: hohChangeLoading,
       })}
+      {!!splitInitiator && (
+        <SplitHouseholdDialog
+          donorHousehold={household}
+          initiator={splitInitiator}
+          open={!!splitInitiator}
+          onClose={() => setSplitInitiator(null)}
+          project={project}
+        />
+      )}
     </>
   );
 };

@@ -1,0 +1,43 @@
+import { Box, Grid, Stack } from '@mui/material';
+
+import ClientCustomDataElementsCard from '@/modules/client/components/ClientCustomDataElementsCard';
+import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
+import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
+
+import { ClientAlertProfileWrapper } from '@/modules/clientAlerts/components/ClientAlertWrappers';
+import { ClientFieldsFragment } from '@/types/gqlTypes';
+
+export interface Props {
+  client: ClientFieldsFragment;
+}
+
+const ClientProfileLayout: React.FC<Props> = ({ client }) => {
+  const { canViewEnrollmentDetails, canViewClientAlerts } = client.access;
+  const hasRightColumn = canViewEnrollmentDetails || canViewClientAlerts;
+  return (
+    <Box data-testid='clientProfile'>
+      <Grid container spacing={2}>
+        <Grid item xs={12} lg={hasRightColumn ? 6 : 8}>
+          <Stack gap={2}>
+            <ClientProfileCard client={client} />
+            <ClientCustomDataElementsCard client={client} />
+          </Stack>
+        </Grid>
+        {hasRightColumn && (
+          <Grid item xs={12} lg={6}>
+            <Stack gap={2}>
+              {canViewClientAlerts && (
+                <ClientAlertProfileWrapper client={client} />
+              )}
+              {canViewEnrollmentDetails && (
+                <ClientEnrollmentCard client={client} />
+              )}
+            </Stack>
+          </Grid>
+        )}
+      </Grid>
+    </Box>
+  );
+};
+
+export default ClientProfileLayout;

@@ -1,45 +1,38 @@
+# Permissions to resolve globally on the User.
+#
+# These should be interpreted as "user can view/edit *ANY* <entity>".
+#   For example: it will resolve true for 'canEditEnrollments' if the user can edit ANY enrollments.
+#   For example: it will resolve true for 'canViewDob' if the user can view dob on ANY clients.
 fragment RootPermissions on QueryAccess {
   id
+  # Admin permissions:
   canAdministerHmis
-  canImpersonateUsers
-  canAuditUsers
-  canEditClients
-  canViewClients
-  canViewClientName
-  canDeleteClients
-  canEditOrganization
-  canDeleteOrganization
-  canViewDob
-  canViewFullSsn
-  canDeleteProject
-  canViewPartialSsn
-  canViewClientPhoto
-  canEnrollClients
-  canEditEnrollments
-  canViewMyDashboard
-  canViewEnrollmentDetails
-  canViewOpenEnrollmentSummary
-  canDeleteEnrollments
-  canDeleteAssessments
-  canEditProjectDetails
-  canManageAnyClientFiles
-  canManageOwnClientFiles
-  canViewAnyConfidentialClientFiles
-  canViewAnyNonconfidentialClientFiles
-  canManageInventory
-  canManageDeniedReferrals
-  canManageIncomingReferrals
-  canManageOutgoingReferrals
-  canMergeClients
-  canTransferEnrollments
-  canSplitHouseholds
-  canConfigureDataCollection
   canManageForms
   canAdministrateConfig
+  canConfigureDataCollection
+  canImpersonateUsers
+  canAuditUsers
+  canManageDeniedReferrals
+  canMergeClients # provides access to admin client merge
+  canTransferEnrollments
+
+  # Root Client permissions:
+  canViewClients
+  canEditClients # globally, determines whether user can add new clients
+  canViewDob # globally, determines whether to show col header as "DOB" or "Age"
   canViewClientAlerts
-  canManageExternalFormSubmissions
+
+  # Application permissions:
+  canViewMyDashboard
+
+  # Root Project permissions:
+  canEditOrganization # globally, determines whether user can create organization
+  canEditProjectDetails # globally, determines whether user can create project
 }
 
+# Permissions on Client to determine what to show on the Client Dashboard
+#
+# Note: This gets resolved on multiple fragments, it could be further split out to resolve only what we need (to improve perf)
 fragment ClientAccessFields on ClientAccess {
   id
   canEditClient
@@ -48,21 +41,21 @@ fragment ClientAccessFields on ClientAccess {
   canViewFullSsn
   canViewPartialSsn
   canViewClientName
-  canEditEnrollments
-  canDeleteEnrollments
+  canViewClientPhoto
+  canViewClientAlerts
+  canManageClientAlerts
+
+  # Perms for determining which tabs to show on Client dashboard:
   canViewEnrollmentDetails
-  canDeleteAssessments
-  canManageAnyClientFiles
-  canManageOwnClientFiles
-  canViewAnyConfidentialClientFiles
-  canViewAnyNonconfidentialClientFiles
-  canUploadClientFiles
-  canViewAnyFiles
   canAuditClients
   canManageScanCards
   canMergeClients
-  canViewClientAlerts
-  canManageClientAlerts
+  canViewAnyFiles
+
+  # The below perms could be pulled out and fetched on Client Files tab, for perf improvement
+  canManageAnyClientFiles
+  canManageOwnClientFiles
+  canUploadClientFiles
 }
 
 fragment EnrollmentAccessFields on EnrollmentAccess {
@@ -70,6 +63,7 @@ fragment EnrollmentAccessFields on EnrollmentAccess {
   canEditEnrollments
   canDeleteEnrollments
   canAuditEnrollments
+  canViewEnrollmentLocationMap
 }
 
 fragment AssessmentAccessFields on AssessmentAccess {
@@ -81,21 +75,17 @@ fragment AssessmentAccessFields on AssessmentAccess {
 
 fragment ProjectAccessFields on ProjectAccess {
   id
-  canViewDob
-  canViewFullSsn
   canDeleteProject
-  canViewPartialSsn
   canEnrollClients
   canEditEnrollments
   canViewEnrollmentDetails
-  canDeleteEnrollments
-  canDeleteAssessments
   canEditProjectDetails
-  canManageInventory
-  canManageDeniedReferrals
+  canViewUnits
+  canManageUnits
   canManageIncomingReferrals
   canManageOutgoingReferrals
   canManageExternalFormSubmissions
+  canSplitHouseholds
 }
 
 fragment OrganizationAccessFields on OrganizationAccess {

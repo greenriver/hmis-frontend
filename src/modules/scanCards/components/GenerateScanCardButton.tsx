@@ -130,7 +130,7 @@ const GenerateScanCardButton: React.FC<{
           </DialogContent>
         )}
         <DialogActions sx={{ justifyContent: 'center' }}>
-          <Button onClick={closeDialog} variant='gray'>
+          <Button onClick={closeDialog} color='grayscale'>
             Close
           </Button>
         </DialogActions>

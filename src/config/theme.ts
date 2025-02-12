@@ -1,19 +1,12 @@
-import { Theme } from '@mui/material';
+import { Color, SxProps, Theme } from '@mui/material';
 import {
   PaletteColor,
   SimplePaletteColorOptions,
   ThemeOptions,
+  alpha,
   createTheme,
 } from '@mui/material/styles';
-import { deepmerge } from '@mui/utils';
-
-// to have typed safe, Button need to provide extra type that can be augmented
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    gray: true;
-    transparent: true;
-  }
-}
+import { deepmerge, visuallyHidden } from '@mui/utils';
 
 declare module '@mui/material/Alert' {
   interface AlertPropsVariantOverrides {
@@ -55,17 +48,25 @@ declare module '@mui/material/styles' {
       icon?: string;
     };
   }
+  interface GrayscalePaletteColor
+    extends PaletteColor,
+      Pick<Color, 300 | 200 | 100> {
+    tint: string;
+  }
+
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
+    grayscale: GrayscalePaletteColor;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
+    grayscale: SimplePaletteColorOptions & GrayscalePaletteColor;
   }
 }
 
@@ -73,6 +74,18 @@ declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     body3: true;
     cardTitle: true;
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    grayscale: true;
+  }
+}
+
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsColorOverrides {
+    grayscale: true;
   }
 }
 
@@ -126,9 +139,24 @@ export const baseThemeDef: ThemeOptions = {
     },
     links: '#1976D2',
     activeStatus: '#75559F',
+    grayscale: {
+      main: '#6E6E6E',
+      dark: '#4D4D4D',
+      light: '#8b8b8b',
+      contrastText: '#fff',
+      tint: '#F3F3F3',
+      300: alpha('#6E6E6E', 0.3),
+      200: alpha('#6E6E6E', 0.12),
+      100: alpha('#6E6E6E', 0.08),
+    },
   },
 };
 
+const outlineStyles = {
+  outlineColor: '-webkit-focus-ring-color',
+  outlineWidth: '2px',
+  outlineStyle: 'auto',
+};
 // Create theme options to use for composition
 // See: https://mui.com/material-ui/customization/theming/#createtheme-options-args-theme
 const createThemeOptions = (theme: Theme) => ({
@@ -193,6 +221,11 @@ const createThemeOptions = (theme: Theme) => ({
   },
 
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        '&.Mui-focusVisible': outlineStyles,
+      },
+    },
     MuiTypography: {
       styleOverrides: {
         h3: {
@@ -236,6 +269,16 @@ const createThemeOptions = (theme: Theme) => ({
         }),
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          '&.Mui-focusVisible': {
+            outlineOffset: 0,
+            backgroundColor: theme.palette.grayscale[200],
+          },
+        }),
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         sizeSmall: {
@@ -243,8 +286,7 @@ const createThemeOptions = (theme: Theme) => ({
         },
         root: theme.unstable_sx({
           '&.Mui-disabled': {
-            color: 'red',
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.grayscale.tint,
           },
         }),
         input: {
@@ -283,9 +325,7 @@ const createThemeOptions = (theme: Theme) => ({
         root: {
           whiteSpace: 'nowrap',
           '&.Mui-focusVisible': {
-            outlineColor: '-webkit-focus-ring-color',
-            outlineWidth: '2px',
-            outlineStyle: 'auto',
+            ...outlineStyles,
             outlineOffset: '4px',
           },
         },
@@ -318,7 +358,7 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         switchBase: {
           '&.Mui-focusVisible': {
-            outline: '2px solid -webkit-focus-ring-color',
+            ...outlineStyles,
             outlineOffset: '-2px',
           },
         },
@@ -418,19 +458,34 @@ const createThemeOptions = (theme: Theme) => ({
       },
       variants: [
         {
-          props: { variant: 'gray' },
-          style: {
-            backgroundColor: '#EDEDED',
-          },
+          // Special styles for grayscale button
+          props: { color: 'grayscale' },
+          style: theme.unstable_sx({
+            color: 'text.primary',
+            '&:not(:disabled) .MuiButton-icon': {
+              color: theme.palette.grayscale.main,
+            },
+            '&.MuiButton-contained': {
+              backgroundColor: theme.palette.grayscale[100],
+              '&:hover': {
+                backgroundColor: theme.palette.grayscale[200],
+              },
+            },
+            '&.MuiButton-text:hover': {
+              backgroundColor: theme.palette.grayscale[100],
+            },
+            '&.MuiButton-outlined': {
+              borderColor: theme.palette.grayscale[300],
+            },
+          }),
         },
       ],
       styleOverrides: {
         root: {
           fontWeight: 600,
         },
-        outlined: {
-          backgroundColor: theme.palette.background.paper,
-        },
+        // Give 'text' variant Buttons the same horiztonal padding as outlined
+        text: theme.unstable_sx({ px: 2 }),
       },
     },
     MuiAutocomplete: {
@@ -466,11 +521,6 @@ const createThemeOptions = (theme: Theme) => ({
         }),
       },
     },
-    // MuiDialogContent: {
-    //   styleOverrides: {
-    //     root: theme.unstable_sx({}),
-    //   },
-    // },
     MuiDialogActions: {
       styleOverrides: {
         root: theme.unstable_sx({
@@ -512,3 +562,10 @@ export const createFullTheme = (options?: ThemeOptions) => {
 
 // Export default theme with no overlay options
 export default createFullTheme();
+
+// MUI's visuallyHidden sometimes takes up space and otherwise causes visual bugs,
+// so we override it here with our own version that sets position to `fixed`
+export const customVisuallyHidden: SxProps = {
+  ...visuallyHidden,
+  position: 'fixed',
+};

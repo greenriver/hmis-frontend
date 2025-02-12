@@ -104,7 +104,7 @@ export const useProjectDashboardNavItems = (
             id: 'units',
             title: 'Units',
             path: ProjectDashboardRoutes.UNITS,
-            permissions: ['canManageInventory'],
+            permissions: ['canViewUnits'],
           },
           {
             id: 'inventory',

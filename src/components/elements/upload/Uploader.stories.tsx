@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import { Meta, StoryObj } from '@storybook/react';
 
 import MOCK_IMAGE from './MOCK_IMAGE';
-import Uploader from './UploaderBase';
+import Uploader from './Uploader';
 
 import { createDirectUploadMock, getFileMock } from '@/test/__mocks__/requests';
 
@@ -18,7 +18,7 @@ export default {
     <>
       <Uploader
         {...args}
-        onUpload={async (upload, file) => {
+        onUpload={(upload, file) => {
           const targetElem = document.getElementById('result');
           if (targetElem)
             targetElem.innerHTML = JSON.stringify({ upload, file }, null, 2);

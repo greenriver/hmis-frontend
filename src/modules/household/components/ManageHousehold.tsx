@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -10,42 +10,51 @@ import AddNewClientButton from './elements/AddNewClientButton';
 import { CommonCard } from '@/components/elements/CommonCard';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
+import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
-import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import AssociatedHouseholdMembers, {
-  householdMemberColumns,
-} from '@/modules/household/components/AssociatedHouseholdMembers';
+import AssociatedHouseholdMembers from '@/modules/household/components/AssociatedHouseholdMembers';
 import { RecentHouseholdMember } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import {
-  ClientFieldsFragment,
   ClientSearchInput,
+  ClientSearchResultFieldsFragment,
   ClientSortOption,
   EnrollmentFieldsFragment,
   ExternalIdentifierType,
+  ProjectAccessFieldsFragment,
+  ProjectAllFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
 
+export type ManageHouseholdProject = Pick<
+  ProjectAllFieldsFragment,
+  'id' | 'projectName'
+> & {
+  access: Pick<ProjectAccessFieldsFragment, 'canSplitHouseholds'>;
+};
+
 interface Props {
   householdId?: string;
-  projectId: string;
+  project: ManageHouseholdProject;
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
 }
 
 const ManageHousehold = ({
   householdId: initialHouseholdId,
-  projectId,
+  project,
   BackButton,
   renderBackButton,
 }: Props) => {
@@ -64,7 +73,7 @@ const ManageHousehold = ({
     householdId,
   } = useAddToHouseholdColumns({
     householdId: initialHouseholdId,
-    projectId,
+    project,
   });
 
   // Fetch members to show in "previously associated" table
@@ -89,24 +98,25 @@ const ManageHousehold = ({
   useScrollToHash(loading || recentMembersLoading);
   const isMobile = useIsMobile();
 
-  const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] =
-    useMemo(() => {
-      const defaults = [...householdMemberColumns];
-      if (isMobile) {
-        // On mobile, show enrollment button right next to the client name so user
-        // doesn't have to scroll to the right.
-        defaults.splice(1, 0, ...addToEnrollmentColumns);
-      } else {
-        defaults.push(...addToEnrollmentColumns);
-      }
-      if (globalFeatureFlags?.mciId) {
-        return [
-          externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
-          ...defaults,
-        ];
-      }
-      return defaults;
-    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
+  const columns = useMemo(() => {
+    const defaults: ColumnDef<
+      ClientSearchResultFieldsFragment | RecentHouseholdMember
+    >[] = [CLIENT_COLUMNS.name, CLIENT_COLUMNS.dobAge];
+    if (isMobile) {
+      // On mobile, show enrollment button right next to the client name so user
+      // doesn't have to scroll to the right.
+      defaults.splice(1, 0, ...addToEnrollmentColumns);
+    } else {
+      defaults.push(...addToEnrollmentColumns);
+    }
+    if (globalFeatureFlags?.mciId) {
+      return [
+        externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
+        ...defaults,
+      ];
+    }
+    return defaults;
+  }, [addToEnrollmentColumns, isMobile, globalFeatureFlags?.mciId]);
 
   const filters = useFilters({
     type: 'ClientFilterOptions',
@@ -149,7 +159,7 @@ const ManageHousehold = ({
             currentDashboardEnrollmentId={currentDashboardEnrollmentId}
             refetchHousehold={refetchHousehold}
             loading={loading}
-            projectId={projectId}
+            project={project}
           />
         </TitleCard>
       )}
@@ -184,7 +194,7 @@ const ManageHousehold = ({
               {hasSearched && (
                 <RootPermissionsFilter permissions='canEditClients'>
                   <AddNewClientButton
-                    projectId={projectId}
+                    projectId={project.id}
                     householdId={householdId}
                     onCompleted={handleNewClientAdded}
                   />
@@ -195,21 +205,29 @@ const ManageHousehold = ({
 
           {searchInput && (
             <SsnDobShowContextProvider>
-              <GenericTableWithData<
-                SearchClientsQuery,
-                SearchClientsQueryVariables,
-                ClientFieldsFragment
-              >
-                queryVariables={{ input: searchInput }}
-                queryDocument={SearchClientsDocument}
-                columns={columns}
-                pagePath='clientSearch'
-                fetchPolicy='cache-and-network'
-                filters={filters}
-                recordType='Client'
-                defaultSortOption={ClientSortOption.BestMatch}
-                onCompleted={() => setHasSearched(true)}
-              />
+              <Paper>
+                <GenericTableWithData<
+                  SearchClientsQuery,
+                  SearchClientsQueryVariables,
+                  ClientSearchResultFieldsFragment
+                >
+                  queryVariables={{ input: searchInput }}
+                  queryDocument={SearchClientsDocument}
+                  columns={columns}
+                  pagePath='clientSearch'
+                  fetchPolicy='cache-and-network'
+                  filters={filters}
+                  recordType='Client'
+                  defaultSortOption={ClientSortOption.BestMatch}
+                  onCompleted={() => setHasSearched(true)}
+                  rowSecondaryActionConfigs={(row) => [
+                    getViewClientMenuItem(row),
+                  ]}
+                  tableProps={{
+                    'aria-label': 'Search results',
+                  }}
+                />
+              </Paper>
             </SsnDobShowContextProvider>
           )}
         </Stack>

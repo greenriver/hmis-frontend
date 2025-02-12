@@ -1,10 +1,11 @@
-import { Button, Chip, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
 import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import ExternalSubmissionsViewModal from '@/modules/projects/components/ExternalSubmissionsViewModal';
@@ -64,7 +65,6 @@ const ProjectExternalSubmissionsTable = ({
         },
         {
           header: 'Status',
-          linkTreatment: false,
           render: ({ status, spam }: ExternalFormSubmissionSummaryFragment) => {
             const isNew = status === ExternalFormSubmissionStatus.New;
             return (
@@ -91,7 +91,6 @@ const ProjectExternalSubmissionsTable = ({
         },
         {
           header: 'Date Submitted',
-          linkTreatment: false,
           render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) => (
             <RelativeDateTableCellContents
               dateTimeString={submittedAt}
@@ -100,28 +99,14 @@ const ProjectExternalSubmissionsTable = ({
           ),
         },
         ...defs,
-        {
-          header: 'Action',
-          render: ({ id }: ExternalFormSubmissionSummaryFragment) => (
-            <Button
-              variant='outlined'
-              onClick={() => setModalOpenId(id)}
-              disabled={bulkLoading}
-            >
-              View
-            </Button>
-          ),
-        },
       ];
     },
-    [setModalOpenId, bulkLoading]
+    []
   );
 
   const filters = useFilters({
     type: 'ExternalFormSubmissionFilterOptions',
   });
-
-  if (bulkError) throw bulkError;
 
   return (
     <>
@@ -141,6 +126,10 @@ const ProjectExternalSubmissionsTable = ({
         }
         queryDocument={GetProjectExternalFormSubmissionsDocument}
         getColumnDefs={getColumnDefs}
+        handleRowClick={(submission) => setModalOpenId(submission.id)}
+        rowActionDisabled={bulkLoading}
+        rowName={(row) => row.id}
+        rowActionTitle='View Submission'
         noData='No external form submissions'
         pagePath='project.externalFormSubmissions'
         recordType='ExternalFormSubmission'
@@ -179,6 +168,7 @@ const ProjectExternalSubmissionsTable = ({
           onClose={() => setModalOpenId(null)}
         />
       )}
+      {bulkError && <ApolloErrorAlert error={bulkError} />}
     </>
   );
 };

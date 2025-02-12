@@ -100,6 +100,7 @@ fragment ItemFields on FormItem {
   }
   rule
   customRule
+  editorUserIds
 }
 
 # GQL doesnt allow recursive fragments, so we have a max nesting level here
@@ -132,6 +133,7 @@ fragment FormDefinitionMetadata on FormDefinition {
     name
   }
   dateUpdated
+  supportsSaveInProgress
 }
 
 # FormDefinition to use for rendering a dynamic form
@@ -159,6 +161,7 @@ fragment FormDefinitionFieldsForEditor on FormDefinition {
 fragment FormIdentifierDetails on FormIdentifier {
   id
   identifier
+  managedInVersionControl
   displayVersion {
     ...FormDefinitionMetadata
   }

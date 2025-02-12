@@ -6,12 +6,12 @@ import ClickToShow, {
 } from '@/components/elements/ClickToShow';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { maskSSN } from '@/modules/hmis/hmisUtil';
-import { ClientIdentificationFieldsFragment } from '@/types/gqlTypes';
+import { ClientSsnFieldsFragment } from '@/types/gqlTypes';
 
 export interface Props
   extends TypographyProps,
     Pick<ClickToShowProps, 'hide' | 'onToggle'> {
-  client: ClientIdentificationFieldsFragment;
+  client: ClientSsnFieldsFragment;
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];
   lastFour?: boolean; // show the last 4 digits only (not hidden)
@@ -40,7 +40,13 @@ const ClientSsn = ({
   );
   if (alwaysShow) return fullSsn;
   return (
-    <ClickToShow variant={variant} hide={hide} onToggle={onToggle}>
+    <ClickToShow
+      variant={variant}
+      hide={hide}
+      onToggle={onToggle}
+      hiddenAriaLabel={`SSN Hidden - Click to Show`}
+      shownAriaLabel={`SSN ${masked} - Click to Hide`}
+    >
       {fullSsn}
     </ClickToShow>
   );
