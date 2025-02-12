@@ -133,7 +133,6 @@ const CommonMenuButton = ({
             if (divider) return <Divider key={key} />;
 
             const props = {
-              key,
               'aria-label': ariaLabel,
               disabled,
             };
@@ -166,6 +165,7 @@ const CommonMenuButton = ({
             if (to) {
               return (
                 <MenuItem
+                  key={key}
                   {...props}
                   component={RouterLink}
                   to={to}
@@ -179,6 +179,7 @@ const CommonMenuButton = ({
 
             return (
               <MenuItem
+                key={key}
                 {...props}
                 onClick={() => {
                   if (onClick) {
