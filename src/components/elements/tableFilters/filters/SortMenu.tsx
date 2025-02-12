@@ -30,7 +30,6 @@ const TableSortMenu = <S extends Record<string, string>>({
       <TableFilterButton
         startIcon={<ArrowDownwardIcon />}
         active={!isNil(sortOptionValue)}
-        aria-label={'Sort'}
         {...bindTrigger(popupState)}
       >
         Sort
