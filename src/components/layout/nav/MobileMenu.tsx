@@ -103,18 +103,22 @@ const MobileMenu: React.FC<Props> = ({
         </Box>
       )}
 
+      {/* If we child nav items for a dashboard, render them in a scrollable area */}
       {children && (
-        <Box
-          id='dashboard-nav-menu'
-          sx={({ palette }) => ({ background: palette.grey[100] })}
-        >
-          {children}
+        <Box sx={{ flex: '1', overflowY: 'scroll' }}>
+          <Box
+            id='dashboard-nav-menu'
+            sx={({ palette }) => ({ background: palette.grey[100] })}
+          >
+            {children}
+          </Box>
         </Box>
       )}
 
       {/* Navigation for top-level items (Clients, Projects, Admin) */}
       <Box
         sx={({ palette }) => ({
+          flex: '1',
           borderTop: `1px solid ${palette.divider}`,
         })}
       >
