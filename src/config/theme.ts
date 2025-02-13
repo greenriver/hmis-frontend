@@ -568,6 +568,32 @@ const createThemeOptions = (theme: Theme) => ({
           '&.MuiButton-text.MuiButton-colorSuccess:hover': {
             backgroundColor: theme.palette.success[200],
           },
+          // Overrides to make all `outlined` buttons use dark text
+          '&.MuiButton-outlined.MuiButton-colorPrimary:not(:disabled)': {
+            color: 'primary.dark',
+          },
+          '&.MuiButton-outlined.MuiButton-colorWarning:not(:disabled)': {
+            color: 'warning.dark',
+          },
+          '&.MuiButton-outlined.MuiButton-colorError:not(:disabled)': {
+            color: 'error.dark',
+          },
+          '&.MuiButton-outlined.MuiButton-colorSuccess:not(:disabled)': {
+            color: 'success.dark',
+          },
+          // Overrides to make all `text` buttons use dark text
+          '&.MuiButton-text.MuiButton-colorPrimary:not(:disabled)': {
+            color: 'primary.dark',
+          },
+          '&.MuiButton-text.MuiButton-colorWarning:not(:disabled)': {
+            color: 'warning.dark',
+          },
+          '&.MuiButton-text.MuiButton-colorError:not(:disabled)': {
+            color: 'error.dark',
+          },
+          '&.MuiButton-text.MuiButton-colorSuccess:not(:disabled)': {
+            color: 'success.dark',
+          },
           // Overrides to make all `outlined` buttons use 12% opacity instead of 4%
           '&.MuiButton-outlined.MuiButton-colorPrimary:hover': {
             backgroundColor: theme.palette.primary[200],

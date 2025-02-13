@@ -110,7 +110,7 @@ const generateColumns = (
     header: 'Due',
     render: ({ dueDate, overdue }) => {
       return overdue ? (
-        <Box color='error.main' fontWeight={600} alignSelf='flex-start'>
+        <Box color='error.dark' fontWeight={600} alignSelf='flex-start'>
           Overdue
         </Box>
       ) : dueDate ? (
