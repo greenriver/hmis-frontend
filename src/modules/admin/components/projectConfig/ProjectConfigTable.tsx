@@ -99,6 +99,7 @@ const ProjectConfigTable = ({
         recordType='ProjectConfig'
         paginationItemName='project config'
         handleRowClick={onClickRow}
+        rowActionTitle='Edit Project Config'
         showTopToolbar
       />
     </>

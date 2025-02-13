@@ -15,14 +15,7 @@ query GetEnrollmentDetails($id: ID!) {
 
 query GetEnrollmentWithHousehold($id: ID!) {
   enrollment(id: $id) {
-    ...EnrollmentFields
-    household {
-      id
-      shortId
-      householdClients {
-        ...HouseholdClientFields
-      }
-    }
+    ...EnrollmentWithHouseholdFields
   }
 }
 

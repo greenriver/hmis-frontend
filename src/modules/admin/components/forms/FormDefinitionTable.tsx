@@ -80,6 +80,8 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
           identifier: row.identifier,
         })
       }
+      rowActionTitle='View Form'
+      rowName={(row) => row.displayVersion.title}
     />
   );
 };

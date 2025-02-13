@@ -4,6 +4,7 @@ import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHo
 import {
   ClientAccess,
   ClientWithAlertFieldsFragment,
+  GetHouseholdClientAlertsQuery,
   useGetHouseholdClientAlertsQuery,
 } from '@/types/gqlTypes';
 
@@ -15,6 +16,7 @@ enum AlertPriority {
 
 interface ClientAlertParams {
   householdId?: string;
+  household?: GetHouseholdClientAlertsQuery['household'];
   client?: Omit<ClientWithAlertFieldsFragment, 'access'> & {
     access?: Partial<ClientAccess>;
   };
@@ -26,13 +28,18 @@ export default function useClientAlerts(params: ClientAlertParams) {
   const [canViewClientAlerts] = useHasRootPermissions(['canViewClientAlerts']);
 
   const {
-    data: { household } = {},
+    data: { household: queriedHousehold } = {},
     loading,
     error,
   } = useGetHouseholdClientAlertsQuery({
     variables: { id: params.householdId || '' },
-    skip: !params.householdId || !canViewClientAlerts,
+    skip: !params.householdId || !!params.household || !canViewClientAlerts,
   });
+
+  const household = useMemo(
+    () => queriedHousehold || params.household,
+    [params.household, queriedHousehold]
+  );
 
   const canViewAlertsForAnyHouseholdMembers = useMemo(() => {
     if (!canViewClientAlerts) return false;

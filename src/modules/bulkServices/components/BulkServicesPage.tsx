@@ -150,9 +150,13 @@ const BulkServicesPage: React.FC<Props> = ({
                 <ServiceTypeSelect
                   projectId={project.id}
                   value={serviceTypeId ? { code: serviceTypeId } : null}
-                  onChange={(option) =>
-                    setFilterParams({ serviceTypeId: option?.code })
-                  }
+                  onChange={(option) => {
+                    // ServiceTypeSelect's internal effect causes `onChange` to be called even when option value is not changing.
+                    // To avoid unneeded rerenders, only setFilterParams if the value is changing
+                    if (option?.code !== serviceTypeId) {
+                      setFilterParams({ serviceTypeId: option?.code });
+                    }
+                  }}
                   label='Service Type'
                   bulk
                 />

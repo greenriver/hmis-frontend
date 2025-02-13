@@ -3,10 +3,7 @@ import { Grid, Skeleton, Stack, Typography } from '@mui/material';
 import { isEmpty, isNil } from 'lodash-es';
 import { Fragment, useMemo } from 'react';
 
-import {
-  ContextualClientDobAge,
-  ContextualClientSsn,
-} from '../providers/ClientSsnDobVisibility';
+import { ContextualClientDobAge } from '../providers/ClientSsnDobVisibility';
 
 import ClientCardImageElement from './ClientCardImageElement';
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -21,13 +18,12 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
 } from '@/routes/routes';
 import {
-  ClientFieldsFragment,
+  ClientSearchResultFieldsFragment,
   ExternalIdentifierType,
   GetClientEnrollmentsQuery,
   useGetClientEnrollmentsQuery,
@@ -80,7 +76,7 @@ const RecentEnrollments = ({
 };
 
 interface Props {
-  client: ClientFieldsFragment;
+  client: ClientSearchResultFieldsFragment;
   linkTargetBlank?: boolean;
   hideImage?: boolean;
 }
@@ -170,40 +166,28 @@ const ClientSearchResultCard: React.FC<Props> = ({
                   <ContextualClientDobAge client={client} />
                 </CommonLabeledTextBlock>
               )}
-              {client.ssn && (
-                <ClientPermissionsFilter
-                  id={client.id}
-                  permissions={['canViewFullSsn', 'canViewPartialSsn']}
-                >
-                  <CommonLabeledTextBlock title='SSN:' horizontal>
-                    <ContextualClientSsn client={client} />
-                  </CommonLabeledTextBlock>
-                </ClientPermissionsFilter>
-              )}
             </Stack>
           </Stack>
           {client.dateUpdated && (
             <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-              Last Updated on {lastUpdatedBy(client.dateUpdated, client.user)}
+              Last Updated on {lastUpdatedBy(client.dateUpdated)}
             </Typography>
           )}
         </Stack>
       </Grid>
 
       <Grid item xs={5} lg={6}>
-        {client.access.canViewEnrollmentDetails &&
-          recentEnrollments &&
-          recentEnrollments?.length > 0 && (
-            <>
-              <Typography variant='h6' sx={{ mb: 1 }}>
-                Recent Enrollments
-              </Typography>
-              <RecentEnrollments
-                recentEnrollments={recentEnrollments}
-                clientId={client.id}
-              />
-            </>
-          )}
+        {recentEnrollments && recentEnrollments?.length > 0 && (
+          <>
+            <Typography variant='h6' sx={{ mb: 1 }}>
+              Recent Enrollments
+            </Typography>
+            <RecentEnrollments
+              recentEnrollments={recentEnrollments}
+              clientId={client.id}
+            />
+          </>
+        )}
       </Grid>
       <Grid item xs={2}>
         <Typography variant='h6' sx={{ mb: 1 }}>
@@ -219,7 +203,7 @@ const ClientSearchResultCard: React.FC<Props> = ({
             Icon={PersonIcon}
             leftAlign
           >
-            Client Profile
+            View Client
           </ButtonLink>
           {/* disabled for now #185750557 */}
           {/* <RootPermissionsFilter permissions='canEnrollClients'>

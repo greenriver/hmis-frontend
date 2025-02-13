@@ -1,5 +1,6 @@
 import { alpha, Stack, Toolbar, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 export interface EnhancedTableToolbarProps<T> {
   title?: ReactNode;
@@ -21,6 +22,8 @@ const EnhancedTableToolbar = <T extends { id: string }>({
     return rows.filter((r) => selectedIds.includes(r.id));
   }, [rows, selectedIds]);
 
+  const isTiny = useIsMobile('sm');
+
   return (
     <Toolbar
       sx={{
@@ -41,7 +44,7 @@ const EnhancedTableToolbar = <T extends { id: string }>({
       <Stack
         justifyContent='space-between'
         alignItems={'center'}
-        direction={'row'}
+        direction={isTiny ? 'column' : 'row'}
         sx={{
           width: '100%',
           pr: 1,

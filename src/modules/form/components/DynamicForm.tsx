@@ -9,8 +9,10 @@ import { FormValues, LocalConstants } from '../types';
 import DirtyObserver from './DirtyObserver';
 import DynamicFormBase, { DynamicFormBaseProps } from './DynamicFormBase';
 import Loading from '@/components/elements/Loading';
+import { ErrorFilterFn } from '@/modules/errors/util';
 import { useEnrichedFormData } from '@/modules/form/hooks/rhf/useEnrichedFormData';
 import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
+
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -45,6 +47,7 @@ export interface DynamicFormProps
   initialValues?: InitialValues;
   localConstants?: LocalConstants;
   variant?: 'standard' | 'without_top_level_cards';
+  errorFilter?: ErrorFilterFn;
 }
 
 export interface DynamicFormRef {

@@ -4,11 +4,11 @@ import { useCallback } from 'react';
 
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 
-interface Props extends DialogProps {
+export interface CommonDialogProps extends DialogProps {
   enableBackdropClick?: boolean;
 }
 
-const CommonDialog: React.FC<Props> = ({
+const CommonDialog: React.FC<CommonDialogProps> = ({
   children,
   onClose,
   enableBackdropClick = false,
