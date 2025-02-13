@@ -1,22 +1,32 @@
 import type { TestRunnerConfig } from '@storybook/test-runner';
-import { injectAxe, checkA11y } from 'axe-playwright';
+import { injectAxe, checkA11y, configureAxe } from 'axe-playwright';
 
 /*
  * See https://storybook.js.org/docs/writing-tests/test-runner#test-hook-api
  * to learn more about the test-runner hooks API.
  */
 const config: TestRunnerConfig = {
-  // COMMENTED OUT for now
   async preVisit(page) {
     await injectAxe(page);
   },
   async postVisit(page) {
-    await checkA11y(page, '#storybook-root', {
-      detailedReport: true,
-      detailedReportOptions: {
-        html: true,
-      },
+    await configureAxe(page, {
+      // Skip some rules for now as we work on addressing them
+      rules: [
+        {
+          // TODO(#7108, #a11y-162) - turn this back on
+          id: 'color-contrast',
+          enabled: false,
+        },
+        {
+          // TODO(#a11y-1)
+          id: 'autocomplete-valid',
+          enabled: false,
+        },
+      ],
     });
+
+    await checkA11y(page, '#storybook-root');
   },
 };
 

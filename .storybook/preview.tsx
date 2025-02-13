@@ -33,22 +33,6 @@ export const parameters = {
     mocks: [], // mocks are passed in each story
     addTypename: false,
   },
-  a11y: {
-    config: {
-      rules: [
-        {
-          // TODO(#7108, #a11y-162) - turn this back on
-          id: 'color-contrast',
-          enabled: false,
-        },
-        {
-          // TODO(#a11y-1)
-          id: 'autocomplete-valid',
-          enabled: false,
-        },
-      ],
-    },
-  },
 };
 
 export const tags = ['autodocs'];
