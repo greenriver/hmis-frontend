@@ -20263,7 +20263,7 @@ export type EnrolledClientFieldsFragment = {
       } | null;
     }> | null;
   }>;
-  access: { __typename?: 'ClientAccess'; canEditClient: boolean };
+  access: { __typename?: 'ClientAccess'; id: string; canEditClient: boolean };
 };
 
 export type AllEnrollmentDetailsFragment = {
@@ -20548,7 +20548,7 @@ export type AllEnrollmentDetailsFragment = {
         } | null;
       }> | null;
     }>;
-    access: { __typename?: 'ClientAccess'; canEditClient: boolean };
+    access: { __typename?: 'ClientAccess'; id: string; canEditClient: boolean };
   };
   openEnrollmentSummary: Array<{
     __typename?: 'EnrollmentSummary';
@@ -21984,7 +21984,11 @@ export type GetEnrollmentDetailsQuery = {
           } | null;
         }> | null;
       }>;
-      access: { __typename?: 'ClientAccess'; canEditClient: boolean };
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canEditClient: boolean;
+      };
     };
     openEnrollmentSummary: Array<{
       __typename?: 'EnrollmentSummary';
@@ -41324,6 +41328,7 @@ export const EnrolledClientFieldsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     access {
+      id
       canEditClient
     }
   }
