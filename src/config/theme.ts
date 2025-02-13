@@ -70,14 +70,14 @@ declare module '@mui/material/styles' {
 // Extend the SimplePaletteColorOptions
 declare module '@mui/material/styles/createPalette' {
   interface SimplePaletteColorOptions {
-    tint?: string;
+    surface?: string;
     darkest?: string;
     100?: string;
     200?: string;
     300?: string;
   }
   interface PaletteColor {
-    tint: string;
+    surface: string;
     darkest?: string;
     100: string;
     200: string;
@@ -121,7 +121,7 @@ export const baseThemeDef: ThemeOptions = {
   },
   palette: {
     primary: {
-      tint: '#F8F9FB',
+      surface: '#F8F9FB',
       light: '#A4B9DB',
       main: '#5661A5',
       dark: '#1D2877',
@@ -132,7 +132,7 @@ export const baseThemeDef: ThemeOptions = {
       300: alpha('#5661A5', 0.3),
     },
     success: {
-      tint: '#F1F9F1',
+      surface: '#F1F9F1',
       light: '#6FBF73',
       main: '#4CAF50',
       dark: '#357A38',
@@ -143,7 +143,7 @@ export const baseThemeDef: ThemeOptions = {
       300: alpha('#4CAF50', 0.3),
     },
     warning: {
-      tint: '#FEF3EB',
+      surface: '#FEF3EB',
       light: '#FF9800',
       main: '#ED6C02',
       dark: '#D14900',
@@ -154,7 +154,7 @@ export const baseThemeDef: ThemeOptions = {
       300: alpha('#ED6C02', 0.3),
     },
     error: {
-      tint: '#FEF0EF',
+      surface: '#FEF0EF',
       light: '#F6685E',
       main: '#F44336',
       dark: '#AA2E25',
@@ -197,7 +197,7 @@ export const baseThemeDef: ThemeOptions = {
       dark: '#4D4D4D',
       light: '#8b8b8b',
       contrastText: '#fff',
-      tint: '#F3F3F3',
+      surface: '#F3F3F3',
       100: alpha('#6E6E6E', 0.08),
       200: alpha('#6E6E6E', 0.12),
       300: alpha('#6E6E6E', 0.3),
@@ -339,7 +339,7 @@ const createThemeOptions = (theme: Theme) => ({
         },
         root: theme.unstable_sx({
           '&.Mui-disabled': {
-            backgroundColor: theme.palette.grayscale.tint,
+            backgroundColor: '#F5F5F5',
           },
         }),
         input: {

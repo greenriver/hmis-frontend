@@ -87,7 +87,10 @@ export interface Props<T> {
 
 export const clickableRowStyles = {
   backgroundColor: 'background.paper',
-  '&:hover': { backgroundColor: 'grayscale.tint' },
+  '&:hover': {
+    // this should be primary[100], but blocked by #5746
+    backgroundColor: (theme: Theme) => theme.palette.grayscale.surface,
+  },
   cursor: 'pointer',
 };
 
