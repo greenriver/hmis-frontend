@@ -17,14 +17,14 @@ const ClientProfileLayout: React.FC<Props> = ({ client }) => {
   return (
     <Box data-testid='clientProfile'>
       <Grid container spacing={2}>
-        <Grid item md={12} lg={hasRightColumn ? 6 : 8}>
+        <Grid item xs={12} lg={hasRightColumn ? 6 : 8}>
           <Stack gap={2}>
             <ClientProfileCard client={client} />
             <ClientCustomDataElementsCard client={client} />
           </Stack>
         </Grid>
         {hasRightColumn && (
-          <Grid item md={12} lg={6}>
+          <Grid item xs={12} lg={6}>
             <Stack gap={2}>
               {canViewClientAlerts && (
                 <ClientAlertProfileWrapper client={client} />

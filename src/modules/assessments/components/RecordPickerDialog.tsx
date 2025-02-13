@@ -4,13 +4,13 @@ import { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { visuallyHidden } from '@mui/utils';
 import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { ColumnDef } from '@/components/elements/table/types';
+import { customVisuallyHidden } from '@/config/theme';
 import AssessmentsForPopulationTable from '@/modules/assessments/components/AssessmentsForPopulationTable';
 import { AssessmentForPopulation } from '@/modules/form/types';
 import {
@@ -146,7 +146,7 @@ const RecordPickerDialog = ({
           renderVerticalHeaderCell={(record) => {
             return (
               <>
-                <Box sx={visuallyHidden}>
+                <Box sx={customVisuallyHidden}>
                   {/* Additional visually hidden info about this assessment to help with accessibility when navigating the table */}
                   {ASSESSMENT_COLUMNS.CollectionStage.render(record)}
                 </Box>

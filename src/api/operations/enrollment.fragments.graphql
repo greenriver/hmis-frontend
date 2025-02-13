@@ -86,6 +86,7 @@ fragment EnrolledClientFields on Client {
     ...CustomDataElementFields
   }
   access {
+    id
     canEditClient # TODO: move to EnrollmentAccess object
   }
 }

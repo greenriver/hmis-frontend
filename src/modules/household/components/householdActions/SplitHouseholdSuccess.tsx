@@ -41,7 +41,7 @@ const SplitHouseholdSuccess = ({
   return (
     <SuccessWayfindingStep
       title={'Successful Split'}
-      description={`${stringifyHousehold(splitHousehold.householdClients)} ${splitHousehold.householdClients.length > 1 ? 'have' : 'has'} been successfully split from ${donorHohName}’s Enrollment at ${project.projectName}`}
+      description={`${stringifyHousehold(splitHousehold.householdClients)} ${splitHousehold.householdClients.length > 1 ? 'have' : 'has'} been successfully split from ${donorHohName}’s Enrollment at ${project.projectName}.`}
       primaryClientName={donorHohName}
       secondary={splitHoh}
       project={project}

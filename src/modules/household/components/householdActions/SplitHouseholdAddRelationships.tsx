@@ -48,7 +48,7 @@ const SplitHouseholdAddRelationships = ({
       updateRelationship={updateRelationship}
     >
       <Typography variant='body1'>
-        Select a new head of household and update all relationships
+        Select a new head of household and update all relationships.
       </Typography>
       {showHohAlert && (
         <Alert severity='warning'>

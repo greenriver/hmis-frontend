@@ -63,6 +63,7 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
       )}
       <TitleCard
         title='Staff Assignment'
+        stackOnMobile={false}
         actions={
           enrollment.relationshipToHoH ===
             RelationshipToHoH.SelfHeadOfHousehold &&

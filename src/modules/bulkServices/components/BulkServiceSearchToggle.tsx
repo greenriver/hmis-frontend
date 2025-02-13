@@ -3,6 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 // eslint-disable-next-line no-restricted-imports
 import CommonToggle from '@/components/elements/CommonToggle';
 import { ServiceListIcon } from '@/components/elements/SemanticIcons';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 export type ClientLookupMode = 'search' | 'scan' | 'list';
 
@@ -20,12 +21,14 @@ const BulkServiceSearchToggle: React.FC<BulkServiceSearchToggleProps> = ({
   onChange,
   serviceTypeName,
 }) => {
+  const isTiny = useIsMobile('sm');
   return (
     <CommonToggle
       value={value}
       onChange={onChange}
       aria-label='client lookup mode'
       size='small'
+      orientation={isTiny ? 'vertical' : undefined}
       items={[
         {
           value: 'search',

@@ -18,8 +18,9 @@ export function useTableSelection<T extends { id: string }>({
   const [selectedState, setSelectedState] = useState<string[]>();
 
   // Table row selection can be either controlled or uncontrolled:
-  // - controlled: `selectedCtrl` and `onChangeSelectedCtrl` props passed from parent
-  // - uncontrolled: managed internally in `selectedState`
+  // - controlled: `selectedControlled` and `onChangeSelected` props passed from parent
+  // - uncontrolled: managed internally in `selectedState`,
+  // (but we still call `onChangeSelected` so the caller can "listen in" on what rows are selected)
   const isSelectControlled = selectedControlled !== undefined;
 
   const selected = useMemo(
@@ -61,7 +62,10 @@ export function useTableSelection<T extends { id: string }>({
   );
 
   // Clear selection when data changes
-  useEffect(() => setSelectedState([]), [rows]);
+  useEffect(() => {
+    setSelectedState([]);
+    onChangeSelected?.([]);
+  }, [onChangeSelected, rows]);
 
   return {
     selected,
