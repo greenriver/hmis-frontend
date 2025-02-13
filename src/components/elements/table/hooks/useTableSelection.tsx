@@ -7,12 +7,14 @@ export function useTableSelection<T extends { id: string }>({
   rows,
   selectedControlled,
   onChangeSelected,
+  autoResetSelection = true,
 }: {
   selectable?: boolean;
   isRowSelectable?: (row: T) => boolean;
   rows: T[];
   selectedControlled?: readonly string[];
   onChangeSelected?: (ids: readonly string[]) => void;
+  autoResetSelection?: boolean;
 }) {
   // Initially set selected to undefined, so we can early return and avoid state flicker
   const [selectedState, setSelectedState] = useState<string[]>();
@@ -63,9 +65,11 @@ export function useTableSelection<T extends { id: string }>({
 
   // Clear selection when data changes
   useEffect(() => {
-    setSelectedState([]);
-    onChangeSelected?.([]);
-  }, [onChangeSelected, rows]);
+    if (autoResetSelection) {
+      setSelectedState([]);
+      onChangeSelected?.([]);
+    }
+  }, [autoResetSelection, onChangeSelected, rows]);
 
   return {
     selected,

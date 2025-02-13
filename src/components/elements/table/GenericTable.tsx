@@ -72,6 +72,7 @@ export interface Props<T> {
   selected?: readonly string[]; // selection can optionally be controlled by the parent
   isRowSelectable?: (row: T) => boolean;
   onChangeSelectedRowIds?: (ids: readonly string[]) => void; // Used BOTH by parents that control selection, AND those with uncontrolled selection to know what rows are currently selected
+  autoResetSelection?: boolean;
   EnhancedTableToolbarProps?: Omit<
     EnhancedTableToolbarProps<T>,
     'selectedIds' | 'rows'
@@ -281,6 +282,7 @@ const GenericTable = <T extends { id: string }>({
   isRowSelectable,
   selected: selectedProp,
   onChangeSelectedRowIds,
+  autoResetSelection,
   EnhancedTableToolbarProps,
   filterToolbar,
   renderRow,
@@ -302,6 +304,7 @@ const GenericTable = <T extends { id: string }>({
       rows,
       selectedControlled: selectedProp,
       onChangeSelected: onChangeSelectedRowIds,
+      autoResetSelection,
     });
 
   // avoid state flicker due to state reset

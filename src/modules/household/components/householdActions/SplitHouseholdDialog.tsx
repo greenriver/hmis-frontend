@@ -34,7 +34,9 @@ const SplitHouseholdDialog = ({
 
   const [relationships, setRelationships] = useState<
     Record<string, RelationshipToHoH | null>
-  >({});
+  >({
+    [initiator.enrollment.id]: RelationshipToHoH.SelfHeadOfHousehold,
+  });
 
   const missingRelationshipsCount = useMemo(
     () =>
@@ -81,6 +83,22 @@ const SplitHouseholdDialog = ({
     [performSplitHousehold, relationships, splittingClients]
   );
 
+  const setSelectedClients = useCallback(
+    (clients: HouseholdClientFieldsFragment[]) => {
+      setSplittingClients(clients);
+      if (clients.length === 1) {
+        // If exactly 1 client is selected, make them the HoH
+        setRelationships({
+          [clients[0].enrollment.id]: RelationshipToHoH.SelfHeadOfHousehold,
+        });
+      } else {
+        // Clear all relationships if selected clients change.
+        setRelationships({});
+      }
+    },
+    []
+  );
+
   const stepDefinitions: StepDefinition[] = useMemo(
     () => [
       {
@@ -92,19 +110,7 @@ const SplitHouseholdDialog = ({
               <SplitHouseholdSelectClients
                 donorHousehold={donorHousehold}
                 selectedClients={splittingClients}
-                setSelectedClients={(clients) => {
-                  setSplittingClients(clients);
-                  if (clients.length === 1) {
-                    // If exactly 1 client is selected, make them the HoH
-                    setRelationships({
-                      [clients[0].enrollment.id]:
-                        RelationshipToHoH.SelfHeadOfHousehold,
-                    });
-                  } else {
-                    // Clear all relationships if selected clients change.
-                    setRelationships({});
-                  }
-                }}
+                setSelectedClients={setSelectedClients}
               />
             )}
           </>
@@ -165,6 +171,7 @@ const SplitHouseholdDialog = ({
     [
       donorHousehold,
       splittingClients,
+      setSelectedClients,
       relationships,
       hohCount,
       disabledProps,

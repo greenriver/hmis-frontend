@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import { useMemo } from 'react';
 import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
 import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import SelectClientsStep from '@/modules/household/components/householdActions/SelectClientsStep';
@@ -24,11 +25,18 @@ const SplitHouseholdSelectClients = ({
     showClientName: true,
   });
 
+  // You can't split out the HoH, so exclude them from the list of selectable clients
+  const clients = useMemo(
+    () =>
+      donorHousehold.householdClients.filter((hc) => {
+        return hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold;
+      }),
+    [donorHousehold.householdClients]
+  );
+
   return (
     <SelectClientsStep
-      clients={donorHousehold.householdClients.filter(
-        (hc) => hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
-      )}
+      clients={clients}
       selectedClients={selectedClients}
       setSelectedClients={setSelectedClients}
     >
