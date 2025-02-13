@@ -16,7 +16,7 @@ const TableFilterButton: React.FC<TableFilterButtonProps> = ({
   return isTiny ? (
     <IconButton
       sx={(theme) => ({
-        border: `1px solid ${theme.palette.grayscale[300]}`,
+        border: `1px solid ${theme.palette.borders.dark}`,
         borderRadius: 1,
         height: '32px',
         width: '32px',
