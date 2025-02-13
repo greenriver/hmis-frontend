@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { cloneDeep } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { DefaultValues, FieldValues } from 'react-hook-form';
@@ -8,7 +9,12 @@ import {
   getInitialValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
-import { FormDefinitionJson } from '@/types/gqlTypes';
+import { FormDefinitionJson, PickListType } from '@/types/gqlTypes';
+
+const handleError = (message: string) => {
+  // console.info('error', message)
+  Sentry.captureMessage(message, { level: 'error' });
+};
 
 interface Args<T extends FieldValues> {
   definition: FormDefinitionJson;
@@ -59,11 +65,27 @@ export const useEnrichedFormData = <T extends FieldValues>({
     if (loading || result) return;
     const mutation = cloneDeep(defaultValues);
     Object.values(itemMap || {}).forEach(({ pickListReference, linkId }) => {
-      if (!pickListReference || !picklistValues[pickListReference]) return;
-      const found = picklistValues[pickListReference].find((i) => {
-        return i.code === defaultValues[linkId].code;
-      });
-      // console.info('update', linkId, found)
+      const valueCode = mutation[linkId]?.code || mutation[linkId];
+      // skip unless there's a value and a value code
+      if (!valueCode) return;
+      if (!pickListReference) return;
+      if (!Object.values<string>(PickListType).includes(pickListReference))
+        return;
+
+      if (!picklistValues[pickListReference]) {
+        // this shouldn't occur
+        handleError(`Could not find pick list "${pickListReference}"`);
+        return;
+      }
+      const found = picklistValues[pickListReference].find(
+        (i) => i.code === valueCode
+      );
+      if (!found) {
+        handleError(
+          `Pick list "${pickListReference}" does not contain code "${valueCode}"`
+        );
+        return;
+      }
       if (found) mutation[linkId] = found;
     });
     setResult(mutation);
