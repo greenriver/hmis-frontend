@@ -4,7 +4,6 @@ import { ReactNode } from 'react';
 
 import { ContextHeaderAppBar } from './dashboard/contextHeader/ContextHeader';
 import Breadcrumbs, { Breadcrumb } from '@/components/elements/Breadcrumbs';
-import { FOCUSABLE_MAIN_TARGET_ID } from '@/components/layout/MainLayout';
 
 const BasicBreadcrumbPageLayout = ({
   crumbs,
@@ -22,12 +21,7 @@ const BasicBreadcrumbPageLayout = ({
           <Breadcrumbs crumbs={crumbs} />
         </Container>
       </ContextHeaderAppBar>
-      <Container
-        component='main'
-        maxWidth={maxWidth}
-        sx={{ pt: 2, pb: 6 }}
-        id={FOCUSABLE_MAIN_TARGET_ID}
-      >
+      <Container component='main' maxWidth={maxWidth} sx={{ pt: 2, pb: 6 }}>
         {children}
       </Container>
     </>
