@@ -11,28 +11,32 @@ export type Option = { value: RelationshipToHoH; label: string };
 
 export interface Props
   extends Omit<GenericSelectProps<Option, false, false>, 'options' | 'value'> {
+  variant: 'includeHoh' | 'excludeHoh';
   value: RelationshipToHoH | null;
 }
-const relationshipToHohOptions: Option[] = (
+
+const relationshipOptions: Option[] = (
   localResolvePickList('RelationshipToHoH') || []
-)
-  .filter(({ code }) => code !== RelationshipToHoH.SelfHeadOfHousehold) // Exclude HoH from option list
-  .map(({ code, label }) => ({
-    value: code as RelationshipToHoH,
-    label: label as string,
-  }));
+).map(({ code, label }) => ({
+  value: code as RelationshipToHoH,
+  label: label as string,
+}));
+
+const relationshipOptionsNoHoh: Option[] = relationshipOptions
+  // Exclude HoH from option list
+  .filter(({ value }) => value !== RelationshipToHoH.SelfHeadOfHousehold);
 
 const RelationshipToHohSelect = ({
-  disabled,
   value,
   textInputProps,
+  variant = 'excludeHoh',
   ...props
 }: Props) => {
-  // disabled if HoH is selected
   const isHoH = value === RelationshipToHoH.SelfHeadOfHousehold;
-  const isDisabled = disabled || isHoH;
 
-  if (isHoH) {
+  const excludeHoh = variant === 'excludeHoh';
+
+  if (isHoH && excludeHoh) {
     return (
       <Typography variant='body2' sx={{ pl: 0.5 }}>
         {HmisEnums.RelationshipToHoH[value]}
@@ -40,16 +44,13 @@ const RelationshipToHohSelect = ({
     );
   }
 
+  const options = excludeHoh ? relationshipOptionsNoHoh : relationshipOptions;
+
   return (
     <GenericSelect<Option, false, false>
-      options={relationshipToHohOptions}
-      disabled={isDisabled}
+      options={options}
       textInputProps={{ placeholder: 'Select Relationship', ...textInputProps }}
-      value={
-        value && !isHoH
-          ? relationshipToHohOptions.find((el) => el.value === value) || null
-          : null
-      }
+      value={options.find((el) => el.value === value) || null}
       size='small'
       renderOption={(props, option) => (
         <li {...props} key={option.value}>

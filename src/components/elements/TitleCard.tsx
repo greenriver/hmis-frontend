@@ -33,7 +33,7 @@ const TitleCard: React.FC<Props> = ({
   headerSx,
   padded = false,
   stackOnMobile = true,
-  mobileBreakpoint = 'xs',
+  mobileBreakpoint = 'sm',
   ...props
 }) => {
   const isMobile = useIsMobile(mobileBreakpoint);

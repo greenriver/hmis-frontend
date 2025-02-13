@@ -8,11 +8,13 @@ import { ClientNameFragment, EnrollmentFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 export const BASE_ACTION_COLUMN_DEF: ColumnDef<any> = {
+  // Used in cases where we can't use the default table linking behavior (rowLinkTo OR handleRowClick OR rowSecondaryActionConfigs).
+  // For example, when we want to pass a custom primaryAction to TableRowActions (BulkServices),
+  // or when we take over rendering of an entire row using renderRow (ProjectHouseholdsTable).
   key: 'Actions',
   tableCellProps: {
     sx: {
-      py: 0,
-      px: 0,
+      p: 1,
       whiteSpace: 'nowrap',
     },
   },

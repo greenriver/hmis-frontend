@@ -85,6 +85,7 @@ fragment ProjectAccessFields on ProjectAccess {
   canManageIncomingReferrals
   canManageOutgoingReferrals
   canManageExternalFormSubmissions
+  canSplitHouseholds
 }
 
 fragment OrganizationAccessFields on OrganizationAccess {

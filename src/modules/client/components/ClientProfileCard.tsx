@@ -23,6 +23,7 @@ import ClientImageUploadDialog from '@/components/elements/input/ClientImageUplo
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
@@ -373,6 +374,8 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
     );
   }, [navigate, client.id]);
 
+  const isTiny = useIsMobile('sm');
+
   return (
     <Box>
       <Card
@@ -388,7 +391,15 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
               {clientNameAllParts(client)}
             </Typography>
           </Grid>
-          <Grid item xs={12} sx={{ display: 'flex', gap: 2 }}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: 'flex',
+              gap: 2,
+              flexDirection: isTiny ? 'column' : 'row',
+            }}
+          >
             {canViewClientPhoto &&
               (imageLoading ? (
                 <Skeleton

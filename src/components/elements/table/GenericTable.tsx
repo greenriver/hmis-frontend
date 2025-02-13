@@ -18,17 +18,8 @@ import {
   Theme,
 } from '@mui/material';
 import { SystemStyleObject } from '@mui/system';
-import { visuallyHidden } from '@mui/utils';
-import { compact, get, includes, isNil, without } from 'lodash-es';
-import {
-  ComponentType,
-  ReactNode,
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { compact, get, includes, isNil } from 'lodash-es';
+import { ComponentType, ReactNode, SyntheticEvent, useMemo } from 'react';
 import { To } from 'react-router-dom';
 
 import Loading from '../Loading';
@@ -44,7 +35,9 @@ import {
 } from './types';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import RouterLink from '@/components/elements/RouterLink';
+import { useTableSelection } from '@/components/elements/table/hooks/useTableSelection';
 import TableRowActions from '@/components/elements/table/TableRowActions';
+import { customVisuallyHidden } from '@/config/theme';
 import { LocationState } from '@/routes/routeUtil';
 
 export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
@@ -76,8 +69,9 @@ export interface Props<T> {
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
   selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
+  selected?: readonly string[]; // selection can optionally be controlled by the parent
   isRowSelectable?: (row: T) => boolean;
-  onChangeSelectedRowIds?: (ids: readonly string[]) => void;
+  onChangeSelectedRowIds?: (ids: readonly string[]) => void; // Used BOTH by parents that control selection, AND those with uncontrolled selection to know what rows are currently selected
   EnhancedTableToolbarProps?: Omit<
     EnhancedTableToolbarProps<T>,
     'selectedIds' | 'rows'
@@ -187,7 +181,7 @@ export const renderHeaderCellContents = <T extends { id: string }>(
     <strong>{def.header}</strong>
   ) : (
     // If header isn't provided, add a visually hidden header with the column key for accessibility
-    <Box sx={visuallyHidden}>{def.key}</Box>
+    <Box sx={customVisuallyHidden}>{def.key}</Box>
   );
 };
 
@@ -254,7 +248,9 @@ export const renderLinkedRowCellContents = <T extends { id: string }>({
         {cellContents}
       </RouterLink>
       {/* If the RouterLink was aria-hidden, render the contents as visually hidden alongside */}
-      {isInaccessibleLink && <Box sx={visuallyHidden}>{cellContents}</Box>}
+      {isInaccessibleLink && (
+        <Box sx={customVisuallyHidden}>{cellContents}</Box>
+      )}
     </>
   );
 };
@@ -283,6 +279,7 @@ const GenericTable = <T extends { id: string }>({
   rowSx,
   selectable,
   isRowSelectable,
+  selected: selectedProp,
   onChangeSelectedRowIds,
   EnhancedTableToolbarProps,
   filterToolbar,
@@ -298,41 +295,14 @@ const GenericTable = <T extends { id: string }>({
   );
   const hasHeaders = columns.find((c) => !!c.header);
 
-  // initially undefined so we can early return and avoid state flicker
-  const [selected, setSelected] = useState<string[]>();
-
-  const selectableRowIds = useMemo(() => {
-    if (!selectable) return [];
-    if (!isRowSelectable) return rows.map((r) => r.id);
-    return rows.filter(isRowSelectable).map((r) => r.id);
-  }, [rows, selectable, isRowSelectable]);
-
-  const handleSelectAllClick = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.checked) {
-        setSelected(selectableRowIds);
-      } else {
-        setSelected([]);
-      }
-    },
-    [selectableRowIds]
-  );
-
-  const handleSelectRow = useCallback(
-    (row: T) =>
-      setSelected((old) => {
-        if (!old) return undefined;
-        return old.includes(row.id) ? without(old, row.id) : [...old, row.id];
-      }),
-    []
-  );
-
-  // Clear selection when data changes
-  useEffect(() => setSelected([]), [rows]);
-
-  useEffect(() => {
-    if (selected) onChangeSelectedRowIds?.(selected);
-  }, [selected, onChangeSelectedRowIds]);
+  const { selected, selectableRowIds, handleSelectAllClick, handleSelectRow } =
+    useTableSelection({
+      selectable: !!selectable,
+      isRowSelectable,
+      rows,
+      selectedControlled: selectedProp,
+      onChangeSelected: onChangeSelectedRowIds,
+    });
 
   // avoid state flicker due to state reset
   if (!selected) return <Loading />;
@@ -361,7 +331,7 @@ const GenericTable = <T extends { id: string }>({
             key='empty'
             sx={{ ...verticalCellSx(0), backgroundColor: 'background.paper' }}
           >
-            <Box sx={visuallyHidden}>{verticalHiddenHeader}</Box>
+            <Box sx={customVisuallyHidden}>{verticalHiddenHeader}</Box>
           </TableCell>
           {rows.map((row, idx) => (
             <TableCell key={row.id} sx={verticalCellSx(idx)}>
@@ -389,7 +359,8 @@ const GenericTable = <T extends { id: string }>({
                 }
                 checked={
                   selectableRowIds.length > 0 &&
-                  selected.length === selectableRowIds.length
+                  // >= instead of === accommodates rows that are selected but disabled
+                  selected.length >= selectableRowIds.length
                 }
                 disabled={selectableRowIds.length === 0}
                 onChange={handleSelectAllClick}
@@ -410,6 +381,7 @@ const GenericTable = <T extends { id: string }>({
                   textAlign: def.textAlign,
                   width: def.width,
                 }}
+                {...def.headerCellProps}
               >
                 {renderHeaderCellContents(def)}
               </HeaderCell>
@@ -418,7 +390,7 @@ const GenericTable = <T extends { id: string }>({
           {/* right-most column for row actions */}
           {hasTableRowActions && (
             <HeaderCell sx={{ ...getStickyCellStyles({ sticky: 'right' }) }}>
-              <Box sx={visuallyHidden}>Action</Box>
+              <Box sx={customVisuallyHidden}>Action</Box>
             </HeaderCell>
           )}
         </TableRow>
@@ -479,6 +451,7 @@ const GenericTable = <T extends { id: string }>({
                     sx={{ ...verticalCellSx(1), width: '350px' }}
                     key={getColumnKey(def)}
                     role='rowheader'
+                    {...def.headerCellProps}
                   >
                     {renderHeaderCellContents(def)}
                   </HeaderCell>
@@ -567,7 +540,9 @@ const GenericTable = <T extends { id: string }>({
                           color='primary'
                           disabled={!isSelectable}
                           checked={includes(selected, row.id)}
-                          inputProps={{ 'aria-label': `Select ${recordName}` }}
+                          inputProps={{
+                            'aria-label': `Select ${recordName}`,
+                          }}
                           onClick={
                             isSelectable
                               ? () => handleSelectRow(row)
@@ -590,10 +565,15 @@ const GenericTable = <T extends { id: string }>({
 
                       const isLinked = rowLink && !dontLink;
 
+                      const cellProps =
+                        typeof tableCellProps === 'function'
+                          ? tableCellProps(row)
+                          : tableCellProps;
+
                       return (
                         <TableCell
                           key={getColumnKey(def) || index}
-                          {...tableCellProps}
+                          {...cellProps}
                           sx={{
                             ...getStickyCellStyles({
                               sticky,
@@ -601,11 +581,12 @@ const GenericTable = <T extends { id: string }>({
                             }),
                             width,
                             minWidth,
-                            maxWidth,
+                            // don't override maxWidth from sticky styles if it is undefined on column def
+                            ...(maxWidth ? { maxWidth: maxWidth } : undefined),
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
                             whiteSpace: 'initial',
-                            ...tableCellProps?.sx,
+                            ...cellProps?.sx,
                           }}
                           role={sticky === 'left' ? 'rowheader' : undefined}
                           // Reuse `dontLink` to prevent click propagation if the row has a click handler, but the cell has a more specific click target

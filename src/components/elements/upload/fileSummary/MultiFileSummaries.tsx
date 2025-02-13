@@ -1,8 +1,8 @@
 import { Box, Card, Divider, Stack } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import React, { Fragment } from 'react';
 import SavedFileSummary from '@/components/elements/upload/fileSummary/SavedFileSummary';
 import UnsavedFileSummary from '@/components/elements/upload/fileSummary/UnsavedFileSummary';
+import { customVisuallyHidden } from '@/config/theme';
 import { FileFieldsFragment } from '@/types/gqlTypes';
 
 const MultiFileSummaries = ({
@@ -36,7 +36,7 @@ const MultiFileSummaries = ({
                 onRemove={() => onRemove(file)}
                 variant='row'
               />
-              <Box aria-live='polite' sx={visuallyHidden}>
+              <Box aria-live='polite' sx={customVisuallyHidden}>
                 Uploaded {file.name}
               </Box>
             </Fragment>

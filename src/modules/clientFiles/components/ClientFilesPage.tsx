@@ -10,6 +10,7 @@ import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
 import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -70,6 +71,8 @@ const ClientFilesPage = () => {
     variables: { pickListType: PickListType.AvailableFileTypes },
   });
 
+  const isTiny = useIsMobile('sm');
+
   const columns: ColumnDef<ClientFileType>[] = useMemo(() => {
     return [
       {
@@ -77,6 +80,8 @@ const ClientFilesPage = () => {
         render: (file) => (
           <Typography variant='inherit'>{file.name}</Typography>
         ),
+        // Limit the col width on tiny screens so that other non-sticky columns are scrollable
+        maxWidth: isTiny ? '100px' : undefined,
         sticky: 'left',
       },
       {
@@ -126,7 +131,7 @@ const ClientFilesPage = () => {
         },
       },
     ];
-  }, [pickListData]);
+  }, [isTiny, pickListData]);
 
   return (
     <>
