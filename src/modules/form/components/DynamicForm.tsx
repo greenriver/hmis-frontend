@@ -44,7 +44,6 @@ export interface DynamicFormProps
   onSubmit: (input: DynamicFormSubmitInput) => void;
   onSaveDraft?: DynamicFormOnSaveDraft;
   onDirty?: (value: boolean) => void;
-  initialValues?: InitialValues;
   localConstants?: LocalConstants;
   variant?: 'standard' | 'without_top_level_cards';
   errorFilter?: ErrorFilterFn;
@@ -65,7 +64,6 @@ export const DynamicFormWithoutHandlers = forwardRef<
       onSubmit,
       onSaveDraft,
       onDirty,
-      initialValues,
       errors: errorState,
       localConstants,
       handlers,
@@ -158,16 +156,15 @@ const DynamicFormWithHandlers = forwardRef<
   );
 });
 
-// load remote data (picklists) to augment form data
-
+// load remote data (picklists) to augment form data (initialValues => defaultValues)
 const DynamicFormEnrichedDataLoader = forwardRef<
   DynamicFormRef,
-  DynamicFormProps
->((props, ref) => {
+  DynamicFormProps & { initialValues?: InitialValues }
+>(({ initialValues, ...props }, ref) => {
   const { defaultValues, loading } = useEnrichedFormData({
     pickListArgs: props.pickListArgs,
     definition: props.definition,
-    initialValues: props.initialValues,
+    initialValues: initialValues,
     localConstants: props.localConstants,
     viewOnly: false,
   });
