@@ -38,8 +38,8 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Reload page on successful login, to ensure fetching latest assets.
-  // When the page reloads, it will get the user from getValidCachedUser∏
+  // Reload page on successful login, to ensure the user fetches the latest assets.
+  // When the page reloads, the application will get the user from getValidCachedUser
   const handleSuccess = useCallback(() => reloadWindow(), []);
 
   const retryCsrf = useRef(true);
