@@ -68,7 +68,6 @@ const SelectClientsStep = ({
           onChangeSelectedRowIds={setSelectedClientIds}
           isRowSelectable={isRowSelectable}
           tableProps={{ 'aria-label': 'Select Clients' }}
-          autoResetSelection={false}
         />
       </Paper>
     </Stack>

@@ -1,5 +1,5 @@
 import { without } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export function useTableSelection<T extends { id: string }>({
   selectable = false,
@@ -7,14 +7,12 @@ export function useTableSelection<T extends { id: string }>({
   rows,
   selectedControlled,
   onChangeSelected,
-  autoResetSelection = true,
 }: {
   selectable?: boolean;
   isRowSelectable?: (row: T) => boolean;
   rows: T[];
   selectedControlled?: readonly string[];
   onChangeSelected?: (ids: readonly string[]) => void;
-  autoResetSelection?: boolean;
 }) {
   // Initially set selected to undefined, so we can early return and avoid state flicker
   const [selectedState, setSelectedState] = useState<string[]>();
@@ -36,6 +34,11 @@ export function useTableSelection<T extends { id: string }>({
     return rows.filter(isRowSelectable).map((r) => r.id);
   }, [rows, selectable, isRowSelectable]);
 
+  const deselectAll = useCallback(() => {
+    if (!isSelectControlled) setSelectedState([]);
+    onChangeSelected?.([]);
+  }, [isSelectControlled, onChangeSelected]);
+
   const handleSelectAllClick = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {
@@ -44,11 +47,10 @@ export function useTableSelection<T extends { id: string }>({
         onChangeSelected?.(selectableRowIds);
       } else {
         // deselect all
-        if (!isSelectControlled) setSelectedState([]);
-        onChangeSelected?.([]);
+        deselectAll();
       }
     },
-    [isSelectControlled, onChangeSelected, selectableRowIds]
+    [deselectAll, isSelectControlled, onChangeSelected, selectableRowIds]
   );
 
   const handleSelectRow = useCallback(
@@ -63,13 +65,15 @@ export function useTableSelection<T extends { id: string }>({
     [isSelectControlled, onChangeSelected, selected]
   );
 
-  // Clear selection when data changes
+  // Clear selection when `rows` change (but not in initial render)
+  const didMountRef = useRef(false);
   useEffect(() => {
-    if (autoResetSelection) {
-      setSelectedState([]);
-      onChangeSelected?.([]);
+    if (didMountRef.current) {
+      deselectAll();
+    } else {
+      didMountRef.current = true; // first render
     }
-  }, [autoResetSelection, onChangeSelected, rows]);
+  }, [deselectAll, rows]);
 
   return {
     selected,
