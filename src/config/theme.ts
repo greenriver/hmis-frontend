@@ -56,6 +56,7 @@ declare module '@mui/material/styles' {
     links: string;
     activeStatus: string;
     grayscale: SimplePaletteColorOptions;
+    custom: { main: string };
   }
 
   interface PaletteOptions {
@@ -64,6 +65,7 @@ declare module '@mui/material/styles' {
     links: string;
     activeStatus: string;
     grayscale: SimplePaletteColorOptions;
+    custom: { main: string };
   }
 }
 
@@ -120,6 +122,10 @@ export const baseThemeDef: ThemeOptions = {
     },
   },
   palette: {
+    // customizable color per data source; use only for accents
+    custom: {
+      main: '#5661A5', // primary.main
+    },
     primary: {
       surface: '#F8F9FB',
       light: '#A4B9DB',
