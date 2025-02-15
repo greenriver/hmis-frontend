@@ -50,6 +50,15 @@ const JoinHouseholdDialog = ({
     Record<string, RelationshipToHoH | null>
   >({});
 
+  // When client selection changes, reset relationships
+  const setSelectedClients = useCallback(
+    (clients: HouseholdClientFieldsFragment[]) => {
+      setJoiningClients(clients);
+      setRelationships({});
+    },
+    []
+  );
+
   // Fetch the initiator's enrollment by ID since we need the full EnrollmentWithHousehold
   const {
     data: { enrollment: initiatorEnrollment } = {},
@@ -137,10 +146,7 @@ const JoinHouseholdDialog = ({
               <JoinHouseholdSelectClients
                 donorHousehold={donorHousehold}
                 selectedClients={joiningClients}
-                setSelectedClients={(clients) => {
-                  setJoiningClients(clients);
-                  setRelationships({});
-                }}
+                setSelectedClients={setSelectedClients}
                 receivingHohName={receivingHohName}
               />
             )}
@@ -171,8 +177,8 @@ const JoinHouseholdDialog = ({
             }}
           >
             <Typography variant='body1'>
-              Update joining clients’ relationships{' '}
-              {receivingHohName && <>to {receivingHohName}</>}.
+              Update joining clients’ relationships
+              {receivingHohName && <> to {receivingHohName}</>}.
             </Typography>
           </AddRelationshipsStep>
         ),
@@ -227,6 +233,7 @@ const JoinHouseholdDialog = ({
       receivingHousehold,
       relationships,
       remainingHousehold?.householdClients,
+      setSelectedClients,
     ]
   );
 
