@@ -1,33 +1,37 @@
-import { ClickToCopyId } from '@/components/elements/ClickToCopy';
-import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
-import TitleCard from '@/components/elements/TitleCard';
+import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
-import useSafeParams from '@/hooks/useSafeParams';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import ManageHousehold from '@/modules/household/components/ManageHousehold';
 
 const HouseholdPage = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
-  const { clientId, enrollmentId } = useSafeParams() as {
-    enrollmentId: string;
-    clientId: string;
-  };
-
+  const { enrollment, client } = useEnrollmentDashboardContext();
   if (!enrollment) return <NotFound />;
 
   return (
-    <TitleCard
-      title='Household'
-      headerVariant='border'
-      headerComponent='h1'
-      actions={
-        <CommonLabeledTextBlock title='Household ID' horizontal>
-          <ClickToCopyId value={enrollment.householdId} />
-        </CommonLabeledTextBlock>
-      }
-    >
-      <HouseholdMemberTable clientId={clientId} enrollmentId={enrollmentId} />
-    </TitleCard>
+    <>
+      <PageTitle
+        title={`Household for ${clientBriefName(client)} at ${enrollment.project.projectName}`}
+      />
+      <ManageHousehold
+        project={enrollment.project}
+        householdId={enrollment.householdId}
+        canEdit={enrollment.access.canEditEnrollments}
+        // canEdit={false}
+      />
+      {/* <TitleCard
+        title='Household'
+        headerVariant='border'
+        headerComponent='h1'
+        actions={
+          <CommonLabeledTextBlock title='Household ID' horizontal>
+            <ClickToCopyId value={enrollment.householdId} />
+          </CommonLabeledTextBlock>
+        }
+      >
+        <HouseholdMemberTable clientId={clientId} enrollmentId={enrollmentId} />
+      </TitleCard> */}
+    </>
   );
 };
 

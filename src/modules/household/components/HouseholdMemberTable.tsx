@@ -129,6 +129,8 @@ const HouseholdMemberTable = ({
   condensed?: boolean;
 }) => {
   const { enrollment } = useEnrollmentDashboardContext();
+  // TODO: move MCI over to manage hh
+  // TODO: move unit over to manage hh
   const { globalFeatureFlags } = useHmisAppSettings();
   const [householdMembers, { loading: householdMembersLoading, error }] =
     useHouseholdMembers(enrollmentId);

@@ -51,9 +51,9 @@ export default function useAddToHouseholdColumns({
   }, [data]);
 
   const handleSuccess = useCallback(
-    (data) => {
+    (hhId: string) => {
       refetchHousehold();
-      onSuccess(data);
+      onSuccess(hhId);
     },
     [refetchHousehold, onSuccess]
   );

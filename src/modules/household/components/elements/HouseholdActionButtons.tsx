@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { HouseholdIcon } from '@/components/elements/SemanticIcons';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
@@ -62,22 +61,7 @@ const HouseholdActionButtons = ({
   const isTiny = useIsMobile('sm');
 
   return (
-    <Stack
-      direction={isTiny ? 'column' : 'row'}
-      gap={{ xs: 1, sm: 2, md: 3 }}
-      sx={{ mt: 4, mb: 4 }}
-    >
-      <ButtonLink
-        Icon={HouseholdIcon}
-        to={generateSafePath(EnrollmentDashboardRoutes.EDIT_HOUSEHOLD, {
-          clientId,
-          enrollmentId,
-        })}
-        color='secondary'
-        sx={{ width: { xs: '100%', sm: 'fit-content' }, textAlign: 'center' }}
-      >
-        Manage Household
-      </ButtonLink>
+    <Stack direction={isTiny ? 'column' : 'row'} gap={{ xs: 1, sm: 2, md: 3 }}>
       {(canIntake || intakeReason) && (
         <ButtonTooltipContainer title={intakeReason} placement='bottom'>
           <ButtonLink

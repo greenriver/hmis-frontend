@@ -1,5 +1,11 @@
-import { Collapse, Paper, Stack, Typography } from '@mui/material';
-import { ReactNode, useState } from 'react';
+import {
+  Collapse,
+  CollapseProps,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { ReactNode } from 'react';
 import {
   commonCardPaperPadding,
   commonCardTitleVariant,
@@ -13,25 +19,23 @@ interface CommonCollapsibleCardProps {
   title: string;
   children: ReactNode;
   open?: boolean;
+  onClick?: CollapseProps['onClick'];
+  onExited?: CollapseProps['onExited'];
 }
 
 const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
-  open: initialOpen = true,
+  open,
   title,
   children,
+  onClick,
+  onExited,
 }) => {
-  const [open, setOpen] = useState(initialOpen);
-
-  const handleExpandClick = () => {
-    setOpen(!open);
-  };
-
   const collapsibleTitle = (
     <Stack
       direction='row'
       justifyContent='space-between'
       alignItems='center'
-      onClick={handleExpandClick}
+      onClick={onClick}
       sx={{
         cursor: 'pointer',
         '&:hover': { backgroundColor: '#F1F2F9' }, // FIXME: primary surface when theme is merged
@@ -47,7 +51,7 @@ const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
   return (
     <Paper>
       {collapsibleTitle}
-      <Collapse in={open} timeout='auto' unmountOnExit>
+      <Collapse in={open} timeout='auto' unmountOnExit onExited={onExited}>
         {children}
       </Collapse>
     </Paper>

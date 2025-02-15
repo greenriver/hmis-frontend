@@ -1,5 +1,5 @@
 import { Grid, Paper } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
@@ -7,7 +7,9 @@ import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
 
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
 import AddNewClientButton from './elements/AddNewClientButton';
+import { ClickToCopyId } from '@/components/elements/ClickToCopy';
 import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
@@ -21,6 +23,7 @@ import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollm
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import AssociatedHouseholdMembers from '@/modules/household/components/AssociatedHouseholdMembers';
+import HouseholdActionButtons from '@/modules/household/components/elements/HouseholdActionButtons';
 import { RecentHouseholdMember } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
@@ -51,6 +54,7 @@ interface Props {
   BackButton?: ReactNode;
   renderBackButton?: (householdId?: string) => ReactNode;
   onFirstMemberAdded?: (householdId: string) => void;
+  canEdit: boolean;
 }
 
 const ManageHousehold = ({
@@ -59,6 +63,7 @@ const ManageHousehold = ({
   BackButton,
   renderBackButton,
   onFirstMemberAdded,
+  canEdit,
 }: Props) => {
   const { globalFeatureFlags } = useHmisAppSettings();
   // This may be rendered either on the Project Dashboard or the Enrollment Dashboard. If on the Enrollment Dash, we need to treat the "current" client differently.
@@ -66,12 +71,23 @@ const ManageHousehold = ({
   const currentDashboardClientId = enrollmentContext?.client?.id;
   const currentDashboardEnrollmentId = enrollmentContext?.enrollment?.id;
 
+  // Fetch members to show in "previously associated" table
+  const [recentMembers, recentMembersLoading] = useRecentHouseholdMembers(
+    currentDashboardClientId
+  );
+  const [recentEligibleMembers, setRecentEligibleMembers] =
+    useState<RecentHouseholdMember[]>();
+  const [searchInput, setSearchInput] = useState<ClientSearchInput>();
+  const [hasSearched, setHasSearched] = useState(false);
+  // Search is expanded by default only if this is a new household (no members yet)
+  const [searchOpen, setSearchOpen] = useState(!householdId);
+
   const onSuccess = useCallback(
     (newHouseholdId: string) => {
       if (!householdId && onFirstMemberAdded) {
-        console.log('RELOAD TO', newHouseholdId);
         onFirstMemberAdded(newHouseholdId);
       }
+      setSearchOpen(false);
     },
     [householdId, onFirstMemberAdded]
   );
@@ -85,13 +101,6 @@ const ManageHousehold = ({
   // useEffect(() => {
   //   if (householdId) refetchHousehold();
   // }, [refetchHousehold, householdId]);
-
-  // Fetch members to show in "previously associated" table
-  const [recentMembers, recentMembersLoading] = useRecentHouseholdMembers(
-    currentDashboardClientId
-  );
-  const [recentEligibleMembers, setRecentEligibleMembers] =
-    useState<RecentHouseholdMember[]>();
 
   useEffect(() => {
     if (!currentDashboardClientId) return;
@@ -147,9 +156,6 @@ const ManageHousehold = ({
     [householdId, onSuccess, refetchHousehold]
   );
 
-  const [searchInput, setSearchInput] = useState<ClientSearchInput>();
-  const [hasSearched, setHasSearched] = useState(false);
-
   if (householdId && !household) return <Loading />;
 
   return (
@@ -158,6 +164,14 @@ const ManageHousehold = ({
       <TitleCard
         title='Household'
         headerVariant={household ? 'border' : undefined}
+        headerComponent='h1'
+        actions={
+          householdId && (
+            <CommonLabeledTextBlock title='Household ID' horizontal>
+              <ClickToCopyId value={householdId} />
+            </CommonLabeledTextBlock>
+          )
+        }
       >
         {!household && loading && <Loading />}
         {!household && !loading && (
@@ -184,9 +198,18 @@ const ManageHousehold = ({
             project={project}
           />
         )}
+        {canEdit && household && (
+          <Box sx={{ p: 3 }}>
+            <HouseholdActionButtons
+              householdMembers={household.householdClients}
+              clientId={household.householdClients[0].client.id} //fixme
+              enrollmentId={household.householdClients[0].enrollment.id} //fixme
+            />
+          </Box>
+        )}
       </TitleCard>
       {BackButton}
-      {renderBackButton && renderBackButton(householdId)}
+
       {recentEligibleMembers && recentEligibleMembers.length > 0 && (
         <>
           <TitleCard
@@ -201,58 +224,67 @@ const ManageHousehold = ({
         </>
       )}
 
-      <CommonCollapsibleCard title='Add Household Member'>
-        <Stack gap={2} sx={{ py: 2 }}>
-          <Grid container alignItems={'flex-start'} sx={{ px: 2 }}>
-            <Grid item xs={12} md={9} lg={8}>
-              <ClientTextSearchForm
-                onSearch={(text) => setSearchInput({ textSearch: text })}
-                searchAdornment
-                label='Search for Client'
-                minChars={3}
-              />
+      {canEdit && (
+        <CommonCollapsibleCard
+          title='Add Household Member'
+          open={searchOpen}
+          onClick={() => setSearchOpen(!searchOpen)}
+          // Clear search results when card collapses
+          onExited={() => setSearchInput(undefined)}
+        >
+          <Stack gap={2} sx={{ py: 2 }}>
+            <Grid container alignItems={'flex-start'} sx={{ px: 2 }}>
+              <Grid item xs={12} md={9} lg={8}>
+                <ClientTextSearchForm
+                  onSearch={(text) => setSearchInput({ textSearch: text })}
+                  searchAdornment
+                  label='Search for Client'
+                  minChars={3}
+                />
+              </Grid>
+              <Grid item xs></Grid>
+              <Grid item xs={12} md={3}>
+                {hasSearched && (
+                  <RootPermissionsFilter permissions='canEditClients'>
+                    <AddNewClientButton
+                      projectId={project.id}
+                      householdId={householdId}
+                      onCompleted={handleNewClientAdded}
+                    />
+                  </RootPermissionsFilter>
+                )}
+              </Grid>
             </Grid>
-            <Grid item xs></Grid>
-            <Grid item xs={12} md={3}>
-              {hasSearched && (
-                <RootPermissionsFilter permissions='canEditClients'>
-                  <AddNewClientButton
-                    projectId={project.id}
-                    householdId={householdId}
-                    onCompleted={handleNewClientAdded}
-                  />
-                </RootPermissionsFilter>
-              )}
-            </Grid>
-          </Grid>
 
-          {searchInput && (
-            <SsnDobShowContextProvider>
-              <GenericTableWithData<
-                SearchClientsQuery,
-                SearchClientsQueryVariables,
-                ClientSearchResultFieldsFragment
-              >
-                queryVariables={{ input: searchInput }}
-                queryDocument={SearchClientsDocument}
-                columns={columns}
-                pagePath='clientSearch'
-                fetchPolicy='cache-and-network'
-                filters={filters}
-                recordType='Client'
-                defaultSortOption={ClientSortOption.BestMatch}
-                onCompleted={() => setHasSearched(true)}
-                rowSecondaryActionConfigs={(row) => [
-                  getViewClientMenuItem(row),
-                ]}
-                tableProps={{
-                  'aria-label': 'Search results',
-                }}
-              />
-            </SsnDobShowContextProvider>
-          )}
-        </Stack>
-      </CommonCollapsibleCard>
+            {searchInput && (
+              <SsnDobShowContextProvider>
+                <GenericTableWithData<
+                  SearchClientsQuery,
+                  SearchClientsQueryVariables,
+                  ClientSearchResultFieldsFragment
+                >
+                  queryVariables={{ input: searchInput }}
+                  queryDocument={SearchClientsDocument}
+                  columns={columns}
+                  pagePath='clientSearch'
+                  fetchPolicy='cache-and-network'
+                  filters={filters}
+                  recordType='Client'
+                  defaultSortOption={ClientSortOption.BestMatch}
+                  onCompleted={() => setHasSearched(true)}
+                  rowSecondaryActionConfigs={(row) => [
+                    getViewClientMenuItem(row),
+                  ]}
+                  tableProps={{
+                    'aria-label': 'Search results',
+                  }}
+                />
+              </SsnDobShowContextProvider>
+            )}
+          </Stack>
+        </CommonCollapsibleCard>
+      )}
+      {renderBackButton && renderBackButton(householdId)}
     </Stack>
   );
 };
