@@ -339,7 +339,7 @@ const createThemeOptions = (theme: Theme) => ({
         },
         root: theme.unstable_sx({
           '&.Mui-disabled': {
-            backgroundColor: '#F5F5F5',
+            backgroundColor: theme.palette.grayscale.surface,
           },
         }),
         input: {
