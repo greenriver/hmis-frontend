@@ -1,38 +1,20 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  Box,
-  CircularProgress,
-  FormControlLabel,
-  Radio,
-  Tooltip,
-} from '@mui/material';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Box, Tooltip } from '@mui/material';
+import { useMemo } from 'react';
 
-import RelationshipToHoHInput from './elements/RelationshipToHoHInput';
 import { HOUSEHOLD_MEMBER_COLUMNS } from './HouseholdMemberTable';
 
-import { SplitIcon } from '@/components/elements/SemanticIcons';
+import { CheckIcon } from '@/components/elements/SemanticIcons';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
-import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
-import {
-  emptyErrorState,
-  ErrorState,
-  partitionValidations,
-} from '@/modules/errors/util';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
-import SplitHouseholdDialog from '@/modules/household/components/householdActions/SplitHouseholdDialog';
-import {
-  getDeleteEnrollmentDisabledAttrs,
-  getSplitDisabledAttrs,
-} from '@/modules/household/components/householdActions/util';
 import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
+import { useHouseholdMenuActions } from '@/modules/household/hooks/useHouseholdMenuActions';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
   RelationshipToHoH,
-  useDeleteEnrollmentMutation,
-  useUpdateRelationshipToHoHMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -41,19 +23,18 @@ interface Props {
   currentDashboardEnrollmentId?: string;
   refetchHousehold: any;
   loading?: boolean;
+  canEdit?: boolean;
 }
 
+//rename to HouseholdMemberTable
 const EditHouseholdMemberTable = ({
   household,
   project,
   refetchHousehold,
   currentDashboardEnrollmentId,
   loading,
+  canEdit,
 }: Props) => {
-  const [proposedHoH, setProposedHoH] =
-    useState<HouseholdClientFieldsFragment | null>(null);
-  const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
-
   const currentMembers = useMemo(
     () =>
       sortHouseholdMembers(
@@ -63,100 +44,25 @@ const EditHouseholdMemberTable = ({
     [household, currentDashboardEnrollmentId]
   );
 
-  const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
-    currentMembers.find(
-      (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-    ) || null
-  );
-
   // client to highlight for relationship input
-  const [highlight, setHighlight] = useState<string[]>([]);
+  // const [highlight, setHighlight] = useState<string[]>([]);
 
-  const [setHoHMutate, { loading: hohChangeLoading }] =
-    useUpdateRelationshipToHoHMutation({
-      onCompleted: (data) => {
-        if (!data.updateRelationshipToHoH) return;
-
-        if (data.updateRelationshipToHoH.enrollment) {
-          // highlight relationship field for non-HOH members
-          const members =
-            data.updateRelationshipToHoH?.enrollment?.household.householdClients
-              .filter(
-                (hc) =>
-                  hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
-              )
-              .map((hc) => hc.client.id);
-          setHighlight(members || []);
-          setProposedHoH(null);
-          setErrors(emptyErrorState);
-          // refetch, so that all relationships-to-HoH to reload
-          refetchHousehold();
-        } else if (data.updateRelationshipToHoH.errors.length > 0) {
-          const errors = data.updateRelationshipToHoH.errors;
-          setErrors(partitionValidations(errors));
-        }
-      },
-      onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
-    });
-
-  // If member list has changed, update HoH and clear proposed-HoH status
-  useEffect(() => {
-    const actualHoH =
-      currentMembers.find(
-        (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-      ) || null;
-
-    setHoH(actualHoH);
-    setProposedHoH((prev) => {
-      if (prev && prev === actualHoH) {
-        return null;
-      }
-      return prev;
-    });
-  }, [currentMembers]);
-
-  const onChangeHoH = useCallback(
-    (hc: HouseholdClientFieldsFragment, confirmed = false) => {
-      setProposedHoH(hc);
-      setHoHMutate({
-        variables: {
-          input: {
-            enrollmentId: hc.enrollment.id,
-            relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
-            confirmed,
-          },
-        },
-      });
-    },
-    [setHoHMutate]
-  );
-
-  const { renderValidationDialog } = useValidationDialog({
-    errorState,
-    includeErrors: true,
-  });
-
-  const [splitInitiator, setSplitInitiator] =
-    useState<HouseholdClientFieldsFragment | null>(null);
-
-  const canSplitHouseholds = project.access.canSplitHouseholds;
-
-  const [deleteEnrollment, { loading: deleteLoading, error: deleteError }] =
-    useDeleteEnrollmentMutation({
-      onCompleted: () => {
-        refetchHousehold();
-      },
-    });
-
+  // TODO ADD: MCI ID and Unit Assignment
   const columns = useMemo(() => {
+    const anyExited = household.householdClients.find(
+      (hc) => !!hc.enrollment.exitDate
+    );
+
     return [
-      HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
       HOUSEHOLD_MEMBER_COLUMNS.clientName({
         currentEnrollmentId: currentDashboardEnrollmentId,
         linkToProfile: !!currentDashboardEnrollmentId,
       }),
-      HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
-      HOUSEHOLD_MEMBER_COLUMNS.dobAge,
+      // HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
+      HOUSEHOLD_MEMBER_COLUMNS.entryDate,
+      // TODO ADD: ENROLLMENT STATUS
+      ...(anyExited ? [HOUSEHOLD_MEMBER_COLUMNS.exitDate] : []),
+
       {
         header: (
           <Tooltip title='Head of Household' placement='top' arrow>
@@ -165,124 +71,57 @@ const EditHouseholdMemberTable = ({
         ),
         key: 'HoH',
         width: '1%',
-        render: (hc: HouseholdClientFieldsFragment) => {
-          return (
-            <FormControlLabel
-              checked={hc.client.id === hoh?.client?.id}
-              control={
-                hohChangeLoading && proposedHoH === hc ? (
-                  <Box display='flex' alignItems='center' sx={{ pl: 1, pr: 2 }}>
-                    <CircularProgress size={20} />
-                  </Box>
-                ) : (
-                  <Radio
-                    inputProps={{
-                      'aria-label': `HoH status for ${clientBriefName(
-                        hc.client
-                      )}`,
-                    }}
-                  />
-                )
-              }
-              componentsProps={{ typography: { variant: 'body2' } }}
-              label='HoH'
-              labelPlacement='end'
-              disabled={hohChangeLoading}
-              onChange={() => {
-                onChangeHoH(hc, false);
-              }}
-            />
-          );
-        },
+        render: (hc: HouseholdClientFieldsFragment) =>
+          hc.enrollment.relationshipToHoH ===
+            RelationshipToHoH.SelfHeadOfHousehold && <CheckIcon />,
       },
       {
-        header: <Box sx={{ pl: 4 }}>Relationship to HoH</Box>,
+        header: 'Rel. to HoH',
         width: '25%',
         key: 'relationship',
+        // TODO move to menu action modal
         render: (hc: HouseholdClientFieldsFragment) => (
-          <RelationshipToHoHInput
-            variant='excludeHoh'
-            enrollmentId={hc.enrollment.id}
-            enrollmentLockVersion={hc.enrollment.lockVersion}
-            relationshipToHoH={hc.relationshipToHoH}
-            onClose={() =>
-              setHighlight((old) => old.filter((id) => id !== hc.client.id))
-            }
-            textInputProps={{
-              highlight: highlight.includes(hc.client.id),
-              inputProps: {
-                'aria-label': `Relationship to HoH for ${clientBriefName(
-                  hc.client
-                )}`,
-              },
-            }}
+          <HmisEnum
+            value={hc.relationshipToHoH}
+            enumMap={HmisEnums.RelationshipToHoH}
           />
+          // <RelationshipToHoHInput
+          //   variant='excludeHoh'
+          //   enrollmentId={hc.enrollment.id}
+          //   enrollmentLockVersion={hc.enrollment.lockVersion}
+          //   relationshipToHoH={hc.relationshipToHoH}
+          //   onClose={() =>
+          //     setHighlight((old) => old.filter((id) => id !== hc.client.id))
+          //   }
+          //   textInputProps={{
+          //     highlight: highlight.includes(hc.client.id),
+          //     inputProps: {
+          //       'aria-label': `Relationship to HoH for ${clientBriefName(
+          //         hc.client
+          //       )}`,
+          //     },
+          //   }}
+          // />
         ),
       },
+      HOUSEHOLD_MEMBER_COLUMNS.dobAge,
       HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(currentMembers),
     ];
   }, [
+    household.householdClients,
     currentDashboardEnrollmentId,
     currentMembers,
-    hoh?.client?.id,
-    hohChangeLoading,
-    proposedHoH,
-    onChangeHoH,
-    highlight,
   ]);
 
-  const getRowSecondaryActionConfigs = useCallback(
-    (row: HouseholdClientFieldsFragment) => {
-      return [
-        {
-          // No extra perm check is required for Delete, because this action only allows removing WIP Enrollments,
-          // which only requires Can Edit Enrollments, which is already required for this page
-          key: 'remove',
-          title: 'Delete Enrollment',
-          Icon: DeleteIcon,
-          ariaLabel: `Delete ${clientBriefName(row.client)}'s enrollment`,
-          onClick: () => {
-            deleteEnrollment({
-              variables: {
-                input: {
-                  id: row.enrollment.id,
-                },
-              },
-            });
-          },
-          ...getDeleteEnrollmentDisabledAttrs({
-            loading: loading || deleteLoading,
-            currentDashboardEnrollmentId,
-            householdClient: row,
-            householdSize: currentMembers.length,
-          }),
-        },
-        {
-          key: 'split',
-          title: 'Split → New Household',
-          Icon: SplitIcon,
-          onClick: () => setSplitInitiator(row),
-          ariaLabel: `Split ${clientBriefName(row.client)} to new household`,
-          ...getSplitDisabledAttrs({
-            canSplitHouseholds,
-            loading: loading || deleteLoading,
-            householdClient: row,
-            householdSize: currentMembers.length,
-          }),
-        },
-      ];
-    },
-    [
-      canSplitHouseholds,
-      currentDashboardEnrollmentId,
-      currentMembers.length,
-      deleteEnrollment,
-      deleteLoading,
+  const { getRowSecondaryActionConfigs, actionDialogs, actionLoading } =
+    useHouseholdMenuActions({
+      household,
+      refetchHousehold,
       loading,
-    ]
-  );
-
-  if (deleteError) throw deleteError;
+      currentDashboardEnrollmentId,
+      currentMembers,
+      project,
+    });
 
   return (
     <>
@@ -290,37 +129,19 @@ const EditHouseholdMemberTable = ({
         <GenericTable<HouseholdClientFieldsFragment>
           rows={currentMembers}
           rowName={(row) => clientBriefName(row.client)}
-          rowSecondaryActionConfigs={getRowSecondaryActionConfigs}
+          // TODO : only render actions if user can edit household
+          rowSecondaryActionConfigs={
+            canEdit ? getRowSecondaryActionConfigs : undefined
+          }
           columns={columns}
-          rowSx={() => ({
-            // HoH indicator column
-            'td:nth-of-type(1)': { px: 0 },
-          })}
-          loading={loading || deleteLoading}
+          loading={loading || actionLoading}
           loadingVariant='linear'
           tableProps={{
             'aria-label': 'Manage Household',
           }}
         />
       </SsnDobShowContextProvider>
-      {renderValidationDialog({
-        title: 'Change Head of Household',
-        onConfirm: () => proposedHoH && onChangeHoH(proposedHoH, true),
-        onCancel: () => {
-          setProposedHoH(null);
-          setErrors(emptyErrorState);
-        },
-        loading: hohChangeLoading,
-      })}
-      {!!splitInitiator && (
-        <SplitHouseholdDialog
-          donorHousehold={household}
-          initiator={splitInitiator}
-          open={!!splitInitiator}
-          onClose={() => setSplitInitiator(null)}
-          project={project}
-        />
-      )}
+      {actionDialogs}
     </>
   );
 };

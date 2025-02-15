@@ -6,9 +6,11 @@ import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import ArticleIcon from '@mui/icons-material/Article';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CallSplitRounded from '@mui/icons-material/CallSplitRounded';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -45,6 +47,7 @@ import WrapTextIcon from '@mui/icons-material/WrapText';
 
 export {
   Person as ClientIcon,
+  Person as PersonIcon,
   Home as EnrollmentIcon,
   QrCodeScannerIcon as GenerateScanCardIcon,
   DeleteIcon,
@@ -70,6 +73,8 @@ export {
   CallSplitRounded as SplitIcon,
   ExpandLessRoundedIcon as ExpandLessIcon,
   ExpandMoreRoundedIcon as ExpandMoreIcon,
+  CheckRoundedIcon as CheckIcon,
+  AutorenewRoundedIcon as ChangeRelationshipIcon,
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,

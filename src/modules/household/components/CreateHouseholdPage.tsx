@@ -49,7 +49,7 @@ const CreateHouseholdPage = () => {
         {buttonTextForPath(currentPath)}
       </BackButton>
     ),
-    [currentPath, navigate, state.prev]
+    [currentPath, navigate, state]
   );
 
   if (!project.access.canEnrollClients || !project.access.canEditEnrollments) {

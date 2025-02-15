@@ -81,6 +81,7 @@ const ManageHousehold = ({
   const [hasSearched, setHasSearched] = useState(false);
   // Search is expanded by default only if this is a new household (no members yet)
   const [searchOpen, setSearchOpen] = useState(!householdId);
+  const [previousMembersOpen, setPreviousMembersOpen] = useState(false);
 
   const onSuccess = useCallback(
     (newHouseholdId: string) => {
@@ -196,6 +197,7 @@ const ManageHousehold = ({
             refetchHousehold={refetchHousehold}
             loading={loading}
             project={project}
+            canEdit={canEdit}
           />
         )}
         {canEdit && household && (
@@ -210,17 +212,18 @@ const ManageHousehold = ({
       </TitleCard>
       {BackButton}
 
-      {recentEligibleMembers && recentEligibleMembers.length > 0 && (
+      {canEdit && recentEligibleMembers && recentEligibleMembers.length > 0 && (
         <>
-          <TitleCard
-            title='Previously Associated Members'
-            headerVariant='border'
+          <CommonCollapsibleCard
+            title={`Add Previously Associated Household Members (${recentEligibleMembers.length})`}
+            open={previousMembersOpen}
+            onClick={() => setPreviousMembersOpen(!previousMembersOpen)}
           >
             <AssociatedHouseholdMembers
               recentMembers={recentEligibleMembers}
               additionalColumns={addToEnrollmentColumns}
             />
-          </TitleCard>
+          </CommonCollapsibleCard>
         </>
       )}
 
@@ -285,6 +288,7 @@ const ManageHousehold = ({
         </CommonCollapsibleCard>
       )}
       {renderBackButton && renderBackButton(householdId)}
+      <Box sx={{ height: 100 }} />
     </Stack>
   );
 };

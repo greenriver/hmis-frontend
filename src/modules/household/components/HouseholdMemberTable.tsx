@@ -15,6 +15,7 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
@@ -43,6 +44,7 @@ export const nameColumnConfig = (currentClientId: string) => {
 
 export const HOUSEHOLD_MEMBER_COLUMNS = {
   hohIndicator: {
+    //delete
     header: '',
     key: 'indicator',
     width: '1%',
@@ -74,6 +76,16 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       );
     },
   }),
+  entryDate: {
+    header: 'Entry Date',
+    render: (hc: HouseholdClientFieldsFragment) =>
+      parseAndFormatDate(hc.enrollment.entryDate),
+  },
+  exitDate: {
+    header: 'Exit Date',
+    render: (hc: HouseholdClientFieldsFragment) =>
+      parseAndFormatDate(hc.enrollment.exitDate),
+  },
   enrollmentStatus: {
     header: 'Status',
     render: (hc: HouseholdClientFieldsFragment) => (
