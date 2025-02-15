@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
+import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import {
   ChangeRelationshipIcon,
   DeleteIcon,
@@ -46,7 +47,7 @@ export function useHouseholdMenuActions({
 
   // TODO: group menu items into sections
   const getRowSecondaryActionConfigs = useCallback(
-    (row: HouseholdClientFieldsFragment) => {
+    (row: HouseholdClientFieldsFragment): CommonMenuItem[] => {
       return [
         // ASSESSMENTS
         // Intake Assessment
@@ -85,6 +86,7 @@ export function useHouseholdMenuActions({
         // DIVIDER
         {
           key: 'divider',
+          title: 'divider',
           divider: true,
         },
         {
