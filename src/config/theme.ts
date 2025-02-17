@@ -1,7 +1,6 @@
 import { Theme } from '@mui/material';
 import {
   PaletteColor,
-  SimplePaletteColorOptions,
   SxProps,
   ThemeOptions,
   alpha,
@@ -49,14 +48,12 @@ declare module '@mui/material/styles' {
       icon?: string;
     };
   }
-
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
     grayscale: SimplePaletteColorOptions;
-    custom: { main: string };
   }
 
   interface PaletteOptions {
@@ -65,7 +62,14 @@ declare module '@mui/material/styles' {
     links: string;
     activeStatus: string;
     grayscale: SimplePaletteColorOptions;
-    custom: { main: string };
+  }
+
+  interface SimplePaletteColorOptions {
+    surface?: string;
+    darkest?: string;
+    100?: string;
+    200?: string;
+    300?: string;
   }
 }
 
@@ -106,8 +110,14 @@ declare module '@mui/material/IconButton' {
   }
 }
 
+const generateShades = (mainColor: string) => ({
+  100: alpha(mainColor, 0.08),
+  200: alpha(mainColor, 0.12),
+  300: alpha(mainColor, 0.3),
+});
+
 // Default base theme, to be merged with overlays
-export const baseThemeDef: ThemeOptions = {
+export const baseThemeOptions = {
   typography: {
     fontFamily: '"Open Sans", sans-serif',
     fontWeightBold: 600,
@@ -122,10 +132,6 @@ export const baseThemeDef: ThemeOptions = {
     },
   },
   palette: {
-    // customizable color per data source; use only for accents
-    custom: {
-      main: '#5661A5', // primary.main
-    },
     primary: {
       surface: '#F8F9FB',
       light: '#A4B9DB',
@@ -133,9 +139,6 @@ export const baseThemeDef: ThemeOptions = {
       dark: '#1D2877',
       darkest: '#17205F',
       contrastText: '#FFFFFF',
-      100: alpha('#5661A5', 0.08),
-      200: alpha('#5661A5', 0.12),
-      300: alpha('#5661A5', 0.3),
     },
     success: {
       surface: '#F1F9F1',
@@ -144,9 +147,6 @@ export const baseThemeDef: ThemeOptions = {
       dark: '#357A38',
       darkest: '#263826',
       contrastText: '#263826',
-      100: alpha('#4CAF50', 0.08),
-      200: alpha('#4CAF50', 0.12),
-      300: alpha('#4CAF50', 0.3),
     },
     warning: {
       surface: '#FEF3EB',
@@ -155,9 +155,6 @@ export const baseThemeDef: ThemeOptions = {
       dark: '#D14900',
       darkest: '#4D1800',
       contrastText: '#4D1800',
-      100: alpha('#ED6C02', 0.08),
-      200: alpha('#ED6C02', 0.12),
-      300: alpha('#ED6C02', 0.3),
     },
     error: {
       surface: '#FEF0EF',
@@ -166,9 +163,6 @@ export const baseThemeDef: ThemeOptions = {
       dark: '#AA2E25',
       darkest: '#420400',
       contrastText: '#420400',
-      100: alpha('#F44336', 0.08),
-      200: alpha('#F44336', 0.12),
-      300: alpha('#F44336', 0.3),
     },
     background: {
       default: '#FCFCFC',
@@ -204,18 +198,29 @@ export const baseThemeDef: ThemeOptions = {
       light: '#8b8b8b',
       contrastText: '#fff',
       surface: '#F3F3F3',
-      100: alpha('#6E6E6E', 0.08),
-      200: alpha('#6E6E6E', 0.12),
-      300: alpha('#6E6E6E', 0.3),
     },
   },
-};
+} as const satisfies ThemeOptions;
 
 const outlineStyles = {
   outlineColor: '-webkit-focus-ring-color',
   outlineWidth: '2px',
   outlineStyle: 'auto',
 };
+
+// Add shades to palette as a separate step, rather than in baseThemeOptions, so that they are
+// generated based on the final palette values (which may be overridden by GrdaWarehouse::Theme customizations)
+const addPaletteShades = (theme: Theme) =>
+  createTheme(theme, {
+    palette: {
+      primary: { ...generateShades(theme.palette.primary.main) },
+      success: { ...generateShades(theme.palette.success.main) },
+      warning: { ...generateShades(theme.palette.warning.main) },
+      error: { ...generateShades(theme.palette.error.main) },
+      grayscale: { ...generateShades(theme.palette.grayscale.main) },
+    },
+  });
+
 // Create theme options to use for composition
 // See: https://mui.com/material-ui/customization/theming/#createtheme-options-args-theme
 const createThemeOptions = (theme: Theme) => ({
@@ -278,7 +283,6 @@ const createThemeOptions = (theme: Theme) => ({
       fontWeight: 400,
     },
   },
-
   components: {
     MuiCssBaseline: {
       styleOverrides: {
@@ -688,10 +692,13 @@ const createThemeOptions = (theme: Theme) => ({
 });
 
 export const createFullTheme = (options?: ThemeOptions) => {
-  // Create theb ase theme, merged with any overlays from the backend
-  const theme = createTheme(deepmerge(baseThemeDef, options || {}));
+  // Create the base theme, merged with any overlays from the backend
+  // (Note: if overlaying a color, need to specify all main/surface/dark/darkest values)
+  const theme = createTheme(deepmerge(baseThemeOptions, options || {}));
+  // Add missing shades to the palette
+  const themeWithShades = addPaletteShades(theme);
   // Create the full theme with composition
-  return createTheme(theme, createThemeOptions(theme));
+  return createTheme(themeWithShades, createThemeOptions(themeWithShades));
 };
 
 // Export default theme with no overlay options
