@@ -14,12 +14,12 @@ const config: TestRunnerConfig = {
       // Skip some rules for now as we work on addressing them
       rules: [
         {
-          // TODO(#7108, #a11y-162) - turn this back on
+          // TODO(#7108), https://github.com/open-path/hmis-accessibility/issues/162
           id: 'color-contrast',
           enabled: false,
         },
         {
-          // TODO(#a11y-1)
+          // TODO https://github.com/open-path/hmis-accessibility/issues/1
           id: 'autocomplete-valid',
           enabled: false,
         },
