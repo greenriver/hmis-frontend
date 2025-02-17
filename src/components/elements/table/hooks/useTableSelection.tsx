@@ -1,5 +1,5 @@
 import { without } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export function useTableSelection<T extends { id: string }>({
   selectable = false,
@@ -18,8 +18,9 @@ export function useTableSelection<T extends { id: string }>({
   const [selectedState, setSelectedState] = useState<string[]>();
 
   // Table row selection can be either controlled or uncontrolled:
-  // - controlled: `selectedCtrl` and `onChangeSelectedCtrl` props passed from parent
-  // - uncontrolled: managed internally in `selectedState`
+  // - controlled: `selectedControlled` and `onChangeSelected` props passed from parent
+  // - uncontrolled: managed internally in `selectedState`,
+  // (but we still call `onChangeSelected` so the caller can "listen in" on what rows are selected)
   const isSelectControlled = selectedControlled !== undefined;
 
   const selected = useMemo(
@@ -33,6 +34,11 @@ export function useTableSelection<T extends { id: string }>({
     return rows.filter(isRowSelectable).map((r) => r.id);
   }, [rows, selectable, isRowSelectable]);
 
+  const deselectAll = useCallback(() => {
+    if (!isSelectControlled) setSelectedState([]);
+    onChangeSelected?.([]);
+  }, [isSelectControlled, onChangeSelected]);
+
   const handleSelectAllClick = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {
@@ -41,11 +47,10 @@ export function useTableSelection<T extends { id: string }>({
         onChangeSelected?.(selectableRowIds);
       } else {
         // deselect all
-        if (!isSelectControlled) setSelectedState([]);
-        onChangeSelected?.([]);
+        deselectAll();
       }
     },
-    [isSelectControlled, onChangeSelected, selectableRowIds]
+    [deselectAll, isSelectControlled, onChangeSelected, selectableRowIds]
   );
 
   const handleSelectRow = useCallback(
@@ -60,8 +65,15 @@ export function useTableSelection<T extends { id: string }>({
     [isSelectControlled, onChangeSelected, selected]
   );
 
-  // Clear selection when data changes
-  useEffect(() => setSelectedState([]), [rows]);
+  // Clear selection when `rows` change (but not in initial render)
+  const didMountRef = useRef(false);
+  useEffect(() => {
+    if (didMountRef.current) {
+      deselectAll();
+    } else {
+      didMountRef.current = true; // first render
+    }
+  }, [deselectAll, rows]);
 
   return {
     selected,

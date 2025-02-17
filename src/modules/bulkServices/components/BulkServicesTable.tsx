@@ -173,6 +173,11 @@ const BulkServicesTable: React.FC<Props> = ({
     };
   }, [projectId, servicePeriod, serviceTypeId]);
 
+  const handleSelectedRowsChange = useCallback(
+    (rows: readonly string[]) => setAnyRowsSelected(rows.length > 0),
+    []
+  );
+
   return (
     <SsnDobShowContextProvider>
       <GenericTableWithData<
@@ -190,7 +195,7 @@ const BulkServicesTable: React.FC<Props> = ({
         }}
         loadingVariant='linear'
         selectable='checkbox'
-        onChangeSelectedRowIds={(rows) => setAnyRowsSelected(rows.length > 0)}
+        onChangeSelectedRowIds={handleSelectedRowsChange}
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
         getColumnDefs={getColumnDefs}
