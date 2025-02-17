@@ -13,4 +13,5 @@ fragment EventFields on Event {
   user {
     ...UserFields
   }
+  formDefinitionId
 }
