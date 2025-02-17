@@ -51,7 +51,7 @@ const RecentEnrollments = ({
           p: 2,
         }}
       >
-        <CircularProgress color='inherit' />
+        <CircularProgress aria-label='Loading' color='inherit' />
       </Box>
     );
   }
