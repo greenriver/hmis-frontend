@@ -1,4 +1,5 @@
 import {
+  Box,
   lighten,
   Table,
   TableBody,
@@ -18,6 +19,7 @@ import {
 } from '../../types';
 
 import { yesCode } from '../../util/formUtil';
+import { customVisuallyHidden } from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
@@ -184,7 +186,9 @@ const DisabilityTable = ({
       ) : (
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
+            <TableCell>
+              <Box sx={customVisuallyHidden}>Disability</Box>
+            </TableCell>
             <TableCell id={statusId}>Status</TableCell>
             <TableCell id={disablingConditionId}>Disabling Condition</TableCell>
           </TableRow>

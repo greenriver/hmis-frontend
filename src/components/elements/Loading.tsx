@@ -11,7 +11,7 @@ const Loading = () => (
     aria-live='polite'
     aria-busy='true'
   >
-    <CircularProgress size={50} />
+    <CircularProgress aria-label='Loading' size={50} />
   </Box>
 );
 

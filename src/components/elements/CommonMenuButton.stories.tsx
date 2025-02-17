@@ -29,6 +29,9 @@ export const Outlined: Story = {
 export const IconOnly: Story = {
   args: {
     title: 'Menu',
+    ButtonProps: {
+      'aria-label': 'Action menu',
+    },
     iconButton: true,
     items: menuItems,
   },
