@@ -693,7 +693,8 @@ const createThemeOptions = (theme: Theme) => ({
 
 export const createFullTheme = (options?: ThemeOptions) => {
   // Create the base theme, merged with any overlays from the backend
-  // (Note: if overlaying a color, need to specify all main/surface/dark/darkest values)
+  // (Note: if overlaying a color, need to specify all main/surface/dark/darkest values.
+  //  we don't currently calculate those based off primary)
   const theme = createTheme(deepmerge(baseThemeOptions, options || {}));
   // Add missing shades to the palette
   const themeWithShades = addPaletteShades(theme);
