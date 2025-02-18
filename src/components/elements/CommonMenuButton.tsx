@@ -25,7 +25,8 @@ export type CommonMenuItem = {
   Icon?: SvgIconComponent;
   to?: To;
   onClick?: VoidFunction;
-  divider?: boolean;
+  divider?: boolean; // if true, this item is ONLY a divider
+  sectionLabel?: string; // if passed, renders section label above menu item
   disabled?: boolean;
   disabledReason?: string;
   ariaLabel?: string;
@@ -129,6 +130,7 @@ const CommonMenuButton = ({
             ariaLabel,
             openInNew,
             linkState,
+            sectionLabel,
           }) => {
             if (divider) return <Divider key={key} />;
 
@@ -137,6 +139,16 @@ const CommonMenuButton = ({
               disabled,
             };
 
+            const sectionLabelEl = sectionLabel ? (
+              <Typography
+                variant='caption'
+                color='text.secondary'
+                sx={{ px: 1.5, py: 0.5 }}
+                component='div'
+              >
+                {sectionLabel}
+              </Typography>
+            ) : null;
             const menuItemLabel = (
               <Stack direction='row'>
                 {Icon && (
@@ -164,33 +176,39 @@ const CommonMenuButton = ({
 
             if (to) {
               return (
-                <MenuItem
-                  key={key}
-                  {...props}
-                  component={RouterLink}
-                  to={to}
-                  state={linkState}
-                  openInNew={openInNew}
-                >
-                  {menuItemLabel}
-                </MenuItem>
+                <>
+                  {sectionLabelEl}
+                  <MenuItem
+                    key={key}
+                    {...props}
+                    component={RouterLink}
+                    to={to}
+                    state={linkState}
+                    openInNew={openInNew}
+                  >
+                    {menuItemLabel}
+                  </MenuItem>
+                </>
               );
             }
 
             return (
-              <MenuItem
-                key={key}
-                {...props}
-                onClick={() => {
-                  if (onClick) {
-                    // close menu before triggering onClick
-                    setAnchorEl(null);
-                    onClick();
-                  }
-                }}
-              >
-                {menuItemLabel}
-              </MenuItem>
+              <>
+                {sectionLabelEl}
+                <MenuItem
+                  key={key}
+                  {...props}
+                  onClick={() => {
+                    if (onClick) {
+                      // close menu before triggering onClick
+                      setAnchorEl(null);
+                      onClick();
+                    }
+                  }}
+                >
+                  {menuItemLabel}
+                </MenuItem>
+              </>
             );
           }
         )}

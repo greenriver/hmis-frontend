@@ -39,22 +39,17 @@ const EditHouseholdMemberTable = ({
     [household]
   );
 
-  // client to highlight for relationship input
-  // const [highlight, setHighlight] = useState<string[]>([]);
-
-  // TODO ADD: MCI ID and Unit Assignment
   const columns = useMemo(() => {
     const anyExited = household.householdClients.find(
       (hc) => !!hc.enrollment.exitDate
     );
 
+    // TODO ADD: MCI ID
     return [
       HOUSEHOLD_MEMBER_COLUMNS.clientName,
-      // HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.entryDate,
-      // TODO ADD: ENROLLMENT STATUS
       ...(anyExited ? [HOUSEHOLD_MEMBER_COLUMNS.exitDate] : []),
-
+      HOUSEHOLD_MEMBER_COLUMNS.enrollmentStatus,
       {
         header: (
           <Tooltip title='Head of Household' placement='top' arrow>
@@ -62,7 +57,6 @@ const EditHouseholdMemberTable = ({
           </Tooltip>
         ),
         key: 'HoH',
-        width: '1%',
         render: (hc: HouseholdClientFieldsFragment) =>
           hc.enrollment.relationshipToHoH ===
             RelationshipToHoH.SelfHeadOfHousehold && <CheckIcon />,

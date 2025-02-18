@@ -4,6 +4,10 @@ import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import {
   ChangeRelationshipIcon,
   DeleteIcon,
+  ExitAssessmentIcon,
+  GoToIcon,
+  IntakeAssessmentIcon,
+  OpenInNewIcon,
   PersonIcon,
   SplitIcon,
 } from '@/components/elements/SemanticIcons';
@@ -17,11 +21,16 @@ import { ManageHouseholdProject } from '@/modules/household/components/ManageHou
 import { useChangeHoh } from '@/modules/household/hooks/useChangeHoh';
 import { useChangeRelationshipToHoh } from '@/modules/household/hooks/useChangeRelationshipToHoh';
 import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
+import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
   RelationshipToHoH,
   useDeleteEnrollmentMutation,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Args {
   refetchHousehold: VoidFunction;
@@ -56,20 +65,45 @@ export function useHouseholdMenuActions({
   );
 
   const { changeRelationshipDialog, openChangeRelationshipDialog } =
-    useChangeRelationshipToHoh({ refetchHousehold });
-  // TODO: group menu items into sections
+    useChangeRelationshipToHoh();
+
   const getRowSecondaryActionConfigs = useCallback(
     (row: HouseholdClientFieldsFragment): CommonMenuItem[] => {
       const isSoleHoh =
         row.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
         !hasMultipleHohs;
 
+      const clientId = row.client.id;
+      const enrollmentId = row.enrollment.id;
       return [
         // ASSESSMENTS
+        {
+          sectionLabel: 'Assessments',
+          key: 'intake assessment',
+          title: 'Intake Assessment',
+          Icon: IntakeAssessmentIcon,
+          to: generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
+            clientId,
+            enrollmentId,
+          }),
+          ariaLabel: `Go to ${clientBriefName(row.client)}'s Intake Assessment`,
+        },
+        {
+          key: 'exit assessment',
+          title: 'Exit',
+          Icon: ExitAssessmentIcon,
+          to: generateSafePath(EnrollmentDashboardRoutes.EXIT, {
+            clientId,
+            enrollmentId,
+          }),
+          ariaLabel: `Go to ${clientBriefName(row.client)}'s Exit Assessment`,
+          disabled: !!row.enrollment.inProgress,
+        },
         // Intake Assessment
         // Exit
         // CLIENT
         {
+          sectionLabel: 'Client',
           key: 'assign hoh',
           title: 'Make Head of Household',
           Icon: PersonIcon,
@@ -99,8 +133,32 @@ export function useHouseholdMenuActions({
           }),
         },
         // NAVIGATION
+        {
+          key: 'divider-navigation',
+          title: 'divider',
+          divider: true,
+        },
         // go to client enrollment
+        {
+          sectionLabel: 'Navigation',
+          key: 'view enrollment',
+          title: 'Go to Client Enrollment',
+          Icon: GoToIcon,
+          to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+            clientId,
+            enrollmentId,
+          }),
+          ariaLabel: `Go to  ${clientBriefName(row.client)}'s Enrollment`,
+        },
         // open client profile
+        {
+          key: 'open client profile',
+          title: 'Open Client Profile',
+          Icon: OpenInNewIcon,
+          to: generateSafePath(ClientDashboardRoutes.PROFILE, { clientId }),
+          openInNew: true,
+          ariaLabel: `Go to  ${clientBriefName(row.client)}'s Client Profile`,
+        },
         // DIVIDER
         {
           key: 'divider',

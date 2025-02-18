@@ -1,5 +1,4 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Link, LinkProps, Stack } from '@mui/material';
 import { forwardRef } from 'react';
 import {
@@ -29,7 +28,7 @@ const RouterLink = forwardRef<HTMLLinkElement, RouterLinkProps>(
         sx={plain ? { color: 'inherit', ...props.sx } : props.sx}
         target={openInNew ? '_blank' : undefined}
       >
-        {openInNew || Icon ? (
+        {Icon ? (
           <Stack
             direction={'row'}
             gap={0.75}
@@ -38,11 +37,7 @@ const RouterLink = forwardRef<HTMLLinkElement, RouterLinkProps>(
             component='span'
           >
             {children}
-            {openInNew ? (
-              <OpenInNewIcon fontSize='inherit' />
-            ) : (
-              Icon && <Icon fontSize='inherit' />
-            )}
+            <Icon fontSize='inherit' />
           </Stack>
         ) : (
           children

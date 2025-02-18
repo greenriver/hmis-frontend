@@ -65,7 +65,6 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     key: 'name',
     render: (h: HouseholdClientFieldsFragment) => {
       const isCurrentClient = h.enrollment.id === currentEnrollmentId;
-
       return (
         <ClientName
           client={h.client}
@@ -87,13 +86,13 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       parseAndFormatDate(hc.enrollment.exitDate),
   },
   enrollmentStatus: {
-    header: 'Status',
+    header: 'Enrollment Status',
     render: (hc: HouseholdClientFieldsFragment) => (
       <EnrollmentStatus enrollment={hc.enrollment} />
     ),
   },
   relationshipToHoh: {
-    header: 'Relationship to HoH',
+    header: 'Rel. to HoH',
     render: (hc: HouseholdClientFieldsFragment) => (
       <HmisEnum
         value={hc.relationshipToHoH}
@@ -115,6 +114,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
   },
   dobAge: CLIENT_COLUMNS.dobAge,
   enrollmentPeriod: {
+    // delete
     header: 'Enrollment Period',
     key: 'status',
     render: (hc: HouseholdClientFieldsFragment) => (
