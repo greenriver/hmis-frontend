@@ -1,3 +1,4 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import { useCallback, useMemo, useState } from 'react';
 
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
@@ -81,7 +82,7 @@ export function useHouseholdMenuActions({
           sectionLabel: 'Assessments',
           key: 'intake assessment',
           title: 'Intake Assessment',
-          Icon: IntakeAssessmentIcon,
+          Icon: IntakeAssessmentIcon as any as SvgIconComponent,
           to: generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
             clientId,
             enrollmentId,

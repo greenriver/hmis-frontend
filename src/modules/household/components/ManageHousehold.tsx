@@ -104,6 +104,8 @@ const ManageHousehold = ({
       { ...CLIENT_COLUMNS.name, sticky: 'left', width: '25%' }, // why does sticky make it so wide?
       CLIENT_COLUMNS.dobAge,
     ];
+
+    // fixme get rid of this
     if (isMobile) {
       // On mobile, show enrollment button right next to the client name so user
       // doesn't have to scroll to the right.

@@ -138,6 +138,7 @@ const HouseholdMemberTable = ({
   columns?: ColumnDef<HouseholdClientFieldsFragment>[];
   condensed?: boolean;
 }) => {
+  // fixme clean up
   const { enrollment } = useEnrollmentDashboardContext();
   // TODO: move MCI over to manage hh
   // TODO: move unit over to manage hh

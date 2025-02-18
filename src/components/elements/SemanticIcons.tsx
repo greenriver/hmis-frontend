@@ -94,7 +94,7 @@ export {
   QrCodeScannerIcon as GenerateScanCardIcon,
   ArrowForwardRoundedIcon as GoToIcon,
   PeopleIcon as HouseholdIcon,
-  IntakeAssessmentIcon as IntakeAssessmentIcon,
+  IntakeAssessmentIcon,
   MergeTypeRounded as JoinIcon,
   AddchartRoundedIcon as ManageHouseholdIcon,
   MoreVertRoundedIcon as MoreMenuIcon,

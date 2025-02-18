@@ -86,7 +86,6 @@ const EnrollmentOverview = () => {
               }
             >
               <HouseholdMemberTable
-                clientId={clientId}
                 enrollmentId={enrollmentId}
                 hideActions
                 columns={householdColumns}
