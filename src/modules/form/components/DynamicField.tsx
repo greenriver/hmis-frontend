@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
-import { getValueFromPickListData, usePickList } from '../hooks/usePickList';
+import { usePickList } from '../hooks/usePickList';
 import {
   ChangeType,
   DynamicFieldProps,
@@ -50,7 +50,13 @@ import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { safeParseLatLon } from '@/types/geolocationTypes';
-import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
+import {
+  Component,
+  DisabledDisplay,
+  FormItem,
+  InputSize,
+  ItemType,
+} from '@/types/gqlTypes';
 
 export const getLabel = (
   item: FormItem,
@@ -74,7 +80,8 @@ export const getLabel = (
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
-  value,
+  handlers,
+  value: formValue,
   disabled = false,
   horizontal = false,
   errors,
@@ -86,6 +93,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   localConstants,
 }) => {
   const { linkId } = item;
+  const value =
+    disabled && item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
+      ? undefined
+      : formValue;
   const onChangeEvent = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) =>
       itemChanged({ linkId, value: e.target.value, type: ChangeType.User }),
@@ -152,29 +163,20 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   } = usePickList({
     item,
     ...pickListArgs,
-    fetchOptions: {
-      onCompleted: (data) => {
-        const newValue = getValueFromPickListData({
-          item,
-          value,
-          linkId: item.linkId,
-          data,
-        });
-        // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
-        if (newValue) setTimeout(() => itemChanged(newValue));
-      },
-    },
   });
 
   const placeholder = placeholderText(item);
 
   if (item.component === Component.Mci) {
+    if (!handlers) throw new Error('MCI field missing required handlers');
+
     return (
       <MciClearance
         value={value}
         onChange={onChangeValue}
         {...commonInputProps}
         disabled={false}
+        handlers={handlers}
       />
     );
   }
