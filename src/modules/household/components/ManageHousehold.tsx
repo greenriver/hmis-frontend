@@ -8,13 +8,12 @@ import { usePreviouslyAssociatedMembers } from '../hooks/usePreviouslyAssociated
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
 import AddNewClientButton from './elements/AddNewClientButton';
 import { ClickToCopyId } from '@/components/elements/ClickToCopy';
-import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
+import { CommonCard2 } from '@/components/elements/CommonCard2';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import TitleCard from '@/components/elements/TitleCard';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -142,10 +141,11 @@ const ManageHousehold = ({
   return (
     <Stack gap={4}>
       {/* FIXME: align on titlecard and commoncard */}
-      <TitleCard
+      <CommonCard2
         title='Household'
-        headerVariant={household ? 'border' : undefined}
-        headerComponent='h1'
+        titleBorder
+        TitleComponent='h1'
+        padContent={false}
         actions={
           householdId && (
             <CommonLabeledTextBlock title='Household ID' horizontal>
@@ -186,15 +186,17 @@ const ManageHousehold = ({
             />
           </Box>
         )}
-      </TitleCard>
+      </CommonCard2>
       {BackButton}
 
       {canEdit &&
         previouslyAssociatedMembers &&
         previouslyAssociatedMembers.length > 0 && (
           <>
-            <CommonCollapsibleCard
-              title={`Add Previously Associated Household Members (${previouslyAssociatedMembers.length})`}
+            <CommonCard2
+              title={`+ Add Previously Associated Household Members (${previouslyAssociatedMembers.length})`}
+              collapsible
+              padContent={false}
               open={previousMembersOpen}
               onClick={() => setPreviousMembersOpen(!previousMembersOpen)}
             >
@@ -203,13 +205,15 @@ const ManageHousehold = ({
                 recentMembers={previouslyAssociatedMembers}
                 additionalColumns={addToEnrollmentColumns}
               />
-            </CommonCollapsibleCard>
+            </CommonCard2>
           </>
         )}
 
       {canEdit && (
-        <CommonCollapsibleCard
-          title='Add Household Member'
+        <CommonCard2
+          title='+ Add Household Member'
+          collapsible
+          padContent={false}
           open={searchOpen}
           onClick={() => setSearchOpen(!searchOpen)}
           // Clear search results when card collapses
@@ -265,7 +269,7 @@ const ManageHousehold = ({
               </SsnDobShowContextProvider>
             )}
           </Stack>
-        </CommonCollapsibleCard>
+        </CommonCard2>
       )}
       {renderBackButton && renderBackButton(householdId)}
       <Box sx={{ height: 100 }} />
