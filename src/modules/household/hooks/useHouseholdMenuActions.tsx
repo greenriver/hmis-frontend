@@ -15,6 +15,7 @@ import {
 } from '@/modules/household/components/householdActions/util';
 import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import { useChangeHoh } from '@/modules/household/hooks/useChangeHoh';
+import { useChangeRelationshipToHoh } from '@/modules/household/hooks/useChangeRelationshipToHoh';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -53,6 +54,9 @@ export function useHouseholdMenuActions({
       ).length > 1,
     [currentMembers]
   );
+
+  const { changeRelationshipDialog, openChangeRelationshipDialog } =
+    useChangeRelationshipToHoh({ refetchHousehold });
   // TODO: group menu items into sections
   const getRowSecondaryActionConfigs = useCallback(
     (row: HouseholdClientFieldsFragment): CommonMenuItem[] => {
@@ -77,7 +81,7 @@ export function useHouseholdMenuActions({
           key: 'change relationship to hoh',
           title: 'Change Relationship',
           Icon: ChangeRelationshipIcon,
-          onClick: () => console.error('TODO'),
+          onClick: () => openChangeRelationshipDialog(row),
           ariaLabel: `Change ${clientBriefName(row.client)}'s relationship`,
           disabled: isSoleHoh,
         },
@@ -132,6 +136,7 @@ export function useHouseholdMenuActions({
       currentMembers.length,
       currentDashboardEnrollmentId,
       onChangeHoh,
+      openChangeRelationshipDialog,
       deleteEnrollment,
     ]
   );
@@ -149,9 +154,16 @@ export function useHouseholdMenuActions({
           />
         )}
         {confirmHohDialog}
+        {changeRelationshipDialog}
       </>
     );
-  }, [splitInitiator, household, project, confirmHohDialog]);
+  }, [
+    splitInitiator,
+    household,
+    project,
+    confirmHohDialog,
+    changeRelationshipDialog,
+  ]);
 
   if (deleteError) throw deleteError;
 
