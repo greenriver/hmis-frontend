@@ -1,5 +1,6 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
+import AddchartRoundedIcon from '@mui/icons-material/AddchartRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
@@ -44,7 +45,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import WrapTextIcon from '@mui/icons-material/WrapText';
-
 export {
   Person as ClientIcon,
   Person as PersonIcon,
@@ -75,6 +75,7 @@ export {
   ExpandMoreRoundedIcon as ExpandMoreIcon,
   CheckRoundedIcon as CheckIcon,
   AutorenewRoundedIcon as ChangeRelationshipIcon,
+  AddchartRoundedIcon as ManageHouseholdIcon,
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,

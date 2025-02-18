@@ -18,6 +18,7 @@ import { useChangeHoh } from '@/modules/household/hooks/useChangeHoh';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
+  RelationshipToHoH,
   useDeleteEnrollmentMutation,
 } from '@/types/gqlTypes';
 
@@ -45,9 +46,20 @@ export function useHouseholdMenuActions({
 
   const { confirmHohDialog, onChangeHoh } = useChangeHoh({ refetchHousehold });
 
+  const hasMultipleHohs = useMemo(
+    () =>
+      currentMembers.filter(
+        (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+      ).length > 1,
+    [currentMembers]
+  );
   // TODO: group menu items into sections
   const getRowSecondaryActionConfigs = useCallback(
     (row: HouseholdClientFieldsFragment): CommonMenuItem[] => {
+      const isSoleHoh =
+        row.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
+        !hasMultipleHohs;
+
       return [
         // ASSESSMENTS
         // Intake Assessment
@@ -59,6 +71,7 @@ export function useHouseholdMenuActions({
           Icon: PersonIcon,
           onClick: () => onChangeHoh(row),
           ariaLabel: `Make ${clientBriefName(row.client)} the Head of Household`,
+          disabled: isSoleHoh,
         },
         {
           key: 'change relationship to hoh',
@@ -66,6 +79,7 @@ export function useHouseholdMenuActions({
           Icon: ChangeRelationshipIcon,
           onClick: () => console.error('TODO'),
           ariaLabel: `Change ${clientBriefName(row.client)}'s relationship`,
+          disabled: isSoleHoh,
         },
         {
           key: 'split',
@@ -111,13 +125,14 @@ export function useHouseholdMenuActions({
       ];
     },
     [
+      hasMultipleHohs,
       project.access.canSplitHouseholds,
-      currentDashboardEnrollmentId,
-      currentMembers.length,
-      deleteEnrollment,
-      deleteLoading,
       loading,
+      deleteLoading,
+      currentMembers.length,
+      currentDashboardEnrollmentId,
       onChangeHoh,
+      deleteEnrollment,
     ]
   );
 

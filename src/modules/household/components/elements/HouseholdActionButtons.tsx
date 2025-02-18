@@ -6,24 +6,34 @@ import { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
+import { findHohOrRep } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   householdMembers: HouseholdClientFieldsFragment[];
-  enrollmentId: string;
-  clientId: string;
 }
 
 /**
  * Action buttons for an entire household
  */
-const HouseholdActionButtons = ({
-  householdMembers,
-  enrollmentId,
-  clientId,
-}: Props) => {
+const HouseholdActionButtons = ({ householdMembers }: Props) => {
+  const { enrollment } = useEnrollmentDashboardContext();
+  // If rendered on the enrollment dashboard, link to the same enrollment.
+  // If rendered elsewhere (project dash household creation), link to HoH enrollment.
+  const routeParams = useMemo(() => {
+    if (enrollment) {
+      return { clientId: enrollment.client.id, enrollmentId: enrollment.id };
+    }
+    const hoh = findHohOrRep(householdMembers);
+    return {
+      clientId: hoh.client.id,
+      enrollmentId: hoh.enrollment.id,
+    };
+  }, [enrollment, householdMembers]);
+
   const individual = householdMembers.length === 1;
   // TODO: should make exit red if there are exits in progress
   const [canExit, exitReason] = useMemo(() => {
@@ -68,10 +78,7 @@ const HouseholdActionButtons = ({
             disabled={!canIntake}
             color={intakeColor}
             Icon={PostAddIcon}
-            to={generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
-              clientId,
-              enrollmentId,
-            })}
+            to={generateSafePath(EnrollmentDashboardRoutes.INTAKE, routeParams)}
             sx={{
               width: { xs: '100%', sm: 'fit-content' },
               textAlign: 'center',
@@ -81,15 +88,13 @@ const HouseholdActionButtons = ({
           </ButtonLink>
         </ButtonTooltipContainer>
       )}
-      {(canExit || exitReason) && (
+      {/* only show exit assessment link if all members have completed intake, and if rendered on enrollment dashboard (to avoid displaying immediately after auto-enter into project) */}
+      {(canExit || exitReason) && enrollment && (
         <ButtonTooltipContainer title={exitReason} placement='bottom'>
           <ButtonLink
             disabled={!canExit}
             Icon={ExitToAppIcon}
-            to={generateSafePath(EnrollmentDashboardRoutes.EXIT, {
-              clientId,
-              enrollmentId,
-            })}
+            to={generateSafePath(EnrollmentDashboardRoutes.EXIT, routeParams)}
             sx={{
               width: { xs: '100%', sm: 'fit-content' },
               textAlign: 'center',

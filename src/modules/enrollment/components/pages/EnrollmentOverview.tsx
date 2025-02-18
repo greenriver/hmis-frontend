@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import EnrollmentDetails from '../EnrollmentDetails';
 import EnrollmentReminders from '../EnrollmentReminders';
 
+import ButtonLink from '@/components/elements/ButtonLink';
+import { ManageHouseholdIcon } from '@/components/elements/SemanticIcons';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
@@ -18,7 +20,10 @@ import HouseholdMemberTable, {
   HOUSEHOLD_MEMBER_COLUMNS,
 } from '@/modules/household/components/HouseholdMemberTable';
 import StaffAssignmentCard from '@/modules/staffAssignment/components/StaffAssignmentCard';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
 import {
   DeleteEnrollmentDocument,
   DeleteEnrollmentMutation,
@@ -38,7 +43,7 @@ const EnrollmentOverview = () => {
   const householdColumns = useMemo(
     () => [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
-      HOUSEHOLD_MEMBER_COLUMNS.clientName({
+      HOUSEHOLD_MEMBER_COLUMNS.linkedClientName({
         currentEnrollmentId: enrollmentId,
       }),
       HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
@@ -56,13 +61,30 @@ const EnrollmentOverview = () => {
 
   if (!enrollment) return <NotFound />;
 
+  const manageHouseholdButton = (
+    <ButtonLink
+      startIcon={<ManageHouseholdIcon />}
+      to={generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, {
+        clientId,
+        enrollmentId,
+      })}
+    >
+      Manage Household
+    </ButtonLink>
+  );
   return (
     <>
       <PageTitle title='Enrollment Overview' />
       <Grid container spacing={4}>
         <Grid item md={8} xs={12}>
           <Stack spacing={4}>
-            <TitleCard title='Household' headerVariant='border'>
+            <TitleCard
+              title='Household'
+              headerVariant='border'
+              actions={
+                enrollment.access.canEditEnrollments && manageHouseholdButton
+              }
+            >
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}

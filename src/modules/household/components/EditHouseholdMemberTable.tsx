@@ -20,7 +20,7 @@ import {
 interface Props {
   household: HouseholdFieldsFragment;
   project: ManageHouseholdProject;
-  currentDashboardEnrollmentId?: string;
+
   refetchHousehold: any;
   loading?: boolean;
   canEdit?: boolean;
@@ -31,17 +31,12 @@ const EditHouseholdMemberTable = ({
   household,
   project,
   refetchHousehold,
-  currentDashboardEnrollmentId,
   loading,
   canEdit,
 }: Props) => {
   const currentMembers = useMemo(
-    () =>
-      sortHouseholdMembers(
-        household.householdClients,
-        currentDashboardEnrollmentId
-      ),
-    [household, currentDashboardEnrollmentId]
+    () => sortHouseholdMembers(household.householdClients),
+    [household]
   );
 
   // client to highlight for relationship input
@@ -54,10 +49,7 @@ const EditHouseholdMemberTable = ({
     );
 
     return [
-      HOUSEHOLD_MEMBER_COLUMNS.clientName({
-        currentEnrollmentId: currentDashboardEnrollmentId,
-        linkToProfile: !!currentDashboardEnrollmentId,
-      }),
+      HOUSEHOLD_MEMBER_COLUMNS.clientName,
       // HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.entryDate,
       // TODO ADD: ENROLLMENT STATUS
@@ -77,48 +69,24 @@ const EditHouseholdMemberTable = ({
       },
       {
         header: 'Rel. to HoH',
-        width: '25%',
         key: 'relationship',
-        // TODO move to menu action modal
         render: (hc: HouseholdClientFieldsFragment) => (
           <HmisEnum
             value={hc.relationshipToHoH}
             enumMap={HmisEnums.RelationshipToHoH}
           />
-          // <RelationshipToHoHInput
-          //   variant='excludeHoh'
-          //   enrollmentId={hc.enrollment.id}
-          //   enrollmentLockVersion={hc.enrollment.lockVersion}
-          //   relationshipToHoH={hc.relationshipToHoH}
-          //   onClose={() =>
-          //     setHighlight((old) => old.filter((id) => id !== hc.client.id))
-          //   }
-          //   textInputProps={{
-          //     highlight: highlight.includes(hc.client.id),
-          //     inputProps: {
-          //       'aria-label': `Relationship to HoH for ${clientBriefName(
-          //         hc.client
-          //       )}`,
-          //     },
-          //   }}
-          // />
         ),
       },
       HOUSEHOLD_MEMBER_COLUMNS.dobAge,
-      HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(currentMembers),
+      HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(household.householdClients),
     ];
-  }, [
-    household.householdClients,
-    currentDashboardEnrollmentId,
-    currentMembers,
-  ]);
+  }, [household.householdClients]);
 
   const { getRowSecondaryActionConfigs, actionDialogs, actionLoading } =
     useHouseholdMenuActions({
       household,
       refetchHousehold,
       loading,
-      currentDashboardEnrollmentId,
       currentMembers,
       project,
     });

@@ -5,12 +5,15 @@ import {
   ClientIdentificationFieldsFragment,
   ClientSearchResultFieldsFragment,
   EnrollmentFieldsFragment,
+  GetClientHouseholdMemberCandidatesQuery,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
   ProjectEnrollmentsHouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
 
-export type RecentHouseholdMember = HouseholdClientFieldsFragment & {
+export type RecentHouseholdMember = NonNullable<
+  GetClientHouseholdMemberCandidatesQuery['client']
+>['enrollments']['nodes'][0]['household']['householdClients'][0] & {
   projectName: string;
 };
 

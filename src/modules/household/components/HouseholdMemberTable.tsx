@@ -15,7 +15,7 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
@@ -44,7 +44,6 @@ export const nameColumnConfig = (currentClientId: string) => {
 
 export const HOUSEHOLD_MEMBER_COLUMNS = {
   hohIndicator: {
-    //delete
     header: '',
     key: 'indicator',
     width: '1%',
@@ -52,12 +51,15 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       <HohIndicator relationshipToHoh={hc.relationshipToHoH} />
     ),
   },
-  clientName: ({
+  clientName: {
+    header: 'Name',
+    key: 'name',
+    render: (hc: HouseholdClientFieldsFragment) => clientBriefName(hc.client),
+  },
+  linkedClientName: ({
     currentEnrollmentId,
-    linkToProfile = false,
   }: {
     currentEnrollmentId?: string;
-    linkToProfile?: boolean;
   }) => ({
     header: 'Name',
     key: 'name',
@@ -67,10 +69,8 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       return (
         <ClientName
           client={h.client}
-          linkToProfile={!isCurrentClient && linkToProfile}
-          linkToEnrollmentId={
-            !isCurrentClient && !linkToProfile ? h.enrollment.id : undefined
-          }
+          linkToProfile={false}
+          linkToEnrollmentId={!isCurrentClient ? h.enrollment.id : undefined}
           bold={isCurrentClient}
         />
       );
@@ -128,13 +128,11 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
  * Table showing all members that belong to a given household
  */
 const HouseholdMemberTable = ({
-  clientId,
   enrollmentId,
   hideActions = false,
   columns: columnProp,
   condensed,
 }: {
-  clientId: string;
   enrollmentId: string;
   hideActions?: boolean;
   columns?: ColumnDef<HouseholdClientFieldsFragment>[];
@@ -152,7 +150,7 @@ const HouseholdMemberTable = ({
     if (columnProp) return columnProp;
     const cols = [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
-      HOUSEHOLD_MEMBER_COLUMNS.clientName({
+      HOUSEHOLD_MEMBER_COLUMNS.linkedClientName({
         currentEnrollmentId: enrollmentId,
       }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
@@ -189,11 +187,7 @@ const HouseholdMemberTable = ({
       </SsnDobShowContextProvider>
       {!hideActions && enrollment?.access?.canEditEnrollments && (
         <Box sx={{ px: 3 }}>
-          <HouseholdActionButtons
-            householdMembers={householdMembers || []}
-            clientId={clientId}
-            enrollmentId={enrollmentId}
-          />
+          <HouseholdActionButtons householdMembers={householdMembers || []} />
         </Box>
       )}
     </>
