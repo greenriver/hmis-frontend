@@ -1,29 +1,18 @@
-import { Box, Grid, Stack } from '@mui/material';
-import { isNil } from 'lodash-es';
-import React, {
-  Ref,
-  RefObject,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import { forwardRef, useCallback, useImperativeHandle } from 'react';
 
-import useDynamicFields from '../hooks/useDynamicFields';
-import { DynamicFormContext } from '../hooks/useDynamicFormContext';
-import { ChangeType, FormValues, LocalConstants, PickListArgs } from '../types';
+import { DefaultValues, FormProvider } from 'react-hook-form';
+import useFormDefinitionHandlers, {
+  FormDefinitionHandlers,
+} from '../hooks/useFormDefinitionHandlers';
+import { FormValues, LocalConstants } from '../types';
 
-import FormActions, { FormActionProps } from './FormActions';
-import SaveSlide from './SaveSlide';
+import DirtyObserver from './DirtyObserver';
+import DynamicFormBase, { DynamicFormBaseProps } from './DynamicFormBase';
+import Loading from '@/components/elements/Loading';
+import { ErrorFilterFn } from '@/modules/errors/util';
+import { useEnrichedFormData } from '@/modules/form/hooks/rhf/useEnrichedFormData';
+import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
 
-import useElementInView from '@/hooks/useElementInView';
-import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import { ValidationDialogProps } from '@/modules/errors/components/ValidationDialog';
-import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
-import { ErrorFilterFn, ErrorState, hasErrors } from '@/modules/errors/util';
-import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -47,117 +36,57 @@ interface DynamicFormSaveDraftInput {
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 export type DynamicFormOnSaveDraft = (input: DynamicFormSaveDraftInput) => void;
 
+type InitialValues = Record<string, any>;
 export interface DynamicFormProps
-  extends Omit<
-    FormActionProps,
-    'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
-  > {
+  extends Omit<DynamicFormBaseProps, 'handlers' | 'onSaveDraft'> {
   clientId?: string;
   definition: FormDefinitionJson;
-  onSubmit: DynamicFormOnSubmit;
+  onSubmit: (input: DynamicFormSubmitInput) => void;
   onSaveDraft?: DynamicFormOnSaveDraft;
   onDirty?: (value: boolean) => void;
-  loading?: boolean;
-  initialValues?: Record<string, any>;
-  errors: ErrorState;
-  showSavePrompt?: boolean;
-  alwaysShowSaveSlide?: boolean;
-  horizontal?: boolean;
-  pickListArgs?: PickListArgs;
-  warnIfEmpty?: boolean;
-  locked?: boolean;
-  visible?: boolean;
-  FormActionProps?: Omit<
-    FormActionProps,
-    'loading' | 'onSubmit' | 'onSaveDraft'
-  >;
-  ValidationDialogProps?: Omit<
-    ValidationDialogProps,
-    'errorState' | 'open' | 'onConfirm' | 'loading'
-  >;
-  hideSubmit?: boolean;
   localConstants?: LocalConstants;
-  errorRef?: RefObject<HTMLDivElement>;
   variant?: 'standard' | 'without_top_level_cards';
   errorFilter?: ErrorFilterFn;
 }
+
 export interface DynamicFormRef {
-  SaveIfDirty: VoidFunction;
-  SubmitIfDirty: (ignoreWarnings: boolean) => void;
   SubmitForm: VoidFunction;
+  SaveDraftForm: VoidFunction;
 }
 
-const DynamicForm = forwardRef(
+export const DynamicFormWithoutHandlers = forwardRef<
+  DynamicFormRef,
+  DynamicFormProps & { handlers: FormDefinitionHandlers }
+>(
   (
     {
-      clientId,
       definition,
       onSubmit,
       onSaveDraft,
-      loading,
-      initialValues,
-      errors: errorState,
-      showSavePrompt = false,
-      alwaysShowSaveSlide = false,
-      horizontal = false,
-      warnIfEmpty = false,
-      locked = false,
-      visible = true,
-      pickListArgs,
-      FormActionProps = {},
-      ValidationDialogProps = {},
-      hideSubmit = false,
-      localConstants,
-      errorRef,
       onDirty,
-      variant = 'standard',
-      errorFilter,
-    }: DynamicFormProps,
-    ref: Ref<DynamicFormRef>
-  ) => {
-    const [dirty, setDirty] = useState(false);
-    useEffect(() => {
-      onDirty?.(dirty);
-    }, [dirty, onDirty]);
-    const [promptSave, setPromptSave] = useState<boolean | undefined>();
-
-    const onFieldChange = useCallback((type: ChangeType) => {
-      if (type === ChangeType.User) {
-        setPromptSave(true);
-        setDirty(true);
-      }
-    }, []);
-
-    // getValues: returns form state (used by some nested components, like MciClearance)
-    // getValuesForSubmit: returns submittable form state (used for onSubmit/onSaveDraft)
-    const { renderFields, getValues, getValuesForSubmit } = useDynamicFields({
-      definition,
-      initialValues,
+      errors: errorState,
       localConstants,
-      onFieldChange,
-    });
-
-    const saveButtonsRef = React.createRef<HTMLDivElement>();
-    const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
+      handlers,
+      ...props
+    },
+    ref
+  ) => {
+    const { getValuesForSubmit, resetDirty } = handlers;
 
     const handleSaveDraft = useCallback(() => {
       if (!onSaveDraft) return;
       onSaveDraft({
         ...getValuesForSubmit(),
-        onSuccess: () => setDirty(false),
+        onSuccess: () => resetDirty(),
       });
-    }, [onSaveDraft, getValuesForSubmit]);
+    }, [onSaveDraft, getValuesForSubmit, resetDirty]);
 
-    const handleSubmit = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        onSubmit({
-          ...getValuesForSubmit(),
-          confirmed: false,
-          event,
-          onSuccess: () => setDirty(false),
-        });
+    const handleSubmit: DynamicFormOnSubmit = useCallback(
+      (input) => {
+        // console.log(input, handlers.getCleanedValues())
+        onSubmit(input);
       },
-      [onSubmit, getValuesForSubmit]
+      [onSubmit]
     );
 
     // Expose handle for parent components to initiate a background save (used for household workflow tabs)
@@ -167,132 +96,88 @@ const DynamicForm = forwardRef(
         SubmitForm: () => {
           onSubmit({ ...getValuesForSubmit(), confirmed: false });
         },
-        SaveIfDirty: () => {
-          if (!dirty || locked) return;
+        SaveDraftForm: () => {
+          if (props.locked) return;
           handleSaveDraft();
         },
-        SubmitIfDirty: (ignoreWarnings: boolean) => {
-          if (!onSubmit || !dirty || locked) return;
-          onSubmit({
-            ...getValuesForSubmit(),
-            confirmed: ignoreWarnings,
-            onSuccess: () => setDirty(false),
-          });
-        },
       }),
-      [onSubmit, getValuesForSubmit, dirty, locked, handleSaveDraft]
-    );
-
-    useEffect(() => {
-      if (isNil(promptSave)) return;
-      setPromptSave(!isSaveButtonVisible);
-    }, [isSaveButtonVisible, promptSave]);
-
-    const handleConfirm = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        onSubmit({
-          ...getValuesForSubmit(),
-          confirmed: true,
-          event,
-          onSuccess: () => setDirty(false),
-        });
-      },
-      [onSubmit, getValuesForSubmit]
-    );
-
-    const { renderValidationDialog, validationDialogVisible } =
-      useValidationDialog({ errorState });
-
-    const handleChangeCallback = useCallback(
-      ({ type }: { type: ChangeType }) => {
-        if (type === ChangeType.User) {
-          setPromptSave(true);
-          setDirty(true);
-        }
-      },
-      []
-    );
-
-    const saveButtons = (
-      <FormActions
-        onSubmit={handleSubmit}
-        onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-        disabled={locked || !!loading || validationDialogVisible}
-        loading={loading}
-        {...FormActionProps}
-      />
+      [onSubmit, getValuesForSubmit, props.locked, handleSaveDraft]
     );
 
     return (
-      <form
-        onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
-        autoComplete={formAutoCompleteOff}
-      >
-        <Grid
-          container
-          direction='column'
-          spacing={2}
-          sx={
-            variant === 'without_top_level_cards'
-              ? { '.HmisForm-card': { px: 0, pt: 1, pb: 0, border: 'unset' } }
-              : undefined
-          }
-        >
-          <div ref={errorRef} />
-          {hasErrors(errorState) && (
-            <Grid item>
-              <Stack gap={2}>
-                <ApolloErrorAlert error={errorState.apolloError} />
-                <ErrorAlert
-                  errors={errorState.errors}
-                  fixable
-                  errorFilter={errorFilter}
-                />
-              </Stack>
-            </Grid>
-          )}
-          <DynamicFormContext.Provider value={{ getValues, definition }}>
-            {renderFields({
-              itemChanged: handleChangeCallback,
-              severalItemsChanged: handleChangeCallback,
-              clientId,
-              errors: errorState.errors,
-              warnings: errorState.warnings,
-              horizontal,
-              pickListArgs,
-              warnIfEmpty,
-              locked,
-              visible,
-            })}
-          </DynamicFormContext.Provider>
-        </Grid>
-        {!alwaysShowSaveSlide && !hideSubmit && (
-          <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
-            {saveButtons}
-          </Box>
-        )}
-        {renderValidationDialog({
-          onConfirm: handleConfirm,
-          loading: loading || false,
-          confirmText: FormActionProps?.submitButtonText || 'Confirm',
-          ...ValidationDialogProps,
-        })}
-        {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
-          <SaveSlide
-            in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}
-            appear
-            padBody
-            timeout={300}
-            direction='up'
-            loading={loading}
-          >
-            {saveButtons}
-          </SaveSlide>
-        )}
-      </form>
+      <>
+        {onDirty && <DirtyObserver onDirty={onDirty} handlers={handlers} />}
+        <DynamicFormBase
+          {...props}
+          handlers={handlers}
+          errors={errorState}
+          onSubmit={handleSubmit}
+          onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
+        />
+      </>
     );
   }
 );
 
-export default DynamicForm;
+const BLANK = {};
+const DynamicFormWithHandlers = forwardRef<
+  DynamicFormRef,
+  DynamicFormProps & { defaultValues: DefaultValues<InitialValues> }
+>((props, ref) => {
+  const { definition, defaultValues, localConstants = BLANK } = props;
+  const handlers = useFormDefinitionHandlers({
+    definition,
+    defaultValues,
+    localConstants,
+    errors: props.errors.errors,
+  });
+
+  const {
+    itemMap,
+    viewOnly,
+    autofillInvertedDependencyMap,
+    disabledDependencyMap,
+  } = handlers;
+  return (
+    <FormProvider {...handlers.methods}>
+      <DynamicFormContext.Provider
+        value={{
+          definition,
+          itemMap,
+          localConstants,
+          viewOnly,
+          autofillInvertedDependencyMap,
+          disabledDependencyMap,
+        }}
+      >
+        <DynamicFormWithoutHandlers {...props} handlers={handlers} ref={ref} />
+      </DynamicFormContext.Provider>
+    </FormProvider>
+  );
+});
+
+// load remote data (picklists) to augment form data (initialValues => defaultValues)
+const DynamicFormEnrichedDataLoader = forwardRef<
+  DynamicFormRef,
+  DynamicFormProps & { initialValues?: InitialValues }
+>(({ initialValues, ...props }, ref) => {
+  const { defaultValues, loading } = useEnrichedFormData({
+    pickListArgs: props.pickListArgs,
+    definition: props.definition,
+    initialValues: initialValues,
+    localConstants: props.localConstants,
+    viewOnly: false,
+  });
+  if (loading || !defaultValues) {
+    return <Loading />;
+  }
+  return (
+    <DynamicFormWithHandlers
+      defaultValues={defaultValues}
+      {...props}
+      ref={ref}
+    />
+  );
+});
+
+export default DynamicFormEnrichedDataLoader;

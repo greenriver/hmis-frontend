@@ -1,4 +1,4 @@
-import { Box, Grid, lighten } from '@mui/material';
+import { Box, lighten } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { GroupItemComponentProps } from '../types';
@@ -37,17 +37,15 @@ export const InfoGroup = ({
 
 interface Props extends GroupItemComponentProps {
   clientId?: string;
-  debug?: (ids?: string[]) => void;
 }
 
-const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
+const DynamicGroup: React.FC<Props> = (props) => {
   // Always render top-level groups as cards
   if (props.nestingLevel === 0 && !props.item.component) {
     return (
       <FormCard
         key={props.item.linkId}
         anchor={props.visible ? props.item.linkId : undefined}
-        debug={debug}
         {...props}
       />
     );
@@ -55,22 +53,13 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
 
   switch (props.item.component) {
     case Component.InputGroup:
-      if (props.nestingLevel === 0) {
-        return (
-          <Grid item>
-            <InputGroup key={props.item.linkId} {...props} />
-          </Grid>
-        );
-      }
       return <InputGroup key={props.item.linkId} {...props} />;
     case Component.DisabilityTable:
       return <DisabilityTable key={props.item.linkId} {...props} />;
     case Component.HorizontalGroup:
       return <HorizontalGroup key={props.item.linkId} {...props} />;
     case Component.SignatureGroup:
-      return (
-        <SignatureGroupCard key={props.item.linkId} debug={debug} {...props} />
-      );
+      return <SignatureGroupCard key={props.item.linkId} {...props} />;
     case Component.Signature:
       return <Signature key={props.item.linkId} {...props} />;
     case Component.InfoGroup:

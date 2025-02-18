@@ -1,6 +1,20 @@
 {
   "item": [
     {
+      "type": "BOOLEAN",
+      "linkId": "show-hidden",
+      "text": "Should be hidden",
+      "disabledDisplay": "HIDDEN",
+      "enableBehavior": "ANY",
+      "hidden": true,
+      "initial": [
+        {
+          "initialBehavior": "OVERWRITE",
+          "valueLocalConstant": "$showHidden"
+        }
+      ]
+    },
+    {
       "type": "GROUP",
       "linkId": "group-1",
       "text": "Basic Input Types",
@@ -335,6 +349,27 @@
               "question": "choice-1",
               "operator": "EQUAL",
               "answerCode": "YES"
+            }
+          ]
+        },
+        {
+          "type": "INTEGER",
+          "required": false,
+          "warnIfEmpty": true,
+          "linkId": "number-autofill",
+          "text": "Details (autofill on previous)",
+          "helperText": "This is autofilled",
+          "autofillValues": [
+            {
+              "valueNumber": 99,
+              "autofillBehavior": "ANY",
+              "autofillWhen": [
+                {
+                  "question": "choice-1",
+                  "operator": "EQUAL",
+                  "answerCode": "YES"
+                }
+              ]
             }
           ]
         }

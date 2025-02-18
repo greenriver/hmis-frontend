@@ -1,8 +1,10 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Alert, AlertTitle, Box, lighten, Stack } from '@mui/material';
-import { find, isEqual, pick, transform } from 'lodash-es';
+import { Maybe } from 'graphql/jsutils/Maybe';
+import { isEqual } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useWatch } from 'react-hook-form';
 import { ClearanceState, ClearanceStatus } from '../types';
 
 import { NEW_MCI_STRING } from '../util';
@@ -20,62 +22,18 @@ import usePrevious from '@/hooks/usePrevious';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
-import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
-import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
+import { formatDateForGql } from '@/modules/hmis/hmisUtil';
 import {
+  ClientNameObjectFieldsFragment,
   DobDataQuality,
+  ExternalIdentifier,
+  Gender,
   MciClearanceInput,
   NameDataQuality,
   useClearMciMutation,
 } from '@/types/gqlTypes';
 
-const MCI_CLEARANCE_FIELDS = [
-  'names',
-  'firstName',
-  'middleName',
-  'lastName',
-  'dob',
-  'gender',
-  'ssn',
-  'nameDataQuality',
-  'dobDataQuality',
-] as const;
-
 const CLEARANCE_REQUIRED_MSG = 'MCI clearance is required';
-
-const fieldsToParams = (
-  fields: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>
-): MciClearanceInput & {
-  nameDataQuality: NameDataQuality;
-  dobDataQuality: DobDataQuality;
-} => {
-  const { names, ...rest } = fields;
-  const primaryName = find(names || [], {
-    primary: true,
-  });
-
-  const input = rest;
-  if (primaryName) {
-    input.firstName = primaryName.first;
-    input.middleName = primaryName.middle;
-    input.lastName = primaryName.last;
-    input.nameDataQuality = primaryName.nameDataQuality;
-  }
-  return rest;
-};
-
-const enoughFieldsForClearance = (
-  fields: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>
-): boolean => {
-  const params = fieldsToParams(fields);
-  return !!(
-    params.firstName &&
-    params.lastName &&
-    params.nameDataQuality === NameDataQuality.FullNameReported &&
-    params.dob &&
-    params.dobDataQuality === DobDataQuality.FullDobReported
-  );
-};
 
 const initialClearanceState: ClearanceState = {
   status: 'initial',
@@ -90,7 +48,7 @@ const MciClearance = ({
   currentMciAttributes,
 }: MciClearanceProps & {
   existingClient: boolean;
-  currentMciAttributes: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>;
+  currentMciAttributes: MciClearanceInput;
 }) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [{ status, candidates }, setState] = useState<ClearanceState>(
@@ -151,9 +109,8 @@ const MciClearance = ({
     if (!currentMciAttributes) return;
     onChange(null);
     setErrorState(emptyErrorState);
-    const { dobDataQuality, nameDataQuality, ...input } =
-      fieldsToParams(currentMciAttributes);
-    clearMci({ variables: { input: { input } } });
+    // nested input due to base mutation class, needs backend fix to tidy this up
+    clearMci({ variables: { input: { input: currentMciAttributes } } });
   }, [clearMci, onChange, currentMciAttributes]);
 
   const { title, subtitle, buttonText, rightAlignButton } = useMemo(
@@ -257,12 +214,11 @@ const MciClearanceWrapper = ({
   ...props
 }: MciClearanceProps & {
   existingClient: boolean;
-  currentMciAttributes?: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>;
+  currentMciAttributes?: MciClearanceInput;
 }) => {
   const mciSearchUnavailable = useMemo(() => {
     if (disabled) return true;
     if (!currentMciAttributes) return true;
-    return !enoughFieldsForClearance(currentMciAttributes);
   }, [disabled, currentMciAttributes]);
 
   // When enabled/disabled state changes, clear value
@@ -296,23 +252,46 @@ const MciClearanceWrapper = ({
  * Wrapper to show existing MCI ID if client already has one.
  */
 const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
-  const { getValues, definition } = useDynamicFormContext();
+  const { methods } = props.handlers;
+  const { getValues } = methods;
 
-  // currentMciAttributes gets re-calculated any time one of the dependent values changes (because of enableWhen dependency)
-  const [clientId, externalIds, currentMciAttributes] = useMemo(() => {
-    if (!getValues || !definition) return [];
-    const values = getValues();
-    let byKey = createHudValuesForSubmit(values, definition);
-    byKey = transform(
-      byKey,
-      (result, v, k) => (result[k.replace('Client.', '')] = v)
-    );
+  // this is coupled to the form definition
+  const [names, dob, dobDq, gender, ssn]: [
+    Maybe<ClientNameObjectFieldsFragment[]>, // names
+    Maybe<Date>, // dob
+    Maybe<{ code?: DobDataQuality }>, // db doq
+    Maybe<{ code?: Gender }[]>, //gender
+    Maybe<string>, //ssn/
+  ] = useWatch({
+    control: methods.control,
+    name: ['names', 'dob', 'dob_dq', 'gender', 'ssn'],
+  });
 
-    const mciFields = pick(byKey, MCI_CLEARANCE_FIELDS);
-    // Check Link ID 'current_mci_id' in values to see if we already have an MCI ID
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    return [byKey.id, values['current_mci_id'], mciFields];
-  }, [getValues, definition]);
+  const values = useMemo(() => getValues(), [getValues]);
+  const clientId = values.client_id;
+  const externalIds: ExternalIdentifier[] = values.current_mci_id;
+
+  const currentMciAttributes = useMemo(() => {
+    const primaryName = names?.find((name) => name.primary);
+
+    // has the user entered the fields needed to clear MCI
+    if (primaryName?.nameDataQuality !== NameDataQuality.FullNameReported)
+      return;
+    if (!(primaryName.first && primaryName.last)) return;
+    if (!dob || dobDq?.code !== DobDataQuality.FullDobReported) return;
+    const formattedDate = formatDateForGql(dob);
+    if (!formattedDate) return;
+
+    const result: MciClearanceInput = {
+      dob: formattedDate,
+      firstName: primaryName.first,
+      middleName: primaryName.middle,
+      lastName: primaryName.last,
+      gender: gender?.map((i) => i.code).filter((i) => !!i),
+      ssn: ssn,
+    };
+    return result;
+  }, [names, dob, dobDq, gender, ssn]);
 
   const previousMciAttributes = usePrevious(currentMciAttributes);
 
@@ -323,8 +302,6 @@ const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
     const changed = !isEqual(currentMciAttributes, previousMciAttributes);
     if (changed) setHasChanged(true);
   }, [currentMciAttributes, previousMciAttributes]);
-
-  if (!getValues) return null;
 
   // If client already has an MCI ID, just show that.
   // Post-MVP: allow re-clear

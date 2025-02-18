@@ -1,4 +1,4 @@
-import { QueryOptions, useApolloClient } from '@apollo/client';
+import { FetchPolicy, QueryOptions, useApolloClient } from '@apollo/client';
 import { compact, isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -17,16 +17,20 @@ interface Args {
   pickListArgs?: PickListArgs;
   queryOptions?: Omit<QueryOptions, 'query'>;
   skip?: boolean;
+  fetchPolicy?: FetchPolicy;
 }
 const usePreloadPicklists = ({
   definition,
   pickListArgs,
   queryOptions,
+  fetchPolicy,
   skip,
 }: Args) => {
   const client = useApolloClient();
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<PickListOptionFieldsFragment[]>([]);
+  const [data, setData] = useState<
+    Record<string, PickListOptionFieldsFragment[]>
+  >({});
 
   const itemMap: ItemMap = useMemo(
     () => (definition ? getItemMap(definition) : {}),
@@ -59,34 +63,40 @@ const usePreloadPicklists = ({
         client.query({
           query: GetPickListDocument,
           variables: { ...pickListArgs, pickListType },
-          fetchPolicy: 'network-only',
+          fetchPolicy: fetchPolicy,
           ...queryOptions,
         })
       )
     )
       .then((results) => {
-        setData(
-          results.map(
-            (result) => result.data.pickList as PickListOptionFieldsFragment
-          )
+        const zipped = Object.fromEntries(
+          pickListTypesToFetch.map((p, i) => [
+            p,
+            results[i].data.pickList as PickListOptionFieldsFragment[],
+          ])
         );
+        setData(zipped);
       })
-      .catch(() => setData([]))
+      .catch(() => setData({}))
       .finally(() => setLoading(false));
-  }, [skip, pickListTypesToFetch, client, pickListArgs, queryOptions]);
+  }, [
+    skip,
+    pickListTypesToFetch,
+    client,
+    pickListArgs,
+    queryOptions,
+    fetchPolicy,
+  ]);
 
   useEffect(() => {
     fetch();
   }, [fetch]);
 
-  return useMemo(
-    () => ({
-      fetch,
-      loading: loading && data.length === 0,
-      data,
-    }),
-    [fetch, loading, data]
-  );
+  return {
+    fetch,
+    loading: loading && Object.keys(data).length === 0,
+    data,
+  };
 };
 
 export default usePreloadPicklists;

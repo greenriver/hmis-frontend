@@ -39,6 +39,7 @@ import {
   ItemMap,
   LinkIdMap,
   LocalConstants,
+  PartialLinkIdMap,
   TypedObject,
 } from '../types';
 
@@ -83,6 +84,15 @@ import { ensureArray } from '@/utils/arrays';
 // invalid value here that the browser doesn't understand to prevent this behavior. This
 // works in current versions of chrome as of 2023 but is not valid HTML.
 export const formAutoCompleteOff = 'do-not-autocomplete';
+
+export const invertDependencyMap = (depMap: LinkIdMap): PartialLinkIdMap =>
+  Object.entries(depMap).reduce((acc, [linkId, childLinkIds]) => {
+    const result = { ...acc };
+    childLinkIds.forEach((childLinkId) => {
+      result[childLinkId] = [...(result[childLinkId] || []), linkId];
+    });
+    return result;
+  }, {} as LinkIdMap);
 
 export const isDataNotCollected = (val?: any): boolean => {
   if (typeof val === 'string') {
@@ -528,13 +538,11 @@ export const getAutofillComparisonValue = (
 };
 
 /**
- * Autofill values based on changed item.
+ * Calculates autofill values based on item and values
  * If there are multiple autofill rules, the first matching one is used
  * ("matching" meaning autofill_when evaluated to true).
  *
- * Changes `values` in place.
- *
- * @return boolen true if values changed
+ * @returns {value} object or null if no autofill value could be calculated
  */
 type AutofillValuesArgs = {
   item: FormItem;
@@ -549,15 +557,15 @@ export const autofillValues = ({
   itemMap,
   localConstants,
   viewOnly,
-}: AutofillValuesArgs): boolean => {
-  if (!item.autofillValues) return false;
+}: AutofillValuesArgs): { value: any } | null => {
+  if (!item.autofillValues) return null;
 
-  // use `some` to stop iterating when true is returned
-  const autofilled = item.autofillValues.some((av) => {
+  // Process rules until we find one that applies
+  for (const av of item.autofillValues) {
     // Skip autofills that should not run on read-only views
-    if (viewOnly && !av.autofillReadonly) return false;
+    if (viewOnly && !av.autofillReadonly) continue;
 
-    // Evaluate enableWhen conditions, if present
+    // Evaluate enableWhen conditions, if present. Treat no enableWhen conditions as true
     if (av.autofillWhen && av.autofillWhen.length > 0) {
       const booleans = av.autofillWhen.map((en) =>
         evaluateEnableWhen({
@@ -574,38 +582,14 @@ export const autofillValues = ({
           ? booleans.some(Boolean)
           : booleans.every(Boolean);
 
-      if (!shouldAutofillValue) return false;
+      // break loop if the condition was not satisfied
+      if (!shouldAutofillValue) continue;
     }
 
-    const newValue = getAutofillComparisonValue(av, values, item);
-
-    if (!areEqualValues(values[item.linkId], newValue)) {
-      // console.debug(
-      //   `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
-      //     values[item.linkId]
-      //   )} to ${JSON.stringify(newValue)}`,
-      //   av
-      // );
-      values[item.linkId] = newValue;
-    }
-
-    // Stop iterating through autofill values
-    return true;
-  });
-
-  // For read-only items that are displayed on editable forms, the autofill value should nullify when its conditions are no longer met.
-  // For example, a read-only field showing the sum of 2 input fields should be cleared if the inputs are cleared.
-  // (In that example, we assume the autofill rule for summing has an autofill_when condition requiring the inputs to be present)
-  if (
-    !autofilled &&
-    (item.readOnly || item.type === ItemType.Display) &&
-    !viewOnly
-  ) {
-    values[item.linkId] = undefined;
-    return true;
+    const computed = getAutofillComparisonValue(av, values, item);
+    if (!isNil(computed)) return { value: computed };
   }
-
-  return autofilled;
+  return null;
 };
 
 const getBoundValue = (
@@ -919,21 +903,34 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
   return result;
 };
 
-export const getAllChildLinkIds = (item: FormItem): string[] => {
+export const walkDefinitionItems = (
+  root: FormItem | FormDefinitionJson,
+  cb: (i: FormItem) => void
+) => {
   function recursiveFind(items: FormItem[], ids: string[]) {
     items.forEach((item) => {
       if (Array.isArray(item.item)) {
         recursiveFind(item.item, ids);
       }
 
-      if (isQuestionItem(item)) {
-        ids.push(item.linkId);
-      }
+      cb(item);
     });
   }
 
   const result: string[] = [];
-  recursiveFind(item.item || [], result);
+  recursiveFind(root.item || [], result);
+  return result;
+};
+
+export const getAllChildLinkIds = (
+  root: FormItem | FormDefinitionJson,
+  { onlyQuestions = true }: { onlyQuestions?: boolean } = {}
+): string[] => {
+  const result: string[] = [];
+  walkDefinitionItems(root, (item) => {
+    if (onlyQuestions === false || (onlyQuestions && isQuestionItem(item)))
+      result.push(item.linkId);
+  });
   return result;
 };
 
@@ -1052,6 +1049,7 @@ export const buildBoundsDependencyMap = (itemMap: ItemMap): LinkIdMap => {
 /**
  * List of link IDs that should be disabled, based on provided form values
  */
+// Note: this is only used by OccurrencePointForm
 export const getDisabledLinkIds = ({
   itemMap,
   values,
@@ -1375,71 +1373,6 @@ export const createHudValuesForSubmit = (
     keyByFieldName: true,
     includeMissingKeys: 'AS_HIDDEN',
   });
-
-type GetDependentItemsDisabledStatus = {
-  changedLinkIds: string[];
-  localValues: FormValues;
-  enabledDependencyMap: LinkIdMap;
-  itemMap: ItemMap;
-  localConstants: LocalConstants;
-};
-
-export const getDependentItemsDisabledStatus = ({
-  changedLinkIds,
-  localValues,
-  enabledDependencyMap,
-  itemMap,
-  localConstants,
-}: GetDependentItemsDisabledStatus) => {
-  const enabledLinkIds: string[] = [];
-  const disabledLinkIds: string[] = [];
-  // If none of these are dependencies, return immediately
-  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id]))
-    return { enabledLinkIds, disabledLinkIds };
-
-  changedLinkIds.forEach((changedLinkId) => {
-    if (!enabledDependencyMap[changedLinkId]) return;
-
-    // iterate through all items that are dependent on this item,
-    // and see if they need to be enabled or disabled
-    enabledDependencyMap[changedLinkId]
-      .filter((id) => !!itemMap[id]) // can happen if removed because of a 'rule'. ignore.
-      .forEach((dependentLinkId) => {
-        const enabled = shouldEnableItem({
-          item: itemMap[dependentLinkId],
-          values: localValues,
-          itemMap,
-          localConstants,
-        });
-        if (enabled) {
-          enabledLinkIds.push(dependentLinkId);
-        } else {
-          disabledLinkIds.push(dependentLinkId);
-          // if the disabled field is hidden, nullify its value (so that related enableWhens dont consider it present).
-          // this needs to happen here, rather than in the caller, because subsequent iterations of this loop
-          // may depend on the presence of this item.
-          const disabledItem = itemMap[dependentLinkId];
-          if (
-            disabledItem.disabledDisplay !== DisabledDisplay.ProtectedWithValue
-          ) {
-            localValues[dependentLinkId] = null;
-            // All its children should get emptied too
-            if (disabledItem.item) {
-              const childrenLinkIds = getAllChildLinkIds(disabledItem);
-              childrenLinkIds.forEach((hiddenChildId) => {
-                localValues[hiddenChildId] = null;
-              });
-            }
-          }
-        }
-      });
-  });
-
-  return {
-    enabledLinkIds: uniq(enabledLinkIds),
-    disabledLinkIds: uniq(disabledLinkIds),
-  };
-};
 
 const underscoreKey = (v: any, k: string) => k.startsWith('_');
 

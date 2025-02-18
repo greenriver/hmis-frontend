@@ -3,6 +3,7 @@ import { isNil, isObject } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import { RegisterOptions } from 'react-hook-form';
+import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHandlers';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormItem,
@@ -47,6 +48,7 @@ export type PickListArgs = {
 export interface DynamicFieldProps {
   item: FormItem;
   itemChanged: ItemChangedFn;
+  handlers?: FormDefinitionHandlers;
   value: any;
   disabled?: boolean;
   errors?: ValidationError[];
@@ -108,11 +110,9 @@ export interface GroupItemComponentProps {
     props?: OverrideableDynamicFieldProps,
     renderFn?: (children: ReactNode) => ReactNode
   ) => ReactNode;
-  values: Record<string, any>;
   itemChanged?: ItemChangedFn;
   severalItemsChanged?: SeveralItemsChangedFn;
   visible?: boolean;
-  locked?: boolean;
   viewOnly?: boolean;
   rowSx?: SxProps;
 }
@@ -127,7 +127,6 @@ export interface ViewGroupItemComponentProps {
   ) => ReactNode;
   values: Record<string, any>;
   visible?: boolean;
-  locked?: boolean;
 }
 
 export enum FormActionTypes {
@@ -142,6 +141,7 @@ export enum FormActionTypes {
 export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
+export type PartialLinkIdMap = Record<string, string[] | undefined>;
 export type LocalConstants = Record<string, any>;
 export type TypedObject = { __typename: string };
 
