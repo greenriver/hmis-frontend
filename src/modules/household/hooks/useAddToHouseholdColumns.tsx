@@ -21,7 +21,6 @@ export default function useAddToHouseholdColumns({
   project,
   onSuccess,
 }: Args) {
-  // const [householdId, setHouseholdId] = useState(initialHouseholdId);
   const [getHousehold, { data, loading, error }] = useGetHouseholdLazyQuery({
     fetchPolicy: 'network-only',
   });
@@ -33,12 +32,6 @@ export default function useAddToHouseholdColumns({
 
   // Refetch household when household ID changes
   useEffect(() => refetchHousehold(), [refetchHousehold, householdId]);
-
-  // If household ID wasn't found, clear the household ID state.
-  // This happens when the last/only member is removed.
-  // useEffect(() => {
-  //   if (data && !data.household) setHouseholdId(undefined);
-  // }, [data]);
 
   const currentMembersMap = useMemo(() => {
     // filter out exited members, because they can be re-added
@@ -61,14 +54,6 @@ export default function useAddToHouseholdColumns({
   useEffect(() => {
     if (loading) window.scrollTo(0, 0);
   }, [data, loading]);
-
-  // const onSuccess = useCallback(
-  //   (updatedHouseholdId: string) => {
-  //     setHouseholdId(updatedHouseholdId);
-  //     getHousehold({ variables: { id: updatedHouseholdId } });
-  //   },
-  //   [getHousehold]
-  // );
 
   const addToEnrollmentColumns: ColumnDef<
     ClientSearchResultFieldsFragment | RecentHouseholdMember
@@ -110,8 +95,6 @@ export default function useAddToHouseholdColumns({
 
   return {
     addToEnrollmentColumns,
-    // householdId,
-    // onHouseholdIdChange: onSuccess,
     household: data?.household,
     refetchHousehold,
     loading,
