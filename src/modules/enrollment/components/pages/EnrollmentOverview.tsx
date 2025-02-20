@@ -1,5 +1,5 @@
 import { Grid, Stack } from '@mui/material';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import EnrollmentDetails from '../EnrollmentDetails';
@@ -16,9 +16,7 @@ import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutati
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import HouseholdMemberTable, {
-  HOUSEHOLD_MEMBER_COLUMNS,
-} from '@/modules/household/components/HouseholdMemberTable';
+import HouseholdOverviewTable from '@/modules/household/components/HouseholdOverviewTable';
 import StaffAssignmentCard from '@/modules/staffAssignment/components/StaffAssignmentCard';
 import {
   ClientDashboardRoutes,
@@ -39,18 +37,6 @@ const EnrollmentOverview = () => {
     enrollmentId: string;
     clientId: string;
   };
-
-  const householdColumns = useMemo(
-    () => [
-      HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
-      HOUSEHOLD_MEMBER_COLUMNS.linkedClientName({
-        currentEnrollmentId: enrollmentId,
-      }),
-      HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
-      HOUSEHOLD_MEMBER_COLUMNS.enrollmentStatus,
-    ],
-    [enrollmentId]
-  );
 
   const onSuccessfulDelete = useCallback(() => {
     evictDeletedEnrollment({ enrollmentId, clientId });
@@ -85,12 +71,7 @@ const EnrollmentOverview = () => {
                 enrollment.access.canEditEnrollments && manageHouseholdButton
               }
             >
-              <HouseholdMemberTable
-                enrollmentId={enrollmentId}
-                hideActions
-                columns={householdColumns}
-                condensed
-              />
+              <HouseholdOverviewTable enrollmentId={enrollmentId} />
             </TitleCard>
             <TitleCard
               title={`${

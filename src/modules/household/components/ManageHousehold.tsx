@@ -5,8 +5,8 @@ import { ReactNode, useCallback, useMemo, useState } from 'react';
 import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
 import { usePreviouslyAssociatedMembers } from '../hooks/usePreviouslyAssociatedMembers';
 
-import EditHouseholdMemberTable from './EditHouseholdMemberTable';
 import AddNewClientButton from './elements/AddNewClientButton';
+import HouseholdMemberTable from './HouseholdMemberTable';
 import { ClickToCopyId } from '@/components/elements/ClickToCopy';
 import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -170,7 +170,7 @@ const ManageHousehold = ({
           </Paper>
         )}
         {household && (
-          <EditHouseholdMemberTable
+          <HouseholdMemberTable
             household={household}
             refetchHousehold={refetchHousehold}
             loading={loading}
