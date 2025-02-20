@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import EnrollmentDetails from '../EnrollmentDetails';
 import EnrollmentReminders from '../EnrollmentReminders';
 
-import ButtonLink from '@/components/elements/ButtonLink';
-import { ManageHouseholdIcon } from '@/components/elements/SemanticIcons';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
@@ -18,10 +16,7 @@ import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollm
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import HouseholdOverviewTable from '@/modules/household/components/HouseholdOverviewTable';
 import StaffAssignmentCard from '@/modules/staffAssignment/components/StaffAssignmentCard';
-import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   DeleteEnrollmentDocument,
   DeleteEnrollmentMutation,
@@ -47,30 +42,13 @@ const EnrollmentOverview = () => {
 
   if (!enrollment) return <NotFound />;
 
-  const manageHouseholdButton = (
-    <ButtonLink
-      startIcon={<ManageHouseholdIcon />}
-      to={generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, {
-        clientId,
-        enrollmentId,
-      })}
-    >
-      Manage Household
-    </ButtonLink>
-  );
   return (
     <>
       <PageTitle title='Enrollment Overview' />
       <Grid container spacing={4}>
         <Grid item md={8} xs={12}>
           <Stack spacing={4}>
-            <TitleCard
-              title='Household'
-              headerVariant='border'
-              actions={
-                enrollment.access.canEditEnrollments && manageHouseholdButton
-              }
-            >
+            <TitleCard title='Household' headerVariant='border'>
               <HouseholdOverviewTable enrollmentId={enrollmentId} />
             </TitleCard>
             <TitleCard
