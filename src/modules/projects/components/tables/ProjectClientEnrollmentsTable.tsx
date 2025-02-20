@@ -5,7 +5,8 @@ import {
   getViewClientMenuItem,
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
+import { ColumnDef } from '@/components/elements/table/types';
+import { getColumnKey } from '@/components/elements/table/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ClientEnrollmentTableFields } from '@/modules/enrollment/components/pages/ClientEnrollmentsPage';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';

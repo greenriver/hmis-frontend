@@ -29,7 +29,6 @@ import EnhancedTableToolbar, {
 } from './EnhancedTableToolbar';
 import {
   ColumnDef,
-  getColumnKey,
   isPrimitive,
   isRenderFunction,
   RenderFunction,
@@ -38,6 +37,7 @@ import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import RouterLink from '@/components/elements/RouterLink';
 import { useTableSelection } from '@/components/elements/table/hooks/useTableSelection';
 import TableRowActions from '@/components/elements/table/TableRowActions';
+import { getColumnKey } from '@/components/elements/table/util';
 import { customVisuallyHidden } from '@/config/theme';
 import { LocationState } from '@/routes/routeUtil';
 

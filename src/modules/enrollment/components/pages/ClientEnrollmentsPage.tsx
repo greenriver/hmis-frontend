@@ -2,7 +2,8 @@ import { Paper, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
+import { ColumnDef } from '@/components/elements/table/types';
+import { getColumnKey } from '@/components/elements/table/util';
 import PageTitle from '@/components/layout/PageTitle';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';

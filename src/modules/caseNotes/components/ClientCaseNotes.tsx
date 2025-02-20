@@ -1,7 +1,8 @@
 import { Paper } from '@mui/material';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
+import { ColumnDef } from '@/components/elements/table/types';
+import { getColumnKey } from '@/components/elements/table/util';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';

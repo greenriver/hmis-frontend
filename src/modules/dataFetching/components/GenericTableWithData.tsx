@@ -23,7 +23,8 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import Pagination from '@/components/elements/table/Pagination';
-import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
+import { ColumnDef } from '@/components/elements/table/types';
+import { getColumnKey } from '@/components/elements/table/util';
 import TableFilters, {
   TableFiltersProps,
 } from '@/components/elements/tableFilters/TableFilters';

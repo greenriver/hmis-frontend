@@ -1,7 +1,8 @@
 import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
+import { ColumnDef } from '@/components/elements/table/types';
+import { getColumnKey } from '@/components/elements/table/util';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';

@@ -33,10 +33,6 @@ export type ColumnDef<T> =
       key: string;
     });
 
-export function getColumnKey(col: Pick<ColumnDef<any>, 'key' | 'header'>) {
-  return col.key || (typeof col.header === 'string' ? col.header : '');
-}
-
 export function isPrimitive<T>(value: any): value is AttributeName<T> {
   return (
     typeof value === 'string' ||

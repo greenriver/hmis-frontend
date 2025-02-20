@@ -12,7 +12,8 @@ import {
   getViewClientMenuItem,
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
+import { ColumnDef } from '@/components/elements/table/types';
+import { getColumnKey } from '@/components/elements/table/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
