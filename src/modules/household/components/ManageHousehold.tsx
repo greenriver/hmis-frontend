@@ -96,7 +96,7 @@ const ManageHousehold = ({
 
   const isMobile = useIsMobile();
 
-  const columns = useMemo(() => {
+  const searchResultColumns = useMemo(() => {
     const defaults: ColumnDef<
       ClientSearchResultFieldsFragment | RecentHouseholdMember
     >[] = [
@@ -127,15 +127,10 @@ const ManageHousehold = ({
 
   const handleNewClientAdded = useCallback(
     (data: EnrollmentFieldsFragment) => {
-      // fixme this should always call onsuccess, test it
-      if (data.householdId !== householdId) {
-        // onHouseholdIdChange(data.householdId);
-        onSuccess(data.householdId);
-      } else {
-        refetchHousehold();
-      }
+      onSuccess(data.householdId);
+      refetchHousehold();
     },
-    [householdId, onSuccess, refetchHousehold]
+    [onSuccess, refetchHousehold]
   );
 
   return (
@@ -251,7 +246,7 @@ const ManageHousehold = ({
                 >
                   queryVariables={{ input: searchInput }}
                   queryDocument={SearchClientsDocument}
-                  columns={columns}
+                  columns={searchResultColumns}
                   pagePath='clientSearch'
                   fetchPolicy='cache-and-network'
                   filters={filters}
