@@ -184,6 +184,11 @@ const GenericTableWithData = <
   const offset = page * rowsPerPage;
   const limit = rowsPerPage;
 
+  const optionalColumnFieldFlags = useMemo(
+    () => compact(includedOptionalColumns.map((c) => c.optionalFieldFlag)),
+    [includedOptionalColumns]
+  );
+
   const { data, loading, error, networkStatus } = useQuery<
     Query,
     QueryVariables
@@ -198,12 +203,8 @@ const GenericTableWithData = <
       offset,
       limit,
       ...(applyOptionalColumns
-        ? applyOptionalColumns(
-            compact(includedOptionalColumns.map((c) => c.optionalFieldFlag))
-          )
-        : defaultApplyOptionalCols(
-            compact(includedOptionalColumns.map((c) => c.optionalFieldFlag))
-          )),
+        ? applyOptionalColumns(optionalColumnFieldFlags)
+        : defaultApplyOptionalCols(optionalColumnFieldFlags)),
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
