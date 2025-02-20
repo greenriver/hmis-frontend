@@ -1,7 +1,7 @@
 import { CardProps, Paper, Typography } from '@mui/material';
 import { ElementType, ReactNode } from 'react';
 
-export interface CommonCardProps {
+interface CommonCardProps {
   children: ReactNode;
   title?: ReactNode;
   titleComponent?: ElementType<any>;

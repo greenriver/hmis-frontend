@@ -16,7 +16,7 @@ import {
   ExpandMoreIcon,
 } from '@/components/elements/SemanticIcons';
 
-export interface CommonCardProps {
+interface CommonCollapsibleCardProps {
   title: string;
 
   titleBorder?: boolean; // Render border below title
@@ -40,7 +40,7 @@ export interface CommonCardProps {
  *
  * TODO(#7191): Consolidate with CommonCard and TitleCard
  */
-const CommonCollapsibleCard: React.FC<CommonCardProps> = ({
+const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
   open,
   title,
   children,

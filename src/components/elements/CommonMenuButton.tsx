@@ -184,6 +184,7 @@ const CommonMenuButton = ({
                   to={to}
                   state={linkState}
                   openInNew={openInNew}
+                  Icon={false} // omit openInNew Icon. Use menu icon instead.
                 >
                   {menuItemLabel}
                 </MenuItem>
