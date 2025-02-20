@@ -2,7 +2,6 @@ import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
@@ -92,19 +91,7 @@ const ClientAssessmentsPage = () => {
           recordType='Assessment'
           defaultSortOption={AssessmentSortOption.AssessmentDate}
           showOptionalColumns
-          applyOptionalColumns={(cols) => {
-            const result: Partial<GetClientAssessmentsQueryVariables> = {};
-
-            if (
-              cols.includes(
-                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
-              )
-            ) {
-              result.includeOrganizationName = true;
-            }
-
-            return result;
-          }}
+          // With this idea we now don't need to provide applyOptionalColumns
         />
       </Paper>
     </>

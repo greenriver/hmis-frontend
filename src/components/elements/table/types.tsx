@@ -18,6 +18,9 @@ type BaseColumnDef<T> = {
   optional?: boolean;
   defaultHidden?: boolean;
   sticky?: 'left' | 'right';
+  // If the column is optional, then you can optionally provide an optionalFieldFlag, which tells GenericTableWithData how to update the query variables.
+  // Discuss this idea. It's not ideal because ColumnDef is used by GenericTable, but this concept is specific to GenericTableWithData.
+  optionalFieldFlag?: string;
 };
 
 export type ColumnDef<T> =

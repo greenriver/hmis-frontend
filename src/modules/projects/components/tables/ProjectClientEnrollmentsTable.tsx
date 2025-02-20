@@ -225,6 +225,7 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   organizationName: {
     header: 'Organization Name',
+    optionalFieldFlag: 'includeOrganizationName',
     optional: true,
     defaultHidden: true,
     render: (e) => {

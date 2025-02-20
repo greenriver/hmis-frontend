@@ -14,7 +14,7 @@ import {
   startCase,
 } from 'lodash-es';
 import pluralize from 'pluralize';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FilterType } from '../types';
 
@@ -151,13 +151,21 @@ const GenericTableWithData = <
   const [filterValues, setFilterValues] = useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
   const [includedOptionalColumns, setIncludedOptionalColumns] = useState<
-    string[]
+    ColumnDef<RowDataType>[]
   >(
     compact(
-      columnsProp
-        ?.filter((col) => col.optional && !col.defaultHidden)
-        .map((col) => getColumnKey(col)) || []
+      columnsProp?.filter((col) => col.optional && !col.defaultHidden) || []
     )
+  );
+
+  const defaultApplyOptionalCols = useCallback(
+    (optionalColumnFlags: string[]) => {
+      return optionalColumnFlags.reduce((acc: any, key) => {
+        acc[key] = true;
+        return acc as QueryVariables;
+      }, {});
+    },
+    []
   );
 
   // if the filters change, return to the first page
@@ -190,8 +198,12 @@ const GenericTableWithData = <
       offset,
       limit,
       ...(applyOptionalColumns
-        ? applyOptionalColumns(includedOptionalColumns)
-        : {}),
+        ? applyOptionalColumns(
+            compact(includedOptionalColumns.map((c) => c.optionalFieldFlag))
+          )
+        : defaultApplyOptionalCols(
+            compact(includedOptionalColumns.map((c) => c.optionalFieldFlag))
+          )),
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
@@ -280,10 +292,7 @@ const GenericTableWithData = <
 
   const showColumnDefs = useMemo(() => {
     return columnDefs.filter((col) => {
-      return !(
-        col.optional &&
-        !includedOptionalColumns.includes(getColumnKey(col) || '')
-      );
+      return !(col.optional && !includedOptionalColumns.includes(col));
     });
   }, [columnDefs, includedOptionalColumns]);
 
@@ -370,8 +379,15 @@ const GenericTableWithData = <
                               header: col.header,
                               defaultHidden: !!col.defaultHidden,
                             })),
-                            columnsValue: includedOptionalColumns,
-                            setColumnsValue: setIncludedOptionalColumns,
+                            columnsValue: includedOptionalColumns.map((c) =>
+                              getColumnKey(c)
+                            ),
+                            setColumnsValue: (columnKeys) => {
+                              const cols = columnsProp?.filter((c) =>
+                                columnKeys.includes(getColumnKey(c))
+                              );
+                              setIncludedOptionalColumns(cols || []);
+                            },
                           }
                         : undefined
                     }
