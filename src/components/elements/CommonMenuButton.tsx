@@ -174,27 +174,22 @@ const CommonMenuButton = ({
               </Stack>
             );
 
+            let menuItem;
             if (to) {
-              return (
-                <>
-                  {sectionLabelEl}
-                  <MenuItem
-                    key={key}
-                    {...props}
-                    component={RouterLink}
-                    to={to}
-                    state={linkState}
-                    openInNew={openInNew}
-                  >
-                    {menuItemLabel}
-                  </MenuItem>
-                </>
+              menuItem = (
+                <MenuItem
+                  key={key}
+                  {...props}
+                  component={RouterLink}
+                  to={to}
+                  state={linkState}
+                  openInNew={openInNew}
+                >
+                  {menuItemLabel}
+                </MenuItem>
               );
-            }
-
-            return (
-              <>
-                {sectionLabelEl}
+            } else {
+              menuItem = (
                 <MenuItem
                   key={key}
                   {...props}
@@ -208,8 +203,19 @@ const CommonMenuButton = ({
                 >
                   {menuItemLabel}
                 </MenuItem>
-              </>
-            );
+              );
+            }
+
+            if (sectionLabelEl) {
+              return (
+                <div key={key}>
+                  {sectionLabelEl}
+                  {menuItem}
+                </div>
+              );
+            }
+
+            return menuItem;
           }
         )}
       </Menu>

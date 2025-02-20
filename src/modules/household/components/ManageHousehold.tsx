@@ -96,30 +96,21 @@ const ManageHousehold = ({
 
   const isMobile = useIsMobile();
 
-  const searchResultColumns = useMemo(() => {
-    const defaults: ColumnDef<
-      ClientSearchResultFieldsFragment | RecentHouseholdMember
-    >[] = [
+  const searchResultColumns: ColumnDef<
+    ClientSearchResultFieldsFragment | RecentHouseholdMember
+  >[] = useMemo(() => {
+    return [
       { ...CLIENT_COLUMNS.name, sticky: 'left', width: '25%' }, // why does sticky make it so wide?
+      ...(globalFeatureFlags?.mciId
+        ? [externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID')]
+        : []),
+      // On mobile, show enrollment button right next to the client name so user.
+      // This needs fixing, ideally we could use a sticky column but it doesn't work as expected on mobile
+      ...(isMobile ? addToEnrollmentColumns : []),
       CLIENT_COLUMNS.dobAge,
+      ...(isMobile ? [] : addToEnrollmentColumns),
     ];
-
-    // fixme get rid of this
-    if (isMobile) {
-      // On mobile, show enrollment button right next to the client name so user
-      // doesn't have to scroll to the right.
-      defaults.splice(1, 0, ...addToEnrollmentColumns);
-    } else {
-      defaults.push(...addToEnrollmentColumns);
-    }
-    if (globalFeatureFlags?.mciId) {
-      return [
-        externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
-        ...defaults,
-      ];
-    }
-    return defaults;
-  }, [addToEnrollmentColumns, isMobile, globalFeatureFlags?.mciId]);
+  }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
 
   const filters = useFilters({
     type: 'ClientFilterOptions',

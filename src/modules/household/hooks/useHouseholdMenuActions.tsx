@@ -100,9 +100,12 @@ export function useHouseholdMenuActions({
           ariaLabel: `Go to ${clientBriefName(row.client)}'s Exit Assessment`,
           disabled: !!row.enrollment.inProgress,
         },
-        // Intake Assessment
-        // Exit
         // CLIENT
+        {
+          key: 'divider-client',
+          title: 'divider',
+          divider: true,
+        },
         {
           sectionLabel: 'Client',
           key: 'assign hoh',

@@ -64,6 +64,7 @@ export default function useAddToHouseholdColumns({
         key: 'add',
         width: '10%',
         minWidth: '180px',
+
         render: (record) => {
           const client = isRecentHouseholdMember(record)
             ? record.client
