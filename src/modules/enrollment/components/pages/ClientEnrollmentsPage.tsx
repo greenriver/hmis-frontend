@@ -2,7 +2,7 @@ import { Paper, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import { ColumnDef } from '@/components/elements/table/types';
+import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -13,7 +13,10 @@ import {
   parseAndFormatDate,
   PERMANENT_HOUSING_PROJECT_TYPES,
 } from '@/modules/hmis/hmisUtil';
-import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import {
+  ENROLLMENT_COLUMNS,
+  HOUSEHOLD_ASSIGNED_STAFF_COL,
+} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
@@ -25,6 +28,10 @@ import {
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
+
+export type ClientEnrollmentTableFields = NonNullable<
+  GetClientEnrollmentsQuery['client']
+>['enrollments']['nodes'][number];
 
 const CaptionedText: React.FC<{ caption: string; children: ReactNode }> = ({
   caption,
@@ -59,6 +66,9 @@ const CLIENT_ENROLLMENT_COLUMNS: {
     ),
   },
   enrollmentDetails: {
+    // Enrollment Details shows Move-in Date or Last Bed Night, depending on project type.
+    // Ideally this could be now removed in favor of the optional columns Move-in Date and Last Contact Date,
+    // but we are avoiding that product churn (which would require additional training) for now
     header: 'Enrollment Details',
     render: ({
       moveInDate,
@@ -102,6 +112,9 @@ const COLUMNS: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
   ENROLLMENT_COLUMNS.exitDate,
   ENROLLMENT_COLUMNS.enrollmentStatus,
   CLIENT_ENROLLMENT_COLUMNS.projectType,
+  ENROLLMENT_COLUMNS.moveInDate,
+  ENROLLMENT_COLUMNS.lastContactDate,
+  ENROLLMENT_COLUMNS.assignedStaff,
   CLIENT_ENROLLMENT_COLUMNS.enrollmentDetails,
 ];
 
@@ -119,7 +132,7 @@ const ClientEnrollmentsPage = () => {
         <GenericTableWithData<
           GetClientEnrollmentsQuery,
           GetClientEnrollmentsQueryVariables,
-          ClientEnrollmentFieldsFragment
+          ClientEnrollmentTableFields
         >
           queryVariables={{ id: client.id }}
           queryDocument={GetClientEnrollmentsDocument}
@@ -137,6 +150,21 @@ const ClientEnrollmentsPage = () => {
           recordType='Enrollment'
           noSort
           defaultSortOption={EnrollmentSortOption.MostRecent}
+          showOptionalColumns
+          applyOptionalColumns={(cols) => {
+            const result: Partial<GetClientEnrollmentsQueryVariables> = {};
+
+            if (cols.includes(getColumnKey(HOUSEHOLD_ASSIGNED_STAFF_COL)))
+              result.includeStaffAssignment = true;
+
+            if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.moveInDate)))
+              result.includeMoveInDate = true;
+
+            if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.lastContactDate)))
+              result.includeLastContact = true;
+
+            return result;
+          }}
         />
       </Paper>
     </>

@@ -2340,6 +2340,7 @@ export type Enrollment = {
   juvenileJusticeMonths?: Maybe<Scalars['Int']['output']>;
   juvenileJusticeYears?: Maybe<RhyNumberofYears>;
   lastBedNightDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  lastContact?: Maybe<LastContact>;
   lastCurrentLivingSituation?: Maybe<CurrentLivingSituation>;
   lastServiceDate?: Maybe<Scalars['ISO8601Date']['output']>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
@@ -3951,6 +3952,12 @@ export type KeyValue = {
   __typename?: 'KeyValue';
   key: Scalars['String']['output'];
   value?: Maybe<Scalars['String']['output']>;
+};
+
+export type LastContact = {
+  __typename?: 'LastContact';
+  date: Scalars['ISO8601Date']['output'];
+  type: Scalars['String']['output'];
 };
 
 /** HUD LastGradeCompleted (R4.1) */
@@ -11926,6 +11933,7 @@ export type GetClientAssessmentsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
   filters?: InputMaybe<AssessmentFilterOptions>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientAssessmentsQuery = {
@@ -11959,7 +11967,7 @@ export type GetClientAssessmentsQuery = {
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
-          organizationName: string;
+          organizationName?: string;
           projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
@@ -16419,6 +16427,10 @@ export type GetClientEnrollmentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
+  includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientEnrollmentsQuery = {
@@ -16441,7 +16453,7 @@ export type GetClientEnrollmentsQuery = {
         moveInDate?: string | null;
         lastBedNightDate?: string | null;
         projectName: string;
-        organizationName: string;
+        organizationName?: string;
         projectType?: ProjectType | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
@@ -16449,6 +16461,46 @@ export type GetClientEnrollmentsQuery = {
           __typename?: 'EnrollmentAccess';
           id: string;
           canViewEnrollmentDetails: boolean;
+        };
+        lastContact?: {
+          __typename?: 'LastContact';
+          date: string;
+          type: string;
+        } | null;
+        household?: {
+          __typename?: 'Household';
+          id: string;
+          householdClients: Array<{
+            __typename?: 'HouseholdClient';
+            id: string;
+            relationshipToHoH: RelationshipToHoH;
+            client: {
+              __typename?: 'Client';
+              id: string;
+              lockVersion: number;
+              firstName?: string | null;
+              middleName?: string | null;
+              lastName?: string | null;
+              nameSuffix?: string | null;
+            };
+          }>;
+          staffAssignments?: {
+            __typename?: 'StaffAssignmentsPaginated';
+            nodesCount: number;
+            nodes: Array<{
+              __typename?: 'StaffAssignment';
+              id: string;
+              staffAssignmentRelationship: string;
+              assignedAt: string;
+              unassignedAt?: string | null;
+              user: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              };
+              household: { __typename?: 'Household'; id: string };
+            }>;
+          } | null;
         };
       }>;
     };
@@ -16461,6 +16513,7 @@ export type GetClientServicesQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
   filters?: InputMaybe<ServiceFilterOptions>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientServicesQuery = {
@@ -16497,7 +16550,7 @@ export type GetClientServicesQuery = {
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
-          organizationName: string;
+          organizationName?: string;
           projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
@@ -16993,6 +17046,7 @@ export type GetClientFilesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientFilesQuery = {
@@ -17030,7 +17084,7 @@ export type GetClientFilesQuery = {
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
-          organizationName: string;
+          organizationName?: string;
           projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
@@ -19670,6 +19724,7 @@ export type GetClientCaseNotesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<CustomCaseNoteSortOption>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientCaseNotesQuery = {
@@ -19700,7 +19755,7 @@ export type GetClientCaseNotesQuery = {
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
-          organizationName: string;
+          organizationName?: string;
           projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
@@ -20062,7 +20117,7 @@ export type ClientEnrollmentFieldsFragment = {
   moveInDate?: string | null;
   lastBedNightDate?: string | null;
   projectName: string;
-  organizationName: string;
+  organizationName?: string;
   projectType?: ProjectType | null;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
@@ -20070,6 +20125,47 @@ export type ClientEnrollmentFieldsFragment = {
     __typename?: 'EnrollmentAccess';
     id: string;
     canViewEnrollmentDetails: boolean;
+  };
+};
+
+export type EnrollmentWithOptionalFieldsFragment = {
+  __typename?: 'Enrollment';
+  moveInDate?: string | null;
+  lastContact?: {
+    __typename?: 'LastContact';
+    date: string;
+    type: string;
+  } | null;
+  household?: {
+    __typename?: 'Household';
+    id: string;
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+    }>;
+    staffAssignments?: {
+      __typename?: 'StaffAssignmentsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'StaffAssignment';
+        id: string;
+        staffAssignmentRelationship: string;
+        assignedAt: string;
+        unassignedAt?: string | null;
+        user: { __typename?: 'ApplicationUser'; id: string; name: string };
+        household: { __typename?: 'Household'; id: string };
+      }>;
+    } | null;
   };
 };
 
@@ -33351,6 +33447,12 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       exitDate?: string | null;
       inProgress: boolean;
       autoExited: boolean;
+      moveInDate?: string | null;
+      lastContact?: {
+        __typename?: 'LastContact';
+        date: string;
+        type: string;
+      } | null;
     };
   }>;
   staffAssignments?: {
@@ -33393,6 +33495,12 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     exitDate?: string | null;
     inProgress: boolean;
     autoExited: boolean;
+    moveInDate?: string | null;
+    lastContact?: {
+      __typename?: 'LastContact';
+      date: string;
+      type: string;
+    } | null;
   };
 };
 
@@ -35619,10 +35727,25 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
   householdId: string;
   householdShortId: string;
   householdSize: number;
-  lastCurrentLivingSituation?: {
-    __typename?: 'CurrentLivingSituation';
+  moveInDate?: string | null;
+  client: {
+    __typename?: 'Client';
     id: string;
-    informationDate?: string | null;
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    lockVersion: number;
+    age?: number | null;
+    gender: Array<Gender>;
+    pronouns: Array<string>;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+  lastContact?: {
+    __typename?: 'LastContact';
+    date: string;
+    type: string;
   } | null;
   household?: {
     __typename?: 'Household';
@@ -35654,20 +35777,6 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
         household: { __typename?: 'Household'; id: string };
       }>;
     } | null;
-  };
-  client: {
-    __typename?: 'Client';
-    id: string;
-    dob?: string | null;
-    veteranStatus: NoYesReasonsForMissingData;
-    lockVersion: number;
-    age?: number | null;
-    gender: Array<Gender>;
-    pronouns: Array<string>;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
   };
 };
 
@@ -35936,8 +36045,9 @@ export type GetProjectEnrollmentsQueryVariables = Exact<{
   sortOrder?: InputMaybe<EnrollmentSortOption>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  includeCls?: InputMaybe<Scalars['Boolean']['input']>;
   includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetProjectEnrollmentsQuery = {
@@ -35963,10 +36073,25 @@ export type GetProjectEnrollmentsQuery = {
         householdId: string;
         householdShortId: string;
         householdSize: number;
-        lastCurrentLivingSituation?: {
-          __typename?: 'CurrentLivingSituation';
+        moveInDate?: string | null;
+        client: {
+          __typename?: 'Client';
           id: string;
-          informationDate?: string | null;
+          dob?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
+          lockVersion: number;
+          age?: number | null;
+          gender: Array<Gender>;
+          pronouns: Array<string>;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
+        lastContact?: {
+          __typename?: 'LastContact';
+          date: string;
+          type: string;
         } | null;
         household?: {
           __typename?: 'Household';
@@ -36003,20 +36128,6 @@ export type GetProjectEnrollmentsQuery = {
             }>;
           } | null;
         };
-        client: {
-          __typename?: 'Client';
-          id: string;
-          dob?: string | null;
-          veteranStatus: NoYesReasonsForMissingData;
-          lockVersion: number;
-          age?: number | null;
-          gender: Array<Gender>;
-          pronouns: Array<string>;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        };
       }>;
     };
   } | null;
@@ -36029,6 +36140,8 @@ export type GetProjectHouseholdsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetProjectHouseholdsQuery = {
@@ -36071,6 +36184,12 @@ export type GetProjectHouseholdsQuery = {
             exitDate?: string | null;
             inProgress: boolean;
             autoExited: boolean;
+            moveInDate?: string | null;
+            lastContact?: {
+              __typename?: 'LastContact';
+              date: string;
+              type: string;
+            } | null;
           };
         }>;
         staffAssignments?: {
@@ -39486,6 +39605,7 @@ export type StaffAssignmentWithClientsFragment = {
     latestExitDate?: string | null;
     householdClients: Array<{
       __typename?: 'HouseholdClient';
+      id: string;
       relationshipToHoH: RelationshipToHoH;
       client: {
         __typename?: 'Client';
@@ -39499,6 +39619,8 @@ export type StaffAssignmentWithClientsFragment = {
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        organizationName?: string;
+        moveInDate?: string | null;
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
@@ -39508,6 +39630,11 @@ export type StaffAssignmentWithClientsFragment = {
           projectName: string;
           projectType?: ProjectType | null;
         };
+        lastContact?: {
+          __typename?: 'LastContact';
+          date: string;
+          type: string;
+        } | null;
       };
     }>;
   };
@@ -40070,6 +40197,9 @@ export type GetUserStaffAssignmentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetUserStaffAssignmentsQuery = {
@@ -40096,6 +40226,7 @@ export type GetUserStaffAssignmentsQuery = {
           latestExitDate?: string | null;
           householdClients: Array<{
             __typename?: 'HouseholdClient';
+            id: string;
             relationshipToHoH: RelationshipToHoH;
             client: {
               __typename?: 'Client';
@@ -40109,6 +40240,8 @@ export type GetUserStaffAssignmentsQuery = {
             enrollment: {
               __typename?: 'Enrollment';
               id: string;
+              organizationName?: string;
+              moveInDate?: string | null;
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
@@ -40118,6 +40251,11 @@ export type GetUserStaffAssignmentsQuery = {
                 projectName: string;
                 projectType?: ProjectType | null;
               };
+              lastContact?: {
+                __typename?: 'LastContact';
+                date: string;
+                type: string;
+              } | null;
             };
           }>;
         };
@@ -41230,7 +41368,7 @@ export const ClientEnrollmentFieldsFragmentDoc = gql`
     moveInDate
     lastBedNightDate
     projectName
-    organizationName
+    organizationName @include(if: $includeOrganizationName)
     projectType
     inProgress
     relationshipToHoH
@@ -41741,6 +41879,11 @@ export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
       exitDate
       inProgress
       autoExited
+      moveInDate @include(if: $includeMoveInDate)
+      lastContact @include(if: $includeLastContact) {
+        date
+        type
+      }
     }
   }
   ${ClientNameFragmentDoc}
@@ -42031,20 +42174,27 @@ export const ProjectEnrollmentFieldsFragmentDoc = gql`
   ${ClientNameDobVetFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
 `;
-export const ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc = gql`
-  fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
-    ...ProjectEnrollmentFields
-    lastCurrentLivingSituation @include(if: $includeCls) {
-      id
-      informationDate
+export const EnrollmentWithOptionalFieldsFragmentDoc = gql`
+  fragment EnrollmentWithOptionalFields on Enrollment {
+    moveInDate @include(if: $includeMoveInDate)
+    lastContact @include(if: $includeLastContact) {
+      date
+      type
     }
     household @include(if: $includeStaffAssignment) {
       id
       ...HouseholdWithStaffAssignments
     }
   }
-  ${ProjectEnrollmentFieldsFragmentDoc}
   ${HouseholdWithStaffAssignmentsFragmentDoc}
+`;
+export const ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc = gql`
+  fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
+    ...ProjectEnrollmentFields
+    ...EnrollmentWithOptionalFields
+  }
+  ${ProjectEnrollmentFieldsFragmentDoc}
+  ${EnrollmentWithOptionalFieldsFragmentDoc}
 `;
 export const ProjectConfigFieldsFragmentDoc = gql`
   fragment ProjectConfigFields on ProjectConfig {
@@ -42321,6 +42471,7 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
       anyInProgress
       latestExitDate
       householdClients {
+        id
         relationshipToHoH
         client {
           id
@@ -42331,6 +42482,12 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
           ...EnrollmentRangeFields
           project {
             ...ProjectNameAndType
+          }
+          organizationName @include(if: $includeOrganizationName)
+          moveInDate @include(if: $includeMoveInDate)
+          lastContact @include(if: $includeLastContact) {
+            date
+            type
           }
         }
       }
@@ -42760,6 +42917,7 @@ export const GetClientAssessmentsDocument = gql`
     $offset: Int = 0
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
     $filters: AssessmentFilterOptions = null
+    $includeOrganizationName: Boolean = false
   ) {
     client(id: $id) {
       id
@@ -42802,6 +42960,7 @@ export const GetClientAssessmentsDocument = gql`
  *      offset: // value for 'offset'
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -44447,6 +44606,10 @@ export const GetClientEnrollmentsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $filters: EnrollmentsForClientFilterOptions
+    $includeStaffAssignment: Boolean = false
+    $includeMoveInDate: Boolean = false
+    $includeLastContact: Boolean = false
+    $includeOrganizationName: Boolean = true
   ) {
     client(id: $id) {
       id
@@ -44462,11 +44625,13 @@ export const GetClientEnrollmentsDocument = gql`
         nodesCount
         nodes {
           ...ClientEnrollmentFields
+          ...EnrollmentWithOptionalFields
         }
       }
     }
   }
   ${ClientEnrollmentFieldsFragmentDoc}
+  ${EnrollmentWithOptionalFieldsFragmentDoc}
 `;
 
 /**
@@ -44485,6 +44650,10 @@ export const GetClientEnrollmentsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
+ *      includeStaffAssignment: // value for 'includeStaffAssignment'
+ *      includeMoveInDate: // value for 'includeMoveInDate'
+ *      includeLastContact: // value for 'includeLastContact'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -44548,6 +44717,7 @@ export const GetClientServicesDocument = gql`
     $offset: Int = 0
     $sortOrder: ServiceSortOption = DATE_PROVIDED
     $filters: ServiceFilterOptions = null
+    $includeOrganizationName: Boolean = false
   ) {
     client(id: $id) {
       id
@@ -44590,6 +44760,7 @@ export const GetClientServicesDocument = gql`
  *      offset: // value for 'offset'
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -45051,7 +45222,12 @@ export type GetFileQueryResult = Apollo.QueryResult<
   GetFileQueryVariables
 >;
 export const GetClientFilesDocument = gql`
-  query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetClientFiles(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $includeOrganizationName: Boolean = false
+  ) {
     client(id: $id) {
       id
       files(limit: $limit, offset: $offset) {
@@ -45086,6 +45262,7 @@ export const GetClientFilesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -46825,6 +47002,7 @@ export const GetClientCaseNotesDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $sortOrder: CustomCaseNoteSortOption
+    $includeOrganizationName: Boolean = false
   ) {
     client(id: $id) {
       id
@@ -46861,6 +47039,7 @@ export const GetClientCaseNotesDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      sortOrder: // value for 'sortOrder'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -51051,8 +51230,9 @@ export const GetProjectEnrollmentsDocument = gql`
     $sortOrder: EnrollmentSortOption
     $limit: Int = 10
     $offset: Int = 0
-    $includeCls: Boolean = false
     $includeStaffAssignment: Boolean = false
+    $includeMoveInDate: Boolean = false
+    $includeLastContact: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -51091,8 +51271,9 @@ export const GetProjectEnrollmentsDocument = gql`
  *      sortOrder: // value for 'sortOrder'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      includeCls: // value for 'includeCls'
  *      includeStaffAssignment: // value for 'includeStaffAssignment'
+ *      includeMoveInDate: // value for 'includeMoveInDate'
+ *      includeLastContact: // value for 'includeLastContact'
  *   },
  * });
  */
@@ -51157,6 +51338,8 @@ export const GetProjectHouseholdsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $includeStaffAssignment: Boolean = false
+    $includeMoveInDate: Boolean = false
+    $includeLastContact: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -51196,6 +51379,8 @@ export const GetProjectHouseholdsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      includeStaffAssignment: // value for 'includeStaffAssignment'
+ *      includeMoveInDate: // value for 'includeMoveInDate'
+ *      includeLastContact: // value for 'includeLastContact'
  *   },
  * });
  */
@@ -55306,7 +55491,14 @@ export type GetUserEnrollmentSummariesQueryResult = Apollo.QueryResult<
   GetUserEnrollmentSummariesQueryVariables
 >;
 export const GetUserStaffAssignmentsDocument = gql`
-  query GetUserStaffAssignments($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  query GetUserStaffAssignments(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $includeOrganizationName: Boolean = false
+    $includeMoveInDate: Boolean = false
+    $includeLastContact: Boolean = false
+  ) {
     user(id: $id) {
       id
       staffAssignments(limit: $limit, offset: $offset) {
@@ -55337,6 +55529,9 @@ export const GetUserStaffAssignmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
+ *      includeMoveInDate: // value for 'includeMoveInDate'
+ *      includeLastContact: // value for 'includeLastContact'
  *   },
  * });
  */

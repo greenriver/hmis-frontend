@@ -21,6 +21,7 @@ fragment ProjectEnrollmentFields on Enrollment {
 }
 
 # fields for resolving Enrollments on a Client
+# also used for resolving Enrollments on other Client records, like Assessment, Case Note, Service
 # Note: user might only have limited access to some Enrollments
 fragment ClientEnrollmentFields on Enrollment {
   id
@@ -31,13 +32,27 @@ fragment ClientEnrollmentFields on Enrollment {
   moveInDate
   lastBedNightDate
   projectName
-  organizationName
+  organizationName @include(if: $includeOrganizationName)
   projectType
   inProgress
   relationshipToHoH
   access {
     id
     canViewEnrollmentDetails
+  }
+}
+
+fragment EnrollmentWithOptionalFields on Enrollment {
+  # Optional fields that are only included on Project Enrollments and Client Enrollments
+  # (organizationName not included here because it is fetched optionally by all records that use ClientEnrollmentFields)
+  moveInDate @include(if: $includeMoveInDate)
+  lastContact @include(if: $includeLastContact) {
+    date
+    type
+  }
+  household @include(if: $includeStaffAssignment) {
+    id
+    ...HouseholdWithStaffAssignments
   }
 }
 

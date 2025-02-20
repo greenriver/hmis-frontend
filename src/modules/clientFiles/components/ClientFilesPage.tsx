@@ -7,7 +7,7 @@ import useFileActions from '../hooks/useFileActions';
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
-import { ColumnDef } from '@/components/elements/table/types';
+import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
 import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -17,6 +17,7 @@ import {
   useClientPermissions,
   useHasClientPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientFilesDocument,
@@ -130,6 +131,16 @@ const ClientFilesPage = () => {
           return `Unknown time ${byUser}`;
         },
       },
+      {
+        header: 'Organization Name',
+        optional: true,
+        defaultHidden: true,
+        render: (file) => {
+          if (file.enrollment) {
+            return file.enrollment.organizationName;
+          }
+        },
+      },
     ];
   }, [isTiny, pickListData]);
 
@@ -166,6 +177,19 @@ const ClientFilesPage = () => {
           handleRowClick={(file) => (file.redacted ? {} : setViewingFile(file))}
           pagePath='client.files'
           noData='No files'
+          showOptionalColumns
+          applyOptionalColumns={(cols) => {
+            const result: Partial<GetClientFilesQueryVariables> = {};
+
+            if (
+              cols.includes(
+                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
+              )
+            )
+              result.includeOrganizationName = true;
+
+            return result;
+          }}
         />
       </Paper>
       {viewingFile && (

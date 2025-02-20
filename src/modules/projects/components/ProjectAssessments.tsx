@@ -79,6 +79,7 @@ const ProjectAssessments = () => {
           recordType='Assessment'
           filters={filters}
           defaultSortOption={AssessmentSortOption.AssessmentDate}
+          showOptionalColumns
         />
       </Paper>
     </>

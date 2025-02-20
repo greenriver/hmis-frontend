@@ -67,6 +67,7 @@ const ProjectCurrentLivingSituations = () => {
           pagePath='project.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'
+          showOptionalColumns
         />
       </Paper>
     </>

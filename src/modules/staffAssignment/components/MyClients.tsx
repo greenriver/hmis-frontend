@@ -2,14 +2,16 @@ import { Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { memoize } from 'lodash-es';
 import React from 'react';
-import { ColumnDef } from '@/components/elements/table/types';
+import { renderCellContents } from '@/components/elements/table/GenericTable';
+import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
-  clientBriefName,
-  parseAndFormatDateRange,
-} from '@/modules/hmis/hmisUtil';
+  ENROLLMENT_COLUMNS,
+  WITH_ENROLLMENT_COLUMNS,
+} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetUserStaffAssignmentsDocument,
@@ -48,20 +50,50 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
       memoizedHoh(assignment).enrollment.project.projectName,
   },
   {
-    header: 'Enrollment Period',
+    ...WITH_ENROLLMENT_COLUMNS.entryDate,
     render: (assignment) => {
-      const hoh = memoizedHoh(assignment);
-      return parseAndFormatDateRange(
-        hoh.enrollment.entryDate,
-        hoh.enrollment.exitDate
+      return renderCellContents(
+        memoizedHoh(assignment),
+        WITH_ENROLLMENT_COLUMNS.entryDate.render
       );
     },
+    tableCellProps: undefined, // typescript
   },
   {
-    header: 'Status',
+    header: 'Household Status',
     render: (assignment) => (
       <HouseholdStatus household={assignment.household} />
     ),
+  },
+  {
+    ...WITH_ENROLLMENT_COLUMNS.moveInDate,
+    render: (assignment) => {
+      return renderCellContents(
+        memoizedHoh(assignment),
+        WITH_ENROLLMENT_COLUMNS.moveInDate.render
+      );
+    },
+    tableCellProps: undefined, // typescript
+  },
+  {
+    ...WITH_ENROLLMENT_COLUMNS.lastContactDate,
+    render: (assignment) => {
+      return renderCellContents(
+        memoizedHoh(assignment),
+        WITH_ENROLLMENT_COLUMNS.lastContactDate.render
+      );
+    },
+    tableCellProps: undefined, // typescript
+  },
+  {
+    ...WITH_ENROLLMENT_COLUMNS.organizationName,
+    render: (assignment) => {
+      return renderCellContents(
+        memoizedHoh(assignment),
+        WITH_ENROLLMENT_COLUMNS.organizationName.render
+      );
+    },
+    tableCellProps: undefined, // typescript
   },
 ];
 
@@ -104,6 +136,25 @@ const MyClients = () => {
           }}
           rowName={(row) => clientBriefName(memoizedHoh(row).client)}
           rowActionTitle='View Household'
+          showOptionalColumns
+          applyOptionalColumns={(cols) => {
+            const result: Partial<GetUserStaffAssignmentsQueryVariables> = {};
+
+            if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.moveInDate)))
+              result.includeMoveInDate = true;
+
+            if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.lastContactDate)))
+              result.includeLastContact = true;
+
+            if (
+              cols.includes(
+                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
+              )
+            )
+              result.includeOrganizationName = true;
+
+            return result;
+          }}
         />
       </Paper>
     </>

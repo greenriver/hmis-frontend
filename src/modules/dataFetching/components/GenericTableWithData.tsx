@@ -23,7 +23,7 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import Pagination from '@/components/elements/table/Pagination';
-import { ColumnDef } from '@/components/elements/table/types';
+import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
 import TableFilters, {
   TableFiltersProps,
 } from '@/components/elements/tableFilters/TableFilters';
@@ -155,7 +155,7 @@ const GenericTableWithData = <
     compact(
       columnsProp
         ?.filter((col) => col.optional && !col.defaultHidden)
-        .map((col) => col.key) || []
+        .map((col) => getColumnKey(col)) || []
     )
   );
 
@@ -279,9 +279,10 @@ const GenericTableWithData = <
 
   const showColumnDefs = useMemo(() => {
     return columnDefs.filter((col) => {
-      if (col.optional && !includedOptionalColumns.includes(col.key || ''))
-        return false;
-      return true;
+      return !(
+        col.optional &&
+        !includedOptionalColumns.includes(getColumnKey(col) || '')
+      );
     });
   }, [columnDefs, includedOptionalColumns]);
 
@@ -364,7 +365,7 @@ const GenericTableWithData = <
                       showOptionalColumns
                         ? {
                             columns: optionalColumns.map((col) => ({
-                              value: col.key || '',
+                              value: getColumnKey(col) || '',
                               header: col.header,
                               defaultHidden: !!col.defaultHidden,
                             })),

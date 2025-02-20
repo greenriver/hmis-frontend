@@ -81,6 +81,7 @@ const ProjectServicesTable = ({
       pagePath='project.services'
       recordType='Service'
       filters={filters}
+      showOptionalColumns
     />
   );
 };

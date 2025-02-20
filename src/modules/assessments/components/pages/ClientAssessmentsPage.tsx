@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef } from '@/components/elements/table/types';
+import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
@@ -13,6 +13,7 @@ import useClientDashboardContext from '@/modules/client/hooks/useClientDashboard
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription, entryExitRange } from '@/modules/hmis/hmisUtil';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   AssessmentSortOption,
   GetClientAssessmentsDocument,
@@ -28,6 +29,13 @@ const COLUMNS: ColumnDef<ClientAssessmentType>[] = [
     header: 'Project Name',
     render: (row: ClientAssessmentType) => row.enrollment.projectName,
   },
+  {
+    ...WITH_ENROLLMENT_COLUMNS.entryDate,
+    optional: true,
+    defaultHidden: true,
+  },
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+  WITH_ENROLLMENT_COLUMNS.organizationName,
 ];
 
 const ClientAssessmentsPage = () => {
@@ -82,6 +90,20 @@ const ClientAssessmentsPage = () => {
           noData='No assessments'
           recordType='Assessment'
           defaultSortOption={AssessmentSortOption.AssessmentDate}
+          showOptionalColumns
+          applyOptionalColumns={(cols) => {
+            const result: Partial<GetClientAssessmentsQueryVariables> = {};
+
+            if (
+              cols.includes(
+                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
+              )
+            ) {
+              result.includeOrganizationName = true;
+            }
+
+            return result;
+          }}
         />
       </Paper>
     </>

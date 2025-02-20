@@ -29,6 +29,7 @@ import EnhancedTableToolbar, {
 } from './EnhancedTableToolbar';
 import {
   ColumnDef,
+  getColumnKey,
   isPrimitive,
   isRenderFunction,
   RenderFunction,
@@ -39,9 +40,6 @@ import { useTableSelection } from '@/components/elements/table/hooks/useTableSel
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { customVisuallyHidden } from '@/config/theme';
 import { LocationState } from '@/routes/routeUtil';
-
-export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
-  def.key || (typeof def.header === 'string' ? def.header : '');
 
 export interface Props<T> {
   rows: T[];
@@ -466,7 +464,10 @@ const GenericTable = <T extends { id: string }>({
               rows.map((row) => {
                 // prop to completely take over row rendering
                 if (renderRow) {
-                  return renderRow(row, compact(columns.map((c) => c.key)));
+                  return renderRow(
+                    row,
+                    compact(columns.map((c) => getColumnKey(c)))
+                  );
                 }
 
                 const isSelectable =

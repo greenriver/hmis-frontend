@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material';
 import React from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef } from '@/components/elements/table/types';
+import { ColumnDef, getColumnKey } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
@@ -9,6 +9,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   getServiceTypeForDisplay,
   SERVICE_BASIC_COLUMNS,
@@ -40,6 +41,13 @@ const columns: ColumnDef<ServiceType>[] = [
     optional: true,
     defaultHidden: true,
   },
+  {
+    ...WITH_ENROLLMENT_COLUMNS.entryDate,
+    optional: true,
+    defaultHidden: true,
+  },
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+  WITH_ENROLLMENT_COLUMNS.organizationName,
 ];
 
 const ClientServicesPage: React.FC = () => {
@@ -87,6 +95,19 @@ const ClientServicesPage: React.FC = () => {
           defaultSortOption={ServiceSortOption.DateProvided}
           noSort
           showOptionalColumns
+          applyOptionalColumns={(cols) => {
+            const result: Partial<GetClientServicesQueryVariables> = {};
+
+            if (
+              cols.includes(
+                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
+              )
+            ) {
+              result.includeOrganizationName = true;
+            }
+
+            return result;
+          }}
         />
       </Paper>
     </>
