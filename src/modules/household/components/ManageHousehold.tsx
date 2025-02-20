@@ -8,7 +8,7 @@ import { usePreviouslyAssociatedMembers } from '../hooks/usePreviouslyAssociated
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
 import AddNewClientButton from './elements/AddNewClientButton';
 import { ClickToCopyId } from '@/components/elements/ClickToCopy';
-import { CommonCard2 } from '@/components/elements/CommonCard2';
+import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
@@ -140,8 +140,7 @@ const ManageHousehold = ({
 
   return (
     <Stack gap={4}>
-      {/* FIXME: align on titlecard and commoncard */}
-      <CommonCard2
+      <CommonCollapsibleCard
         title='Household'
         titleBorder
         TitleComponent='h1'
@@ -186,14 +185,14 @@ const ManageHousehold = ({
             />
           </Box>
         )}
-      </CommonCard2>
+      </CommonCollapsibleCard>
       {BackButton}
 
       {canEdit &&
         previouslyAssociatedMembers &&
         previouslyAssociatedMembers.length > 0 && (
           <>
-            <CommonCard2
+            <CommonCollapsibleCard
               title={`+ Add Previously Associated Household Members (${previouslyAssociatedMembers.length})`}
               collapsible
               padContent={false}
@@ -205,12 +204,12 @@ const ManageHousehold = ({
                 recentMembers={previouslyAssociatedMembers}
                 additionalColumns={addToEnrollmentColumns}
               />
-            </CommonCard2>
+            </CommonCollapsibleCard>
           </>
         )}
 
       {canEdit && (
-        <CommonCard2
+        <CommonCollapsibleCard
           title='+ Add Household Member'
           collapsible
           padContent={false}
@@ -269,7 +268,7 @@ const ManageHousehold = ({
               </SsnDobShowContextProvider>
             )}
           </Stack>
-        </CommonCard2>
+        </CommonCollapsibleCard>
       )}
       {renderBackButton && renderBackButton(householdId)}
       <Box sx={{ height: 100 }} />

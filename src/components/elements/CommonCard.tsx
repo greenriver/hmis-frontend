@@ -9,6 +9,7 @@ export interface CommonCardProps {
   className?: string;
 }
 
+// TODO(#7191): Replace usages of CommonCard and TitleCard with CommonCollapsibleCard
 export const commonCardPaperPadding = { py: 2, px: 2.5 };
 export const commonCardTitleVariant = 'h5';
 

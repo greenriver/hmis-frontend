@@ -41,9 +41,9 @@ const clientColumns = [
 ];
 
 type RowType = ClientFieldsFragment;
-const fakeRows: RowType[] = [];
+export const DummyTableRows: RowType[] = [];
 for (let i = 0; i < 10; i++) {
-  fakeRows.push({ ...RITA_ACKROYD, id: (i + 1).toString() } as RowType);
+  DummyTableRows.push({ ...RITA_ACKROYD, id: (i + 1).toString() } as RowType);
 }
 
 export const NoData = Template<RowType>().bind({});
@@ -51,13 +51,13 @@ NoData.args = { rows: [] as RowType[], columns: clientColumns };
 
 export const WithClientData = Template<RowType>().bind({});
 WithClientData.args = {
-  rows: fakeRows,
+  rows: DummyTableRows,
   columns: clientColumns,
 };
 
 export const SelectableRows = Template<RowType>().bind({});
 SelectableRows.args = {
-  rows: fakeRows,
+  rows: DummyTableRows,
   columns: clientColumns,
   selectable: 'row',
 };
@@ -146,7 +146,7 @@ WithCustomDataElements.args = {
 
 export const WithLinkedTableRows = Template<RowType>().bind({});
 WithLinkedTableRows.args = {
-  rows: fakeRows,
+  rows: DummyTableRows,
   rowLinkTo: () => 'https://storybook.js.org/docs',
   rowName: (row) => row.id + ' ' + clientBriefName(row),
   rowActionTitle: 'Navigate to an external link',
@@ -155,7 +155,7 @@ WithLinkedTableRows.args = {
 
 export const WithMultiActionTableRows = Template<RowType>().bind({});
 WithMultiActionTableRows.args = {
-  rows: fakeRows,
+  rows: DummyTableRows,
   handleRowClick: (row) => alert(`Hello, ${clientBriefName(row)} ${row.id}`),
   rowName: (row) => row.id + ' ' + clientBriefName(row),
   rowActionTitle: 'Do something in-app',

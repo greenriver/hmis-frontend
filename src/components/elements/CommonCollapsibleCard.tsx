@@ -5,7 +5,8 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { ReactNode } from 'react';
+import { Box } from '@mui/system';
+import React, { ReactNode } from 'react';
 import {
   commonCardPaperPadding,
   commonCardTitleVariant,
@@ -15,45 +16,99 @@ import {
   ExpandMoreIcon,
 } from '@/components/elements/SemanticIcons';
 
-interface CommonCollapsibleCardProps {
+export interface CommonCardProps {
   title: string;
-  children: ReactNode;
+
+  titleBorder?: boolean; // Render border below title
+  TitleComponent?: React.ElementType; // Use different component for title
+  children: ReactNode; // Card content
+  padContent?: boolean; // Whether content is padded
+  actions?: ReactNode; // Top-right actions, not compatible with collapsible
+  // collapse props
+  collapsible?: boolean;
   open?: boolean;
-  onClick?: CollapseProps['onClick'];
+  onClick?: VoidFunction;
   onExited?: CollapseProps['onExited'];
 }
 
-const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
+/**
+ * Card with a title and content.
+ * Title can optionally have a border below it.
+ * Title can optionally have "action" content (usually a button) rendered to the right.
+ * Content can optionally be collapsible.
+ * Content can optionally be padded (padContent). Un-pad content if rendering a table in the card.
+ *
+ * TODO(#7191): Consolidate with CommonCard and TitleCard
+ */
+const CommonCollapsibleCard: React.FC<CommonCardProps> = ({
   open,
   title,
   children,
   onClick,
   onExited,
+  collapsible,
+  titleBorder = false,
+  padContent = true,
+  actions,
+  TitleComponent,
 }) => {
-  const collapsibleTitle = (
+  if (collapsible && actions)
+    throw new Error('Cannot have actions on collapsible card');
+
+  const collapseIcon =
+    collapsible && (open ? <ExpandLessIcon /> : <ExpandMoreIcon />);
+
+  const cardTitle = (
     <Stack
       direction='row'
       justifyContent='space-between'
       alignItems='center'
-      onClick={onClick}
+      onClick={collapsible ? onClick : undefined}
       sx={{
-        cursor: 'pointer',
-        '&:hover': { backgroundColor: '#F1F2F9' }, // FIXME: primary surface when theme is merged
+        ...(collapsible
+          ? {
+              cursor: 'pointer',
+              '&:hover': { backgroundColor: '#F1F2F9' }, // FIXME: should be 'primary.surface' when theme is merged
+            }
+          : {}),
+        ...(titleBorder
+          ? {
+              borderBottomColor: 'borders.light',
+              borderBottomWidth: 1,
+              borderBottomStyle: 'solid',
+            }
+          : {}),
         ...commonCardPaperPadding, // make sure this matches CommonCard
         pageBreakInside: 'avoid',
       }}
     >
-      <Typography variant={commonCardTitleVariant}>{title}</Typography>
-      {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      <Typography
+        variant={commonCardTitleVariant}
+        component={TitleComponent || commonCardTitleVariant}
+      >
+        {title}
+      </Typography>
+      {collapseIcon}
+      {actions && !collapseIcon && <>{actions}</>}
     </Stack>
+  );
+
+  const cardContent = padContent ? (
+    <Box sx={{ p: 2 }}>{children}</Box>
+  ) : (
+    children
   );
 
   return (
     <Paper>
-      {collapsibleTitle}
-      <Collapse in={open} timeout='auto' unmountOnExit onExited={onExited}>
-        {children}
-      </Collapse>
+      {cardTitle}
+      {collapsible ? (
+        <Collapse in={open} timeout='auto' unmountOnExit onExited={onExited}>
+          {cardContent}
+        </Collapse>
+      ) : (
+        cardContent
+      )}
     </Paper>
   );
 };
