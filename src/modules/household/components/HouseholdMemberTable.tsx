@@ -118,6 +118,15 @@ interface Props {
   canEdit?: boolean;
 }
 
+/**
+ * Table for viewing details of all household members.
+ *
+ * If user can edit, also includes menu actions for each member, including:
+ * - assign HoH
+ * - change relationship to HoH
+ * - split to new household
+ * - delete enrollments
+ */
 const HouseholdMemberTable = ({
   household,
   project,
@@ -162,6 +171,7 @@ const HouseholdMemberTable = ({
       loading,
       currentMembers,
       project,
+      canEdit,
     });
 
   return (
@@ -170,9 +180,7 @@ const HouseholdMemberTable = ({
         <GenericTable<HouseholdClientFieldsFragment>
           rows={currentMembers}
           rowName={(row) => clientBriefName(row.client)}
-          rowSecondaryActionConfigs={
-            canEdit ? getRowSecondaryActionConfigs : undefined
-          }
+          rowSecondaryActionConfigs={getRowSecondaryActionConfigs}
           columns={columns}
           loading={loading || actionLoading}
           loadingVariant='linear'

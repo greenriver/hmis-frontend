@@ -1,13 +1,10 @@
-import { SvgIconComponent } from '@mui/icons-material';
 import { useCallback, useMemo, useState } from 'react';
 
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import {
   ChangeRelationshipIcon,
   DeleteIcon,
-  ExitAssessmentIcon,
   GoToIcon,
-  IntakeAssessmentIcon,
   OpenInNewIcon,
   PersonIcon,
   SplitIcon,
@@ -40,6 +37,7 @@ interface Args {
   currentMembers: HouseholdClientFieldsFragment[];
   project: ManageHouseholdProject;
   household: HouseholdFieldsFragment;
+  canEdit?: boolean;
 }
 export function useHouseholdMenuActions({
   refetchHousehold,
@@ -48,6 +46,7 @@ export function useHouseholdMenuActions({
   currentMembers,
   project,
   household,
+  canEdit,
 }: Args) {
   const [deleteEnrollment, { loading: deleteLoading, error: deleteError }] =
     useDeleteEnrollmentMutation({ onCompleted: () => refetchHousehold() });
@@ -76,75 +75,73 @@ export function useHouseholdMenuActions({
 
       const clientId = row.client.id;
       const enrollmentId = row.enrollment.id;
-      return [
-        // ASSESSMENTS
+
+      // Hold off adding Assessment items now, desired behavior is unclear (open individual intakes, switch Enrollment context, etc?)
+      // const assessmentItems = [
+      //   {
+      //     key: 'intake assessment',
+      //     title: 'Intake Assessment',
+      //     Icon: IntakeAssessmentIcon as any as SvgIconComponent,
+      //     to: generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
+      //       clientId,
+      //       enrollmentId,
+      //     }),
+      //     ariaLabel: `Go to ${clientBriefName(row.client)}'s Intake Assessment`,
+      //   },
+      //   {
+      //     key: 'exit assessment',
+      //     title: 'Exit',
+      //     Icon: ExitAssessmentIcon,
+      //     to: generateSafePath(EnrollmentDashboardRoutes.EXIT, {
+      //       clientId,
+      //       enrollmentId,
+      //     }),
+      //     ariaLabel: `Go to ${clientBriefName(row.client)}'s Exit Assessment`,
+      //     disabled: !!row.enrollment.inProgress,
+      //   },
+      // ];
+
+      const manageHouseholdItems = canEdit
+        ? [
+            {
+              key: 'assign hoh',
+              title: 'Make Head of Household',
+              Icon: PersonIcon,
+              onClick: () => onChangeHoh(row),
+              ariaLabel: `Make ${clientBriefName(row.client)} the Head of Household`,
+              disabled: isSoleHoh,
+            },
+            {
+              key: 'change relationship to hoh',
+              title: 'Change Relationship',
+              Icon: ChangeRelationshipIcon,
+              onClick: () => openChangeRelationshipDialog(row),
+              ariaLabel: `Change ${clientBriefName(row.client)}'s relationship`,
+              disabled: isSoleHoh,
+            },
+            {
+              key: 'split',
+              title: 'Split → New Household',
+              Icon: SplitIcon,
+              onClick: () => setSplitInitiator(row),
+              ariaLabel: `Split ${clientBriefName(row.client)} to new household`,
+              ...getSplitDisabledAttrs({
+                canSplitHouseholds: project.access.canSplitHouseholds,
+                loading: loading || deleteLoading,
+                householdClient: row,
+                householdSize: currentMembers.length,
+              }),
+            },
+            {
+              key: 'divider-navigation',
+              title: 'divider',
+              divider: true,
+            },
+          ]
+        : [];
+
+      const navigationItems = [
         {
-          sectionLabel: 'Assessments',
-          key: 'intake assessment',
-          title: 'Intake Assessment',
-          Icon: IntakeAssessmentIcon as any as SvgIconComponent,
-          to: generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
-            clientId,
-            enrollmentId,
-          }),
-          ariaLabel: `Go to ${clientBriefName(row.client)}'s Intake Assessment`,
-        },
-        {
-          key: 'exit assessment',
-          title: 'Exit',
-          Icon: ExitAssessmentIcon,
-          to: generateSafePath(EnrollmentDashboardRoutes.EXIT, {
-            clientId,
-            enrollmentId,
-          }),
-          ariaLabel: `Go to ${clientBriefName(row.client)}'s Exit Assessment`,
-          disabled: !!row.enrollment.inProgress,
-        },
-        // CLIENT
-        {
-          key: 'divider-client',
-          title: 'divider',
-          divider: true,
-        },
-        {
-          sectionLabel: 'Client',
-          key: 'assign hoh',
-          title: 'Make Head of Household',
-          Icon: PersonIcon,
-          onClick: () => onChangeHoh(row),
-          ariaLabel: `Make ${clientBriefName(row.client)} the Head of Household`,
-          disabled: isSoleHoh,
-        },
-        {
-          key: 'change relationship to hoh',
-          title: 'Change Relationship',
-          Icon: ChangeRelationshipIcon,
-          onClick: () => openChangeRelationshipDialog(row),
-          ariaLabel: `Change ${clientBriefName(row.client)}'s relationship`,
-          disabled: isSoleHoh,
-        },
-        {
-          key: 'split',
-          title: 'Split → New Household',
-          Icon: SplitIcon,
-          onClick: () => setSplitInitiator(row),
-          ariaLabel: `Split ${clientBriefName(row.client)} to new household`,
-          ...getSplitDisabledAttrs({
-            canSplitHouseholds: project.access.canSplitHouseholds,
-            loading: loading || deleteLoading,
-            householdClient: row,
-            householdSize: currentMembers.length,
-          }),
-        },
-        // NAVIGATION
-        {
-          key: 'divider-navigation',
-          title: 'divider',
-          divider: true,
-        },
-        // go to client enrollment
-        {
-          sectionLabel: 'Navigation',
           key: 'view enrollment',
           title: 'Go to Client Enrollment',
           Icon: GoToIcon,
@@ -154,7 +151,6 @@ export function useHouseholdMenuActions({
           }),
           ariaLabel: `Go to  ${clientBriefName(row.client)}'s Enrollment`,
         },
-        // open client profile
         {
           key: 'open client profile',
           title: 'Open Client Profile',
@@ -163,36 +159,51 @@ export function useHouseholdMenuActions({
           openInNew: true,
           ariaLabel: `Go to  ${clientBriefName(row.client)}'s Client Profile`,
         },
-        // DIVIDER
-        {
-          key: 'divider',
-          title: 'divider',
-          divider: true,
-        },
-        {
-          // No extra perm check is required for Delete, because this action only allows removing WIP Enrollments,
-          // which only requires Can Edit Enrollments, which is already required for this page
-          // FIXME: update this to perform "real" enrollment deletion if permitted, with confirmation dialog
-          key: 'remove',
-          title: 'Delete Enrollment',
-          Icon: DeleteIcon,
-          ariaLabel: `Delete ${clientBriefName(row.client)}'s enrollment`,
-          onClick: () => {
-            deleteEnrollment({
-              variables: { input: { id: row.enrollment.id } },
-            });
-          },
-          ...getDeleteEnrollmentDisabledAttrs({
-            loading: loading || deleteLoading,
-            currentDashboardEnrollmentId,
-            householdClient: row,
-            householdSize: currentMembers.length,
-          }),
-        },
+      ];
+
+      const deleteEnrollmentItem = canEdit
+        ? [
+            {
+              // No extra perm check is required for Delete, because this action only allows removing WIP Enrollments,
+              // which only requires Can Edit Enrollments, which is already required for this page
+              // FIXME: update this to perform "real" enrollment deletion if permitted, with confirmation dialog
+              key: 'remove',
+              title: 'Delete Enrollment',
+              Icon: DeleteIcon,
+              ariaLabel: `Delete ${clientBriefName(row.client)}'s enrollment`,
+              onClick: () => {
+                deleteEnrollment({
+                  variables: { input: { id: row.enrollment.id } },
+                });
+              },
+              ...getDeleteEnrollmentDisabledAttrs({
+                loading: loading || deleteLoading,
+                currentDashboardEnrollmentId,
+                householdClient: row,
+                householdSize: currentMembers.length,
+              }),
+            },
+          ]
+        : [];
+
+      return [
+        ...manageHouseholdItems,
+        ...navigationItems,
+        ...(deleteEnrollmentItem.length > 0
+          ? [
+              {
+                key: 'divider-delete',
+                title: 'divider',
+                divider: true,
+              },
+            ]
+          : []),
+        ...deleteEnrollmentItem,
       ];
     },
     [
       hasMultipleHohs,
+      canEdit,
       project.access.canSplitHouseholds,
       loading,
       deleteLoading,
@@ -205,6 +216,7 @@ export function useHouseholdMenuActions({
   );
 
   const actionDialogs = useMemo(() => {
+    if (!canEdit) return null;
     return (
       <>
         {!!splitInitiator && (
@@ -221,6 +233,7 @@ export function useHouseholdMenuActions({
       </>
     );
   }, [
+    canEdit,
     splitInitiator,
     household,
     project,
