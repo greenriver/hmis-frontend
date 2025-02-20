@@ -113,7 +113,6 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
 interface Props {
   household: HouseholdFieldsFragment;
   project: ManageHouseholdProject;
-
   refetchHousehold: any;
   loading?: boolean;
   canEdit?: boolean;
