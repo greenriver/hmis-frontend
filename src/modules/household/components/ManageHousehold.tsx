@@ -49,7 +49,6 @@ interface Props {
   householdId?: string;
   project: ManageHouseholdProject;
   BackButton?: ReactNode;
-  renderBackButton?: (householdId?: string) => ReactNode;
   onFirstMemberAdded?: (householdId: string) => void;
   canEdit: boolean;
 }
@@ -58,7 +57,6 @@ const ManageHousehold = ({
   householdId,
   project,
   BackButton,
-  renderBackButton,
   onFirstMemberAdded,
   canEdit,
 }: Props) => {
@@ -128,7 +126,7 @@ const ManageHousehold = ({
     <Stack gap={4}>
       <CommonCollapsibleCard
         title='Household'
-        titleBorder
+        titleBorder={!!householdId}
         TitleComponent='h1'
         padContent={false}
         actions={
@@ -173,7 +171,6 @@ const ManageHousehold = ({
         )}
       </CommonCollapsibleCard>
       {BackButton}
-
       {canEdit &&
         previouslyAssociatedMembers &&
         previouslyAssociatedMembers.length > 0 && (
@@ -256,7 +253,6 @@ const ManageHousehold = ({
           </Stack>
         </CommonCollapsibleCard>
       )}
-      {renderBackButton && renderBackButton(householdId)}
       <Box sx={{ height: 100 }} />
     </Stack>
   );

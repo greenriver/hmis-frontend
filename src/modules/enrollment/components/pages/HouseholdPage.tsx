@@ -17,20 +17,7 @@ const HouseholdPage = () => {
         project={enrollment.project}
         householdId={enrollment.householdId}
         canEdit={enrollment.access.canEditEnrollments}
-        // canEdit={false}
       />
-      {/* <TitleCard
-        title='Household'
-        headerVariant='border'
-        headerComponent='h1'
-        actions={
-          <CommonLabeledTextBlock title='Household ID' horizontal>
-            <ClickToCopyId value={enrollment.householdId} />
-          </CommonLabeledTextBlock>
-        }
-      >
-        <HouseholdMemberTable clientId={clientId} enrollmentId={enrollmentId} />
-      </TitleCard> */}
     </>
   );
 };
