@@ -176,6 +176,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       );
     case ItemType.OpenChoice:
     case ItemType.Choice:
+      // if ( item.linkId ==='q_4_03_2' ) console.info('choice', item.linkId, value, item.type)
       if (isDataNotCollected(value?.code)) {
         return (
           <LabelWithContent {...commonProps}>

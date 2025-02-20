@@ -25,8 +25,9 @@ const ApolloErrorTrace: React.FC<Props> = ({ errors }) => {
     >
       {errors.map((e) => (
         <CommonUnstyledList key={JSON.stringify(e)}>
-          {(e?.backtrace || []).map((line) => (
-            <li>{line}</li>
+          {(e?.backtrace || []).map((line, idx) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <li key={`${line}${idx}`}>{line}</li>
           ))}
         </CommonUnstyledList>
       ))}

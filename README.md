@@ -68,6 +68,16 @@ yarn format
 yarn tsc
 ```
 
+#### Accessibility tests:
+You may need to first run
+```sh
+yarn playwright install
+```
+before you can run
+```sh
+yarn test-storybook
+```
+
 ### Build for Production
 
 Preview production build
@@ -224,4 +234,3 @@ src/modules/awesomeModule
 * `modules/service` - includes the service table components, and service-related pages (e.g. ProjectServicesPage, EnrollmentServicesPage)
 * `modules/bulkServices` - includes components to support the bulk service assignment feature. This is separated out from the `services` module to keep the size manageable, and because they are relatively independent implementations.
 * `modules/scanCards` - components to support the Scan Card feature
-

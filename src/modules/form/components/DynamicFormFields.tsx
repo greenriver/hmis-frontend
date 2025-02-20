@@ -1,185 +1,69 @@
-import { Grid } from '@mui/material';
-import { pick } from 'lodash-es';
-import React, { ReactNode, useCallback } from 'react';
+import React, { useCallback } from 'react';
 
+import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import {
-  FormValues,
+  ChangeType,
   ItemChangedFn,
-  ItemMap,
-  LocalConstants,
-  OverrideableDynamicFieldProps,
   PickListArgs,
   SeveralItemsChangedFn,
 } from '../types';
-import {
-  buildCommonInputProps,
-  isEnabled,
-  transformSubmitValues,
-} from '../util/formUtil';
-
-import DynamicField from './DynamicField';
-import DynamicGroup from './DynamicGroup';
-
-import DynamicViewField from '@/modules/form/components/viewable/DynamicViewField';
-import {
-  DisabledDisplay,
-  FormDefinitionJson,
-  FormItem,
-  ItemType,
-  ValidationError,
-} from '@/types/gqlTypes';
+import DynamicFormField from './DynamicFormField';
+import { ItemType } from '@/types/gqlTypes';
 
 export interface Props {
+  handlers: FormDefinitionHandlers;
   clientId?: string;
-  definition: FormDefinitionJson;
-  errors?: ValidationError[];
-  warnings?: ValidationError[];
   horizontal?: boolean;
   warnIfEmpty?: boolean;
-  locked?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
-  values: FormValues;
-  itemChanged: ItemChangedFn;
-  severalItemsChanged: SeveralItemsChangedFn;
-  itemMap: ItemMap;
-  disabledLinkIds: string[];
-  localConstants?: LocalConstants;
 }
 
-const DynamicFormFields: React.FC<Props> = ({
-  clientId,
-  definition,
-  errors = [],
-  horizontal = false,
-  warnIfEmpty = false,
-  locked = false,
-  visible = true,
-  pickListArgs,
-  values,
-  disabledLinkIds,
-  itemChanged,
-  severalItemsChanged,
-  localConstants,
-}) => {
-  // Get errors for a particular field
-  const getFieldErrors = useCallback(
-    (item: FormItem) => {
-      if (!errors || !item.mapping) return undefined;
-      return errors.filter(
-        (e) =>
-          e.linkId === item.linkId ||
-          (e.attribute && e.attribute === item.mapping?.fieldName)
-      );
+const DynamicFormFields: React.FC<Props> = ({ handlers, ...props }) => {
+  const definition = handlers.definition;
+
+  // Handles changes to individual form items, converting values as needed
+  const itemChanged: ItemChangedFn = useCallback(
+    ({ linkId, value: baseValue, type }) => {
+      const item = handlers.itemMap[linkId];
+      let value = baseValue;
+      // Convert string values to appropriate number types
+      if (item) {
+        if (item.type === ItemType.Integer) value = parseInt(value) || 0;
+        if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
+      }
+      handlers.methods.setValue(linkId, value, {
+        shouldDirty: type === ChangeType.User,
+      });
     },
-    [errors]
+    [handlers]
   );
 
-  // Recursively render an item
-  const renderItem = (
-    item: FormItem,
-    nestingLevel: number,
-    props?: OverrideableDynamicFieldProps,
-    renderFn?: (children: ReactNode) => ReactNode
-  ) => {
-    const isDisabled = !isEnabled(item, disabledLinkIds);
-    if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
-      return null;
+  // Handles batch changes to multiple form items
+  const severalItemsChanged: SeveralItemsChangedFn = useCallback(
+    ({ values, type }) => {
+      Object.entries(values).forEach(([linkId, value]) =>
+        itemChanged({ linkId, value, type })
+      );
+    },
+    [itemChanged]
+  );
 
-    if (item.type === ItemType.Group) {
-      return (
-        <DynamicGroup
-          item={item}
-          clientId={clientId}
+  return (
+    <>
+      {definition.item.map((item) => (
+        <DynamicFormField
           key={item.linkId}
-          nestingLevel={nestingLevel}
-          renderChildItem={(item, props, fn) =>
-            renderItem(item, nestingLevel + 1, props, fn)
-          }
-          values={values}
+          handlers={handlers}
+          nestingLevel={0}
+          item={item}
           itemChanged={itemChanged}
           severalItemsChanged={severalItemsChanged}
-          visible={visible}
-          locked={locked}
-          debug={
-            import.meta.env.MODE === 'development'
-              ? (keys?: string[]) => {
-                  const sectionValues = keys ? pick(values, keys) : values;
-                  const valuesByKey = transformSubmitValues({
-                    definition,
-                    values: sectionValues,
-                    keyByFieldName: true,
-                  });
-                  // eslint-disable-next-line no-console
-                  console.group(item.text || item.linkId);
-                  // eslint-disable-next-line no-console
-                  console.log(sectionValues);
-                  // eslint-disable-next-line no-console
-                  console.log(valuesByKey);
-                  // eslint-disable-next-line no-console
-                  console.groupEnd();
-                }
-              : undefined
-          }
           {...props}
         />
-      );
-    }
-
-    // Render question item as an input field or a read-only field.
-    // Note: DynamicField automatically wraps components in an InputContainer, which is a Grid item.
-    // DynamicViewField does not, so we wrap it in a grid  item here for consistency
-    const itemComponent = item.readOnly ? (
-      <Grid item key={item.linkId}>
-        <DynamicViewField
-          item={item}
-          value={values[item.linkId]}
-          disabled={isDisabled}
-          horizontal={horizontal}
-          pickListArgs={pickListArgs}
-          // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
-          adjustValue={itemChanged}
-          // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
-          localConstants={localConstants}
-          {...props}
-        />
-      </Grid>
-    ) : (
-      <DynamicField
-        key={item.linkId}
-        item={item}
-        itemChanged={itemChanged}
-        value={
-          isDisabled &&
-          item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
-            ? undefined
-            : values[item.linkId]
-        }
-        errors={getFieldErrors(item)}
-        horizontal={horizontal}
-        pickListArgs={pickListArgs}
-        warnIfEmpty={warnIfEmpty}
-        // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
-        localConstants={localConstants}
-        {...props}
-        inputProps={{
-          ...props?.inputProps,
-          ...buildCommonInputProps({
-            item,
-            values,
-            localConstants: localConstants || {},
-          }),
-          disabled: isDisabled || locked || undefined,
-        }}
-      />
-    );
-    if (renderFn) {
-      return renderFn(itemComponent);
-    }
-    return itemComponent;
-  };
-
-  return <>{definition.item.map((item) => renderItem(item, 0))}</>;
+      ))}
+    </>
+  );
 };
 
 export default DynamicFormFields;

@@ -17,7 +17,11 @@ export default {
 
 type Story = StoryObj<typeof TextInput>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    ariaLabel: 'Hidden label',
+  },
+};
 export const Labeled: Story = {
   args: {
     label: 'Label',

@@ -16,6 +16,30 @@ export default {
 
 type Story = StoryObj<typeof MultiFieldInput>;
 
+const inputs = [
+  {
+    name: 'areaCode',
+    chars: 3,
+    inputProps: {
+      'aria-label': 'area code',
+    },
+  },
+  {
+    name: 'prefix',
+    chars: 3,
+    inputProps: {
+      'aria-label': 'prefix',
+    },
+  },
+  {
+    name: 'suffix',
+    chars: 4,
+    inputProps: {
+      'aria-label': 'suffix',
+    },
+  },
+];
+
 export const BasicInputs: Story = {
   args: {
     values: {
@@ -31,20 +55,7 @@ export const BasicInputs: Story = {
         </div>
       );
     },
-    inputs: [
-      {
-        name: 'areaCode',
-        chars: 3,
-      },
-      {
-        name: 'prefix',
-        chars: 3,
-      },
-      {
-        name: 'suffix',
-        chars: 4,
-      },
-    ],
+    inputs: inputs,
   } as Partial<MultiFieldInputProps<JSX.IntrinsicElements['input']>>,
 };
 
@@ -63,6 +74,7 @@ export const TextFields: Story = {
         inputProps={{
           size: input.chars,
           ref,
+          'aria-label': input.inputProps?.['aria-label'],
         }}
         onChange={(e) => handlers.handleChange(e.target.value)}
         value={value}
@@ -78,19 +90,6 @@ export const TextFields: Story = {
         </LabelWithContent>
       );
     },
-    inputs: [
-      {
-        name: 'areaCode',
-        chars: 3,
-      },
-      {
-        name: 'prefix',
-        chars: 3,
-      },
-      {
-        name: 'suffix',
-        chars: 4,
-      },
-    ],
+    inputs: inputs,
   } as Partial<MultiFieldInputProps<TextFieldProps>>,
 };

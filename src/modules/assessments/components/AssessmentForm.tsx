@@ -248,6 +248,7 @@ const AssessmentForm: React.FC<Props> = ({
     definition: definition.definition,
     pickListArgs,
     skip: !isPrintView,
+    fetchPolicy: 'network-only',
   });
 
   usePrintTrigger({
