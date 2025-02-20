@@ -3957,8 +3957,31 @@ export type KeyValue = {
 export type LastContact = {
   __typename?: 'LastContact';
   date: Scalars['ISO8601Date']['output'];
-  type: Scalars['String']['output'];
+  type: LastContactType;
 };
+
+export enum LastContactType {
+  /** Annual Assessment */
+  AnnualAssessment = 'ANNUAL_ASSESSMENT',
+  /** Assessment */
+  Assessment = 'ASSESSMENT',
+  /** Bed Night */
+  BedNight = 'BED_NIGHT',
+  /** Case Note */
+  CaseNote = 'CASE_NOTE',
+  /** Current Living Situation */
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Exit Assessment */
+  ExitAssessment = 'EXIT_ASSESSMENT',
+  /** Intake Assessment */
+  IntakeAssessment = 'INTAKE_ASSESSMENT',
+  /** Post-Exit Assessment */
+  PostExitAssessment = 'POST_EXIT_ASSESSMENT',
+  /** Service */
+  Service = 'SERVICE',
+  /** Update Assessment */
+  UpdateAssessment = 'UPDATE_ASSESSMENT',
+}
 
 /** HUD LastGradeCompleted (R4.1) */
 export enum LastGradeCompleted {
@@ -16465,7 +16488,7 @@ export type GetClientEnrollmentsQuery = {
         lastContact?: {
           __typename?: 'LastContact';
           date: string;
-          type: string;
+          type: LastContactType;
         } | null;
         household?: {
           __typename?: 'Household';
@@ -20134,7 +20157,7 @@ export type EnrollmentWithOptionalFieldsFragment = {
   lastContact?: {
     __typename?: 'LastContact';
     date: string;
-    type: string;
+    type: LastContactType;
   } | null;
   household?: {
     __typename?: 'Household';
@@ -33451,7 +33474,7 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       lastContact?: {
         __typename?: 'LastContact';
         date: string;
-        type: string;
+        type: LastContactType;
       } | null;
     };
   }>;
@@ -33499,7 +33522,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     lastContact?: {
       __typename?: 'LastContact';
       date: string;
-      type: string;
+      type: LastContactType;
     } | null;
   };
 };
@@ -35745,7 +35768,7 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
   lastContact?: {
     __typename?: 'LastContact';
     date: string;
-    type: string;
+    type: LastContactType;
   } | null;
   household?: {
     __typename?: 'Household';
@@ -36091,7 +36114,7 @@ export type GetProjectEnrollmentsQuery = {
         lastContact?: {
           __typename?: 'LastContact';
           date: string;
-          type: string;
+          type: LastContactType;
         } | null;
         household?: {
           __typename?: 'Household';
@@ -36188,7 +36211,7 @@ export type GetProjectHouseholdsQuery = {
             lastContact?: {
               __typename?: 'LastContact';
               date: string;
-              type: string;
+              type: LastContactType;
             } | null;
           };
         }>;
@@ -39633,7 +39656,7 @@ export type StaffAssignmentWithClientsFragment = {
         lastContact?: {
           __typename?: 'LastContact';
           date: string;
-          type: string;
+          type: LastContactType;
         } | null;
       };
     }>;
@@ -40254,7 +40277,7 @@ export type GetUserStaffAssignmentsQuery = {
               lastContact?: {
                 __typename?: 'LastContact';
                 date: string;
-                type: string;
+                type: LastContactType;
               } | null;
             };
           }>;

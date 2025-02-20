@@ -19,6 +19,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
@@ -133,7 +134,7 @@ export const ENROLLMENT_COLUMNS: {
               dateString={e.lastContact.date}
               preciseTime={false}
             />{' '}
-            ({e.lastContact.type})
+            ({HmisEnums.LastContactType[e.lastContact.type]})
           </Box>
         );
       }
@@ -218,7 +219,7 @@ export const WITH_ENROLLMENT_COLUMNS: {
               dateString={e.enrollment.lastContact.date}
               preciseTime={false}
             />{' '}
-            ({e.enrollment.lastContact.type})
+            ({HmisEnums.LastContactType[e.enrollment.lastContact.type]})
           </Box>
         );
       }

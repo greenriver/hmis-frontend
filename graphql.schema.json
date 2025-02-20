@@ -28218,8 +28218,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "LastContactType",
                 "ofType": null
               }
             },
@@ -28230,6 +28230,78 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "LastContactType",
+        "description": null,
+        "isOneOf": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ANNUAL_ASSESSMENT",
+            "description": "Annual Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ASSESSMENT",
+            "description": "Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "BED_NIGHT",
+            "description": "Bed Night",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CASE_NOTE",
+            "description": "Case Note",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CURRENT_LIVING_SITUATION",
+            "description": "Current Living Situation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXIT_ASSESSMENT",
+            "description": "Exit Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INTAKE_ASSESSMENT",
+            "description": "Intake Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "POST_EXIT_ASSESSMENT",
+            "description": "Post-Exit Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICE",
+            "description": "Service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UPDATE_ASSESSMENT",
+            "description": "Update Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

@@ -4412,7 +4412,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          ofType: { kind: 'ENUM', name: 'LastContactType', ofType: null },
         },
       },
     ],
