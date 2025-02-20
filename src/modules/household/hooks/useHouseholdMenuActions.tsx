@@ -172,6 +172,7 @@ export function useHouseholdMenuActions({
         {
           // No extra perm check is required for Delete, because this action only allows removing WIP Enrollments,
           // which only requires Can Edit Enrollments, which is already required for this page
+          // FIXME: update this to perform "real" enrollment deletion if permitted, with confirmation dialog
           key: 'remove',
           title: 'Delete Enrollment',
           Icon: DeleteIcon,
