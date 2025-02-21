@@ -69,7 +69,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
         RelationshipToHoH.SelfHeadOfHousehold && <CheckIcon />,
   },
   relationshipToHoh: {
-    header: 'Rel. to HoH',
+    header: 'Relationship to HoH',
     render: (hc: HouseholdClientFieldsFragment) => (
       <HmisEnum
         value={hc.relationshipToHoH}
