@@ -24,8 +24,6 @@ export function useChangeRelationshipToHoh() {
   const [relationship, setRelationship] = useState<RelationshipToHoH | null>(
     null
   );
-  // This component handles validation errors even though the mutation doesn't currently return any.
-  // This is to prepare for when it does, for example to warn if specifying an adult client as "child".
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   // Open dialog for specified member
   const openChangeRelationshipDialog = useCallback(
@@ -64,11 +62,13 @@ export function useChangeRelationshipToHoh() {
           enrollmentId: member.enrollment.id,
           enrollmentLockVersion: member.enrollment.lockVersion,
           relationshipToHoH: relationship,
-          confirmed: errorState.warnings.length > 0,
+          // Changing Rel to HoH (not HoH) has no validation warnings, so just pass confirmed:true.
+          // This would need to be updated if we adjust the mutation to return validation warnings.
+          confirmed: true,
         },
       },
     });
-  }, [errorState.warnings.length, member, relationship, updateRelationship]);
+  }, [member, relationship, updateRelationship]);
 
   const changeRelationshipDialog = useMemo(() => {
     if (!member) return null;
