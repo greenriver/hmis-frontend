@@ -167,6 +167,10 @@ export const RITA_ACKROYD = {
   alerts: [],
 };
 
+export const fakeClient = () => ({
+  ...RITA_ACKROYD,
+  id: v4(),
+});
 export const fakeProject = () => ({
   id: v4(),
   __typename: 'Project',

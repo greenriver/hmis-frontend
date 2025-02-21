@@ -9,7 +9,7 @@ import {
   getCustomDataElementColumns,
 } from '@/modules/hmis/hmisUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { RITA_ACKROYD } from '@/test/__mocks__/requests';
+import { fakeClient, RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
 
 export default {
@@ -41,9 +41,9 @@ const clientColumns = [
 ];
 
 type RowType = ClientFieldsFragment;
-export const DummyTableRows: RowType[] = [];
+const DummyTableRows: RowType[] = [];
 for (let i = 0; i < 10; i++) {
-  DummyTableRows.push({ ...RITA_ACKROYD, id: (i + 1).toString() } as RowType);
+  DummyTableRows.push(fakeClient() as RowType);
 }
 
 export const NoData = Template<RowType>().bind({});

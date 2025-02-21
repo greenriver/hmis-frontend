@@ -3,8 +3,9 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import CommonCard from './CommonCard';
 import GenericTable from '@/components/elements/table/GenericTable';
-import { DummyTableRows } from '@/components/elements/table/GenericTable.stories';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import { fakeClient } from '@/test/__mocks__/requests';
+import { ClientSearchResultFieldsFragment } from '@/types/gqlTypes';
 
 export default {
   component: CommonCard,
@@ -66,7 +67,13 @@ export const WithNoPadding: Story = {
     padContent: false,
     children: (
       <GenericTable
-        rows={DummyTableRows}
+        rows={
+          [
+            fakeClient(),
+            fakeClient(),
+            fakeClient(),
+          ] as ClientSearchResultFieldsFragment[]
+        }
         columns={[CLIENT_COLUMNS.name, CLIENT_COLUMNS.age]}
       />
     ),
