@@ -1,38 +1,23 @@
-import {
-  Collapse,
-  CollapseProps,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
-import React, { ReactNode } from 'react';
-import {
-  commonCardPaperPadding,
-  commonCardTitleVariant,
-} from '@/components/elements/CommonCard';
+import { Collapse, CollapseProps } from '@mui/material';
+import React from 'react';
+import CommonBaseCard, {
+  CommonBaseCardProps,
+} from '@/components/elements/CommonBaseCard';
 import {
   ExpandLessIcon,
   ExpandMoreIcon,
 } from '@/components/elements/SemanticIcons';
 
-interface CommonCollapsibleCardProps {
-  title: string;
-
-  titleBorder?: boolean; // Render border below title
-  TitleComponent?: React.ElementType; // Use different component for title
-  children: ReactNode; // Card content
-  padContent?: boolean; // Whether content is padded
-  actions?: ReactNode; // Top-right actions, not compatible with collapsible
-  // collapse props
-  collapsible?: boolean;
+interface CommonCollapsibleCardProps
+  extends Omit<CommonBaseCardProps, 'onClickHeader' | 'headerActions'> {
   open?: boolean;
   onClick?: VoidFunction;
   onExited?: CollapseProps['onExited'];
 }
 
 /**
- * Card with a title and content.
+ * Collapsible version of CommonBaseCard
+ *
  * Title can optionally have a border below it.
  * Title can optionally have "action" content (usually a button) rendered to the right.
  * Content can optionally be collapsible.
@@ -42,75 +27,20 @@ interface CommonCollapsibleCardProps {
  */
 const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
   open,
-  title,
   children,
   onClick,
   onExited,
-  collapsible,
-  titleBorder = false,
-  padContent = true,
-  actions,
-  TitleComponent,
-}) => {
-  if (collapsible && actions)
-    throw new Error('Cannot have actions on collapsible card');
-
-  const collapseIcon =
-    collapsible && (open ? <ExpandLessIcon /> : <ExpandMoreIcon />);
-
-  const cardTitle = (
-    <Stack
-      direction='row'
-      justifyContent='space-between'
-      alignItems='center'
-      onClick={collapsible ? onClick : undefined}
-      sx={{
-        ...(collapsible
-          ? {
-              cursor: 'pointer',
-              '&:hover': { backgroundColor: 'primary.100' },
-            }
-          : {}),
-        ...(titleBorder
-          ? {
-              borderBottomColor: 'borders.light',
-              borderBottomWidth: 1,
-              borderBottomStyle: 'solid',
-            }
-          : {}),
-        ...commonCardPaperPadding, // make sure this matches CommonCard
-        pageBreakInside: 'avoid',
-      }}
-    >
-      <Typography
-        variant={commonCardTitleVariant}
-        component={TitleComponent || commonCardTitleVariant}
-      >
-        {title}
-      </Typography>
-      {collapseIcon}
-      {actions && !collapseIcon && <>{actions}</>}
-    </Stack>
-  );
-
-  const cardContent = padContent ? (
-    <Box sx={{ p: 2 }}>{children}</Box>
-  ) : (
-    children
-  );
-
-  return (
-    <Paper>
-      {cardTitle}
-      {collapsible ? (
-        <Collapse in={open} timeout='auto' unmountOnExit onExited={onExited}>
-          {cardContent}
-        </Collapse>
-      ) : (
-        cardContent
-      )}
-    </Paper>
-  );
-};
+  ...props
+}) => (
+  <CommonBaseCard
+    onClickHeader={onClick}
+    actions={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+    {...props}
+  >
+    <Collapse in={open} timeout='auto' unmountOnExit onExited={onExited}>
+      {children}
+    </Collapse>
+  </CommonBaseCard>
+);
 
 export default CommonCollapsibleCard;

@@ -8,6 +8,7 @@ import { usePreviouslyAssociatedMembers } from '../hooks/usePreviouslyAssociated
 import AddNewClientButton from './elements/AddNewClientButton';
 import HouseholdMemberTable from './HouseholdMemberTable';
 import { ClickToCopyId } from '@/components/elements/ClickToCopy';
+import CommonBaseCard from '@/components/elements/CommonBaseCard';
 import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
@@ -124,7 +125,7 @@ const ManageHousehold = ({
 
   return (
     <Stack gap={4}>
-      <CommonCollapsibleCard
+      <CommonBaseCard
         title='Household'
         titleBorder={!!householdId}
         TitleComponent='h1'
@@ -170,7 +171,7 @@ const ManageHousehold = ({
             />
           </Box>
         )}
-      </CommonCollapsibleCard>
+      </CommonBaseCard>
       {BackButton}
       {canEdit &&
         previouslyAssociatedMembers &&
@@ -178,7 +179,6 @@ const ManageHousehold = ({
           <>
             <CommonCollapsibleCard
               title={`+ Add Previously Associated Household Members (${previouslyAssociatedMembers.length})`}
-              collapsible
               padContent={false}
               open={previousMembersOpen}
               onClick={() => setPreviousMembersOpen(!previousMembersOpen)}
@@ -195,7 +195,6 @@ const ManageHousehold = ({
       {canEdit && (
         <CommonCollapsibleCard
           title='+ Add Household Member'
-          collapsible
           padContent={false}
           open={searchOpen}
           onClick={() => setSearchOpen(!searchOpen)}
