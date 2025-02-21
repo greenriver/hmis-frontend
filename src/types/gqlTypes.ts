@@ -3956,8 +3956,8 @@ export type KeyValue = {
 
 export type LastContact = {
   __typename?: 'LastContact';
-  date: Scalars['ISO8601Date']['output'];
-  type: LastContactType;
+  contactDate: Scalars['ISO8601Date']['output'];
+  contactType: LastContactType;
 };
 
 export enum LastContactType {
@@ -16487,8 +16487,8 @@ export type GetClientEnrollmentsQuery = {
         };
         lastContact?: {
           __typename?: 'LastContact';
-          date: string;
-          type: LastContactType;
+          contactDate: string;
+          contactType: LastContactType;
         } | null;
         household?: {
           __typename?: 'Household';
@@ -20156,8 +20156,8 @@ export type EnrollmentWithOptionalFieldsFragment = {
   moveInDate?: string | null;
   lastContact?: {
     __typename?: 'LastContact';
-    date: string;
-    type: LastContactType;
+    contactDate: string;
+    contactType: LastContactType;
   } | null;
   household?: {
     __typename?: 'Household';
@@ -33473,8 +33473,8 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       moveInDate?: string | null;
       lastContact?: {
         __typename?: 'LastContact';
-        date: string;
-        type: LastContactType;
+        contactDate: string;
+        contactType: LastContactType;
       } | null;
     };
   }>;
@@ -33521,8 +33521,8 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     moveInDate?: string | null;
     lastContact?: {
       __typename?: 'LastContact';
-      date: string;
-      type: LastContactType;
+      contactDate: string;
+      contactType: LastContactType;
     } | null;
   };
 };
@@ -35767,8 +35767,8 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
   };
   lastContact?: {
     __typename?: 'LastContact';
-    date: string;
-    type: LastContactType;
+    contactDate: string;
+    contactType: LastContactType;
   } | null;
   household?: {
     __typename?: 'Household';
@@ -36113,8 +36113,8 @@ export type GetProjectEnrollmentsQuery = {
         };
         lastContact?: {
           __typename?: 'LastContact';
-          date: string;
-          type: LastContactType;
+          contactDate: string;
+          contactType: LastContactType;
         } | null;
         household?: {
           __typename?: 'Household';
@@ -36210,8 +36210,8 @@ export type GetProjectHouseholdsQuery = {
             moveInDate?: string | null;
             lastContact?: {
               __typename?: 'LastContact';
-              date: string;
-              type: LastContactType;
+              contactDate: string;
+              contactType: LastContactType;
             } | null;
           };
         }>;
@@ -39655,8 +39655,8 @@ export type StaffAssignmentWithClientsFragment = {
         };
         lastContact?: {
           __typename?: 'LastContact';
-          date: string;
-          type: LastContactType;
+          contactDate: string;
+          contactType: LastContactType;
         } | null;
       };
     }>;
@@ -40276,8 +40276,8 @@ export type GetUserStaffAssignmentsQuery = {
               };
               lastContact?: {
                 __typename?: 'LastContact';
-                date: string;
-                type: LastContactType;
+                contactDate: string;
+                contactType: LastContactType;
               } | null;
             };
           }>;
@@ -41904,8 +41904,8 @@ export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
       autoExited
       moveInDate @include(if: $includeMoveInDate)
       lastContact @include(if: $includeLastContact) {
-        date
-        type
+        contactDate
+        contactType
       }
     }
   }
@@ -42201,8 +42201,8 @@ export const EnrollmentWithOptionalFieldsFragmentDoc = gql`
   fragment EnrollmentWithOptionalFields on Enrollment {
     moveInDate @include(if: $includeMoveInDate)
     lastContact @include(if: $includeLastContact) {
-      date
-      type
+      contactDate
+      contactType
     }
     household @include(if: $includeStaffAssignment) {
       id
@@ -42509,8 +42509,8 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
           organizationName @include(if: $includeOrganizationName)
           moveInDate @include(if: $includeMoveInDate)
           lastContact @include(if: $includeLastContact) {
-            date
-            type
+            contactDate
+            contactType
           }
         }
       }

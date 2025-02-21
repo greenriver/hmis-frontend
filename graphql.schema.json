@@ -28195,7 +28195,7 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "date",
+            "name": "contactDate",
             "description": null,
             "args": [],
             "type": {
@@ -28211,7 +28211,7 @@
             "deprecationReason": null
           },
           {
-            "name": "type",
+            "name": "contactType",
             "description": null,
             "args": [],
             "type": {

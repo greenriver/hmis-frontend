@@ -131,10 +131,10 @@ export const ENROLLMENT_COLUMNS: {
         return (
           <Box flexDirection='row'>
             <DateWithRelativeTooltip
-              dateString={e.lastContact.date}
+              dateString={e.lastContact.contactDate}
               preciseTime={false}
             />{' '}
-            ({HmisEnums.LastContactType[e.lastContact.type]})
+            ({HmisEnums.LastContactType[e.lastContact.contactType]})
           </Box>
         );
       }
@@ -216,10 +216,10 @@ export const WITH_ENROLLMENT_COLUMNS: {
         return (
           <Box flexDirection='row'>
             <DateWithRelativeTooltip
-              dateString={e.enrollment.lastContact.date}
+              dateString={e.enrollment.lastContact.contactDate}
               preciseTime={false}
             />{' '}
-            ({HmisEnums.LastContactType[e.enrollment.lastContact.type]})
+            ({HmisEnums.LastContactType[e.enrollment.lastContact.contactType]})
           </Box>
         );
       }

@@ -47,8 +47,8 @@ fragment EnrollmentWithOptionalFields on Enrollment {
   # (organizationName not included here because it is fetched optionally by all records that use ClientEnrollmentFields)
   moveInDate @include(if: $includeMoveInDate)
   lastContact @include(if: $includeLastContact) {
-    date
-    type
+    contactDate
+    contactType
   }
   household @include(if: $includeStaffAssignment) {
     id

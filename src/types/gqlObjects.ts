@@ -4400,7 +4400,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'LastContact',
     fields: [
       {
-        name: 'date',
+        name: 'contactDate',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -4408,7 +4408,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'type',
+        name: 'contactType',
         type: {
           kind: 'NON_NULL',
           name: null,
