@@ -16,49 +16,27 @@ export default {
   },
   argTypes: {
     padContent: { control: 'boolean' },
-    titleBorder: { control: 'boolean' },
-    collapsible: { control: 'boolean' },
+    headerVariant: {
+      control: { type: 'select' },
+      options: ['border', undefined],
+    },
     children: { control: false },
-    actions: { control: false },
   },
 } as Meta<typeof CommonCollapsibleCard>;
 
 type Story = StoryObj<typeof CommonCollapsibleCard>;
 
-const cardContent = (
-  <>
-    This is card content <br />
-    This is card content <br />
-    This is card content <br />
-    This is card content <br />
-    This is card content
-  </>
-);
-
-// export const Default: Story = {
-//   args: {
-//     title: 'Card with Action Button',
-//     children: cardContent,
-//     actions: <Button>Click Me</Button>,
-//   },
-// };
-
-// export const TableContent: Story = {
-//   args: {
-//     title: 'Card with Table Content (No Padding)',
-//     padContent: false,
-//     children: (
-//       <GenericTable
-//         rows={DummyTableRows}
-//         columns={[CLIENT_COLUMNS.name, CLIENT_COLUMNS.age]}
-//       />
-//     ),
-//   },
-// };
-
 export const Default: Story = {
   args: {
     title: 'Card that is Collapsible',
-    children: cardContent,
+    children: (
+      <>
+        This is card content <br />
+        This is card content <br />
+        This is card content <br />
+        This is card content <br />
+        This is card content
+      </>
+    ),
   },
 };

@@ -8,7 +8,7 @@ import { usePreviouslyAssociatedMembers } from '../hooks/usePreviouslyAssociated
 import AddNewClientButton from './elements/AddNewClientButton';
 import HouseholdMemberTable from './HouseholdMemberTable';
 import { ClickToCopyId } from '@/components/elements/ClickToCopy';
-import CommonBaseCard from '@/components/elements/CommonBaseCard';
+import CommonCard from '@/components/elements/CommonCard';
 import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
@@ -125,9 +125,9 @@ const ManageHousehold = ({
 
   return (
     <Stack gap={4}>
-      <CommonBaseCard
+      <CommonCard
         title='Household'
-        titleBorder={!!householdId}
+        headerVariant={householdId ? 'border' : undefined}
         TitleComponent='h1'
         padContent={false}
         actions={
@@ -148,7 +148,7 @@ const ManageHousehold = ({
               mb: 2,
               textAlign: 'center',
               color: 'text.secondary',
-              backgroundColor: 'grayscale.tint',
+              backgroundColor: 'grayscale.surface',
               border: 'none',
             }}
           >
@@ -171,7 +171,7 @@ const ManageHousehold = ({
             />
           </Box>
         )}
-      </CommonBaseCard>
+      </CommonCard>
       {BackButton}
       {canEdit &&
         previouslyAssociatedMembers &&
