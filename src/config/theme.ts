@@ -525,7 +525,7 @@ const createThemeOptions = (theme: Theme) => ({
           props: { color: 'grayscale' },
           style: theme.unstable_sx({
             color: 'text.primary',
-            '&:not(:disabled) .MuiButton-icon': {
+            '&:not(:disabled, .Mui-disabled) .MuiButton-icon': {
               color: 'grayscale.main',
             },
             '&.MuiButton-contained': {
@@ -550,18 +550,21 @@ const createThemeOptions = (theme: Theme) => ({
             backgroundColor: 'grayscale.200',
           },
           // Contained Warning and Primary use 'light' for bg instead of usual 'main'
-          '&.MuiButton-contained.MuiButton-colorWarning:not(:disabled)': {
-            backgroundColor: 'warning.light',
-            '&:hover': { backgroundColor: 'warning.main' },
-          },
-          '&.MuiButton-contained.MuiButton-colorError:not(:disabled)': {
-            backgroundColor: 'error.light',
-            '&:hover': { backgroundColor: 'error.main' },
-          },
-          '&.MuiButton-contained.MuiButton-colorSuccess:not(:disabled)': {
-            backgroundColor: 'success.light',
-            '&:hover': { backgroundColor: 'success.main' },
-          },
+          '&.MuiButton-contained.MuiButton-colorWarning:not(:disabled, .Mui-disabled)':
+            {
+              backgroundColor: 'warning.light',
+              '&:hover': { backgroundColor: 'warning.main' },
+            },
+          '&.MuiButton-contained.MuiButton-colorError:not(:disabled, .Mui-disabled)':
+            {
+              backgroundColor: 'error.light',
+              '&:hover': { backgroundColor: 'error.main' },
+            },
+          '&.MuiButton-contained.MuiButton-colorSuccess:not(:disabled, .Mui-disabled)':
+            {
+              backgroundColor: 'success.light',
+              '&:hover': { backgroundColor: 'success.main' },
+            },
           // Overrides to make all `text buttons use 12% opacity instead of 4%
           '&.MuiButton-text.MuiButton-colorPrimary:hover': {
             backgroundColor: 'primary.200',
@@ -579,31 +582,39 @@ const createThemeOptions = (theme: Theme) => ({
             backgroundColor: 'success.200',
           },
           // Overrides to make all `outlined` buttons use dark text
-          '&.MuiButton-outlined.MuiButton-colorPrimary:not(:disabled)': {
-            color: 'primary.dark',
-          },
-          '&.MuiButton-outlined.MuiButton-colorWarning:not(:disabled)': {
-            color: 'warning.dark',
-          },
-          '&.MuiButton-outlined.MuiButton-colorError:not(:disabled)': {
-            color: 'error.dark',
-          },
-          '&.MuiButton-outlined.MuiButton-colorSuccess:not(:disabled)': {
-            color: 'success.dark',
-          },
+          '&.MuiButton-outlined.MuiButton-colorPrimary:not(:disabled, .Mui-disabled)':
+            {
+              color: 'primary.dark',
+            },
+          '&.MuiButton-outlined.MuiButton-colorWarning:not(:disabled, .Mui-disabled)':
+            {
+              color: 'warning.dark',
+            },
+          '&.MuiButton-outlined.MuiButton-colorError:not(:disabled, .Mui-disabled)':
+            {
+              color: 'error.dark',
+            },
+          '&.MuiButton-outlined.MuiButton-colorSuccess:not(:disabled, .Mui-disabled)':
+            {
+              color: 'success.dark',
+            },
           // Overrides to make all `text` buttons use dark text
-          '&.MuiButton-text.MuiButton-colorPrimary:not(:disabled)': {
-            color: 'primary.dark',
-          },
-          '&.MuiButton-text.MuiButton-colorWarning:not(:disabled)': {
-            color: 'warning.dark',
-          },
-          '&.MuiButton-text.MuiButton-colorError:not(:disabled)': {
-            color: 'error.dark',
-          },
-          '&.MuiButton-text.MuiButton-colorSuccess:not(:disabled)': {
-            color: 'success.dark',
-          },
+          '&.MuiButton-text.MuiButton-colorPrimary:not(:disabled, .Mui-disabled)':
+            {
+              color: 'primary.dark',
+            },
+          '&.MuiButton-text.MuiButton-colorWarning:not(:disabled, .Mui-disabled)':
+            {
+              color: 'warning.dark',
+            },
+          '&.MuiButton-text.MuiButton-colorError:not(:disabled, .Mui-disabled)':
+            {
+              color: 'error.dark',
+            },
+          '&.MuiButton-text.MuiButton-colorSuccess:not(:disabled, .Mui-disabled)':
+            {
+              color: 'success.dark',
+            },
           // Overrides to make all `outlined` buttons use 12% opacity instead of 4%
           '&.MuiButton-outlined.MuiButton-colorPrimary:hover': {
             backgroundColor: 'primary.200',
