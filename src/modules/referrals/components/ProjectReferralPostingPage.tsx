@@ -65,7 +65,6 @@ const ProjectReferralPostingPage: React.FC = () => {
               <ButtonLink
                 fullWidth
                 variant='outlined'
-                color='secondary'
                 to={generateSafePath(
                   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
                   {
@@ -81,7 +80,6 @@ const ProjectReferralPostingPage: React.FC = () => {
               <Button
                 fullWidth
                 variant='outlined'
-                color='secondary'
                 target='_blank'
                 href={fetchPreventionAssessmentReportUrl(
                   referralPosting.referralIdentifier

@@ -52,7 +52,6 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
           data-testid='editFile'
           size='small'
           variant='outlined'
-          color='secondary'
           component={ReactRouterLink}
           to={generateSafePath(ClientDashboardRoutes.EDIT_FILE, {
             clientId,

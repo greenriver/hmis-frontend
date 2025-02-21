@@ -1,7 +1,7 @@
-import { Color, SxProps, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
 import {
   PaletteColor,
-  SimplePaletteColorOptions,
+  SxProps,
   ThemeOptions,
   alpha,
   createTheme,
@@ -48,25 +48,46 @@ declare module '@mui/material/styles' {
       icon?: string;
     };
   }
-  interface GrayscalePaletteColor
-    extends PaletteColor,
-      Pick<Color, 300 | 200 | 100> {
-    tint: string;
-  }
-
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
-    grayscale: GrayscalePaletteColor;
+    grayscale: SimplePaletteColorOptions;
   }
+
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
-    grayscale: SimplePaletteColorOptions & GrayscalePaletteColor;
+    grayscale: SimplePaletteColorOptions;
+  }
+
+  interface SimplePaletteColorOptions {
+    surface?: string;
+    darkest?: string;
+    100?: string;
+    200?: string;
+    300?: string;
+  }
+}
+
+// Extend the SimplePaletteColorOptions
+declare module '@mui/material/styles/createPalette' {
+  interface SimplePaletteColorOptions {
+    surface?: string;
+    darkest?: string;
+    100?: string;
+    200?: string;
+    300?: string;
+  }
+  interface PaletteColor {
+    surface: string;
+    darkest?: string;
+    100: string;
+    200: string;
+    300: string;
   }
 }
 
@@ -89,8 +110,14 @@ declare module '@mui/material/IconButton' {
   }
 }
 
+const generateShades = (mainColor: string) => ({
+  100: alpha(mainColor, 0.08),
+  200: alpha(mainColor, 0.12),
+  300: alpha(mainColor, 0.3),
+});
+
 // Default base theme, to be merged with overlays
-export const baseThemeDef: ThemeOptions = {
+export const baseThemeOptions = {
   typography: {
     fontFamily: '"Open Sans", sans-serif',
     fontWeightBold: 600,
@@ -106,16 +133,42 @@ export const baseThemeDef: ThemeOptions = {
   },
   palette: {
     primary: {
-      main: '#1976D2',
+      surface: '#F8F9FB',
+      light: '#A4B9DB',
+      main: '#5661A5',
+      dark: '#1D2877',
+      darkest: '#17205F',
+      contrastText: '#FFFFFF',
+    },
+    success: {
+      surface: '#F1F9F1',
+      light: '#6FBF73',
+      main: '#4CAF50',
+      dark: '#357A38',
+      darkest: '#263826',
+      contrastText: '#263826',
+    },
+    warning: {
+      surface: '#FEF3EB',
+      light: '#FF9800',
+      main: '#ED6C02',
+      dark: '#D14900',
+      darkest: '#4D1800',
+      contrastText: '#4D1800',
+    },
+    error: {
+      surface: '#FEF0EF',
+      light: '#F6685E',
+      main: '#F44336',
+      dark: '#AA2E25',
+      darkest: '#420400',
+      contrastText: '#420400',
     },
     background: {
       default: '#FCFCFC',
     },
     secondary: {
-      main: '#75559F',
-    },
-    error: {
-      main: '#D32F2F',
+      main: '#75559F', // TODO: remove
     },
     borders: {
       light: '#E5E5E5',
@@ -144,19 +197,30 @@ export const baseThemeDef: ThemeOptions = {
       dark: '#4D4D4D',
       light: '#8b8b8b',
       contrastText: '#fff',
-      tint: '#F3F3F3',
-      300: alpha('#6E6E6E', 0.3),
-      200: alpha('#6E6E6E', 0.12),
-      100: alpha('#6E6E6E', 0.08),
+      surface: '#F3F3F3',
     },
   },
-};
+} as const satisfies ThemeOptions;
 
 const outlineStyles = {
   outlineColor: '-webkit-focus-ring-color',
   outlineWidth: '2px',
   outlineStyle: 'auto',
 };
+
+// Add shades to palette as a separate step, rather than in baseThemeOptions, so that they are
+// generated based on the final palette values (which may be overridden by GrdaWarehouse::Theme customizations)
+const addPaletteShades = (theme: Theme) =>
+  createTheme(theme, {
+    palette: {
+      primary: { ...generateShades(theme.palette.primary.main) },
+      success: { ...generateShades(theme.palette.success.main) },
+      warning: { ...generateShades(theme.palette.warning.main) },
+      error: { ...generateShades(theme.palette.error.main) },
+      grayscale: { ...generateShades(theme.palette.grayscale.main) },
+    },
+  });
+
 // Create theme options to use for composition
 // See: https://mui.com/material-ui/customization/theming/#createtheme-options-args-theme
 const createThemeOptions = (theme: Theme) => ({
@@ -219,7 +283,6 @@ const createThemeOptions = (theme: Theme) => ({
       fontWeight: 400,
     },
   },
-
   components: {
     MuiCssBaseline: {
       styleOverrides: {
@@ -249,7 +312,7 @@ const createThemeOptions = (theme: Theme) => ({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          backgroundColor: theme.palette.background.paper,
+          backgroundColor: 'background.paper',
         },
       },
     },
@@ -274,7 +337,7 @@ const createThemeOptions = (theme: Theme) => ({
         root: theme.unstable_sx({
           '&.Mui-focusVisible': {
             outlineOffset: 0,
-            backgroundColor: theme.palette.grayscale[200],
+            backgroundColor: 'grayscale.200',
           },
         }),
       },
@@ -286,7 +349,7 @@ const createThemeOptions = (theme: Theme) => ({
         },
         root: theme.unstable_sx({
           '&.Mui-disabled': {
-            backgroundColor: theme.palette.grayscale.tint,
+            backgroundColor: 'grayscale.surface',
           },
         }),
         input: {
@@ -463,27 +526,102 @@ const createThemeOptions = (theme: Theme) => ({
           style: theme.unstable_sx({
             color: 'text.primary',
             '&:not(:disabled) .MuiButton-icon': {
-              color: theme.palette.grayscale.main,
+              color: 'grayscale.main',
             },
             '&.MuiButton-contained': {
-              backgroundColor: theme.palette.grayscale[100],
+              backgroundColor: 'grayscale.100',
               '&:hover': {
-                backgroundColor: theme.palette.grayscale[200],
+                backgroundColor: 'grayscale.200',
               },
             },
             '&.MuiButton-text:hover': {
-              backgroundColor: theme.palette.grayscale[100],
+              backgroundColor: 'grayscale.100',
             },
             '&.MuiButton-outlined': {
-              borderColor: theme.palette.grayscale[300],
+              borderColor: 'grayscale.300',
             },
           }),
         },
       ],
       styleOverrides: {
-        root: {
+        root: theme.unstable_sx({
           fontWeight: 600,
-        },
+          '&.MuiButton-contained.Mui-disabled': {
+            backgroundColor: 'grayscale.200',
+          },
+          // Contained Warning and Primary use 'light' for bg instead of usual 'main'
+          '&.MuiButton-contained.MuiButton-colorWarning:not(:disabled)': {
+            backgroundColor: 'warning.light',
+            '&:hover': { backgroundColor: 'warning.main' },
+          },
+          '&.MuiButton-contained.MuiButton-colorError:not(:disabled)': {
+            backgroundColor: 'error.light',
+            '&:hover': { backgroundColor: 'error.main' },
+          },
+          '&.MuiButton-contained.MuiButton-colorSuccess:not(:disabled)': {
+            backgroundColor: 'success.light',
+            '&:hover': { backgroundColor: 'success.main' },
+          },
+          // Overrides to make all `text buttons use 12% opacity instead of 4%
+          '&.MuiButton-text.MuiButton-colorPrimary:hover': {
+            backgroundColor: 'primary.200',
+          },
+          '&.MuiButton-text.MuiButton-colorSecondary:hover': {
+            backgroundColor: 'secondary.200',
+          },
+          '&.MuiButton-text.MuiButton-colorWarning:hover': {
+            backgroundColor: 'warning.200',
+          },
+          '&.MuiButton-text.MuiButton-colorError:hover': {
+            backgroundColor: 'error.200',
+          },
+          '&.MuiButton-text.MuiButton-colorSuccess:hover': {
+            backgroundColor: 'success.200',
+          },
+          // Overrides to make all `outlined` buttons use dark text
+          '&.MuiButton-outlined.MuiButton-colorPrimary:not(:disabled)': {
+            color: 'primary.dark',
+          },
+          '&.MuiButton-outlined.MuiButton-colorWarning:not(:disabled)': {
+            color: 'warning.dark',
+          },
+          '&.MuiButton-outlined.MuiButton-colorError:not(:disabled)': {
+            color: 'error.dark',
+          },
+          '&.MuiButton-outlined.MuiButton-colorSuccess:not(:disabled)': {
+            color: 'success.dark',
+          },
+          // Overrides to make all `text` buttons use dark text
+          '&.MuiButton-text.MuiButton-colorPrimary:not(:disabled)': {
+            color: 'primary.dark',
+          },
+          '&.MuiButton-text.MuiButton-colorWarning:not(:disabled)': {
+            color: 'warning.dark',
+          },
+          '&.MuiButton-text.MuiButton-colorError:not(:disabled)': {
+            color: 'error.dark',
+          },
+          '&.MuiButton-text.MuiButton-colorSuccess:not(:disabled)': {
+            color: 'success.dark',
+          },
+          // Overrides to make all `outlined` buttons use 12% opacity instead of 4%
+          '&.MuiButton-outlined.MuiButton-colorPrimary:hover': {
+            backgroundColor: 'primary.200',
+            borderColor: 'primary.300',
+          },
+          '&.MuiButton-outlined.MuiButton-colorWarning:hover': {
+            backgroundColor: 'warning.200',
+            borderColor: 'warning.300',
+          },
+          '&.MuiButton-outlined.MuiButton-colorError:hover': {
+            backgroundColor: 'error.200',
+            borderColor: 'error.300',
+          },
+          '&.MuiButton-outlined.MuiButton-colorSuccess:hover': {
+            backgroundColor: 'success.200',
+            borderColor: 'success.300',
+          },
+        }),
         // Give 'text' variant Buttons the same horiztonal padding as outlined
         text: theme.unstable_sx({ px: 2 }),
       },
@@ -554,10 +692,14 @@ const createThemeOptions = (theme: Theme) => ({
 });
 
 export const createFullTheme = (options?: ThemeOptions) => {
-  // Create theb ase theme, merged with any overlays from the backend
-  const theme = createTheme(deepmerge(baseThemeDef, options || {}));
+  // Create the base theme, merged with any overlays from the backend
+  // (Note: if overlaying a color, need to specify all main/surface/dark/darkest values.
+  //  we don't currently calculate those based off primary)
+  const theme = createTheme(deepmerge(baseThemeOptions, options || {}));
+  // Add missing shades to the palette
+  const themeWithShades = addPaletteShades(theme);
   // Create the full theme with composition
-  return createTheme(theme, createThemeOptions(theme));
+  return createTheme(themeWithShades, createThemeOptions(themeWithShades));
 };
 
 // Export default theme with no overlay options
