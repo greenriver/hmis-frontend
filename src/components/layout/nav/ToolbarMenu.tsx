@@ -1,4 +1,3 @@
-import { Theme } from '@mui/material';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -92,7 +91,7 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
           px: { xs: 0.5, lg: 2 },
           backgroundColor:
             activeItem === item.activeItemPathIncludes
-              ? (theme: Theme) => theme.palette.primary[100] // selected state
+              ? 'primary.100' // selected state
               : undefined,
         }}
         key={item.id}

@@ -1,5 +1,5 @@
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { Box, Collapse, IconButton, lighten, Link } from '@mui/material';
+import { Box, Collapse, IconButton, Link } from '@mui/material';
 import React, {
   ReactNode,
   useCallback,
@@ -65,7 +65,7 @@ const ItemBase = <T extends object>({
     overflowX: 'hidden',
     whiteSpace: 'nowrap',
     display: 'block',
-    color: isSelected ? 'primary.main' : 'text.primary',
+    color: isSelected ? 'primary.dark' : 'text.primary',
     fontWeight: isSelected ? 600 : 400,
     '&.Mui-focusVisible': {
       outlineOffset: '-2px',
@@ -85,11 +85,10 @@ const ItemBase = <T extends object>({
           '&:hover':
             isClickable && !isSelected
               ? {
-                  backgroundColor: '#fafafa',
+                  backgroundColor: 'primary.200',
                 }
               : undefined,
-          backgroundColor: (theme) =>
-            isSelected ? lighten(theme.palette.primary.light, 0.9) : undefined,
+          backgroundColor: isSelected ? 'primary.100' : undefined,
         }}
       >
         {item.title && (
