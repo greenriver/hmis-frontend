@@ -92,7 +92,7 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
           px: { xs: 0.5, lg: 2 },
           backgroundColor:
             activeItem === item.activeItemPathIncludes
-              ? (theme: Theme) => theme.palette.primary[200] // hover state
+              ? (theme: Theme) => theme.palette.primary[100] // selected state
               : undefined,
         }}
         key={item.id}
