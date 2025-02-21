@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { TabDefinition } from './util';
 
 import { CommonOrderedList } from '@/components/CommonOrderedList';
-import { CommonCard } from '@/components/elements/CommonCard';
+import CommonCard from '@/components/elements/CommonCard';
 import ExpandInfoButton from '@/components/elements/ExpandInfoButton';
 
 interface Props {

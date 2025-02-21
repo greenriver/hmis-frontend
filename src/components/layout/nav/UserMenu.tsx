@@ -1,6 +1,5 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LogoutIcon from '@mui/icons-material/Logout';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import ImpersonatedIcon from '@mui/icons-material/SupervisedUserCircle';
 import {
@@ -19,6 +18,7 @@ import {
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import React, { ReactNode, useMemo } from 'react';
+import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';

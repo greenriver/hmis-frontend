@@ -12,6 +12,7 @@ import {
 import ConfirmationDialog, {
   ConfirmationDialogProps,
 } from '@/components/elements/ConfirmationDialog';
+import Loading from '@/components/elements/Loading';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
 import { ValidationError } from '@/types/gqlTypes';
@@ -21,6 +22,7 @@ type SectionLabels = { [recordId: string]: string };
 type WarningProps = {
   errorState: ErrorState;
   sectionLabels?: SectionLabels;
+  warningsLoading?: boolean; // if true, render loading spinner while errorState is nil
 };
 export type ValidationDialogProps = Omit<ConfirmationDialogProps, 'children'> &
   WarningProps;
@@ -85,9 +87,10 @@ const ValidationDialog = ({
   errorState,
   sectionLabels,
   renderError,
+  warningsLoading,
   ...props
 }: ValidationDialogProps) => {
-  if (!hasAnyValue(errorState)) return null;
+  if (!hasAnyValue(errorState) && !warningsLoading) return null;
   const { errors, warnings, apolloError } = errorState;
 
   const hasErrors = errors.length > 0 || !!apolloError;
@@ -114,6 +117,7 @@ const ValidationDialog = ({
       // we want to handle warning rendering here, so don't pass it
       errorState={hasErrors ? errorState : undefined}
       renderError={renderError}
+      disabled={warningsLoading}
       {...props}
     >
       {warningContent && (
@@ -124,6 +128,7 @@ const ValidationDialog = ({
           {warningContent}
         </>
       )}
+      {warningsLoading && <Loading />}
     </ConfirmationDialog>
   );
 };

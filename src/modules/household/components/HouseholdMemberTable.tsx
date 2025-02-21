@@ -1,45 +1,26 @@
-// import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import { useMemo } from 'react';
 
-import HouseholdActionButtons from './elements/HouseholdActionButtons';
-
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
-import Loading from '@/components/elements/Loading';
+import { CheckIcon } from '@/components/elements/SemanticIcons';
 import GenericTable from '@/components/elements/table/GenericTable';
-import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
-import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
+import { useHouseholdMenuActions } from '@/modules/household/hooks/useHouseholdMenuActions';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
+  HouseholdFieldsFragment,
+  RelationshipToHoH,
 } from '@/types/gqlTypes';
-
-export const nameColumnConfig = (currentClientId: string) => {
-  return {
-    header: 'Name',
-    key: 'name',
-    render: (h: HouseholdClientFieldsFragment) => {
-      const isCurrentClient = h.client.id === currentClientId;
-      return (
-        <ClientName
-          client={h.client}
-          linkToEnrollmentId={isCurrentClient ? undefined : h.enrollment.id}
-          bold={isCurrentClient}
-        />
-      );
-    },
-  };
-};
 
 export const HOUSEHOLD_MEMBER_COLUMNS = {
   hohIndicator: {
@@ -50,35 +31,42 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       <HohIndicator relationshipToHoh={hc.relationshipToHoH} />
     ),
   },
-  clientName: ({
+  clientName: {
+    header: 'Name',
+    key: 'name',
+    render: (hc: HouseholdClientFieldsFragment) => clientBriefName(hc.client),
+  },
+  linkedClientName: ({
     currentEnrollmentId,
-    linkToProfile = false,
   }: {
     currentEnrollmentId?: string;
-    linkToProfile?: boolean;
   }) => ({
     header: 'Name',
     key: 'name',
     render: (h: HouseholdClientFieldsFragment) => {
       const isCurrentClient = h.enrollment.id === currentEnrollmentId;
-
       return (
         <ClientName
           client={h.client}
-          linkToProfile={!isCurrentClient && linkToProfile}
-          linkToEnrollmentId={
-            !isCurrentClient && !linkToProfile ? h.enrollment.id : undefined
-          }
+          linkToEnrollmentId={!isCurrentClient ? h.enrollment.id : undefined}
           bold={isCurrentClient}
         />
       );
     },
   }),
-  enrollmentStatus: {
-    header: 'Status',
-    render: (hc: HouseholdClientFieldsFragment) => (
-      <EnrollmentStatus enrollment={hc.enrollment} />
+  entryDate: WITH_ENROLLMENT_COLUMNS.entryDate,
+  exitDate: WITH_ENROLLMENT_COLUMNS.exitDate,
+  enrollmentStatus: WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
+  hohCheck: {
+    header: (
+      <Tooltip title='Head of Household' placement='top' arrow>
+        <Box sx={{ width: 'fit-content' }}>HoH</Box>
+      </Tooltip>
     ),
+    key: 'HoH',
+    render: (hc: HouseholdClientFieldsFragment) =>
+      hc.enrollment.relationshipToHoH ===
+        RelationshipToHoH.SelfHeadOfHousehold && <CheckIcon />,
   },
   relationshipToHoh: {
     header: 'Relationship to HoH',
@@ -102,86 +90,88 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     };
   },
   dobAge: CLIENT_COLUMNS.dobAge,
-  enrollmentPeriod: {
-    header: 'Enrollment Period',
-    key: 'status',
-    render: (hc: HouseholdClientFieldsFragment) => (
-      <EnrollmentDateRangeWithStatus enrollment={hc.enrollment} />
-    ),
-  },
-  mciIds: externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
 };
 
+interface Props {
+  household: HouseholdFieldsFragment;
+  project: ManageHouseholdProject;
+  refetchHousehold: VoidFunction;
+  loading?: boolean;
+  canEdit?: boolean;
+}
+
 /**
- * Table showing all members that belong to a given household
+ * Table for viewing details of all household members.
+ *
+ * If user can edit, also includes menu actions for each member, including:
+ * - assign HoH
+ * - change relationship to HoH
+ * - split to new household
+ * - delete enrollments
  */
 const HouseholdMemberTable = ({
-  clientId,
-  enrollmentId,
-  hideActions = false,
-  columns: columnProp,
-  condensed,
-}: {
-  clientId: string;
-  enrollmentId: string;
-  hideActions?: boolean;
-  columns?: ColumnDef<HouseholdClientFieldsFragment>[];
-  condensed?: boolean;
-}) => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  household,
+  project,
+  refetchHousehold,
+  loading,
+  canEdit,
+}: Props) => {
   const { globalFeatureFlags } = useHmisAppSettings();
-  const [householdMembers, { loading: householdMembersLoading, error }] =
-    useHouseholdMembers(enrollmentId);
+
+  const currentMembers = useMemo(
+    () => sortHouseholdMembers(household.householdClients),
+    [household]
+  );
 
   const columns = useMemo(() => {
-    if (!householdMembers) return;
-    if (columnProp) return columnProp;
-    const cols = [
-      HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
-      HOUSEHOLD_MEMBER_COLUMNS.clientName({
-        currentEnrollmentId: enrollmentId,
-      }),
-      HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
-      HOUSEHOLD_MEMBER_COLUMNS.dobAge,
-      HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
-      HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(householdMembers),
-    ];
-    if (globalFeatureFlags?.mciId) {
-      return [
-        ...cols,
-        externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
-      ];
-    }
-    return cols;
-  }, [enrollmentId, columnProp, globalFeatureFlags?.mciId, householdMembers]);
+    const anyExited = household.householdClients.find(
+      (hc) => !!hc.enrollment.exitDate
+    );
 
-  if (error) throw error;
-  if (householdMembersLoading && !householdMembers) return <Loading />;
+    return [
+      HOUSEHOLD_MEMBER_COLUMNS.clientName,
+      HOUSEHOLD_MEMBER_COLUMNS.entryDate,
+      // If any members have exited, display exit date column
+      ...(anyExited ? [HOUSEHOLD_MEMBER_COLUMNS.exitDate] : []),
+      HOUSEHOLD_MEMBER_COLUMNS.enrollmentStatus,
+      HOUSEHOLD_MEMBER_COLUMNS.hohCheck,
+      HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
+      HOUSEHOLD_MEMBER_COLUMNS.dobAge,
+      // Unit is displayed only if any members have a unit assigned
+      HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(household.householdClients),
+      // If MCI integration is enabled, display MCI ID column
+      ...(globalFeatureFlags?.mciId
+        ? [externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID')]
+        : []),
+    ];
+  }, [globalFeatureFlags?.mciId, household.householdClients]);
+
+  const { getRowSecondaryActionConfigs, actionDialogs, actionLoading } =
+    useHouseholdMenuActions({
+      household,
+      refetchHousehold,
+      loading,
+      currentMembers,
+      project,
+      canEdit,
+    });
 
   return (
     <>
       <SsnDobShowContextProvider>
         <GenericTable<HouseholdClientFieldsFragment>
-          rows={householdMembers || []}
+          rows={currentMembers}
+          rowName={(row) => clientBriefName(row.client)}
+          rowSecondaryActionConfigs={getRowSecondaryActionConfigs}
           columns={columns}
-          rowSx={() => ({
-            td: condensed ? { py: 1, border: 'unset' } : { py: 2 },
-            '&:nth-last-of-type(1) td': { pb: 2 },
-            '&:first-of-type td': { pt: 2 },
-            // HoH indicator column
-            'td:nth-of-type(1)': { pl: 1, pr: 0 },
-          })}
+          loading={loading || actionLoading}
+          loadingVariant='linear'
+          tableProps={{
+            'aria-label': 'Manage Household',
+          }}
         />
       </SsnDobShowContextProvider>
-      {!hideActions && enrollment?.access?.canEditEnrollments && (
-        <Box sx={{ px: 3 }}>
-          <HouseholdActionButtons
-            householdMembers={householdMembers || []}
-            clientId={clientId}
-            enrollmentId={enrollmentId}
-          />
-        </Box>
-      )}
+      {actionDialogs}
     </>
   );
 };
