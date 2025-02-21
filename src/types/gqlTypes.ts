@@ -526,6 +526,8 @@ export type CeAssessment = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
+  /** Form Definition that was most recently used to create/update this record */
+  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   prioritizationStatus?: Maybe<PrioritizationStatus>;
   user?: Maybe<ApplicationUser>;
@@ -1348,6 +1350,8 @@ export type CurrentLivingSituation = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
+  /** Form Definition that was most recently used to create/update this record */
+  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   /** Client Location where the Current Living Situation was recorded */
   geolocation?: Maybe<Geolocation>;
   id: Scalars['ID']['output'];
@@ -2685,6 +2689,8 @@ export type Event = {
   enrollment: Enrollment;
   event: EventType;
   eventDate: Scalars['ISO8601Date']['output'];
+  /** Form Definition that was most recently used to create/update this record */
+  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   locationCrisisOrPhHousing?: Maybe<Scalars['String']['output']>;
   probSolDivRrResult?: Maybe<NoYesMissing>;
@@ -6122,6 +6128,7 @@ export type QueryServiceCategoryArgs = {
 };
 
 export type QueryServiceFormDefinitionArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
   projectId: Scalars['ID']['input'];
   serviceTypeId: Scalars['ID']['input'];
 };
@@ -6788,6 +6795,8 @@ export type Service = {
   faAmount?: Maybe<Scalars['Float']['output']>;
   faEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   faStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  /** Form Definition that was most recently used to create/update this record */
+  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   movingOnOtherType?: Maybe<Scalars['String']['output']>;
   otherTypeProvided?: Maybe<Scalars['String']['output']>;
@@ -8618,6 +8627,7 @@ export type AssessmentWithRecordsFragment = {
     dateUpdated?: string | null;
     dateDeleted?: string | null;
     prioritizationStatus?: PrioritizationStatus | null;
+    formDefinitionId?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -8640,6 +8650,7 @@ export type AssessmentWithRecordsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     dateDeleted?: string | null;
+    formDefinitionId?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -9483,6 +9494,7 @@ export type FullAssessmentFragment = {
     dateUpdated?: string | null;
     dateDeleted?: string | null;
     prioritizationStatus?: PrioritizationStatus | null;
+    formDefinitionId?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -9505,6 +9517,7 @@ export type FullAssessmentFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     dateDeleted?: string | null;
+    formDefinitionId?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -11338,6 +11351,7 @@ export type GetAssessmentQuery = {
       dateUpdated?: string | null;
       dateDeleted?: string | null;
       prioritizationStatus?: PrioritizationStatus | null;
+      formDefinitionId?: string | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -11360,6 +11374,7 @@ export type GetAssessmentQuery = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       dateDeleted?: string | null;
+      formDefinitionId?: string | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -12462,6 +12477,7 @@ export type SubmitAssessmentMutation = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -12484,6 +12500,7 @@ export type SubmitAssessmentMutation = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -13314,6 +13331,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -13336,6 +13354,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -14183,6 +14202,7 @@ export type GetAssessmentsForPopulationQuery = {
           dateUpdated?: string | null;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
+          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -14205,6 +14225,7 @@ export type GetAssessmentsForPopulationQuery = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           dateDeleted?: string | null;
+          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -16563,6 +16584,7 @@ export type GetClientServicesQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
+        formDefinitionId?: string | null;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -18739,6 +18761,7 @@ export type CurrentLivingSituationFieldsFragment = {
   dateUpdated?: string | null;
   dateCreated?: string | null;
   verifiedByProjectId?: string | null;
+  formDefinitionId?: string | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -18895,6 +18918,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
   dateUpdated?: string | null;
   dateCreated?: string | null;
   verifiedByProjectId?: string | null;
+  formDefinitionId?: string | null;
   client: {
     __typename?: 'Client';
     id: string;
@@ -19083,6 +19107,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         dateUpdated?: string | null;
         dateCreated?: string | null;
         verifiedByProjectId?: string | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -19258,6 +19283,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
         dateUpdated?: string | null;
         dateCreated?: string | null;
         verifiedByProjectId?: string | null;
+        formDefinitionId?: string | null;
         client: {
           __typename?: 'Client';
           id: string;
@@ -21553,6 +21579,7 @@ export type CeAssessmentFieldsFragment = {
   dateUpdated?: string | null;
   dateDeleted?: string | null;
   prioritizationStatus?: PrioritizationStatus | null;
+  formDefinitionId?: string | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -22857,6 +22884,7 @@ export type GetEnrollmentEventsQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -22897,6 +22925,7 @@ export type GetEnrollmentCeAssessmentsQuery = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -23112,6 +23141,7 @@ export type EventFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
+  formDefinitionId?: string | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -28912,6 +28942,7 @@ export type GetStaticFormDefinitionQuery = {
 export type GetServiceFormDefinitionQueryVariables = Exact<{
   serviceTypeId: Scalars['ID']['input'];
   projectId: Scalars['ID']['input'];
+  formDefinitionId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 export type GetServiceFormDefinitionQuery = {
@@ -30085,6 +30116,7 @@ export type SubmitFormMutation = {
           dateUpdated?: string | null;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
+          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -30393,6 +30425,7 @@ export type SubmitFormMutation = {
           dateUpdated?: string | null;
           dateCreated?: string | null;
           verifiedByProjectId?: string | null;
+          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -30876,6 +30909,7 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           dateDeleted?: string | null;
+          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -31502,6 +31536,7 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           dateDeleted?: string | null;
+          formDefinitionId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -38797,6 +38832,7 @@ export type ServiceFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
+  formDefinitionId?: string | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -38977,6 +39013,7 @@ export type GetServiceQuery = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     dateDeleted?: string | null;
+    formDefinitionId?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -39172,6 +39209,7 @@ export type DeleteServiceMutation = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       dateDeleted?: string | null;
+      formDefinitionId?: string | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -39366,6 +39404,7 @@ export type GetEnrollmentServicesQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
+        formDefinitionId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -40545,6 +40584,7 @@ export const CeAssessmentFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    formDefinitionId
   }
   ${UserFieldsFragmentDoc}
 `;
@@ -40564,6 +40604,7 @@ export const EventFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    formDefinitionId
   }
   ${UserFieldsFragmentDoc}
 `;
@@ -41342,6 +41383,7 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     geolocation {
       ...GeolocationFields
     }
+    formDefinitionId
   }
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
@@ -42459,6 +42501,7 @@ export const ServiceFieldsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    formDefinitionId
   }
   ${UserFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
@@ -49074,10 +49117,15 @@ export type GetStaticFormDefinitionQueryResult = Apollo.QueryResult<
   GetStaticFormDefinitionQueryVariables
 >;
 export const GetServiceFormDefinitionDocument = gql`
-  query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
+  query GetServiceFormDefinition(
+    $serviceTypeId: ID!
+    $projectId: ID!
+    $formDefinitionId: ID
+  ) {
     serviceFormDefinition(
       serviceTypeId: $serviceTypeId
       projectId: $projectId
+      id: $formDefinitionId
     ) {
       ...FormDefinitionFields
     }
@@ -49099,6 +49147,7 @@ export const GetServiceFormDefinitionDocument = gql`
  *   variables: {
  *      serviceTypeId: // value for 'serviceTypeId'
  *      projectId: // value for 'projectId'
+ *      formDefinitionId: // value for 'formDefinitionId'
  *   },
  * });
  */
