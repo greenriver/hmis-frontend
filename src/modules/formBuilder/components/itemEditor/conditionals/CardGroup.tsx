@@ -64,7 +64,7 @@ const CardGroup: React.FC<CardGroupProps> = ({
             <Button
               onClick={onAddItem}
               variant='text'
-              sx={{ width: 'fit-content', color: 'links' }}
+              sx={{ width: 'fit-content' }}
               startIcon={<AddIcon />}
             >
               {addItemText}
