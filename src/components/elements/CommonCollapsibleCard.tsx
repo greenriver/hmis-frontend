@@ -68,7 +68,7 @@ const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
         ...(collapsible
           ? {
               cursor: 'pointer',
-              '&:hover': { backgroundColor: 'primary.200' },
+              '&:hover': { backgroundColor: 'primary.100' },
             }
           : {}),
         ...(titleBorder
