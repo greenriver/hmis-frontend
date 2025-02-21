@@ -6,6 +6,7 @@ import {
   getStickyCellStyles,
   renderCellContents,
   renderLinkedRowCellContents,
+  stickyCellClassName,
 } from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import {
@@ -121,6 +122,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           key={getColumnKey(col) || i}
           role={i === 0 ? 'rowheader' : undefined}
           sx={cellSx(col)}
+          className={col?.sticky ? stickyCellClassName : undefined}
         >
           {renderLinkedRowCellContents({
             rowLink,
@@ -138,7 +140,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           })}
         </TableCell>
       )}
-      <TableCell sx={cellSx(ACTION_COL)}>
+      <TableCell sx={cellSx(ACTION_COL)} className={stickyCellClassName}>
         {renderCellContents(householdClient, ACTION_COL.render)}
       </TableCell>
     </TableRow>

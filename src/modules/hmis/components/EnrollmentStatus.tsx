@@ -27,8 +27,8 @@ const CommonStatus: React.FC<CommonStatusProps> = ({ variant }) => {
         return {
           Icon: HistoryIcon,
           text: 'Open',
-          textColor: 'activeStatus', // FIXME(#5746) should be primary.dark
-          // iconColor: 'primary.main', // FIXME(#5746) should be primary.main
+          textColor: 'primary.dark',
+          iconColor: 'primary',
         };
       case 'autoExited':
         return {

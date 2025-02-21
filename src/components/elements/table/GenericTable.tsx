@@ -85,12 +85,21 @@ export interface Props<T> {
   belowRowsContent?: ReactNode; // component to insert below all rendered rows, above footer
 }
 
+export const stickyCellClassName = 'StickyTableCell';
+
+// primary.100 on top of paper bg, so we don't layer semi-transparent primary.100 twice
+const nonTransparentPrimary100bg = (theme: Theme) =>
+  `linear-gradient(${theme.palette.primary[100]}, ${theme.palette.primary[100]}),${theme.palette.background.paper};`;
+
 export const clickableRowStyles = {
-  backgroundColor: 'background.paper',
-  '&:hover': {
-    // FIXME(#5746) should be primary[100]
-    backgroundColor: (theme: Theme) => theme.palette.grayscale.surface,
+  '&.Mui-selected': {
+    [`.${stickyCellClassName}`]: { background: nonTransparentPrimary100bg },
   },
+  '&:hover': {
+    backgroundColor: 'primary.100',
+    [`.${stickyCellClassName}`]: { background: nonTransparentPrimary100bg },
+  },
+
   cursor: 'pointer',
 };
 
@@ -110,7 +119,7 @@ export const getStickyCellStyles = ({
   if (!sticky) return {};
 
   const base = {
-    backgroundColor: 'inherit', // Otherwise it's transparent and other cell content appears beneath it
+    backgroundColor: 'background.paper', // Otherwise it's transparent and other cell content appears beneath it
     position: 'sticky',
     zIndex: 1,
     maxWidth: '200px', // Mitigates the risk that the column may be so wide as to obscure any scrollable columns
@@ -347,11 +356,11 @@ const GenericTable = <T extends { id: string }>({
   ) : (
     <TableHead>
       {hasHeaders && (
-        // Set backgroundColor here in order to make sticky columns non-transparent
-        <TableRow sx={{ backgroundColor: 'background.paper' }}>
+        <TableRow>
           {selectable && (
             <HeaderCell
               padding='checkbox'
+              className={stickyCellClassName}
               sx={getStickyCellStyles({ sticky: 'left', stickyBorder: false })}
             >
               <Checkbox
@@ -375,6 +384,7 @@ const GenericTable = <T extends { id: string }>({
             return (
               <HeaderCell
                 key={getColumnKey(def) || i}
+                className={def.sticky ? stickyCellClassName : undefined}
                 sx={{
                   ...getStickyCellStyles({
                     sticky: def.sticky,
@@ -392,7 +402,10 @@ const GenericTable = <T extends { id: string }>({
           })}
           {/* right-most column for row actions */}
           {hasTableRowActions && (
-            <HeaderCell sx={{ ...getStickyCellStyles({ sticky: 'right' }) }}>
+            <HeaderCell
+              className={stickyCellClassName}
+              sx={{ ...getStickyCellStyles({ sticky: 'right' }) }}
+            >
               <Box sx={customVisuallyHidden}>Action</Box>
             </HeaderCell>
           )}
@@ -416,8 +429,6 @@ const GenericTable = <T extends { id: string }>({
           sx={{
             py: 4,
             textAlign: 'center',
-            // backgroundColor: (theme) =>
-            //   lighten(theme.palette.background.default, 0.6),
             typography: 'body1',
           }}
         >
@@ -517,8 +528,6 @@ const GenericTable = <T extends { id: string }>({
                   <TableRow
                     key={row.id}
                     sx={{
-                      // Set backgroundColor here in order to make sticky columns non-transparent
-                      backgroundColor: 'background.paper',
                       ...(isClickable && clickableRowStyles),
                       ...(!!rowSx && rowSx(row)),
                     }}
@@ -533,6 +542,7 @@ const GenericTable = <T extends { id: string }>({
                       <TableCell
                         padding='checkbox'
                         key='selection'
+                        className={stickyCellClassName}
                         sx={getStickyCellStyles({
                           sticky: 'left',
                           stickyBorder: false,
@@ -577,6 +587,7 @@ const GenericTable = <T extends { id: string }>({
                         <TableCell
                           key={getColumnKey(def) || index}
                           {...cellProps}
+                          className={sticky ? stickyCellClassName : undefined}
                           sx={{
                             ...getStickyCellStyles({
                               sticky,
@@ -609,6 +620,7 @@ const GenericTable = <T extends { id: string }>({
                     })}
                     {tableRowActions && (
                       <TableCell
+                        className={stickyCellClassName}
                         sx={{
                           ...getStickyCellStyles({ sticky: 'right' }),
                           width: '1%',
