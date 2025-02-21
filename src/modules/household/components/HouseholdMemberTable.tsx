@@ -6,17 +6,13 @@ import { CheckIcon } from '@/components/elements/SemanticIcons';
 import GenericTable from '@/components/elements/table/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
-import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import {
-  clientBriefName,
-  parseAndFormatDate,
-  sortHouseholdMembers,
-} from '@/modules/hmis/hmisUtil';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import { useHouseholdMenuActions } from '@/modules/household/hooks/useHouseholdMenuActions';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -52,29 +48,15 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       return (
         <ClientName
           client={h.client}
-          linkToProfile={false}
           linkToEnrollmentId={!isCurrentClient ? h.enrollment.id : undefined}
           bold={isCurrentClient}
         />
       );
     },
   }),
-  entryDate: {
-    header: 'Entry Date',
-    render: (hc: HouseholdClientFieldsFragment) =>
-      parseAndFormatDate(hc.enrollment.entryDate),
-  },
-  exitDate: {
-    header: 'Exit Date',
-    render: (hc: HouseholdClientFieldsFragment) =>
-      parseAndFormatDate(hc.enrollment.exitDate),
-  },
-  enrollmentStatus: {
-    header: 'Enrollment Status',
-    render: (hc: HouseholdClientFieldsFragment) => (
-      <EnrollmentStatus enrollment={hc.enrollment} />
-    ),
-  },
+  entryDate: WITH_ENROLLMENT_COLUMNS.entryDate,
+  exitDate: WITH_ENROLLMENT_COLUMNS.exitDate,
+  enrollmentStatus: WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
   hohCheck: {
     header: (
       <Tooltip title='Head of Household' placement='top' arrow>
@@ -113,7 +95,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
 interface Props {
   household: HouseholdFieldsFragment;
   project: ManageHouseholdProject;
-  refetchHousehold: any;
+  refetchHousehold: VoidFunction;
   loading?: boolean;
   canEdit?: boolean;
 }
