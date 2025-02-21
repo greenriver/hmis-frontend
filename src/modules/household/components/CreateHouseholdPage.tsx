@@ -33,8 +33,10 @@ const supportedPaths = [
  * This is used for enrolling a new household in a project, including during the bulk services and bed nights workflows.
  *
  *
+ * Back button has special logic for Bulk Services and Bed Nights household creation.
+ * After household creation, it should return to service assignment and auto-fill the search box with the newly added household ID.
  *
- * Back button has special logic for Bulk Services and Bed Nights household creation. To test:
+ * To test:
  * 1. Go to bulk services
  * 2. Select date and service (they will be added to url)
  * 3. Perform Search
