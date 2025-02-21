@@ -57,9 +57,7 @@ export const STAFF_ASSIGNMENT_COLUMNS: Record<
         verb='unassign'
         recordName='user'
         confirmationDialogContent={`Are you sure you want to unassign ${assignment.user.name}?`}
-        ButtonProps={{
-          color: 'secondary',
-        }}
+        ButtonProps={{ color: 'primary' }}
       >
         Unassign
       </DeleteMutationButton>

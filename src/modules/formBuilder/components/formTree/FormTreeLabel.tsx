@@ -170,7 +170,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           {item.enableWhen && item.enableWhen?.length > 0 && (
             <ConditionalIcon
               fontSize='inherit'
-              color='secondary'
               sx={{ ml: 1, fontSize: '12' }}
             />
           )}

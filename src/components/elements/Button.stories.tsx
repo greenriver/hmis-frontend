@@ -71,3 +71,11 @@ export const AllVariants: Story = {
   },
   render: (props) => <ButtonMatrix {...props} />,
 };
+
+export const AllVariantsDisabled: Story = {
+  args: {
+    children: 'Action',
+    startIcon: <CheckIcon />,
+  },
+  render: (props) => <ButtonMatrix disabled {...props} />,
+};

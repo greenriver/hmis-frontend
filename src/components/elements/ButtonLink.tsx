@@ -3,13 +3,19 @@ import { Button, ButtonProps } from '@mui/material';
 import { forwardRef, Ref } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
-export type ButtonLinkProps = Omit<ButtonProps, 'href' | `on${string}`> &
+export type ButtonLinkProps = Omit<
+  ButtonProps,
+  'href' | `on${string}` | 'component' | 'role' | 'ref'
+> &
   LinkProps & {
     leftAlign?: boolean;
     Icon?: SvgIconComponent;
     openInNew?: boolean;
   };
 
+/**
+ * A `ButtonLink` is a React-Router link that looks like a button. The underlying interactive element is an `a` tag.
+ */
 const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
   function ButtonLink(
     { sx, leftAlign, Icon, openInNew, ...props },

@@ -31,7 +31,7 @@ const PageTitle = ({
       {typeof title === 'string' ? (
         <Typography variant='h3' component='h1'>
           {overlineText ? (
-            <Typography variant='overline' color='links' display='block'>
+            <Typography variant='overline' color='primary.dark' display='block'>
               {overlineText}
             </Typography>
           ) : null}

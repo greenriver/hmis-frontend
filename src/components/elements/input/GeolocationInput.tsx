@@ -93,7 +93,7 @@ const GeolocationInput: React.FC<GeolocationInputProps> = ({
               aria-live='polite' // Notify screen readers of content updates
             >
               {loading ? (
-                <Typography color='links' fontWeight={700}>
+                <Typography color='primary.dark' fontWeight={700}>
                   Getting Location ...
                 </Typography>
               ) : (
