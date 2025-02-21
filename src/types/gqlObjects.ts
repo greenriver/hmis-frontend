@@ -459,6 +459,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -1345,6 +1349,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'dateUpdated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -2803,6 +2811,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
+      },
+      {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -5758,6 +5770,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'faStartDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
