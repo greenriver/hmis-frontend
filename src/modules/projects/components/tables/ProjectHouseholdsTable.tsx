@@ -17,7 +17,11 @@ import { getColumnKey } from '@/components/elements/table/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import {
+  clientBriefName,
+  PERMANENT_HOUSING_PROJECT_TYPES,
+  sortHouseholdMembers,
+} from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   HOUSEHOLD_ASSIGNED_STAFF_COL,
@@ -63,7 +67,6 @@ const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
-  WITH_ENROLLMENT_COLUMNS.moveInDate,
   WITH_ENROLLMENT_COLUMNS.lastContactDate,
 ];
 const ACTION_COL: ColumnDef<OneHouseholdClient> = {
@@ -133,6 +136,17 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           </TableCell>
         )
       )}
+      {columnKeys.includes(
+        getColumnKey(WITH_ENROLLMENT_COLUMNS.moveInDate)
+      ) && (
+        <TableCell sx={cellSx()}>
+          {renderLinkedRowCellContents({
+            rowLink,
+            row: householdClient,
+            render: WITH_ENROLLMENT_COLUMNS.moveInDate.render,
+          })}
+        </TableCell>
+      )}
       {columnKeys.includes(getColumnKey(HOUSEHOLD_ASSIGNED_STAFF_COL)) && (
         <TableCell sx={cellSx()}>
           {renderLinkedRowCellContents({
@@ -172,13 +186,16 @@ interface Props {
 
 const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
   const {
-    project: { staffAssignmentsEnabled },
+    project: { staffAssignmentsEnabled, projectType },
   } = useProjectDashboardContext();
 
   // dummy column defs for Household that are only used for the headers, not for rendering cells
   const columns: ColumnDef<HouseholdFields>[] = useMemo(() => {
     return [
       ...BASE_COLUMNS,
+      ...(projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)
+        ? [WITH_ENROLLMENT_COLUMNS.moveInDate]
+        : []),
       ...(staffAssignmentsEnabled ? [HOUSEHOLD_ASSIGNED_STAFF_COL] : []),
       ACTION_COL,
     ].map(({ render, ...rest }) => ({
@@ -186,7 +203,7 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
       render: () => null,
       tableCellProps: undefined, // typescript appeasement
     }));
-  }, [staffAssignmentsEnabled]);
+  }, [projectType, staffAssignmentsEnabled]);
 
   const filters = useFilters({
     type: 'HouseholdFilterOptions',

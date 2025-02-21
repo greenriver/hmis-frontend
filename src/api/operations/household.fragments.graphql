@@ -65,8 +65,8 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
     autoExited
     moveInDate @include(if: $includeMoveInDate)
     lastContact @include(if: $includeLastContact) {
-      date
-      type
+      contactDate
+      contactType
     }
   }
 }

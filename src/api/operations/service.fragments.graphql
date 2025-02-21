@@ -43,6 +43,7 @@ fragment ServiceFields on Service {
   customDataElements {
     ...CustomDataElementFields
   }
+  formDefinitionId
 }
 
 fragment ServiceCategoryFields on ServiceCategory {

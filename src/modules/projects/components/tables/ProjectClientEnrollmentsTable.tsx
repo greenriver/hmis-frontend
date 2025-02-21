@@ -15,9 +15,11 @@ import {
   clientBriefName,
   formatDateForDisplay,
   formatDateForGql,
+  PERMANENT_HOUSING_PROJECT_TYPES,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
@@ -129,10 +131,10 @@ export const ENROLLMENT_COLUMNS: {
         return (
           <Box flexDirection='row'>
             <DateWithRelativeTooltip
-              dateString={e.lastContact.date}
+              dateString={e.lastContact.contactDate}
               preciseTime={false}
             />{' '}
-            ({e.lastContact.type})
+            ({HmisEnums.LastContactType[e.lastContact.contactType]})
           </Box>
         );
       }
@@ -214,10 +216,10 @@ export const WITH_ENROLLMENT_COLUMNS: {
         return (
           <Box flexDirection='row'>
             <DateWithRelativeTooltip
-              dateString={e.enrollment.lastContact.date}
+              dateString={e.enrollment.lastContact.contactDate}
               preciseTime={false}
             />{' '}
-            ({e.enrollment.lastContact.type})
+            ({HmisEnums.LastContactType[e.enrollment.lastContact.contactType]})
           </Box>
         );
       }
@@ -240,7 +242,6 @@ const ProjectClientEnrollmentsTable = ({
   searchTerm,
 }: {
   projectId: string;
-  linkRowToEnrollment?: boolean;
   openOnDate?: Date;
   searchTerm?: string;
 }) => {
@@ -253,7 +254,7 @@ const ProjectClientEnrollmentsTable = ({
   );
 
   const {
-    project: { staffAssignmentsEnabled },
+    project: { staffAssignmentsEnabled, projectType },
   } = useProjectDashboardContext();
 
   const columns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
@@ -264,11 +265,13 @@ const ProjectClientEnrollmentsTable = ({
         ENROLLMENT_COLUMNS.entryDate,
         ENROLLMENT_COLUMNS.exitDate,
         ENROLLMENT_COLUMNS.enrollmentStatus,
-        ENROLLMENT_COLUMNS.moveInDate,
+        ...(projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)
+          ? [ENROLLMENT_COLUMNS.moveInDate]
+          : []),
         ENROLLMENT_COLUMNS.lastContactDate,
         ...(staffAssignmentsEnabled ? [ENROLLMENT_COLUMNS.assignedStaff] : []),
       ];
-    }, [staffAssignmentsEnabled]);
+    }, [projectType, staffAssignmentsEnabled]);
 
   const filters = useFilters({
     type: 'EnrollmentsForProjectFilterOptions',

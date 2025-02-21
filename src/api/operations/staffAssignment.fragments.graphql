@@ -59,8 +59,8 @@ fragment StaffAssignmentWithClients on StaffAssignment {
         organizationName @include(if: $includeOrganizationName)
         moveInDate @include(if: $includeMoveInDate)
         lastContact @include(if: $includeLastContact) {
-          date
-          type
+          contactDate
+          contactType
         }
       }
     }

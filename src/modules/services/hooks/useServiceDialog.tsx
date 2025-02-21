@@ -115,6 +115,7 @@ export function useServiceDialog({
     useServiceFormDefinition({
       projectId,
       serviceTypeId: selectedService?.code || service?.serviceType?.id,
+      formDefinitionId: service?.formDefinitionId,
     });
 
   const hookArgs = useMemo(() => {
