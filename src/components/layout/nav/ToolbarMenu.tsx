@@ -1,4 +1,3 @@
-import { alpha, Theme } from '@mui/material';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -90,10 +89,9 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
           fontWeight: 600, // FIXME custom typography, should standardize
           fontSize: 14,
           px: { xs: 0.5, lg: 2 },
-          color: 'text.primary',
           backgroundColor:
             activeItem === item.activeItemPathIncludes
-              ? (theme: Theme) => alpha(theme.palette.links, 0.1)
+              ? 'primary.100' // selected state
               : undefined,
         }}
         key={item.id}

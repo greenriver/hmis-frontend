@@ -21,7 +21,7 @@ const RequiredLabel = ({
         <Typography
           variant='body2'
           {...requiredTypographyProps}
-          color='error'
+          color='error.dark'
           component='span'
         >
           (Required)
