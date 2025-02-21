@@ -130,7 +130,8 @@ const ManageHousehold = ({
         TitleComponent='h1'
         padContent={false}
         actions={
-          householdId && (
+          householdId &&
+          !isMobile && (
             <CommonLabeledTextBlock title='Household ID' horizontal>
               <ClickToCopyId value={householdId} />
             </CommonLabeledTextBlock>
