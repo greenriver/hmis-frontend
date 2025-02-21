@@ -30,9 +30,8 @@ const RepeatedInputContainer = <T extends object>({
   const addButton = (
     <Button
       onClick={onClickAdd}
-      color='secondary'
       variant='text'
-      sx={{ width: 'fit-content', color: 'links' }}
+      color='primary'
       startIcon={<AddIcon />}
     >
       {addText || 'Add'}

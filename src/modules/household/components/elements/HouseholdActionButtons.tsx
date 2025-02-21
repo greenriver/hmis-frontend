@@ -73,7 +73,6 @@ const HouseholdActionButtons = ({
           clientId,
           enrollmentId,
         })}
-        color='secondary'
         sx={{ width: { xs: '100%', sm: 'fit-content' }, textAlign: 'center' }}
       >
         Manage Household
