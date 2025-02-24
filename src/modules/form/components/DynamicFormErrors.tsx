@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import { ErrorFilterFn, ErrorState, hasErrors } from '@/modules/errors/util';
+import { ErrorFilterFn, ErrorState } from '@/modules/errors/util';
 
 export interface DynamicFormErrorsProps {
   errors: ErrorState;
@@ -12,8 +12,6 @@ export interface DynamicFormErrorsProps {
 
 const DynamicFormErrors = forwardRef<HTMLDivElement, DynamicFormErrorsProps>(
   ({ errors: errorState, errorFilter }, ref) => {
-    if (!hasErrors(errorState)) return;
-
     return (
       <Stack gap={2} ref={ref} component='div'>
         <ApolloErrorAlert error={errorState.apolloError} />

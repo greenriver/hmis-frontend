@@ -9,6 +9,7 @@ import DynamicFormLayout, { DynamicFormLayoutProps } from './DynamicFormLayout';
 import DynamicFormSaveButtons, {
   DynamicFormSaveButtonsProps,
 } from './DynamicFormSaveButtons';
+import { hasErrors } from '@/modules/errors/util';
 
 export interface DynamicFormBaseProps
   extends DynamicFormSaveButtonsProps,
@@ -26,7 +27,15 @@ const DynamicFormBase = ({
   return (
     <DynamicFormContainer>
       <DynamicFormLayout
-        errors={<DynamicFormErrors {...props} ref={errorRef} />}
+        errors={
+          hasErrors(props.errors) && (
+            <DynamicFormErrors
+              errors={props.errors}
+              errorFilter={props.errorFilter}
+              ref={errorRef}
+            />
+          )
+        }
         saveButtons={<DynamicFormSaveButtons {...props} />}
         variant={variant}
       >
