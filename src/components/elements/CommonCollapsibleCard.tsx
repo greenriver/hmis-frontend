@@ -1,5 +1,5 @@
 import { Box, Collapse, CollapseProps } from '@mui/material';
-import React from 'react';
+import React, { useId } from 'react';
 import CommonCard, { CommonCardProps } from '@/components/elements/CommonCard';
 import {
   ExpandLessIcon,
@@ -31,11 +31,21 @@ const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
   padContent,
   ...props
 }) => {
+  const headerId = useId();
+  const contentId = useId();
+
   return (
     <CommonCard
       onClickHeader={onClick}
-      actions={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      actions={
+        open ? <ExpandLessIcon aria-hidden /> : <ExpandMoreIcon aria-hidden />
+      }
       padContent={false} // take over content padding, so there is no padding when collapsed
+      cardHeaderProps={{
+        id: headerId,
+        'aria-expanded': open,
+        'aria-controls': contentId,
+      }}
       {...props}
     >
       <Collapse
@@ -44,6 +54,9 @@ const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
         unmountOnExit
         onExited={onExited}
         collapsedSize={'0px'}
+        id={contentId}
+        aria-labelledby={headerId}
+        role='region'
       >
         <>{padContent ? <Box sx={{ p: 2 }}>{children}</Box> : children}</>
       </Collapse>

@@ -65,8 +65,9 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     ),
     key: 'HoH',
     render: (hc: HouseholdClientFieldsFragment) =>
+      // Decorative checkmark to indicate HoH. Aria-hidden because Relationship to HoH should be textually represented in another col.
       hc.enrollment.relationshipToHoH ===
-        RelationshipToHoH.SelfHeadOfHousehold && <CheckIcon />,
+        RelationshipToHoH.SelfHeadOfHousehold && <CheckIcon aria-hidden />,
   },
   relationshipToHoh: {
     header: 'Relationship to HoH',
