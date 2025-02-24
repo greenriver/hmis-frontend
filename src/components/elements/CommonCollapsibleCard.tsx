@@ -48,18 +48,11 @@ const CommonCollapsibleCard: React.FC<CommonCollapsibleCardProps> = ({
       }}
       {...props}
     >
-      <Collapse
-        in={open}
-        timeout='auto'
-        unmountOnExit
-        onExited={onExited}
-        collapsedSize={'0px'}
-        id={contentId}
-        aria-labelledby={headerId}
-        role='region'
-      >
-        <>{padContent ? <Box sx={{ p: 2 }}>{children}</Box> : children}</>
-      </Collapse>
+      <Box id={contentId} aria-labelledby={headerId} role='region'>
+        <Collapse in={open} timeout='auto' unmountOnExit onExited={onExited}>
+          <>{padContent ? <Box sx={{ p: 2 }}>{children}</Box> : children}</>
+        </Collapse>
+      </Box>
     </CommonCard>
   );
 };
