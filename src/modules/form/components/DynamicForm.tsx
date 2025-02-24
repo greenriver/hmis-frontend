@@ -45,7 +45,6 @@ export interface DynamicFormProps
   onSaveDraft?: DynamicFormOnSaveDraft;
   onDirty?: (value: boolean) => void;
   localConstants?: LocalConstants;
-  variant?: 'standard' | 'without_top_level_cards';
   errorFilter?: ErrorFilterFn;
 }
 
