@@ -15,6 +15,7 @@ import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import NotFound from '@/components/pages/NotFound';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -51,6 +52,7 @@ interface Props {
   project: ManageHouseholdProject;
   BackButton?: ReactNode;
   onFirstMemberAdded?: (householdId: string) => void;
+  onHouseholdNotFound?: VoidFunction;
   canEdit: boolean;
 }
 
@@ -59,6 +61,7 @@ const ManageHousehold = ({
   project,
   BackButton,
   onFirstMemberAdded,
+  onHouseholdNotFound,
   canEdit,
 }: Props) => {
   const { globalFeatureFlags } = useHmisAppSettings();
@@ -122,6 +125,11 @@ const ManageHousehold = ({
     },
     [onSuccess, refetchHousehold]
   );
+
+  if (householdId && !household && !loading) {
+    if (onHouseholdNotFound) onHouseholdNotFound();
+    return <NotFound />;
+  }
 
   return (
     <Stack gap={4}>
