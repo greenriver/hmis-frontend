@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
 
-import { RecentHouseholdMember } from '../types';
-
 import RelativeDate from '@/components/elements/RelativeDate';
 import GenericTable, {
   Props as GenericTableProps,
@@ -12,6 +10,8 @@ import {
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
+
+import { RecentHouseholdMember } from '@/modules/household/types';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 
 interface Props
@@ -44,7 +44,7 @@ const AssociatedHouseholdMembers = ({
     ];
   }, [additionalColumns]);
 
-  if (recentMembers.length === 0) return null;
+  if (!recentMembers || recentMembers.length === 0) return null;
 
   return (
     <SsnDobShowContextProvider>

@@ -31,6 +31,7 @@ export interface ConfirmationDialogProps extends DialogProps {
   hideCancelButton?: boolean;
   renderError?: ErrorRenderFn;
   cancelText?: string;
+  disabled?: boolean;
 }
 
 const ConfirmationDialog = ({
@@ -45,6 +46,7 @@ const ConfirmationDialog = ({
   errorState,
   hideCancelButton,
   renderError,
+  disabled,
   ...other
 }: ConfirmationDialogProps) => {
   const unconfirmable =
@@ -84,6 +86,7 @@ const ConfirmationDialog = ({
               data-testid='confirmDialogAction'
               sx={{ minWidth: '120px' }}
               color={color}
+              disabled={disabled}
             >
               {confirmText}
             </LoadingButton>

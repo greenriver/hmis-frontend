@@ -11,7 +11,8 @@ import { useMemo, useState } from 'react';
 import { TabDefinition } from './util';
 
 import { CommonOrderedList } from '@/components/CommonOrderedList';
-import { CommonCard } from '@/components/elements/CommonCard';
+
+import CommonCard from '@/components/elements/CommonCard';
 import ExpandInfoButton from '@/components/elements/ExpandInfoButton';
 import RouterLink from '@/components/elements/RouterLink';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -28,7 +29,7 @@ const HouseholdSummaryExitHelpCard: React.FC<Props> = ({ tabs }) => {
     enrollmentId: string;
   };
 
-  // Find HoH, so we always link to the HoH for household mamagement and intake.
+  // Find HoH, so we always link to the HoH for household management and intake.
   // If there is no HoH, just use the current user client ID and enrollment ID
   const [hohClientId, hohEnrollmentId] = useMemo(() => {
     const hohTab = tabs.find(({ isHoh }) => isHoh);

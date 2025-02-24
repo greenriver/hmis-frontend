@@ -33,6 +33,7 @@ export const useProjectDashboardNavItems = (
             title: 'Enrollments',
             path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
             hide: !project.access.canViewEnrollmentDetails,
+            activePaths: [ProjectDashboardRoutes.ADD_HOUSEHOLD],
           },
           {
             id: 'assessments',

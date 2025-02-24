@@ -1,6 +1,6 @@
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Link, LinkProps, Typography } from '@mui/material';
 import React from 'react';
+import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
 
 const ExternalLink: React.FC<LinkProps> = ({ children, ...props }) => {
   return (
