@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
 import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
@@ -11,15 +11,16 @@ import {
 } from '@/types/gqlTypes';
 
 interface Args {
-  householdId?: string;
+  householdId?: string; // undefined if building new household and no enrollments added yet
   project: ManageHouseholdProject;
+  onSuccess: (householdId: string) => void;
 }
 
 export default function useAddToHouseholdColumns({
-  householdId: initialHouseholdId,
+  householdId,
   project,
+  onSuccess,
 }: Args) {
-  const [householdId, setHouseholdId] = useState(initialHouseholdId);
   const [getHousehold, { data, loading, error }] = useGetHouseholdLazyQuery({
     fetchPolicy: 'network-only',
   });
@@ -32,12 +33,6 @@ export default function useAddToHouseholdColumns({
   // Refetch household when household ID changes
   useEffect(() => refetchHousehold(), [refetchHousehold, householdId]);
 
-  // If household ID wasn't found, clear the household ID state.
-  // This happens when the last/only member is removed.
-  useEffect(() => {
-    if (data && !data.household) setHouseholdId(undefined);
-  }, [data]);
-
   const currentMembersMap = useMemo(() => {
     // filter out exited members, because they can be re-added
     const hc =
@@ -48,18 +43,17 @@ export default function useAddToHouseholdColumns({
     return new Set(hc.map((c) => c.client.id));
   }, [data]);
 
+  const handleSuccess = useCallback(
+    (hhId: string) => {
+      refetchHousehold();
+      onSuccess(hhId);
+    },
+    [refetchHousehold, onSuccess]
+  );
   // workaround to scroll to top if refetching household
   useEffect(() => {
     if (loading) window.scrollTo(0, 0);
   }, [data, loading]);
-
-  const onSuccess = useCallback(
-    (updatedHouseholdId: string) => {
-      setHouseholdId(updatedHouseholdId);
-      getHousehold({ variables: { id: updatedHouseholdId } });
-    },
-    [getHousehold]
-  );
 
   const addToEnrollmentColumns: ColumnDef<
     ClientSearchResultFieldsFragment | RecentHouseholdMember
@@ -70,6 +64,7 @@ export default function useAddToHouseholdColumns({
         key: 'add',
         width: '10%',
         minWidth: '180px',
+
         render: (record) => {
           const client = isRecentHouseholdMember(record)
             ? record.client
@@ -79,7 +74,7 @@ export default function useAddToHouseholdColumns({
               client={client}
               project={project}
               isMember={currentMembersMap.has(client.id)}
-              onSuccess={onSuccess}
+              onSuccess={handleSuccess}
               household={data?.household || undefined}
               // Disable button until `household` is fetched
               disabled={loading && !!householdId && !data?.household}
@@ -91,7 +86,7 @@ export default function useAddToHouseholdColumns({
   }, [
     project,
     currentMembersMap,
-    onSuccess,
+    handleSuccess,
     data?.household,
     loading,
     householdId,
@@ -101,8 +96,6 @@ export default function useAddToHouseholdColumns({
 
   return {
     addToEnrollmentColumns,
-    householdId,
-    onHouseholdIdChange: onSuccess,
     household: data?.household,
     refetchHousehold,
     loading,

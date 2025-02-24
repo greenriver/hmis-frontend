@@ -2,7 +2,12 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import HouseholdMemberTable from './HouseholdMemberTable';
 
-import { enrollmentWithHoHMock, RITA_ACKROYD } from '@/test/__mocks__/requests';
+import {
+  enrollmentWithHoHMock,
+  fakeHousehold,
+  fakeProject,
+} from '@/test/__mocks__/requests';
+import { HouseholdFieldsFragment } from '@/types/gqlTypes';
 
 export default {
   component: HouseholdMemberTable,
@@ -18,7 +23,8 @@ type Story = StoryObj<typeof HouseholdMemberTable>;
 
 export const Default: Story = {
   args: {
-    clientId: RITA_ACKROYD.id,
-    enrollmentId: '5',
+    household: fakeHousehold() as unknown as HouseholdFieldsFragment,
+    project: fakeProject(),
+    canEdit: true,
   },
 };

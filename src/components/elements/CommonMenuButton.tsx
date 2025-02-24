@@ -171,6 +171,7 @@ const CommonMenuButton = ({
                   to={to}
                   state={linkState}
                   openInNew={openInNew}
+                  Icon={openInNew ? false : undefined} // use menu icon instead of link icon
                 >
                   {menuItemLabel}
                 </MenuItem>
