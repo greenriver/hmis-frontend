@@ -52,7 +52,6 @@ interface Props {
   project: ManageHouseholdProject;
   BackButton?: ReactNode;
   onFirstMemberAdded?: (householdId: string) => void;
-  onHouseholdNotFound?: VoidFunction;
   canEdit: boolean;
 }
 
@@ -61,7 +60,6 @@ const ManageHousehold = ({
   project,
   BackButton,
   onFirstMemberAdded,
-  onHouseholdNotFound,
   canEdit,
 }: Props) => {
   const { globalFeatureFlags } = useHmisAppSettings();
@@ -83,12 +81,17 @@ const ManageHousehold = ({
     },
     [householdId, onFirstMemberAdded]
   );
-  const { addToEnrollmentColumns, refetchHousehold, household, loading } =
-    useAddToHouseholdColumns({
-      householdId,
-      project,
-      onSuccess,
-    });
+  const {
+    addToEnrollmentColumns,
+    refetchHousehold,
+    household,
+    householdNotFound,
+    loading,
+  } = useAddToHouseholdColumns({
+    householdId,
+    project,
+    onSuccess,
+  });
 
   // Fetch members to show in "previously associated" table
   const {
@@ -126,10 +129,8 @@ const ManageHousehold = ({
     [onSuccess, refetchHousehold]
   );
 
-  if (householdId && !household && !loading) {
-    if (onHouseholdNotFound) onHouseholdNotFound();
-    return <NotFound />;
-  }
+  // could happen if user entered bad URL for /projects/:id/add-household/:householdId
+  if (householdNotFound) return <NotFound />;
 
   return (
     <Stack gap={4}>

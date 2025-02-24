@@ -72,17 +72,6 @@ const CreateHouseholdPage = () => {
     [currentRoute, navigate, project.id, state]
   );
 
-  // Gracefully handle bad URL entered by user (invalid household id `/projects/95/add-household/foobar`)
-  // by dropping the householdI parameter and replacing the path
-  const onHouseholdNotFound = useCallback(() => {
-    if (!currentRoute) return;
-    const newPath = generateSafePath(currentRoute, {
-      projectId: project.id,
-      householdId: undefined,
-    });
-    navigate(newPath, { replace: true, state });
-  }, [currentRoute, navigate, project.id, state]);
-
   const onGoBack = useCallback(() => {
     if (!state?.prev) {
       navigate(-1);
@@ -110,7 +99,6 @@ const CreateHouseholdPage = () => {
         householdId={householdId}
         canEdit={true}
         onFirstMemberAdded={onFirstMemberAdded}
-        onHouseholdNotFound={onHouseholdNotFound}
         BackButton={
           <BackButton onClick={onGoBack}>
             {buttonTextForPath(currentRoute)}
