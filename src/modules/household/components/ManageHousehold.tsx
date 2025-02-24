@@ -129,6 +129,7 @@ const ManageHousehold = ({
     [onSuccess, refetchHousehold]
   );
 
+  if (householdId && !household && loading && <Loading />) return <Loading />;
   // could happen if user entered bad URL for /projects/:id/add-household/:householdId
   if (householdNotFound) return <NotFound />;
 
@@ -148,7 +149,6 @@ const ManageHousehold = ({
           )
         }
       >
-        {householdId && !household && loading && <Loading />}
         {!householdId && (
           <Paper
             sx={{
