@@ -312,7 +312,7 @@ const createThemeOptions = (theme: Theme) => ({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          backgroundColor: 'background.paper',
+          backgroundColor: theme.palette.background.paper,
         },
       },
     },
