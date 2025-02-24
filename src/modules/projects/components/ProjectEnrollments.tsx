@@ -1,7 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Paper, Stack } from '@mui/material';
 
-import ProjectEnrollmentsTable from './tables/ProjectEnrollmentsTable';
+import ProjectEnrollmentsTable, {
+  ProjectEnrollmentsTableMode,
+} from './tables/ProjectEnrollmentsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
@@ -10,7 +12,11 @@ import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilte
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const ProjectEnrollments = () => {
+const ProjectEnrollments = ({
+  mode = 'households',
+}: {
+  mode: ProjectEnrollmentsTableMode;
+}) => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
@@ -46,7 +52,7 @@ const ProjectEnrollments = () => {
         }
       />
       <Paper>
-        <ProjectEnrollmentsTable projectId={projectId} />
+        <ProjectEnrollmentsTable mode={mode} projectId={projectId} />
       </Paper>
     </>
   );

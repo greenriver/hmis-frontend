@@ -14,7 +14,7 @@ import {
   startCase,
 } from 'lodash-es';
 import pluralize from 'pluralize';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FilterType } from '../types';
 
@@ -28,8 +28,14 @@ import { getColumnKey } from '@/components/elements/table/util';
 import TableFilters, {
   TableFiltersProps,
 } from '@/components/elements/tableFilters/TableFilters';
+import useCurrentPath from '@/hooks/useCurrentPath';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
+import useSearchParamsState from '@/hooks/useSearchParamState';
+import {
+  getStoredPathParams,
+  setStoredPathParams,
+} from '@/modules/auth/api/storage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
@@ -150,14 +156,55 @@ const GenericTableWithData = <
   const previousQueryVariables = usePrevious(queryVariables);
   const [filterValues, setFilterValues] = useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
-  const [includedOptionalColumns, setIncludedOptionalColumns] = useState<
-    string[]
-  >(
-    compact(
+
+  const currentPath = useCurrentPath();
+
+  const defaultOptionalCols = useMemo(() => {
+    const storedOptionalCols = currentPath
+      ? getStoredPathParams(currentPath)?.optionalColumns
+      : undefined;
+
+    // If local storage has optional columns for this path, return them
+    if (storedOptionalCols) return storedOptionalCols;
+
+    // Otherwise, default to any optional columns that are not defaultHidden
+    return compact(
       columnsProp
         ?.filter((col) => col.optional && !col.defaultHidden)
         .map((col) => getColumnKey(col)) || []
-    )
+    );
+  }, [columnsProp, currentPath]);
+
+  // Store optional column state in BOTH search params and local storage.
+  // This is so that users can both
+  // - get the same view on their data every time they visit a table
+  // - and share/bookmark URLs that keep the same view into the data.
+  // We plan to eventually add other table controls, like sort/filter.
+  const [paramValues, setParamValues] = useSearchParamsState(
+    {
+      optionalColumns: {
+        type: 'string',
+        multiple: true,
+        default: defaultOptionalCols,
+      },
+    },
+    true
+  );
+
+  const setIncludedOptionalColumns = useCallback(
+    (optionalColumns: string[]) => {
+      // Store in both local storage and search params
+      if (currentPath) {
+        setStoredPathParams(currentPath, { optionalColumns });
+      }
+      setParamValues({ optionalColumns });
+    },
+    [currentPath, setParamValues]
+  );
+
+  const includedOptionalColumns = useMemo(
+    () => paramValues.optionalColumns,
+    [paramValues]
   );
 
   // if the filters change, return to the first page

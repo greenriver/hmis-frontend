@@ -77,6 +77,8 @@ const projectDashboardRoutes = {
   EDIT_PROJECT: 'overview/edit',
   // Enrollment-related
   PROJECT_ENROLLMENTS: 'enrollments',
+  PROJECT_ENROLLMENTS_CLIENTS: 'enrollments/clients',
+  PROJECT_ENROLLMENTS_HOUSEHOLDS: 'enrollments/households',
   PROJECT_ASSESSMENTS: 'assessments',
   PROJECT_SERVICES: 'services',
   PROJECT_CURRENT_LIVING_SITUATIONS: 'current-living-situations',
