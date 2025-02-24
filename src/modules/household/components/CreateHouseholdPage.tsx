@@ -51,7 +51,8 @@ const CreateHouseholdPage = () => {
   const currentPath = useCurrentPath();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { householdId } = useSafeParams();
+  // Param is called `household` instead of `householdId` so it doesn't get hashed
+  const { household: householdId } = useSafeParams();
 
   const currentRoute = useMemo(() => {
     if (!currentPath) return;
@@ -65,7 +66,7 @@ const CreateHouseholdPage = () => {
 
       const newPath = generateSafePath(currentRoute, {
         projectId: project.id,
-        householdId,
+        household: householdId,
       });
       navigate(newPath, { replace: true, state });
     },
