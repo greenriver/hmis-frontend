@@ -21,6 +21,7 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
 
   const currentPath = useCurrentPath();
 
+  // Optional columns to show when the page first loads
   const initialOptionalColumns = useMemo(() => {
     const storedOptionalCols = currentPath
       ? getStoredPathParams(currentPath)?.optionalColumns
@@ -37,10 +38,7 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
     );
   }, [columns, currentPath]);
 
-  // Store optional column state in BOTH search params and local storage.
-  // This is so that users can both
-  // - get the same view on their data every time they visit a table
-  // - and share/bookmark URLs that keep the same view into the data.
+  // Store currently selected optional columns in url search params
   const [paramValues, setParamValues] = useSearchParamsState(
     {
       optionalColumns: {
@@ -52,10 +50,14 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
     true
   );
 
-  // todo @martha - naming to avoid confusion
+  const includedOptionalColumns = useMemo(
+    () => paramValues.optionalColumns,
+    [paramValues]
+  );
+
   const setIncludedOptionalColumns = useCallback(
     (optionalColumns: string[]) => {
-      // Store in both local storage and search params
+      // Store selected optional columns in BOTH local storage and search params
       if (currentPath) {
         setStoredPathParams(currentPath, { optionalColumns });
       }
@@ -64,28 +66,17 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
     [currentPath, setParamValues]
   );
 
-  const includedOptionalColumns = useMemo(
-    () => paramValues.optionalColumns,
-    [paramValues]
-  );
-
-  // (internal) currently included optional columns
-  const includedOptionalColumnDefs = useMemo(
-    () =>
-      optionalColumns.filter((c) => includedOptionalColumns.includes(c.key)),
-    [optionalColumns, includedOptionalColumns]
-  );
-
   // Based on the currently shown optional columns, get the optional query variables that should be included
   const optionalQueryVariables: Partial<QueryVariables> = useMemo(() => {
-    const queryVariableFields = compact(
-      includedOptionalColumnDefs.map((c) => c.optional?.queryVariableField)
-    );
+    const queryVariableFields = optionalColumns
+      .filter((c) => includedOptionalColumns.includes(c.key))
+      .map((c) => c.optional?.queryVariableField);
+
     return queryVariableFields.reduce((acc: any, key) => {
       acc[key] = true;
       return acc as QueryVariables;
     }, {});
-  }, [includedOptionalColumnDefs]);
+  }, [includedOptionalColumns, optionalColumns]);
 
   return {
     optionalColumns,
