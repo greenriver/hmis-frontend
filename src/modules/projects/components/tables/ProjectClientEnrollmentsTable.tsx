@@ -208,6 +208,8 @@ export const WITH_ENROLLMENT_COLUMNS: {
     key: 'exitDate',
     optional: {
       defaultHidden: true,
+      // queryVariableField not provided here, since we need to fetch exitDate anyway in order to show the status
+      // and correctly aria-label the row action
     },
     render: (objectWithEnrollment: WithEnrollment) => {
       if (objectWithEnrollment.enrollment.exitDate)
