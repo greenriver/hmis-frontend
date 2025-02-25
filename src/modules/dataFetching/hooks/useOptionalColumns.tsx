@@ -1,6 +1,5 @@
 import { compact } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
-import { getColumnKey } from '@/components/elements/table/util';
 import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
 
 export function useOptionalColumns<T extends { id: string }, QueryVariables>({
@@ -23,14 +22,14 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
 
   // Map currently included optional column defs to their keys...
   const includedOptionalColumns = useMemo(
-    () => currentOptColDefs.map((c) => getColumnKey(c)),
+    () => currentOptColDefs.map((c) => c.key),
     [currentOptColDefs]
   );
 
   // ...and map them back again
   const setIncludedOptionalColumns = useCallback(
     (columnKeys: string[]) => {
-      const cols = columns?.filter((c) => columnKeys.includes(getColumnKey(c)));
+      const cols = columns?.filter((c) => columnKeys.includes(c.key));
       setCurrentOptColDefs(cols || []);
     },
     [columns]

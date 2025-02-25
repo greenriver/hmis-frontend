@@ -14,7 +14,6 @@ import {
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -124,10 +123,10 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
 
   return (
     <TableRow sx={clickableRowStyles} key={household.id + householdClient.id}>
-      {BASE_COLUMNS.filter((col) => columnKeys.includes(getColumnKey(col))).map(
+      {BASE_COLUMNS.filter((col) => columnKeys.includes(col.key)).map(
         (col, i) => (
           <TableCell
-            key={getColumnKey(col) || i}
+            key={col.key}
             role={i === 0 ? 'rowheader' : undefined}
             sx={cellSx(col)}
             className={col?.sticky ? stickyCellClassName : undefined}
@@ -140,9 +139,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           </TableCell>
         )
       )}
-      {columnKeys.includes(
-        getColumnKey(WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate)
-      ) && (
+      {columnKeys.includes(WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.key) && (
         <TableCell sx={cellSx()}>
           {renderLinkedRowCellContents({
             rowLink,
@@ -151,7 +148,7 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
           })}
         </TableCell>
       )}
-      {columnKeys.includes(getColumnKey(HOUSEHOLD_ASSIGNED_STAFF_COL)) && (
+      {columnKeys.includes(HOUSEHOLD_ASSIGNED_STAFF_COL.key) && (
         <TableCell sx={cellSx()}>
           {renderLinkedRowCellContents({
             rowLink,

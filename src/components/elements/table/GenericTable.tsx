@@ -37,7 +37,6 @@ import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import RouterLink from '@/components/elements/RouterLink';
 import { useTableSelection } from '@/components/elements/table/hooks/useTableSelection';
 import TableRowActions from '@/components/elements/table/TableRowActions';
-import { getColumnKey } from '@/components/elements/table/util';
 import { customVisuallyHidden } from '@/config/theme';
 import { LocationState } from '@/routes/routeUtil';
 
@@ -378,10 +377,10 @@ const GenericTable = <T extends { id: string }>({
               />
             </HeaderCell>
           )}
-          {columns.map((def, i) => {
+          {columns.map((def) => {
             return (
               <HeaderCell
-                key={getColumnKey(def) || i}
+                key={def.key}
                 className={def.sticky ? stickyCellClassName : undefined}
                 sx={{
                   ...getStickyCellStyles({
@@ -457,11 +456,11 @@ const GenericTable = <T extends { id: string }>({
           {tableHead}
           <TableBodyComponent>
             {vertical &&
-              columns.map((def, i) => (
-                <TableRow key={getColumnKey(def) || i}>
+              columns.map((def) => (
+                <TableRow key={def.key}>
                   <HeaderCell
                     sx={{ ...verticalCellSx(1), width: '350px' }}
-                    key={getColumnKey(def)}
+                    key={def.key}
                     role='rowheader'
                     {...def.headerCellProps}
                   >
@@ -478,10 +477,7 @@ const GenericTable = <T extends { id: string }>({
               rows.map((row) => {
                 // prop to completely take over row rendering
                 if (renderRow) {
-                  return renderRow(
-                    row,
-                    compact(columns.map((c) => getColumnKey(c)))
-                  );
+                  return renderRow(row, compact(columns.map((c) => c.key)));
                 }
 
                 const isSelectable =
@@ -586,7 +582,7 @@ const GenericTable = <T extends { id: string }>({
 
                       return (
                         <TableCell
-                          key={getColumnKey(def) || index}
+                          key={def.key}
                           {...cellProps}
                           className={sticky ? stickyCellClassName : undefined}
                           sx={{
