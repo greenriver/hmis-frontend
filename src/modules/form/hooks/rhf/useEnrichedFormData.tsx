@@ -102,6 +102,7 @@ export const useEnrichedFormData = <T extends FieldValues>({
 
       // skip unless there's a value and a value code
       if (!valueCode) return;
+      if (Array.isArray(valueCode) && valueCode.length === 0) return;
       if (!pickListReference) return;
       if (!Object.values<string>(PickListType).includes(pickListReference))
         return;
