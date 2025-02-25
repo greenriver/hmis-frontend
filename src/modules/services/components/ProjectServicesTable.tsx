@@ -40,6 +40,7 @@ const ProjectServicesTable = ({
         render: (s: ServiceFields) => (
           <ClientName client={s.enrollment.client} />
         ),
+        key: 'clientName',
       },
       SERVICE_BASIC_COLUMNS.serviceDate,
       SERVICE_BASIC_COLUMNS.serviceType,

@@ -1,12 +1,11 @@
 import { Paper } from '@mui/material';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
@@ -21,7 +20,10 @@ type Row = NonNullable<
   GetClientCaseNotesQuery['client']
 >['customCaseNotes']['nodes'][0];
 
-const COLUMNS: ColumnDef<Row>[] = [
+const COLUMNS: GenericTableWithDataColumnDef<
+  Row,
+  GetClientCaseNotesQueryVariables
+>[] = [
   CASE_NOTE_COLUMNS.InformationDate,
   {
     key: 'project',
@@ -36,8 +38,10 @@ const COLUMNS: ColumnDef<Row>[] = [
   CASE_NOTE_COLUMNS.NoteContentPreview,
   {
     ...WITH_ENROLLMENT_COLUMNS.entryDate,
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+      // no queryVariableField, since we need to fetch entryDate anyway in order to correctly aria-label the row action
+    },
   },
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.organizationName,
@@ -88,19 +92,6 @@ const ClientCaseNotes = () => {
           paginationItemName='case note'
           showTopToolbar
           showOptionalColumns
-          applyOptionalColumns={(cols) => {
-            const result: Partial<GetClientCaseNotesQueryVariables> = {};
-
-            if (
-              cols.includes(
-                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
-              )
-            ) {
-              result.includeOrganizationName = true;
-            }
-
-            return result;
-          }}
         />
       </Paper>
       {viewRecordDialog()}

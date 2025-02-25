@@ -23,6 +23,7 @@ import {
 const columns: ColumnDef<CeParticipationFieldsFragment>[] = [
   {
     header: 'Active Period',
+    key: 'activePeriod',
     render: ({
       ceParticipationStatusStartDate,
       ceParticipationStatusEndDate,
@@ -34,11 +35,13 @@ const columns: ColumnDef<CeParticipationFieldsFragment>[] = [
   },
   {
     header: 'Access Point',
+    key: 'accessPoint',
     render: ({ accessPoint }: CeParticipationFieldsFragment) =>
       yesNo(accessPoint),
   },
   {
     header: 'Assessments',
+    key: 'assessments',
     render: ({
       accessPoint,
       preventionAssessment,
@@ -69,11 +72,13 @@ const columns: ColumnDef<CeParticipationFieldsFragment>[] = [
   },
   {
     header: 'Direct Services',
+    key: 'directServices',
     render: ({ accessPoint, directServices }: CeParticipationFieldsFragment) =>
       yesNo(directServices, accessPoint === NoYes.Yes ? 'Unknown' : 'N/A'),
   },
   {
     header: 'Receives Referrals',
+    key: 'receivesReferrals',
     render: ({ receivesReferrals }: CeParticipationFieldsFragment) =>
       yesNo(receivesReferrals, 'Unknown'),
   },

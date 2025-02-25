@@ -1,13 +1,13 @@
 import { Box, Chip, Tooltip } from '@mui/material';
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import {
   getViewClientMenuItem,
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
 import { ClientEnrollmentTableFields } from '@/modules/enrollment/components/pages/ClientEnrollmentsPage';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -30,7 +30,9 @@ import {
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
   HouseholdWithStaffAssignmentsFragment,
+  InputMaybe,
   ProjectEnrollmentQueryEnrollmentFieldsFragment,
+  Scalars,
 } from '@/types/gqlTypes';
 
 export type ProjectEnrollmentFields = NonNullable<
@@ -43,55 +45,72 @@ const isHouseholdWithStaff = (
   return 'household' in e && 'staffAssignments' in e.household;
 };
 
-export const HOUSEHOLD_ASSIGNED_STAFF_COL = {
+type EnrollmentQueryVariables = Partial<{
+  includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+const renderHouseholdAssignedStaff = (
+  hh: HouseholdWithStaffAssignmentsFragment
+): ReactNode => {
+  if (!hh.staffAssignments?.nodes.length) return;
+
+  const allNames = hh.staffAssignments.nodes.map(
+    (staffAssignment) => staffAssignment.user.name
+  );
+
+  const first = allNames[0];
+  const rest = allNames.slice(1);
+
+  return (
+    <Box aria-label={allNames.join(', ')}>
+      {first}{' '}
+      {rest.length > 0 && (
+        <Tooltip arrow title={rest.join(', ')}>
+          <Chip sx={{ mb: 0.5 }} size='small' label={`+${rest.length} more`} />
+        </Tooltip>
+      )}
+    </Box>
+  );
+};
+
+export const HOUSEHOLD_ASSIGNED_STAFF_COL: GenericTableWithDataColumnDef<
+  HouseholdWithStaffAssignmentsFragment,
+  EnrollmentQueryVariables
+> = {
   header: 'Assigned Staff',
-  optional: true,
-  defaultHidden: true,
-  key: 'assigned_staff',
-  render: (hh: HouseholdWithStaffAssignmentsFragment) => {
-    if (!hh.staffAssignments?.nodes.length) return;
-
-    const allNames = hh.staffAssignments.nodes.map(
-      (staffAssignment) => staffAssignment.user.name
-    );
-
-    const first = allNames[0];
-    const rest = allNames.slice(1);
-
-    return (
-      <Box aria-label={allNames.join(', ')}>
-        {first}{' '}
-        {rest.length > 0 && (
-          <Tooltip arrow title={rest.join(', ')}>
-            <Chip
-              sx={{ mb: 0.5 }}
-              size='small'
-              label={`+${rest.length} more`}
-            />
-          </Tooltip>
-        )}
-      </Box>
-    );
+  optional: {
+    defaultHidden: true,
+    queryVariableField: 'includeStaffAssignment',
   },
+  key: 'assigned_staff',
+  render: renderHouseholdAssignedStaff,
 };
 
 export const ENROLLMENT_COLUMNS: {
-  [key: string]: ColumnDef<
+  [key: string]: GenericTableWithDataColumnDef<
     | ClientEnrollmentTableFields
     | ProjectEnrollmentQueryEnrollmentFieldsFragment
-    | ClientEnrollmentFieldsFragment
+    | ClientEnrollmentFieldsFragment,
+    EnrollmentQueryVariables
   >;
 } = {
   entryDate: {
     header: 'Entry Date',
+    key: 'entryDate',
     render: (e) => (
       <DateWithRelativeTooltip dateString={e.entryDate} preciseTime={false} />
     ),
   },
   exitDate: {
     header: 'Exit Date',
-    optional: true,
-    defaultHidden: true,
+    key: 'exitDate',
+    optional: {
+      defaultHidden: true,
+      // queryVariableField not provided here, since we need to fetch exitDate anyway in order to show the status
+      // and correctly aria-label the row action
+    },
     render: (e) => {
       if (e.exitDate) {
         return (
@@ -105,12 +124,16 @@ export const ENROLLMENT_COLUMNS: {
   },
   enrollmentStatus: {
     header: 'Status',
+    key: 'status',
     render: (e) => <EnrollmentStatus enrollment={e} />,
   },
   moveInDate: {
     header: 'Move-in Date',
-    optional: true,
-    defaultHidden: true,
+    key: 'moveInDate',
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeMoveInDate',
+    },
     render: (e) => {
       if (e.moveInDate) {
         return (
@@ -124,8 +147,11 @@ export const ENROLLMENT_COLUMNS: {
   },
   lastContactDate: {
     header: 'Last Contact Date',
-    optional: true,
-    defaultHidden: true,
+    key: 'lastContactDate',
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeLastContact',
+    },
     render: (e) => {
       if ('lastContact' in e && e.lastContact) {
         return (
@@ -142,9 +168,10 @@ export const ENROLLMENT_COLUMNS: {
   },
   assignedStaff: {
     ...HOUSEHOLD_ASSIGNED_STAFF_COL,
+    tableCellProps: undefined,
     render: (e) => {
       return isHouseholdWithStaff(e)
-        ? HOUSEHOLD_ASSIGNED_STAFF_COL.render(e.household)
+        ? renderHouseholdAssignedStaff(e.household)
         : null;
     },
   },
@@ -163,10 +190,14 @@ type WithEnrollment = {
     >;
 };
 export const WITH_ENROLLMENT_COLUMNS: {
-  [key: string]: ColumnDef<WithEnrollment>;
+  [key: string]: GenericTableWithDataColumnDef<
+    WithEnrollment,
+    { includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']> }
+  >;
 } = {
   entryDate: {
     header: ENROLLMENT_COLUMNS.entryDate.header,
+    key: 'entryDate',
     render: (objectWithEnrollment: WithEnrollment) => (
       <DateWithRelativeTooltip
         dateString={objectWithEnrollment.enrollment.entryDate}
@@ -176,8 +207,12 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   exitDate: {
     header: ENROLLMENT_COLUMNS.exitDate.header,
-    optional: true,
-    defaultHidden: true,
+    key: 'exitDate',
+    optional: {
+      defaultHidden: true,
+      // queryVariableField not provided here, since we need to fetch exitDate anyway in order to show the status
+      // and correctly aria-label the row action
+    },
     render: (objectWithEnrollment: WithEnrollment) => {
       if (objectWithEnrollment.enrollment.exitDate)
         return (
@@ -190,12 +225,35 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   enrollmentStatus: {
     header: ENROLLMENT_COLUMNS.enrollmentStatus.header,
+    key: 'status',
     render: (e) => <EnrollmentStatus enrollment={e.enrollment} />,
   },
+  organizationName: {
+    header: 'Organization Name',
+    key: 'organizationName',
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeOrganizationName',
+    },
+    render: (e) => {
+      return e.enrollment.organizationName;
+    },
+  },
+};
+
+export const WITH_ENROLLMENT_OPTIONAL_COLUMNS: {
+  [key: string]: GenericTableWithDataColumnDef<
+    WithEnrollment,
+    EnrollmentQueryVariables
+  >;
+} = {
   moveInDate: {
     header: ENROLLMENT_COLUMNS.moveInDate.header,
-    optional: true,
-    defaultHidden: true,
+    key: 'moveInDate',
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeMoveInDate',
+    },
     render: (e) => {
       if (e.enrollment.moveInDate) {
         return (
@@ -209,8 +267,11 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   lastContactDate: {
     header: ENROLLMENT_COLUMNS.lastContactDate.header,
-    optional: true,
-    defaultHidden: true,
+    key: 'lastContactDate',
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeLastContact',
+    },
     render: (e) => {
       if (e.enrollment.lastContact) {
         return (
@@ -223,14 +284,6 @@ export const WITH_ENROLLMENT_COLUMNS: {
           </Box>
         );
       }
-    },
-  },
-  organizationName: {
-    header: 'Organization Name',
-    optional: true,
-    defaultHidden: true,
-    render: (e) => {
-      return e.enrollment.organizationName;
     },
   },
 };
@@ -312,20 +365,6 @@ const ProjectClientEnrollmentsTable = ({
       filters={filters}
       defaultSortOption={EnrollmentSortOption.MostRecent}
       showOptionalColumns
-      applyOptionalColumns={(cols) => {
-        const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
-
-        if (cols.includes(getColumnKey(HOUSEHOLD_ASSIGNED_STAFF_COL)))
-          result.includeStaffAssignment = true;
-
-        if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.moveInDate)))
-          result.includeMoveInDate = true;
-
-        if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.lastContactDate)))
-          result.includeLastContact = true;
-
-        return result;
-      }}
     />
   );
 };

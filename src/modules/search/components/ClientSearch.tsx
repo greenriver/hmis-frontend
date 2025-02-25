@@ -68,7 +68,7 @@ export const CLIENT_COLUMNS: {
     | ProjectEnrollmentsHouseholdClientFieldsFragment
   >;
 } = {
-  id: { header: 'HMIS ID', render: 'id' },
+  id: { header: 'HMIS ID', render: 'id', key: 'id' },
   name: {
     header: 'Client Name',
     key: 'name',
@@ -81,10 +81,12 @@ export const CLIENT_COLUMNS: {
   },
   first: {
     header: 'First Name',
+    key: 'firstName',
     render: (client) => asClient(client).firstName,
   },
   last: {
     header: 'Last Name',
+    key: 'lastName',
     render: (client) => asClient(client).lastName,
   },
   dobAge: {

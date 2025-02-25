@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import { CheckIcon } from '@/components/elements/SemanticIcons';
 import GenericTable from '@/components/elements/table/GenericTable';
+import { customVisuallyHidden } from '@/config/theme';
 import ClientName from '@/modules/client/components/ClientName';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -64,12 +65,22 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       </Tooltip>
     ),
     key: 'HoH',
-    render: (hc: HouseholdClientFieldsFragment) =>
-      hc.enrollment.relationshipToHoH ===
-        RelationshipToHoH.SelfHeadOfHousehold && <CheckIcon />,
+    render: (hc: HouseholdClientFieldsFragment) => {
+      const isHoh =
+        hc.enrollment.relationshipToHoH ===
+        RelationshipToHoH.SelfHeadOfHousehold;
+      const accessibleLabel = `Client ${isHoh ? 'is' : 'is not'} HoH`;
+      return (
+        <>
+          {isHoh && <CheckIcon aria-hidden />}
+          <Box sx={customVisuallyHidden}>{accessibleLabel}</Box>
+        </>
+      );
+    },
   },
   relationshipToHoh: {
     header: 'Relationship to HoH',
+    key: 'relationship',
     render: (hc: HouseholdClientFieldsFragment) => (
       <HmisEnum
         value={hc.relationshipToHoH}
@@ -84,6 +95,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     unitIds = [...new Set(unitIds)];
     return {
       header: `Assigned Units (${unitIds.length})`,
+      key: 'assignedUnit',
       hide: !householdMembers.some((m) => m.enrollment.currentUnit),
       render: (hc: HouseholdClientFieldsFragment) =>
         hc.enrollment.currentUnit?.name,

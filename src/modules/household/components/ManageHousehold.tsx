@@ -99,7 +99,7 @@ const ManageHousehold = ({
     ClientSearchResultFieldsFragment | RecentHouseholdMember
   >[] = useMemo(() => {
     return [
-      { ...CLIENT_COLUMNS.name, sticky: 'left', width: '25%' },
+      { ...CLIENT_COLUMNS.name, key: 'name', sticky: 'left', width: '25%' },
       ...(globalFeatureFlags?.mciId
         ? [externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID')]
         : []),

@@ -22,19 +22,23 @@ const columns: ColumnDef<ProjectCocFieldsFragment>[] = [
   {
     header: 'CoC Code',
     render: 'cocCode',
+    key: 'cocCode',
   },
   {
     header: 'Geocode',
     render: 'geocode',
+    key: 'geocode',
   },
   {
     header: 'Geography Type',
+    key: 'geographyType',
     render: (c) => (
       <HmisEnum enumMap={HmisEnums.GeographyType} value={c.geographyType} />
     ),
   },
   {
     header: 'Address',
+    key: 'address',
     render: (c: ProjectCocFieldsFragment) => (
       <Stack gap={0.5} sx={{ py: 0.5 }}>
         <Typography variant='body2'>

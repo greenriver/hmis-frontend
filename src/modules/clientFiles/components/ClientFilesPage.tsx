@@ -7,18 +7,16 @@ import useFileActions from '../hooks/useFileActions';
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
-import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
 import {
   useClientPermissions,
   useHasClientPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientFilesDocument,
@@ -75,10 +73,14 @@ const ClientFilesPage = () => {
 
   const isTiny = useIsMobile('sm');
 
-  const columns: ColumnDef<ClientFileType>[] = useMemo(() => {
+  const columns: GenericTableWithDataColumnDef<
+    ClientFileType,
+    GetClientFilesQueryVariables
+  >[] = useMemo(() => {
     return [
       {
         header: 'File Name',
+        key: 'fileName',
         render: (file) => (
           <Typography variant='inherit'>{file.name}</Typography>
         ),
@@ -88,6 +90,7 @@ const ClientFilesPage = () => {
       },
       {
         header: 'File Tags',
+        key: 'tags',
         render: (file) =>
           pickListData ? (
             <Box sx={{ display: 'flex', gap: 0.5 }}>
@@ -109,6 +112,7 @@ const ClientFilesPage = () => {
       },
       {
         header: 'Project Name',
+        key: 'projectName',
         render: ({ enrollment }) =>
           enrollment ? (
             enrollment.projectName
@@ -118,6 +122,7 @@ const ClientFilesPage = () => {
       },
       {
         header: 'Uploaded',
+        key: 'uploaded',
         render: ({ dateCreated, uploadedBy }) => {
           const byUser = uploadedBy?.name
             ? `by ${uploadedBy?.name}`
@@ -134,8 +139,11 @@ const ClientFilesPage = () => {
       },
       {
         header: 'Organization Name',
-        optional: true,
-        defaultHidden: true,
+        key: 'organizationName',
+        optional: {
+          defaultHidden: true,
+          queryVariableField: 'includeOrganizationName',
+        },
         render: (file) => {
           if (file.enrollment) {
             return file.enrollment.organizationName;
@@ -179,18 +187,6 @@ const ClientFilesPage = () => {
           pagePath='client.files'
           noData='No files'
           showOptionalColumns
-          applyOptionalColumns={(cols) => {
-            const result: Partial<GetClientFilesQueryVariables> = {};
-
-            if (
-              cols.includes(
-                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
-              )
-            )
-              result.includeOrganizationName = true;
-
-            return result;
-          }}
         />
       </Paper>
       {viewingFile && (

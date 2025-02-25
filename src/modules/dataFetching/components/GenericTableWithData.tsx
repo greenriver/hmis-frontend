@@ -5,37 +5,23 @@ import {
   WatchQueryFetchPolicy,
 } from '@apollo/client';
 import { Box, Stack } from '@mui/material';
-import {
-  compact,
-  get,
-  isEmpty,
-  isEqual,
-  lowerFirst,
-  startCase,
-} from 'lodash-es';
+import { get, isEmpty, isEqual, lowerFirst, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { FilterType } from '../types';
+import { FilterType, GenericTableWithDataColumnDef } from '../types';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import Pagination from '@/components/elements/table/Pagination';
-import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import TableFilters, {
   TableFiltersProps,
 } from '@/components/elements/tableFilters/TableFilters';
-import useCurrentPath from '@/hooks/useCurrentPath';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
-import useSearchParamsState from '@/hooks/useSearchParamState';
-import {
-  getStoredPathParams,
-  setStoredPathParams,
-} from '@/modules/auth/api/storage';
+import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColumns';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
@@ -63,11 +49,13 @@ export interface Props<
     | 'paginated'
     | 'noData'
     | 'verticalHiddenHeader'
+    | 'columns'
   > {
+  columns?: GenericTableWithDataColumnDef<RowDataType, QueryVariables>[];
   getColumnDefs?: (
     rows: RowDataType[],
     loading?: boolean
-  ) => ColumnDef<RowDataType>[]; // dynamically define column defs based on current data
+  ) => GenericTableWithDataColumnDef<RowDataType, QueryVariables>[]; // dynamically define column defs based on current data
   filters?: TableFilterType<FilterOptionsType>;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
@@ -93,12 +81,13 @@ export interface Props<
     SortOptionsType
   >['tableDisplayOptionButtons'];
   showOptionalColumns?: boolean;
-  applyOptionalColumns?: (columns: string[]) => Partial<QueryVariables>;
   onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
 }
 
-function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
+function allFieldColumns<T, QueryVariables>(
+  recordType: string
+): GenericTableWithDataColumnDef<T, QueryVariables>[] {
   const schema = getSchemaForType(recordType);
   if (!schema) return [];
 
@@ -138,7 +127,6 @@ const GenericTableWithData = <
   noData,
   rowsPerPageOptions,
   tableDisplayOptionButtons,
-  applyOptionalColumns,
   onCompleted,
   paginationItemName,
   filterRows,
@@ -157,55 +145,16 @@ const GenericTableWithData = <
   const [filterValues, setFilterValues] = useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
 
-  const currentPath = useCurrentPath();
-
-  const defaultOptionalCols = useMemo(() => {
-    const storedOptionalCols = currentPath
-      ? getStoredPathParams(currentPath)?.optionalColumns
-      : undefined;
-
-    // If local storage has optional columns for this path, return them
-    if (storedOptionalCols) return storedOptionalCols;
-
-    // Otherwise, default to any optional columns that are not defaultHidden
-    return compact(
-      columnsProp
-        ?.filter((col) => col.optional && !col.defaultHidden)
-        .map((col) => getColumnKey(col)) || []
-    );
-  }, [columnsProp, currentPath]);
-
-  // Store optional column state in BOTH search params and local storage.
-  // This is so that users can both
-  // - get the same view on their data every time they visit a table
-  // - and share/bookmark URLs that keep the same view into the data.
-  // We plan to eventually add other table controls, like sort/filter.
-  const [paramValues, setParamValues] = useSearchParamsState(
-    {
-      optionalColumns: {
-        type: 'string',
-        multiple: true,
-        default: defaultOptionalCols,
-      },
-    },
-    true
-  );
-
-  const setIncludedOptionalColumns = useCallback(
-    (optionalColumns: string[]) => {
-      // Store in both local storage and search params
-      if (currentPath) {
-        setStoredPathParams(currentPath, { optionalColumns });
-      }
-      setParamValues({ optionalColumns });
-    },
-    [currentPath, setParamValues]
-  );
-
-  const includedOptionalColumns = useMemo(
-    () => paramValues.optionalColumns,
-    [paramValues]
-  );
+  // Careful: Optional column behavior is undefined/unsupported when columns are provided by
+  // getColumnDefs instead of the columns prop. This is because `getColumnDefs` receives `rows`,
+  // but `rows` comes from the graphql query that receives `optionalQueryVariables`,
+  // leading to a circular dependency.
+  const {
+    optionalColumns,
+    includedOptionalColumns,
+    setIncludedOptionalColumns,
+    optionalQueryVariables,
+  } = useOptionalColumns<RowDataType, QueryVariables>({ columns: columnsProp });
 
   // if the filters change, return to the first page
   useEffect(() => {
@@ -236,9 +185,7 @@ const GenericTableWithData = <
       sortOrder: effectiveSortOrder,
       offset,
       limit,
-      ...(applyOptionalColumns
-        ? applyOptionalColumns(includedOptionalColumns)
-        : {}),
+      ...optionalQueryVariables,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
@@ -317,20 +264,12 @@ const GenericTableWithData = <
     if (getColumnDefs) return getColumnDefs(rows, loading);
     if (recordType) return allFieldColumns(recordType);
     console.warn('No columns specified');
-    return [] as ColumnDef<RowDataType>[];
+    return [] as GenericTableWithDataColumnDef<RowDataType, QueryVariables>[];
   }, [columnsProp, getColumnDefs, loading, recordType, rows]);
-
-  const optionalColumns = useMemo(
-    () => (columnDefs || []).filter((col) => col.optional),
-    [columnDefs]
-  );
 
   const showColumnDefs = useMemo(() => {
     return columnDefs.filter((col) => {
-      return !(
-        col.optional &&
-        !includedOptionalColumns.includes(getColumnKey(col) || '')
-      );
+      return !(col.optional && !includedOptionalColumns.includes(col.key));
     });
   }, [columnDefs, includedOptionalColumns]);
 
@@ -413,9 +352,9 @@ const GenericTableWithData = <
                       showOptionalColumns
                         ? {
                             columns: optionalColumns.map((col) => ({
-                              value: getColumnKey(col) || '',
+                              value: col.key,
                               header: col.header,
-                              defaultHidden: !!col.defaultHidden,
+                              defaultHidden: !!col.optional?.defaultHidden,
                             })),
                             columnsValue: includedOptionalColumns,
                             setColumnsValue: setIncludedOptionalColumns,

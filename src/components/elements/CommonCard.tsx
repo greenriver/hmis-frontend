@@ -1,6 +1,6 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { Box, SxProps } from '@mui/system';
-import React, { ReactNode } from 'react';
+import { Box, StackProps, SxProps } from '@mui/system';
+import React, { KeyboardEventHandler, ReactNode, useCallback } from 'react';
 
 export interface CommonCardProps {
   title?: ReactNode;
@@ -11,6 +11,7 @@ export interface CommonCardProps {
   padContent?: boolean; // Whether content is padded
   onClickHeader?: VoidFunction;
   sx?: SxProps;
+  cardHeaderProps?: Omit<StackProps, 'direction' | 'spacing' | 'sx'>;
 }
 
 /**
@@ -32,6 +33,7 @@ const CommonCard: React.FC<CommonCardProps> = ({
   onClickHeader,
   actions,
   sx,
+  cardHeaderProps,
 }) => {
   const hasHeaderBorder = headerVariant === 'border';
 
@@ -44,19 +46,34 @@ const CommonCard: React.FC<CommonCardProps> = ({
       title
     );
 
+  // If onClickHeader is provided, add keyboard support for Enter and Space
+  const onKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (!onClickHeader) return;
+      if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
+        onClickHeader();
+      }
+    },
+    [onClickHeader]
+  );
+
+  const clickableHeaderProps = onClickHeader && {
+    onClick: onClickHeader,
+    onKeyDown,
+    role: 'button',
+    tabIndex: 0,
+    sx: { cursor: 'pointer', '&:hover': { backgroundColor: 'primary.100' } },
+  };
+
   const cardHeader = cardTitle && (
     <Stack
       direction='row'
       justifyContent='space-between'
       alignItems='center'
-      onClick={onClickHeader}
+      {...clickableHeaderProps}
+      {...cardHeaderProps}
       sx={{
-        ...(onClickHeader
-          ? {
-              cursor: 'pointer',
-              '&:hover': { backgroundColor: 'primary.100' },
-            }
-          : {}),
+        ...clickableHeaderProps?.sx,
         ...(hasHeaderBorder
           ? {
               borderBottomColor: 'borders.light',
