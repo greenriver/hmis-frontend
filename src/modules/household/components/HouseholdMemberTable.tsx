@@ -70,6 +70,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
   },
   relationshipToHoh: {
     header: 'Relationship to HoH',
+    key: 'relationship',
     render: (hc: HouseholdClientFieldsFragment) => (
       <HmisEnum
         value={hc.relationshipToHoH}
@@ -84,6 +85,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     unitIds = [...new Set(unitIds)];
     return {
       header: `Assigned Units (${unitIds.length})`,
+      key: 'assignedUnit',
       hide: !householdMembers.some((m) => m.enrollment.currentUnit),
       render: (hc: HouseholdClientFieldsFragment) =>
         hc.enrollment.currentUnit?.name,

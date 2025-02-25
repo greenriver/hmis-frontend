@@ -85,12 +85,14 @@ export const ENROLLMENT_COLUMNS: {
 } = {
   entryDate: {
     header: 'Entry Date',
+    key: 'entryDate',
     render: (e) => (
       <DateWithRelativeTooltip dateString={e.entryDate} preciseTime={false} />
     ),
   },
   exitDate: {
     header: 'Exit Date',
+    key: 'exitDate',
     optional: {
       defaultHidden: true,
     },
@@ -107,10 +109,12 @@ export const ENROLLMENT_COLUMNS: {
   },
   enrollmentStatus: {
     header: 'Status',
+    key: 'status',
     render: (e) => <EnrollmentStatus enrollment={e} />,
   },
   moveInDate: {
     header: 'Move-in Date',
+    key: 'moveInDate',
     optional: {
       defaultHidden: true,
       queryVariableField: 'includeMoveInDate',
@@ -128,6 +132,7 @@ export const ENROLLMENT_COLUMNS: {
   },
   lastContactDate: {
     header: 'Last Contact Date',
+    key: 'lastContactDate',
     optional: {
       defaultHidden: true,
       queryVariableField: 'includeLastContact',
@@ -173,6 +178,7 @@ export const WITH_ENROLLMENT_COLUMNS: {
 } = {
   entryDate: {
     header: ENROLLMENT_COLUMNS.entryDate.header,
+    key: 'entryDate',
     render: (objectWithEnrollment: WithEnrollment) => (
       <DateWithRelativeTooltip
         dateString={objectWithEnrollment.enrollment.entryDate}
@@ -182,6 +188,7 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   exitDate: {
     header: ENROLLMENT_COLUMNS.exitDate.header,
+    key: 'exitDate',
     optional: {
       defaultHidden: true,
     },
@@ -197,10 +204,12 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   enrollmentStatus: {
     header: ENROLLMENT_COLUMNS.enrollmentStatus.header,
+    key: 'status',
     render: (e) => <EnrollmentStatus enrollment={e.enrollment} />,
   },
   moveInDate: {
     header: ENROLLMENT_COLUMNS.moveInDate.header,
+    key: 'moveInDate',
     optional: {
       defaultHidden: true,
       queryVariableField: 'includeMoveInDate',
@@ -218,6 +227,7 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   lastContactDate: {
     header: ENROLLMENT_COLUMNS.lastContactDate.header,
+    key: 'lastContactDate',
     optional: {
       defaultHidden: true,
       queryVariableField: 'includeLastContact',
@@ -238,6 +248,7 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   organizationName: {
     header: 'Organization Name',
+    key: 'organizationName',
     optional: {
       defaultHidden: true,
       queryVariableField: 'includeOrganizationName',

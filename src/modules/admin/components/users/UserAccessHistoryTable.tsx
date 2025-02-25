@@ -19,11 +19,13 @@ import {
 const columns: ColumnDef<UserActivityLogFieldsFragment>[] = [
   {
     header: 'Date Accessed',
+    key: 'dateAccessed',
     render: ({ createdAt }) => parseAndFormatDateTime(createdAt),
   },
   {
     header: 'IP Address',
     render: 'ipAddress',
+    key: 'ipAddress',
   },
   {
     header: (
@@ -32,6 +34,7 @@ const columns: ColumnDef<UserActivityLogFieldsFragment>[] = [
         <ContextualListExpansionButton />
       </Stack>
     ),
+    key: 'recordsAccessed',
     tableCellProps: {
       sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[50] },
     },

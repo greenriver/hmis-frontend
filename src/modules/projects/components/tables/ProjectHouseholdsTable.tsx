@@ -46,6 +46,7 @@ export type HouseholdFields = NonNullable<
 
 export const ENROLLMENT_RELATIONSHIP_COL = {
   header: 'Relationship',
+  key: 'relationship',
   render: (e: Pick<ProjectEnrollmentFields, 'id' | 'relationshipToHoH'>) => (
     <HmisEnum
       key={e.id}

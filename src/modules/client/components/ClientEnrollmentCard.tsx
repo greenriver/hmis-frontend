@@ -77,6 +77,7 @@ const RecentEnrollments = ({
         },
         {
           header: 'Enrollment Period',
+          key: 'enrollmentPeriod',
           render: (e) => (
             <EnrollmentDateRangeWithStatus
               enrollment={e}

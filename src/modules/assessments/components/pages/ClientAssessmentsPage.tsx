@@ -27,6 +27,7 @@ const COLUMNS: ColumnDef<ClientAssessmentType>[] = [
   ASSESSMENT_COLUMNS.lastUpdated,
   {
     header: 'Project Name',
+    key: 'projectName',
     render: (row: ClientAssessmentType) => row.enrollment.projectName,
   },
   {

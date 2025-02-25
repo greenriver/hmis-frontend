@@ -20,6 +20,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const COLUMNS: ColumnDef<ProjectCurrentLivingSituationFieldsFragment>[] = [
   {
     header: 'Client Name',
+    key: 'clientName',
     sticky: 'left',
     render: (cls: ProjectCurrentLivingSituationFieldsFragment) => (
       <ClientName client={cls.client} />

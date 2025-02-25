@@ -28,9 +28,10 @@ const AssociatedHouseholdMembers = ({
     return [
       CLIENT_COLUMNS.name,
       CLIENT_COLUMNS.age,
-      { header: 'Project', render: (row) => row.projectName },
+      { header: 'Project', key: 'project', render: (row) => row.projectName },
       {
         header: 'Date Associated',
+        key: 'dateAssociated',
         render: (row) => (
           <RelativeDate
             dateString={row.enrollment.entryDate}

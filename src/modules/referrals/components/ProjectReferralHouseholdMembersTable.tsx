@@ -44,12 +44,14 @@ const ReferralHouseholdMembersTable: React.FC<Props> = ({ rows }) => {
       },
       {
         header: 'Name',
+        key: 'name',
         render: ({ client }: Row) => (
           <ClientName client={client} linkToProfile />
         ),
       },
       {
         header: 'MCI ID',
+        key: 'mciId',
         hide: !hasAnyMci,
         render: ({ client }: Row) => (
           <Stack gap={0.8}>
@@ -63,6 +65,7 @@ const ReferralHouseholdMembersTable: React.FC<Props> = ({ rows }) => {
       },
       {
         header: 'Relationship to HoH',
+        key: 'relationship',
         render: (row: Row) => (
           <HmisEnum
             value={row.relationshipToHoH}
@@ -72,12 +75,14 @@ const ReferralHouseholdMembersTable: React.FC<Props> = ({ rows }) => {
       },
       {
         header: 'DOB / Age',
+        key: 'dob',
         render: ({ client }: Row) => (
           <ClientDobAge client={client} alwaysShow />
         ),
       },
       {
         header: 'Open Enrollments',
+        key: 'openEnrollments',
         render: (row: Row) => {
           return (
             <EnrollmentSummaryCount

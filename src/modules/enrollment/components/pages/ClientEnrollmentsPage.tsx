@@ -49,15 +49,18 @@ const CLIENT_ENROLLMENT_COLUMNS: {
 } = {
   projectName: {
     header: 'Project Name',
+    key: 'projectName',
     render: 'projectName',
     sticky: 'left',
   },
   organizationName: {
     header: 'Organization Name',
+    key: 'organizationName',
     render: 'organizationName',
   },
   projectType: {
     header: 'Project Type',
+    key: 'projectType',
     render: ({ projectType }) => (
       <ProjectTypeChip projectType={projectType} sx={{ px: 0.5 }} />
     ),
@@ -67,6 +70,7 @@ const CLIENT_ENROLLMENT_COLUMNS: {
     // Ideally this could be now removed in favor of the optional columns Move-in Date and Last Contact Date,
     // but we are avoiding that product churn (which would require additional training) for now
     header: 'Enrollment Details',
+    key: 'enrollmentDetails',
     render: ({
       moveInDate,
       lastBedNightDate,

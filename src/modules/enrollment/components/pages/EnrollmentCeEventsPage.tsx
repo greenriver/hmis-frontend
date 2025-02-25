@@ -27,17 +27,20 @@ import {
 const COLUMNS: ColumnDef<EventFieldsFragment>[] = [
   {
     header: 'Event Date',
+    key: 'date',
     render: (e: EventFieldsFragment) => parseAndFormatDate(e.eventDate),
     sticky: 'left',
   },
   {
     header: 'Event Type',
+    key: 'type',
     render: (e: EventFieldsFragment) => (
       <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />
     ),
   },
   {
     header: 'Referral Result',
+    key: 'referralResult',
     render: (e: EventFieldsFragment) => eventReferralResult(e),
   },
 ];

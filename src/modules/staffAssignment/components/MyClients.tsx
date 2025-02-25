@@ -36,15 +36,18 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
   {
     header: 'Head of Household',
     render: (assignment) => clientBriefName(memoizedHoh(assignment).client),
+    key: 'headOfHousehold',
   },
   {
     header: 'Members',
     render: (assignment) => assignment.household.householdClients.length,
+    key: 'members',
   },
   {
     header: 'Project',
     render: (assignment) =>
       memoizedHoh(assignment).enrollment.project.projectName,
+    key: 'project',
   },
   {
     ...WITH_ENROLLMENT_COLUMNS.entryDate,
@@ -61,6 +64,7 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
     render: (assignment) => (
       <HouseholdStatus household={assignment.household} />
     ),
+    key: 'status',
   },
   {
     ...WITH_ENROLLMENT_COLUMNS.moveInDate,

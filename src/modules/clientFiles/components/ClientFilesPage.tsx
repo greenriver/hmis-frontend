@@ -77,6 +77,7 @@ const ClientFilesPage = () => {
     return [
       {
         header: 'File Name',
+        key: 'fileName',
         render: (file) => (
           <Typography variant='inherit'>{file.name}</Typography>
         ),
@@ -86,6 +87,7 @@ const ClientFilesPage = () => {
       },
       {
         header: 'File Tags',
+        key: 'tags',
         render: (file) =>
           pickListData ? (
             <Box sx={{ display: 'flex', gap: 0.5 }}>
@@ -107,6 +109,7 @@ const ClientFilesPage = () => {
       },
       {
         header: 'Project Name',
+        key: 'projectName',
         render: ({ enrollment }) =>
           enrollment ? (
             enrollment.projectName
@@ -116,6 +119,7 @@ const ClientFilesPage = () => {
       },
       {
         header: 'Uploaded',
+        key: 'uploaded',
         render: ({ dateCreated, uploadedBy }) => {
           const byUser = uploadedBy?.name
             ? `by ${uploadedBy?.name}`
@@ -132,6 +136,7 @@ const ClientFilesPage = () => {
       },
       {
         header: 'Organization Name',
+        key: 'organizationName',
         optional: {
           defaultHidden: true,
         },

@@ -38,20 +38,24 @@ const PROJECT_COLUMNS: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Name',
     render: 'projectName',
+    key: 'projectName',
     sticky: 'left',
   },
   {
     header: 'Organization Name',
+    key: 'organizationName',
     render: (row) => row.organization.organizationName,
   },
   {
     header: 'Project Type',
+    key: 'projectType',
     render: (project: ProjectAllFieldsFragment) => (
       <ProjectTypeChip projectType={project.projectType} />
     ),
   },
   {
     header: 'Operating Period',
+    key: 'operatingPeriod',
     render: (project: ProjectAllFieldsFragment) =>
       parseAndFormatDateRange(
         project.operatingStartDate,
@@ -63,11 +67,13 @@ const PROJECT_COLUMNS: ColumnDef<ProjectAllFieldsFragment>[] = [
 const ORGANIZATION_COLUMNS: ColumnDef<OrganizationType>[] = [
   {
     header: 'Organization Name',
+    key: 'organizationName',
     render: 'organizationName',
     sticky: 'left',
   },
   {
     header: 'Project Count',
+    key: 'projectCount',
     render: 'projects.nodesCount' as keyof OrganizationType,
   },
 ];
