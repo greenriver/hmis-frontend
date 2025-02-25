@@ -58,7 +58,7 @@ export type GenericTableWithDataColumnDef<RowType, QueryVariables> = {
   // configuration for making this column Optional
   optional?: {
     defaultHidden: boolean;
-    queryVariableField?: keyof QueryVariables; // field to set on QueryVariables if col is included. Not required, because some tables need to query optional column data even when the optional col is hidden, such as Exit Date
+    queryVariableField?: keyof QueryVariables; // field to set on QueryVariables if col is included. Not required; some tables need to query optional column data even when the optional col is hidden, such as Enrollment Exit Date
     queryVariableValue?: any; // value to set on QueryVariables if col is included (default: true)
   };
 } & ColumnDef<RowType>;
