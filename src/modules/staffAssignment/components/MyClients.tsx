@@ -4,15 +4,11 @@ import { memoize } from 'lodash-es';
 import React from 'react';
 import { renderCellContents } from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import {
-  ENROLLMENT_COLUMNS,
-  WITH_ENROLLMENT_COLUMNS,
-} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetUserStaffAssignmentsDocument,
@@ -138,24 +134,6 @@ const MyClients = () => {
           rowName={(row) => clientBriefName(memoizedHoh(row).client)}
           rowActionTitle='View Household'
           showOptionalColumns
-          applyOptionalColumns={(cols) => {
-            const result: Partial<GetUserStaffAssignmentsQueryVariables> = {};
-
-            if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.moveInDate)))
-              result.includeMoveInDate = true;
-
-            if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.lastContactDate)))
-              result.includeLastContact = true;
-
-            if (
-              cols.includes(
-                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
-              )
-            )
-              result.includeOrganizationName = true;
-
-            return result;
-          }}
         />
       </Paper>
     </>

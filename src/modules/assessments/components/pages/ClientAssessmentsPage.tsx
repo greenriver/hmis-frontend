@@ -31,8 +31,9 @@ const COLUMNS: ColumnDef<ClientAssessmentType>[] = [
   },
   {
     ...WITH_ENROLLMENT_COLUMNS.entryDate,
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+    },
   },
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.organizationName,
@@ -91,7 +92,6 @@ const ClientAssessmentsPage = () => {
           recordType='Assessment'
           defaultSortOption={AssessmentSortOption.AssessmentDate}
           showOptionalColumns
-          // With this idea we now don't need to provide applyOptionalColumns
         />
       </Paper>
     </>

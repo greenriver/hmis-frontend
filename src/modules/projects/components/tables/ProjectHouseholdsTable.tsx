@@ -260,24 +260,6 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
       filters={filters}
       recordType='Household'
       showOptionalColumns
-      applyOptionalColumns={(cols) => {
-        const result: Partial<GetProjectHouseholdsQueryVariables> = {};
-
-        if (cols.includes(HOUSEHOLD_ASSIGNED_STAFF_COL.key || ''))
-          result.includeStaffAssignment = true;
-
-        if (cols.includes(getColumnKey(WITH_ENROLLMENT_COLUMNS.moveInDate))) {
-          result.includeMoveInDate = true;
-        }
-
-        if (
-          cols.includes(getColumnKey(WITH_ENROLLMENT_COLUMNS.lastContactDate))
-        ) {
-          result.includeLastContact = true;
-        }
-
-        return result;
-      }}
     />
   );
 };

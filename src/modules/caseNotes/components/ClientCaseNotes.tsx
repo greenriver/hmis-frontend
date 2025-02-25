@@ -2,7 +2,6 @@ import { Paper } from '@mui/material';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
@@ -36,8 +35,9 @@ const COLUMNS: ColumnDef<Row>[] = [
   CASE_NOTE_COLUMNS.NoteContentPreview,
   {
     ...WITH_ENROLLMENT_COLUMNS.entryDate,
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+    },
   },
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.organizationName,
@@ -88,19 +88,6 @@ const ClientCaseNotes = () => {
           paginationItemName='case note'
           showTopToolbar
           showOptionalColumns
-          applyOptionalColumns={(cols) => {
-            const result: Partial<GetClientCaseNotesQueryVariables> = {};
-
-            if (
-              cols.includes(
-                getColumnKey(WITH_ENROLLMENT_COLUMNS.organizationName)
-              )
-            ) {
-              result.includeOrganizationName = true;
-            }
-
-            return result;
-          }}
         />
       </Paper>
       {viewRecordDialog()}

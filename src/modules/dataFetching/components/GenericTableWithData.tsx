@@ -5,16 +5,9 @@ import {
   WatchQueryFetchPolicy,
 } from '@apollo/client';
 import { Box, Stack } from '@mui/material';
-import {
-  compact,
-  get,
-  isEmpty,
-  isEqual,
-  lowerFirst,
-  startCase,
-} from 'lodash-es';
+import { get, isEmpty, isEqual, lowerFirst, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { FilterType } from '../types';
 
@@ -30,6 +23,7 @@ import TableFilters, {
 } from '@/components/elements/tableFilters/TableFilters';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
+import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColumns';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
@@ -87,7 +81,6 @@ export interface Props<
     SortOptionsType
   >['tableDisplayOptionButtons'];
   showOptionalColumns?: boolean;
-  applyOptionalColumns?: (columns: string[]) => Partial<QueryVariables>;
   onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
 }
@@ -132,7 +125,6 @@ const GenericTableWithData = <
   noData,
   rowsPerPageOptions,
   tableDisplayOptionButtons,
-  applyOptionalColumns,
   onCompleted,
   paginationItemName,
   filterRows,
@@ -150,23 +142,13 @@ const GenericTableWithData = <
   const previousQueryVariables = usePrevious(queryVariables);
   const [filterValues, setFilterValues] = useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
-  const [includedOptionalColumns, setIncludedOptionalColumns] = useState<
-    ColumnDef<RowDataType>[]
-  >(
-    compact(
-      columnsProp?.filter((col) => col.optional && !col.defaultHidden) || []
-    )
-  );
 
-  const defaultApplyOptionalCols = useCallback(
-    (optionalColumnFlags: string[]) => {
-      return optionalColumnFlags.reduce((acc: any, key) => {
-        acc[key] = true;
-        return acc as QueryVariables;
-      }, {});
-    },
-    []
-  );
+  const {
+    includedOptionalColumns,
+    setIncludedOptionalColumns,
+    optionalQueryVariables,
+  } = useOptionalColumns<RowDataType, QueryVariables>({ columns: columnsProp });
+  // todo @martha what if getColumnDefs is provided
 
   // if the filters change, return to the first page
   useEffect(() => {
@@ -184,11 +166,6 @@ const GenericTableWithData = <
   const offset = page * rowsPerPage;
   const limit = rowsPerPage;
 
-  const optionalColumnFieldFlags = useMemo(
-    () => compact(includedOptionalColumns.map((c) => c.optionalFieldFlag)),
-    [includedOptionalColumns]
-  );
-
   const { data, loading, error, networkStatus } = useQuery<
     Query,
     QueryVariables
@@ -202,9 +179,7 @@ const GenericTableWithData = <
       sortOrder: effectiveSortOrder,
       offset,
       limit,
-      ...(applyOptionalColumns
-        ? applyOptionalColumns(optionalColumnFieldFlags)
-        : defaultApplyOptionalCols(optionalColumnFieldFlags)),
+      ...optionalQueryVariables,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
@@ -287,13 +262,17 @@ const GenericTableWithData = <
   }, [columnsProp, getColumnDefs, loading, recordType, rows]);
 
   const optionalColumns = useMemo(
+    // todo @martha - move into hook?
     () => (columnDefs || []).filter((col) => col.optional),
     [columnDefs]
   );
 
   const showColumnDefs = useMemo(() => {
     return columnDefs.filter((col) => {
-      return !(col.optional && !includedOptionalColumns.includes(col));
+      return !(
+        col.optional &&
+        !includedOptionalColumns.includes(getColumnKey(col) || '')
+      );
     });
   }, [columnDefs, includedOptionalColumns]);
 
@@ -378,17 +357,10 @@ const GenericTableWithData = <
                             columns: optionalColumns.map((col) => ({
                               value: getColumnKey(col) || '',
                               header: col.header,
-                              defaultHidden: !!col.defaultHidden,
+                              defaultHidden: !!col.optional?.defaultHidden,
                             })),
-                            columnsValue: includedOptionalColumns.map((c) =>
-                              getColumnKey(c)
-                            ),
-                            setColumnsValue: (columnKeys) => {
-                              const cols = columnsProp?.filter((c) =>
-                                columnKeys.includes(getColumnKey(c))
-                              );
-                              setIncludedOptionalColumns(cols || []);
-                            },
+                            columnsValue: includedOptionalColumns,
+                            setColumnsValue: setIncludedOptionalColumns,
                           }
                         : undefined
                     }

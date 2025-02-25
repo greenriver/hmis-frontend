@@ -15,12 +15,13 @@ type BaseColumnDef<T> = {
   textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
   tableCellProps?: TableCellProps | ((row: T) => TableCellProps);
   headerCellProps?: TableCellProps;
-  optional?: boolean;
-  defaultHidden?: boolean;
   sticky?: 'left' | 'right';
-  // If the column is optional, then you can optionally provide an optionalFieldFlag, which tells GenericTableWithData how to update the query variables.
-  // Discuss this idea. It's not ideal because ColumnDef is used by GenericTable, but this concept is specific to GenericTableWithData.
-  optionalFieldFlag?: string;
+  // configuration for making this column Optional. Only works with GenericTableWithData, will be ignored in GenericTable
+  optional?: {
+    defaultHidden: boolean;
+    queryVariableField?: string; // field to set on QueryVariables if col is included. Not required, because some tables need to query optional column data even when the optional col is hidden, such as Exit Date
+    queryVariableValue?: any; // value to set on QueryVariables if col is included (default: true)
+  };
 };
 
 export type ColumnDef<T> =

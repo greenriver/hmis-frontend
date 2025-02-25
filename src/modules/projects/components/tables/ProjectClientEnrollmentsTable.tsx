@@ -6,7 +6,6 @@ import {
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import { getColumnKey } from '@/components/elements/table/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ClientEnrollmentTableFields } from '@/modules/enrollment/components/pages/ClientEnrollmentsPage';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
@@ -45,8 +44,10 @@ const isHouseholdWithStaff = (
 
 export const HOUSEHOLD_ASSIGNED_STAFF_COL = {
   header: 'Assigned Staff',
-  optional: true,
-  defaultHidden: true,
+  optional: {
+    defaultHidden: true,
+    queryVariableField: 'includeStaffAssignment',
+  },
   key: 'assigned_staff',
   render: (hh: HouseholdWithStaffAssignmentsFragment) => {
     if (!hh.staffAssignments?.nodes.length) return;
@@ -90,8 +91,9 @@ export const ENROLLMENT_COLUMNS: {
   },
   exitDate: {
     header: 'Exit Date',
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+    },
     render: (e) => {
       if (e.exitDate) {
         return (
@@ -109,8 +111,10 @@ export const ENROLLMENT_COLUMNS: {
   },
   moveInDate: {
     header: 'Move-in Date',
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeMoveInDate',
+    },
     render: (e) => {
       if (e.moveInDate) {
         return (
@@ -124,8 +128,10 @@ export const ENROLLMENT_COLUMNS: {
   },
   lastContactDate: {
     header: 'Last Contact Date',
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeLastContact',
+    },
     render: (e) => {
       if ('lastContact' in e && e.lastContact) {
         return (
@@ -176,8 +182,9 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   exitDate: {
     header: ENROLLMENT_COLUMNS.exitDate.header,
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+    },
     render: (objectWithEnrollment: WithEnrollment) => {
       if (objectWithEnrollment.enrollment.exitDate)
         return (
@@ -194,8 +201,10 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   moveInDate: {
     header: ENROLLMENT_COLUMNS.moveInDate.header,
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeMoveInDate',
+    },
     render: (e) => {
       if (e.enrollment.moveInDate) {
         return (
@@ -209,8 +218,10 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   lastContactDate: {
     header: ENROLLMENT_COLUMNS.lastContactDate.header,
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeLastContact',
+    },
     render: (e) => {
       if (e.enrollment.lastContact) {
         return (
@@ -227,9 +238,10 @@ export const WITH_ENROLLMENT_COLUMNS: {
   },
   organizationName: {
     header: 'Organization Name',
-    optionalFieldFlag: 'includeOrganizationName',
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeOrganizationName',
+    },
     render: (e) => {
       return e.enrollment.organizationName;
     },
@@ -313,20 +325,6 @@ const ProjectClientEnrollmentsTable = ({
       filters={filters}
       defaultSortOption={EnrollmentSortOption.MostRecent}
       showOptionalColumns
-      applyOptionalColumns={(cols) => {
-        const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
-
-        if (cols.includes(getColumnKey(HOUSEHOLD_ASSIGNED_STAFF_COL)))
-          result.includeStaffAssignment = true;
-
-        if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.moveInDate)))
-          result.includeMoveInDate = true;
-
-        if (cols.includes(getColumnKey(ENROLLMENT_COLUMNS.lastContactDate)))
-          result.includeLastContact = true;
-
-        return result;
-      }}
     />
   );
 };
