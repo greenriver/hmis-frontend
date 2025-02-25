@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useImperativeHandle } from 'react';
+import { forwardRef, ReactNode, useCallback, useImperativeHandle } from 'react';
 
 import { DefaultValues, FormProvider } from 'react-hook-form';
 import useFormDefinitionHandlers, {
@@ -158,8 +158,12 @@ const DynamicFormWithHandlers = forwardRef<
 // load remote data (picklists) to augment form data (initialValues => defaultValues)
 const DynamicFormEnrichedDataLoader = forwardRef<
   DynamicFormRef,
-  DynamicFormProps & { initialValues?: InitialValues }
->(({ initialValues, ...props }, ref) => {
+  DynamicFormProps & {
+    initialValues?: InitialValues;
+    // Loading element to render while the form is initially loading (due to PickLists being fetched). Named "initial" to distinguish from existing `loading` prop which typically is used to indicate that the form is submitting.
+    initialLoadingElement?: ReactNode;
+  }
+>(({ initialValues, initialLoadingElement, ...props }, ref) => {
   const { defaultValues, loading } = useEnrichedFormData({
     pickListArgs: props.pickListArgs,
     definition: props.definition,
@@ -168,7 +172,7 @@ const DynamicFormEnrichedDataLoader = forwardRef<
     viewOnly: false,
   });
   if (loading || !defaultValues) {
-    return <Loading />;
+    return initialLoadingElement || <Loading />;
   }
   return (
     <DynamicFormWithHandlers

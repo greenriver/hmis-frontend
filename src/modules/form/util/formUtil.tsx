@@ -74,6 +74,7 @@ import {
   Maybe,
   NoYesReasonsForMissingData,
   PickListOption,
+  PickListType,
   RelatedRecordType,
   RelationshipToHoH,
   ValueBound,
@@ -1489,6 +1490,13 @@ export const parseOccurrencePointFormDefinition = (
     isEditable,
   };
 };
+
+export const itemHasRemotePicklist = (item: FormItem): boolean =>
+  !!item.pickListReference &&
+  Object.values<string>(PickListType).includes(item.pickListReference);
+
+export const formHasAnyRemotePicklists = (itemMap: ItemMap): boolean =>
+  Object.values(itemMap).some(itemHasRemotePicklist);
 
 export const getFormStepperItems = (
   formDefinition: FormDefinitionFieldsFragment | undefined | null,
