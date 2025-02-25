@@ -1,7 +1,7 @@
 import { isDate } from 'date-fns';
 import { isNil } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo } from 'react';
+import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 
 // adapted from https://github.com/jschwindt/react-use-search-params-state/tree/main
@@ -48,8 +48,7 @@ const paramToDate = (
 const paramToValue = (
   paramName: string,
   paramDefinition: SearchParamStateType,
-  searchParams: URLSearchParams,
-  emptyArrays: string[]
+  searchParams: URLSearchParams
 ) => {
   if (paramDefinition.multiple) {
     const paramValue = searchParams.getAll(paramName);
@@ -66,14 +65,13 @@ const paramToValue = (
         : paramValue;
     }
   }
-  if (emptyArrays.includes(paramName)) return [];
+
   return paramDefinition.default;
 };
 
 const getValues = (
   paramsDefinition: SearchParamsStateType,
-  searchParams: URLSearchParams,
-  emptyArrays: string[]
+  searchParams: URLSearchParams
 ) => {
   const values: any = {};
   for (const [paramName, paramDefinition] of Object.entries(paramsDefinition)) {
@@ -85,8 +83,7 @@ const getValues = (
       values[paramName] = paramToValue(
         paramName,
         paramDefinition,
-        searchParams,
-        emptyArrays
+        searchParams
       );
     }
   }
@@ -115,37 +112,38 @@ const getAllCurrentParams = (searchParams: URLSearchParams) => {
  *
  * @param paramsDefinition maps search param names to their definitions,
  * indicating their type and default value
- * @param applyDefaults if true, on load apply the default values from
- * the paramsDefinition to the actual search params that appear the URL bar.
+ * @param initial initial values to set in the search params
  */
 const useSearchParamsState = (
   paramsDefinition: SearchParamsStateType,
-  applyDefaults?: boolean
+  initial?: URLSearchParamsInit
 ) => {
+  // `initial` is NOT passed to `useSearchParams` here; useSearchParams's defaultInit prop
+  // auto-populates its internal state, but not the actual search params that appear in the url.
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // `emptyArrays` is a hack to get around the fact that in URL search params,
-  // empty arrays aren't distinguished from null/undefined values.
-  // For SearchParamStateTypes where multiple is true _and_ there is a default value,
-  // we need this workaround to be able to set the value to empty, instead of just always returning the default.
-  const [emptyArrays, setEmptyArrays] = useState<string[]>([]);
-
-  const values = useMemo(
-    () => getValues(paramsDefinition, searchParams, emptyArrays),
-    [emptyArrays, paramsDefinition, searchParams]
-  );
-
+  // Auto-populate the search params with the initial value
   useEffect(() => {
-    if (!applyDefaults) return;
+    if (!initial) return;
 
     const toUpdate: Record<string, any> = Object.fromEntries(
-      // Find any key/value pairs that are in values, but not in searchParams.
-      // These are default values, so if applyDefaults flag is true, put them in searchParams.
-      Object.entries(values).filter(([key]) => !searchParams.has(key))
+      // Find any key/value pairs that are in initial, but not in searchParams.
+      Object.entries(initial).filter(([key]) => !searchParams.has(key))
     );
 
-    if (Object.keys(toUpdate).length) setSearchParams(toUpdate);
-  }, [applyDefaults, values, searchParams, setSearchParams]);
+    if (Object.keys(toUpdate).length) {
+      // This unfortunately needs to cause an extra render when setting searchParams to the initial value
+      setSearchParams(toUpdate, { replace: true });
+    }
+
+    // Only run on mount, so that we don't prevent the user from overwriting the initial values.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const values = useMemo(
+    () => getValues(paramsDefinition, searchParams),
+    [paramsDefinition, searchParams]
+  );
 
   const setValues = useCallback(
     (newValues: Record<string, any>) => {
@@ -159,13 +157,11 @@ const useSearchParamsState = (
             value = newValues[key] = formatDateForGql(value);
           }
 
-          if (isNil(value) || value === '') {
-            delete currentParams[key];
-            delete newValues[key];
-          }
-          if (Array.isArray(value) && value.length === 0) {
-            // See comments above about setEmptyArrays
-            setEmptyArrays([...emptyArrays, key]);
+          if (
+            isNil(value) ||
+            value === '' ||
+            (Array.isArray(value) && value.length === 0)
+          ) {
             delete currentParams[key];
             delete newValues[key];
           }
@@ -173,7 +169,7 @@ const useSearchParamsState = (
       }
       setSearchParams({ ...currentParams, ...newValues });
     },
-    [emptyArrays, paramsDefinition, searchParams, setSearchParams]
+    [paramsDefinition, searchParams, setSearchParams]
   );
 
   return [values, setValues] as const;

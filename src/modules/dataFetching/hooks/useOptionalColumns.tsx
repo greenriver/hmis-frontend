@@ -32,11 +32,11 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
 
     // Otherwise, default to any optional columns that are not defaultHidden
     return compact(
-      columns
+      optionalColumns
         ?.filter((col) => !col.optional?.defaultHidden)
         .map((col) => col.key) || []
     );
-  }, [columns, currentPath]);
+  }, [optionalColumns, currentPath]);
 
   // Store currently selected optional columns in url search params
   const [paramValues, setParamValues] = useSearchParamsState(
@@ -44,10 +44,12 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
       optionalColumns: {
         type: 'string',
         multiple: true,
-        default: initialOptionalColumns, // todo @martha - make this 'initial', not 'default'
+        default: [],
       },
     },
-    true
+    {
+      optionalColumns: initialOptionalColumns,
+    }
   );
 
   const includedOptionalColumns = useMemo(
@@ -68,9 +70,11 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
 
   // Based on the currently shown optional columns, get the optional query variables that should be included
   const optionalQueryVariables: Partial<QueryVariables> = useMemo(() => {
-    const queryVariableFields = optionalColumns
-      .filter((c) => includedOptionalColumns.includes(c.key))
-      .map((c) => c.optional?.queryVariableField);
+    const queryVariableFields = compact(
+      optionalColumns
+        .filter((c) => includedOptionalColumns.includes(c.key))
+        .map((c) => c.optional?.queryVariableField)
+    );
 
     return queryVariableFields.reduce((acc: any, key) => {
       acc[key] = true;
