@@ -6,6 +6,7 @@ import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { LocalConstants, PickListArgs } from '@/modules/form/types';
 import {
   autofillValues,
+  formHasAnyRemotePicklists,
   getInitialValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
@@ -35,9 +36,16 @@ export const useEnrichedFormData = <T extends FieldValues>({
   // we also calculate itemMap in useComputedData() which is redundant. Could optimize this by sharing the same state
   const itemMap = useMemo(() => getItemMap(definition), [definition]);
 
+  // If form doesn't have any remote picklists, we can skip the fetch
+  const hasRemotePicklists = useMemo(
+    () => formHasAnyRemotePicklists(itemMap),
+    [itemMap]
+  );
+
   const { data: picklistValues, loading } = usePreloadPicklists({
     definition: definition,
     pickListArgs,
+    skip: !hasRemotePicklists,
   });
 
   const [defaultValues] = useState<DefaultValues<T>>(() => {
@@ -60,9 +68,18 @@ export const useEnrichedFormData = <T extends FieldValues>({
   });
 
   // supplement with data from picklist
-  const [result, setResult] = useState<DefaultValues<T> | undefined>(undefined);
+  const [enrichedDefaultValues, setEnrichedDefaultValues] = useState<
+    DefaultValues<T> | undefined
+  >(undefined);
+
   useEffect(() => {
-    if (loading || result) return;
+    // Form has no remote picklists; nothing to enrich
+    if (!hasRemotePicklists) return;
+    // Remote picklists are loading, wait
+    if (loading) return;
+    // Default values have already been enriched
+    if (!!enrichedDefaultValues) return;
+
     const mutation = cloneDeep(defaultValues);
     Object.values(itemMap || {}).forEach(({ pickListReference, linkId }) => {
       const valueCode = mutation[linkId]?.code || mutation[linkId];
@@ -88,8 +105,18 @@ export const useEnrichedFormData = <T extends FieldValues>({
       }
       if (found) mutation[linkId] = found;
     });
-    setResult(mutation);
-  }, [loading, defaultValues, itemMap, picklistValues, result]);
+    setEnrichedDefaultValues(mutation);
+  }, [
+    loading,
+    defaultValues,
+    itemMap,
+    picklistValues,
+    hasRemotePicklists,
+    enrichedDefaultValues,
+  ]);
 
-  return { defaultValues: result, loading };
+  return {
+    defaultValues: hasRemotePicklists ? enrichedDefaultValues : defaultValues,
+    loading,
+  };
 };
