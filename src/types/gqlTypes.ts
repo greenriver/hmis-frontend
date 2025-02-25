@@ -16014,10 +16014,6 @@ export type ClientImageFieldsFragment = {
 export type ClientOmniSearchFieldsFragment = {
   __typename?: 'Client';
   id: string;
-  dob?: string | null;
-  age?: number | null;
-  gender: Array<Gender>;
-  personalId: string;
   lockVersion: number;
   firstName?: string | null;
   middleName?: string | null;
@@ -34166,10 +34162,6 @@ export type OmniSearchClientsQuery = {
     nodes: Array<{
       __typename?: 'Client';
       id: string;
-      dob?: string | null;
-      age?: number | null;
-      gender: Array<Gender>;
-      personalId: string;
       lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
@@ -34210,10 +34202,6 @@ export type GetRecentItemsQuery = {
       | {
           __typename?: 'Client';
           id: string;
-          dob?: string | null;
-          age?: number | null;
-          gender: Array<Gender>;
-          personalId: string;
           lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
@@ -34244,10 +34232,6 @@ export type AddRecentItemMutation = {
       | {
           __typename?: 'Client';
           id: string;
-          dob?: string | null;
-          age?: number | null;
-          gender: Array<Gender>;
-          personalId: string;
           lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
@@ -34275,10 +34259,6 @@ export type ClearRecentItemsMutation = {
       | {
           __typename?: 'Client';
           id: string;
-          dob?: string | null;
-          age?: number | null;
-          gender: Array<Gender>;
-          personalId: string;
           lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
@@ -41093,10 +41073,6 @@ export const ClientImageFragmentDoc = gql`
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
     id
-    dob
-    age
-    gender
-    personalId
     ...ClientName
   }
   ${ClientNameFragmentDoc}
