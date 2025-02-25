@@ -80,9 +80,9 @@ export const useEnrichedFormData = <T extends FieldValues>({
     // Default values have already been enriched
     if (!!enrichedDefaultValues) return;
 
-    const mutation = cloneDeep(defaultValues);
+    const clonedValues = cloneDeep(defaultValues);
     Object.values(itemMap || {}).forEach(({ pickListReference, linkId }) => {
-      const valueCode = mutation[linkId]?.code || mutation[linkId];
+      const valueCode = clonedValues[linkId]?.code || clonedValues[linkId];
       // skip unless there's a value and a value code
       if (!valueCode) return;
       if (!pickListReference) return;
@@ -103,9 +103,9 @@ export const useEnrichedFormData = <T extends FieldValues>({
         );
         return;
       }
-      if (found) mutation[linkId] = found;
+      if (found) clonedValues[linkId] = found;
     });
-    setEnrichedDefaultValues(mutation);
+    setEnrichedDefaultValues(clonedValues);
   }, [
     loading,
     defaultValues,
