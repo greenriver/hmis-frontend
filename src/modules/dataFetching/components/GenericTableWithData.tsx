@@ -143,12 +143,16 @@ const GenericTableWithData = <
   const [filterValues, setFilterValues] = useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
 
+  // Careful: Optional column behavior is undefined/unsupported when columns are provided by
+  // getColumnDefs instead of the columns prop. This is because `getColumnDefs` receives `rows`,
+  // but `rows` comes from the graphql query that receives `optionalQueryVariables`,
+  // leading to a circular dependency.
   const {
+    optionalColumns,
     includedOptionalColumns,
     setIncludedOptionalColumns,
     optionalQueryVariables,
   } = useOptionalColumns<RowDataType, QueryVariables>({ columns: columnsProp });
-  // todo @martha what if getColumnDefs is provided
 
   // if the filters change, return to the first page
   useEffect(() => {
@@ -260,12 +264,6 @@ const GenericTableWithData = <
     console.warn('No columns specified');
     return [] as ColumnDef<RowDataType>[];
   }, [columnsProp, getColumnDefs, loading, recordType, rows]);
-
-  const optionalColumns = useMemo(
-    // todo @martha - move into hook?
-    () => (columnDefs || []).filter((col) => col.optional),
-    [columnDefs]
-  );
 
   const showColumnDefs = useMemo(() => {
     return columnDefs.filter((col) => {

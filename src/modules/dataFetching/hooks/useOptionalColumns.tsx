@@ -8,37 +8,45 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
 }: {
   columns?: ColumnDef<T>[];
 }) {
-  const [currentOptCols, setCurrentOptCols] = useState<ColumnDef<T>[]>(
-    compact(
-      columns?.filter((col) => col.optional && !col.optional.defaultHidden) ||
-        []
-    )
+  // All the column definitions that are marked optional
+  const optionalColumns = useMemo(
+    () => (columns || []).filter((col) => col.optional),
+    [columns]
   );
 
+  // (Internal to this hook) Which optional column defs are currently included
+  const [currentOptColDefs, setCurrentOptColDefs] = useState<ColumnDef<T>[]>(
+    compact(optionalColumns.filter((col) => !col.optional?.defaultHidden) || [])
+  );
+
+  // Map currently included optional column defs to their keys...
   const includedOptionalColumns = useMemo(
-    () => currentOptCols.map((c) => getColumnKey(c)),
-    [currentOptCols]
+    () => currentOptColDefs.map((c) => getColumnKey(c)),
+    [currentOptColDefs]
   );
 
+  // ...and map them back again
   const setIncludedOptionalColumns = useCallback(
     (columnKeys: string[]) => {
       const cols = columns?.filter((c) => columnKeys.includes(getColumnKey(c)));
-      setCurrentOptCols(cols || []);
+      setCurrentOptColDefs(cols || []);
     },
     [columns]
   );
 
+  // Based on the currently shown optional columns, get the optional query variables that should be included
   const optionalQueryVariables = useMemo(() => {
     const queryVariableFields = compact(
-      currentOptCols.map((c) => c.optional?.queryVariableField)
+      currentOptColDefs.map((c) => c.optional?.queryVariableField)
     );
     return queryVariableFields.reduce((acc: any, key) => {
       acc[key] = true;
       return acc as QueryVariables;
     }, {});
-  }, [currentOptCols]);
+  }, [currentOptColDefs]);
 
   return {
+    optionalColumns,
     includedOptionalColumns,
     setIncludedOptionalColumns,
     optionalQueryVariables,
