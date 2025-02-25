@@ -1,11 +1,9 @@
 import { Grid } from '@mui/material';
-import React, { ReactNode, useCallback } from 'react';
+import React, { ReactNode } from 'react';
 
 import { FormDefinitionHandlers } from '../../hooks/useFormDefinitionHandlers';
 import {
-  ChangeType,
   FormValues,
-  ItemChangedFn,
   LocalConstants,
   OverrideableDynamicFieldProps,
   PickListArgs,
@@ -19,7 +17,6 @@ import { FormItem, ItemType } from '@/types/gqlTypes';
 export interface Props {
   horizontal?: boolean;
   visible?: boolean;
-  pickListArgs?: PickListArgs;
   handlers: FormDefinitionHandlers;
   nestingLevel: number;
   item: FormItem;
@@ -27,12 +24,10 @@ export interface Props {
   renderFn?: (children: ReactNode) => ReactNode;
   localConstants?: LocalConstants;
   values: FormValues;
-  itemChanged: ItemChangedFn;
 }
 
 const DynamicViewFormField: React.FC<Props> = ({
   horizontal = false,
-  pickListArgs,
   handlers,
   item,
   nestingLevel,
@@ -40,7 +35,6 @@ const DynamicViewFormField: React.FC<Props> = ({
   renderFn,
   localConstants,
   values,
-  itemChanged,
   ...fieldsProps
 }) => {
   // Recursively render an item
@@ -60,7 +54,6 @@ const DynamicViewFormField: React.FC<Props> = ({
               props={props}
               renderFn={fn}
               values={values}
-              itemChanged={itemChanged}
             />
           )}
           values={values}
@@ -78,10 +71,7 @@ const DynamicViewFormField: React.FC<Props> = ({
               value={values[item.linkId]}
               disabled={isDisabled}
               horizontal={horizontal}
-              pickListArgs={pickListArgs}
               localConstants={localConstants}
-              // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
-              adjustValue={itemChanged}
               {...fieldProps}
             />
           )}
@@ -113,21 +103,6 @@ const DynamicViewFields: React.FC<DynamicViewFieldsProps> = ({
   const definition = handlers.definition;
   const values = handlers.methods.getValues();
 
-  const itemChanged: ItemChangedFn = useCallback(
-    ({ linkId, value: baseValue, type }) => {
-      const item = handlers.itemMap[linkId];
-      let value = baseValue;
-      if (item) {
-        if (item.type === ItemType.Integer) value = parseInt(value) || 0;
-        if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
-      }
-      handlers.methods.setValue(linkId, value, {
-        shouldDirty: type === ChangeType.User,
-      });
-    },
-    [handlers]
-  );
-
   return (
     <>
       {definition.item.map((item) => (
@@ -137,7 +112,6 @@ const DynamicViewFields: React.FC<DynamicViewFieldsProps> = ({
           nestingLevel={0}
           item={item}
           values={values}
-          itemChanged={itemChanged}
           {...props}
         />
       ))}
