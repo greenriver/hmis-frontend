@@ -18,12 +18,6 @@ export type ColumnDef<T> = {
   tableCellProps?: TableCellProps | ((row: T) => TableCellProps);
   headerCellProps?: TableCellProps;
   sticky?: 'left' | 'right';
-  // configuration for making this column Optional. Only works with GenericTableWithData, will be ignored in GenericTable
-  optional?: {
-    defaultHidden: boolean;
-    queryVariableField?: string; // field to set on QueryVariables if col is included. Not required, because some tables need to query optional column data even when the optional col is hidden, such as Exit Date
-    queryVariableValue?: any; // value to set on QueryVariables if col is included (default: true)
-  };
 };
 
 export function isPrimitive<T>(value: any): value is AttributeName<T> {

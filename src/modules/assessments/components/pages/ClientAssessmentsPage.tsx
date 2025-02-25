@@ -1,7 +1,6 @@
 import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
@@ -11,6 +10,7 @@ import {
 } from '@/modules/assessments/util';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription, entryExitRange } from '@/modules/hmis/hmisUtil';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
@@ -21,7 +21,10 @@ import {
   GetClientAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
 
-const COLUMNS: ColumnDef<ClientAssessmentType>[] = [
+const COLUMNS: GenericTableWithDataColumnDef<
+  ClientAssessmentType,
+  GetClientAssessmentsQueryVariables
+>[] = [
   { ...ASSESSMENT_COLUMNS.date, sticky: 'left' },
   ASSESSMENT_COLUMNS.type,
   ASSESSMENT_COLUMNS.lastUpdated,

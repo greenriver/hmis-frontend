@@ -9,14 +9,13 @@ import { get, isEmpty, isEqual, lowerFirst, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { FilterType } from '../types';
+import { FilterType, GenericTableWithDataColumnDef } from '../types';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import Pagination from '@/components/elements/table/Pagination';
-import { ColumnDef } from '@/components/elements/table/types';
 import { getColumnKey } from '@/components/elements/table/util';
 import TableFilters, {
   TableFiltersProps,
@@ -51,11 +50,13 @@ export interface Props<
     | 'paginated'
     | 'noData'
     | 'verticalHiddenHeader'
+    | 'columns'
   > {
+  columns?: GenericTableWithDataColumnDef<RowDataType, QueryVariables>[];
   getColumnDefs?: (
     rows: RowDataType[],
     loading?: boolean
-  ) => ColumnDef<RowDataType>[]; // dynamically define column defs based on current data
+  ) => GenericTableWithDataColumnDef<RowDataType, QueryVariables>[]; // dynamically define column defs based on current data
   filters?: TableFilterType<FilterOptionsType>;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
@@ -85,7 +86,9 @@ export interface Props<
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
 }
 
-function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
+function allFieldColumns<T, QueryVariables>(
+  recordType: string
+): GenericTableWithDataColumnDef<T, QueryVariables>[] {
   const schema = getSchemaForType(recordType);
   if (!schema) return [];
 
@@ -262,7 +265,7 @@ const GenericTableWithData = <
     if (getColumnDefs) return getColumnDefs(rows, loading);
     if (recordType) return allFieldColumns(recordType);
     console.warn('No columns specified');
-    return [] as ColumnDef<RowDataType>[];
+    return [] as GenericTableWithDataColumnDef<RowDataType, QueryVariables>[];
   }, [columnsProp, getColumnDefs, loading, recordType, rows]);
 
   const showColumnDefs = useMemo(() => {

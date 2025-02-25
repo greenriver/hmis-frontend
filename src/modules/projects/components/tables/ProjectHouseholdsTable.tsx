@@ -28,6 +28,7 @@ import {
   HOUSEHOLD_ASSIGNED_STAFF_COL,
   ProjectEnrollmentFields,
   WITH_ENROLLMENT_COLUMNS,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS,
 } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -69,7 +70,7 @@ const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
-  WITH_ENROLLMENT_COLUMNS.lastContactDate,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS.lastContactDate,
 ];
 const ACTION_COL: ColumnDef<OneHouseholdClient> = {
   ...BASE_ACTION_COLUMN_DEF,
@@ -140,13 +141,13 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
         )
       )}
       {columnKeys.includes(
-        getColumnKey(WITH_ENROLLMENT_COLUMNS.moveInDate)
+        getColumnKey(WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate)
       ) && (
         <TableCell sx={cellSx()}>
           {renderLinkedRowCellContents({
             rowLink,
             row: householdClient,
-            render: WITH_ENROLLMENT_COLUMNS.moveInDate.render,
+            render: WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.render,
           })}
         </TableCell>
       )}
@@ -197,7 +198,7 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
     return [
       ...BASE_COLUMNS,
       ...(projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)
-        ? [WITH_ENROLLMENT_COLUMNS.moveInDate]
+        ? [WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate]
         : []),
       ...(staffAssignmentsEnabled ? [HOUSEHOLD_ASSIGNED_STAFF_COL] : []),
       ACTION_COL,

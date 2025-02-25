@@ -1,12 +1,12 @@
 import { compact } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
-import { ColumnDef } from '@/components/elements/table/types';
 import { getColumnKey } from '@/components/elements/table/util';
+import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
 
 export function useOptionalColumns<T extends { id: string }, QueryVariables>({
   columns,
 }: {
-  columns?: ColumnDef<T>[];
+  columns?: GenericTableWithDataColumnDef<T, QueryVariables>[];
 }) {
   // All the column definitions that are marked optional
   const optionalColumns = useMemo(
@@ -15,7 +15,9 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
   );
 
   // (Internal to this hook) Which optional column defs are currently included
-  const [currentOptColDefs, setCurrentOptColDefs] = useState<ColumnDef<T>[]>(
+  const [currentOptColDefs, setCurrentOptColDefs] = useState<
+    GenericTableWithDataColumnDef<T, QueryVariables>[]
+  >(
     compact(optionalColumns.filter((col) => !col.optional?.defaultHidden) || [])
   );
 

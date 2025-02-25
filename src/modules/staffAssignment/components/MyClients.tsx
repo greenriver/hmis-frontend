@@ -8,7 +8,10 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import {
+  WITH_ENROLLMENT_COLUMNS,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS,
+} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetUserStaffAssignmentsDocument,
@@ -67,21 +70,21 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
     key: 'status',
   },
   {
-    ...WITH_ENROLLMENT_COLUMNS.moveInDate,
+    ...WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate,
     render: (assignment) => {
       return renderCellContents(
         memoizedHoh(assignment),
-        WITH_ENROLLMENT_COLUMNS.moveInDate.render
+        WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.render
       );
     },
     tableCellProps: undefined, // typescript
   },
   {
-    ...WITH_ENROLLMENT_COLUMNS.lastContactDate,
+    ...WITH_ENROLLMENT_OPTIONAL_COLUMNS.lastContactDate,
     render: (assignment) => {
       return renderCellContents(
         memoizedHoh(assignment),
-        WITH_ENROLLMENT_COLUMNS.lastContactDate.render
+        WITH_ENROLLMENT_OPTIONAL_COLUMNS.lastContactDate.render
       );
     },
     tableCellProps: undefined, // typescript
