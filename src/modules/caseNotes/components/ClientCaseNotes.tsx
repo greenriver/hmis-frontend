@@ -40,6 +40,7 @@ const COLUMNS: GenericTableWithDataColumnDef<
     ...WITH_ENROLLMENT_COLUMNS.entryDate,
     optional: {
       defaultHidden: true,
+      // no queryVariableField, since we need to fetch entryDate anyway in order to correctly aria-label the row action
     },
   },
   WITH_ENROLLMENT_COLUMNS.exitDate,
