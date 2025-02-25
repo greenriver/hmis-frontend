@@ -22,6 +22,7 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   AUDIT_HISTORY_COLUMNS.timestamp,
   {
     header: 'Client Name',
+    key: 'clientName',
     width: '180px',
     render: ({ clientName, clientId }) => {
       if (!clientName) return;
@@ -40,6 +41,7 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   },
   {
     header: 'Project Name',
+    key: 'projectName',
     width: '180px',
     render: ({ projectName, clientId, enrollmentId, projectId }) => {
       if (!projectName) return;

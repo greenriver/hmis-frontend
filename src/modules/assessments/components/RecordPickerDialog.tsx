@@ -71,7 +71,7 @@ const RecordPickerDialog = ({
     const dataColumns = getPopulatableChildren(item)
       .filter((item) => !item.hidden && !!item.mapping)
       .map((i) => ({
-        key: i.mapping?.fieldName || undefined,
+        key: i.mapping?.fieldName || '',
         header: i.briefText || i.text || startCase(i.mapping?.fieldName || ''),
         render: (assessment: AssessmentForPopulation) => {
           if (!i.mapping) return;
