@@ -34,6 +34,11 @@ const HouseholdActionButtons = ({ householdMembers }: Props) => {
     };
   }, [enrollment, householdMembers]);
 
+  const enrollmentPath = generateSafePath(
+    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+    routeParams
+  );
+
   const individual = householdMembers.length === 1;
   // TODO: should make exit red if there are exits in progress
   const [canExit, exitReason] = useMemo(() => {
@@ -83,6 +88,9 @@ const HouseholdActionButtons = ({ householdMembers }: Props) => {
               width: { xs: '100%', sm: 'fit-content' },
               textAlign: 'center',
             }}
+            // The "Back to <Client Name>" button on the intake page should always return to the Enrollment dashboard,
+            // even if we got to it through the Project Add Household page.
+            state={{ focusModeReturnPath: enrollmentPath }}
           >
             {individual ? 'Intake Assessment' : 'Household Intakes'}
           </ButtonLink>
@@ -99,6 +107,7 @@ const HouseholdActionButtons = ({ householdMembers }: Props) => {
               width: { xs: '100%', sm: 'fit-content' },
               textAlign: 'center',
             }}
+            state={{ focusModeReturnPath: enrollmentPath }}
           >
             {individual ? 'Exit Assessment' : 'Household Exits'}
           </ButtonLink>

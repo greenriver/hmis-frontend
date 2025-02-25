@@ -15,6 +15,7 @@ import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import NotFound from '@/components/pages/NotFound';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -80,12 +81,17 @@ const ManageHousehold = ({
     },
     [householdId, onFirstMemberAdded]
   );
-  const { addToEnrollmentColumns, refetchHousehold, household, loading } =
-    useAddToHouseholdColumns({
-      householdId,
-      project,
-      onSuccess,
-    });
+  const {
+    addToEnrollmentColumns,
+    refetchHousehold,
+    household,
+    householdNotFound,
+    loading,
+  } = useAddToHouseholdColumns({
+    householdId,
+    project,
+    onSuccess,
+  });
 
   // Fetch members to show in "previously associated" table
   const {
@@ -123,6 +129,10 @@ const ManageHousehold = ({
     [onSuccess, refetchHousehold]
   );
 
+  if (householdId && !household && loading && <Loading />) return <Loading />;
+  // could happen if user entered bad URL for /projects/:id/add-household/:householdId
+  if (householdNotFound) return <NotFound />;
+
   return (
     <Stack gap={4}>
       <CommonCard
@@ -139,7 +149,6 @@ const ManageHousehold = ({
           )
         }
       >
-        {householdId && !household && loading && <Loading />}
         {!householdId && (
           <Paper
             sx={{

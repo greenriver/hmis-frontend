@@ -1,15 +1,14 @@
 import { FetchPolicy, QueryOptions, useApolloClient } from '@apollo/client';
-import { compact, isEmpty } from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ItemMap, PickListArgs } from '../types';
-import { getItemMap } from '../util/formUtil';
+import { getItemMap, itemHasRemotePicklist } from '../util/formUtil';
 
 import {
   FormDefinitionJson,
   GetPickListDocument,
   PickListOptionFieldsFragment,
-  PickListType,
 } from '@/types/gqlTypes';
 
 interface Args {
@@ -37,19 +36,15 @@ const usePreloadPicklists = ({
     [definition]
   );
 
-  const pickListTypesToFetch = useMemo(
-    () =>
-      compact(
-        Object.values(itemMap || {})
-          .map((item) => item.pickListReference)
-          .filter(
-            (reference) =>
-              reference &&
-              Object.values<string>(PickListType).includes(reference)
-          )
-      ),
-    [itemMap]
-  );
+  // Get all `pickListReference` values from the Form Definition
+  const pickListTypesToFetch = useMemo(() => {
+    if (skip) return [];
+
+    const references = Object.values(itemMap)
+      .filter(itemHasRemotePicklist)
+      .map((item) => item.pickListReference);
+    return [...new Set(references)];
+  }, [itemMap, skip]);
 
   const fetch = useCallback(() => {
     if (skip || isEmpty(pickListTypesToFetch)) {
@@ -58,6 +53,7 @@ const usePreloadPicklists = ({
     }
 
     setLoading(true);
+    // Fetch all picklists
     Promise.all(
       pickListTypesToFetch.map((pickListType) =>
         client.query({
@@ -94,7 +90,10 @@ const usePreloadPicklists = ({
 
   return {
     fetch,
-    loading: loading && Object.keys(data).length === 0,
+    loading:
+      loading &&
+      pickListTypesToFetch.length > 0 && // always loading:false if there was no fetch
+      Object.keys(data).length === 0,
     data,
   };
 };
