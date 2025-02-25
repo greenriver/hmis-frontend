@@ -43,7 +43,7 @@ const columns: GenericTableWithDataColumnDef<
     ...SERVICE_COLUMNS.serviceDetails,
     optional: {
       defaultHidden: true,
-      // todo @martha
+      queryVariableField: 'includeServiceDetails',
     },
   },
   {

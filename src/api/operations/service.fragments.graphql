@@ -21,9 +21,15 @@ fragment ServiceBasicFields on Service {
   }
 }
 
-fragment ServiceFields on Service {
+fragment ServiceBaseFields on Service {
   id
   dateProvided
+  serviceType {
+    ...ServiceTypeFields
+  }
+}
+
+fragment ServiceDetailFields on Service {
   faAmount
   faStartDate
   faEndDate
@@ -37,13 +43,20 @@ fragment ServiceFields on Service {
   user {
     ...UserFields
   }
-  serviceType {
-    ...ServiceTypeFields
-  }
   customDataElements {
     ...CustomDataElementFields
   }
   formDefinitionId
+}
+
+fragment ServiceFields on Service {
+  ...ServiceBaseFields
+  ...ServiceDetailFields
+}
+
+fragment ClientServiceFields on Service {
+  ...ServiceBaseFields
+  ...ServiceDetailFields @include(if: $includeServiceDetails)
 }
 
 fragment ServiceCategoryFields on ServiceCategory {
