@@ -34,7 +34,7 @@ const TableFilterButton: React.FC<TableFilterButtonProps> = ({
       sx={{
         backgroundColor: active ? 'primary.200' : undefined,
         px: 2,
-        py: 0.5,
+        py: 1,
       }}
       {...props}
     />
