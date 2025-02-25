@@ -7,12 +7,12 @@ import useFileActions from '../hooks/useFileActions';
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
-import { ColumnDef } from '@/components/elements/table/types';
 import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
 import {
   useClientPermissions,
   useHasClientPermissions,
@@ -73,7 +73,10 @@ const ClientFilesPage = () => {
 
   const isTiny = useIsMobile('sm');
 
-  const columns: ColumnDef<ClientFileType>[] = useMemo(() => {
+  const columns: GenericTableWithDataColumnDef<
+    ClientFileType,
+    GetClientFilesQueryVariables
+  >[] = useMemo(() => {
     return [
       {
         header: 'File Name',
@@ -139,6 +142,7 @@ const ClientFilesPage = () => {
         key: 'organizationName',
         optional: {
           defaultHidden: true,
+          queryVariableField: 'includeOrganizationName',
         },
         render: (file) => {
           if (file.enrollment) {

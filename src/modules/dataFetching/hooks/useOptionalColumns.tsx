@@ -13,14 +13,14 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
     [columns]
   );
 
-  // (Internal to this hook) Which optional column defs are currently included
+  // (Internal to this hook) Which optional column defs are currently shown
   const [currentOptColDefs, setCurrentOptColDefs] = useState<
     GenericTableWithDataColumnDef<T, QueryVariables>[]
   >(
     compact(optionalColumns.filter((col) => !col.optional?.defaultHidden) || [])
   );
 
-  // Map currently included optional column defs to their keys...
+  // Map currently shown optional column defs to their keys...
   const includedOptionalColumns = useMemo(
     () => currentOptColDefs.map((c) => c.key),
     [currentOptColDefs]
