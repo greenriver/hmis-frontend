@@ -52,7 +52,7 @@ const UserMenu: React.FC = () => {
           key='manage account'
         >
           <ListItemIcon>
-            <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
+            <OpenInNewIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>Manage Account</ListItemText>
         </MenuItem>
@@ -68,7 +68,7 @@ const UserMenu: React.FC = () => {
           key='warehouse'
         >
           <ListItemIcon>
-            <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
+            <OpenInNewIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>{warehouseName}</ListItemText>
         </MenuItem>

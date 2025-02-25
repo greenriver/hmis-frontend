@@ -1,4 +1,4 @@
-import { alpha, Button, ButtonProps, IconButton } from '@mui/material';
+import { Button, ButtonProps, IconButton } from '@mui/material';
 import React from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -28,19 +28,14 @@ const TableFilterButton: React.FC<TableFilterButtonProps> = ({
   ) : (
     <Button
       size='small'
-      variant='text'
+      variant='outlined'
+      color={active ? 'primary' : 'grayscale'}
       startIcon={startIcon}
-      sx={(theme) => ({
-        color: active ? theme.palette.links : theme.palette.text.primary,
-        fontWeight: 600,
-        '&:hover': {
-          backgroundColor: active
-            ? alpha(theme.palette.links, 0.15)
-            : theme.palette.grey[100],
-        },
+      sx={{
+        backgroundColor: active ? 'primary.200' : undefined,
         px: 2,
-        py: 1,
-      })}
+        py: 0.5,
+      }}
       {...props}
     />
   );

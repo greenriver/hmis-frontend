@@ -55,8 +55,8 @@ const VisibilityToggleButton: React.FC<
       {...props}
       sx={{
         ...props.sx,
-        backgroundColor: theme.palette.grey[100],
-        color: on ? theme.palette.links : 'inherit',
+        backgroundColor: 'grayscale.surface',
+        color: on ? 'primary.dark' : 'inherit',
       }}
     />
   );
