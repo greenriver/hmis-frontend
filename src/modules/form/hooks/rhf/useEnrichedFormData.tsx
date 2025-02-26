@@ -3,7 +3,12 @@ import { cloneDeep } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { DefaultValues, FieldValues } from 'react-hook-form';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
-import { LocalConstants, PickListArgs } from '@/modules/form/types';
+import {
+  isPickListOption,
+  isPickListOptionArray,
+  LocalConstants,
+  PickListArgs,
+} from '@/modules/form/types';
 import {
   autofillValues,
   formHasAnyRemotePicklists,
@@ -11,9 +16,12 @@ import {
   getItemMap,
 } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson, PickListType } from '@/types/gqlTypes';
+import { ensureArray } from '@/utils/arrays';
 
 const handleError = (message: string) => {
-  // console.info('error', message)
+  if (import.meta.env.MODE === 'development') {
+    console.error(message);
+  }
   Sentry.captureMessage(message, { level: 'error' });
 };
 
@@ -82,22 +90,46 @@ export const useEnrichedFormData = <T extends FieldValues>({
 
     const clonedValues = cloneDeep(defaultValues);
     Object.values(itemMap || {}).forEach(({ pickListReference, linkId }) => {
-      const valueCode = clonedValues[linkId]?.code || clonedValues[linkId];
+      let valueCode = clonedValues[linkId];
+      // Value may already be in Picklist shape with only the code, because of createInitialValuesFromRecord.
+      // in that case we still want to try to populate it with the full option, based on the code.
+      if (isPickListOption(valueCode)) {
+        valueCode = valueCode.code;
+      }
+      if (isPickListOptionArray(valueCode)) {
+        valueCode = valueCode.map((o) => o.code);
+      }
+
       // skip unless there's a value and a value code
       if (!valueCode) return;
+      if (Array.isArray(valueCode) && valueCode.length === 0) return;
       if (!pickListReference) return;
       if (!Object.values<string>(PickListType).includes(pickListReference))
         return;
 
-      if (!picklistValues[pickListReference]) {
+      const resolvedPicklist = picklistValues[pickListReference];
+      if (!resolvedPicklist) {
         // this shouldn't occur
         handleError(`Could not find pick list "${pickListReference}"`);
         return;
       }
-      const found = picklistValues[pickListReference].find(
-        (i) => i.code === valueCode
-      );
-      if (!found) {
+
+      // Map the value code(s) to the corresponding picklist option(s)
+      let found;
+      if (Array.isArray(valueCode)) {
+        found = valueCode
+          .map((value) =>
+            resolvedPicklist.find((option) => option.code === value)
+          )
+          .filter((option) => !!option);
+      } else {
+        found = resolvedPicklist.find((option) => option.code === valueCode);
+      }
+
+      if (
+        !found ||
+        ensureArray(found).length !== ensureArray(valueCode).length
+      ) {
         handleError(
           `Pick list "${pickListReference}" does not contain code "${valueCode}"`
         );
