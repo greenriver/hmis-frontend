@@ -91,9 +91,9 @@ const generateColumns = (
           <Typography
             variant='inherit'
             sx={{
-              color: 'links',
+              color: 'primary.dark',
               textDecoration: 'underline',
-              textDecorationColor: 'links',
+              textDecorationColor: 'primary.dark',
             }}
           >
             {reminderTitle(reminder)}

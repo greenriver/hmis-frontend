@@ -58,7 +58,7 @@ const ClickToShow: React.FC<Props> = ({
         justifyContent: 'flex-start',
         width: 'fit-content',
         textAlign: 'left',
-        color: hidden ? undefined : 'links',
+        color: hidden ? undefined : 'primary.dark',
         p: 0,
       }}
       onClick={onToggle}
@@ -69,10 +69,7 @@ const ClickToShow: React.FC<Props> = ({
         {hidden ? (
           <VisibilityOffIcon color='disabled' fontSize='small' />
         ) : (
-          <VisibilityIcon
-            sx={(theme) => ({ color: theme.palette.links })}
-            fontSize='small'
-          />
+          <VisibilityIcon sx={{ color: 'primary.dark' }} fontSize='small' />
         )}
         {hidden ? (
           <Typography {...props} sx={{ textDecoration: 'none', ...props.sx }}>
