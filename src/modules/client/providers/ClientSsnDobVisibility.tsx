@@ -45,6 +45,7 @@ const VisibilityToggleButton: React.FC<
         onToggle();
         if (props.onClick) props.onClick(...args);
       }}
+      color={on ? 'primary' : 'grayscale'}
       startIcon={
         on ? (
           <VisibilityIcon color='inherit' />
@@ -55,8 +56,7 @@ const VisibilityToggleButton: React.FC<
       {...props}
       sx={{
         ...props.sx,
-        backgroundColor: theme.palette.grey[100],
-        color: on ? theme.palette.links : 'inherit',
+        backgroundColor: on ? 'primary.surface' : 'grayscale.surface',
       }}
     />
   );
