@@ -73,7 +73,7 @@ const BulkServicesTable: React.FC<Props> = ({
   const getColumnDefs = useCallback(
     (_rows: RowType[], loading?: boolean) => {
       const notEnrolledText = (
-        <NotCollectedText variant='inherit' color='text.disabled'>
+        <NotCollectedText variant='inherit' color='grayscale.main'>
           Not enrolled on {formatDateForDisplay(serviceDate, 'M/d')}
         </NotCollectedText>
       );
@@ -94,7 +94,7 @@ const BulkServicesTable: React.FC<Props> = ({
             if (!row.activeEnrollment) return notEnrolledText;
 
             const noService = (
-              <NotCollectedText variant='inherit' color='text.disabled'>
+              <NotCollectedText variant='inherit' color='grayscale.main'>
                 No Previous {serviceTypeName}
               </NotCollectedText>
             );

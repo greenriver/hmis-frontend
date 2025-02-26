@@ -86,6 +86,7 @@ const GenericSelect = <
               size='small'
               label={ownerState.getOptionLabel(option)}
               aria-label={`Option: ${ownerState.getOptionLabel(option)}. Press backspace or delete to remove.`}
+              aria-disabled={rest.disabled ? 'true' : undefined}
               {...rest}
             />
           );

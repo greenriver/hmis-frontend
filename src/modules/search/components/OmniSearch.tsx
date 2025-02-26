@@ -18,6 +18,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
+import Loading from '@/components/elements/Loading';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientName from '@/modules/client/components/ClientName';
@@ -255,17 +256,7 @@ const OmniSearch: React.FC = () => {
             }}
           >
             {loading ? (
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  py: 2,
-                  color: 'text.disabled',
-                }}
-              >
-                <CircularProgress color='inherit' />
-              </Box>
+              <Loading sx={{ py: 2 }} />
             ) : (
               <Grid
                 container
@@ -275,7 +266,7 @@ const OmniSearch: React.FC = () => {
               >
                 {isEmpty(options) ? (
                   <Grid item xs={12}>
-                    <Typography color='text.disabled'>
+                    <Typography color='grayscale.main'>
                       {value
                         ? 'No Results found'
                         : 'Search for clients or projects'}

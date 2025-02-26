@@ -25,7 +25,7 @@ export function useRenderLastUpdated(
           TypographyProps={{
             variant: 'body2',
             fontStyle: 'italic',
-            color: 'text.disabled',
+            color: 'grayscale.main',
             fontSize: 'inherit',
           }}
         />
