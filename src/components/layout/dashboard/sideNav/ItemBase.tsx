@@ -85,10 +85,10 @@ const ItemBase = <T extends object>({
           '&:hover':
             isClickable && !isSelected
               ? {
-                  backgroundColor: 'primary.200',
+                  backgroundColor: 'primary.100',
                 }
               : undefined,
-          backgroundColor: isSelected ? 'primary.100' : undefined,
+          backgroundColor: isSelected ? 'primary.200' : undefined,
         }}
       >
         {item.title && (

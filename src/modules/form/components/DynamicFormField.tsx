@@ -94,8 +94,6 @@ const DynamicFormField: React.FC<Props> = ({
                 disabled={isDisabled}
                 horizontal={horizontal}
                 pickListArgs={pickListArgs}
-                // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
-                adjustValue={itemChanged}
                 // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
                 localConstants={localConstants}
                 {...fieldProps}

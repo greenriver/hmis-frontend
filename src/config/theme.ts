@@ -51,7 +51,6 @@ declare module '@mui/material/styles' {
   interface Palette {
     borders: PaletteColor;
     alerts: AlertPriorityColorOptions;
-    links: string;
     activeStatus: string;
     grayscale: SimplePaletteColorOptions;
   }
@@ -59,7 +58,6 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: AlertPriorityColorOptions;
-    links: string;
     activeStatus: string;
     grayscale: SimplePaletteColorOptions;
   }
@@ -190,7 +188,6 @@ export const baseThemeOptions = {
         icon: '#FFFFFF8F',
       },
     },
-    links: '#1976D2',
     activeStatus: '#75559F',
     grayscale: {
       main: '#6E6E6E',
@@ -322,8 +319,8 @@ const createThemeOptions = (theme: Theme) => ({
       },
       styleOverrides: {
         root: theme.unstable_sx({
-          color: theme.palette.links,
-          textDecorationColor: theme.palette.links,
+          color: 'primary.dark',
+          textDecorationColor: 'primary.dark',
           textUnderlineOffset: '0.2rem',
           cursor: 'pointer',
           '&.Mui-focusVisible': {

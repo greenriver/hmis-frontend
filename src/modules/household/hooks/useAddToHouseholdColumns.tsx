@@ -21,9 +21,10 @@ export default function useAddToHouseholdColumns({
   project,
   onSuccess,
 }: Args) {
-  const [getHousehold, { data, loading, error }] = useGetHouseholdLazyQuery({
-    fetchPolicy: 'network-only',
-  });
+  const [getHousehold, { called, data, loading, error }] =
+    useGetHouseholdLazyQuery({
+      fetchPolicy: 'network-only',
+    });
 
   const refetchHousehold = useCallback(() => {
     if (!householdId) return;
@@ -97,6 +98,7 @@ export default function useAddToHouseholdColumns({
   return {
     addToEnrollmentColumns,
     household: data?.household,
+    householdNotFound: called && householdId && !loading && !data?.household,
     refetchHousehold,
     loading,
   };
