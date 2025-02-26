@@ -65,9 +65,7 @@ export interface DynamicViewFieldProps {
   item: FormItem;
   value: any;
   horizontal?: boolean;
-  pickListArgs?: PickListArgs;
   noLabel?: boolean;
-  adjustValue?: ItemChangedFn;
   disabled?: boolean;
   localConstants?: LocalConstants;
 }

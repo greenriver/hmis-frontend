@@ -27,6 +27,7 @@ import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import ExpandLessRoundedIcon from '@mui/icons-material/ExpandLessRounded';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
 import Home from '@mui/icons-material/Home';
 import ImageIcon from '@mui/icons-material/Image';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
@@ -46,6 +47,7 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import SearchIcon from '@mui/icons-material/Search';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
+import SwapVertRoundedIcon from '@mui/icons-material/SwapVertRounded';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import WrapTextIcon from '@mui/icons-material/WrapText';
 import { styled, SvgIconProps } from '@mui/material';
@@ -75,6 +77,8 @@ export {
   ExitToAppRoundedIcon as ExitAssessmentIcon,
   ExpandLessRoundedIcon as ExpandLessIcon,
   ExpandMoreRoundedIcon as ExpandMoreIcon,
+  SwapVertRoundedIcon as SortIcon,
+  FilterListRoundedIcon as FilterIcon,
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
   RadioButtonCheckedIcon as FormChoiceIcon,

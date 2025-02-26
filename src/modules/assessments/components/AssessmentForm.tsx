@@ -243,7 +243,8 @@ const AssessmentForm: React.FC<Props> = ({
     [enrollment]
   );
 
-  // Manually preload picklists here so we can prevent printing until they're fetched
+  // Manually preload picklists here so we can prevent printing until they're fetched.
+  // usePreloadPicklists will be invoked again by DynamicViewEnrichmentLoader, but it will just hit the cache.
   const { loading: pickListsLoading } = usePreloadPicklists({
     definition: definition.definition,
     pickListArgs,

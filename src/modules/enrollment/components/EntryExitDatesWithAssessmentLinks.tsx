@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { Box, Stack, Theme } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
@@ -52,7 +52,7 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
     minWidth: '30px',
     px: 1,
     mx: 0.5,
-    svg: { color: (theme: Theme) => theme.palette.links },
+    svg: { color: 'primary.main' },
   };
   return (
     <Stack direction='row' alignItems='center' gap={2}>

@@ -13,7 +13,6 @@ import { FormDefinitionJson } from '@/types/gqlTypes';
 export interface DynamicViewProps {
   definition: FormDefinitionJson;
   horizontal?: boolean;
-  pickListArgs?: PickListArgs;
   visible?: boolean;
   GridProps?: GridProps;
   localConstants?: LocalConstants;
@@ -25,7 +24,6 @@ const DynamicView: React.FC<
   definition,
   horizontal = false,
   visible = true,
-  pickListArgs,
   localConstants = {},
   GridProps,
   defaultValues,
@@ -64,7 +62,6 @@ const DynamicView: React.FC<
         >
           <DynamicViewFields
             horizontal={horizontal}
-            pickListArgs={pickListArgs}
             visible={visible}
             handlers={handlers}
           />
@@ -75,7 +72,10 @@ const DynamicView: React.FC<
 };
 
 const DynamicViewEnrichmentLoader: React.FC<
-  DynamicViewProps & { values: Record<string, any> }
+  DynamicViewProps & {
+    values: Record<string, any>;
+    pickListArgs?: PickListArgs;
+  }
 > = (props): JSX.Element => {
   const { defaultValues, loading } = useEnrichedFormData({
     pickListArgs: props.pickListArgs,
