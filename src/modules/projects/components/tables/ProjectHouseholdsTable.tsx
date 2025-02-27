@@ -258,7 +258,6 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
       pagePath='project.households'
       filters={filters}
       recordType='Household'
-      showOptionalColumns
     />
   );
 };

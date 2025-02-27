@@ -6,7 +6,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
-import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
+import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
@@ -28,10 +28,7 @@ type ServiceType = NonNullable<
   NonNullable<GetClientServicesQuery['client']>['services']
 >['nodes'][0];
 
-const columns: GenericTableWithDataColumnDef<
-  ServiceType,
-  GetClientServicesQueryVariables
->[] = [
+const columns: DataColumnDef<ServiceType, GetClientServicesQueryVariables>[] = [
   { ...SERVICE_BASIC_COLUMNS.serviceDate, sticky: 'left' },
   SERVICE_BASIC_COLUMNS.serviceType,
   {
@@ -100,7 +97,6 @@ const ClientServicesPage: React.FC = () => {
           recordType='Service'
           defaultSortOption={ServiceSortOption.DateProvided}
           noSort
-          showOptionalColumns
         />
       </Paper>
     </>

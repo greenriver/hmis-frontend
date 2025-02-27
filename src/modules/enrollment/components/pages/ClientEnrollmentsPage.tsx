@@ -151,7 +151,6 @@ const ClientEnrollmentsPage = () => {
           recordType='Enrollment'
           noSort
           defaultSortOption={EnrollmentSortOption.MostRecent}
-          showOptionalColumns
         />
       </Paper>
     </>

@@ -9,7 +9,7 @@ import { get, isEmpty, isEqual, lowerFirst, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { FilterType, GenericTableWithDataColumnDef } from '../types';
+import { FilterType, DataColumnDef } from '../types';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable, {
@@ -51,11 +51,11 @@ export interface Props<
     | 'verticalHiddenHeader'
     | 'columns'
   > {
-  columns?: GenericTableWithDataColumnDef<RowDataType, QueryVariables>[];
+  columns?: DataColumnDef<RowDataType, QueryVariables>[];
   getColumnDefs?: (
     rows: RowDataType[],
     loading?: boolean
-  ) => GenericTableWithDataColumnDef<RowDataType, QueryVariables>[]; // dynamically define column defs based on current data
+  ) => DataColumnDef<RowDataType, QueryVariables>[]; // dynamically define column defs based on current data
   filters?: TableFilterType<FilterOptionsType>;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
@@ -80,14 +80,13 @@ export interface Props<
     TableFilterType<FilterOptionsType>,
     SortOptionsType
   >['tableDisplayOptionButtons'];
-  showOptionalColumns?: boolean;
   onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
 }
 
 function allFieldColumns<T, QueryVariables>(
   recordType: string
-): GenericTableWithDataColumnDef<T, QueryVariables>[] {
+): DataColumnDef<T, QueryVariables>[] {
   const schema = getSchemaForType(recordType);
   if (!schema) return [];
 
@@ -120,7 +119,6 @@ const GenericTableWithData = <
   fetchPolicy = 'cache-and-network',
   nonTablePagination = false,
   fullHeight = false,
-  showOptionalColumns = false,
   noSort,
   header,
   toolbars = [],
@@ -264,7 +262,7 @@ const GenericTableWithData = <
     if (getColumnDefs) return getColumnDefs(rows, loading);
     if (recordType) return allFieldColumns(recordType);
     console.warn('No columns specified');
-    return [] as GenericTableWithDataColumnDef<RowDataType, QueryVariables>[];
+    return [] as DataColumnDef<RowDataType, QueryVariables>[];
   }, [columnsProp, getColumnDefs, loading, recordType, rows]);
 
   const showColumnDefs = useMemo(() => {
@@ -310,7 +308,7 @@ const GenericTableWithData = <
     !isEmpty(filters) ||
     (!isEmpty(sortOptions) && !noSort) ||
     !isEmpty(tableDisplayOptionButtons) ||
-    showOptionalColumns ||
+    !isEmpty(optionalColumns) ||
     !isEmpty(toolbars);
 
   return (
@@ -349,7 +347,7 @@ const GenericTableWithData = <
                     loading={loading && !data}
                     tableDisplayOptionButtons={tableDisplayOptionButtons}
                     optionalColumns={
-                      showOptionalColumns
+                      !isEmpty(optionalColumns)
                         ? {
                             columns: optionalColumns.map((col) => ({
                               value: col.key,

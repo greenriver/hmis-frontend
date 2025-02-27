@@ -69,7 +69,6 @@ const ProjectCurrentLivingSituations = () => {
           noData='No current living situations'
           recordType='CurrentLivingSituation'
           paginationItemName='current living situations'
-          showOptionalColumns
         />
       </Paper>
     </>
