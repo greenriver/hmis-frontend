@@ -5,9 +5,9 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { CLS_COLUMNS } from '@/modules/enrollment/components/pages/EnrollmentCurrentLivingSituationsPage';
 import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectCurrentLivingSituationsDocument,

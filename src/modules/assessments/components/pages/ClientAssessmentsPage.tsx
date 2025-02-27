@@ -11,9 +11,9 @@ import {
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription, entryExitRange } from '@/modules/hmis/hmisUtil';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   AssessmentSortOption,
   GetClientAssessmentsDocument,

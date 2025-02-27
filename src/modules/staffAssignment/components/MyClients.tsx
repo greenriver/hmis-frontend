@@ -6,12 +6,16 @@ import { renderCellContents } from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
+  ENTRY_DATE_COL,
+  LAST_CONTACT_DATE_COL,
+  MOVE_IN_DATE_COL,
+  ORGANIZATION_NAME_COL,
   WITH_ENROLLMENT_COLUMNS,
   WITH_ENROLLMENT_OPTIONAL_COLUMNS,
-} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+} from '@/modules/enrollment/columns/enrollmentColumns';
+import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetUserStaffAssignmentsDocument,
@@ -53,14 +57,13 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
     key: 'project',
   },
   {
-    ...WITH_ENROLLMENT_COLUMNS.entryDate,
+    ...ENTRY_DATE_COL,
     render: (assignment) => {
       return renderCellContents(
         memoizedHoh(assignment),
         WITH_ENROLLMENT_COLUMNS.entryDate.render
       );
     },
-    tableCellProps: undefined, // typescript
   },
   {
     header: 'Household Status',
@@ -70,34 +73,31 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
     key: 'status',
   },
   {
-    ...WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate,
+    ...MOVE_IN_DATE_COL,
     render: (assignment) => {
       return renderCellContents(
         memoizedHoh(assignment),
         WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.render
       );
     },
-    tableCellProps: undefined, // typescript
   },
   {
-    ...WITH_ENROLLMENT_OPTIONAL_COLUMNS.lastContactDate,
+    ...LAST_CONTACT_DATE_COL,
     render: (assignment) => {
       return renderCellContents(
         memoizedHoh(assignment),
         WITH_ENROLLMENT_OPTIONAL_COLUMNS.lastContactDate.render
       );
     },
-    tableCellProps: undefined, // typescript
   },
   {
-    ...WITH_ENROLLMENT_COLUMNS.organizationName,
+    ...ORGANIZATION_NAME_COL,
     render: (assignment) => {
       return renderCellContents(
         memoizedHoh(assignment),
         WITH_ENROLLMENT_COLUMNS.organizationName.render
       );
     },
-    tableCellProps: undefined, // typescript
   },
 ];
 

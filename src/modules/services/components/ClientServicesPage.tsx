@@ -7,9 +7,9 @@ import useClientDashboardContext from '@/modules/client/hooks/useClientDashboard
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
 import { DataColumnDef } from '@/modules/dataFetching/types';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   getServiceTypeForDisplay,
   SERVICE_BASIC_COLUMNS,

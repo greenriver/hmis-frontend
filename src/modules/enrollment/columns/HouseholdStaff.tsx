@@ -2,6 +2,14 @@ import { Box, Chip, Tooltip } from '@mui/material';
 import React from 'react';
 import { HouseholdWithStaffAssignmentsFragment } from '@/types/gqlTypes';
 
+export const hasHouseholdWithStaff = (
+  enrollment: any
+): enrollment is { household: HouseholdWithStaffAssignmentsFragment } => {
+  return (
+    'household' in enrollment && 'staffAssignments' in enrollment.household
+  );
+};
+
 interface Props {
   household: HouseholdWithStaffAssignmentsFragment;
 }
@@ -27,4 +35,5 @@ const HouseholdStaff: React.FC<Props> = ({ household }) => {
     </Box>
   );
 };
+
 export default HouseholdStaff;

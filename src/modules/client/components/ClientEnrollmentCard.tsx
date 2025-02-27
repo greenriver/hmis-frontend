@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 
 import GenericTable from '@/components/elements/table/GenericTable';
 import TitleCard from '@/components/elements/TitleCard';
+import { ENROLLMENT_STATUS_COL } from '@/modules/enrollment/columns/enrollmentColumns';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { isRecentEnrollment } from '@/modules/hmis/hmisUtil';
-import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
@@ -69,7 +69,7 @@ const RecentEnrollments = ({
       noHead
       rows={recentEnrollments}
       columns={[
-        ENROLLMENT_COLUMNS.enrollmentStatus,
+        ENROLLMENT_STATUS_COL,
         {
           key: 'name',
           header: 'Name',
