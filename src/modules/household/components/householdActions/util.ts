@@ -61,20 +61,17 @@ export const getDeleteEnrollmentDisabledAttrs = ({
       disabled: true,
     };
 
-  // If household is being created in the project context, any enrollment can be removed
-  if (!currentDashboardEnrollmentId) {
-    if (
-      householdClient.relationshipToHoH ===
-        RelationshipToHoH.SelfHeadOfHousehold &&
-      householdSize > 1
-    ) {
-      return {
-        disabled: true,
-        disabledReason:
-          'HoH cannot be removed. Change HoH or remove other members first.',
-      };
-    }
-    return {};
+  // HoH cannot be removed if there are other members in the household
+  if (
+    householdClient.relationshipToHoH ===
+      RelationshipToHoH.SelfHeadOfHousehold &&
+    householdSize > 1
+  ) {
+    return {
+      disabled: true,
+      disabledReason:
+        'HoH cannot be removed. Change HoH or remove other members first.',
+    };
   }
 
   if (!householdClient.enrollment.inProgress) {

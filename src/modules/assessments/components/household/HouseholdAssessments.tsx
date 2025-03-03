@@ -325,7 +325,7 @@ const HouseholdAssessments: React.FC<Props> = ({
               alignItems: 'flex-end',
               // Dont show icon color for not-currently-active tabs
               '.MuiTab-root[aria-selected="false"] svg': {
-                color: 'text.disabled',
+                color: 'grayscale.main',
               },
             }}
           >

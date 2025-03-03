@@ -180,9 +180,5 @@ fragment ClientImageFields on ClientImage {
 
 fragment ClientOmniSearchFields on Client {
   id
-  dob
-  age
-  gender
-  personalId
   ...ClientName
 }

@@ -57,6 +57,7 @@ const UnitManagementTable = ({
               variant: 'text',
               color: 'info',
               disabled,
+              'aria-label': 'Delete unit',
             }}
             confirmationDialogContent={
               unitIds.length > 1 ? (

@@ -16,7 +16,6 @@ const ConsumerSummaryReportButton: React.FC<Props> = ({
       <Button
         fullWidth
         variant='outlined'
-        color='secondary'
         onClick={() => setOpen((prev) => !prev)}
       >
         LINK Consumer Summary Report

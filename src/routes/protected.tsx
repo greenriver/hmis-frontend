@@ -75,7 +75,6 @@ import HouseholdPage from '@/modules/enrollment/components/pages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
-import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import MyDashboardPage from '@/modules/myDashboard/components/MyDashboardPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
@@ -459,17 +458,6 @@ export const protectedRoutes: RouteNode[] = [
             path: EnrollmentDashboardRoutes.HOUSEHOLD,
             // No perm needed because it only requires enrollment visibility
             element: <HouseholdPage />,
-          },
-          {
-            path: EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
-            element: (
-              <EnrollmentRoute
-                permissions='canEditEnrollments'
-                redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
-              >
-                <EditHouseholdPage />
-              </EnrollmentRoute>
-            ),
           },
           {
             path: EnrollmentDashboardRoutes.ASSESSMENTS,

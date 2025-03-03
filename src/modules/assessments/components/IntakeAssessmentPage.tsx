@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import HouseholdAssessments from '@/modules/assessments/components/household/HouseholdAssessments';
@@ -14,6 +14,7 @@ const IntakeAssessmentPage = () => {
   const { enrollment, enrollmentLoading, client } =
     useEnrollmentDashboardContext();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const { formDefinition, loading: definitionLoading } =
     useAssessmentFormDefinition({
@@ -36,7 +37,7 @@ const IntakeAssessmentPage = () => {
           clientId: client.id,
           assessmentId: enrollment.intakeAssessment.id,
         }),
-        { replace: true }
+        { replace: true, state }
       );
     } else {
       // Navigate away for single-member HH with no Intake Assessment
@@ -46,10 +47,10 @@ const IntakeAssessmentPage = () => {
           clientId: client.id,
           formDefinitionId: formDefinition.id,
         }),
-        { replace: true }
+        { replace: true, state }
       );
     }
-  }, [client, enrollment, enrollmentLoading, formDefinition, navigate]);
+  }, [client, enrollment, enrollmentLoading, formDefinition, navigate, state]);
 
   if (!formDefinition && definitionLoading) return <Loading />;
   if (!formDefinition) return <MissingDefinitionAlert />;

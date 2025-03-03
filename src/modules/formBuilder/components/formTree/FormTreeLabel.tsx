@@ -1,5 +1,5 @@
 import { IconButton, Typography } from '@mui/material';
-import { Box, Stack, Theme } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
@@ -170,7 +170,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           {item.enableWhen && item.enableWhen?.length > 0 && (
             <ConditionalIcon
               fontSize='inherit'
-              color='secondary'
               sx={{ ml: 1, fontSize: '12' }}
             />
           )}
@@ -190,7 +189,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
                 'aria-label': `${itemId} item actions`,
                 variant: 'outlined',
                 sx: {
-                  color: (theme: Theme) => theme.palette.links,
+                  color: 'primary.main',
                   height: '28px',
                   width: '28px',
                 },

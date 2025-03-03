@@ -1,5 +1,5 @@
 import CheckIcon from '@mui/icons-material/Check';
-import { Button, ButtonProps, Stack } from '@mui/material';
+import { Button, ButtonProps, Paper, Stack } from '@mui/material';
 import { Meta, StoryObj } from '@storybook/react';
 
 export default {
@@ -34,32 +34,36 @@ export const Default: Story = {
 const ButtonMatrix: React.FC<ButtonProps> = (props) => {
   return (
     <>
-      <Stack gap={2} direction='row'>
-        {(
-          [
-            'grayscale',
-            'primary',
-            'error',
-            'warning',
-            // Note: secondary, info, and success button colors exist in MUI but are not part of HMIS design language.
-          ] as ButtonProps['color'][]
-        ).map((color, idx) => (
-          <Stack gap={2} alignItems='center' key={color}>
-            <Stack direction='row' gap={1}>
-              {idx === 0 && <span style={{ width: '100px' }}></span>}
-              <span style={{ width: '100px' }}>{color}</span>
-            </Stack>
-            {(
-              ['contained', 'outlined', 'text'] as ButtonProps['variant'][]
-            ).map((variant) => (
-              <Stack direction='row' gap={1} key={variant}>
-                {idx === 0 && <span style={{ width: '100px' }}>{variant}</span>}
-                <Button {...props} color={color} variant={variant} />
+      <Paper sx={{ p: 2 }}>
+        <Stack gap={2} direction='row'>
+          {(
+            [
+              'grayscale',
+              'primary',
+              'error',
+              'warning',
+              // Note: secondary, info, and success button colors exist in MUI but are not part of HMIS design language.
+            ] as ButtonProps['color'][]
+          ).map((color, idx) => (
+            <Stack gap={2} alignItems='center' key={color}>
+              <Stack direction='row' gap={1}>
+                {idx === 0 && <span style={{ width: '100px' }}></span>}
+                <span style={{ width: '100px' }}>{color}</span>
               </Stack>
-            ))}
-          </Stack>
-        ))}
-      </Stack>
+              {(
+                ['contained', 'outlined', 'text'] as ButtonProps['variant'][]
+              ).map((variant) => (
+                <Stack direction='row' gap={1} key={variant}>
+                  {idx === 0 && (
+                    <span style={{ width: '100px' }}>{variant}</span>
+                  )}
+                  <Button {...props} color={color} variant={variant} />
+                </Stack>
+              ))}
+            </Stack>
+          ))}
+        </Stack>
+      </Paper>
     </>
   );
 };
@@ -70,4 +74,12 @@ export const AllVariants: Story = {
     startIcon: <CheckIcon />,
   },
   render: (props) => <ButtonMatrix {...props} />,
+};
+
+export const AllVariantsDisabled: Story = {
+  args: {
+    children: 'Action',
+    startIcon: <CheckIcon />,
+  },
+  render: (props) => <ButtonMatrix disabled {...props} />,
 };

@@ -115,6 +115,7 @@ export function useServiceDialog({
     useServiceFormDefinition({
       projectId,
       serviceTypeId: selectedService?.code || service?.serviceType?.id,
+      formDefinitionId: service?.formDefinitionId,
     });
 
   const hookArgs = useMemo(() => {
@@ -183,6 +184,10 @@ export function useServiceDialog({
 
   const renderServiceDialog = (args?: RenderServiceDialogProps) => {
     const { dialogContent, ...props } = args || {};
+
+    const loadingSkeleton = (
+      <Skeleton variant='rectangular' sx={{ height: 60 }} />
+    );
     return (
       <CommonDialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
         <DialogTitle>{service ? 'Update Service' : 'Add Service'}</DialogTitle>
@@ -201,9 +206,7 @@ export function useServiceDialog({
               />
             )}
           </Box>
-          {serviceTypeInfoLoading && (
-            <Skeleton variant='rectangular' sx={{ height: 60 }} />
-          )}
+          {serviceTypeInfoLoading && loadingSkeleton}
           {selectedService && formDefinition && serviceType && (
             <DynamicForm
               key={service?.id || selectedService.code}
@@ -217,6 +220,8 @@ export function useServiceDialog({
               localConstants={hookArgs?.localConstants}
               hideSubmit
               errorRef={errorRef}
+              // Render skeleton while initial picklists load, to prevent flicker to Loading spinner
+              initialLoadingElement={loadingSkeleton}
             />
           )}
         </DialogContent>

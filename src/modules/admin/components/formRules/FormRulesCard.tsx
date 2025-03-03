@@ -3,7 +3,7 @@ import { Box, Button, Divider, Typography } from '@mui/material';
 
 import { useState } from 'react';
 import FormRuleTable from '../formRules/FormRuleTable';
-import TitleCard from '@/components/elements/TitleCard';
+import CommonCard from '@/components/elements/CommonCard';
 import FormProjectMatchTable from '@/modules/admin/components/formRules/FormProjectMatchTable';
 import NewFormRuleDialog from '@/modules/admin/components/formRules/NewFormRuleDialog';
 import { FormRole, useGetFormProjectMatchesQuery } from '@/types/gqlTypes';
@@ -31,10 +31,10 @@ const FormRulesCard: React.FC<Props> = ({
 
   return (
     <>
-      <TitleCard
+      <CommonCard
         title='Form Applicability'
-        headerTypographyVariant='h5'
-        headerComponent='h2'
+        padContent={false}
+        TitleComponent='h2'
         actions={
           <Button
             onClick={() => setDialogOpen(true)}
@@ -70,7 +70,7 @@ const FormRulesCard: React.FC<Props> = ({
           </Typography>
         </Box>
         <FormProjectMatchTable formId={formId} />
-      </TitleCard>
+      </CommonCard>
       <NewFormRuleDialog
         formId={formId}
         formTitle={formTitle}

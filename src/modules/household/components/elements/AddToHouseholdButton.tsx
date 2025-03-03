@@ -51,7 +51,7 @@ const AddToHouseholdButton = ({
   }, [prevIsMember, isMember, setAdded]);
 
   let text = household ? 'Add to Household' : 'Enroll Client';
-  const color: 'secondary' | 'error' = 'secondary';
+  const color: 'primary' | 'error' = 'primary';
   if (added) text = 'Added';
   const clientId = client.id;
 

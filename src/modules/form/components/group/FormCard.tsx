@@ -8,9 +8,10 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import { includes, isNil, zipObject } from 'lodash-es';
+import { isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
+import { useFormContext } from 'react-hook-form';
 import {
   AssessmentForPopulation,
   ChangeType,
@@ -25,12 +26,12 @@ import {
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import RecordPickerDialog from '@/modules/assessments/components/RecordPickerDialog';
+import { useDebugDynamicFormValues } from '@/modules/form/hooks/rhf/useDebugDynamicFormValues';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 export interface FormCardProps extends GroupItemComponentProps {
   anchor?: string;
   clientId?: string;
-  debug?: (ids?: string[]) => void;
   TitleIcon?: SvgIconComponent;
   titleProps?: TypographyProps;
   helperTextProps?: TypographyProps;
@@ -42,14 +43,12 @@ const FormCard: React.FC<FormCardProps> = ({
   severalItemsChanged = () => {},
   renderChildItem,
   anchor,
-  values,
-  locked,
-  debug,
   TitleIcon,
   helperTextProps,
   titleProps,
   viewOnly,
 }) => {
+  const { getValues } = useFormContext();
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
   const [sourceRecord, setSourceRecord] = useState<
@@ -57,19 +56,19 @@ const FormCard: React.FC<FormCardProps> = ({
   >();
 
   const childLinkIds = useMemo(() => getAllChildLinkIds(item), [item]);
-  const hasAnyChildValues = useMemo(
-    () =>
-      !!Object.keys(values).find(
-        (linkId) => includes(childLinkIds, linkId) && !isNil(values[linkId])
-      ),
-    [childLinkIds, values]
-  );
+
+  // Enable the "Clear Section" button if any child item has a value initially.
+  // We don't watch for changes in child values, because it's not worth the re-renders. (top-level groups may be very large)
+  const enableClearSectionButton = useMemo(() => {
+    const childValues = getValues(childLinkIds);
+    return childValues.some((value) => !isNil(value));
+  }, [getValues, childLinkIds]);
+
   const onClear = useCallback(() => {
     const updatedValues = zipObject(
       childLinkIds,
       new Array(childLinkIds.length).fill(null)
     );
-
     severalItemsChanged({ values: updatedValues, type: ChangeType.User });
     setSourceRecord(undefined);
     setClearDialogOpen(false);
@@ -91,6 +90,8 @@ const FormCard: React.FC<FormCardProps> = ({
     },
     [setFillDialogOpen, severalItemsChanged, item]
   );
+
+  const consoleDebugValues = useDebugDynamicFormValues(childLinkIds);
 
   const buttonProps: ButtonProps = {
     variant: 'outlined',
@@ -122,23 +123,20 @@ const FormCard: React.FC<FormCardProps> = ({
               </Typography>
 
               <Stack direction='row' spacing={2}>
-                {debug &&
-                  import.meta.env.MODE === 'development' &&
-                  !viewOnly && (
-                    <Button
-                      {...buttonProps}
-                      onClick={() => debug(childLinkIds)}
-                      variant='text'
-                    >
-                      Debug
-                    </Button>
-                  )}
+                {import.meta.env.MODE === 'development' && !viewOnly && (
+                  <Button
+                    {...buttonProps}
+                    onClick={consoleDebugValues}
+                    variant='text'
+                  >
+                    Debug
+                  </Button>
+                )}
                 {item.prefill && !viewOnly && (
                   <>
                     <Button
                       data-testid='fillSectionButton'
                       onClick={() => setFillDialogOpen(true)}
-                      disabled={locked}
                       {...buttonProps}
                     >
                       Fill Section
@@ -147,7 +145,7 @@ const FormCard: React.FC<FormCardProps> = ({
                       data-testid='clearButton'
                       color='error'
                       onClick={() => setClearDialogOpen(true)}
-                      disabled={!hasAnyChildValues || locked}
+                      disabled={!enableClearSectionButton}
                       {...buttonProps}
                     >
                       Clear Section
