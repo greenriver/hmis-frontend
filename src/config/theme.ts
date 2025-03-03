@@ -190,7 +190,7 @@ export const baseThemeOptions = {
     },
     activeStatus: '#75559F',
     grayscale: {
-      main: '#6E6E6E',
+      main: '#6E6E6E', // MUI's default text.disabled doesn't meet contrast requirements and should never be used for non-disabled text elements. Use grayscale.main instead
       dark: '#4D4D4D',
       light: '#8b8b8b',
       contrastText: '#fff',
@@ -361,6 +361,9 @@ const createThemeOptions = (theme: Theme) => ({
         root: theme.unstable_sx({
           typography: 'body2',
           fontWeight: 600,
+          '&.Mui-error': {
+            color: 'error.dark',
+          },
         }),
       },
     },
@@ -648,6 +651,14 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         root: {
           marginLeft: 0,
+          '&.Mui-disabled': theme.unstable_sx({
+            opacity: 1,
+            color: 'grayscale.main',
+          }),
+          '&.Mui-error': theme.unstable_sx({
+            opacity: 1,
+            color: 'error.dark',
+          }),
         },
       },
     },

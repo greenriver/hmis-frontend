@@ -12,7 +12,7 @@ const ClearSearchEndAdornmentButton: React.FC<
   <InputAdornment position='end'>
     <Button
       variant='text'
-      sx={{ color: 'text.disabled' }}
+      color='grayscale'
       startIcon={<ClearIcon />}
       onClick={onClick}
       {...props}

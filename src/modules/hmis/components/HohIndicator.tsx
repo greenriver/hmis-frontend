@@ -15,7 +15,7 @@ const HohIndicator = ({
     // <Tooltip title='Head of Household' arrow>
     <Typography
       variant='subtitle2'
-      color='text.disabled'
+      color='grayscale.main'
       {...{ component: 'div', ...props }}
       sx={{
         fontWeight: 600,

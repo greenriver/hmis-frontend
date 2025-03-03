@@ -30,7 +30,7 @@ const InputContainer = ({
         .map(({ message, fullMessage }) => (
           <Typography
             variant='body2'
-            color='error'
+            color='error.dark'
             key={fullMessage || message}
             sx={{ mt: 0.5, float: horizontal ? 'right' : undefined }}
           >
