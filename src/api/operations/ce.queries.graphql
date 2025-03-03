@@ -1,0 +1,43 @@
+query GetProjectCeOpportunities($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    ceOpportunities(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeOpportunitySummaryFields
+      }
+    }
+  }
+}
+
+query GetCeOpportunity($id: ID!) {
+  ceOpportunity(id: $id) {
+    ...CeOpportunityFields
+  }
+}
+
+query GetCeOpportunityCandidates(
+  $opportunityId: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+) {
+  ceOpportunity(id: $opportunityId) {
+    id
+    candidates(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeCandidateFields
+      }
+    }
+  }
+}
+
+query GetCeReferral($id: ID!) {
+  ceReferral(id: $id) {
+    ...CeReferralFields
+  }
+}

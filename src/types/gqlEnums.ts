@@ -963,6 +963,7 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
     USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
+    WORKFLOW_DEFINITION_TEMPLATES: 'Templates for CE workflow definitions',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',

@@ -1,0 +1,49 @@
+fragment CeOpportunitySummaryFields on CeOpportunity {
+  id
+  name
+  status
+  expiresAt
+  projectId
+}
+
+fragment CeOpportunityFields on CeOpportunity {
+  ...CeOpportunitySummaryFields
+  activeReferral {
+    id
+  }
+  acceptedReferral {
+    id
+  }
+}
+
+fragment CeCandidateFields on CeCandidate {
+  id
+  priorityScore
+  client {
+    id
+  }
+}
+
+fragment CeReferralSummaryFields on CeReferral {
+  id
+  status
+}
+
+fragment CeReferralFields on CeReferral {
+  ...CeReferralSummaryFields
+  steps {
+    ...CeReferralStepFields
+  }
+  opportunity {
+    ...CeOpportunitySummaryFields
+  }
+}
+
+fragment CeReferralStepFields on CeReferralStep {
+  id
+  name
+  status
+  formDefinition {
+    ...FormDefinitionMetadata
+  }
+}
