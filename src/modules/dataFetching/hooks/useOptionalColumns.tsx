@@ -6,12 +6,12 @@ import {
   getStoredPathParams,
   setStoredPathParams,
 } from '@/modules/auth/api/storage';
-import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
+import { DataColumnDef } from '@/modules/dataFetching/types';
 
 export function useOptionalColumns<T extends { id: string }, QueryVariables>({
   columns,
 }: {
-  columns?: GenericTableWithDataColumnDef<T, QueryVariables>[];
+  columns?: DataColumnDef<T, QueryVariables>[];
 }) {
   // All the column definitions that are marked optional
   const optionalColumns = useMemo(

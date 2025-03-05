@@ -12,7 +12,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
+import { DataColumnDef } from '@/modules/dataFetching/types';
 import {
   useClientPermissions,
   useHasClientPermissions,
@@ -73,85 +73,83 @@ const ClientFilesPage = () => {
 
   const isTiny = useIsMobile('sm');
 
-  const columns: GenericTableWithDataColumnDef<
-    ClientFileType,
-    GetClientFilesQueryVariables
-  >[] = useMemo(() => {
-    return [
-      {
-        header: 'File Name',
-        key: 'fileName',
-        render: (file) => (
-          <Typography variant='inherit'>{file.name}</Typography>
-        ),
-        // Limit the col width on tiny screens so that other non-sticky columns are scrollable
-        maxWidth: isTiny ? '100px' : undefined,
-        sticky: 'left',
-      },
-      {
-        header: 'File Tags',
-        key: 'tags',
-        render: (file) =>
-          pickListData ? (
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              {file.tags.map((tag) => {
-                const item = pickListData.pickList.find(
-                  (type) => type.code === tag
-                );
-                return (
-                  <Chip
-                    key={item?.code || tag}
-                    label={item?.label || tag}
-                    id={`tag-${item?.code || tag}`}
-                    size='small'
-                  />
-                );
-              })}
-            </Box>
-          ) : null,
-      },
-      {
-        header: 'Project Name',
-        key: 'projectName',
-        render: ({ enrollment }) =>
-          enrollment ? (
-            enrollment.projectName
-          ) : (
-            <NotCollectedText>N/A</NotCollectedText>
+  const columns: DataColumnDef<ClientFileType, GetClientFilesQueryVariables>[] =
+    useMemo(() => {
+      return [
+        {
+          header: 'File Name',
+          key: 'fileName',
+          render: (file) => (
+            <Typography variant='inherit'>{file.name}</Typography>
           ),
-      },
-      {
-        header: 'Uploaded',
-        key: 'uploaded',
-        render: ({ dateCreated, uploadedBy }) => {
-          const byUser = uploadedBy?.name
-            ? `by ${uploadedBy?.name}`
-            : 'by unknown user';
-          if (dateCreated)
-            return (
-              <RelativeDateDisplay
-                dateString={dateCreated}
-                tooltipSuffixText={byUser}
-              />
-            );
-          return `Unknown time ${byUser}`;
+          // Limit the col width on tiny screens so that other non-sticky columns are scrollable
+          maxWidth: isTiny ? '100px' : undefined,
+          sticky: 'left',
         },
-      },
-      {
-        header: 'Organization Name',
-        key: 'organizationName',
-        optional: {
-          defaultHidden: true,
-          queryVariableField: 'includeOrganizationName',
+        {
+          header: 'File Tags',
+          key: 'tags',
+          render: (file) =>
+            pickListData ? (
+              <Box sx={{ display: 'flex', gap: 0.5 }}>
+                {file.tags.map((tag) => {
+                  const item = pickListData.pickList.find(
+                    (type) => type.code === tag
+                  );
+                  return (
+                    <Chip
+                      key={item?.code || tag}
+                      label={item?.label || tag}
+                      id={`tag-${item?.code || tag}`}
+                      size='small'
+                    />
+                  );
+                })}
+              </Box>
+            ) : null,
         },
-        render: (file) => {
-          if (file.enrollment) {
-            return file.enrollment.organizationName;
-          }
+        {
+          header: 'Project Name',
+          key: 'projectName',
+          render: ({ enrollment }) =>
+            enrollment ? (
+              enrollment.projectName
+            ) : (
+              <NotCollectedText>N/A</NotCollectedText>
+            ),
         },
-      },
-    ];
-  }, [isTiny, pickListData]);
+        {
+          header: 'Uploaded',
+          key: 'uploaded',
+          render: ({ dateCreated, uploadedBy }) => {
+            const byUser = uploadedBy?.name
+              ? `by ${uploadedBy?.name}`
+              : 'by unknown user';
+            if (dateCreated)
+              return (
+                <RelativeDateDisplay
+                  dateString={dateCreated}
+                  tooltipSuffixText={byUser}
+                />
+              );
+            return `Unknown time ${byUser}`;
+          },
+        },
+        {
+          header: 'Organization Name',
+          key: 'organizationName',
+          optional: {
+            defaultHidden: true,
+            queryVariableField: 'includeOrganizationName',
+          },
+          render: (file) => {
+            if (file.enrollment) {
+              return file.enrollment.organizationName;
+            }
+          },
+        },
+      ];
+    }, [isTiny, pickListData]);
 
   return (
     <>
@@ -186,7 +184,6 @@ const ClientFilesPage = () => {
           handleRowClick={(file) => (file.redacted ? {} : setViewingFile(file))}
           pagePath='client.files'
           noData='No files'
-          showOptionalColumns
         />
       </Paper>
       {viewingFile && (

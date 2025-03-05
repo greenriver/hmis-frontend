@@ -15,6 +15,11 @@ import {
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import {
+  HOUSEHOLD_ASSIGNED_STAFF_COL,
+  WITH_ENROLLMENT_COLUMNS,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS,
+} from '@/modules/enrollment/columns/enrollmentColumns';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
@@ -23,12 +28,7 @@ import {
   sortHouseholdMembers,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import {
-  HOUSEHOLD_ASSIGNED_STAFF_COL,
-  ProjectEnrollmentFields,
-  WITH_ENROLLMENT_COLUMNS,
-  WITH_ENROLLMENT_OPTIONAL_COLUMNS,
-} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { ProjectEnrollmentFields } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -258,7 +258,6 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
       pagePath='project.households'
       filters={filters}
       recordType='Household'
-      showOptionalColumns
     />
   );
 };

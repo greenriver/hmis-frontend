@@ -6,6 +6,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
@@ -13,7 +14,6 @@ import {
   parseAndFormatDate,
   PERMANENT_HOUSING_PROJECT_TYPES,
 } from '@/modules/hmis/hmisUtil';
-import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
@@ -151,7 +151,6 @@ const ClientEnrollmentsPage = () => {
           recordType='Enrollment'
           noSort
           defaultSortOption={EnrollmentSortOption.MostRecent}
-          showOptionalColumns
         />
       </Paper>
     </>

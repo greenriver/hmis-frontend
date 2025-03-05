@@ -5,10 +5,10 @@ import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { GenericTableWithDataColumnDef } from '@/modules/dataFetching/types';
+import { DataColumnDef } from '@/modules/dataFetching/types';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   GetClientCaseNotesDocument,
   GetClientCaseNotesQuery,
@@ -20,10 +20,7 @@ type Row = NonNullable<
   GetClientCaseNotesQuery['client']
 >['customCaseNotes']['nodes'][0];
 
-const COLUMNS: GenericTableWithDataColumnDef<
-  Row,
-  GetClientCaseNotesQueryVariables
->[] = [
+const COLUMNS: DataColumnDef<Row, GetClientCaseNotesQueryVariables>[] = [
   CASE_NOTE_COLUMNS.InformationDate,
   {
     key: 'project',
@@ -91,7 +88,6 @@ const ClientCaseNotes = () => {
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar
-          showOptionalColumns
         />
       </Paper>
       {viewRecordDialog()}
