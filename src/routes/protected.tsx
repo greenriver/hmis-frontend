@@ -51,6 +51,9 @@ import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage
 import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
+import Opportunities from '@/modules/ce/components/Opportunities';
+import Opportunity from '@/modules/ce/components/Opportunity';
+import Referral from '@/modules/ce/components/Referral';
 import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
 import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
 import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
@@ -411,7 +414,40 @@ export const protectedRoutes: RouteNode[] = [
               </ProjectEditRoute>
             ),
           },
+          {
+            path: ProjectDashboardRoutes.OPPORTUNITIES,
+            element: (
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']}
+                otherwise={<NotFound />}
+              >
+                <Opportunities />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.OPPORTUNITY,
+            element: (
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']}
+                otherwise={<NotFound />}
+              >
+                <Opportunity />
+              </RootPermissionsFilter>
+            ),
+          },
         ],
+      },
+      {
+        path: Routes.REFERRAL,
+        element: (
+          <RootPermissionsFilter
+            permissions={['canViewCoordinatedEntry']}
+            otherwise={<NotFound />}
+          >
+            <Referral />
+          </RootPermissionsFilter>
+        ),
       },
       {
         path: Routes.CREATE_PROJECT,

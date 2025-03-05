@@ -11,6 +11,7 @@ export const Routes = {
   CREATE_PROJECT: '/organizations/:organizationId/new-project',
   CREATE_ORGANIZATION: '/projects/new-organization',
   MY_DASHBOARD: '/my-dashboard',
+  REFERRAL: '/referrals/:referralId',
 } as const;
 
 const adminDashboardRoutes = {
@@ -107,6 +108,10 @@ const projectDashboardRoutes = {
   HMIS_PARTICIPATION: 'hmis-participation',
   CE_PARTICIPATION: 'ce-participation',
   EXTERNAL_FORM_SUBMISSIONS: 'external-form-submissions',
+
+  // CE
+  OPPORTUNITIES: 'opportunities',
+  OPPORTUNITY: 'opportunities/:opportunityId',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`

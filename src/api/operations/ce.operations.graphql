@@ -1,0 +1,23 @@
+mutation CreateCeOpportunity($projectId: ID!, $input: CeOpportunityInput!) {
+  createCeOpportunity(projectId: $projectId, input: $input) {
+    opportunity {
+      ...CeOpportunitySummaryFields
+    }
+  }
+}
+
+mutation CreateCeReferral(
+  $opportunityId: ID!
+  $clientId: ID!
+  $input: CeReferralInput!
+) {
+  createCeReferral(
+    opportunityId: $opportunityId
+    clientId: $clientId
+    input: $input
+  ) {
+    referral {
+      ...CeReferralSummaryFields
+    }
+  }
+}

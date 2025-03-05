@@ -141,6 +141,10 @@ export const useProjectBreadcrumbConfig = (
       [ProjectDashboardRoutes.CE_PARTICIPATION]: {
         title: 'CE Participation',
       },
+      [ProjectDashboardRoutes.OPPORTUNITY]: {
+        title: 'Opportunity',
+        parent: ProjectDashboardRoutes.OPPORTUNITIES,
+      },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;
     return buildDefaultCrumbs(ProjectDashboardRoutes, overrides, projectRoot);
