@@ -22,6 +22,7 @@ type ClientMergeAuditType = NonNullable<
 const columns: ColumnDef<ClientMergeAuditType>[] = [
   {
     header: 'Client Name',
+    key: 'clientName',
     render: ({ client }) => (client ? <ClientName client={client} /> : null),
   },
   ...ClientMergeAuditColumns,

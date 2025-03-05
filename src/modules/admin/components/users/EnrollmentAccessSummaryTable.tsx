@@ -13,21 +13,26 @@ const columns: ColumnDef<EnrollmentAccessSummaryFieldsFragment>[] = [
   {
     header: 'Project Name',
     render: 'projectName',
+    key: 'projectName',
   },
   {
     header: 'Client Name',
     render: 'clientName',
+    key: 'clientName',
   },
   {
     header: 'Enrollment ID',
     render: 'enrollmentId',
+    key: 'enrollmentId',
   },
   {
     header: 'Client ID',
     render: 'clientId',
+    key: 'clientId',
   },
   {
     header: 'Last Accessed',
+    key: 'lastAccessed',
     render: ({ lastAccessedAt }) => (
       <RelativeDateTableCellContents
         dateTimeString={lastAccessedAt}

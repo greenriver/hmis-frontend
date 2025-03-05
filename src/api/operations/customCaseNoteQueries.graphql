@@ -33,6 +33,7 @@ query GetClientCaseNotes(
   $limit: Int = 10
   $offset: Int = 0
   $sortOrder: CustomCaseNoteSortOption
+  $includeOrganizationName: Boolean = false
 ) {
   client(id: $id) {
     id

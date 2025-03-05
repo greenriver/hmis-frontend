@@ -2,10 +2,10 @@ import { Chip, Paper, Stack } from '@mui/material';
 import React, { ReactNode, useId } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import RelationshipToHohSelect from '@/modules/household/components/elements/RelationshipToHohSelect';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import {
   asClient,
   CLIENT_COLUMNS,

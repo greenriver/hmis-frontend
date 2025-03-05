@@ -11,19 +11,18 @@ const dataCollectionVerb = {
   [DataCollectionStage.Invalid]: '',
 };
 
-const COLLECTION_DATE = 'Date Collected';
-const COLLECTION_STAGE = 'Collection Point';
-
 export const ASSESSMENT_COLUMNS = {
   CollectionDate: {
-    header: COLLECTION_DATE,
+    header: 'Date Collected',
+    key: 'dateCollected',
     render: (record: AssessmentForPopulation) =>
       [parseAndFormatDate(record.assessmentDate), record.user?.name]
         .filter((s) => !!s)
         .join(' by '),
   },
   CollectionStage: {
-    header: COLLECTION_STAGE,
+    header: 'Collection Point',
+    key: 'collectionPoint',
     render: (record: AssessmentForPopulation) =>
       [
         record.dataCollectionStage

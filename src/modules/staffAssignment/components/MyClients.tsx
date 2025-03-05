@@ -2,14 +2,20 @@ import { Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { memoize } from 'lodash-es';
 import React from 'react';
+import { renderCellContents } from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
 import {
-  clientBriefName,
-  parseAndFormatDateRange,
-} from '@/modules/hmis/hmisUtil';
+  ENTRY_DATE_COL,
+  LAST_CONTACT_DATE_COL,
+  MOVE_IN_DATE_COL,
+  ORGANIZATION_NAME_COL,
+  WITH_ENROLLMENT_COLUMNS,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS,
+} from '@/modules/enrollment/columns/enrollmentColumns';
+import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetUserStaffAssignmentsDocument,
@@ -37,31 +43,61 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
   {
     header: 'Head of Household',
     render: (assignment) => clientBriefName(memoizedHoh(assignment).client),
+    key: 'headOfHousehold',
   },
   {
     header: 'Members',
     render: (assignment) => assignment.household.householdClients.length,
+    key: 'members',
   },
   {
     header: 'Project',
     render: (assignment) =>
       memoizedHoh(assignment).enrollment.project.projectName,
+    key: 'project',
   },
   {
-    header: 'Enrollment Period',
+    ...ENTRY_DATE_COL,
     render: (assignment) => {
-      const hoh = memoizedHoh(assignment);
-      return parseAndFormatDateRange(
-        hoh.enrollment.entryDate,
-        hoh.enrollment.exitDate
+      return renderCellContents(
+        memoizedHoh(assignment),
+        WITH_ENROLLMENT_COLUMNS.entryDate.render
       );
     },
   },
   {
-    header: 'Status',
+    header: 'Household Status',
     render: (assignment) => (
       <HouseholdStatus household={assignment.household} />
     ),
+    key: 'status',
+  },
+  {
+    ...MOVE_IN_DATE_COL,
+    render: (assignment) => {
+      return renderCellContents(
+        memoizedHoh(assignment),
+        WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.render
+      );
+    },
+  },
+  {
+    ...LAST_CONTACT_DATE_COL,
+    render: (assignment) => {
+      return renderCellContents(
+        memoizedHoh(assignment),
+        WITH_ENROLLMENT_OPTIONAL_COLUMNS.lastContactDate.render
+      );
+    },
+  },
+  {
+    ...ORGANIZATION_NAME_COL,
+    render: (assignment) => {
+      return renderCellContents(
+        memoizedHoh(assignment),
+        WITH_ENROLLMENT_COLUMNS.organizationName.render
+      );
+    },
   },
 ];
 

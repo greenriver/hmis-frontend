@@ -43,12 +43,14 @@ const ClientMergeCandidatesTable: React.FC = () => {
   const columns: ColumnDef<MergeCandidateFragment>[] = [
     {
       header: 'Warehouse ID',
+      key: 'warehouseId',
       render: ({ id, warehouseUrl }) => (
         <ExternalLink href={warehouseUrl}>{id}</ExternalLink>
       ),
     },
     {
       header: 'HMIS ID',
+      key: 'hmisId',
       render: ({ clients }) => (
         <Stack direction='column' gap={1} sx={{ py: 1 }}>
           {clients.map((client) => (
@@ -59,6 +61,7 @@ const ClientMergeCandidatesTable: React.FC = () => {
     },
     {
       header: 'Client Name',
+      key: 'clientName',
       render: ({ clients }) => (
         <Stack direction='column' gap={1} sx={{ py: 1 }}>
           {clients.map((client) => (

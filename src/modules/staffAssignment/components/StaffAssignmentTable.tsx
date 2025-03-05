@@ -25,22 +25,27 @@ export const STAFF_ASSIGNMENT_COLUMNS: Record<
   staffName: {
     header: 'Staff Name',
     render: (assignment) => assignment.user.name,
+    key: 'staffName',
   },
   role: {
     header: 'Role',
     render: (assignment) => assignment.staffAssignmentRelationship,
+    key: 'role',
   },
   assignmentDate: {
     header: 'Assignment Date',
     render: (assignment) => parseAndFormatDate(assignment.assignedAt),
+    key: 'assignmentDate',
   },
   assignmentDateRange: {
     header: 'Assignment Dates',
     render: (assignment) =>
       parseAndFormatDateRange(assignment.assignedAt, assignment.unassignedAt),
+    key: 'assignmentDates',
   },
   action: {
     header: 'Action',
+    key: 'action',
     render: (assignment) => (
       <DeleteMutationButton<
         UnassignStaffMutation,

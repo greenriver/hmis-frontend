@@ -63,11 +63,13 @@ const CommonStatus: React.FC<CommonStatusProps> = ({ variant }) => {
   );
 };
 
+export type EnrollmentWithStatus = Pick<Enrollment, 'inProgress' | 'exitDate'> &
+  Partial<Pick<EnrollmentFieldsFragment, 'autoExited'>>;
+
 const EnrollmentStatus = ({
   enrollment,
 }: {
-  enrollment: Pick<Enrollment, 'inProgress' | 'exitDate'> &
-    Partial<Pick<EnrollmentFieldsFragment, 'autoExited'>>;
+  enrollment: EnrollmentWithStatus;
 }) => {
   if (enrollment.inProgress) return <CommonStatus variant='inProgress' />;
   if (enrollment.autoExited) return <CommonStatus variant='autoExited' />;

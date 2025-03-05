@@ -2,7 +2,6 @@ import { TableBody, TableCell, TableRow } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
 import {
   clickableRowStyles,
-  getColumnKey,
   getStickyCellStyles,
   renderCellContents,
   renderLinkedRowCellContents,
@@ -16,15 +15,20 @@ import {
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import {
+  HOUSEHOLD_ASSIGNED_STAFF_COL,
+  WITH_ENROLLMENT_COLUMNS,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS,
+} from '@/modules/enrollment/columns/enrollmentColumns';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
-import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
-  ASSIGNED_STAFF_COL,
-  EnrollmentFields,
-  WITH_ENROLLMENT_COLUMNS,
-} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+  clientBriefName,
+  PERMANENT_HOUSING_PROJECT_TYPES,
+  sortHouseholdMembers,
+} from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ProjectEnrollmentFields } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -42,7 +46,8 @@ export type HouseholdFields = NonNullable<
 
 export const ENROLLMENT_RELATIONSHIP_COL = {
   header: 'Relationship',
-  render: (e: Pick<EnrollmentFields, 'id' | 'relationshipToHoH'>) => (
+  key: 'relationship',
+  render: (e: Pick<ProjectEnrollmentFields, 'id' | 'relationshipToHoH'>) => (
     <HmisEnum
       key={e.id}
       value={e.relationshipToHoH}
@@ -64,6 +69,7 @@ const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS.lastContactDate,
 ];
 const ACTION_COL: ColumnDef<OneHouseholdClient> = {
   ...BASE_ACTION_COLUMN_DEF,
@@ -85,15 +91,15 @@ const ACTION_COL: ColumnDef<OneHouseholdClient> = {
 interface ProjectHouseholdsClientRowProps {
   household: ProjectEnrollmentsHouseholdFieldsFragment;
   householdClient: ProjectEnrollmentsHouseholdClientFieldsFragment;
+  columnKeys: string[];
   lastInGroup?: boolean;
-  showAssignedStaff?: boolean;
 }
 
 const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
   household,
   householdClient,
+  columnKeys,
   lastInGroup = false,
-  showAssignedStaff = false,
 }) => {
   const cellSx = useCallback(
     (col?: ColumnDef<ProjectEnrollmentsHouseholdClientFieldsFragment>) => {
@@ -117,26 +123,37 @@ const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
 
   return (
     <TableRow sx={clickableRowStyles} key={household.id + householdClient.id}>
-      {BASE_COLUMNS.map((col, i) => (
-        <TableCell
-          key={getColumnKey(col) || i}
-          role={i === 0 ? 'rowheader' : undefined}
-          sx={cellSx(col)}
-          className={col?.sticky ? stickyCellClassName : undefined}
-        >
+      {BASE_COLUMNS.filter((col) => columnKeys.includes(col.key)).map(
+        (col, i) => (
+          <TableCell
+            key={col.key}
+            role={i === 0 ? 'rowheader' : undefined}
+            sx={cellSx(col)}
+            className={col?.sticky ? stickyCellClassName : undefined}
+          >
+            {renderLinkedRowCellContents({
+              rowLink,
+              row: householdClient,
+              render: col.render,
+            })}
+          </TableCell>
+        )
+      )}
+      {columnKeys.includes(WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.key) && (
+        <TableCell sx={cellSx()}>
           {renderLinkedRowCellContents({
             rowLink,
             row: householdClient,
-            render: col.render,
+            render: WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.render,
           })}
         </TableCell>
-      ))}
-      {showAssignedStaff && (
+      )}
+      {columnKeys.includes(HOUSEHOLD_ASSIGNED_STAFF_COL.key) && (
         <TableCell sx={cellSx()}>
           {renderLinkedRowCellContents({
             rowLink,
             row: household,
-            render: ASSIGNED_STAFF_COL.render,
+            render: HOUSEHOLD_ASSIGNED_STAFF_COL.render,
           })}
         </TableCell>
       )}
@@ -170,21 +187,24 @@ interface Props {
 
 const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
   const {
-    project: { staffAssignmentsEnabled },
+    project: { staffAssignmentsEnabled, projectType },
   } = useProjectDashboardContext();
 
   // dummy column defs for Household that are only used for the headers, not for rendering cells
   const columns: ColumnDef<HouseholdFields>[] = useMemo(() => {
     return [
       ...BASE_COLUMNS,
-      ...(staffAssignmentsEnabled ? [{ ...ASSIGNED_STAFF_COL }] : []),
+      ...(projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)
+        ? [WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate]
+        : []),
+      ...(staffAssignmentsEnabled ? [HOUSEHOLD_ASSIGNED_STAFF_COL] : []),
       ACTION_COL,
     ].map(({ render, ...rest }) => ({
       ...rest,
       render: () => null,
       tableCellProps: undefined, // typescript appeasement
     }));
-  }, [staffAssignmentsEnabled]);
+  }, [projectType, staffAssignmentsEnabled]);
 
   const filters = useFilters({
     type: 'HouseholdFilterOptions',
@@ -222,9 +242,7 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
                   household={household}
                   householdClient={householdClient}
                   lastInGroup={index === household.householdClients.length - 1}
-                  showAssignedStaff={columnKeys.includes(
-                    ASSIGNED_STAFF_COL.key || ''
-                  )}
+                  columnKeys={columnKeys}
                 />
               )
             )}
@@ -240,15 +258,6 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
       pagePath='project.households'
       filters={filters}
       recordType='Household'
-      showOptionalColumns
-      applyOptionalColumns={(cols) => {
-        const result: Partial<GetProjectHouseholdsQueryVariables> = {};
-
-        if (cols.includes(ASSIGNED_STAFF_COL.key || ''))
-          result.includeStaffAssignment = true;
-
-        return result;
-      }}
     />
   );
 };

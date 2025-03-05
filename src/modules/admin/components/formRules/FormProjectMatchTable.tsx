@@ -13,14 +13,17 @@ const columns: ColumnDef<FormProjectMatchFieldsFragment>[] = [
   {
     header: 'Project',
     render: 'projectName',
+    key: 'projectName',
   },
   {
     header: 'Organization',
     render: 'organizationName',
+    key: 'organizationName',
   },
   {
     header: 'Applies to',
     render: (row) => HmisEnums.DataCollectedAbout[row.dataCollectedAbout],
+    key: 'appliesTo',
   },
 ];
 

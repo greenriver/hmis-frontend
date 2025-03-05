@@ -23,28 +23,34 @@ type OutgoingReferral = NonNullable<
 const columns: ColumnDef<OutgoingReferral>[] = [
   {
     header: 'Referral Date',
+    key: 'referralDate',
     render: (row: OutgoingReferral) => parseAndFormatDate(row.referralDate),
   },
   {
     header: 'HoH Name',
+    key: 'hohName',
     render: 'hohName',
   },
   {
     header: 'Project Referred To',
+    key: 'referredTo',
     render: 'referredTo',
   },
   {
     header: 'Referred By',
+    key: 'referredBy',
     render: 'referredBy',
   },
   {
     header: 'Status',
+    key: 'status',
     render: ({ status }: OutgoingReferral) => (
       <ReferralPostingStatusDisplay status={status} />
     ),
   },
   {
     header: 'Household Size',
+    key: 'householdSize',
     render: 'householdSize',
   },
 ];
