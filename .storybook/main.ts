@@ -1,6 +1,5 @@
-const { mergeConfig } = require('vite');
-const { resolve } = require('path');
-import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+import { mergeConfig } from 'vite';
 
 const config = {
   async viteFinal(config) {
