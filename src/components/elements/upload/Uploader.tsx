@@ -353,7 +353,11 @@ const Uploader = <Multiple extends boolean>({
                     </Link>{' '}
                     or drag and drop
                   </Typography>
-                  <Typography variant='body2' color='GrayText' sx={{ mt: 1 }}>
+                  <Typography
+                    variant='body2'
+                    color='grayscale.main'
+                    sx={{ mt: 1 }}
+                  >
                     {accept ? getFileTypesFromAccept(accept) : 'Any file type'}{' '}
                     (max. {getReadableSize(maxSize)})
                   </Typography>

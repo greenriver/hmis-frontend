@@ -104,7 +104,7 @@ const FileSummary: React.FC<FileSummaryProps> = ({
                   onRemove();
                 }}
                 variant='body2'
-                color='GrayText'
+                color='grayscale.main'
                 sx={{
                   display: 'inline-flex',
                   alignItems: 'center',

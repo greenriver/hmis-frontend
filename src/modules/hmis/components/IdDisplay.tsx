@@ -35,7 +35,7 @@ const IdDisplay = ({
   return (
     <Typography
       variant='body2'
-      color='text.disabled'
+      color='grayscale.main'
       {...props}
       sx={{ ...centerAlignedSx, gap: 0.8, ...props.sx }}
     >

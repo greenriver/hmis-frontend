@@ -91,7 +91,12 @@ const RadioGroupInput = ({
   const ControlComponent = checkbox ? Checkbox : Radio;
 
   return (
-    <FormControl component='fieldset' sx={{ maxWidth, ...sx }}>
+    <FormControl
+      component='fieldset'
+      sx={{ maxWidth, ...sx }}
+      // this marks up the fieldset DOM element as `disabled`. MUI FormControl doesn't pass down the `disabled` prop
+      ref={(el) => el && props.disabled && el.setAttribute('disabled', 'true')}
+    >
       <FormLabel
         error={error}
         disabled={props.disabled}

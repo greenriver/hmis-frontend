@@ -8,11 +8,11 @@ const getLabelAndColor = (enumMap: Record<string, string>, value?: any) => {
   let color: TypographyProps['color'] = 'text.primary';
   const label = enumMap[value];
   if (!label) {
-    color = 'text.disabled';
+    color = 'grayscale.main';
   } else if (value === INVALID_ENUM) {
-    color = 'error';
+    color = 'error.dark';
   } else if (isDataNotCollected(value) || MISSING_DATA_KEYS.includes(value)) {
-    color = 'text.disabled';
+    color = 'grayscale.main';
   }
   return [label, color];
 };
