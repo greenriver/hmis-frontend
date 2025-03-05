@@ -75,7 +75,9 @@ const RadioGroupInputOption: React.FC<Props> = ({
             variant: 'body2',
             mr: 0.5,
             color:
-              variant === 'checkbox' && value && !checked ? 'gray' : undefined,
+              variant === 'checkbox' && value && !checked
+                ? 'grayscale.main'
+                : undefined,
           },
         }}
       />

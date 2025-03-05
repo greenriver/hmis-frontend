@@ -27,7 +27,7 @@ interface Props {
 }
 
 const nullText = (
-  <Typography component='span' variant='inherit' color='text.disabled'>
+  <Typography component='span' variant='inherit' color='grayscale.main'>
     Empty
   </Typography>
 );

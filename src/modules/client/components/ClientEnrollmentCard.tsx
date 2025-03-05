@@ -1,6 +1,7 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { Typography } from '@mui/material';
+import React, { useMemo } from 'react';
 
+import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import TitleCard from '@/components/elements/TitleCard';
 import { ENROLLMENT_STATUS_COL } from '@/modules/enrollment/columns/enrollmentColumns';
@@ -41,25 +42,13 @@ const RecentEnrollments = ({
 
   if (error) throw error;
   if (loading && !client) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: (theme) => theme.palette.text.disabled,
-          p: 2,
-        }}
-      >
-        <CircularProgress aria-label='Loading' color='inherit' />
-      </Box>
-    );
+    return <Loading />;
   }
   if (!client) throw new Error('client not found');
 
   if (recentEnrollments && recentEnrollments.length === 0)
     return (
-      <Typography sx={{ p: 2 }} color='GrayText'>
+      <Typography sx={{ p: 2 }} color='grayscale.main'>
         No Recent Enrollments
       </Typography>
     );

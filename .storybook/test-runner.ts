@@ -14,11 +14,6 @@ const config: TestRunnerConfig = {
       // Skip some rules for now as we work on addressing them
       rules: [
         {
-          // TODO(#7108), https://github.com/open-path/hmis-accessibility/issues/162
-          id: 'color-contrast',
-          enabled: false,
-        },
-        {
           // TODO https://github.com/open-path/hmis-accessibility/issues/1
           id: 'autocomplete-valid',
           enabled: false,

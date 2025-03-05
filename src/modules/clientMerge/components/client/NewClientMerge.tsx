@@ -117,7 +117,7 @@ const NewClientMerge = () => {
           record.id === client.id ? (
             <Typography
               textAlign='center'
-              color='text.disabled'
+              color='grayscale.main'
               variant='body2'
             >
               Current Client
