@@ -18,25 +18,37 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
     () => (columns || []).filter((col) => !!col.optional),
     [columns]
   );
+  const optionalColumnKeys = useMemo(
+    () => optionalColumns.map((col) => col.key),
+    [optionalColumns]
+  );
 
   const currentPath = useCurrentPath();
 
   // Optional columns to show when the page first loads
   const initialOptionalColumns = useMemo(() => {
+    if (optionalColumns.length === 0) {
+      return [];
+    }
+
     const storedOptionalCols = currentPath
       ? getStoredPathParams(currentPath)?.optionalColumns
       : undefined;
 
-    // If local storage has optional columns for this path, return them
-    if (storedOptionalCols) return storedOptionalCols;
+    // If local storage has optional columns for this path, return them.
+    // Filter by optionalColumnKeys inclusion so we only return columns relevant to this table
+    if (storedOptionalCols)
+      return storedOptionalCols.filter((col: string) =>
+        optionalColumnKeys.includes(col)
+      );
 
     // Otherwise, default to any optional columns that are not defaultHidden
     return compact(
       optionalColumns
-        ?.filter((col) => !col.optional?.defaultHidden)
+        .filter((col) => !col.optional?.defaultHidden)
         .map((col) => col.key) || []
     );
-  }, [optionalColumns, currentPath]);
+  }, [optionalColumns, currentPath, optionalColumnKeys]);
 
   // Store currently selected optional columns in url search params
   const [paramValues, setParamValues] = useSearchParamsState(
@@ -78,7 +90,7 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
 
     return queryVariableFields.reduce((acc: any, key) => {
       acc[key] = true;
-      return acc as QueryVariables;
+      return acc;
     }, {});
   }, [includedOptionalColumns, optionalColumns]);
 
