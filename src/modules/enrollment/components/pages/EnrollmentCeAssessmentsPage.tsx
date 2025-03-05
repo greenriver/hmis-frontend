@@ -24,28 +24,33 @@ import {
 const COLUMNS: ColumnDef<CeAssessmentFieldsFragment>[] = [
   {
     header: 'Assessment Date',
+    key: 'date',
     render: (a: CeAssessmentFieldsFragment) =>
       parseAndFormatDate(a.assessmentDate),
     sticky: 'left',
   },
   {
     header: 'Assessment Level',
+    key: 'level',
     render: (a: CeAssessmentFieldsFragment) => (
       <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
     ),
   },
   {
     header: 'Assessment Type',
+    key: 'type',
     render: (a: CeAssessmentFieldsFragment) => (
       <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
     ),
   },
   {
     header: 'Assessment Location',
+    key: 'location',
     render: (a: CeAssessmentFieldsFragment) => a.assessmentLocation,
   },
   {
     header: 'Prioritization Status',
+    key: 'prioritization status',
     render: (a: CeAssessmentFieldsFragment) => (
       <HmisEnum
         value={a.prioritizationStatus}

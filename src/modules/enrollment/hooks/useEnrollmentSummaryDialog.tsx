@@ -21,20 +21,24 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragment>[] = [
   {
     header: 'Enrollment Period',
+    key: 'period',
     render: (e) => entryExitRange(e),
   },
   {
     header: 'Project',
+    key: 'project',
     render: (e) => e.projectName,
   },
   {
     header: 'Project Type',
+    key: 'projectType',
     render: (e) => (
       <HmisEnum value={e.projectType} enumMap={HmisEnums.ProjectType} />
     ),
   },
   {
     header: 'Move in Date',
+    key: 'moveInDate',
     render: (e) => parseAndFormatDate(e.moveInDate),
   },
 ];

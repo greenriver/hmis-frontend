@@ -1,12 +1,13 @@
 import { Paper } from '@mui/material';
 import React from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
+import { DataColumnDef } from '@/modules/dataFetching/types';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
@@ -27,7 +28,7 @@ type ServiceType = NonNullable<
   NonNullable<GetClientServicesQuery['client']>['services']
 >['nodes'][0];
 
-const columns: ColumnDef<ServiceType>[] = [
+const columns: DataColumnDef<ServiceType, GetClientServicesQueryVariables>[] = [
   { ...SERVICE_BASIC_COLUMNS.serviceDate, sticky: 'left' },
   SERVICE_BASIC_COLUMNS.serviceType,
   {
@@ -37,9 +38,19 @@ const columns: ColumnDef<ServiceType>[] = [
   },
   {
     ...SERVICE_COLUMNS.serviceDetails,
-    optional: true,
-    defaultHidden: true,
+    optional: {
+      defaultHidden: true,
+      queryVariableField: 'includeServiceDetails',
+    },
   },
+  {
+    ...WITH_ENROLLMENT_COLUMNS.entryDate,
+    optional: {
+      defaultHidden: true,
+    },
+  },
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+  WITH_ENROLLMENT_COLUMNS.organizationName,
 ];
 
 const ClientServicesPage: React.FC = () => {
@@ -86,7 +97,6 @@ const ClientServicesPage: React.FC = () => {
           recordType='Service'
           defaultSortOption={ServiceSortOption.DateProvided}
           noSort
-          showOptionalColumns
         />
       </Paper>
     </>

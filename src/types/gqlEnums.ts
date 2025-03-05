@@ -782,6 +782,18 @@ export const HmisEnums = {
     TEXT: 'TEXT',
     TIME_OF_DAY: 'TIME_OF_DAY',
   },
+  LastContactType: {
+    ANNUAL_ASSESSMENT: 'Annual Assessment',
+    ASSESSMENT: 'Assessment',
+    BED_NIGHT: 'Bed Night',
+    CASE_NOTE: 'Case Note',
+    CURRENT_LIVING_SITUATION: 'Current Living Situation',
+    EXIT_ASSESSMENT: 'Exit Assessment',
+    INTAKE_ASSESSMENT: 'Intake Assessment',
+    POST_EXIT_ASSESSMENT: 'Post-Exit Assessment',
+    SERVICE: 'Service',
+    UPDATE_ASSESSMENT: 'Update Assessment',
+  },
   LastGradeCompleted: {
     INVALID: 'Invalid Value',
     LESS_THAN_GRADE_5: 'Less than grade 5',

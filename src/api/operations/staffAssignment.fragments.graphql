@@ -44,6 +44,7 @@ fragment StaffAssignmentWithClients on StaffAssignment {
     anyInProgress
     latestExitDate
     householdClients {
+      id
       relationshipToHoH
       client {
         id
@@ -54,6 +55,12 @@ fragment StaffAssignmentWithClients on StaffAssignment {
         ...EnrollmentRangeFields
         project {
           ...ProjectNameAndType
+        }
+        organizationName @include(if: $includeOrganizationName)
+        moveInDate @include(if: $includeMoveInDate)
+        lastContact @include(if: $includeLastContact) {
+          contactDate
+          contactType
         }
       }
     }

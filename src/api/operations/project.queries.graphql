@@ -45,8 +45,9 @@ query GetProjectEnrollments(
   $sortOrder: EnrollmentSortOption
   $limit: Int = 10
   $offset: Int = 0
-  $includeCls: Boolean = false
   $includeStaffAssignment: Boolean = false
+  $includeMoveInDate: Boolean = false
+  $includeLastContact: Boolean = false
 ) {
   project(id: $id) {
     id
@@ -73,6 +74,8 @@ query GetProjectHouseholds(
   $limit: Int = 10
   $offset: Int = 0
   $includeStaffAssignment: Boolean = false
+  $includeMoveInDate: Boolean = false
+  $includeLastContact: Boolean = false
 ) {
   project(id: $id) {
     id
