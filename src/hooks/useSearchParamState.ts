@@ -1,7 +1,11 @@
 import { isDate } from 'date-fns';
 import { isNil } from 'lodash-es';
-import { useCallback, useEffect, useMemo } from 'react';
-import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  createSearchParams,
+  URLSearchParamsInit,
+  useSearchParams,
+} from 'react-router-dom';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 
 // adapted from https://github.com/jschwindt/react-use-search-params-state/tree/main
@@ -118,32 +122,51 @@ const useSearchParamsState = (
   paramsDefinition: SearchParamsStateType,
   initial?: URLSearchParamsInit
 ) => {
-  // `initial` is NOT passed to `useSearchParams` here; useSearchParams's defaultInit prop
-  // auto-populates its internal state, but not the actual search params that appear in the url.
+  // `initial` is NOT passed to `useSearchParams` here, since react-router-dom's
+  // useSearchParams's `defaultInit` prop auto-populates the internal state, but not
+  // the search params that appear in the url. See the useEffect below
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Auto-populate the search params with the initial value
+  // This wrapper for setSearchParams ensure that if different components within
+  // one page use this hook, they won't overwrite each other's searchParamsState
+  const updateSearchParams = useCallback(
+    (newValues: Record<string, any>) => {
+      setSearchParams((oldParams) => {
+        const oldValues = Object.fromEntries(oldParams.entries());
+        return createSearchParams({ ...oldValues, ...newValues });
+      });
+    },
+    [setSearchParams]
+  );
+
+  const [mounted, setMounted] = useState(false);
+
+  // Use an effect to set the `initial` params in the url bar
   useEffect(() => {
+    setMounted(true);
+
     if (!initial) return;
 
     const toUpdate: Record<string, any> = Object.fromEntries(
-      // Find any key/value pairs that are in initial, but not in searchParams.
+      // Find any key/value pairs that are in initial, but not in searchParams
       Object.entries(initial).filter(([key]) => !searchParams.has(key))
     );
-
     if (Object.keys(toUpdate).length) {
-      // This unfortunately needs to cause an extra render when setting searchParams to the initial value
-      setSearchParams(toUpdate, { replace: true });
+      updateSearchParams(toUpdate);
     }
 
-    // Only run on mount, so that we don't prevent the user from overwriting the initial values.
+    // Only run on mount, so the user can overwrite initial values.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const values = useMemo(
-    () => getValues(paramsDefinition, searchParams),
-    [paramsDefinition, searchParams]
-  );
+  const values = useMemo(() => {
+    if (initial && !mounted) {
+      // If the above useEffect hasn't run yet, return the initial values right away
+      // to avoid flickering
+      return getValues(paramsDefinition, createSearchParams(initial));
+    }
+    return getValues(paramsDefinition, searchParams);
+  }, [initial, mounted, paramsDefinition, searchParams]);
 
   const setValues = useCallback(
     (newValues: Record<string, any>) => {
@@ -167,11 +190,10 @@ const useSearchParamsState = (
           }
         }
       }
-      setSearchParams({ ...currentParams, ...newValues });
+      updateSearchParams({ ...currentParams, ...newValues });
     },
-    [paramsDefinition, searchParams, setSearchParams]
+    [paramsDefinition, searchParams, updateSearchParams]
   );
-
   return [values, setValues] as const;
 };
 export default useSearchParamsState;
