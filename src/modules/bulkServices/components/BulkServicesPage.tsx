@@ -64,7 +64,7 @@ const BulkServicesPage: React.FC<Props> = ({
       serviceTypeId: serviceTypeIdParam,
     },
     setFilterParams,
-  ] = useSearchParamsState(filtersDefaults);
+  ] = useSearchParamsState({ paramsDefinition: filtersDefaults });
 
   const serviceTypeId = useMemo(
     () => serviceTypeIdProp || serviceTypeIdParam,

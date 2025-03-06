@@ -118,10 +118,13 @@ const getAllCurrentParams = (searchParams: URLSearchParams) => {
  * indicating their type and default value
  * @param initial initial values to set in the search params
  */
-const useSearchParamsState = (
-  paramsDefinition: SearchParamsStateType,
-  initial?: URLSearchParamsInit
-) => {
+const useSearchParamsState = ({
+  paramsDefinition,
+  initial,
+}: {
+  paramsDefinition: SearchParamsStateType;
+  initial?: URLSearchParamsInit;
+}) => {
   // `initial` is NOT passed to `useSearchParams` here, since react-router-dom's
   // useSearchParams's `defaultInit` prop auto-populates the internal state, but not
   // the search params that appear in the url. See the useEffect below

@@ -51,18 +51,18 @@ export function useOptionalColumns<T extends { id: string }, QueryVariables>({
   }, [optionalColumns, currentPath, optionalColumnKeys]);
 
   // Store currently selected optional columns in url search params
-  const [paramValues, setParamValues] = useSearchParamsState(
-    {
+  const [paramValues, setParamValues] = useSearchParamsState({
+    paramsDefinition: {
       optionalColumns: {
         type: 'string',
         multiple: true,
         default: [],
       },
     },
-    {
+    initial: {
       optionalColumns: initialOptionalColumns,
-    }
-  );
+    },
+  });
 
   const includedOptionalColumns = useMemo(
     () => paramValues.optionalColumns,
