@@ -1,11 +1,7 @@
 import { isDate } from 'date-fns';
 import { isNil } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  createSearchParams,
-  URLSearchParamsInit,
-  useSearchParams,
-} from 'react-router-dom';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 
 // adapted from https://github.com/jschwindt/react-use-search-params-state/tree/main
@@ -77,7 +73,7 @@ const getValues = (
   paramsDefinition: SearchParamsStateType,
   searchParams: URLSearchParams
 ) => {
-  const values: any = {};
+  const values: Record<string, any> = {};
   for (const [paramName, paramDefinition] of Object.entries(paramsDefinition)) {
     if (paramDefinition.type === 'boolean') {
       values[paramName] = paramToBool(paramName, paramDefinition, searchParams);
@@ -110,21 +106,21 @@ const getAllCurrentParams = (searchParams: URLSearchParams) => {
   return allUrlParams;
 };
 
-/**
- * Works like useState but stores the state in URL search params. Adapted
- * from https://github.com/jschwindt/react-use-search-params-state/tree/main
- *
- * @param paramsDefinition maps search param names to their definitions,
- * indicating their type and default value
- * @param initial initial values to set in the search params
- */
+// Type for internal state representation of search params
+type ValueType = Record<string, any>; // Future improvement: constrain value type
+
+type Args = {
+  paramsDefinition: SearchParamsStateType; // shape of params/state
+  initial?: ValueType;
+};
+
+// Returns state and setState function
+type ReturnType = [ValueType, (value: ValueType) => void];
+
 const useSearchParamsState = ({
   paramsDefinition,
   initial,
-}: {
-  paramsDefinition: SearchParamsStateType;
-  initial?: URLSearchParamsInit;
-}) => {
+}: Args): ReturnType => {
   // `initial` is NOT passed to `useSearchParams` here, since react-router-dom's
   // useSearchParams's `defaultInit` prop auto-populates the internal state, but not
   // the search params that appear in the url. See the useEffect below
@@ -187,6 +183,6 @@ const useSearchParamsState = ({
     },
     [paramsDefinition, searchParams, setSearchParams]
   );
-  return [values, setValues] as const;
+  return [values, setValues];
 };
 export default useSearchParamsState;
