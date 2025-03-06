@@ -7,7 +7,12 @@ const ExternalLink: React.FC<LinkProps> = ({ children, ...props }) => {
     <Link target='_blank' {...props}>
       <Typography
         variant='inherit'
-        sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 0.75,
+          textDecoration: 'inherit',
+        }}
       >
         {children} <OpenInNewIcon fontSize='inherit' />
       </Typography>

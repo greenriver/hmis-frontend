@@ -23,6 +23,7 @@ import {
 const columns: ColumnDef<HmisParticipationFieldsFragment>[] = [
   {
     header: 'Participation Type',
+    key: 'participationType',
     render: ({ hmisParticipationType }: HmisParticipationFieldsFragment) => (
       <HmisEnum
         value={hmisParticipationType}
@@ -32,6 +33,7 @@ const columns: ColumnDef<HmisParticipationFieldsFragment>[] = [
   },
   {
     header: 'Active Period',
+    key: 'activePeriod',
     render: ({
       hmisParticipationStatusStartDate,
       hmisParticipationStatusEndDate,

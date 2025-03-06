@@ -54,13 +54,14 @@ export const externalIdColumn = (
   label: string
 ) => ({
   header: label,
+  key: label,
   render: (
     record: ClientSearchResultFieldsFragment | HouseholdClientFieldsFragment,
     props?: ExternalIdDisplayProps
   ) => {
     const client = isHouseholdClient(record) ? record.client : record;
     return (
-      <Stack gap={0.8}>
+      <Stack gap={0.8} sx={{ width: 'fit-content' }}>
         {filter(client.externalIds, { type }).map((val) => (
           <ExternalIdDisplay key={val?.identifier} value={val} {...props} />
         ))}

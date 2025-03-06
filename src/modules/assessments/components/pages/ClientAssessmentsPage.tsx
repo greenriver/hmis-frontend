@@ -1,7 +1,6 @@
 import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
@@ -11,6 +10,8 @@ import {
 } from '@/modules/assessments/util';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { DataColumnDef } from '@/modules/dataFetching/types';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription, entryExitRange } from '@/modules/hmis/hmisUtil';
 import {
@@ -20,14 +21,27 @@ import {
   GetClientAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
 
-const COLUMNS: ColumnDef<ClientAssessmentType>[] = [
+const COLUMNS: DataColumnDef<
+  ClientAssessmentType,
+  GetClientAssessmentsQueryVariables
+>[] = [
   { ...ASSESSMENT_COLUMNS.date, sticky: 'left' },
   ASSESSMENT_COLUMNS.type,
   ASSESSMENT_COLUMNS.lastUpdated,
   {
     header: 'Project Name',
+    key: 'projectName',
     render: (row: ClientAssessmentType) => row.enrollment.projectName,
   },
+  {
+    ...WITH_ENROLLMENT_COLUMNS.entryDate,
+    optional: {
+      defaultHidden: true,
+      // no queryVariableField, since we need to fetch entryDate anyway in order to correctly aria-label the row action
+    },
+  },
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+  WITH_ENROLLMENT_COLUMNS.organizationName,
 ];
 
 const ClientAssessmentsPage = () => {

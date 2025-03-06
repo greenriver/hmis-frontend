@@ -87,13 +87,14 @@ const NewClientMerge = () => {
 
   const clientColumns: ColumnDef<ClientSearchResultFieldsFragment>[] = useMemo(
     () => [
-      { header: 'HMIS ID', render: 'id' },
+      { header: 'HMIS ID', render: 'id', key: 'id' },
       CLIENT_COLUMNS.first,
       CLIENT_COLUMNS.last,
       CLIENT_SSN_COLUMN,
       CLIENT_COLUMNS.dobAge,
       {
         header: 'Gender',
+        key: 'gender',
         render: (client: ClientSearchResultFieldsFragment) => (
           <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
         ),

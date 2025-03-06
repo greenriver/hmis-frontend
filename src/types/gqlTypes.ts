@@ -2449,6 +2449,7 @@ export type Enrollment = {
   juvenileJusticeMonths?: Maybe<Scalars['Int']['output']>;
   juvenileJusticeYears?: Maybe<RhyNumberofYears>;
   lastBedNightDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  lastContact?: Maybe<LastContact>;
   lastCurrentLivingSituation?: Maybe<CurrentLivingSituation>;
   lastServiceDate?: Maybe<Scalars['ISO8601Date']['output']>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
@@ -4063,6 +4064,35 @@ export type KeyValue = {
   key: Scalars['String']['output'];
   value?: Maybe<Scalars['String']['output']>;
 };
+
+export type LastContact = {
+  __typename?: 'LastContact';
+  contactDate: Scalars['ISO8601Date']['output'];
+  contactType: LastContactType;
+};
+
+export enum LastContactType {
+  /** Annual Assessment */
+  AnnualAssessment = 'ANNUAL_ASSESSMENT',
+  /** Assessment */
+  Assessment = 'ASSESSMENT',
+  /** Bed Night */
+  BedNight = 'BED_NIGHT',
+  /** Case Note */
+  CaseNote = 'CASE_NOTE',
+  /** Current Living Situation */
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Exit Assessment */
+  ExitAssessment = 'EXIT_ASSESSMENT',
+  /** Intake Assessment */
+  IntakeAssessment = 'INTAKE_ASSESSMENT',
+  /** Post-Exit Assessment */
+  PostExitAssessment = 'POST_EXIT_ASSESSMENT',
+  /** Service */
+  Service = 'SERVICE',
+  /** Update Assessment */
+  UpdateAssessment = 'UPDATE_ASSESSMENT',
+}
 
 /** HUD LastGradeCompleted (R4.1) */
 export enum LastGradeCompleted {
@@ -12093,6 +12123,7 @@ export type GetClientAssessmentsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
   filters?: InputMaybe<AssessmentFilterOptions>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientAssessmentsQuery = {
@@ -12126,7 +12157,7 @@ export type GetClientAssessmentsQuery = {
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
-          organizationName: string;
+          organizationName?: string;
           projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
@@ -16817,6 +16848,10 @@ export type GetClientEnrollmentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
+  includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientEnrollmentsQuery = {
@@ -16839,7 +16874,7 @@ export type GetClientEnrollmentsQuery = {
         moveInDate?: string | null;
         lastBedNightDate?: string | null;
         projectName: string;
-        organizationName: string;
+        organizationName?: string;
         projectType?: ProjectType | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
@@ -16847,6 +16882,46 @@ export type GetClientEnrollmentsQuery = {
           __typename?: 'EnrollmentAccess';
           id: string;
           canViewEnrollmentDetails: boolean;
+        };
+        lastContact?: {
+          __typename?: 'LastContact';
+          contactDate: string;
+          contactType: LastContactType;
+        } | null;
+        household?: {
+          __typename?: 'Household';
+          id: string;
+          householdClients: Array<{
+            __typename?: 'HouseholdClient';
+            id: string;
+            relationshipToHoH: RelationshipToHoH;
+            client: {
+              __typename?: 'Client';
+              id: string;
+              lockVersion: number;
+              firstName?: string | null;
+              middleName?: string | null;
+              lastName?: string | null;
+              nameSuffix?: string | null;
+            };
+          }>;
+          staffAssignments?: {
+            __typename?: 'StaffAssignmentsPaginated';
+            nodesCount: number;
+            nodes: Array<{
+              __typename?: 'StaffAssignment';
+              id: string;
+              staffAssignmentRelationship: string;
+              assignedAt: string;
+              unassignedAt?: string | null;
+              user: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              };
+              household: { __typename?: 'Household'; id: string };
+            }>;
+          } | null;
         };
       }>;
     };
@@ -16859,6 +16934,8 @@ export type GetClientServicesQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
   filters?: InputMaybe<ServiceFilterOptions>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
+  includeServiceDetails?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientServicesQuery = {
@@ -16896,7 +16973,7 @@ export type GetClientServicesQuery = {
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
-          organizationName: string;
+          organizationName?: string;
           projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
@@ -16906,14 +16983,6 @@ export type GetClientServicesQuery = {
             canViewEnrollmentDetails: boolean;
           };
         };
-        user?: {
-          __typename: 'ApplicationUser';
-          id: string;
-          name: string;
-          firstName?: string | null;
-          lastName?: string | null;
-          email: string;
-        } | null;
         serviceType?: {
           __typename?: 'ServiceType';
           id: string;
@@ -16929,6 +16998,14 @@ export type GetClientServicesQuery = {
             id: string;
             name: string;
           };
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -17392,6 +17469,7 @@ export type GetClientFilesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientFilesQuery = {
@@ -17429,7 +17507,7 @@ export type GetClientFilesQuery = {
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
-          organizationName: string;
+          organizationName?: string;
           projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
@@ -20073,6 +20151,7 @@ export type GetClientCaseNotesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<CustomCaseNoteSortOption>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientCaseNotesQuery = {
@@ -20103,7 +20182,7 @@ export type GetClientCaseNotesQuery = {
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
-          organizationName: string;
+          organizationName?: string;
           projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
@@ -20465,7 +20544,7 @@ export type ClientEnrollmentFieldsFragment = {
   moveInDate?: string | null;
   lastBedNightDate?: string | null;
   projectName: string;
-  organizationName: string;
+  organizationName?: string;
   projectType?: ProjectType | null;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
@@ -20473,6 +20552,47 @@ export type ClientEnrollmentFieldsFragment = {
     __typename?: 'EnrollmentAccess';
     id: string;
     canViewEnrollmentDetails: boolean;
+  };
+};
+
+export type EnrollmentWithOptionalFieldsFragment = {
+  __typename?: 'Enrollment';
+  moveInDate?: string | null;
+  lastContact?: {
+    __typename?: 'LastContact';
+    contactDate: string;
+    contactType: LastContactType;
+  } | null;
+  household?: {
+    __typename?: 'Household';
+    id: string;
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+    }>;
+    staffAssignments?: {
+      __typename?: 'StaffAssignmentsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'StaffAssignment';
+        id: string;
+        staffAssignmentRelationship: string;
+        assignedAt: string;
+        unassignedAt?: string | null;
+        user: { __typename?: 'ApplicationUser'; id: string; name: string };
+        household: { __typename?: 'Household'; id: string };
+      }>;
+    } | null;
   };
 };
 
@@ -31795,14 +31915,6 @@ export type SubmitFormMutation = {
           dateUpdated?: string | null;
           dateDeleted?: string | null;
           formDefinitionId?: string | null;
-          user?: {
-            __typename: 'ApplicationUser';
-            id: string;
-            name: string;
-            firstName?: string | null;
-            lastName?: string | null;
-            email: string;
-          } | null;
           serviceType?: {
             __typename?: 'ServiceType';
             id: string;
@@ -31818,6 +31930,14 @@ export type SubmitFormMutation = {
               id: string;
               name: string;
             };
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
           } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -33763,6 +33883,12 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       exitDate?: string | null;
       inProgress: boolean;
       autoExited: boolean;
+      moveInDate?: string | null;
+      lastContact?: {
+        __typename?: 'LastContact';
+        contactDate: string;
+        contactType: LastContactType;
+      } | null;
     };
   }>;
   staffAssignments?: {
@@ -33805,6 +33931,12 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     exitDate?: string | null;
     inProgress: boolean;
     autoExited: boolean;
+    moveInDate?: string | null;
+    lastContact?: {
+      __typename?: 'LastContact';
+      contactDate: string;
+      contactType: LastContactType;
+    } | null;
   };
 };
 
@@ -36015,10 +36147,25 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
   householdId: string;
   householdShortId: string;
   householdSize: number;
-  lastCurrentLivingSituation?: {
-    __typename?: 'CurrentLivingSituation';
+  moveInDate?: string | null;
+  client: {
+    __typename?: 'Client';
     id: string;
-    informationDate?: string | null;
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    lockVersion: number;
+    age?: number | null;
+    gender: Array<Gender>;
+    pronouns: Array<string>;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+  lastContact?: {
+    __typename?: 'LastContact';
+    contactDate: string;
+    contactType: LastContactType;
   } | null;
   household?: {
     __typename?: 'Household';
@@ -36050,20 +36197,6 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
         household: { __typename?: 'Household'; id: string };
       }>;
     } | null;
-  };
-  client: {
-    __typename?: 'Client';
-    id: string;
-    dob?: string | null;
-    veteranStatus: NoYesReasonsForMissingData;
-    lockVersion: number;
-    age?: number | null;
-    gender: Array<Gender>;
-    pronouns: Array<string>;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
   };
 };
 
@@ -36332,8 +36465,9 @@ export type GetProjectEnrollmentsQueryVariables = Exact<{
   sortOrder?: InputMaybe<EnrollmentSortOption>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  includeCls?: InputMaybe<Scalars['Boolean']['input']>;
   includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetProjectEnrollmentsQuery = {
@@ -36359,10 +36493,25 @@ export type GetProjectEnrollmentsQuery = {
         householdId: string;
         householdShortId: string;
         householdSize: number;
-        lastCurrentLivingSituation?: {
-          __typename?: 'CurrentLivingSituation';
+        moveInDate?: string | null;
+        client: {
+          __typename?: 'Client';
           id: string;
-          informationDate?: string | null;
+          dob?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
+          lockVersion: number;
+          age?: number | null;
+          gender: Array<Gender>;
+          pronouns: Array<string>;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
+        lastContact?: {
+          __typename?: 'LastContact';
+          contactDate: string;
+          contactType: LastContactType;
         } | null;
         household?: {
           __typename?: 'Household';
@@ -36399,20 +36548,6 @@ export type GetProjectEnrollmentsQuery = {
             }>;
           } | null;
         };
-        client: {
-          __typename?: 'Client';
-          id: string;
-          dob?: string | null;
-          veteranStatus: NoYesReasonsForMissingData;
-          lockVersion: number;
-          age?: number | null;
-          gender: Array<Gender>;
-          pronouns: Array<string>;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        };
       }>;
     };
   } | null;
@@ -36425,6 +36560,8 @@ export type GetProjectHouseholdsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetProjectHouseholdsQuery = {
@@ -36467,6 +36604,12 @@ export type GetProjectHouseholdsQuery = {
             exitDate?: string | null;
             inProgress: boolean;
             autoExited: boolean;
+            moveInDate?: string | null;
+            lastContact?: {
+              __typename?: 'LastContact';
+              contactDate: string;
+              contactType: LastContactType;
+            } | null;
           };
         }>;
         staffAssignments?: {
@@ -39037,10 +39180,30 @@ export type ServiceBasicFieldsFragment = {
   } | null;
 };
 
-export type ServiceFieldsFragment = {
+export type ServiceBaseFieldsFragment = {
   __typename?: 'Service';
   id: string;
   dateProvided?: string | null;
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+    serviceCategory: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+    };
+  } | null;
+};
+
+export type ServiceDetailFieldsFragment = {
+  __typename?: 'Service';
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
@@ -39060,6 +39223,144 @@ export type ServiceFieldsFragment = {
     lastName?: string | null;
     email: string;
   } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
+};
+
+export type ServiceFieldsFragment = {
+  __typename?: 'Service';
+  id: string;
+  dateProvided?: string | null;
+  faAmount?: number | null;
+  faStartDate?: string | null;
+  faEndDate?: string | null;
+  movingOnOtherType?: string | null;
+  referralOutcome?: PathReferralOutcome | null;
+  subTypeProvided?: ServiceSubTypeProvided | null;
+  otherTypeProvided?: string | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  dateDeleted?: string | null;
+  formDefinitionId?: string | null;
   serviceType?: {
     __typename?: 'ServiceType';
     id: string;
@@ -39075,6 +39376,176 @@ export type ServiceFieldsFragment = {
       id: string;
       name: string;
     };
+  } | null;
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
+  } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
+};
+
+export type ClientServiceFieldsFragment = {
+  __typename?: 'Service';
+  id: string;
+  dateProvided?: string | null;
+  faAmount?: number | null;
+  faStartDate?: string | null;
+  faEndDate?: string | null;
+  movingOnOtherType?: string | null;
+  referralOutcome?: PathReferralOutcome | null;
+  subTypeProvided?: ServiceSubTypeProvided | null;
+  otherTypeProvided?: string | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  dateDeleted?: string | null;
+  formDefinitionId?: string | null;
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+    serviceCategory: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+    };
+  } | null;
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -39233,14 +39704,6 @@ export type GetServiceQuery = {
     dateUpdated?: string | null;
     dateDeleted?: string | null;
     formDefinitionId?: string | null;
-    user?: {
-      __typename: 'ApplicationUser';
-      id: string;
-      name: string;
-      firstName?: string | null;
-      lastName?: string | null;
-      email: string;
-    } | null;
     serviceType?: {
       __typename?: 'ServiceType';
       id: string;
@@ -39256,6 +39719,14 @@ export type GetServiceQuery = {
         id: string;
         name: string;
       };
+    } | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      email: string;
     } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -39429,14 +39900,6 @@ export type DeleteServiceMutation = {
       dateUpdated?: string | null;
       dateDeleted?: string | null;
       formDefinitionId?: string | null;
-      user?: {
-        __typename: 'ApplicationUser';
-        id: string;
-        name: string;
-        firstName?: string | null;
-        lastName?: string | null;
-        email: string;
-      } | null;
       serviceType?: {
         __typename?: 'ServiceType';
         id: string;
@@ -39452,6 +39915,14 @@ export type DeleteServiceMutation = {
           id: string;
           name: string;
         };
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
       } | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -39624,14 +40095,6 @@ export type GetEnrollmentServicesQuery = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         formDefinitionId?: string | null;
-        user?: {
-          __typename: 'ApplicationUser';
-          id: string;
-          name: string;
-          firstName?: string | null;
-          lastName?: string | null;
-          email: string;
-        } | null;
         serviceType?: {
           __typename?: 'ServiceType';
           id: string;
@@ -39647,6 +40110,14 @@ export type GetEnrollmentServicesQuery = {
             id: string;
             name: string;
           };
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -39886,6 +40357,7 @@ export type StaffAssignmentWithClientsFragment = {
     latestExitDate?: string | null;
     householdClients: Array<{
       __typename?: 'HouseholdClient';
+      id: string;
       relationshipToHoH: RelationshipToHoH;
       client: {
         __typename?: 'Client';
@@ -39899,6 +40371,8 @@ export type StaffAssignmentWithClientsFragment = {
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        organizationName?: string;
+        moveInDate?: string | null;
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
@@ -39908,6 +40382,11 @@ export type StaffAssignmentWithClientsFragment = {
           projectName: string;
           projectType?: ProjectType | null;
         };
+        lastContact?: {
+          __typename?: 'LastContact';
+          contactDate: string;
+          contactType: LastContactType;
+        } | null;
       };
     }>;
   };
@@ -40470,6 +40949,9 @@ export type GetUserStaffAssignmentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
+  includeMoveInDate?: InputMaybe<Scalars['Boolean']['input']>;
+  includeLastContact?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetUserStaffAssignmentsQuery = {
@@ -40496,6 +40978,7 @@ export type GetUserStaffAssignmentsQuery = {
           latestExitDate?: string | null;
           householdClients: Array<{
             __typename?: 'HouseholdClient';
+            id: string;
             relationshipToHoH: RelationshipToHoH;
             client: {
               __typename?: 'Client';
@@ -40509,6 +40992,8 @@ export type GetUserStaffAssignmentsQuery = {
             enrollment: {
               __typename?: 'Enrollment';
               id: string;
+              organizationName?: string;
+              moveInDate?: string | null;
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
@@ -40518,6 +41003,11 @@ export type GetUserStaffAssignmentsQuery = {
                 projectName: string;
                 projectType?: ProjectType | null;
               };
+              lastContact?: {
+                __typename?: 'LastContact';
+                contactDate: string;
+                contactType: LastContactType;
+              } | null;
             };
           }>;
         };
@@ -41706,7 +42196,7 @@ export const ClientEnrollmentFieldsFragmentDoc = gql`
     moveInDate
     lastBedNightDate
     projectName
-    organizationName
+    organizationName @include(if: $includeOrganizationName)
     projectType
     inProgress
     relationshipToHoH
@@ -42202,6 +42692,11 @@ export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
       exitDate
       inProgress
       autoExited
+      moveInDate @include(if: $includeMoveInDate)
+      lastContact @include(if: $includeLastContact) {
+        contactDate
+        contactType
+      }
     }
   }
   ${ClientNameFragmentDoc}
@@ -42492,20 +42987,27 @@ export const ProjectEnrollmentFieldsFragmentDoc = gql`
   ${ClientNameDobVetFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
 `;
-export const ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc = gql`
-  fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
-    ...ProjectEnrollmentFields
-    lastCurrentLivingSituation @include(if: $includeCls) {
-      id
-      informationDate
+export const EnrollmentWithOptionalFieldsFragmentDoc = gql`
+  fragment EnrollmentWithOptionalFields on Enrollment {
+    moveInDate @include(if: $includeMoveInDate)
+    lastContact @include(if: $includeLastContact) {
+      contactDate
+      contactType
     }
     household @include(if: $includeStaffAssignment) {
       id
       ...HouseholdWithStaffAssignments
     }
   }
-  ${ProjectEnrollmentFieldsFragmentDoc}
   ${HouseholdWithStaffAssignmentsFragmentDoc}
+`;
+export const ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc = gql`
+  fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
+    ...ProjectEnrollmentFields
+    ...EnrollmentWithOptionalFields
+  }
+  ${ProjectEnrollmentFieldsFragmentDoc}
+  ${EnrollmentWithOptionalFieldsFragmentDoc}
 `;
 export const ProjectConfigFieldsFragmentDoc = gql`
   fragment ProjectConfigFields on ProjectConfig {
@@ -42724,10 +43226,18 @@ export const ServiceBasicFieldsFragmentDoc = gql`
   }
   ${ServiceTypeFieldsFragmentDoc}
 `;
-export const ServiceFieldsFragmentDoc = gql`
-  fragment ServiceFields on Service {
+export const ServiceBaseFieldsFragmentDoc = gql`
+  fragment ServiceBaseFields on Service {
     id
     dateProvided
+    serviceType {
+      ...ServiceTypeFields
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
+`;
+export const ServiceDetailFieldsFragmentDoc = gql`
+  fragment ServiceDetailFields on Service {
     faAmount
     faStartDate
     faEndDate
@@ -42741,17 +43251,29 @@ export const ServiceFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
-    serviceType {
-      ...ServiceTypeFields
-    }
     customDataElements {
       ...CustomDataElementFields
     }
     formDefinitionId
   }
   ${UserFieldsFragmentDoc}
-  ${ServiceTypeFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+`;
+export const ServiceFieldsFragmentDoc = gql`
+  fragment ServiceFields on Service {
+    ...ServiceBaseFields
+    ...ServiceDetailFields
+  }
+  ${ServiceBaseFieldsFragmentDoc}
+  ${ServiceDetailFieldsFragmentDoc}
+`;
+export const ClientServiceFieldsFragmentDoc = gql`
+  fragment ClientServiceFields on Service {
+    ...ServiceBaseFields
+    ...ServiceDetailFields @include(if: $includeServiceDetails)
+  }
+  ${ServiceBaseFieldsFragmentDoc}
+  ${ServiceDetailFieldsFragmentDoc}
 `;
 export const ServiceCategoryFieldsFragmentDoc = gql`
   fragment ServiceCategoryFields on ServiceCategory {
@@ -42783,6 +43305,7 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
       anyInProgress
       latestExitDate
       householdClients {
+        id
         relationshipToHoH
         client {
           id
@@ -42793,6 +43316,12 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
           ...EnrollmentRangeFields
           project {
             ...ProjectNameAndType
+          }
+          organizationName @include(if: $includeOrganizationName)
+          moveInDate @include(if: $includeMoveInDate)
+          lastContact @include(if: $includeLastContact) {
+            contactDate
+            contactType
           }
         }
       }
@@ -43222,6 +43751,7 @@ export const GetClientAssessmentsDocument = gql`
     $offset: Int = 0
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
     $filters: AssessmentFilterOptions = null
+    $includeOrganizationName: Boolean = false
   ) {
     client(id: $id) {
       id
@@ -43264,6 +43794,7 @@ export const GetClientAssessmentsDocument = gql`
  *      offset: // value for 'offset'
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -45366,6 +45897,10 @@ export const GetClientEnrollmentsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $filters: EnrollmentsForClientFilterOptions
+    $includeStaffAssignment: Boolean = false
+    $includeMoveInDate: Boolean = false
+    $includeLastContact: Boolean = false
+    $includeOrganizationName: Boolean = true
   ) {
     client(id: $id) {
       id
@@ -45381,11 +45916,13 @@ export const GetClientEnrollmentsDocument = gql`
         nodesCount
         nodes {
           ...ClientEnrollmentFields
+          ...EnrollmentWithOptionalFields
         }
       }
     }
   }
   ${ClientEnrollmentFieldsFragmentDoc}
+  ${EnrollmentWithOptionalFieldsFragmentDoc}
 `;
 
 /**
@@ -45404,6 +45941,10 @@ export const GetClientEnrollmentsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
+ *      includeStaffAssignment: // value for 'includeStaffAssignment'
+ *      includeMoveInDate: // value for 'includeMoveInDate'
+ *      includeLastContact: // value for 'includeLastContact'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -45467,6 +46008,8 @@ export const GetClientServicesDocument = gql`
     $offset: Int = 0
     $sortOrder: ServiceSortOption = DATE_PROVIDED
     $filters: ServiceFilterOptions = null
+    $includeOrganizationName: Boolean = false
+    $includeServiceDetails: Boolean = false
   ) {
     client(id: $id) {
       id
@@ -45480,7 +46023,7 @@ export const GetClientServicesDocument = gql`
         limit
         nodesCount
         nodes {
-          ...ServiceFields
+          ...ClientServiceFields
           enrollment {
             ...ClientEnrollmentFields
           }
@@ -45488,7 +46031,7 @@ export const GetClientServicesDocument = gql`
       }
     }
   }
-  ${ServiceFieldsFragmentDoc}
+  ${ClientServiceFieldsFragmentDoc}
   ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
@@ -45509,6 +46052,8 @@ export const GetClientServicesDocument = gql`
  *      offset: // value for 'offset'
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
+ *      includeServiceDetails: // value for 'includeServiceDetails'
  *   },
  * });
  */
@@ -45970,7 +46515,12 @@ export type GetFileQueryResult = Apollo.QueryResult<
   GetFileQueryVariables
 >;
 export const GetClientFilesDocument = gql`
-  query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetClientFiles(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $includeOrganizationName: Boolean = false
+  ) {
     client(id: $id) {
       id
       files(limit: $limit, offset: $offset) {
@@ -46005,6 +46555,7 @@ export const GetClientFilesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -47744,6 +48295,7 @@ export const GetClientCaseNotesDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $sortOrder: CustomCaseNoteSortOption
+    $includeOrganizationName: Boolean = false
   ) {
     client(id: $id) {
       id
@@ -47780,6 +48332,7 @@ export const GetClientCaseNotesDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      sortOrder: // value for 'sortOrder'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
@@ -51976,8 +52529,9 @@ export const GetProjectEnrollmentsDocument = gql`
     $sortOrder: EnrollmentSortOption
     $limit: Int = 10
     $offset: Int = 0
-    $includeCls: Boolean = false
     $includeStaffAssignment: Boolean = false
+    $includeMoveInDate: Boolean = false
+    $includeLastContact: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -52016,8 +52570,9 @@ export const GetProjectEnrollmentsDocument = gql`
  *      sortOrder: // value for 'sortOrder'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      includeCls: // value for 'includeCls'
  *      includeStaffAssignment: // value for 'includeStaffAssignment'
+ *      includeMoveInDate: // value for 'includeMoveInDate'
+ *      includeLastContact: // value for 'includeLastContact'
  *   },
  * });
  */
@@ -52082,6 +52637,8 @@ export const GetProjectHouseholdsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $includeStaffAssignment: Boolean = false
+    $includeMoveInDate: Boolean = false
+    $includeLastContact: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -52121,6 +52678,8 @@ export const GetProjectHouseholdsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      includeStaffAssignment: // value for 'includeStaffAssignment'
+ *      includeMoveInDate: // value for 'includeMoveInDate'
+ *      includeLastContact: // value for 'includeLastContact'
  *   },
  * });
  */
@@ -56231,7 +56790,14 @@ export type GetUserEnrollmentSummariesQueryResult = Apollo.QueryResult<
   GetUserEnrollmentSummariesQueryVariables
 >;
 export const GetUserStaffAssignmentsDocument = gql`
-  query GetUserStaffAssignments($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  query GetUserStaffAssignments(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $includeOrganizationName: Boolean = false
+    $includeMoveInDate: Boolean = false
+    $includeLastContact: Boolean = false
+  ) {
     user(id: $id) {
       id
       staffAssignments(limit: $limit, offset: $offset) {
@@ -56262,6 +56828,9 @@ export const GetUserStaffAssignmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      includeOrganizationName: // value for 'includeOrganizationName'
+ *      includeMoveInDate: // value for 'includeMoveInDate'
+ *      includeLastContact: // value for 'includeLastContact'
  *   },
  * });
  */

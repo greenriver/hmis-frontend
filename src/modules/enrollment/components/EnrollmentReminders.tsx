@@ -1,5 +1,5 @@
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import { isToday } from 'date-fns';
 import { lowerCase, sortBy } from 'lodash-es';
 import { useMemo } from 'react';
@@ -88,16 +88,8 @@ const generateColumns = (
     render: (reminder: ReminderFieldsFragment) => {
       return (
         <Stack gap={0.4}>
-          <Typography
-            variant='inherit'
-            sx={{
-              color: 'primary.dark',
-              textDecoration: 'underline',
-              textDecorationColor: 'primary.dark',
-            }}
-          >
-            {reminderTitle(reminder)}
-          </Typography>
+          {/* style reminder as a link, even though it's not (the row is clickable) */}
+          <Link component='span'>{reminderTitle(reminder)}</Link>
           <Typography color='text.secondary' variant='inherit'>
             {reminderDesciption(reminder, currentClientId)}
           </Typography>

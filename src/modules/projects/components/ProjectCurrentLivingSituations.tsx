@@ -5,9 +5,9 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { CLS_COLUMNS } from '@/modules/enrollment/components/pages/EnrollmentCurrentLivingSituationsPage';
 import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { WITH_ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectCurrentLivingSituationsDocument,
@@ -20,6 +20,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const COLUMNS: ColumnDef<ProjectCurrentLivingSituationFieldsFragment>[] = [
   {
     header: 'Client Name',
+    key: 'clientName',
     sticky: 'left',
     render: (cls: ProjectCurrentLivingSituationFieldsFragment) => (
       <ClientName client={cls.client} />
@@ -67,6 +68,7 @@ const ProjectCurrentLivingSituations = () => {
           pagePath='project.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'
+          paginationItemName='current living situations'
         />
       </Paper>
     </>

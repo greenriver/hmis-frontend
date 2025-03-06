@@ -7,12 +7,12 @@ import useFileActions from '../hooks/useFileActions';
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
-import { ColumnDef } from '@/components/elements/table/types';
 import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { DataColumnDef } from '@/modules/dataFetching/types';
 import {
   useClientPermissions,
   useHasClientPermissions,
@@ -73,65 +73,83 @@ const ClientFilesPage = () => {
 
   const isTiny = useIsMobile('sm');
 
-  const columns: ColumnDef<ClientFileType>[] = useMemo(() => {
-    return [
-      {
-        header: 'File Name',
-        render: (file) => (
-          <Typography variant='inherit'>{file.name}</Typography>
-        ),
-        // Limit the col width on tiny screens so that other non-sticky columns are scrollable
-        maxWidth: isTiny ? '100px' : undefined,
-        sticky: 'left',
-      },
-      {
-        header: 'File Tags',
-        render: (file) =>
-          pickListData ? (
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              {file.tags.map((tag) => {
-                const item = pickListData.pickList.find(
-                  (type) => type.code === tag
-                );
-                return (
-                  <Chip
-                    key={item?.code || tag}
-                    label={item?.label || tag}
-                    id={`tag-${item?.code || tag}`}
-                    size='small'
-                  />
-                );
-              })}
-            </Box>
-          ) : null,
-      },
-      {
-        header: 'Project Name',
-        render: ({ enrollment }) =>
-          enrollment ? (
-            enrollment.projectName
-          ) : (
-            <NotCollectedText>N/A</NotCollectedText>
+  const columns: DataColumnDef<ClientFileType, GetClientFilesQueryVariables>[] =
+    useMemo(() => {
+      return [
+        {
+          header: 'File Name',
+          key: 'fileName',
+          render: (file) => (
+            <Typography variant='inherit'>{file.name}</Typography>
           ),
-      },
-      {
-        header: 'Uploaded',
-        render: ({ dateCreated, uploadedBy }) => {
-          const byUser = uploadedBy?.name
-            ? `by ${uploadedBy?.name}`
-            : 'by unknown user';
-          if (dateCreated)
-            return (
-              <RelativeDateDisplay
-                dateString={dateCreated}
-                tooltipSuffixText={byUser}
-              />
-            );
-          return `Unknown time ${byUser}`;
+          // Limit the col width on tiny screens so that other non-sticky columns are scrollable
+          maxWidth: isTiny ? '100px' : undefined,
+          sticky: 'left',
         },
-      },
-    ];
-  }, [isTiny, pickListData]);
+        {
+          header: 'File Tags',
+          key: 'tags',
+          render: (file) =>
+            pickListData ? (
+              <Box sx={{ display: 'flex', gap: 0.5 }}>
+                {file.tags.map((tag) => {
+                  const item = pickListData.pickList.find(
+                    (type) => type.code === tag
+                  );
+                  return (
+                    <Chip
+                      key={item?.code || tag}
+                      label={item?.label || tag}
+                      id={`tag-${item?.code || tag}`}
+                      size='small'
+                    />
+                  );
+                })}
+              </Box>
+            ) : null,
+        },
+        {
+          header: 'Project Name',
+          key: 'projectName',
+          render: ({ enrollment }) =>
+            enrollment ? (
+              enrollment.projectName
+            ) : (
+              <NotCollectedText>N/A</NotCollectedText>
+            ),
+        },
+        {
+          header: 'Uploaded',
+          key: 'uploaded',
+          render: ({ dateCreated, uploadedBy }) => {
+            const byUser = uploadedBy?.name
+              ? `by ${uploadedBy?.name}`
+              : 'by unknown user';
+            if (dateCreated)
+              return (
+                <RelativeDateDisplay
+                  dateString={dateCreated}
+                  tooltipSuffixText={byUser}
+                />
+              );
+            return `Unknown time ${byUser}`;
+          },
+        },
+        {
+          header: 'Organization Name',
+          key: 'organizationName',
+          optional: {
+            defaultHidden: true,
+            queryVariableField: 'includeOrganizationName',
+          },
+          render: (file) => {
+            if (file.enrollment) {
+              return file.enrollment.organizationName;
+            }
+          },
+        },
+      ];
+    }, [isTiny, pickListData]);
 
   return (
     <>

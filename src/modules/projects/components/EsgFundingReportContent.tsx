@@ -74,38 +74,47 @@ const EsgFundingReportContent: React.FC<{
       columns={[
         {
           header: 'Last Name',
+          key: 'lastName',
           render: (row) => row.lastName,
         },
         {
           header: 'First Name',
+          key: 'firstName',
           render: (row) => row.firstName,
         },
         {
           header: 'Date Of Birth',
+          key: 'dob',
           render: (row) => parseAndFormatDate(row.clientDob),
         },
         {
           header: 'MCI ID',
+          key: 'mciId',
           render: (row) => row.mciIds.map((id) => id.identifier).join('\n'),
         },
         {
           header: 'Provider ID',
+          key: 'providerId',
           render: (row) => row.organizationId,
         },
         {
           header: 'Provider Name',
+          key: 'providerName',
           render: (row) => row.organizationName,
         },
         {
           header: 'Program ID',
+          key: 'programId',
           render: (row) => row.projectId,
         },
         {
           header: 'Program Name',
+          key: 'programName',
           render: (row) => row.projectName,
         },
         {
           header: 'Funding Source',
+          key: 'fundingSource',
           render: (row) =>
             customDataElementValueForKey(
               'funding_source',
@@ -114,6 +123,7 @@ const EsgFundingReportContent: React.FC<{
         },
         {
           header: 'Payment Type',
+          key: 'paymentType',
           render: (row) =>
             customDataElementValueForKey(
               'payment_type',
@@ -122,14 +132,17 @@ const EsgFundingReportContent: React.FC<{
         },
         {
           header: 'Amount',
+          key: 'amount',
           render: (row) => formatCurrency(row.faAmount),
         },
         {
           header: 'Payment Start Date',
+          key: 'paymentStartDate',
           render: (row) => parseAndFormatDate(row.faStartDate),
         },
         {
           header: 'Payment End Date',
+          key: 'paymentEndDate',
           render: (row) => parseAndFormatDate(row.faEndDate),
         },
       ]}

@@ -27,11 +27,13 @@ export const SERVICE_BASIC_COLUMNS: {
   serviceDate: {
     header: 'Service Date',
     render: (s) => parseAndFormatDate(s.dateProvided),
+    key: 'date',
   },
   serviceType: {
     header: 'Service Type',
     render: (s) => getServiceTypeForDisplay(s.serviceType),
     maxWidth: '200px',
+    key: 'type',
   },
 };
 
@@ -40,6 +42,7 @@ export const SERVICE_COLUMNS: {
 } = {
   serviceDetails: {
     header: 'Service Details',
+    key: 'details',
     render: (service) => (
       <Stack>
         {serviceDetails(service).map((s, i) => (

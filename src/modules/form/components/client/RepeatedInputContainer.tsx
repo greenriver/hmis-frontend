@@ -77,9 +77,7 @@ const RepeatedInputContainer = <T extends object>({
                     variant='text'
                     disabled={!removeAt(val, idx)}
                     sx={{
-                      color: 'error.dark',
                       width: 'fit-content',
-                      textDecoration: 'underline',
                       py: 0,
                       ml: -1,
                       fontSize: 'inherit',

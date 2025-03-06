@@ -320,7 +320,6 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         root: theme.unstable_sx({
           color: 'primary.dark',
-          textDecorationColor: 'primary.dark',
           textUnderlineOffset: '0.2rem',
           cursor: 'pointer',
           '&.Mui-focusVisible': {

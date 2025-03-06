@@ -18,6 +18,7 @@ query GetClientAssessments(
   $offset: Int = 0
   $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
   $filters: AssessmentFilterOptions = null
+  $includeOrganizationName: Boolean = false
 ) {
   client(id: $id) {
     id

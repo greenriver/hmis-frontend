@@ -4521,6 +4521,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'LastContact',
+    fields: [
+      {
+        name: 'contactDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'contactType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'LastContactType', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'MciClearanceMatch',
     fields: [
       {
