@@ -127,18 +127,6 @@ const useSearchParamsState = (
   // the search params that appear in the url. See the useEffect below
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // This wrapper for setSearchParams ensure that if different components within
-  // one page use this hook, they won't overwrite each other's searchParamsState
-  const updateSearchParams = useCallback(
-    (newValues: Record<string, any>) => {
-      setSearchParams((oldParams) => {
-        const oldValues = Object.fromEntries(oldParams.entries());
-        return createSearchParams({ ...oldValues, ...newValues });
-      });
-    },
-    [setSearchParams]
-  );
-
   const [mounted, setMounted] = useState(false);
 
   // Use an effect to set the `initial` params in the url bar
@@ -152,7 +140,9 @@ const useSearchParamsState = (
       Object.entries(initial).filter(([key]) => !searchParams.has(key))
     );
     if (Object.keys(toUpdate).length) {
-      updateSearchParams(toUpdate);
+      // Spread currentParams to avoid overwriting search params set by other components
+      const currentParams = getAllCurrentParams(searchParams);
+      setSearchParams({ ...currentParams, ...toUpdate });
     }
 
     // Only run on mount, so the user can overwrite initial values.
@@ -190,9 +180,9 @@ const useSearchParamsState = (
           }
         }
       }
-      updateSearchParams({ ...currentParams, ...newValues });
+      setSearchParams({ ...currentParams, ...newValues });
     },
-    [paramsDefinition, searchParams, updateSearchParams]
+    [paramsDefinition, searchParams, setSearchParams]
   );
   return [values, setValues] as const;
 };
