@@ -36,12 +36,6 @@ const TableColumnsMenu = ({
         setColumnsValue(defaultValue);
         reset();
       }}
-      // When the popover opens, set the state to whatever is currently in columnsValue.
-      // columnsValue may change on renders subsequent to the first one (see useOptionalColumns hook),
-      // so this menu component needs to "catch up" in order to display the up-to-date state!
-      onOpen={() => setState(columnsValue)}
-      // (We may eventually need to add similar logic to other callers of `useIntermediateState`, such as filter,
-      // but we can kick the can until we add search param / localStorage control.)
     >
       <FormGroup>
         {columns.map(({ value, header }) => (

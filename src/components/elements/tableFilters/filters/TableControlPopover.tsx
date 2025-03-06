@@ -21,7 +21,6 @@ export interface TableControlPopoverProps {
   label: string;
   icon: ReactNode;
   applyLabel?: ReactNode;
-  onOpen?: VoidFunction;
 }
 
 const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
@@ -36,7 +35,6 @@ const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
     label,
     icon,
     applyLabel = 'Apply',
-    onOpen,
   } = props;
   const popupState = usePopupState({
     variant: 'popover',
@@ -54,22 +52,13 @@ const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
     return <> ({filterHint})</>;
   }, [filterCount, filterHint, isTiny]);
 
-  const { onClick, onTouchStart } = bindTrigger(popupState);
-
   return (
     <>
       <TableFilterButton
         startIcon={icon}
         active={filterCount > 0}
         aria-label={label}
-        onClick={(event) => {
-          onClick(event);
-          onOpen?.();
-        }}
-        onTouchStart={(event) => {
-          onTouchStart(event);
-          onOpen?.();
-        }}
+        {...bindTrigger(popupState)}
       >
         {label}
         {filterSummary}
