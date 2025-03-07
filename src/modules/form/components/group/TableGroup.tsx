@@ -1,4 +1,3 @@
-import { cloneDeep } from '@apollo/client/utilities';
 import {
   Grid,
   Stack,
@@ -9,6 +8,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { cloneDeep } from 'lodash-es';
 
 import { useId, useMemo } from 'react';
 import { GroupItemComponentProps } from '../../types';
