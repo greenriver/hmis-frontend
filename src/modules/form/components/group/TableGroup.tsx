@@ -1,3 +1,4 @@
+import { cloneDeep } from '@apollo/client/utilities';
 import {
   Grid,
   Stack,
@@ -72,22 +73,34 @@ const TableGroup = ({
       })
     );
   }, [item, viewOnly, baseId]);
+  console.log(tableHeaderInfo);
 
   // Memoize the props configuration for each cell to maintain stable references
   const cellConfigs = useMemo(() => {
     return tableHeaderInfo.map((header) => ({
-      // remove helper text, it is shown in table header
-      noLabel: true,
       // hide label for each input, since they are labeled by the header
+      noLabel: true,
       inputProps: { ariaLabelledBy: header.id },
     }));
   }, [tableHeaderInfo]);
 
-  // Create a stable memoized representation of the table rows
-  const tableRows = useMemo(() => {
+  // Create a stable memoized representation of the table row items, with cell helper text removed
+  const rowItems = useMemo(() => {
     if (!item.item) return null;
 
-    return item.item.map((rowItem) => (
+    const rowItemsClone = cloneDeep(item.item);
+    // remove helper text from Cell Items, because it's shown in table header
+    rowItemsClone.forEach((rowItem) =>
+      rowItem.item?.forEach((cellItem) => (cellItem.helperText = null))
+    );
+    return rowItemsClone;
+  }, [item.item]);
+
+  // Create a stable memoized representation of the table rows
+  const tableRows = useMemo(() => {
+    if (!rowItems) return null;
+
+    return rowItems.map((rowItem) => (
       <TableRow key={rowItem.linkId}>
         {rowItem.item?.map((cellItem, index) => (
           <TableCell key={cellItem.linkId}>
@@ -96,7 +109,7 @@ const TableGroup = ({
         ))}
       </TableRow>
     ));
-  }, [item.item, renderChildItem, cellConfigs]);
+  }, [rowItems, renderChildItem, cellConfigs]);
 
   return (
     <Grid item xs>
