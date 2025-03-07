@@ -73,7 +73,6 @@ const TableGroup = ({
       })
     );
   }, [item, viewOnly, baseId]);
-  console.log(tableHeaderInfo);
 
   // Memoize the props configuration for each cell to maintain stable references
   const cellConfigs = useMemo(() => {
