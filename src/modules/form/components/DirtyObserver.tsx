@@ -19,12 +19,17 @@ const DirtyObserver: React.FC<DirtyObserverProps> = ({
     methods: { control },
   },
 }) => {
-  const { isDirty } = useFormState({ control });
-  const prevDirty = usePrevious(isDirty);
+  const { dirtyFields } = useFormState({ control });
+  // detect dirty state using dirtyFields rather than isDirty. It seems that isDirty is not always reliable or 1:1 with dirtyFields
+  const anyDirtyFields = Object.values(dirtyFields).length > 0;
+  const prevDirty = usePrevious(anyDirtyFields);
 
   useEffect(() => {
-    if (isDirty !== prevDirty) onDirty(isDirty);
-  }, [isDirty, prevDirty, onDirty]);
+    if (anyDirtyFields !== prevDirty) {
+      //console.info(`form for client ${clientId} became`, anyDirtyFields ? 'dirty' : 'clean')
+      onDirty(anyDirtyFields);
+    }
+  }, [anyDirtyFields, prevDirty, onDirty]);
 
   return null;
 };
