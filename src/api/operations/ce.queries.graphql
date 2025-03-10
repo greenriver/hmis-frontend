@@ -41,3 +41,9 @@ query GetCeReferral($id: ID!) {
     ...CeReferralFields
   }
 }
+
+query GetCeReferralStep($id: ID!) {
+  ceReferralStep(id: $id) {
+    ...CeReferralStepFields
+  }
+}

@@ -16,6 +16,7 @@ declare module '@mui/material/Alert' {
     low: true;
     medium: true;
     high: true;
+    gray: true;
   }
 }
 
@@ -508,6 +509,17 @@ const createThemeOptions = (theme: Theme) => ({
             },
             '& .MuiAlertTitle-root .MuiIconButton-root': {
               color: theme.palette.alerts.high.icon,
+            },
+          }),
+        },
+        {
+          // styles for gray alert
+          props: { color: 'gray' },
+          style: theme.unstable_sx({
+            borderColor: theme.palette.grayscale[300],
+            backgroundColor: theme.palette.grayscale.surface,
+            '& .MuiAlert-icon': {
+              color: theme.palette.grayscale.main,
             },
           }),
         },

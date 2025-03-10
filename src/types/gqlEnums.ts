@@ -75,6 +75,18 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  CeReferralStatus: {
+    accepted: 'accepted',
+    in_progress: 'in_progress',
+    initialized: 'initialized',
+    rejected: 'rejected',
+  },
+  CeReferralStepStatus: {
+    available: 'available',
+    completed: 'completed',
+    in_progress: 'in_progress',
+    unavailable: 'unavailable',
+  },
   ClientAddressType: { both: 'Both', physical: 'Physical', postal: 'Postal' },
   ClientAddressUse: {
     home: 'Home',

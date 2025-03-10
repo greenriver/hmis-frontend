@@ -1,9 +1,11 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import { Paper, Stack, Typography } from '@mui/material';
 import { Box, StackProps, SxProps } from '@mui/system';
 import React, { KeyboardEventHandler, ReactNode, useCallback } from 'react';
 
 export interface CommonCardProps {
   title?: ReactNode;
+  Icon?: SvgIconComponent;
   headerVariant?: 'border'; // Optionally render border below title
   actions?: ReactNode; // Action element to render to the right of title, usually button
   TitleComponent?: React.ElementType; // Use different component for title
@@ -26,6 +28,7 @@ export interface CommonCardProps {
  */
 const CommonCard: React.FC<CommonCardProps> = ({
   title,
+  Icon,
   children,
   headerVariant,
   padContent = true,
@@ -39,9 +42,12 @@ const CommonCard: React.FC<CommonCardProps> = ({
 
   const cardTitle =
     typeof title === 'string' ? (
-      <Typography variant='h5' component={TitleComponent || 'h5'}>
-        {title}
-      </Typography>
+      <Stack direction='row' alignItems='center' gap={1}>
+        {Icon && <Icon sx={{ color: 'grayscale.main' }} />}
+        <Typography variant='h5' component={TitleComponent || 'h5'}>
+          {title}
+        </Typography>
+      </Stack>
     ) : (
       title
     );

@@ -71,7 +71,7 @@ const ProjectDashboard: React.FC = () => {
   const { project, loading } = useDetailedProject(params.projectId);
   const isPrint = useIsPrintView();
   const navItems = useProjectDashboardNavItems(project);
-  const dashboardState = useDashboardState();
+  const { fullScreen, ...dashboardState } = useDashboardState();
   const outletContext: ProjectDashboardContext | undefined = useMemo(
     () => (project ? { project } : undefined),
     [project]
@@ -103,9 +103,10 @@ const ProjectDashboard: React.FC = () => {
         />
       }
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
+      fullScreen={fullScreen}
       {...dashboardState}
     >
-      <Container maxWidth='xl' disableGutters>
+      <Container maxWidth={fullScreen ? false : 'xl'} disableGutters>
         <Outlet context={outletContext} />
       </Container>
     </DashboardContentContainer>

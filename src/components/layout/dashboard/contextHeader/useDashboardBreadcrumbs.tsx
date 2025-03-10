@@ -145,6 +145,18 @@ export const useProjectBreadcrumbConfig = (
         title: 'Opportunity',
         parent: ProjectDashboardRoutes.OPPORTUNITIES,
       },
+      [ProjectDashboardRoutes.REFERRAL_DETAILS]: {
+        title: 'Referral',
+        parent: ProjectDashboardRoutes.OPPORTUNITY,
+      },
+      [ProjectDashboardRoutes.REFERRAL_STEPS]: {
+        title: 'Referral',
+        parent: ProjectDashboardRoutes.OPPORTUNITY,
+      },
+      [ProjectDashboardRoutes.REFERRAL_STEP]: {
+        title: 'Referral',
+        parent: ProjectDashboardRoutes.OPPORTUNITY,
+      },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;
     return buildDefaultCrumbs(ProjectDashboardRoutes, overrides, projectRoot);

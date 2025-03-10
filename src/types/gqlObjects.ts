@@ -529,6 +529,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'projectName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
         name: 'status',
         type: {
           kind: 'NON_NULL',
@@ -611,7 +619,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          ofType: { kind: 'ENUM', name: 'CeReferralStatus', ofType: null },
         },
       },
     ],
@@ -637,6 +645,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'status',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CeReferralStepStatus', ofType: null },
+        },
+      },
+      { name: 'stepId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'submittedValues',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'swimlane',
         type: {
           kind: 'NON_NULL',
           name: null,

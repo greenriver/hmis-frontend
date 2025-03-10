@@ -21,3 +21,31 @@ mutation CreateCeReferral(
     }
   }
 }
+
+mutation StartCeReferralStep($referralId: ID!, $stepId: ID!) {
+  startCeReferralStep(referralId: $referralId, stepId: $stepId) {
+    step {
+      ...CeReferralStepFields
+    }
+  }
+}
+
+mutation SubmitCeReferralStep(
+  $referralId: ID!
+  $stepId: ID!
+  $input: JsonObject!
+) {
+  submitCeReferralStep(
+    referralId: $referralId
+    stepId: $stepId
+    input: $input
+  ) {
+    step {
+      ...CeReferralStepFields
+    }
+    referral {
+      id
+      status
+    }
+  }
+}
