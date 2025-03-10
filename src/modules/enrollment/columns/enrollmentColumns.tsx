@@ -93,7 +93,7 @@ export const HOUSEHOLD_ASSIGNED_STAFF_COL = {
     queryVariableField:
       'includeStaffAssignment' as keyof EnrollmentQueryVariables,
   },
-  key: 'assigned_staff',
+  key: 'assignedStaff',
   render: (hh: HouseholdWithStaffAssignmentsFragment) => (
     <HouseholdStaff household={hh} />
   ),

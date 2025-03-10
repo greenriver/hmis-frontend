@@ -6,6 +6,7 @@ export const SESSION_KEY = '_hmis_session_id';
 export const USER_STORAGE_KEY = '_hmis_user_info';
 export const SETTINGS_STORAGE_KEY = '_hmis_app_settings';
 export const SESSION_TRACKING_STORAGE_KEY = '_hmis_session_ts';
+const PATH_PARAMS_KEY = '_hmis_path_params';
 
 // Stores user name and email. No sensitive information stored!
 export const setUser = (value: HmisUser) =>
@@ -52,4 +53,43 @@ export const clearSessionTacking = () => {
 export const getSessionTracking = () => {
   const value = localStorage.getItem(SESSION_TRACKING_STORAGE_KEY);
   return value ? (parseJson(value) as HmisSessionTracking) : undefined;
+};
+
+/**
+ * [get|set]StoredPathParams generically supports saving page attributes
+ * in browser storage, on a per-page-path basis. For example, on the
+ * `/projects/:projectId/enrollments` page, we could store key-value pairs like:
+ * {
+ *   optionalColumns: [...],
+ *   sort: ...
+ * }
+ *
+ * Then each time the user requests that path, we display the data to them with
+ * the same optional columns and sort that they last loaded.
+ */
+export const getStoredPathParams = (path: string) => {
+  const value = localStorage.getItem(PATH_PARAMS_KEY);
+  if (!value) return undefined;
+
+  const allPathParams = parseJson(value) as Record<string, any>;
+  return allPathParams?.[path];
+};
+
+export const setStoredPathParams = (
+  path: string,
+  params: Record<string, any>
+) => {
+  const value = localStorage.getItem(PATH_PARAMS_KEY);
+  const existingParams = value
+    ? (parseJson(value) as Record<string, any>) || {}
+    : {};
+  const existingPathParams = existingParams[path];
+  const newParams = {
+    ...existingParams,
+    [path]: {
+      ...existingPathParams,
+      ...params,
+    },
+  };
+  localStorage.setItem(PATH_PARAMS_KEY, JSON.stringify(newParams));
 };
