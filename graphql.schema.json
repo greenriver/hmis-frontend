@@ -12079,6 +12079,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CE_REFERRAL_STEP",
+            "description": "CE referral step",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CURRENT_LIVING_SITUATION",
             "description": "Current living situation",
             "isDeprecated": false,
@@ -23959,6 +23965,12 @@
           {
             "name": "CE_PARTICIPATION",
             "description": "CE participation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE_REFERRAL_STEP",
+            "description": "CE referral step",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -42315,6 +42327,12 @@
           {
             "name": "CE_PARTICIPATION",
             "description": "CE participation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE_REFERRAL_STEP",
+            "description": "CE referral step",
             "isDeprecated": false,
             "deprecationReason": null
           },

@@ -1703,6 +1703,8 @@ export enum DataCollectionFeatureRole {
   CeAssessment = 'CE_ASSESSMENT',
   /** CE event */
   CeEvent = 'CE_EVENT',
+  /** CE referral step */
+  CeReferralStep = 'CE_REFERRAL_STEP',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** External form */
@@ -3298,6 +3300,8 @@ export enum FormRole {
   CeEvent = 'CE_EVENT',
   /** CE participation */
   CeParticipation = 'CE_PARTICIPATION',
+  /** CE referral step */
+  CeReferralStep = 'CE_REFERRAL_STEP',
   /** Client */
   Client = 'CLIENT',
   /** Client alert */
@@ -6491,6 +6495,8 @@ export enum RecordFormRole {
   CeEvent = 'CE_EVENT',
   /** CE participation */
   CeParticipation = 'CE_PARTICIPATION',
+  /** CE referral step */
+  CeReferralStep = 'CE_REFERRAL_STEP',
   /** Client */
   Client = 'CLIENT',
   /** Client detail */
