@@ -17,13 +17,17 @@ const handleError = (message: string) => {
   throw new Error(message);
 };
 
-const enrich = (item: FormItem, value: any) =>
-  getEnrichedValueForChoiceItem({
-    item,
-    remotePickListMap,
-    defaultValue: value,
-    handleError,
-  });
+const enrich = (item: FormItem, value: any) => {
+  const { enrichedValue, initialSelectedValue } = getEnrichedValueForChoiceItem(
+    {
+      item,
+      remotePickListMap,
+      defaultValue: value,
+      handleError,
+    }
+  );
+  return enrichedValue || initialSelectedValue;
+};
 
 describe('getEnrichedValueForChoiceItem', () => {
   describe('single-select choice item', () => {
