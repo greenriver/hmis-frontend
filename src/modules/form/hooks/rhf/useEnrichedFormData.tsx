@@ -92,14 +92,19 @@ export const useEnrichedFormData = <T extends FieldValues>({
     Object.values(itemMap || {}).forEach((item) => {
       if (!item.pickListOptions && !item.pickListReference) return; // nothing to enrich if no pick list
 
-      const enrichedOptionValue = getEnrichedValueForChoiceItem({
-        item,
-        defaultValue: clonedValues[item.linkId],
-        remotePickListMap: picklistValues,
-        handleError,
-      });
+      const { enrichedValue, initialSelectedValue } =
+        getEnrichedValueForChoiceItem({
+          item,
+          defaultValue: clonedValues[item.linkId],
+          remotePickListMap: picklistValues,
+          handleError,
+        });
 
-      if (enrichedOptionValue) clonedValues[item.linkId] = enrichedOptionValue;
+      if (enrichedValue) {
+        clonedValues[item.linkId] = enrichedValue;
+      } else if (initialSelectedValue && !viewOnly) {
+        clonedValues[item.linkId] = initialSelectedValue;
+      }
     });
     setEnrichedDefaultValues(clonedValues);
   }, [
@@ -109,6 +114,7 @@ export const useEnrichedFormData = <T extends FieldValues>({
     picklistValues,
     hasRemotePicklists,
     enrichedDefaultValues,
+    viewOnly,
   ]);
 
   return {
