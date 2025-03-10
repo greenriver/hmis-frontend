@@ -1,7 +1,7 @@
 import { isDate } from 'date-fns';
 import { isNil } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { createSearchParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 
 // adapted from https://github.com/jschwindt/react-use-search-params-state/tree/main
@@ -152,7 +152,7 @@ const useSearchParamsState = ({
     if (initial && !mounted) {
       // If the above useEffect hasn't run yet, return the initial values right away
       // to avoid flickering
-      return getValues(paramsDefinition, createSearchParams(initial));
+      return initial;
     }
     return getValues(paramsDefinition, searchParams);
   }, [initial, mounted, paramsDefinition, searchParams]);
