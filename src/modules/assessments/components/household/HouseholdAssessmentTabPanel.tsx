@@ -115,7 +115,7 @@ const HouseholdAssessmentTabPanel = memo(
 
     const onCompletedMutation = useCallback(
       (status: AssessmentResponseStatus) => {
-        // console.debug('Completed with status', status);
+        // console.info(`form for ${client.id} completed`, status);
         if (['saved', 'submitted'].includes(status)) {
           onFormStateChange?.(enrollmentId, 'saveCompleted');
         } else if (['warning', 'error'].includes(status)) {
