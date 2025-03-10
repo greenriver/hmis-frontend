@@ -8,12 +8,10 @@ import Breadcrumbs, { Breadcrumb } from '@/components/elements/Breadcrumbs';
 const BasicBreadcrumbPageLayout = ({
   crumbs,
   children,
-  ContainerProps,
   maxWidth = 'lg',
 }: {
   crumbs: Breadcrumb[];
   children: ReactNode;
-  ContainerProps?: ContainerProps;
   maxWidth?: ContainerProps['maxWidth'];
 }) => {
   return (
@@ -23,12 +21,7 @@ const BasicBreadcrumbPageLayout = ({
           <Breadcrumbs crumbs={crumbs} />
         </Container>
       </ContextHeaderAppBar>
-      <Container
-        component='main'
-        maxWidth={maxWidth}
-        sx={{ pt: 2, pb: 6 }}
-        {...ContainerProps}
-      >
+      <Container component='main' maxWidth={maxWidth} sx={{ pt: 2, pb: 6 }}>
         {children}
       </Container>
     </>
