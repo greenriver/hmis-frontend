@@ -3,20 +3,15 @@ import { cloneDeep } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { DefaultValues, FieldValues } from 'react-hook-form';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
-import {
-  isPickListOption,
-  isPickListOptionArray,
-  LocalConstants,
-  PickListArgs,
-} from '@/modules/form/types';
+import { LocalConstants, PickListArgs } from '@/modules/form/types';
 import {
   autofillValues,
   formHasAnyRemotePicklists,
+  getEnrichedValueForChoiceItem,
   getInitialValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
-import { FormDefinitionJson, PickListType } from '@/types/gqlTypes';
-import { ensureArray } from '@/utils/arrays';
+import { FormDefinitionJson } from '@/types/gqlTypes';
 
 const handleError = (message: string) => {
   if (import.meta.env.MODE === 'development') {
@@ -33,7 +28,12 @@ interface Args<T extends FieldValues> {
   pickListArgs?: PickListArgs;
 }
 
-// we get incomplete form data and need to enrich it using local constants and pick lists before it can be displayed
+// We get incomplete form data and need to enrich it using local constants and pick lists before it can be displayed.
+//
+// This includes enriching incomplete values for "choice" items based on their pick lists, for example:
+//  - Converting code to PickListOption:  'yes' => { code: 'yes', label: 'Yes', groupLabel: 'Something' }
+//  - Filling in initialSelected option:   null => { code: 'foo', label: 'The Initial Value', initialSelected: true }
+//
 export const useEnrichedFormData = <T extends FieldValues>({
   definition,
   initialValues = {} as T,
@@ -89,53 +89,17 @@ export const useEnrichedFormData = <T extends FieldValues>({
     if (!!enrichedDefaultValues) return;
 
     const clonedValues = cloneDeep(defaultValues);
-    Object.values(itemMap || {}).forEach(({ pickListReference, linkId }) => {
-      let valueCode = clonedValues[linkId];
-      // Value may already be in Picklist shape with only the code, because of createInitialValuesFromRecord.
-      // in that case we still want to try to populate it with the full option, based on the code.
-      if (isPickListOption(valueCode)) {
-        valueCode = valueCode.code;
-      }
-      if (isPickListOptionArray(valueCode)) {
-        valueCode = valueCode.map((o) => o.code);
-      }
+    Object.values(itemMap || {}).forEach((item) => {
+      if (!item.pickListOptions && !item.pickListReference) return; // nothing to enrich if no pick list
 
-      // skip unless there's a value and a value code
-      if (!valueCode) return;
-      if (Array.isArray(valueCode) && valueCode.length === 0) return;
-      if (!pickListReference) return;
-      if (!Object.values<string>(PickListType).includes(pickListReference))
-        return;
+      const enrichedOptionValue = getEnrichedValueForChoiceItem({
+        item,
+        defaultValue: clonedValues[item.linkId],
+        remotePickListMap: picklistValues,
+        handleError,
+      });
 
-      const resolvedPicklist = picklistValues[pickListReference];
-      if (!resolvedPicklist) {
-        // this shouldn't occur
-        handleError(`Could not find pick list "${pickListReference}"`);
-        return;
-      }
-
-      // Map the value code(s) to the corresponding picklist option(s)
-      let found;
-      if (Array.isArray(valueCode)) {
-        found = valueCode
-          .map((value) =>
-            resolvedPicklist.find((option) => option.code === value)
-          )
-          .filter((option) => !!option);
-      } else {
-        found = resolvedPicklist.find((option) => option.code === valueCode);
-      }
-
-      if (
-        !found ||
-        ensureArray(found).length !== ensureArray(valueCode).length
-      ) {
-        handleError(
-          `Pick list "${pickListReference}" does not contain code "${valueCode}"`
-        );
-        return;
-      }
-      if (found) clonedValues[linkId] = found;
+      if (enrichedOptionValue) clonedValues[item.linkId] = enrichedOptionValue;
     });
     setEnrichedDefaultValues(clonedValues);
   }, [
