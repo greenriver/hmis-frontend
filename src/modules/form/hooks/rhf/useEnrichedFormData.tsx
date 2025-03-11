@@ -81,8 +81,6 @@ export const useEnrichedFormData = <T extends FieldValues>({
   >(undefined);
 
   useEffect(() => {
-    // Form has no remote picklists; nothing to enrich
-    if (!hasRemotePicklists) return;
     // Remote picklists are loading, wait
     if (loading) return;
     // Default values have already been enriched
@@ -118,7 +116,7 @@ export const useEnrichedFormData = <T extends FieldValues>({
   ]);
 
   return {
-    defaultValues: hasRemotePicklists ? enrichedDefaultValues : defaultValues,
+    defaultValues: enrichedDefaultValues,
     loading,
   };
 };
