@@ -1,12 +1,16 @@
 import { Divider, Stack } from '@mui/material';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CommonCard from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
-import { emptyErrorState } from '@/modules/errors/util';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import {
@@ -42,28 +46,38 @@ const ReferralStep: React.FC<Props> = ({}) => {
     },
   });
 
-  const [submit, { loading: submitLoading, error: submitError }] =
-    useSubmitCeReferralStepMutation({
-      onCompleted: (data) => {
-        const status = data.submitCeReferralStep?.referral.status;
-        const wayfind =
-          status &&
-          [CeReferralStatus.Rejected, CeReferralStatus.Accepted].includes(
-            status
-          );
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
-        navigate({
-          pathname: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
-            projectId,
-            opportunityId,
-            referralId,
-          }),
-          search: wayfind
-            ? new URLSearchParams({ wayfinding: 'true' }).toString()
-            : undefined,
-        });
-      },
-    });
+  const [submit, { loading: submitLoading }] = useSubmitCeReferralStepMutation({
+    onCompleted: (data) => {
+      const errors = data.submitCeReferralStep?.errors;
+      if (errors && errors.length > 0) {
+        setErrors(partitionValidations(errors));
+        return;
+      }
+
+      setErrors(emptyErrorState);
+
+      const status = data.submitCeReferralStep?.referral?.status;
+      const wayfind =
+        status &&
+        [CeReferralStatus.Rejected, CeReferralStatus.Accepted].includes(status);
+
+      navigate({
+        pathname: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
+          projectId,
+          opportunityId,
+          referralId,
+        }),
+        search: wayfind
+          ? new URLSearchParams({ wayfinding: 'true' }).toString()
+          : undefined,
+      });
+    },
+    onError: (apolloError) => {
+      setErrors({ ...emptyErrorState, apolloError });
+    },
+  });
 
   const { name, status, formDefinition, submittedValues } = step || {};
 
@@ -79,7 +93,6 @@ const ReferralStep: React.FC<Props> = ({}) => {
 
   if (fetchLoading) return <Loading />;
   if (fetchError) throw fetchError;
-  if (submitError) throw submitError;
   if (!step || !formDefinition) return <NotFound />;
 
   return (
@@ -90,16 +103,17 @@ const ReferralStep: React.FC<Props> = ({}) => {
         {status === CeReferralStepStatus.InProgress && (
           <DynamicForm
             definition={formDefinition.definition}
-            onSubmit={(input) => {
+            onSubmit={({ valuesByLinkId, confirmed }) => {
               submit({
                 variables: {
                   referralId: referralId,
                   stepId: stepId,
-                  input: input.valuesByLinkId,
+                  input: valuesByLinkId,
+                  confirmed,
                 },
               });
             }}
-            errors={emptyErrorState}
+            errors={errors}
             loading={submitLoading}
             FormActionProps={{
               submitButtonText: 'Submit',
