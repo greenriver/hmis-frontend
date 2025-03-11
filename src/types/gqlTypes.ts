@@ -1703,8 +1703,6 @@ export enum DataCollectionFeatureRole {
   CeAssessment = 'CE_ASSESSMENT',
   /** CE event */
   CeEvent = 'CE_EVENT',
-  /** CE referral step */
-  CeReferralStep = 'CE_REFERRAL_STEP',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** External form */

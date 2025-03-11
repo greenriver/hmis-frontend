@@ -310,7 +310,6 @@ export const HmisEnums = {
     CASE_NOTE: 'Case note',
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
-    CE_REFERRAL_STEP: 'CE referral step',
     CURRENT_LIVING_SITUATION: 'Current living situation',
     EXTERNAL_FORM: 'External form',
     REFERRAL: 'Referral',
