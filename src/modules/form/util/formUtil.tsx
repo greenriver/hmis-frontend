@@ -74,6 +74,7 @@ import {
   Maybe,
   NoYesReasonsForMissingData,
   PickListOption,
+  PickListOptionFieldsFragment,
   PickListType,
   RelatedRecordType,
   RelationshipToHoH,
@@ -1543,3 +1544,85 @@ export function findOptionLabel(
   }
   return option.code || '';
 }
+
+// Given a CHOICE or OPEN_CHOICE item and an initial form value, provide an 'enriched' representation of the value.
+//
+// Returns an object with the following attributes:
+//  'enrichedValue' is the PickListOption representation, e.g. 'yes' => { code: 'yes', label: 'Yes', groupLabel: 'Something' }
+//  'initialSelectedValue' is the initialSelected option, if any (only present if the defaultValue was missing)
+//
+// Returns an empty object if the value does not need to be enriched
+export const getEnrichedValueForChoiceItem = ({
+  remotePickListMap,
+  item,
+  defaultValue,
+  handleError,
+}: {
+  remotePickListMap: Record<string, PickListOptionFieldsFragment[]>;
+  item: FormItem;
+  defaultValue: any;
+  setInitialSelected?: boolean;
+  handleError: (message: string) => void;
+}): {
+  enrichedValue?: PickListOption | PickListOption[];
+  initialSelectedValue?: PickListOption | PickListOption[];
+} => {
+  const { pickListReference, pickListOptions } = item;
+  if (!pickListReference && !pickListOptions) return {}; // nothing to enrich
+
+  // Try to locally resolve the pick list (either pickListOptions or a "local" reference from codegen'd enums).
+  let resolvedPicklist = resolveOptionList(item);
+
+  // Try to resolve the list from the remotePickListMap
+  if (
+    !resolvedPicklist &&
+    pickListReference &&
+    Object.values<string>(PickListType).includes(pickListReference)
+  ) {
+    resolvedPicklist = remotePickListMap[pickListReference];
+  }
+
+  // Failed to resolve the pick list. Report to sentry.
+  if (!resolvedPicklist) {
+    handleError(`Could not resolve pick list "${pickListReference}"`);
+    return {};
+  }
+
+  // Get the 'code' of the default value.
+  // Value may already be in Picklist shape with only the code, because of createInitialValuesFromRecord.
+  // in that case we still want to try to populate it with the full option, based on the code.
+  let valueCode = defaultValue;
+  if (isPickListOption(valueCode)) valueCode = valueCode.code;
+  if (isPickListOptionArray(valueCode))
+    valueCode = valueCode.map((o) => o.code);
+
+  // if there is no value, populate field with the default option (initialSelected) and return
+  if (!valueCode || (Array.isArray(valueCode) && valueCode.length === 0)) {
+    const initialSelected = resolvedPicklist.filter((o) => o.initialSelected);
+    if (initialSelected.length === 0) return {}; // nothing to enrich
+
+    // Return the initialSelected option(s)
+    const initialSelectedValue = item.repeats
+      ? initialSelected
+      : initialSelected[0];
+    return { initialSelectedValue };
+  }
+
+  // Map the value code(s) to the corresponding picklist option(s)
+  let found;
+  if (Array.isArray(valueCode)) {
+    found = valueCode
+      .map((value) => resolvedPicklist.find((option) => option.code === value))
+      .filter((option) => !!option);
+  } else {
+    found = resolvedPicklist.find((option) => option.code === valueCode);
+  }
+
+  if (!found || ensureArray(found).length !== ensureArray(valueCode).length) {
+    handleError(
+      `Pick list "${pickListReference}" does not contain code "${valueCode}"`
+    );
+    return {};
+  }
+  return { enrichedValue: found };
+};
