@@ -1619,9 +1619,11 @@ export const getEnrichedValueForChoiceItem = ({
   }
 
   if (!found || ensureArray(found).length !== ensureArray(valueCode).length) {
-    handleError(
-      `Pick list "${pickListReference}" does not contain code "${valueCode}"`
-    );
+    // Resolved Pick List does not contain a code that matches this value. This can occur when
+    // migrated-in data had different values, or when picklist options have been removed from a form (and we are editing a form with old values).
+    // No need to send this to sentry in this case, just return empty to leave the values as-is. The value will still display in the form.
+
+    // console.debug(`Pick list "${pickListReference}" does not contain code "${valueCode}"`);
     return {};
   }
   return { enrichedValue: found };
