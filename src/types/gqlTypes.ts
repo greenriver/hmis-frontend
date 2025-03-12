@@ -653,9 +653,11 @@ export enum CeReferralStatus {
 export type CeReferralStep = {
   __typename?: 'CeReferralStep';
   formDefinition: FormDefinition;
+  /** unique identifier for this step based on node and instance */
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   status: CeReferralStepStatus;
+  /** the DB identifier of this step, if it is persisted */
   stepId?: Maybe<Scalars['ID']['output']>;
   submittedValues?: Maybe<Scalars['JsonObject']['output']>;
   swimlane: Scalars['String']['output'];

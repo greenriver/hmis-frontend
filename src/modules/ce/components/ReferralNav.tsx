@@ -51,8 +51,8 @@ const ReferralNav: React.FC<Props> = ({}) => {
   const currentPath = useCurrentPath();
 
   if (loading) return <Loading />;
-  if (!referral) return <NotFound />;
   if (error) throw error;
+  if (!referral) return <NotFound />;
 
   return (
     <>

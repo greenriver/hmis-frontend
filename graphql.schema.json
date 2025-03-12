@@ -4698,7 +4698,7 @@
           },
           {
             "name": "id",
-            "description": null,
+            "description": "unique identifier for this step based on node and instance",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -4746,7 +4746,7 @@
           },
           {
             "name": "stepId",
-            "description": null,
+            "description": "the DB identifier of this step, if it is persisted",
             "args": [],
             "type": {
               "kind": "SCALAR",
