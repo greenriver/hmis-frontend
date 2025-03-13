@@ -98,7 +98,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
   return (
     <DynamicForm
       // Use the key to force a re-render when the referral posting changes.
-      // Note: the change to initialValues won't not trigger a form re-render,
+      // Note: the change to initialValues won't trigger a form re-render,
       // because useEnrichedFormData doesn't recalculate defaultValues.
       key={JSON.stringify(referralPosting)}
       definition={definition}
