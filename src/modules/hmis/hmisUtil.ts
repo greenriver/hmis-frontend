@@ -33,13 +33,13 @@ import {
   ClientImageFieldsFragment,
   ClientNameDobVetFragment,
   ClientNameFragment,
+  ClientSearchResultFieldsFragment,
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   DataCollectedAbout,
   DisplayHook,
   EnrollmentFieldsFragment,
   EnrollmentOccurrencePointFieldsFragment,
-  EnrollmentSummaryFieldsFragment,
   EventFieldsFragment,
   HouseholdClientFieldsFragment,
   NoYes,
@@ -312,16 +312,15 @@ export const lastUpdatedBy = (
   return dateString;
 };
 
-export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
+export const pronouns = (
+  client: ClientSearchResultFieldsFragment | ClientFieldsFragment
+): React.ReactNode =>
   client.pronouns && client.pronouns.length > 0
     ? client.pronouns.join(', ')
     : null;
 
 export const entryExitRange = (
-  enrollment:
-    | EnrollmentFieldsFragment
-    | HouseholdClientFieldsFragment['enrollment']
-    | EnrollmentSummaryFieldsFragment,
+  enrollment: Pick<EnrollmentFieldsFragment, 'entryDate' | 'exitDate'>,
   endPlaceholder?: string
 ) => {
   return parseAndFormatDateRange(
@@ -379,12 +378,18 @@ export const formRoleDisplay = (assessment: AssessmentFieldsFragment) => {
   return defaultTitle;
 };
 
-export const assessmentDescription = (assessment: ClientAssessmentType) => {
+export const assessmentDescription = (
+  assessment: ClientAssessmentType | AssessmentFieldsFragment
+) => {
   const prefix = formRoleDisplay(assessment);
-  const name = prefix ? `${prefix} assessment` : 'Assessment';
-  return `${name} at ${assessment.enrollment.projectName} on ${
-    parseAndFormatDate(assessment.assessmentDate) || 'unknown date'
-  }`;
+  const name = prefix ? `${prefix} assessment ` : 'Assessment ';
+  // `enrollment` may not be present in the type (eg. if we are on the Enrollment Assessments page)
+  const atProject =
+    'enrollment' in assessment && !!assessment.enrollment?.projectName
+      ? `at ${assessment.enrollment.projectName} `
+      : '';
+  const onDate = `on ${parseAndFormatDate(assessment.assessmentDate) || 'unknown date'}`;
+  return name + atProject + onDate;
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
@@ -414,16 +419,32 @@ export const eventReferralResult = (e: EventFieldsFragment) => {
   return result;
 };
 
-export const sortHouseholdMembers = (
-  members?: HouseholdClientFieldsFragment[],
+const hohPriorityMapping: Record<RelationshipToHoH, number> = {
+  [RelationshipToHoH.SelfHeadOfHousehold]: 0,
+  [RelationshipToHoH.SpouseOrPartner]: 1,
+  [RelationshipToHoH.Child]: 2,
+  [RelationshipToHoH.OtherRelative]: 3,
+  [RelationshipToHoH.UnrelatedHouseholdMember]: 4,
+  [RelationshipToHoH.DataNotCollected]: 5,
+  [RelationshipToHoH.Invalid]: 6,
+};
+
+type GenericHouseholdClient = Pick<
+  HouseholdClientFieldsFragment,
+  'relationshipToHoH'
+> & {
+  client: Pick<HouseholdClientFieldsFragment['client'], 'id'>;
+  enrollment: Pick<HouseholdClientFieldsFragment['enrollment'], 'id'>;
+};
+export const sortHouseholdMembers = <T extends GenericHouseholdClient>(
+  members?: T[],
   activeEnrollmentId?: string
-) => {
-  const sorted = sortBy(members || [], [
+): T[] => {
+  return sortBy(members || [], [
     (c) => (c.enrollment.id === activeEnrollmentId ? -1 : 1),
-    (c) => c.client.lastName,
-    (c) => c.client.id,
+    (c) => hohPriorityMapping[c.relationshipToHoH], // HoH > spouse > child > relative > unrelated
+    (c) => c.client.id, // deterministic tie-breaker
   ]);
-  return sorted;
 };
 
 export const getSchemaForType = (type: string) => {

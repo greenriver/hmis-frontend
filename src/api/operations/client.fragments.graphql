@@ -1,16 +1,13 @@
 fragment ClientSearchResultFields on Client {
   ...ClientName
   ...ClientIdentificationFields
+  ...ClientSsnFields @include(if: $includeSsn)
   dateCreated
   dateDeleted
   dateUpdated
   # needed for mci id display in search results
   externalIds {
     ...ClientIdentifierFields
-  }
-  # needed to determine whether to show ssn/dob
-  access {
-    ...ClientAccessFields
   }
   alerts {
     ...ClientAlertFields
@@ -20,6 +17,7 @@ fragment ClientSearchResultFields on Client {
 # Fragment to resolve many details on an individual client, when rendering the Client Dashboard
 fragment ClientFields on Client {
   ...ClientIdentificationFields
+  ...ClientSsnFields
   ...ClientVeteranInfoFields
   dobDataQuality
   gender
@@ -124,6 +122,7 @@ fragment ClientImage on Client {
     ...ClientImageFields
   }
   access {
+    id
     canEditClient
     canViewClientPhoto
   }
@@ -134,8 +133,14 @@ fragment ClientIdentificationFields on Client {
   lockVersion
   dob
   age
-  ssn
   gender
+  pronouns
+}
+
+fragment ClientSsnFields on Client {
+  id
+  lockVersion
+  ssn
   access {
     id
     canViewFullSsn
