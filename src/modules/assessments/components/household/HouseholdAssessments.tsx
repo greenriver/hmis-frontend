@@ -204,6 +204,7 @@ const HouseholdAssessments: React.FC<Props> = ({
     if (hasInflights) return;
     if (nextTab === currentTab) return;
 
+    // console.info(`navigated from tab ${currentTab} to ${nextTab}`)
     setCurrentTab(nextTab);
     setNextTab(undefined);
     window.scrollTo(0, 0);
