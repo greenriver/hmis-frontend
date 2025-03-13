@@ -1,4 +1,4 @@
-import { Button, Chip, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
@@ -61,11 +61,12 @@ const ProjectExternalSubmissionsTable = ({
       return [
         {
           header: 'ID',
+          key: 'id',
           render: (s: ExternalFormSubmissionSummaryFragment) => s.id,
         },
         {
           header: 'Status',
-          linkTreatment: false,
+          key: 'status',
           render: ({ status, spam }: ExternalFormSubmissionSummaryFragment) => {
             const isNew = status === ExternalFormSubmissionStatus.New;
             return (
@@ -92,7 +93,7 @@ const ProjectExternalSubmissionsTable = ({
         },
         {
           header: 'Date Submitted',
-          linkTreatment: false,
+          key: 'dateSubmitted',
           render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) => (
             <RelativeDateTableCellContents
               dateTimeString={submittedAt}
@@ -101,21 +102,9 @@ const ProjectExternalSubmissionsTable = ({
           ),
         },
         ...defs,
-        {
-          header: 'Action',
-          render: ({ id }: ExternalFormSubmissionSummaryFragment) => (
-            <Button
-              variant='outlined'
-              onClick={() => setModalOpenId(id)}
-              disabled={bulkLoading}
-            >
-              View
-            </Button>
-          ),
-        },
       ];
     },
-    [setModalOpenId, bulkLoading]
+    []
   );
 
   const filters = useFilters({
@@ -140,6 +129,10 @@ const ProjectExternalSubmissionsTable = ({
         }
         queryDocument={GetProjectExternalFormSubmissionsDocument}
         getColumnDefs={getColumnDefs}
+        handleRowClick={(submission) => setModalOpenId(submission.id)}
+        rowActionDisabled={bulkLoading}
+        rowName={(row) => row.id}
+        rowActionTitle='View Submission'
         noData='No external form submissions'
         pagePath='project.externalFormSubmissions'
         recordType='ExternalFormSubmission'

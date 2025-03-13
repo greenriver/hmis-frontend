@@ -20,8 +20,6 @@ const ItemCategory = <T extends object>({ item, first }: Props<T>) => {
     <ItemBase
       item={item}
       renderTitle={(title) => (
-        // <Box sx={{ width: '100%' }}>
-        //   {!first && <Divider />}
         <Typography
           variant='body2'
           color='text.secondary'
@@ -29,7 +27,6 @@ const ItemCategory = <T extends object>({ item, first }: Props<T>) => {
         >
           {title}
         </Typography>
-        // </Box>
       )}
       renderChild={(item) => {
         let ChildComponent = Topic;

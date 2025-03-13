@@ -57,6 +57,7 @@ const UnitManagementTable = ({
               variant: 'text',
               color: 'info',
               disabled,
+              'aria-label': 'Delete unit',
             }}
             confirmationDialogContent={
               unitIds.length > 1 ? (
@@ -91,18 +92,22 @@ const UnitManagementTable = ({
     return [
       {
         header: 'Unit Type',
+        key: 'unitType',
         render: (unit) => unit.unitType?.description,
       },
       {
         header: 'Unit ID',
+        key: 'unitId',
         render: 'id',
       },
       {
         header: 'Active Status',
+        key: 'activeStatus',
         render: (unit) => (unit.occupants.length > 0 ? 'Filled' : 'Available'),
       },
       {
         header: 'Client(s)',
+        key: 'clients',
         render: (unit) => <UnitOccupants unit={unit} />,
       },
       ...(allowDeleteUnits

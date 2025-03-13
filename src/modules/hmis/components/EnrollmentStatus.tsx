@@ -1,9 +1,13 @@
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
-import { Stack, Typography } from '@mui/material';
+import { IconProps, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import { Enrollment, Household } from '@/types/gqlTypes';
+import {
+  Enrollment,
+  EnrollmentFieldsFragment,
+  Household,
+} from '@/types/gqlTypes';
 
 interface CommonStatusProps {
   variant: 'inProgress' | 'open' | 'autoExited' | 'exited';
@@ -16,13 +20,15 @@ const CommonStatus: React.FC<CommonStatusProps> = ({ variant }) => {
         return {
           Icon: ErrorOutlineIcon,
           text: 'Incomplete',
-          textColor: 'error',
+          textColor: 'error.dark',
+          iconColor: 'error',
         };
       case 'open':
         return {
           Icon: HistoryIcon,
           text: 'Open',
-          textColor: 'activeStatus',
+          textColor: 'primary.dark',
+          iconColor: 'primary',
         };
       case 'autoExited':
         return {
@@ -47,17 +53,23 @@ const CommonStatus: React.FC<CommonStatusProps> = ({ variant }) => {
       sx={{ textDecoration: 'none' }}
     >
       <Stack direction='row' alignItems='center' gap={0.8}>
-        <statusProps.Icon fontSize='small' />
+        <statusProps.Icon
+          fontSize='small'
+          color={statusProps.iconColor as IconProps['color']}
+        />
         {statusProps.text}
       </Stack>
     </Typography>
   );
 };
 
+export type EnrollmentWithStatus = Pick<Enrollment, 'inProgress' | 'exitDate'> &
+  Partial<Pick<EnrollmentFieldsFragment, 'autoExited'>>;
+
 const EnrollmentStatus = ({
   enrollment,
 }: {
-  enrollment: Pick<Enrollment, 'inProgress' | 'autoExited' | 'exitDate'>;
+  enrollment: EnrollmentWithStatus;
 }) => {
   if (enrollment.inProgress) return <CommonStatus variant='inProgress' />;
   if (enrollment.autoExited) return <CommonStatus variant='autoExited' />;

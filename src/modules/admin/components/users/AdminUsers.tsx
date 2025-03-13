@@ -33,12 +33,15 @@ const AdminUsers = () => {
       {
         header: 'Name',
         render: ({ name }) => name,
+        key: 'name',
       },
       {
         header: 'Email Address',
         render: ({ email }) => email,
+        key: 'email',
       },
       {
+        key: 'Actions',
         textAlign: 'right',
         render: (user) =>
           access && (

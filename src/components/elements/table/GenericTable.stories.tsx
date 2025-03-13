@@ -3,9 +3,13 @@ import { Meta, StoryFn } from '@storybook/react';
 
 import GenericTable, { Props as GenericTableProps } from './GenericTable';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
-import { getCustomDataElementColumns } from '@/modules/hmis/hmisUtil';
+import { CLIENT_SSN_COLUMN } from '@/modules/clientMerge/components/client/NewClientMerge';
+import {
+  clientBriefName,
+  getCustomDataElementColumns,
+} from '@/modules/hmis/hmisUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { RITA_ACKROYD } from '@/test/__mocks__/requests';
+import { fakeClient, RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
 
 export default {
@@ -30,17 +34,16 @@ const Template =
   );
 
 const clientColumns = [
-  CLIENT_COLUMNS.id,
   CLIENT_COLUMNS.first,
   CLIENT_COLUMNS.last,
-  CLIENT_COLUMNS.ssn,
+  CLIENT_SSN_COLUMN,
   CLIENT_COLUMNS.dobAge,
 ];
 
 type RowType = ClientFieldsFragment;
-const fakeRows: RowType[] = [];
+const DummyTableRows: RowType[] = [];
 for (let i = 0; i < 10; i++) {
-  fakeRows.push({ ...RITA_ACKROYD, id: (i + 1).toString() } as RowType);
+  DummyTableRows.push(fakeClient() as RowType);
 }
 
 export const NoData = Template<RowType>().bind({});
@@ -48,13 +51,13 @@ NoData.args = { rows: [] as RowType[], columns: clientColumns };
 
 export const WithClientData = Template<RowType>().bind({});
 WithClientData.args = {
-  rows: fakeRows,
+  rows: DummyTableRows,
   columns: clientColumns,
 };
 
 export const SelectableRows = Template<RowType>().bind({});
 SelectableRows.args = {
-  rows: fakeRows,
+  rows: DummyTableRows,
   columns: clientColumns,
   selectable: 'row',
 };
@@ -136,8 +139,32 @@ const rowsWithCdes = [
 WithCustomDataElements.args = {
   rows: rowsWithCdes,
   columns: [
-    CLIENT_COLUMNS.id,
     CLIENT_COLUMNS.name,
     ...getCustomDataElementColumns<RowType>(rowsWithCdes),
+  ],
+};
+
+export const WithLinkedTableRows = Template<RowType>().bind({});
+WithLinkedTableRows.args = {
+  rows: DummyTableRows,
+  rowLinkTo: () => 'https://storybook.js.org/docs',
+  rowName: (row) => row.id + ' ' + clientBriefName(row),
+  rowActionTitle: 'Navigate to an external link',
+  columns: clientColumns,
+};
+
+export const WithMultiActionTableRows = Template<RowType>().bind({});
+WithMultiActionTableRows.args = {
+  rows: DummyTableRows,
+  handleRowClick: (row) => alert(`Hello, ${clientBriefName(row)} ${row.id}`),
+  rowName: (row) => row.id + ' ' + clientBriefName(row),
+  rowActionTitle: 'Do something in-app',
+  columns: clientColumns,
+  rowSecondaryActionConfigs: () => [
+    {
+      title: 'Navigate to an external link',
+      key: 'link',
+      to: 'https://storybook.js.org/docs',
+    },
   ],
 };

@@ -21,21 +21,24 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const columns: ColumnDef<ProjectCocFieldsFragment>[] = [
   {
     header: 'CoC Code',
-    linkTreatment: true,
     render: 'cocCode',
+    key: 'cocCode',
   },
   {
     header: 'Geocode',
     render: 'geocode',
+    key: 'geocode',
   },
   {
     header: 'Geography Type',
+    key: 'geographyType',
     render: (c) => (
       <HmisEnum enumMap={HmisEnums.GeographyType} value={c.geographyType} />
     ),
   },
   {
     header: 'Address',
+    key: 'address',
     render: (c: ProjectCocFieldsFragment) => (
       <Stack gap={0.5} sx={{ py: 0.5 }}>
         <Typography variant='body2'>
@@ -79,6 +82,8 @@ const ProjectCocTable = (props: Props) => {
                 })
             : undefined
         }
+        rowActionTitle='Edit CoC'
+        rowName={(row) => row.cocCode || row.id}
         {...props}
       />
     </>

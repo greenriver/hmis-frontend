@@ -8,6 +8,7 @@ import {
   CreateDirectUploadMutationDocument,
   DobDataQuality,
   EnrollmentAccess,
+  ExternalIdentifierType,
   Gender,
   GetClientEnrollmentsDocument,
   GetClientImageDocument,
@@ -16,10 +17,12 @@ import {
   GetEnrollmentWithHouseholdDocument,
   GetFileDocument,
   GetPickListDocument,
+  GetProjectHouseholdsDocument,
   GetRootPermissionsDocument,
   NameDataQuality,
   NoYesReasonsForMissingData,
   PickListOption,
+  ProjectAccess,
   ProjectType,
   Race,
   RelationshipToHoH,
@@ -58,6 +61,15 @@ const enrollmentAccessMock = {
   id: '9999:1', // <enrollment id>:<user id>
 } as EnrollmentAccess;
 
+const projectAccessMock = {
+  ...Object.fromEntries(
+    HmisObjectSchemas.find((obj) => obj.name === 'ProjectAccess')?.fields.map(
+      (f) => [f.name, true]
+    ) || []
+  ),
+  id: 'X:1', // <project id>:<user id>
+} as ProjectAccess;
+
 export const applicationUserMock: UserFieldsFragment = {
   __typename: 'ApplicationUser',
   id: '1',
@@ -82,7 +94,7 @@ export const fakeEnrollment = () => {
     organizationName: 'Blue Hills Organization',
     lastBedNightDate: '2022-06-18',
     moveInDate: null,
-    lockVersion: '1',
+    lockVersion: 1,
     autoExited: false,
     project: {
       id: '1',
@@ -125,7 +137,7 @@ export const RITA_ACKROYD = {
       id: 'client_id:999',
       identifier: '999',
       url: null,
-      type: 'CLIENT_ID',
+      type: ExternalIdentifierType.ClientId,
       label: 'Client ID',
       __typename: 'ExternalIdentifier',
     },
@@ -134,14 +146,14 @@ export const RITA_ACKROYD = {
       identifier: '9999',
       url: null,
       label: 'Personal ID',
-      type: 'PERSONAL_ID',
+      type: ExternalIdentifierType.PersonalId,
       __typename: 'ExternalIdentifier',
     },
     {
       id: 'warehouse_id:999',
       identifier: '9999',
       url: 'https://hmis-warehouse.dev.test/clients/999/from_source',
-      type: 'WAREHOUSE_ID',
+      type: ExternalIdentifierType.WarehouseId,
       label: 'Warehouse ID',
       __typename: 'ExternalIdentifier',
     },
@@ -155,10 +167,131 @@ export const RITA_ACKROYD = {
   alerts: [],
 };
 
+export const fakeClient = () => ({
+  ...RITA_ACKROYD,
+  id: v4(),
+});
+export const fakeProject = () => ({
+  id: v4(),
+  __typename: 'Project',
+  projectName: 'White Pine',
+  projectType: ProjectType.EsNbn,
+  access: projectAccessMock,
+});
+
+export const fakeHousehold = () => ({
+  id: v4(),
+  __typename: 'Household',
+  householdId: v4(),
+  householdSize: 2,
+  shortId: 'ABC',
+  householdClients: [
+    {
+      __typename: 'HouseholdClient',
+      id: RITA_ACKROYD.id,
+      relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
+      client: RITA_ACKROYD,
+      enrollment: { ...fakeEnrollment(), id: '5', __typename: 'Enrollment' },
+    },
+    {
+      __typename: 'HouseholdClient',
+      id: '9998',
+      relationshipToHoH: RelationshipToHoH.OtherRelative,
+      client: {
+        __typename: 'Client',
+        id: '9998',
+        firstName: 'Lennart',
+        lastName: 'Acker',
+        nameSuffix: null,
+        dob: '1990-03-20',
+        age: 35,
+      },
+      enrollment: {
+        ...fakeEnrollment(),
+        relationshipToHoH: RelationshipToHoH.OtherRelative,
+      },
+    },
+  ],
+});
+
 export const RITA_ACKROYD_WITHOUT_ENROLLMENTS = {
   ...RITA_ACKROYD,
   id: '9998',
   enrollments: [],
+};
+
+export const AMERICAN_LAKE_HOUSE = {
+  id: '441',
+  staffAssignmentsEnabled: true,
+  // TODO: flesh out project mock
+};
+
+export const getProjectHouseholdsMock = {
+  request: {
+    query: GetProjectHouseholdsDocument,
+    variables: {
+      limit: 25,
+      offset: 0,
+      includeStaffAssignment: false,
+      id: undefined,
+      filters: { searchTerm: undefined },
+      openOnDate: undefined,
+      sortOrder: 'MOST_RECENT',
+    },
+  },
+  result: {
+    data: {
+      project: {
+        households: {
+          offset: 0,
+          limit: 25,
+          nodesCount: 2,
+          nodes: [
+            {
+              id: '1',
+              householdSize: 1,
+              householdClients: [
+                {
+                  id: '35871:8678',
+                  relationshipToHoH: 'SELF_HEAD_OF_HOUSEHOLD',
+                  client: {
+                    ...RITA_ACKROYD,
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+              ],
+            },
+            {
+              id: '2',
+              householdSize: 4,
+              householdClients: [
+                {
+                  id: '1:1',
+                  relationshipToHoH: 'SELF_HEAD_OF_HOUSEHOLD',
+                  client: {
+                    ...RITA_ACKROYD,
+                    firstName: 'Elmer',
+                    lastName: 'Smith',
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+                {
+                  id: '1:2',
+                  relationshipToHoH: 'SPOUSE_OR_PARTNER',
+                  client: {
+                    ...RITA_ACKROYD,
+                    firstName: 'Ryan',
+                    lastName: 'Smith',
+                  },
+                  enrollment: fakeEnrollment(),
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+  },
 };
 
 export const projectsForSelectMock = {
@@ -442,32 +575,7 @@ export const enrollmentWithHoHMock = {
       enrollment: {
         ...fakeEnrollment(),
         householdSize: 2,
-        household: {
-          id: '123',
-          __typename: 'Household',
-          householdClients: [
-            {
-              __typename: 'HouseholdClient',
-              id: RITA_ACKROYD.id,
-              relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
-              client: RITA_ACKROYD,
-              enrollment: { ...fakeEnrollment(), id: '5' },
-            },
-            {
-              __typename: 'HouseholdClient',
-              id: '9998',
-              relationshipToHoH: RelationshipToHoH.OtherRelative,
-              client: {
-                __typename: 'Client',
-                id: '9998',
-                firstName: 'Lennart',
-                lastName: 'Acker',
-                nameSuffix: null,
-              },
-              enrollment: fakeEnrollment(),
-            },
-          ],
-        },
+        household: fakeHousehold(),
       },
     },
   },

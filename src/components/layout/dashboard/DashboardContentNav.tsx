@@ -7,24 +7,28 @@ import {
   DESKTOP_NAV_SIDEBAR_WIDTH,
   STICKY_BAR_HEIGHT,
 } from '../layoutConstants';
+import SkipToContentButton from '@/components/elements/SkipToContentButton';
 import MobileMenu from '@/components/layout/nav/MobileMenu';
 
 interface Props {
   children: ReactNode;
-  navHeader: ReactNode;
+  navHeader?: ReactNode;
   desktopNavIsOpen: boolean;
   mobileNavIsOpen: boolean;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
-  label?: string;
+  label: string;
+  skipNavFocusTargetId: string;
 }
 
 const CloseMenuRow = ({
   onClose,
   label,
+  skipNavFocusTargetId,
 }: {
   onClose: VoidFunction;
-  label?: string;
+  skipNavFocusTargetId: string;
+  label: string;
 }) => (
   <Stack
     justifyContent='space-between'
@@ -39,13 +43,12 @@ const CloseMenuRow = ({
       height: CONTEXT_HEADER_HEIGHT,
     }}
   >
-    {label ? (
-      <Typography variant='body2' color='text.secondary'>
-        {label}
-      </Typography>
-    ) : (
-      <Box />
-    )}
+    <Typography variant='body2' color='text.secondary'>
+      {label}
+    </Typography>
+    <SkipToContentButton focusTargetId={skipNavFocusTargetId}>
+      Skip {label} navigation
+    </SkipToContentButton>
     <Button
       variant='text'
       color='grayscale'
@@ -65,6 +68,7 @@ const DashboardContentNav: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   label,
+  skipNavFocusTargetId,
 }) => {
   const headerHeight = `${STICKY_BAR_HEIGHT}px`;
   const height = `calc(100vh - ${headerHeight})`;
@@ -110,19 +114,25 @@ const DashboardContentNav: React.FC<Props> = ({
         })}
       >
         <Box component='nav' aria-label='sidebar-nav'>
-          <CloseMenuRow onClose={handleCloseDesktopMenu} label={label} />
-          <Box
-            sx={{
-              pl: 3,
-              pr: 2,
-              py: 2,
-              borderBottomColor: 'borders.light',
-              borderBottomWidth: 1,
-              borderBottomStyle: 'solid',
-            }}
-          >
-            {navHeader}
-          </Box>
+          <CloseMenuRow
+            onClose={handleCloseDesktopMenu}
+            label={label}
+            skipNavFocusTargetId={skipNavFocusTargetId}
+          />
+          {navHeader && (
+            <Box
+              sx={{
+                pl: 3,
+                pr: 2,
+                py: 2,
+                borderBottomColor: 'borders.light',
+                borderBottomWidth: 1,
+                borderBottomStyle: 'solid',
+              }}
+            >
+              {navHeader}
+            </Box>
+          )}
           {children}
         </Box>
       </Drawer>

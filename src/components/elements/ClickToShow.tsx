@@ -46,21 +46,21 @@ const ClickToShow: React.FC<Props> = ({
   return (
     <Button
       variant='text'
+      color='grayscale'
       // Unintuitively, aria-live="off" means to announce changes only when this element has focus.
       // (See https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
       // This prevents all hidden items in a column from announcing changes when the show/hide button in the column header is clicked.
       aria-live='off'
       aria-label={ariaLabel}
-      sx={(theme) => ({
+      sx={{
         textDecoration: 'none',
         userSelect: 'text',
-        // color: hidden ? 'text.disabled' : 'text.primary',
         justifyContent: 'flex-start',
         width: 'fit-content',
         textAlign: 'left',
-        color: hidden ? 'text.disabled' : theme.palette.links,
+        color: hidden ? undefined : 'primary.dark',
         p: 0,
-      })}
+      }}
       onClick={onToggle}
       size='small'
       data-testid='clickToShow'
@@ -69,10 +69,7 @@ const ClickToShow: React.FC<Props> = ({
         {hidden ? (
           <VisibilityOffIcon color='disabled' fontSize='small' />
         ) : (
-          <VisibilityIcon
-            sx={(theme) => ({ color: theme.palette.links })}
-            fontSize='small'
-          />
+          <VisibilityIcon sx={{ color: 'primary.dark' }} fontSize='small' />
         )}
         {hidden ? (
           <Typography {...props} sx={{ textDecoration: 'none', ...props.sx }}>

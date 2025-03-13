@@ -24,16 +24,19 @@ import { evictProjectConfigs } from '@/utils/cacheUtil';
 const columns: ColumnDef<ProjectConfigFieldsFragment>[] = [
   {
     header: 'Config Type',
+    key: 'type',
     render: ({ configType }) => (
       <HmisEnum enumMap={HmisEnums.ProjectConfigType} value={configType} />
     ),
   },
   {
     header: 'Applicability Rule',
+    key: 'rule',
     render: (config) => <ProjectConfigFormRule rule={config} />,
   },
   {
     header: 'Options',
+    key: 'options',
     render: ({ configOptions, configType }) => {
       if (configType === ProjectConfigType.AutoEnter) {
         return <NotCollectedText>N/A</NotCollectedText>;
@@ -71,7 +74,7 @@ const ProjectConfigTable = ({
         columns={[
           ...columns,
           {
-            header: '',
+            key: 'Delete',
             render: ({ id }) => (
               <Box
                 onClick={(e) => {
@@ -89,9 +92,7 @@ const ProjectConfigTable = ({
                   recordName='Project Config'
                   onSuccess={() => evictProjectConfigs()}
                   onlyIcon
-                >
-                  Delete
-                </DeleteMutationButton>
+                />
               </Box>
             ),
           },
@@ -101,6 +102,7 @@ const ProjectConfigTable = ({
         recordType='ProjectConfig'
         paginationItemName='project config'
         handleRowClick={onClickRow}
+        rowActionTitle='Edit Project Config'
         showTopToolbar
       />
     </>

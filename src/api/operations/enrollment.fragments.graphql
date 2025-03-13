@@ -21,6 +21,7 @@ fragment ProjectEnrollmentFields on Enrollment {
 }
 
 # fields for resolving Enrollments on a Client
+# also used for resolving Enrollments on other Client records, like Assessment, Case Note, Service
 # Note: user might only have limited access to some Enrollments
 fragment ClientEnrollmentFields on Enrollment {
   id
@@ -31,13 +32,27 @@ fragment ClientEnrollmentFields on Enrollment {
   moveInDate
   lastBedNightDate
   projectName
-  organizationName
+  organizationName @include(if: $includeOrganizationName)
   projectType
   inProgress
   relationshipToHoH
   access {
     id
     canViewEnrollmentDetails
+  }
+}
+
+fragment EnrollmentWithOptionalFields on Enrollment {
+  # Optional fields that are only included on Project Enrollments and Client Enrollments
+  # (organizationName not included here because it is fetched optionally by all records that use ClientEnrollmentFields)
+  moveInDate @include(if: $includeMoveInDate)
+  lastContact @include(if: $includeLastContact) {
+    contactDate
+    contactType
+  }
+  household @include(if: $includeStaffAssignment) {
+    id
+    ...HouseholdWithStaffAssignments
   }
 }
 
@@ -86,13 +101,12 @@ fragment EnrolledClientFields on Client {
     ...CustomDataElementFields
   }
   access {
-    ...ClientAccessFields
+    id
+    canEditClient # TODO: move to EnrollmentAccess object
   }
 }
 
 # Fields when you're resolving an individual Enrollment and all its details
-# FIXME: stop resolving client/project access objects. Instead, put what we need to know
-# inside of the Enrollment access obj
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentFields
   ...EnrollmentOccurrencePointFields
@@ -123,7 +137,9 @@ fragment AllEnrollmentDetails on Enrollment {
     ...ProjectCocCount
     hasUnits
     access {
-      ...ProjectAccessFields
+      id
+      canSplitHouseholds
+      canManageIncomingReferrals # determine whether to link to source referral
     }
     staffAssignmentsEnabled
   }
@@ -252,6 +268,7 @@ fragment CeAssessmentFields on CeAssessment {
   user {
     ...UserFields
   }
+  formDefinitionId
 }
 
 fragment EnrollmentSummaryFields on EnrollmentSummary {
@@ -269,4 +286,11 @@ fragment EnrollmentRangeFields on Enrollment {
   entryDate
   exitDate
   inProgress
+}
+
+fragment EnrollmentWithHouseholdFields on Enrollment {
+  ...EnrollmentFields
+  household {
+    ...HouseholdFields
+  }
 }

@@ -72,16 +72,18 @@ const HouseholdAssessmentTabPanel = memo(
       if (formState.saving) return;
       // skip save if there are errors. user must do an explicit save to resolve error before proceeding
       if (formState.errors) return;
+      // skip save if form is not dirty
+      if (!formState.dirty) return;
 
       // perform background save or submit
       if (assessmentSubmitted) {
-        formRef.current.SubmitIfDirty(false);
+        formRef.current.SubmitForm();
       } else {
-        formRef.current.SaveIfDirty();
+        formRef.current.SaveDraftForm();
       }
     }, [
       onFormStateChange,
-      formState.saving,
+      formState,
       navigatingAway,
       assessmentId,
       assessmentSubmitted,
@@ -89,7 +91,6 @@ const HouseholdAssessmentTabPanel = memo(
       id,
       refetch,
       updateTabStatus,
-      formState.errors,
     ]);
 
     const { assessment, loading: assessmentLoading } =
@@ -114,7 +115,7 @@ const HouseholdAssessmentTabPanel = memo(
 
     const onCompletedMutation = useCallback(
       (status: AssessmentResponseStatus) => {
-        // console.debug('Completed with status', status);
+        // console.info(`form for ${client.id} completed`, status);
         if (['saved', 'submitted'].includes(status)) {
           onFormStateChange?.(enrollmentId, 'saveCompleted');
         } else if (['warning', 'error'].includes(status)) {
@@ -199,7 +200,7 @@ const HouseholdAssessmentTabPanel = memo(
 
       config.push({
         id: 'next',
-        label: 'Next Client',
+        label: nextTab === 'summary' ? 'Next' : 'Next Client',
         action: FormActionTypes.Navigate,
         buttonProps: {
           disabled: !nextTab || disableNavigation,

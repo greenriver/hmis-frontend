@@ -1,26 +1,30 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
 import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
+import { ColumnDef } from '@/components/elements/table/types';
+import { ManageHouseholdProject } from '@/modules/household/components/ManageHousehold';
 import {
-  ClientFieldsFragment,
+  ClientSearchResultFieldsFragment,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
 
 interface Args {
-  householdId?: string;
-  projectId: string;
+  householdId?: string; // undefined if building new household and no enrollments added yet
+  project: ManageHouseholdProject;
+  onSuccess: (householdId: string) => void;
 }
 
 export default function useAddToHouseholdColumns({
-  householdId: initialHouseholdId,
-  projectId,
+  householdId,
+  project,
+  onSuccess,
 }: Args) {
-  const [householdId, setHouseholdId] = useState(initialHouseholdId);
-  const [getHousehold, { data, loading, error }] = useGetHouseholdLazyQuery({
-    fetchPolicy: 'network-only',
-  });
+  const [getHousehold, { called, data, loading, error }] =
+    useGetHouseholdLazyQuery({
+      fetchPolicy: 'network-only',
+    });
 
   const refetchHousehold = useCallback(() => {
     if (!householdId) return;
@@ -29,12 +33,6 @@ export default function useAddToHouseholdColumns({
 
   // Refetch household when household ID changes
   useEffect(() => refetchHousehold(), [refetchHousehold, householdId]);
-
-  // If household ID wasn't found, clear the household ID state.
-  // This happens when the last/only member is removed.
-  useEffect(() => {
-    if (data && !data.household) setHouseholdId(undefined);
-  }, [data]);
 
   const currentMembersMap = useMemo(() => {
     // filter out exited members, because they can be re-added
@@ -46,51 +44,61 @@ export default function useAddToHouseholdColumns({
     return new Set(hc.map((c) => c.client.id));
   }, [data]);
 
+  const handleSuccess = useCallback(
+    (hhId: string) => {
+      refetchHousehold();
+      onSuccess(hhId);
+    },
+    [refetchHousehold, onSuccess]
+  );
   // workaround to scroll to top if refetching household
   useEffect(() => {
     if (loading) window.scrollTo(0, 0);
   }, [data, loading]);
 
-  const onSuccess = useCallback(
-    (updatedHouseholdId: string) => {
-      setHouseholdId(updatedHouseholdId);
-      getHousehold({ variables: { id: updatedHouseholdId } });
-    },
-    [getHousehold]
-  );
-
-  const addToEnrollmentColumns = useMemo(() => {
+  const addToEnrollmentColumns: ColumnDef<
+    ClientSearchResultFieldsFragment | RecentHouseholdMember
+  >[] = useMemo(() => {
     return [
       {
         header: '',
         key: 'add',
         width: '10%',
         minWidth: '180px',
-        render: (record: ClientFieldsFragment | RecentHouseholdMember) => {
+
+        render: (record) => {
           const client = isRecentHouseholdMember(record)
             ? record.client
             : record;
           return (
             <AddToHouseholdButton
               client={client}
-              householdId={householdId}
-              projectId={projectId}
+              project={project}
               isMember={currentMembersMap.has(client.id)}
-              onSuccess={onSuccess}
+              onSuccess={handleSuccess}
+              household={data?.household || undefined}
+              // Disable button until `household` is fetched
+              disabled={loading && !!householdId && !data?.household}
             />
           );
         },
       },
     ];
-  }, [currentMembersMap, householdId, projectId, onSuccess]);
+  }, [
+    project,
+    currentMembersMap,
+    handleSuccess,
+    data?.household,
+    loading,
+    householdId,
+  ]);
 
   if (error) throw error;
 
   return {
     addToEnrollmentColumns,
-    householdId,
-    onHouseholdIdChange: onSuccess,
     household: data?.household,
+    householdNotFound: called && householdId && !loading && !data?.household,
     refetchHousehold,
     loading,
   };

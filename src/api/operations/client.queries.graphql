@@ -4,6 +4,8 @@ query SearchClients(
   $limit: Int
   $offset: Int
   $sortOrder: ClientSortOption = LAST_NAME_A_TO_Z
+  # SSN is typically not included in search results, but can be included for Client Merge search (to compare SSN when identifying duplicates)
+  $includeSsn: Boolean = false
 ) {
   clientSearch(
     input: $input
@@ -54,6 +56,10 @@ query GetClientEnrollments(
   $limit: Int = 10
   $offset: Int = 0
   $filters: EnrollmentsForClientFilterOptions
+  $includeStaffAssignment: Boolean = false
+  $includeMoveInDate: Boolean = false
+  $includeLastContact: Boolean = false
+  $includeOrganizationName: Boolean = true
 ) {
   client(id: $id) {
     id
@@ -69,6 +75,7 @@ query GetClientEnrollments(
       nodesCount
       nodes {
         ...ClientEnrollmentFields
+        ...EnrollmentWithOptionalFields
       }
     }
   }
@@ -80,6 +87,8 @@ query GetClientServices(
   $offset: Int = 0
   $sortOrder: ServiceSortOption = DATE_PROVIDED
   $filters: ServiceFilterOptions = null
+  $includeOrganizationName: Boolean = false
+  $includeServiceDetails: Boolean = false
 ) {
   client(id: $id) {
     id
@@ -93,7 +102,7 @@ query GetClientServices(
       limit
       nodesCount
       nodes {
-        ...ServiceFields
+        ...ClientServiceFields
         enrollment {
           ...ClientEnrollmentFields
         }
@@ -184,7 +193,12 @@ query GetFile($id: ID!) {
   }
 }
 
-query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetClientFiles(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $includeOrganizationName: Boolean = false
+) {
   client(id: $id) {
     id
     files(limit: $limit, offset: $offset) {

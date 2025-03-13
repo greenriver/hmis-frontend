@@ -35,15 +35,18 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
     () => [
       {
         header: 'Referral Request ID',
+        key: 'id',
         render: 'identifier',
       },
       {
         header: 'Request Date',
+        key: 'date',
         render: (row: ReferralRequestFieldsFragment) =>
           parseAndFormatDateTime(row.requestedOn),
       },
       {
         header: 'Requested By',
+        key: 'requestedBy',
         render: (row: ReferralRequestFieldsFragment) => (
           <>
             {`${row.requestorName} <${row.requestorEmail}>`}
@@ -54,17 +57,18 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
       },
       {
         header: 'Estimated Date Needed',
+        key: 'neededBy',
         render: (row: ReferralRequestFieldsFragment) =>
           parseAndFormatDate(row.neededBy),
       },
       {
         header: 'Unit Type',
+        key: 'unitType',
         render: (row: ReferralRequestFieldsFragment) =>
           row.unitType.description,
       },
       {
         key: 'action',
-        linkTreatment: true,
         render: (referralRequest: ReferralRequestFieldsFragment) => (
           <DeleteMutationButton<
             VoidReferralRequestMutation,

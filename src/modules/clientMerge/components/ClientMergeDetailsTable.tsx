@@ -7,9 +7,12 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientIdentificationFieldsFragment,
   ClientNameFragment,
+  ClientSsnFieldsFragment,
 } from '@/types/gqlTypes';
 
-type ClientType = ClientNameFragment & ClientIdentificationFieldsFragment;
+type ClientType = ClientNameFragment &
+  ClientIdentificationFieldsFragment &
+  ClientSsnFieldsFragment;
 
 interface Props {
   clients: ClientType[];
@@ -17,17 +20,19 @@ interface Props {
 
 // TODO: add more details like race, gender, enrollment history
 const columns: ColumnDef<ClientType>[] = [
-  { header: 'First Name', render: 'firstName' },
-  { header: 'Middle Name', render: 'middleName' },
-  { header: 'Last Name', render: 'lastName' },
-  { header: 'Name Suffix', render: 'nameSuffix' },
-  { header: 'SSN', render: 'ssn' },
+  { header: 'First Name', render: 'firstName', key: 'firstName' },
+  { header: 'Middle Name', render: 'middleName', key: 'middleName' },
+  { header: 'Last Name', render: 'lastName', key: 'lastName' },
+  { header: 'Name Suffix', render: 'nameSuffix', key: 'nameSuffix' },
+  { header: 'SSN', render: 'ssn', key: 'ssn' },
   {
     header: 'DOB',
+    key: 'dob',
     render: (client) => <ClientDobAge client={client} alwaysShow />,
   },
   {
     header: 'Gender',
+    key: 'gender',
     render: (client) => (
       <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
     ),

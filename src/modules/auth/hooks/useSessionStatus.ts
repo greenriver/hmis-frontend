@@ -87,7 +87,15 @@ const useSessionStatus = ({
     if (exitStatus) return;
 
     if (tracking?.userId !== initialUserId) {
-      setExitStatus('invalid');
+      // Add a small delay to allow for temporary inconsistencies to resolve
+      const timeout = setTimeout(() => {
+        // Check again after delay
+        if (tracking?.userId !== initialUserId) {
+          setExitStatus('invalid');
+        }
+      }, 500);
+
+      return () => clearTimeout(timeout);
     } else if (timeRemaining !== undefined && timeRemaining <= 1) {
       setExitStatus('expired');
     }

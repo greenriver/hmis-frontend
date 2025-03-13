@@ -1,4 +1,4 @@
-import { Button, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { generatePath } from 'react-router-dom';
@@ -17,18 +17,19 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import DynamicForm, {
+  DynamicFormOnSaveDraft,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import FormNavigation from '@/modules/form/components/FormNavigation';
+import FormNavigationContainer from '@/modules/form/components/FormNavigationContainer';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
-import { FormValues } from '@/modules/form/types';
+
 import {
   AlwaysPresentLocalConstants,
   createInitialValuesFromSavedValues,
+  createValuesForSubmit,
   getFormStepperItems,
   getInitialValues,
   getItemMap,
-  createValuesForSubmit,
 } from '@/modules/form/util/formUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -98,9 +99,11 @@ const FormPreview = () => {
   );
 
   const onSaveFormValues = useCallback(
-    (values: FormValues) =>
+    (values: Parameters<DynamicFormOnSaveDraft>[0]) =>
       formDefinition &&
-      setFormValues(createValuesForSubmit(values, formDefinition.definition)),
+      setFormValues(
+        createValuesForSubmit(values.rawValues, formDefinition.definition)
+      ),
     [formDefinition]
   );
 
@@ -164,9 +167,12 @@ const FormPreview = () => {
       <Stack direction='row' justifyContent='space-between' sx={{ mb: 4 }}>
         <CommonToggle
           value={toggleValue}
-          onChange={(value) => {
+          onChange={(value: PreviewMode) => {
             setToggleValue(value);
-            formRef.current?.SaveIfDirty();
+            // Trigger save to update `formValues` state when toggling away from Edit-mode
+            if (value === 'readOnly') {
+              formRef.current?.SaveDraftForm();
+            }
           }}
           items={toggleItems}
           size='small'
@@ -207,13 +213,9 @@ const FormPreview = () => {
       </Stack>
 
       <SentryErrorBoundary>
-        {formStepperItems ? (
-          <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-            <FormNavigation items={formStepperItems}>{form}</FormNavigation>
-          </Grid>
-        ) : (
-          form
-        )}
+        <FormNavigationContainer navItems={formStepperItems}>
+          {form}
+        </FormNavigationContainer>
       </SentryErrorBoundary>
     </>
   );

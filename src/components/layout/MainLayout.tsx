@@ -14,6 +14,7 @@ import PrintViewButton from './PrintViewButton';
 import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
+import SkipToContentButton from '@/components/elements/SkipToContentButton';
 import MobileMenu from '@/components/layout/nav/MobileMenu';
 import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
 import { useIsDashboard } from '@/components/layout/nav/useIsDashboard';
@@ -28,6 +29,8 @@ interface Props {
   mobileMenuContext: MobileMenuContext;
   children: React.ReactNode;
 }
+
+const FOCUS_TARGET_ID = 'focusable-main';
 
 const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
   const { appName } = useHmisAppSettings();
@@ -99,6 +102,9 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
           sx={{ px: isMobile ? 1 : 3, minHeight: APP_BAR_HEIGHT }}
           disableGutters={isMobile}
         >
+          <SkipToContentButton focusTargetId={FOCUS_TARGET_ID}>
+            Skip main navigation
+          </SkipToContentButton>
           <RouterLink
             variant='h1'
             noWrap
@@ -145,7 +151,12 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
         </Toolbar>
       </AppBar>
       <CssBaseline />
-      {children}
+      <Box
+        // "Skip to content" button should always have a destination, even when content is loading
+        id={FOCUS_TARGET_ID}
+      >
+        {children}
+      </Box>
     </React.Fragment>
   );
 };

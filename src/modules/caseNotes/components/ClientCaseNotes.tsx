@@ -1,39 +1,47 @@
 import { Paper } from '@mui/material';
-
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
-import { ColumnDef } from '@/components/elements/table/types';
+import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { DataColumnDef } from '@/modules/dataFetching/types';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
-  RecordFormRole,
   GetClientCaseNotesDocument,
   GetClientCaseNotesQuery,
   GetClientCaseNotesQueryVariables,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 type Row = NonNullable<
   GetClientCaseNotesQuery['client']
 >['customCaseNotes']['nodes'][0];
 
-const columns: ColumnDef<Row>[] = [
+const COLUMNS: DataColumnDef<Row, GetClientCaseNotesQueryVariables>[] = [
   CASE_NOTE_COLUMNS.InformationDate,
-  CASE_NOTE_COLUMNS.NoteContentPreview,
   {
     key: 'project',
     header: 'Project Name',
-    render: (row) => row.enrollment.projectName,
+    render: (row: Row) => row.enrollment.projectName,
+    maxWidth: '200px',
   },
   {
-    key: 'en-period',
-    header: 'Enrollment Period',
-    render: (row) => (
-      <EnrollmentDateRangeWithStatus enrollment={row.enrollment} />
-    ),
+    ...CASE_NOTE_COLUMNS.LastUpdated,
+    minWidth: '0',
   },
+  CASE_NOTE_COLUMNS.NoteContentPreview,
+  {
+    ...WITH_ENROLLMENT_COLUMNS.entryDate,
+    optional: {
+      defaultHidden: true,
+      // no queryVariableField, since we need to fetch entryDate anyway in order to correctly aria-label the row action
+    },
+  },
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+  WITH_ENROLLMENT_COLUMNS.organizationName,
 ];
 
 const ClientCaseNotes = () => {
@@ -62,11 +70,21 @@ const ClientCaseNotes = () => {
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientCaseNotesDocument}
-          columns={columns}
+          columns={COLUMNS}
+          handleRowClick={(row) => onSelectRecord(row)}
+          rowName={(row) =>
+            `${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`
+          }
+          rowActionTitle='View Case Note'
+          rowSecondaryActionConfigs={(row) => [
+            {
+              ...getViewEnrollmentMenuItem(row.enrollment, client),
+              // override the default ariaLabel to provide the project name, since we are in the client context
+              ariaLabel: `View Enrollment at ${row.enrollment.projectName} for ${entryExitRange(row.enrollment)}`,
+            },
+          ]}
           pagePath='client.customCaseNotes'
           noData='No case notes'
-          headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={onSelectRecord}
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar

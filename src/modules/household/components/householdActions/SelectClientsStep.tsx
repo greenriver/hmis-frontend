@@ -1,0 +1,77 @@
+import { Paper, Stack } from '@mui/material';
+
+import { ReactNode, useCallback, useMemo } from 'react';
+import GenericTable from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
+import { clientBriefName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import { ENROLLMENT_RELATIONSHIP_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
+
+export const MANAGE_HOUSEHOLD_COLUMNS: ColumnDef<HouseholdClientFieldsFragment>[] =
+  [
+    { ...CLIENT_COLUMNS.name, sticky: 'left' },
+    CLIENT_COLUMNS.age,
+    ENROLLMENT_RELATIONSHIP_COL,
+    WITH_ENROLLMENT_COLUMNS.entryDate,
+    WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
+  ];
+
+interface Props {
+  clients: HouseholdClientFieldsFragment[];
+  selectedClients: HouseholdClientFieldsFragment[];
+  setSelectedClients: (clients: HouseholdClientFieldsFragment[]) => void;
+  children?: ReactNode;
+  isRowSelectable?: (client: HouseholdClientFieldsFragment) => boolean;
+}
+
+const SelectClientsStep = ({
+  clients: clientsProp,
+  selectedClients,
+  setSelectedClients,
+  isRowSelectable,
+  children,
+}: Props) => {
+  const clients = useMemo(
+    () => sortHouseholdMembers(clientsProp),
+    [clientsProp]
+  );
+
+  // Selection is controlled, so the selection state is stored in the parent.
+  // Here, translate the list of selected HouseholdClients from the parent to a list of row IDs for GenericTable.
+  const selectedClientIds = useMemo(
+    () => selectedClients.map((hc) => hc.id),
+    [selectedClients]
+  );
+
+  // .. and here, translate back again
+  const setSelectedClientIds = useCallback(
+    (clientIds: readonly string[]) => {
+      setSelectedClients(
+        sortHouseholdMembers(clients.filter((hc) => clientIds.includes(hc.id)))
+      );
+    },
+    [clients, setSelectedClients]
+  );
+
+  return (
+    <Stack gap={2}>
+      {children}
+      <Paper>
+        <GenericTable<HouseholdClientFieldsFragment>
+          rows={clients}
+          rowName={(row) => clientBriefName(row.client)}
+          columns={MANAGE_HOUSEHOLD_COLUMNS}
+          selectable={'checkbox'}
+          selected={selectedClientIds}
+          onChangeSelectedRowIds={setSelectedClientIds}
+          isRowSelectable={isRowSelectable}
+          tableProps={{ 'aria-label': 'Select Clients' }}
+        />
+      </Paper>
+    </Stack>
+  );
+};
+
+export default SelectClientsStep;

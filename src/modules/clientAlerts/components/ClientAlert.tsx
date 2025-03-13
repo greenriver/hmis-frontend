@@ -52,9 +52,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
               });
             }}
             onlyIcon
-          >
-            Delete
-          </DeleteMutationButton>
+          />
         )}
       </AlertTitle>
       <Box className='MuiAlert-body'>

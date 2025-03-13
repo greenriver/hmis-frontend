@@ -28,6 +28,7 @@ fragment HouseholdClientFields on HouseholdClient {
   enrollment {
     id
     lockVersion
+    relationshipToHoH
     ...EnrollmentRangeFields
     autoExited
     currentUnit {
@@ -62,5 +63,10 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
     exitDate
     inProgress
     autoExited
+    moveInDate @include(if: $includeMoveInDate)
+    lastContact @include(if: $includeLastContact) {
+      contactDate
+      contactType
+    }
   }
 }

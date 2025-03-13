@@ -1,6 +1,7 @@
 import { Paper } from '@mui/material';
 import { ClientMergeAuditColumns } from '../client/ClientMergeHistory';
 import ButtonLink from '@/components/elements/ButtonLink';
+import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import ClientName from '@/modules/client/components/ClientName';
@@ -21,8 +22,8 @@ type ClientMergeAuditType = NonNullable<
 const columns: ColumnDef<ClientMergeAuditType>[] = [
   {
     header: 'Client Name',
-    render: ({ client }) =>
-      client ? <ClientName client={client} linkToProfile /> : null,
+    key: 'clientName',
+    render: ({ client }) => (client ? <ClientName client={client} /> : null),
   },
   ...ClientMergeAuditColumns,
 ];
@@ -58,6 +59,9 @@ const GlobalClientMergeHistory = () => {
           recordType='MergeAuditEvent'
           paginationItemName='merge event'
           noSort
+          rowSecondaryActionConfigs={(row) =>
+            row.client ? [getViewClientMenuItem(row.client)] : []
+          }
         />
       </Paper>
     </>

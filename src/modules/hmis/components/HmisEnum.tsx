@@ -8,11 +8,11 @@ const getLabelAndColor = (enumMap: Record<string, string>, value?: any) => {
   let color: TypographyProps['color'] = 'text.primary';
   const label = enumMap[value];
   if (!label) {
-    color = 'text.disabled';
+    color = 'grayscale.main';
   } else if (value === INVALID_ENUM) {
-    color = 'error';
+    color = 'error.dark';
   } else if (isDataNotCollected(value) || MISSING_DATA_KEYS.includes(value)) {
-    color = 'text.disabled';
+    color = 'grayscale.main';
   }
   return [label, color];
 };
@@ -29,7 +29,7 @@ interface Props extends TypographyProps {
 const HmisEnum = ({ value, enumMap, noData, ...props }: Props) => {
   const [label, color] = getLabelAndColor(enumMap, value);
   return (
-    <Typography variant='body2' color={color} {...props}>
+    <Typography variant='body2' color={color} component='span' {...props}>
       {label || noData}
     </Typography>
   );
@@ -72,7 +72,7 @@ export const MultiHmisEnum = ({
   }
 
   return (
-    <Typography variant='body2' color={color} {...props}>
+    <Typography variant='body2' component='span' color={color} {...props}>
       {label || noData}
     </Typography>
   );

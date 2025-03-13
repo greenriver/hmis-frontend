@@ -1,5 +1,5 @@
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import { isToday } from 'date-fns';
 import { lowerCase, sortBy } from 'lodash-es';
 import { useMemo } from 'react';
@@ -88,16 +88,8 @@ const generateColumns = (
     render: (reminder: ReminderFieldsFragment) => {
       return (
         <Stack gap={0.4}>
-          <Typography
-            variant='inherit'
-            sx={{
-              color: 'links',
-              textDecoration: 'underline',
-              textDecorationColor: 'links',
-            }}
-          >
-            {reminderTitle(reminder)}
-          </Typography>
+          {/* style reminder as a link, even though it's not (the row is clickable) */}
+          <Link component='span'>{reminderTitle(reminder)}</Link>
           <Typography color='text.secondary' variant='inherit'>
             {reminderDesciption(reminder, currentClientId)}
           </Typography>
@@ -110,7 +102,7 @@ const generateColumns = (
     header: 'Due',
     render: ({ dueDate, overdue }) => {
       return overdue ? (
-        <Box color='error.main' fontWeight={600} alignSelf='flex-start'>
+        <Box color='error.dark' fontWeight={600} alignSelf='flex-start'>
           Overdue
         </Box>
       ) : dueDate ? (
@@ -273,6 +265,7 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           rowLinkTo={
             enrollment.access.canEditEnrollments ? rowLinkTo : undefined
           }
+          hideMenu
           rowSx={() => ({ '&:nth-last-of-type(1) td': { pb: 1 } })}
           noData={
             <Stack

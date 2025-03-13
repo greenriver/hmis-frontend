@@ -20,18 +20,19 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Name',
+    key: 'projectName',
     render: 'projectName',
-    linkTreatment: true,
-    ariaLabel: (row) => row.projectName,
   },
   {
     header: 'Project Type',
+    key: 'projectType',
     render: (project: ProjectAllFieldsFragment) => (
       <ProjectTypeChip projectType={project.projectType} />
     ),
   },
   {
     header: 'Operating Period',
+    key: 'operatingPeriod',
     render: (project: ProjectAllFieldsFragment) =>
       parseAndFormatDateRange(
         project.operatingStartDate,
@@ -91,6 +92,8 @@ const OrganizationProjectsTable = ({
       queryDocument={GetOrganizationProjectsDocument}
       columns={columns}
       rowLinkTo={rowLinkTo}
+      rowActionTitle='View Project'
+      rowName={(row) => row.projectName}
       noData='No projects'
       pagePath='organization.projects'
       filters={hideFilters ? undefined : filters}

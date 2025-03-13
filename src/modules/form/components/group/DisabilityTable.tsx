@@ -1,4 +1,5 @@
 import {
+  Box,
   lighten,
   Table,
   TableBody,
@@ -18,7 +19,9 @@ import {
 } from '../../types';
 
 import { yesCode } from '../../util/formUtil';
+import { customVisuallyHidden } from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
 interface DisabilityGroupRow extends FormItem {
@@ -39,11 +42,11 @@ function isValidDisabilityGroup(item: FormItem): item is DisabilityGroupItem {
 }
 
 const DisabilityTable = ({
-  values,
   item,
   renderChildItem,
   itemChanged,
   severalItemsChanged,
+  // values, - values are not used, this component manages it's own value subscription
 }: GroupItemComponentProps) => {
   // Link ID for DisablingCondition, which is the last row in the table
   const disablingConditionLinkId = useMemo(() => {
@@ -52,31 +55,32 @@ const DisabilityTable = ({
       ?.linkId;
   }, [item]);
 
-  // Link IDs for items that, if YES, consitute a Disabling Condition per HUD spec.
+  // Link IDs for items that, if YES, constitute a Disabling Condition per HUD spec.
   // This is highly dependent on the structure of the item group.
   const dependentLinkIds = useMemo(() => {
     if (!isValidDisabilityGroup(item))
       throw new Error('incorrectly formatted disability table');
 
-    return item.item
-      .map((i, idx) => {
-        if (idx === item.item.length - 1) return; // Skip last, which is DisablingCondition
-        if (i.item[1].type === ItemType.Choice) {
-          return i.item[1].linkId;
-        } else {
-          return i.item[0].linkId;
-        }
-      })
-      .filter((id) => !!id);
+    // Get all rows except the last one (Disabling Condition)
+    const disabilityRows = item.item.slice(0, -1);
+
+    return disabilityRows.map((i) => {
+      if (i.item[1].type === ItemType.Choice) {
+        return i.item[1].linkId; // second col is "indefinite and impairs"
+      } else {
+        return i.item[0].linkId; // lack of second col indicates that disability is alway considered indefinite and impairing
+      }
+    });
   }, [item]);
 
-  const dependentsThatAreYes = useMemo(
-    () =>
-      Object.keys(values).filter(
-        (k) => dependentLinkIds.indexOf(k) !== -1 && values[k]?.code === 'YES'
-      ),
-    [dependentLinkIds, values]
-  );
+  const values = useDynamicFieldWatchValues(dependentLinkIds);
+
+  const dependentsThatAreYes = useMemo(() => {
+    const result = Object.keys(values).filter(
+      (k) => dependentLinkIds.indexOf(k) !== -1 && values[k]?.code === 'YES'
+    );
+    return result;
+  }, [dependentLinkIds, values]);
 
   // Set DisablingCondition initially to YES if applicable.
   useEffect(() => {
@@ -184,7 +188,9 @@ const DisabilityTable = ({
       ) : (
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
+            <TableCell>
+              <Box sx={customVisuallyHidden}>Disability</Box>
+            </TableCell>
             <TableCell id={statusId}>Status</TableCell>
             <TableCell id={disablingConditionId}>Disabling Condition</TableCell>
           </TableRow>
@@ -252,7 +258,7 @@ const DisabilityTable = ({
                         cellItem,
                         idx,
                         disabilityTypeLabelId
-                        // dont pass a label because it is labelled-by the header cells
+                        // don't pass a label because it is labelled-by the header cells
                       )}
                     </TableCell>
                   ))}

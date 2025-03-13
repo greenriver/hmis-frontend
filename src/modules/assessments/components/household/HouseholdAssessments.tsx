@@ -204,6 +204,7 @@ const HouseholdAssessments: React.FC<Props> = ({
     if (hasInflights) return;
     if (nextTab === currentTab) return;
 
+    // console.info(`navigated from tab ${currentTab} to ${nextTab}`)
     setCurrentTab(nextTab);
     setNextTab(undefined);
     window.scrollTo(0, 0);
@@ -325,7 +326,7 @@ const HouseholdAssessments: React.FC<Props> = ({
               alignItems: 'flex-end',
               // Dont show icon color for not-currently-active tabs
               '.MuiTab-root[aria-selected="false"] svg': {
-                color: 'text.disabled',
+                color: 'grayscale.main',
               },
             }}
           >

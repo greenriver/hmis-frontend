@@ -2,6 +2,7 @@ import { Chip } from '@mui/material';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { getServiceTypeForDisplay } from '@/modules/services/serviceColumns';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetServiceTypesDocument,
@@ -11,18 +12,20 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
+const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
   {
     header: 'Service Name',
     render: 'name',
-    linkTreatment: true,
+    key: 'name',
   },
   {
     header: 'Service Category',
     render: ({ serviceCategory }) => serviceCategory.name,
+    key: 'category',
   },
   {
     header: 'HUD or Custom',
+    key: 'hudOrCustom',
     render: ({ hud }) => (
       <Chip
         label={hud ? 'HUD' : 'Custom'}
@@ -35,6 +38,7 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
   },
   {
     header: 'Tags',
+    key: 'tags',
     render: ({ supportsBulkAssignment }) =>
       supportsBulkAssignment ? (
         <Chip size='small' label='Supports Bulk Assignment' />
@@ -57,17 +61,19 @@ const ServiceTypeTable = () => {
       >
         queryVariables={{}}
         queryDocument={GetServiceTypesDocument}
-        columns={columns}
-        pagePath='serviceTypes'
-        noData='No service types'
-        filters={filters}
-        recordType='ServiceType'
-        paginationItemName='service type'
+        columns={COLUMNS}
         rowLinkTo={(row) =>
           generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
             serviceTypeId: row.id,
           })
         }
+        rowName={(row) => getServiceTypeForDisplay(row)}
+        rowActionTitle='View Service Type'
+        pagePath='serviceTypes'
+        noData='No service types'
+        filters={filters}
+        recordType='ServiceType'
+        paginationItemName='service type'
       />
     </>
   );

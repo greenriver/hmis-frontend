@@ -1,15 +1,14 @@
-import { QueryOptions, useApolloClient } from '@apollo/client';
-import { compact, isEmpty } from 'lodash-es';
+import { FetchPolicy, QueryOptions, useApolloClient } from '@apollo/client';
+import { isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ItemMap, PickListArgs } from '../types';
-import { getItemMap } from '../util/formUtil';
+import { getItemMap, itemHasRemotePicklist } from '../util/formUtil';
 
 import {
   FormDefinitionJson,
   GetPickListDocument,
   PickListOptionFieldsFragment,
-  PickListType,
 } from '@/types/gqlTypes';
 
 interface Args {
@@ -17,35 +16,35 @@ interface Args {
   pickListArgs?: PickListArgs;
   queryOptions?: Omit<QueryOptions, 'query'>;
   skip?: boolean;
+  fetchPolicy?: FetchPolicy;
 }
 const usePreloadPicklists = ({
   definition,
   pickListArgs,
   queryOptions,
+  fetchPolicy,
   skip,
 }: Args) => {
   const client = useApolloClient();
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<PickListOptionFieldsFragment[]>([]);
+  const [data, setData] = useState<
+    Record<string, PickListOptionFieldsFragment[]>
+  >({});
 
   const itemMap: ItemMap = useMemo(
     () => (definition ? getItemMap(definition) : {}),
     [definition]
   );
 
-  const pickListTypesToFetch = useMemo(
-    () =>
-      compact(
-        Object.values(itemMap || {})
-          .map((item) => item.pickListReference)
-          .filter(
-            (reference) =>
-              reference &&
-              Object.values<string>(PickListType).includes(reference)
-          )
-      ),
-    [itemMap]
-  );
+  // Get all `pickListReference` values from the Form Definition
+  const pickListTypesToFetch = useMemo(() => {
+    if (skip) return [];
+
+    const references = Object.values(itemMap)
+      .filter(itemHasRemotePicklist)
+      .map((item) => item.pickListReference);
+    return [...new Set(references)];
+  }, [itemMap, skip]);
 
   const fetch = useCallback(() => {
     if (skip || isEmpty(pickListTypesToFetch)) {
@@ -54,39 +53,49 @@ const usePreloadPicklists = ({
     }
 
     setLoading(true);
+    // Fetch all picklists
     Promise.all(
       pickListTypesToFetch.map((pickListType) =>
         client.query({
           query: GetPickListDocument,
           variables: { ...pickListArgs, pickListType },
-          fetchPolicy: 'network-only',
+          fetchPolicy: fetchPolicy,
           ...queryOptions,
         })
       )
     )
       .then((results) => {
-        setData(
-          results.map(
-            (result) => result.data.pickList as PickListOptionFieldsFragment
-          )
+        const zipped = Object.fromEntries(
+          pickListTypesToFetch.map((p, i) => [
+            p,
+            results[i].data.pickList as PickListOptionFieldsFragment[],
+          ])
         );
+        setData(zipped);
       })
-      .catch(() => setData([]))
+      .catch(() => setData({}))
       .finally(() => setLoading(false));
-  }, [skip, pickListTypesToFetch, client, pickListArgs, queryOptions]);
+  }, [
+    skip,
+    pickListTypesToFetch,
+    client,
+    pickListArgs,
+    queryOptions,
+    fetchPolicy,
+  ]);
 
   useEffect(() => {
     fetch();
   }, [fetch]);
 
-  return useMemo(
-    () => ({
-      fetch,
-      loading: loading && data.length === 0,
-      data,
-    }),
-    [fetch, loading, data]
-  );
+  return {
+    fetch,
+    loading:
+      loading &&
+      pickListTypesToFetch.length > 0 && // always loading:false if there was no fetch
+      Object.keys(data).length === 0,
+    data,
+  };
 };
 
 export default usePreloadPicklists;

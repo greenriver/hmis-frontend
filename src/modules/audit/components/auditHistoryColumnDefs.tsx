@@ -26,6 +26,7 @@ export const AUDIT_HISTORY_COLUMNS: {
 } = {
   timestamp: {
     header: 'Timestamp',
+    key: 'timestamp',
     width: '180px',
     render: (e) => (
       <RelativeDateTableCellContents dateTimeString={e.createdAt} />
@@ -33,11 +34,13 @@ export const AUDIT_HISTORY_COLUMNS: {
   },
   action: {
     header: 'Action',
+    key: 'action',
     width: '100px',
     render: ({ event }) => auditActionForDisplay(event),
   },
   recordType: {
     header: 'Record Type',
+    key: 'recordType',
     width: '180px',
     render: ({ recordName, recordId }) => {
       return (
@@ -52,6 +55,7 @@ export const AUDIT_HISTORY_COLUMNS: {
     },
   },
   fieldsChanged: {
+    key: 'fieldsChanged',
     header: (
       <Stack direction='row' justifyContent='space-between' alignItems='center'>
         <strong>Fields Changed</strong>
@@ -90,6 +94,7 @@ export const AUDIT_HISTORY_USER_COLUMNS: {
 } = {
   user: {
     header: 'User',
+    key: 'user',
     width: '180px',
     render: ({ user, trueUser }) =>
       compact([trueUser?.name, user?.name]).join(' acting as '),

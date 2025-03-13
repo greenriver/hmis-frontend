@@ -1,12 +1,16 @@
-import { useCallback, useMemo } from 'react';
-
+import { useMemo } from 'react';
+import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { SERVICE_BASIC_COLUMNS } from '@/modules/services/serviceColumns';
+import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  getServiceTypeForDisplay,
+  SERVICE_BASIC_COLUMNS,
+} from '@/modules/services/serviceColumns';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectServicesDocument,
@@ -31,40 +35,23 @@ const ProjectServicesTable = ({
     if (columns) return columns;
     return [
       {
-        header: 'First Name',
-        linkTreatment: true,
+        header: 'Client Name',
+        sticky: 'left',
         render: (s: ServiceFields) => (
-          <ClientName client={s.enrollment.client} nameParts='first_only' />
+          <ClientName client={s.enrollment.client} />
         ),
+        key: 'clientName',
       },
-      {
-        header: 'Last Name',
-        linkTreatment: true,
-        render: (s: ServiceFields) => (
-          <ClientName client={s.enrollment.client} nameParts='last_only' />
-        ),
-      },
-      { ...SERVICE_BASIC_COLUMNS.dateProvided, linkTreatment: false },
+      SERVICE_BASIC_COLUMNS.serviceDate,
       SERVICE_BASIC_COLUMNS.serviceType,
-      {
-        header: 'Enrollment Period',
-        render: (s: ServiceFields) => (
-          <EnrollmentDateRangeWithStatus enrollment={s.enrollment} />
-        ),
-      },
+      WITH_ENROLLMENT_COLUMNS.entryDate,
+      WITH_ENROLLMENT_COLUMNS.exitDate,
     ];
   }, [columns]);
 
   const filters = useFilters({
     type: 'ServicesForProjectFilterOptions',
   });
-
-  const rowLinkTo = useCallback((s: ServiceFields) => {
-    return generateSafePath(EnrollmentDashboardRoutes.SERVICES, {
-      clientId: s.enrollment.client.id,
-      enrollmentId: s.enrollment.id,
-    });
-  }, []);
 
   return (
     <GenericTableWithData<
@@ -78,11 +65,23 @@ const ProjectServicesTable = ({
       }}
       queryDocument={GetProjectServicesDocument}
       columns={displayColumns}
+      rowLinkTo={(row) =>
+        generateSafePath(EnrollmentDashboardRoutes.SERVICES, {
+          clientId: row.enrollment.client.id,
+          enrollmentId: row.enrollment.id,
+        })
+      }
+      rowName={(row) =>
+        `${clientBriefName(row.enrollment.client)}'s ${getServiceTypeForDisplay(row.serviceType)} on ${parseAndFormatDate(row.dateProvided)}`
+      }
+      rowActionTitle='View Service'
+      rowSecondaryActionConfigs={(row) => [
+        getViewEnrollmentMenuItem(row.enrollment, row.enrollment.client),
+      ]}
       noData='No services'
       pagePath='project.services'
       recordType='Service'
       filters={filters}
-      rowLinkTo={rowLinkTo}
     />
   );
 };

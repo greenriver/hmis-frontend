@@ -27,8 +27,7 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
   children,
 }) => (
   <AppBar
-    component='nav'
-    aria-label='breadcrumbs-nav'
+    component='div'
     position='sticky'
     color='default'
     elevation={0}
@@ -81,7 +80,12 @@ const ContextHeader: React.FC<Props> = ({
   const exitFocusMode = useCallback(() => {
     if (!focusMode) return;
 
-    if (locationFromDefaultOrLogin(location) && focusModeDefaultReturnPath) {
+    if (location?.state?.focusModeReturnPath) {
+      navigate(location.state.focusModeReturnPath);
+    } else if (
+      locationFromDefaultOrLogin(location) &&
+      focusModeDefaultReturnPath
+    ) {
       // This page was loaded directly, so go "back" to the default path
       const defaultBackPath = generateSafePath(focusModeDefaultReturnPath, {
         clientId,

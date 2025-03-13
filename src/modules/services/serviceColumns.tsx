@@ -6,24 +6,34 @@ import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import {
   ServiceBasicFieldsFragment,
   ServiceFieldsFragment,
+  ServiceTypeConfigFieldsFragment,
 } from '@/types/gqlTypes';
+
+export const getServiceTypeForDisplay = (
+  serviceType?: Pick<
+    ServiceTypeConfigFieldsFragment,
+    'name' | 'serviceCategory'
+  > | null
+) => {
+  if (!serviceType) return 'Unknown Service';
+  const { name, serviceCategory } = serviceType;
+  if (name === serviceCategory.name) return name;
+  return `${serviceCategory.name} - ${name}`;
+};
 
 export const SERVICE_BASIC_COLUMNS: {
   [key: string]: ColumnDef<ServiceBasicFieldsFragment>;
 } = {
-  dateProvided: {
-    header: 'Date Provided',
-    linkTreatment: true,
+  serviceDate: {
+    header: 'Service Date',
     render: (s) => parseAndFormatDate(s.dateProvided),
+    key: 'date',
   },
   serviceType: {
     header: 'Service Type',
-    render: ({ serviceType }) => {
-      if (!serviceType) return 'Unknown Service';
-      const { name, serviceCategory } = serviceType;
-      if (name === serviceCategory.name) return name;
-      return `${serviceCategory.name} - ${name}`;
-    },
+    render: (s) => getServiceTypeForDisplay(s.serviceType),
+    maxWidth: '200px',
+    key: 'type',
   },
 };
 
@@ -32,6 +42,7 @@ export const SERVICE_COLUMNS: {
 } = {
   serviceDetails: {
     header: 'Service Details',
+    key: 'details',
     render: (service) => (
       <Stack>
         {serviceDetails(service).map((s, i) => (

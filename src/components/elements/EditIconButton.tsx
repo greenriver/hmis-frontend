@@ -7,14 +7,7 @@ export interface EditIconButtonProps extends IconButtonProps {}
 const EditIconButton: React.FC<EditIconButtonProps> = ({ ...props }) => {
   return (
     <ButtonTooltipContainer title={props.title}>
-      <IconButton
-        size='small'
-        {...props}
-        sx={{
-          color: (theme) => theme.palette.links,
-          ...props.sx,
-        }}
-      >
+      <IconButton size='small' {...props}>
         <EditIcon fontSize='inherit' />
       </IconButton>
     </ButtonTooltipContainer>

@@ -1,4 +1,3 @@
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Button, Grid, Stack, Typography } from '@mui/material';
 
 import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
@@ -6,6 +5,7 @@ import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
+import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
@@ -65,7 +65,6 @@ const ProjectReferralPostingPage: React.FC = () => {
               <ButtonLink
                 fullWidth
                 variant='outlined'
-                color='secondary'
                 to={generateSafePath(
                   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
                   {
@@ -81,7 +80,6 @@ const ProjectReferralPostingPage: React.FC = () => {
               <Button
                 fullWidth
                 variant='outlined'
-                color='secondary'
                 target='_blank'
                 href={fetchPreventionAssessmentReportUrl(
                   referralPosting.referralIdentifier

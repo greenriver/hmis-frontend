@@ -1,219 +1,69 @@
-import { Stack, Tooltip, Typography } from '@mui/material';
-import { useCallback, useMemo } from 'react';
-
+import React, { useMemo } from 'react';
+import {
+  getViewClientMenuItem,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import ClientName from '@/modules/client/components/ClientName';
-import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentClientNameWithAge from '@/modules/hmis/components/EnrollmentClientNameWithAge';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-
-import EnrollmentEntryDateWithStatusIndicator from '@/modules/hmis/components/EnrollmentEntryDateWithStatusIndicator';
-import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
-import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import { ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
+  clientBriefName,
   formatDateForDisplay,
   formatDateForGql,
-  parseAndFormatDate,
+  PERMANENT_HOUSING_PROJECT_TYPES,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  ClientEnrollmentFieldsFragment,
-  EnrollmentFieldsFragment,
   EnrollmentsForProjectFilterOptions,
   EnrollmentSortOption,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
-  HouseholdWithStaffAssignmentsFragment,
-  ProjectEnrollmentFieldsFragment,
   ProjectEnrollmentQueryEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
-export type EnrollmentFields = NonNullable<
+export type ProjectEnrollmentFields = NonNullable<
   GetProjectEnrollmentsQuery['project']
 >['enrollments']['nodes'][number];
 
-export const ENROLLMENT_STATUS_COL: ColumnDef<
-  | EnrollmentFieldsFragment
-  | ProjectEnrollmentFieldsFragment
-  | ClientEnrollmentFieldsFragment
-> = {
-  header: 'Status',
-  render: (e) => <EnrollmentStatus enrollment={e} />,
-};
-
-export const ENROLLMENT_PERIOD_COL: ColumnDef<
-  | EnrollmentFieldsFragment
-  | ProjectEnrollmentFieldsFragment
-  | ClientEnrollmentFieldsFragment
-> = {
-  header: 'Enrollment Period',
-  render: (e) => (
-    <EnrollmentDateRangeWithStatus enrollment={e} treatIncompleteAsActive />
-  ),
-};
-
-const isHouseholdWithStaff = (
-  e: any
-): e is { household: HouseholdWithStaffAssignmentsFragment } => {
-  return 'household' in e && 'staffAssignments' in e.household;
-};
-
-export const ENROLLMENT_COLUMNS: {
-  [key: string]: ColumnDef<
-    | EnrollmentFieldsFragment
-    | ProjectEnrollmentFieldsFragment
-    | ProjectEnrollmentQueryEnrollmentFieldsFragment
-  >;
-} = {
-  clientName: {
-    header: 'Client',
-    render: (e) => <ClientName client={e.client} />,
-    linkTreatment: true,
-  },
-  clientNameLinkedToEnrollment: {
-    header: 'Client',
-    render: (e) => <ClientName client={e.client} linkToEnrollmentId={e.id} />,
-    linkTreatment: true,
-  },
-  clientNameLinkedToEnrollmentWithAge: {
-    header: 'Client',
-    render: (e) => (
-      <EnrollmentClientNameWithAge client={e.client} enrollmentId={e.id} />
-    ),
-    linkTreatment: true,
-  },
-  firstNameLinkedToEnrollment: {
-    header: 'First Name',
-    render: (e) => (
-      <ClientName
-        client={e.client}
-        linkToEnrollmentId={e.id}
-        nameParts='first_only'
-      />
-    ),
-    linkTreatment: true,
-  },
-  lastNameLinkedToEnrollment: {
-    header: 'Last Name',
-    render: (e) => (
-      <ClientName
-        client={e.client}
-        linkToEnrollmentId={e.id}
-        nameParts='last_only'
-      />
-    ),
-    linkTreatment: true,
-  },
-  enrollmentStatus: ENROLLMENT_STATUS_COL,
-  entryDate: {
-    header: 'Entry Date',
-    // should only be used for open enrollments, because it doesnt indicate if closed or not
-    render: (e) => <EnrollmentEntryDateWithStatusIndicator enrollment={e} />,
-  },
-  enrollmentPeriod: ENROLLMENT_PERIOD_COL,
-  householdId: {
-    header: 'Household ID',
-    key: 'housholdId',
-    optional: true,
-    render: (e) => (
-      <Stack direction='row' alignItems='baseline'>
-        <Tooltip
-          title={`${e.householdSize} member${e.householdSize !== 1 ? 's' : ''}`}
-          arrow
-        >
-          <Typography variant='body2'>
-            {`${e.householdShortId} (${e.householdSize})`}
-          </Typography>
-        </Tooltip>
-        {e.householdSize > 1 && (
-          <HohIndicator relationshipToHoh={e.relationshipToHoH} />
-        )}
-      </Stack>
-    ),
-  },
-  clientId: {
-    header: 'Client ID',
-    key: 'id',
-    render: (e) => e.client.id,
-  },
-  lastClsDate: {
-    header: 'Last Current Living Situation Date',
-    key: 'lastClsDate',
-    optional: true,
-    defaultHidden: true,
-    render: (e) => {
-      if ('lastCurrentLivingSituation' in e) {
-        const cls = e.lastCurrentLivingSituation;
-        return cls ? parseAndFormatDate(cls.informationDate) : null;
-      }
-      return null;
-    },
-  },
-  assignedStaff: {
-    ...ASSIGNED_STAFF_COL,
-    render: (e) => {
-      return isHouseholdWithStaff(e)
-        ? ASSIGNED_STAFF_COL.render(e.household)
-        : null;
-    },
-  },
-};
-
 const ProjectClientEnrollmentsTable = ({
   projectId,
-  columns,
   openOnDate,
-  linkRowToEnrollment = false,
   searchTerm,
 }: {
   projectId: string;
-  columns?: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[];
-  linkRowToEnrollment?: boolean;
   openOnDate?: Date;
   searchTerm?: string;
 }) => {
   // TODO: show MCI column if enabled
   // const { globalFeatureFlags } = useHmisAppSettings();
   // globalFeatureFlags?.mciId
-  const rowLinkTo = useCallback(
-    (en: EnrollmentFields) =>
-      generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-        clientId: en.client.id,
-        enrollmentId: en.id,
-      }),
-    []
-  );
-
   const openOnDateString = useMemo(
     () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
     [openOnDate]
   );
 
   const {
-    project: { staffAssignmentsEnabled },
+    project: { staffAssignmentsEnabled, projectType },
   } = useProjectDashboardContext();
 
-  const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
+  const columns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
-      const cols = [
-        ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
-        CLIENT_COLUMNS.dobAge,
+      return [
+        { ...CLIENT_COLUMNS.name, sticky: 'left' },
+        CLIENT_COLUMNS.age,
+        ENROLLMENT_COLUMNS.entryDate,
+        ENROLLMENT_COLUMNS.exitDate,
         ENROLLMENT_COLUMNS.enrollmentStatus,
-        ENROLLMENT_COLUMNS.enrollmentPeriod,
-        ENROLLMENT_COLUMNS.lastClsDate,
+        ...(projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)
+          ? [ENROLLMENT_COLUMNS.moveInDate]
+          : []),
+        ENROLLMENT_COLUMNS.lastContactDate,
+        ...(staffAssignmentsEnabled ? [ENROLLMENT_COLUMNS.assignedStaff] : []),
       ];
-
-      if (staffAssignmentsEnabled) cols.push(ENROLLMENT_COLUMNS.assignedStaff);
-
-      return cols;
-    }, [staffAssignmentsEnabled]);
+    }, [projectType, staffAssignmentsEnabled]);
 
   const filters = useFilters({
     type: 'EnrollmentsForProjectFilterOptions',
@@ -226,46 +76,36 @@ const ProjectClientEnrollmentsTable = ({
   });
 
   return (
-    <SsnDobShowContextProvider>
-      <GenericTableWithData<
-        GetProjectEnrollmentsQuery,
-        GetProjectEnrollmentsQueryVariables,
-        EnrollmentFields,
-        EnrollmentsForProjectFilterOptions
-      >
-        queryVariables={{
-          id: projectId,
-          filters: {
-            searchTerm,
-            openOnDate: openOnDateString,
-          },
-        }}
-        queryDocument={GetProjectEnrollmentsDocument}
-        columns={columns || defaultColumns}
-        rowLinkTo={linkRowToEnrollment ? rowLinkTo : undefined}
-        noData={
-          openOnDate
-            ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
-            : 'No enrollments'
-        }
-        pagePath='project.enrollments'
-        recordType='Enrollment'
-        filters={filters}
-        defaultSortOption={EnrollmentSortOption.MostRecent}
-        showOptionalColumns
-        applyOptionalColumns={(cols) => {
-          const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
-
-          if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
-            result.includeCls = true;
-
-          if (cols.includes(ENROLLMENT_COLUMNS.assignedStaff.key || ''))
-            result.includeStaffAssignment = true;
-
-          return result;
-        }}
-      />
-    </SsnDobShowContextProvider>
+    <GenericTableWithData<
+      GetProjectEnrollmentsQuery,
+      GetProjectEnrollmentsQueryVariables,
+      ProjectEnrollmentFields,
+      EnrollmentsForProjectFilterOptions
+    >
+      queryVariables={{
+        id: projectId,
+        filters: {
+          searchTerm,
+          openOnDate: openOnDateString,
+        },
+      }}
+      queryDocument={GetProjectEnrollmentsDocument}
+      columns={columns}
+      rowLinkTo={(row) => getViewEnrollmentMenuItem(row, row.client).to}
+      rowActionTitle='View Enrollment'
+      rowName={(row) => clientBriefName(row.client)}
+      rowSecondaryActionConfigs={(row) => [getViewClientMenuItem(row.client)]}
+      noData={
+        openOnDate
+          ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
+          : 'No enrollments'
+      }
+      pagePath='project.enrollments'
+      recordType='Enrollment'
+      filters={filters}
+      defaultSortOption={EnrollmentSortOption.MostRecent}
+    />
   );
 };
+
 export default ProjectClientEnrollmentsTable;

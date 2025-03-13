@@ -1,5 +1,5 @@
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { Step, StepButton, StepLabel, Stepper } from '@mui/material';
+import { Link, Step, StepButton, StepLabel, Stepper } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -9,10 +9,10 @@ import { FormItem } from '@/types/gqlTypes';
 
 export interface Props {
   items: FormItem[];
-  useUrlHash?: boolean;
+  useUrlHash: boolean;
   scrollOffset?: number;
 }
-const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
+const FormStepper = ({ items, useUrlHash, scrollOffset }: Props) => {
   const { pathname } = useLocation();
   const steps = useMemo(
     () =>
@@ -62,14 +62,10 @@ const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
                 sx={{
                   '.MuiStepLabel-root': { py: 0 },
                   '.MuiStepLabel-iconContainer': { display: 'none' },
-                  '.MuiStepLabel-label': {
-                    color: '#1976d2',
-                    textDecoration: 'underline',
-                    textDecorationColor: 'rgba(25, 118, 210, 0.4)',
-                  },
                 }}
               >
-                {step.label}
+                {/* style button as link */}
+                <Link component='span'>{step.label}</Link>
               </StepButton>
             )}
           </StepLabel>

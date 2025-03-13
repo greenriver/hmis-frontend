@@ -26,18 +26,21 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const columns: ColumnDef<InventoryFieldsFragment>[] = [
   {
     header: 'Household Type',
+    key: 'householdType',
     render: (i: InventoryFieldsFragment) => (
       <HmisEnum value={i.householdType} enumMap={HmisEnums.HouseholdType} />
     ),
   },
   {
     header: 'Active Period',
+    key: 'activePeriod',
     render: (i: InventoryFieldsFragment) =>
       parseAndFormatDateRange(i.inventoryStartDate, i.inventoryEndDate),
   },
   {
     header: 'CoC',
     render: 'cocCode',
+    key: 'coc',
   },
 ];
 
@@ -56,6 +59,7 @@ const InventoryTable = () => {
         ? [
             {
               header: 'Availability',
+              key: 'availability',
               render: (row: InventoryFieldsFragment) => (
                 <HmisEnum
                   value={row.availability}
@@ -65,6 +69,7 @@ const InventoryTable = () => {
             },
             {
               header: 'Bed Type',
+              key: 'bed type',
               render: (row: InventoryFieldsFragment) => (
                 <HmisEnum value={row.esBedType} enumMap={HmisEnums.BedType} />
               ),
@@ -73,10 +78,12 @@ const InventoryTable = () => {
         : []),
       {
         header: 'Units',
+        key: 'units',
         render: 'unitInventory' as keyof InventoryFieldsFragment,
       },
       {
         header: 'Beds',
+        key: 'beds',
         render: 'bedInventory' as keyof InventoryFieldsFragment,
       },
     ];
@@ -103,6 +110,7 @@ const InventoryTable = () => {
         pagePath='project.inventories'
         noData='No inventory'
         handleRowClick={(record) => setViewingRecord(record)}
+        rowActionTitle='View Inventory'
       />
       {viewingRecord && (
         <ViewRecordDialog<InventoryFieldsFragment>

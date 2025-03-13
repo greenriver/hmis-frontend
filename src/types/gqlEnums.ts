@@ -782,6 +782,18 @@ export const HmisEnums = {
     TEXT: 'TEXT',
     TIME_OF_DAY: 'TIME_OF_DAY',
   },
+  LastContactType: {
+    ANNUAL_ASSESSMENT: 'Annual Assessment',
+    ASSESSMENT: 'Assessment',
+    BED_NIGHT: 'Bed Night',
+    CASE_NOTE: 'Case Note',
+    CURRENT_LIVING_SITUATION: 'Current Living Situation',
+    EXIT_ASSESSMENT: 'Exit Assessment',
+    INTAKE_ASSESSMENT: 'Intake Assessment',
+    POST_EXIT_ASSESSMENT: 'Post-Exit Assessment',
+    SERVICE: 'Service',
+    UPDATE_ASSESSMENT: 'Update Assessment',
+  },
   LastGradeCompleted: {
     INVALID: 'Invalid Value',
     LESS_THAN_GRADE_5: 'Less than grade 5',
@@ -915,6 +927,8 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   PickListType: {
+    ADMIN_AVAILABLE_UNITS_FOR_ENROLLMENT:
+      'Units available for the given Enrollment at the given project. Includes all available units at project even if they have a different type from what the household is currently occupying.',
     ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ALL_UNIT_TYPES: 'All unit types.',
@@ -925,7 +939,7 @@ export const HmisEnums = {
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS_FOR_ENROLLMENT:
-      'Units available for the given household at the given project',
+      'Units available for the given Enrollment at the given project. List is limited to units with the same unit type currently occupied by the household, if any.',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',

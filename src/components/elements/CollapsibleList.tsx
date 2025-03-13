@@ -25,10 +25,7 @@ const CollapsibleList: React.FC<CollapsibleListProps> = ({
   };
   return (
     <List sx={{ p: 0 }} disablePadding>
-      <ListItemButton
-        onClick={handleClick}
-        sx={{ color: (theme) => theme.palette.links }}
-      >
+      <ListItemButton onClick={handleClick} sx={{ color: 'primary.dark' }}>
         {open ? <ExpandLess /> : <ExpandMore />}
         <ListItemText
           sx={{ ml: 1 }}

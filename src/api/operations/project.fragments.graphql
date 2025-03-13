@@ -130,12 +130,5 @@ fragment HmisParticipationFields on HmisParticipation {
 
 fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
   ...ProjectEnrollmentFields
-  lastCurrentLivingSituation @include(if: $includeCls) {
-    id
-    informationDate
-  }
-  household @include(if: $includeStaffAssignment) {
-    id
-    ...HouseholdWithStaffAssignments
-  }
+  ...EnrollmentWithOptionalFields
 }

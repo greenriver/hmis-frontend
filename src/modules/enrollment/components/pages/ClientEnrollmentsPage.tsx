@@ -1,17 +1,18 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { ReactNode, useCallback } from 'react';
+import { ReactNode } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
-  PERMANENT_HOUSING_PROJECT_TYPES,
+  entryExitRange,
   parseAndFormatDate,
+  PERMANENT_HOUSING_PROJECT_TYPES,
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
@@ -24,6 +25,10 @@ import {
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
+
+export type ClientEnrollmentTableFields = NonNullable<
+  GetClientEnrollmentsQuery['client']
+>['enrollments']['nodes'][number];
 
 const CaptionedText: React.FC<{ caption: string; children: ReactNode }> = ({
   caption,
@@ -39,30 +44,33 @@ const CaptionedText: React.FC<{ caption: string; children: ReactNode }> = ({
   );
 };
 
-const columns: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
-  {
-    header: 'Enrollment Period',
-    render: (row) => <EnrollmentDateRangeWithStatus enrollment={row} />,
+const CLIENT_ENROLLMENT_COLUMNS: {
+  [key: string]: ColumnDef<ClientEnrollmentFieldsFragment>;
+} = {
+  projectName: {
+    header: 'Project Name',
+    key: 'projectName',
+    render: 'projectName',
+    sticky: 'left',
   },
-  {
+  organizationName: {
     header: 'Organization Name',
+    key: 'organizationName',
     render: 'organizationName',
   },
-  {
-    header: 'Project Name',
-    render: 'projectName',
-    linkTreatment: true,
-    ariaLabel: (row) => row.projectName,
-  },
-
-  {
+  projectType: {
     header: 'Project Type',
+    key: 'projectType',
     render: ({ projectType }) => (
       <ProjectTypeChip projectType={projectType} sx={{ px: 0.5 }} />
     ),
   },
-  {
-    header: 'Details',
+  enrollmentDetails: {
+    // Enrollment Details shows Move-in Date or Last Bed Night, depending on project type.
+    // Ideally this could be now removed in favor of the optional columns Move-in Date and Last Contact Date,
+    // but we are avoiding that product churn (which would require additional training) for now
+    header: 'Enrollment Details',
+    key: 'enrollmentDetails',
     render: ({
       moveInDate,
       lastBedNightDate,
@@ -96,22 +104,23 @@ const columns: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
       }
     },
   },
+};
+
+const COLUMNS: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
+  CLIENT_ENROLLMENT_COLUMNS.projectName,
+  CLIENT_ENROLLMENT_COLUMNS.organizationName,
+  ENROLLMENT_COLUMNS.entryDate,
+  ENROLLMENT_COLUMNS.exitDate,
+  ENROLLMENT_COLUMNS.enrollmentStatus,
+  CLIENT_ENROLLMENT_COLUMNS.projectType,
+  ENROLLMENT_COLUMNS.moveInDate,
+  ENROLLMENT_COLUMNS.lastContactDate,
+  ENROLLMENT_COLUMNS.assignedStaff,
+  CLIENT_ENROLLMENT_COLUMNS.enrollmentDetails,
 ];
 
 const ClientEnrollmentsPage = () => {
   const { client } = useClientDashboardContext();
-
-  const rowLinkTo = useCallback(
-    (enrollment: ClientEnrollmentFieldsFragment) => {
-      if (!enrollment.access.canViewEnrollmentDetails) return null;
-
-      return generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-        clientId: client.id,
-        enrollmentId: enrollment.id,
-      });
-    },
-    [client]
-  );
 
   const filters = useFilters({
     type: 'EnrollmentsForClientFilterOptions',
@@ -119,32 +128,24 @@ const ClientEnrollmentsPage = () => {
 
   return (
     <>
-      <PageTitle
-        title='Enrollments'
-        // disabled for now #185750557
-        // actions={
-        //   <RootPermissionsFilter permissions={['canEnrollClients']}>
-        //     <ButtonLink
-        //       to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
-        //         clientId,
-        //       })}
-        //       Icon={AddIcon}
-        //     >
-        //       Add Enrollment
-        //     </ButtonLink>
-        //   </RootPermissionsFilter>
-        // }
-      />
+      <PageTitle title='Enrollments' />
       <Paper>
         <GenericTableWithData<
           GetClientEnrollmentsQuery,
           GetClientEnrollmentsQueryVariables,
-          ClientEnrollmentFieldsFragment
+          ClientEnrollmentTableFields
         >
           queryVariables={{ id: client.id }}
           queryDocument={GetClientEnrollmentsDocument}
-          rowLinkTo={rowLinkTo}
-          columns={columns}
+          columns={COLUMNS}
+          rowLinkTo={(enrollment) =>
+            generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+              clientId: client.id,
+              enrollmentId: enrollment.id,
+            })
+          }
+          rowName={(row) => ` ${row.projectName} for ${entryExitRange(row)}`}
+          rowActionTitle='View Enrollment'
           pagePath='client.enrollments'
           filters={filters}
           recordType='Enrollment'

@@ -36,10 +36,10 @@ const EnrollmentDateRangeWithStatus = ({
     enrollment.inProgress &&
     !treatIncompleteAsActive
   ) {
-    color = 'error.main';
+    color = 'error.dark';
     endFormatted = 'Incomplete';
   } else if (!enrollment.exitDate) {
-    color = 'text.disabled';
+    color = 'grayscale.main';
   }
 
   return (

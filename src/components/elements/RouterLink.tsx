@@ -11,7 +11,7 @@ export type RouterLinkProps = Omit<LinkProps, 'href'> &
   ReactRouterLinkProps & {
     plain?: boolean;
     openInNew?: boolean;
-    Icon?: SvgIconComponent;
+    Icon?: SvgIconComponent | false; // pass false to omit icon for openInNew
   };
 
 const RouterLink = forwardRef<HTMLLinkElement, RouterLinkProps>(
@@ -38,7 +38,7 @@ const RouterLink = forwardRef<HTMLLinkElement, RouterLinkProps>(
             component='span'
           >
             {children}
-            {openInNew ? (
+            {openInNew && Icon !== false ? (
               <OpenInNewIcon fontSize='inherit' />
             ) : (
               Icon && <Icon fontSize='inherit' />

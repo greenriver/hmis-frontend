@@ -1,9 +1,8 @@
-import { Card, Divider, Skeleton, Stack, Typography } from '@mui/material';
+import { Card, Divider, Stack, Typography } from '@mui/material';
 import { formatDuration } from 'date-fns';
 import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
 
-import { getValueFromPickListData, usePickList } from '../../hooks/usePickList';
 import { DynamicViewFieldProps } from '../../types';
 import { isDataNotCollected } from '../../util/formUtil';
 import DynamicDisplay from '../DynamicDisplay';
@@ -60,31 +59,12 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   item,
   value,
   horizontal = false,
-  pickListArgs,
   noLabel = false,
-  adjustValue = () => {},
   disabled = false,
   localConstants,
 }) => {
   const label = noLabel ? null : getLabel(item, horizontal);
 
-  const { loading: pickListLoading } = usePickList({
-    item,
-    ...pickListArgs,
-    fetchOptions: {
-      onCompleted: (data) => {
-        const newValue = getValueFromPickListData({
-          item,
-          value,
-          linkId: item.linkId,
-          data,
-          setInitial: false,
-        });
-        // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
-        if (newValue) setTimeout(() => adjustValue(newValue));
-      },
-    },
-  });
   const commonProps = useMemo(
     () => ({
       label,
@@ -176,6 +156,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       );
     case ItemType.OpenChoice:
     case ItemType.Choice:
+      // if ( item.linkId ==='q_4_03_2' ) console.info('choice', item.linkId, value, item.type)
       if (isDataNotCollected(value?.code)) {
         return (
           <LabelWithContent {...commonProps}>
@@ -188,17 +169,13 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       return (
         <TextContent
           {...commonProps}
-          renderValue={(value) => {
-            if (pickListLoading) return <Skeleton width={200} />;
-
-            return (
-              <Typography variant='body2'>
-                {ensureArray(value)
-                  .map((val) => val.label || val.code)
-                  .join(', ')}
-              </Typography>
-            );
-          }}
+          renderValue={(value) => (
+            <Typography variant='body2'>
+              {ensureArray(value)
+                .map((val) => val.label || val.code)
+                .join(', ')}
+            </Typography>
+          )}
         />
       );
     case ItemType.Image:

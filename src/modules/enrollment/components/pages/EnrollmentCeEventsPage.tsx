@@ -1,7 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
@@ -25,19 +24,24 @@ import {
   RecordFormRole,
 } from '@/types/gqlTypes';
 
-const columns: ColumnDef<EventFieldsFragment>[] = [
+const COLUMNS: ColumnDef<EventFieldsFragment>[] = [
   {
     header: 'Event Date',
-    render: (e) => parseAndFormatDate(e.eventDate),
-    linkTreatment: true,
+    key: 'date',
+    render: (e: EventFieldsFragment) => parseAndFormatDate(e.eventDate),
+    sticky: 'left',
   },
   {
     header: 'Event Type',
-    render: (e) => <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />,
+    key: 'type',
+    render: (e: EventFieldsFragment) => (
+      <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />
+    ),
   },
   {
-    header: 'Result',
-    render: (e) => eventReferralResult(e),
+    header: 'Referral Result',
+    key: 'referralResult',
+    render: (e: EventFieldsFragment) => eventReferralResult(e),
   },
 ];
 
@@ -110,11 +114,14 @@ const EnrollmentCeEventsPage = () => {
         >
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentEventsDocument}
-          columns={columns}
+          columns={COLUMNS}
+          rowActionTitle='View CE Event'
+          rowName={(row) =>
+            `${HmisEnums.EventType[row.event]} on ${parseAndFormatDate(row.eventDate)}`
+          }
+          handleRowClick={onSelectRecord}
           pagePath='enrollment.events'
           noData='No events'
-          headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={onSelectRecord}
         />
       </TitleCard>
       {viewRecordDialog()}

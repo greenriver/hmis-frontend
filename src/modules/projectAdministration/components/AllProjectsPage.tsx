@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Grid, Paper } from '@mui/material';
+import { Paper } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { useCallback, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 import CommonSearchInput from '../../search/components/CommonSearchInput';
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -38,21 +38,24 @@ const PROJECT_COLUMNS: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Name',
     render: 'projectName',
-    linkTreatment: true,
-    ariaLabel: (row) => row.projectName,
+    key: 'projectName',
+    sticky: 'left',
   },
   {
-    header: 'Organization',
+    header: 'Organization Name',
+    key: 'organizationName',
     render: (row) => row.organization.organizationName,
   },
   {
     header: 'Project Type',
+    key: 'projectType',
     render: (project: ProjectAllFieldsFragment) => (
       <ProjectTypeChip projectType={project.projectType} />
     ),
   },
   {
     header: 'Operating Period',
+    key: 'operatingPeriod',
     render: (project: ProjectAllFieldsFragment) =>
       parseAndFormatDateRange(
         project.operatingStartDate,
@@ -64,11 +67,13 @@ const PROJECT_COLUMNS: ColumnDef<ProjectAllFieldsFragment>[] = [
 const ORGANIZATION_COLUMNS: ColumnDef<OrganizationType>[] = [
   {
     header: 'Organization Name',
+    key: 'organizationName',
     render: 'organizationName',
-    linkTreatment: true,
+    sticky: 'left',
   },
   {
     header: 'Project Count',
+    key: 'projectCount',
     render: 'projects.nodesCount' as keyof OrganizationType,
   },
 ];
@@ -87,33 +92,144 @@ const toggleItemDefinitions: ToggleItem<ViewMode>[] = [
   },
 ];
 
-const AllProjectsPage = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>('projects');
-
-  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
-
-  const projectRowLink = useCallback(
-    (project: ProjectAllFieldsFragment) =>
-      generateSafePath(Routes.PROJECT, {
-        projectId: project.id,
-      }),
-    []
-  );
-
+const ProjectsTable = ({
+  search,
+  setSearch,
+  debouncedSearch,
+}: {
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+  debouncedSearch?: string;
+}) => {
   const projectFilters = useFilters({
     type: 'ProjectFilterOptions',
     omit: ['searchTerm'],
   });
 
-  const organizationRowLink = useCallback(
-    (row: OrganizationType) =>
-      generateSafePath(Routes.ORGANIZATION, {
-        organizationId: row.id,
-      }),
-    []
+  return (
+    <Stack gap={2}>
+      <CommonSearchInput
+        label='Search Projects'
+        name='search projects'
+        placeholder='Search by Project Name or ID'
+        value={search}
+        onChange={setSearch}
+        fullWidth
+        size='medium'
+        searchAdornment
+        clearAdornment
+      />
+      <Paper data-testid='allProjectsTable'>
+        <GenericTableWithData<
+          GetProjectsQuery,
+          GetProjectsQueryVariables,
+          ProjectAllFieldsFragment
+        >
+          key='projectTable'
+          queryVariables={{
+            filters: { searchTerm: debouncedSearch || undefined },
+          }}
+          defaultSortOption={ProjectSortOption.OrganizationAndName}
+          queryDocument={GetProjectsDocument}
+          columns={PROJECT_COLUMNS}
+          rowLinkTo={(project) =>
+            generateSafePath(Routes.PROJECT, {
+              projectId: project.id,
+            })
+          }
+          rowName={(project) => project.projectName}
+          rowActionTitle='View Project'
+          noData='No projects'
+          pagePath='projects'
+          recordType='Project'
+          defaultFilterValues={{
+            status: [ProjectFilterOptionStatus.Open],
+          }}
+          filters={projectFilters}
+          defaultPageSize={25}
+        />
+      </Paper>
+    </Stack>
   );
-
+};
+const OrganizationsTable = ({
+  search,
+  setSearch,
+  debouncedSearch,
+}: {
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+  debouncedSearch?: string;
+}) => {
   const isMobile = useIsMobile('sm');
+
+  return (
+    <Stack gap={2}>
+      <Stack gap={2} direction={isMobile ? 'column' : 'row'}>
+        <CommonSearchInput
+          label='Search Organizations'
+          name='search organizations'
+          placeholder='Search by Organization Name or ID'
+          value={search}
+          onChange={setSearch}
+          fullWidth
+          size='medium'
+          searchAdornment
+          clearAdornment
+        />
+        <RootPermissionsFilter permissions={['canEditOrganization']}>
+          <Box
+            sx={{
+              width: 'fit-content',
+              pt: isMobile ? 0 : 3.5,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <ButtonLink
+              data-testid='addOrganizationButton'
+              to={generateSafePath(Routes.CREATE_ORGANIZATION)}
+              Icon={AddIcon}
+              leftAlign
+            >
+              Add Organization
+            </ButtonLink>
+          </Box>
+        </RootPermissionsFilter>
+      </Stack>
+      <Paper>
+        <GenericTableWithData<
+          GetOrganizationsQuery,
+          GetOrganizationsQueryVariables,
+          OrganizationType
+        >
+          key='organizationTable'
+          queryDocument={GetOrganizationsDocument}
+          columns={ORGANIZATION_COLUMNS}
+          rowLinkTo={(organization) =>
+            generateSafePath(Routes.ORGANIZATION, {
+              organizationId: organization.id,
+            })
+          }
+          rowName={(organization) => organization.organizationName}
+          rowActionTitle='View Organization'
+          noData='No organizations'
+          pagePath='organizations'
+          recordType='Organization'
+          defaultPageSize={25}
+          queryVariables={{
+            filters: { searchTerm: debouncedSearch || undefined },
+          }}
+          noSort
+        />
+      </Paper>
+    </Stack>
+  );
+};
+
+const AllProjectsPage = () => {
+  const [viewMode, setViewMode] = useState<ViewMode>('projects');
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   return (
     <PageContainer
@@ -126,106 +242,19 @@ const AllProjectsPage = () => {
         />
       }
     >
-      <Grid container spacing={2}>
-        {viewMode === 'projects' && (
-          <Grid item xs={12}>
-            <CommonSearchInput
-              label='Search Projects'
-              name='search projects'
-              placeholder='Search by Project Name or ID'
-              value={search}
-              onChange={setSearch}
-              fullWidth
-              size='medium'
-              searchAdornment
-              clearAdornment
-            />
-          </Grid>
-        )}
-        {viewMode === 'organizations' && (
-          <Grid item xs={12}>
-            <Stack gap={2} direction={isMobile ? 'column' : 'row'}>
-              <CommonSearchInput
-                label='Search Organizations'
-                name='search organizations'
-                placeholder='Search by Organization Name or ID'
-                value={search}
-                onChange={setSearch}
-                fullWidth
-                size='medium'
-                searchAdornment
-                clearAdornment
-              />
-              <RootPermissionsFilter permissions={['canEditOrganization']}>
-                <Box
-                  sx={{
-                    width: 'fit-content',
-                    pt: isMobile ? 0 : 3.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <ButtonLink
-                    data-testid='addOrganizationButton'
-                    to={generateSafePath(Routes.CREATE_ORGANIZATION)}
-                    Icon={AddIcon}
-                    leftAlign
-                  >
-                    Add Organization
-                  </ButtonLink>
-                </Box>
-              </RootPermissionsFilter>
-            </Stack>
-          </Grid>
-        )}
-        <Grid item xs={12}>
-          <Paper data-testid='allProjectsTable'>
-            {viewMode === 'projects' ? (
-              <GenericTableWithData<
-                GetProjectsQuery,
-                GetProjectsQueryVariables,
-                ProjectAllFieldsFragment
-              >
-                key='projectTable'
-                queryVariables={{
-                  filters: { searchTerm: debouncedSearch || undefined },
-                }}
-                defaultSortOption={ProjectSortOption.OrganizationAndName}
-                queryDocument={GetProjectsDocument}
-                columns={PROJECT_COLUMNS}
-                rowLinkTo={projectRowLink}
-                noData='No projects'
-                pagePath='projects'
-                recordType='Project'
-                defaultFilterValues={{
-                  status: [ProjectFilterOptionStatus.Open],
-                }}
-                filters={projectFilters}
-                defaultPageSize={25}
-              />
-            ) : (
-              <GenericTableWithData<
-                GetOrganizationsQuery,
-                GetOrganizationsQueryVariables,
-                OrganizationType
-              >
-                key='organizationTable'
-                queryDocument={GetOrganizationsDocument}
-                columns={ORGANIZATION_COLUMNS}
-                rowLinkTo={organizationRowLink}
-                noData='No organizations'
-                pagePath='organizations'
-                recordType='Organization'
-                defaultPageSize={25}
-                queryVariables={{
-                  filters: { searchTerm: debouncedSearch || undefined },
-                }}
-                noSort
-              />
-            )}
-          </Paper>
-        </Grid>
-      </Grid>
+      {viewMode === 'projects' ? (
+        <ProjectsTable
+          debouncedSearch={debouncedSearch}
+          search={search}
+          setSearch={setSearch}
+        />
+      ) : (
+        <OrganizationsTable
+          debouncedSearch={debouncedSearch}
+          search={search}
+          setSearch={setSearch}
+        />
+      )}
     </PageContainer>
   );
 };

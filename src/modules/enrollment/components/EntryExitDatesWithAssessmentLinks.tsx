@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { AssessmentIcon } from '@/components/elements/SemanticIcons';
-import theme from '@/config/theme';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -42,13 +41,19 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
     <Typography
       component='span'
       variant='body2'
-      color='success.main'
+      color='success.dark'
       fontWeight={600}
     >
       Active
     </Typography>
   );
 
+  const iconLinkSx = {
+    minWidth: '30px',
+    px: 1,
+    mx: 0.5,
+    svg: { color: 'primary.main' },
+  };
   return (
     <Stack direction='row' alignItems='center' gap={2}>
       <Box component='span'>
@@ -59,9 +64,10 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
               <ButtonLink
                 to={intakePath}
                 variant='text'
-                sx={{ minWidth: '30px', color: theme.palette.links }}
+                aria-label='Go to Intake Assessment'
+                sx={iconLinkSx}
               >
-                <AssessmentIcon fontSize='small' />
+                <AssessmentIcon fontSize='small' color='inherit' />
               </ButtonLink>
             </ButtonTooltipContainer>
           </Stack>
@@ -77,7 +83,8 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
             <ButtonLink
               to={exitPath}
               variant='text'
-              sx={{ minWidth: '30px', color: theme.palette.links }}
+              aria-label='Go to Exit Assessment'
+              sx={iconLinkSx}
             >
               <AssessmentIcon fontSize='small' />
             </ButtonLink>

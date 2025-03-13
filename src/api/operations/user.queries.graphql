@@ -75,7 +75,14 @@ query GetUserEnrollmentSummaries(
   }
 }
 
-query GetUserStaffAssignments($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+query GetUserStaffAssignments(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $includeOrganizationName: Boolean = false
+  $includeMoveInDate: Boolean = false
+  $includeLastContact: Boolean = false
+) {
   user(id: $id) {
     id
     staffAssignments(limit: $limit, offset: $offset) {

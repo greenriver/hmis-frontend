@@ -459,6 +459,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -1345,6 +1349,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'dateUpdated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -2803,6 +2811,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
+      },
+      {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -4397,6 +4409,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'LastContact',
+    fields: [
+      {
+        name: 'contactDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'contactType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'LastContactType', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'MciClearanceMatch',
     fields: [
       {
@@ -4886,6 +4919,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageUnits',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canSplitHouseholds',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5750,6 +5791,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'faStartDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -7047,6 +7092,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             name: null,
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentRelationshipInput',
+    args: [
+      {
+        name: 'enrollmentId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'relationshipToHoh',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
         },
       },
     ],

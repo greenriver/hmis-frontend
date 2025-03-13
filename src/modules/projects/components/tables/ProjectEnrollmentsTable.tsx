@@ -1,47 +1,58 @@
 import PersonIcon from '@mui/icons-material/Person';
 import { Box, Grid } from '@mui/material';
-import { useState } from 'react';
+import React, { useCallback } from 'react';
 
-import ProjectClientEnrollmentsTable, {
-  EnrollmentFields,
-} from './ProjectClientEnrollmentsTable';
+import { useNavigate } from 'react-router-dom';
+import ProjectClientEnrollmentsTable from './ProjectClientEnrollmentsTable';
 import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 
 import CommonToggle from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import { HouseholdIcon } from '@/components/elements/SemanticIcons';
-import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ClientSearchInput from '@/modules/search/components/ClientTextSearchInput';
+import { ProjectDashboardRoutes } from '@/routes/routes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
-type Mode = 'clients' | 'households';
+export type ProjectEnrollmentsTableMode = 'clients' | 'households';
 
-const ProjectEnrollmentsTable = ({
-  projectId,
-  columns,
-  openOnDate,
-  linkRowToEnrollment = false,
-  searchable = true,
-  mode: modeProp,
-  initialMode: initialModeProp = 'households',
-}: {
-  mode?: Mode;
-  initialMode?: Mode;
+interface Props {
+  mode: ProjectEnrollmentsTableMode;
   projectId: string;
-  columns?: ColumnDef<EnrollmentFields>[];
-  linkRowToEnrollment?: boolean;
-  openOnDate?: Date;
-  searchable?: boolean;
-}) => {
+}
+const ProjectEnrollmentsTable: React.FC<Props> = ({ mode, projectId }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const [mode, setMode] = useState<Mode>(modeProp || initialModeProp);
+  const navigate = useNavigate();
+  const setMode = useCallback(
+    (newMode: ProjectEnrollmentsTableMode) => {
+      switch (newMode) {
+        case 'households':
+          navigate(
+            generateSafePath(
+              ProjectDashboardRoutes.PROJECT_ENROLLMENTS_HOUSEHOLDS,
+              { projectId }
+            )
+          );
+          break;
+        case 'clients':
+          navigate(
+            generateSafePath(
+              ProjectDashboardRoutes.PROJECT_ENROLLMENTS_CLIENTS,
+              { projectId }
+            )
+          );
+          break;
+      }
+    },
+    [navigate, projectId]
+  );
 
   return (
     <>
       <Box py={2} px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Grid container direction='row' rowSpacing={2} columnSpacing={4}>
-          {!modeProp && (
+          {
             <Grid item>
               <LabelWithContent
                 label='View enrollments by'
@@ -81,32 +92,26 @@ const ProjectEnrollmentsTable = ({
                 )}
               />
             </Grid>
-          )}
+          }
           <Grid item flexGrow={1}>
-            {searchable ? (
-              <ClientSearchInput
-                value={search || ''}
-                onChange={setSearch}
-                helperText={null}
-              />
-            ) : undefined}
+            <ClientSearchInput
+              value={search || ''}
+              onChange={setSearch}
+              helperText={null}
+            />
           </Grid>
         </Grid>
       </Box>
       {mode === 'clients' && (
         <ProjectClientEnrollmentsTable
-          columns={columns}
-          linkRowToEnrollment={linkRowToEnrollment}
           searchTerm={debouncedSearch || undefined}
           projectId={projectId}
-          openOnDate={openOnDate}
         />
       )}
       {mode === 'households' && (
         <ProjectHouseholdsTable
           searchTerm={debouncedSearch || undefined}
           projectId={projectId}
-          openOnDate={openOnDate}
         />
       )}
     </>

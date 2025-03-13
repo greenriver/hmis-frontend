@@ -23,7 +23,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const columns: ColumnDef<FunderFieldsFragment>[] = [
   {
     header: 'Funder',
-    linkTreatment: true,
+    key: 'funder',
     render: (f: FunderFieldsFragment) =>
       f.funder === FundingSource.LocalOrOtherFundingSource && f.otherFunder ? (
         f.otherFunder
@@ -37,10 +37,11 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
   },
   {
     header: 'Active Period',
+    key: 'activePeriod',
     render: (f: FunderFieldsFragment) =>
       parseAndFormatDateRange(f.startDate, f.endDate),
   },
-  { header: 'Grant ID', render: 'grantId' },
+  { header: 'Grant ID', render: 'grantId', key: 'grantId' },
   HudRecordMetadataHistoryColumn,
 ];
 
@@ -90,6 +91,8 @@ const FundersPage = () => {
                   })
               : undefined
           }
+          rowActionTitle='Edit Funder'
+          rowName={(row) => HmisEnums.FundingSource[row.funder]}
         />
       </Paper>
     </>

@@ -1,18 +1,18 @@
 import UploadIcon from '@mui/icons-material/Upload';
-import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import useFileActions from '../hooks/useFileActions';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import { ColumnDef } from '@/components/elements/table/types';
+import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import FilePreviewDialog from '@/components/elements/upload/fileDialog/FilePreviewDialog';
 import PageTitle from '@/components/layout/PageTitle';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import { DataColumnDef } from '@/modules/dataFetching/types';
 import {
   useClientPermissions,
   useHasClientPermissions,
@@ -71,72 +71,85 @@ const ClientFilesPage = () => {
     variables: { pickListType: PickListType.AvailableFileTypes },
   });
 
-  const columns: ColumnDef<ClientFileType>[] = useMemo(() => {
-    return [
-      {
-        header: 'File Name',
-        render: (file) =>
-          file.redacted ? (
-            <Typography variant='inherit'>{file.name}</Typography>
-          ) : (
-            <Link
-              component='button'
-              onClick={() => setViewingFile(file)}
-              align='left'
-              tabIndex={-1}
-            >
-              {file.name}
-            </Link>
-          ),
-      },
-      {
-        header: 'File Tags',
-        render: (file) =>
-          pickListData ? (
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              {file.tags.map((tag) => {
-                const item = pickListData.pickList.find(
-                  (type) => type.code === tag
-                );
-                return (
-                  <Chip
-                    key={item?.code || tag}
-                    label={item?.label || tag}
-                    id={`tag-${item?.code || tag}`}
-                    size='small'
-                  />
-                );
-              })}
-            </Box>
-          ) : null,
-      },
-      {
-        header: 'Enrollment',
-        render: ({ enrollment }) => {
-          if (!enrollment) return <NotCollectedText>N/A</NotCollectedText>;
+  const isTiny = useIsMobile('sm');
 
-          return (
-            <Stack gap={1}>
-              {enrollment.projectName}
-              <EnrollmentDateRangeWithStatus enrollment={enrollment} />
-            </Stack>
-          );
+  const columns: DataColumnDef<ClientFileType, GetClientFilesQueryVariables>[] =
+    useMemo(() => {
+      return [
+        {
+          header: 'File Name',
+          key: 'fileName',
+          render: (file) => (
+            <Typography variant='inherit'>{file.name}</Typography>
+          ),
+          // Limit the col width on tiny screens so that other non-sticky columns are scrollable
+          maxWidth: isTiny ? '100px' : undefined,
+          sticky: 'left',
         },
-      },
-      {
-        header: 'Uploaded At',
-        render: (file) => {
-          const uploadedAt = file.dateCreated
-            ? parseAndFormatDateTime(file.dateCreated)
-            : 'Unknown time';
-          const uploadedBy = file.uploadedBy?.name
-            ? `by ${file.uploadedBy?.name}`
-            : 'by unknown user';
-          return `${uploadedAt} ${uploadedBy}`;
+        {
+          header: 'File Tags',
+          key: 'tags',
+          render: (file) =>
+            pickListData ? (
+              <Box sx={{ display: 'flex', gap: 0.5 }}>
+                {file.tags.map((tag) => {
+                  const item = pickListData.pickList.find(
+                    (type) => type.code === tag
+                  );
+                  return (
+                    <Chip
+                      key={item?.code || tag}
+                      label={item?.label || tag}
+                      id={`tag-${item?.code || tag}`}
+                      size='small'
+                    />
+                  );
+                })}
+              </Box>
+            ) : null,
         },
-      },
-    ];
-  }, [pickListData]);
+        {
+          header: 'Project Name',
+          key: 'projectName',
+          render: ({ enrollment }) =>
+            enrollment ? (
+              enrollment.projectName
+            ) : (
+              <NotCollectedText>N/A</NotCollectedText>
+            ),
+        },
+        {
+          header: 'Uploaded',
+          key: 'uploaded',
+          render: ({ dateCreated, uploadedBy }) => {
+            const byUser = uploadedBy?.name
+              ? `by ${uploadedBy?.name}`
+              : 'by unknown user';
+            if (dateCreated)
+              return (
+                <RelativeDateDisplay
+                  dateString={dateCreated}
+                  tooltipSuffixText={byUser}
+                />
+              );
+            return `Unknown time ${byUser}`;
+          },
+        },
+        {
+          header: 'Organization Name',
+          key: 'organizationName',
+          optional: {
+            defaultHidden: true,
+            queryVariableField: 'includeOrganizationName',
+          },
+          render: (file) => {
+            if (file.enrollment) {
+              return file.enrollment.organizationName;
+            }
+          },
+        },
+      ];
+    }, [isTiny, pickListData]);
 
   return (
     <>
@@ -165,8 +178,11 @@ const ClientFilesPage = () => {
           queryVariables={{ id: clientId }}
           queryDocument={GetClientFilesDocument}
           columns={columns}
+          rowName={(file) => file.name}
+          rowActionTitle='View File'
+          hideMenu={(file) => file.redacted}
+          handleRowClick={(file) => (file.redacted ? {} : setViewingFile(file))}
           pagePath='client.files'
-          handleRowClick={(file) => !file.redacted && setViewingFile(file)}
           noData='No files'
         />
       </Paper>

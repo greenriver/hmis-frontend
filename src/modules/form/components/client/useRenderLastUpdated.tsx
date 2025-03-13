@@ -1,7 +1,7 @@
 import { DocumentNode } from 'graphql';
 import { useCallback } from 'react';
 
-import RelativeDateDisplay from '@/modules/hmis/components/RelativeDateDisplay';
+import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import apolloClient from '@/providers/apolloClient';
 
 export function useRenderLastUpdated(
@@ -25,7 +25,7 @@ export function useRenderLastUpdated(
           TypographyProps={{
             variant: 'body2',
             fontStyle: 'italic',
-            color: 'text.disabled',
+            color: 'grayscale.main',
             fontSize: 'inherit',
           }}
         />

@@ -15,11 +15,11 @@ const AssessmentDateWithStatusIndicator = ({
 
   return (
     <Stack direction='row' alignItems='center' gap={0.8}>
-      <Typography variant='inherit' color='error'>
+      <Typography variant='inherit' color='error.dark'>
         {parseAndFormatDate(assessment.assessmentDate)}
       </Typography>
-      <Tooltip title='Assessment has not been submitted.' arrow describeChild>
-        <ErrorOutlineIcon color='error' fontSize='small' />
+      <Tooltip title='Assessment has not been submitted.' arrow>
+        <ErrorOutlineIcon aria-hidden={false} color='error' fontSize='small' />
       </Tooltip>
     </Stack>
   );

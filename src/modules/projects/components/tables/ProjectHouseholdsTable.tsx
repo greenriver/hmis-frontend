@@ -1,197 +1,210 @@
-import { Chip, Stack, Tooltip, Typography } from '@mui/material';
-import { ReactNode, useMemo } from 'react';
-
+import { TableBody, TableCell, TableRow } from '@mui/material';
+import React, { useCallback, useMemo } from 'react';
+import {
+  clickableRowStyles,
+  getStickyCellStyles,
+  renderCellContents,
+  renderLinkedRowCellContents,
+  stickyCellClassName,
+} from '@/components/elements/table/GenericTable';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewClientMenuItem,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentClientNameWithAge from '@/modules/hmis/components/EnrollmentClientNameWithAge';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
+import {
+  HOUSEHOLD_ASSIGNED_STAFF_COL,
+  WITH_ENROLLMENT_COLUMNS,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS,
+} from '@/modules/enrollment/columns/enrollmentColumns';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
-  formatDateForDisplay,
-  formatDateForGql,
+  clientBriefName,
+  PERMANENT_HOUSING_PROJECT_TYPES,
+  sortHouseholdMembers,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ProjectEnrollmentFields } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
   HouseholdFilterOptions,
-  HouseholdWithStaffAssignmentsFragment,
-  RelationshipToHoH,
+  ProjectEnrollmentsHouseholdClientFieldsFragment,
+  ProjectEnrollmentsHouseholdFieldsFragment,
 } from '@/types/gqlTypes';
 
 export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
 >['households']['nodes'][number];
 
-const TableCellContainer = ({ children }: { children: ReactNode }) => (
-  <Stack direction='column' gap={1} sx={{ py: 1 }}>
-    {children}
-  </Stack>
-);
-
-export const ASSIGNED_STAFF_COL = {
-  header: 'Assigned Staff',
-  optional: true,
-  defaultHidden: true,
-  render: (hh: HouseholdWithStaffAssignmentsFragment) => {
-    if (!hh.staffAssignments?.nodes.length) return;
-
-    const first = hh.staffAssignments.nodes[0].user.name;
-    const rest = hh.staffAssignments.nodes
-      .slice(1)
-      .map((staffAssignment) => staffAssignment.user.name);
-
-    return (
-      <>
-        {first}{' '}
-        {rest.length > 0 && (
-          <Tooltip arrow title={rest.join(', ')}>
-            <Chip
-              sx={{ mb: 0.5 }}
-              size='small'
-              label={`+${rest.length} more`}
-            />
-          </Tooltip>
-        )}
-      </>
-    );
-  },
+export const ENROLLMENT_RELATIONSHIP_COL = {
+  header: 'Relationship',
+  key: 'relationship',
+  render: (e: Pick<ProjectEnrollmentFields, 'id' | 'relationshipToHoH'>) => (
+    <HmisEnum
+      key={e.id}
+      value={e.relationshipToHoH}
+      enumMap={{
+        ...HmisEnums.RelationshipToHoH,
+        // Display "HoH", instead of "Self (HoH)"
+        SELF_HEAD_OF_HOUSEHOLD: 'HoH',
+      }}
+      whiteSpace='nowrap'
+    />
+  ),
 };
 
-export const HOUSEHOLD_COLUMNS: {
-  [key: string]: ColumnDef<HouseholdFields>;
-} = {
-  hohIndicator: {
-    header: ' ',
-    width: '0%',
-    key: 'hoh-indicator',
-    render: (hh) => (
-      <TableCellContainer>
-        {hh.householdClients.map((c) =>
-          RelationshipToHoH.SelfHeadOfHousehold === c.relationshipToHoH ? (
-            <HohIndicator
-              key={c.id}
-              sx={{ pl: 0, pt: 0 }}
-              relationshipToHoh={c.relationshipToHoH}
-            />
-          ) : (
-            <Typography variant='body2' key={c.id}>
-              &#160;
-            </Typography>
-          )
-        )}
-      </TableCellContainer>
-    ),
-  },
-  clients: {
-    header: 'Clients',
-    render: (hh) => (
-      <TableCellContainer>
-        {hh.householdClients.map((hc) => (
-          <EnrollmentClientNameWithAge
-            key={hc.id}
-            enrollmentId={hc.enrollment.id}
-            client={hc.client}
-          />
-        ))}
-      </TableCellContainer>
-    ),
-  },
-  relationshipToHoH: {
-    header: 'Relationship to HoH',
-    render: (hh) => (
-      <TableCellContainer>
-        {hh.householdClients.map((c) =>
-          c.relationshipToHoH === RelationshipToHoH.DataNotCollected ? (
-            <Typography variant='body2' key={c.id}>
-              &#160;
-            </Typography>
-          ) : (
-            <HmisEnum
-              key={c.id}
-              value={c.relationshipToHoH}
-              enumMap={HmisEnums.RelationshipToHoH}
-              whiteSpace='nowrap'
-            />
-          )
-        )}
-      </TableCellContainer>
-    ),
-  },
-  status: {
-    header: 'Status',
-    render: (hh) => (
-      <TableCellContainer>
-        {hh.householdClients.map((c) => (
-          <EnrollmentStatus key={c.id} enrollment={c.enrollment} />
-        ))}
-      </TableCellContainer>
-    ),
-  },
-  enrollmentPeriod: {
-    header: 'Enrollment Period',
-    render: (hh) => (
-      <TableCellContainer>
-        {hh.householdClients.map((c) => (
-          <EnrollmentDateRangeWithStatus
-            key={c.id}
-            enrollment={c.enrollment}
-            treatIncompleteAsActive
-          />
-        ))}
-      </TableCellContainer>
-    ),
-  },
-  householdId: {
-    header: 'Household ID',
-    render: (hh) => (
-      <Typography variant='body2' whiteSpace='nowrap'>
-        {hh.shortId} ({hh.householdSize})
-      </Typography>
-    ),
-  },
-  assignedStaff: ASSIGNED_STAFF_COL,
+type OneHouseholdClient = HouseholdFields['householdClients'][number];
+const BASE_COLUMNS: ColumnDef<OneHouseholdClient>[] = [
+  { ...CLIENT_COLUMNS.name, sticky: 'left' },
+  CLIENT_COLUMNS.age,
+  ENROLLMENT_RELATIONSHIP_COL,
+  WITH_ENROLLMENT_COLUMNS.entryDate,
+  WITH_ENROLLMENT_COLUMNS.exitDate,
+  WITH_ENROLLMENT_COLUMNS.enrollmentStatus,
+  WITH_ENROLLMENT_OPTIONAL_COLUMNS.lastContactDate,
+];
+const ACTION_COL: ColumnDef<OneHouseholdClient> = {
+  ...BASE_ACTION_COLUMN_DEF,
+  render: (householdClient) => (
+    <TableRowActions
+      record={householdClient}
+      recordName={clientBriefName(householdClient.client)}
+      menuActionConfigs={[
+        getViewEnrollmentMenuItem(
+          householdClient.enrollment,
+          householdClient.client
+        ),
+        getViewClientMenuItem(householdClient.client),
+      ]}
+    />
+  ),
 };
 
-const ProjectHouseholdsTable = ({
-  projectId,
-  columns,
-  openOnDate,
-  searchTerm,
-}: {
-  projectId: string;
-  columns?: ColumnDef<HouseholdFields>[];
-  openOnDate?: Date;
-  searchTerm?: string;
+interface ProjectHouseholdsClientRowProps {
+  household: ProjectEnrollmentsHouseholdFieldsFragment;
+  householdClient: ProjectEnrollmentsHouseholdClientFieldsFragment;
+  columnKeys: string[];
+  lastInGroup?: boolean;
+}
+
+const ProjectHouseholdsClientRow: React.FC<ProjectHouseholdsClientRowProps> = ({
+  household,
+  householdClient,
+  columnKeys,
+  lastInGroup = false,
 }) => {
-  const openOnDateString = useMemo(
-    () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
-    [openOnDate]
+  const cellSx = useCallback(
+    (col?: ColumnDef<ProjectEnrollmentsHouseholdClientFieldsFragment>) => {
+      const cellProps = col?.tableCellProps;
+      const cellSx = typeof cellProps === 'object' ? cellProps.sx : {};
+
+      return {
+        p: 0,
+        ...(lastInGroup ? { borderBottom: 0 } : {}),
+        ...getStickyCellStyles({ sticky: col?.sticky }),
+        ...cellSx,
+      };
+    },
+    [lastInGroup]
   );
 
+  const rowLink = getViewEnrollmentMenuItem(
+    householdClient.enrollment,
+    householdClient.client
+  ).to;
+
+  return (
+    <TableRow sx={clickableRowStyles} key={household.id + householdClient.id}>
+      {BASE_COLUMNS.filter((col) => columnKeys.includes(col.key)).map(
+        (col, i) => (
+          <TableCell
+            key={col.key}
+            role={i === 0 ? 'rowheader' : undefined}
+            sx={cellSx(col)}
+            className={col?.sticky ? stickyCellClassName : undefined}
+          >
+            {renderLinkedRowCellContents({
+              rowLink,
+              row: householdClient,
+              render: col.render,
+            })}
+          </TableCell>
+        )
+      )}
+      {columnKeys.includes(WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.key) && (
+        <TableCell sx={cellSx()}>
+          {renderLinkedRowCellContents({
+            rowLink,
+            row: householdClient,
+            render: WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate.render,
+          })}
+        </TableCell>
+      )}
+      {columnKeys.includes(HOUSEHOLD_ASSIGNED_STAFF_COL.key) && (
+        <TableCell sx={cellSx()}>
+          {renderLinkedRowCellContents({
+            rowLink,
+            row: household,
+            render: HOUSEHOLD_ASSIGNED_STAFF_COL.render,
+          })}
+        </TableCell>
+      )}
+      <TableCell sx={cellSx(ACTION_COL)} className={stickyCellClassName}>
+        {renderCellContents(householdClient, ACTION_COL.render)}
+      </TableCell>
+    </TableRow>
+  );
+};
+
+const CustomDividerRow = ({ colSpan }: { colSpan: number }) => (
+  <TableRow sx={{ height: '8px' }}>
+    <TableCell
+      colSpan={colSpan}
+      sx={(theme) => {
+        return {
+          padding: 0,
+          backgroundColor: theme.palette.grey[200],
+          borderTop: `1px solid ${theme.palette.borders.main}`,
+          borderBottom: `1px solid ${theme.palette.borders.main}`,
+        };
+      }}
+    />
+  </TableRow>
+);
+
+interface Props {
+  projectId: string;
+  searchTerm?: string;
+}
+
+const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
   const {
-    project: { staffAssignmentsEnabled },
+    project: { staffAssignmentsEnabled, projectType },
   } = useProjectDashboardContext();
 
-  const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
-    const cols: ColumnDef<HouseholdFields>[] = [
-      HOUSEHOLD_COLUMNS.hohIndicator,
-      HOUSEHOLD_COLUMNS.clients,
-      HOUSEHOLD_COLUMNS.relationshipToHoH,
-      HOUSEHOLD_COLUMNS.status,
-      HOUSEHOLD_COLUMNS.enrollmentPeriod,
-      HOUSEHOLD_COLUMNS.householdId,
-    ];
-
-    if (staffAssignmentsEnabled) cols.push(HOUSEHOLD_COLUMNS.assignedStaff);
-
-    return cols;
-  }, [staffAssignmentsEnabled]);
+  // dummy column defs for Household that are only used for the headers, not for rendering cells
+  const columns: ColumnDef<HouseholdFields>[] = useMemo(() => {
+    return [
+      ...BASE_COLUMNS,
+      ...(projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)
+        ? [WITH_ENROLLMENT_OPTIONAL_COLUMNS.moveInDate]
+        : []),
+      ...(staffAssignmentsEnabled ? [HOUSEHOLD_ASSIGNED_STAFF_COL] : []),
+      ACTION_COL,
+    ].map(({ render, ...rest }) => ({
+      ...rest,
+      render: () => null,
+      tableCellProps: undefined, // typescript appeasement
+    }));
+  }, [projectType, staffAssignmentsEnabled]);
 
   const filters = useFilters({
     type: 'HouseholdFilterOptions',
@@ -208,30 +221,43 @@ const ProjectHouseholdsTable = ({
     >
       queryVariables={{
         id: projectId,
-        filters: {
-          searchTerm,
-          openOnDate: openOnDateString,
-        },
+        // filter from parent component gets merged with any filters selected on the table
+        filters: { searchTerm },
       }}
       queryDocument={GetProjectHouseholdsDocument}
-      columns={columns || defaultColumns}
-      noData={
-        openOnDate
-          ? `No households open on ${formatDateForDisplay(openOnDate)}`
-          : 'No households'
+      columns={columns}
+      TableBodyComponent={React.Fragment}
+      renderRow={(household, columnKeys) => {
+        return (
+          <TableBody
+            // Render each household as its own `tbody` in order to use the role='rowgroup' for better accessibility markup
+            key={household.id}
+            role='rowgroup'
+          >
+            <CustomDividerRow colSpan={columns.length} />
+            {sortHouseholdMembers(household.householdClients).map(
+              (householdClient, index) => (
+                <ProjectHouseholdsClientRow
+                  key={householdClient.id}
+                  household={household}
+                  householdClient={householdClient}
+                  lastInGroup={index === household.householdClients.length - 1}
+                  columnKeys={columnKeys}
+                />
+              )
+            )}
+          </TableBody>
+        );
+      }}
+      belowRowsContent={
+        <TableBody>
+          <CustomDividerRow colSpan={columns.length} />
+        </TableBody>
       }
+      noData='No households'
       pagePath='project.households'
       filters={filters}
       recordType='Household'
-      showOptionalColumns
-      applyOptionalColumns={(cols) => {
-        const result: Partial<GetProjectHouseholdsQueryVariables> = {};
-
-        if (cols.includes(HOUSEHOLD_COLUMNS.assignedStaff.key || ''))
-          result.includeStaffAssignment = true;
-
-        return result;
-      }}
     />
   );
 };

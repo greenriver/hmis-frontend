@@ -24,12 +24,14 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
       {
         header: 'Form Title',
         render: ({ displayVersion }) => displayVersion.title,
+        key: 'title',
       },
       {
         header: 'Form Type',
         render: ({ displayVersion }) => (
           <FormTypeChip role={displayVersion.role} />
         ),
+        key: 'type',
       },
       {
         key: 'status',
@@ -41,8 +43,8 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
       {
         header: 'Applicability Rules',
         render: ({ displayVersion }) => displayVersion.formRules.nodesCount,
+        key: 'rules',
       },
-
       {
         key: 'system',
         header: 'Form Tags',
@@ -80,6 +82,8 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
           identifier: row.identifier,
         })
       }
+      rowActionTitle='View Form'
+      rowName={(row) => row.displayVersion.title}
     />
   );
 };

@@ -1,7 +1,7 @@
 import { TextField, TextFieldProps } from '@mui/material';
 import { Box } from '@mui/system';
 import { isNil, padEnd, padStart } from 'lodash-es';
-import { useMemo } from 'react';
+import { useId, useMemo } from 'react';
 
 import LabelWithContent from '../LabelWithContent';
 import MultiFieldInput from './MultiFieldInput';
@@ -64,6 +64,8 @@ const SsnInput = ({
       third,
     };
   }, [value, onlylast4]);
+
+  const id = useId();
 
   return (
     <MultiFieldInput<TextFieldProps>
@@ -135,14 +137,24 @@ const SsnInput = ({
           sx={{ maxWidth, ...sx }}
           label={label}
           helperText={helperText}
-          LabelProps={{ disabled: baseInputProps.disabled }}
+          id={id}
+          LabelProps={{
+            disabled: baseInputProps.disabled,
+          }}
         >
           <Box
+            aria-labelledby={id}
+            component='fieldset'
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'flex-start',
+              // remove border, padding, and margin from fieldset
+              border: 'none',
+              padding: 0,
+              margin: 0,
             }}
+            disabled={baseInputProps.disabled}
           >
             {inputs.first.node}&#160;-&#160;{inputs.second.node}&#160;-&#160;
             {inputs.third.node}

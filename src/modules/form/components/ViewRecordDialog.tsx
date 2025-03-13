@@ -14,6 +14,7 @@ import { PickListArgs, SubmitFormAllowedTypes } from '../types';
 import ViewRecord from './ViewRecord';
 
 import CommonDialog from '@/components/elements/CommonDialog';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import HudRecordMetadata from '@/modules/hmis/components/HudRecordMetadata';
 import { RecordFormRole } from '@/types/gqlTypes';
 
@@ -37,6 +38,8 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
   projectId,
   ...props
 }: RecordDialogProps<RecordType>) => {
+  const isTiny = useIsMobile('sm');
+
   return (
     <CommonDialog
       maxWidth='md'
@@ -60,7 +63,8 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
       </DialogTitle>
       <Stack
         justifyContent={'space-between'}
-        direction='row'
+        gap={2}
+        direction={isTiny ? 'column' : 'row'}
         alignItems={'center'}
         sx={{ px: 4, py: 1.5 }}
       >
@@ -85,7 +89,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
       <DialogContent>
         <Box
           sx={(theme) => ({
-            backgroundColor: theme.palette.grey[300],
+            backgroundColor: 'grayscale.200',
             boxShadow: `${theme.shadows[1]} inset`,
             padding: 2,
             display: 'flex',

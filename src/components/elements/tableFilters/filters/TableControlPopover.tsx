@@ -18,7 +18,7 @@ export interface TableControlPopoverProps {
   onReset: VoidFunction;
   onApply: VoidFunction;
   header: ReactNode;
-  label: ReactNode;
+  label: string;
   icon: ReactNode;
   applyLabel?: ReactNode;
 }
@@ -57,6 +57,7 @@ const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
       <TableFilterButton
         startIcon={icon}
         active={filterCount > 0}
+        aria-label={label}
         {...bindTrigger(popupState)}
       >
         {label}

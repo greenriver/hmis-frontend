@@ -1,28 +1,35 @@
+import { Box } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { ServicePeriod } from '../bulkServicesTypes';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import RouterLink from '@/components/elements/RouterLink';
+import TableRowActions from '@/components/elements/table/TableRowActions';
+import {
+  BASE_ACTION_COLUMN_DEF,
+  getViewClientMenuItem,
+  getViewEnrollmentMenuItem,
+} from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
+  clientBriefName,
   formatDateForDisplay,
   formatDateForGql,
   formatRelativeDate,
   parseAndFormatDate,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   BulkServicesClientSearchDocument,
   BulkServicesClientSearchQuery,
   BulkServicesClientSearchQueryVariables,
   ClientSortOption,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   projectId: string;
@@ -59,43 +66,37 @@ const BulkServicesTable: React.FC<Props> = ({
     [cocCode, projectId, serviceDate, serviceTypeId]
   );
 
+  const [canViewDob] = useHasRootPermissions(['canViewDob']);
+
+  const isTiny = useIsMobile('sm');
+
   const getColumnDefs = useCallback(
     (_rows: RowType[], loading?: boolean) => {
       const notEnrolledText = (
-        <NotCollectedText variant='inherit' color='text.disabled'>
+        <NotCollectedText variant='inherit' color='grayscale.main'>
           Not enrolled on {formatDateForDisplay(serviceDate, 'M/d')}
         </NotCollectedText>
       );
       return [
-        { ...CLIENT_COLUMNS.linkedId },
-        CLIENT_COLUMNS.first,
-        CLIENT_COLUMNS.last,
-        CLIENT_COLUMNS.dobAge,
+        { ...CLIENT_COLUMNS.name, sticky: 'left' },
+        ...(canViewDob ? [CLIENT_COLUMNS.dobAge] : []),
         {
           header: 'Entry Date',
+          key: 'entryDate',
           render: (row: RowType) => {
             if (!row.activeEnrollment) return notEnrolledText;
 
-            return (
-              <RouterLink
-                to={generateSafePath(
-                  EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-                  { clientId: row.id, enrollmentId: row.activeEnrollment.id }
-                )}
-                openInNew
-              >
-                {parseAndFormatDate(row.activeEnrollment.entryDate)}
-              </RouterLink>
-            );
+            return parseAndFormatDate(row.activeEnrollment.entryDate);
           },
         },
         {
           header: `Last ${serviceTypeName} Date`,
+          key: 'lastServiceDate',
           render: (row: RowType) => {
             if (!row.activeEnrollment) return notEnrolledText;
 
             const noService = (
-              <NotCollectedText variant='inherit' color='text.disabled'>
+              <NotCollectedText variant='inherit' color='grayscale.main'>
                 No Previous {serviceTypeName}
               </NotCollectedText>
             );
@@ -112,30 +113,50 @@ const BulkServicesTable: React.FC<Props> = ({
           },
         },
         {
-          header: `Assign ${serviceTypeName} for ${formatDateForDisplay(
-            serviceDate
-          )}`,
+          ...BASE_ACTION_COLUMN_DEF,
           width: '180px',
-          render: (row: RowType) => {
-            return (
-              <AssignServiceButton
-                client={row}
-                queryVariables={mutationQueryVariables}
-                tableLoading={loading}
-                disabled={anyRowsSelected}
-                disabledReason={
-                  anyRowsSelected
-                    ? 'Deselect checkboxes to assign clients individually.'
-                    : undefined
-                }
-                serviceTypeName={serviceTypeName}
-              />
-            );
-          },
+          tableCellProps: { sx: { p: 1, pl: 2 } },
+          // Prevent stickiness on tiny screens, so that non-sticky columns are still scrollable
+          sticky: isTiny ? undefined : 'right',
+          render: (row: RowType) => (
+            <TableRowActions
+              record={row}
+              recordName={clientBriefName(row)}
+              primaryAction={
+                <Box sx={{ width: '100%' }}>
+                  <AssignServiceButton
+                    client={row}
+                    queryVariables={mutationQueryVariables}
+                    tableLoading={loading}
+                    disabled={anyRowsSelected}
+                    disabledReason={
+                      anyRowsSelected
+                        ? 'Deselect checkboxes to assign clients individually.'
+                        : undefined
+                    }
+                    serviceTypeName={serviceTypeName}
+                  />
+                </Box>
+              }
+              menuActionConfigs={[
+                getViewClientMenuItem(row),
+                ...(row.activeEnrollment
+                  ? [getViewEnrollmentMenuItem(row.activeEnrollment, row)]
+                  : []),
+              ]}
+            />
+          ),
         },
       ] as ColumnDef<RowType>[];
     },
-    [serviceDate, serviceTypeName, mutationQueryVariables, anyRowsSelected]
+    [
+      anyRowsSelected,
+      canViewDob,
+      isTiny,
+      mutationQueryVariables,
+      serviceDate,
+      serviceTypeName,
+    ]
   );
 
   const defaultFilterValues = useMemo(() => {
@@ -154,6 +175,11 @@ const BulkServicesTable: React.FC<Props> = ({
     };
   }, [projectId, servicePeriod, serviceTypeId]);
 
+  const handleSelectedRowsChange = useCallback(
+    (rows: readonly string[]) => setAnyRowsSelected(rows.length > 0),
+    []
+  );
+
   return (
     <SsnDobShowContextProvider>
       <GenericTableWithData<
@@ -171,7 +197,7 @@ const BulkServicesTable: React.FC<Props> = ({
         }}
         loadingVariant='linear'
         selectable='checkbox'
-        onChangeSelectedRowIds={(rows) => setAnyRowsSelected(rows.length > 0)}
+        onChangeSelectedRowIds={handleSelectedRowsChange}
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
         getColumnDefs={getColumnDefs}

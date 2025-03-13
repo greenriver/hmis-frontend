@@ -3,7 +3,7 @@ import { Divider, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
-import { CommonCard } from '@/components/elements/CommonCard';
+import CommonCard from '@/components/elements/CommonCard';
 
 import DuplicateFormButton from '@/modules/admin/components/forms/DuplicateFormButton';
 import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
@@ -39,7 +39,7 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
     : undefined;
 
   return (
-    <CommonCard title='Actions' titleComponent='h5'>
+    <CommonCard title='Actions' TitleComponent='h5'>
       <Stack gap={1.5}>
         <ButtonLink
           to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {

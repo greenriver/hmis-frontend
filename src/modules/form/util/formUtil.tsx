@@ -39,6 +39,7 @@ import {
   ItemMap,
   LinkIdMap,
   LocalConstants,
+  PartialLinkIdMap,
   TypedObject,
 } from '../types';
 
@@ -73,6 +74,8 @@ import {
   Maybe,
   NoYesReasonsForMissingData,
   PickListOption,
+  PickListOptionFieldsFragment,
+  PickListType,
   RelatedRecordType,
   RelationshipToHoH,
   ValueBound,
@@ -83,6 +86,15 @@ import { ensureArray } from '@/utils/arrays';
 // invalid value here that the browser doesn't understand to prevent this behavior. This
 // works in current versions of chrome as of 2023 but is not valid HTML.
 export const formAutoCompleteOff = 'do-not-autocomplete';
+
+export const invertDependencyMap = (depMap: LinkIdMap): PartialLinkIdMap =>
+  Object.entries(depMap).reduce((acc, [linkId, childLinkIds]) => {
+    const result = { ...acc };
+    childLinkIds.forEach((childLinkId) => {
+      result[childLinkId] = [...(result[childLinkId] || []), linkId];
+    });
+    return result;
+  }, {} as LinkIdMap);
 
 export const isDataNotCollected = (val?: any): boolean => {
   if (typeof val === 'string') {
@@ -115,13 +127,31 @@ export const hasMeaningfulValue = (value: any): boolean => {
   return true;
 };
 
+/**
+ * Resolves a GQL Enum name into an array of PickListOptions
+ * that can be used for selection components (dropdowns, radio buttons, etc).
+ *
+ * Optionally specify whether to include "Data Not Collected" (99) equivalent in the list,
+ * if the enum contains it.
+ *
+ * There is a special case to always exclude 99 for the RelationshipToHoH picklist,
+ * because 99 is not a valid value for collection, but we keep it in the GQL Enum
+ * because we need to treat it as a valid value for display. This is because there may
+ * be unfixable migrated-in data with 99s or nulls, and we want to display those as
+ * 'Data not collected' rather than 'Invalid'.
+ *
+ * @param pickListReference - The name of the GraphQL Enum to resolve as a pick list
+ * @param excludeDataNotCollected - Whether to exlude Data Not Collected from the pick list
+ * @returns The resolved array of PickListOptions, or null if pick list reference was not found.
+ */
 export const localResolvePickList = (
   pickListReference: string,
   excludeDataNotCollected = false
 ): PickListOption[] | null => {
   if (isHmisEnum(pickListReference)) {
     let values = Object.entries(HmisEnums[pickListReference]);
-    if (excludeDataNotCollected) {
+
+    if (excludeDataNotCollected || pickListReference === 'RelationshipToHoH') {
       values = values.filter(([code]) => !isDataNotCollected(code));
     }
     return values
@@ -510,13 +540,11 @@ export const getAutofillComparisonValue = (
 };
 
 /**
- * Autofill values based on changed item.
+ * Calculates autofill values based on item and values
  * If there are multiple autofill rules, the first matching one is used
  * ("matching" meaning autofill_when evaluated to true).
  *
- * Changes `values` in place.
- *
- * @return boolen true if values changed
+ * @returns {value} object or null if no autofill value could be calculated
  */
 type AutofillValuesArgs = {
   item: FormItem;
@@ -531,15 +559,15 @@ export const autofillValues = ({
   itemMap,
   localConstants,
   viewOnly,
-}: AutofillValuesArgs): boolean => {
-  if (!item.autofillValues) return false;
+}: AutofillValuesArgs): { value: any } | null => {
+  if (!item.autofillValues) return null;
 
-  // use `some` to stop iterating when true is returned
-  const autofilled = item.autofillValues.some((av) => {
+  // Process rules until we find one that applies
+  for (const av of item.autofillValues) {
     // Skip autofills that should not run on read-only views
-    if (viewOnly && !av.autofillReadonly) return false;
+    if (viewOnly && !av.autofillReadonly) continue;
 
-    // Evaluate enableWhen conditions, if present
+    // Evaluate enableWhen conditions, if present. Treat no enableWhen conditions as true
     if (av.autofillWhen && av.autofillWhen.length > 0) {
       const booleans = av.autofillWhen.map((en) =>
         evaluateEnableWhen({
@@ -556,38 +584,14 @@ export const autofillValues = ({
           ? booleans.some(Boolean)
           : booleans.every(Boolean);
 
-      if (!shouldAutofillValue) return false;
+      // break loop if the condition was not satisfied
+      if (!shouldAutofillValue) continue;
     }
 
-    const newValue = getAutofillComparisonValue(av, values, item);
-
-    if (!areEqualValues(values[item.linkId], newValue)) {
-      // console.debug(
-      //   `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
-      //     values[item.linkId]
-      //   )} to ${JSON.stringify(newValue)}`,
-      //   av
-      // );
-      values[item.linkId] = newValue;
-    }
-
-    // Stop iterating through autofill values
-    return true;
-  });
-
-  // For read-only items that are displayed on editable forms, the autofill value should nullify when its conditions are no longer met.
-  // For example, a read-only field showing the sum of 2 input fields should be cleared if the inputs are cleared.
-  // (In that example, we assume the autofill rule for summing has an autofill_when condition requiring the inputs to be present)
-  if (
-    !autofilled &&
-    (item.readOnly || item.type === ItemType.Display) &&
-    !viewOnly
-  ) {
-    values[item.linkId] = undefined;
-    return true;
+    const computed = getAutofillComparisonValue(av, values, item);
+    if (!isNil(computed)) return { value: computed };
   }
-
-  return autofilled;
+  return null;
 };
 
 const getBoundValue = (
@@ -901,21 +905,34 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
   return result;
 };
 
-export const getAllChildLinkIds = (item: FormItem): string[] => {
+export const walkDefinitionItems = (
+  root: FormItem | FormDefinitionJson,
+  cb: (i: FormItem) => void
+) => {
   function recursiveFind(items: FormItem[], ids: string[]) {
     items.forEach((item) => {
       if (Array.isArray(item.item)) {
         recursiveFind(item.item, ids);
       }
 
-      if (isQuestionItem(item)) {
-        ids.push(item.linkId);
-      }
+      cb(item);
     });
   }
 
   const result: string[] = [];
-  recursiveFind(item.item || [], result);
+  recursiveFind(root.item || [], result);
+  return result;
+};
+
+export const getAllChildLinkIds = (
+  root: FormItem | FormDefinitionJson,
+  { onlyQuestions = true }: { onlyQuestions?: boolean } = {}
+): string[] => {
+  const result: string[] = [];
+  walkDefinitionItems(root, (item) => {
+    if (onlyQuestions === false || (onlyQuestions && isQuestionItem(item)))
+      result.push(item.linkId);
+  });
   return result;
 };
 
@@ -1034,6 +1051,7 @@ export const buildBoundsDependencyMap = (itemMap: ItemMap): LinkIdMap => {
 /**
  * List of link IDs that should be disabled, based on provided form values
  */
+// Note: this is only used by OccurrencePointForm
 export const getDisabledLinkIds = ({
   itemMap,
   values,
@@ -1358,71 +1376,6 @@ export const createHudValuesForSubmit = (
     includeMissingKeys: 'AS_HIDDEN',
   });
 
-type GetDependentItemsDisabledStatus = {
-  changedLinkIds: string[];
-  localValues: FormValues;
-  enabledDependencyMap: LinkIdMap;
-  itemMap: ItemMap;
-  localConstants: LocalConstants;
-};
-
-export const getDependentItemsDisabledStatus = ({
-  changedLinkIds,
-  localValues,
-  enabledDependencyMap,
-  itemMap,
-  localConstants,
-}: GetDependentItemsDisabledStatus) => {
-  const enabledLinkIds: string[] = [];
-  const disabledLinkIds: string[] = [];
-  // If none of these are dependencies, return immediately
-  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id]))
-    return { enabledLinkIds, disabledLinkIds };
-
-  changedLinkIds.forEach((changedLinkId) => {
-    if (!enabledDependencyMap[changedLinkId]) return;
-
-    // iterate through all items that are dependent on this item,
-    // and see if they need to be enabled or disabled
-    enabledDependencyMap[changedLinkId]
-      .filter((id) => !!itemMap[id]) // can happen if removed because of a 'rule'. ignore.
-      .forEach((dependentLinkId) => {
-        const enabled = shouldEnableItem({
-          item: itemMap[dependentLinkId],
-          values: localValues,
-          itemMap,
-          localConstants,
-        });
-        if (enabled) {
-          enabledLinkIds.push(dependentLinkId);
-        } else {
-          disabledLinkIds.push(dependentLinkId);
-          // if the disabled field is hidden, nullify its value (so that related enableWhens dont consider it present).
-          // this needs to happen here, rather than in the caller, because subsequent iterations of this loop
-          // may depend on the presence of this item.
-          const disabledItem = itemMap[dependentLinkId];
-          if (
-            disabledItem.disabledDisplay !== DisabledDisplay.ProtectedWithValue
-          ) {
-            localValues[dependentLinkId] = null;
-            // All its children should get emptied too
-            if (disabledItem.item) {
-              const childrenLinkIds = getAllChildLinkIds(disabledItem);
-              childrenLinkIds.forEach((hiddenChildId) => {
-                localValues[hiddenChildId] = null;
-              });
-            }
-          }
-        }
-      });
-  });
-
-  return {
-    enabledLinkIds: uniq(enabledLinkIds),
-    disabledLinkIds: uniq(disabledLinkIds),
-  };
-};
-
 const underscoreKey = (v: any, k: string) => k.startsWith('_');
 
 // Remove any keys that start with "_" (those are frontend-specific values like keys that shouldnt be sent)
@@ -1539,6 +1492,13 @@ export const parseOccurrencePointFormDefinition = (
   };
 };
 
+export const itemHasRemotePicklist = (item: FormItem): boolean =>
+  !!item.pickListReference &&
+  Object.values<string>(PickListType).includes(item.pickListReference);
+
+export const formHasAnyRemotePicklists = (itemMap: ItemMap): boolean =>
+  Object.values(itemMap).some(itemHasRemotePicklist);
+
 export const getFormStepperItems = (
   formDefinition: FormDefinitionFieldsFragment | undefined | null,
   itemMap: ItemMap | undefined | null,
@@ -1546,7 +1506,7 @@ export const getFormStepperItems = (
   localConstants: LocalConstants,
   minGroupsToDisplay: number = 3
 ) => {
-  if (!formDefinition || !itemMap) return false;
+  if (!formDefinition || !itemMap) return undefined;
 
   let items = formDefinition.definition.item.filter(
     (i) => i.type === ItemType.Group && !i.hidden
@@ -1561,7 +1521,7 @@ export const getFormStepperItems = (
       localConstants: localConstants || {},
     })
   );
-  if (items.length < minGroupsToDisplay) return false;
+  if (items.length < minGroupsToDisplay) return undefined;
 
   return items;
 };
@@ -1584,3 +1544,87 @@ export function findOptionLabel(
   }
   return option.code || '';
 }
+
+// Given a CHOICE or OPEN_CHOICE item and an initial form value, provide an 'enriched' representation of the value.
+//
+// Returns an object with the following attributes:
+//  'enrichedValue' is the PickListOption representation, e.g. 'yes' => { code: 'yes', label: 'Yes', groupLabel: 'Something' }
+//  'initialSelectedValue' is the initialSelected option, if any (only present if the defaultValue was missing)
+//
+// Returns an empty object if the value does not need to be enriched
+export const getEnrichedValueForChoiceItem = ({
+  remotePickListMap,
+  item,
+  defaultValue,
+  handleError,
+}: {
+  remotePickListMap: Record<string, PickListOptionFieldsFragment[]>;
+  item: FormItem;
+  defaultValue: any;
+  setInitialSelected?: boolean;
+  handleError: (message: string) => void;
+}): {
+  enrichedValue?: PickListOption | PickListOption[];
+  initialSelectedValue?: PickListOption | PickListOption[];
+} => {
+  const { pickListReference, pickListOptions } = item;
+  if (!pickListReference && !pickListOptions) return {}; // nothing to enrich
+
+  // Try to locally resolve the pick list (either pickListOptions or a "local" reference from codegen'd enums).
+  let resolvedPicklist = resolveOptionList(item);
+
+  // Try to resolve the list from the remotePickListMap
+  if (
+    !resolvedPicklist &&
+    pickListReference &&
+    Object.values<string>(PickListType).includes(pickListReference)
+  ) {
+    resolvedPicklist = remotePickListMap[pickListReference];
+  }
+
+  // Failed to resolve the pick list. Report to sentry.
+  if (!resolvedPicklist) {
+    handleError(`Could not resolve pick list "${pickListReference}"`);
+    return {};
+  }
+
+  // Get the 'code' of the default value.
+  // Value may already be in Picklist shape with only the code, because of createInitialValuesFromRecord.
+  // in that case we still want to try to populate it with the full option, based on the code.
+  let valueCode = defaultValue;
+  if (isPickListOption(valueCode)) valueCode = valueCode.code;
+  if (isPickListOptionArray(valueCode))
+    valueCode = valueCode.map((o) => o.code);
+
+  // if there is no value, populate field with the default option (initialSelected) and return
+  if (!valueCode || (Array.isArray(valueCode) && valueCode.length === 0)) {
+    const initialSelected = resolvedPicklist.filter((o) => o.initialSelected);
+    if (initialSelected.length === 0) return {}; // nothing to enrich
+
+    // Return the initialSelected option(s)
+    const initialSelectedValue = item.repeats
+      ? initialSelected
+      : initialSelected[0];
+    return { initialSelectedValue };
+  }
+
+  // Map the value code(s) to the corresponding picklist option(s)
+  let found;
+  if (Array.isArray(valueCode)) {
+    found = valueCode
+      .map((value) => resolvedPicklist.find((option) => option.code === value))
+      .filter((option) => !!option);
+  } else {
+    found = resolvedPicklist.find((option) => option.code === valueCode);
+  }
+
+  if (!found || ensureArray(found).length !== ensureArray(valueCode).length) {
+    // Resolved Pick List does not contain a code that matches this value. This can occur when
+    // migrated-in data had different values, or when picklist options have been removed from a form (and we are editing a form with old values).
+    // No need to send this to sentry in this case, just return empty to leave the values as-is. The value will still display in the form.
+
+    // console.debug(`Pick list "${pickListReference}" does not contain code "${valueCode}"`);
+    return {};
+  }
+  return { enrichedValue: found };
+};

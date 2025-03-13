@@ -1,6 +1,5 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LogoutIcon from '@mui/icons-material/Logout';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import ImpersonatedIcon from '@mui/icons-material/SupervisedUserCircle';
 import {
@@ -19,6 +18,7 @@ import {
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import React, { ReactNode, useMemo } from 'react';
+import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
@@ -52,7 +52,7 @@ const UserMenu: React.FC = () => {
           key='manage account'
         >
           <ListItemIcon>
-            <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
+            <OpenInNewIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>Manage Account</ListItemText>
         </MenuItem>
@@ -68,7 +68,7 @@ const UserMenu: React.FC = () => {
           key='warehouse'
         >
           <ListItemIcon>
-            <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
+            <OpenInNewIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>{warehouseName}</ListItemText>
         </MenuItem>

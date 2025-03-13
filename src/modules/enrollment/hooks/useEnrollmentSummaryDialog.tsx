@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogProps,
   DialogTitle,
+  Paper,
 } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -20,21 +21,24 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragment>[] = [
   {
     header: 'Enrollment Period',
+    key: 'period',
     render: (e) => entryExitRange(e),
   },
   {
     header: 'Project',
-    linkTreatment: true,
+    key: 'project',
     render: (e) => e.projectName,
   },
   {
     header: 'Project Type',
+    key: 'projectType',
     render: (e) => (
       <HmisEnum value={e.projectType} enumMap={HmisEnums.ProjectType} />
     ),
   },
   {
     header: 'Move in Date',
+    key: 'moveInDate',
     render: (e) => parseAndFormatDate(e.moveInDate),
   },
 ];
@@ -58,25 +62,29 @@ const useEnrollmentSummaryDialog = ({
       return (
         <CommonDialog
           fullWidth
-          maxWidth='md'
+          maxWidth='lg'
           {...props}
           open={!!dialogOpen}
           onClose={closeDialog}
         >
           <DialogTitle>Open Enrollment Summary</DialogTitle>
           <DialogContent sx={{ my: 2 }}>
-            <GenericTable<EnrollmentSummaryFieldsFragment>
-              columns={baseColumns}
-              rows={enrollmentSummary}
-              rowLinkTo={(row) =>
-                row.canViewEnrollment && clientId
-                  ? generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
-                      enrollmentId: row.id,
-                      clientId,
-                    })
-                  : ''
-              }
-            />
+            <Paper>
+              <GenericTable<EnrollmentSummaryFieldsFragment>
+                columns={baseColumns}
+                rows={enrollmentSummary}
+                rowLinkTo={(row) =>
+                  row.canViewEnrollment && clientId
+                    ? generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
+                        enrollmentId: row.id,
+                        clientId,
+                      })
+                    : undefined
+                }
+                rowActionTitle='View Enrollment'
+                rowName={(row) => `Enrollment at ${row.projectName}`}
+              />
+            </Paper>
           </DialogContent>
           <DialogActions>
             <Button color='grayscale' onClick={closeDialog}>
