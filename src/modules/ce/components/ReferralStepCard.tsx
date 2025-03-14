@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReferralStepCardInner from './ReferralStepCardInner';
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
-import CommonCard from '@/components/elements/CommonCard';
 import LoadingButton from '@/components/elements/LoadingButton';
-import { CompletedIcon, GoToIcon } from '@/components/elements/SemanticIcons';
+import { GoToIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
@@ -18,7 +18,8 @@ import { generateSafePath } from '@/utils/pathEncoding';
 interface Props {
   step: CeReferralStepSummaryFieldsFragment;
 }
-const ReferralStepSummary: React.FC<Props> = ({ step }) => {
+
+const ReferralStepCard: React.FC<Props> = ({ step }) => {
   const { projectId, opportunityId } = useSafeParams() as {
     projectId: string;
     opportunityId: string;
@@ -27,31 +28,6 @@ const ReferralStepSummary: React.FC<Props> = ({ step }) => {
   const navigate = useNavigate();
 
   const { name, status } = step;
-
-  const sx = useMemo(() => {
-    switch (status) {
-      case CeReferralStepStatus.Available:
-      case CeReferralStepStatus.InProgress:
-        return {
-          borderColor: 'primary.main',
-          borderLeftWidth: '5px',
-        };
-      case CeReferralStepStatus.Completed:
-        return {
-          borderColor: 'grayscale.light',
-          borderLeftWidth: '5px',
-          backgroundColor: 'grayscale.surface',
-        };
-      case CeReferralStepStatus.Unavailable:
-        return {
-          borderColor: 'borders.light',
-          borderLeftWidth: '5px',
-          color: 'text.secondary',
-        };
-      default:
-        return {};
-    }
-  }, [status]);
 
   const [startStepMutation, { loading, error }] =
     useStartCeReferralStepMutation({
@@ -121,14 +97,11 @@ const ReferralStepSummary: React.FC<Props> = ({ step }) => {
 
   if (error) throw error;
 
-  const icon =
-    status === CeReferralStepStatus.Completed ? CompletedIcon : undefined;
-
   return (
-    <CommonCard title={name} Icon={icon} sx={sx} actions={action}>
+    <ReferralStepCardInner name={name} status={status} action={action}>
       <ReferralStepAssignee step={step} />
-    </CommonCard>
+    </ReferralStepCardInner>
   );
 };
 
-export default ReferralStepSummary;
+export default ReferralStepCard;

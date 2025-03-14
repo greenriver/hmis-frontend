@@ -2,7 +2,7 @@ import { Divider, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import useSearchParamsState from '@/hooks/useSearchParamState';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
-import ReferralStepSummary from '@/modules/ce/components/ReferralStepSummary';
+import ReferralStepCard from '@/modules/ce/components/ReferralStepCard';
 import ReferralWayfinder from '@/modules/ce/components/ReferralWayfinder';
 import { CeReferralStepStatus } from '@/types/gqlTypes';
 
@@ -40,7 +40,7 @@ const ReferralSteps: React.FC<Props> = () => {
           Tasks Complete
         </Typography>
         {referral.steps.map((s) => (
-          <ReferralStepSummary key={s.id} step={s} />
+          <ReferralStepCard key={s.id} step={s} />
         ))}
       </Stack>
       <ReferralWayfinder
