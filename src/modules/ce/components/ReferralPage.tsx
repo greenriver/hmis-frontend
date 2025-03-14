@@ -107,6 +107,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
           >
             Details
           </ButtonLink>
+          <Divider orientation='vertical' flexItem />
           <ButtonLink
             to={generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
               projectId,
