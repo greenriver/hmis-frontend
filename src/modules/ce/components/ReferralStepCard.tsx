@@ -41,6 +41,9 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
         if (data.startCeReferralStep?.step) {
           const step = data.startCeReferralStep?.step;
 
+          // The step returned from the mutation is now auto added to the Apollo cache.
+          // Here we are writing it to the cache specifically for the GetCeReferralStepDocument query,
+          // so that when we navigate to the Step page, we don't do a double-fetch for the data we already have.
           cache.writeQuery({
             query: GetCeReferralStepDocument,
             data: {
