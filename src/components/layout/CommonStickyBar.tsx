@@ -9,7 +9,16 @@ type Props = AppBarProps & {
   isStickyOnMobile?: boolean;
 };
 
-const CommonAppBar: React.FC<Props> = ({
+/**
+ * Used when we need a sticky bar at the top of the screen below the app header, including
+ * - the nav bar containing breadcrumbs
+ * - sticky headers inside of dashboard content
+ *
+ * Can be stacked, with the help of the `top` prop.
+ *
+ * Uses MUI's AppBar internally, but overrides the component so it's just a `div` and not a `header`
+ */
+const CommonStickyBar: React.FC<Props> = ({
   height,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   isStickyOnMobile = false,
@@ -48,4 +57,4 @@ const CommonAppBar: React.FC<Props> = ({
     </AppBar>
   );
 };
-export default CommonAppBar;
+export default CommonStickyBar;

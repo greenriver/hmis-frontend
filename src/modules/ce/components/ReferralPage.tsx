@@ -6,7 +6,7 @@ import { Outlet, useOutletContext } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
 import { DetailsIcon } from '@/components/elements/SemanticIcons';
-import CommonAppBar from '@/components/layout/CommonAppBar';
+import CommonStickyBar from '@/components/layout/CommonStickyBar';
 import {
   CONTEXT_HEADER_HEIGHT,
   REFERRAL_HEADER_HEIGHT,
@@ -60,7 +60,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <CommonAppBar height={REFERRAL_HEADER_HEIGHT}>
+      <CommonStickyBar height={REFERRAL_HEADER_HEIGHT}>
         <Stack direction='column' gap={2}>
           <Stack
             direction='row'
@@ -88,8 +88,8 @@ const ReferralPage: React.FC<Props> = ({}) => {
             </Typography>
           </Stack>
         </Stack>
-      </CommonAppBar>
-      <CommonAppBar
+      </CommonStickyBar>
+      <CommonStickyBar
         top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT + REFERRAL_HEADER_HEIGHT}
       >
         <Stack direction='row' alignItems='center' gap={1}>
@@ -140,7 +140,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
             </ButtonLink>
           ))}
         </Stack>
-      </CommonAppBar>
+      </CommonStickyBar>
       <Container maxWidth='lg' sx={{ py: 4 }}>
         <Outlet context={outletContext} />
       </Container>

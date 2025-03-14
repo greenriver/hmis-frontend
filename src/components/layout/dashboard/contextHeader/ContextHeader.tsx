@@ -4,7 +4,7 @@ import { Box, Button } from '@mui/material';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import CommonAppBar from '../../CommonAppBar';
+import CommonStickyBar from '../../CommonStickyBar';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -27,7 +27,7 @@ interface Props {
 export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
   children,
 }) => (
-  <CommonAppBar
+  <CommonStickyBar
     height={CONTEXT_HEADER_HEIGHT}
     top={STICKY_BAR_HEIGHT}
     isStickyOnMobile={true}
@@ -37,7 +37,7 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
     }}
   >
     {children}
-  </CommonAppBar>
+  </CommonStickyBar>
 );
 
 const ContextHeader: React.FC<Props> = ({
