@@ -91,6 +91,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
       </CommonStickyBar>
       <CommonStickyBar
         top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT + REFERRAL_HEADER_HEIGHT}
+        sx={{ py: 1 }}
       >
         <Stack direction='row' alignItems='center' gap={1}>
           <ButtonLink
