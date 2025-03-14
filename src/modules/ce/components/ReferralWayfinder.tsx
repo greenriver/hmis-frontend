@@ -2,7 +2,7 @@ import React from 'react';
 import WayfindingDialog from '@/components/elements/navigation/WayfindingDialog';
 import { DeclinedIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useReferralContext } from '@/modules/ce/components/ReferralNav';
+import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import { CeReferralStatus } from '@/types/gqlTypes';

@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import React from 'react';
-import { useReferralContext } from '@/modules/ce/components/ReferralNav';
+import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import { CeReferralStatus } from '@/types/gqlTypes';
 
 interface Props {}

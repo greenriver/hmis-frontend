@@ -54,7 +54,7 @@ import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNo
 import Opportunities from '@/modules/ce/components/Opportunities';
 import Opportunity from '@/modules/ce/components/Opportunity';
 import ReferralDetails from '@/modules/ce/components/ReferralDetails';
-import ReferralNav from '@/modules/ce/components/ReferralNav';
+import ReferralPage from '@/modules/ce/components/ReferralPage';
 import ReferralStep from '@/modules/ce/components/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/ReferralSteps';
 import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
@@ -446,7 +446,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canViewCoordinatedEntry']}
                 otherwise={<NotFound />}
               >
-                <ReferralNav />
+                <ReferralPage />
               </RootPermissionsFilter>
             ),
             children: [

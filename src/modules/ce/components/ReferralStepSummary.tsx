@@ -5,7 +5,7 @@ import CommonCard from '@/components/elements/CommonCard';
 import LoadingButton from '@/components/elements/LoadingButton';
 import { CompletedIcon, GoToIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useReferralContext } from '@/modules/ce/components/ReferralNav';
+import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {

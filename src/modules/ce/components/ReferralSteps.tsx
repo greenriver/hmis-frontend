@@ -1,7 +1,7 @@
 import { Divider, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import useSearchParamsState from '@/hooks/useSearchParamState';
-import { useReferralContext } from '@/modules/ce/components/ReferralNav';
+import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepSummary from '@/modules/ce/components/ReferralStepSummary';
 import ReferralWayfinder from '@/modules/ce/components/ReferralWayfinder';
 import { CeReferralStepStatus } from '@/types/gqlTypes';

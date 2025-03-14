@@ -26,7 +26,11 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {}
 
-const ReferralNav: React.FC<Props> = ({}) => {
+/**
+ * Provides navigational context for a single Referral, like buttons to move between tasks, notes/referral history, etc.
+ * Uses react router outlet to render sub-pages.
+ */
+const ReferralPage: React.FC<Props> = ({}) => {
   const { projectId, opportunityId, referralId } = useSafeParams() as {
     projectId: string;
     opportunityId: string;
@@ -147,4 +151,4 @@ const ReferralNav: React.FC<Props> = ({}) => {
 export type ReferralContext = { referral: CeReferralFieldsFragment };
 export const useReferralContext = () => useOutletContext<ReferralContext>();
 
-export default ReferralNav;
+export default ReferralPage;
