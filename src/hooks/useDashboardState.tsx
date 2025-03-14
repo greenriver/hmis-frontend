@@ -4,7 +4,7 @@ import { useMobileMenu } from '@/components/layout/nav/useMobileMenuContext';
 import {
   FOCUS_MODE_ROUTES,
   HIDE_NAV_ROUTES,
-  FULL_SCREEN_ROUTES,
+  NO_PADDING_ROUTES,
 } from '@/routes/routes';
 
 export function useDashboardState() {
@@ -42,15 +42,15 @@ export function useDashboardState() {
     setDesktopNavState(true);
   }, []);
 
-  const fullScreen = useMemo(
-    () => FULL_SCREEN_ROUTES.includes(currentPath || ''),
+  const noPadding = useMemo(
+    () => NO_PADDING_ROUTES.includes(currentPath || ''),
     [currentPath]
   );
 
   return {
     currentPath,
-    focusMode,
-    fullScreen,
+    focusMode, // Auto-hide left nav when the page is opened (like assessments)
+    noPadding, // Remove default padding from DashboardContentContainer (like form builder)
     desktopNavIsOpen,
     mobileNavIsOpen,
     handleCloseMobileMenu,

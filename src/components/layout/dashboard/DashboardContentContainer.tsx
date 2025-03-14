@@ -27,7 +27,7 @@ interface Props {
   handleOpenMobileMenu: VoidFunction;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
-  fullScreen?: boolean;
+  noPadding?: boolean; // Remove padding when the page contents need to go all the way to the edges
 }
 
 const DashboardContentContainer: React.FC<Props> = ({
@@ -44,7 +44,7 @@ const DashboardContentContainer: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   navLabel,
-  fullScreen,
+  noPadding,
 }) => {
   const theme = useTheme();
   const maxPageWidth = useMaxPageWidth();
@@ -60,7 +60,7 @@ const DashboardContentContainer: React.FC<Props> = ({
   const isMobile = useIsMobile();
 
   const mainSx = useMemo(() => {
-    if (fullScreen) {
+    if (noPadding) {
       return {
         p: 0,
         maxWidth: '100%',
@@ -72,7 +72,7 @@ const DashboardContentContainer: React.FC<Props> = ({
       px: { xs: 1, sm: 3, lg: 4 },
       maxWidth: `${maxPageWidth}px`,
     };
-  }, [fullScreen, maxPageWidth]);
+  }, [noPadding, maxPageWidth]);
 
   return (
     <Box

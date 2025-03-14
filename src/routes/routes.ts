@@ -160,8 +160,8 @@ export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
 } = adminDashboardRoutes;
 
-// Routes that live "under" one of the dashboards, but their content should be allowed to take up the full screen
-export const FULL_SCREEN_ROUTES: string[] = [
+// Routes that live "under" one of the dashboards, but they need to take up the full screen, so they shouldn't get the default padding applied.
+export const NO_PADDING_ROUTES: string[] = [
   ProjectDashboardRoutes.REFERRAL,
   ProjectDashboardRoutes.REFERRAL_DETAILS,
   ProjectDashboardRoutes.REFERRAL_STEPS,

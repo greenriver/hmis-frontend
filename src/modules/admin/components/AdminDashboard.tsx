@@ -98,7 +98,7 @@ export const AdminLandingPage = () => {
 
 const AdminDashboard: React.FC = () => {
   const [access] = useRootPermissions();
-  const { fullScreen, ...dashboardState } = useDashboardState();
+  const { noPadding, ...dashboardState } = useDashboardState();
   const breadCrumbConfig = useAdminBreadcrumbConfig();
   const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
 
@@ -113,11 +113,11 @@ const AdminDashboard: React.FC = () => {
           access={access}
         />
       }
-      fullScreen={fullScreen}
+      noPadding={noPadding}
       navLabel={'Admin'}
       {...dashboardState}
     >
-      <Container maxWidth={fullScreen ? false : 'xl'} disableGutters>
+      <Container maxWidth={noPadding ? false : 'xl'} disableGutters>
         <Outlet />
       </Container>
     </DashboardContentContainer>
