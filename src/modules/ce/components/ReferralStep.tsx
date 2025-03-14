@@ -90,12 +90,12 @@ const ReferralStep: React.FC<Props> = ({}) => {
         {status === CeReferralStepStatus.InProgress && (
           <DynamicForm
             definition={formDefinition.definition}
-            onSubmit={(event) => {
+            onSubmit={(input) => {
               submit({
                 variables: {
                   referralId: referralId,
                   stepId: stepId,
-                  input: event.valuesByLinkId,
+                  input: input.valuesByLinkId,
                 },
               });
             }}

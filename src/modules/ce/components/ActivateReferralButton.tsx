@@ -23,11 +23,17 @@ const ActivateReferralButton: React.FC<Props> = ({
         participants: [], // hard-coded for now
       },
     },
-    onCompleted: () => {
-      cache.evict({
-        id: `CeOpportunity:${opportunityId}`,
-        fieldName: 'activeReferral',
-      });
+    onCompleted: (data) => {
+      if (data.createCeReferral?.referral) {
+        cache.modify({
+          id: `CeOpportunity:${opportunityId}`,
+          fields: {
+            activeReferral() {
+              return data.createCeReferral?.referral;
+            },
+          },
+        });
+      }
     },
   });
 

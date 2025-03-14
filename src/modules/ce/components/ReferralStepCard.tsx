@@ -7,10 +7,12 @@ import { GoToIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
+import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralStepStatus,
   CeReferralStepSummaryFieldsFragment,
+  GetCeReferralStepDocument,
   useStartCeReferralStepMutation,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -36,7 +38,19 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
         stepId: step.stepId || '',
       },
       onCompleted: (data) => {
-        if (!!data.startCeReferralStep?.step) {
+        if (data.startCeReferralStep?.step) {
+          const step = data.startCeReferralStep?.step;
+
+          cache.writeQuery({
+            query: GetCeReferralStepDocument,
+            data: {
+              ceReferralStep: step,
+            },
+            variables: {
+              id: step.stepId,
+            },
+          });
+
           navigate(
             generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
               projectId,
