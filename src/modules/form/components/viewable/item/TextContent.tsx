@@ -12,7 +12,6 @@ export interface TextContentProps<T extends ReactNode> {
   label: ReactNode;
   value: T;
   horizontal?: boolean;
-  hasValue?: (value: T) => boolean;
   renderValue?: (value: T) => ReactNode;
   'data-testid'?: string;
 }

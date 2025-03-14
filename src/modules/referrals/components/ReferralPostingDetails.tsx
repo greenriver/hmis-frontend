@@ -65,6 +65,7 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
         <YesNoDisplay
           booleanValue={referralPosting.chronic}
           fallback={<NotCollectedText variant='body2' />}
+          mode='tri_state' // display missing as Not Collected
         />,
       ],
       [
@@ -80,6 +81,7 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
         <YesNoDisplay
           booleanValue={referralPosting.needsWheelchairAccessibleUnit}
           fallback={<NotCollectedText variant='body2' />}
+          mode='tri_state' // display missing as Not Collected
         />,
       ],
     ].filter((ary): ary is [string, ReactNode] => !!ary[1]);

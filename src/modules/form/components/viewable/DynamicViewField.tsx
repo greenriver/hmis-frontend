@@ -1,6 +1,5 @@
 import { Card, Divider, Stack, Typography } from '@mui/material';
 import { formatDuration } from 'date-fns';
-import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
 
 import { DynamicViewFieldProps } from '../../types';
@@ -93,18 +92,12 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         />
       );
     case ItemType.Boolean:
-      // value could be true/false (from HMIS form) or "0"/"1" (from external forms), so pass as both boolean and string
+      // value could be true/false (from HMIS form) or "0"/"1" (from external forms), so pass as both boolean and string.
+      // null/undefined value displays as 'no'.
       return (
         <TextContent
           {...commonProps}
-          value={
-            <YesNoDisplay
-              booleanValue={value}
-              stringValue={value}
-              fallback={<NotCollectedText variant='body2' />}
-            />
-          }
-          hasValue={(val) => !isNil(val)}
+          value={<YesNoDisplay booleanValue={value} stringValue={value} />}
         />
       );
     case ItemType.TimeOfDay:
@@ -156,7 +149,6 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       );
     case ItemType.OpenChoice:
     case ItemType.Choice:
-      // if ( item.linkId ==='q_4_03_2' ) console.info('choice', item.linkId, value, item.type)
       if (isDataNotCollected(value?.code)) {
         return (
           <LabelWithContent {...commonProps}>
