@@ -53,7 +53,10 @@ import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNo
 
 import Opportunities from '@/modules/ce/components/Opportunities';
 import Opportunity from '@/modules/ce/components/Opportunity';
-import Referral from '@/modules/ce/components/Referral';
+import ReferralDetails from '@/modules/ce/components/ReferralDetails';
+import ReferralPage from '@/modules/ce/components/ReferralPage';
+import ReferralStep from '@/modules/ce/components/ReferralStep';
+import ReferralSteps from '@/modules/ce/components/ReferralSteps';
 import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
 import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
 import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
@@ -436,18 +439,32 @@ export const protectedRoutes: RouteNode[] = [
               </RootPermissionsFilter>
             ),
           },
+          {
+            path: ProjectDashboardRoutes.REFERRAL,
+            element: (
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']}
+                otherwise={<NotFound />}
+              >
+                <ReferralPage />
+              </RootPermissionsFilter>
+            ),
+            children: [
+              {
+                path: ProjectDashboardRoutes.REFERRAL_DETAILS,
+                element: <ReferralDetails />,
+              },
+              {
+                path: ProjectDashboardRoutes.REFERRAL_STEPS,
+                element: <ReferralSteps />,
+              },
+              {
+                path: ProjectDashboardRoutes.REFERRAL_STEP,
+                element: <ReferralStep />,
+              },
+            ],
+          },
         ],
-      },
-      {
-        path: Routes.REFERRAL,
-        element: (
-          <RootPermissionsFilter
-            permissions={['canViewCoordinatedEntry']}
-            otherwise={<NotFound />}
-          >
-            <Referral />
-          </RootPermissionsFilter>
-        ),
       },
       {
         path: Routes.CREATE_PROJECT,

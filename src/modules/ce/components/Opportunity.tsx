@@ -10,7 +10,7 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ActivateReferralButton from '@/modules/ce/components/ActivateReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { ClientDashboardRoutes, Routes } from '@/routes/routes';
+import { ClientDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
   GetCeOpportunityCandidatesDocument,
@@ -96,7 +96,9 @@ const Opportunity: React.FC<Props> = ({}) => {
       <PageTitle title={`Opportunity ${name}`} />
       {!!(activeReferral || acceptedReferral) && (
         <ButtonLink
-          to={generateSafePath(Routes.REFERRAL, {
+          to={generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
+            projectId: projectId,
+            opportunityId: opportunityId,
             referralId: activeReferral?.id || acceptedReferral?.id || '',
           })}
         >

@@ -1,7 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useCurrentPath from './useCurrentPath';
 import { useMobileMenu } from '@/components/layout/nav/useMobileMenuContext';
-import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/routes/routes';
+import {
+  FOCUS_MODE_ROUTES,
+  HIDE_NAV_ROUTES,
+  NO_PADDING_ROUTES,
+} from '@/routes/routes';
 
 export function useDashboardState() {
   const currentPath = useCurrentPath();
@@ -38,9 +42,15 @@ export function useDashboardState() {
     setDesktopNavState(true);
   }, []);
 
+  const noPadding = useMemo(
+    () => NO_PADDING_ROUTES.includes(currentPath || ''),
+    [currentPath]
+  );
+
   return {
     currentPath,
-    focusMode,
+    focusMode, // Auto-hide left nav when the page is opened (like assessments)
+    noPadding, // Remove default padding from DashboardContentContainer (like form builder)
     desktopNavIsOpen,
     mobileNavIsOpen,
     handleCloseMobileMenu,

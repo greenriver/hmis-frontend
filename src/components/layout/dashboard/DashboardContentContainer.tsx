@@ -1,7 +1,6 @@
 import { Box, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { SxProps } from '@mui/system';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import { DESKTOP_NAV_SIDEBAR_WIDTH } from '../layoutConstants';
 
@@ -28,7 +27,7 @@ interface Props {
   handleOpenMobileMenu: VoidFunction;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
-  contentSx?: SxProps;
+  noPadding?: boolean; // Remove padding when the page contents need to go all the way to the edges
 }
 
 const DashboardContentContainer: React.FC<Props> = ({
@@ -45,7 +44,7 @@ const DashboardContentContainer: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   navLabel,
-  contentSx,
+  noPadding,
 }) => {
   const theme = useTheme();
   const maxPageWidth = useMaxPageWidth();
@@ -59,6 +58,21 @@ const DashboardContentContainer: React.FC<Props> = ({
     ? ''
     : `translateX(-${DESKTOP_NAV_SIDEBAR_WIDTH}px)`;
   const isMobile = useIsMobile();
+
+  const mainSx = useMemo(() => {
+    if (noPadding) {
+      return {
+        p: 0,
+        maxWidth: '100%',
+      };
+    }
+    return {
+      pt: 2,
+      pb: 8,
+      px: { xs: 1, sm: 3, lg: 4 },
+      maxWidth: `${maxPageWidth}px`,
+    };
+  }, [noPadding, maxPageWidth]);
 
   return (
     <Box
@@ -121,18 +135,7 @@ const DashboardContentContainer: React.FC<Props> = ({
               <Box>{header}</Box>
             </Paper>
           )}
-          <Box
-            key='content'
-            component='main'
-            id={FOCUS_TARGET_ID}
-            sx={{
-              pt: 2,
-              pb: 8,
-              px: { xs: 1, sm: 3, lg: 4 },
-              maxWidth: `${maxPageWidth}px`,
-              ...contentSx,
-            }}
-          >
+          <Box key='content' component='main' id={FOCUS_TARGET_ID} sx={mainSx}>
             <SentryErrorBoundary>{children}</SentryErrorBoundary>
           </Box>
         </Box>

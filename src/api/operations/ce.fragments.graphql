@@ -4,6 +4,7 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
   status
   expiresAt
   projectId
+  projectName
 }
 
 fragment CeOpportunityFields on CeOpportunity {
@@ -27,23 +28,34 @@ fragment CeCandidateFields on CeCandidate {
 fragment CeReferralSummaryFields on CeReferral {
   id
   status
+  client {
+    id
+    ...ClientName
+  }
 }
 
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
   steps {
-    ...CeReferralStepFields
+    ...CeReferralStepSummaryFields
   }
   opportunity {
     ...CeOpportunitySummaryFields
   }
 }
 
-fragment CeReferralStepFields on CeReferralStep {
+fragment CeReferralStepSummaryFields on CeReferralStep {
   id
+  stepId
   name
   status
+  swimlane
+}
+
+fragment CeReferralStepFields on CeReferralStep {
+  ...CeReferralStepSummaryFields
   formDefinition {
-    ...FormDefinitionMetadata
+    ...FormDefinitionFields
   }
+  submittedValues
 }
