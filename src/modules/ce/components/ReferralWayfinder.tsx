@@ -54,7 +54,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           alertText={`${clientBriefName(client)} has been declined from ${opportunity.name}`}
           AlertProps={{
             icon: <DeclinedIcon />,
-            color: 'grayscale',
+            severity: 'info',
           }}
           items={[
             {
