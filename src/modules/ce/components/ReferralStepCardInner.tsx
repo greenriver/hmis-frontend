@@ -1,3 +1,4 @@
+import { Stack, Typography } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
 import CommonCard from '@/components/elements/CommonCard';
 import { CompletedIcon } from '@/components/elements/SemanticIcons';
@@ -16,9 +17,6 @@ const ReferralStepCardInner: React.FC<Props> = ({
   action,
   children,
 }) => {
-  const icon =
-    status === CeReferralStepStatus.Completed ? CompletedIcon : undefined;
-
   const sx = useMemo(() => {
     switch (status) {
       case CeReferralStepStatus.Available:
@@ -44,8 +42,19 @@ const ReferralStepCardInner: React.FC<Props> = ({
     }
   }, [status]);
 
+  const title = (
+    <Stack direction='row' alignItems='center' gap={1}>
+      {status === CeReferralStepStatus.Completed && (
+        <CompletedIcon sx={{ color: 'grayscale.main' }} />
+      )}
+      <Typography variant='h5' component={'h3'}>
+        {name}
+      </Typography>
+    </Stack>
+  );
+
   return (
-    <CommonCard title={name} Icon={icon} sx={sx} actions={action}>
+    <CommonCard title={title} sx={sx} actions={action}>
       {children}
     </CommonCard>
   );
