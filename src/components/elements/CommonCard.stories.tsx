@@ -2,7 +2,6 @@ import { Button } from '@mui/material';
 import { Meta, StoryObj } from '@storybook/react';
 
 import CommonCard from './CommonCard';
-import { CompletedIcon } from '@/components/elements/SemanticIcons';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { fakeClient } from '@/test/__mocks__/requests';
@@ -78,13 +77,5 @@ export const WithNoPadding: Story = {
         columns={[CLIENT_COLUMNS.name, CLIENT_COLUMNS.age]}
       />
     ),
-  },
-};
-
-export const WithIcon: Story = {
-  args: {
-    title: 'Completed',
-    Icon: CompletedIcon,
-    children: cardContent,
   },
 };
