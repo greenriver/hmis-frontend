@@ -11,7 +11,9 @@ const ReferralSteps: React.FC<Props> = () => {
   const { referral } = useReferralContext();
 
   const [{ wayfinding }, setFilterParams] = useSearchParamsState({
-    wayfinding: { type: 'boolean', default: false },
+    paramsDefinition: {
+      wayfinding: { type: 'boolean', default: false },
+    },
   });
 
   const completedSteps = useMemo(() => {
