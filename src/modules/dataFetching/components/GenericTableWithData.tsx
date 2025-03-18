@@ -143,10 +143,8 @@ const GenericTableWithData = <
   const [filterValues, setFilterValues] = useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
 
-  // Careful: Optional column behavior is undefined/unsupported when columns are provided by
-  // getColumnDefs instead of the columns prop. This is because `getColumnDefs` receives `rows`,
-  // but `rows` comes from the graphql query that receives `optionalQueryVariables`,
-  // leading to a circular dependency.
+  // TODO(#7387) Optional column behavior is currently undefined/unsupported
+  //  when columns are provided by getColumnDefs instead of the columns prop.
   const {
     optionalColumns,
     includedOptionalColumns,

@@ -49,6 +49,10 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     const currentSessionId = getCurrentSessionId();
     const lastSessionId = storage.getLastSessionId();
     if (currentSessionId !== lastSessionId) {
+      console.warn('Clearing session due to ID mismatch', {
+        currentSessionId,
+        lastSessionId,
+      });
       storage.setLastSessionId(currentSessionId);
       storage.clearUser();
       storage.clearAppSettings();

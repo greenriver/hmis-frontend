@@ -8,6 +8,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { cloneDeep } from 'lodash-es';
 
 import { useId, useMemo } from 'react';
 import { GroupItemComponentProps } from '../../types';
@@ -60,7 +61,7 @@ const TableGroup = ({
       item.item[0].type !== ItemType.Group ||
       !item.item[0].item
     ) {
-      throw new Error(`invalid table format form item ${item.linkId}`);
+      throw new Error(`Invalid table format for item ${item.linkId}`);
     }
 
     return item.item[0].item.map(
@@ -72,6 +73,42 @@ const TableGroup = ({
       })
     );
   }, [item, viewOnly, baseId]);
+
+  // Memoize the props configuration for each cell to maintain stable references
+  const cellConfigs = useMemo(() => {
+    return tableHeaderInfo.map((header) => ({
+      // hide label for each input, since they are labeled by the header
+      noLabel: true,
+      inputProps: { ariaLabelledBy: header.id },
+    }));
+  }, [tableHeaderInfo]);
+
+  // Create a stable memoized representation of the table row items, with cell helper text removed
+  const rowItems = useMemo(() => {
+    if (!item.item) return null;
+
+    const rowItemsClone = cloneDeep(item.item);
+    // remove helper text from Cell Items, because it's shown in table header
+    rowItemsClone.forEach((rowItem) =>
+      rowItem.item?.forEach((cellItem) => (cellItem.helperText = null))
+    );
+    return rowItemsClone;
+  }, [item.item]);
+
+  // Create a stable memoized representation of the table rows
+  const tableRows = useMemo(() => {
+    if (!rowItems) return null;
+
+    return rowItems.map((rowItem) => (
+      <TableRow key={rowItem.linkId}>
+        {rowItem.item?.map((cellItem, index) => (
+          <TableCell key={cellItem.linkId}>
+            {renderChildItem(cellItem, cellConfigs[index])}
+          </TableCell>
+        ))}
+      </TableRow>
+    ));
+  }, [rowItems, renderChildItem, cellConfigs]);
 
   return (
     <Grid item xs>
@@ -131,25 +168,7 @@ const TableGroup = ({
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {item.item?.map((rowItem) => (
-            <TableRow key={rowItem.linkId}>
-              {rowItem.item?.map((cellItem, index) => (
-                <TableCell key={cellItem.linkId}>
-                  {renderChildItem(
-                    // remove helper text, it is shown in table header
-                    { ...cellItem, helperText: null },
-                    // hide label for each input, since they are labeled by the header
-                    {
-                      noLabel: true,
-                      inputProps: { ariaLabelledBy: tableHeaderInfo[index].id },
-                    }
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
+        <TableBody>{tableRows}</TableBody>
       </Table>
     </Grid>
   );

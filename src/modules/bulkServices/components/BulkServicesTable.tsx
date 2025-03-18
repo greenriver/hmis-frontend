@@ -82,6 +82,7 @@ const BulkServicesTable: React.FC<Props> = ({
         ...(canViewDob ? [CLIENT_COLUMNS.dobAge] : []),
         {
           header: 'Entry Date',
+          key: 'entryDate',
           render: (row: RowType) => {
             if (!row.activeEnrollment) return notEnrolledText;
 
@@ -90,6 +91,7 @@ const BulkServicesTable: React.FC<Props> = ({
         },
         {
           header: `Last ${serviceTypeName} Date`,
+          key: 'lastServiceDate',
           render: (row: RowType) => {
             if (!row.activeEnrollment) return notEnrolledText;
 

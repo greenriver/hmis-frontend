@@ -186,7 +186,15 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
-            element: <ProjectEnrollments />,
+            element: <Navigate to='households' replace />,
+          },
+          {
+            path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS_HOUSEHOLDS,
+            element: <ProjectEnrollments mode={'households'} />,
+          },
+          {
+            path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS_CLIENTS,
+            element: <ProjectEnrollments mode={'clients'} />,
           },
           {
             path: ProjectDashboardRoutes.PROJECT_ASSESSMENTS,

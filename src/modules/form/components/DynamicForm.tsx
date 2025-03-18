@@ -159,6 +159,7 @@ const DynamicFormWithHandlers = forwardRef<
 const DynamicFormEnrichedDataLoader = forwardRef<
   DynamicFormRef,
   DynamicFormProps & {
+    // Initial values to be used for the form. NOTE: this prop shouldn't change after the initial render. defaultValues are only calculated once.
     initialValues?: InitialValues;
     // Loading element to render while the form is initially loading (due to PickLists being fetched). Named "initial" to distinguish from existing `loading` prop which typically is used to indicate that the form is submitting.
     initialLoadingElement?: ReactNode;
