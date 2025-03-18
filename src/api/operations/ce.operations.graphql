@@ -34,11 +34,13 @@ mutation SubmitCeReferralStep(
   $referralId: ID!
   $stepId: ID!
   $input: JsonObject!
+  $confirmed: Boolean
 ) {
   submitCeReferralStep(
     referralId: $referralId
     stepId: $stepId
     input: $input
+    confirmed: $confirmed
   ) {
     step {
       ...CeReferralStepFields
@@ -46,6 +48,9 @@ mutation SubmitCeReferralStep(
     referral {
       id
       status
+    }
+    errors {
+      ...ValidationErrorFields
     }
   }
 }
