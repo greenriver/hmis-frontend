@@ -8,6 +8,7 @@ import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
+  CeOpportunityStatus,
   GetCeOpportunityCandidatesDocument,
   GetCeOpportunityCandidatesQuery,
   GetCeOpportunityCandidatesQueryVariables,
@@ -30,8 +31,12 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
 
 interface Props {
   opportunityId: string;
+  status: CeOpportunityStatus;
 }
-const PrioritizedClientsTable: React.FC<Props> = ({ opportunityId }) => {
+const PrioritizedClientsTable: React.FC<Props> = ({
+  opportunityId,
+  status,
+}) => {
   const columns = useMemo(() => {
     return [
       ...COLUMNS,
@@ -42,10 +47,12 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunityId }) => {
             record={row}
             recordName={`ID ${row.id}`}
             primaryAction={
-              <BeginReferralButton
-                opportunityId={opportunityId}
-                candidate={row}
-              />
+              status === CeOpportunityStatus.Open && (
+                <BeginReferralButton
+                  opportunityId={opportunityId}
+                  candidate={row}
+                />
+              )
             }
             menuActionConfigs={[
               {
@@ -63,7 +70,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunityId }) => {
         ),
       },
     ];
-  }, [opportunityId]);
+  }, [opportunityId, status]);
 
   return (
     <GenericTableWithData<
@@ -76,7 +83,6 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunityId }) => {
       queryDocument={GetCeOpportunityCandidatesDocument}
       pagePath='ceOpportunity.candidates'
       paginationItemName='candidates'
-      //showTopToolbar={true}
     />
   );
 };

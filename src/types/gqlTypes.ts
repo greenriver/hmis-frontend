@@ -597,7 +597,7 @@ export type CeOpportunity = {
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
   rules?: Maybe<Array<CeMatchRule>>;
-  status: Scalars['String']['output'];
+  status: CeOpportunityStatus;
   topCandidate?: Maybe<CeCandidate>;
 };
 
@@ -610,6 +610,12 @@ export type CeOpportunityInput = {
   name: Scalars['String']['input'];
   templateId: Scalars['ID']['input'];
 };
+
+export enum CeOpportunityStatus {
+  Closed = 'closed',
+  Locked = 'locked',
+  Open = 'open',
+}
 
 export type CeParticipation = {
   __typename?: 'CeParticipation';
@@ -15796,7 +15802,7 @@ export type CeOpportunitySummaryFieldsFragment = {
   __typename?: 'CeOpportunity';
   id: string;
   name: string;
-  status: string;
+  status: CeOpportunityStatus;
   expiresAt?: string | null;
   projectId: string;
   projectName: string;
@@ -15806,7 +15812,7 @@ export type CeOpportunityFieldsFragment = {
   __typename?: 'CeOpportunity';
   id: string;
   name: string;
-  status: string;
+  status: CeOpportunityStatus;
   expiresAt?: string | null;
   projectId: string;
   projectName: string;
@@ -15915,7 +15921,7 @@ export type CeReferralFieldsFragment = {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
-    status: string;
+    status: CeOpportunityStatus;
     expiresAt?: string | null;
     projectId: string;
     projectName: string;
@@ -16473,7 +16479,7 @@ export type CreateCeOpportunityMutation = {
       __typename?: 'CeOpportunity';
       id: string;
       name: string;
-      status: string;
+      status: CeOpportunityStatus;
       expiresAt?: string | null;
       projectId: string;
       projectName: string;
@@ -17611,7 +17617,7 @@ export type GetProjectCeOpportunitiesQuery = {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
-        status: string;
+        status: CeOpportunityStatus;
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
@@ -17630,7 +17636,7 @@ export type GetCeOpportunityQuery = {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
-    status: string;
+    status: CeOpportunityStatus;
     expiresAt?: string | null;
     projectId: string;
     projectName: string;
@@ -17742,7 +17748,7 @@ export type GetCeReferralQuery = {
       __typename?: 'CeOpportunity';
       id: string;
       name: string;
-      status: string;
+      status: CeOpportunityStatus;
       expiresAt?: string | null;
       projectId: string;
       projectName: string;

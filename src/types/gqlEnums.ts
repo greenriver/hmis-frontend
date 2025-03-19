@@ -79,6 +79,7 @@ export const HmisEnums = {
     eligibility_requirement: 'eligibility_requirement',
     priority_scheme: 'priority_scheme',
   },
+  CeOpportunityStatus: { closed: 'closed', locked: 'locked', open: 'open' },
   CeReferralStatus: {
     accepted: 'accepted',
     in_progress: 'in_progress',
