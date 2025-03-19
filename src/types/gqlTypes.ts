@@ -562,6 +562,19 @@ export type CeCandidatesPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
+export type CeMatchRule = {
+  __typename?: 'CeMatchRule';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  ownerType: Scalars['String']['output'];
+  type: CeMatchRuleType;
+};
+
+export enum CeMatchRuleType {
+  EligibilityRequirement = 'eligibility_requirement',
+  PriorityScheme = 'priority_scheme',
+}
+
 export type CeOpportunitiesPaginated = {
   __typename?: 'CeOpportunitiesPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -583,7 +596,9 @@ export type CeOpportunity = {
   name: Scalars['String']['output'];
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
+  rules?: Maybe<Array<CeMatchRule>>;
   status: Scalars['String']['output'];
+  topCandidate?: Maybe<CeCandidate>;
 };
 
 export type CeOpportunityCandidatesArgs = {
@@ -15795,15 +15810,78 @@ export type CeOpportunityFieldsFragment = {
   expiresAt?: string | null;
   projectId: string;
   projectName: string;
-  activeReferral?: { __typename?: 'CeReferral'; id: string } | null;
-  acceptedReferral?: { __typename?: 'CeReferral'; id: string } | null;
+  activeReferral?: {
+    __typename?: 'CeReferral';
+    id: string;
+    status: CeReferralStatus;
+    client: {
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+  } | null;
+  acceptedReferral?: {
+    __typename?: 'CeReferral';
+    id: string;
+    status: CeReferralStatus;
+    client: {
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+  } | null;
+  rules?: Array<{
+    __typename?: 'CeMatchRule';
+    id: string;
+    name: string;
+    type: CeMatchRuleType;
+    ownerType: string;
+  }> | null;
+  topCandidate?: {
+    __typename?: 'CeCandidate';
+    id: string;
+    priorityScore: number;
+    client: {
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+  } | null;
+};
+
+export type CeMatchRuleFieldsFragment = {
+  __typename?: 'CeMatchRule';
+  id: string;
+  name: string;
+  type: CeMatchRuleType;
+  ownerType: string;
 };
 
 export type CeCandidateFieldsFragment = {
   __typename?: 'CeCandidate';
   id: string;
   priorityScore: number;
-  client: { __typename?: 'Client'; id: string };
+  client: {
+    __typename?: 'Client';
+    id: string;
+    lockVersion: number;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
 };
 
 export type CeReferralSummaryFieldsFragment = {
@@ -17556,8 +17634,55 @@ export type GetCeOpportunityQuery = {
     expiresAt?: string | null;
     projectId: string;
     projectName: string;
-    activeReferral?: { __typename?: 'CeReferral'; id: string } | null;
-    acceptedReferral?: { __typename?: 'CeReferral'; id: string } | null;
+    activeReferral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      status: CeReferralStatus;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+    } | null;
+    acceptedReferral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      status: CeReferralStatus;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+    } | null;
+    rules?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      type: CeMatchRuleType;
+      ownerType: string;
+    }> | null;
+    topCandidate?: {
+      __typename?: 'CeCandidate';
+      id: string;
+      priorityScore: number;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+    } | null;
   };
 };
 
@@ -17581,7 +17706,15 @@ export type GetCeOpportunityCandidatesQuery = {
         __typename?: 'CeCandidate';
         id: string;
         priorityScore: number;
-        client: { __typename?: 'Client'; id: string };
+        client: {
+          __typename?: 'Client';
+          id: string;
+          lockVersion: number;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
       }>;
     };
   };
@@ -43915,27 +44048,6 @@ export const CeOpportunitySummaryFieldsFragmentDoc = gql`
     projectName
   }
 `;
-export const CeOpportunityFieldsFragmentDoc = gql`
-  fragment CeOpportunityFields on CeOpportunity {
-    ...CeOpportunitySummaryFields
-    activeReferral {
-      id
-    }
-    acceptedReferral {
-      id
-    }
-  }
-  ${CeOpportunitySummaryFieldsFragmentDoc}
-`;
-export const CeCandidateFieldsFragmentDoc = gql`
-  fragment CeCandidateFields on CeCandidate {
-    id
-    priorityScore
-    client {
-      id
-    }
-  }
-`;
 export const CeReferralSummaryFieldsFragmentDoc = gql`
   fragment CeReferralSummaryFields on CeReferral {
     id
@@ -43946,6 +44058,45 @@ export const CeReferralSummaryFieldsFragmentDoc = gql`
     }
   }
   ${ClientNameFragmentDoc}
+`;
+export const CeMatchRuleFieldsFragmentDoc = gql`
+  fragment CeMatchRuleFields on CeMatchRule {
+    id
+    name
+    type
+    ownerType
+  }
+`;
+export const CeCandidateFieldsFragmentDoc = gql`
+  fragment CeCandidateFields on CeCandidate {
+    id
+    priorityScore
+    client {
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
+export const CeOpportunityFieldsFragmentDoc = gql`
+  fragment CeOpportunityFields on CeOpportunity {
+    ...CeOpportunitySummaryFields
+    activeReferral {
+      ...CeReferralSummaryFields
+    }
+    acceptedReferral {
+      ...CeReferralSummaryFields
+    }
+    rules {
+      ...CeMatchRuleFields
+    }
+    topCandidate {
+      ...CeCandidateFields
+    }
+  }
+  ${CeOpportunitySummaryFieldsFragmentDoc}
+  ${CeReferralSummaryFieldsFragmentDoc}
+  ${CeMatchRuleFieldsFragmentDoc}
+  ${CeCandidateFieldsFragmentDoc}
 `;
 export const CeReferralStepSummaryFieldsFragmentDoc = gql`
   fragment CeReferralStepSummaryFields on CeReferralStep {

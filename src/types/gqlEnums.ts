@@ -75,6 +75,10 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  CeMatchRuleType: {
+    eligibility_requirement: 'eligibility_requirement',
+    priority_scheme: 'priority_scheme',
+  },
   CeReferralStatus: {
     accepted: 'accepted',
     in_progress: 'in_progress',

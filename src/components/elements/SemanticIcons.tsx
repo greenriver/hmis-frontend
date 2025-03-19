@@ -1,3 +1,4 @@
+import { TimelapseRounded } from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import AddchartRoundedIcon from '@mui/icons-material/AddchartRounded';
@@ -120,4 +121,5 @@ export {
   ListRounded as TasksIcon,
   CheckCircleRounded as CompletedIcon,
   CancelIcon as DeclinedIcon,
+  TimelapseRounded as InProgressIcon,
 };
