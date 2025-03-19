@@ -61,6 +61,7 @@ const OpportunityBanner: React.FC<Props> = ({
       return (
         <BeginReferralButton
           opportunityId={opportunity.id}
+          projectId={opportunity.projectId}
           candidate={topCandidate}
           color='primary'
         />

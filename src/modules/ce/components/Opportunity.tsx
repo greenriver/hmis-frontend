@@ -90,6 +90,7 @@ const Opportunity: React.FC<Props> = ({}) => {
                 {/*todo @martha - discuss showing current referral and status here */}
                 <PrioritizedClientsTable
                   opportunityId={opportunityId}
+                  projectId={projectId}
                   status={opportunity.status}
                 />
               </Paper>

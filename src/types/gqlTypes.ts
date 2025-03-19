@@ -17579,6 +17579,64 @@ export type SubmitCeReferralStepMutation = {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
+      opportunity: {
+        __typename?: 'CeOpportunity';
+        id: string;
+        name: string;
+        status: CeOpportunityStatus;
+        expiresAt?: string | null;
+        projectId: string;
+        projectName: string;
+        activeReferral?: {
+          __typename?: 'CeReferral';
+          id: string;
+          status: CeReferralStatus;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+        } | null;
+        acceptedReferral?: {
+          __typename?: 'CeReferral';
+          id: string;
+          status: CeReferralStatus;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+        } | null;
+        rules?: Array<{
+          __typename?: 'CeMatchRule';
+          id: string;
+          name: string;
+          type: CeMatchRuleType;
+          ownerType: string;
+        }> | null;
+        topCandidate?: {
+          __typename?: 'CeCandidate';
+          id: string;
+          priorityScore: number;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+        } | null;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -47563,6 +47621,9 @@ export const SubmitCeReferralStepDocument = gql`
       referral {
         id
         status
+        opportunity {
+          ...CeOpportunityFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -47570,6 +47631,7 @@ export const SubmitCeReferralStepDocument = gql`
     }
   }
   ${CeReferralStepFieldsFragmentDoc}
+  ${CeOpportunityFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitCeReferralStepMutationFn = Apollo.MutationFunction<

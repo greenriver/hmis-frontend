@@ -31,10 +31,12 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
 
 interface Props {
   opportunityId: string;
+  projectId: string;
   status: CeOpportunityStatus;
 }
 const PrioritizedClientsTable: React.FC<Props> = ({
   opportunityId,
+  projectId,
   status,
 }) => {
   const columns = useMemo(() => {
@@ -50,6 +52,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
               status === CeOpportunityStatus.Open && (
                 <BeginReferralButton
                   opportunityId={opportunityId}
+                  projectId={projectId}
                   candidate={row}
                 />
               )
@@ -70,7 +73,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
         ),
       },
     ];
-  }, [opportunityId, status]);
+  }, [opportunityId, projectId, status]);
 
   return (
     <GenericTableWithData<
