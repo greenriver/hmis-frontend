@@ -73,6 +73,8 @@ const OpportunityBanner: React.FC<Props> = ({
     topCandidate,
   ]);
 
+  if (!referral && !topCandidate) return;
+
   return (
     <>
       <Stack
