@@ -15,7 +15,7 @@ interface CommonTabsProps {
 }
 
 // CommonTabs wraps the MUI Tabs component. It can be controlled or uncontrolled,
-// so callers can choose whether to delegate of which tab is selected.
+// so callers can choose whether to delegate controlling the state of which tab is selected.
 // This is a rare case where ariaLabel is a required prop, otherwise the tabs won't be accessible.
 const CommonTabs: React.FC<CommonTabsProps> = ({
   sx,
