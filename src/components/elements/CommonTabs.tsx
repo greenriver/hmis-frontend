@@ -14,9 +14,8 @@ interface CommonTabsProps {
   onChangeTab?: (tab: number) => void;
 }
 
-// CommonTabs wraps the MUI Tabs component, which requires a lot of boilerplate,
-// allowing the caller to provide a TabDefinition and abstracting away handling
-// of which tab value is currently selected.
+// CommonTabs wraps the MUI Tabs component. It can be controlled or uncontrolled,
+// so callers can choose whether to delegate of which tab is selected.
 // This is a rare case where ariaLabel is a required prop, otherwise the tabs won't be accessible.
 const CommonTabs: React.FC<CommonTabsProps> = ({
   sx,
@@ -26,8 +25,6 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
   onChangeTab,
 }) => {
   const [internalValue, setInternalValue] = useState(0);
-
-  // Use external value if provided; otherwise, use internal state
   const currentValue = currentTab ?? internalValue;
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
