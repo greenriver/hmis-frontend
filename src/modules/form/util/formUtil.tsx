@@ -1290,7 +1290,17 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
     );
     return customDataElementValueForKey(mapping.customFieldKey, cdes);
   } else if (mapping.fieldName) {
-    return get(record, compact([relatedRecordAttribute, mapping.fieldName]));
+    const keys = compact([relatedRecordAttribute, mapping.fieldName]); // for example: ['disabilityGroup', 'viralLoadSource']
+
+    return keys.reduce((result, key) => {
+      if (!(key in result)) {
+        // If the key isn't here, we probably forgot to resolve it; fail loudly so we can fix the error
+        throw new Error(
+          `Property "${key}" is missing in record ${record.__typename}:${record.id}`
+        );
+      }
+      return result[key];
+    }, record);
   }
 };
 
