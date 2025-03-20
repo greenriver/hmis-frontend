@@ -2,7 +2,7 @@ import { LoadingButton } from '@mui/lab';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoadingButtonProps } from '@/components/elements/LoadingButton';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { clientNameFromRecordOptionalClient } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -28,7 +28,7 @@ const BeginReferralButton: React.FC<Props> = ({
   const [createReferral, { loading, error }] = useCreateCeReferralMutation({
     variables: {
       opportunityId,
-      clientId: candidate.client?.id || '',
+      clientId: candidate.clientId,
       input: {
         participants: [], // TODO(#7351) - assign participants
       },
@@ -58,14 +58,13 @@ const BeginReferralButton: React.FC<Props> = ({
   });
 
   if (error) throw error;
-  if (!candidate.client) return;
 
   return (
     <LoadingButton
       onClick={() => createReferral()}
       loading={loading}
       color='grayscale'
-      aria-label={`Begin Referral for ${clientBriefName(candidate.client)}`}
+      aria-label={`Begin Referral for ${clientNameFromRecordOptionalClient(candidate)}`}
       {...rest}
     >
       Begin Referral

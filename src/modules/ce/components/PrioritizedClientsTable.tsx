@@ -1,11 +1,13 @@
-import { Chip } from '@mui/material';
 import React, { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import BeginReferralButton from '@/modules/ce/components/BeginReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import {
+  clientBriefName,
+  clientNameFromRecordOptionalClient,
+} from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
@@ -21,12 +23,7 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
     header: 'Client',
     key: 'client',
     sticky: 'left',
-    render: (candidate) =>
-      candidate.client ? (
-        clientBriefName(candidate.client)
-      ) : (
-        <Chip label={candidate.id} />
-      ),
+    render: (candidate) => clientNameFromRecordOptionalClient(candidate),
   },
   {
     header: 'Priority Score',
@@ -77,7 +74,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
                     },
                     // TODO(#7321) - add menu item for sending project here?
                   ]
-                : undefined
+                : []
             }
           />
         ),

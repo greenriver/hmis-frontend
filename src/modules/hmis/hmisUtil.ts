@@ -42,6 +42,7 @@ import {
   EnrollmentOccurrencePointFieldsFragment,
   EventFieldsFragment,
   HouseholdClientFieldsFragment,
+  Maybe,
   NoYes,
   NoYesMissing,
   NoYesReasonsForMissingData,
@@ -254,6 +255,17 @@ export const clientBriefName = (
 ) =>
   [client.firstName, client.lastName].filter(Boolean).join(' ') ||
   anonymousClientName(client);
+
+type WithClient = {
+  client?: Maybe<ClientNameFragment>;
+  clientId: string;
+};
+export const clientNameFromRecordOptionalClient = ({
+  client,
+  clientId,
+}: WithClient) => {
+  return client ? clientBriefName(client) : `Client ${clientId}`;
+};
 
 export const clientInitials = (client: ClientNameFragment) =>
   [client.firstName, client.lastName]

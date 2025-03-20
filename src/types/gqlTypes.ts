@@ -547,6 +547,7 @@ export type CeAssessmentsPaginated = {
 export type CeCandidate = {
   __typename?: 'CeCandidate';
   client?: Maybe<Client>;
+  clientId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
   priorityScore: Scalars['Int']['output'];
 };
@@ -648,7 +649,8 @@ export type CeParticipationsPaginated = {
 
 export type CeReferral = {
   __typename?: 'CeReferral';
-  client: Client;
+  client?: Maybe<Client>;
+  clientId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
   status: CeReferralStatus;
@@ -15820,7 +15822,8 @@ export type CeOpportunityFieldsFragment = {
     __typename?: 'CeReferral';
     id: string;
     status: CeReferralStatus;
-    client: {
+    clientId: string;
+    client?: {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
@@ -15828,13 +15831,14 @@ export type CeOpportunityFieldsFragment = {
       middleName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
-    };
+    } | null;
   } | null;
   acceptedReferral?: {
     __typename?: 'CeReferral';
     id: string;
     status: CeReferralStatus;
-    client: {
+    clientId: string;
+    client?: {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
@@ -15842,7 +15846,7 @@ export type CeOpportunityFieldsFragment = {
       middleName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
-    };
+    } | null;
   } | null;
   rules?: Array<{
     __typename?: 'CeMatchRule';
@@ -15855,6 +15859,7 @@ export type CeOpportunityFieldsFragment = {
     __typename?: 'CeCandidate';
     id: string;
     priorityScore: number;
+    clientId: string;
     client?: {
       __typename?: 'Client';
       id: string;
@@ -15879,6 +15884,7 @@ export type CeCandidateFieldsFragment = {
   __typename?: 'CeCandidate';
   id: string;
   priorityScore: number;
+  clientId: string;
   client?: {
     __typename?: 'Client';
     id: string;
@@ -15894,7 +15900,8 @@ export type CeReferralSummaryFieldsFragment = {
   __typename?: 'CeReferral';
   id: string;
   status: CeReferralStatus;
-  client: {
+  clientId: string;
+  client?: {
     __typename?: 'Client';
     id: string;
     lockVersion: number;
@@ -15902,13 +15909,14 @@ export type CeReferralSummaryFieldsFragment = {
     middleName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
-  };
+  } | null;
 };
 
 export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
   id: string;
   status: CeReferralStatus;
+  clientId: string;
   steps: Array<{
     __typename?: 'CeReferralStep';
     id: string;
@@ -15926,7 +15934,7 @@ export type CeReferralFieldsFragment = {
     projectId: string;
     projectName: string;
   };
-  client: {
+  client?: {
     __typename?: 'Client';
     id: string;
     lockVersion: number;
@@ -15934,7 +15942,7 @@ export type CeReferralFieldsFragment = {
     middleName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
-  };
+  } | null;
 };
 
 export type CeReferralStepSummaryFieldsFragment = {
@@ -16501,7 +16509,8 @@ export type CreateCeReferralMutation = {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
-      client: {
+      clientId: string;
+      client?: {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
@@ -16509,7 +16518,7 @@ export type CreateCeReferralMutation = {
         middleName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
-      };
+      } | null;
     };
   } | null;
 };
@@ -17591,7 +17600,8 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
-          client: {
+          clientId: string;
+          client?: {
             __typename?: 'Client';
             id: string;
             lockVersion: number;
@@ -17599,13 +17609,14 @@ export type SubmitCeReferralStepMutation = {
             middleName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
-          };
+          } | null;
         } | null;
         acceptedReferral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
-          client: {
+          clientId: string;
+          client?: {
             __typename?: 'Client';
             id: string;
             lockVersion: number;
@@ -17613,7 +17624,7 @@ export type SubmitCeReferralStepMutation = {
             middleName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
-          };
+          } | null;
         } | null;
         rules?: Array<{
           __typename?: 'CeMatchRule';
@@ -17626,6 +17637,7 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'CeCandidate';
           id: string;
           priorityScore: number;
+          clientId: string;
           client?: {
             __typename?: 'Client';
             id: string;
@@ -17702,7 +17714,8 @@ export type GetCeOpportunityQuery = {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
-      client: {
+      clientId: string;
+      client?: {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
@@ -17710,13 +17723,14 @@ export type GetCeOpportunityQuery = {
         middleName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
-      };
+      } | null;
     } | null;
     acceptedReferral?: {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
-      client: {
+      clientId: string;
+      client?: {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
@@ -17724,7 +17738,7 @@ export type GetCeOpportunityQuery = {
         middleName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
-      };
+      } | null;
     } | null;
     rules?: Array<{
       __typename?: 'CeMatchRule';
@@ -17737,6 +17751,7 @@ export type GetCeOpportunityQuery = {
       __typename?: 'CeCandidate';
       id: string;
       priorityScore: number;
+      clientId: string;
       client?: {
         __typename?: 'Client';
         id: string;
@@ -17770,6 +17785,7 @@ export type GetCeOpportunityCandidatesQuery = {
         __typename?: 'CeCandidate';
         id: string;
         priorityScore: number;
+        clientId: string;
         client?: {
           __typename?: 'Client';
           id: string;
@@ -17794,6 +17810,7 @@ export type GetCeReferralQuery = {
     __typename?: 'CeReferral';
     id: string;
     status: CeReferralStatus;
+    clientId: string;
     steps: Array<{
       __typename?: 'CeReferralStep';
       id: string;
@@ -17811,7 +17828,7 @@ export type GetCeReferralQuery = {
       projectId: string;
       projectName: string;
     };
-    client: {
+    client?: {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
@@ -17819,7 +17836,7 @@ export type GetCeReferralQuery = {
       middleName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
-    };
+    } | null;
   };
 };
 
@@ -44116,6 +44133,7 @@ export const CeReferralSummaryFieldsFragmentDoc = gql`
   fragment CeReferralSummaryFields on CeReferral {
     id
     status
+    clientId
     client {
       id
       ...ClientName
@@ -44135,6 +44153,7 @@ export const CeCandidateFieldsFragmentDoc = gql`
   fragment CeCandidateFields on CeCandidate {
     id
     priorityScore
+    clientId
     client {
       ...ClientName
     }

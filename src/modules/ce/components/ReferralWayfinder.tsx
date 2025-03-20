@@ -3,7 +3,7 @@ import WayfindingDialog from '@/components/elements/navigation/WayfindingDialog'
 import { DeclinedIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { clientNameFromRecordOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import { CeReferralStatus } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -19,7 +19,8 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
     opportunityId: string;
   };
 
-  const { status, client, opportunity } = referral;
+  const { status, opportunity } = referral;
+  const clientName = clientNameFromRecordOptionalClient(referral);
 
   switch (status) {
     case CeReferralStatus.Accepted:
@@ -29,7 +30,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           onClose={onClose}
           title='Referral Complete'
           alertTitle='Referral Completed'
-          alertText={`${clientBriefName(client)} has been accepted to ${opportunity.name}`}
+          alertText={`${clientName} has been accepted to ${opportunity.name}`}
           items={[
             {
               title: 'Return to Opportunity Overview',
@@ -51,7 +52,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           onClose={onClose}
           title='Referral Complete'
           alertTitle='Referral Declined'
-          alertText={`${clientBriefName(client)} has been declined from ${opportunity.name}`}
+          alertText={`${clientName} has been declined from ${opportunity.name}`}
           AlertProps={{
             icon: <DeclinedIcon />,
             severity: 'info',

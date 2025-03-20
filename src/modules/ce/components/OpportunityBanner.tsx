@@ -1,12 +1,12 @@
 import PeopleIcon from '@mui/icons-material/People';
-import { Button, Chip, Paper, Stack, Typography } from '@mui/material';
+import { Button, Paper, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import BeginReferralButton from '@/modules/ce/components/BeginReferralButton';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { clientNameFromRecordOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { CeOpportunityFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -30,13 +30,8 @@ const OpportunityBanner: React.FC<Props> = ({
   }, [acceptedReferral, activeReferral, topCandidate]);
 
   const clientName = useMemo(() => {
-    if (referral) return clientBriefName(referral.client);
-    if (topCandidate)
-      return topCandidate.client ? (
-        clientBriefName(topCandidate.client)
-      ) : (
-        <Chip label={topCandidate.id} />
-      );
+    if (referral) return clientNameFromRecordOptionalClient(referral);
+    if (topCandidate) return clientNameFromRecordOptionalClient(topCandidate);
   }, [referral, topCandidate]);
 
   const action = useMemo(() => {
@@ -62,7 +57,7 @@ const OpportunityBanner: React.FC<Props> = ({
       );
     }
 
-    if (topCandidate && topCandidate.client) {
+    if (topCandidate) {
       return (
         <BeginReferralButton
           opportunityId={opportunity.id}
