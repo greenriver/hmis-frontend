@@ -15,7 +15,10 @@ fragment CeOpportunityFields on CeOpportunity {
   acceptedReferral {
     ...CeReferralSummaryFields
   }
-  rules {
+  eligibilityRequirements {
+    ...CeMatchRuleFields
+  }
+  priorityScheme {
     ...CeMatchRuleFields
   }
 }

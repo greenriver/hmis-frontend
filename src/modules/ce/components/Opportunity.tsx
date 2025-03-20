@@ -10,7 +10,6 @@ import OpportunityBanner from '@/modules/ce/components/OpportunityBanner';
 import PrioritizedClientsTable from '@/modules/ce/components/PrioritizedClientsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
-  CeMatchRuleType,
   useGetCeOpportunityCandidatesQuery,
   useGetCeOpportunityQuery,
 } from '@/types/gqlTypes';
@@ -55,13 +54,6 @@ const Opportunity: React.FC<Props> = ({}) => {
     return candidates[0];
   }, [candidates]);
 
-  const eligibilityRequirements = (opportunity?.rules || []).filter(
-    (r) => r.type === CeMatchRuleType.EligibilityRequirement
-  );
-  const prioritySchemes = (opportunity?.rules || []).filter(
-    (r) => r.type === CeMatchRuleType.PriorityScheme
-  );
-
   if (loading || topCandidateLoading) return <Loading />;
   if (error) throw error;
   if (topCandidateError) throw topCandidateError;
@@ -93,18 +85,22 @@ const Opportunity: React.FC<Props> = ({}) => {
                     viewAllEligibleClients={() => setCurrentTab(1)}
                   />
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <MatchRuleGrid
-                    title='Requirements'
-                    rules={eligibilityRequirements}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <MatchRuleGrid
-                    title='Prioritization'
-                    rules={prioritySchemes}
-                  />
-                </Grid>
+                {opportunity.eligibilityRequirements && (
+                  <Grid item xs={12} md={6}>
+                    <MatchRuleGrid
+                      title='Requirements'
+                      rules={opportunity.eligibilityRequirements}
+                    />
+                  </Grid>
+                )}
+                {opportunity.priorityScheme && (
+                  <Grid item xs={12} md={6}>
+                    <MatchRuleGrid
+                      title='Prioritization'
+                      rules={[opportunity.priorityScheme]}
+                    />
+                  </Grid>
+                )}
               </Grid>
             ),
           },

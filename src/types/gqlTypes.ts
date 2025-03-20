@@ -593,12 +593,13 @@ export type CeOpportunity = {
   acceptedReferral?: Maybe<CeReferral>;
   activeReferral?: Maybe<CeReferral>;
   candidates: CeCandidatesPaginated;
+  eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  priorityScheme?: Maybe<CeMatchRule>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
-  rules?: Maybe<Array<CeMatchRule>>;
   status: CeOpportunityStatus;
 };
 
@@ -15848,13 +15849,20 @@ export type CeOpportunityFieldsFragment = {
       nameSuffix?: string | null;
     } | null;
   } | null;
-  rules?: Array<{
+  eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
     type: CeMatchRuleType;
     ownerType: string;
   }> | null;
+  priorityScheme?: {
+    __typename?: 'CeMatchRule';
+    id: string;
+    name: string;
+    type: CeMatchRuleType;
+    ownerType: string;
+  } | null;
 };
 
 export type CeMatchRuleFieldsFragment = {
@@ -17611,13 +17619,20 @@ export type SubmitCeReferralStepMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
-        rules?: Array<{
+        eligibilityRequirements?: Array<{
           __typename?: 'CeMatchRule';
           id: string;
           name: string;
           type: CeMatchRuleType;
           ownerType: string;
         }> | null;
+        priorityScheme?: {
+          __typename?: 'CeMatchRule';
+          id: string;
+          name: string;
+          type: CeMatchRuleType;
+          ownerType: string;
+        } | null;
       };
     } | null;
     errors: Array<{
@@ -17710,13 +17725,20 @@ export type GetCeOpportunityQuery = {
         nameSuffix?: string | null;
       } | null;
     } | null;
-    rules?: Array<{
+    eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
       type: CeMatchRuleType;
       ownerType: string;
     }> | null;
+    priorityScheme?: {
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      type: CeMatchRuleType;
+      ownerType: string;
+    } | null;
   };
 };
 
@@ -44113,7 +44135,10 @@ export const CeOpportunityFieldsFragmentDoc = gql`
     acceptedReferral {
       ...CeReferralSummaryFields
     }
-    rules {
+    eligibilityRequirements {
+      ...CeMatchRuleFields
+    }
+    priorityScheme {
       ...CeMatchRuleFields
     }
   }
