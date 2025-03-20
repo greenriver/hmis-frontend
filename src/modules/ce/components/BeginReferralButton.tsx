@@ -2,7 +2,7 @@ import { LoadingButton } from '@mui/lab';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoadingButtonProps } from '@/components/elements/LoadingButton';
-import { clientNameFromRecordOptionalClient } from '@/modules/hmis/hmisUtil';
+import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -64,7 +64,7 @@ const BeginReferralButton: React.FC<Props> = ({
       onClick={() => createReferral()}
       loading={loading}
       color='grayscale'
-      aria-label={`Begin Referral for ${clientNameFromRecordOptionalClient(candidate)}`}
+      aria-label={`Begin Referral for ${clientNameFromRecordWithOptionalClient(candidate)}`}
       {...rest}
     >
       Begin Referral

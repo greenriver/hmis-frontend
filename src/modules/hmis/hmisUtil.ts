@@ -260,7 +260,7 @@ type WithClient = {
   client?: Maybe<ClientNameFragment>;
   clientId: string;
 };
-export const clientNameFromRecordOptionalClient = ({
+export const clientNameFromRecordWithOptionalClient = ({
   client,
   clientId,
 }: WithClient) => {

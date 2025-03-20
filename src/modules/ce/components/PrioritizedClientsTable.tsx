@@ -6,7 +6,7 @@ import BeginReferralButton from '@/modules/ce/components/BeginReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   clientBriefName,
-  clientNameFromRecordOptionalClient,
+  clientNameFromRecordWithOptionalClient,
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
@@ -23,7 +23,7 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
     header: 'Client',
     key: 'client',
     sticky: 'left',
-    render: (candidate) => clientNameFromRecordOptionalClient(candidate),
+    render: (candidate) => clientNameFromRecordWithOptionalClient(candidate),
   },
   {
     header: 'Priority Score',

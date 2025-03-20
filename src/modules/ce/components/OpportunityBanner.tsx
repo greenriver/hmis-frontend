@@ -6,7 +6,7 @@ import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextB
 import { useIsMobile } from '@/hooks/useIsMobile';
 import BeginReferralButton from '@/modules/ce/components/BeginReferralButton';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
-import { clientNameFromRecordOptionalClient } from '@/modules/hmis/hmisUtil';
+import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { CeOpportunityFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -30,8 +30,9 @@ const OpportunityBanner: React.FC<Props> = ({
   }, [acceptedReferral, activeReferral, topCandidate]);
 
   const clientName = useMemo(() => {
-    if (referral) return clientNameFromRecordOptionalClient(referral);
-    if (topCandidate) return clientNameFromRecordOptionalClient(topCandidate);
+    if (referral) return clientNameFromRecordWithOptionalClient(referral);
+    if (topCandidate)
+      return clientNameFromRecordWithOptionalClient(topCandidate);
   }, [referral, topCandidate]);
 
   const action = useMemo(() => {

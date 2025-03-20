@@ -3,7 +3,7 @@ import WayfindingDialog from '@/components/elements/navigation/WayfindingDialog'
 import { DeclinedIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
-import { clientNameFromRecordOptionalClient } from '@/modules/hmis/hmisUtil';
+import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import { CeReferralStatus } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -20,7 +20,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
   };
 
   const { status, opportunity } = referral;
-  const clientName = clientNameFromRecordOptionalClient(referral);
+  const clientName = clientNameFromRecordWithOptionalClient(referral);
 
   switch (status) {
     case CeReferralStatus.Accepted:
