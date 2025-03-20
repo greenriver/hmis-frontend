@@ -113,7 +113,7 @@ const BulkServicesTable: React.FC<Props> = ({
         {
           ...BASE_ACTION_COLUMN_DEF,
           width: '180px',
-          tableCellProps: { sx: { pl: 2, pr: 1 } },
+          tableCellProps: { sx: { p: 1, pl: 2 } },
           // Prevent stickiness on tiny screens, so that non-sticky columns are still scrollable
           sticky: isTiny ? undefined : 'right',
           render: (row: RowType) => (
@@ -173,6 +173,11 @@ const BulkServicesTable: React.FC<Props> = ({
     };
   }, [projectId, servicePeriod, serviceTypeId]);
 
+  const handleSelectedRowsChange = useCallback(
+    (rows: readonly string[]) => setAnyRowsSelected(rows.length > 0),
+    []
+  );
+
   return (
     <SsnDobShowContextProvider>
       <GenericTableWithData<
@@ -190,7 +195,7 @@ const BulkServicesTable: React.FC<Props> = ({
         }}
         loadingVariant='linear'
         selectable='checkbox'
-        onChangeSelectedRowIds={(rows) => setAnyRowsSelected(rows.length > 0)}
+        onChangeSelectedRowIds={handleSelectedRowsChange}
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
         getColumnDefs={getColumnDefs}

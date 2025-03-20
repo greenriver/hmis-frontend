@@ -1,5 +1,5 @@
 import { Box, Chip, Tooltip } from '@mui/material';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import {
   getViewClientMenuItem,

@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { MenuProps, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import CommonMenuButton, { CommonMenuItem } from '../CommonMenuButton';
 
@@ -7,6 +7,7 @@ interface TableRowActionsProps<T> {
   recordName?: string;
   primaryAction?: ReactNode;
   menuActionConfigs?: CommonMenuItem[];
+  MenuProps?: Omit<MenuProps, 'open'>;
 }
 
 const TableRowActions = <T extends { id: string }>({
@@ -14,6 +15,7 @@ const TableRowActions = <T extends { id: string }>({
   recordName,
   primaryAction,
   menuActionConfigs,
+  MenuProps,
 }: TableRowActionsProps<T>) => {
   return (
     <Stack
@@ -35,6 +37,7 @@ const TableRowActions = <T extends { id: string }>({
             MenuListProps: {
               dense: true,
             },
+            ...MenuProps,
           }}
         />
       )}

@@ -1,0 +1,29 @@
+mutation JoinHousehold(
+  $receivingHouseholdId: ID!
+  $joiningEnrollmentInputs: [EnrollmentRelationshipInput!]!
+) {
+  joinHousehold(
+    receivingHouseholdId: $receivingHouseholdId
+    joiningEnrollmentInputs: $joiningEnrollmentInputs
+  ) {
+    receivingHousehold {
+      ...HouseholdFields
+    }
+    donorHousehold {
+      ...HouseholdFields
+    }
+  }
+}
+
+mutation SplitHousehold(
+  $splittingEnrollmentInputs: [EnrollmentRelationshipInput!]!
+) {
+  splitHousehold(splittingEnrollmentInputs: $splittingEnrollmentInputs) {
+    newHousehold {
+      ...HouseholdFields
+    }
+    remainingHousehold {
+      ...HouseholdFields
+    }
+  }
+}

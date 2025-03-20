@@ -5,7 +5,14 @@ import {
   DialogTitle,
   Grid,
 } from '@mui/material';
-import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import DynamicForm, {
   DynamicFormProps,
@@ -23,7 +30,11 @@ import useFormDefinition from './useFormDefinition';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
-import { emptyErrorState } from '@/modules/errors/util';
+import {
+  emptyErrorState,
+  ErrorFilterFn,
+  OnChangeErrorsFn,
+} from '@/modules/errors/util';
 
 import {
   FormDefinitionFieldsFragment,
@@ -48,6 +59,8 @@ interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
   onClose?: VoidFunction;
   localDefinition?: FormDefinitionFieldsFragment;
   projectId?: string; // Project context for fetching form definition
+  onChangeErrors?: OnChangeErrorsFn;
+  errorFilter?: ErrorFilterFn;
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
@@ -59,6 +72,8 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   localDefinition,
   pickListArgs,
   projectId,
+  onChangeErrors,
+  errorFilter,
 }: Args<T>) {
   const errorRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -115,6 +130,10 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
 
   const { initialValues, errors, onSubmit, submitLoading, setErrors } =
     useDynamicFormHandlersForRecord(hookArgs);
+
+  useEffect(() => {
+    onChangeErrors?.(errors);
+  }, [errors, onChangeErrors]);
 
   const closeDialog = useCallback(() => {
     setDialogOpen(false);
@@ -185,6 +204,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                     }}
                     variant={variant}
                     hideSubmit
+                    errorFilter={errorFilter}
                     {...props}
                     errorRef={errorRef}
                   />
@@ -210,6 +230,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       closeDialog,
       definitionLoading,
       dialogOpen,
+      errorFilter,
       errors,
       formDefinition,
       formRole,
