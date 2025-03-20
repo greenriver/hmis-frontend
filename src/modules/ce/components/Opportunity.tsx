@@ -1,5 +1,5 @@
 import { Grid, Paper, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import MatchRuleGrid from './MatchRuleGrid';
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
@@ -9,7 +9,11 @@ import useSafeParams from '@/hooks/useSafeParams';
 import OpportunityBanner from '@/modules/ce/components/OpportunityBanner';
 import PrioritizedClientsTable from '@/modules/ce/components/PrioritizedClientsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { CeMatchRuleType, useGetCeOpportunityQuery } from '@/types/gqlTypes';
+import {
+  CeMatchRuleType,
+  useGetCeOpportunityCandidatesQuery,
+  useGetCeOpportunityQuery,
+} from '@/types/gqlTypes';
 
 interface Props {}
 const Opportunity: React.FC<Props> = ({}) => {
@@ -32,6 +36,25 @@ const Opportunity: React.FC<Props> = ({}) => {
     },
   });
 
+  // query for the opportunity's top candidate here, rather than inside the OpportunityBanner,
+  // so we can batch it with the above query for the Opportunity
+  const {
+    data: {
+      ceOpportunity: { candidates: { nodes: candidates = [] } = {} } = {},
+    } = {},
+    loading: topCandidateLoading,
+    error: topCandidateError,
+  } = useGetCeOpportunityCandidatesQuery({
+    variables: {
+      opportunityId: opportunityId,
+      limit: 1,
+    },
+  });
+
+  const topCandidate = useMemo(() => {
+    return candidates[0];
+  }, [candidates]);
+
   const eligibilityRequirements = (opportunity?.rules || []).filter(
     (r) => r.type === CeMatchRuleType.EligibilityRequirement
   );
@@ -39,8 +62,9 @@ const Opportunity: React.FC<Props> = ({}) => {
     (r) => r.type === CeMatchRuleType.PriorityScheme
   );
 
-  if (loading) return <Loading />;
+  if (loading || topCandidateLoading) return <Loading />;
   if (error) throw error;
+  if (topCandidateError) throw topCandidateError;
   if (!opportunity) return <NotFound />;
 
   if (opportunity.projectId !== projectId) {
@@ -64,6 +88,7 @@ const Opportunity: React.FC<Props> = ({}) => {
               <Grid container columnSpacing={2} rowSpacing={4}>
                 <Grid item xs={12}>
                   <OpportunityBanner
+                    topCandidate={topCandidate}
                     opportunity={opportunity}
                     viewAllEligibleClients={() => setCurrentTab(1)}
                   />

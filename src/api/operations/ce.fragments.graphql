@@ -18,9 +18,6 @@ fragment CeOpportunityFields on CeOpportunity {
   rules {
     ...CeMatchRuleFields
   }
-  topCandidate {
-    ...CeCandidateFields
-  }
 }
 
 fragment CeMatchRuleFields on CeMatchRule {

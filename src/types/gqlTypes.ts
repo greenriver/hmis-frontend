@@ -546,6 +546,7 @@ export type CeAssessmentsPaginated = {
 
 export type CeCandidate = {
   __typename?: 'CeCandidate';
+  /** Null if the user lacks permission to view the client */
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
@@ -599,7 +600,6 @@ export type CeOpportunity = {
   projectName: Scalars['String']['output'];
   rules?: Maybe<Array<CeMatchRule>>;
   status: CeOpportunityStatus;
-  topCandidate?: Maybe<CeCandidate>;
 };
 
 export type CeOpportunityCandidatesArgs = {
@@ -15855,21 +15855,6 @@ export type CeOpportunityFieldsFragment = {
     type: CeMatchRuleType;
     ownerType: string;
   }> | null;
-  topCandidate?: {
-    __typename?: 'CeCandidate';
-    id: string;
-    priorityScore: number;
-    clientId: string;
-    client?: {
-      __typename?: 'Client';
-      id: string;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    } | null;
-  } | null;
 };
 
 export type CeMatchRuleFieldsFragment = {
@@ -17633,21 +17618,6 @@ export type SubmitCeReferralStepMutation = {
           type: CeMatchRuleType;
           ownerType: string;
         }> | null;
-        topCandidate?: {
-          __typename?: 'CeCandidate';
-          id: string;
-          priorityScore: number;
-          clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
-        } | null;
       };
     } | null;
     errors: Array<{
@@ -17747,21 +17717,6 @@ export type GetCeOpportunityQuery = {
       type: CeMatchRuleType;
       ownerType: string;
     }> | null;
-    topCandidate?: {
-      __typename?: 'CeCandidate';
-      id: string;
-      priorityScore: number;
-      clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
-    } | null;
   };
 };
 
@@ -44149,17 +44104,6 @@ export const CeMatchRuleFieldsFragmentDoc = gql`
     ownerType
   }
 `;
-export const CeCandidateFieldsFragmentDoc = gql`
-  fragment CeCandidateFields on CeCandidate {
-    id
-    priorityScore
-    clientId
-    client {
-      ...ClientName
-    }
-  }
-  ${ClientNameFragmentDoc}
-`;
 export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
     ...CeOpportunitySummaryFields
@@ -44172,14 +44116,21 @@ export const CeOpportunityFieldsFragmentDoc = gql`
     rules {
       ...CeMatchRuleFields
     }
-    topCandidate {
-      ...CeCandidateFields
-    }
   }
   ${CeOpportunitySummaryFieldsFragmentDoc}
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeMatchRuleFieldsFragmentDoc}
-  ${CeCandidateFieldsFragmentDoc}
+`;
+export const CeCandidateFieldsFragmentDoc = gql`
+  fragment CeCandidateFields on CeCandidate {
+    id
+    priorityScore
+    clientId
+    client {
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
 `;
 export const CeReferralStepSummaryFieldsFragmentDoc = gql`
   fragment CeReferralStepSummaryFields on CeReferralStep {

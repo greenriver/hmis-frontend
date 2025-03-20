@@ -3613,7 +3613,7 @@
         "fields": [
           {
             "name": "client",
-            "description": null,
+            "description": "Null if the user lacks permission to view the client",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -4220,18 +4220,6 @@
                 "name": "CeOpportunityStatus",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "topCandidate",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CeCandidate",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

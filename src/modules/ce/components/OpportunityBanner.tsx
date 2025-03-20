@@ -8,19 +8,24 @@ import BeginReferralButton from '@/modules/ce/components/BeginReferralButton';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { CeOpportunityFieldsFragment } from '@/types/gqlTypes';
+import {
+  CeCandidateFieldsFragment,
+  CeOpportunityFieldsFragment,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   opportunity: CeOpportunityFieldsFragment;
+  topCandidate?: CeCandidateFieldsFragment;
   viewAllEligibleClients: VoidFunction;
 }
 const OpportunityBanner: React.FC<Props> = ({
   opportunity,
+  topCandidate,
   viewAllEligibleClients,
 }) => {
   const isTiny = useIsMobile('sm');
-  const { activeReferral, acceptedReferral, topCandidate } = opportunity;
+  const { activeReferral, acceptedReferral } = opportunity;
   const referral = acceptedReferral || activeReferral;
 
   const header = useMemo(() => {
