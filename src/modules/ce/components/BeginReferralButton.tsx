@@ -28,7 +28,7 @@ const BeginReferralButton: React.FC<Props> = ({
   const [createReferral, { loading, error }] = useCreateCeReferralMutation({
     variables: {
       opportunityId,
-      clientId: candidate.client.id,
+      clientId: candidate.client?.id || '',
       input: {
         participants: [], // TODO(#7351) - assign participants
       },
@@ -58,6 +58,7 @@ const BeginReferralButton: React.FC<Props> = ({
   });
 
   if (error) throw error;
+  if (!candidate.client) return;
 
   return (
     <LoadingButton

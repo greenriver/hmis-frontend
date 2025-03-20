@@ -546,7 +546,7 @@ export type CeAssessmentsPaginated = {
 
 export type CeCandidate = {
   __typename?: 'CeCandidate';
-  client: Client;
+  client?: Maybe<Client>;
   id: Scalars['ID']['output'];
   priorityScore: Scalars['Int']['output'];
 };
@@ -15855,7 +15855,7 @@ export type CeOpportunityFieldsFragment = {
     __typename?: 'CeCandidate';
     id: string;
     priorityScore: number;
-    client: {
+    client?: {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
@@ -15863,7 +15863,7 @@ export type CeOpportunityFieldsFragment = {
       middleName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
-    };
+    } | null;
   } | null;
 };
 
@@ -15879,7 +15879,7 @@ export type CeCandidateFieldsFragment = {
   __typename?: 'CeCandidate';
   id: string;
   priorityScore: number;
-  client: {
+  client?: {
     __typename?: 'Client';
     id: string;
     lockVersion: number;
@@ -15887,7 +15887,7 @@ export type CeCandidateFieldsFragment = {
     middleName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
-  };
+  } | null;
 };
 
 export type CeReferralSummaryFieldsFragment = {
@@ -17626,7 +17626,7 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'CeCandidate';
           id: string;
           priorityScore: number;
-          client: {
+          client?: {
             __typename?: 'Client';
             id: string;
             lockVersion: number;
@@ -17634,7 +17634,7 @@ export type SubmitCeReferralStepMutation = {
             middleName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
-          };
+          } | null;
         } | null;
       };
     } | null;
@@ -17737,7 +17737,7 @@ export type GetCeOpportunityQuery = {
       __typename?: 'CeCandidate';
       id: string;
       priorityScore: number;
-      client: {
+      client?: {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
@@ -17745,7 +17745,7 @@ export type GetCeOpportunityQuery = {
         middleName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
-      };
+      } | null;
     } | null;
   };
 };
@@ -17770,7 +17770,7 @@ export type GetCeOpportunityCandidatesQuery = {
         __typename?: 'CeCandidate';
         id: string;
         priorityScore: number;
-        client: {
+        client?: {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
@@ -17778,7 +17778,7 @@ export type GetCeOpportunityCandidatesQuery = {
           middleName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
-        };
+        } | null;
       }>;
     };
   };

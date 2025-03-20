@@ -1,3 +1,4 @@
+import { Chip } from '@mui/material';
 import React, { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
@@ -20,7 +21,12 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
     header: 'Client',
     key: 'client',
     sticky: 'left',
-    render: (candidate) => clientBriefName(candidate.client),
+    render: (candidate) =>
+      candidate.client ? (
+        clientBriefName(candidate.client)
+      ) : (
+        <Chip label={candidate.id} />
+      ),
   },
   {
     header: 'Priority Score',
@@ -57,18 +63,22 @@ const PrioritizedClientsTable: React.FC<Props> = ({
                 />
               )
             }
-            menuActionConfigs={[
-              {
-                title: 'View Client',
-                openInNew: true,
-                key: 'client',
-                ariaLabel: `View Client, ${clientBriefName(row.client)}`,
-                to: generateSafePath(ClientDashboardRoutes.PROFILE, {
-                  clientId: row.client.id,
-                }),
-              },
-              // TODO(#7321) - add menu item for sending project here?
-            ]}
+            menuActionConfigs={
+              row.client
+                ? [
+                    {
+                      title: 'View Client',
+                      openInNew: true,
+                      key: 'client',
+                      ariaLabel: `View Client, ${clientBriefName(row.client)}`,
+                      to: generateSafePath(ClientDashboardRoutes.PROFILE, {
+                        clientId: row.client.id,
+                      }),
+                    },
+                    // TODO(#7321) - add menu item for sending project here?
+                  ]
+                : undefined
+            }
           />
         ),
       },

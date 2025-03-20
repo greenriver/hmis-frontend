@@ -1,5 +1,5 @@
 import PeopleIcon from '@mui/icons-material/People';
-import { Button, Paper, Stack, Typography } from '@mui/material';
+import { Button, Chip, Paper, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -31,7 +31,12 @@ const OpportunityBanner: React.FC<Props> = ({
 
   const clientName = useMemo(() => {
     if (referral) return clientBriefName(referral.client);
-    if (topCandidate) return clientBriefName(topCandidate.client);
+    if (topCandidate)
+      return topCandidate.client ? (
+        clientBriefName(topCandidate.client)
+      ) : (
+        <Chip label={topCandidate.id} />
+      );
   }, [referral, topCandidate]);
 
   const action = useMemo(() => {
@@ -57,7 +62,7 @@ const OpportunityBanner: React.FC<Props> = ({
       );
     }
 
-    if (topCandidate)
+    if (topCandidate && topCandidate.client) {
       return (
         <BeginReferralButton
           opportunityId={opportunity.id}
@@ -66,6 +71,7 @@ const OpportunityBanner: React.FC<Props> = ({
           color='primary'
         />
       );
+    }
   }, [
     acceptedReferral,
     opportunity.id,
