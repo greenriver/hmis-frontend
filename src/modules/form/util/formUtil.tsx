@@ -1292,6 +1292,12 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
   } else if (mapping.fieldName) {
     const keys = compact([relatedRecordAttribute, mapping.fieldName]); // for example: ['disabilityGroup', 'viralLoadSource']
 
+    if (!record.id || mapping.fieldName === 'imageBlobId') {
+      return get(record, keys);
+    }
+
+    // return get(record, keys);
+
     return keys.reduce((result, key) => {
       if (!(key in result)) {
         // If the key isn't here, we probably forgot to resolve it; fail loudly so we can fix the error
