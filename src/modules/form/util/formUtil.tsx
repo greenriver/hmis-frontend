@@ -1292,15 +1292,28 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
   } else if (mapping.fieldName) {
     const keys = compact([relatedRecordAttribute, mapping.fieldName]); // for example: ['disabilityGroup', 'viralLoadSource']
 
-    if (!record.id || mapping.fieldName === 'imageBlobId') {
+    // FIXME - do these special cases make sense or should they be fixed instead of carved out here?
+    // Special cases where we DON'T want to raise an error if the field can't be resolved on the record:
+    // 1. The only key in `record` is `enrollment`. This happens in AssessmentForm
+    // around line 212 when we are creating a new assessment and populating it from the enrollment, but other
+    // fields that are normally resolved on an Assessment, like incomeBenefit, disabilityGroup, etc. are not resolved.
+    const recordKeys = Object.keys(record);
+    if (recordKeys.length === 1 && recordKeys[0] === 'enrollment') {
+      return get(record, keys);
+    }
+    // 2. `imageBlobId` is a special case where we only send the value to the backend when submitting the form,
+    // but don't receive the value from the backend on persisted records
+    if (mapping.fieldName === 'imageBlobId') {
       return get(record, keys);
     }
 
-    // return get(record, keys);
-
+    // In all other cases(?), we do want to raise an error if the key is missing,
+    // to prevent silently swallowing developer errors.
+    // This would indicate we're not resolving a field that we should be resolving.
+    // TODO - I don't feel that confident that "in all other cases" is really true,
+    //  need to check other usages to make sure we aren't missing anything
     return keys.reduce((result, key) => {
       if (!(key in result)) {
-        // If the key isn't here, we probably forgot to resolve it; fail loudly so we can fix the error
         throw new Error(
           `Property "${key}" is missing in record ${record.__typename}:${record.id}`
         );
