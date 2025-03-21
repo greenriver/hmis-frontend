@@ -63,6 +63,7 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
               id={`tab-${i}`}
               aria-controls={`tabpanel-${i}`}
               href={`#${t.key}`}
+              target='_self' // https://github.com/storybookjs/storybook/issues/15934
             />
           ))}
         </Tabs>
