@@ -16,7 +16,7 @@ import NotFound from '@/components/pages/NotFound';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
@@ -80,7 +80,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
             <Stack direction='row' alignItems='center' gap={0.5}>
               <Person sx={{ color: 'grayscale.main' }} />
               <Typography variant='body1'>
-                {clientBriefName(referral.client)}
+                {clientNameFromRecordWithOptionalClient(referral)}
               </Typography>
             </Stack>
             <Typography variant='body1'>

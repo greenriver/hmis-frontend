@@ -20,8 +20,8 @@ interface Props {
 }
 const CreateOpportunityButton: React.FC<Props> = ({ projectId }) => {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState<string | undefined>(undefined);
-  const [templateId, setTemplateId] = useState<string | undefined>(undefined);
+  const [name, setName] = useState<string | null>(null);
+  const [templateId, setTemplateId] = useState<string | null>(null);
 
   const [createOpportunity, { loading, error }] =
     useCreateCeOpportunityMutation({

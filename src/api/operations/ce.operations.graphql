@@ -48,6 +48,9 @@ mutation SubmitCeReferralStep(
     referral {
       id
       status
+      opportunity {
+        ...CeOpportunityFields
+      }
     }
     errors {
       ...ValidationErrorFields
