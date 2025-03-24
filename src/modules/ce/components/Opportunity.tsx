@@ -1,5 +1,6 @@
 import { Grid, Paper, Typography } from '@mui/material';
 import React, { useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import MatchRuleGrid from './MatchRuleGrid';
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
@@ -23,7 +24,8 @@ const Opportunity: React.FC<Props> = ({}) => {
 
   const { project } = useProjectDashboardContext();
 
-  const [currentTab, setCurrentTab] = useState(0);
+  const { hash } = useLocation();
+  const [currentTab, setCurrentTab] = useState(hash.replace(/^#/, ''));
 
   const {
     data: { ceOpportunity: opportunity } = {},
@@ -83,7 +85,7 @@ const Opportunity: React.FC<Props> = ({}) => {
                   <OpportunityBanner
                     topCandidate={topCandidate}
                     opportunity={opportunity}
-                    viewAllEligibleClients={() => setCurrentTab(1)}
+                    viewAllEligibleClients={() => setCurrentTab('clients')}
                   />
                 </Grid>
                 {opportunity.eligibilityRequirements && (
