@@ -569,13 +569,7 @@ export type CeMatchRule = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   ownerType: Scalars['String']['output'];
-  type: CeMatchRuleType;
 };
-
-export enum CeMatchRuleType {
-  EligibilityRequirement = 'eligibility_requirement',
-  PriorityScheme = 'priority_scheme',
-}
 
 export type CeOpportunitiesPaginated = {
   __typename?: 'CeOpportunitiesPaginated';
@@ -15853,14 +15847,12 @@ export type CeOpportunityFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    type: CeMatchRuleType;
     ownerType: string;
   }> | null;
   priorityScheme?: {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    type: CeMatchRuleType;
     ownerType: string;
   } | null;
 };
@@ -15869,7 +15861,6 @@ export type CeMatchRuleFieldsFragment = {
   __typename?: 'CeMatchRule';
   id: string;
   name: string;
-  type: CeMatchRuleType;
   ownerType: string;
 };
 
@@ -17623,14 +17614,12 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'CeMatchRule';
           id: string;
           name: string;
-          type: CeMatchRuleType;
           ownerType: string;
         }> | null;
         priorityScheme?: {
           __typename?: 'CeMatchRule';
           id: string;
           name: string;
-          type: CeMatchRuleType;
           ownerType: string;
         } | null;
       };
@@ -17729,14 +17718,12 @@ export type GetCeOpportunityQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      type: CeMatchRuleType;
       ownerType: string;
     }> | null;
     priorityScheme?: {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      type: CeMatchRuleType;
       ownerType: string;
     } | null;
   };
@@ -44122,7 +44109,6 @@ export const CeMatchRuleFieldsFragmentDoc = gql`
   fragment CeMatchRuleFields on CeMatchRule {
     id
     name
-    type
     ownerType
   }
 `;

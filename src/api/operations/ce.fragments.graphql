@@ -26,7 +26,6 @@ fragment CeOpportunityFields on CeOpportunity {
 fragment CeMatchRuleFields on CeMatchRule {
   id
   name
-  type
   ownerType
 }
 
