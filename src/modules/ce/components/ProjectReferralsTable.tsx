@@ -32,10 +32,7 @@ const COLUMNS: ColumnDef<CeReferralTableFieldsFragment>[] = [
     header: 'Started',
     key: 'started',
     render: (referral) => (
-      <RelativeDateDisplay
-        preciseTime={false}
-        dateString={referral.dateStarted}
-      />
+      <RelativeDateDisplay dateString={referral.createdAt} />
     ),
   },
   {

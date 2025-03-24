@@ -651,8 +651,8 @@ export type CeReferral = {
   __typename?: 'CeReferral';
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
+  createdAt: Scalars['ISO8601DateTime']['output'];
   currentStep?: Maybe<CeReferralStep>;
-  dateStarted: Scalars['ISO8601Date']['output'];
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
   status: CeReferralStatus;
@@ -15930,7 +15930,7 @@ export type CeReferralSummaryFieldsFragment = {
 
 export type CeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
-  dateStarted: string;
+  createdAt: string;
   id: string;
   status: CeReferralStatus;
   clientId: string;
@@ -17745,7 +17745,7 @@ export type GetProjectCeReferralsQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'CeReferral';
-        dateStarted: string;
+        createdAt: string;
         id: string;
         status: CeReferralStatus;
         clientId: string;
@@ -44244,7 +44244,7 @@ export const CeCandidateFieldsFragmentDoc = gql`
 export const CeReferralTableFieldsFragmentDoc = gql`
   fragment CeReferralTableFields on CeReferral {
     ...CeReferralSummaryFields
-    dateStarted
+    createdAt
     opportunity {
       id
       name

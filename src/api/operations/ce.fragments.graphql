@@ -51,7 +51,7 @@ fragment CeReferralSummaryFields on CeReferral {
 
 fragment CeReferralTableFields on CeReferral {
   ...CeReferralSummaryFields
-  dateStarted
+  createdAt
   opportunity {
     id
     name
