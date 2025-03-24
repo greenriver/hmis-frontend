@@ -51,8 +51,8 @@ import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage
 import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
-import Opportunities from '@/modules/ce/components/Opportunities';
 import Opportunity from '@/modules/ce/components/Opportunity';
+import ProjectCePage from '@/modules/ce/components/ProjectCePage';
 import ReferralDetails from '@/modules/ce/components/ReferralDetails';
 import ReferralPage from '@/modules/ce/components/ReferralPage';
 import ReferralStep from '@/modules/ce/components/ReferralStep';
@@ -432,7 +432,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canViewCoordinatedEntry']}
                 otherwise={<NotFound />}
               >
-                <Opportunities />
+                <ProjectCePage />
               </RootPermissionsFilter>
             ),
           },

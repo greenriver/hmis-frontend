@@ -538,6 +538,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeOpportunity',
     fields: [
       {
+        name: 'categories',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
+        },
+      },
+      {
         name: 'expiresAt',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
@@ -649,6 +665,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'dateStarted',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
       {
@@ -6705,6 +6729,23 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'CeOpportunityFilterOptions',
+    args: [
+      {
+        name: 'status',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeOpportunityStatus', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeOpportunityInput',
     args: [
       {
@@ -6721,6 +6762,23 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'CeReferralFilterOptions',
+    args: [
+      {
+        name: 'status',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralStatus', ofType: null },
+          },
         },
       },
     ],

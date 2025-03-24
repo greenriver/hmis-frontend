@@ -11,6 +11,7 @@ import { customVisuallyHidden } from '@/config/theme';
 import {
   formatDateForDisplay,
   formatDateTimeForDisplay,
+  formatRelativeDate,
   formatRelativeDateTime,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
@@ -23,7 +24,7 @@ export const getFormattedDates = (
   if (!date) return [];
   return [
     preciseTime ? formatDateTimeForDisplay(date) : formatDateForDisplay(date),
-    formatRelativeDateTime(date),
+    preciseTime ? formatRelativeDateTime(date) : formatRelativeDate(date),
   ];
 };
 
@@ -34,6 +35,7 @@ export interface RelativeDateDisplayProps {
   tooltipSuffixText?: string;
   TooltipProps?: Omit<TooltipProps, 'title' | 'children'>;
   TypographyProps?: TypographyProps;
+  preciseTime?: boolean;
 }
 
 /**
@@ -46,10 +48,11 @@ const RelativeDateDisplay = ({
   tooltipSuffixText,
   TooltipProps = {},
   TypographyProps = {},
+  preciseTime = true,
 }: RelativeDateDisplayProps) => {
   const [formattedDate, formattedDateRelative] = useMemo(
-    () => getFormattedDates(dateString),
-    [dateString]
+    () => getFormattedDates(dateString, preciseTime),
+    [dateString, preciseTime]
   );
 
   if (!dateString || !formattedDate || !formattedDateRelative) return null;

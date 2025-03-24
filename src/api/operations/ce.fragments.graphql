@@ -1,6 +1,7 @@
 fragment CeOpportunitySummaryFields on CeOpportunity {
   id
   name
+  categories
   status
   expiresAt
   projectId
@@ -45,6 +46,18 @@ fragment CeReferralSummaryFields on CeReferral {
   client {
     id
     ...ClientName
+  }
+}
+
+fragment CeReferralTableFields on CeReferral {
+  ...CeReferralSummaryFields
+  dateStarted
+  opportunity {
+    id
+    name
+  }
+  currentStep {
+    name
   }
 }
 
