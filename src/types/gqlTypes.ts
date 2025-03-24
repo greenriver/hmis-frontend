@@ -652,7 +652,7 @@ export type CeReferral = {
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
-  currentStep?: Maybe<CeReferralStep>;
+  currentStepName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
   status: CeReferralStatus;
@@ -15931,11 +15931,11 @@ export type CeReferralSummaryFieldsFragment = {
 export type CeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
+  currentStepName?: string | null;
   id: string;
   status: CeReferralStatus;
   clientId: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
-  currentStep?: { __typename?: 'CeReferralStep'; name: string } | null;
   client?: {
     __typename?: 'Client';
     id: string;
@@ -17746,11 +17746,11 @@ export type GetProjectCeReferralsQuery = {
       nodes: Array<{
         __typename?: 'CeReferral';
         createdAt: string;
+        currentStepName?: string | null;
         id: string;
         status: CeReferralStatus;
         clientId: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
-        currentStep?: { __typename?: 'CeReferralStep'; name: string } | null;
         client?: {
           __typename?: 'Client';
           id: string;
@@ -44249,9 +44249,7 @@ export const CeReferralTableFieldsFragmentDoc = gql`
       id
       name
     }
-    currentStep {
-      name
-    }
+    currentStepName
   }
   ${CeReferralSummaryFieldsFragmentDoc}
 `;

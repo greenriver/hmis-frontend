@@ -43,7 +43,7 @@ const COLUMNS: ColumnDef<CeReferralTableFieldsFragment>[] = [
   {
     header: 'Current Step',
     key: 'step',
-    render: (referral) => referral.currentStep?.name,
+    render: (referral) => referral.currentStepName,
   },
   // TODO(#7321) - add column for sending project here
 ];

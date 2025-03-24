@@ -4699,12 +4699,12 @@
             "deprecationReason": null
           },
           {
-            "name": "currentStep",
+            "name": "currentStepName",
             "description": null,
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "CeReferralStep",
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,

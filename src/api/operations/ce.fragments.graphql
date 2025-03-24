@@ -56,9 +56,7 @@ fragment CeReferralTableFields on CeReferral {
     id
     name
   }
-  currentStep {
-    name
-  }
+  currentStepName
 }
 
 fragment CeReferralFields on CeReferral {
