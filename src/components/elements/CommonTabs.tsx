@@ -1,6 +1,6 @@
 import { Box, SxProps, Tab, Tabs } from '@mui/material';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export type TabDefinition = {
   title: string;
@@ -10,15 +10,14 @@ export type TabDefinition = {
 
 interface CommonTabsProps {
   tabDefinitions: TabDefinition[];
-  ariaLabel: string;
+  ariaLabel: string; // This is a rare case where ariaLabel is a required prop, otherwise the tabs won't be accessible.
   sx?: SxProps;
-  currentTab?: number;
-  onChangeTab?: (tab: number) => void;
+  currentTab?: string;
+  onChangeTab?: (tab: string) => void;
 }
 
 // CommonTabs wraps the MUI Tabs component. It can be controlled or uncontrolled,
 // so callers can choose whether to delegate controlling the state of which tab is selected.
-// This is a rare case where ariaLabel is a required prop, otherwise the tabs won't be accessible.
 const CommonTabs: React.FC<CommonTabsProps> = ({
   sx,
   ariaLabel,
@@ -26,25 +25,45 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
   currentTab,
   onChangeTab,
 }) => {
-  const [internalValue, setInternalValue] = useState(0);
-  const currentValue = currentTab ?? internalValue;
+  const { hash } = useLocation();
 
-  const { pathname, hash } = useLocation();
-  const navigate = useNavigate();
+  // The prop for `currentTab` is a string (key), but internally MUI Tabs uses an number (index).
+  // If a hash is already in the url, find the index for that tab and pass it in as the initial value to the useState call.
+  const initialIndex = useMemo(() => {
+    const initialKey = hash.replace(/^#/, '');
+    const index = tabDefinitions.findIndex((t) => t.key === initialKey);
+
+    return Math.max(index, 0); // If we didn't find a tab definition with this key (index === -1), just return 0
+  }, [hash, tabDefinitions]);
+
+  const [internalValue, setInternalValue] = useState(initialIndex);
+
+  const currentIndex = useMemo(() => {
+    if (!currentTab) return internalValue;
+    const index = tabDefinitions.findIndex((t) => t.key === currentTab);
+
+    return Math.max(index, 0);
+  }, [currentTab, internalValue, tabDefinitions]);
+
+  const currentKey = useMemo(() => {
+    if (currentTab) return currentTab;
+
+    return tabDefinitions[internalValue].key;
+  }, [currentTab, internalValue, tabDefinitions]);
 
   useEffect(() => {
+    // If no hash is present on the path, set it to currentKey. (Should be `tabDefinitions[0].key` on pageload)
     if (!hash) {
-      navigate(`${pathname}#${tabDefinitions[currentValue].key}`, {
-        replace: true,
-      });
+      window.location.assign(`#${currentKey}`);
     }
-  }, [currentValue, hash, navigate, pathname, tabDefinitions]);
+  }, [currentKey, hash]);
 
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newIndex: number) => {
     if (onChangeTab) {
-      onChangeTab(newValue); // Controlled mode: notify parent
+      const newKey = tabDefinitions[newIndex].key;
+      onChangeTab(newKey); // Controlled mode: notify parent, passing the key
     } else {
-      setInternalValue(newValue); // Uncontrolled mode: manage internally
+      setInternalValue(newIndex); // Uncontrolled mode: manage internally, using the index
     }
   };
 
@@ -52,30 +71,31 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
     <Box sx={{ width: '100%', ...sx }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
-          value={currentValue}
+          value={currentIndex}
           onChange={handleChange}
           aria-label={ariaLabel}
         >
-          {tabDefinitions.map((t, i) => (
+          {tabDefinitions.map((t) => (
             <Tab
               key={t.title}
               label={<strong>{t.title}</strong>}
-              id={`tab-${i}`}
-              aria-controls={`tabpanel-${i}`}
+              id={`tab-${t.key}`}
+              aria-controls={`tabpanel-${t.key}`}
               href={`#${t.key}`}
+              target='_self' // https://github.com/storybookjs/storybook/issues/15934
             />
           ))}
         </Tabs>
       </Box>
-      {tabDefinitions.map((t, i) => (
+      {tabDefinitions.map((t) => (
         <div
           key={t.title}
           role='tabpanel'
-          hidden={currentValue !== i}
-          id={`tabpanel-${i}`}
-          aria-labelledby={`tab-${i}`}
+          hidden={currentKey !== t.key}
+          id={`tabpanel-${t.key}`}
+          aria-labelledby={`tab-${t.key}`}
         >
-          {currentValue === i && <Box mt={3}>{t.contents}</Box>}
+          {currentKey === t.key && <Box mt={3}>{t.contents}</Box>}
         </div>
       ))}
     </Box>
