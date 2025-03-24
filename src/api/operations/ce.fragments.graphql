@@ -10,24 +10,38 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
 fragment CeOpportunityFields on CeOpportunity {
   ...CeOpportunitySummaryFields
   activeReferral {
-    id
+    ...CeReferralSummaryFields
   }
   acceptedReferral {
-    id
+    ...CeReferralSummaryFields
   }
+  eligibilityRequirements {
+    ...CeMatchRuleFields
+  }
+  priorityScheme {
+    ...CeMatchRuleFields
+  }
+}
+
+fragment CeMatchRuleFields on CeMatchRule {
+  id
+  name
+  ownerType
 }
 
 fragment CeCandidateFields on CeCandidate {
   id
   priorityScore
+  clientId
   client {
-    id
+    ...ClientName
   }
 }
 
 fragment CeReferralSummaryFields on CeReferral {
   id
   status
+  clientId
   client {
     id
     ...ClientName

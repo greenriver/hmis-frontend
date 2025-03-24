@@ -75,6 +75,7 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  CeOpportunityStatus: { closed: 'closed', locked: 'locked', open: 'open' },
   CeReferralStatus: {
     accepted: 'accepted',
     in_progress: 'in_progress',
