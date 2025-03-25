@@ -1375,7 +1375,7 @@ export const initialValuesFromAssessment = (
 ) => {
   // If non-WIP, construct based on related records
   if (!assessment.inProgress) {
-    return createInitialValuesFromRecord(itemMap, assessment);
+    return createInitialValuesFromRecord({ itemMap, record: assessment });
   }
   // If WIP, construt based on stored JSON values
   if (!assessment.wipValues)
