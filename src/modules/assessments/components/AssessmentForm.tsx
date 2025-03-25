@@ -209,8 +209,10 @@ const AssessmentForm: React.FC<Props> = ({
       assign(init, initialsToOverwrite);
     } else {
       // If this is a completely new assessment, set initials from Enrollment
-      const initialsFromEnrollment = createInitialValuesFromRecord(itemMap, {
-        enrollment,
+      const initialsFromEnrollment = createInitialValuesFromRecord({
+        itemMap,
+        record: { enrollment },
+        raiseOnMissing: false,
       });
       assign(init, initialsFromEnrollment);
     }

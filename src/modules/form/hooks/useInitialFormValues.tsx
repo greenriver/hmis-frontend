@@ -36,10 +36,10 @@ const useInitialFormValues = ({
     });
     if (!record) return initialValuesFromDefinition;
 
-    const initialValuesFromRecord = createInitialValuesFromRecord(
+    const initialValuesFromRecord = createInitialValuesFromRecord({
       itemMap,
-      record
-    );
+      record,
+    });
     const values = {
       ...initialValuesFromDefinition,
       ...initialValuesFromRecord,

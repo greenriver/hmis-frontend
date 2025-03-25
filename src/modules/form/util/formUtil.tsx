@@ -44,6 +44,7 @@ import {
 } from '../types';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
+import { sendToSentry } from '@/modules/errors/util';
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 import { collectExpressionReferences } from '@/modules/form/util/expressions/references';
 import {
@@ -1268,18 +1269,16 @@ export const transformSubmitValues = ({
 };
 
 // record could be an Assessment
-const getMappedValue = (record: any, mapping: FieldMapping) => {
+const getMappedValue = (
+  record: any,
+  mapping: FieldMapping,
+  raiseOnMissing: boolean
+) => {
   let relatedRecordAttribute;
   if (mapping.recordType) {
     const recordType = HmisEnums.RelatedRecordType[mapping.recordType];
     if (recordType !== record.__typename) {
       relatedRecordAttribute = lowerFirst(recordType);
-      // if (!record.hasOwnProperty(relatedRecordAttribute)) {
-      //   console.debug(
-      //     `Expected record to have ${relatedRecordAttribute}. FieldMapping:`,
-      //     JSON.stringify(mapping)
-      //   );
-      // }
     }
   }
 
@@ -1292,31 +1291,22 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
   } else if (mapping.fieldName) {
     const keys = compact([relatedRecordAttribute, mapping.fieldName]); // for example: ['disabilityGroup', 'viralLoadSource']
 
-    // FIXME - do these special cases make sense or should they be fixed instead of carved out here?
-    // Special cases where we DON'T want to raise an error if the field can't be resolved on the record:
-    // 1. The only key in `record` is `enrollment`. This happens in AssessmentForm
-    // around line 212 when we are creating a new assessment and populating it from the enrollment, but other
-    // fields that are normally resolved on an Assessment, like incomeBenefit, disabilityGroup, etc. are not resolved.
-    const recordKeys = Object.keys(record);
-    if (recordKeys.length === 1 && recordKeys[0] === 'enrollment') {
-      return get(record, keys);
-    }
-    // 2. `imageBlobId` is a special case where we only send the value to the backend when submitting the form,
-    // but don't receive the value from the backend on persisted records
-    if (mapping.fieldName === 'imageBlobId') {
+    // Special cases where we DON'T want to raise an error if the field can't be resolved on the record.
+    // - imageBlobId: we pass this field when first saving a client image, but it isn't used for returning a saved client image.
+    // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's not a persisted or resolved field on the client record.
+    const specialCaseFieldNames = ['imageBlobId', 'mciId'];
+    if (!raiseOnMissing || specialCaseFieldNames.includes(mapping.fieldName)) {
       return get(record, keys);
     }
 
-    // In all other cases(?), we do want to raise an error if the key is missing,
-    // to prevent silently swallowing developer errors.
+    // In general, we do want to raise an error if the key is missing, to prevent silently swallowing developer errors.
     // This would indicate we're not resolving a field that we should be resolving.
-    // TODO - I don't feel that confident that "in all other cases" is really true,
-    //  need to check other usages to make sure we aren't missing anything
     return keys.reduce((result, key) => {
       if (!(key in result)) {
-        throw new Error(
+        sendToSentry(
           `Property "${key}" is missing in record ${record.__typename}:${record.id}`
         );
+        return undefined;
       }
       return result[key];
     }, record);
@@ -1328,26 +1318,31 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
  *
  * @param itemMap Map of linkId -> Item
  * @param record  GQL HMIS record, like Project or Organization
+ * @param raiseOnMissing If true (default), raise a Sentry error if a value in itemMap doesn't exist on the record. If false, return undefined for that value.
  *
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
-export const createInitialValuesFromRecord = (
-  itemMap: ItemMap,
-  record: any // could be an assessment
-): Record<string, any> => {
+export const createInitialValuesFromRecord = ({
+  itemMap,
+  record,
+  raiseOnMissing = true,
+}: {
+  itemMap: ItemMap;
+  record: any; // could be an assessment
+  raiseOnMissing?: boolean;
+}): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
   Object.values(itemMap).forEach((item) => {
     if (!item.mapping) return;
     if (!item.mapping.customFieldKey && !item.mapping.fieldName) return;
 
-    const value = getMappedValue(record, item.mapping);
+    const value = getMappedValue(record, item.mapping, raiseOnMissing);
     if (hasMeaningfulValue(value)) {
       initialValues[item.linkId] = gqlValueToFormValue(value, item);
     }
   });
 
-  // console.debug('Created initial values from record', record, initialValues);
   return initialValues;
 };
 
