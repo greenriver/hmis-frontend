@@ -1291,7 +1291,7 @@ const getMappedValue = (
   } else if (mapping.fieldName) {
     const keys = compact([relatedRecordAttribute, mapping.fieldName]); // for example: ['disabilityGroup', 'viralLoadSource']
 
-    // Special cases where we DON'T want to raise an error if the field can't be resolved on the record.
+    // Special cases where we DON'T want to alert Sentry if the field can't be resolved on the record.
     // - imageBlobId: we pass this field when first saving a client image, but it isn't used for returning a saved client image.
     // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's not a persisted or resolved field on the client record.
     const specialCaseFieldNames = ['imageBlobId', 'mciId'];
@@ -1299,7 +1299,7 @@ const getMappedValue = (
       return get(record, keys);
     }
 
-    // In general, we do want to raise an error if the key is missing, to prevent silently swallowing developer errors.
+    // In general, we do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
     // This would indicate we're not resolving a field that we should be resolving.
     return keys.reduce((result, key) => {
       if (!(key in result)) {
