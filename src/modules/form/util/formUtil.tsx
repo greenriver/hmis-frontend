@@ -1325,11 +1325,11 @@ const getMappedValue = (
 export const createInitialValuesFromRecord = ({
   itemMap,
   record,
-  raiseOnMissing = true,
+  sentryOnMissing = true,
 }: {
   itemMap: ItemMap;
   record: any; // could be an assessment
-  raiseOnMissing?: boolean;
+  sentryOnMissing?: boolean;
 }): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
@@ -1337,7 +1337,7 @@ export const createInitialValuesFromRecord = ({
     if (!item.mapping) return;
     if (!item.mapping.customFieldKey && !item.mapping.fieldName) return;
 
-    const value = getMappedValue(record, item.mapping, raiseOnMissing);
+    const value = getMappedValue(record, item.mapping, sentryOnMissing);
     if (hasMeaningfulValue(value)) {
       initialValues[item.linkId] = gqlValueToFormValue(value, item);
     }

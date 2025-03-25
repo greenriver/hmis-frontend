@@ -212,17 +212,12 @@ const AssessmentForm: React.FC<Props> = ({
       const initialsFromEnrollment = createInitialValuesFromRecord({
         itemMap,
         record: { enrollment },
-        raiseOnMissing: false,
+        // Don't alert Sentry if a property is missing, because this is a new assessment that we're populating from the enrollment,
+        // so we don't expect all the assessment attributes to be present.
+        sentryOnMissing: false,
       });
       assign(init, initialsFromEnrollment);
     }
-
-    // console.debug(
-    //   'Initial Form State',
-    //   init,
-    //   'from source:',
-    //   source?.id || 'none'
-    // );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unused = reloadInitialValues; // reference trigger
