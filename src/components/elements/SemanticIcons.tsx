@@ -38,6 +38,7 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import PeopleIcon from '@mui/icons-material/People';
+import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
 import Person from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
@@ -49,6 +50,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
 import SwapVertRoundedIcon from '@mui/icons-material/SwapVertRounded';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import WrapTextIcon from '@mui/icons-material/WrapText';
 import { styled, SvgIconProps } from '@mui/material';
 
@@ -79,6 +81,8 @@ export {
   ExpandMoreRoundedIcon as ExpandMoreIcon,
   SwapVertRoundedIcon as SortIcon,
   FilterListRoundedIcon as FilterIcon,
+  VisibilityRoundedIcon as AuditIcon,
+  PeopleOutlineRoundedIcon as ImpersonateIcon,
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
   RadioButtonCheckedIcon as FormChoiceIcon,

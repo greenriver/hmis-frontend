@@ -1,20 +1,28 @@
 import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
+import {
+  AuditIcon,
+  ImpersonateIcon,
+  OpenInNewIcon,
+} from '@/components/elements/SemanticIcons';
 import { AdminDashboardRoutes } from '@/routes/routes';
-import { RootPermissionsFragment } from '@/types/gqlTypes';
+import {
+  RootPermissionsFragment,
+  UserAdminFieldsFragment,
+} from '@/types/gqlTypes';
 
 interface Props {
   onClickImpersonate: VoidFunction;
   isCurrentUser: boolean;
-  userId: string;
+  user: UserAdminFieldsFragment;
   rootAccess: RootPermissionsFragment;
 }
 
 const UserActionsMenu: React.FC<Props> = ({
   onClickImpersonate,
   isCurrentUser,
-  userId,
+  user,
   rootAccess,
 }) => {
   const menuItems = useMemo(() => {
@@ -23,9 +31,11 @@ const UserActionsMenu: React.FC<Props> = ({
       items.push({
         key: 'audit',
         title: 'Audit User',
+        Icon: AuditIcon,
         to: generatePath(AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY, {
-          userId,
+          userId: user.id,
         }),
+        ariaLabel: `Audit ${user.name}`,
       });
     }
     if (rootAccess.canImpersonateUsers) {
@@ -33,17 +43,23 @@ const UserActionsMenu: React.FC<Props> = ({
         key: 'impersonate',
         onClick: onClickImpersonate,
         title: 'Impersonate User',
+        Icon: ImpersonateIcon,
         disabled: isCurrentUser,
+        ariaLabel: `Impersonate ${user.name}`,
+      });
+    }
+    if (rootAccess.canEditUsersInWarehouse) {
+      items.push({
+        key: 'edit',
+        to: user.manageAccountUrl,
+        title: 'Edit Account',
+        Icon: OpenInNewIcon,
+        openInNew: true,
+        ariaLabel: `Edit ${user.name}'s Account in the Warehouse`,
       });
     }
     return items;
-  }, [
-    isCurrentUser,
-    onClickImpersonate,
-    rootAccess.canAuditUsers,
-    rootAccess.canImpersonateUsers,
-    userId,
-  ]);
+  }, [isCurrentUser, onClickImpersonate, rootAccess, user]);
 
   if (menuItems.length === 0) return null;
 

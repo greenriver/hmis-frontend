@@ -15,6 +15,7 @@ fragment RootPermissions on QueryAccess {
   canManageDeniedReferrals
   canMergeClients # provides access to admin client merge
   canTransferEnrollments
+  canEditUsersInWarehouse
 
   # Root Client permissions:
   canViewClients

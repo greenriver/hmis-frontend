@@ -7,6 +7,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import Loading from '@/components/elements/Loading';
+import { PersonIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -14,10 +15,12 @@ import UserAccessHistory, {
   AccessEntityType,
 } from '@/modules/admin/components/users/UserAccessHistory';
 import UserAuditHistory from '@/modules/admin/components/users/UserAuditHistory';
+import UserLoginActivity from '@/modules/admin/components/users/UserLoginActivity';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
 import { AdminDashboardRoutes } from '@/routes/routes';
 
-type UserHistoryType = 'access' | 'edits';
+// TODO: replace toggle with CommonTabs, updated pattern for this type of navigation
+type UserHistoryType = 'access' | 'edits' | 'logins';
 const historyTypeToggleItems: ToggleItem<UserHistoryType>[] = [
   {
     value: 'access',
@@ -28,6 +31,11 @@ const historyTypeToggleItems: ToggleItem<UserHistoryType>[] = [
     value: 'edits',
     label: 'User Edits',
     Icon: EditIcon,
+  },
+  {
+    value: 'logins',
+    label: 'Login Activity',
+    Icon: PersonIcon,
   },
 ];
 
@@ -42,11 +50,6 @@ const UserAuditPage: React.FC<Props> = ({
   const { userId } = useSafeParams() as { userId: string };
   const { user, loading } = useUser(userId);
   const navigate = useNavigate();
-  //const defaultStartDate = useMemo<string>(() => {
-  //  const today = new Date();
-  //  const twoWeeksAgo = subWeeks(today, 2);
-  //  return formatISO(twoWeeksAgo);
-  //}, []);
 
   if (!user && loading) return <Loading />;
   if (!user) return <NotFound />;
@@ -63,6 +66,13 @@ const UserAuditPage: React.FC<Props> = ({
       case 'edits':
         navigate(
           generatePath(AdminDashboardRoutes.USER_EDIT_HISTORY, {
+            userId,
+          })
+        );
+        break;
+      case 'logins':
+        navigate(
+          generatePath(AdminDashboardRoutes.USER_LOGIN_ACTIVITY, {
             userId,
           })
         );
@@ -93,6 +103,7 @@ const UserAuditPage: React.FC<Props> = ({
           <UserAccessHistory accessEntityType={accessEntityType} />
         )}
         {userHistoryType === 'edits' && <UserAuditHistory />}
+        {userHistoryType === 'logins' && <UserLoginActivity />}
       </Paper>
     </>
   );
