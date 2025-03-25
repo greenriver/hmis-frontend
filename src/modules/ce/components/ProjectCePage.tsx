@@ -7,7 +7,7 @@ import ProjectOpportunitiesTable from '@/modules/ce/components/ProjectOpportunit
 import ProjectReferralsTable from '@/modules/ce/components/ProjectReferralsTable';
 
 interface Props {}
-const ProjectCePage: React.FC<Props> = ({}) => {
+const ProjectCePage: React.FC = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
