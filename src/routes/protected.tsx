@@ -426,7 +426,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: ProjectDashboardRoutes.OPPORTUNITIES,
+            path: ProjectDashboardRoutes.CE,
             element: (
               <RootPermissionsFilter
                 permissions={['canViewCoordinatedEntry']}

@@ -6,7 +6,6 @@ import CreateOpportunityButton from '@/modules/ce/components/CreateOpportunityBu
 import ProjectOpportunitiesTable from '@/modules/ce/components/ProjectOpportunitiesTable';
 import ProjectReferralsTable from '@/modules/ce/components/ProjectReferralsTable';
 
-interface Props {}
 const ProjectCePage: React.FC = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
