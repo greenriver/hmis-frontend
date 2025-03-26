@@ -51,6 +51,12 @@ mutation SubmitCeReferralStep(
       opportunity {
         ...CeOpportunityFields
       }
+      targetHousehold {
+        id
+        householdClients {
+          ...HouseholdClientFields
+        }
+      }
     }
     errors {
       ...ValidationErrorFields

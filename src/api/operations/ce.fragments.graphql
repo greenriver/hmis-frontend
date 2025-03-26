@@ -67,6 +67,12 @@ fragment CeReferralFields on CeReferral {
   opportunity {
     ...CeOpportunitySummaryFields
   }
+  targetHousehold {
+    id
+    householdClients {
+      ...HouseholdClientFields
+    }
+  }
 }
 
 fragment CeReferralStepSummaryFields on CeReferralStep {

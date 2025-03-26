@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import WayfindingDialog from '@/components/elements/navigation/WayfindingDialog';
 import { DeclinedIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
-import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
-import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
+import {
+  clientNameFromRecordWithOptionalClient,
+  findHohOrRep,
+} from '@/modules/hmis/hmisUtil';
+import {
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+  Routes,
+} from '@/routes/routes';
 import { CeReferralStatus } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -21,6 +28,13 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
 
   const { status, opportunity } = referral;
   const clientName = clientNameFromRecordWithOptionalClient(referral);
+
+  // if there is a target household on the referral, allow navigating to that HoH's enrollment
+  const target = useMemo(() => {
+    if (!referral.targetHousehold) return;
+
+    return findHohOrRep(referral.targetHousehold.householdClients);
+  }, [referral.targetHousehold]);
 
   switch (status) {
     case CeReferralStatus.Accepted:
@@ -40,6 +54,20 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
               title: 'Go to My Dashboard',
               to: generateSafePath(Routes.MY_DASHBOARD),
             },
+            ...(!!target
+              ? [
+                  {
+                    title: `Go to Enrollment`,
+                    to: generateSafePath(
+                      EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                      {
+                        clientId: target.client.id,
+                        enrollmentId: target.enrollment.id,
+                      }
+                    ),
+                  },
+                ]
+              : []),
           ]}
         />
       );

@@ -657,6 +657,7 @@ export type CeReferral = {
   opportunity: CeOpportunity;
   status: CeReferralStatus;
   steps: Array<CeReferralStep>;
+  targetHousehold?: Maybe<Household>;
 };
 
 export type CeReferralFilterOptions = {
@@ -15970,6 +15971,87 @@ export type CeReferralFieldsFragment = {
     projectId: string;
     projectName: string;
   };
+  targetHousehold?: {
+    __typename?: 'Household';
+    id: string;
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+        dob?: string | null;
+        age?: number | null;
+        gender: Array<Gender>;
+        pronouns: Array<string>;
+        ssn?: string | null;
+        race: Array<Race>;
+        veteranStatus: NoYesReasonsForMissingData;
+        access: {
+          __typename?: 'ClientAccess';
+          id: string;
+          canEditClient: boolean;
+          canDeleteClient: boolean;
+          canViewDob: boolean;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
+          canViewClientName: boolean;
+          canViewClientPhoto: boolean;
+          canViewClientAlerts: boolean;
+          canManageClientAlerts: boolean;
+          canViewEnrollmentDetails: boolean;
+          canAuditClients: boolean;
+          canManageScanCards: boolean;
+          canMergeClients: boolean;
+          canViewAnyFiles: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canUploadClientFiles: boolean;
+        };
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+          type: ExternalIdentifierType;
+        }>;
+        alerts: Array<{
+          __typename?: 'ClientAlert';
+          id: string;
+          note: string;
+          expirationDate?: string | null;
+          createdAt: string;
+          priority: ClientAlertPriorityLevel;
+          createdBy?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        }>;
+      };
+      enrollment: {
+        __typename?: 'Enrollment';
+        id: string;
+        lockVersion: number;
+        relationshipToHoH: RelationshipToHoH;
+        autoExited: boolean;
+        entryDate: string;
+        exitDate?: string | null;
+        inProgress: boolean;
+        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+      };
+    }>;
+  } | null;
   client?: {
     __typename?: 'Client';
     id: string;
@@ -17677,6 +17759,91 @@ export type SubmitCeReferralStepMutation = {
           ownerType: string;
         } | null;
       };
+      targetHousehold?: {
+        __typename?: 'Household';
+        id: string;
+        householdClients: Array<{
+          __typename?: 'HouseholdClient';
+          id: string;
+          relationshipToHoH: RelationshipToHoH;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+            dob?: string | null;
+            age?: number | null;
+            gender: Array<Gender>;
+            pronouns: Array<string>;
+            ssn?: string | null;
+            race: Array<Race>;
+            veteranStatus: NoYesReasonsForMissingData;
+            access: {
+              __typename?: 'ClientAccess';
+              id: string;
+              canEditClient: boolean;
+              canDeleteClient: boolean;
+              canViewDob: boolean;
+              canViewFullSsn: boolean;
+              canViewPartialSsn: boolean;
+              canViewClientName: boolean;
+              canViewClientPhoto: boolean;
+              canViewClientAlerts: boolean;
+              canManageClientAlerts: boolean;
+              canViewEnrollmentDetails: boolean;
+              canAuditClients: boolean;
+              canManageScanCards: boolean;
+              canMergeClients: boolean;
+              canViewAnyFiles: boolean;
+              canManageAnyClientFiles: boolean;
+              canManageOwnClientFiles: boolean;
+              canUploadClientFiles: boolean;
+            };
+            externalIds: Array<{
+              __typename?: 'ExternalIdentifier';
+              id: string;
+              identifier?: string | null;
+              url?: string | null;
+              label: string;
+              type: ExternalIdentifierType;
+            }>;
+            alerts: Array<{
+              __typename?: 'ClientAlert';
+              id: string;
+              note: string;
+              expirationDate?: string | null;
+              createdAt: string;
+              priority: ClientAlertPriorityLevel;
+              createdBy?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            }>;
+          };
+          enrollment: {
+            __typename?: 'Enrollment';
+            id: string;
+            lockVersion: number;
+            relationshipToHoH: RelationshipToHoH;
+            autoExited: boolean;
+            entryDate: string;
+            exitDate?: string | null;
+            inProgress: boolean;
+            currentUnit?: {
+              __typename?: 'Unit';
+              id: string;
+              name: string;
+            } | null;
+          };
+        }>;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -17889,6 +18056,91 @@ export type GetCeReferralQuery = {
       projectId: string;
       projectName: string;
     };
+    targetHousehold?: {
+      __typename?: 'Household';
+      id: string;
+      householdClients: Array<{
+        __typename?: 'HouseholdClient';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          lockVersion: number;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+          dob?: string | null;
+          age?: number | null;
+          gender: Array<Gender>;
+          pronouns: Array<string>;
+          ssn?: string | null;
+          race: Array<Race>;
+          veteranStatus: NoYesReasonsForMissingData;
+          access: {
+            __typename?: 'ClientAccess';
+            id: string;
+            canEditClient: boolean;
+            canDeleteClient: boolean;
+            canViewDob: boolean;
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
+            canViewClientName: boolean;
+            canViewClientPhoto: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
+            canViewEnrollmentDetails: boolean;
+            canAuditClients: boolean;
+            canManageScanCards: boolean;
+            canMergeClients: boolean;
+            canViewAnyFiles: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canUploadClientFiles: boolean;
+          };
+          externalIds: Array<{
+            __typename?: 'ExternalIdentifier';
+            id: string;
+            identifier?: string | null;
+            url?: string | null;
+            label: string;
+            type: ExternalIdentifierType;
+          }>;
+          alerts: Array<{
+            __typename?: 'ClientAlert';
+            id: string;
+            note: string;
+            expirationDate?: string | null;
+            createdAt: string;
+            priority: ClientAlertPriorityLevel;
+            createdBy?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }>;
+        };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          lockVersion: number;
+          relationshipToHoH: RelationshipToHoH;
+          autoExited: boolean;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+          } | null;
+        };
+      }>;
+    } | null;
     client?: {
       __typename?: 'Client';
       id: string;
@@ -44262,6 +44514,109 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     swimlane
   }
 `;
+export const ClientIdentificationFieldsFragmentDoc = gql`
+  fragment ClientIdentificationFields on Client {
+    id
+    lockVersion
+    dob
+    age
+    gender
+    pronouns
+  }
+`;
+export const ClientNameDobVetFragmentDoc = gql`
+  fragment ClientNameDobVet on Client {
+    ...ClientName
+    dob
+    veteranStatus
+  }
+  ${ClientNameFragmentDoc}
+`;
+export const AssessedClientFieldsFragmentDoc = gql`
+  fragment AssessedClientFields on Client {
+    ...ClientNameDobVet
+    ssn
+    race
+  }
+  ${ClientNameDobVetFragmentDoc}
+`;
+export const ClientAccessFieldsFragmentDoc = gql`
+  fragment ClientAccessFields on ClientAccess {
+    id
+    canEditClient
+    canDeleteClient
+    canViewDob
+    canViewFullSsn
+    canViewPartialSsn
+    canViewClientName
+    canViewClientPhoto
+    canViewClientAlerts
+    canManageClientAlerts
+    canViewEnrollmentDetails
+    canAuditClients
+    canManageScanCards
+    canMergeClients
+    canViewAnyFiles
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canUploadClientFiles
+  }
+`;
+export const ClientIdentifierFieldsFragmentDoc = gql`
+  fragment ClientIdentifierFields on ExternalIdentifier {
+    id
+    identifier
+    url
+    label
+    type
+  }
+`;
+export const EnrollmentRangeFieldsFragmentDoc = gql`
+  fragment EnrollmentRangeFields on Enrollment {
+    entryDate
+    exitDate
+    inProgress
+  }
+`;
+export const HouseholdClientFieldsFragmentDoc = gql`
+  fragment HouseholdClientFields on HouseholdClient {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+      ...ClientIdentificationFields
+      ...AssessedClientFields
+      access {
+        ...ClientAccessFields
+      }
+      externalIds {
+        ...ClientIdentifierFields
+      }
+      alerts {
+        ...ClientAlertFields
+      }
+    }
+    enrollment {
+      id
+      lockVersion
+      relationshipToHoH
+      ...EnrollmentRangeFields
+      autoExited
+      currentUnit {
+        id
+        name
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+  ${AssessedClientFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
+`;
 export const CeReferralFieldsFragmentDoc = gql`
   fragment CeReferralFields on CeReferral {
     ...CeReferralSummaryFields
@@ -44271,10 +44626,17 @@ export const CeReferralFieldsFragmentDoc = gql`
     opportunity {
       ...CeOpportunitySummaryFields
     }
+    targetHousehold {
+      id
+      householdClients {
+        ...HouseholdClientFields
+      }
+    }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${CeOpportunitySummaryFieldsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
 `;
 export const FormDefinitionMetadataFragmentDoc = gql`
   fragment FormDefinitionMetadata on FormDefinition {
@@ -44429,16 +44791,6 @@ export const CeReferralStepFieldsFragmentDoc = gql`
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
 `;
-export const ClientIdentificationFieldsFragmentDoc = gql`
-  fragment ClientIdentificationFields on Client {
-    id
-    lockVersion
-    dob
-    age
-    gender
-    pronouns
-  }
-`;
 export const ClientSsnFieldsFragmentDoc = gql`
   fragment ClientSsnFields on Client {
     id
@@ -44449,15 +44801,6 @@ export const ClientSsnFieldsFragmentDoc = gql`
       canViewFullSsn
       canViewPartialSsn
     }
-  }
-`;
-export const ClientIdentifierFieldsFragmentDoc = gql`
-  fragment ClientIdentifierFields on ExternalIdentifier {
-    id
-    identifier
-    url
-    label
-    type
   }
 `;
 export const ClientSearchResultFieldsFragmentDoc = gql`
@@ -44496,28 +44839,6 @@ export const ClientVeteranInfoFieldsFragmentDoc = gql`
     otherTheater
     militaryBranch
     dischargeStatus
-  }
-`;
-export const ClientAccessFieldsFragmentDoc = gql`
-  fragment ClientAccessFields on ClientAccess {
-    id
-    canEditClient
-    canDeleteClient
-    canViewDob
-    canViewFullSsn
-    canViewPartialSsn
-    canViewClientName
-    canViewClientPhoto
-    canViewClientAlerts
-    canManageClientAlerts
-    canViewEnrollmentDetails
-    canAuditClients
-    canManageScanCards
-    canMergeClients
-    canViewAnyFiles
-    canManageAnyClientFiles
-    canManageOwnClientFiles
-    canUploadClientFiles
   }
 `;
 export const ClientNameObjectFieldsFragmentDoc = gql`
@@ -44742,13 +45063,6 @@ export const ServiceTypeConfigFieldsFragmentDoc = gql`
   }
   ${ServiceTypeFieldsFragmentDoc}
 `;
-export const EnrollmentRangeFieldsFragmentDoc = gql`
-  fragment EnrollmentRangeFields on Enrollment {
-    entryDate
-    exitDate
-    inProgress
-  }
-`;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
     id
@@ -44833,14 +45147,6 @@ export const ClientEnrollmentFieldsFragmentDoc = gql`
     }
   }
 `;
-export const ClientNameDobVetFragmentDoc = gql`
-  fragment ClientNameDobVet on Client {
-    ...ClientName
-    dob
-    veteranStatus
-  }
-  ${ClientNameFragmentDoc}
-`;
 export const EnrollmentAccessFieldsFragmentDoc = gql`
   fragment EnrollmentAccessFields on EnrollmentAccess {
     id
@@ -44904,14 +45210,6 @@ export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
     }
   }
   ${ClientAddressFieldsFragmentDoc}
-`;
-export const AssessedClientFieldsFragmentDoc = gql`
-  fragment AssessedClientFields on Client {
-    ...ClientNameDobVet
-    ssn
-    race
-  }
-  ${ClientNameDobVetFragmentDoc}
 `;
 export const EnrolledClientFieldsFragmentDoc = gql`
   fragment EnrolledClientFields on Client {
@@ -45029,45 +45327,6 @@ export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-`;
-export const HouseholdClientFieldsFragmentDoc = gql`
-  fragment HouseholdClientFields on HouseholdClient {
-    id
-    relationshipToHoH
-    client {
-      id
-      ...ClientName
-      ...ClientIdentificationFields
-      ...AssessedClientFields
-      access {
-        ...ClientAccessFields
-      }
-      externalIds {
-        ...ClientIdentifierFields
-      }
-      alerts {
-        ...ClientAlertFields
-      }
-    }
-    enrollment {
-      id
-      lockVersion
-      relationshipToHoH
-      ...EnrollmentRangeFields
-      autoExited
-      currentUnit {
-        id
-        name
-      }
-    }
-  }
-  ${ClientNameFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
-  ${AssessedClientFieldsFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
-  ${ClientIdentifierFieldsFragmentDoc}
-  ${ClientAlertFieldsFragmentDoc}
-  ${EnrollmentRangeFieldsFragmentDoc}
 `;
 export const HouseholdFieldsFragmentDoc = gql`
   fragment HouseholdFields on Household {
@@ -47715,6 +47974,12 @@ export const SubmitCeReferralStepDocument = gql`
         opportunity {
           ...CeOpportunityFields
         }
+        targetHousehold {
+          id
+          householdClients {
+            ...HouseholdClientFields
+          }
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -47723,6 +47988,7 @@ export const SubmitCeReferralStepDocument = gql`
   }
   ${CeReferralStepFieldsFragmentDoc}
   ${CeOpportunityFieldsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitCeReferralStepMutationFn = Apollo.MutationFunction<
