@@ -111,13 +111,13 @@ const projectDashboardRoutes = {
   EXTERNAL_FORM_SUBMISSIONS: 'external-form-submissions',
 
   // CE
-  OPPORTUNITIES: 'opportunities',
-  OPPORTUNITY: 'opportunities/:opportunityId',
-  REFERRAL: 'opportunities/:opportunityId/referrals',
-  REFERRAL_DETAILS: 'opportunities/:opportunityId/referrals/:referralId',
-  REFERRAL_STEPS: 'opportunities/:opportunityId/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
+  CE: 'ce',
+  OPPORTUNITY: 'ce/opportunities/:opportunityId',
+  REFERRAL: 'ce/opportunities/:opportunityId/referrals',
+  REFERRAL_DETAILS: 'ce/opportunities/:opportunityId/referrals/:referralId',
+  REFERRAL_STEPS: 'ce/opportunities/:opportunityId/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
   REFERRAL_STEP:
-    'opportunities/:opportunityId/referrals/:referralId/tasks/:stepId',
+    'ce/opportunities/:opportunityId/referrals/:referralId/tasks/:stepId',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`

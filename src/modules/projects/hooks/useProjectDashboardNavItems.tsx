@@ -100,9 +100,9 @@ export const useProjectDashboardNavItems = (
             permissionMode: 'any',
           },
           {
-            id: 'opportunities',
-            title: 'Opportunities',
-            path: ProjectDashboardRoutes.OPPORTUNITIES,
+            id: 'coordinated-entry',
+            title: 'Coordinated Entry',
+            path: ProjectDashboardRoutes.CE,
             hide: !canViewCoordinatedEntry,
           },
         ],

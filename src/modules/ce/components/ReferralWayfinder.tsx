@@ -34,9 +34,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           items={[
             {
               title: 'Return to Opportunity Overview',
-              to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITIES, {
-                projectId,
-              }),
+              to: generateSafePath(ProjectDashboardRoutes.CE, { projectId }),
             },
             {
               title: 'Go to My Dashboard',

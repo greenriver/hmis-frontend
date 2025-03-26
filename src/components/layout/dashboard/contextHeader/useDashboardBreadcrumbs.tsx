@@ -141,9 +141,12 @@ export const useProjectBreadcrumbConfig = (
       [ProjectDashboardRoutes.CE_PARTICIPATION]: {
         title: 'CE Participation',
       },
+      [ProjectDashboardRoutes.CE]: {
+        title: 'Coordinated Entry',
+      },
       [ProjectDashboardRoutes.OPPORTUNITY]: {
         title: 'Opportunity',
-        parent: ProjectDashboardRoutes.OPPORTUNITIES,
+        parent: ProjectDashboardRoutes.CE,
       },
       [ProjectDashboardRoutes.REFERRAL_DETAILS]: {
         title: 'Referral',
