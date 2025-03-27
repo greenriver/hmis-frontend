@@ -1,12 +1,14 @@
 ## Description
 
-Include a summary of the changes and a link to the related issue. List any dependencies that are required for this change.
+Summary of changes:
 
 [//]: # 'remove if not applicable'
 Depends on hmis-warehouse PR:
 
+[//]: # 'remove if not applicable'
+How to test:
+
 ## Type of change
-[//]: # 'remove options that are not relevant'
 - [ ] Bug fix
 - [ ] New feature (adds functionality)
 - [ ] Code clean-up / housekeeping
