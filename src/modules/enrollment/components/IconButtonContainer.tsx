@@ -18,7 +18,7 @@ const IconButtonContainer = ({
 }) => {
   const button = (
     <IconButton
-      sx={{ padding: 0.5, color: 'links' }}
+      sx={{ padding: 0.5, color: 'primary.main' }}
       size='small'
       onClick={onClick}
       {...IconButtonProps}

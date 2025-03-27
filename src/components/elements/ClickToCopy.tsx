@@ -47,7 +47,7 @@ export const ClickToCopyButton: React.FC<
     <IconButton
       aria-label='copy'
       onClick={() => navigator.clipboard.writeText(value)}
-      sx={{ fontSize: 'inherit', color: 'links' }}
+      sx={{ fontSize: 'inherit' }}
       {...props}
     >
       <CopyIcon fontSize='inherit' />

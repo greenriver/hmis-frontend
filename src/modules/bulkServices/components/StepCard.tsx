@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from '@mui/material';
 import { Stack, SxProps } from '@mui/system';
 import React, { ReactNode } from 'react';
-import { CommonCard } from '@/components/elements/CommonCard';
+import CommonCard from '@/components/elements/CommonCard';
 
 export const StepCardTitle: React.FC<{
   step: string;
@@ -57,8 +57,8 @@ const StepCard: React.FC<{
         sx={{
           m: 2,
           textAlign: 'center',
-          color: 'text.disabled',
-          backgroundColor: (theme) => theme.palette.background.default,
+          color: 'text.secondary',
+          backgroundColor: 'grayscale.surface',
           border: 'unset',
         }}
       >

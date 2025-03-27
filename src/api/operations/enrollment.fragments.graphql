@@ -253,6 +253,7 @@ fragment CeAssessmentFields on CeAssessment {
   user {
     ...UserFields
   }
+  formDefinitionId
 }
 
 fragment EnrollmentSummaryFields on EnrollmentSummary {

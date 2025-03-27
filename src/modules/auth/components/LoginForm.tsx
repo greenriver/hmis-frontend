@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import OneTimePassword from './OneTimePassword';
 
@@ -14,11 +13,9 @@ import TextInput from '@/components/elements/input/TextInput';
 import LoadingButton from '@/components/elements/LoadingButton';
 import {
   fetchCurrentUser,
-  HmisUser,
   isHmisResponseError,
   login,
 } from '@/modules/auth/api/sessions';
-import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { reloadWindow } from '@/utils/location';
 
@@ -37,19 +34,13 @@ const LoginForm = () => {
     useState<boolean>(false);
   const [prompt2fa, setPrompt2fa] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const { setUser } = useAuth();
   const { resetPasswordUrl } = useHmisAppSettings();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
 
-  const handleSuccess = useCallback(
-    (user: HmisUser) => {
-      setUser(user);
-      navigate('/');
-    },
-    [navigate, setUser]
-  );
+  // Reload page on successful login, to ensure the user fetches the latest assets.
+  // When the page reloads, the application will get the user from getValidCachedUser
+  const handleSuccess = useCallback(() => reloadWindow(), []);
 
   const retryCsrf = useRef(true);
   const handleSubmit = useCallback(
@@ -65,10 +56,10 @@ const LoginForm = () => {
 
       const sendLogin = () => {
         // if (simulateFail) return Promise.reject( new HmisResponseError({ type: 'unverified_request' }));
-        return login({ email, password }).then((user) => {
+        return login({ email, password }).then(() => {
           setPrompt2fa(false);
           setLoading(false);
-          handleSuccess(user);
+          handleSuccess();
         });
       };
 

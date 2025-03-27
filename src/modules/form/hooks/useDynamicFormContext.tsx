@@ -1,15 +1,21 @@
 import { createContext, useContext } from 'react';
 
-import { FormValues } from '../types';
+import { ItemMap, LocalConstants, PartialLinkIdMap } from '../types';
 
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 type DynamicFormContextType = {
-  getValues?: () => FormValues;
-  definition?: FormDefinitionJson;
+  definition: FormDefinitionJson;
+  itemMap: ItemMap;
+  localConstants: LocalConstants;
+  viewOnly: boolean;
+  autofillInvertedDependencyMap: PartialLinkIdMap;
+  disabledDependencyMap: PartialLinkIdMap;
 };
 
-export const DynamicFormContext = createContext<DynamicFormContextType>({});
+export const DynamicFormContext = createContext<DynamicFormContextType>(
+  {} as DynamicFormContextType
+);
 
 const useDynamicFormContext = () => {
   return useContext(DynamicFormContext);

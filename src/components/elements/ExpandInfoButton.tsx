@@ -17,7 +17,7 @@ const ExpandInfoButton: React.FC<Props> = ({ expanded, ...props }) => {
       }
       {...props}
       sx={({ typography }) => ({
-        color: 'links',
+        color: 'primary.dark',
         fontWeight: typography.fontWeightBold,
         width: 'fit-content',
         ml: -1,

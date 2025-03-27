@@ -1,4 +1,3 @@
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { Stack } from '@mui/material';
 import { isDate, isValid } from 'date-fns';
 import { isEmpty, isNil, startCase } from 'lodash-es';
@@ -6,6 +5,7 @@ import { useCallback, useMemo } from 'react';
 
 import TableFilterItem from './FilterItem';
 import TableControlPopover from './TableControlPopover';
+import { FilterIcon } from '@/components/elements/SemanticIcons';
 import useIntermediateState from '@/hooks/useIntermediateState';
 import { FilterType } from '@/modules/dataFetching/types';
 
@@ -57,8 +57,8 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
 
   return (
     <TableControlPopover
-      label='Filters'
-      icon={<FilterListIcon />}
+      label='Filter'
+      icon={<FilterIcon />}
       header='Filter By'
       applyLabel='Apply Filters'
       filterHint={filterHint}

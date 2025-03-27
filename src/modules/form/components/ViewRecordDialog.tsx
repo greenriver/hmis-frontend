@@ -89,7 +89,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
       <DialogContent>
         <Box
           sx={(theme) => ({
-            backgroundColor: theme.palette.grey[300],
+            backgroundColor: 'grayscale.200',
             boxShadow: `${theme.shadows[1]} inset`,
             padding: 2,
             display: 'flex',

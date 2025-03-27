@@ -2,10 +2,9 @@ import LockIcon from '@mui/icons-material/Lock';
 import { Alert, Chip, Grid, Stack, Typography } from '@mui/material';
 import FormRulesCard from '../formRules/FormRulesCard';
 import FormVersionTable from './FormVersionTable';
-import { CommonCard } from '@/components/elements/CommonCard';
+import CommonCard from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
-import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 
 import NotFound from '@/components/pages/NotFound';
@@ -42,7 +41,7 @@ const FormDefinitionDetailPage = () => {
       <Stack gap={2}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
-            <CommonCard title='Details' titleComponent='h5'>
+            <CommonCard title='Details' TitleComponent='h5'>
               <Stack gap={2}>
                 {formIdentifier.managedInVersionControl && (
                   <Alert severity='info' icon={<LockIcon />}>
@@ -83,14 +82,14 @@ const FormDefinitionDetailPage = () => {
           formRole={formIdentifier.displayVersion.role}
           formCacheKey={formIdentifier.displayVersion.cacheKey}
         />
-        <TitleCard
+        <CommonCard
           title='Version History'
           headerVariant='border'
-          headerTypographyVariant='h5'
-          headerComponent='h2'
+          TitleComponent='h2'
+          padContent={false}
         >
           <FormVersionTable formIdentifier={formIdentifier.identifier} />
-        </TitleCard>
+        </CommonCard>
       </Stack>
     </>
   );
