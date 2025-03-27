@@ -29,7 +29,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
   const { status, opportunity } = referral;
   const clientName = clientNameFromRecordWithOptionalClient(referral);
 
-  // if there is a target household on the referral, allow navigating to that HoH's enrollment
+  // "target" household on the referral links to the household/enrollment that was created by this referral, if any
   const target = useMemo(() => {
     if (!referral.targetHousehold) return;
 
