@@ -51,10 +51,10 @@ mutation SubmitCeReferralStep(
       opportunity {
         ...CeOpportunityFields
       }
-      targetHousehold {
+      targetEnrollment {
         id
-        householdClients {
-          ...HouseholdClientFields
+        client {
+          id
         }
       }
     }

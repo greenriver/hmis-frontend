@@ -67,10 +67,10 @@ fragment CeReferralFields on CeReferral {
   opportunity {
     ...CeOpportunitySummaryFields
   }
-  targetHousehold {
+  targetEnrollment {
     id
-    householdClients {
-      ...HouseholdClientFields
+    client {
+      id
     }
   }
 }

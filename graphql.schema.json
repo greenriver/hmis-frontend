@@ -4783,12 +4783,12 @@
             "deprecationReason": null
           },
           {
-            "name": "targetHousehold",
+            "name": "targetEnrollment",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Household",
+              "name": "Enrollment",
               "ofType": null
             },
             "isDeprecated": false,
