@@ -27,12 +27,14 @@ import {
 export const CLS_COLUMNS = {
   informationDate: {
     header: 'Information Date',
+    key: 'date',
     width: '180px',
     render: (e: CurrentLivingSituationFieldsFragment) =>
       parseAndFormatDate(e.informationDate),
   },
   livingSituation: {
     header: 'Living Situation',
+    key: 'livingSituation',
     width: '400px',
     render: (e: CurrentLivingSituationFieldsFragment) => (
       <HmisEnum
@@ -43,6 +45,7 @@ export const CLS_COLUMNS = {
   },
   locationDetails: {
     header: 'Location Details',
+    key: 'locationDetails',
     render: (e: CurrentLivingSituationFieldsFragment) => e.locationDetails,
   },
 };

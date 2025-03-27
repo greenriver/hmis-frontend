@@ -31,6 +31,7 @@ export const CASE_NOTE_COLUMNS: Record<
 > = {
   InformationDate: {
     header: 'Information Date',
+    key: 'informationDate',
     width: '150px',
     render: ({ informationDate }: CustomCaseNoteFieldsFragment) =>
       parseAndFormatDate(informationDate),
@@ -38,6 +39,7 @@ export const CASE_NOTE_COLUMNS: Record<
   },
   NoteContent: {
     header: 'Note Content',
+    key: 'noteContent',
     render: ({ content }: CustomCaseNoteFieldsFragment) => (
       <Box
         sx={{
@@ -53,8 +55,8 @@ export const CASE_NOTE_COLUMNS: Record<
     ),
   },
   NoteContentPreview: {
-    key: 'content-preview',
     header: 'Note Content Preview',
+    key: 'contentPreview',
     render: ({ content }: CustomCaseNoteFieldsFragment) => (
       <Box
         sx={{
@@ -72,6 +74,7 @@ export const CASE_NOTE_COLUMNS: Record<
   },
   LastUpdated: {
     header: 'Last Updated',
+    key: 'lastUpdated',
     minWidth: '200px',
     render: ({ dateUpdated, user }: CustomCaseNoteFieldsFragment) => {
       if (dateUpdated)

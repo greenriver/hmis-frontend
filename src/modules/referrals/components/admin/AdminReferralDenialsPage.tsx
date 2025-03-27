@@ -31,37 +31,43 @@ const AdminReferralDenialsPage = () => {
     () => [
       {
         header: 'Referral ID',
+        key: 'referralId',
         render: (row: ReferralPostingFieldsFragment) =>
           row.referralIdentifier || 'N/A',
         hide: !externalReferrals, // only show for external referral which have ID from another system
       },
       {
         header: 'Referral Date',
+        key: 'referralDate',
         render: (row: ReferralPostingFieldsFragment) =>
           parseAndFormatDate(row.referralDate),
       },
-
       {
         header: 'Project',
+        key: 'project',
         render: (row: ReferralPostingFieldsFragment) =>
           row.project?.projectName,
       },
       {
         header: 'Organization',
+        key: 'organization',
         render: (row: ReferralPostingFieldsFragment) =>
           row.organization?.organizationName,
       },
       {
         header: 'HoH Name',
+        key: 'hohName',
         render: (row: ReferralPostingFieldsFragment) => row.hohName,
       },
       {
         header: 'HoH MCI ID',
+        key: 'hohMciId',
         render: (row: ReferralPostingFieldsFragment) => row.hohMciId,
         hide: !externalReferrals,
       },
       {
         header: 'Denied By',
+        key: 'deniedBy',
         render: (row: ReferralPostingFieldsFragment) => {
           const action =
             row.status === ReferralPostingStatus.DeniedPendingStatus

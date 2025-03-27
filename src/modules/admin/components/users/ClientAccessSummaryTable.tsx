@@ -15,13 +15,16 @@ const columns: ColumnDef<ClientAccessSummaryFieldsFragment>[] = [
   {
     header: 'Client Name',
     render: 'clientName',
+    key: 'name',
   },
   {
     header: 'Client ID',
     render: 'clientId',
+    key: 'id',
   },
   {
     header: 'Last Accessed',
+    key: 'lastAccessed',
     render: ({ lastAccessedAt }) => (
       <RelativeDateTableCellContents
         dateTimeString={lastAccessedAt}

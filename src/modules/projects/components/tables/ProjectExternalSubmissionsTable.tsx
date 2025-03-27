@@ -61,10 +61,12 @@ const ProjectExternalSubmissionsTable = ({
       return [
         {
           header: 'ID',
+          key: 'id',
           render: (s: ExternalFormSubmissionSummaryFragment) => s.id,
         },
         {
           header: 'Status',
+          key: 'status',
           render: ({ status, spam }: ExternalFormSubmissionSummaryFragment) => {
             const isNew = status === ExternalFormSubmissionStatus.New;
             return (
@@ -91,6 +93,7 @@ const ProjectExternalSubmissionsTable = ({
         },
         {
           header: 'Date Submitted',
+          key: 'dateSubmitted',
           render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) => (
             <RelativeDateTableCellContents
               dateTimeString={submittedAt}

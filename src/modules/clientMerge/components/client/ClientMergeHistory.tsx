@@ -18,14 +18,17 @@ export const ClientMergeAuditColumns: ColumnDef<MergeAuditEventFieldsFragment>[]
   [
     {
       header: 'Merged Client IDs',
+      key: 'mergedClientIds',
       render: ({ clientIdsMerged }) => clientIdsMerged.join(', '),
     },
     {
       header: 'Merged By',
+      key: 'mergedBy',
       render: ({ user }) => user?.name || 'Unknown',
     },
     {
       header: 'Merged At',
+      key: 'mergedAt',
       render: ({ mergedAt }) => (
         <RelativeDateTableCellContents dateTimeString={mergedAt} horizontal />
       ),

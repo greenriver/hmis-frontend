@@ -1,7 +1,8 @@
 import PersonIcon from '@mui/icons-material/Person';
 import { Box, Grid } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import ProjectClientEnrollmentsTable from './ProjectClientEnrollmentsTable';
 import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 
@@ -10,16 +11,42 @@ import LabelWithContent from '@/components/elements/LabelWithContent';
 import { HouseholdIcon } from '@/components/elements/SemanticIcons';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ClientSearchInput from '@/modules/search/components/ClientTextSearchInput';
+import { ProjectDashboardRoutes } from '@/routes/routes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
-type Mode = 'clients' | 'households';
+export type ProjectEnrollmentsTableMode = 'clients' | 'households';
 
 interface Props {
+  mode: ProjectEnrollmentsTableMode;
   projectId: string;
 }
-const ProjectEnrollmentsTable: React.FC<Props> = ({ projectId }) => {
+const ProjectEnrollmentsTable: React.FC<Props> = ({ mode, projectId }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const [mode, setMode] = useState<Mode>('households');
+  const navigate = useNavigate();
+  const setMode = useCallback(
+    (newMode: ProjectEnrollmentsTableMode) => {
+      switch (newMode) {
+        case 'households':
+          navigate(
+            generateSafePath(
+              ProjectDashboardRoutes.PROJECT_ENROLLMENTS_HOUSEHOLDS,
+              { projectId }
+            )
+          );
+          break;
+        case 'clients':
+          navigate(
+            generateSafePath(
+              ProjectDashboardRoutes.PROJECT_ENROLLMENTS_CLIENTS,
+              { projectId }
+            )
+          );
+          break;
+      }
+    },
+    [navigate, projectId]
+  );
 
   return (
     <>

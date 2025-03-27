@@ -40,9 +40,6 @@ import TableRowActions from '@/components/elements/table/TableRowActions';
 import { customVisuallyHidden } from '@/config/theme';
 import { LocationState } from '@/routes/routeUtil';
 
-export const getColumnKey = <T extends { id: string }>(def: ColumnDef<T>) =>
-  def.key || (typeof def.header === 'string' ? def.header : '');
-
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
@@ -380,10 +377,10 @@ const GenericTable = <T extends { id: string }>({
               />
             </HeaderCell>
           )}
-          {columns.map((def, i) => {
+          {columns.map((def) => {
             return (
               <HeaderCell
-                key={getColumnKey(def) || i}
+                key={def.key}
                 className={def.sticky ? stickyCellClassName : undefined}
                 sx={{
                   ...getStickyCellStyles({
@@ -459,11 +456,11 @@ const GenericTable = <T extends { id: string }>({
           {tableHead}
           <TableBodyComponent>
             {vertical &&
-              columns.map((def, i) => (
-                <TableRow key={getColumnKey(def) || i}>
+              columns.map((def) => (
+                <TableRow key={def.key}>
                   <HeaderCell
                     sx={{ ...verticalCellSx(1), width: '350px' }}
-                    key={getColumnKey(def)}
+                    key={def.key}
                     role='rowheader'
                     {...def.headerCellProps}
                   >
@@ -585,7 +582,7 @@ const GenericTable = <T extends { id: string }>({
 
                       return (
                         <TableCell
-                          key={getColumnKey(def) || index}
+                          key={def.key}
                           {...cellProps}
                           className={sticky ? stickyCellClassName : undefined}
                           sx={{

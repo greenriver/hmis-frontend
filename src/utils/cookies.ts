@@ -15,5 +15,5 @@ export function readCookie(cookieName: string) {
 
 export function setCookie(name: string, value: string) {
   // Set the cookie with the desired name, value, and expiration time
-  document.cookie = `${name}=${value}; Secure`;
+  document.cookie = `${name}=${value}; path=/; SameSite=Lax; Secure`;
 }

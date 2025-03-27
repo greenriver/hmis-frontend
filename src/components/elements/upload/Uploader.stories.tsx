@@ -42,9 +42,7 @@ export default {
         id='result'
         sx={{ p: 2, borderRadius: 4, backgroundColor: 'grey.100' }}
       >
-        <Typography sx={({ palette }) => ({ color: palette.text.disabled })}>
-          Results will show here
-        </Typography>
+        <Typography>Results will show here</Typography>
       </Box>
     </>
   ),

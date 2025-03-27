@@ -42,7 +42,7 @@ const ClientCardImageElement: React.FC<Props> = ({
       {src ? undefined : (
         <Typography
           sx={{
-            color: (theme) => theme.palette.text.disabled,
+            color: 'grayscale.main',
             borderBottom: 0,
             display: 'flex',
             flexGrow: 1,

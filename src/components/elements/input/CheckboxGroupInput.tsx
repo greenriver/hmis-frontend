@@ -56,6 +56,8 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
         component='fieldset'
         variant='standard'
         sx={{ maxWidth, ...sx }}
+        // this marks up the fieldset DOM element as `disabled`. MUI FormControl doesn't pass down the `disabled` prop
+        ref={(el) => el && disabled && el.setAttribute('disabled', 'true')}
       >
         {label && (
           <FormLabel

@@ -73,7 +73,7 @@ const BulkServicesTable: React.FC<Props> = ({
   const getColumnDefs = useCallback(
     (_rows: RowType[], loading?: boolean) => {
       const notEnrolledText = (
-        <NotCollectedText variant='inherit' color='text.disabled'>
+        <NotCollectedText variant='inherit' color='grayscale.main'>
           Not enrolled on {formatDateForDisplay(serviceDate, 'M/d')}
         </NotCollectedText>
       );
@@ -82,6 +82,7 @@ const BulkServicesTable: React.FC<Props> = ({
         ...(canViewDob ? [CLIENT_COLUMNS.dobAge] : []),
         {
           header: 'Entry Date',
+          key: 'entryDate',
           render: (row: RowType) => {
             if (!row.activeEnrollment) return notEnrolledText;
 
@@ -90,11 +91,12 @@ const BulkServicesTable: React.FC<Props> = ({
         },
         {
           header: `Last ${serviceTypeName} Date`,
+          key: 'lastServiceDate',
           render: (row: RowType) => {
             if (!row.activeEnrollment) return notEnrolledText;
 
             const noService = (
-              <NotCollectedText variant='inherit' color='text.disabled'>
+              <NotCollectedText variant='inherit' color='grayscale.main'>
                 No Previous {serviceTypeName}
               </NotCollectedText>
             );

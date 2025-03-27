@@ -1,11 +1,12 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { Typography } from '@mui/material';
+import React, { useMemo } from 'react';
 
+import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import TitleCard from '@/components/elements/TitleCard';
+import { ENROLLMENT_STATUS_COL } from '@/modules/enrollment/columns/enrollmentColumns';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { isRecentEnrollment } from '@/modules/hmis/hmisUtil';
-import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
@@ -41,25 +42,13 @@ const RecentEnrollments = ({
 
   if (error) throw error;
   if (loading && !client) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: (theme) => theme.palette.text.disabled,
-          p: 2,
-        }}
-      >
-        <CircularProgress aria-label='Loading' color='inherit' />
-      </Box>
-    );
+    return <Loading />;
   }
   if (!client) throw new Error('client not found');
 
   if (recentEnrollments && recentEnrollments.length === 0)
     return (
-      <Typography sx={{ p: 2 }} color='GrayText'>
+      <Typography sx={{ p: 2 }} color='grayscale.main'>
         No Recent Enrollments
       </Typography>
     );
@@ -69,7 +58,7 @@ const RecentEnrollments = ({
       noHead
       rows={recentEnrollments}
       columns={[
-        ENROLLMENT_COLUMNS.enrollmentStatus,
+        ENROLLMENT_STATUS_COL,
         {
           key: 'name',
           header: 'Name',
@@ -77,6 +66,7 @@ const RecentEnrollments = ({
         },
         {
           header: 'Enrollment Period',
+          key: 'enrollmentPeriod',
           render: (e) => (
             <EnrollmentDateRangeWithStatus
               enrollment={e}

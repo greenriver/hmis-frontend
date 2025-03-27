@@ -70,8 +70,8 @@ const RecordPickerDialog = ({
     // Select additional fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item)
       .filter((item) => !item.hidden && !!item.mapping)
-      .map((i) => ({
-        key: i.mapping?.fieldName || undefined,
+      .map((i, idx) => ({
+        key: i.mapping?.fieldName || `${idx}`,
         header: i.briefText || i.text || startCase(i.mapping?.fieldName || ''),
         render: (assessment: AssessmentForPopulation) => {
           if (!i.mapping) return;

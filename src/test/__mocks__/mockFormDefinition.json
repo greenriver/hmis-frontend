@@ -470,7 +470,7 @@
                 {
                   "type": "DISPLAY",
                   "linkId": "4.06.2-info",
-                  "text": "<i style='color:gray;'>Not applicable.</i>"
+                  "text": "<i style='color:#6E6E6E;'>Not applicable.</i>"
                 }
               ]
             },

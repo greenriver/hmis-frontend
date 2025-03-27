@@ -75,14 +75,17 @@ export const ASSESSMENT_COLUMNS: {
 } = {
   date: {
     header: 'Assessment Date',
+    key: 'date',
     render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
   },
   type: {
     header: 'Assessment Type',
+    key: 'type',
     render: (a) => formRoleDisplay(a),
   },
   lastUpdated: {
     header: 'Last Updated',
+    key: 'lastUpdated',
     render: ({ dateUpdated, user }) => {
       if (dateUpdated)
         return (
@@ -99,6 +102,7 @@ export const ASSESSMENT_CLIENT_NAME_COL: ColumnDef<
   ProjectAssessmentType | HhmAssessmentType
 > = {
   header: 'Client Name',
+  key: 'clientName',
   sticky: 'left',
   render: (a) => clientBriefName(a.enrollment.client),
 };

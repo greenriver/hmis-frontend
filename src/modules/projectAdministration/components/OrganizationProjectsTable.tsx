@@ -20,16 +20,19 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Name',
+    key: 'projectName',
     render: 'projectName',
   },
   {
     header: 'Project Type',
+    key: 'projectType',
     render: (project: ProjectAllFieldsFragment) => (
       <ProjectTypeChip projectType={project.projectType} />
     ),
   },
   {
     header: 'Operating Period',
+    key: 'operatingPeriod',
     render: (project: ProjectAllFieldsFragment) =>
       parseAndFormatDateRange(
         project.operatingStartDate,

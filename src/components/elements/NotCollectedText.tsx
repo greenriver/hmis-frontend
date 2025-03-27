@@ -11,7 +11,7 @@ const NotCollectedText = ({
 }: NotCollectedTextProps): JSX.Element => {
   return (
     <Typography
-      color='text.disabled'
+      color='grayscale.main'
       variant='inherit'
       className='HmisForm-notCollectedText'
       {...props}
