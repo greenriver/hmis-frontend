@@ -6,6 +6,7 @@ import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
+import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
 import {
   emptyErrorState,
   ErrorState,
@@ -100,6 +101,16 @@ const ReferralStep: React.FC<Props> = ({}) => {
       <Stack gap={2}>
         <ReferralStepAssignee step={step} />
         <Divider />
+        {status === CeReferralStepStatus.Available && (
+          <StartCeReferralStepButton
+            step={step}
+            opportunityId={opportunityId}
+            projectId={projectId}
+            referralId={referralId}
+          >
+            Start Step
+          </StartCeReferralStepButton>
+        )}
         {status === CeReferralStepStatus.InProgress && (
           <DynamicForm
             definition={formDefinition.definition}
