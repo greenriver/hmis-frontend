@@ -46,8 +46,7 @@ mutation SubmitCeReferralStep(
       ...CeReferralStepFields
     }
     referral {
-      id
-      status
+      ...CeReferralFields
       opportunity {
         ...CeOpportunityFields
       }

@@ -17625,6 +17625,7 @@ export type SubmitCeReferralStepMutation = {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
+      clientId: string;
       opportunity: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -17677,6 +17678,23 @@ export type SubmitCeReferralStepMutation = {
           ownerType: string;
         } | null;
       };
+      steps: Array<{
+        __typename?: 'CeReferralStep';
+        id: string;
+        stepId?: string | null;
+        name: string;
+        status: CeReferralStepStatus;
+        swimlane: string;
+      }>;
+      client?: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -47710,8 +47728,7 @@ export const SubmitCeReferralStepDocument = gql`
         ...CeReferralStepFields
       }
       referral {
-        id
-        status
+        ...CeReferralFields
         opportunity {
           ...CeOpportunityFields
         }
@@ -47722,6 +47739,7 @@ export const SubmitCeReferralStepDocument = gql`
     }
   }
   ${CeReferralStepFieldsFragmentDoc}
+  ${CeReferralFieldsFragmentDoc}
   ${CeOpportunityFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
