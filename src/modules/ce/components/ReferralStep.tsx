@@ -130,6 +130,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
               submitButtonText: 'Submit',
               noDiscard: true,
             }}
+            initialValues={formState}
           />
         )}
         {status === CeReferralStepStatus.Completed && formState && (
