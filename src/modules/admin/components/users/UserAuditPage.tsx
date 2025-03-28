@@ -12,7 +12,7 @@ import UserAccessHistory, {
   AccessEntityType,
 } from '@/modules/admin/components/users/UserAccessHistory';
 import UserAuditHistory from '@/modules/admin/components/users/UserAuditHistory';
-import UserLoginActivity from '@/modules/admin/components/users/UserLoginActivity';
+import UserLoginHistory from '@/modules/admin/components/users/UserLoginHistory';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
 import { AdminDashboardRoutes } from '@/routes/routes';
 
@@ -91,7 +91,7 @@ const UserAuditPage: React.FC<Props> = ({
         title: 'Login History',
         contents: (
           <Paper>
-            <UserLoginActivity />
+            <UserLoginHistory />
           </Paper>
         ),
       },

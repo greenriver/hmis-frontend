@@ -15,7 +15,6 @@ const LastContact: React.FC<Props> = ({ enrollment }) => {
     <Box whiteSpace='nowrap'>
       <DateWithRelativeTooltip
         dateString={enrollment.lastContact.contactDate}
-        preciseTime={false}
       />{' '}
       ({HmisEnums.LastContactType[enrollment.lastContact.contactType]})
     </Box>
