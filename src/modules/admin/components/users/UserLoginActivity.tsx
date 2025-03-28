@@ -50,6 +50,7 @@ const UserLoginActivity = () => {
           paginationItemName='login'
           queryDocument={GetUserLoginActivitiesDocument}
           queryVariables={{ id: userId }}
+          showTopToolbar
         />
       </ContextualCollapsibleListsProvider>
     </>

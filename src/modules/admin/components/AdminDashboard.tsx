@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
-import { useMemo } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Navigate, Outlet, useOutletContext } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
 import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
@@ -100,8 +100,16 @@ export const AdminLandingPage = () => {
 const AdminDashboard: React.FC = () => {
   const [access] = useRootPermissions();
   const dashboardState = useDashboardState();
+  // allow pages to "override" the default breadcrumb text
+  const [breadcrumbOverrides, overrideBreadcrumbTitles] = useState<
+    Record<string, string> | undefined
+  >();
+
   const breadCrumbConfig = useAdminBreadcrumbConfig();
-  const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
+  const breadcrumbs = useDashboardBreadcrumbs(
+    breadCrumbConfig,
+    breadcrumbOverrides
+  );
 
   const formEditorContentSx = {
     px: 0,
@@ -111,6 +119,11 @@ const AdminDashboard: React.FC = () => {
 
   const currentPath = useCurrentPath();
 
+  const outletContext = useMemo(() => {
+    return {
+      overrideBreadcrumbTitles,
+    };
+  }, []);
   if (!access) return <NotFound />;
 
   return (
@@ -136,10 +149,18 @@ const AdminDashboard: React.FC = () => {
         maxWidth={currentPath === AdminDashboardRoutes.EDIT_FORM ? false : 'xl'}
         disableGutters
       >
-        <Outlet />
+        <Outlet context={outletContext} />
       </Container>
     </DashboardContentContainer>
   );
+};
+
+export type AdminDashboardContext = {
+  overrideBreadcrumbTitles: (crumbs: any) => void;
+};
+
+export const useAdminDashboardContext = () => {
+  return useOutletContext<AdminDashboardContext>();
 };
 
 export default AdminDashboard;
