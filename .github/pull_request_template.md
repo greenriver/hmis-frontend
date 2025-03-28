@@ -9,10 +9,7 @@ Depends on hmis-warehouse PR:
 How to test:
 
 ## Type of change
-- [ ] Bug fix
-- [ ] New feature (adds functionality)
-- [ ] Code clean-up / housekeeping
-- [ ] Dependency update
+[//]: # (e.g., Bug fix, New feature, Documentation, Code clean-up, Dependency update)
 
 ## Checklist before requesting review
 - [ ] I have performed a self-review of my code
