@@ -1319,7 +1319,7 @@ const getMappedValue = (
  *
  * @param itemMap Map of linkId -> Item
  * @param record  GQL HMIS record, like Project or Organization
- * @param raiseOnMissing If true (default), raise a Sentry error if a value in itemMap doesn't exist on the record. If false, return undefined for that value.
+ * @param handleMissingField callback that receives an error message if a value isn't found in the record
  *
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
