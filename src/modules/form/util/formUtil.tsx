@@ -1296,7 +1296,7 @@ const getMappedValue = (
 
     // Special cases where we DON'T want to alert Sentry if the field can't be resolved on the record.
     // - imageBlobId: we pass this field when first saving a client image, but it isn't used for returning a saved client image.
-    // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's not a persisted or resolved field on the client record.
+    // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
     const specialCaseFieldNames = ['imageBlobId', 'mciId'];
     if (!specialCaseFieldNames.includes(mapping.fieldName)) {
       const isMissingField = !has(record, keys); // logic to determine if attribute is not present
