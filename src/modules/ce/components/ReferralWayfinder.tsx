@@ -4,7 +4,11 @@ import { DeclinedIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
-import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
+import {
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+  Routes,
+} from '@/routes/routes';
 import { CeReferralStatus } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -40,6 +44,20 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
               title: 'Go to My Dashboard',
               to: generateSafePath(Routes.MY_DASHBOARD),
             },
+            ...(!!referral.targetEnrollment
+              ? [
+                  {
+                    title: `Go to Enrollment`,
+                    to: generateSafePath(
+                      EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                      {
+                        clientId: referral.targetEnrollment.client.id,
+                        enrollmentId: referral.targetEnrollment.id,
+                      }
+                    ),
+                  },
+                ]
+              : []),
           ]}
         />
       );

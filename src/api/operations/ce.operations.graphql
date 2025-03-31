@@ -50,6 +50,12 @@ mutation SubmitCeReferralStep(
       opportunity {
         ...CeOpportunityFields
       }
+      targetEnrollment {
+        id
+        client {
+          id
+        }
+      }
     }
     errors {
       ...ValidationErrorFields
