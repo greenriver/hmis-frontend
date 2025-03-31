@@ -657,6 +657,7 @@ export type CeReferral = {
   opportunity: CeOpportunity;
   status: CeReferralStatus;
   steps: Array<CeReferralStep>;
+  targetEnrollment?: Maybe<Enrollment>;
 };
 
 export type CeReferralFilterOptions = {
@@ -15970,6 +15971,11 @@ export type CeReferralFieldsFragment = {
     projectId: string;
     projectName: string;
   };
+  targetEnrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    client: { __typename?: 'Client'; id: string };
+  } | null;
   client?: {
     __typename?: 'Client';
     id: string;
@@ -17677,6 +17683,11 @@ export type SubmitCeReferralStepMutation = {
           ownerType: string;
         } | null;
       };
+      targetEnrollment?: {
+        __typename?: 'Enrollment';
+        id: string;
+        client: { __typename?: 'Client'; id: string };
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -17889,6 +17900,11 @@ export type GetCeReferralQuery = {
       projectId: string;
       projectName: string;
     };
+    targetEnrollment?: {
+      __typename?: 'Enrollment';
+      id: string;
+      client: { __typename?: 'Client'; id: string };
+    } | null;
     client?: {
       __typename?: 'Client';
       id: string;
@@ -44271,6 +44287,12 @@ export const CeReferralFieldsFragmentDoc = gql`
     opportunity {
       ...CeOpportunitySummaryFields
     }
+    targetEnrollment {
+      id
+      client {
+        id
+      }
+    }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeReferralStepSummaryFieldsFragmentDoc}
@@ -47714,6 +47736,12 @@ export const SubmitCeReferralStepDocument = gql`
         status
         opportunity {
           ...CeOpportunityFields
+        }
+        targetEnrollment {
+          id
+          client {
+            id
+          }
         }
       }
       errors {
