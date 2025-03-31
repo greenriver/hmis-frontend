@@ -13,6 +13,7 @@ import {
   cloneDeep,
   compact,
   get,
+  has,
   isArray,
   isNil,
   isObject,
@@ -1272,7 +1273,7 @@ export const transformSubmitValues = ({
 const getMappedValue = (
   record: any,
   mapping: FieldMapping,
-  raiseOnMissing: boolean
+  handleMissingField: (message: string) => void
 ) => {
   let relatedRecordAttribute;
   if (mapping.recordType) {
@@ -1291,25 +1292,25 @@ const getMappedValue = (
   } else if (mapping.fieldName) {
     const keys = compact([relatedRecordAttribute, mapping.fieldName]); // for example: ['disabilityGroup', 'viralLoadSource']
 
+    const value = get(record, keys); // lodash's `get` will return undefined if the field doesn't exist
+
     // Special cases where we DON'T want to alert Sentry if the field can't be resolved on the record.
     // - imageBlobId: we pass this field when first saving a client image, but it isn't used for returning a saved client image.
     // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's not a persisted or resolved field on the client record.
     const specialCaseFieldNames = ['imageBlobId', 'mciId'];
-    if (!raiseOnMissing || specialCaseFieldNames.includes(mapping.fieldName)) {
-      return get(record, keys);
+    if (!specialCaseFieldNames.includes(mapping.fieldName)) {
+      const isMissingField = !has(record, keys); // logic to determine if attribute is not present
+
+      // In general, we do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
+      // This would indicate we're not resolving a field that we should be resolving.
+      if (isMissingField) {
+        handleMissingField(
+          `Field "${keys.join('.')}" is missing in record ${record.__typename}:${record.id}`
+        );
+      }
     }
 
-    // In general, we do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
-    // This would indicate we're not resolving a field that we should be resolving.
-    return keys.reduce((result, key) => {
-      if (!(key in result)) {
-        sendToSentry(
-          `Property "${key}" is missing in record ${record.__typename}:${record.id}`
-        );
-        return undefined;
-      }
-      return result[key];
-    }, record);
+    return value;
   }
 };
 
@@ -1325,11 +1326,11 @@ const getMappedValue = (
 export const createInitialValuesFromRecord = ({
   itemMap,
   record,
-  sentryOnMissing = true,
+  handleMissingField = sendToSentry,
 }: {
   itemMap: ItemMap;
   record: any; // could be an assessment
-  sentryOnMissing?: boolean;
+  handleMissingField?: (message: string) => void;
 }): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
@@ -1337,7 +1338,7 @@ export const createInitialValuesFromRecord = ({
     if (!item.mapping) return;
     if (!item.mapping.customFieldKey && !item.mapping.fieldName) return;
 
-    const value = getMappedValue(record, item.mapping, sentryOnMissing);
+    const value = getMappedValue(record, item.mapping, handleMissingField);
     if (hasMeaningfulValue(value)) {
       initialValues[item.linkId] = gqlValueToFormValue(value, item);
     }

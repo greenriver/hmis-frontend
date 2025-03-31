@@ -214,7 +214,7 @@ const AssessmentForm: React.FC<Props> = ({
         record: { enrollment },
         // Don't alert Sentry if a property is missing, because this is a new assessment that we're populating from the enrollment,
         // so we don't expect all the assessment attributes to be present.
-        sentryOnMissing: false,
+        handleMissingField: () => {},
       });
       assign(init, initialsFromEnrollment);
     }
