@@ -15,7 +15,7 @@ import {
   GetApplicationUsersDocument,
   GetApplicationUsersQuery,
   GetApplicationUsersQueryVariables,
-  UserFieldsFragment,
+  UserAdminFieldsFragment,
 } from '@/types/gqlTypes';
 
 const AdminUsers = () => {
@@ -23,12 +23,12 @@ const AdminUsers = () => {
   const { user: currentUser } = useAuth();
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const [chosenUser, setChosenUser] = useState<UserFieldsFragment>();
+  const [chosenUser, setChosenUser] = useState<UserAdminFieldsFragment>();
   const handleCancel = () => {
     setChosenUser(undefined);
   };
 
-  const columns = useMemo<ColumnDef<UserFieldsFragment>[]>(
+  const columns = useMemo<ColumnDef<UserAdminFieldsFragment>[]>(
     () => [
       {
         header: 'Name',
@@ -47,7 +47,7 @@ const AdminUsers = () => {
           access && (
             <UserActionsMenu
               onClickImpersonate={() => setChosenUser(user)}
-              userId={user.id}
+              user={user}
               isCurrentUser={
                 !!(user.id === currentUser?.id || currentUser?.impersonating)
               }
@@ -82,7 +82,7 @@ const AdminUsers = () => {
           <GenericTableWithData<
             GetApplicationUsersQuery,
             GetApplicationUsersQueryVariables,
-            UserFieldsFragment
+            UserAdminFieldsFragment
           >
             queryVariables={{
               filters: { searchTerm: debouncedSearch || undefined },

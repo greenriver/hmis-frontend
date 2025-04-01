@@ -22,6 +22,7 @@ const adminDashboardRoutes = {
   USER_CLIENT_ACCESS_HISTORY: 'users/:userId/clientAccessHistory',
   USER_ENROLLMENT_ACCESS_HISTORY: 'users/:userId/enrollmentAccessHistory',
   USER_EDIT_HISTORY: 'users/:userId/editHistory',
+  USER_LOGIN_ACTIVITY: 'users/:userId/loginActivity',
   CONFIGURE_SERVICES: 'services',
   CONFIGURE_SERVICE_TYPE: 'services/:serviceTypeId',
   FORMS: 'forms',

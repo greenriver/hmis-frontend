@@ -37,6 +37,7 @@ const EnrollmentDashboard: React.FC = () => {
   };
   const isPrint = useIsPrintView();
 
+  // allow pages to "override" the default breadcrumb text
   const [breadcrumbOverrides, overrideBreadcrumbTitles] = useState<
     Record<string, string> | undefined
   >();
