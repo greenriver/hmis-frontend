@@ -7,6 +7,11 @@ fragment UserFields on ApplicationUser {
   email
 }
 
+fragment UserAdminFields on ApplicationUser {
+  ...UserFields
+  manageAccountUrl
+}
+
 fragment UserActivityLogFields on ActivityLog {
   id
   ipAddress

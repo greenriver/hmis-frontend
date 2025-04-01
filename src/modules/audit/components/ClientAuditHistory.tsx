@@ -55,8 +55,6 @@ const ClientAuditHistory = () => {
           paginationItemName='event'
           queryDocument={GetClientAuditEventsDocument}
           queryVariables={{ id: clientId }}
-          rowSx={() => ({ whiteSpace: 'nowrap' })}
-          tableProps={{ sx: { tableLayout: 'fixed' } }}
           recordType='ClientAuditEvent'
           filters={filters}
         />

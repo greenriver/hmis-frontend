@@ -14,6 +14,7 @@ interface CommonTabsProps {
   sx?: SxProps;
   currentTab?: string;
   onChangeTab?: (tab: string) => void;
+  updateUrlHash?: boolean; // If true, the URL hash will be updated to match the selected tab.
 }
 
 // CommonTabs wraps the MUI Tabs component. It can be controlled or uncontrolled,
@@ -24,6 +25,7 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
   tabDefinitions,
   currentTab,
   onChangeTab,
+  updateUrlHash = true,
 }) => {
   const { hash } = useLocation();
 
@@ -52,11 +54,12 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
   }, [currentTab, internalValue, tabDefinitions]);
 
   useEffect(() => {
+    if (!updateUrlHash) return;
     // If no hash is present on the path, set it to currentKey. (Should be `tabDefinitions[0].key` on pageload)
     if (!hash) {
       window.location.assign(`#${currentKey}`);
     }
-  }, [currentKey, hash]);
+  }, [currentKey, updateUrlHash, hash]);
 
   const handleChange = (_event: React.SyntheticEvent, newIndex: number) => {
     if (onChangeTab) {
@@ -81,8 +84,10 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
               label={<strong>{t.title}</strong>}
               id={`tab-${t.key}`}
               aria-controls={`tabpanel-${t.key}`}
-              href={`#${t.key}`}
-              target='_self' // Mitigates an open bug with Storybook; see https://github.com/storybookjs/storybook/issues/15934
+              {...(updateUrlHash
+                ? // _self mitigates an open bug with Storybook; see https://github.com/storybookjs/storybook/issues/15934
+                  { href: `#${t.key}`, target: '_self' }
+                : {})}
             />
           ))}
         </Tabs>
