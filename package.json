@@ -108,7 +108,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.9",
-    "@babel/preset-env": "^7.25.0",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
     "@chromatic-com/storybook": "^3.2.3",
@@ -152,6 +151,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-storybook": "^0.11.1",
     "eslint-plugin-vitest": "^0.4.1",
+    "graphql-sock": "^1.0.0",
     "husky": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^12.4.1",
