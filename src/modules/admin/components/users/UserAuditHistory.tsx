@@ -7,6 +7,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { AUDIT_HISTORY_COLUMNS } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
@@ -16,16 +17,13 @@ import {
   GetUserAuditEventsDocument,
   GetUserAuditEventsQuery,
   GetUserAuditEventsQueryVariables,
+  UserAuditEventFieldsFragment,
   UserAuditEventFilterOptions,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-type AuditHistoryType = NonNullable<
-  NonNullable<GetUserAuditEventsQuery['user']>['auditHistory']
->['nodes'][0];
-
 const naText = <NotCollectedText>N/A</NotCollectedText>;
-const columns: ColumnDef<AuditHistoryType>[] = [
+const columns: ColumnDef<UserAuditEventFieldsFragment>[] = [
   AUDIT_HISTORY_COLUMNS.timestamp,
   {
     header: 'Client Name',
@@ -51,11 +49,17 @@ const UserAuditHistory = () => {
   });
 
   const rowSecondaryActionConfigs = useCallback(
-    ({ projectName, clientId, enrollmentId, projectId }: AuditHistoryType) => {
+    ({
+      projectName,
+      clientId,
+      clientName,
+      enrollmentId,
+      projectId,
+    }: UserAuditEventFieldsFragment) => {
       const viewClient = clientId && {
         title: 'View Client',
         key: 'client',
-        ariaLabel: `View Client ${clientId}`,
+        ariaLabel: `View Client ${clientName || clientId}`,
         to: generateSafePath(ClientDashboardRoutes.PROFILE, {
           clientId,
         }),
@@ -65,7 +69,7 @@ const UserAuditHistory = () => {
         enrollmentId && {
           title: 'View Enrollment',
           key: 'enrollment',
-          ariaLabel: `View Enrollment at ${projectName} for client ${clientId}`,
+          ariaLabel: `View Enrollment at ${projectName} for client ${clientName || clientId}`,
           to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
             clientId,
             enrollmentId,
@@ -75,7 +79,7 @@ const UserAuditHistory = () => {
       const viewProject = projectId && {
         title: 'View Project',
         key: 'project',
-        ariaLabel: `View Project ${projectId}`,
+        ariaLabel: `View Project ${projectName || projectId}`,
         to: generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
           projectId,
         }),
@@ -94,7 +98,7 @@ const UserAuditHistory = () => {
         <GenericTableWithData<
           GetUserAuditEventsQuery,
           GetUserAuditEventsQueryVariables,
-          AuditHistoryType,
+          UserAuditEventFieldsFragment,
           UserAuditEventFilterOptions
         >
           columns={columns}
@@ -106,6 +110,9 @@ const UserAuditHistory = () => {
           queryVariables={{ id: userId }}
           recordType='ApplicationUserAuditEvent'
           filters={filters}
+          rowName={(row) =>
+            `${row.clientName}'s ${row.recordName}, ${parseAndFormatDateTime(row.createdAt)}`
+          }
           rowSecondaryActionConfigs={rowSecondaryActionConfigs}
         />
       </ContextualCollapsibleListsProvider>
