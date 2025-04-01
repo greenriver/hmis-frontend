@@ -84,8 +84,10 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
               label={<strong>{t.title}</strong>}
               id={`tab-${t.key}`}
               aria-controls={`tabpanel-${t.key}`}
-              href={updateUrlHash ? `#${t.key}` : undefined}
-              target='_self' // Mitigates an open bug with Storybook; see https://github.com/storybookjs/storybook/issues/15934
+              {...(updateUrlHash
+                ? // _self mitigates an open bug with Storybook; see https://github.com/storybookjs/storybook/issues/15934
+                  { href: `#${t.key}`, target: '_self' }
+                : {})}
             />
           ))}
         </Tabs>
