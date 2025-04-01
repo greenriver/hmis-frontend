@@ -162,6 +162,6 @@
     "storybook-addon-apollo-client": "^7.3.0",
     "storybook-addon-pseudo-states": "^4.0.2",
     "ts-node": "^10.9.2",
-    "vite-plugin-mkcert": "^1.17.6"
+    "vite-plugin-mkcert": "^1.17.8"
   }
 }
