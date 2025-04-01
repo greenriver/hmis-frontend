@@ -102,9 +102,6 @@
     "yarn-deduplicate": "^6.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.9",
-    "@babel/preset-react": "^7.24.7",
-    "@babel/preset-typescript": "^7.24.7",
     "@chromatic-com/storybook": "^3.2.3",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/fragment-matcher": "^5.0.2",
