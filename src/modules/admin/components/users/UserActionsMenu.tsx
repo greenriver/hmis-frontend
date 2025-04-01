@@ -32,7 +32,7 @@ const UserActionsMenu: React.FC<Props> = ({
         key: 'audit',
         title: 'Audit User',
         Icon: AuditIcon,
-        to: generatePath(AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY, {
+        to: generatePath(AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY, {
           userId: user.id,
         }),
         ariaLabel: `Audit ${user.name}`,
