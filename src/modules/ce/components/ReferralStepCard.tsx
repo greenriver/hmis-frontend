@@ -1,19 +1,15 @@
 import React, { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ReferralStepCardInner from './ReferralStepCardInner';
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
-import LoadingButton from '@/components/elements/LoadingButton';
 import { GoToIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
-import { cache } from '@/providers/apolloClient';
+import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralStepStatus,
   CeReferralStepSummaryFieldsFragment,
-  GetCeReferralStepDocument,
-  useStartCeReferralStepMutation,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -27,57 +23,19 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
     opportunityId: string;
   };
   const { referral } = useReferralContext();
-  const navigate = useNavigate();
-
   const { name, status } = step;
-
-  const [startStepMutation, { loading, error }] =
-    useStartCeReferralStepMutation({
-      variables: {
-        referralId: referral.id,
-        stepId: step.stepId || '',
-      },
-      onCompleted: (data) => {
-        if (data.startCeReferralStep?.step) {
-          const step = data.startCeReferralStep?.step;
-
-          // The step returned from the mutation is now auto added to the Apollo cache.
-          // Here we are writing it to the cache specifically for the GetCeReferralStepDocument query,
-          // because the step is queried by `stepId` (the db ID) but cached by `id` (a composite ID).
-          // We might have to return to these IDs in the future if there are issues
-          cache.writeQuery({
-            query: GetCeReferralStepDocument,
-            data: {
-              ceReferralStep: step,
-            },
-            variables: {
-              id: step.stepId,
-            },
-          });
-
-          navigate(
-            generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
-              projectId,
-              opportunityId,
-              referralId: referral.id,
-              stepId: step.stepId || '',
-            })
-          );
-        }
-      },
-    });
 
   const action = useMemo(() => {
     if (status === CeReferralStepStatus.Available) {
       return (
-        <LoadingButton
-          loading={loading}
-          variant='text'
-          endIcon={<GoToIcon />}
-          onClick={() => startStepMutation()}
+        <StartCeReferralStepButton
+          step={step}
+          referralId={referral.id}
+          opportunityId={opportunityId}
+          projectId={projectId}
         >
           Start
-        </LoadingButton>
+        </StartCeReferralStepButton>
       );
     }
 
@@ -103,17 +61,7 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
         </ButtonLink>
       );
     }
-  }, [
-    loading,
-    opportunityId,
-    projectId,
-    referral.id,
-    startStepMutation,
-    status,
-    step.stepId,
-  ]);
-
-  if (error) throw error;
+  }, [opportunityId, projectId, referral.id, status, step]);
 
   return (
     <ReferralStepCardInner name={name} status={status} action={action}>
