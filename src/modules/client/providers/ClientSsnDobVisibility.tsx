@@ -36,8 +36,12 @@ export const SsnDobShowContextProvider: React.FC<
 );
 
 const VisibilityToggleButton: React.FC<
-  { on?: boolean | null | undefined; onToggle?: VoidFunction } & ButtonProps
-> = ({ on, onToggle = () => {}, ...props }) => {
+  {
+    on?: boolean | null | undefined;
+    onToggle?: VoidFunction;
+    name: string;
+  } & ButtonProps
+> = ({ on, onToggle = () => {}, name, ...props }) => {
   const theme = useTheme();
   return (
     <Button
@@ -58,6 +62,12 @@ const VisibilityToggleButton: React.FC<
         ...props.sx,
         backgroundColor: on ? 'primary.surface' : 'grayscale.surface',
       }}
+      aria-label={
+        on
+          ? `${name} (Currently shown. Click to hide all in column)`
+          : `${name} (Currently hidden. Click to show all in column)`
+      }
+      aria-live={'polite'}
     />
   );
 };
@@ -70,6 +80,7 @@ export const ContextualSsnToggleButton: React.FC<ButtonProps> = (props) => (
           {...props}
           on={show}
           onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
+          name='SSN'
         >
           <strong>SSN</strong>
         </VisibilityToggleButton>
@@ -86,6 +97,7 @@ export const ContextualDobToggleButton: React.FC<ButtonProps> = (props) => (
           {...props}
           on={show}
           onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
+          name='DOB'
         >
           <strong>DOB</strong>
         </VisibilityToggleButton>

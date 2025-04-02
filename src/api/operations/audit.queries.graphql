@@ -54,3 +54,20 @@ query GetUserAuditEvents(
     }
   }
 }
+
+query GetUserLoginActivities($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  user(id: $id) {
+    id
+    loginActivities(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        loginTime
+        ipAddress
+        locationDescription
+      }
+    }
+  }
+}

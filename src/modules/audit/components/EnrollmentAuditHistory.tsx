@@ -55,8 +55,6 @@ const EnrollmentAuditHistory = () => {
           paginationItemName='event'
           queryDocument={GetEnrollmentAuditEventsDocument}
           queryVariables={{ id: enrollmentId }}
-          rowSx={() => ({ whiteSpace: 'nowrap' })}
-          tableProps={{ sx: { tableLayout: 'fixed' } }}
           recordType='EnrollmentAuditEvent'
           filters={filters}
         />

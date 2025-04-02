@@ -1,7 +1,7 @@
-import * as Sentry from '@sentry/react';
 import { cloneDeep } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { DefaultValues, FieldValues } from 'react-hook-form';
+import { sendToSentry } from '@/modules/errors/util';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { LocalConstants, PickListArgs } from '@/modules/form/types';
 import {
@@ -12,13 +12,6 @@ import {
   getItemMap,
 } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
-
-const handleError = (message: string) => {
-  if (import.meta.env.MODE === 'development') {
-    console.error(message);
-  }
-  Sentry.captureMessage(message, { level: 'error' });
-};
 
 interface Args<T extends FieldValues> {
   definition: FormDefinitionJson;
@@ -95,7 +88,7 @@ export const useEnrichedFormData = <T extends FieldValues>({
           item,
           defaultValue: clonedValues[item.linkId],
           remotePickListMap: picklistValues,
-          handleError,
+          handleError: sendToSentry,
         });
 
       if (enrichedValue) {

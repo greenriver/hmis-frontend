@@ -129,6 +129,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'manageAccountUrl',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
         name: 'name',
         type: {
           kind: 'NON_NULL',
@@ -4636,6 +4644,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'LoginActivity',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'ipAddress',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'locationDescription',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'loginTime',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'MciClearanceMatch',
     fields: [
       {
@@ -5388,6 +5425,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canEditProjectDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEditUsersInWarehouse',
         type: {
           kind: 'NON_NULL',
           name: null,

@@ -33,7 +33,7 @@ export const ENTRY_DATE_COL = {
   header: 'Entry Date',
   key: 'entryDate',
   render: ({ entryDate }: Pick<EnrollmentFieldsFragment, 'entryDate'>) => (
-    <DateWithRelativeTooltip dateString={entryDate} preciseTime={false} />
+    <DateWithRelativeTooltip dateString={entryDate} />
   ),
 };
 
@@ -46,9 +46,7 @@ const EXIT_DATE_COL = {
     // and correctly aria-label the row action
   },
   render: ({ exitDate }: Pick<EnrollmentFieldsFragment, 'exitDate'>) =>
-    exitDate && (
-      <DateWithRelativeTooltip dateString={exitDate} preciseTime={false} />
-    ),
+    exitDate && <DateWithRelativeTooltip dateString={exitDate} />,
 };
 
 export const ENROLLMENT_STATUS_COL = {
@@ -67,9 +65,7 @@ export const MOVE_IN_DATE_COL = {
   render: ({
     moveInDate,
   }: Pick<EnrollmentWithOptionalFieldsFragment, 'moveInDate'>) =>
-    moveInDate && (
-      <DateWithRelativeTooltip dateString={moveInDate} preciseTime={false} />
-    ),
+    moveInDate && <DateWithRelativeTooltip dateString={moveInDate} />,
 };
 
 export const LAST_CONTACT_DATE_COL = {
