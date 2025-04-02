@@ -160,6 +160,8 @@ export type ApplicationUser = {
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
+  loginActivities?: Maybe<LoginActivitiesPaginated>;
+  manageAccountUrl: Scalars['String']['output'];
   name: Scalars['String']['output'];
   recentItems: Array<OmnisearchResult>;
   staffAssignments?: Maybe<StaffAssignmentsPaginated>;
@@ -188,6 +190,12 @@ export type ApplicationUserClientAccessSummariesArgs = {
 /** User account for a user of the system */
 export type ApplicationUserEnrollmentAccessSummariesArgs = {
   filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
+export type ApplicationUserLoginActivitiesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -4194,6 +4202,25 @@ export enum LiteralHomelessHistory {
   None = 'NONE',
 }
 
+export type LoginActivitiesPaginated = {
+  __typename?: 'LoginActivitiesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<LoginActivity>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
+export type LoginActivity = {
+  __typename?: 'LoginActivity';
+  id: Scalars['ID']['output'];
+  ipAddress?: Maybe<Scalars['String']['output']>;
+  locationDescription?: Maybe<Scalars['String']['output']>;
+  loginTime: Scalars['ISO8601DateTime']['output'];
+};
+
 export type MciClearanceInput = {
   dob: Scalars['ISO8601Date']['input'];
   firstName: Scalars['String']['input'];
@@ -6381,6 +6408,7 @@ export type QueryAccess = {
   canEditEnrollments: Scalars['Boolean']['output'];
   canEditOrganization: Scalars['Boolean']['output'];
   canEditProjectDetails: Scalars['Boolean']['output'];
+  canEditUsersInWarehouse: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
   canImpersonateUsers: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
@@ -8337,6 +8365,7 @@ export type RootPermissionsFragment = {
   canManageDeniedReferrals: boolean;
   canMergeClients: boolean;
   canTransferEnrollments: boolean;
+  canEditUsersInWarehouse: boolean;
   canViewClients: boolean;
   canEditClients: boolean;
   canViewDob: boolean;
@@ -8425,6 +8454,7 @@ export type GetRootPermissionsQuery = {
     canManageDeniedReferrals: boolean;
     canMergeClients: boolean;
     canTransferEnrollments: boolean;
+    canEditUsersInWarehouse: boolean;
     canViewClients: boolean;
     canEditClients: boolean;
     canViewDob: boolean;
@@ -15707,6 +15737,33 @@ export type GetUserAuditEventsQuery = {
         } | null;
       }>;
     };
+  } | null;
+};
+
+export type GetUserLoginActivitiesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetUserLoginActivitiesQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    loginActivities?: {
+      __typename?: 'LoginActivitiesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'LoginActivity';
+        id: string;
+        loginTime: string;
+        ipAddress?: string | null;
+        locationDescription?: string | null;
+      }>;
+    } | null;
   } | null;
 };
 
@@ -43254,6 +43311,16 @@ export type UserFieldsFragment = {
   email: string;
 };
 
+export type UserAdminFieldsFragment = {
+  __typename: 'ApplicationUser';
+  manageAccountUrl: string;
+  id: string;
+  name: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  email: string;
+};
+
 export type UserActivityLogFieldsFragment = {
   __typename?: 'ActivityLog';
   id: string;
@@ -43300,6 +43367,7 @@ export type GetApplicationUsersQuery = {
     nodesCount: number;
     nodes: Array<{
       __typename: 'ApplicationUser';
+      manageAccountUrl: string;
       id: string;
       name: string;
       firstName?: string | null;
@@ -43498,6 +43566,7 @@ export const RootPermissionsFragmentDoc = gql`
     canManageDeniedReferrals
     canMergeClients
     canTransferEnrollments
+    canEditUsersInWarehouse
     canViewClients
     canEditClients
     canViewDob
@@ -45880,6 +45949,13 @@ export const UnitFieldsFragmentDoc = gql`
   ${UnitTypeFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
 `;
+export const UserAdminFieldsFragmentDoc = gql`
+  fragment UserAdminFields on ApplicationUser {
+    ...UserFields
+    manageAccountUrl
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const UserActivityLogFieldsFragmentDoc = gql`
   fragment UserActivityLogFields on ActivityLog {
     id
@@ -47302,6 +47378,96 @@ export type GetUserAuditEventsSuspenseQueryHookResult = ReturnType<
 export type GetUserAuditEventsQueryResult = Apollo.QueryResult<
   GetUserAuditEventsQuery,
   GetUserAuditEventsQueryVariables
+>;
+export const GetUserLoginActivitiesDocument = gql`
+  query GetUserLoginActivities($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+    user(id: $id) {
+      id
+      loginActivities(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          id
+          loginTime
+          ipAddress
+          locationDescription
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetUserLoginActivitiesQuery__
+ *
+ * To run a query within a React component, call `useGetUserLoginActivitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserLoginActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserLoginActivitiesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetUserLoginActivitiesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserLoginActivitiesQuery,
+    GetUserLoginActivitiesQueryVariables
+  > &
+    (
+      | { variables: GetUserLoginActivitiesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserLoginActivitiesQuery,
+    GetUserLoginActivitiesQueryVariables
+  >(GetUserLoginActivitiesDocument, options);
+}
+export function useGetUserLoginActivitiesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserLoginActivitiesQuery,
+    GetUserLoginActivitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserLoginActivitiesQuery,
+    GetUserLoginActivitiesQueryVariables
+  >(GetUserLoginActivitiesDocument, options);
+}
+export function useGetUserLoginActivitiesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetUserLoginActivitiesQuery,
+    GetUserLoginActivitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetUserLoginActivitiesQuery,
+    GetUserLoginActivitiesQueryVariables
+  >(GetUserLoginActivitiesDocument, options);
+}
+export type GetUserLoginActivitiesQueryHookResult = ReturnType<
+  typeof useGetUserLoginActivitiesQuery
+>;
+export type GetUserLoginActivitiesLazyQueryHookResult = ReturnType<
+  typeof useGetUserLoginActivitiesLazyQuery
+>;
+export type GetUserLoginActivitiesSuspenseQueryHookResult = ReturnType<
+  typeof useGetUserLoginActivitiesSuspenseQuery
+>;
+export type GetUserLoginActivitiesQueryResult = Apollo.QueryResult<
+  GetUserLoginActivitiesQuery,
+  GetUserLoginActivitiesQueryVariables
 >;
 export const BulkServicesClientSearchDocument = gql`
   query BulkServicesClientSearch(
@@ -59204,11 +59370,11 @@ export const GetApplicationUsersDocument = gql`
       limit
       nodesCount
       nodes {
-        ...UserFields
+        ...UserAdminFields
       }
     }
   }
-  ${UserFieldsFragmentDoc}
+  ${UserAdminFieldsFragmentDoc}
 `;
 
 /**

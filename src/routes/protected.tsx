@@ -860,6 +860,14 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: AdminDashboardRoutes.USER_LOGIN_ACTIVITY,
+            element: (
+              <RootPermissionsFilter permissions='canAuditUsers'>
+                <UserAuditPage userHistoryType='logins' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
             path: AdminDashboardRoutes.FORMS,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
