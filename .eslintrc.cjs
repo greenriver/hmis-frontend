@@ -1,4 +1,5 @@
 // To see all enabled rules, run `yarn eslint --print-config .eslintrc.js`
+// TODO migrate to eslint.config.js https://eslint.org/docs/latest/use/configure/migration-guide
 module.exports = {
   env: {
     browser: true,
