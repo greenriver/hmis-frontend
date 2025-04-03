@@ -56,9 +56,5 @@ jobs:
       run: |
         npx playwright install --with-deps
         yarn test-storybook --testTimeout 15000
-        yarn test-storybook --testTimeout 15000
-        yarn test-storybook --testTimeout 15000
-        yarn test-storybook --testTimeout 15000
-        yarn test-storybook --testTimeout 15000
       env:
         TARGET_URL: '${{ steps.chromatic.outputs.storybookUrl }}'
