@@ -1,5 +1,4 @@
 import { ApolloError, ServerError, ServerParseError } from '@apollo/client';
-import * as Sentry from '@sentry/react';
 import { partition } from 'lodash-es';
 
 import { CustomFetchNetworkError } from '@/providers/apolloClient';
@@ -77,10 +76,3 @@ export class NotFoundError extends Error {
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
-
-export const sendToSentry = (message: string) => {
-  if (['test', 'development'].includes(import.meta.env.MODE)) {
-    console.error(message);
-  }
-  Sentry.captureMessage(message, { level: 'error' });
-};
