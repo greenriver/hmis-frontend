@@ -209,15 +209,18 @@ const AssessmentForm: React.FC<Props> = ({
       assign(init, initialsToOverwrite);
     } else {
       // If this is a completely new assessment, set initials from Enrollment
-      const initialsFromEnrollment = createInitialValuesFromRecord({
-        itemMap,
-        record: { enrollment },
-        // Don't alert Sentry if a property is missing, because this is a new assessment that we're populating from the enrollment,
-        // so we don't expect all the assessment attributes to be present.
-        handleMissingField: () => {},
+      const initialsFromEnrollment = createInitialValuesFromRecord(itemMap, {
+        enrollment,
       });
       assign(init, initialsFromEnrollment);
     }
+
+    // console.debug(
+    //   'Initial Form State',
+    //   init,
+    //   'from source:',
+    //   source?.id || 'none'
+    // );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unused = reloadInitialValues; // reference trigger
