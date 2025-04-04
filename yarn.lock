@@ -3077,11 +3077,6 @@
   resolved "https://registry.yarnpkg.com/@storybook/components/-/components-8.6.4.tgz#503636d607b1c1a4a094b250e68d61c39a151e65"
   integrity sha512-91VEVFWOgHkEFoNFMk6gs1AuOE9Yp7N283BXQOW+AgP+atpzED6t/fIBPGqJ2ewAuzLJ+cFOrasSzoNwVfg3Jg==
 
-"@storybook/core-common@^8.0.0":
-  version "8.6.11"
-  resolved "https://registry.yarnpkg.com/@storybook/core-common/-/core-common-8.6.11.tgz#8db14bdd8c7924aa2815b870646ba6ad253241c9"
-  integrity sha512-ZXYZ3kK0sx8ESAKfOJOA9x9nprtn2aUPhJk4diA9XNq5VEWEnJsUdgpEljs/Ilk/prl2hkz6sDsI2Mqkkb6ZQw==
-
 "@storybook/core@8.6.4":
   version "8.6.4"
   resolved "https://registry.yarnpkg.com/@storybook/core/-/core-8.6.4.tgz#7cfb5dae8e2ce22eaab8c6c04ef63d7c20686692"
@@ -3105,11 +3100,6 @@
   integrity sha512-7UpEp4PFTy1iKjZiRaYMG7zvnpLIRPyD0+lUJUlLYG4UIemV3onvnIi1Je1tSZ4hfTup+ulom7JLztVSHZGRMg==
   dependencies:
     unplugin "^1.3.1"
-
-"@storybook/csf-tools@^8.0.0":
-  version "8.6.11"
-  resolved "https://registry.yarnpkg.com/@storybook/csf-tools/-/csf-tools-8.6.11.tgz#f36a9d73317bf0b0f819580702acfb07bad1ed65"
-  integrity sha512-W5sBHv1UFjj+7NZaC9DDwZCeT1249lTWh03fuMuIrg4415l1F1J7ycqVXt2EM2XMPWTtUn8GRjbg3lW0C23gHQ==
 
 "@storybook/csf@^0.1.11":
   version "0.1.13"
@@ -3146,7 +3136,7 @@
   resolved "https://registry.yarnpkg.com/@storybook/preview-api/-/preview-api-8.6.4.tgz#fadd89fcef92dcac32f8ae9945f7ceb012e5e741"
   integrity sha512-5HBfxggzxGz0dg2c61NpPiQJav7UAmzsQlzmI5SzWOS6lkaylcDG8giwKzASVCXVWBxNji9qIDFM++UH090aDg==
 
-"@storybook/preview-api@^8.0.0", "@storybook/preview-api@^8.6.4":
+"@storybook/preview-api@^8.6.4":
   version "8.6.11"
   resolved "https://registry.yarnpkg.com/@storybook/preview-api/-/preview-api-8.6.11.tgz#47b15edae8af4518065399d9511208ec80a2d97e"
   integrity sha512-NpSVJFa9MkPq3u/h+bvx+iSnm6OG6mMUzMgmY67mA0dgIgOWcaoP2Y7254SZlBeho97HCValTDKJyqZMwiVlyQ==
@@ -3183,20 +3173,17 @@
     "@storybook/react-dom-shim" "8.6.4"
     "@storybook/theming" "8.6.4"
 
-"@storybook/test-runner@^0.19.1":
-  version "0.19.1"
-  resolved "https://registry.yarnpkg.com/@storybook/test-runner/-/test-runner-0.19.1.tgz#b0a94bd09d9914f47e23d11779690ffc5b5164a7"
-  integrity sha512-Nc4djXw3Lv3AAXg6TJ7yVTeuMryjMsTDd8GCbE/PStU602rpe8syEqElz78GPoJqB1VYWQ3T9pcu93MKyHT+xQ==
+"@storybook/test-runner@^0.21.1":
+  version "0.21.3"
+  resolved "https://registry.yarnpkg.com/@storybook/test-runner/-/test-runner-0.21.3.tgz#20ad7a9ee20811c51f332557e362733df2c31c4b"
+  integrity sha512-tsorR0IVYElcaTZrT/ZrH/8YDw7c+wrLDN0e3qj1WdbqU8l2IU4+a32HLXaakzdDpuTn+d8xCk4VZMlzMrmToA==
   dependencies:
     "@babel/core" "^7.22.5"
     "@babel/generator" "^7.22.5"
     "@babel/template" "^7.22.5"
     "@babel/types" "^7.22.5"
     "@jest/types" "^29.6.3"
-    "@storybook/core-common" "^8.0.0"
     "@storybook/csf" "^0.1.11"
-    "@storybook/csf-tools" "^8.0.0"
-    "@storybook/preview-api" "^8.0.0"
     "@swc/core" "^1.5.22"
     "@swc/jest" "^0.2.23"
     expect-playwright "^0.8.0"
