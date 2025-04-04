@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 
-// import mkcert from 'vite-plugin-mkcert';
+import mkcert from 'vite-plugin-mkcert';
 
 dns.setDefaultResultOrder('ipv4first');
 
@@ -49,7 +49,7 @@ export default defineConfig(({ command, mode }) => {
     },
     plugins: [
       react(),
-      // mkcert(),
+      mkcert(),
       sourcemapExclude({ excludeNodeModules: true }),
       // Note: even though sourcemaps are public, we upload them to get additional Sentry tooling around releases
       ...(env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN
@@ -124,6 +124,8 @@ export default defineConfig(({ command, mode }) => {
         port: 5173,
         open: true,
         host: env.HMIS_HOST || 'hmis.dev.test',
+        https:
+          env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
         proxy: {
           '/hmis': warehouseProxyServer,
           '/dev-assets/theme': warehouseProxyServer,
