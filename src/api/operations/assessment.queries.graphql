@@ -89,7 +89,7 @@ query GetHouseholdAssessments(
       limit
       nodesCount
       nodes {
-        ...AssessmentFields
+        ...FullAssessment
         enrollment {
           id
           relationshipToHoH

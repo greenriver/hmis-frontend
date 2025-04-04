@@ -10,6 +10,8 @@ export function useAssessment(assessmentId?: string) {
     skip: !assessmentId, // skip if creating a new assessment
   });
 
+  console.log(assessmentData);
+
   if (assessmentError) throw assessmentError;
 
   return {
