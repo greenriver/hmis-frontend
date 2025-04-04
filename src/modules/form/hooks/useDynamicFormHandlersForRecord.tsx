@@ -42,6 +42,7 @@ export interface DynamicFormHandlerArgs<T> {
   localConstants?: LocalConstants;
   inputVariables?: SubmitFormInputVariables;
   errorRef?: RefObject<HTMLDivElement>;
+  handleMissingField?: (message: string) => void;
 }
 
 export function useDynamicFormHandlersForRecord<
@@ -53,6 +54,7 @@ export function useDynamicFormHandlersForRecord<
   inputVariables,
   localConstants,
   errorRef,
+  handleMissingField,
 }: DynamicFormHandlerArgs<T>) {
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
@@ -90,6 +92,7 @@ export function useDynamicFormHandlersForRecord<
     itemMap,
     definition: formDefinition?.definition,
     localConstants,
+    handleMissingField,
   });
 
   const onSubmit: DynamicFormOnSubmit = useCallback(

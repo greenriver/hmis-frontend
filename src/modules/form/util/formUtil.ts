@@ -13,7 +13,6 @@ import {
   cloneDeep,
   compact,
   get,
-  has,
   isArray,
   isNil,
   isObject,
@@ -1269,6 +1268,45 @@ export const transformSubmitValues = ({
   return result;
 };
 
+/**
+ * Checks if path is missing in object. Similar to lodash's `has` helper,
+ * with the following key difference:
+ * - ONLY "leaf node" keys are considered missing.
+ * - If a parent key is null, that is allowed; we don't consider the leaf missing.
+ *
+ * Examples:
+ *
+ * object = { disabilityGroup: { viralLoadSource: 1 }}
+ * path = ['disabilityGroup', 'viralLoadSource']
+ * isMissingField(object, path) = false  // Path exists in the object
+ *
+ * object = { disabilityGroup: { viralLoadSource: 1 }}
+ * path = ['disabilityGroup', 'viralLoadCount']
+ * isMissingField(object, path) = true  // Path is missing in the object
+ *
+ * object = { disabilityGroup: null}
+ * path = ['disabilityGroup', 'viralLoadCount']
+ * isMissingField(object, path) = false  // Not considered missing, because the parent record is null
+ *
+ * @param object the object to query, such as an Assessment
+ * @param path a list of strings representing the path to query
+ */
+function isMissingField(object: any, path: string[]) {
+  let current = object;
+  for (const key of path) {
+    if (current === null) {
+      // If parent is null, we don't consider the leaf missing.
+      return false;
+    }
+    if (typeof current !== 'object' || !(key in current)) {
+      return true; // If current is not an object or the key doesn't exist, it's missing.
+    }
+    current = current[key]; // Move deeper in the object.
+  }
+  // If we complete the loop without returning, the field exists.
+  return false;
+}
+
 // record could be an Assessment
 const getMappedValue = (
   record: any,
@@ -1299,11 +1337,9 @@ const getMappedValue = (
     // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
     const specialCaseFieldNames = ['imageBlobId', 'mciId'];
     if (!specialCaseFieldNames.includes(mapping.fieldName)) {
-      const isMissingField = !has(record, keys); // logic to determine if attribute is not present
-
       // In general, we do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
       // This would indicate we're not resolving a field that we should be resolving.
-      if (isMissingField) {
+      if (isMissingField(record, keys)) {
         handleMissingField(
           `Field "${keys.join('.')}" is missing in record ${record.__typename}:${record.id}`
         );

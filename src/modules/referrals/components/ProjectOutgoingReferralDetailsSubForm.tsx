@@ -49,6 +49,8 @@ const ProjectOutgoingReferralDetailsSubForm: React.FC<Props> = ({
         enrollmentId,
       },
       onCompleted: () => onSuccess(),
+      // Don't alert Sentry for missing properties, since record is empty
+      handleMissingField: () => {},
     };
   }, [formDefinition, destinationProjectId, enrollmentId, onSuccess]);
 
