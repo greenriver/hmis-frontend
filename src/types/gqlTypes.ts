@@ -753,7 +753,6 @@ export type Client = {
   alerts: Array<ClientAlert>;
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
-  ceOpportunities: Array<CeOpportunity>;
   contactPoints: Array<ClientContactPoint>;
   createdBy?: Maybe<ApplicationUser>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
@@ -768,6 +767,7 @@ export type Client = {
   dischargeStatus?: Maybe<DischargeStatus>;
   dob?: Maybe<Scalars['ISO8601Date']['output']>;
   dobDataQuality: DobDataQuality;
+  eligibleCeOpportunities: CeOpportunitiesPaginated;
   emailAddresses: Array<ClientContactPoint>;
   employmentEducations: EmploymentEducationsPaginated;
   enabledFeatures: Array<ClientDashboardFeature>;
@@ -848,6 +848,12 @@ export type ClientCustomCaseNotesArgs = {
 
 /** HUD Client */
 export type ClientDisabilitiesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** HUD Client */
+export type ClientEligibleCeOpportunitiesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -4680,6 +4686,7 @@ export type MutationSubmitAssessmentArgs = {
 
 export type MutationSubmitCeReferralStepArgs = {
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  formDefinitionId: Scalars['ID']['input'];
   input: Scalars['JsonObject']['input'];
   referralId: Scalars['ID']['input'];
   stepId: Scalars['ID']['input'];
@@ -17159,6 +17166,7 @@ export type SubmitCeReferralStepMutationVariables = Exact<{
   stepId: Scalars['ID']['input'];
   input: Scalars['JsonObject']['input'];
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  formDefinitionId: Scalars['ID']['input'];
 }>;
 
 export type SubmitCeReferralStepMutation = {
@@ -47518,12 +47526,17 @@ export function useGetUserLoginActivitiesLazyQuery(
   >(GetUserLoginActivitiesDocument, options);
 }
 export function useGetUserLoginActivitiesSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetUserLoginActivitiesQuery,
-    GetUserLoginActivitiesQueryVariables
-  >
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetUserLoginActivitiesQuery,
+        GetUserLoginActivitiesQueryVariables
+      >
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
     GetUserLoginActivitiesQuery,
     GetUserLoginActivitiesQueryVariables
@@ -47965,12 +47978,14 @@ export const SubmitCeReferralStepDocument = gql`
     $stepId: ID!
     $input: JsonObject!
     $confirmed: Boolean
+    $formDefinitionId: ID!
   ) {
     submitCeReferralStep(
       referralId: $referralId
       stepId: $stepId
       input: $input
       confirmed: $confirmed
+      formDefinitionId: $formDefinitionId
     ) {
       step {
         ...CeReferralStepFields
@@ -48019,6 +48034,7 @@ export type SubmitCeReferralStepMutationFn = Apollo.MutationFunction<
  *      stepId: // value for 'stepId'
  *      input: // value for 'input'
  *      confirmed: // value for 'confirmed'
+ *      formDefinitionId: // value for 'formDefinitionId'
  *   },
  * });
  */
@@ -48113,12 +48129,17 @@ export function useGetProjectCeOpportunitiesLazyQuery(
   >(GetProjectCeOpportunitiesDocument, options);
 }
 export function useGetProjectCeOpportunitiesSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetProjectCeOpportunitiesQuery,
-    GetProjectCeOpportunitiesQueryVariables
-  >
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetProjectCeOpportunitiesQuery,
+        GetProjectCeOpportunitiesQueryVariables
+      >
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
     GetProjectCeOpportunitiesQuery,
     GetProjectCeOpportunitiesQueryVariables
@@ -48207,12 +48228,17 @@ export function useGetProjectCeReferralsLazyQuery(
   >(GetProjectCeReferralsDocument, options);
 }
 export function useGetProjectCeReferralsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetProjectCeReferralsQuery,
-    GetProjectCeReferralsQueryVariables
-  >
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetProjectCeReferralsQuery,
+        GetProjectCeReferralsQueryVariables
+      >
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
     GetProjectCeReferralsQuery,
     GetProjectCeReferralsQueryVariables
@@ -48285,12 +48311,17 @@ export function useGetCeOpportunityLazyQuery(
   >(GetCeOpportunityDocument, options);
 }
 export function useGetCeOpportunitySuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetCeOpportunityQuery,
-    GetCeOpportunityQueryVariables
-  >
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeOpportunityQuery,
+        GetCeOpportunityQueryVariables
+      >
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
     GetCeOpportunityQuery,
     GetCeOpportunityQueryVariables
@@ -48377,12 +48408,17 @@ export function useGetCeOpportunityCandidatesLazyQuery(
   >(GetCeOpportunityCandidatesDocument, options);
 }
 export function useGetCeOpportunityCandidatesSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetCeOpportunityCandidatesQuery,
-    GetCeOpportunityCandidatesQueryVariables
-  >
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeOpportunityCandidatesQuery,
+        GetCeOpportunityCandidatesQueryVariables
+      >
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
     GetCeOpportunityCandidatesQuery,
     GetCeOpportunityCandidatesQueryVariables
@@ -48455,12 +48491,17 @@ export function useGetCeReferralLazyQuery(
   );
 }
 export function useGetCeReferralSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetCeReferralQuery,
-    GetCeReferralQueryVariables
-  >
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeReferralQuery,
+        GetCeReferralQueryVariables
+      >
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
     GetCeReferralQuery,
     GetCeReferralQueryVariables
@@ -48533,12 +48574,17 @@ export function useGetCeReferralStepLazyQuery(
   >(GetCeReferralStepDocument, options);
 }
 export function useGetCeReferralStepSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetCeReferralStepQuery,
-    GetCeReferralStepQueryVariables
-  >
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeReferralStepQuery,
+        GetCeReferralStepQueryVariables
+      >
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
     GetCeReferralStepQuery,
     GetCeReferralStepQueryVariables
