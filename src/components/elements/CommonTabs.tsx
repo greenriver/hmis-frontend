@@ -1,6 +1,6 @@
 import { Box, SxProps, Tab, Tabs } from '@mui/material';
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export type TabDefinition = {
   title: string;
@@ -27,7 +27,8 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
   onChangeTab,
   updateUrlHash = true,
 }) => {
-  const { hash } = useLocation();
+  const { pathname, search, hash } = useLocation();
+  const navigate = useNavigate();
 
   // The prop for `currentTab` is a string (key), but internally MUI Tabs uses an number (index).
   // If a hash is already in the url, find the index for that tab and pass it in as the initial value to the useState call.
@@ -57,9 +58,9 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
     if (!updateUrlHash) return;
     // If no hash is present on the path, set it to currentKey. (Should be `tabDefinitions[0].key` on pageload)
     if (!hash) {
-      window.location.assign(`#${currentKey}`);
+      navigate({ pathname, search, hash: currentKey }, { replace: true });
     }
-  }, [currentKey, updateUrlHash, hash]);
+  }, [currentKey, updateUrlHash, hash, pathname, search, navigate]);
 
   const handleChange = (_event: React.SyntheticEvent, newIndex: number) => {
     if (onChangeTab) {

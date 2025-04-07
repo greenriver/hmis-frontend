@@ -141,7 +141,7 @@ const useSearchParamsState = ({
     if (Object.keys(toUpdate).length) {
       // Spread currentParams to avoid overwriting search params set by other components
       const currentParams = getAllCurrentParams(searchParams);
-      setSearchParams({ ...currentParams, ...toUpdate });
+      setSearchParams({ ...currentParams, ...toUpdate }, { replace: true });
     }
 
     // Only run on mount, so the user can overwrite initial values.
