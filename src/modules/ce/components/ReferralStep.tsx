@@ -120,7 +120,6 @@ const ReferralStep: React.FC<Props> = ({}) => {
                   referralId: referralId,
                   stepId: stepId,
                   input: valuesByLinkId,
-                  formDefinitionId: formDefinition.id,
                   confirmed,
                 },
               });
