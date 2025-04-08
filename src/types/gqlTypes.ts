@@ -4686,6 +4686,7 @@ export type MutationSubmitAssessmentArgs = {
 
 export type MutationSubmitCeReferralStepArgs = {
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  formDefinitionId: Scalars['ID']['input'];
   input: Scalars['JsonObject']['input'];
   referralId: Scalars['ID']['input'];
   stepId: Scalars['ID']['input'];
@@ -17150,6 +17151,7 @@ export type SubmitCeReferralStepMutationVariables = Exact<{
   stepId: Scalars['ID']['input'];
   input: Scalars['JsonObject']['input'];
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  formDefinitionId: Scalars['ID']['input'];
 }>;
 
 export type SubmitCeReferralStepMutation = {
@@ -47928,12 +47930,14 @@ export const SubmitCeReferralStepDocument = gql`
     $stepId: ID!
     $input: JsonObject!
     $confirmed: Boolean
+    $formDefinitionId: ID!
   ) {
     submitCeReferralStep(
       referralId: $referralId
       stepId: $stepId
       input: $input
       confirmed: $confirmed
+      formDefinitionId: $formDefinitionId
     ) {
       step {
         ...CeReferralStepFields
@@ -47982,6 +47986,7 @@ export type SubmitCeReferralStepMutationFn = Apollo.MutationFunction<
  *      stepId: // value for 'stepId'
  *      input: // value for 'input'
  *      confirmed: // value for 'confirmed'
+ *      formDefinitionId: // value for 'formDefinitionId'
  *   },
  * });
  */
