@@ -4672,7 +4672,6 @@ export type MutationJoinHouseholdArgs = {
 };
 
 export type MutationMarkUnitsAvailableArgs = {
-  templateId: Scalars['ID']['input'];
   unitIds: Array<Scalars['ID']['input']>;
 };
 
@@ -7776,7 +7775,8 @@ export type UnassignStaffPayload = {
 
 export type Unit = {
   __typename?: 'Unit';
-  activeOpportunity?: Maybe<CeOpportunity>;
+  /** The unit's most recent opportunity, which could be currently active or already closed */
+  currentOpportunity?: Maybe<CeOpportunity>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
@@ -17815,7 +17815,6 @@ export type SubmitCeReferralStepMutation = {
 
 export type MarkUnitsAvailableMutationVariables = Exact<{
   unitIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
-  templateId: Scalars['ID']['input'];
 }>;
 
 export type MarkUnitsAvailableMutation = {
@@ -17849,7 +17848,7 @@ export type MarkUnitsAvailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      activeOpportunity?: {
+      currentOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
@@ -17859,6 +17858,21 @@ export type MarkUnitsAvailableMutation = {
         projectId: string;
         projectName: string;
         activeReferral?: {
+          __typename?: 'CeReferral';
+          id: string;
+          status: CeReferralStatus;
+          clientId: string;
+          client?: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          } | null;
+        } | null;
+        acceptedReferral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
@@ -17913,7 +17927,7 @@ export type MarkUnitsUnavailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      activeOpportunity?: {
+      currentOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
@@ -17923,6 +17937,21 @@ export type MarkUnitsUnavailableMutation = {
         projectId: string;
         projectName: string;
         activeReferral?: {
+          __typename?: 'CeReferral';
+          id: string;
+          status: CeReferralStatus;
+          clientId: string;
+          client?: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          } | null;
+        } | null;
+        acceptedReferral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
@@ -43261,7 +43290,7 @@ export type UnitFieldsFragment = {
       nameSuffix?: string | null;
     };
   }>;
-  activeOpportunity?: {
+  currentOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
@@ -43271,6 +43300,21 @@ export type UnitFieldsFragment = {
     projectId: string;
     projectName: string;
     activeReferral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      status: CeReferralStatus;
+      clientId: string;
+      client?: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      } | null;
+    } | null;
+    acceptedReferral?: {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
@@ -43332,7 +43376,7 @@ export type GetUnitsQuery = {
             nameSuffix?: string | null;
           };
         }>;
-        activeOpportunity?: {
+        currentOpportunity?: {
           __typename?: 'CeOpportunity';
           id: string;
           name: string;
@@ -43342,6 +43386,21 @@ export type GetUnitsQuery = {
           projectId: string;
           projectName: string;
           activeReferral?: {
+            __typename?: 'CeReferral';
+            id: string;
+            status: CeReferralStatus;
+            clientId: string;
+            client?: {
+              __typename?: 'Client';
+              id: string;
+              lockVersion: number;
+              firstName?: string | null;
+              middleName?: string | null;
+              lastName?: string | null;
+              nameSuffix?: string | null;
+            } | null;
+          } | null;
+          acceptedReferral?: {
             __typename?: 'CeReferral';
             id: string;
             status: CeReferralStatus;
@@ -43417,7 +43476,7 @@ export type CreateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      activeOpportunity?: {
+      currentOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
@@ -43427,6 +43486,21 @@ export type CreateUnitsMutation = {
         projectId: string;
         projectName: string;
         activeReferral?: {
+          __typename?: 'CeReferral';
+          id: string;
+          status: CeReferralStatus;
+          clientId: string;
+          client?: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          } | null;
+        } | null;
+        acceptedReferral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
@@ -43523,7 +43597,7 @@ export type UpdateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      activeOpportunity?: {
+      currentOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
@@ -43533,6 +43607,21 @@ export type UpdateUnitsMutation = {
         projectId: string;
         projectName: string;
         activeReferral?: {
+          __typename?: 'CeReferral';
+          id: string;
+          status: CeReferralStatus;
+          clientId: string;
+          client?: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          } | null;
+        } | null;
+        acceptedReferral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
@@ -46224,9 +46313,12 @@ export const UnitFieldsFragmentDoc = gql`
         ...ClientName
       }
     }
-    activeOpportunity {
+    currentOpportunity {
       ...CeOpportunitySummaryFields
       activeReferral {
+        ...CeReferralSummaryFields
+      }
+      acceptedReferral {
         ...CeReferralSummaryFields
       }
     }
@@ -48318,8 +48410,8 @@ export type SubmitCeReferralStepMutationOptions = Apollo.BaseMutationOptions<
   SubmitCeReferralStepMutationVariables
 >;
 export const MarkUnitsAvailableDocument = gql`
-  mutation MarkUnitsAvailable($unitIds: [ID!]!, $templateId: ID!) {
-    markUnitsAvailable(unitIds: $unitIds, templateId: $templateId) {
+  mutation MarkUnitsAvailable($unitIds: [ID!]!) {
+    markUnitsAvailable(unitIds: $unitIds) {
       units {
         ...UnitFields
       }
@@ -48346,7 +48438,6 @@ export type MarkUnitsAvailableMutationFn = Apollo.MutationFunction<
  * const [markUnitsAvailableMutation, { data, loading, error }] = useMarkUnitsAvailableMutation({
  *   variables: {
  *      unitIds: // value for 'unitIds'
- *      templateId: // value for 'templateId'
  *   },
  * });
  */

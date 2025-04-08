@@ -63,8 +63,8 @@ mutation SubmitCeReferralStep(
   }
 }
 
-mutation MarkUnitsAvailable($unitIds: [ID!]!, $templateId: ID!) {
-  markUnitsAvailable(unitIds: $unitIds, templateId: $templateId) {
+mutation MarkUnitsAvailable($unitIds: [ID!]!) {
+  markUnitsAvailable(unitIds: $unitIds) {
     units {
       ...UnitFields
     }

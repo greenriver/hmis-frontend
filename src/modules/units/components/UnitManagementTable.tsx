@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import UnitOccupants from './UnitOccupants';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -6,7 +6,6 @@ import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import MarkUnitsAvailableDialog from '@/modules/units/components/MarkUnitsAvailableDialog';
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -14,6 +13,7 @@ import {
   GetUnitsQuery,
   GetUnitsQueryVariables,
   UnitFieldsFragment,
+  useMarkUnitsAvailableMutation,
   useMarkUnitsUnavailableMutation,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -63,8 +63,9 @@ const UnitManagementTable = ({
               key: 'available',
               render: (unit: UnitFieldsFragment) => {
                 if (
-                  unit.activeOpportunity &&
-                  !unit.activeOpportunity.activeReferral &&
+                  unit.currentOpportunity &&
+                  !unit.currentOpportunity.activeReferral &&
+                  !unit.currentOpportunity.acceptedReferral &&
                   unit.occupants.length === 0
                 ) {
                   return 'Yes';
@@ -76,8 +77,12 @@ const UnitManagementTable = ({
               header: 'Referral Status',
               key: 'referralStatus',
               render: (unit: UnitFieldsFragment) => {
-                const referral = unit.activeOpportunity?.activeReferral;
-                // todo @martha - should show successful referral status, but that's not returned on activeOpportunity
+                const opportunity = unit.currentOpportunity;
+                const referral =
+                  opportunity?.activeReferral || opportunity?.acceptedReferral;
+
+                if (opportunity && !referral) return 'Available for referrals';
+
                 if (referral)
                   return <ReferralStatusChip status={referral.status} />;
               },
@@ -95,9 +100,11 @@ const UnitManagementTable = ({
     return allowDeleteUnits || canViewCoordinatedEntry; // TODO(#7395)
   }, [allowDeleteUnits, canViewCoordinatedEntry]);
 
-  const [availableUnits, setAvailableUnits] = useState<string[] | undefined>(
-    undefined
-  );
+  const [
+    markUnitsAvailable,
+    { loading: availableLoading, error: availableError },
+  ] = useMarkUnitsAvailableMutation();
+
   const [
     markUnitsUnavailable,
     { loading: unavailableLoading, error: unavailableError },
@@ -107,54 +114,56 @@ const UnitManagementTable = ({
     (unit: UnitFieldsFragment) => {
       if (!canViewCoordinatedEntry) return [];
 
+      // todo @martha - this logic isn't quite right:
+      // -should be able to view opportunity either way (fine)
+      // should only be able tom ark unavailable if the current opportunity doesn't have an accepted referral eitehr
+      // should be able to mark available even if there isa  closed opportunity from the pats
+      // do acceptedReferral and activeReferral need to stay separate?
+      if (unit.currentOpportunity) {
+        return [
+          {
+            title: 'View Opportunity',
+            key: 'viewOpportunity',
+            ariaLabel: `View Opportunity for Unit ${unit.id}`,
+            to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+              projectId,
+              opportunityId: unit.currentOpportunity.id,
+            }),
+          },
+          {
+            title: 'Mark as Unavailable for Referrals',
+            key: 'markUnavailable',
+            ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
+            onClick: () => {
+              markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
+            },
+            disabled: unit.currentOpportunity.activeReferral,
+            disabledReason:
+              'Unit with in-progress referral cannot be marked as unavailable',
+          },
+        ];
+      }
+
       return [
-        ...(!!unit.activeOpportunity
-          ? [
-              {
-                title: 'View Opportunity',
-                key: 'viewOpportunity',
-                ariaLabel: `View Opportunity for Unit ${unit.id}`,
-                to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-                  projectId,
-                  opportunityId: unit.activeOpportunity.id,
-                }),
-              },
-            ]
-          : []),
         {
           title: 'Mark as Available for Referrals',
           key: 'markAvailable',
           ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
-          onClick: () => setAvailableUnits([unit.id]),
-          disabled: unit.occupants.length > 0 || !!unit.activeOpportunity,
-          disabledReason:
-            unit.occupants.length > 0
-              ? 'Currently assigned units cannot be marked available'
-              : 'Unit is already available',
-        },
-        {
-          title: 'Mark as Unavailable for Referrals',
-          key: 'markUnavailable',
-          ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
           onClick: () => {
-            markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
+            markUnitsAvailable({ variables: { unitIds: [unit.id] } });
           },
-          disabled:
-            unit.occupants.length > 0 ||
-            !unit.activeOpportunity ||
-            !!unit.activeOpportunity.activeReferral,
-          disabledReason:
-            unit.occupants.length > 0
-              ? 'Currently assigned units cannot be marked unavailable'
-              : !unit.activeOpportunity
-                ? 'Unit is unavailable'
-                : 'Unit has an active referral',
         },
       ];
     },
-    [canViewCoordinatedEntry, markUnitsUnavailable, projectId]
+    [
+      canViewCoordinatedEntry,
+      markUnitsAvailable,
+      markUnitsUnavailable,
+      projectId,
+    ]
   );
 
+  if (availableError) throw availableError;
   if (unavailableError) throw unavailableError;
 
   const rowSecondaryActionConfigs = useCallback(
@@ -209,15 +218,10 @@ const UnitManagementTable = ({
         rowSecondaryActionConfigs={
           hasSecondaryActions ? rowSecondaryActionConfigs : undefined
         }
-        loading={unavailableLoading}
+        loading={availableLoading || unavailableLoading}
         loadingVariant='linear'
       />
       {renderSingleDeleteDialog()}
-      <MarkUnitsAvailableDialog
-        unitIds={availableUnits}
-        open={!!availableUnits}
-        onClose={() => setAvailableUnits(undefined)}
-      />
     </>
   );
 };
