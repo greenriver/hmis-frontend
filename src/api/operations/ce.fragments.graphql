@@ -3,6 +3,7 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
   name
   categories
   status
+  active
   expiresAt
   projectId
   projectName

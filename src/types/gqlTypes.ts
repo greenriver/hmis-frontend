@@ -592,6 +592,7 @@ export type CeOpportunitiesPaginated = {
 
 export type CeOpportunity = {
   __typename?: 'CeOpportunity';
+  active: Scalars['Boolean']['output'];
   candidates: CeCandidatesPaginated;
   categories: Array<Scalars['String']['output']>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
@@ -15923,6 +15924,7 @@ export type CeOpportunitySummaryFieldsFragment = {
   name: string;
   categories: Array<string>;
   status: CeOpportunityStatus;
+  active: boolean;
   expiresAt?: string | null;
   projectId: string;
   projectName: string;
@@ -15934,6 +15936,7 @@ export type CeOpportunityFieldsFragment = {
   name: string;
   categories: Array<string>;
   status: CeOpportunityStatus;
+  active: boolean;
   expiresAt?: string | null;
   projectId: string;
   projectName: string;
@@ -16047,6 +16050,7 @@ export type CeReferralFieldsFragment = {
     name: string;
     categories: Array<string>;
     status: CeOpportunityStatus;
+    active: boolean;
     expiresAt?: string | null;
     projectId: string;
     projectName: string;
@@ -16611,6 +16615,7 @@ export type CreateCeOpportunityMutation = {
       name: string;
       categories: Array<string>;
       status: CeOpportunityStatus;
+      active: boolean;
       expiresAt?: string | null;
       projectId: string;
       projectName: string;
@@ -17721,6 +17726,7 @@ export type SubmitCeReferralStepMutation = {
         name: string;
         categories: Array<string>;
         status: CeOpportunityStatus;
+        active: boolean;
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
@@ -17834,6 +17840,7 @@ export type MarkUnitsAvailableMutation = {
         name: string;
         categories: Array<string>;
         status: CeOpportunityStatus;
+        active: boolean;
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
@@ -17899,6 +17906,7 @@ export type MarkUnitsUnavailableMutation = {
         name: string;
         categories: Array<string>;
         status: CeOpportunityStatus;
+        active: boolean;
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
@@ -17946,6 +17954,7 @@ export type GetProjectCeOpportunitiesQuery = {
         name: string;
         categories: Array<string>;
         status: CeOpportunityStatus;
+        active: boolean;
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
@@ -18006,6 +18015,7 @@ export type GetCeOpportunityQuery = {
     name: string;
     categories: Array<string>;
     status: CeOpportunityStatus;
+    active: boolean;
     expiresAt?: string | null;
     projectId: string;
     projectName: string;
@@ -18101,6 +18111,7 @@ export type GetCeReferralQuery = {
       name: string;
       categories: Array<string>;
       status: CeOpportunityStatus;
+      active: boolean;
       expiresAt?: string | null;
       projectId: string;
       projectName: string;
@@ -43236,6 +43247,7 @@ export type UnitFieldsFragment = {
     name: string;
     categories: Array<string>;
     status: CeOpportunityStatus;
+    active: boolean;
     expiresAt?: string | null;
     projectId: string;
     projectName: string;
@@ -43308,6 +43320,7 @@ export type GetUnitsQuery = {
           name: string;
           categories: Array<string>;
           status: CeOpportunityStatus;
+          active: boolean;
           expiresAt?: string | null;
           projectId: string;
           projectName: string;
@@ -43394,6 +43407,7 @@ export type CreateUnitsMutation = {
         name: string;
         categories: Array<string>;
         status: CeOpportunityStatus;
+        active: boolean;
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
@@ -43501,6 +43515,7 @@ export type UpdateUnitsMutation = {
         name: string;
         categories: Array<string>;
         status: CeOpportunityStatus;
+        active: boolean;
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
@@ -44523,6 +44538,7 @@ export const CeOpportunitySummaryFieldsFragmentDoc = gql`
     name
     categories
     status
+    active
     expiresAt
     projectId
     projectName

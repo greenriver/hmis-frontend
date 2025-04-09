@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import UnitOccupants from './UnitOccupants';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import { ColumnDef } from '@/components/elements/table/types';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -9,6 +10,7 @@ import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHo
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
+  CeOpportunityStatus,
   GetUnitsDocument,
   GetUnitsQuery,
   GetUnitsQueryVariables,
@@ -110,48 +112,47 @@ const UnitManagementTable = ({
 
   const getCeActions = useCallback(
     (unit: UnitFieldsFragment) => {
-      if (!canViewCoordinatedEntry) return [];
+      const actions: CommonMenuItem[] = [];
+      if (!canViewCoordinatedEntry) return actions;
 
-      // todo @martha - this logic isn't quite right:
-      // -should be able to view opportunity either way (fine)
-      // should only be able tom ark unavailable if the current opportunity doesn't have an accepted referral eitehr
-      // should be able to mark available even if there isa  closed opportunity from the pats
-      // do acceptedReferral and activeReferral need to stay separate?
       if (unit.latestOpportunity) {
-        return [
-          {
-            title: 'View Opportunity',
-            key: 'viewOpportunity',
-            ariaLabel: `View Opportunity for Unit ${unit.id}`,
-            to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-              projectId,
-              opportunityId: unit.latestOpportunity.id,
-            }),
-          },
-          {
-            title: 'Mark as Unavailable for Referrals',
-            key: 'markUnavailable',
-            ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
-            onClick: () => {
-              markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
-            },
-            disabled: unit.latestOpportunity.referral?.active,
-            disabledReason:
-              'Unit with in-progress referral cannot be marked as unavailable',
-          },
-        ];
+        actions.push({
+          title: 'View Opportunity',
+          key: 'viewOpportunity',
+          ariaLabel: `View Opportunity for Unit ${unit.id}`,
+          to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+            projectId,
+            opportunityId: unit.latestOpportunity.id,
+          }),
+        });
       }
 
-      return [
-        {
+      if (unit.latestOpportunity && unit.latestOpportunity.active) {
+        // Show this option if the opportunity is active, but disable it if it's locked
+        actions.push({
+          title: 'Mark as Unavailable for Referrals',
+          key: 'markUnavailable',
+          ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
+          onClick: () => {
+            markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
+          },
+          disabled:
+            unit.latestOpportunity.status === CeOpportunityStatus.Locked,
+          disabledReason:
+            'Unit with in-progress referral cannot be marked as unavailable',
+        });
+      } else {
+        actions.push({
           title: 'Mark as Available for Referrals',
           key: 'markAvailable',
           ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
           onClick: () => {
             markUnitsAvailable({ variables: { unitIds: [unit.id] } });
           },
-        },
-      ];
+        });
+      }
+
+      return actions;
     },
     [
       canViewCoordinatedEntry,
