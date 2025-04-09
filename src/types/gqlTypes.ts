@@ -592,8 +592,6 @@ export type CeOpportunitiesPaginated = {
 
 export type CeOpportunity = {
   __typename?: 'CeOpportunity';
-  acceptedReferral?: Maybe<CeReferral>;
-  activeReferral?: Maybe<CeReferral>;
   candidates: CeCandidatesPaginated;
   categories: Array<Scalars['String']['output']>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
@@ -603,6 +601,8 @@ export type CeOpportunity = {
   priorityScheme?: Maybe<CeMatchRule>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
+  /** Could be an active or accepted referral */
+  referral?: Maybe<CeReferral>;
   status: CeOpportunityStatus;
 };
 
@@ -4710,6 +4710,7 @@ export type MutationSubmitAssessmentArgs = {
 
 export type MutationSubmitCeReferralStepArgs = {
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  formDefinitionId: Scalars['ID']['input'];
   input: Scalars['JsonObject']['input'];
   referralId: Scalars['ID']['input'];
   stepId: Scalars['ID']['input'];
@@ -15935,22 +15936,7 @@ export type CeOpportunityFieldsFragment = {
   expiresAt?: string | null;
   projectId: string;
   projectName: string;
-  activeReferral?: {
-    __typename?: 'CeReferral';
-    id: string;
-    status: CeReferralStatus;
-    clientId: string;
-    client?: {
-      __typename?: 'Client';
-      id: string;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    } | null;
-  } | null;
-  acceptedReferral?: {
+  referral?: {
     __typename?: 'CeReferral';
     id: string;
     status: CeReferralStatus;
@@ -17191,6 +17177,7 @@ export type SubmitCeReferralStepMutationVariables = Exact<{
   stepId: Scalars['ID']['input'];
   input: Scalars['JsonObject']['input'];
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  formDefinitionId: Scalars['ID']['input'];
 }>;
 
 export type SubmitCeReferralStepMutation = {
@@ -17730,22 +17717,7 @@ export type SubmitCeReferralStepMutation = {
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
-        activeReferral?: {
-          __typename?: 'CeReferral';
-          id: string;
-          status: CeReferralStatus;
-          clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
-        } | null;
-        acceptedReferral?: {
+        referral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
@@ -18056,22 +18028,7 @@ export type GetCeOpportunityQuery = {
     expiresAt?: string | null;
     projectId: string;
     projectName: string;
-    activeReferral?: {
-      __typename?: 'CeReferral';
-      id: string;
-      status: CeReferralStatus;
-      clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
-    } | null;
-    acceptedReferral?: {
+    referral?: {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
@@ -44666,10 +44623,7 @@ export const CeMatchRuleFieldsFragmentDoc = gql`
 export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
     ...CeOpportunitySummaryFields
-    activeReferral {
-      ...CeReferralSummaryFields
-    }
-    acceptedReferral {
+    referral {
       ...CeReferralSummaryFields
     }
     eligibilityRequirements {
@@ -48331,12 +48285,14 @@ export const SubmitCeReferralStepDocument = gql`
     $stepId: ID!
     $input: JsonObject!
     $confirmed: Boolean
+    $formDefinitionId: ID!
   ) {
     submitCeReferralStep(
       referralId: $referralId
       stepId: $stepId
       input: $input
       confirmed: $confirmed
+      formDefinitionId: $formDefinitionId
     ) {
       step {
         ...CeReferralStepFields
@@ -48385,6 +48341,7 @@ export type SubmitCeReferralStepMutationFn = Apollo.MutationFunction<
  *      stepId: // value for 'stepId'
  *      input: // value for 'input'
  *      confirmed: // value for 'confirmed'
+ *      formDefinitionId: // value for 'formDefinitionId'
  *   },
  * });
  */

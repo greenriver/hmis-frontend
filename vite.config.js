@@ -124,6 +124,8 @@ export default defineConfig(({ command, mode }) => {
         port: 5173,
         open: true,
         host: env.HMIS_HOST || 'hmis.dev.test',
+        https:
+          env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
         proxy: {
           '/hmis': warehouseProxyServer,
           '/dev-assets/theme': warehouseProxyServer,
