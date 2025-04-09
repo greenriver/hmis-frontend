@@ -4262,18 +4262,6 @@
             "deprecationReason": null
           },
           {
-            "name": "referral",
-            "description": "Active or accepted referral",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CeReferral",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "status",
             "description": null,
             "args": [],
