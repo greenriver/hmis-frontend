@@ -601,7 +601,7 @@ export type CeOpportunity = {
   priorityScheme?: Maybe<CeMatchRule>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
-  /** Could be an active or accepted referral */
+  /** Active or accepted referral */
   referral?: Maybe<CeReferral>;
   status: CeOpportunityStatus;
 };

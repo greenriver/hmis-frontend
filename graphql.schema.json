@@ -4235,7 +4235,7 @@
           },
           {
             "name": "referral",
-            "description": "Could be an active or accepted referral",
+            "description": "Active or accepted referral",
             "args": [],
             "type": {
               "kind": "OBJECT",
