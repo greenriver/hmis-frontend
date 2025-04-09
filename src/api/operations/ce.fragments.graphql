@@ -10,10 +10,7 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
 
 fragment CeOpportunityFields on CeOpportunity {
   ...CeOpportunitySummaryFields
-  activeReferral {
-    ...CeReferralSummaryFields
-  }
-  acceptedReferral {
+  referral {
     ...CeReferralSummaryFields
   }
   eligibilityRequirements {

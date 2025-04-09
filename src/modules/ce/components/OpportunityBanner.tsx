@@ -11,6 +11,7 @@ import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
   CeOpportunityFieldsFragment,
+  CeReferralStatus,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -25,14 +26,19 @@ const OpportunityBanner: React.FC<Props> = ({
   viewAllEligibleClients,
 }) => {
   const isTiny = useIsMobile('sm');
-  const { activeReferral, acceptedReferral } = opportunity;
-  const referral = acceptedReferral || activeReferral;
+  const { referral } = opportunity;
 
   const header = useMemo(() => {
-    if (acceptedReferral) return 'Filled By';
-    if (activeReferral) return 'In-Progress Referral';
+    if (referral?.status === CeReferralStatus.Accepted) return 'Filled By';
+    if (
+      referral &&
+      [CeReferralStatus.Initialized, CeReferralStatus.InProgress].includes(
+        referral.status
+      )
+    )
+      return 'In-Progress Referral';
     if (topCandidate) return 'Top Prioritization';
-  }, [acceptedReferral, activeReferral, topCandidate]);
+  }, [referral, topCandidate]);
 
   const clientName = useMemo(() => {
     if (referral) return clientNameFromRecordWithOptionalClient(referral);
@@ -48,7 +54,7 @@ const OpportunityBanner: React.FC<Props> = ({
         referralId: referral.id,
       });
 
-      if (acceptedReferral) {
+      if (referral.status === CeReferralStatus.Accepted) {
         return (
           <ButtonLink color='grayscale' variant='contained' to={to}>
             View
@@ -73,13 +79,7 @@ const OpportunityBanner: React.FC<Props> = ({
         />
       );
     }
-  }, [
-    acceptedReferral,
-    opportunity.id,
-    opportunity.projectId,
-    referral,
-    topCandidate,
-  ]);
+  }, [referral, opportunity.id, opportunity.projectId, topCandidate]);
 
   if (!referral && !topCandidate) return;
 
@@ -107,7 +107,10 @@ const OpportunityBanner: React.FC<Props> = ({
       </Stack>
       <Paper
         sx={{
-          backgroundColor: acceptedReferral ? undefined : 'primary.surface',
+          backgroundColor:
+            referral?.status === CeReferralStatus.Accepted
+              ? undefined
+              : 'primary.surface',
           p: 2,
         }}
       >

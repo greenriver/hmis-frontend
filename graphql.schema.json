@@ -4061,30 +4061,6 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "acceptedReferral",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CeReferral",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "activeReferral",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CeReferral",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "candidates",
             "description": null,
             "args": [
@@ -4253,6 +4229,18 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referral",
+            "description": "Active or accepted referral",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CeReferral",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

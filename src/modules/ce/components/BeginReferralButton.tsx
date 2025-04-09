@@ -40,7 +40,7 @@ const BeginReferralButton: React.FC<Props> = ({
         cache.modify({
           id: `CeOpportunity:${opportunityId}`,
           fields: {
-            activeReferral() {
+            referral() {
               return referral;
             },
           },
