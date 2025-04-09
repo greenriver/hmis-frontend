@@ -1333,7 +1333,7 @@ const getMappedValue = (
     const value = get(record, keys); // lodash's `get` will return undefined if the field doesn't exist
 
     // Special cases where we DON'T want to alert Sentry if the field can't be resolved on the record.
-    // - imageBlobId and fileBlobId: we pass these fields when first saving a file, but it isn't used for returning a saved file.
+    // - imageBlobId and fileBlobId: we pass these fields when first saving a file, but they aren't persisted on the file or returned on a saved file record.
     // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
     // - resendReferralRequest: special case for the admin update referral posting, not saved on the referral posting record, but used by the custom mutation for this form.
     const specialCaseFieldNames = [
