@@ -601,7 +601,7 @@ export type CeOpportunity = {
   priorityScheme?: Maybe<CeMatchRule>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
-  /** Could be an active or accepted referral */
+  /** Active or accepted referral */
   referral?: Maybe<CeReferral>;
   status: CeOpportunityStatus;
 };
@@ -657,6 +657,7 @@ export type CeParticipationsPaginated = {
 
 export type CeReferral = {
   __typename?: 'CeReferral';
+  active: Scalars['Boolean']['output'];
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -7776,11 +7777,11 @@ export type UnassignStaffPayload = {
 
 export type Unit = {
   __typename?: 'Unit';
-  /** The unit's most recent opportunity, which could be currently active or already closed */
-  currentOpportunity?: Maybe<CeOpportunity>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
+  /** The unit's most recent opportunity, which could be currently active or already closed */
+  latestOpportunity?: Maybe<CeOpportunity>;
   name: Scalars['String']['output'];
   occupants: Array<Enrollment>;
   project?: Maybe<Project>;
@@ -15940,6 +15941,7 @@ export type CeOpportunityFieldsFragment = {
     __typename?: 'CeReferral';
     id: string;
     status: CeReferralStatus;
+    active: boolean;
     clientId: string;
     client?: {
       __typename?: 'Client';
@@ -15992,6 +15994,7 @@ export type CeReferralSummaryFieldsFragment = {
   __typename?: 'CeReferral';
   id: string;
   status: CeReferralStatus;
+  active: boolean;
   clientId: string;
   client?: {
     __typename?: 'Client';
@@ -16010,6 +16013,7 @@ export type CeReferralTableFieldsFragment = {
   currentStepName?: string | null;
   id: string;
   status: CeReferralStatus;
+  active: boolean;
   clientId: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
   client?: {
@@ -16027,6 +16031,7 @@ export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
   id: string;
   status: CeReferralStatus;
+  active: boolean;
   clientId: string;
   steps: Array<{
     __typename?: 'CeReferralStep';
@@ -16627,6 +16632,7 @@ export type CreateCeReferralMutation = {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
+      active: boolean;
       clientId: string;
       client?: {
         __typename?: 'Client';
@@ -17707,6 +17713,7 @@ export type SubmitCeReferralStepMutation = {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
+      active: boolean;
       clientId: string;
       opportunity: {
         __typename?: 'CeOpportunity';
@@ -17721,6 +17728,7 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
+          active: boolean;
           clientId: string;
           client?: {
             __typename?: 'Client';
@@ -17820,7 +17828,7 @@ export type MarkUnitsAvailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      currentOpportunity?: {
+      latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
@@ -17829,25 +17837,11 @@ export type MarkUnitsAvailableMutation = {
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
-        activeReferral?: {
+        referral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
-          clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
-        } | null;
-        acceptedReferral?: {
-          __typename?: 'CeReferral';
-          id: string;
-          status: CeReferralStatus;
+          active: boolean;
           clientId: string;
           client?: {
             __typename?: 'Client';
@@ -17899,7 +17893,7 @@ export type MarkUnitsUnavailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      currentOpportunity?: {
+      latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
@@ -17908,25 +17902,11 @@ export type MarkUnitsUnavailableMutation = {
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
-        activeReferral?: {
+        referral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
-          clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
-        } | null;
-        acceptedReferral?: {
-          __typename?: 'CeReferral';
-          id: string;
-          status: CeReferralStatus;
+          active: boolean;
           clientId: string;
           client?: {
             __typename?: 'Client';
@@ -17997,6 +17977,7 @@ export type GetProjectCeReferralsQuery = {
         currentStepName?: string | null;
         id: string;
         status: CeReferralStatus;
+        active: boolean;
         clientId: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
         client?: {
@@ -18032,6 +18013,7 @@ export type GetCeOpportunityQuery = {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
+      active: boolean;
       clientId: string;
       client?: {
         __typename?: 'Client';
@@ -18103,6 +18085,7 @@ export type GetCeReferralQuery = {
     __typename?: 'CeReferral';
     id: string;
     status: CeReferralStatus;
+    active: boolean;
     clientId: string;
     steps: Array<{
       __typename?: 'CeReferralStep';
@@ -43247,7 +43230,7 @@ export type UnitFieldsFragment = {
       nameSuffix?: string | null;
     };
   }>;
-  currentOpportunity?: {
+  latestOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
@@ -43256,25 +43239,11 @@ export type UnitFieldsFragment = {
     expiresAt?: string | null;
     projectId: string;
     projectName: string;
-    activeReferral?: {
+    referral?: {
       __typename?: 'CeReferral';
       id: string;
       status: CeReferralStatus;
-      clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
-    } | null;
-    acceptedReferral?: {
-      __typename?: 'CeReferral';
-      id: string;
-      status: CeReferralStatus;
+      active: boolean;
       clientId: string;
       client?: {
         __typename?: 'Client';
@@ -43333,7 +43302,7 @@ export type GetUnitsQuery = {
             nameSuffix?: string | null;
           };
         }>;
-        currentOpportunity?: {
+        latestOpportunity?: {
           __typename?: 'CeOpportunity';
           id: string;
           name: string;
@@ -43342,25 +43311,11 @@ export type GetUnitsQuery = {
           expiresAt?: string | null;
           projectId: string;
           projectName: string;
-          activeReferral?: {
+          referral?: {
             __typename?: 'CeReferral';
             id: string;
             status: CeReferralStatus;
-            clientId: string;
-            client?: {
-              __typename?: 'Client';
-              id: string;
-              lockVersion: number;
-              firstName?: string | null;
-              middleName?: string | null;
-              lastName?: string | null;
-              nameSuffix?: string | null;
-            } | null;
-          } | null;
-          acceptedReferral?: {
-            __typename?: 'CeReferral';
-            id: string;
-            status: CeReferralStatus;
+            active: boolean;
             clientId: string;
             client?: {
               __typename?: 'Client';
@@ -43433,7 +43388,7 @@ export type CreateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      currentOpportunity?: {
+      latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
@@ -43442,25 +43397,11 @@ export type CreateUnitsMutation = {
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
-        activeReferral?: {
+        referral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
-          clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
-        } | null;
-        acceptedReferral?: {
-          __typename?: 'CeReferral';
-          id: string;
-          status: CeReferralStatus;
+          active: boolean;
           clientId: string;
           client?: {
             __typename?: 'Client';
@@ -43554,7 +43495,7 @@ export type UpdateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      currentOpportunity?: {
+      latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
@@ -43563,25 +43504,11 @@ export type UpdateUnitsMutation = {
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
-        activeReferral?: {
+        referral?: {
           __typename?: 'CeReferral';
           id: string;
           status: CeReferralStatus;
-          clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
-        } | null;
-        acceptedReferral?: {
-          __typename?: 'CeReferral';
-          id: string;
-          status: CeReferralStatus;
+          active: boolean;
           clientId: string;
           client?: {
             __typename?: 'Client';
@@ -44605,6 +44532,7 @@ export const CeReferralSummaryFieldsFragmentDoc = gql`
   fragment CeReferralSummaryFields on CeReferral {
     id
     status
+    active
     clientId
     client {
       id
@@ -46267,12 +46195,9 @@ export const UnitFieldsFragmentDoc = gql`
         ...ClientName
       }
     }
-    currentOpportunity {
+    latestOpportunity {
       ...CeOpportunitySummaryFields
-      activeReferral {
-        ...CeReferralSummaryFields
-      }
-      acceptedReferral {
+      referral {
         ...CeReferralSummaryFields
       }
     }

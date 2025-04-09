@@ -39,6 +39,7 @@ fragment CeCandidateFields on CeCandidate {
 fragment CeReferralSummaryFields on CeReferral {
   id
   status
+  active
   clientId
   client {
     id

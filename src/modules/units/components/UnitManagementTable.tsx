@@ -63,9 +63,8 @@ const UnitManagementTable = ({
               key: 'available',
               render: (unit: UnitFieldsFragment) => {
                 if (
-                  unit.currentOpportunity &&
-                  !unit.currentOpportunity.activeReferral &&
-                  !unit.currentOpportunity.acceptedReferral &&
+                  unit.latestOpportunity &&
+                  !unit.latestOpportunity.referral &&
                   unit.occupants.length === 0
                 ) {
                   return 'Yes';
@@ -77,9 +76,8 @@ const UnitManagementTable = ({
               header: 'Referral Status',
               key: 'referralStatus',
               render: (unit: UnitFieldsFragment) => {
-                const opportunity = unit.currentOpportunity;
-                const referral =
-                  opportunity?.activeReferral || opportunity?.acceptedReferral;
+                const opportunity = unit.latestOpportunity;
+                const referral = opportunity?.referral;
 
                 if (opportunity && !referral) return 'Available for referrals';
 
@@ -119,7 +117,7 @@ const UnitManagementTable = ({
       // should only be able tom ark unavailable if the current opportunity doesn't have an accepted referral eitehr
       // should be able to mark available even if there isa  closed opportunity from the pats
       // do acceptedReferral and activeReferral need to stay separate?
-      if (unit.currentOpportunity) {
+      if (unit.latestOpportunity) {
         return [
           {
             title: 'View Opportunity',
@@ -127,7 +125,7 @@ const UnitManagementTable = ({
             ariaLabel: `View Opportunity for Unit ${unit.id}`,
             to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
               projectId,
-              opportunityId: unit.currentOpportunity.id,
+              opportunityId: unit.latestOpportunity.id,
             }),
           },
           {
@@ -137,7 +135,7 @@ const UnitManagementTable = ({
             onClick: () => {
               markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
             },
-            disabled: unit.currentOpportunity.activeReferral,
+            disabled: unit.latestOpportunity.referral?.active,
             disabledReason:
               'Unit with in-progress referral cannot be marked as unavailable',
           },

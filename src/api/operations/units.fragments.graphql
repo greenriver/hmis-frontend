@@ -28,12 +28,9 @@ fragment UnitFields on Unit {
       ...ClientName
     }
   }
-  currentOpportunity {
+  latestOpportunity {
     ...CeOpportunitySummaryFields
-    activeReferral {
-      ...CeReferralSummaryFields
-    }
-    acceptedReferral {
+    referral {
       ...CeReferralSummaryFields
     }
   }
