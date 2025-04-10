@@ -4,7 +4,7 @@ import { InProgressIcon } from '@/components/elements/SemanticIcons';
 import { CeReferralStatus } from '@/types/gqlTypes';
 
 interface Props {
-  status?: CeReferralStatus;
+  status: CeReferralStatus;
 }
 const ReferralStatusChip: React.FC<Props> = ({ status }) => {
   const baseChipSx: SxProps = {
@@ -38,7 +38,7 @@ const ReferralStatusChip: React.FC<Props> = ({ status }) => {
     case CeReferralStatus.Rejected:
       return <Chip label='Declined' {...baseChipProps} />;
     default:
-      return <Chip label='Not Started' {...baseChipProps} />;
+      return '';
   }
 };
 
