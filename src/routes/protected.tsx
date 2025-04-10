@@ -51,6 +51,12 @@ import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage
 import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
+import Opportunity from '@/modules/ce/components/Opportunity';
+import ProjectCePage from '@/modules/ce/components/ProjectCePage';
+import ReferralDetails from '@/modules/ce/components/ReferralDetails';
+import ReferralPage from '@/modules/ce/components/ReferralPage';
+import ReferralStep from '@/modules/ce/components/ReferralStep';
+import ReferralSteps from '@/modules/ce/components/ReferralSteps';
 import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
 import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
 import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
@@ -418,6 +424,53 @@ export const protectedRoutes: RouteNode[] = [
                 <CreateHouseholdPage />
               </ProjectEditRoute>
             ),
+          },
+          {
+            path: ProjectDashboardRoutes.CE,
+            element: (
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']}
+                otherwise={<NotFound />}
+              >
+                <ProjectCePage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.OPPORTUNITY,
+            element: (
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']}
+                otherwise={<NotFound />}
+              >
+                <Opportunity />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.REFERRAL,
+            element: (
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']}
+                otherwise={<NotFound />}
+              >
+                <ReferralPage />
+              </RootPermissionsFilter>
+            ),
+            children: [
+              {
+                path: ProjectDashboardRoutes.REFERRAL_DETAILS,
+                element: <ReferralDetails />,
+              },
+              {
+                path: ProjectDashboardRoutes.REFERRAL_STEPS,
+                element: <ReferralSteps />,
+              },
+              {
+                path: ProjectDashboardRoutes.REFERRAL_STEP,
+                element: <ReferralStep />,
+              },
+            ],
           },
         ],
       },

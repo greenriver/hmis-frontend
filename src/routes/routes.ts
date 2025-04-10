@@ -110,6 +110,15 @@ const projectDashboardRoutes = {
   HMIS_PARTICIPATION: 'hmis-participation',
   CE_PARTICIPATION: 'ce-participation',
   EXTERNAL_FORM_SUBMISSIONS: 'external-form-submissions',
+
+  // CE
+  CE: 'ce',
+  OPPORTUNITY: 'ce/opportunities/:opportunityId',
+  REFERRAL: 'ce/opportunities/:opportunityId/referrals',
+  REFERRAL_DETAILS: 'ce/opportunities/:opportunityId/referrals/:referralId',
+  REFERRAL_STEPS: 'ce/opportunities/:opportunityId/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
+  REFERRAL_STEP:
+    'ce/opportunities/:opportunityId/referrals/:referralId/tasks/:stepId',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`
@@ -154,10 +163,21 @@ export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
 } = adminDashboardRoutes;
 
+// Routes that live "under" one of the dashboards, but they need to take up the full screen, so they shouldn't get the default padding applied.
+export const NO_PADDING_ROUTES: string[] = [
+  ProjectDashboardRoutes.REFERRAL,
+  ProjectDashboardRoutes.REFERRAL_DETAILS,
+  ProjectDashboardRoutes.REFERRAL_STEPS,
+  ProjectDashboardRoutes.REFERRAL_STEP,
+  AdminDashboardRoutes.EDIT_FORM,
+];
+
 // Auto-hide left desktop nav for some routes
 export const HIDE_NAV_ROUTES: string[] = [
-  // EnrollmentDashboardRoutes.NEW_ASSESSMENT
-  // AdminDashboardRoutes.EDIT_FORM,
+  ProjectDashboardRoutes.REFERRAL,
+  ProjectDashboardRoutes.REFERRAL_DETAILS,
+  ProjectDashboardRoutes.REFERRAL_STEPS,
+  ProjectDashboardRoutes.REFERRAL_STEP,
 ];
 
 export const FOCUS_MODE_ROUTES = [

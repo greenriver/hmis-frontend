@@ -1,10 +1,15 @@
 import React from 'react';
+import { generatePath } from 'react-router-dom';
+import Wayfinder from '@/components/elements/navigation/Wayfinder';
 import {
   clientBriefName,
   findHohOrRep,
   stringifyHousehold,
 } from '@/modules/hmis/hmisUtil';
-import SuccessWayfindingStep from '@/modules/household/components/householdActions/SuccessWayfindingStep';
+import {
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+} from '@/routes/routes';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -39,13 +44,28 @@ const SplitHouseholdSuccess = ({
   const splitHoh = findHohOrRep(splitHousehold.householdClients);
 
   return (
-    <SuccessWayfindingStep
-      title={'Successful Split'}
-      description={`${stringifyHousehold(splitHousehold.householdClients)} ${splitHousehold.householdClients.length > 1 ? 'have' : 'has'} been successfully split from ${donorHohName}’s Enrollment at ${project.projectName}.`}
-      primaryClientName={donorHohName}
-      secondary={splitHoh}
-      project={project}
-      onClose={onClose}
+    <Wayfinder
+      alertTitle='Successful Split'
+      alertText={`${stringifyHousehold(splitHousehold.householdClients)} ${splitHousehold.householdClients.length > 1 ? 'have' : 'has'} been successfully split from ${donorHohName}’s Enrollment at ${project.projectName}.`}
+      items={[
+        {
+          title: `Return to ${donorHohName}’s Enrollment`,
+          onClick: onClose,
+        },
+        {
+          title: `View ${clientBriefName(splitHoh.client)}'s Enrollment`,
+          to: generatePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+            clientId: splitHoh.client.id,
+            enrollmentId: splitHoh.enrollment.id,
+          }),
+        },
+        {
+          title: `View Enrollments at ${project.projectName}`,
+          to: generatePath(ProjectDashboardRoutes.PROJECT_ENROLLMENTS, {
+            projectId: project.id,
+          }),
+        },
+      ]}
     />
   );
 };

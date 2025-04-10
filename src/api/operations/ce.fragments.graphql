@@ -1,0 +1,89 @@
+fragment CeOpportunitySummaryFields on CeOpportunity {
+  id
+  name
+  categories
+  status
+  expiresAt
+  projectId
+  projectName
+}
+
+fragment CeOpportunityFields on CeOpportunity {
+  ...CeOpportunitySummaryFields
+  referral {
+    ...CeReferralSummaryFields
+  }
+  eligibilityRequirements {
+    ...CeMatchRuleFields
+  }
+  priorityScheme {
+    ...CeMatchRuleFields
+  }
+}
+
+fragment CeMatchRuleFields on CeMatchRule {
+  id
+  name
+  ownerType
+}
+
+fragment CeCandidateFields on CeCandidate {
+  id
+  priorityScore
+  clientId
+  client {
+    ...ClientName
+  }
+}
+
+fragment CeReferralSummaryFields on CeReferral {
+  id
+  status
+  clientId
+  client {
+    id
+    ...ClientName
+  }
+}
+
+fragment CeReferralTableFields on CeReferral {
+  ...CeReferralSummaryFields
+  createdAt
+  opportunity {
+    id
+    name
+  }
+  currentStepName
+}
+
+fragment CeReferralFields on CeReferral {
+  ...CeReferralSummaryFields
+  steps {
+    ...CeReferralStepSummaryFields
+  }
+  opportunity {
+    ...CeOpportunitySummaryFields
+  }
+  targetEnrollment {
+    id
+    client {
+      id
+    }
+  }
+}
+
+fragment CeReferralStepSummaryFields on CeReferralStep {
+  id
+  stepId
+  name
+  status
+  swimlane
+}
+
+fragment CeReferralStepFields on CeReferralStep {
+  ...CeReferralStepSummaryFields
+  formDefinition {
+    ...FormDefinitionFields
+  }
+  submittedValues
+}
