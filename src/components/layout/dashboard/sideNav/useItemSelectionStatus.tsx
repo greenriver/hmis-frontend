@@ -1,3 +1,4 @@
+import { escapeRegExp } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -16,9 +17,12 @@ export const useItemSelectionStatus = <T extends object>({
 
   const isSelected = useMemo(() => {
     if (!item.path && !item.activePaths) return false;
-    // If current location starts with item path, then this nav item should be selected.
+    // If current location matches item path, then this nav item should be selected.
     // (e.g. item path is /enrollments/1/services and current location is /enrollments/1/services/2)
-    if (item.path && currentLocation.startsWith(item.path)) {
+    // Use a regex to avoid false positives (e.g. item path is /projects/1/ce and current location is /projects/1/ce-participation)
+    const escapedPath = item.path ? escapeRegExp(item.path) : '';
+    const regex = new RegExp(`^${escapedPath}(?:[#/\?]|$)`);
+    if (item.path && regex.test(currentLocation)) {
       return true;
     }
 
