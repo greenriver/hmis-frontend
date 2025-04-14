@@ -1,8 +1,8 @@
-import { escapeRegExp } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { NavItem } from './types';
+import { addTrailingSlash } from '@/components/layout/dashboard/sideNav/navUtil';
 import useCurrentPath from '@/hooks/useCurrentPath';
 
 export type Options<T> = {
@@ -16,20 +16,19 @@ export const useItemSelectionStatus = <T extends object>({
   const currentPath = useCurrentPath(); // /projects/:id/foo
 
   const isSelected = useMemo(() => {
-    if (!item.path && !item.activePaths) return false;
-    // If current location matches item path, then this nav item should be selected.
-    // (e.g. item path is /enrollments/1/services and current location is /enrollments/1/services/2)
-    // Use a regex to avoid false positives (e.g. item path is /projects/1/ce and current location is /projects/1/ce-participation)
-    const escapedPath = item.path ? escapeRegExp(item.path) : '';
-    const regex = new RegExp(`^${escapedPath}(?:[#/\?]|$)`);
-    if (item.path && regex.test(currentLocation)) {
-      return true;
+    if (item.path) {
+      const matchesPath =
+        currentLocation === item.path || // matches path exactly
+        currentLocation.startsWith(addTrailingSlash(item.path)); // starts with path
+
+      if (matchesPath) return true;
     }
 
     // If current route is listed in this item's activePaths, then this nav item should be selected.
-    if (item.activePaths && item.activePaths.some((p) => p === currentPath)) {
-      return true;
+    if (item.activePaths) {
+      return item.activePaths.some((p) => p === currentPath);
     }
+
     return false;
   }, [item.path, item.activePaths, currentLocation, currentPath]);
 
