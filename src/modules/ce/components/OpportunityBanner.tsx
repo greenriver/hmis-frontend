@@ -1,5 +1,5 @@
 import PeopleIcon from '@mui/icons-material/People';
-import { Button, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -18,13 +18,8 @@ import { generateSafePath } from '@/utils/pathEncoding';
 interface Props {
   opportunity: CeOpportunityFieldsFragment;
   topCandidate?: CeCandidateFieldsFragment;
-  viewAllEligibleClients: VoidFunction;
 }
-const OpportunityBanner: React.FC<Props> = ({
-  opportunity,
-  topCandidate,
-  viewAllEligibleClients,
-}) => {
+const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
   const isTiny = useIsMobile('sm');
   const { referral } = opportunity;
 
@@ -96,13 +91,9 @@ const OpportunityBanner: React.FC<Props> = ({
           {header}
         </Typography>
         {!isTiny && (
-          <Button
-            onClick={viewAllEligibleClients}
-            startIcon={<PeopleIcon />}
-            variant='text'
-          >
+          <ButtonLink to={'#clients'} startIcon={<PeopleIcon />} variant='text'>
             View All Eligible Clients
-          </Button>
+          </ButtonLink>
         )}
       </Stack>
       <Paper
