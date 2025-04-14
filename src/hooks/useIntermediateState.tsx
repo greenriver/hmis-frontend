@@ -1,16 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-export type IntermediateState<T> = {
-  state: T;
-  setState: (value: T) => void;
-  reset: VoidFunction;
-  cancel: VoidFunction;
-};
-
-const useIntermediateState = <T,>(
-  value: T,
-  defaultValue: T = value
-): IntermediateState<T> => {
+const useIntermediateState = <T,>(value: T, defaultValue: T = value) => {
   const [state, setState] = useState<T>(value);
 
   const reset = useCallback(() => setState(defaultValue), [defaultValue]);
