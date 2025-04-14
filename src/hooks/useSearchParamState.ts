@@ -1,7 +1,7 @@
 import { isDate } from 'date-fns';
-import { isNil } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 
 // adapted from https://github.com/jschwindt/react-use-search-params-state/tree/main
@@ -106,6 +106,22 @@ const getAllCurrentParams = (searchParams: URLSearchParams) => {
   return allUrlParams;
 };
 
+const populateParams = (
+  params: Record<string, any>,
+  searchParams: URLSearchParams
+) => {
+  Object.entries(params).forEach(([key, value]) => {
+    if (!isEmpty(key)) {
+      // Don't add this key to params if the value is empty
+      if (Array.isArray(value)) {
+        value.forEach((v) => searchParams.append(key, v));
+      } else {
+        searchParams.set(key, value);
+      }
+    }
+  });
+};
+
 // Type for internal state representation of search params
 type ValueType = Record<string, any>; // Future improvement: constrain value type
 
@@ -121,6 +137,9 @@ const useSearchParamsState = ({
   paramsDefinition,
   initial,
 }: Args): ReturnType => {
+  const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
+
   // `initial` is NOT passed to `useSearchParams` here, since react-router-dom's
   // useSearchParams's `defaultInit` prop auto-populates the internal state, but not
   // the search params that appear in the url. See the useEffect below
@@ -128,7 +147,9 @@ const useSearchParamsState = ({
 
   const [mounted, setMounted] = useState(false);
 
-  // Use an effect to set the `initial` params in the url bar
+  // Use an effect to set the `initial` params in the url bar. This could be avoided
+  // if we transitioned to createBrowserRouter and used route `loader`s, but that's a big lift,
+  // and would need to be configured on every route that uses optional columns.
   useEffect(() => {
     setMounted(true);
 
@@ -138,11 +159,23 @@ const useSearchParamsState = ({
       // Find any key/value pairs that are in initial, but not in searchParams
       Object.entries(initial).filter(([key]) => !searchParams.has(key))
     );
-    if (Object.keys(toUpdate).length) {
-      // Spread currentParams to avoid overwriting search params set by other components
-      const currentParams = getAllCurrentParams(searchParams);
-      setSearchParams({ ...currentParams, ...toUpdate }, { replace: true });
-    }
+
+    const accumulator = new URLSearchParams();
+    populateParams(toUpdate, accumulator);
+    if (accumulator.entries.length === 0) return; // If we don't have anything to update, return early
+
+    // Add currentParams to avoid overwriting params set by other components
+    const currentParams = getAllCurrentParams(searchParams);
+    populateParams(currentParams, accumulator);
+
+    navigate(
+      {
+        pathname,
+        hash,
+        search: accumulator.toString(),
+      },
+      { replace: true }
+    ); // replace so that browser history acts normal
 
     // Only run on mount, so the user can overwrite initial values.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,7 +212,7 @@ const useSearchParamsState = ({
           }
         }
       }
-      setSearchParams({ ...currentParams, ...newValues });
+      setSearchParams({ ...currentParams, ...newValues }, { replace: false });
     },
     [paramsDefinition, searchParams, setSearchParams]
   );

@@ -16,9 +16,9 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import Pagination from '@/components/elements/table/Pagination';
-import TableFilters, {
+import TableControls, {
   TableFiltersProps,
-} from '@/components/elements/tableFilters/TableFilters';
+} from '@/components/elements/tableFilters/TableControls';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColumns';
@@ -152,10 +152,34 @@ const GenericTableWithData = <
     optionalQueryVariables,
   } = useOptionalColumns<RowDataType, QueryVariables>({ columns: columnsProp });
 
+  const optionalColumnsProps = useMemo(() => {
+    return !isEmpty(optionalColumns)
+      ? {
+          columns: optionalColumns.map((col) => ({
+            value: col.key,
+            header: col.header,
+            defaultHidden: !!col.optional?.defaultHidden,
+          })),
+          columnsValue: includedOptionalColumns,
+          setColumnsValue: setIncludedOptionalColumns,
+        }
+      : undefined;
+  }, [includedOptionalColumns, optionalColumns, setIncludedOptionalColumns]);
+
   // if the filters change, return to the first page
   useEffect(() => {
     setPage(0);
   }, [filterValues]);
+
+  const filterProps = useMemo(() => {
+    return !isEmpty(filters)
+      ? {
+          filters,
+          filterValues,
+          setFilterValues,
+        }
+      : undefined;
+  }, [filterValues, filters]);
 
   const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
     if (sortOrder) return sortOrder;
@@ -346,23 +370,11 @@ const GenericTableWithData = <
                     borderBottom: `1px solid ${theme.palette.divider}`,
                   })}
                 >
-                  <TableFilters
+                  <TableControls
                     noSort={noSort}
                     loading={loading && !data}
                     tableDisplayOptionButtons={tableDisplayOptionButtons}
-                    optionalColumns={
-                      !isEmpty(optionalColumns)
-                        ? {
-                            columns: optionalColumns.map((col) => ({
-                              value: col.key,
-                              header: col.header,
-                              defaultHidden: !!col.optional?.defaultHidden,
-                            })),
-                            columnsValue: includedOptionalColumns,
-                            setColumnsValue: setIncludedOptionalColumns,
-                          }
-                        : undefined
-                    }
+                    optionalColumns={optionalColumnsProps}
                     sorting={
                       sortOptions
                         ? {
@@ -372,15 +384,7 @@ const GenericTableWithData = <
                           }
                         : undefined
                     }
-                    filters={
-                      !isEmpty(filters)
-                        ? {
-                            filters,
-                            filterValues,
-                            setFilterValues,
-                          }
-                        : undefined
-                    }
+                    filters={filterProps}
                     pagination={{
                       limit,
                       offset,

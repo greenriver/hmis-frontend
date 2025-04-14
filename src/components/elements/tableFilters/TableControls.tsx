@@ -54,7 +54,7 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   );
 };
 
-const TableFilters = <T, S extends Record<string, string>>({
+const TableControls = <T, S extends Record<string, string>>({
   filters,
   sorting,
   pagination,
@@ -94,4 +94,4 @@ const TableFilters = <T, S extends Record<string, string>>({
   );
 };
 
-export default TableFilters;
+export default TableControls;
