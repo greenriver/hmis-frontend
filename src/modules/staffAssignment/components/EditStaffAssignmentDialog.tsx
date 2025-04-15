@@ -32,12 +32,6 @@ const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
 }) => {
   const isTiny = useIsMobile('sm');
 
-  // const headOfHousehold = useMemo(() => {
-  //   return household.householdClients.find(
-  //     (c) => c.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-  //   );
-  // }, [household.householdClients]);
-
   const { enrollment } = useEnrollmentDashboardContext();
 
   if (!enrollment) return;
