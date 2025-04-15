@@ -2,7 +2,7 @@ query GetProjectCeOpportunities(
   $id: ID!
   $limit: Int = 25
   $offset: Int = 0
-  $filters: CeOpportunityFilterOptions = null
+  $filters: ProjectCeOpportunityFilterOptions = null
 ) {
   project(id: $id) {
     id
@@ -21,7 +21,7 @@ query GetProjectCeReferrals(
   $id: ID!
   $limit: Int = 25
   $offset: Int = 0
-  $filters: CeReferralFilterOptions = null
+  $filters: ProjectCeReferralFilterOptions = null
 ) {
   project(id: $id) {
     id
@@ -69,5 +69,43 @@ query GetCeReferral($id: ID!) {
 query GetCeReferralStep($id: ID!) {
   ceReferralStep(id: $id) {
     ...CeReferralStepFields
+  }
+}
+
+query GetClientCeReferrals(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: CeReferralFilterOptions = null
+) {
+  client(id: $id) {
+    id
+    ceReferrals(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ClientCeReferralTableFields
+      }
+    }
+  }
+}
+
+query GetClientEligibleOpportunities(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: ClientEligibleCeOpportunityFilterOptions = null
+) {
+  client(id: $id) {
+    id
+    eligibleCeOpportunities(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ClientCeOpportunitySummaryFields
+      }
+    }
   }
 }

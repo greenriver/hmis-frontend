@@ -6778,23 +6778,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'CeOpportunityFilterOptions',
-    args: [
-      {
-        name: 'status',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'CeOpportunityStatus', ofType: null },
-          },
-        },
-      },
-    ],
-  },
-  {
     name: 'CeOpportunityInput',
     args: [
       {
@@ -6818,6 +6801,30 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'CeReferralFilterOptions',
     args: [
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
       {
         name: 'status',
         type: {
@@ -6955,6 +6962,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ClientEligibleCeOpportunityFilterOptions',
+    args: [
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
           },
         },
       },
@@ -7909,6 +7945,40 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ProjectCeOpportunityFilterOptions',
+    args: [
+      {
+        name: 'status',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeOpportunityStatus', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ProjectCeReferralFilterOptions',
+    args: [
+      {
+        name: 'status',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralStatus', ofType: null },
+          },
+        },
       },
     ],
   },

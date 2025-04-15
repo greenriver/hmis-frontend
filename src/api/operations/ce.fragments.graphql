@@ -21,6 +21,15 @@ fragment CeOpportunityFields on CeOpportunity {
   }
 }
 
+fragment ClientCeOpportunitySummaryFields on CeOpportunity {
+  ...CeOpportunitySummaryFields
+  project {
+    id
+    projectName
+    projectType
+  }
+}
+
 fragment CeMatchRuleFields on CeMatchRule {
   id
   name
@@ -54,6 +63,19 @@ fragment CeReferralTableFields on CeReferral {
     name
   }
   currentStepName
+  referredBy {
+    id
+    name
+  }
+}
+
+fragment ClientCeReferralTableFields on CeReferral {
+  ...CeReferralTableFields
+  targetProject {
+    id
+    projectName
+    projectType
+  }
 }
 
 fragment CeReferralFields on CeReferral {

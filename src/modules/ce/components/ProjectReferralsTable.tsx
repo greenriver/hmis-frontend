@@ -16,36 +16,58 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const COLUMNS: ColumnDef<CeReferralTableFieldsFragment>[] = [
-  {
+export const REFERRAL_COLUMNS: Record<
+  string,
+  ColumnDef<CeReferralTableFieldsFragment>
+> = {
+  client: {
     header: 'Client',
-    render: (referral) => clientNameFromRecordWithOptionalClient(referral),
+    render: (referral: CeReferralTableFieldsFragment) =>
+      clientNameFromRecordWithOptionalClient(referral),
     key: 'name',
     sticky: 'left',
   },
-  {
+  opportunity: {
     header: 'Opportunity',
     key: 'opportunity',
-    render: (referral) => referral.opportunity.name,
+    render: (referral: CeReferralTableFieldsFragment) =>
+      referral.opportunity.name,
   },
-  {
-    header: 'Started',
-    key: 'started',
-    render: (referral) => (
+  date: {
+    header: 'Referral Date',
+    key: 'date',
+    render: (referral: CeReferralTableFieldsFragment) => (
       <RelativeDateDisplay dateString={referral.createdAt} />
     ),
   },
-  {
+  status: {
     header: 'Status',
-    render: (referral) => <ReferralStatusChip status={referral.status} />,
+    render: (referral: CeReferralTableFieldsFragment) => (
+      <ReferralStatusChip status={referral.status} />
+    ),
     key: 'status',
   },
-  {
+  step: {
     header: 'Current Step',
     key: 'step',
-    render: (referral) => referral.currentStepName,
+    render: (referral: CeReferralTableFieldsFragment) =>
+      referral.currentStepName,
   },
-  // TODO(#7321) - add column for sending project here
+  referredBy: {
+    header: 'Referred By',
+    key: 'referredBy',
+    render: (referral: CeReferralTableFieldsFragment) =>
+      referral.referredBy?.name,
+  },
+  // TODO(#7321) - add column for sending project
+};
+
+const COLUMNS: ColumnDef<CeReferralTableFieldsFragment>[] = [
+  REFERRAL_COLUMNS.client,
+  REFERRAL_COLUMNS.opportunity,
+  REFERRAL_COLUMNS.date,
+  REFERRAL_COLUMNS.status,
+  REFERRAL_COLUMNS.step,
 ];
 
 interface Props {}
