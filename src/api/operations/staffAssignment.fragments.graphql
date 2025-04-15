@@ -1,6 +1,7 @@
 fragment HouseholdWithStaffAssignments on Household {
   id
   householdClients {
+    # this is included because of "My Dashboard" query I think it should be split to 2 fragments
     id
     relationshipToHoH
     client {
@@ -25,11 +26,9 @@ fragment StaffAssignmentDetails on StaffAssignment {
   staffAssignmentRelationship
   assignedAt
   unassignedAt
-  household {
-    id
-  }
 }
 
+# Fragment to resolve details about each household assigned to the current user on My Dashboard
 fragment StaffAssignmentWithClients on StaffAssignment {
   id
   user {
