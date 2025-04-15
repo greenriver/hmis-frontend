@@ -546,6 +546,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeOpportunity',
     fields: [
       {
+        name: 'candidatesGeneratedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
         name: 'categories',
         type: {
           kind: 'NON_NULL',

@@ -23,6 +23,7 @@ fragment CeOpportunityFields on CeOpportunity {
 
 fragment ClientCeOpportunitySummaryFields on CeOpportunity {
   ...CeOpportunitySummaryFields
+  candidatesGeneratedAt
   project {
     id
     projectName
