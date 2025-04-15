@@ -1,19 +1,9 @@
+# This fragment is resolved both on an individual household (staff assignment card)
+# AND on a table of households (staff assignment optional column)
 fragment HouseholdWithStaffAssignments on Household {
   id
-  householdClients {
-    # this is included because of "My Dashboard" query I think it should be split to 2 fragments
-    id
-    relationshipToHoH
-    client {
-      id
-      ...ClientName
-    }
-  }
-  staffAssignments(limit: 100) {
-    nodesCount
-    nodes {
-      ...StaffAssignmentDetails
-    }
+  currentStaffAssignments {
+    ...StaffAssignmentDetails
   }
 }
 

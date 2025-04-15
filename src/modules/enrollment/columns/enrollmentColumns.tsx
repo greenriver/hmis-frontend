@@ -88,7 +88,7 @@ export const HOUSEHOLD_ASSIGNED_STAFF_COL = {
   },
   key: 'assignedStaff',
   render: (hh: HouseholdWithStaffAssignmentsFragment) => (
-    <HouseholdStaff staffAssignments={hh.staffAssignments?.nodes || []} />
+    <HouseholdStaff staffAssignments={hh.currentStaffAssignments} />
   ),
 };
 

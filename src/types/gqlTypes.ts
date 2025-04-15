@@ -36351,18 +36351,14 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       } | null;
     };
   }>;
-  staffAssignments?: {
-    __typename?: 'StaffAssignmentsPaginated';
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'StaffAssignment';
-      id: string;
-      staffAssignmentRelationship: string;
-      assignedAt: string;
-      unassignedAt?: string | null;
-      user: { __typename?: 'ApplicationUser'; id: string; name: string };
-    }>;
-  } | null;
+  currentStaffAssignments: Array<{
+    __typename?: 'StaffAssignment';
+    id: string;
+    staffAssignmentRelationship: string;
+    assignedAt: string;
+    unassignedAt?: string | null;
+    user: { __typename?: 'ApplicationUser'; id: string; name: string };
+  }>;
 };
 
 export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
@@ -39021,18 +39017,14 @@ export type GetProjectHouseholdsQuery = {
             } | null;
           };
         }>;
-        staffAssignments?: {
-          __typename?: 'StaffAssignmentsPaginated';
-          nodesCount: number;
-          nodes: Array<{
-            __typename?: 'StaffAssignment';
-            id: string;
-            staffAssignmentRelationship: string;
-            assignedAt: string;
-            unassignedAt?: string | null;
-            user: { __typename?: 'ApplicationUser'; id: string; name: string };
-          }>;
-        } | null;
+        currentStaffAssignments: Array<{
+          __typename?: 'StaffAssignment';
+          id: string;
+          staffAssignmentRelationship: string;
+          assignedAt: string;
+          unassignedAt?: string | null;
+          user: { __typename?: 'ApplicationUser'; id: string; name: string };
+        }>;
       }>;
     };
   } | null;
@@ -42712,32 +42704,14 @@ export type GetServiceCategoryTypesQuery = {
 export type HouseholdWithStaffAssignmentsFragment = {
   __typename?: 'Household';
   id: string;
-  householdClients: Array<{
-    __typename?: 'HouseholdClient';
+  currentStaffAssignments: Array<{
+    __typename?: 'StaffAssignment';
     id: string;
-    relationshipToHoH: RelationshipToHoH;
-    client: {
-      __typename?: 'Client';
-      id: string;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    };
+    staffAssignmentRelationship: string;
+    assignedAt: string;
+    unassignedAt?: string | null;
+    user: { __typename?: 'ApplicationUser'; id: string; name: string };
   }>;
-  staffAssignments?: {
-    __typename?: 'StaffAssignmentsPaginated';
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'StaffAssignment';
-      id: string;
-      staffAssignmentRelationship: string;
-      assignedAt: string;
-      unassignedAt?: string | null;
-      user: { __typename?: 'ApplicationUser'; id: string; name: string };
-    }>;
-  } | null;
 };
 
 export type StaffAssignmentDetailsFragment = {
@@ -42873,18 +42847,14 @@ export type GetHouseholdStaffAssignmentsQuery = {
         nameSuffix?: string | null;
       };
     }>;
-    staffAssignments?: {
-      __typename?: 'StaffAssignmentsPaginated';
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'StaffAssignment';
-        id: string;
-        staffAssignmentRelationship: string;
-        assignedAt: string;
-        unassignedAt?: string | null;
-        user: { __typename?: 'ApplicationUser'; id: string; name: string };
-      }>;
-    } | null;
+    currentStaffAssignments: Array<{
+      __typename?: 'StaffAssignment';
+      id: string;
+      staffAssignmentRelationship: string;
+      assignedAt: string;
+      unassignedAt?: string | null;
+      user: { __typename?: 'ApplicationUser'; id: string; name: string };
+    }>;
   } | null;
 };
 
@@ -45180,22 +45150,10 @@ export const StaffAssignmentDetailsFragmentDoc = gql`
 export const HouseholdWithStaffAssignmentsFragmentDoc = gql`
   fragment HouseholdWithStaffAssignments on Household {
     id
-    householdClients {
-      id
-      relationshipToHoH
-      client {
-        id
-        ...ClientName
-      }
-    }
-    staffAssignments(limit: 100) {
-      nodesCount
-      nodes {
-        ...StaffAssignmentDetails
-      }
+    currentStaffAssignments {
+      ...StaffAssignmentDetails
     }
   }
-  ${ClientNameFragmentDoc}
   ${StaffAssignmentDetailsFragmentDoc}
 `;
 export const ProjectEnrollmentsHouseholdFieldsFragmentDoc = gql`
@@ -59170,9 +59128,18 @@ export const GetHouseholdStaffAssignmentsDocument = gql`
   query GetHouseholdStaffAssignments($id: ID!) {
     household(id: $id) {
       ...HouseholdWithStaffAssignments
+      householdClients {
+        id
+        relationshipToHoH
+        client {
+          id
+          ...ClientName
+        }
+      }
     }
   }
   ${HouseholdWithStaffAssignmentsFragmentDoc}
+  ${ClientNameFragmentDoc}
 `;
 
 /**
