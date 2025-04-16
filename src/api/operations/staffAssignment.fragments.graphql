@@ -1,18 +1,9 @@
+# This fragment is resolved both on an individual household (staff assignment card)
+# AND on a table of households (staff assignment optional column)
 fragment HouseholdWithStaffAssignments on Household {
   id
-  householdClients {
-    id
-    relationshipToHoH
-    client {
-      id
-      ...ClientName
-    }
-  }
-  staffAssignments(limit: 100) {
-    nodesCount
-    nodes {
-      ...StaffAssignmentDetails
-    }
+  currentStaffAssignments {
+    ...StaffAssignmentDetails
   }
 }
 
@@ -25,11 +16,9 @@ fragment StaffAssignmentDetails on StaffAssignment {
   staffAssignmentRelationship
   assignedAt
   unassignedAt
-  household {
-    id
-  }
 }
 
+# Fragment to resolve details about each household assigned to the current user on My Dashboard
 fragment StaffAssignmentWithClients on StaffAssignment {
   id
   user {

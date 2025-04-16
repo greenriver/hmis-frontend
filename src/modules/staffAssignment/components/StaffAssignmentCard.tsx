@@ -10,6 +10,7 @@ import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import IconButtonContainer from '@/modules/enrollment/components/IconButtonContainer';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   RelationshipToHoH,
   useGetHouseholdStaffAssignmentsQuery,
@@ -35,11 +36,12 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const staffAssignmentRows = useMemo(() => {
-    if (!household?.staffAssignments?.nodesCount) return;
+    if (!household?.currentStaffAssignments) return;
+    if (household.currentStaffAssignments.length === 0) return;
 
     // { relationship => [user1, user2] }
     const staff: Record<string, string[]> = {};
-    household.staffAssignments.nodes.forEach(
+    household.currentStaffAssignments.forEach(
       ({ staffAssignmentRelationship, user }) => {
         staff[staffAssignmentRelationship] ||= [];
         staff[staffAssignmentRelationship].push(user.name);
@@ -47,6 +49,14 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
     );
     // sort by relationship alphabetically
     return Object.entries(staff).sort(([a], [b]) => a.localeCompare(b));
+  }, [household]);
+
+  const headOfHousehold = useMemo(() => {
+    if (!household) return;
+
+    return household.householdClients.find(
+      (c) => c.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+    )?.client;
   }, [household]);
 
   if (!enrollment) return;
@@ -59,6 +69,7 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
           household={household}
           open={editDialogOpen}
           onClose={() => setEditDialogOpen(false)}
+          hohName={clientBriefName(headOfHousehold || enrollment.client)}
         />
       )}
       <TitleCard
@@ -77,10 +88,10 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
         }
       >
         {loading && <Loading />}
-        {!loading && household?.staffAssignments && (
+        {!loading && household?.currentStaffAssignments && (
           <>
             <Divider />
-            {household.staffAssignments.nodesCount === 0 && (
+            {household.currentStaffAssignments.length === 0 && (
               <Typography variant='body2' sx={{ p: 2 }} color='text.secondary'>
                 No staff assigned
               </Typography>

@@ -1,6 +1,18 @@
 query GetHouseholdStaffAssignments($id: ID!) {
   household(id: $id) {
     ...HouseholdWithStaffAssignments
+
+    # These are resolved just so that we can show the HoH Client Name
+    # inside the staff assignment management screen. It would be better
+    # if we added a hoh or hohName field to the Household type
+    householdClients {
+      id
+      relationshipToHoH
+      client {
+        id
+        ...ClientName
+      }
+    }
   }
 }
 

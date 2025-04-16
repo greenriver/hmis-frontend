@@ -2551,6 +2551,7 @@ export type Enrollment = {
   singleParent?: Maybe<NoYesMissing>;
   /** Present if this household was enrolled as the result of a referral from another project. */
   sourceReferralPosting?: Maybe<ReferralPosting>;
+  staffAssignments?: Maybe<Array<StaffAssignment>>;
   status: EnrollmentStatus;
   subsidyAtRisk?: Maybe<NoYesMissing>;
   targetScreenReqd?: Maybe<NoYesMissing>;
@@ -3781,6 +3782,7 @@ export type Household = {
   __typename?: 'Household';
   anyInProgress: Scalars['Boolean']['output'];
   assessments: AssessmentsPaginated;
+  currentStaffAssignments: Array<StaffAssignment>;
   earliestEntryDate: Scalars['ISO8601Date']['output'];
   householdClients: Array<HouseholdClient>;
   householdSize: Scalars['Int']['output'];
@@ -19396,41 +19398,14 @@ export type GetClientEnrollmentsQuery = {
           contactDate: string;
           contactType: LastContactType;
         } | null;
-        household?: {
-          __typename?: 'Household';
+        staffAssignments?: Array<{
+          __typename?: 'StaffAssignment';
           id: string;
-          householdClients: Array<{
-            __typename?: 'HouseholdClient';
-            id: string;
-            relationshipToHoH: RelationshipToHoH;
-            client: {
-              __typename?: 'Client';
-              id: string;
-              lockVersion: number;
-              firstName?: string | null;
-              middleName?: string | null;
-              lastName?: string | null;
-              nameSuffix?: string | null;
-            };
-          }>;
-          staffAssignments?: {
-            __typename?: 'StaffAssignmentsPaginated';
-            nodesCount: number;
-            nodes: Array<{
-              __typename?: 'StaffAssignment';
-              id: string;
-              staffAssignmentRelationship: string;
-              assignedAt: string;
-              unassignedAt?: string | null;
-              user: {
-                __typename?: 'ApplicationUser';
-                id: string;
-                name: string;
-              };
-              household: { __typename?: 'Household'; id: string };
-            }>;
-          } | null;
-        };
+          staffAssignmentRelationship: string;
+          assignedAt: string;
+          unassignedAt?: string | null;
+          user: { __typename?: 'ApplicationUser'; id: string; name: string };
+        }> | null;
       }>;
     };
   } | null;
@@ -23071,37 +23046,14 @@ export type EnrollmentWithOptionalFieldsFragment = {
     contactDate: string;
     contactType: LastContactType;
   } | null;
-  household?: {
-    __typename?: 'Household';
+  staffAssignments?: Array<{
+    __typename?: 'StaffAssignment';
     id: string;
-    householdClients: Array<{
-      __typename?: 'HouseholdClient';
-      id: string;
-      relationshipToHoH: RelationshipToHoH;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      };
-    }>;
-    staffAssignments?: {
-      __typename?: 'StaffAssignmentsPaginated';
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'StaffAssignment';
-        id: string;
-        staffAssignmentRelationship: string;
-        assignedAt: string;
-        unassignedAt?: string | null;
-        user: { __typename?: 'ApplicationUser'; id: string; name: string };
-        household: { __typename?: 'Household'; id: string };
-      }>;
-    } | null;
-  };
+    staffAssignmentRelationship: string;
+    assignedAt: string;
+    unassignedAt?: string | null;
+    user: { __typename?: 'ApplicationUser'; id: string; name: string };
+  }> | null;
 };
 
 export type EnrollmentFieldsFragment = {
@@ -36399,19 +36351,14 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       } | null;
     };
   }>;
-  staffAssignments?: {
-    __typename?: 'StaffAssignmentsPaginated';
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'StaffAssignment';
-      id: string;
-      staffAssignmentRelationship: string;
-      assignedAt: string;
-      unassignedAt?: string | null;
-      user: { __typename?: 'ApplicationUser'; id: string; name: string };
-      household: { __typename?: 'Household'; id: string };
-    }>;
-  } | null;
+  currentStaffAssignments: Array<{
+    __typename?: 'StaffAssignment';
+    id: string;
+    staffAssignmentRelationship: string;
+    assignedAt: string;
+    unassignedAt?: string | null;
+    user: { __typename?: 'ApplicationUser'; id: string; name: string };
+  }>;
 };
 
 export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
@@ -38675,37 +38622,14 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
     contactDate: string;
     contactType: LastContactType;
   } | null;
-  household?: {
-    __typename?: 'Household';
+  staffAssignments?: Array<{
+    __typename?: 'StaffAssignment';
     id: string;
-    householdClients: Array<{
-      __typename?: 'HouseholdClient';
-      id: string;
-      relationshipToHoH: RelationshipToHoH;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      };
-    }>;
-    staffAssignments?: {
-      __typename?: 'StaffAssignmentsPaginated';
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'StaffAssignment';
-        id: string;
-        staffAssignmentRelationship: string;
-        assignedAt: string;
-        unassignedAt?: string | null;
-        user: { __typename?: 'ApplicationUser'; id: string; name: string };
-        household: { __typename?: 'Household'; id: string };
-      }>;
-    } | null;
-  };
+    staffAssignmentRelationship: string;
+    assignedAt: string;
+    unassignedAt?: string | null;
+    user: { __typename?: 'ApplicationUser'; id: string; name: string };
+  }> | null;
 };
 
 export type GetProjectsQueryVariables = Exact<{
@@ -39021,41 +38945,14 @@ export type GetProjectEnrollmentsQuery = {
           contactDate: string;
           contactType: LastContactType;
         } | null;
-        household?: {
-          __typename?: 'Household';
+        staffAssignments?: Array<{
+          __typename?: 'StaffAssignment';
           id: string;
-          householdClients: Array<{
-            __typename?: 'HouseholdClient';
-            id: string;
-            relationshipToHoH: RelationshipToHoH;
-            client: {
-              __typename?: 'Client';
-              id: string;
-              lockVersion: number;
-              firstName?: string | null;
-              middleName?: string | null;
-              lastName?: string | null;
-              nameSuffix?: string | null;
-            };
-          }>;
-          staffAssignments?: {
-            __typename?: 'StaffAssignmentsPaginated';
-            nodesCount: number;
-            nodes: Array<{
-              __typename?: 'StaffAssignment';
-              id: string;
-              staffAssignmentRelationship: string;
-              assignedAt: string;
-              unassignedAt?: string | null;
-              user: {
-                __typename?: 'ApplicationUser';
-                id: string;
-                name: string;
-              };
-              household: { __typename?: 'Household'; id: string };
-            }>;
-          } | null;
-        };
+          staffAssignmentRelationship: string;
+          assignedAt: string;
+          unassignedAt?: string | null;
+          user: { __typename?: 'ApplicationUser'; id: string; name: string };
+        }> | null;
       }>;
     };
   } | null;
@@ -39120,19 +39017,14 @@ export type GetProjectHouseholdsQuery = {
             } | null;
           };
         }>;
-        staffAssignments?: {
-          __typename?: 'StaffAssignmentsPaginated';
-          nodesCount: number;
-          nodes: Array<{
-            __typename?: 'StaffAssignment';
-            id: string;
-            staffAssignmentRelationship: string;
-            assignedAt: string;
-            unassignedAt?: string | null;
-            user: { __typename?: 'ApplicationUser'; id: string; name: string };
-            household: { __typename?: 'Household'; id: string };
-          }>;
-        } | null;
+        currentStaffAssignments: Array<{
+          __typename?: 'StaffAssignment';
+          id: string;
+          staffAssignmentRelationship: string;
+          assignedAt: string;
+          unassignedAt?: string | null;
+          user: { __typename?: 'ApplicationUser'; id: string; name: string };
+        }>;
       }>;
     };
   } | null;
@@ -42812,33 +42704,14 @@ export type GetServiceCategoryTypesQuery = {
 export type HouseholdWithStaffAssignmentsFragment = {
   __typename?: 'Household';
   id: string;
-  householdClients: Array<{
-    __typename?: 'HouseholdClient';
+  currentStaffAssignments: Array<{
+    __typename?: 'StaffAssignment';
     id: string;
-    relationshipToHoH: RelationshipToHoH;
-    client: {
-      __typename?: 'Client';
-      id: string;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    };
+    staffAssignmentRelationship: string;
+    assignedAt: string;
+    unassignedAt?: string | null;
+    user: { __typename?: 'ApplicationUser'; id: string; name: string };
   }>;
-  staffAssignments?: {
-    __typename?: 'StaffAssignmentsPaginated';
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'StaffAssignment';
-      id: string;
-      staffAssignmentRelationship: string;
-      assignedAt: string;
-      unassignedAt?: string | null;
-      user: { __typename?: 'ApplicationUser'; id: string; name: string };
-      household: { __typename?: 'Household'; id: string };
-    }>;
-  } | null;
 };
 
 export type StaffAssignmentDetailsFragment = {
@@ -42848,7 +42721,6 @@ export type StaffAssignmentDetailsFragment = {
   assignedAt: string;
   unassignedAt?: string | null;
   user: { __typename?: 'ApplicationUser'; id: string; name: string };
-  household: { __typename?: 'Household'; id: string };
 };
 
 export type StaffAssignmentWithClientsFragment = {
@@ -42915,7 +42787,6 @@ export type AssignStaffMutation = {
       assignedAt: string;
       unassignedAt?: string | null;
       user: { __typename?: 'ApplicationUser'; id: string; name: string };
-      household: { __typename?: 'Household'; id: string };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -42949,7 +42820,6 @@ export type UnassignStaffMutation = {
       assignedAt: string;
       unassignedAt?: string | null;
       user: { __typename?: 'ApplicationUser'; id: string; name: string };
-      household: { __typename?: 'Household'; id: string };
     } | null;
   } | null;
 };
@@ -42977,19 +42847,14 @@ export type GetHouseholdStaffAssignmentsQuery = {
         nameSuffix?: string | null;
       };
     }>;
-    staffAssignments?: {
-      __typename?: 'StaffAssignmentsPaginated';
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'StaffAssignment';
-        id: string;
-        staffAssignmentRelationship: string;
-        assignedAt: string;
-        unassignedAt?: string | null;
-        user: { __typename?: 'ApplicationUser'; id: string; name: string };
-        household: { __typename?: 'Household'; id: string };
-      }>;
-    } | null;
+    currentStaffAssignments: Array<{
+      __typename?: 'StaffAssignment';
+      id: string;
+      staffAssignmentRelationship: string;
+      assignedAt: string;
+      unassignedAt?: string | null;
+      user: { __typename?: 'ApplicationUser'; id: string; name: string };
+    }>;
   } | null;
 };
 
@@ -43012,7 +42877,6 @@ export type GetHouseholdStaffAssignmentHistoryQuery = {
         assignedAt: string;
         unassignedAt?: string | null;
         user: { __typename?: 'ApplicationUser'; id: string; name: string };
-        household: { __typename?: 'Household'; id: string };
       }>;
     } | null;
   } | null;
@@ -45281,30 +45145,15 @@ export const StaffAssignmentDetailsFragmentDoc = gql`
     staffAssignmentRelationship
     assignedAt
     unassignedAt
-    household {
-      id
-    }
   }
 `;
 export const HouseholdWithStaffAssignmentsFragmentDoc = gql`
   fragment HouseholdWithStaffAssignments on Household {
     id
-    householdClients {
-      id
-      relationshipToHoH
-      client {
-        id
-        ...ClientName
-      }
-    }
-    staffAssignments(limit: 100) {
-      nodesCount
-      nodes {
-        ...StaffAssignmentDetails
-      }
+    currentStaffAssignments {
+      ...StaffAssignmentDetails
     }
   }
-  ${ClientNameFragmentDoc}
   ${StaffAssignmentDetailsFragmentDoc}
 `;
 export const ProjectEnrollmentsHouseholdFieldsFragmentDoc = gql`
@@ -45563,12 +45412,11 @@ export const EnrollmentWithOptionalFieldsFragmentDoc = gql`
       contactDate
       contactType
     }
-    household @include(if: $includeStaffAssignment) {
-      id
-      ...HouseholdWithStaffAssignments
+    staffAssignments @include(if: $includeStaffAssignment) {
+      ...StaffAssignmentDetails
     }
   }
-  ${HouseholdWithStaffAssignmentsFragmentDoc}
+  ${StaffAssignmentDetailsFragmentDoc}
 `;
 export const ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc = gql`
   fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
@@ -59280,9 +59128,18 @@ export const GetHouseholdStaffAssignmentsDocument = gql`
   query GetHouseholdStaffAssignments($id: ID!) {
     household(id: $id) {
       ...HouseholdWithStaffAssignments
+      householdClients {
+        id
+        relationshipToHoH
+        client {
+          id
+          ...ClientName
+        }
+      }
     }
   }
   ${HouseholdWithStaffAssignmentsFragmentDoc}
+  ${ClientNameFragmentDoc}
 `;
 
 /**
