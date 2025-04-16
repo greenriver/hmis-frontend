@@ -1,17 +1,6 @@
 import { Box, Chip, Tooltip } from '@mui/material';
 import React from 'react';
-import {
-  HouseholdWithStaffAssignmentsFragment,
-  StaffAssignmentDetailsFragment,
-} from '@/types/gqlTypes';
-
-export const hasHouseholdWithStaff = (
-  enrollment: any
-): enrollment is { household: HouseholdWithStaffAssignmentsFragment } => {
-  return (
-    'household' in enrollment && 'staffAssignments' in enrollment.household
-  );
-};
+import { StaffAssignmentDetailsFragment } from '@/types/gqlTypes';
 
 interface Props {
   staffAssignments: StaffAssignmentDetailsFragment[];
