@@ -58,17 +58,40 @@ fragment CeReferralTableFields on CeReferral {
 
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
+  ...CeWithReferralParticipants
   steps {
     ...CeReferralStepSummaryFields
   }
   opportunity {
     ...CeOpportunitySummaryFields
+    swimlanes {
+      id
+      name
+    }
   }
   targetEnrollment {
     id
     client {
       id
     }
+  }
+}
+
+fragment CeWithReferralParticipants on CeReferral {
+  id
+  participants {
+    ...CeReferralParticipantFields
+  }
+}
+
+fragment CeReferralParticipantFields on CeReferralParticipant {
+  id
+  user {
+    ...UserFields
+  }
+  swimlane {
+    id
+    name
   }
 }
 

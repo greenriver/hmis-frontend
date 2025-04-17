@@ -18,6 +18,7 @@ import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
+import ContactsIcon from '@mui/icons-material/Contacts';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -58,7 +59,6 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import WrapTextIcon from '@mui/icons-material/WrapText';
 import { styled, SvgIconProps } from '@mui/material';
-
 const IntakeAssessmentIcon = styled(ExitToAppRoundedIcon)<SvgIconProps>(() => ({
   transform: 'rotate(90deg)',
 }));
@@ -72,6 +72,7 @@ export {
   AutorenewRoundedIcon as ChangeRelationshipIcon,
   CheckRoundedIcon as CheckIcon,
   ClearIcon as ClearIcon,
+  ContactsIcon as ContactsIcon, // no semantic meaning changing here, just keeping it here for consistency and ease of audit
   Person as ClientIcon,
   CloseIcon as CloseIcon,
   MediationRoundedIcon as ConditionalIcon,

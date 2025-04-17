@@ -15,6 +15,7 @@ import {
 import NotFound from '@/components/pages/NotFound';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';
+import AssignContactsButton from '@/modules/ce/components/AssignContactsButton';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
@@ -108,6 +109,8 @@ const ReferralPage: React.FC<Props> = ({}) => {
           >
             Details
           </ButtonLink>
+          <Divider orientation='vertical' flexItem />
+          <AssignContactsButton referral={referral} />
           <Divider orientation='vertical' flexItem />
           <ButtonLink
             to={generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
