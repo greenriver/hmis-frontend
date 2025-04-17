@@ -1,23 +1,15 @@
 import { Box, Chip, Tooltip } from '@mui/material';
 import React from 'react';
-import { HouseholdWithStaffAssignmentsFragment } from '@/types/gqlTypes';
-
-export const hasHouseholdWithStaff = (
-  enrollment: any
-): enrollment is { household: HouseholdWithStaffAssignmentsFragment } => {
-  return (
-    'household' in enrollment && 'staffAssignments' in enrollment.household
-  );
-};
+import { StaffAssignmentDetailsFragment } from '@/types/gqlTypes';
 
 interface Props {
-  household: HouseholdWithStaffAssignmentsFragment;
+  staffAssignments: StaffAssignmentDetailsFragment[];
 }
 
-const HouseholdStaff: React.FC<Props> = ({ household }) => {
-  if (!household.staffAssignments?.nodes.length) return;
+const HouseholdStaff: React.FC<Props> = ({ staffAssignments }) => {
+  if (staffAssignments.length === 0) return null;
 
-  const allNames = household.staffAssignments.nodes.map(
+  const allNames = staffAssignments.map(
     (staffAssignment) => staffAssignment.user.name
   );
 

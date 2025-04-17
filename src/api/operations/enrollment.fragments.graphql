@@ -42,17 +42,18 @@ fragment ClientEnrollmentFields on Enrollment {
   }
 }
 
+# Optional fields that can be included on the Project Enrollments and Client Enrollments tables.
+#
+# Note: organizationName not included here because it is fetched optionally by all records that use ClientEnrollmentFields.
+# Note: this may be resolved on Enrollments that the user only has LIMITED ACCESS to (see includeEnrollmentsWithLimitedAccess). For enrollments with limited access, some optional fields may always resolve as null.
 fragment EnrollmentWithOptionalFields on Enrollment {
-  # Optional fields that are only included on Project Enrollments and Client Enrollments
-  # (organizationName not included here because it is fetched optionally by all records that use ClientEnrollmentFields)
   moveInDate @include(if: $includeMoveInDate)
   lastContact @include(if: $includeLastContact) {
     contactDate
     contactType
   }
-  household @include(if: $includeStaffAssignment) {
-    id
-    ...HouseholdWithStaffAssignments
+  staffAssignments @include(if: $includeStaffAssignment) {
+    ...StaffAssignmentDetails
   }
 }
 

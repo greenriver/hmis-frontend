@@ -1,10 +1,7 @@
-import React from 'react';
 import LastContact from './LastContact';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import HouseholdStaff, {
-  hasHouseholdWithStaff,
-} from '@/modules/enrollment/columns/HouseholdStaff';
+import HouseholdStaff from '@/modules/enrollment/columns/HouseholdStaff';
 import { ClientEnrollmentTableFields } from '@/modules/enrollment/components/pages/ClientEnrollmentsPage';
 import EnrollmentStatus, {
   EnrollmentWithStatus,
@@ -91,7 +88,7 @@ export const HOUSEHOLD_ASSIGNED_STAFF_COL = {
   },
   key: 'assignedStaff',
   render: (hh: HouseholdWithStaffAssignmentsFragment) => (
-    <HouseholdStaff household={hh} />
+    <HouseholdStaff staffAssignments={hh.currentStaffAssignments} />
   ),
 };
 
@@ -122,11 +119,10 @@ export const ENROLLMENT_COLUMNS: {
   lastContactDate: LAST_CONTACT_DATE_COL,
   assignedStaff: {
     ...HOUSEHOLD_ASSIGNED_STAFF_COL,
-    render: (enrollment) => {
-      return hasHouseholdWithStaff(enrollment) ? (
-        <HouseholdStaff household={enrollment.household} />
-      ) : null;
-    },
+    render: (enrollment) =>
+      enrollment.staffAssignments && (
+        <HouseholdStaff staffAssignments={enrollment.staffAssignments} />
+      ),
   },
 };
 
