@@ -72,7 +72,7 @@ export {
   AutorenewRoundedIcon as ChangeRelationshipIcon,
   CheckRoundedIcon as CheckIcon,
   ClearIcon as ClearIcon,
-  ContactsIcon as ContactsIcon, // no semantic meaning changing here, just keeping it here for consistency and ease of audit
+  ContactsIcon as ContactsIcon,
   Person as ClientIcon,
   CloseIcon as CloseIcon,
   MediationRoundedIcon as ConditionalIcon,

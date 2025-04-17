@@ -10,7 +10,7 @@ import {
 interface Props {
   swimlane: CeSwimlane;
   users: string[];
-  setUsers: (swimlaneId: string, userIds: string[]) => void;
+  setUsers: (userIds: string[]) => void;
 }
 const AssignContactFormItem: React.FC<Props> = ({
   swimlane,
@@ -27,31 +27,26 @@ const AssignContactFormItem: React.FC<Props> = ({
     },
   });
 
-  const userPickListOptions = useMemo(
+  const selectedUsers = useMemo(
     () =>
       users.map((userId) => {
-        return {
-          code: userId,
-        };
+        return { code: userId };
       }),
     [users]
   );
 
   const handleChange = useCallback(
     (_event: React.ChangeEvent<unknown>, options: PickListOption[]) => {
-      setUsers(
-        swimlane.id,
-        options.map((option) => option.code)
-      );
+      setUsers(options.map((option) => option.code));
     },
-    [setUsers, swimlane.id]
+    [setUsers]
   );
 
   if (staffPickListError) throw staffPickListError;
 
   return (
     <FormSelect
-      value={userPickListOptions}
+      value={selectedUsers}
       placeholder={'Select Staff'}
       label={swimlane.name}
       loading={staffPickListLoading}

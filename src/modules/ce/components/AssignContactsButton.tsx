@@ -25,6 +25,8 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
 
   const swimlanes = referral.opportunity.swimlanes || [];
 
+  // Map the existing referral participants to a Record<string, string[]>
+  // where key = swimlaneId and value = [userIds]
   const initialValues = useMemo(() => {
     return reduce(
       referral.participants,
@@ -49,22 +51,25 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
     [setValues]
   );
 
-  const [assignReferralParticipants, { loading, error }] =
-    useAssignParticipantsMutation({
-      variables: {
-        referralId: referral.id,
-        participants: Object.entries(values).flatMap(([swimlaneId, userIds]) =>
-          userIds.map((userId) => ({ userId, swimlaneId }))
-        ),
-      },
-      onCompleted: () => setOpen(false),
-    });
+  const [handleSubmit, { loading, error }] = useAssignParticipantsMutation({
+    variables: {
+      referralId: referral.id,
+      // On submit, map the `values` object into the shape the mutation is expecting: { userId, swimlaneId }
+      participants: Object.entries(values).flatMap(([swimlaneId, userIds]) =>
+        userIds.map((userId) => ({ userId, swimlaneId }))
+      ),
+    },
+    onCompleted: () => setOpen(false),
+  });
 
   if (error) throw error;
 
   return (
     <>
       {swimlanes.length === 0 ? (
+        // If this referral has no swimlanes, disable the button.
+        // For now this will only happen if the referral also has no tasks,
+        // because the schema requires swimlane to be non-null on tasks.
         <ButtonTooltipContainer
           title={'No swimlanes available'}
           placement='top-start'
@@ -97,14 +102,16 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
                 key={swimlane.id}
                 swimlane={swimlane}
                 users={values[swimlane.id] || []}
-                setUsers={handleChangeValue}
+                setUsers={(userIds) => {
+                  handleChangeValue(swimlane.id, userIds);
+                }}
               />
             ))}
           </Stack>
         </DialogContent>
         <DialogActions>
           <FormDialogActionContent
-            onSubmit={() => assignReferralParticipants()}
+            onSubmit={() => handleSubmit()}
             onDiscard={() => setOpen(false)}
             submitLoading={loading}
           />

@@ -28,15 +28,10 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  /** A base64 encoded string */
   Base64: { input: string; output: string };
-  /** An ISO 8601-encoded date */
   ISO8601Date: { input: string; output: string };
-  /** An ISO 8601-encoded datetime */
   ISO8601DateTime: { input: string; output: string };
-  /** Represents untyped JSON */
   JSON: { input: any; output: any };
-  /** Arbitrary JSON Type */
   JsonObject: { input: any; output: any };
 };
 
