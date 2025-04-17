@@ -62,6 +62,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
         </Button>
       )}
       <DeleteMutationConfirmationDialog
+        recordName={recordName}
         open={showDialog}
         onClose={() => setShowDialog(false)}
         {...rest}
