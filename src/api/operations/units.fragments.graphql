@@ -28,6 +28,10 @@ fragment UnitFields on Unit {
       ...ClientName
     }
   }
+  ...UnitWithCeFields @include(if: $ceEnabled)
+}
+
+fragment UnitWithCeFields on Unit {
   latestOpportunity {
     ...CeOpportunitySummaryFields
     referral {

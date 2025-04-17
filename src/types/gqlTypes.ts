@@ -17804,6 +17804,7 @@ export type SubmitCeReferralStepMutation = {
 
 export type MarkUnitsAvailableMutationVariables = Exact<{
   unitIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type MarkUnitsAvailableMutation = {
@@ -17871,6 +17872,7 @@ export type MarkUnitsAvailableMutation = {
 
 export type MarkUnitsUnavailableMutationVariables = Exact<{
   unitIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type MarkUnitsUnavailableMutation = {
@@ -43138,11 +43140,44 @@ export type UnitFieldsFragment = {
   } | null;
 };
 
+export type UnitWithCeFieldsFragment = {
+  __typename?: 'Unit';
+  acceptingCeReferrals: boolean;
+  latestOpportunity?: {
+    __typename?: 'CeOpportunity';
+    id: string;
+    name: string;
+    categories: Array<string>;
+    status: CeOpportunityStatus;
+    active: boolean;
+    expiresAt?: string | null;
+    projectId: string;
+    projectName: string;
+    referral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      status: CeReferralStatus;
+      active: boolean;
+      clientId: string;
+      client?: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
 export type GetUnitsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<UnitFilterOptions>;
+  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetUnitsQuery = {
@@ -43236,6 +43271,7 @@ export type GetProjectUnitTypesQuery = {
 
 export type CreateUnitsMutationVariables = Exact<{
   input: CreateUnitsInput;
+  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type CreateUnitsMutation = {
@@ -43345,6 +43381,7 @@ export type DeleteUnitsMutation = {
 
 export type UpdateUnitsMutationVariables = Exact<{
   input: UpdateUnitsInput;
+  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type UpdateUnitsMutation = {
@@ -46051,6 +46088,19 @@ export const UnitTypeCapacityFieldsFragmentDoc = gql`
     availability
   }
 `;
+export const UnitWithCeFieldsFragmentDoc = gql`
+  fragment UnitWithCeFields on Unit {
+    latestOpportunity {
+      ...CeOpportunitySummaryFields
+      referral {
+        ...CeReferralSummaryFields
+      }
+    }
+    acceptingCeReferrals
+  }
+  ${CeOpportunitySummaryFieldsFragmentDoc}
+  ${CeReferralSummaryFieldsFragmentDoc}
+`;
 export const UnitFieldsFragmentDoc = gql`
   fragment UnitFields on Unit {
     id
@@ -46066,18 +46116,11 @@ export const UnitFieldsFragmentDoc = gql`
         ...ClientName
       }
     }
-    latestOpportunity {
-      ...CeOpportunitySummaryFields
-      referral {
-        ...CeReferralSummaryFields
-      }
-    }
-    acceptingCeReferrals
+    ...UnitWithCeFields @include(if: $ceEnabled)
   }
   ${UnitTypeFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
-  ${CeOpportunitySummaryFieldsFragmentDoc}
-  ${CeReferralSummaryFieldsFragmentDoc}
+  ${UnitWithCeFieldsFragmentDoc}
 `;
 export const UserAdminFieldsFragmentDoc = gql`
   fragment UserAdminFields on ApplicationUser {
@@ -48164,7 +48207,7 @@ export type SubmitCeReferralStepMutationOptions = Apollo.BaseMutationOptions<
   SubmitCeReferralStepMutationVariables
 >;
 export const MarkUnitsAvailableDocument = gql`
-  mutation MarkUnitsAvailable($unitIds: [ID!]!) {
+  mutation MarkUnitsAvailable($unitIds: [ID!]!, $ceEnabled: Boolean = true) {
     markUnitsAvailable(unitIds: $unitIds) {
       units {
         ...UnitFields
@@ -48192,6 +48235,7 @@ export type MarkUnitsAvailableMutationFn = Apollo.MutationFunction<
  * const [markUnitsAvailableMutation, { data, loading, error }] = useMarkUnitsAvailableMutation({
  *   variables: {
  *      unitIds: // value for 'unitIds'
+ *      ceEnabled: // value for 'ceEnabled'
  *   },
  * });
  */
@@ -48217,7 +48261,7 @@ export type MarkUnitsAvailableMutationOptions = Apollo.BaseMutationOptions<
   MarkUnitsAvailableMutationVariables
 >;
 export const MarkUnitsUnavailableDocument = gql`
-  mutation MarkUnitsUnavailable($unitIds: [ID!]!) {
+  mutation MarkUnitsUnavailable($unitIds: [ID!]!, $ceEnabled: Boolean = true) {
     markUnitsUnavailable(unitIds: $unitIds) {
       units {
         ...UnitFields
@@ -48245,6 +48289,7 @@ export type MarkUnitsUnavailableMutationFn = Apollo.MutationFunction<
  * const [markUnitsUnavailableMutation, { data, loading, error }] = useMarkUnitsUnavailableMutation({
  *   variables: {
  *      unitIds: // value for 'unitIds'
+ *      ceEnabled: // value for 'ceEnabled'
  *   },
  * });
  */
@@ -59726,6 +59771,7 @@ export const GetUnitsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $filters: UnitFilterOptions
+    $ceEnabled: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -59758,6 +59804,7 @@ export const GetUnitsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
+ *      ceEnabled: // value for 'ceEnabled'
  *   },
  * });
  */
@@ -59895,7 +59942,7 @@ export type GetProjectUnitTypesQueryResult = Apollo.QueryResult<
   GetProjectUnitTypesQueryVariables
 >;
 export const CreateUnitsDocument = gql`
-  mutation CreateUnits($input: CreateUnitsInput!) {
+  mutation CreateUnits($input: CreateUnitsInput!, $ceEnabled: Boolean = false) {
     createUnits(input: $input) {
       clientMutationId
       units {
@@ -59928,6 +59975,7 @@ export type CreateUnitsMutationFn = Apollo.MutationFunction<
  * const [createUnitsMutation, { data, loading, error }] = useCreateUnitsMutation({
  *   variables: {
  *      input: // value for 'input'
+ *      ceEnabled: // value for 'ceEnabled'
  *   },
  * });
  */
@@ -60008,7 +60056,7 @@ export type DeleteUnitsMutationOptions = Apollo.BaseMutationOptions<
   DeleteUnitsMutationVariables
 >;
 export const UpdateUnitsDocument = gql`
-  mutation UpdateUnits($input: UpdateUnitsInput!) {
+  mutation UpdateUnits($input: UpdateUnitsInput!, $ceEnabled: Boolean = false) {
     updateUnits(input: $input) {
       clientMutationId
       units {
@@ -60041,6 +60089,7 @@ export type UpdateUnitsMutationFn = Apollo.MutationFunction<
  * const [updateUnitsMutation, { data, loading, error }] = useUpdateUnitsMutation({
  *   variables: {
  *      input: // value for 'input'
+ *      ceEnabled: // value for 'ceEnabled'
  *   },
  * });
  */

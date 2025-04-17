@@ -4,6 +4,7 @@ import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
 import { useUnitCeColumns } from '@/modules/units/hooks/useUnitCeColumns';
@@ -25,6 +26,10 @@ const UnitManagementTable = ({
     useDeleteUnits({
       projectId,
     });
+
+  const [canViewCoordinatedEntry] = useHasRootPermissions([
+    'canViewCoordinatedEntry',
+  ]);
 
   const ceColumns = useUnitCeColumns();
   const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
@@ -88,7 +93,7 @@ const UnitManagementTable = ({
         UnitFieldsFragment
       >
         defaultPageSize={10}
-        queryVariables={{ id: projectId }}
+        queryVariables={{ id: projectId, ceEnabled: canViewCoordinatedEntry }}
         queryDocument={GetUnitsDocument}
         columns={columns}
         pagePath='project.units'

@@ -65,7 +65,7 @@ mutation SubmitCeReferralStep(
   }
 }
 
-mutation MarkUnitsAvailable($unitIds: [ID!]!) {
+mutation MarkUnitsAvailable($unitIds: [ID!]!, $ceEnabled: Boolean = true) {
   markUnitsAvailable(unitIds: $unitIds) {
     units {
       ...UnitFields
@@ -73,7 +73,7 @@ mutation MarkUnitsAvailable($unitIds: [ID!]!) {
   }
 }
 
-mutation MarkUnitsUnavailable($unitIds: [ID!]!) {
+mutation MarkUnitsUnavailable($unitIds: [ID!]!, $ceEnabled: Boolean = true) {
   markUnitsUnavailable(unitIds: $unitIds) {
     units {
       ...UnitFields
