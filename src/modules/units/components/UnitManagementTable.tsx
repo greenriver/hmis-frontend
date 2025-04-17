@@ -1,24 +1,18 @@
 import { useCallback, useMemo } from 'react';
 import UnitOccupants from './UnitOccupants';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import { ColumnDef } from '@/components/elements/table/types';
-import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
-import { ProjectDashboardRoutes } from '@/routes/routes';
+import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
+import { useUnitCeColumns } from '@/modules/units/hooks/useUnitCeColumns';
 import {
-  CeOpportunityStatus,
   GetUnitsDocument,
   GetUnitsQuery,
   GetUnitsQueryVariables,
   UnitFieldsFragment,
-  useMarkUnitsAvailableMutation,
-  useMarkUnitsUnavailableMutation,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 const UnitManagementTable = ({
   projectId,
@@ -32,10 +26,7 @@ const UnitManagementTable = ({
       projectId,
     });
 
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
-
+  const ceColumns = useUnitCeColumns();
   const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
     return [
       {
@@ -58,104 +49,15 @@ const UnitManagementTable = ({
         key: 'clients',
         render: (unit) => <UnitOccupants unit={unit} />,
       },
-      ...(canViewCoordinatedEntry
-        ? [
-            {
-              header: 'Accepting Referrals?',
-              key: 'available',
-              render: (unit: UnitFieldsFragment) =>
-                unit.acceptingCeReferrals ? 'Yes' : 'No',
-            },
-            {
-              header: 'Referral Status',
-              key: 'referralStatus',
-              render: (unit: UnitFieldsFragment) => {
-                const opportunity = unit.latestOpportunity;
-                const referral = opportunity?.referral;
-
-                if (opportunity && !referral) return 'Available for referrals';
-
-                if (referral)
-                  return <ReferralStatusChip status={referral.status} />;
-              },
-            },
-          ]
-        : []),
+      ...ceColumns,
     ];
-  }, [canViewCoordinatedEntry]);
+  }, [ceColumns]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
   });
 
-  const hasSecondaryActions = useMemo(() => {
-    return allowDeleteUnits || canViewCoordinatedEntry; // TODO(#7395)
-  }, [allowDeleteUnits, canViewCoordinatedEntry]);
-
-  const [
-    markUnitsAvailable,
-    { loading: availableLoading, error: availableError },
-  ] = useMarkUnitsAvailableMutation();
-
-  const [
-    markUnitsUnavailable,
-    { loading: unavailableLoading, error: unavailableError },
-  ] = useMarkUnitsUnavailableMutation();
-
-  const getCeActions = useCallback(
-    (unit: UnitFieldsFragment) => {
-      const actions: CommonMenuItem[] = [];
-      if (!canViewCoordinatedEntry) return actions;
-
-      if (unit.latestOpportunity) {
-        actions.push({
-          title: 'View Opportunity',
-          key: 'viewOpportunity',
-          ariaLabel: `View Opportunity for Unit ${unit.id}`,
-          to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-            projectId,
-            opportunityId: unit.latestOpportunity.id,
-          }),
-        });
-      }
-
-      if (unit.latestOpportunity && unit.latestOpportunity.active) {
-        // Show this option if the opportunity is active, but disable it if it's locked
-        actions.push({
-          title: 'Mark as Unavailable for Referrals',
-          key: 'markUnavailable',
-          ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
-          onClick: () => {
-            markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
-          },
-          disabled:
-            unit.latestOpportunity.status === CeOpportunityStatus.Locked,
-          disabledReason:
-            'Unit with in-progress referral cannot be marked as unavailable',
-        });
-      } else {
-        actions.push({
-          title: 'Mark as Available for Referrals',
-          key: 'markAvailable',
-          ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
-          onClick: () => {
-            markUnitsAvailable({ variables: { unitIds: [unit.id] } });
-          },
-        });
-      }
-
-      return actions;
-    },
-    [
-      canViewCoordinatedEntry,
-      markUnitsAvailable,
-      markUnitsUnavailable,
-      projectId,
-    ]
-  );
-
-  if (availableError) throw availableError;
-  if (unavailableError) throw unavailableError;
+  const { getCeActions, loading } = useUnitCeActions({ projectId });
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitFieldsFragment) => {
@@ -206,10 +108,8 @@ const UnitManagementTable = ({
             : undefined,
         }}
         rowName={(row) => `${row.unitType?.description} - ${row.id}`}
-        rowSecondaryActionConfigs={
-          hasSecondaryActions ? rowSecondaryActionConfigs : undefined
-        }
-        loading={availableLoading || unavailableLoading}
+        rowSecondaryActionConfigs={rowSecondaryActionConfigs}
+        loading={loading}
         loadingVariant='linear'
       />
       {renderSingleDeleteDialog()}
