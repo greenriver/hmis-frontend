@@ -63,16 +63,8 @@ const UnitManagementTable = ({
             {
               header: 'Accepting Referrals?',
               key: 'available',
-              render: (unit: UnitFieldsFragment) => {
-                if (
-                  unit.latestOpportunity &&
-                  !unit.latestOpportunity.referral &&
-                  unit.occupants.length === 0
-                ) {
-                  return 'Yes';
-                }
-                return 'No';
-              },
+              render: (unit: UnitFieldsFragment) =>
+                unit.acceptingCeReferrals ? 'Yes' : 'No',
             },
             {
               header: 'Referral Status',

@@ -34,4 +34,5 @@ fragment UnitFields on Unit {
       ...CeReferralSummaryFields
     }
   }
+  acceptingCeReferrals
 }

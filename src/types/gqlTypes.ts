@@ -2553,6 +2553,7 @@ export type Enrollment = {
   singleParent?: Maybe<NoYesMissing>;
   /** Present if this household was enrolled as the result of a referral from another project. */
   sourceReferralPosting?: Maybe<ReferralPosting>;
+  staffAssignments?: Maybe<Array<StaffAssignment>>;
   status: EnrollmentStatus;
   subsidyAtRisk?: Maybe<NoYesMissing>;
   targetScreenReqd?: Maybe<NoYesMissing>;
@@ -3783,6 +3784,7 @@ export type Household = {
   __typename?: 'Household';
   anyInProgress: Scalars['Boolean']['output'];
   assessments: AssessmentsPaginated;
+  currentStaffAssignments: Array<StaffAssignment>;
   earliestEntryDate: Scalars['ISO8601Date']['output'];
   householdClients: Array<HouseholdClient>;
   householdSize: Scalars['Int']['output'];
@@ -7778,6 +7780,7 @@ export type UnassignStaffPayload = {
 
 export type Unit = {
   __typename?: 'Unit';
+  acceptingCeReferrals: Scalars['Boolean']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
@@ -17811,6 +17814,7 @@ export type MarkUnitsAvailableMutation = {
       __typename?: 'Unit';
       id: string;
       unitSize?: number | null;
+      acceptingCeReferrals: boolean;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -17877,6 +17881,7 @@ export type MarkUnitsUnavailableMutation = {
       __typename?: 'Unit';
       id: string;
       unitSize?: number | null;
+      acceptingCeReferrals: boolean;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -43218,6 +43223,7 @@ export type UnitFieldsFragment = {
   __typename?: 'Unit';
   id: string;
   unitSize?: number | null;
+  acceptingCeReferrals: boolean;
   unitType?: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -43291,6 +43297,7 @@ export type GetUnitsQuery = {
         __typename?: 'Unit';
         id: string;
         unitSize?: number | null;
+        acceptingCeReferrals: boolean;
         unitType?: {
           __typename?: 'UnitTypeObject';
           id: string;
@@ -43378,6 +43385,7 @@ export type CreateUnitsMutation = {
       __typename?: 'Unit';
       id: string;
       unitSize?: number | null;
+      acceptingCeReferrals: boolean;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -43486,6 +43494,7 @@ export type UpdateUnitsMutation = {
       __typename?: 'Unit';
       id: string;
       unitSize?: number | null;
+      acceptingCeReferrals: boolean;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -46217,6 +46226,7 @@ export const UnitFieldsFragmentDoc = gql`
         ...CeReferralSummaryFields
       }
     }
+    acceptingCeReferrals
   }
   ${UnitTypeFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
