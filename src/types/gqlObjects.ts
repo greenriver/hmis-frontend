@@ -546,6 +546,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeOpportunity',
     fields: [
       {
+        name: 'active',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'categories',
         type: {
           kind: 'NON_NULL',
@@ -667,6 +675,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'CeReferral',
     fields: [
+      {
+        name: 'active',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
       {
         name: 'clientId',
         type: {
@@ -6231,6 +6247,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'Unit',
     fields: [
+      {
+        name: 'acceptingCeReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
       {
         name: 'dateCreated',
         type: {
