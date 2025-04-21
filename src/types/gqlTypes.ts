@@ -6142,7 +6142,7 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
-  ceOpportunity: CeOpportunity;
+  ceOpportunity?: Maybe<CeOpportunity>;
   ceReferral: CeReferral;
   ceReferralStep: CeReferralStep;
   /** Client lookup */
@@ -18016,7 +18016,7 @@ export type GetCeOpportunityQueryVariables = Exact<{
 
 export type GetCeOpportunityQuery = {
   __typename?: 'Query';
-  ceOpportunity: {
+  ceOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
@@ -18054,7 +18054,7 @@ export type GetCeOpportunityQuery = {
       name: string;
       ownerType: string;
     } | null;
-  };
+  } | null;
 };
 
 export type GetCeOpportunityCandidatesQueryVariables = Exact<{
@@ -18065,7 +18065,7 @@ export type GetCeOpportunityCandidatesQueryVariables = Exact<{
 
 export type GetCeOpportunityCandidatesQuery = {
   __typename?: 'Query';
-  ceOpportunity: {
+  ceOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
     candidates: {
@@ -18089,7 +18089,7 @@ export type GetCeOpportunityCandidatesQuery = {
         } | null;
       }>;
     };
-  };
+  } | null;
 };
 
 export type GetCeReferralQueryVariables = Exact<{
