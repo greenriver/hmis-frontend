@@ -20,13 +20,13 @@ const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
     header: 'Project Name',
     key: 'projectName',
     render: (opportunity: ClientCeOpportunitySummaryFieldsFragment) =>
-      opportunity.project.projectName,
+      opportunity.projectName,
   },
   {
     header: 'Project Type',
     key: 'projectType',
     render: (opportunity: ClientCeOpportunitySummaryFieldsFragment) => (
-      <ProjectTypeChip projectType={opportunity.project.projectType} />
+      <ProjectTypeChip projectType={opportunity.projectType} />
     ),
   },
 ];

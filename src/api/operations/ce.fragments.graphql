@@ -23,11 +23,7 @@ fragment CeOpportunityFields on CeOpportunity {
 
 fragment ClientCeOpportunitySummaryFields on CeOpportunity {
   ...CeOpportunitySummaryFields
-  project {
-    id
-    projectName
-    projectType
-  }
+  projectType
 }
 
 fragment CeMatchRuleFields on CeMatchRule {
@@ -71,11 +67,9 @@ fragment CeReferralTableFields on CeReferral {
 
 fragment ClientCeReferralTableFields on CeReferral {
   ...CeReferralTableFields
-  targetProject {
-    id
-    projectName
-    projectType
-  }
+  targetProjectId
+  targetProjectName
+  targetProjectType
 }
 
 fragment CeReferralFields on CeReferral {

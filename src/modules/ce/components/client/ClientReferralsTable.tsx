@@ -22,13 +22,13 @@ const COLUMNS: ColumnDef<ClientCeReferralTableFieldsFragment>[] = [
     header: 'Project Name',
     key: 'projectName',
     render: (referral: ClientCeReferralTableFieldsFragment) =>
-      referral.targetProject.projectName,
+      referral.targetProjectName,
   },
   {
     header: 'Project Type',
     key: 'projectType',
     render: (referral: ClientCeReferralTableFieldsFragment) => (
-      <ProjectTypeChip projectType={referral.targetProject.projectType} />
+      <ProjectTypeChip projectType={referral.targetProjectType} />
     ),
   },
   REFERRAL_COLUMNS.status,
@@ -65,7 +65,7 @@ const ClientReferralsTable: React.FC = () => {
         paginationItemName='referrals'
         rowLinkTo={(referral) =>
           generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
-            projectId: referral.targetProject.id,
+            projectId: referral.targetProjectId,
             opportunityId: referral.opportunity.id,
             referralId: referral.id,
           })
