@@ -6143,8 +6143,8 @@ export type Query = {
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
   ceOpportunity?: Maybe<CeOpportunity>;
-  ceReferral: CeReferral;
-  ceReferralStep: CeReferralStep;
+  ceReferral?: Maybe<CeReferral>;
+  ceReferralStep?: Maybe<CeReferralStep>;
   /** Client lookup */
   client?: Maybe<Client>;
   /** Custom forms for collecting and/or displaying custom details for a Client (outside of the Client demographics form) */
@@ -18098,7 +18098,7 @@ export type GetCeReferralQueryVariables = Exact<{
 
 export type GetCeReferralQuery = {
   __typename?: 'Query';
-  ceReferral: {
+  ceReferral?: {
     __typename?: 'CeReferral';
     id: string;
     status: CeReferralStatus;
@@ -18137,7 +18137,7 @@ export type GetCeReferralQuery = {
       lastName?: string | null;
       nameSuffix?: string | null;
     } | null;
-  };
+  } | null;
 };
 
 export type GetCeReferralStepQueryVariables = Exact<{
@@ -18146,7 +18146,7 @@ export type GetCeReferralStepQueryVariables = Exact<{
 
 export type GetCeReferralStepQuery = {
   __typename?: 'Query';
-  ceReferralStep: {
+  ceReferralStep?: {
     __typename?: 'CeReferralStep';
     submittedValues?: any | null;
     id: string;
@@ -18664,7 +18664,7 @@ export type GetCeReferralStepQuery = {
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
-  };
+  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
