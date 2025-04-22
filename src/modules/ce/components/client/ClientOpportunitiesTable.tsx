@@ -17,6 +17,12 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
   {
+    header: 'Opportunity Name',
+    key: 'opportunityName',
+    render: 'name',
+    sticky: 'left',
+  },
+  {
     header: 'Project Name',
     key: 'projectName',
     render: (opportunity: ClientCeOpportunitySummaryFieldsFragment) =>
