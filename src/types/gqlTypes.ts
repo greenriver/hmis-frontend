@@ -594,6 +594,7 @@ export type CeOpportunity = {
   __typename?: 'CeOpportunity';
   active: Scalars['Boolean']['output'];
   candidates: CeCandidatesPaginated;
+  candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -602,6 +603,7 @@ export type CeOpportunity = {
   priorityScheme?: Maybe<CeMatchRule>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
+  projectType: ProjectType;
   /** Active or accepted referral */
   referral?: Maybe<CeReferral>;
   status: CeOpportunityStatus;
@@ -612,18 +614,17 @@ export type CeOpportunityCandidatesArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type CeOpportunityFilterOptions = {
-  status?: InputMaybe<Array<CeOpportunityStatus>>;
-};
-
 export type CeOpportunityInput = {
   name: Scalars['String']['input'];
   templateId: Scalars['ID']['input'];
 };
 
 export enum CeOpportunityStatus {
+  /** Closed */
   Closed = 'closed',
+  /** Locked */
   Locked = 'locked',
+  /** Open */
   Open = 'open',
 }
 
@@ -665,12 +666,18 @@ export type CeReferral = {
   currentStepName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
+  referredBy?: Maybe<ApplicationUser>;
   status: CeReferralStatus;
   steps: Array<CeReferralStep>;
   targetEnrollment?: Maybe<Enrollment>;
+  targetProjectId: Scalars['ID']['output'];
+  targetProjectName: Scalars['String']['output'];
+  targetProjectType: ProjectType;
 };
 
 export type CeReferralFilterOptions = {
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<CeReferralStatus>>;
 };
 
@@ -684,9 +691,13 @@ export type CeReferralParticipantInput = {
 };
 
 export enum CeReferralStatus {
+  /** Accepted */
   Accepted = 'accepted',
+  /** In progress */
   InProgress = 'in_progress',
+  /** Initialized */
   Initialized = 'initialized',
+  /** Rejected */
   Rejected = 'rejected',
 }
 
@@ -704,9 +715,13 @@ export type CeReferralStep = {
 };
 
 export enum CeReferralStepStatus {
+  /** Available */
   Available = 'available',
+  /** Completed */
   Completed = 'completed',
+  /** In progress */
   InProgress = 'in_progress',
+  /** Unavailable */
   Unavailable = 'unavailable',
 }
 
@@ -755,6 +770,7 @@ export type Client = {
   alerts: Array<ClientAlert>;
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
+  ceReferrals: CeReferralsPaginated;
   contactPoints: Array<ClientContactPoint>;
   createdBy?: Maybe<ApplicationUser>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
@@ -836,6 +852,13 @@ export type ClientAuditHistoryArgs = {
 };
 
 /** HUD Client */
+export type ClientCeReferralsArgs = {
+  filters?: InputMaybe<CeReferralFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** HUD Client */
 export type ClientCurrentLivingSituationsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -856,6 +879,7 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEligibleCeOpportunitiesArgs = {
+  filters?: InputMaybe<ClientEligibleCeOpportunityFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1126,6 +1150,11 @@ export enum ClientDashboardFeature {
   CaseNote = 'CASE_NOTE',
   File = 'FILE',
 }
+
+export type ClientEligibleCeOpportunityFilterOptions = {
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+};
 
 export type ClientFilterOptions = {
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -5853,7 +5882,7 @@ export type ProjectAssessmentsArgs = {
 };
 
 export type ProjectCeOpportunitiesArgs = {
-  filters?: InputMaybe<CeOpportunityFilterOptions>;
+  filters?: InputMaybe<ProjectCeOpportunityFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5864,7 +5893,7 @@ export type ProjectCeParticipationsArgs = {
 };
 
 export type ProjectCeReferralsArgs = {
-  filters?: InputMaybe<CeReferralFilterOptions>;
+  filters?: InputMaybe<ProjectCeReferralFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5967,6 +5996,14 @@ export type ProjectAccess = {
   canViewPartialSsn: Scalars['Boolean']['output'];
   canViewUnits: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+};
+
+export type ProjectCeOpportunityFilterOptions = {
+  status?: InputMaybe<Array<CeOpportunityStatus>>;
+};
+
+export type ProjectCeReferralFilterOptions = {
+  status?: InputMaybe<Array<CeReferralStatus>>;
 };
 
 export type ProjectCoc = {
@@ -15973,6 +16010,19 @@ export type CeOpportunityFieldsFragment = {
   } | null;
 };
 
+export type ClientCeOpportunitySummaryFieldsFragment = {
+  __typename?: 'CeOpportunity';
+  candidatesGeneratedAt?: string | null;
+  projectType: ProjectType;
+  id: string;
+  name: string;
+  categories: Array<string>;
+  status: CeOpportunityStatus;
+  expiresAt?: string | null;
+  projectId: string;
+  projectName: string;
+};
+
 export type CeMatchRuleFieldsFragment = {
   __typename?: 'CeMatchRule';
   id: string;
@@ -16022,6 +16072,38 @@ export type CeReferralTableFieldsFragment = {
   active: boolean;
   clientId: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+  referredBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    lockVersion: number;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  } | null;
+};
+
+export type ClientCeReferralTableFieldsFragment = {
+  __typename?: 'CeReferral';
+  targetProjectId: string;
+  targetProjectName: string;
+  targetProjectType: ProjectType;
+  createdAt: string;
+  currentStepName?: string | null;
+  id: string;
+  status: CeReferralStatus;
+  clientId: string;
+  opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+  referredBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
   client?: {
     __typename?: 'Client';
     id: string;
@@ -17942,7 +18024,7 @@ export type GetProjectCeOpportunitiesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<CeOpportunityFilterOptions>;
+  filters?: InputMaybe<ProjectCeOpportunityFilterOptions>;
 }>;
 
 export type GetProjectCeOpportunitiesQuery = {
@@ -17974,7 +18056,7 @@ export type GetProjectCeReferralsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<CeReferralFilterOptions>;
+  filters?: InputMaybe<ProjectCeReferralFilterOptions>;
 }>;
 
 export type GetProjectCeReferralsQuery = {
@@ -17996,6 +18078,11 @@ export type GetProjectCeReferralsQuery = {
         active: boolean;
         clientId: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+        referredBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         client?: {
           __typename?: 'Client';
           id: string;
@@ -18663,6 +18750,86 @@ export type GetCeReferralStepQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    };
+  } | null;
+};
+
+export type GetClientCeReferralsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeReferralFilterOptions>;
+}>;
+
+export type GetClientCeReferralsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    ceReferrals: {
+      __typename?: 'CeReferralsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeReferral';
+        targetProjectId: string;
+        targetProjectName: string;
+        targetProjectType: ProjectType;
+        createdAt: string;
+        currentStepName?: string | null;
+        id: string;
+        status: CeReferralStatus;
+        clientId: string;
+        opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+        referredBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        client?: {
+          __typename?: 'Client';
+          id: string;
+          lockVersion: number;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetClientEligibleOpportunitiesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ClientEligibleCeOpportunityFilterOptions>;
+}>;
+
+export type GetClientEligibleOpportunitiesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    eligibleCeOpportunities: {
+      __typename?: 'CeOpportunitiesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeOpportunity';
+        candidatesGeneratedAt?: string | null;
+        projectType: ProjectType;
+        id: string;
+        name: string;
+        categories: Array<string>;
+        status: CeOpportunityStatus;
+        expiresAt?: string | null;
+        projectId: string;
+        projectName: string;
+      }>;
     };
   } | null;
 };
@@ -44489,6 +44656,14 @@ export const CeOpportunityFieldsFragmentDoc = gql`
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeMatchRuleFieldsFragmentDoc}
 `;
+export const ClientCeOpportunitySummaryFieldsFragmentDoc = gql`
+  fragment ClientCeOpportunitySummaryFields on CeOpportunity {
+    candidatesGeneratedAt
+    ...CeOpportunitySummaryFields
+    projectType
+  }
+  ${CeOpportunitySummaryFieldsFragmentDoc}
+`;
 export const CeCandidateFieldsFragmentDoc = gql`
   fragment CeCandidateFields on CeCandidate {
     id
@@ -44509,8 +44684,21 @@ export const CeReferralTableFieldsFragmentDoc = gql`
       name
     }
     currentStepName
+    referredBy {
+      id
+      name
+    }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
+`;
+export const ClientCeReferralTableFieldsFragmentDoc = gql`
+  fragment ClientCeReferralTableFields on CeReferral {
+    ...CeReferralTableFields
+    targetProjectId
+    targetProjectName
+    targetProjectType
+  }
+  ${CeReferralTableFieldsFragmentDoc}
 `;
 export const CeReferralStepSummaryFieldsFragmentDoc = gql`
   fragment CeReferralStepSummaryFields on CeReferralStep {
@@ -48319,7 +48507,7 @@ export const GetProjectCeOpportunitiesDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
-    $filters: CeOpportunityFilterOptions = null
+    $filters: ProjectCeOpportunityFilterOptions = null
   ) {
     project(id: $id) {
       id
@@ -48418,7 +48606,7 @@ export const GetProjectCeReferralsDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
-    $filters: CeReferralFilterOptions = null
+    $filters: ProjectCeReferralFilterOptions = null
   ) {
     project(id: $id) {
       id
@@ -48857,6 +49045,211 @@ export type GetCeReferralStepSuspenseQueryHookResult = ReturnType<
 export type GetCeReferralStepQueryResult = Apollo.QueryResult<
   GetCeReferralStepQuery,
   GetCeReferralStepQueryVariables
+>;
+export const GetClientCeReferralsDocument = gql`
+  query GetClientCeReferrals(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: CeReferralFilterOptions = null
+  ) {
+    client(id: $id) {
+      id
+      ceReferrals(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ClientCeReferralTableFields
+        }
+      }
+    }
+  }
+  ${ClientCeReferralTableFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientCeReferralsQuery__
+ *
+ * To run a query within a React component, call `useGetClientCeReferralsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientCeReferralsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientCeReferralsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetClientCeReferralsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientCeReferralsQuery,
+    GetClientCeReferralsQueryVariables
+  > &
+    (
+      | { variables: GetClientCeReferralsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientCeReferralsQuery,
+    GetClientCeReferralsQueryVariables
+  >(GetClientCeReferralsDocument, options);
+}
+export function useGetClientCeReferralsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientCeReferralsQuery,
+    GetClientCeReferralsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientCeReferralsQuery,
+    GetClientCeReferralsQueryVariables
+  >(GetClientCeReferralsDocument, options);
+}
+export function useGetClientCeReferralsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetClientCeReferralsQuery,
+        GetClientCeReferralsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetClientCeReferralsQuery,
+    GetClientCeReferralsQueryVariables
+  >(GetClientCeReferralsDocument, options);
+}
+export type GetClientCeReferralsQueryHookResult = ReturnType<
+  typeof useGetClientCeReferralsQuery
+>;
+export type GetClientCeReferralsLazyQueryHookResult = ReturnType<
+  typeof useGetClientCeReferralsLazyQuery
+>;
+export type GetClientCeReferralsSuspenseQueryHookResult = ReturnType<
+  typeof useGetClientCeReferralsSuspenseQuery
+>;
+export type GetClientCeReferralsQueryResult = Apollo.QueryResult<
+  GetClientCeReferralsQuery,
+  GetClientCeReferralsQueryVariables
+>;
+export const GetClientEligibleOpportunitiesDocument = gql`
+  query GetClientEligibleOpportunities(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: ClientEligibleCeOpportunityFilterOptions = null
+  ) {
+    client(id: $id) {
+      id
+      eligibleCeOpportunities(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ClientCeOpportunitySummaryFields
+        }
+      }
+    }
+  }
+  ${ClientCeOpportunitySummaryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientEligibleOpportunitiesQuery__
+ *
+ * To run a query within a React component, call `useGetClientEligibleOpportunitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientEligibleOpportunitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientEligibleOpportunitiesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetClientEligibleOpportunitiesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientEligibleOpportunitiesQuery,
+    GetClientEligibleOpportunitiesQueryVariables
+  > &
+    (
+      | {
+          variables: GetClientEligibleOpportunitiesQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientEligibleOpportunitiesQuery,
+    GetClientEligibleOpportunitiesQueryVariables
+  >(GetClientEligibleOpportunitiesDocument, options);
+}
+export function useGetClientEligibleOpportunitiesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientEligibleOpportunitiesQuery,
+    GetClientEligibleOpportunitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientEligibleOpportunitiesQuery,
+    GetClientEligibleOpportunitiesQueryVariables
+  >(GetClientEligibleOpportunitiesDocument, options);
+}
+export function useGetClientEligibleOpportunitiesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetClientEligibleOpportunitiesQuery,
+        GetClientEligibleOpportunitiesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetClientEligibleOpportunitiesQuery,
+    GetClientEligibleOpportunitiesQueryVariables
+  >(GetClientEligibleOpportunitiesDocument, options);
+}
+export type GetClientEligibleOpportunitiesQueryHookResult = ReturnType<
+  typeof useGetClientEligibleOpportunitiesQuery
+>;
+export type GetClientEligibleOpportunitiesLazyQueryHookResult = ReturnType<
+  typeof useGetClientEligibleOpportunitiesLazyQuery
+>;
+export type GetClientEligibleOpportunitiesSuspenseQueryHookResult = ReturnType<
+  typeof useGetClientEligibleOpportunitiesSuspenseQuery
+>;
+export type GetClientEligibleOpportunitiesQueryResult = Apollo.QueryResult<
+  GetClientEligibleOpportunitiesQuery,
+  GetClientEligibleOpportunitiesQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(

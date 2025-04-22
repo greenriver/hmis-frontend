@@ -51,6 +51,7 @@ import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage
 import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
+import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import Opportunity from '@/modules/ce/components/Opportunity';
 import ProjectCePage from '@/modules/ce/components/ProjectCePage';
 import ReferralDetails from '@/modules/ce/components/ReferralDetails';
@@ -773,6 +774,14 @@ export const protectedRoutes: RouteNode[] = [
               <FileEditRoute>
                 <EditFilePage />
               </FileEditRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.REFERRALS,
+            element: (
+              <RootPermissionsFilter permissions='canViewCoordinatedEntry'>
+                <ClientReferralsPage />
+              </RootPermissionsFilter>
             ),
           },
           { path: '*', element: <Navigate to='profile' replace /> },

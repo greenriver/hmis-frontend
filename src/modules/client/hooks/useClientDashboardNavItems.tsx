@@ -2,12 +2,17 @@ import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientDashboardFeature, ClientFieldsFragment } from '@/types/gqlTypes';
 
 export const useClientDashboardNavItems = (
   enabledFeatures: ClientDashboardFeature[]
 ) => {
+  const [canViewCoordinatedEntry] = useHasRootPermissions([
+    'canViewCoordinatedEntry',
+  ]);
+
   const navItems: NavItem<ClientFieldsFragment['access']>[] = useMemo(() => {
     return [
       {
@@ -46,6 +51,12 @@ export const useClientDashboardNavItems = (
             hide: !enabledFeatures.includes(ClientDashboardFeature.File),
           },
           {
+            id: 'referrals',
+            title: 'Referrals',
+            path: ClientDashboardRoutes.REFERRALS,
+            hide: !canViewCoordinatedEntry,
+          },
+          {
             id: 'case-notes',
             title: 'Case Notes',
             path: ClientDashboardRoutes.CASE_NOTES,
@@ -79,7 +90,7 @@ export const useClientDashboardNavItems = (
         ],
       },
     ];
-  }, [enabledFeatures]);
+  }, [canViewCoordinatedEntry, enabledFeatures]);
 
   return navItems;
 };
