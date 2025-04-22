@@ -669,7 +669,6 @@ export type CeReferral = {
   status: CeReferralStatus;
   steps: Array<CeReferralStep>;
   targetEnrollment?: Maybe<Enrollment>;
-  targetProject: Project;
   targetProjectId: Scalars['ID']['output'];
   targetProjectName: Scalars['String']['output'];
   targetProjectType: ProjectType;

@@ -4864,22 +4864,6 @@
             "deprecationReason": null
           },
           {
-            "name": "targetProject",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Project",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "targetProjectId",
             "description": null,
             "args": [],
