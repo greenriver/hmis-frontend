@@ -12,17 +12,13 @@ import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralStatus,
   CeReferralTableFieldsFragment,
-  ClientCeReferralTableFieldsFragment,
   GetProjectCeReferralsDocument,
   GetProjectCeReferralsQuery,
   GetProjectCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-export const REFERRAL_COLUMNS: Record<
-  string,
-  ColumnDef<CeReferralTableFieldsFragment | ClientCeReferralTableFieldsFragment>
-> = {
+export const REFERRAL_COLUMNS = {
   client: {
     header: 'Client',
     render: (referral: CeReferralTableFieldsFragment) =>
