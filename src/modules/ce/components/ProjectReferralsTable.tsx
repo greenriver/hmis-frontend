@@ -1,11 +1,13 @@
 import { Paper } from '@mui/material';
 import React from 'react';
-import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
+import {
+  clientNameFromRecordWithOptionalClient,
+  parseAndFormatDate,
+} from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralStatus,
@@ -36,9 +38,8 @@ export const REFERRAL_COLUMNS: Record<
   date: {
     header: 'Referral Date',
     key: 'date',
-    render: (referral: CeReferralTableFieldsFragment) => (
-      <RelativeDateDisplay dateString={referral.createdAt} />
-    ),
+    render: (referral: CeReferralTableFieldsFragment) =>
+      parseAndFormatDate(referral.createdAt),
   },
   status: {
     header: 'Status',
