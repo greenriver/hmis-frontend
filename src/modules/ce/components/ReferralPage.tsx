@@ -83,7 +83,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
               <Typography variant='body1'>
                 {referral.client ? (
                   <RouterLink
-                    to={generateSafePath(ClientDashboardRoutes.REFERRALS, {
+                    to={generateSafePath(ClientDashboardRoutes.PROFILE, {
                       clientId: referral.client.id,
                     })}
                   >

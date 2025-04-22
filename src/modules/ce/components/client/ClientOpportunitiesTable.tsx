@@ -18,16 +18,22 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
   {
+    header: 'Opportunity Name',
+    key: 'opportunityName',
+    render: 'name',
+    sticky: 'left',
+  },
+  {
     header: 'Project Name',
     key: 'projectName',
     render: (opportunity: ClientCeOpportunitySummaryFieldsFragment) =>
-      opportunity.project.projectName,
+      opportunity.projectName,
   },
   {
     header: 'Project Type',
     key: 'projectType',
     render: (opportunity: ClientCeOpportunitySummaryFieldsFragment) => (
-      <ProjectTypeChip projectType={opportunity.project.projectType} />
+      <ProjectTypeChip projectType={opportunity.projectType} />
     ),
   },
   {
@@ -56,14 +62,9 @@ const ClientOpportunitiesTable: React.FC = () => {
           About Eligible Opportunities
         </Typography>
         <Typography variant='body2'>
-          {clientName} qualifies for several open positions. These positions are
-          either not currently matched with a client, or the matching process is
-          not far enough along to cause problems if cancelled (e.g., it hasn't
-          reached the CoC Initial Review stage). Activating a match for any of
-          these positions will cancel any existing match for that position,
-          returning the client to the pool of available candidates. However,
-          this action will not affect any other matches {clientName} may already
-          have.
+          {clientName} is eligible for the below open opportunities. Click the
+          opportunity to see more details, including {clientName}'s position on
+          the waitlist.
         </Typography>
       </Paper>
       <Paper>
