@@ -1,5 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import React from 'react';
+import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { ColumnDef } from '@/components/elements/table/types';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -34,6 +35,14 @@ const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
     render: (opportunity: ClientCeOpportunitySummaryFieldsFragment) => (
       <ProjectTypeChip projectType={opportunity.projectType} />
     ),
+  },
+  {
+    header: 'Candidates Generated At',
+    key: 'generatedAt',
+    render: ({ candidatesGeneratedAt }) =>
+      candidatesGeneratedAt && (
+        <DateWithRelativeTooltip dateString={candidatesGeneratedAt} />
+      ),
   },
 ];
 

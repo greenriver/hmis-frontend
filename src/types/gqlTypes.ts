@@ -594,6 +594,7 @@ export type CeOpportunity = {
   __typename?: 'CeOpportunity';
   active: Scalars['Boolean']['output'];
   candidates: CeCandidatesPaginated;
+  candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -16011,6 +16012,7 @@ export type CeOpportunityFieldsFragment = {
 
 export type ClientCeOpportunitySummaryFieldsFragment = {
   __typename?: 'CeOpportunity';
+  candidatesGeneratedAt?: string | null;
   projectType: ProjectType;
   id: string;
   name: string;
@@ -18818,6 +18820,7 @@ export type GetClientEligibleOpportunitiesQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'CeOpportunity';
+        candidatesGeneratedAt?: string | null;
         projectType: ProjectType;
         id: string;
         name: string;
@@ -44655,6 +44658,7 @@ export const CeOpportunityFieldsFragmentDoc = gql`
 `;
 export const ClientCeOpportunitySummaryFieldsFragmentDoc = gql`
   fragment ClientCeOpportunitySummaryFields on CeOpportunity {
+    candidatesGeneratedAt
     ...CeOpportunitySummaryFields
     projectType
   }
