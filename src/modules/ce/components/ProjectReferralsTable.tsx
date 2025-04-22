@@ -12,50 +12,71 @@ import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralStatus,
   CeReferralTableFieldsFragment,
+  ClientCeReferralTableFieldsFragment,
   GetProjectCeReferralsDocument,
   GetProjectCeReferralsQuery,
   GetProjectCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-export const REFERRAL_COLUMNS = {
+export const REFERRAL_COLUMNS: Record<
+  string,
+  ColumnDef<CeReferralTableFieldsFragment | ClientCeReferralTableFieldsFragment>
+> = {
   client: {
     header: 'Client',
-    render: (referral: CeReferralTableFieldsFragment) =>
-      clientNameFromRecordWithOptionalClient(referral),
+    render: (
+      referral:
+        | CeReferralTableFieldsFragment
+        | ClientCeReferralTableFieldsFragment
+    ) => clientNameFromRecordWithOptionalClient(referral),
     key: 'name',
     sticky: 'left',
   },
   opportunity: {
     header: 'Opportunity',
     key: 'opportunity',
-    render: (referral: CeReferralTableFieldsFragment) =>
-      referral.opportunity.name,
+    render: (
+      referral:
+        | CeReferralTableFieldsFragment
+        | ClientCeReferralTableFieldsFragment
+    ) => referral.opportunity.name,
   },
   date: {
     header: 'Referral Date',
     key: 'date',
-    render: (referral: CeReferralTableFieldsFragment) =>
-      parseAndFormatDate(referral.createdAt),
+    render: (
+      referral:
+        | CeReferralTableFieldsFragment
+        | ClientCeReferralTableFieldsFragment
+    ) => parseAndFormatDate(referral.createdAt),
   },
   status: {
     header: 'Status',
-    render: (referral: CeReferralTableFieldsFragment) => (
-      <ReferralStatusChip status={referral.status} />
-    ),
+    render: (
+      referral:
+        | CeReferralTableFieldsFragment
+        | ClientCeReferralTableFieldsFragment
+    ) => <ReferralStatusChip status={referral.status} />,
     key: 'status',
   },
   step: {
     header: 'Current Step',
     key: 'step',
-    render: (referral: CeReferralTableFieldsFragment) =>
-      referral.currentStepName,
+    render: (
+      referral:
+        | CeReferralTableFieldsFragment
+        | ClientCeReferralTableFieldsFragment
+    ) => referral.currentStepName,
   },
   referredBy: {
     header: 'Referred By',
     key: 'referredBy',
-    render: (referral: CeReferralTableFieldsFragment) =>
-      referral.referredBy?.name,
+    render: (
+      referral:
+        | CeReferralTableFieldsFragment
+        | ClientCeReferralTableFieldsFragment
+    ) => referral.referredBy?.name,
   },
   // TODO(#7321) - add column for sending project
 };
