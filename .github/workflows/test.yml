@@ -30,10 +30,8 @@ jobs:
     # - name: Audit dependencies
     #   run: |
     #     yarn audit --groups dependencies
-    - name: Lint and Format # todo @martha - remove added
+    - name: Lint and Format
       run: |
-        yarn tsc -v
-        yarn tsc --showConfig
         yarn tsc
         yarn format:check
         yarn lint:check
