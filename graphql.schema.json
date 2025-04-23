@@ -5272,13 +5272,9 @@
             "description": "Swimlane for this step, which holds information about potential step participants",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "CeReferralSwimlane",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "CeReferralSwimlane",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

@@ -8,7 +8,7 @@ interface Props {
 }
 const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
   const { swimlane, assignees = [] } = step;
-  const { participants } = swimlane;
+  const { participants } = swimlane || {};
 
   const content = useMemo(() => {
     if (!swimlane) return null;
@@ -23,7 +23,7 @@ const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
       });
     }
 
-    if (participants.length > 0) {
+    if (participants && participants.length > 0) {
       return participants.map((participant) => {
         return (
           <Fragment key={participant.id}>
