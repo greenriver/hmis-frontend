@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import React, { useMemo } from 'react';
+import React from 'react';
 import NewStaffAssignmentForm from './NewStaffAssignmentForm';
 import StaffAssignmentHistory from './StaffAssignmentHistory';
 import StaffAssignmentTable from './StaffAssignmentTable';
@@ -15,35 +15,26 @@ import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextB
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import {
-  HouseholdWithStaffAssignmentsFragment,
-  RelationshipToHoH,
-} from '@/types/gqlTypes';
+import { HouseholdWithStaffAssignmentsFragment } from '@/types/gqlTypes';
 
 interface EditStaffAssignmentDialogProps {
   household: HouseholdWithStaffAssignmentsFragment;
   open: boolean;
   onClose: VoidFunction;
+  hohName: string;
 }
 
 const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
   household,
   open,
   onClose,
+  hohName,
 }) => {
   const isTiny = useIsMobile('sm');
-
-  const headOfHousehold = useMemo(() => {
-    return household.householdClients.find(
-      (c) => c.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-    );
-  }, [household.householdClients]);
 
   const { enrollment } = useEnrollmentDashboardContext();
 
   if (!enrollment) return;
-  if (!headOfHousehold) return;
 
   return (
     <CommonDialog fullWidth open={open} onClose={onClose} maxWidth='md'>
@@ -52,7 +43,7 @@ const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
         <Stack gap={3} sx={{ mt: 2 }}>
           <Stack direction={isTiny ? 'column' : 'row'} gap={isTiny ? 2 : 4}>
             <CommonLabeledTextBlock title='Head of Household'>
-              {clientBriefName(headOfHousehold.client)}
+              {hohName}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Project'>
               {enrollment.project.projectName}

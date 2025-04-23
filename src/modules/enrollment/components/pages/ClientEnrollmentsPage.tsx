@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -126,6 +126,18 @@ const ClientEnrollmentsPage = () => {
     type: 'EnrollmentsForClientFilterOptions',
   });
 
+  const rowLinkTo = useCallback(
+    (enrollment: ClientEnrollmentTableFields) => {
+      if (!enrollment.access.canViewEnrollmentDetails) return;
+
+      return generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+        clientId: client.id,
+        enrollmentId: enrollment.id,
+      });
+    },
+    [client.id]
+  );
+
   return (
     <>
       <PageTitle title='Enrollments' />
@@ -138,12 +150,7 @@ const ClientEnrollmentsPage = () => {
           queryVariables={{ id: client.id }}
           queryDocument={GetClientEnrollmentsDocument}
           columns={COLUMNS}
-          rowLinkTo={(enrollment) =>
-            generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-              clientId: client.id,
-              enrollmentId: enrollment.id,
-            })
-          }
+          rowLinkTo={rowLinkTo}
           rowName={(row) => ` ${row.projectName} for ${entryExitRange(row)}`}
           rowActionTitle='View Enrollment'
           pagePath='client.enrollments'

@@ -5,6 +5,7 @@ import React, { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
+import RouterLink from '@/components/elements/RouterLink';
 import { DetailsIcon } from '@/components/elements/SemanticIcons';
 import CommonStickyBar from '@/components/layout/CommonStickyBar';
 import {
@@ -17,8 +18,8 @@ import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';
 import AssignContactsButton from '@/modules/ce/components/AssignContactsButton';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
-import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
-import { ProjectDashboardRoutes } from '@/routes/routes';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { ClientDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
   useGetCeReferralQuery,
@@ -81,7 +82,17 @@ const ReferralPage: React.FC<Props> = ({}) => {
             <Stack direction='row' alignItems='center' gap={0.5}>
               <Person sx={{ color: 'grayscale.main' }} />
               <Typography variant='body1'>
-                {clientNameFromRecordWithOptionalClient(referral)}
+                {referral.client ? (
+                  <RouterLink
+                    to={generateSafePath(ClientDashboardRoutes.PROFILE, {
+                      clientId: referral.client.id,
+                    })}
+                  >
+                    {clientBriefName(referral.client)}
+                  </RouterLink>
+                ) : (
+                  `Client ${referral.clientId}`
+                )}
               </Typography>
             </Stack>
             <Typography variant='body1'>

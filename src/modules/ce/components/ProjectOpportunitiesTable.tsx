@@ -13,22 +13,30 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const COLUMNS: ColumnDef<CeOpportunitySummaryFieldsFragment>[] = [
-  {
+export const OPPORTUNITY_COLUMNS: Record<
+  string,
+  ColumnDef<CeOpportunitySummaryFieldsFragment>
+> = {
+  name: {
     header: 'Opportunity',
-    render: 'name',
     key: 'name',
     sticky: 'left',
+    render: 'name',
   },
-  {
+  type: {
     header: 'Type',
+    key: 'type',
     render: (row) => {
       return row.categories.map((category) => (
         <Chip key={category} size='small' variant='outlined' label={category} />
       ));
     },
-    key: 'type',
   },
+};
+
+const COLUMNS: ColumnDef<CeOpportunitySummaryFieldsFragment>[] = [
+  OPPORTUNITY_COLUMNS.name,
+  OPPORTUNITY_COLUMNS.type,
 ];
 
 interface Props {}

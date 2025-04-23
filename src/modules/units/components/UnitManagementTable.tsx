@@ -1,20 +1,14 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Typography } from '@mui/material';
-import pluralize from 'pluralize';
 import { useCallback, useMemo } from 'react';
-
 import UnitOccupants from './UnitOccupants';
-
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ColumnDef } from '@/components/elements/table/types';
-import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { evictUnitsQuery } from '@/modules/units/util';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
+import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
+import { useUnitCeColumns } from '@/modules/units/hooks/useUnitCeColumns';
 import {
-  DeleteUnitsDocument,
-  DeleteUnitsMutation,
-  DeleteUnitsMutationVariables,
   GetUnitsDocument,
   GetUnitsQuery,
   GetUnitsQueryVariables,
@@ -28,66 +22,16 @@ const UnitManagementTable = ({
   projectId: string;
   allowDeleteUnits: boolean;
 }) => {
-  const renderDeleteButton = useCallback(
-    (unitIds: string[], disabled?: boolean) => {
-      const pluralUnits = `${unitIds.length} ${pluralize(
-        'unit',
-        unitIds.length
-      )}`;
+  const { setUnitToDelete, renderSingleDeleteDialog, renderBulkDeleteButton } =
+    useDeleteUnits({
+      projectId,
+    });
 
-      return (
-        <ButtonTooltipContainer
-          title={
-            disabled ? 'Currently assigned units can not be deleted' : null
-          }
-        >
-          <DeleteMutationButton<
-            DeleteUnitsMutation,
-            DeleteUnitsMutationVariables
-          >
-            variables={{
-              input: { unitIds },
-            }}
-            idPath={'deleteUnits.unitIds[0]'}
-            recordName='unit'
-            queryDocument={DeleteUnitsDocument}
-            onSuccess={() => evictUnitsQuery(projectId)}
-            ButtonProps={{
-              size: 'small',
-              variant: 'text',
-              color: 'info',
-              disabled,
-              'aria-label': 'Delete unit',
-            }}
-            confirmationDialogContent={
-              unitIds.length > 1 ? (
-                <>
-                  <Typography>
-                    {`Are you sure you want to delete ${pluralUnits}?`}
-                  </Typography>
-                  <Typography>This action cannot be undone.</Typography>
-                </>
-              ) : undefined
-            }
-            ConfirmationDialogProps={
-              unitIds.length > 1
-                ? {
-                    confirmText: `Yes, delete ${pluralUnits}`,
-                    title: 'Delete units',
-                  }
-                : undefined
-            }
-          >
-            <DeleteIcon
-              sx={{ color: disabled ? 'text.disabled' : 'text.secondary' }}
-            />
-          </DeleteMutationButton>
-        </ButtonTooltipContainer>
-      );
-    },
-    [projectId]
-  );
+  const [canViewCoordinatedEntry] = useHasRootPermissions([
+    'canViewCoordinatedEntry',
+  ]);
 
+  const ceColumns = useUnitCeColumns();
   const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
     return [
       {
@@ -110,51 +54,71 @@ const UnitManagementTable = ({
         key: 'clients',
         render: (unit) => <UnitOccupants unit={unit} />,
       },
-      ...(allowDeleteUnits
-        ? [
-            {
-              key: 'delete',
-              width: '1%',
-              dontLink: true,
-              render: (unit: UnitFieldsFragment) =>
-                renderDeleteButton([unit.id], unit.occupants.length > 0),
-            },
-          ]
-        : []),
+      ...ceColumns,
     ];
-  }, [allowDeleteUnits, renderDeleteButton]);
+  }, [ceColumns]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
   });
 
+  const { getCeActions, loading } = useUnitCeActions({ projectId });
+
+  const rowSecondaryActionConfigs = useCallback(
+    (unit: UnitFieldsFragment) => {
+      return [
+        ...(allowDeleteUnits
+          ? [
+              {
+                title: 'Delete Unit',
+                key: 'delete',
+                ariaLabel: `Delete Unit ${unit.id}`,
+                onClick: () => setUnitToDelete(unit.id),
+                disabled: unit.occupants.length > 0,
+                disabledReason: 'Currently assigned units cannot be deleted',
+              },
+            ]
+          : []),
+        ...getCeActions(unit),
+      ];
+    },
+    [allowDeleteUnits, getCeActions, setUnitToDelete]
+  );
+
   return (
-    <GenericTableWithData<
-      GetUnitsQuery,
-      GetUnitsQueryVariables,
-      UnitFieldsFragment
-    >
-      defaultPageSize={10}
-      queryVariables={{ id: projectId }}
-      queryDocument={GetUnitsDocument}
-      columns={columns}
-      pagePath='project.units'
-      noData='No units'
-      selectable={allowDeleteUnits ? 'row' : undefined}
-      isRowSelectable={(row) => row.occupants.length === 0}
-      filters={filters}
-      recordType='Unit'
-      EnhancedTableToolbarProps={{
-        title: 'Unit Management',
-        renderBulkAction: allowDeleteUnits
-          ? (selectedUnitIds) => (
-              <ButtonTooltipContainer title='Delete Selected Units'>
-                {renderDeleteButton(selectedUnitIds as string[])}
-              </ButtonTooltipContainer>
-            )
-          : undefined,
-      }}
-    />
+    <>
+      <GenericTableWithData<
+        GetUnitsQuery,
+        GetUnitsQueryVariables,
+        UnitFieldsFragment
+      >
+        defaultPageSize={10}
+        queryVariables={{ id: projectId, ceEnabled: canViewCoordinatedEntry }}
+        queryDocument={GetUnitsDocument}
+        columns={columns}
+        pagePath='project.units'
+        noData='No units'
+        selectable={allowDeleteUnits ? 'row' : undefined}
+        isRowSelectable={(row) => row.occupants.length === 0}
+        filters={filters}
+        recordType='Unit'
+        EnhancedTableToolbarProps={{
+          title: 'Unit Management',
+          renderBulkAction: allowDeleteUnits
+            ? (selectedUnitIds) => (
+                <ButtonTooltipContainer title='Delete Selected Units'>
+                  {renderBulkDeleteButton(selectedUnitIds as string[])}
+                </ButtonTooltipContainer>
+              )
+            : undefined,
+        }}
+        rowName={(row) => `${row.unitType?.description} - ${row.id}`}
+        rowSecondaryActionConfigs={rowSecondaryActionConfigs}
+        loading={loading}
+        loadingVariant='linear'
+      />
+      {renderSingleDeleteDialog()}
+    </>
   );
 };
 export default UnitManagementTable;
