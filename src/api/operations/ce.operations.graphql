@@ -82,7 +82,7 @@ mutation AssignParticipants(
     participants: $participants
   ) {
     referral {
-      ...CeWithReferralParticipants
+      ...CeReferralWithSwimlanes
     }
   }
 }

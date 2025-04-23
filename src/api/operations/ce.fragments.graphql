@@ -77,16 +77,12 @@ fragment ClientCeReferralTableFields on CeReferral {
 
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
-  ...CeWithReferralParticipants
+  ...CeReferralWithSwimlanes
   steps {
     ...CeReferralStepSummaryFields
   }
   opportunity {
     ...CeOpportunitySummaryFields
-    swimlanes {
-      id
-      name
-    }
   }
   targetEnrollment {
     id
@@ -96,21 +92,19 @@ fragment CeReferralFields on CeReferral {
   }
 }
 
-fragment CeWithReferralParticipants on CeReferral {
+fragment CeReferralSwimlaneFields on CeReferralSwimlane {
   id
+  name
   participants {
-    ...CeReferralParticipantFields
+    id
+    name
   }
 }
 
-fragment CeReferralParticipantFields on CeReferralParticipant {
+fragment CeReferralWithSwimlanes on CeReferral {
   id
-  user {
-    ...UserFields
-  }
-  swimlane {
-    id
-    name
+  swimlanes {
+    ...CeReferralSwimlaneFields
   }
 }
 
@@ -119,7 +113,18 @@ fragment CeReferralStepSummaryFields on CeReferralStep {
   stepId
   name
   status
-  swimlane
+  swimlane {
+    id
+    name
+    participants {
+      id
+      name
+    }
+  }
+  assignees {
+    id
+    name
+  }
 }
 
 fragment CeReferralStepFields on CeReferralStep {

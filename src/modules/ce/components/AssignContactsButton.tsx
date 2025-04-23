@@ -23,20 +23,16 @@ interface Props {
 const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
   const [open, setOpen] = useState(false);
 
-  const swimlanes = referral.opportunity.swimlanes || [];
-
-  // Map the existing referral participants to a Record<string, string[]>
-  // where key = swimlaneId and value = [userIds]
   const initialValues = useMemo(() => {
     return reduce(
-      referral.participants,
-      (acc, { swimlane, user }) => ({
-        ...acc,
-        [swimlane.id]: [...(acc[swimlane.id] || []), user.id],
-      }),
+      referral.swimlanes,
+      (acc, swimlane) => {
+        acc[swimlane.id] = swimlane.participants.map((user) => user.id);
+        return acc;
+      },
       {} as Record<string, string[]>
     );
-  }, [referral.participants]);
+  }, [referral.swimlanes]);
 
   // `values` maps swimlaneId to [userIds]
   const [values, setValues] = useState<Record<string, string[]>>(initialValues);
@@ -54,7 +50,7 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
   const [handleSubmit, { loading, error }] = useAssignParticipantsMutation({
     variables: {
       referralId: referral.id,
-      // On submit, map the `values` object into the shape the mutation is expecting: { userId, swimlaneId }
+      // On submit, map the `values` object into the shape the mutation is expecting: [{ userId, swimlaneId }]
       participants: Object.entries(values).flatMap(([swimlaneId, userIds]) =>
         userIds.map((userId) => ({ userId, swimlaneId }))
       ),
@@ -66,7 +62,7 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
 
   return (
     <>
-      {swimlanes.length === 0 ? (
+      {!referral.swimlanes || referral.swimlanes?.length === 0 ? (
         // If this referral has no swimlanes, disable the button.
         // For now this will only happen if the referral also has no tasks,
         // because the schema requires swimlane to be non-null on tasks.
@@ -97,7 +93,7 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
         <DialogTitle>Assign Contacts</DialogTitle>
         <DialogContent>
           <Stack gap={2} mt={2}>
-            {swimlanes.map((swimlane) => (
+            {referral.swimlanes?.map((swimlane) => (
               <AssignContactFormItem
                 key={swimlane.id}
                 swimlane={swimlane}

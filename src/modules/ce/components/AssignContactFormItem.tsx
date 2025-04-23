@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
 import FormSelect from '@/modules/form/components/FormSelect';
 import {
-  CeSwimlane,
+  CeReferralSwimlaneFieldsFragment,
   PickListOption,
   PickListType,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 
 interface Props {
-  swimlane: CeSwimlane;
+  swimlane: CeReferralSwimlaneFieldsFragment;
   users: string[];
   setUsers: (userIds: string[]) => void;
 }

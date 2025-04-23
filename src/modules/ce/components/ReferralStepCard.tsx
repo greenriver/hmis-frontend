@@ -65,10 +65,7 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
 
   return (
     <ReferralStepCardInner name={name} status={status} action={action}>
-      <ReferralStepAssignee
-        step={step}
-        participants={referral.participants || []}
-      />
+      <ReferralStepAssignee step={step} />
     </ReferralStepCardInner>
   );
 };

@@ -5,7 +5,6 @@ import CommonCard from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
 import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
 import {
@@ -36,7 +35,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
     referralId: string;
     stepId: string;
   };
-  const { referral } = useReferralContext();
+
   const navigate = useNavigate();
 
   const {
@@ -46,6 +45,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
   } = useGetCeReferralStepQuery({
     variables: {
       id: stepId,
+      referralId: referralId,
     },
   });
 
@@ -101,10 +101,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
   return (
     <CommonCard title={name}>
       <Stack gap={2}>
-        <ReferralStepAssignee
-          step={step}
-          participants={referral.participants || []}
-        />
+        <ReferralStepAssignee step={step} />
         <Divider />
         {status === CeReferralStepStatus.Available && (
           <StartCeReferralStepButton

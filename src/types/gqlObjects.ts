@@ -758,19 +758,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
-    name: 'CeReferralParticipant',
-    fields: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-    ],
-  },
-  {
     name: 'CeReferralStep',
     fields: [
       {
@@ -802,14 +789,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'submittedValues',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
-      {
-        name: 'swimlane',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
     ],
   },
   {
-    name: 'CeSwimlane',
+    name: 'CeReferralSwimlane',
     fields: [
       {
         name: 'id',
@@ -6924,31 +6907,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'ENUM', name: 'CeReferralStatus', ofType: null },
-          },
-        },
-      },
-    ],
-  },
-  {
-    name: 'CeReferralInput',
-    args: [
-      {
-        name: 'participants',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: {
-                kind: 'INPUT_OBJECT',
-                name: 'CeReferralParticipantInput',
-                ofType: null,
-              },
-            },
           },
         },
       },
