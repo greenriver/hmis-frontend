@@ -44944,18 +44944,14 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     name
     status
     swimlane {
-      id
-      name
-      participants {
-        id
-        name
-      }
+      ...CeReferralSwimlaneFields
     }
     assignees {
       id
       name
     }
   }
+  ${CeReferralSwimlaneFieldsFragmentDoc}
 `;
 export const CeReferralFieldsFragmentDoc = gql`
   fragment CeReferralFields on CeReferral {

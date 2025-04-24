@@ -35,7 +35,6 @@ const ReferralStep: React.FC<Props> = ({}) => {
     referralId: string;
     stepId: string;
   };
-
   const navigate = useNavigate();
 
   const {

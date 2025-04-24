@@ -59,6 +59,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import WrapTextIcon from '@mui/icons-material/WrapText';
 import { styled, SvgIconProps } from '@mui/material';
+
 const IntakeAssessmentIcon = styled(ExitToAppRoundedIcon)<SvgIconProps>(() => ({
   transform: 'rotate(90deg)',
 }));
