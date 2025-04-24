@@ -707,7 +707,7 @@ export enum CeReferralStatus {
 
 export type CeReferralStep = {
   __typename?: 'CeReferralStep';
-  /** Assignee(s) currently working on this step */
+  /** User(s) currently assigned to this step */
   assignees?: Maybe<Array<ApplicationUser>>;
   formDefinition: FormDefinition;
   /** unique identifier for this step based on node and instance */
