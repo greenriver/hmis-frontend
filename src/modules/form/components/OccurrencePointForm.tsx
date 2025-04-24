@@ -83,7 +83,10 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
       InitialBehavior.IfEmpty
     );
     // Apply values from the Enrollment
-    const formValues = createInitialValuesFromRecord(itemMap, record);
+    const formValues = createInitialValuesFromRecord({
+      itemMap,
+      record,
+    });
 
     return assign(initialsIfEmpty, formValues);
   }, [itemMap, definition.definition, record, localConstants]);

@@ -29,7 +29,11 @@ const CollapsibleList: React.FC<CollapsibleListProps> = ({
         {open ? <ExpandLess /> : <ExpandMore />}
         <ListItemText
           sx={{ ml: 1 }}
-          primaryTypographyProps={{ fontWeight: 600, variant: 'body2' }}
+          primaryTypographyProps={{
+            fontWeight: 600,
+            variant: 'body2',
+            whiteSpace: 'wrap', // wrap text to prevent super wide cells when used in audit tables
+          }}
           primary={title}
         />
       </ListItemButton>

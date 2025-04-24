@@ -38,7 +38,7 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   // Transform record into "form state" for DynamicView
   const values = useMemo(() => {
     if (!itemMap) return {};
-    const formValues = createInitialValuesFromRecord(itemMap, record);
+    const formValues = createInitialValuesFromRecord({ itemMap, record });
     return formValues;
   }, [itemMap, record]);
 

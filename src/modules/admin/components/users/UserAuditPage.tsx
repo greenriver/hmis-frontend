@@ -1,35 +1,22 @@
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import EditIcon from '@mui/icons-material/Edit';
 import { Paper } from '@mui/material';
-// import { formatISO, subWeeks } from 'date-fns';
-import { generatePath, useNavigate } from 'react-router-dom';
 
-import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
-import LabelWithContent from '@/components/elements/LabelWithContent';
+import { useEffect, useMemo } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
+import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import { useAdminDashboardContext } from '@/modules/admin/components/AdminDashboard';
 import UserAccessHistory, {
   AccessEntityType,
 } from '@/modules/admin/components/users/UserAccessHistory';
 import UserAuditHistory from '@/modules/admin/components/users/UserAuditHistory';
+import UserLoginHistory from '@/modules/admin/components/users/UserLoginHistory';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
 import { AdminDashboardRoutes } from '@/routes/routes';
 
-type UserHistoryType = 'access' | 'edits';
-const historyTypeToggleItems: ToggleItem<UserHistoryType>[] = [
-  {
-    value: 'access',
-    label: 'User Access',
-    Icon: AccessTimeIcon,
-  },
-  {
-    value: 'edits',
-    label: 'User Edits',
-    Icon: EditIcon,
-  },
-];
+type UserHistoryType = 'access' | 'edits' | 'logins';
 
 interface Props {
   userHistoryType: UserHistoryType;
@@ -41,21 +28,27 @@ const UserAuditPage: React.FC<Props> = ({
 }) => {
   const { userId } = useSafeParams() as { userId: string };
   const { user, loading } = useUser(userId);
+  const { overrideBreadcrumbTitles } = useAdminDashboardContext();
   const navigate = useNavigate();
-  //const defaultStartDate = useMemo<string>(() => {
-  //  const today = new Date();
-  //  const twoWeeksAgo = subWeeks(today, 2);
-  //  return formatISO(twoWeeksAgo);
-  //}, []);
 
-  if (!user && loading) return <Loading />;
-  if (!user) return <NotFound />;
+  // Set the breadcrumb so it says the correct name of this user
+  useEffect(() => {
+    if (!user) return;
 
-  const handleHistoryTypeToggleChange = (value: UserHistoryType) => {
+    const title = `${user?.name} Audit`;
+    overrideBreadcrumbTitles({
+      [AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY]: title,
+      [AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY]: title,
+      [AdminDashboardRoutes.USER_EDIT_HISTORY]: title,
+      [AdminDashboardRoutes.USER_LOGIN_ACTIVITY]: title,
+    });
+  }, [overrideBreadcrumbTitles, user]);
+
+  const handleHistoryTypeToggleChange = (value: string) => {
     switch (value) {
       case 'access':
         navigate(
-          generatePath(AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY, {
+          generatePath(AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY, {
             userId,
           })
         );
@@ -67,33 +60,58 @@ const UserAuditPage: React.FC<Props> = ({
           })
         );
         break;
+      case 'logins':
+        navigate(
+          generatePath(AdminDashboardRoutes.USER_LOGIN_ACTIVITY, {
+            userId,
+          })
+        );
+        break;
     }
   };
+
+  const tabDefinitions = useMemo(
+    () => [
+      {
+        key: 'access',
+        title: 'Viewed Client Data',
+        contents: <UserAccessHistory accessEntityType={accessEntityType} />,
+      },
+      {
+        key: 'edits',
+        title: 'Edit History',
+        contents: (
+          <Paper>
+            <UserAuditHistory />
+          </Paper>
+        ),
+      },
+      {
+        key: 'logins',
+        title: 'Login History',
+        contents: (
+          <Paper>
+            <UserLoginHistory />
+          </Paper>
+        ),
+      },
+    ],
+    [accessEntityType]
+  );
+
+  if (!user && loading) return <Loading />;
+  if (!user) return <NotFound />;
 
   return (
     <>
       <PageTitle title={`${user.name} Audit History`} />
-      <LabelWithContent
-        label='Audit History Type'
-        labelId='page-type-label'
-        renderChildren={(labelElement) => (
-          <CommonToggle
-            sx={{ mb: 3 }}
-            value={userHistoryType}
-            onChange={handleHistoryTypeToggleChange}
-            items={historyTypeToggleItems}
-            aria-labelledby={
-              (labelElement && labelElement.getAttribute('id')) || undefined
-            }
-          />
-        )}
+      <CommonTabs
+        tabDefinitions={tabDefinitions}
+        ariaLabel={'audit history types'}
+        currentTab={userHistoryType}
+        onChangeTab={(key) => handleHistoryTypeToggleChange(key)}
+        updateUrlHash={false}
       />
-      <Paper>
-        {userHistoryType === 'access' && (
-          <UserAccessHistory accessEntityType={accessEntityType} />
-        )}
-        {userHistoryType === 'edits' && <UserAuditHistory />}
-      </Paper>
     </>
   );
 };

@@ -1,9 +1,9 @@
-const { mergeConfig } = require('vite');
-const { resolve } = require('path');
-import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 const config = {
   async viteFinal(config) {
+    const { mergeConfig } = await import('vite'); // https://github.com/storybookjs/storybook/issues/26291#issuecomment-1978193283
+
     return mergeConfig(config, {
       resolve: {
         alias: {

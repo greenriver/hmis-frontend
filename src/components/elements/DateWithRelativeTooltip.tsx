@@ -12,7 +12,6 @@ import { customVisuallyHidden } from '@/config/theme';
 
 export interface DateWithRelativeTooltipProps {
   dateString: string;
-  preciseTime?: boolean;
   TooltipProps?: Omit<TooltipProps, 'title' | 'children'>;
   TypographyProps?: TypographyProps;
 }
@@ -22,13 +21,13 @@ export interface DateWithRelativeTooltipProps {
  */
 const DateWithRelativeTooltip = ({
   dateString,
-  preciseTime = false,
+
   TooltipProps = {},
   TypographyProps = {},
 }: DateWithRelativeTooltipProps) => {
   const [formattedDate, formattedDateRelative] = useMemo(
-    () => getFormattedDates(dateString, preciseTime),
-    [dateString, preciseTime]
+    () => getFormattedDates(dateString),
+    [dateString]
   );
 
   if (!dateString || !formattedDate || !formattedDateRelative) return null;

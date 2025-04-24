@@ -15,6 +15,7 @@ interface Args {
   itemMap?: ItemMap;
   definition?: FormDefinitionJsonFieldsFragment;
   localConstants?: LocalConstants;
+  handleMissingField?: (message: string) => void;
 }
 
 const useInitialFormValues = ({
@@ -22,6 +23,7 @@ const useInitialFormValues = ({
   itemMap: itemMapArg,
   definition,
   localConstants,
+  handleMissingField,
 }: Args) => {
   const itemMap = useMemo(() => {
     if (!definition) return;
@@ -36,17 +38,18 @@ const useInitialFormValues = ({
     });
     if (!record) return initialValuesFromDefinition;
 
-    const initialValuesFromRecord = createInitialValuesFromRecord(
+    const initialValuesFromRecord = createInitialValuesFromRecord({
       itemMap,
-      record
-    );
+      record,
+      handleMissingField,
+    });
     const values = {
       ...initialValuesFromDefinition,
       ...initialValuesFromRecord,
     };
     // console.debug('Initial form values:', values, 'from', record);
     return values;
-  }, [record, definition, itemMap, localConstants]);
+  }, [definition, itemMap, localConstants, record, handleMissingField]);
 
   return initialValues;
 };

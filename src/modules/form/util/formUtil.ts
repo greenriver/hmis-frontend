@@ -44,6 +44,7 @@ import {
 } from '../types';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
+import { sendToSentry } from '@/modules/errors/util';
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 import { collectExpressionReferences } from '@/modules/form/util/expressions/references';
 import {
@@ -1267,19 +1268,56 @@ export const transformSubmitValues = ({
   return result;
 };
 
+/**
+ * Checks if path is missing in object. Similar to lodash's `has` helper,
+ * with the following key difference:
+ * - ONLY "leaf node" keys are considered missing.
+ * - If a parent key is null, that is allowed; we don't consider the leaf missing.
+ *
+ * Examples:
+ *
+ * object = { disabilityGroup: { viralLoadSource: 1 }}
+ * path = ['disabilityGroup', 'viralLoadSource']
+ * isMissingField(object, path) = false  // Path exists in the object
+ *
+ * object = { disabilityGroup: { viralLoadSource: 1 }}
+ * path = ['disabilityGroup', 'viralLoadCount']
+ * isMissingField(object, path) = true  // Path is missing in the object
+ *
+ * object = { disabilityGroup: null}
+ * path = ['disabilityGroup', 'viralLoadCount']
+ * isMissingField(object, path) = false  // Not considered missing, because the parent record is null
+ *
+ * @param object the object to query, such as an Assessment
+ * @param path a list of strings representing the path to query
+ */
+function isMissingField(object: any, path: string[]) {
+  let current = object;
+  for (const key of path) {
+    if (current === null) {
+      // If parent is null, we don't consider the leaf missing.
+      return false;
+    }
+    if (typeof current !== 'object' || !(key in current)) {
+      return true; // If current is not an object or the key doesn't exist, it's missing.
+    }
+    current = current[key]; // Move deeper in the object.
+  }
+  // If we complete the loop without returning, the field exists.
+  return false;
+}
+
 // record could be an Assessment
-const getMappedValue = (record: any, mapping: FieldMapping) => {
+const getMappedValue = (
+  record: any,
+  mapping: FieldMapping,
+  handleMissingField: (message: string) => void
+) => {
   let relatedRecordAttribute;
   if (mapping.recordType) {
     const recordType = HmisEnums.RelatedRecordType[mapping.recordType];
     if (recordType !== record.__typename) {
       relatedRecordAttribute = lowerFirst(recordType);
-      // if (!record.hasOwnProperty(relatedRecordAttribute)) {
-      //   console.debug(
-      //     `Expected record to have ${relatedRecordAttribute}. FieldMapping:`,
-      //     JSON.stringify(mapping)
-      //   );
-      // }
     }
   }
 
@@ -1290,7 +1328,31 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
     );
     return customDataElementValueForKey(mapping.customFieldKey, cdes);
   } else if (mapping.fieldName) {
-    return get(record, compact([relatedRecordAttribute, mapping.fieldName]));
+    const keys = compact([relatedRecordAttribute, mapping.fieldName]); // for example: ['disabilityGroup', 'viralLoadSource']
+
+    const value = get(record, keys); // lodash's `get` will return undefined if the field doesn't exist
+
+    // Special cases where we DON'T want to alert Sentry if the field can't be resolved on the record.
+    // - imageBlobId and fileBlobId: we pass these fields when first saving a file, but they aren't persisted on the file or returned on a saved file record.
+    // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
+    // - resendReferralRequest: special case for the admin update referral posting, not saved on the referral posting record, but used by the custom mutation for this form.
+    const specialCaseFieldNames = [
+      'fileBlobId',
+      'imageBlobId',
+      'mciId',
+      'resendReferralRequest',
+    ];
+    if (!specialCaseFieldNames.includes(mapping.fieldName)) {
+      // In general, we do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
+      // This would indicate we're not resolving a field that we should be resolving.
+      if (isMissingField(record, keys)) {
+        handleMissingField(
+          `Field "${keys.join('.')}" is missing in record ${record.__typename}:${record.id}`
+        );
+      }
+    }
+
+    return value;
   }
 };
 
@@ -1299,26 +1361,31 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
  *
  * @param itemMap Map of linkId -> Item
  * @param record  GQL HMIS record, like Project or Organization
+ * @param handleMissingField callback that receives an error message if a value isn't found in the record
  *
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
-export const createInitialValuesFromRecord = (
-  itemMap: ItemMap,
-  record: any // could be an assessment
-): Record<string, any> => {
+export const createInitialValuesFromRecord = ({
+  itemMap,
+  record,
+  handleMissingField = sendToSentry,
+}: {
+  itemMap: ItemMap;
+  record: any; // could be an assessment
+  handleMissingField?: (message: string) => void;
+}): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
   Object.values(itemMap).forEach((item) => {
     if (!item.mapping) return;
     if (!item.mapping.customFieldKey && !item.mapping.fieldName) return;
 
-    const value = getMappedValue(record, item.mapping);
+    const value = getMappedValue(record, item.mapping, handleMissingField);
     if (hasMeaningfulValue(value)) {
       initialValues[item.linkId] = gqlValueToFormValue(value, item);
     }
   });
 
-  // console.debug('Created initial values from record', record, initialValues);
   return initialValues;
 };
 
@@ -1351,7 +1418,7 @@ export const initialValuesFromAssessment = (
 ) => {
   // If non-WIP, construct based on related records
   if (!assessment.inProgress) {
-    return createInitialValuesFromRecord(itemMap, assessment);
+    return createInitialValuesFromRecord({ itemMap, record: assessment });
   }
   // If WIP, construt based on stored JSON values
   if (!assessment.wipValues)

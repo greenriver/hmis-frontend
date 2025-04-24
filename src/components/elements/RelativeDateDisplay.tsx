@@ -11,24 +11,24 @@ import { customVisuallyHidden } from '@/config/theme';
 import {
   formatDateForDisplay,
   formatDateTimeForDisplay,
+  formatRelativeDate,
   formatRelativeDateTime,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 
-export const getFormattedDates = (
-  dateString: string,
-  preciseTime: boolean = true
-) => {
-  const date = parseHmisDateString(dateString);
+export const getFormattedDates = (dateString: string) => {
+  const date = parseHmisDateString(dateString); // parse Date or DateTime string into Date object
   if (!date) return [];
+
+  const isDateTime = dateString.length > 10;
   return [
-    preciseTime ? formatDateTimeForDisplay(date) : formatDateForDisplay(date),
-    formatRelativeDateTime(date),
+    isDateTime ? formatDateTimeForDisplay(date) : formatDateForDisplay(date),
+    isDateTime ? formatRelativeDateTime(date) : formatRelativeDate(date),
   ];
 };
 
 export interface RelativeDateDisplayProps {
-  dateString: string;
+  dateString: string; // can be date or datetime string
   prefixVerb?: string;
   suffixText?: string;
   tooltipSuffixText?: string;

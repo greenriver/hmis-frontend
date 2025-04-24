@@ -1,7 +1,7 @@
 'use strict';
 
-const fs = require('fs');
-const { type } = require('os');
+import fs from 'fs';
+
 const generatedFiledHeader =
   '// **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****\n\n';
 let rawdata = fs.readFileSync('graphql.schema.json');
