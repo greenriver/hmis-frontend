@@ -50,6 +50,7 @@ const clientDashboardRoutes = {
   SCAN_CARDS: 'scan-cards',
   MERGE_HISTORY: 'merges',
   NEW_MERGE: 'merges/new',
+  REFERRALS: 'referrals',
 };
 
 // Routes within the enrollment dashboard

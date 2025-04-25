@@ -3,6 +3,7 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
   name
   categories
   status
+  active
   expiresAt
   projectId
   projectName
@@ -19,6 +20,12 @@ fragment CeOpportunityFields on CeOpportunity {
   priorityScheme {
     ...CeMatchRuleFields
   }
+}
+
+fragment ClientCeOpportunitySummaryFields on CeOpportunity {
+  candidatesGeneratedAt
+  ...CeOpportunitySummaryFields
+  projectType
 }
 
 fragment CeMatchRuleFields on CeMatchRule {
@@ -39,6 +46,7 @@ fragment CeCandidateFields on CeCandidate {
 fragment CeReferralSummaryFields on CeReferral {
   id
   status
+  active
   clientId
   client {
     id
@@ -54,6 +62,17 @@ fragment CeReferralTableFields on CeReferral {
     name
   }
   currentStepName
+  referredBy {
+    id
+    name
+  }
+}
+
+fragment ClientCeReferralTableFields on CeReferral {
+  ...CeReferralTableFields
+  targetProjectId
+  targetProjectName
+  targetProjectType
 }
 
 fragment CeReferralFields on CeReferral {

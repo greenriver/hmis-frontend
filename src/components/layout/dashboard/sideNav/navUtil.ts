@@ -72,3 +72,7 @@ export const applySafePaths = <T>(
 
   return config.map((child) => recur(child));
 };
+
+export const addTrailingSlash = (path: string) => {
+  return path.endsWith('/') ? path : path + '/';
+};

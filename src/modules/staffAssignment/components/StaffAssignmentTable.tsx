@@ -94,7 +94,7 @@ const StaffAssignmentTable: React.FC<StaffAssignmentTableProps> = ({
   return (
     <Card sx={cardSx}>
       <GenericTable<StaffAssignmentDetailsFragment>
-        rows={household.staffAssignments?.nodes || []}
+        rows={household.currentStaffAssignments}
         columns={columns || defaultColumns}
         noData={'No Staff Assigned'}
         tableProps={{ 'aria-label': 'Current staff assignments' }}
