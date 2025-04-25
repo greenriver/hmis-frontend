@@ -1,8 +1,6 @@
-import { Button } from '@mui/material';
 import React, { useMemo } from 'react';
 import ReferralStepCardInner from './ReferralStepCardInner';
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { GoToIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
@@ -25,20 +23,10 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
     opportunityId: string;
   };
   const { referral } = useReferralContext();
-  const { name, status, swimlane } = step;
+  const { name, status } = step;
 
   const action = useMemo(() => {
     if (status === CeReferralStepStatus.Available) {
-      if (!swimlane || !swimlane.participants.length) {
-        return (
-          <ButtonTooltipContainer title={'No participants for this step'}>
-            <Button disabled={true} variant='text' endIcon={<GoToIcon />}>
-              Start
-            </Button>
-          </ButtonTooltipContainer>
-        );
-      }
-
       return (
         <StartCeReferralStepButton
           step={step}
@@ -73,7 +61,7 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
         </ButtonLink>
       );
     }
-  }, [opportunityId, projectId, referral.id, status, step, swimlane]);
+  }, [opportunityId, projectId, referral.id, status, step]);
 
   return (
     <ReferralStepCardInner name={name} status={status} action={action}>
