@@ -1,5 +1,5 @@
 import { isDate } from 'date-fns';
-import { isEmpty, isNil } from 'lodash-es';
+import { isNil } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
@@ -111,13 +111,10 @@ const populateParams = (
   searchParams: URLSearchParams
 ) => {
   Object.entries(params).forEach(([key, value]) => {
-    if (!isEmpty(key)) {
-      // Don't add this key to params if the value is empty
-      if (Array.isArray(value)) {
-        value.forEach((v) => searchParams.append(key, v));
-      } else {
-        searchParams.set(key, value);
-      }
+    if (Array.isArray(value)) {
+      value.forEach((v) => searchParams.append(key, v));
+    } else {
+      if (!!value) searchParams.set(key, value);
     }
   });
 };
@@ -153,16 +150,11 @@ const useSearchParamsState = ({
   useEffect(() => {
     setMounted(true);
 
-    if (!initial) return;
-
-    const toUpdate: Record<string, any> = Object.fromEntries(
-      // Find any key/value pairs that are in initial, but not in searchParams
-      Object.entries(initial).filter(([key]) => !searchParams.has(key))
-    );
+    if (!initial || Object.keys(initial).length === 0) return;
 
     const accumulator = new URLSearchParams();
-    populateParams(toUpdate, accumulator);
-    if (accumulator.entries.length === 0) return; // If we don't have anything to update, return early
+    populateParams(initial, accumulator);
+    if (accumulator.size === 0) return;
 
     // Add currentParams to avoid overwriting params set by other components
     const currentParams = getAllCurrentParams(searchParams);
@@ -175,9 +167,9 @@ const useSearchParamsState = ({
         search: accumulator.toString(),
       },
       { replace: true }
-    ); // replace so that browser history acts normal
+    ); // replace so that this doesn't create a new entry in browser history
 
-    // Only run on mount, so the user can overwrite initial values.
+    // Only run on mount, otherwise the effect prevents the user from overwriting initial values.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -212,7 +204,7 @@ const useSearchParamsState = ({
           }
         }
       }
-      setSearchParams({ ...currentParams, ...newValues }, { replace: false });
+      setSearchParams({ ...currentParams, ...newValues });
     },
     [paramsDefinition, searchParams, setSearchParams]
   );

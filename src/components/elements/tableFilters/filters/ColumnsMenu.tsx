@@ -7,6 +7,7 @@ import useIntermediateState from '@/hooks/useIntermediateState';
 
 export interface TableColumnsMenuProps {
   columns: { value: string; header: ReactNode; defaultHidden: boolean }[];
+  defaultColumns: string[];
   columnsValue: string[];
   setColumnsValue: (value: string[]) => any;
 }
@@ -14,15 +15,13 @@ export interface TableColumnsMenuProps {
 const TableColumnsMenu = memo(
   ({
     columns,
+    defaultColumns,
     columnsValue,
     setColumnsValue,
   }: TableColumnsMenuProps): JSX.Element => {
-    const defaultValue = columns
-      .filter((col) => !col.defaultHidden)
-      .map((col) => col.value);
     const { state, setState, reset, cancel } = useIntermediateState(
       columnsValue,
-      defaultValue
+      defaultColumns
     );
 
     return (
@@ -34,7 +33,7 @@ const TableColumnsMenu = memo(
         onCancel={cancel}
         onApply={() => setColumnsValue(state)}
         onReset={() => {
-          setColumnsValue(defaultValue);
+          setColumnsValue(defaultColumns);
           reset();
         }}
       >

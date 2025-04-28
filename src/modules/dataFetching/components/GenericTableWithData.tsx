@@ -150,23 +150,9 @@ const GenericTableWithData = <
   const {
     optionalColumns,
     includedOptionalColumns,
-    setIncludedOptionalColumns,
     optionalQueryVariables,
+    optionalColumnsMenuProps,
   } = useOptionalColumns<RowDataType, QueryVariables>({ columns: columnsProp });
-
-  const optionalColumnsProps = useMemo(() => {
-    return !isEmpty(optionalColumns)
-      ? {
-          columns: optionalColumns.map((col) => ({
-            value: col.key,
-            header: col.header,
-            defaultHidden: !!col.optional?.defaultHidden,
-          })),
-          columnsValue: includedOptionalColumns,
-          setColumnsValue: setIncludedOptionalColumns,
-        }
-      : undefined;
-  }, [includedOptionalColumns, optionalColumns, setIncludedOptionalColumns]);
 
   // if the filters change, return to the first page
   useEffect(() => {
@@ -174,13 +160,13 @@ const GenericTableWithData = <
   }, [filterValues]);
 
   const filterProps = useMemo(() => {
-    return !isEmpty(filters)
-      ? {
-          filters,
-          filterValues,
-          setFilterValues,
-        }
-      : undefined;
+    if (!filters || Object.keys(filters).length === 0) return;
+
+    return {
+      filters,
+      filterValues,
+      setFilterValues,
+    };
   }, [filterValues, filters]);
 
   const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
@@ -376,7 +362,7 @@ const GenericTableWithData = <
                     noSort={noSort}
                     loading={loading && !data}
                     tableDisplayOptionButtons={tableDisplayOptionButtons}
-                    optionalColumns={optionalColumnsProps}
+                    optionalColumns={optionalColumnsMenuProps}
                     sorting={
                       sortOptions
                         ? {
