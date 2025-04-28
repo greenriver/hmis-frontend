@@ -4920,15 +4920,19 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "LIST",
+              "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CeReferralSwimlane",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeReferralSwimlane",
+                    "ofType": null
+                  }
                 }
               }
             },
@@ -5164,15 +5168,19 @@
             "description": "User(s) currently assigned to this step",
             "args": [],
             "type": {
-              "kind": "LIST",
+              "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ApplicationUser",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ApplicationUser",
+                    "ofType": null
+                  }
                 }
               }
             },
@@ -5272,9 +5280,13 @@
             "description": "Swimlane for this step, which holds information about potential step participants",
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "CeReferralSwimlane",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CeReferralSwimlane",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -40793,22 +40805,6 @@
             "args": [
               {
                 "name": "id",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "referralId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",

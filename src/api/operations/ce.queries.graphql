@@ -66,8 +66,8 @@ query GetCeReferral($id: ID!) {
   }
 }
 
-query GetCeReferralStep($id: ID!, $referralId: ID!) {
-  ceReferralStep(id: $id, referralId: $referralId) {
+query GetCeReferralStep($id: ID!) {
+  ceReferralStep(id: $id) {
     ...CeReferralStepFields
   }
 }
