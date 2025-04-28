@@ -44,7 +44,6 @@ const ReferralStep: React.FC<Props> = ({}) => {
   } = useGetCeReferralStepQuery({
     variables: {
       id: stepId,
-      referralId: referralId,
     },
   });
 
