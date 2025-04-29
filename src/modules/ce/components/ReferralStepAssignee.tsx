@@ -22,7 +22,7 @@ const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
       });
     }
 
-    return <Chip size='small' label={swimlane.name} />;
+    return <Chip size='small' label={swimlane} />;
   }, [swimlane, assignees]);
 
   return (

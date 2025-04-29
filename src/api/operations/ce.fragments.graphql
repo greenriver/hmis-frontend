@@ -113,10 +113,7 @@ fragment CeReferralStepSummaryFields on CeReferralStep {
   stepId
   name
   status
-  swimlane {
-    id
-    name
-  }
+  swimlane
   assignees {
     id
     name

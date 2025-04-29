@@ -789,6 +789,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'submittedValues',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
+      {
+        name: 'swimlane',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
     ],
   },
   {

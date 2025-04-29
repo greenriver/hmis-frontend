@@ -5277,14 +5277,14 @@
           },
           {
             "name": "swimlane",
-            "description": "Swimlane for this step, which holds information about potential step participants",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "CeReferralSwimlane",
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               }
             },
