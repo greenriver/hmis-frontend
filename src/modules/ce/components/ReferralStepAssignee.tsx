@@ -11,9 +11,9 @@ const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
   const { participants } = swimlane || {};
 
   const content = useMemo(() => {
-    if (!swimlane) return null;
-
-    if (assignees && assignees.length > 0) {
+    // Assignees are the user(s) currently assigned to this step.
+    // (For example, a user who clicked "start step" already)
+    if (assignees.length > 0) {
       return assignees.map((assignee) => {
         return (
           <Fragment key={assignee.id}>
@@ -23,6 +23,9 @@ const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
       });
     }
 
+    // Participants are users who are contacts on this step's swimlane.
+    // (For example, a user who was added using the Assign Contacts modal.
+    // They may not have interacted with this particular step at all yet.)
     if (participants && participants.length > 0) {
       return participants.map((participant) => {
         return (
@@ -36,12 +39,11 @@ const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
     return <Chip size='small' label={swimlane.name} />;
   }, [participants, swimlane, assignees]);
 
-  if (swimlane)
-    return (
-      <Typography component='div' variant='body2'>
-        <strong>Assigned</strong> {content}
-      </Typography>
-    );
+  return (
+    <Typography component='div' variant='body2'>
+      <strong>Assigned</strong> {content}
+    </Typography>
+  );
 };
 
 export default ReferralStepAssignee;

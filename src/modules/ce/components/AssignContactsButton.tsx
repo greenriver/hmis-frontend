@@ -62,7 +62,7 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
 
   return (
     <>
-      {!referral.swimlanes || referral.swimlanes?.length === 0 ? (
+      {referral.swimlanes.length === 0 ? (
         // If this referral has no swimlanes, disable the button.
         // For now this will only happen if the referral also has no tasks,
         // because the schema requires swimlane to be non-null on tasks.
