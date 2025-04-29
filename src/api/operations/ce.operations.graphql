@@ -83,6 +83,10 @@ mutation AssignParticipants(
   ) {
     referral {
       ...CeReferralWithSwimlanes
+      steps {
+        # Re-resolve steps to update cache in case assignees have changed
+        ...CeReferralStepSummaryFields
+      }
     }
   }
 }
