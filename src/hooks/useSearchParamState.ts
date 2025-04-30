@@ -152,8 +152,12 @@ const useSearchParamsState = ({
 
     if (!initial || Object.keys(initial).length === 0) return;
 
+    const initialParamsToUpdate: Record<string, any> = Object.fromEntries(
+      // Find any key/value pairs that are in initial, but not in searchParams
+      Object.entries(initial).filter(([key]) => !searchParams.has(key))
+    );
     const accumulator = new URLSearchParams();
-    populateParams(initial, accumulator);
+    populateParams(initialParamsToUpdate, accumulator);
     if (accumulator.size === 0) return;
 
     // Add currentParams to avoid overwriting params set by other components
