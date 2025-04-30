@@ -18,6 +18,7 @@ import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
+import ContactsIcon from '@mui/icons-material/Contacts';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -72,6 +73,7 @@ export {
   AutorenewRoundedIcon as ChangeRelationshipIcon,
   CheckRoundedIcon as CheckIcon,
   ClearIcon as ClearIcon,
+  ContactsIcon as ContactsIcon,
   Person as ClientIcon,
   CloseIcon as CloseIcon,
   MediationRoundedIcon as ConditionalIcon,
