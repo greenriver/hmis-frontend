@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import FormSelect from '@/modules/form/components/FormSelect';
 import {
   CeReferralSwimlaneFieldsFragment,
@@ -9,8 +9,8 @@ import {
 
 interface Props {
   swimlane: CeReferralSwimlaneFieldsFragment;
-  users: string[];
-  setUsers: (userIds: string[]) => void;
+  users: PickListOption[];
+  setUsers: (userIds: PickListOption[]) => void;
 }
 const AssignContactFormItem: React.FC<Props> = ({
   swimlane,
@@ -23,21 +23,15 @@ const AssignContactFormItem: React.FC<Props> = ({
     error: staffPickListError,
   } = useGetPickListQuery({
     variables: {
+      // TODO(#7506) (or later), add a new pick list type ELIGIBLE_REFERRAL_PARTICIPANT_USERS
+      // and pass in the projectId to get users who are allowed to participate in this referral
       pickListType: PickListType.Users,
     },
   });
 
-  const selectedUsers = useMemo(
-    () =>
-      users.map((userId) => {
-        return { code: userId };
-      }),
-    [users]
-  );
-
   const handleChange = useCallback(
     (_event: React.ChangeEvent<unknown>, options: PickListOption[]) => {
-      setUsers(options.map((option) => option.code));
+      setUsers(options);
     },
     [setUsers]
   );
@@ -46,7 +40,7 @@ const AssignContactFormItem: React.FC<Props> = ({
 
   return (
     <FormSelect
-      value={selectedUsers}
+      value={users}
       placeholder={'Select Staff'}
       label={swimlane.name}
       loading={staffPickListLoading}

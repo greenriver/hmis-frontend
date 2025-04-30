@@ -14,6 +14,7 @@ import { ContactsIcon } from '@/components/elements/SemanticIcons';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import {
   CeReferralFieldsFragment,
+  PickListOption,
   useAssignParticipantsMutation,
 } from '@/types/gqlTypes';
 
@@ -27,21 +28,28 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
     return reduce(
       referral.swimlanes,
       (acc, swimlane) => {
-        acc[swimlane.id] = swimlane.participants.map((user) => user.id);
+        acc[swimlane.id] = swimlane.participants.map((user) => {
+          return {
+            code: user.id,
+            label: user.name,
+          };
+        });
         return acc;
       },
-      {} as Record<string, string[]>
+      {} as Record<string, PickListOption[]>
     );
   }, [referral.swimlanes]);
 
-  // `values` maps swimlaneId to [userIds]
-  const [values, setValues] = useState<Record<string, string[]>>(initialValues);
+  // `values` maps swimlaneId to PickListOption[]
+  // where PickListOption looks like: { code: <user ID>, label: <user name> }
+  const [values, setValues] =
+    useState<Record<string, PickListOption[]>>(initialValues);
 
   const handleChangeValue = useCallback(
-    (swimlaneId: string, userIds: string[]) => {
-      setValues((prevValues: Record<string, string[]>) => ({
+    (swimlaneId: string, users: PickListOption[]) => {
+      setValues((prevValues: Record<string, PickListOption[]>) => ({
         ...prevValues,
-        [swimlaneId]: userIds,
+        [swimlaneId]: users,
       }));
     },
     [setValues]
@@ -52,7 +60,7 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
       referralId: referral.id,
       // On submit, map the `values` object into the shape the mutation is expecting: [{ userId, swimlaneId }]
       participants: Object.entries(values).flatMap(([swimlaneId, userIds]) =>
-        userIds.map((userId) => ({ userId, swimlaneId }))
+        userIds.map(({ code }) => ({ userId: code, swimlaneId }))
       ),
     },
     onCompleted: () => setOpen(false),
