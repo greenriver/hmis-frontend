@@ -110,7 +110,6 @@ const UserAuditPage: React.FC<Props> = ({
         ariaLabel={'audit history types'}
         currentTab={userHistoryType}
         onChangeTab={(key) => handleHistoryTypeToggleChange(key)}
-        updateUrlHash={false}
       />
     </>
   );
