@@ -1,6 +1,6 @@
 import { Box, SxProps, Tab, Tabs } from '@mui/material';
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { ReactNode, useMemo } from 'react';
+import useHashState from '@/hooks/useHashState.ts';
 
 export type TabDefinition = {
   title: string;
@@ -14,60 +14,42 @@ interface CommonTabsProps {
   sx?: SxProps;
   currentTab?: string;
   onChangeTab?: (tab: string) => void;
-  updateUrlHash?: boolean; // If true, the URL hash will be updated to match the selected tab.
 }
 
-// CommonTabs wraps the MUI Tabs component. It can be controlled or uncontrolled,
-// so callers can choose whether to delegate controlling the state of which tab is selected.
+// CommonTabs wraps the MUI Tabs component. It can be controlled or uncontrolled.
+// If uncontrolled, it stores state using hash params.
+// If controlled, the parent is responsible for managing the state (see UserAuditPage for example).
+// Managing state internally *without* hash params is currently not supported, but we can add this if the need arises.
 const CommonTabs: React.FC<CommonTabsProps> = ({
   sx,
   ariaLabel,
   tabDefinitions,
   currentTab,
   onChangeTab,
-  updateUrlHash = true,
 }) => {
-  const { pathname, search, hash } = useLocation();
-  const navigate = useNavigate();
-
-  // The prop for `currentTab` is a string (key), but internally MUI Tabs uses an number (index).
-  // If a hash is already in the url, find the index for that tab and pass it in as the initial value to the useState call.
-  const initialIndex = useMemo(() => {
-    const initialKey = hash.replace(/^#/, '');
-    const index = tabDefinitions.findIndex((t) => t.key === initialKey);
-
-    return Math.max(index, 0); // If we didn't find a tab definition with this key (index === -1), just return 0
-  }, [hash, tabDefinitions]);
-
-  const [internalValue, setInternalValue] = useState(initialIndex);
-
-  const currentIndex = useMemo(() => {
-    if (!currentTab) return internalValue;
-    const index = tabDefinitions.findIndex((t) => t.key === currentTab);
-
-    return Math.max(index, 0);
-  }, [currentTab, internalValue, tabDefinitions]);
+  const [internalValue, setInternalValue] = useHashState({
+    initial: tabDefinitions[0].key,
+    skip: !!onChangeTab,
+  });
 
   const currentKey = useMemo(() => {
     if (currentTab) return currentTab;
 
-    return tabDefinitions[internalValue].key;
-  }, [currentTab, internalValue, tabDefinitions]);
+    return internalValue;
+  }, [currentTab, internalValue]);
 
-  useEffect(() => {
-    if (!updateUrlHash) return;
-    // If no hash is present on the path, set it to currentKey. (Should be `tabDefinitions[0].key` on pageload)
-    if (!hash) {
-      navigate({ pathname, search, hash: currentKey }, { replace: true });
-    }
-  }, [currentKey, updateUrlHash, hash, pathname, search, navigate]);
+  const currentIndex = useMemo(() => {
+    const index = tabDefinitions.findIndex((t) => t.key === currentKey);
+
+    return Math.max(index, 0); // If we didn't find a tab definition with this key (index === -1), just return 0
+  }, [currentKey, tabDefinitions]);
 
   const handleChange = (_event: React.SyntheticEvent, newIndex: number) => {
+    const newKey = tabDefinitions[newIndex].key;
     if (onChangeTab) {
-      const newKey = tabDefinitions[newIndex].key;
       onChangeTab(newKey); // Controlled mode: notify parent, passing the key
     } else {
-      setInternalValue(newIndex); // Uncontrolled mode: manage internally, using the index
+      setInternalValue(newKey); // Uncontrolled mode: manage internally
     }
   };
 
@@ -85,10 +67,10 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
               label={<strong>{t.title}</strong>}
               id={`tab-${t.key}`}
               aria-controls={`tabpanel-${t.key}`}
-              {...(updateUrlHash
-                ? // _self mitigates an open bug with Storybook; see https://github.com/storybookjs/storybook/issues/15934
-                  { href: `#${t.key}`, target: '_self' }
-                : {})}
+              {...(onChangeTab
+                ? {}
+                : // _self mitigates an open bug with Storybook; see https://github.com/storybookjs/storybook/issues/15934
+                  { href: `#${t.key}`, target: '_self' })}
             />
           ))}
         </Tabs>
