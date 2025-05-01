@@ -1,3 +1,4 @@
+import { TimelapseRounded } from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import AddchartRoundedIcon from '@mui/icons-material/AddchartRounded';
@@ -11,7 +12,9 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CallSplitRounded from '@mui/icons-material/CallSplitRounded';
+import CancelIcon from '@mui/icons-material/Cancel';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,7 +33,9 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
 import Home from '@mui/icons-material/Home';
 import ImageIcon from '@mui/icons-material/Image';
+import LayersRounded from '@mui/icons-material/LayersRounded';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
+import ListRounded from '@mui/icons-material/ListRounded';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MediationRoundedIcon from '@mui/icons-material/MediationRounded';
 import MergeTypeRounded from '@mui/icons-material/MergeTypeRounded';
@@ -116,4 +121,9 @@ export {
   Draw as SignatureIcon,
   CallSplitRounded as SplitIcon,
   ArrowDropUpRoundedIcon as UpIcon,
+  LayersRounded as DetailsIcon,
+  ListRounded as TasksIcon,
+  CheckCircleRounded as CompletedIcon,
+  CancelIcon as DeclinedIcon,
+  TimelapseRounded as InProgressIcon,
 };

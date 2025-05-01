@@ -1,6 +1,8 @@
 import { Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
+import { generatePath } from 'react-router-dom';
 import Loading from '@/components/elements/Loading';
+import Wayfinder from '@/components/elements/navigation/Wayfinder';
 import { JoinIcon } from '@/components/elements/SemanticIcons';
 import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
 import {
@@ -12,8 +14,11 @@ import {
 import AddRelationshipsStep from '@/modules/household/components/householdActions/AddRelationshipsStep';
 import JoinHouseholdReview from '@/modules/household/components/householdActions/JoinHouseholdReview';
 import JoinHouseholdSelectClients from '@/modules/household/components/householdActions/JoinHouseholdSelectClients';
-import SuccessWayfindingStep from '@/modules/household/components/householdActions/SuccessWayfindingStep';
 import { usePerformJoinHousehold } from '@/modules/household/hooks/usePerformJoinHousehold';
+import {
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+} from '@/routes/routes';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -125,6 +130,10 @@ const JoinHouseholdDialog = ({
     remainingHousehold,
   } = usePerformJoinHousehold({ onSuccess });
 
+  const remainingHoh = useMemo(() => {
+    return findHohOrRep(remainingHousehold?.householdClients || []);
+  }, [remainingHousehold?.householdClients]);
+
   const onSubmit = useCallback(
     () =>
       performJoinHousehold({
@@ -209,13 +218,35 @@ const JoinHouseholdDialog = ({
       {
         key: 'success',
         content: (
-          <SuccessWayfindingStep
-            title={'Successful Join'}
-            description={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}.`}
-            primaryClientName={receivingHohName}
-            secondary={findHohOrRep(remainingHousehold?.householdClients || [])}
-            project={project}
-            onClose={onClose}
+          <Wayfinder
+            alertTitle='Successful Join'
+            alertText={`${stringifyHousehold(joiningClients)} ${joiningClients.length > 1 ? 'have' : 'has'} been successfully joined to ${receivingHohName}’s Enrollment at ${project.projectName}.`}
+            items={[
+              {
+                title: `Return to ${receivingHohName}’s Enrollment`,
+                onClick: onClose,
+              },
+              ...(remainingHoh
+                ? [
+                    {
+                      title: `View ${clientBriefName(remainingHoh.client)}'s Enrollment`,
+                      to: generatePath(
+                        EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                        {
+                          clientId: remainingHoh.client.id,
+                          enrollmentId: remainingHoh.enrollment.id,
+                        }
+                      ),
+                    },
+                  ]
+                : []),
+              {
+                title: `View Enrollments at ${project.projectName}`,
+                to: generatePath(ProjectDashboardRoutes.PROJECT_ENROLLMENTS, {
+                  projectId: project.id,
+                }),
+              },
+            ]}
           />
         ),
       },
@@ -228,11 +259,12 @@ const JoinHouseholdDialog = ({
       missingRelationshipsProps,
       onClose,
       onSubmit,
-      project,
+      project.id,
+      project.projectName,
       receivingHohName,
       receivingHousehold,
       relationships,
-      remainingHousehold?.householdClients,
+      remainingHoh,
       setSelectedClients,
     ]
   );

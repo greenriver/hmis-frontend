@@ -1,9 +1,10 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Box, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
+import CommonStickyBar from '../../CommonStickyBar';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -26,28 +27,17 @@ interface Props {
 export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
   children,
 }) => (
-  <AppBar
-    component='div'
-    position='sticky'
-    color='default'
-    elevation={0}
+  <CommonStickyBar
+    height={CONTEXT_HEADER_HEIGHT}
+    top={STICKY_BAR_HEIGHT}
+    isStickyOnMobile={true}
     sx={{
-      borderTop: 'unset',
-      borderLeft: 'unset',
-      borderRight: 'unset',
-      height: CONTEXT_HEADER_HEIGHT,
       alignItems: 'stretch',
       justifyContent: 'center',
-      top: STICKY_BAR_HEIGHT,
-      backgroundColor: 'white',
-      borderBottomWidth: '1px',
-      borderBottomColor: 'borders.light',
-      borderBottomStyle: 'solid',
-      py: 0,
     }}
   >
     {children}
-  </AppBar>
+  </CommonStickyBar>
 );
 
 const ContextHeader: React.FC<Props> = ({

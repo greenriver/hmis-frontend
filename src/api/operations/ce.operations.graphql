@@ -1,0 +1,66 @@
+mutation CreateCeOpportunity($projectId: ID!, $input: CeOpportunityInput!) {
+  createCeOpportunity(projectId: $projectId, input: $input) {
+    opportunity {
+      ...CeOpportunitySummaryFields
+    }
+  }
+}
+
+mutation CreateCeReferral(
+  $opportunityId: ID!
+  $clientId: ID!
+  $input: CeReferralInput!
+) {
+  createCeReferral(
+    opportunityId: $opportunityId
+    clientId: $clientId
+    input: $input
+  ) {
+    referral {
+      ...CeReferralSummaryFields
+    }
+  }
+}
+
+mutation StartCeReferralStep($referralId: ID!, $stepId: ID!) {
+  startCeReferralStep(referralId: $referralId, stepId: $stepId) {
+    step {
+      ...CeReferralStepFields
+    }
+  }
+}
+
+mutation SubmitCeReferralStep(
+  $referralId: ID!
+  $stepId: ID!
+  $input: JsonObject!
+  $confirmed: Boolean
+  $formDefinitionId: ID!
+) {
+  submitCeReferralStep(
+    referralId: $referralId
+    stepId: $stepId
+    input: $input
+    confirmed: $confirmed
+    formDefinitionId: $formDefinitionId
+  ) {
+    step {
+      ...CeReferralStepFields
+    }
+    referral {
+      ...CeReferralFields
+      opportunity {
+        ...CeOpportunityFields
+      }
+      targetEnrollment {
+        id
+        client {
+          id
+        }
+      }
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

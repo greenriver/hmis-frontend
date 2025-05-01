@@ -141,6 +141,25 @@ export const useProjectBreadcrumbConfig = (
       [ProjectDashboardRoutes.CE_PARTICIPATION]: {
         title: 'CE Participation',
       },
+      [ProjectDashboardRoutes.CE]: {
+        title: 'Coordinated Entry',
+      },
+      [ProjectDashboardRoutes.OPPORTUNITY]: {
+        title: 'Opportunity',
+        parent: ProjectDashboardRoutes.CE,
+      },
+      [ProjectDashboardRoutes.REFERRAL_DETAILS]: {
+        title: 'Referral',
+        parent: ProjectDashboardRoutes.OPPORTUNITY,
+      },
+      [ProjectDashboardRoutes.REFERRAL_STEPS]: {
+        title: 'Referral',
+        parent: ProjectDashboardRoutes.OPPORTUNITY,
+      },
+      [ProjectDashboardRoutes.REFERRAL_STEP]: {
+        title: 'Referral',
+        parent: ProjectDashboardRoutes.OPPORTUNITY,
+      },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;
     return buildDefaultCrumbs(ProjectDashboardRoutes, overrides, projectRoot);

@@ -75,6 +75,19 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  CeOpportunityStatus: { closed: 'closed', locked: 'locked', open: 'open' },
+  CeReferralStatus: {
+    accepted: 'accepted',
+    in_progress: 'in_progress',
+    initialized: 'initialized',
+    rejected: 'rejected',
+  },
+  CeReferralStepStatus: {
+    available: 'available',
+    completed: 'completed',
+    in_progress: 'in_progress',
+    unavailable: 'unavailable',
+  },
   ClientAddressType: { both: 'Both', physical: 'Physical', postal: 'Postal' },
   ClientAddressUse: {
     home: 'Home',
@@ -537,6 +550,7 @@ export const HmisEnums = {
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
     CE_PARTICIPATION: 'CE participation',
+    CE_REFERRAL_STEP: 'CE referral step',
     CLIENT: 'Client',
     CLIENT_ALERT: 'Client alert',
     CLIENT_DETAIL: 'Client detail',
@@ -975,6 +989,7 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
     USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
+    WORKFLOW_DEFINITION_TEMPLATES: 'Templates for CE workflow definitions',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',
@@ -1449,6 +1464,7 @@ export const HmisEnums = {
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
     CE_PARTICIPATION: 'CE participation',
+    CE_REFERRAL_STEP: 'CE referral step',
     CLIENT: 'Client',
     CLIENT_DETAIL: 'Client detail',
     CURRENT_LIVING_SITUATION: 'Current living situation',

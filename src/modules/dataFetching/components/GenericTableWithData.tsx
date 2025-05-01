@@ -324,6 +324,12 @@ const GenericTableWithData = <
           tablePaginationProps={
             nonTablePagination ? undefined : tablePaginationProps
           }
+          tableContainerProps={{
+            sx: {
+              // makes sure border radius corners aren't cut off when top toolbar isn't shown
+              borderRadius: 1,
+            },
+          }}
           columns={showColumnDefs}
           noData={loading ? 'Loading...' : noDataValue}
           vertical={vertical}
