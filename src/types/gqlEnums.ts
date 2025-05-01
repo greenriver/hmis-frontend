@@ -75,6 +75,10 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  CeOpportunitySortOption: {
+    DATE_AVAILABLE_EARLIEST_FIRST: 'Date Available, earliest first',
+    DATE_AVAILABLE_LATEST_FIRST: 'Date Available, latest first',
+  },
   CeOpportunityStatus: { closed: 'Closed', locked: 'Locked', open: 'Open' },
   CeReferralStatus: {
     accepted: 'Accepted',
@@ -2104,5 +2108,11 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     NO: 'No',
     WORKER_DOES_NOT_KNOW: 'Worker does not know',
+  },
+  WorkflowDefinitionTemplate: {
+    admin_approve_denial: 'Admin Approve Denial',
+    enrollment_creator: 'Enrollment Creator',
+    no_tasks: 'No Tasks',
+    one_task: 'One Task',
   },
 };

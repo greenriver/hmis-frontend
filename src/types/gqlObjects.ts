@@ -574,6 +574,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'dateAvailable',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'expiresAt',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
@@ -587,6 +591,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'organizationName',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6859,6 +6871,79 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'CeOpportunityFilterOptions',
+    args: [
+      {
+        name: 'availableOnDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'organization',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'status',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeOpportunityStatus', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'workflowTemplate',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'WorkflowDefinitionTemplate',
+              ofType: null,
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeOpportunityInput',
     args: [
       {
@@ -7026,6 +7111,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ClientEligibleCeOpportunityFilterOptions',
     args: [
+      {
+        name: 'organization',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
       {
         name: 'project',
         type: {

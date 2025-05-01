@@ -603,10 +603,12 @@ export type CeOpportunity = {
   candidates: CeCandidatesPaginated;
   candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
+  dateAvailable?: Maybe<Scalars['ISO8601Date']['output']>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  organizationName: Scalars['String']['output'];
   priorityScheme?: Maybe<CeMatchRule>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
@@ -614,6 +616,7 @@ export type CeOpportunity = {
   /** Active or accepted referral */
   referral?: Maybe<CeReferral>;
   status: CeOpportunityStatus;
+  unit?: Maybe<Unit>;
 };
 
 export type CeOpportunityCandidatesArgs = {
@@ -621,10 +624,27 @@ export type CeOpportunityCandidatesArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type CeOpportunityFilterOptions = {
+  availableOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  status?: InputMaybe<Array<CeOpportunityStatus>>;
+  workflowTemplate?: InputMaybe<Array<WorkflowDefinitionTemplate>>;
+};
+
 export type CeOpportunityInput = {
   name: Scalars['String']['input'];
   templateId: Scalars['ID']['input'];
 };
+
+/** Opportunity Sorting Options */
+export enum CeOpportunitySortOption {
+  /** Date Available, earliest first */
+  DateAvailableEarliestFirst = 'DATE_AVAILABLE_EARLIEST_FIRST',
+  /** Date Available, latest first */
+  DateAvailableLatestFirst = 'DATE_AVAILABLE_LATEST_FIRST',
+}
 
 export enum CeOpportunityStatus {
   /** Closed */
@@ -895,6 +915,7 @@ export type ClientEligibleCeOpportunitiesArgs = {
   filters?: InputMaybe<ClientEligibleCeOpportunityFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CeOpportunitySortOption>;
 };
 
 /** HUD Client */
@@ -1165,6 +1186,7 @@ export enum ClientDashboardFeature {
 }
 
 export type ClientEligibleCeOpportunityFilterOptions = {
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
 };
@@ -5903,6 +5925,7 @@ export type ProjectCeOpportunitiesArgs = {
   filters?: InputMaybe<ProjectCeOpportunityFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CeOpportunitySortOption>;
 };
 
 export type ProjectCeParticipationsArgs = {
@@ -6197,6 +6220,7 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
+  ceOpportunities: CeOpportunitiesPaginated;
   ceOpportunity?: Maybe<CeOpportunity>;
   ceReferral?: Maybe<CeReferral>;
   ceReferralStep?: Maybe<CeReferralStep>;
@@ -6276,6 +6300,13 @@ export type QueryAssessmentFormDefinitionArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   projectId: Scalars['ID']['input'];
   role?: InputMaybe<AssessmentRole>;
+};
+
+export type QueryCeOpportunitiesArgs = {
+  filters?: InputMaybe<CeOpportunityFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CeOpportunitySortOption>;
 };
 
 export type QueryCeOpportunityArgs = {
@@ -8415,6 +8446,18 @@ export enum WorkerResponse {
   WorkerDoesNotKnow = 'WORKER_DOES_NOT_KNOW',
   /** (1) Yes */
   Yes = 'YES',
+}
+
+/** Workflow Definition Templates */
+export enum WorkflowDefinitionTemplate {
+  /** Admin Approve Denial */
+  AdminApproveDenial = 'admin_approve_denial',
+  /** Enrollment Creator */
+  EnrollmentCreator = 'enrollment_creator',
+  /** No Tasks */
+  NoTasks = 'no_tasks',
+  /** One Task */
+  OneTask = 'one_task',
 }
 
 /** HUD Youth Education Status */
@@ -16028,6 +16071,22 @@ export type CeOpportunityFieldsFragment = {
   } | null;
 };
 
+export type CeOpportunityAdminFieldsFragment = {
+  __typename?: 'CeOpportunity';
+  projectType: ProjectType;
+  organizationName: string;
+  dateAvailable?: string | null;
+  id: string;
+  name: string;
+  categories: Array<string>;
+  status: CeOpportunityStatus;
+  active: boolean;
+  expiresAt?: string | null;
+  projectId: string;
+  projectName: string;
+  unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+};
+
 export type ClientCeOpportunitySummaryFieldsFragment = {
   __typename?: 'CeOpportunity';
   candidatesGeneratedAt?: string | null;
@@ -18988,6 +19047,38 @@ export type GetClientEligibleOpportunitiesQuery = {
       }>;
     };
   } | null;
+};
+
+export type GetAdminCeOpportunitiesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeOpportunityFilterOptions>;
+  sortOrder?: InputMaybe<CeOpportunitySortOption>;
+}>;
+
+export type GetAdminCeOpportunitiesQuery = {
+  __typename?: 'Query';
+  ceOpportunities: {
+    __typename?: 'CeOpportunitiesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeOpportunity';
+      projectType: ProjectType;
+      organizationName: string;
+      dateAvailable?: string | null;
+      id: string;
+      name: string;
+      categories: Array<string>;
+      status: CeOpportunityStatus;
+      active: boolean;
+      expiresAt?: string | null;
+      projectId: string;
+      projectName: string;
+      unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    }>;
+  };
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -44809,6 +44900,19 @@ export const CeOpportunityFieldsFragmentDoc = gql`
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeMatchRuleFieldsFragmentDoc}
 `;
+export const CeOpportunityAdminFieldsFragmentDoc = gql`
+  fragment CeOpportunityAdminFields on CeOpportunity {
+    ...CeOpportunitySummaryFields
+    projectType
+    organizationName
+    dateAvailable
+    unit {
+      id
+      name
+    }
+  }
+  ${CeOpportunitySummaryFieldsFragmentDoc}
+`;
 export const ClientCeOpportunitySummaryFieldsFragmentDoc = gql`
   fragment ClientCeOpportunitySummaryFields on CeOpportunity {
     candidatesGeneratedAt
@@ -49482,6 +49586,103 @@ export type GetClientEligibleOpportunitiesSuspenseQueryHookResult = ReturnType<
 export type GetClientEligibleOpportunitiesQueryResult = Apollo.QueryResult<
   GetClientEligibleOpportunitiesQuery,
   GetClientEligibleOpportunitiesQueryVariables
+>;
+export const GetAdminCeOpportunitiesDocument = gql`
+  query GetAdminCeOpportunities(
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: CeOpportunityFilterOptions = null
+    $sortOrder: CeOpportunitySortOption = null
+  ) {
+    ceOpportunities(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: $sortOrder
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeOpportunityAdminFields
+      }
+    }
+  }
+  ${CeOpportunityAdminFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetAdminCeOpportunitiesQuery__
+ *
+ * To run a query within a React component, call `useGetAdminCeOpportunitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminCeOpportunitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminCeOpportunitiesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useGetAdminCeOpportunitiesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAdminCeOpportunitiesQuery,
+    GetAdminCeOpportunitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAdminCeOpportunitiesQuery,
+    GetAdminCeOpportunitiesQueryVariables
+  >(GetAdminCeOpportunitiesDocument, options);
+}
+export function useGetAdminCeOpportunitiesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAdminCeOpportunitiesQuery,
+    GetAdminCeOpportunitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAdminCeOpportunitiesQuery,
+    GetAdminCeOpportunitiesQueryVariables
+  >(GetAdminCeOpportunitiesDocument, options);
+}
+export function useGetAdminCeOpportunitiesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetAdminCeOpportunitiesQuery,
+        GetAdminCeOpportunitiesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAdminCeOpportunitiesQuery,
+    GetAdminCeOpportunitiesQueryVariables
+  >(GetAdminCeOpportunitiesDocument, options);
+}
+export type GetAdminCeOpportunitiesQueryHookResult = ReturnType<
+  typeof useGetAdminCeOpportunitiesQuery
+>;
+export type GetAdminCeOpportunitiesLazyQueryHookResult = ReturnType<
+  typeof useGetAdminCeOpportunitiesLazyQuery
+>;
+export type GetAdminCeOpportunitiesSuspenseQueryHookResult = ReturnType<
+  typeof useGetAdminCeOpportunitiesSuspenseQuery
+>;
+export type GetAdminCeOpportunitiesQueryResult = Apollo.QueryResult<
+  GetAdminCeOpportunitiesQuery,
+  GetAdminCeOpportunitiesQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(

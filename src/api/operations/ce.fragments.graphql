@@ -22,6 +22,17 @@ fragment CeOpportunityFields on CeOpportunity {
   }
 }
 
+fragment CeOpportunityAdminFields on CeOpportunity {
+  ...CeOpportunitySummaryFields
+  projectType
+  organizationName
+  dateAvailable
+  unit {
+    id
+    name
+  }
+}
+
 fragment ClientCeOpportunitySummaryFields on CeOpportunity {
   candidatesGeneratedAt
   ...CeOpportunitySummaryFields

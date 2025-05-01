@@ -15,6 +15,7 @@ export const Routes = {
 
 const adminDashboardRoutes = {
   CLIENT_MERGE_HISTORY: 'client-merge-history',
+  COORDINATED_ENTRY: 'coordinated-entry',
   PERFORM_CLIENT_MERGES: 'client-merge-history/candidates',
   AC_DENIALS: 'referral-denials',
   AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',

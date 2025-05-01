@@ -51,6 +51,7 @@ import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage
 import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
+import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinatedEntry';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import Opportunity from '@/modules/ce/components/Opportunity';
 import ProjectCePage from '@/modules/ce/components/ProjectCePage';
@@ -808,6 +809,14 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canMergeClients'>
                 <AdminClientMerge />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.COORDINATED_ENTRY,
+            element: (
+              <RootPermissionsFilter permissions='canViewCoordinatedEntry'>
+                <AdminCoordinatedEntry />
               </RootPermissionsFilter>
             ),
           },
