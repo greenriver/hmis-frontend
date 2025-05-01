@@ -6,6 +6,7 @@ import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer
 import LoadingButton from '@/components/elements/LoadingButton';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ValidationErrorSnackbarAlert from '@/modules/errors/components/ValidationErrorSnackbarAlert';
 import {
   BulkAssignServiceInput,
   BulkServicesClientSearchQuery,
@@ -31,7 +32,8 @@ const MultiAssignServiceButton: React.FC<Props> = ({
   clients,
   queryVariables,
 }) => {
-  const { bulkAssign, bulkRemove, apolloError } = useBulkAssignMutations();
+  const { bulkAssign, bulkRemove, apolloError, validationErrors } =
+    useBulkAssignMutations();
 
   // Use internal loading state, so that buttons appear as if they are loading even while table refetches.
   // We never clear the loading state in this component, except on error.
@@ -39,8 +41,9 @@ const MultiAssignServiceButton: React.FC<Props> = ({
   const [loading, setLoading] = useState<LoadingStates>(initialLoadingState);
 
   useEffect(() => {
-    if (apolloError) setLoading(initialLoadingState);
-  }, [apolloError]);
+    if (apolloError || validationErrors.length > 0)
+      setLoading(initialLoadingState);
+  }, [apolloError, validationErrors]);
 
   const { clientIdsToAssign, clientIdsToRemove, numToEnroll } = useMemo(() => {
     const toAssign: string[] = [];
@@ -127,6 +130,9 @@ const MultiAssignServiceButton: React.FC<Props> = ({
           </LoadingButton>
         </ButtonTooltipContainer>
       </Stack>
+      {validationErrors.length > 0 && (
+        <ValidationErrorSnackbarAlert errors={validationErrors} />
+      )}
       {apolloError && <ApolloErrorAlert error={apolloError} />}
     </>
   );
