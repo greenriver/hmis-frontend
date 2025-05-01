@@ -1,6 +1,7 @@
-import { Alert, AlertProps, AlertTitle, Snackbar } from '@mui/material';
+import { Alert, AlertProps, AlertTitle } from '@mui/material';
 
 import { ReactNode } from 'react';
+import CommonSnackbar from '@/components/elements/CommonSnackbar';
 
 interface Props {
   open: boolean;
@@ -9,6 +10,7 @@ interface Props {
   alertProps?: AlertProps;
   title?: string;
 }
+
 const SnackbarAlert: React.FC<Props> = ({
   open,
   onClose,
@@ -17,23 +19,19 @@ const SnackbarAlert: React.FC<Props> = ({
   title,
 }) => {
   return (
-    <Snackbar
-      TransitionProps={{ appear: false }} // disabled transition since it looks a bit junky
+    <CommonSnackbar
       open={open}
       onClose={onClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      sx={({ shadows }) => ({
-        boxShadow: shadows[6],
-        borderRadius: 2, // matches Alert
+      sx={{
         '.MuiAlertTitle-root': { fontWeight: 600 },
-        marginTop: '100px',
-      })}
+      }}
     >
       <Alert onClose={onClose} {...alertProps}>
         {title && <AlertTitle sx={{ mb: 0 }}>{title}</AlertTitle>}
         {children}
       </Alert>
-    </Snackbar>
+    </CommonSnackbar>
   );
 };
 

@@ -440,6 +440,14 @@ const createThemeOptions = (theme: Theme) => ({
         variant: 'contained',
       },
     },
+    MuiSnackbar: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          boxShadow: theme.shadows[4],
+          borderRadius: 2,
+        }),
+      },
+    },
     MuiAlert: {
       styleOverrides: {
         // override default transparent bg
