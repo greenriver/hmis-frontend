@@ -77,6 +77,7 @@ fragment ClientCeReferralTableFields on CeReferral {
 
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
+  ...CeReferralWithSwimlanes
   steps {
     ...CeReferralStepSummaryFields
   }
@@ -91,12 +92,32 @@ fragment CeReferralFields on CeReferral {
   }
 }
 
+fragment CeReferralSwimlaneFields on CeReferralSwimlane {
+  id
+  name
+  participants {
+    id
+    name
+  }
+}
+
+fragment CeReferralWithSwimlanes on CeReferral {
+  id
+  swimlanes {
+    ...CeReferralSwimlaneFields
+  }
+}
+
 fragment CeReferralStepSummaryFields on CeReferralStep {
   id
   stepId
   name
   status
   swimlane
+  assignees {
+    id
+    name
+  }
 }
 
 fragment CeReferralStepFields on CeReferralStep {
