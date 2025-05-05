@@ -16018,6 +16018,7 @@ export type ClientCeOpportunitySummaryFieldsFragment = {
   name: string;
   categories: Array<string>;
   status: CeOpportunityStatus;
+  active: boolean;
   expiresAt?: string | null;
   projectId: string;
   projectName: string;
@@ -16097,6 +16098,7 @@ export type ClientCeReferralTableFieldsFragment = {
   currentStepName?: string | null;
   id: string;
   status: CeReferralStatus;
+  active: boolean;
   clientId: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
   referredBy?: {
@@ -18780,6 +18782,7 @@ export type GetClientCeReferralsQuery = {
         currentStepName?: string | null;
         id: string;
         status: CeReferralStatus;
+        active: boolean;
         clientId: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
         referredBy?: {
@@ -18826,6 +18829,7 @@ export type GetClientEligibleOpportunitiesQuery = {
         name: string;
         categories: Array<string>;
         status: CeOpportunityStatus;
+        active: boolean;
         expiresAt?: string | null;
         projectId: string;
         projectName: string;
@@ -40616,7 +40620,6 @@ export type UpdateReferralPostingMutation = {
       id: string;
       assignedDate: string;
       chronic?: boolean | null;
-      hudChronic?: boolean | null;
       denialNote?: string | null;
       denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
@@ -40856,7 +40859,6 @@ export type GetReferralPostingQuery = {
     id: string;
     assignedDate: string;
     chronic?: boolean | null;
-    hudChronic?: boolean | null;
     denialNote?: string | null;
     denialReason?: ReferralPostingDenialReasonType | null;
     needsWheelchairAccessibleUnit?: boolean | null;
@@ -41136,7 +41138,6 @@ export type ReferralPostingDetailFieldsFragment = {
   id: string;
   assignedDate: string;
   chronic?: boolean | null;
-  hudChronic?: boolean | null;
   denialNote?: string | null;
   denialReason?: ReferralPostingDenialReasonType | null;
   needsWheelchairAccessibleUnit?: boolean | null;
@@ -45995,7 +45996,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     id
     assignedDate
     chronic
-    hudChronic
     denialNote
     denialReason
     needsWheelchairAccessibleUnit
