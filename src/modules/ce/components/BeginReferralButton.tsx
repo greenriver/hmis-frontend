@@ -29,9 +29,6 @@ const BeginReferralButton: React.FC<Props> = ({
     variables: {
       opportunityId,
       clientId: candidate.clientId,
-      input: {
-        participants: [], // TODO(#7351) - assign participants
-      },
     },
     onCompleted: (data) => {
       if (data.createCeReferral?.referral) {

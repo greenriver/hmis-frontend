@@ -6,16 +6,8 @@ mutation CreateCeOpportunity($projectId: ID!, $input: CeOpportunityInput!) {
   }
 }
 
-mutation CreateCeReferral(
-  $opportunityId: ID!
-  $clientId: ID!
-  $input: CeReferralInput!
-) {
-  createCeReferral(
-    opportunityId: $opportunityId
-    clientId: $clientId
-    input: $input
-  ) {
+mutation CreateCeReferral($opportunityId: ID!, $clientId: ID!) {
+  createCeReferral(opportunityId: $opportunityId, clientId: $clientId) {
     referral {
       ...CeReferralSummaryFields
     }
@@ -77,6 +69,24 @@ mutation MarkUnitsUnavailable($unitIds: [ID!]!, $ceEnabled: Boolean = true) {
   markUnitsUnavailable(unitIds: $unitIds) {
     units {
       ...UnitFields
+    }
+  }
+}
+
+mutation AssignParticipants(
+  $referralId: ID!
+  $participants: [CeReferralParticipantInput!]!
+) {
+  assignReferralParticipants(
+    referralId: $referralId
+    participants: $participants
+  ) {
+    referral {
+      ...CeReferralWithSwimlanes
+      steps {
+        # Re-resolve steps to update cache in case assignees have changed
+        ...CeReferralStepSummaryFields
+      }
     }
   }
 }
