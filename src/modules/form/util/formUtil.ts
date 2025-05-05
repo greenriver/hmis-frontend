@@ -1333,14 +1333,17 @@ const getMappedValue = (
     const value = get(record, keys); // lodash's `get` will return undefined if the field doesn't exist
 
     // Special cases where we DON'T want to alert Sentry if the field can't be resolved on the record.
-    // - imageBlobId and fileBlobId: we pass these fields when first saving a file, but they aren't persisted on the file or returned on a saved file record.
-    // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
-    // - resendReferralRequest: special case for the admin update referral posting, not saved on the referral posting record, but used by the custom mutation for this form.
     const specialCaseFieldNames = [
+      // imageBlobId and fileBlobId: we pass these fields when first saving a file, but they aren't persisted on the file or returned on a saved file record.
       'fileBlobId',
       'imageBlobId',
+      // mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
       'mciId',
+      // resendReferralRequest: special case for the admin update referral posting, not saved on the referral posting record, but used by the custom mutation for this form.
       'resendReferralRequest',
+      // verifiedBy: we may pass this field to the backend if this is a migrated-in CLS with no verifiedByProjectId, but we don't need to resolve it separately from verifiedByProjectId.
+      // See comments on the backend CLS schema object for more details
+      'verifiedBy',
     ];
     if (!specialCaseFieldNames.includes(mapping.fieldName)) {
       // In general, we do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
