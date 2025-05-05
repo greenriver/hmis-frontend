@@ -14,6 +14,8 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
 import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+
+import ValidationErrorSnackbarAlert from '@/modules/errors/components/ValidationErrorSnackbarAlert';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
@@ -38,7 +40,7 @@ const AssignServiceButton: React.FC<Props> = ({
   disabledReason,
   serviceTypeName,
 }) => {
-  const { bulkAssign, bulkRemove, loading, apolloError } =
+  const { bulkAssign, bulkRemove, loading, apolloError, validationErrors } =
     useBulkAssignMutations();
 
   // Locally disable the button while the table refetches, AFTER this specific mutation has completed
@@ -131,6 +133,9 @@ const AssignServiceButton: React.FC<Props> = ({
           {buttonText}
         </LoadingButton>
       </ButtonTooltipContainer>
+      {validationErrors.length > 0 && (
+        <ValidationErrorSnackbarAlert errors={validationErrors} />
+      )}
       {apolloError && <ApolloErrorAlert error={apolloError} />}
       <CommonDialog fullWidth open={clientAlertDialogOpen}>
         <DialogTitle>{alertModalTitle}</DialogTitle>
