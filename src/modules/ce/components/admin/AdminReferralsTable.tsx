@@ -53,8 +53,6 @@ const COLUMNS: DataColumnDef<
   {
     header: 'Unit',
     key: 'unit',
-    // todo @martha - something is broken with optional columns and tabs. no surprise
-    // clear opt cols when changing tabs
     render: ({ opportunity }) => opportunity.unit?.name,
     optional: {
       defaultHidden: true,
