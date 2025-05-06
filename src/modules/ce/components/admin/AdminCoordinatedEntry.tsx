@@ -1,4 +1,5 @@
 import React from 'react';
+import AdminReferralsTable from './AdminReferralsTable';
 import CommonTabs from '@/components/elements/CommonTabs';
 import PageTitle from '@/components/layout/PageTitle';
 import AdminOpportunitiesTable from '@/modules/ce/components/admin/AdminOpportunitiesTable';
@@ -16,9 +17,9 @@ const AdminCoordinatedEntry: React.FC = () => {
             contents: <AdminOpportunitiesTable />,
           },
           {
-            title: 'Ongoing Referrals',
+            title: 'Referrals',
             key: 'referrals',
-            contents: 'todo @martha',
+            contents: <AdminReferralsTable />,
           },
         ]}
       />

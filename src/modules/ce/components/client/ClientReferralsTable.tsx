@@ -8,6 +8,7 @@ import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
+  CeReferralAdminFieldsFragment,
   CeReferralStatus,
   ClientCeReferralTableFieldsFragment,
   GetClientCeReferralsDocument,
@@ -16,21 +17,30 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const COLUMNS: ColumnDef<ClientCeReferralTableFieldsFragment>[] = [
-  { ...REFERRAL_COLUMNS.date, sticky: 'left' },
-  {
+export const REFERRAL_WITH_PROJECT_COLUMNS: {
+  [key: string]: ColumnDef<
+    ClientCeReferralTableFieldsFragment | CeReferralAdminFieldsFragment
+  >;
+} = {
+  projectName: {
     header: 'Project Name',
     key: 'projectName',
     render: (referral: ClientCeReferralTableFieldsFragment) =>
       referral.targetProjectName,
   },
-  {
+  projectType: {
     header: 'Project Type',
     key: 'projectType',
     render: (referral: ClientCeReferralTableFieldsFragment) => (
       <ProjectTypeChip projectType={referral.targetProjectType} />
     ),
   },
+};
+
+const COLUMNS: ColumnDef<ClientCeReferralTableFieldsFragment>[] = [
+  { ...REFERRAL_COLUMNS.date, sticky: 'left' },
+  REFERRAL_WITH_PROJECT_COLUMNS.projectName,
+  REFERRAL_WITH_PROJECT_COLUMNS.projectType,
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.referredBy,
   REFERRAL_COLUMNS.step,

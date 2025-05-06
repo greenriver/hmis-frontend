@@ -76,7 +76,7 @@ query GetClientCeReferrals(
   $id: ID!
   $limit: Int = 25
   $offset: Int = 0
-  $filters: CeReferralFilterOptions = null
+  $filters: ClientCeReferralFilterOptions = null
 ) {
   client(id: $id) {
     id
@@ -127,6 +127,22 @@ query GetAdminCeOpportunities(
     nodesCount
     nodes {
       ...CeOpportunityAdminFields
+    }
+  }
+}
+
+query GetAdminCeReferrals(
+  $limit: Int = 3
+  $offset: Int = 0
+  $filters: CeReferralFilterOptions = null
+  $includeUnit: Boolean = false
+) {
+  ceReferrals(limit: $limit, offset: $offset, filters: $filters) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...CeReferralAdminFields
     }
   }
 }

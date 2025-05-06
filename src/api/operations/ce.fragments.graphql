@@ -72,10 +72,44 @@ fragment CeReferralTableFields on CeReferral {
     id
     name
   }
-  currentStepName
+  currentSteps {
+    id
+    name
+  }
   referredBy {
     id
     name
+  }
+}
+
+fragment CeReferralAdminFields on CeReferral {
+  ...CeReferralTableFields
+  targetProjectId
+  targetProjectName
+  targetProjectType
+  targetEnrollment {
+    id
+  }
+  targetOrganizationName
+  currentStepTime
+  currentSteps {
+    id
+    name
+  }
+  updatedBy {
+    id
+    name
+  }
+  opportunity {
+    id
+    name
+    unit @include(if: $includeUnit) {
+      id
+      name
+      unitType {
+        ...UnitTypeFields
+      }
+    }
   }
 }
 

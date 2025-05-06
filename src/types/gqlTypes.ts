@@ -690,7 +690,8 @@ export type CeReferral = {
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
-  currentStepName?: Maybe<Scalars['String']['output']>;
+  currentStepTime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  currentSteps?: Maybe<Array<CeReferralStep>>;
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
   referredBy?: Maybe<ApplicationUser>;
@@ -698,15 +699,20 @@ export type CeReferral = {
   steps: Array<CeReferralStep>;
   swimlanes: Array<CeReferralSwimlane>;
   targetEnrollment?: Maybe<Enrollment>;
+  targetOrganizationName: Scalars['String']['output'];
   targetProjectId: Scalars['ID']['output'];
   targetProjectName: Scalars['String']['output'];
   targetProjectType: ProjectType;
+  updatedBy?: Maybe<ApplicationUser>;
 };
 
 export type CeReferralFilterOptions = {
+  onCurrentStepSince?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<CeReferralStatus>>;
+  workflowTemplate?: InputMaybe<Array<WorkflowDefinitionTemplate>>;
 };
 
 export type CeReferralParticipantInput = {
@@ -886,7 +892,7 @@ export type ClientAuditHistoryArgs = {
 
 /** HUD Client */
 export type ClientCeReferralsArgs = {
-  filters?: InputMaybe<CeReferralFilterOptions>;
+  filters?: InputMaybe<ClientCeReferralFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1137,6 +1143,13 @@ export type ClientAuditEventsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+};
+
+export type ClientCeReferralFilterOptions = {
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  status?: InputMaybe<Array<CeReferralStatus>>;
 };
 
 export type ClientContactPoint = {
@@ -6224,6 +6237,7 @@ export type Query = {
   ceOpportunity?: Maybe<CeOpportunity>;
   ceReferral?: Maybe<CeReferral>;
   ceReferralStep?: Maybe<CeReferralStep>;
+  ceReferrals: CeReferralsPaginated;
   /** Client lookup */
   client?: Maybe<Client>;
   /** Custom forms for collecting and/or displaying custom details for a Client (outside of the Client demographics form) */
@@ -6319,6 +6333,12 @@ export type QueryCeReferralArgs = {
 
 export type QueryCeReferralStepArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryCeReferralsArgs = {
+  filters?: InputMaybe<CeReferralFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryClientArgs = {
@@ -16144,12 +16164,74 @@ export type CeReferralSummaryFieldsFragment = {
 export type CeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
-  currentStepName?: string | null;
   id: string;
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+  currentSteps?: Array<{
+    __typename?: 'CeReferralStep';
+    id: string;
+    name: string;
+  }> | null;
+  referredBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    lockVersion: number;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  } | null;
+};
+
+export type CeReferralAdminFieldsFragment = {
+  __typename?: 'CeReferral';
+  targetProjectId: string;
+  targetProjectName: string;
+  targetProjectType: ProjectType;
+  targetOrganizationName: string;
+  currentStepTime?: string | null;
+  createdAt: string;
+  id: string;
+  status: CeReferralStatus;
+  active: boolean;
+  clientId: string;
+  targetEnrollment?: { __typename?: 'Enrollment'; id: string } | null;
+  currentSteps?: Array<{
+    __typename?: 'CeReferralStep';
+    id: string;
+    name: string;
+  }> | null;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  opportunity: {
+    __typename?: 'CeOpportunity';
+    id: string;
+    name: string;
+    unit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+        bedType?: InventoryBedType | null;
+        unitSize?: number | null;
+        dateUpdated: string;
+        dateCreated: string;
+      } | null;
+    } | null;
+  };
   referredBy?: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -16172,12 +16254,16 @@ export type ClientCeReferralTableFieldsFragment = {
   targetProjectName: string;
   targetProjectType: ProjectType;
   createdAt: string;
-  currentStepName?: string | null;
   id: string;
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+  currentSteps?: Array<{
+    __typename?: 'CeReferralStep';
+    id: string;
+    name: string;
+  }> | null;
   referredBy?: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -18265,12 +18351,16 @@ export type GetProjectCeReferralsQuery = {
       nodes: Array<{
         __typename?: 'CeReferral';
         createdAt: string;
-        currentStepName?: string | null;
         id: string;
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+        currentSteps?: Array<{
+          __typename?: 'CeReferralStep';
+          id: string;
+          name: string;
+        }> | null;
         referredBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -18971,7 +19061,7 @@ export type GetClientCeReferralsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<CeReferralFilterOptions>;
+  filters?: InputMaybe<ClientCeReferralFilterOptions>;
 }>;
 
 export type GetClientCeReferralsQuery = {
@@ -18990,12 +19080,16 @@ export type GetClientCeReferralsQuery = {
         targetProjectName: string;
         targetProjectType: ProjectType;
         createdAt: string;
-        currentStepName?: string | null;
         id: string;
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+        currentSteps?: Array<{
+          __typename?: 'CeReferralStep';
+          id: string;
+          name: string;
+        }> | null;
         referredBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -19077,6 +19171,80 @@ export type GetAdminCeOpportunitiesQuery = {
       projectId: string;
       projectName: string;
       unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    }>;
+  };
+};
+
+export type GetAdminCeReferralsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeReferralFilterOptions>;
+  includeUnit?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type GetAdminCeReferralsQuery = {
+  __typename?: 'Query';
+  ceReferrals: {
+    __typename?: 'CeReferralsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeReferral';
+      targetProjectId: string;
+      targetProjectName: string;
+      targetProjectType: ProjectType;
+      targetOrganizationName: string;
+      currentStepTime?: string | null;
+      createdAt: string;
+      id: string;
+      status: CeReferralStatus;
+      active: boolean;
+      clientId: string;
+      targetEnrollment?: { __typename?: 'Enrollment'; id: string } | null;
+      currentSteps?: Array<{
+        __typename?: 'CeReferralStep';
+        id: string;
+        name: string;
+      }> | null;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      opportunity: {
+        __typename?: 'CeOpportunity';
+        id: string;
+        name: string;
+        unit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+            bedType?: InventoryBedType | null;
+            unitSize?: number | null;
+            dateUpdated: string;
+            dateCreated: string;
+          } | null;
+        } | null;
+      };
+      referredBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      client?: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      } | null;
     }>;
   };
 };
@@ -44940,13 +45108,60 @@ export const CeReferralTableFieldsFragmentDoc = gql`
       id
       name
     }
-    currentStepName
+    currentSteps {
+      id
+      name
+    }
     referredBy {
       id
       name
     }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
+`;
+export const UnitTypeFieldsFragmentDoc = gql`
+  fragment UnitTypeFields on UnitTypeObject {
+    id
+    description
+    bedType
+    unitSize
+    dateUpdated
+    dateCreated
+  }
+`;
+export const CeReferralAdminFieldsFragmentDoc = gql`
+  fragment CeReferralAdminFields on CeReferral {
+    ...CeReferralTableFields
+    targetProjectId
+    targetProjectName
+    targetProjectType
+    targetEnrollment {
+      id
+    }
+    targetOrganizationName
+    currentStepTime
+    currentSteps {
+      id
+      name
+    }
+    updatedBy {
+      id
+      name
+    }
+    opportunity {
+      id
+      name
+      unit @include(if: $includeUnit) {
+        id
+        name
+        unitType {
+          ...UnitTypeFields
+        }
+      }
+    }
+  }
+  ${CeReferralTableFieldsFragmentDoc}
+  ${UnitTypeFieldsFragmentDoc}
 `;
 export const ClientCeReferralTableFieldsFragmentDoc = gql`
   fragment ClientCeReferralTableFields on CeReferral {
@@ -46344,16 +46559,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-`;
-export const UnitTypeFieldsFragmentDoc = gql`
-  fragment UnitTypeFields on UnitTypeObject {
-    id
-    description
-    bedType
-    unitSize
-    dateUpdated
-    dateCreated
-  }
 `;
 export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
@@ -49387,7 +49592,7 @@ export const GetClientCeReferralsDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
-    $filters: CeReferralFilterOptions = null
+    $filters: ClientCeReferralFilterOptions = null
   ) {
     client(id: $id) {
       id
@@ -49683,6 +49888,98 @@ export type GetAdminCeOpportunitiesSuspenseQueryHookResult = ReturnType<
 export type GetAdminCeOpportunitiesQueryResult = Apollo.QueryResult<
   GetAdminCeOpportunitiesQuery,
   GetAdminCeOpportunitiesQueryVariables
+>;
+export const GetAdminCeReferralsDocument = gql`
+  query GetAdminCeReferrals(
+    $limit: Int = 3
+    $offset: Int = 0
+    $filters: CeReferralFilterOptions = null
+    $includeUnit: Boolean = false
+  ) {
+    ceReferrals(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeReferralAdminFields
+      }
+    }
+  }
+  ${CeReferralAdminFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetAdminCeReferralsQuery__
+ *
+ * To run a query within a React component, call `useGetAdminCeReferralsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminCeReferralsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminCeReferralsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      includeUnit: // value for 'includeUnit'
+ *   },
+ * });
+ */
+export function useGetAdminCeReferralsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAdminCeReferralsQuery,
+    GetAdminCeReferralsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAdminCeReferralsQuery,
+    GetAdminCeReferralsQueryVariables
+  >(GetAdminCeReferralsDocument, options);
+}
+export function useGetAdminCeReferralsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAdminCeReferralsQuery,
+    GetAdminCeReferralsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAdminCeReferralsQuery,
+    GetAdminCeReferralsQueryVariables
+  >(GetAdminCeReferralsDocument, options);
+}
+export function useGetAdminCeReferralsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetAdminCeReferralsQuery,
+        GetAdminCeReferralsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAdminCeReferralsQuery,
+    GetAdminCeReferralsQueryVariables
+  >(GetAdminCeReferralsDocument, options);
+}
+export type GetAdminCeReferralsQueryHookResult = ReturnType<
+  typeof useGetAdminCeReferralsQuery
+>;
+export type GetAdminCeReferralsLazyQueryHookResult = ReturnType<
+  typeof useGetAdminCeReferralsLazyQuery
+>;
+export type GetAdminCeReferralsSuspenseQueryHookResult = ReturnType<
+  typeof useGetAdminCeReferralsSuspenseQuery
+>;
+export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
+  GetAdminCeReferralsQuery,
+  GetAdminCeReferralsQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
