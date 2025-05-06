@@ -630,7 +630,7 @@ export type CeOpportunityFilterOptions = {
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<CeOpportunityStatus>>;
-  workflowTemplate?: InputMaybe<Array<WorkflowDefinitionTemplate>>;
+  workflowTemplate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type CeOpportunityInput = {
@@ -712,7 +712,7 @@ export type CeReferralFilterOptions = {
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<CeReferralStatus>>;
-  workflowTemplate?: InputMaybe<Array<WorkflowDefinitionTemplate>>;
+  workflowTemplate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type CeReferralParticipantInput = {
@@ -5137,6 +5137,8 @@ export enum PickListType {
   Users = 'USERS',
   /** Templates for CE workflow definitions */
   WorkflowDefinitionTemplates = 'WORKFLOW_DEFINITION_TEMPLATES',
+  /** Templates for CE workflow definitions by identifier */
+  WorkflowDefinitionTemplateIdentifiers = 'WORKFLOW_DEFINITION_TEMPLATE_IDENTIFIERS',
 }
 
 /** HUD PreferredLanguage (C4.A) */
@@ -8466,18 +8468,6 @@ export enum WorkerResponse {
   WorkerDoesNotKnow = 'WORKER_DOES_NOT_KNOW',
   /** (1) Yes */
   Yes = 'YES',
-}
-
-/** Workflow Definition Templates */
-export enum WorkflowDefinitionTemplate {
-  /** Admin Approve Denial */
-  AdminApproveDenial = 'admin_approve_denial',
-  /** Enrollment Creator */
-  EnrollmentCreator = 'enrollment_creator',
-  /** No Tasks */
-  NoTasks = 'no_tasks',
-  /** One Task */
-  OneTask = 'one_task',
 }
 
 /** HUD Youth Education Status */

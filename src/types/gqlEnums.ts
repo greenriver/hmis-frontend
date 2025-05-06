@@ -994,6 +994,8 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
     USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
     WORKFLOW_DEFINITION_TEMPLATES: 'Templates for CE workflow definitions',
+    WORKFLOW_DEFINITION_TEMPLATE_IDENTIFIERS:
+      'Templates for CE workflow definitions by identifier',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',
@@ -2108,11 +2110,5 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     NO: 'No',
     WORKER_DOES_NOT_KNOW: 'Worker does not know',
-  },
-  WorkflowDefinitionTemplate: {
-    admin_approve_denial: 'Admin Approve Denial',
-    enrollment_creator: 'Enrollment Creator',
-    no_tasks: 'No Tasks',
-    one_task: 'One Task',
   },
 };
