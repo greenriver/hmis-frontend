@@ -209,13 +209,12 @@ const useSearchParamsState = ({
         }
       }
       // `navigate` instead of `useSearchParams` as workaround for https://github.com/remix-run/react-router/issues/8393
+      const accumulator = new URLSearchParams();
+      populateParams({ ...currentParams, ...newValues }, accumulator);
       navigate({
         pathname,
         hash,
-        search: new URLSearchParams({
-          ...currentParams,
-          ...newValues,
-        }).toString(),
+        search: accumulator.toString(),
       });
     },
     [hash, navigate, paramsDefinition, pathname, searchParams]
