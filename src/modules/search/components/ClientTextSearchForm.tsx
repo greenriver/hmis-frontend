@@ -34,7 +34,8 @@ const ClientTextSearchForm: React.FC<Props> = ({
   const [tooShort, setTooShort] = useState(false);
 
   useEffect(() => {
-    if (initialValue) setValue(initialValue);
+    console.log('initialValue is updating', initialValue);
+    setValue(initialValue || '');
   }, [initialValue]);
 
   useEffect(() => {

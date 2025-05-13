@@ -209,6 +209,8 @@ const BulkServicesPage: React.FC<Props> = ({
             <Box sx={{ mt: 2 }} maxWidth='800px'>
               {lookupMode === 'search' && (
                 <ClientTextSearchForm
+                  // this uses initialValue
+                  // seems correct behavior to update in the effect anytime initialValue changes
                   initialValue={searchTerm}
                   onSearch={(value) => setFilterParams({ searchTerm: value })}
                   onClearSearch={() => setFilterParams({ searchTerm: null })}

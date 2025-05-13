@@ -236,6 +236,9 @@ const ClientSearch = () => {
       <Box mb={5}>
         {searchType === 'broad' ? (
           <ClientTextSearchForm
+            // this uses initialValue but doesn't trigger a change to the effect when the backbutton is pressed
+            // maybe because it's not using useSearchParamState, but using useSearchParams directly?
+            // have to investigate more, discuss w/ gig
             initialValue={initialValues?.textSearch || ''}
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
             label={null}
