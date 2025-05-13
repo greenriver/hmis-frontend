@@ -30,11 +30,12 @@ const COLUMNS: DataColumnDef<
     // TODO - Ideally this column "Time in Current Step" should correspond with the filter "On Current Step Since..."
     // aka, they should have the same title and use the same unit (days)
     key: 'daysOnCurrentSteps',
-    header: 'Time in Current Step',
+    header: 'Days on Current Step',
     render: ({ daysOnCurrentSteps }) => {
-      if (!daysOnCurrentSteps) return;
+      if (isNil(daysOnCurrentSteps)) return; // no open steps
+      if (daysOnCurrentSteps === 0) return '< 1 day';
       return `${daysOnCurrentSteps} day${daysOnCurrentSteps > 1 ? 's' : ''}`;
-    },
+   },
   },
   REFERRAL_WITH_PROJECT_COLUMNS.projectName,
   REFERRAL_WITH_PROJECT_COLUMNS.projectType,
