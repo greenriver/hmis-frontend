@@ -1,4 +1,5 @@
 import { Paper } from '@mui/material';
+import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 import { REFERRAL_WITH_PROJECT_COLUMNS } from '@/modules/ce/components/client/ClientReferralsTable';
 import { REFERRAL_COLUMNS } from '@/modules/ce/components/ProjectReferralsTable';
@@ -35,7 +36,7 @@ const COLUMNS: DataColumnDef<
       if (isNil(daysOnCurrentSteps)) return; // no open steps
       if (daysOnCurrentSteps === 0) return '< 1 day';
       return `${daysOnCurrentSteps} day${daysOnCurrentSteps > 1 ? 's' : ''}`;
-   },
+    },
   },
   REFERRAL_WITH_PROJECT_COLUMNS.projectName,
   REFERRAL_WITH_PROJECT_COLUMNS.projectType,
