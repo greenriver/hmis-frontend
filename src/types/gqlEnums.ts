@@ -961,6 +961,8 @@ export const HmisEnums = {
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',
+    CE_WORKFLOW_TEMPLATE_IDENTIFIERS_INCLUDING_RETIRED:
+      'Templates for CE workflow definitions, including fully retired workflows',
     CLIENT_AUDIT_EVENT_RECORD_TYPES: 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
     COC: 'COC',
     CONTINUUM_PROJECTS: 'Continuum Projects',
@@ -994,8 +996,6 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
     USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
     WORKFLOW_DEFINITION_TEMPLATES: 'Templates for CE workflow definitions',
-    WORKFLOW_DEFINITION_TEMPLATE_IDENTIFIERS:
-      'Templates for CE workflow definitions by identifier',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',

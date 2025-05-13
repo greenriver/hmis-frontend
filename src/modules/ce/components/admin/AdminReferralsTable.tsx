@@ -1,12 +1,10 @@
 import { Paper } from '@mui/material';
-import { formatDistanceToNowStrict } from 'date-fns';
 import React, { useCallback } from 'react';
 import { REFERRAL_WITH_PROJECT_COLUMNS } from '@/modules/ce/components/client/ClientReferralsTable';
 import { REFERRAL_COLUMNS } from '@/modules/ce/components/ProjectReferralsTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
@@ -29,18 +27,13 @@ const COLUMNS: DataColumnDef<
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.currentSteps,
   {
-    // TODO - no ticket yet, but we will discuss this with design and probably make updates.
-    // Ideally this column "Time in Current Step" should correspond with the filter "On Current Step Since..."
+    // TODO - Ideally this column "Time in Current Step" should correspond with the filter "On Current Step Since..."
     // aka, they should have the same title and use the same unit (days)
-    key: 'timeInCurrentStep',
+    key: 'daysOnCurrentSteps',
     header: 'Time in Current Step',
-    render: (row) => {
-      if (!row.currentStepTime) return;
-
-      const parsed = parseHmisDateString(row.currentStepTime);
-      if (!parsed) return row.currentStepTime;
-
-      return formatDistanceToNowStrict(parsed);
+    render: ({ daysOnCurrentSteps }) => {
+      if (!daysOnCurrentSteps) return;
+      return `${daysOnCurrentSteps} day${daysOnCurrentSteps > 1 ? 's' : ''}`;
     },
   },
   REFERRAL_WITH_PROJECT_COLUMNS.projectName,

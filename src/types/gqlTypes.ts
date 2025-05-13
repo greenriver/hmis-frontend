@@ -603,7 +603,7 @@ export type CeOpportunity = {
   candidates: CeCandidatesPaginated;
   candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
-  dateAvailable?: Maybe<Scalars['ISO8601Date']['output']>;
+  dateAvailable: Scalars['ISO8601Date']['output'];
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
@@ -690,8 +690,8 @@ export type CeReferral = {
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
-  currentStepTime?: Maybe<Scalars['ISO8601DateTime']['output']>;
   currentSteps?: Maybe<Array<CeReferralStep>>;
+  daysOnCurrentSteps?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
   referredBy?: Maybe<ApplicationUser>;
@@ -5090,6 +5090,8 @@ export enum PickListType {
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
+  /** Templates for CE workflow definitions, including fully retired workflows */
+  CeWorkflowTemplateIdentifiersIncludingRetired = 'CE_WORKFLOW_TEMPLATE_IDENTIFIERS_INCLUDING_RETIRED',
   ClientAuditEventRecordTypes = 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
   Coc = 'COC',
   /** Continuum Projects */
@@ -5137,8 +5139,6 @@ export enum PickListType {
   Users = 'USERS',
   /** Templates for CE workflow definitions */
   WorkflowDefinitionTemplates = 'WORKFLOW_DEFINITION_TEMPLATES',
-  /** Templates for CE workflow definitions by identifier */
-  WorkflowDefinitionTemplateIdentifiers = 'WORKFLOW_DEFINITION_TEMPLATE_IDENTIFIERS',
 }
 
 /** HUD PreferredLanguage (C4.A) */
@@ -16085,7 +16085,7 @@ export type CeOpportunityAdminFieldsFragment = {
   __typename?: 'CeOpportunity';
   projectType: ProjectType;
   organizationName: string;
-  dateAvailable?: string | null;
+  dateAvailable: string;
   id: string;
   name: string;
   categories: Array<string>;
@@ -16186,7 +16186,7 @@ export type CeReferralAdminFieldsFragment = {
   targetProjectName: string;
   targetProjectType: ProjectType;
   targetOrganizationName: string;
-  currentStepTime?: string | null;
+  daysOnCurrentSteps?: number | null;
   createdAt: string;
   id: string;
   status: CeReferralStatus;
@@ -19151,7 +19151,7 @@ export type GetAdminCeOpportunitiesQuery = {
       __typename?: 'CeOpportunity';
       projectType: ProjectType;
       organizationName: string;
-      dateAvailable?: string | null;
+      dateAvailable: string;
       id: string;
       name: string;
       categories: Array<string>;
@@ -19185,7 +19185,7 @@ export type GetAdminCeReferralsQuery = {
       targetProjectName: string;
       targetProjectType: ProjectType;
       targetOrganizationName: string;
-      currentStepTime?: string | null;
+      daysOnCurrentSteps?: number | null;
       createdAt: string;
       id: string;
       status: CeReferralStatus;
@@ -45129,7 +45129,7 @@ export const CeReferralAdminFieldsFragmentDoc = gql`
       id
     }
     targetOrganizationName
-    currentStepTime
+    daysOnCurrentSteps
     currentSteps {
       id
       name

@@ -575,7 +575,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateAvailable',
-        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
       },
       {
         name: 'expiresAt',
@@ -724,8 +728,8 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'currentStepTime',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        name: 'daysOnCurrentSteps',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {
         name: 'id',

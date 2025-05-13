@@ -91,7 +91,7 @@ fragment CeReferralAdminFields on CeReferral {
     id
   }
   targetOrganizationName
-  currentStepTime
+  daysOnCurrentSteps
   currentSteps {
     id
     name
