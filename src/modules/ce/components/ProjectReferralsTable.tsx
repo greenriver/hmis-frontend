@@ -67,7 +67,11 @@ export const REFERRAL_COLUMNS: Record<
       referral:
         | CeReferralTableFieldsFragment
         | ClientCeReferralTableFieldsFragment
-    ) => referral.currentStepName,
+    ) => {
+      if (referral.currentSteps && referral.currentSteps.length > 0) {
+        return referral.currentSteps[0].name;
+      }
+    },
   },
   referredBy: {
     header: 'Referred By',

@@ -61,7 +61,10 @@ fragment CeReferralTableFields on CeReferral {
     id
     name
   }
-  currentStepName
+  currentSteps {
+    id
+    name
+  }
   referredBy {
     id
     name

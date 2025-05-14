@@ -75,6 +75,10 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  CeOpportunitySortOption: {
+    DATE_AVAILABLE_EARLIEST_FIRST: 'Date Available, earliest first',
+    DATE_AVAILABLE_LATEST_FIRST: 'Date Available, latest first',
+  },
   CeOpportunityStatus: { closed: 'Closed', locked: 'Locked', open: 'Open' },
   CeReferralStatus: {
     accepted: 'Accepted',
@@ -957,6 +961,8 @@ export const HmisEnums = {
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',
+    CE_WORKFLOW_TEMPLATE_IDENTIFIERS_INCLUDING_RETIRED:
+      'Templates for CE workflow definitions, including fully retired workflows',
     CLIENT_AUDIT_EVENT_RECORD_TYPES: 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
     COC: 'COC',
     CONTINUUM_PROJECTS: 'Continuum Projects',

@@ -76,7 +76,7 @@ query GetClientCeReferrals(
   $id: ID!
   $limit: Int = 25
   $offset: Int = 0
-  $filters: CeReferralFilterOptions = null
+  $filters: ClientCeReferralFilterOptions = null
 ) {
   client(id: $id) {
     id

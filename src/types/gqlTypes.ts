@@ -603,10 +603,12 @@ export type CeOpportunity = {
   candidates: CeCandidatesPaginated;
   candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
+  dateAvailable: Scalars['ISO8601Date']['output'];
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  organizationName: Scalars['String']['output'];
   priorityScheme?: Maybe<CeMatchRule>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
@@ -614,6 +616,7 @@ export type CeOpportunity = {
   /** Active or accepted referral */
   referral?: Maybe<CeReferral>;
   status: CeOpportunityStatus;
+  unit?: Maybe<Unit>;
 };
 
 export type CeOpportunityCandidatesArgs = {
@@ -621,10 +624,27 @@ export type CeOpportunityCandidatesArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type CeOpportunityFilterOptions = {
+  availableOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  status?: InputMaybe<Array<CeOpportunityStatus>>;
+  workflowTemplate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type CeOpportunityInput = {
   name: Scalars['String']['input'];
   templateId: Scalars['ID']['input'];
 };
+
+/** Opportunity Sorting Options */
+export enum CeOpportunitySortOption {
+  /** Date Available, earliest first */
+  DateAvailableEarliestFirst = 'DATE_AVAILABLE_EARLIEST_FIRST',
+  /** Date Available, latest first */
+  DateAvailableLatestFirst = 'DATE_AVAILABLE_LATEST_FIRST',
+}
 
 export enum CeOpportunityStatus {
   /** Closed */
@@ -670,7 +690,8 @@ export type CeReferral = {
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
-  currentStepName?: Maybe<Scalars['String']['output']>;
+  currentSteps?: Maybe<Array<CeReferralStep>>;
+  daysOnCurrentSteps?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
   referredBy?: Maybe<ApplicationUser>;
@@ -678,15 +699,20 @@ export type CeReferral = {
   steps: Array<CeReferralStep>;
   swimlanes: Array<CeReferralSwimlane>;
   targetEnrollment?: Maybe<Enrollment>;
+  targetOrganizationName: Scalars['String']['output'];
   targetProjectId: Scalars['ID']['output'];
   targetProjectName: Scalars['String']['output'];
   targetProjectType: ProjectType;
+  updatedBy?: Maybe<ApplicationUser>;
 };
 
 export type CeReferralFilterOptions = {
+  onCurrentStepSince?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<CeReferralStatus>>;
+  workflowTemplate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type CeReferralParticipantInput = {
@@ -867,7 +893,7 @@ export type ClientAuditHistoryArgs = {
 
 /** HUD Client */
 export type ClientCeReferralsArgs = {
-  filters?: InputMaybe<CeReferralFilterOptions>;
+  filters?: InputMaybe<ClientCeReferralFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -896,6 +922,7 @@ export type ClientEligibleCeOpportunitiesArgs = {
   filters?: InputMaybe<ClientEligibleCeOpportunityFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CeOpportunitySortOption>;
 };
 
 /** HUD Client */
@@ -1119,6 +1146,13 @@ export type ClientAuditEventsPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
+export type ClientCeReferralFilterOptions = {
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  status?: InputMaybe<Array<CeReferralStatus>>;
+};
+
 export type ClientContactPoint = {
   __typename?: 'ClientContactPoint';
   client: Client;
@@ -1166,6 +1200,7 @@ export enum ClientDashboardFeature {
 }
 
 export type ClientEligibleCeOpportunityFilterOptions = {
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
 };
@@ -5056,6 +5091,8 @@ export enum PickListType {
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
+  /** Templates for CE workflow definitions, including fully retired workflows */
+  CeWorkflowTemplateIdentifiersIncludingRetired = 'CE_WORKFLOW_TEMPLATE_IDENTIFIERS_INCLUDING_RETIRED',
   ClientAuditEventRecordTypes = 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
   Coc = 'COC',
   /** Continuum Projects */
@@ -5906,6 +5943,7 @@ export type ProjectCeOpportunitiesArgs = {
   filters?: InputMaybe<ProjectCeOpportunityFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CeOpportunitySortOption>;
 };
 
 export type ProjectCeParticipationsArgs = {
@@ -6207,9 +6245,11 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
+  ceOpportunities: CeOpportunitiesPaginated;
   ceOpportunity?: Maybe<CeOpportunity>;
   ceReferral?: Maybe<CeReferral>;
   ceReferralStep?: Maybe<CeReferralStep>;
+  ceReferrals: CeReferralsPaginated;
   /** Client lookup */
   client?: Maybe<Client>;
   /** Custom forms for collecting and/or displaying custom details for a Client (outside of the Client demographics form) */
@@ -6288,6 +6328,13 @@ export type QueryAssessmentFormDefinitionArgs = {
   role?: InputMaybe<AssessmentRole>;
 };
 
+export type QueryCeOpportunitiesArgs = {
+  filters?: InputMaybe<CeOpportunityFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CeOpportunitySortOption>;
+};
+
 export type QueryCeOpportunityArgs = {
   id: Scalars['ID']['input'];
 };
@@ -6298,6 +6345,12 @@ export type QueryCeReferralArgs = {
 
 export type QueryCeReferralStepArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryCeReferralsArgs = {
+  filters?: InputMaybe<CeReferralFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryClientArgs = {
@@ -16116,12 +16169,16 @@ export type CeReferralSummaryFieldsFragment = {
 export type CeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
-  currentStepName?: string | null;
   id: string;
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+  currentSteps?: Array<{
+    __typename?: 'CeReferralStep';
+    id: string;
+    name: string;
+  }> | null;
   referredBy?: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -16144,12 +16201,16 @@ export type ClientCeReferralTableFieldsFragment = {
   targetProjectName: string;
   targetProjectType: ProjectType;
   createdAt: string;
-  currentStepName?: string | null;
   id: string;
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+  currentSteps?: Array<{
+    __typename?: 'CeReferralStep';
+    id: string;
+    name: string;
+  }> | null;
   referredBy?: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -18244,12 +18305,16 @@ export type GetProjectCeReferralsQuery = {
       nodes: Array<{
         __typename?: 'CeReferral';
         createdAt: string;
-        currentStepName?: string | null;
         id: string;
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+        currentSteps?: Array<{
+          __typename?: 'CeReferralStep';
+          id: string;
+          name: string;
+        }> | null;
         referredBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -18952,7 +19017,7 @@ export type GetClientCeReferralsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<CeReferralFilterOptions>;
+  filters?: InputMaybe<ClientCeReferralFilterOptions>;
 }>;
 
 export type GetClientCeReferralsQuery = {
@@ -18971,12 +19036,16 @@ export type GetClientCeReferralsQuery = {
         targetProjectName: string;
         targetProjectType: ProjectType;
         createdAt: string;
-        currentStepName?: string | null;
         id: string;
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
+        currentSteps?: Array<{
+          __typename?: 'CeReferralStep';
+          id: string;
+          name: string;
+        }> | null;
         referredBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -44907,7 +44976,10 @@ export const CeReferralTableFieldsFragmentDoc = gql`
       id
       name
     }
-    currentStepName
+    currentSteps {
+      id
+      name
+    }
     referredBy {
       id
       name
@@ -49368,7 +49440,7 @@ export const GetClientCeReferralsDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
-    $filters: CeReferralFilterOptions = null
+    $filters: ClientCeReferralFilterOptions = null
   ) {
     client(id: $id) {
       id
