@@ -19,6 +19,7 @@ export const useUnitCeActions = ({
   loading: boolean;
   getCeActions: (unit: UnitFieldsFragment) => CommonMenuItem[];
 } => {
+  // TODO(7409) - instead of using the global permission, check project-level config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
     'canViewCoordinatedEntry',
   ]);

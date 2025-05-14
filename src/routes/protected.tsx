@@ -429,34 +429,33 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.CE,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
-                otherwise={<NotFound />}
+              <ProjectRoute
+                permissions={[
+                  'canViewUnits',
+                  'canViewReferrals',
+                  'canViewOwnReferrals',
+                ]}
               >
                 <ProjectCePage />
-              </RootPermissionsFilter>
+              </ProjectRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.OPPORTUNITY,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
-                otherwise={<NotFound />}
-              >
+              <ProjectRoute permissions={['canViewUnits']}>
                 <Opportunity />
-              </RootPermissionsFilter>
+              </ProjectRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.REFERRAL,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
-                otherwise={<NotFound />}
+              <ProjectRoute
+                permissions={['canViewReferrals', 'canViewOwnReferrals']}
               >
                 <ReferralPage />
-              </RootPermissionsFilter>
+              </ProjectRoute>
             ),
             children: [
               {
@@ -779,7 +778,13 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ClientDashboardRoutes.REFERRALS,
             element: (
-              <RootPermissionsFilter permissions='canViewCoordinatedEntry'>
+              <RootPermissionsFilter
+                permissions={[
+                  'canViewClientEligibleOpportunities',
+                  'canViewReferrals',
+                  'canViewOwnReferrals',
+                ]}
+              >
                 <ClientReferralsPage />
               </RootPermissionsFilter>
             ),

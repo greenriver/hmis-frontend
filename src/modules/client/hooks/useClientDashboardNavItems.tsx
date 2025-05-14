@@ -9,10 +9,6 @@ import { ClientDashboardFeature, ClientFieldsFragment } from '@/types/gqlTypes';
 export const useClientDashboardNavItems = (
   enabledFeatures: ClientDashboardFeature[]
 ) => {
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
-
   const [canViewClientReferrals] = useHasRootPermissions([
     'canViewReferrals',
     'canViewOwnReferrals',
@@ -60,7 +56,7 @@ export const useClientDashboardNavItems = (
             id: 'referrals',
             title: 'Referrals',
             path: ClientDashboardRoutes.REFERRALS,
-            hide: !canViewCoordinatedEntry || !canViewClientReferrals,
+            hide: !canViewClientReferrals,
           },
           {
             id: 'case-notes',
@@ -96,7 +92,7 @@ export const useClientDashboardNavItems = (
         ],
       },
     ];
-  }, [canViewClientReferrals, canViewCoordinatedEntry, enabledFeatures]);
+  }, [canViewClientReferrals, enabledFeatures]);
 
   return navItems;
 };
