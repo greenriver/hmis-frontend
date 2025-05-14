@@ -148,7 +148,7 @@ export const useProjectBreadcrumbConfig = (
         title: 'Opportunity',
         parent: ProjectDashboardRoutes.CE,
       },
-      [ProjectDashboardRoutes.REFERRAL_DETAILS]: {
+      [ProjectDashboardRoutes.REFERRAL]: {
         title: 'Referral',
         parent: ProjectDashboardRoutes.OPPORTUNITY,
       },

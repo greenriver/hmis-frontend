@@ -118,7 +118,7 @@ const ProjectReferralsTable: React.FC<Props> = ({}) => {
         noData='No referrals'
         paginationItemName='referrals'
         rowLinkTo={(referral) =>
-          generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
+          generateSafePath(ProjectDashboardRoutes.REFERRAL, {
             projectId,
             opportunityId: referral.opportunity.id,
             referralId: referral.id,

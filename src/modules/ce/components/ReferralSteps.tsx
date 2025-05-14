@@ -1,5 +1,6 @@
 import { Divider, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
+import NotFound from '@/components/pages/NotFound';
 import useSearchParamsState from '@/hooks/useSearchParamState';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepCard from '@/modules/ce/components/ReferralStepCard';
@@ -22,7 +23,9 @@ const ReferralSteps: React.FC<Props> = () => {
         ?.length || 0
     );
   }, [referral?.steps]);
-  const totalSteps = referral.steps.length;
+  const totalSteps = referral?.steps.length;
+
+  if (!referral) return <NotFound />;
 
   return (
     <>

@@ -44,7 +44,7 @@ const BeginReferralButton: React.FC<Props> = ({
         });
 
         navigate(
-          generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
+          generateSafePath(ProjectDashboardRoutes.REFERRAL, {
             projectId: projectId,
             opportunityId: opportunityId,
             referralId: referral.id,
