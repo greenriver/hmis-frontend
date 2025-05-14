@@ -1,4 +1,9 @@
-import { TimelapseRounded } from '@mui/icons-material';
+import {
+  HistoryRounded,
+  InfoOutlined,
+  StickyNote2Rounded,
+  TimelapseRounded,
+} from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import AddchartRoundedIcon from '@mui/icons-material/AddchartRounded';
@@ -128,4 +133,7 @@ export {
   CheckCircleRounded as CompletedIcon,
   CancelIcon as DeclinedIcon,
   TimelapseRounded as InProgressIcon,
+  HistoryRounded as ActivityIcon,
+  InfoOutlined as InfoIcon,
+  StickyNote2Rounded as NotesIcon,
 };
