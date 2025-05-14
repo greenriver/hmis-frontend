@@ -11,11 +11,13 @@ interface Props {
   swimlane: CeReferralSwimlaneFieldsFragment;
   users: PickListOption[];
   setUsers: (userIds: PickListOption[]) => void;
+  projectId: string;
 }
 const AssignContactFormItem: React.FC<Props> = ({
   swimlane,
   users,
   setUsers,
+  projectId,
 }) => {
   const {
     data: { pickList: staffPickList } = {},
@@ -23,9 +25,8 @@ const AssignContactFormItem: React.FC<Props> = ({
     error: staffPickListError,
   } = useGetPickListQuery({
     variables: {
-      // TODO(#7506) (or later), add a new pick list type ELIGIBLE_REFERRAL_PARTICIPANT_USERS
-      // and pass in the projectId to get users who are allowed to participate in this referral
-      pickListType: PickListType.Users,
+      pickListType: PickListType.EligibleReferralStepAssignmentUsers,
+      projectId: projectId,
     },
   });
 

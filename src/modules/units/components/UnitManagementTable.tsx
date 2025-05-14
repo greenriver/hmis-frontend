@@ -5,6 +5,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
 import { useUnitCeColumns } from '@/modules/units/hooks/useUnitCeColumns';
@@ -27,6 +28,7 @@ const UnitManagementTable = ({
       projectId,
     });
 
+  // TODO(7409) - instead of using the global permission, check project-level config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
     'canViewCoordinatedEntry',
   ]);
@@ -62,7 +64,8 @@ const UnitManagementTable = ({
     type: 'UnitFilterOptions',
   });
 
-  const { getCeActions, loading } = useUnitCeActions({ projectId });
+  const { project } = useProjectDashboardContext();
+  const { getCeActions, loading } = useUnitCeActions({ project });
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitFieldsFragment) => {
@@ -93,7 +96,10 @@ const UnitManagementTable = ({
         UnitFieldsFragment
       >
         defaultPageSize={10}
-        queryVariables={{ id: projectId, ceEnabled: canViewCoordinatedEntry }}
+        queryVariables={{
+          id: projectId,
+          includeCeFields: canViewCoordinatedEntry,
+        }}
         queryDocument={GetUnitsDocument}
         columns={columns}
         pagePath='project.units'

@@ -4,6 +4,7 @@ import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHo
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeOpportunityStatus,
+  ProjectAllFieldsFragment,
   UnitFieldsFragment,
   useMarkUnitsAvailableMutation,
   useMarkUnitsUnavailableMutation,
@@ -11,9 +12,9 @@ import {
 import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useUnitCeActions = ({
-  projectId,
+  project,
 }: {
-  projectId: string;
+  project: ProjectAllFieldsFragment;
 }): {
   loading: boolean;
   getCeActions: (unit: UnitFieldsFragment) => CommonMenuItem[];
@@ -43,35 +44,37 @@ export const useUnitCeActions = ({
           key: 'viewOpportunity',
           ariaLabel: `View Opportunity for Unit ${unit.id}`,
           to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-            projectId,
+            projectId: project.id,
             opportunityId: unit.latestOpportunity.id,
           }),
         });
       }
 
-      if (unit.latestOpportunity && unit.latestOpportunity.active) {
-        // Show this option if the opportunity is active, but disable it if it's locked
-        actions.push({
-          title: 'Mark as Unavailable for Referrals',
-          key: 'markUnavailable',
-          ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
-          onClick: () => {
-            markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
-          },
-          disabled:
-            unit.latestOpportunity.status === CeOpportunityStatus.Locked,
-          disabledReason:
-            'Unit with in-progress referral cannot be marked as unavailable',
-        });
-      } else {
-        actions.push({
-          title: 'Mark as Available for Referrals',
-          key: 'markAvailable',
-          ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
-          onClick: () => {
-            markUnitsAvailable({ variables: { unitIds: [unit.id] } });
-          },
-        });
+      if (project.access.canManageUnits) {
+        if (unit.latestOpportunity && unit.latestOpportunity.active) {
+          // Show this option if the opportunity is active, but disable it if it's locked
+          actions.push({
+            title: 'Mark as Unavailable for Referrals',
+            key: 'markUnavailable',
+            ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
+            onClick: () => {
+              markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
+            },
+            disabled:
+              unit.latestOpportunity.status === CeOpportunityStatus.Locked,
+            disabledReason:
+              'Unit with in-progress referral cannot be marked as unavailable',
+          });
+        } else {
+          actions.push({
+            title: 'Mark as Available for Referrals',
+            key: 'markAvailable',
+            ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
+            onClick: () => {
+              markUnitsAvailable({ variables: { unitIds: [unit.id] } });
+            },
+          });
+        }
       }
 
       return actions;
@@ -80,7 +83,8 @@ export const useUnitCeActions = ({
       canViewCoordinatedEntry,
       markUnitsAvailable,
       markUnitsUnavailable,
-      projectId,
+      project.access.canManageUnits,
+      project.id,
     ]
   );
 

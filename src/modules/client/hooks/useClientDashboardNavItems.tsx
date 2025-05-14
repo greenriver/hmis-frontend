@@ -13,6 +13,12 @@ export const useClientDashboardNavItems = (
     'canViewCoordinatedEntry',
   ]);
 
+  const [canViewClientReferrals] = useHasRootPermissions([
+    'canViewReferrals',
+    'canViewOwnReferrals',
+    'canViewClientEligibleOpportunities',
+  ]);
+
   const navItems: NavItem<ClientFieldsFragment['access']>[] = useMemo(() => {
     return [
       {
@@ -54,7 +60,7 @@ export const useClientDashboardNavItems = (
             id: 'referrals',
             title: 'Referrals',
             path: ClientDashboardRoutes.REFERRALS,
-            hide: !canViewCoordinatedEntry,
+            hide: !canViewCoordinatedEntry || !canViewClientReferrals,
           },
           {
             id: 'case-notes',
@@ -90,7 +96,7 @@ export const useClientDashboardNavItems = (
         ],
       },
     ];
-  }, [canViewCoordinatedEntry, enabledFeatures]);
+  }, [canViewClientReferrals, canViewCoordinatedEntry, enabledFeatures]);
 
   return navItems;
 };

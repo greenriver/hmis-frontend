@@ -963,6 +963,8 @@ export const HmisEnums = {
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     CUSTOM_SERVICE_CATEGORIES: 'CUSTOM_SERVICE_CATEGORIES',
     DESTINATION: 'DESTINATION',
+    ELIGIBLE_REFERRAL_STEP_ASSIGNMENT_USERS:
+      'Current users who can be assigned to referral steps in the specified project',
     ELIGIBLE_STAFF_ASSIGNMENT_USERS:
       'Current users who are eligible for staff assignment',
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',

@@ -92,6 +92,9 @@ const ReferralStep: React.FC<Props> = ({}) => {
     submittedValues &&
     createInitialValuesFromSavedValues(itemMap, submittedValues);
 
+  const editable =
+    status === CeReferralStepStatus.InProgress && step?.canCurrentUserPerform;
+
   if (fetchLoading) return <Loading />;
   if (fetchError) throw fetchError;
   if (!step || !formDefinition) return <NotFound />;
@@ -111,7 +114,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
             Start Step
           </StartCeReferralStepButton>
         )}
-        {status === CeReferralStepStatus.InProgress && (
+        {editable ? (
           <DynamicForm
             definition={formDefinition.definition}
             onSubmit={({ valuesByLinkId, confirmed }) => {
@@ -133,8 +136,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
             }}
             initialValues={formState}
           />
-        )}
-        {status === CeReferralStepStatus.Completed && formState && (
+        ) : (
           <DynamicView
             definition={formDefinition.definition}
             values={formState}
