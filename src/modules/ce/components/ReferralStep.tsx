@@ -147,23 +147,16 @@ const ReferralStep: React.FC<Props> = ({}) => {
                     id: 'discard',
                     label: 'Back to All Tasks',
                     action: FormActionTypes.Discard,
+                    leftAlign: true,
                     buttonProps: {
                       color: 'grayscale',
                       startIcon: <BackIcon />,
                     },
                   },
                   {
-                    // Dummy `display: none` button that is center-aligned to help position the submit and discard buttons correctly. (See FormActions.tsx)
-                    // TODO @martha: discuss hacky approach vs. implementing a different API in FormActions
-                    id: 'dummy',
-                    centerAlign: true,
-                    label: '',
-                    action: FormActionTypes.Discard,
-                    buttonProps: { sx: { display: 'none' } },
-                  },
-                  {
                     id: 'submit',
                     label: 'Submit',
+                    rightAlign: true,
                     action: FormActionTypes.Submit,
                     buttonProps: { variant: 'contained' },
                   },
