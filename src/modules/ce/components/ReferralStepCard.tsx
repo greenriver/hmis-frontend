@@ -71,6 +71,7 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
   }, [name, opportunityId, projectId, referral.id, status, step]);
 
   const collapsed = step.status === CeReferralStepStatus.Completed;
+  const locked = step.status === CeReferralStepStatus.Unavailable;
 
   const updatedDateString = useMemo(() => {
     const dateString = parseHmisDateString(updatedAt);
@@ -79,7 +80,15 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
   }, [updatedAt]);
 
   return (
-    <Paper>
+    <Paper
+      sx={
+        locked
+          ? {
+              color: 'grayscale.light',
+            }
+          : {}
+      }
+    >
       {!collapsed && (
         <>
           <Stack
