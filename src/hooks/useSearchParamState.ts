@@ -140,7 +140,7 @@ const useSearchParamsState = ({
   // `initial` is NOT passed to `useSearchParams` here, since react-router-dom's
   // useSearchParams's `defaultInit` prop auto-populates the internal state, but not
   // the search params that appear in the url. See the useEffect below
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [mounted, setMounted] = useState(false);
 
@@ -208,9 +208,16 @@ const useSearchParamsState = ({
           }
         }
       }
-      setSearchParams({ ...currentParams, ...newValues });
+      // `navigate` instead of `useSearchParams` as workaround for https://github.com/remix-run/react-router/issues/8393
+      const accumulator = new URLSearchParams();
+      populateParams({ ...currentParams, ...newValues }, accumulator);
+      navigate({
+        pathname,
+        hash,
+        search: accumulator.toString(),
+      });
     },
-    [paramsDefinition, searchParams, setSearchParams]
+    [hash, navigate, paramsDefinition, pathname, searchParams]
   );
   return [values, setValues];
 };

@@ -17,6 +17,12 @@ export const OPPORTUNITY_COLUMNS: Record<
   string,
   ColumnDef<CeOpportunitySummaryFieldsFragment>
 > = {
+  project: {
+    header: 'Project',
+    key: 'project',
+    sticky: 'left',
+    render: 'projectName',
+  },
   name: {
     header: 'Opportunity',
     key: 'name',
