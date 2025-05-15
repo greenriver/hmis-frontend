@@ -43,20 +43,11 @@ const ReferralSteps: React.FC<Props> = () => {
             alignItems='center'
           >
             <Stack direction='row' gap={2}>
-              {/* TODO(#7700) - when adding filters, add:
-                <Typography variant='body2'>
-                  Displaying {totalSteps} of {totalSteps} tasks
-                </Typography>
-                <Divider orientation='vertical' flexItem/>
-              */}
               <Typography variant='body2'>
                 {completedSteps === totalSteps ? 'All' : completedSteps} tasks
                 completed
               </Typography>
             </Stack>
-            {/* TODO(#7700) - filters
-              <TableFilterMenu filters={[]} filterValues={[]} setFilterValues={() => {}}/>
-            */}
           </Stack>
         </Paper>
 

@@ -20,8 +20,6 @@ const ReferralStatusChip: React.FC<Props> = ({ status }) => {
   switch (status) {
     case CeReferralStatus.Initialized:
     case CeReferralStatus.InProgress:
-      // TODO - discuss statuses; Initialized status is currently hypothetical,
-      //  because we always start the workflow as soon as we create the referral
       return (
         <Chip
           label='In Progress'

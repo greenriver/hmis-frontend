@@ -153,8 +153,8 @@ const ReferralStep: React.FC<Props> = ({}) => {
                     },
                   },
                   {
-                    // Dummy display: none button that is center-aligned to help position the submit and discard buttons correctly. (See FormActions.tsx)
-                    // TODO: discuss hacky approach vs. implementing a different API in FormActions
+                    // Dummy `display: none` button that is center-aligned to help position the submit and discard buttons correctly. (See FormActions.tsx)
+                    // TODO @martha: discuss hacky approach vs. implementing a different API in FormActions
                     id: 'dummy',
                     centerAlign: true,
                     label: '',
