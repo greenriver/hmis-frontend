@@ -109,3 +109,40 @@ query GetClientEligibleOpportunities(
     }
   }
 }
+
+query GetAdminCeOpportunities(
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: CeOpportunityFilterOptions = null
+  $sortOrder: CeOpportunitySortOption = null
+) {
+  ceOpportunities(
+    limit: $limit
+    offset: $offset
+    filters: $filters
+    sortOrder: $sortOrder
+  ) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...CeOpportunityAdminFields
+    }
+  }
+}
+
+query GetAdminCeReferrals(
+  $limit: Int = 3
+  $offset: Int = 0
+  $filters: CeReferralFilterOptions = null
+  $includeUnit: Boolean = false
+) {
+  ceReferrals(limit: $limit, offset: $offset, filters: $filters) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...CeReferralAdminFields
+    }
+  }
+}

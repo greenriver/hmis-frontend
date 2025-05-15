@@ -33,6 +33,7 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
   const [internalValue, setInternalValue] = useHashState({
     initial: tabDefinitions[0].key,
     skip: !!onChangeTab,
+    clearSearch: true,
   });
 
   const currentKey = useMemo(() => {

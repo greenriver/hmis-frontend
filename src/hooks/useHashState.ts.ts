@@ -4,11 +4,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 interface UseHashStateParams {
   initial: string;
   skip?: boolean;
+  clearSearch?: boolean;
 }
 
 const useHashState = ({
   initial,
   skip,
+  clearSearch,
 }: UseHashStateParams): [string, (newValue: string) => void] => {
   const { pathname, search, hash } = useLocation();
   const navigate = useNavigate();
@@ -27,7 +29,14 @@ const useHashState = ({
     hashValue,
     (newValue: string) => {
       if (newValue === hash) return;
-      navigate({ pathname, search, hash: newValue }, { replace: false });
+      navigate(
+        {
+          pathname,
+          search: clearSearch ? undefined : search,
+          hash: newValue,
+        },
+        { replace: false }
+      );
     },
   ];
 };
