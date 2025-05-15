@@ -744,6 +744,8 @@ export type CeReferralStep = {
   stepId?: Maybe<Scalars['ID']['output']>;
   submittedValues?: Maybe<Scalars['JsonObject']['output']>;
   swimlane: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  updatedBy?: Maybe<ApplicationUser>;
 };
 
 export enum CeReferralStepStatus {
@@ -16283,11 +16285,17 @@ export type CeReferralFieldsFragment = {
     name: string;
     status: CeReferralStepStatus;
     swimlane: string;
+    updatedAt?: string | null;
     assignees: Array<{
       __typename?: 'ApplicationUser';
       id: string;
       name: string;
     }>;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   }>;
   opportunity: {
     __typename?: 'CeOpportunity';
@@ -16359,11 +16367,17 @@ export type CeReferralStepSummaryFieldsFragment = {
   name: string;
   status: CeReferralStepStatus;
   swimlane: string;
+  updatedAt?: string | null;
   assignees: Array<{
     __typename?: 'ApplicationUser';
     id: string;
     name: string;
   }>;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type CeReferralStepFieldsFragment = {
@@ -16374,6 +16388,7 @@ export type CeReferralStepFieldsFragment = {
   name: string;
   status: CeReferralStepStatus;
   swimlane: string;
+  updatedAt?: string | null;
   formDefinition: {
     __typename?: 'FormDefinition';
     id: string;
@@ -16889,6 +16904,11 @@ export type CeReferralStepFieldsFragment = {
     id: string;
     name: string;
   }>;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type CreateCeOpportunityMutationVariables = Exact<{
@@ -16959,6 +16979,7 @@ export type StartCeReferralStepMutation = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
+      updatedAt?: string | null;
       formDefinition: {
         __typename?: 'FormDefinition';
         id: string;
@@ -17474,6 +17495,11 @@ export type StartCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     };
   } | null;
 };
@@ -17498,6 +17524,7 @@ export type SubmitCeReferralStepMutation = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
+      updatedAt?: string | null;
       formDefinition: {
         __typename?: 'FormDefinition';
         id: string;
@@ -18013,6 +18040,11 @@ export type SubmitCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
     referral?: {
       __typename?: 'CeReferral';
@@ -18071,11 +18103,17 @@ export type SubmitCeReferralStepMutation = {
         name: string;
         status: CeReferralStepStatus;
         swimlane: string;
+        updatedAt?: string | null;
         assignees: Array<{
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
         }>;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
       client?: {
         __typename?: 'Client';
@@ -18269,11 +18307,17 @@ export type AssignParticipantsMutation = {
         name: string;
         status: CeReferralStepStatus;
         swimlane: string;
+        updatedAt?: string | null;
         assignees: Array<{
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
         }>;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
       swimlanes: Array<{
         __typename?: 'CeReferralSwimlane';
@@ -18471,11 +18515,17 @@ export type GetCeReferralQuery = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
+      updatedAt?: string | null;
       assignees: Array<{
         __typename?: 'ApplicationUser';
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     }>;
     opportunity: {
       __typename?: 'CeOpportunity';
@@ -18529,6 +18579,7 @@ export type GetCeReferralStepQuery = {
     name: string;
     status: CeReferralStepStatus;
     swimlane: string;
+    updatedAt?: string | null;
     formDefinition: {
       __typename?: 'FormDefinition';
       id: string;
@@ -19044,6 +19095,11 @@ export type GetCeReferralStepQuery = {
       id: string;
       name: string;
     }>;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -45189,6 +45245,11 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     status
     swimlane
     assignees {
+      id
+      name
+    }
+    updatedAt
+    updatedBy {
       id
       name
     }
