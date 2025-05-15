@@ -58,6 +58,7 @@ export const NotStarted: Story = {
   },
 };
 
+// todo @martha - waiting for design on decision about accessible contrast
 export const Locked: Story = {
   args: {
     step: { ...mockStep, status: CeReferralStepStatus.Unavailable },
