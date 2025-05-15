@@ -1,4 +1,4 @@
-import { Divider, Stack, Typography } from '@mui/material';
+import { Divider, Paper, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import NotFound from '@/components/pages/NotFound';
 import useSearchParamsState from '@/hooks/useSearchParamState';
@@ -30,20 +30,36 @@ const ReferralSteps: React.FC<Props> = () => {
   return (
     <>
       <Stack gap={2}>
-        <Typography variant='h4' component='h2'>
-          All Tasks
-        </Typography>
-        <Divider />
-        <Typography variant='body1'>
-          {completedSteps === totalSteps ? (
-            'All'
-          ) : (
-            <>
-              <strong>{completedSteps}</strong> of <strong>{totalSteps}</strong>
-            </>
-          )}{' '}
-          Tasks Complete
-        </Typography>
+        <Paper>
+          <Typography sx={{ p: 2 }} variant='h5' component='h2'>
+            All Referral Tasks
+          </Typography>
+          <Divider />
+
+          <Stack
+            direction='row'
+            sx={{ px: 2, py: 1 }}
+            justifyContent='space-between'
+            alignItems='center'
+          >
+            <Stack direction='row' gap={2}>
+              {/* TODO(#7700) - when adding filters, add:
+                <Typography variant='body2'>
+                  Displaying {totalSteps} of {totalSteps} tasks
+                </Typography>
+                <Divider orientation='vertical' flexItem/>
+              */}
+              <Typography variant='body2'>
+                {completedSteps === totalSteps ? 'All' : completedSteps} tasks
+                completed
+              </Typography>
+            </Stack>
+            {/* TODO(#7700) - filters
+              <TableFilterMenu filters={[]} filterValues={[]} setFilterValues={() => {}}/>
+            */}
+          </Stack>
+        </Paper>
+
         {referral.steps.map((s) => (
           <ReferralStepCard key={s.id} step={s} />
         ))}
