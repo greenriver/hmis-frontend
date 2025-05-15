@@ -27,7 +27,7 @@ const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
 
   return (
     <Typography component='div' variant='body2'>
-      <strong>Assigned</strong> {content}
+      <strong>Assigned:</strong> {content}
     </Typography>
   );
 };

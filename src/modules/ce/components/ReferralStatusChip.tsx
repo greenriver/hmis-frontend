@@ -8,35 +8,45 @@ interface Props {
 }
 const ReferralStatusChip: React.FC<Props> = ({ status }) => {
   const baseChipSx: SxProps = {
-    borderWeight: '1px',
-    borderColor: 'borders.main',
-    borderStyle: 'solid',
     fontWeight: 600,
+    fontSize: '14px',
+    backgroundColor: 'grayscale.surface',
   };
 
   const baseChipProps: ChipProps = {
-    size: 'small',
-    variant: 'outlined',
     sx: baseChipSx,
   };
 
-  // TODO(7393) - add styles and colors, and make sure all statuses are mapped correctly
   switch (status) {
     case CeReferralStatus.Initialized:
-      return <Chip label='Initialized' {...baseChipProps} />;
     case CeReferralStatus.InProgress:
+      // TODO - discuss statuses; Initialized status is currently hypothetical,
+      //  because we always start the workflow as soon as we create the referral
       return (
         <Chip
           label='In Progress'
           {...baseChipProps}
+          sx={{
+            ...baseChipSx,
+            backgroundColor: 'primary.surface',
+            color: 'primary.dark',
+          }}
           color='primary'
-          icon={<InProgressIcon />}
+          icon={
+            <InProgressIcon
+              sx={{
+                '&.MuiChip-icon': {
+                  color: 'primary.main',
+                },
+              }}
+            />
+          }
         />
       );
     case CeReferralStatus.Accepted:
       return <Chip label='Accepted' {...baseChipProps} />;
     case CeReferralStatus.Rejected:
-      return <Chip label='Rejected' {...baseChipProps} />;
+      return <Chip label='Declined' {...baseChipProps} />;
     default:
       return '';
   }
