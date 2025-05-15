@@ -11,6 +11,7 @@ export type ButtonLinkProps = Omit<
     leftAlign?: boolean;
     Icon?: SvgIconComponent;
     openInNew?: boolean;
+    ariaLabel?: string;
   };
 
 /**

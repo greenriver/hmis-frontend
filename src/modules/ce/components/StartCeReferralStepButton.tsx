@@ -75,6 +75,7 @@ const StartCeReferralStepButton: React.FC<Props> = ({
       variant='text'
       endIcon={<GoToIcon />}
       onClick={() => startStepMutation()}
+      aria-label={`Start step: ${step.name}`}
     >
       {children}
     </LoadingButton>

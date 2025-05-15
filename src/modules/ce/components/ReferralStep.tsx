@@ -8,7 +8,6 @@ import { BackIcon } from '@/components/elements/SemanticIcons';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
-import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
 import {
   emptyErrorState,
   ErrorState,
@@ -99,6 +98,15 @@ const ReferralStep: React.FC<Props> = ({}) => {
   if (fetchError) throw fetchError;
   if (!step || !formDefinition) return <NotFound />;
 
+  if (
+    [CeReferralStepStatus.Unavailable, CeReferralStepStatus.Available].includes(
+      step.status
+    )
+  ) {
+    // The step has to be started from the Referral Steps page
+    return <NotFound />;
+  }
+
   return (
     <Stack direction='column' gap={2}>
       <Paper
@@ -117,17 +125,6 @@ const ReferralStep: React.FC<Props> = ({}) => {
         <Stack gap={2}>
           <ReferralStepAssignee step={step} />
           <Divider />
-          {/* TODO - discuss this "Start step" button. Is this status distinction important to the user? */}
-          {status === CeReferralStepStatus.Available && (
-            <StartCeReferralStepButton
-              step={step}
-              opportunityId={opportunityId}
-              projectId={projectId}
-              referralId={referralId}
-            >
-              Start Step
-            </StartCeReferralStepButton>
-          )}
           {status === CeReferralStepStatus.InProgress && (
             <DynamicForm
               definition={formDefinition.definition}

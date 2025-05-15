@@ -1,18 +1,13 @@
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  Divider,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
-import ButtonLink from '@/components/elements/ButtonLink';
-import CommonMenuButton from '@/components/elements/CommonMenuButton';
+import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
+import { GoToIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
 import ReferralStepStatusChip from '@/modules/ce/components/ReferralStepStatusChip';
+import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
 import {
   formatRelativeDateTime,
   parseHmisDateString,
@@ -36,18 +31,46 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
   const { referral } = useReferralContext();
   const { name, status, updatedBy, updatedAt } = step;
 
-  const collapsed = step.status === CeReferralStepStatus.Completed;
+  const action = useMemo(() => {
+    if (status === CeReferralStepStatus.Available) {
+      return (
+        <StartCeReferralStepButton
+          step={step}
+          referralId={referral.id}
+          opportunityId={opportunityId}
+          projectId={projectId}
+        >
+          Start
+        </StartCeReferralStepButton>
+      );
+    }
 
-  const stepLink = useMemo(() => {
-    if (step.stepId) {
-      return generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
+    const buttonProps: ButtonLinkProps = {
+      to: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
         projectId,
         opportunityId,
         referralId: referral.id,
-        stepId: step.stepId,
-      });
+        stepId: step.stepId || '',
+      }),
+      variant: 'text',
+      endIcon: <GoToIcon />,
+      ariaLabel: `View step: ${name}`,
+    };
+
+    if (status === CeReferralStepStatus.InProgress) {
+      return <ButtonLink {...buttonProps}>View</ButtonLink>;
     }
-  }, [opportunityId, projectId, referral.id, step.stepId]);
+
+    if (status === CeReferralStepStatus.Completed) {
+      return (
+        <ButtonLink {...buttonProps} color='grayscale'>
+          View
+        </ButtonLink>
+      );
+    }
+  }, [name, opportunityId, projectId, referral.id, status, step]);
+
+  const collapsed = step.status === CeReferralStepStatus.Completed;
 
   const updatedDateString = useMemo(() => {
     const dateString = parseHmisDateString(updatedAt);
@@ -56,61 +79,35 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
   }, [updatedAt]);
 
   return (
-    <Card>
-      <CardActionArea
-        component={ButtonLink}
-        to={stepLink || ''}
-        sx={{
-          color: 'black !important',
-          ...(stepLink
-            ? {}
-            : {
-                pointerEvents: 'none',
-                color: 'grayscale.main',
-              }),
-          // TODO - update styles, hover, etc. pending discussion about click target.
-        }}
-      >
-        {!collapsed && (
-          <>
-            <Stack
-              sx={{ px: 2, py: 1 }}
-              direction='row'
-              alignItems='center'
-              justifyContent='space-between'
-            >
-              <ReferralStepAssignee step={step} />
-              <CommonMenuButton
-                iconButton={true}
-                title={'step actions'}
-                items={[
-                  {
-                    title: 'View Step',
-                    key: 'view',
-                    to: stepLink,
-                  },
-                ]}
-              />
-            </Stack>
-            <Divider orientation='horizontal' flexItem />
-          </>
-        )}
-
-        <CardContent>
-          <ReferralStepStatusChip status={status} sx={{ mb: 1 }} />
-          <Stack gap={2}>
-            <Typography variant='h5' component='div'>
-              {name}
-            </Typography>
-            {updatedBy && updatedDateString && (
-              <Typography variant='caption' color='grayscale.main'>
-                Last edited {updatedDateString} by {updatedBy.name}
-              </Typography>
-            )}
+    <Paper>
+      {!collapsed && (
+        <>
+          <Stack
+            sx={{ px: 2, py: 1 }}
+            direction='row'
+            alignItems='center'
+            justifyContent='space-between'
+          >
+            <ReferralStepAssignee step={step} />
+            {action}
           </Stack>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+          <Divider orientation='horizontal' flexItem />
+        </>
+      )}
+      <Box p={2}>
+        <ReferralStepStatusChip status={status} sx={{ mb: 2 }} />
+        <Stack gap={1}>
+          <Typography variant='h5' component='h3'>
+            {name}
+          </Typography>
+          {updatedBy && updatedDateString && (
+            <Typography variant='caption' color='grayscale.main'>
+              Last edited {updatedDateString} by {updatedBy.name}
+            </Typography>
+          )}
+        </Stack>
+      </Box>
+    </Paper>
   );
 };
 
