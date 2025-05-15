@@ -128,7 +128,7 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
         paginationItemName='referrals'
         filters={filters}
         rowLinkTo={(row) =>
-          generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
+          generateSafePath(ProjectDashboardRoutes.REFERRAL, {
             projectId: row.targetProjectId,
             opportunityId: row.opportunity.id,
             referralId: row.id,
