@@ -13,7 +13,7 @@ import React, { ReactElement } from 'react';
 interface Props {
   title: string;
   icon: ButtonProps['startIcon'];
-  // Specify that this component's child can accept `onClose` as a prop.
+  // This component's child can accept `onClose` as a prop.
   // If it does, this component, which manages the drawer open/close state, will pass it down.
   // This avoids lifting state up into the parent
   children?: ReactElement<{ onClose?: () => void }>;

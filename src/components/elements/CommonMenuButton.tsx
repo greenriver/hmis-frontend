@@ -37,7 +37,6 @@ interface Props {
   title: ReactNode;
   items: CommonMenuItem[];
   iconButton?: boolean; // use an icon button instead of a text button
-  Icon?: SvgIconComponent;
   MenuProps?: Omit<MenuProps, 'open'>;
   ButtonProps?: ButtonProps;
 }
@@ -46,7 +45,6 @@ const CommonMenuButton = ({
   title,
   items,
   iconButton,
-  Icon,
   MenuProps,
   ButtonProps,
 }: Props) => {
@@ -78,11 +76,7 @@ const CommonMenuButton = ({
           onClick={handleClick}
           {...buttonProps}
         >
-          {Icon ? (
-            <Icon fontSize='inherit' />
-          ) : (
-            <MoreMenuIcon fontSize='inherit' />
-          )}
+          <MoreMenuIcon fontSize='inherit' />
         </IconButton>
       ) : (
         <Button
