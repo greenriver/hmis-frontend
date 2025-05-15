@@ -3,8 +3,6 @@ import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
 import { GoToIcon } from '@/components/elements/SemanticIcons';
-import useSafeParams from '@/hooks/useSafeParams';
-import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
 import ReferralStepStatusChip from '@/modules/ce/components/ReferralStepStatusChip';
 import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
@@ -14,6 +12,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
+  CeReferralFieldsFragment,
   CeReferralStepStatus,
   CeReferralStepSummaryFieldsFragment,
 } from '@/types/gqlTypes';
@@ -21,15 +20,13 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   step: CeReferralStepSummaryFieldsFragment;
+  referral: CeReferralFieldsFragment;
 }
 
-const ReferralStepCard: React.FC<Props> = ({ step }) => {
-  const { projectId, opportunityId } = useSafeParams() as {
-    projectId: string;
-    opportunityId: string;
-  };
-  const { referral } = useReferralContext();
+const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
   const { name, status, updatedBy, updatedAt } = step;
+  const projectId = referral.opportunity.projectId;
+  const opportunityId = referral.opportunity.id;
 
   const action = useMemo(() => {
     if (status === CeReferralStepStatus.Available) {
@@ -54,16 +51,23 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
       }),
       variant: 'text',
       endIcon: <GoToIcon />,
-      ariaLabel: `View step: ${name}`,
     };
 
     if (status === CeReferralStepStatus.InProgress) {
-      return <ButtonLink {...buttonProps}>View</ButtonLink>;
+      return (
+        <ButtonLink aria-label={`View step: ${name}`} {...buttonProps}>
+          View
+        </ButtonLink>
+      );
     }
 
     if (status === CeReferralStepStatus.Completed) {
       return (
-        <ButtonLink {...buttonProps} color='grayscale'>
+        <ButtonLink
+          aria-label={`View step: ${name}`}
+          {...buttonProps}
+          color='grayscale'
+        >
           View
         </ButtonLink>
       );

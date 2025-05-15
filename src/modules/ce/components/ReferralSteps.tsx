@@ -52,7 +52,7 @@ const ReferralSteps: React.FC<Props> = () => {
         </Paper>
 
         {referral.steps.map((s) => (
-          <ReferralStepCard key={s.id} step={s} />
+          <ReferralStepCard key={s.id} step={s} referral={referral} />
         ))}
       </Stack>
       <ReferralWayfinder
