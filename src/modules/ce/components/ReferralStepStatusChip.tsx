@@ -47,7 +47,7 @@ const ReferralStepStatusChip: React.FC<Props> = ({ status, sx }) => {
           sx={{
             ...baseChipSx,
             backgroundColor: 'primary.surface',
-            color: 'primary.dark',
+            color: 'primary.darkest',
           }}
         />
       );
@@ -59,7 +59,7 @@ const ReferralStepStatusChip: React.FC<Props> = ({ status, sx }) => {
           sx={{
             ...baseChipSx,
             backgroundColor: 'success.surface',
-            color: 'success.dark',
+            color: 'success.darkest',
           }}
         />
       );
