@@ -76,23 +76,22 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
 
   const collapsed = step.status === CeReferralStepStatus.Completed;
   const locked = step.status === CeReferralStepStatus.Unavailable;
+  const paperSx = useMemo(() => {
+    if (locked)
+      return {
+        color: 'grayscale.light',
+      };
+  }, [locked]);
 
-  const updatedDateString = useMemo(() => {
+  const lastUpdatedString = useMemo(() => {
     const dateString = parseHmisDateString(updatedAt);
-    if (dateString) return formatRelativeDateTime(dateString);
-    return updatedAt;
-  }, [updatedAt]);
+    const at = dateString ? ` ${formatRelativeDateTime(dateString)}` : '';
+    const by = updatedBy ? ` by ${updatedBy.name}` : '';
+    if (at || by) return `Last edited${at}${by}`;
+  }, [updatedAt, updatedBy]);
 
   return (
-    <Paper
-      sx={
-        locked
-          ? {
-              color: 'grayscale.light',
-            }
-          : {}
-      }
-    >
+    <Paper sx={paperSx}>
       {!collapsed && (
         <>
           <Stack
@@ -113,9 +112,9 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
           <Typography variant='h5' component='h3'>
             {name}
           </Typography>
-          {updatedBy && updatedDateString && (
+          {lastUpdatedString && (
             <Typography variant='caption' color='grayscale.main'>
-              Last edited {updatedDateString} by {updatedBy.name}
+              {lastUpdatedString}
             </Typography>
           )}
         </Stack>

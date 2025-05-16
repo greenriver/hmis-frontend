@@ -5,6 +5,7 @@ import {
   ButtonProps,
   Divider,
   Drawer,
+  DrawerProps,
   IconButton,
   Typography,
 } from '@mui/material';
@@ -12,14 +13,21 @@ import React, { ReactElement } from 'react';
 
 interface Props {
   title: string;
-  icon: ButtonProps['startIcon'];
+  ButtonProps?: ButtonProps;
+  DrawerProps?: DrawerProps;
   // This component's child can accept `onClose` as a prop.
   // If it does, this component, which manages the drawer open/close state, will pass it down.
   // This avoids lifting state up into the parent
   children?: ReactElement<{ onClose?: () => void }>;
 }
 
-const CommonButtonDrawer: React.FC<Props> = ({ title, icon, children }) => {
+// Common component for a button that opens a drawer
+const CommonButtonDrawer: React.FC<Props> = ({
+  title,
+  ButtonProps,
+  DrawerProps,
+  children,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => setOpen(false);
@@ -29,8 +37,8 @@ const CommonButtonDrawer: React.FC<Props> = ({ title, icon, children }) => {
       <Button
         variant='text'
         color='grayscale'
-        startIcon={icon}
         onClick={() => setOpen(true)}
+        {...ButtonProps}
       >
         {title}
       </Button>
@@ -45,6 +53,7 @@ const CommonButtonDrawer: React.FC<Props> = ({ title, icon, children }) => {
             maxWidth: '100%',
           },
         }}
+        {...DrawerProps}
       >
         <Typography p={2} component='h2' variant='h5'>
           {title}

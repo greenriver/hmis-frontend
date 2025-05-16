@@ -100,16 +100,31 @@ const ReferralPage: React.FC<Props> = ({}) => {
             <ReferralStatusChip status={referral.status} />
           </Stack>
           <Stack sx={{ py: 2 }} direction='row' alignItems='center' gap={1}>
-            <CommonButtonDrawer title={'Client'} icon={<PersonIcon />} />
-            <CommonButtonDrawer title={'Referral'} icon={<InfoIcon />} />
+            <CommonButtonDrawer
+              title={'Client'}
+              ButtonProps={{ startIcon: <PersonIcon /> }}
+            />
+            <CommonButtonDrawer
+              title={'Referral'}
+              ButtonProps={{ startIcon: <InfoIcon /> }}
+            />
             {referral.swimlanes.length > 0 && (
               // If this referral has no swimlanes, hide the Contacts button. This will only happen if the referral also has no tasks
-              <CommonButtonDrawer title={'Contacts'} icon={<ContactsIcon />}>
+              <CommonButtonDrawer
+                title={'Contacts'}
+                ButtonProps={{ startIcon: <ContactsIcon /> }}
+              >
                 <AssignContactsForm referral={referral} />
               </CommonButtonDrawer>
             )}
-            <CommonButtonDrawer title={'Activity'} icon={<ActivityIcon />} />
-            <CommonButtonDrawer title={'Notes'} icon={<NotesIcon />} />
+            <CommonButtonDrawer
+              title={'Activity'}
+              ButtonProps={{ startIcon: <ActivityIcon /> }}
+            />
+            <CommonButtonDrawer
+              title={'Notes'}
+              ButtonProps={{ startIcon: <NotesIcon /> }}
+            />
           </Stack>
         </Stack>
       </CommonStickyBar>
