@@ -79,7 +79,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
   const paperSx = useMemo(() => {
     if (locked)
       return {
-        color: 'grayscale.light',
+        color: 'grayscale.main',
       };
   }, [locked]);
 
