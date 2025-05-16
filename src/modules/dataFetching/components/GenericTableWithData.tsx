@@ -82,6 +82,7 @@ export interface Props<
   >['tableDisplayOptionButtons'];
   onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
+  loading?: boolean;
 }
 
 function allFieldColumns<T, QueryVariables>(
@@ -129,6 +130,7 @@ const GenericTableWithData = <
   paginationItemName,
   filterRows,
   vertical,
+  loading: loadingProp,
   ...props
 }: Props<
   Query,
@@ -318,7 +320,7 @@ const GenericTableWithData = <
       )}
       <Box sx={containerSx}>
         <GenericTable<RowDataType>
-          loading={loading && !data}
+          loading={(loading && !data) || loadingProp}
           rows={rows}
           paginated={!nonTablePagination && !hidePagination}
           tablePaginationProps={

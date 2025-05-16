@@ -1,0 +1,94 @@
+import { useCallback } from 'react';
+import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { ProjectDashboardRoutes } from '@/routes/routes';
+import {
+  CeOpportunityStatus,
+  UnitFieldsFragment,
+  useMarkUnitsAvailableMutation,
+  useMarkUnitsUnavailableMutation,
+} from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
+
+export const useUnitCeActions = ({
+  projectId,
+}: {
+  projectId: string;
+}): {
+  loading: boolean;
+  getCeActions: (unit: UnitFieldsFragment) => CommonMenuItem[];
+} => {
+  const [canViewCoordinatedEntry] = useHasRootPermissions([
+    'canViewCoordinatedEntry',
+  ]);
+
+  const [
+    markUnitsAvailable,
+    { loading: availableLoading, error: availableError },
+  ] = useMarkUnitsAvailableMutation();
+
+  const [
+    markUnitsUnavailable,
+    { loading: unavailableLoading, error: unavailableError },
+  ] = useMarkUnitsUnavailableMutation();
+
+  const getCeActions = useCallback(
+    (unit: UnitFieldsFragment) => {
+      const actions: CommonMenuItem[] = [];
+      if (!canViewCoordinatedEntry) return actions;
+
+      if (unit.latestOpportunity) {
+        actions.push({
+          title: 'View Opportunity',
+          key: 'viewOpportunity',
+          ariaLabel: `View Opportunity for Unit ${unit.id}`,
+          to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+            projectId,
+            opportunityId: unit.latestOpportunity.id,
+          }),
+        });
+      }
+
+      if (unit.latestOpportunity && unit.latestOpportunity.active) {
+        // Show this option if the opportunity is active, but disable it if it's locked
+        actions.push({
+          title: 'Mark as Unavailable for Referrals',
+          key: 'markUnavailable',
+          ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
+          onClick: () => {
+            markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
+          },
+          disabled:
+            unit.latestOpportunity.status === CeOpportunityStatus.Locked,
+          disabledReason:
+            'Unit with in-progress referral cannot be marked as unavailable',
+        });
+      } else {
+        actions.push({
+          title: 'Mark as Available for Referrals',
+          key: 'markAvailable',
+          ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
+          onClick: () => {
+            markUnitsAvailable({ variables: { unitIds: [unit.id] } });
+          },
+        });
+      }
+
+      return actions;
+    },
+    [
+      canViewCoordinatedEntry,
+      markUnitsAvailable,
+      markUnitsUnavailable,
+      projectId,
+    ]
+  );
+
+  if (availableError) throw availableError;
+  if (unavailableError) throw unavailableError;
+
+  return {
+    getCeActions,
+    loading: availableLoading || unavailableLoading,
+  };
+};

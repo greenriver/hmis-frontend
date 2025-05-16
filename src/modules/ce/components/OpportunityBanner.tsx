@@ -30,13 +30,7 @@ const OpportunityBanner: React.FC<Props> = ({
 
   const header = useMemo(() => {
     if (referral?.status === CeReferralStatus.Accepted) return 'Filled By';
-    if (
-      referral &&
-      [CeReferralStatus.Initialized, CeReferralStatus.InProgress].includes(
-        referral.status
-      )
-    )
-      return 'In-Progress Referral';
+    if (referral && referral.active) return 'In-Progress Referral';
     if (topCandidate) return 'Top Prioritization';
   }, [referral, topCandidate]);
 

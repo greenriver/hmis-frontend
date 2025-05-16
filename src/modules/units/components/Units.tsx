@@ -29,6 +29,7 @@ import FormDialogActionContent from '@/modules/form/components/FormDialogActionC
 import { UnitsDefinition } from '@/modules/form/data';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { evictUnitsQuery } from '@/modules/units/util';
 import { CreateUnitsInput, useCreateUnitsMutation } from '@/types/gqlTypes';
@@ -56,6 +57,10 @@ const Units = () => {
     }
   );
 
+  const [canViewCoordinatedEntry] = useHasRootPermissions([
+    'canViewCoordinatedEntry',
+  ]);
+
   const handleCreateUnits: DynamicFormOnSubmit = useCallback(
     ({ rawValues }) => {
       const input = transformSubmitValues({
@@ -65,9 +70,14 @@ const Units = () => {
       });
       input.projectId = project.id;
       if (!input.prefix) input.prefix = 'Unit';
-      createUnits({ variables: { input: { input } as CreateUnitsInput } });
+      createUnits({
+        variables: {
+          input: { input } as CreateUnitsInput,
+          ceEnabled: canViewCoordinatedEntry,
+        },
+      });
     },
-    [createUnits, project]
+    [canViewCoordinatedEntry, createUnits, project.id]
   );
   const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
 
