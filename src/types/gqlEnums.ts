@@ -970,9 +970,9 @@ export const HmisEnums = {
     CUSTOM_SERVICE_CATEGORIES: 'CUSTOM_SERVICE_CATEGORIES',
     DESTINATION: 'DESTINATION',
     ELIGIBLE_REFERRAL_STEP_ASSIGNMENT_USERS:
-      'Users who can be assigned to referral steps in the specified project',
+      'Current users who can be assigned to referral steps in the specified project',
     ELIGIBLE_STAFF_ASSIGNMENT_USERS:
-      'Users who are eligible for staff assignment',
+      'Current users who are eligible for staff assignment',
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',

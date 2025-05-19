@@ -35656,13 +35656,13 @@
           },
           {
             "name": "ELIGIBLE_REFERRAL_STEP_ASSIGNMENT_USERS",
-            "description": "Users who can be assigned to referral steps in the specified project",
+            "description": "Current users who can be assigned to referral steps in the specified project",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ELIGIBLE_STAFF_ASSIGNMENT_USERS",
-            "description": "Users who are eligible for staff assignment",
+            "description": "Current users who are eligible for staff assignment",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -43218,22 +43218,6 @@
           },
           {
             "name": "canAdministrateConfig",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "canAdministrateCoordinatedEntry",
             "description": null,
             "args": [],
             "type": {

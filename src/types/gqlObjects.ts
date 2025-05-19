@@ -5489,14 +5489,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canAdministrateCoordinatedEntry',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canAssignReferralTasks',
         type: {
           kind: 'NON_NULL',
