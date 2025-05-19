@@ -5100,9 +5100,9 @@ export enum PickListType {
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   CustomServiceCategories = 'CUSTOM_SERVICE_CATEGORIES',
   Destination = 'DESTINATION',
-  /** Current users who can be assigned to referral steps in the specified project */
+  /** Users who can be assigned to referral steps in the specified project */
   EligibleReferralStepAssignmentUsers = 'ELIGIBLE_REFERRAL_STEP_ASSIGNMENT_USERS',
-  /** Current users who are eligible for staff assignment */
+  /** Users who are eligible for staff assignment */
   EligibleStaffAssignmentUsers = 'ELIGIBLE_STAFF_ASSIGNMENT_USERS',
   /** Projects that the User can enroll Clients in */
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
@@ -6548,6 +6548,7 @@ export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean']['output'];
   canAdministrateConfig: Scalars['Boolean']['output'];
+  canAdministrateCoordinatedEntry: Scalars['Boolean']['output'];
   canAssignReferralTasks: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
   canAuditEnrollments: Scalars['Boolean']['output'];
@@ -8539,6 +8540,7 @@ export type RootPermissionsFragment = {
   canViewOwnReferrals: boolean;
   canViewMyDashboard: boolean;
   canViewCoordinatedEntry: boolean;
+  canAdministrateCoordinatedEntry: boolean;
   canEditOrganization: boolean;
   canEditProjectDetails: boolean;
 };
@@ -8638,6 +8640,7 @@ export type GetRootPermissionsQuery = {
     canViewOwnReferrals: boolean;
     canViewMyDashboard: boolean;
     canViewCoordinatedEntry: boolean;
+    canAdministrateCoordinatedEntry: boolean;
     canEditOrganization: boolean;
     canEditProjectDetails: boolean;
   };
@@ -44388,6 +44391,7 @@ export const RootPermissionsFragmentDoc = gql`
     canViewOwnReferrals
     canViewMyDashboard
     canViewCoordinatedEntry
+    canAdministrateCoordinatedEntry
     canEditOrganization
     canEditProjectDetails
   }

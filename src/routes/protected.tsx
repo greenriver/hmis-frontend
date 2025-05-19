@@ -820,7 +820,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.COORDINATED_ENTRY,
             element: (
-              <RootPermissionsFilter permissions='canViewCoordinatedEntry'>
+              <RootPermissionsFilter
+                permissions='canAdministrateCoordinatedEntry'
+                otherwise={<NotFound />}
+              >
                 <AdminCoordinatedEntry />
               </RootPermissionsFilter>
             ),

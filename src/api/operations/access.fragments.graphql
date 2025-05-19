@@ -29,6 +29,7 @@ fragment RootPermissions on QueryAccess {
   # Application permissions:
   canViewMyDashboard
   canViewCoordinatedEntry
+  canAdministrateCoordinatedEntry
 
   # Root Project permissions:
   canEditOrganization # globally, determines whether user can create organization
