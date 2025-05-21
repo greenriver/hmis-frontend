@@ -69,7 +69,7 @@ const StartCeReferralStepButton: React.FC<Props> = ({
 
   if (step.status !== CeReferralStepStatus.Available) return;
 
-  if (!step.canCurrentUserPerform) return;
+  if (!step.access.canPerformStep) return;
 
   return (
     <LoadingButton

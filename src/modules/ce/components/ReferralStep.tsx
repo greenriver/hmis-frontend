@@ -93,7 +93,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
     createInitialValuesFromSavedValues(itemMap, submittedValues);
 
   const editable =
-    status === CeReferralStepStatus.InProgress && step?.canCurrentUserPerform;
+    status === CeReferralStepStatus.InProgress && step?.access.canPerformStep;
 
   if (fetchLoading) return <Loading />;
   if (fetchError) throw fetchError;

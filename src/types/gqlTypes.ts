@@ -733,9 +733,9 @@ export enum CeReferralStatus {
 
 export type CeReferralStep = {
   __typename?: 'CeReferralStep';
+  access: CeReferralStepAccess;
   /** User(s) currently assigned to this step */
   assignees: Array<ApplicationUser>;
-  canCurrentUserPerform: Scalars['Boolean']['output'];
   formDefinition: FormDefinition;
   /** unique identifier for this step based on node and instance */
   id: Scalars['ID']['output'];
@@ -745,6 +745,14 @@ export type CeReferralStep = {
   stepId?: Maybe<Scalars['ID']['output']>;
   submittedValues?: Maybe<Scalars['JsonObject']['output']>;
   swimlane: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  updatedBy?: Maybe<ApplicationUser>;
+};
+
+export type CeReferralStepAccess = {
+  __typename?: 'CeReferralStepAccess';
+  canPerformStep: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export enum CeReferralStepStatus {
@@ -16317,12 +16325,12 @@ export type CeReferralFieldsFragment = {
     name: string;
     status: CeReferralStepStatus;
     swimlane: string;
-    canCurrentUserPerform: boolean;
     assignees: Array<{
       __typename?: 'ApplicationUser';
       id: string;
       name: string;
     }>;
+    access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   }>;
   opportunity: {
     __typename?: 'CeOpportunity';
@@ -16394,12 +16402,12 @@ export type CeReferralStepSummaryFieldsFragment = {
   name: string;
   status: CeReferralStepStatus;
   swimlane: string;
-  canCurrentUserPerform: boolean;
   assignees: Array<{
     __typename?: 'ApplicationUser';
     id: string;
     name: string;
   }>;
+  access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
 export type CeReferralStepFieldsFragment = {
@@ -16410,7 +16418,6 @@ export type CeReferralStepFieldsFragment = {
   name: string;
   status: CeReferralStepStatus;
   swimlane: string;
-  canCurrentUserPerform: boolean;
   formDefinition: {
     __typename?: 'FormDefinition';
     id: string;
@@ -16926,6 +16933,7 @@ export type CeReferralStepFieldsFragment = {
     id: string;
     name: string;
   }>;
+  access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
 export type CreateCeOpportunityMutationVariables = Exact<{
@@ -16996,7 +17004,6 @@ export type StartCeReferralStepMutation = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
-      canCurrentUserPerform: boolean;
       formDefinition: {
         __typename?: 'FormDefinition';
         id: string;
@@ -17512,6 +17519,7 @@ export type StartCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     };
   } | null;
 };
@@ -17536,7 +17544,6 @@ export type SubmitCeReferralStepMutation = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
-      canCurrentUserPerform: boolean;
       formDefinition: {
         __typename?: 'FormDefinition';
         id: string;
@@ -18052,6 +18059,7 @@ export type SubmitCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     } | null;
     referral?: {
       __typename?: 'CeReferral';
@@ -18110,12 +18118,15 @@ export type SubmitCeReferralStepMutation = {
         name: string;
         status: CeReferralStepStatus;
         swimlane: string;
-        canCurrentUserPerform: boolean;
         assignees: Array<{
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
         }>;
+        access: {
+          __typename?: 'CeReferralStepAccess';
+          canPerformStep: boolean;
+        };
       }>;
       client?: {
         __typename?: 'Client';
@@ -18309,12 +18320,15 @@ export type AssignParticipantsMutation = {
         name: string;
         status: CeReferralStepStatus;
         swimlane: string;
-        canCurrentUserPerform: boolean;
         assignees: Array<{
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
         }>;
+        access: {
+          __typename?: 'CeReferralStepAccess';
+          canPerformStep: boolean;
+        };
       }>;
       swimlanes: Array<{
         __typename?: 'CeReferralSwimlane';
@@ -18512,12 +18526,12 @@ export type GetCeReferralQuery = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
-      canCurrentUserPerform: boolean;
       assignees: Array<{
         __typename?: 'ApplicationUser';
         id: string;
         name: string;
       }>;
+      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     }>;
     opportunity: {
       __typename?: 'CeOpportunity';
@@ -18571,7 +18585,6 @@ export type GetCeReferralStepQuery = {
     name: string;
     status: CeReferralStepStatus;
     swimlane: string;
-    canCurrentUserPerform: boolean;
     formDefinition: {
       __typename?: 'FormDefinition';
       id: string;
@@ -19087,6 +19100,7 @@ export type GetCeReferralStepQuery = {
       id: string;
       name: string;
     }>;
+    access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   } | null;
 };
 
@@ -45267,7 +45281,9 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
       id
       name
     }
-    canCurrentUserPerform
+    access {
+      canPerformStep
+    }
   }
 `;
 export const CeReferralFieldsFragmentDoc = gql`
