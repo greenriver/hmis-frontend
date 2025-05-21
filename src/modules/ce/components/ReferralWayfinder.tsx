@@ -41,7 +41,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
               to: generateSafePath(ProjectDashboardRoutes.CE, { projectId }),
             },
             {
-              title: 'Go to My Dashboard',
+              title: 'Go to HMIS Dashboard',
               to: generateSafePath(Routes.MY_DASHBOARD),
             },
             ...(!!referral.targetEnrollment
@@ -82,7 +82,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
               }),
             },
             {
-              title: 'Go to My Dashboard',
+              title: 'Go to HMIS Dashboard',
               to: generateSafePath(Routes.MY_DASHBOARD),
             },
           ]}

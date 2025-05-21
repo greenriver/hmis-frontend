@@ -785,6 +785,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeReferralStep',
     fields: [
       {
+        name: 'availableAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -820,6 +824,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
+      },
+      {
+        name: 'updatedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
     ],
   },

@@ -151,6 +151,7 @@ export type ApplicationUser = {
   __typename?: 'ApplicationUser';
   activityLogs: ActivityLogsPaginated;
   auditHistory: ApplicationUserAuditEventsPaginated;
+  ceAssignedSteps?: Maybe<CeReferralStepsPaginated>;
   clientAccessSummaries: ClientAccessSummariesPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -176,6 +177,12 @@ export type ApplicationUserActivityLogsArgs = {
 /** User account for a user of the system */
 export type ApplicationUserAuditHistoryArgs = {
   filters?: InputMaybe<UserAuditEventFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
+export type ApplicationUserCeAssignedStepsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -735,15 +742,19 @@ export type CeReferralStep = {
   __typename?: 'CeReferralStep';
   /** User(s) currently assigned to this step */
   assignees: Array<ApplicationUser>;
+  availableAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   formDefinition: FormDefinition;
   /** unique identifier for this step based on node and instance */
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  referral: CeReferral;
   status: CeReferralStepStatus;
   /** the DB identifier of this step, if it is persisted */
   stepId?: Maybe<Scalars['ID']['output']>;
   submittedValues?: Maybe<Scalars['JsonObject']['output']>;
   swimlane: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  updatedBy?: Maybe<ApplicationUser>;
 };
 
 export enum CeReferralStepStatus {
@@ -756,6 +767,17 @@ export enum CeReferralStepStatus {
   /** Unavailable */
   Unavailable = 'unavailable',
 }
+
+export type CeReferralStepsPaginated = {
+  __typename?: 'CeReferralStepsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeReferralStep>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
 
 export type CeReferralSwimlane = {
   __typename?: 'CeReferralSwimlane';
@@ -16891,6 +16913,37 @@ export type CeReferralStepFieldsFragment = {
   }>;
 };
 
+export type UserCeReferralStepFieldsFragment = {
+  __typename?: 'CeReferralStep';
+  id: string;
+  stepId?: string | null;
+  name: string;
+  availableAt?: string | null;
+  status: CeReferralStepStatus;
+  assignees: Array<{
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  }>;
+  referral: {
+    __typename?: 'CeReferral';
+    id: string;
+    targetProjectId: string;
+    targetProjectName: string;
+    clientId: string;
+    opportunity: { __typename?: 'CeOpportunity'; id: string };
+    client?: {
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    } | null;
+  };
+};
+
 export type CreateCeOpportunityMutationVariables = Exact<{
   projectId: Scalars['ID']['input'];
   input: CeOpportunityInput;
@@ -19237,6 +19290,53 @@ export type GetAdminCeReferralsQuery = {
       } | null;
     }>;
   };
+};
+
+export type GetUserCeAssignedStepsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetUserCeAssignedStepsQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    ceAssignedSteps?: {
+      __typename?: 'CeReferralStepsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeReferralStep';
+        id: string;
+        stepId?: string | null;
+        name: string;
+        availableAt?: string | null;
+        status: CeReferralStepStatus;
+        assignees: Array<{
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        }>;
+        referral: {
+          __typename?: 'CeReferral';
+          id: string;
+          targetProjectId: string;
+          targetProjectName: string;
+          clientId: string;
+          opportunity: { __typename?: 'CeOpportunity'; id: string };
+          client?: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          } | null;
+        };
+      }>;
+    } | null;
+  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -45369,6 +45469,32 @@ export const CeReferralStepFieldsFragmentDoc = gql`
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
 `;
+export const UserCeReferralStepFieldsFragmentDoc = gql`
+  fragment UserCeReferralStepFields on CeReferralStep {
+    id
+    stepId
+    name
+    availableAt
+    status
+    assignees {
+      id
+      name
+    }
+    referral {
+      id
+      opportunity {
+        id
+      }
+      targetProjectId
+      targetProjectName
+      clientId
+      client {
+        ...ClientName
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
@@ -49970,6 +50096,96 @@ export type GetAdminCeReferralsSuspenseQueryHookResult = ReturnType<
 export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables
+>;
+export const GetUserCeAssignedStepsDocument = gql`
+  query GetUserCeAssignedSteps($id: ID!) {
+    user(id: $id) {
+      ceAssignedSteps {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...UserCeReferralStepFields
+        }
+      }
+    }
+  }
+  ${UserCeReferralStepFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserCeAssignedStepsQuery__
+ *
+ * To run a query within a React component, call `useGetUserCeAssignedStepsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCeAssignedStepsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCeAssignedStepsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserCeAssignedStepsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  > &
+    (
+      | { variables: GetUserCeAssignedStepsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >(GetUserCeAssignedStepsDocument, options);
+}
+export function useGetUserCeAssignedStepsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >(GetUserCeAssignedStepsDocument, options);
+}
+export function useGetUserCeAssignedStepsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetUserCeAssignedStepsQuery,
+        GetUserCeAssignedStepsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >(GetUserCeAssignedStepsDocument, options);
+}
+export type GetUserCeAssignedStepsQueryHookResult = ReturnType<
+  typeof useGetUserCeAssignedStepsQuery
+>;
+export type GetUserCeAssignedStepsLazyQueryHookResult = ReturnType<
+  typeof useGetUserCeAssignedStepsLazyQuery
+>;
+export type GetUserCeAssignedStepsSuspenseQueryHookResult = ReturnType<
+  typeof useGetUserCeAssignedStepsSuspenseQuery
+>;
+export type GetUserCeAssignedStepsQueryResult = Apollo.QueryResult<
+  GetUserCeAssignedStepsQuery,
+  GetUserCeAssignedStepsQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(

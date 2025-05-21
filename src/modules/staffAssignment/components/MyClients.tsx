@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { memoize } from 'lodash-es';
 import React from 'react';
@@ -107,13 +107,15 @@ const MyClients = () => {
 
   return (
     <>
-      <Typography component='h2' variant='h4'>
-        My Clients
-      </Typography>
-      <Typography variant='body1'>
-        Households with active enrollments assigned to you
-      </Typography>
       <Paper>
+        <Stack gap={1} m={2}>
+          <Typography component='h2' variant='h4'>
+            Your Clients
+          </Typography>
+          <Typography variant='caption'>
+            Households with active enrollments assigned to you
+          </Typography>
+        </Stack>
         <GenericTableWithData<
           GetUserStaffAssignmentsQuery,
           GetUserStaffAssignmentsQueryVariables,

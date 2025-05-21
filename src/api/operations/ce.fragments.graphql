@@ -172,3 +172,27 @@ fragment CeReferralStepFields on CeReferralStep {
   }
   submittedValues
 }
+
+fragment UserCeReferralStepFields on CeReferralStep {
+  id
+  stepId
+  name
+  availableAt
+  status
+  assignees {
+    id
+    name
+  }
+  referral {
+    id
+    opportunity {
+      id
+    }
+    targetProjectId
+    targetProjectName
+    clientId
+    client {
+      ...ClientName
+    }
+  }
+}
