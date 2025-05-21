@@ -3,10 +3,10 @@ import Loading from '@/components/elements/Loading';
 import PageContainer from '@/components/layout/PageContainer';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
-import UserReferrals from '@/modules/myDashboard/components/UserReferrals';
-import MyClients from '@/modules/staffAssignment/components/MyClients';
+import YourClients from '@/modules/staffAssignment/components/YourClients';
+import YourReferrals from '@/modules/userDashboard/components/YourReferrals';
 
-const MyDashboardPage = () => {
+const UserDashboardPage = () => {
   const { user: { id } = {} } = useAuth();
   // Session storage doesn't store the user's firstName, so fetch with graphql
   const { user } = useUser(id);
@@ -20,14 +20,14 @@ const MyDashboardPage = () => {
     >
       <Grid container spacing={2}>
         <Grid item xs={12} lg={7}>
-          <MyClients />
+          <YourClients />
         </Grid>
         <Grid item xs={12} lg={5}>
-          <UserReferrals />
+          <YourReferrals />
         </Grid>
       </Grid>
     </PageContainer>
   );
 };
 
-export default MyDashboardPage;
+export default UserDashboardPage;

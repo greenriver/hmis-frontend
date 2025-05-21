@@ -14,7 +14,7 @@ import {
   parseHmisDateString,
   stringifyArray,
 } from '@/modules/hmis/hmisUtil';
-import TooltipKeyValue from '@/modules/myDashboard/components/TooltipKeyValue';
+import TooltipKeyValue from '@/modules/userDashboard/components/TooltipKeyValue';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { UserCeReferralStepFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';

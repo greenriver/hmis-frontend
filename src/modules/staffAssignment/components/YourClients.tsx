@@ -101,7 +101,7 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
   },
 ];
 
-const MyClients = () => {
+const YourClients = () => {
   const { user: currentUser } = useAuth();
   if (!currentUser) return;
 
@@ -148,4 +148,4 @@ const MyClients = () => {
   );
 };
 
-export default MyClients;
+export default YourClients;

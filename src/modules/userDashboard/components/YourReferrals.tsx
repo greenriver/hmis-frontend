@@ -4,7 +4,7 @@ import React from 'react';
 import NotFound from '@/components/pages/NotFound';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import UserStepCard from '@/modules/myDashboard/components/UserStepCard';
+import UserStepCard from '@/modules/userDashboard/components/UserStepCard';
 import {
   GetUserCeAssignedStepsDocument,
   GetUserCeAssignedStepsQuery,
@@ -12,7 +12,7 @@ import {
   UserCeReferralStepFieldsFragment,
 } from '@/types/gqlTypes';
 
-const UserReferrals = () => {
+const YourReferrals = () => {
   const { user } = useAuth();
   if (!user) return <NotFound />;
 
@@ -51,4 +51,4 @@ const UserReferrals = () => {
   );
 };
 
-export default UserReferrals;
+export default YourReferrals;
