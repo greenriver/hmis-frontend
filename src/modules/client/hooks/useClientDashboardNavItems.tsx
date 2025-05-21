@@ -53,7 +53,7 @@ export const useClientDashboardNavItems = (
               'canViewReferrals',
               'canViewOwnReferrals',
             ],
-            permissionsMode: 'any',
+            permissionMode: 'any',
           },
           {
             id: 'case-notes',

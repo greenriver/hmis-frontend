@@ -785,7 +785,7 @@ export const protectedRoutes: RouteNode[] = [
                   'canViewReferrals',
                   'canViewOwnReferrals',
                 ]}
-                permissionsMode='any'
+                permissionMode='any'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientReferralsPage />
