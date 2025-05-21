@@ -4,13 +4,16 @@ import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import ClientOpportunitiesTable from '@/modules/ce/components/client/ClientOpportunitiesTable';
 import ClientReferralsTable from '@/modules/ce/components/client/ClientReferralsTable';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
+import { useHasPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 
 const ClientReferralsPage: React.FC = () => {
-  const [canViewClientEligibleOpportunities] = useHasRootPermissions([
+  const { client } = useClientDashboardContext();
+
+  const canViewClientEligibleOpportunities = useHasPermissions(client?.access, [
     'canViewClientEligibleOpportunities',
   ]);
-  const [canViewAnyReferrals] = useHasRootPermissions([
+  const canViewAnyReferrals = useHasPermissions(client?.access, [
     'canViewReferrals',
     'canViewOwnReferrals',
   ]);

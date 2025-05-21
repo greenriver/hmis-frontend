@@ -779,15 +779,17 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ClientDashboardRoutes.REFERRALS,
             element: (
-              <RootPermissionsFilter
+              <ClientRoute
                 permissions={[
                   'canViewClientEligibleOpportunities',
                   'canViewReferrals',
                   'canViewOwnReferrals',
                 ]}
+                permissionsMode='any'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientReferralsPage />
-              </RootPermissionsFilter>
+              </ClientRoute>
             ),
           },
           { path: '*', element: <Navigate to='profile' replace /> },

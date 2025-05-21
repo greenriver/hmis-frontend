@@ -1,20 +1,12 @@
 import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
-
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientDashboardFeature, ClientFieldsFragment } from '@/types/gqlTypes';
 
 export const useClientDashboardNavItems = (
   enabledFeatures: ClientDashboardFeature[]
 ) => {
-  const [canViewClientReferrals] = useHasRootPermissions([
-    'canViewReferrals',
-    'canViewOwnReferrals',
-    'canViewClientEligibleOpportunities',
-  ]);
-
   const navItems: NavItem<ClientFieldsFragment['access']>[] = useMemo(() => {
     return [
       {
@@ -56,7 +48,12 @@ export const useClientDashboardNavItems = (
             id: 'referrals',
             title: 'Referrals',
             path: ClientDashboardRoutes.REFERRALS,
-            hide: !canViewClientReferrals,
+            permissions: [
+              'canViewClientEligibleOpportunities',
+              'canViewReferrals',
+              'canViewOwnReferrals',
+            ],
+            permissionsMode: 'any',
           },
           {
             id: 'case-notes',
@@ -92,7 +89,7 @@ export const useClientDashboardNavItems = (
         ],
       },
     ];
-  }, [canViewClientReferrals, enabledFeatures]);
+  }, [enabledFeatures]);
 
   return navItems;
 };

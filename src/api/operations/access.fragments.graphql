@@ -22,9 +22,6 @@ fragment RootPermissions on QueryAccess {
   canEditClients # globally, determines whether user can add new clients
   canViewDob # globally, determines whether to show col header as "DOB" or "Age"
   canViewClientAlerts
-  canViewClientEligibleOpportunities
-  canViewReferrals
-  canViewOwnReferrals
 
   # Application permissions:
   canViewMyDashboard
@@ -62,6 +59,11 @@ fragment ClientAccessFields on ClientAccess {
   canManageAnyClientFiles
   canManageOwnClientFiles
   canUploadClientFiles
+
+  # Referral-related root permissions, resolved on Client for convenience
+  canViewReferrals
+  canViewOwnReferrals
+  canViewClientEligibleOpportunities
 }
 
 fragment EnrollmentAccessFields on EnrollmentAccess {

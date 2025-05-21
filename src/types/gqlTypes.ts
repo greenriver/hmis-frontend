@@ -1011,12 +1011,15 @@ export type ClientAccess = {
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
   canViewClientName: Scalars['Boolean']['output'];
   canViewClientPhoto: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
+  canViewOwnReferrals: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
+  canViewReferrals: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -8543,9 +8546,6 @@ export type RootPermissionsFragment = {
   canEditClients: boolean;
   canViewDob: boolean;
   canViewClientAlerts: boolean;
-  canViewClientEligibleOpportunities: boolean;
-  canViewReferrals: boolean;
-  canViewOwnReferrals: boolean;
   canViewMyDashboard: boolean;
   canViewCoordinatedEntry: boolean;
   canAdministrateCoordinatedEntry: boolean;
@@ -8573,6 +8573,9 @@ export type ClientAccessFieldsFragment = {
   canManageAnyClientFiles: boolean;
   canManageOwnClientFiles: boolean;
   canUploadClientFiles: boolean;
+  canViewReferrals: boolean;
+  canViewOwnReferrals: boolean;
+  canViewClientEligibleOpportunities: boolean;
 };
 
 export type EnrollmentAccessFieldsFragment = {
@@ -8643,9 +8646,6 @@ export type GetRootPermissionsQuery = {
     canEditClients: boolean;
     canViewDob: boolean;
     canViewClientAlerts: boolean;
-    canViewClientEligibleOpportunities: boolean;
-    canViewReferrals: boolean;
-    canViewOwnReferrals: boolean;
     canViewMyDashboard: boolean;
     canViewCoordinatedEntry: boolean;
     canAdministrateCoordinatedEntry: boolean;
@@ -19417,6 +19417,9 @@ export type ClientFieldsFragment = {
     canManageAnyClientFiles: boolean;
     canManageOwnClientFiles: boolean;
     canUploadClientFiles: boolean;
+    canViewReferrals: boolean;
+    canViewOwnReferrals: boolean;
+    canViewClientEligibleOpportunities: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -19900,6 +19903,9 @@ export type GetClientQuery = {
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canUploadClientFiles: boolean;
+      canViewReferrals: boolean;
+      canViewOwnReferrals: boolean;
+      canViewClientEligibleOpportunities: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -20137,6 +20143,9 @@ export type GetClientPermissionsQuery = {
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canUploadClientFiles: boolean;
+      canViewReferrals: boolean;
+      canViewOwnReferrals: boolean;
+      canViewClientEligibleOpportunities: boolean;
     };
   } | null;
 };
@@ -20669,6 +20678,9 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canManageAnyClientFiles: boolean;
                 canManageOwnClientFiles: boolean;
                 canUploadClientFiles: boolean;
+                canViewReferrals: boolean;
+                canViewOwnReferrals: boolean;
+                canViewClientEligibleOpportunities: boolean;
               };
               externalIds: Array<{
                 __typename?: 'ExternalIdentifier';
@@ -21565,6 +21577,9 @@ export type MergeClientsMutation = {
         canManageAnyClientFiles: boolean;
         canManageOwnClientFiles: boolean;
         canUploadClientFiles: boolean;
+        canViewReferrals: boolean;
+        canViewOwnReferrals: boolean;
+        canViewClientEligibleOpportunities: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -25317,6 +25332,9 @@ export type EnrollmentWithHouseholdFieldsFragment = {
           canManageAnyClientFiles: boolean;
           canManageOwnClientFiles: boolean;
           canUploadClientFiles: boolean;
+          canViewReferrals: boolean;
+          canViewOwnReferrals: boolean;
+          canViewClientEligibleOpportunities: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -26432,6 +26450,9 @@ export type GetEnrollmentWithHouseholdQuery = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -33871,6 +33892,9 @@ export type SubmitFormMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -37014,6 +37038,9 @@ export type HouseholdFieldsFragment = {
         canManageAnyClientFiles: boolean;
         canManageOwnClientFiles: boolean;
         canUploadClientFiles: boolean;
+        canViewReferrals: boolean;
+        canViewOwnReferrals: boolean;
+        canViewClientEligibleOpportunities: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -37093,6 +37120,9 @@ export type HouseholdClientFieldsFragment = {
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canUploadClientFiles: boolean;
+      canViewReferrals: boolean;
+      canViewOwnReferrals: boolean;
+      canViewClientEligibleOpportunities: boolean;
     };
     externalIds: Array<{
       __typename?: 'ExternalIdentifier';
@@ -37269,6 +37299,9 @@ export type JoinHouseholdMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -37356,6 +37389,9 @@ export type JoinHouseholdMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -37456,6 +37492,9 @@ export type SplitHouseholdMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -37543,6 +37582,9 @@ export type SplitHouseholdMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -37639,6 +37681,9 @@ export type GetHouseholdQuery = {
           canManageAnyClientFiles: boolean;
           canManageOwnClientFiles: boolean;
           canUploadClientFiles: boolean;
+          canViewReferrals: boolean;
+          canViewOwnReferrals: boolean;
+          canViewClientEligibleOpportunities: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -44400,9 +44445,6 @@ export const RootPermissionsFragmentDoc = gql`
     canEditClients
     canViewDob
     canViewClientAlerts
-    canViewClientEligibleOpportunities
-    canViewReferrals
-    canViewOwnReferrals
     canViewMyDashboard
     canViewCoordinatedEntry
     canAdministrateCoordinatedEntry
@@ -45550,6 +45592,9 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canManageAnyClientFiles
     canManageOwnClientFiles
     canUploadClientFiles
+    canViewReferrals
+    canViewOwnReferrals
+    canViewClientEligibleOpportunities
   }
 `;
 export const ClientNameObjectFieldsFragmentDoc = gql`
