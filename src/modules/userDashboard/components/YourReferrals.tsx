@@ -16,6 +16,8 @@ const YourReferrals = () => {
   const { user } = useAuth();
   if (!user) return <NotFound />;
 
+  // TODO(#7507) - using this "table" to display cards results in some dom validation issues that cause console warning.
+  // When we refactor GenericTable to use hooks, we should consider supporting non-table layouts more gracefully.
   return (
     <>
       <Paper>
@@ -43,7 +45,7 @@ const YourReferrals = () => {
           defaultPageSize={10}
           recordType='CeReferralStep'
           renderRow={(step) => (
-            <UserStepCard step={step} currentUserId={user.id} />
+            <UserStepCard key={step.id} step={step} currentUserId={user.id} />
           )}
         />
       </Paper>
