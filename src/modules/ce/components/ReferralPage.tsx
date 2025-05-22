@@ -82,7 +82,6 @@ const ReferralPage: React.FC<Props> = ({}) => {
             justifyContent='space-between'
           >
             <Box>
-              {/*todo @martha - waiting for design on display of client name*/}
               <Typography variant='overline'>
                 Referral to {referral.opportunity.name}
               </Typography>
