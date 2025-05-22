@@ -18,7 +18,7 @@ export const TOOLBAR_MENU_ITEMS: (Required<
     permissions: ['canViewMyDashboard'],
     path: Routes.USER_DASHBOARD,
     id: 'navToUserDashboard',
-    activeItemPathIncludes: 'my-dashboard',
+    activeItemPathIncludes: 'dashboard',
     title: 'Dashboard',
   },
   {

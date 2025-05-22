@@ -87,6 +87,7 @@ export {
   ArrowDropDownRoundedIcon as DownIcon,
   DownloadIcon as DownloadIcon,
   EditIcon as EditIcon,
+  // TODO(#7362) - resolve a new icon for Enrollments, use "home" for Projects, per our style guide
   Home as EnrollmentIcon,
   HomeRounded as ProjectIcon,
   ExitToAppRoundedIcon as ExitAssessmentIcon,

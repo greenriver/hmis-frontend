@@ -167,6 +167,11 @@ export const protectedRoutes: RouteNode[] = [
     children: [
       { path: Routes.ALL_PROJECTS, element: <AllProjectsPage /> },
       { path: Routes.USER_DASHBOARD, element: <UserDashboardPage /> },
+      // For backwards compat, old '/my-dashboard' redirects to '/dashboard'
+      {
+        path: Routes.MY_DASHBOARD,
+        element: <Navigate to='/dashboard' replace />,
+      },
       {
         path: Routes.PROJECT,
         element: <ProjectDashboard />,

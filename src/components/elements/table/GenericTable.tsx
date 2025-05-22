@@ -79,7 +79,6 @@ export interface Props<T> {
   renderRow?: (row: T, columnKeys: string[]) => ReactNode;
   // TableBodyComponent can be overridden. This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
   TableBodyComponent?: ComponentType | keyof JSX.IntrinsicElements;
-  TableComponent?: ComponentType | keyof JSX.IntrinsicElements;
   belowRowsContent?: ReactNode; // component to insert below all rendered rows, above footer
 }
 

@@ -10,7 +10,8 @@ export const Routes = {
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
   CREATE_PROJECT: '/organizations/:organizationId/new-project',
   CREATE_ORGANIZATION: '/projects/new-organization',
-  USER_DASHBOARD: '/my-dashboard', // we prefer to avoid "my" in favor of addressing user as "you/your", but not renaming the route yet to avoid churn
+  USER_DASHBOARD: '/dashboard',
+  MY_DASHBOARD: '/my-dashboard', // maintained for backwards compat
 } as const;
 
 const adminDashboardRoutes = {
