@@ -134,7 +134,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
           </Stack>
         </Stack>
       </CommonStickyBar>
-      <Container maxWidth='lg' sx={{ py: 4 }}>
+      <Container maxWidth='md' sx={{ py: 4 }}>
         <Outlet context={outletContext} />
       </Container>
     </>
