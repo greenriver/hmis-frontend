@@ -23,20 +23,20 @@ const ReferralStatusChip: React.FC<Props> = ({ status }) => {
   // TODO(7393) - add styles and colors, and make sure all statuses are mapped correctly
   switch (status) {
     case CeReferralStatus.Initialized:
-      return <Chip label='Eligible' {...baseChipProps} />;
+      return <Chip label='Initialized' {...baseChipProps} />;
     case CeReferralStatus.InProgress:
       return (
         <Chip
-          label='In Process'
+          label='In Progress'
           {...baseChipProps}
           color='primary'
           icon={<InProgressIcon />}
         />
       );
     case CeReferralStatus.Accepted:
-      return <Chip label='Approved' {...baseChipProps} />;
+      return <Chip label='Accepted' {...baseChipProps} />;
     case CeReferralStatus.Rejected:
-      return <Chip label='Declined' {...baseChipProps} />;
+      return <Chip label='Rejected' {...baseChipProps} />;
     default:
       return '';
   }

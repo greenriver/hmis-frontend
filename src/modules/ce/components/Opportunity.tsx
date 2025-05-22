@@ -40,9 +40,7 @@ const Opportunity: React.FC<Props> = ({}) => {
   // query for the opportunity's top candidate here, rather than inside the OpportunityBanner,
   // so we can batch it with the above query for the Opportunity
   const {
-    data: {
-      ceOpportunity: { candidates: { nodes: candidates = [] } = {} } = {},
-    } = {},
+    data: { ceOpportunity } = {},
     loading: topCandidateLoading,
     error: topCandidateError,
   } = useGetCeOpportunityCandidatesQuery({
@@ -53,8 +51,12 @@ const Opportunity: React.FC<Props> = ({}) => {
   });
 
   const topCandidate = useMemo(() => {
-    return candidates[0];
-  }, [candidates]);
+    if (!ceOpportunity || ceOpportunity.candidates.nodes.length === 0) {
+      return undefined;
+    }
+
+    return ceOpportunity.candidates.nodes[0];
+  }, [ceOpportunity]);
 
   if (loading || topCandidateLoading) return <Loading />;
   if (error) throw error;
