@@ -46,7 +46,7 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
         id: 'coordinated-entry',
         title: 'Coordinated Entry',
         path: AdminDashboardRoutes.COORDINATED_ENTRY,
-        permissions: ['canViewCoordinatedEntry'], // TODO (#7506) - update permission
+        permissions: ['canAdministrateCoordinatedEntry'],
       },
     ],
   },

@@ -11,9 +11,14 @@ import {
 
 interface Props {
   referral: CeReferralFieldsFragment;
+  projectId: string;
   onClose?: VoidFunction;
 }
-const AssignContactsForm: React.FC<Props> = ({ referral, onClose }: Props) => {
+const AssignContactsForm: React.FC<Props> = ({
+  referral,
+  projectId,
+  onClose,
+}: Props) => {
   const initialValues = useMemo(() => {
     return reduce(
       referral.swimlanes,
@@ -68,6 +73,7 @@ const AssignContactsForm: React.FC<Props> = ({ referral, onClose }: Props) => {
           setUsers={(userIds) => {
             handleChangeValue(swimlane.id, userIds);
           }}
+          projectId={projectId}
         />
       ))}
       <LoadingButton onClick={() => handleSubmit()} loading={loading}>

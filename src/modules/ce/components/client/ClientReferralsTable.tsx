@@ -43,7 +43,7 @@ const COLUMNS: ColumnDef<ClientCeReferralTableFieldsFragment>[] = [
   REFERRAL_WITH_PROJECT_COLUMNS.projectType,
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.referredBy,
-  REFERRAL_COLUMNS.step,
+  REFERRAL_COLUMNS.currentSteps,
 ];
 
 const ClientReferralsTable: React.FC = () => {

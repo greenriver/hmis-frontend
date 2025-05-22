@@ -19,6 +19,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import AssignContactsForm from '@/modules/ce/components/AssignContactsForm';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
@@ -34,6 +35,8 @@ interface Props {}
  */
 const ReferralPage: React.FC<Props> = ({}) => {
   const { referralId } = useSafeParams() as { referralId: string };
+
+  const { project } = useProjectDashboardContext();
 
   const {
     data: { ceReferral: referral } = {},
@@ -108,15 +111,19 @@ const ReferralPage: React.FC<Props> = ({}) => {
               title={'Referral'}
               ButtonProps={{ startIcon: <InfoIcon /> }}
             />
-            {referral.swimlanes.length > 0 && (
-              // If this referral has no swimlanes, hide the Contacts button. This will only happen if the referral also has no tasks
-              <CommonButtonDrawer
-                title={'Contacts'}
-                ButtonProps={{ startIcon: <ContactsIcon /> }}
-              >
-                <AssignContactsForm referral={referral} />
-              </CommonButtonDrawer>
-            )}
+            {referral.swimlanes.length > 0 &&
+              project.access.canAssignReferralTasks && (
+                // If this referral has no swimlanes, hide the Contacts button. This will only happen if the referral also has no tasks
+                <CommonButtonDrawer
+                  title={'Contacts'}
+                  ButtonProps={{ startIcon: <ContactsIcon /> }}
+                >
+                  <AssignContactsForm
+                    referral={referral}
+                    projectId={project.id}
+                  />
+                </CommonButtonDrawer>
+              )}
             <CommonButtonDrawer
               title={'Activity'}
               ButtonProps={{ startIcon: <ActivityIcon /> }}

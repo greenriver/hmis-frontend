@@ -26,6 +26,7 @@ fragment RootPermissions on QueryAccess {
   # Application permissions:
   canViewMyDashboard
   canViewCoordinatedEntry
+  canAdministrateCoordinatedEntry
 
   # Root Project permissions:
   canEditOrganization # globally, determines whether user can create organization
@@ -58,6 +59,11 @@ fragment ClientAccessFields on ClientAccess {
   canManageAnyClientFiles
   canManageOwnClientFiles
   canUploadClientFiles
+
+  # Referral-related root permissions, resolved on Client for convenience
+  canViewReferrals
+  canViewOwnReferrals
+  canViewClientEligibleOpportunities
 }
 
 fragment EnrollmentAccessFields on EnrollmentAccess {
@@ -88,6 +94,13 @@ fragment ProjectAccessFields on ProjectAccess {
   canManageOutgoingReferrals
   canManageExternalFormSubmissions
   canSplitHouseholds
+  canViewReferrals
+  canViewOwnReferrals
+  canViewPrioritizedClientLists
+  canStartReferrals
+  canPerformAnyReferralTasks
+  canPerformOwnReferralTasks
+  canAssignReferralTasks
 }
 
 fragment OrganizationAccessFields on OrganizationAccess {

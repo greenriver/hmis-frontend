@@ -54,6 +54,70 @@ const Opportunity: React.FC<Props> = ({}) => {
     return ceOpportunity.candidates.nodes[0];
   }, [ceOpportunity]);
 
+  const tabDefinitions = useMemo(() => {
+    if (!opportunity) return [];
+    const defs = [];
+
+    if (project.access.canViewUnits) {
+      // just for symmetry; should already be the case if opportunity was returned
+      defs.push({
+        title: 'Overview',
+        key: 'overview',
+        contents: (
+          <Grid container columnSpacing={2} rowSpacing={4}>
+            <Grid item xs={12}>
+              <OpportunityBanner
+                topCandidate={topCandidate}
+                opportunity={opportunity}
+              />
+            </Grid>
+            {opportunity.eligibilityRequirements && (
+              <Grid item xs={12} md={6}>
+                <MatchRuleGrid
+                  title='Requirements'
+                  rules={opportunity.eligibilityRequirements}
+                />
+              </Grid>
+            )}
+            {opportunity.priorityScheme && (
+              <Grid item xs={12} md={6}>
+                <MatchRuleGrid
+                  title='Prioritization'
+                  rules={[opportunity.priorityScheme]}
+                />
+              </Grid>
+            )}
+          </Grid>
+        ),
+      });
+    }
+
+    if (project.access.canViewPrioritizedClientLists) {
+      defs.push({
+        title: 'Eligible Clients',
+        key: 'clients',
+        contents: (
+          <Paper>
+            <PrioritizedClientsTable
+              opportunityId={opportunityId}
+              projectId={projectId}
+              status={opportunity.status}
+            />
+          </Paper>
+        ),
+      });
+    }
+
+    return defs;
+  }, [
+    opportunity,
+    opportunityId,
+    project.access.canViewPrioritizedClientLists,
+    project.access.canViewUnits,
+    projectId,
+    topCandidate,
+  ]);
+
   if (loading || topCandidateLoading) return <Loading />;
   if (error) throw error;
   if (topCandidateError) throw topCandidateError;
@@ -71,51 +135,7 @@ const Opportunity: React.FC<Props> = ({}) => {
       </Typography>
       <CommonTabs
         ariaLabel={'Eligible Clients and Details tabs'}
-        tabDefinitions={[
-          {
-            title: 'Overview',
-            key: 'overview',
-            contents: (
-              <Grid container columnSpacing={2} rowSpacing={4}>
-                <Grid item xs={12}>
-                  <OpportunityBanner
-                    topCandidate={topCandidate}
-                    opportunity={opportunity}
-                  />
-                </Grid>
-                {opportunity.eligibilityRequirements && (
-                  <Grid item xs={12} md={6}>
-                    <MatchRuleGrid
-                      title='Requirements'
-                      rules={opportunity.eligibilityRequirements}
-                    />
-                  </Grid>
-                )}
-                {opportunity.priorityScheme && (
-                  <Grid item xs={12} md={6}>
-                    <MatchRuleGrid
-                      title='Prioritization'
-                      rules={[opportunity.priorityScheme]}
-                    />
-                  </Grid>
-                )}
-              </Grid>
-            ),
-          },
-          {
-            title: 'Eligible Clients',
-            key: 'clients',
-            contents: (
-              <Paper>
-                <PrioritizedClientsTable
-                  opportunityId={opportunityId}
-                  projectId={projectId}
-                  status={opportunity.status}
-                />
-              </Paper>
-            ),
-          },
-        ]}
+        tabDefinitions={tabDefinitions}
       />
     </>
   );
