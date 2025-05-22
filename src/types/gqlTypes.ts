@@ -6575,6 +6575,8 @@ export type QueryAccess = {
   canEditProjectDetails: Scalars['Boolean']['output'];
   canEditUsersInWarehouse: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
+  canHaveAssignedReferralTasks: Scalars['Boolean']['output'];
+  canHaveAssignedStaff: Scalars['Boolean']['output'];
   canImpersonateUsers: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
@@ -8540,6 +8542,8 @@ export type RootPermissionsFragment = {
   canViewClientAlerts: boolean;
   canViewMyDashboard: boolean;
   canViewCoordinatedEntry: boolean;
+  canHaveAssignedStaff: boolean;
+  canHaveAssignedReferralTasks: boolean;
   canEditOrganization: boolean;
   canEditProjectDetails: boolean;
 };
@@ -8629,6 +8633,8 @@ export type GetRootPermissionsQuery = {
     canViewClientAlerts: boolean;
     canViewMyDashboard: boolean;
     canViewCoordinatedEntry: boolean;
+    canHaveAssignedStaff: boolean;
+    canHaveAssignedReferralTasks: boolean;
     canEditOrganization: boolean;
     canEditProjectDetails: boolean;
   };
@@ -44417,6 +44423,8 @@ export const RootPermissionsFragmentDoc = gql`
     canViewClientAlerts
     canViewMyDashboard
     canViewCoordinatedEntry
+    canHaveAssignedStaff
+    canHaveAssignedReferralTasks
     canEditOrganization
     canEditProjectDetails
   }

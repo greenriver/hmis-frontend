@@ -26,7 +26,7 @@ interface Props {
 
 const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
   const { referral } = step;
-  // todo @martha - this is going to be a merge conflict
+  // todo @martha - after merge need to update
   const path = generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
     projectId: referral.targetProjectId,
     opportunityId: referral.opportunity.id,

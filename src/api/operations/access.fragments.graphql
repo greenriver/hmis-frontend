@@ -25,7 +25,9 @@ fragment RootPermissions on QueryAccess {
 
   # Application permissions:
   canViewMyDashboard
-  canViewCoordinatedEntry
+  canViewCoordinatedEntry # TODO(7409) - stop resolving this permission once we remove all references
+  canHaveAssignedStaff
+  canHaveAssignedReferralTasks
 
   # Root Project permissions:
   canEditOrganization # globally, determines whether user can create organization
