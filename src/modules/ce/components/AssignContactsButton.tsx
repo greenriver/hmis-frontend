@@ -20,8 +20,12 @@ import {
 
 interface Props {
   referral: CeReferralFieldsFragment;
+  projectId: string;
 }
-const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
+const AssignContactsButton: React.FC<Props> = ({
+  referral,
+  projectId,
+}: Props) => {
   const [open, setOpen] = useState(false);
 
   const initialValues = useMemo(() => {
@@ -109,6 +113,7 @@ const AssignContactsButton: React.FC<Props> = ({ referral }: Props) => {
                 setUsers={(userIds) => {
                   handleChangeValue(swimlane.id, userIds);
                 }}
+                projectId={projectId}
               />
             ))}
           </Stack>

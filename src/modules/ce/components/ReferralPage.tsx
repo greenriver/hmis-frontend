@@ -19,6 +19,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import AssignContactsButton from '@/modules/ce/components/AssignContactsButton';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ClientDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
@@ -38,6 +39,8 @@ const ReferralPage: React.FC<Props> = ({}) => {
     opportunityId: string;
     referralId: string;
   };
+
+  const { project } = useProjectDashboardContext();
 
   const {
     data: { ceReferral: referral } = {},
@@ -121,8 +124,12 @@ const ReferralPage: React.FC<Props> = ({}) => {
             Details
           </ButtonLink>
           <Divider orientation='vertical' flexItem />
-          <AssignContactsButton referral={referral} />
-          <Divider orientation='vertical' flexItem />
+          {project.access.canAssignReferralTasks && (
+            <>
+              <AssignContactsButton referral={referral} projectId={projectId} />
+              <Divider orientation='vertical' flexItem />
+            </>
+          )}
           <ButtonLink
             to={generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
               projectId,

@@ -3,7 +3,7 @@ query GetUnits(
   $limit: Int = 10
   $offset: Int = 0
   $filters: UnitFilterOptions
-  $ceEnabled: Boolean = false
+  $includeCeFields: Boolean = false
 ) {
   project(id: $id) {
     id
@@ -27,7 +27,10 @@ query GetProjectUnitTypes($id: ID!) {
   }
 }
 
-mutation CreateUnits($input: CreateUnitsInput!, $ceEnabled: Boolean = false) {
+mutation CreateUnits(
+  $input: CreateUnitsInput!
+  $includeCeFields: Boolean = false
+) {
   createUnits(input: $input) {
     clientMutationId
     units {
@@ -49,7 +52,10 @@ mutation DeleteUnits($input: DeleteUnitsInput!) {
   }
 }
 
-mutation UpdateUnits($input: UpdateUnitsInput!, $ceEnabled: Boolean = false) {
+mutation UpdateUnits(
+  $input: UpdateUnitsInput!
+  $includeCeFields: Boolean = false
+) {
   updateUnits(input: $input) {
     clientMutationId
     units {
