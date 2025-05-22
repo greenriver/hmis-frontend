@@ -740,6 +740,7 @@ export enum CeReferralStatus {
 
 export type CeReferralStep = {
   __typename?: 'CeReferralStep';
+  access: CeReferralStepAccess;
   /** User(s) currently assigned to this step */
   assignees: Array<ApplicationUser>;
   availableAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -755,6 +756,12 @@ export type CeReferralStep = {
   swimlane: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   updatedBy?: Maybe<ApplicationUser>;
+};
+
+export type CeReferralStepAccess = {
+  __typename?: 'CeReferralStepAccess';
+  canPerformStep: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export enum CeReferralStepStatus {
@@ -1024,12 +1031,15 @@ export type ClientAccess = {
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
   canViewClientName: Scalars['Boolean']['output'];
   canViewClientPhoto: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
+  canViewOwnReferrals: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
+  canViewReferrals: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -5121,7 +5131,9 @@ export enum PickListType {
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   CustomServiceCategories = 'CUSTOM_SERVICE_CATEGORIES',
   Destination = 'DESTINATION',
-  /** Current users who are eligible for staff assignment */
+  /** Users who can be assigned to referral steps in the specified project */
+  EligibleReferralStepAssignmentUsers = 'ELIGIBLE_REFERRAL_STEP_ASSIGNMENT_USERS',
+  /** Users who are eligible for staff assignment */
   EligibleStaffAssignmentUsers = 'ELIGIBLE_STAFF_ASSIGNMENT_USERS',
   /** Projects that the User can enroll Clients in */
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
@@ -6056,6 +6068,7 @@ export type ProjectUnitsArgs = {
 
 export type ProjectAccess = {
   __typename?: 'ProjectAccess';
+  canAssignReferralTasks: Scalars['Boolean']['output'];
   canDeleteAssessments: Scalars['Boolean']['output'];
   canDeleteEnrollments: Scalars['Boolean']['output'];
   canDeleteProject: Scalars['Boolean']['output'];
@@ -6067,11 +6080,17 @@ export type ProjectAccess = {
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
   canManageUnits: Scalars['Boolean']['output'];
+  canPerformAnyReferralTasks: Scalars['Boolean']['output'];
+  canPerformOwnReferralTasks: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
+  canStartReferrals: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
+  canViewOwnReferrals: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
+  canViewPrioritizedClientLists: Scalars['Boolean']['output'];
+  canViewReferrals: Scalars['Boolean']['output'];
   canViewUnits: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
@@ -6560,6 +6579,8 @@ export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean']['output'];
   canAdministrateConfig: Scalars['Boolean']['output'];
+  canAdministrateCoordinatedEntry: Scalars['Boolean']['output'];
+  canAssignReferralTasks: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
   canAuditEnrollments: Scalars['Boolean']['output'];
   canAuditUsers: Scalars['Boolean']['output'];
@@ -6589,12 +6610,16 @@ export type QueryAccess = {
   canManageScanCards: Scalars['Boolean']['output'];
   canManageUnits: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
+  canPerformAnyReferralTasks: Scalars['Boolean']['output'];
+  canPerformOwnReferralTasks: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
+  canStartReferrals: Scalars['Boolean']['output'];
   canTransferEnrollments: Scalars['Boolean']['output'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClientContactInfo: Scalars['Boolean']['output'];
+  canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
   canViewClientName: Scalars['Boolean']['output'];
   canViewClientPhoto: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
@@ -6607,8 +6632,11 @@ export type QueryAccess = {
   canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
   canViewMyDashboard: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
+  canViewOwnReferrals: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
+  canViewPrioritizedClientLists: Scalars['Boolean']['output'];
   canViewProject: Scalars['Boolean']['output'];
+  canViewReferrals: Scalars['Boolean']['output'];
   canViewUnits: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
@@ -8542,6 +8570,7 @@ export type RootPermissionsFragment = {
   canViewClientAlerts: boolean;
   canViewMyDashboard: boolean;
   canViewCoordinatedEntry: boolean;
+  canAdministrateCoordinatedEntry: boolean;
   canHaveAssignedStaff: boolean;
   canHaveAssignedReferralTasks: boolean;
   canEditOrganization: boolean;
@@ -8568,6 +8597,9 @@ export type ClientAccessFieldsFragment = {
   canManageAnyClientFiles: boolean;
   canManageOwnClientFiles: boolean;
   canUploadClientFiles: boolean;
+  canViewReferrals: boolean;
+  canViewOwnReferrals: boolean;
+  canViewClientEligibleOpportunities: boolean;
 };
 
 export type EnrollmentAccessFieldsFragment = {
@@ -8601,6 +8633,13 @@ export type ProjectAccessFieldsFragment = {
   canManageOutgoingReferrals: boolean;
   canManageExternalFormSubmissions: boolean;
   canSplitHouseholds: boolean;
+  canViewReferrals: boolean;
+  canViewOwnReferrals: boolean;
+  canViewPrioritizedClientLists: boolean;
+  canStartReferrals: boolean;
+  canPerformAnyReferralTasks: boolean;
+  canPerformOwnReferralTasks: boolean;
+  canAssignReferralTasks: boolean;
 };
 
 export type OrganizationAccessFieldsFragment = {
@@ -8633,6 +8672,7 @@ export type GetRootPermissionsQuery = {
     canViewClientAlerts: boolean;
     canViewMyDashboard: boolean;
     canViewCoordinatedEntry: boolean;
+    canAdministrateCoordinatedEntry: boolean;
     canHaveAssignedStaff: boolean;
     canHaveAssignedReferralTasks: boolean;
     canEditOrganization: boolean;
@@ -16316,6 +16356,7 @@ export type CeReferralFieldsFragment = {
       id: string;
       name: string;
     }>;
+    access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   }>;
   opportunity: {
     __typename?: 'CeOpportunity';
@@ -16392,6 +16433,7 @@ export type CeReferralStepSummaryFieldsFragment = {
     id: string;
     name: string;
   }>;
+  access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
 export type CeReferralStepFieldsFragment = {
@@ -16917,6 +16959,7 @@ export type CeReferralStepFieldsFragment = {
     id: string;
     name: string;
   }>;
+  access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
 export type UserCeReferralStepFieldsFragment = {
@@ -17533,6 +17576,7 @@ export type StartCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     };
   } | null;
 };
@@ -18072,6 +18116,7 @@ export type SubmitCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     } | null;
     referral?: {
       __typename?: 'CeReferral';
@@ -18135,6 +18180,10 @@ export type SubmitCeReferralStepMutation = {
           id: string;
           name: string;
         }>;
+        access: {
+          __typename?: 'CeReferralStepAccess';
+          canPerformStep: boolean;
+        };
       }>;
       client?: {
         __typename?: 'Client';
@@ -18175,7 +18224,7 @@ export type SubmitCeReferralStepMutation = {
 
 export type MarkUnitsAvailableMutationVariables = Exact<{
   unitIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
-  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type MarkUnitsAvailableMutation = {
@@ -18243,7 +18292,7 @@ export type MarkUnitsAvailableMutation = {
 
 export type MarkUnitsUnavailableMutationVariables = Exact<{
   unitIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
-  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type MarkUnitsUnavailableMutation = {
@@ -18333,6 +18382,10 @@ export type AssignParticipantsMutation = {
           id: string;
           name: string;
         }>;
+        access: {
+          __typename?: 'CeReferralStepAccess';
+          canPerformStep: boolean;
+        };
       }>;
       swimlanes: Array<{
         __typename?: 'CeReferralSwimlane';
@@ -18535,6 +18588,7 @@ export type GetCeReferralQuery = {
         id: string;
         name: string;
       }>;
+      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     }>;
     opportunity: {
       __typename?: 'CeOpportunity';
@@ -19103,6 +19157,7 @@ export type GetCeReferralStepQuery = {
       id: string;
       name: string;
     }>;
+    access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   } | null;
 };
 
@@ -19466,6 +19521,9 @@ export type ClientFieldsFragment = {
     canManageAnyClientFiles: boolean;
     canManageOwnClientFiles: boolean;
     canUploadClientFiles: boolean;
+    canViewReferrals: boolean;
+    canViewOwnReferrals: boolean;
+    canViewClientEligibleOpportunities: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -19949,6 +20007,9 @@ export type GetClientQuery = {
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canUploadClientFiles: boolean;
+      canViewReferrals: boolean;
+      canViewOwnReferrals: boolean;
+      canViewClientEligibleOpportunities: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -20186,6 +20247,9 @@ export type GetClientPermissionsQuery = {
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canUploadClientFiles: boolean;
+      canViewReferrals: boolean;
+      canViewOwnReferrals: boolean;
+      canViewClientEligibleOpportunities: boolean;
     };
   } | null;
 };
@@ -20718,6 +20782,9 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canManageAnyClientFiles: boolean;
                 canManageOwnClientFiles: boolean;
                 canUploadClientFiles: boolean;
+                canViewReferrals: boolean;
+                canViewOwnReferrals: boolean;
+                canViewClientEligibleOpportunities: boolean;
               };
               externalIds: Array<{
                 __typename?: 'ExternalIdentifier';
@@ -21614,6 +21681,9 @@ export type MergeClientsMutation = {
         canManageAnyClientFiles: boolean;
         canManageOwnClientFiles: boolean;
         canUploadClientFiles: boolean;
+        canViewReferrals: boolean;
+        canViewOwnReferrals: boolean;
+        canViewClientEligibleOpportunities: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -25366,6 +25436,9 @@ export type EnrollmentWithHouseholdFieldsFragment = {
           canManageAnyClientFiles: boolean;
           canManageOwnClientFiles: boolean;
           canUploadClientFiles: boolean;
+          canViewReferrals: boolean;
+          canViewOwnReferrals: boolean;
+          canViewClientEligibleOpportunities: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -26481,6 +26554,9 @@ export type GetEnrollmentWithHouseholdQuery = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -33920,6 +33996,9 @@ export type SubmitFormMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -35020,6 +35099,13 @@ export type SubmitFormMutation = {
             canManageOutgoingReferrals: boolean;
             canManageExternalFormSubmissions: boolean;
             canSplitHouseholds: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewPrioritizedClientLists: boolean;
+            canStartReferrals: boolean;
+            canPerformAnyReferralTasks: boolean;
+            canPerformOwnReferralTasks: boolean;
+            canAssignReferralTasks: boolean;
           };
           user?: {
             __typename: 'ApplicationUser';
@@ -37056,6 +37142,9 @@ export type HouseholdFieldsFragment = {
         canManageAnyClientFiles: boolean;
         canManageOwnClientFiles: boolean;
         canUploadClientFiles: boolean;
+        canViewReferrals: boolean;
+        canViewOwnReferrals: boolean;
+        canViewClientEligibleOpportunities: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -37135,6 +37224,9 @@ export type HouseholdClientFieldsFragment = {
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canUploadClientFiles: boolean;
+      canViewReferrals: boolean;
+      canViewOwnReferrals: boolean;
+      canViewClientEligibleOpportunities: boolean;
     };
     externalIds: Array<{
       __typename?: 'ExternalIdentifier';
@@ -37311,6 +37403,9 @@ export type JoinHouseholdMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -37398,6 +37493,9 @@ export type JoinHouseholdMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -37498,6 +37596,9 @@ export type SplitHouseholdMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -37585,6 +37686,9 @@ export type SplitHouseholdMutation = {
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canUploadClientFiles: boolean;
+            canViewReferrals: boolean;
+            canViewOwnReferrals: boolean;
+            canViewClientEligibleOpportunities: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -37681,6 +37785,9 @@ export type GetHouseholdQuery = {
           canManageAnyClientFiles: boolean;
           canManageOwnClientFiles: boolean;
           canUploadClientFiles: boolean;
+          canViewReferrals: boolean;
+          canViewOwnReferrals: boolean;
+          canViewClientEligibleOpportunities: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -38684,6 +38791,13 @@ export type ProjectAllFieldsFragment = {
     canManageOutgoingReferrals: boolean;
     canManageExternalFormSubmissions: boolean;
     canSplitHouseholds: boolean;
+    canViewReferrals: boolean;
+    canViewOwnReferrals: boolean;
+    canViewPrioritizedClientLists: boolean;
+    canStartReferrals: boolean;
+    canPerformAnyReferralTasks: boolean;
+    canPerformOwnReferralTasks: boolean;
+    canAssignReferralTasks: boolean;
   };
   user?: {
     __typename: 'ApplicationUser';
@@ -39568,6 +39682,13 @@ export type GetProjectQuery = {
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
       canSplitHouseholds: boolean;
+      canViewReferrals: boolean;
+      canViewOwnReferrals: boolean;
+      canViewPrioritizedClientLists: boolean;
+      canStartReferrals: boolean;
+      canPerformAnyReferralTasks: boolean;
+      canPerformOwnReferralTasks: boolean;
+      canAssignReferralTasks: boolean;
     };
     user?: {
       __typename: 'ApplicationUser';
@@ -39748,6 +39869,13 @@ export type GetProjectPermissionsQuery = {
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
       canSplitHouseholds: boolean;
+      canViewReferrals: boolean;
+      canViewOwnReferrals: boolean;
+      canViewPrioritizedClientLists: boolean;
+      canStartReferrals: boolean;
+      canPerformAnyReferralTasks: boolean;
+      canPerformOwnReferralTasks: boolean;
+      canAssignReferralTasks: boolean;
     };
   } | null;
 };
@@ -43852,7 +43980,7 @@ export type GetUnitsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<UnitFilterOptions>;
-  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetUnitsQuery = {
@@ -43946,7 +44074,7 @@ export type GetProjectUnitTypesQuery = {
 
 export type CreateUnitsMutationVariables = Exact<{
   input: CreateUnitsInput;
-  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type CreateUnitsMutation = {
@@ -44056,7 +44184,7 @@ export type DeleteUnitsMutation = {
 
 export type UpdateUnitsMutationVariables = Exact<{
   input: UpdateUnitsInput;
-  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type UpdateUnitsMutation = {
@@ -44423,6 +44551,7 @@ export const RootPermissionsFragmentDoc = gql`
     canViewClientAlerts
     canViewMyDashboard
     canViewCoordinatedEntry
+    canAdministrateCoordinatedEntry
     canHaveAssignedStaff
     canHaveAssignedReferralTasks
     canEditOrganization
@@ -45300,6 +45429,9 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
       id
       name
     }
+    access {
+      canPerformStep
+    }
   }
 `;
 export const CeReferralFieldsFragmentDoc = gql`
@@ -45592,6 +45724,9 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canManageAnyClientFiles
     canManageOwnClientFiles
     canUploadClientFiles
+    canViewReferrals
+    canViewOwnReferrals
+    canViewClientEligibleOpportunities
   }
 `;
 export const ClientNameObjectFieldsFragmentDoc = gql`
@@ -46406,6 +46541,13 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canManageOutgoingReferrals
     canManageExternalFormSubmissions
     canSplitHouseholds
+    canViewReferrals
+    canViewOwnReferrals
+    canViewPrioritizedClientLists
+    canStartReferrals
+    canPerformAnyReferralTasks
+    canPerformOwnReferralTasks
+    canAssignReferralTasks
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
@@ -46914,7 +47056,7 @@ export const UnitFieldsFragmentDoc = gql`
         ...ClientName
       }
     }
-    ...UnitWithCeFields @include(if: $ceEnabled)
+    ...UnitWithCeFields @include(if: $includeCeFields)
   }
   ${UnitTypeFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
@@ -48996,7 +49138,10 @@ export type SubmitCeReferralStepMutationOptions = Apollo.BaseMutationOptions<
   SubmitCeReferralStepMutationVariables
 >;
 export const MarkUnitsAvailableDocument = gql`
-  mutation MarkUnitsAvailable($unitIds: [ID!]!, $ceEnabled: Boolean = true) {
+  mutation MarkUnitsAvailable(
+    $unitIds: [ID!]!
+    $includeCeFields: Boolean = true
+  ) {
     markUnitsAvailable(unitIds: $unitIds) {
       units {
         ...UnitFields
@@ -49024,7 +49169,7 @@ export type MarkUnitsAvailableMutationFn = Apollo.MutationFunction<
  * const [markUnitsAvailableMutation, { data, loading, error }] = useMarkUnitsAvailableMutation({
  *   variables: {
  *      unitIds: // value for 'unitIds'
- *      ceEnabled: // value for 'ceEnabled'
+ *      includeCeFields: // value for 'includeCeFields'
  *   },
  * });
  */
@@ -49050,7 +49195,10 @@ export type MarkUnitsAvailableMutationOptions = Apollo.BaseMutationOptions<
   MarkUnitsAvailableMutationVariables
 >;
 export const MarkUnitsUnavailableDocument = gql`
-  mutation MarkUnitsUnavailable($unitIds: [ID!]!, $ceEnabled: Boolean = true) {
+  mutation MarkUnitsUnavailable(
+    $unitIds: [ID!]!
+    $includeCeFields: Boolean = true
+  ) {
     markUnitsUnavailable(unitIds: $unitIds) {
       units {
         ...UnitFields
@@ -49078,7 +49226,7 @@ export type MarkUnitsUnavailableMutationFn = Apollo.MutationFunction<
  * const [markUnitsUnavailableMutation, { data, loading, error }] = useMarkUnitsUnavailableMutation({
  *   variables: {
  *      unitIds: // value for 'unitIds'
- *      ceEnabled: // value for 'ceEnabled'
+ *      includeCeFields: // value for 'includeCeFields'
  *   },
  * });
  */
@@ -61108,7 +61256,7 @@ export const GetUnitsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $filters: UnitFilterOptions
-    $ceEnabled: Boolean = false
+    $includeCeFields: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -61141,7 +61289,7 @@ export const GetUnitsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
- *      ceEnabled: // value for 'ceEnabled'
+ *      includeCeFields: // value for 'includeCeFields'
  *   },
  * });
  */
@@ -61279,7 +61427,10 @@ export type GetProjectUnitTypesQueryResult = Apollo.QueryResult<
   GetProjectUnitTypesQueryVariables
 >;
 export const CreateUnitsDocument = gql`
-  mutation CreateUnits($input: CreateUnitsInput!, $ceEnabled: Boolean = false) {
+  mutation CreateUnits(
+    $input: CreateUnitsInput!
+    $includeCeFields: Boolean = false
+  ) {
     createUnits(input: $input) {
       clientMutationId
       units {
@@ -61312,7 +61463,7 @@ export type CreateUnitsMutationFn = Apollo.MutationFunction<
  * const [createUnitsMutation, { data, loading, error }] = useCreateUnitsMutation({
  *   variables: {
  *      input: // value for 'input'
- *      ceEnabled: // value for 'ceEnabled'
+ *      includeCeFields: // value for 'includeCeFields'
  *   },
  * });
  */
@@ -61393,7 +61544,10 @@ export type DeleteUnitsMutationOptions = Apollo.BaseMutationOptions<
   DeleteUnitsMutationVariables
 >;
 export const UpdateUnitsDocument = gql`
-  mutation UpdateUnits($input: UpdateUnitsInput!, $ceEnabled: Boolean = false) {
+  mutation UpdateUnits(
+    $input: UpdateUnitsInput!
+    $includeCeFields: Boolean = false
+  ) {
     updateUnits(input: $input) {
       clientMutationId
       units {
@@ -61426,7 +61580,7 @@ export type UpdateUnitsMutationFn = Apollo.MutationFunction<
  * const [updateUnitsMutation, { data, loading, error }] = useUpdateUnitsMutation({
  *   variables: {
  *      input: // value for 'input'
- *      ceEnabled: // value for 'ceEnabled'
+ *      includeCeFields: // value for 'includeCeFields'
  *   },
  * });
  */

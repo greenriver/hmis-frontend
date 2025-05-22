@@ -13,11 +13,16 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const ClientRoute: React.FC<
   React.PropsWithChildren<{
     permissions: ClientPermissions | ClientPermissions[];
+    permissionMode?: 'any' | 'all';
     redirectRoute?: string;
   }>
-> = ({ permissions, redirectRoute, children }) => {
+> = ({ permissions, permissionMode, redirectRoute, children }) => {
   const { client } = useClientDashboardContext();
-  const hasPermission = useHasPermissions(client?.access, permissions, 'all');
+  const hasPermission = useHasPermissions(
+    client?.access,
+    permissions,
+    permissionMode || 'all'
+  );
   if (!hasPermission) {
     return redirectRoute ? (
       <Navigate

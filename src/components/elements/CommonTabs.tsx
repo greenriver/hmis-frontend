@@ -1,5 +1,6 @@
 import { Box, SxProps, Tab, Tabs } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
+import NotFound from '@/components/pages/NotFound';
 import useHashState from '@/hooks/useHashState.ts';
 
 export type TabDefinition = {
@@ -14,6 +15,7 @@ interface CommonTabsProps {
   sx?: SxProps;
   currentTab?: string;
   onChangeTab?: (tab: string) => void;
+  collapseSingleTab?: boolean; // If true (default), and there is only one tab definition, the tab interface is hidden, and the tab's content is shown with no wrapper
 }
 
 // CommonTabs wraps the MUI Tabs component. It can be controlled or uncontrolled.
@@ -26,6 +28,7 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
   tabDefinitions,
   currentTab,
   onChangeTab,
+  collapseSingleTab = true,
 }) => {
   const [internalValue, setInternalValue] = useHashState({
     initial: tabDefinitions[0].key,
@@ -53,6 +56,12 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
       setInternalValue(newKey); // Uncontrolled mode: manage internally
     }
   };
+
+  if (tabDefinitions.length === 0) return <NotFound />;
+
+  if (collapseSingleTab && tabDefinitions.length === 1) {
+    return tabDefinitions[0].contents;
+  }
 
   return (
     <Box sx={{ width: '100%', ...sx }}>
