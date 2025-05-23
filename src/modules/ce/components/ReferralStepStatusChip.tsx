@@ -11,7 +11,6 @@ interface Props {
 
 const ReferralStepStatusChip: React.FC<Props> = ({ status, sx }) => {
   const baseChipSx: SxProps = {
-    borderRadius: 1,
     fontWeight: 600,
     ...sx,
   };

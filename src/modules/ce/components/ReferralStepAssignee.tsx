@@ -16,7 +16,6 @@ const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
 
   const commonChipSx = useMemo(() => {
     return {
-      borderRadius: 1,
       ...(locked
         ? { color: 'grayscale.main', backgroundColor: 'grayscale.surface' }
         : {}),
