@@ -43,7 +43,7 @@ const ReferralStepStatusChip: React.FC<Props> = ({ status, sx }) => {
     case CeReferralStepStatus.InProgress:
       return (
         <Chip
-          label='Started'
+          label='In Progress'
           sx={{
             ...baseChipSx,
             backgroundColor: 'primary.surface',

@@ -6,10 +6,7 @@ import { GoToIcon } from '@/components/elements/SemanticIcons';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
 import ReferralStepStatusChip from '@/modules/ce/components/ReferralStepStatusChip';
 import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
-import {
-  formatRelativeDateTime,
-  parseHmisDateString,
-} from '@/modules/hmis/hmisUtil';
+import { lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
@@ -74,7 +71,6 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
     }
   }, [name, opportunityId, projectId, referral.id, status, step]);
 
-  const collapsed = step.status === CeReferralStepStatus.Completed;
   const locked = step.status === CeReferralStepStatus.Unavailable;
   const paperSx = useMemo(() => {
     if (locked)
@@ -83,38 +79,32 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
       };
   }, [locked]);
 
-  const lastUpdatedString = useMemo(() => {
-    const dateString = parseHmisDateString(updatedAt);
-    const at = dateString ? ` ${formatRelativeDateTime(dateString)}` : '';
-    const by = updatedBy ? ` by ${updatedBy.name}` : '';
-    if (at || by) return `Last edited${at}${by}`;
-  }, [updatedAt, updatedBy]);
-
   return (
     <Paper sx={paperSx}>
-      {!collapsed && (
-        <>
-          <Stack
-            sx={{ px: 2, py: 1 }}
-            direction='row'
-            alignItems='center'
-            justifyContent='space-between'
-          >
-            <ReferralStepAssignee step={step} />
-            {action}
-          </Stack>
-          <Divider orientation='horizontal' flexItem />
-        </>
-      )}
+      <Stack
+        sx={{ px: 2, py: 1 }}
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+      >
+        <ReferralStepAssignee step={step} />
+        {action}
+      </Stack>
+      <Divider orientation='horizontal' flexItem />
       <Box p={2}>
         <ReferralStepStatusChip status={status} sx={{ mb: 2 }} />
         <Stack gap={1}>
           <Typography variant='h5' component='h3'>
             {name}
           </Typography>
-          {lastUpdatedString && (
+          {!!updatedAt && (
             <Typography variant='caption' color='grayscale.main'>
-              {lastUpdatedString}
+              Last updated{' '}
+              {lastUpdatedBy({
+                dateUpdated: updatedAt,
+                user: updatedBy,
+                relativeDate: true,
+              })}
             </Typography>
           )}
         </Stack>

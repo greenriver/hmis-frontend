@@ -30,10 +30,17 @@ const columns: ColumnDef<Row>[] = [
     header: 'History',
     render: (row) => (
       <Stack>
-        <span>Created on {lastUpdatedBy(row.dateCreated, row.createdBy)}</span>
+        <span>
+          Created on{' '}
+          {lastUpdatedBy({ dateUpdated: row.dateCreated, user: row.createdBy })}
+        </span>
         {row.dateDeleted && (
           <span>
-            Deactivated on {lastUpdatedBy(row.dateDeleted, row.deletedBy)}
+            Deactivated on{' '}
+            {lastUpdatedBy({
+              dateUpdated: row.dateDeleted,
+              user: row.deletedBy,
+            })}
           </span>
         )}
       </Stack>
