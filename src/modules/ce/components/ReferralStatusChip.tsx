@@ -1,4 +1,4 @@
-import { Chip, ChipProps, SxProps } from '@mui/material';
+import { Chip, ChipProps } from '@mui/material';
 import React from 'react';
 import { InProgressIcon } from '@/components/elements/SemanticIcons';
 import { CeReferralStatus } from '@/types/gqlTypes';
@@ -7,39 +7,15 @@ interface Props {
   status: CeReferralStatus;
 }
 const ReferralStatusChip: React.FC<Props> = ({ status }) => {
-  const baseChipSx: SxProps = {
-    fontWeight: 600,
-    fontSize: '14px',
-    backgroundColor: 'grayscale.surface',
-  };
-
   const baseChipProps: ChipProps = {
-    sx: baseChipSx,
+    variant: 'status',
   };
 
   switch (status) {
     case CeReferralStatus.Initialized:
     case CeReferralStatus.InProgress:
       return (
-        <Chip
-          label='In Progress'
-          {...baseChipProps}
-          sx={{
-            ...baseChipSx,
-            backgroundColor: 'primary.surface',
-            color: 'primary.dark',
-          }}
-          color='primary'
-          icon={
-            <InProgressIcon
-              sx={{
-                '&.MuiChip-icon': {
-                  color: 'primary.main',
-                },
-              }}
-            />
-          }
-        />
+        <Chip label='In Progress' color='primary' icon={<InProgressIcon />} />
       );
     case CeReferralStatus.Accepted:
       return <Chip label='Accepted' {...baseChipProps} />;

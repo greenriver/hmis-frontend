@@ -10,56 +10,33 @@ interface Props {
 }
 
 const ReferralStepStatusChip: React.FC<Props> = ({ status, sx }) => {
-  const baseChipSx: SxProps = {
-    fontWeight: 600,
-    ...sx,
-  };
-
   switch (status) {
     case CeReferralStepStatus.Unavailable:
       return (
         <Chip
-          icon={<LockIcon color='inherit' />}
+          icon={<LockIcon />}
           label='Locked'
-          sx={{
-            ...baseChipSx,
-            backgroundColor: 'grayscale.surface',
-            color: 'grayscale.main',
-          }}
+          variant='status'
+          color='grayscale'
+          sx={sx}
         />
       );
     case CeReferralStepStatus.Available:
       return (
-        <Chip
-          label='Not Started'
-          sx={{
-            ...baseChipSx,
-            backgroundColor: 'warning.surface',
-            color: 'warning.darkest',
-          }}
-        />
+        <Chip label='Not Started' color='warning' variant='status' sx={sx} />
       );
     case CeReferralStepStatus.InProgress:
       return (
-        <Chip
-          label='In Progress'
-          sx={{
-            ...baseChipSx,
-            backgroundColor: 'primary.surface',
-            color: 'primary.darkest',
-          }}
-        />
+        <Chip label='In Progress' color='primary' variant='status' sx={sx} />
       );
     case CeReferralStepStatus.Completed:
       return (
         <Chip
           icon={<CheckIcon color={'inherit'} />}
           label='Done'
-          sx={{
-            ...baseChipSx,
-            backgroundColor: 'success.surface',
-            color: 'success.darkest',
-          }}
+          color='success'
+          variant='status'
+          sx={sx}
         />
       );
     default:

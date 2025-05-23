@@ -92,8 +92,8 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
       </Stack>
       <Divider orientation='horizontal' flexItem />
       <Box p={2}>
-        <ReferralStepStatusChip status={status} sx={{ mb: 2 }} />
         <Stack gap={1}>
+          <ReferralStepStatusChip status={status} sx={{ alignSelf: 'start' }} />
           <Typography variant='h5' component='h3'>
             {name}
           </Typography>
