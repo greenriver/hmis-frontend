@@ -15,7 +15,12 @@ const ReferralStatusChip: React.FC<Props> = ({ status }) => {
     case CeReferralStatus.Initialized:
     case CeReferralStatus.InProgress:
       return (
-        <Chip label='In Progress' color='primary' icon={<InProgressIcon />} />
+        <Chip
+          label='In Progress'
+          color='primary'
+          icon={<InProgressIcon />}
+          {...baseChipProps}
+        />
       );
     case CeReferralStatus.Accepted:
       return <Chip label='Accepted' {...baseChipProps} />;
