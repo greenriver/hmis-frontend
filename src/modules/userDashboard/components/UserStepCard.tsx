@@ -25,15 +25,14 @@ interface Props {
 }
 
 const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
-  const { referral } = step;
+  const { referral, assignees } = step;
   const path = generateSafePath(ProjectDashboardRoutes.REFERRAL, {
     projectId: referral.targetProjectId,
-    opportunityId: referral.opportunity.id,
     referralId: referral.id,
   });
 
   const truncatedAssignees = useMemo(() => {
-    const { assignees } = step;
+    if (assignees.length <= 1) return '';
 
     // Move the current user ("You") to the front of the list
     const assigneeNames = [
@@ -48,7 +47,7 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
     if (assigneeNames.length <= 3) return stringifyArray(assigneeNames);
 
     return `${assigneeNames.slice(0, 3).join(', ')} +${assigneeNames.length - 3} more`;
-  }, [currentUserId, step]);
+  }, [assignees, currentUserId]);
 
   const availableSince = useMemo(() => {
     const date = parseHmisDateString(step.availableAt);
@@ -100,24 +99,27 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
           {step.name}
         </Typography>
 
-        <TooltipKeyValue title={'Status'} Icon={InfoIcon}>
-          {startCase(step.status.replace('_', ' '))}
-        </TooltipKeyValue>
-
-        <TooltipKeyValue title={'Assignees'} Icon={AssigneesIcon}>
-          {truncatedAssignees}
-        </TooltipKeyValue>
-
-        <TooltipKeyValue title={'Client'} Icon={ClientIcon}>
-          {clientNameFromRecordWithOptionalClient(step.referral)}
+        <TooltipKeyValue title={'Available Since'} Icon={DaysAvailableIcon}>
+          {availableSince}
         </TooltipKeyValue>
 
         <TooltipKeyValue title={'Project'} Icon={ProjectIcon}>
           {step.referral.targetProjectName}
         </TooltipKeyValue>
 
-        <TooltipKeyValue title={'Available Since'} Icon={DaysAvailableIcon}>
-          {availableSince}
+        <TooltipKeyValue title={'Client'} Icon={ClientIcon}>
+          {clientNameFromRecordWithOptionalClient(step.referral)}
+        </TooltipKeyValue>
+
+        {/* only show assignees if there are any besides the current user */}
+        {assignees.length > 1 && (
+          <TooltipKeyValue title={'Assignees'} Icon={AssigneesIcon}>
+            {truncatedAssignees}
+          </TooltipKeyValue>
+        )}
+
+        <TooltipKeyValue title={'Status'} Icon={InfoIcon}>
+          {startCase(step.status.replace('_', ' '))}
         </TooltipKeyValue>
       </Box>
     </Card>
