@@ -23,7 +23,6 @@ interface Props {
 const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
   const { name, status, updatedBy, updatedAt } = step;
   const projectId = referral.opportunity.projectId;
-  const opportunityId = referral.opportunity.id;
 
   const action = useMemo(() => {
     if (status === CeReferralStepStatus.Available) {
@@ -31,7 +30,6 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
         <StartCeReferralStepButton
           step={step}
           referralId={referral.id}
-          opportunityId={opportunityId}
           projectId={projectId}
         >
           Start
@@ -42,7 +40,6 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
     const buttonProps: ButtonLinkProps = {
       to: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
         projectId,
-        opportunityId,
         referralId: referral.id,
         stepId: step.stepId || '',
       }),
@@ -69,7 +66,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
         </ButtonLink>
       );
     }
-  }, [name, opportunityId, projectId, referral.id, status, step]);
+  }, [name, projectId, referral.id, status, step]);
 
   const locked = step.status === CeReferralStepStatus.Unavailable;
   const paperSx = useMemo(() => {

@@ -120,7 +120,6 @@ const ProjectReferralsTable: React.FC<Props> = ({}) => {
         rowLinkTo={(referral) =>
           generateSafePath(ProjectDashboardRoutes.REFERRAL, {
             projectId,
-            opportunityId: referral.opportunity.id,
             referralId: referral.id,
           })
         }

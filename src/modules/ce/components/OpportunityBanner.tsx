@@ -41,7 +41,6 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
     if (referral) {
       const to = generateSafePath(ProjectDashboardRoutes.REFERRAL, {
         projectId: opportunity.projectId,
-        opportunityId: opportunity.id,
         referralId: referral.id,
       });
 

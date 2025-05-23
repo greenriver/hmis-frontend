@@ -150,15 +150,15 @@ export const useProjectBreadcrumbConfig = (
       },
       [ProjectDashboardRoutes.REFERRAL]: {
         title: 'Referral',
-        parent: ProjectDashboardRoutes.OPPORTUNITY,
+        parent: ProjectDashboardRoutes.CE,
       },
       [ProjectDashboardRoutes.REFERRAL_STEPS]: {
         title: 'Referral',
-        parent: ProjectDashboardRoutes.OPPORTUNITY,
+        parent: ProjectDashboardRoutes.CE,
       },
       [ProjectDashboardRoutes.REFERRAL_STEP]: {
         title: 'Referral',
-        parent: ProjectDashboardRoutes.OPPORTUNITY,
+        parent: ProjectDashboardRoutes.CE,
       },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;

@@ -31,9 +31,8 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {}
 const ReferralStep: React.FC<Props> = ({}) => {
-  const { projectId, opportunityId, referralId, stepId } = useSafeParams() as {
+  const { projectId, referralId, stepId } = useSafeParams() as {
     projectId: string;
-    opportunityId: string;
     referralId: string;
     stepId: string;
   };
@@ -69,7 +68,6 @@ const ReferralStep: React.FC<Props> = ({}) => {
       navigate({
         pathname: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
           projectId,
-          opportunityId,
           referralId,
         }),
         search: wayfind
@@ -118,7 +116,6 @@ const ReferralStep: React.FC<Props> = ({}) => {
         startIcon={<BackIcon />}
         to={generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
           projectId,
-          opportunityId,
           referralId,
         })}
       >
