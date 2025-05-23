@@ -55,7 +55,6 @@ import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinate
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import Opportunity from '@/modules/ce/components/Opportunity';
 import ProjectCePage from '@/modules/ce/components/ProjectCePage';
-import ReferralDetails from '@/modules/ce/components/ReferralDetails';
 import ReferralPage from '@/modules/ce/components/ReferralPage';
 import ReferralStep from '@/modules/ce/components/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/ReferralSteps';
@@ -465,16 +464,16 @@ export const protectedRoutes: RouteNode[] = [
             ),
             children: [
               {
-                path: ProjectDashboardRoutes.REFERRAL_DETAILS,
-                element: <ReferralDetails />,
-              },
-              {
                 path: ProjectDashboardRoutes.REFERRAL_STEPS,
                 element: <ReferralSteps />,
               },
               {
                 path: ProjectDashboardRoutes.REFERRAL_STEP,
                 element: <ReferralStep />,
+              },
+              {
+                path: '',
+                element: <Navigate to={'tasks'} replace />,
               },
             ],
           },

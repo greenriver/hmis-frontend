@@ -1,8 +1,10 @@
 import {
-  TimelapseRounded,
-  InfoOutlined,
   ContentPasteOutlined,
+  HistoryRounded,
   HomeRounded,
+  InfoOutlined,
+  StickyNote2Rounded,
+  TimelapseRounded,
 } from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
@@ -138,4 +140,6 @@ export {
   InfoOutlined as InfoIcon,
   ContentPasteOutlined as AssigneesIcon,
   DateRangeIcon as DaysAvailableIcon,
+  HistoryRounded as ActivityIcon,
+  StickyNote2Rounded as NotesIcon,
 };

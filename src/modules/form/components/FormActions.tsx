@@ -23,6 +23,8 @@ type ButtonConfig = {
   loadingLabel?: string;
   action: FormActionTypes;
   onClick?: VoidFunction;
+  leftAlign?: boolean;
+  rightAlign?: boolean;
   centerAlign?: boolean;
   buttonProps?: Omit<ButtonProps, 'ref' | `on${string}`>;
   tooltip?: ReactNode;
@@ -62,9 +64,21 @@ const FormActions = ({
 
   const [leftConfig, centerConfig, rightConfig] = useMemo(() => {
     if (config) {
+      // If configs directly specify any rightAligned or leftAligned actions, return them exactly as specified, putting any non-specified over on the left
+      const rightAligned = config.filter((c) => c.rightAlign);
+      const leftAligned = config.filter((c) => c.leftAlign);
+      const centerAligned = config.filter((c) => c.centerAlign);
+      const rest = config.filter(
+        (c) => !c.rightAlign && !c.leftAlign && !c.centerAlign
+      );
+      if (rightAligned.length > 0 || leftAligned.length > 0) {
+        return [[...leftAligned, ...rest], centerAligned, rightAligned];
+      }
+
+      // If config specifies just a centerAligned action, everything before center in the list gets left-aligned, and everything after gets right-aligned
       const centerFrom = findIndex(config, { centerAlign: true });
       const centerTo = findLastIndex(config, { centerAlign: true });
-      if (centerFrom === -1) return [config, [], []];
+      if (centerFrom === -1) return [config, [], []]; // If no alignment is specified, everything is left-aligned
 
       const left = config.slice(0, centerFrom);
       const center = config.slice(centerFrom, centerTo + 1);

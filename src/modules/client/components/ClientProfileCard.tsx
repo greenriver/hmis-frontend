@@ -462,7 +462,11 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
                     sx={{ fontStyle: 'italic', mt: 1 }}
                   >
                     Last Updated on{' '}
-                    {lastUpdatedBy(client.dateUpdated, client.user)}.
+                    {lastUpdatedBy({
+                      dateUpdated: client.dateUpdated,
+                      user: client.user,
+                    })}
+                    .
                   </Typography>
                 )}
               </Stack>
