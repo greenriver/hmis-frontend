@@ -1,13 +1,15 @@
+import { Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
-import ReferralStepCardInner from './ReferralStepCardInner';
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
 import { GoToIcon } from '@/components/elements/SemanticIcons';
-import useSafeParams from '@/hooks/useSafeParams';
-import { useReferralContext } from '@/modules/ce/components/ReferralPage';
 import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
+import ReferralStepStatusChip from '@/modules/ce/components/ReferralStepStatusChip';
 import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
+import { lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
+  CeReferralFieldsFragment,
   CeReferralStepStatus,
   CeReferralStepSummaryFieldsFragment,
 } from '@/types/gqlTypes';
@@ -15,15 +17,12 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   step: CeReferralStepSummaryFieldsFragment;
+  referral: CeReferralFieldsFragment;
 }
 
-const ReferralStepCard: React.FC<Props> = ({ step }) => {
-  const { projectId, opportunityId } = useSafeParams() as {
-    projectId: string;
-    opportunityId: string;
-  };
-  const { referral } = useReferralContext();
-  const { name, status } = step;
+const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
+  const { name, status, updatedBy, updatedAt } = step;
+  const projectId = referral.opportunity.projectId;
 
   const action = useMemo(() => {
     if (status === CeReferralStepStatus.Available) {
@@ -31,7 +30,6 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
         <StartCeReferralStepButton
           step={step}
           referralId={referral.id}
-          opportunityId={opportunityId}
           projectId={projectId}
         >
           Start
@@ -42,7 +40,6 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
     const buttonProps: ButtonLinkProps = {
       to: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
         projectId,
-        opportunityId,
         referralId: referral.id,
         stepId: step.stepId || '',
       }),
@@ -51,22 +48,65 @@ const ReferralStepCard: React.FC<Props> = ({ step }) => {
     };
 
     if (status === CeReferralStepStatus.InProgress) {
-      return <ButtonLink {...buttonProps}>View</ButtonLink>;
-    }
-
-    if (status === CeReferralStepStatus.Completed) {
       return (
-        <ButtonLink {...buttonProps} color='grayscale'>
+        <ButtonLink aria-label={`View step: ${name}`} {...buttonProps}>
           View
         </ButtonLink>
       );
     }
-  }, [opportunityId, projectId, referral.id, status, step]);
+
+    if (status === CeReferralStepStatus.Completed) {
+      return (
+        <ButtonLink
+          aria-label={`View step: ${name}`}
+          {...buttonProps}
+          color='grayscale'
+        >
+          View
+        </ButtonLink>
+      );
+    }
+  }, [name, projectId, referral.id, status, step]);
+
+  const locked = step.status === CeReferralStepStatus.Unavailable;
+  const paperSx = useMemo(() => {
+    if (locked)
+      return {
+        color: 'grayscale.main',
+      };
+  }, [locked]);
 
   return (
-    <ReferralStepCardInner name={name} status={status} action={action}>
-      <ReferralStepAssignee step={step} />
-    </ReferralStepCardInner>
+    <Paper sx={paperSx}>
+      <Stack
+        sx={{ px: 2, py: 1 }}
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+      >
+        <ReferralStepAssignee step={step} />
+        {action}
+      </Stack>
+      <Divider orientation='horizontal' flexItem />
+      <Box p={2}>
+        <Stack gap={1}>
+          <ReferralStepStatusChip status={status} sx={{ alignSelf: 'start' }} />
+          <Typography variant='h5' component='h3'>
+            {name}
+          </Typography>
+          {!!updatedAt && (
+            <Typography variant='caption' color='grayscale.main'>
+              Last updated{' '}
+              {lastUpdatedBy({
+                dateUpdated: updatedAt,
+                user: updatedBy,
+                relativeDate: true,
+              })}
+            </Typography>
+          )}
+        </Stack>
+      </Box>
+    </Paper>
   );
 };
 

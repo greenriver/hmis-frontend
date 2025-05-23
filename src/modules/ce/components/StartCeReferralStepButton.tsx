@@ -16,7 +16,6 @@ interface Props {
   step: CeReferralStepSummaryFieldsFragment;
   referralId: string;
   projectId: string;
-  opportunityId: string;
   children: ReactNode;
 }
 
@@ -24,7 +23,6 @@ const StartCeReferralStepButton: React.FC<Props> = ({
   step,
   referralId,
   projectId,
-  opportunityId,
   children,
 }) => {
   const navigate = useNavigate();
@@ -56,7 +54,6 @@ const StartCeReferralStepButton: React.FC<Props> = ({
           navigate(
             generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
               projectId,
-              opportunityId,
               referralId: referralId,
               stepId: step.stepId || '',
             })
@@ -77,6 +74,7 @@ const StartCeReferralStepButton: React.FC<Props> = ({
       variant='text'
       endIcon={<GoToIcon />}
       onClick={() => startStepMutation()}
+      aria-label={`Start step: ${step.name}`}
     >
       {children}
     </LoadingButton>

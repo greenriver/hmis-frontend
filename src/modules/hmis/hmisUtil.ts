@@ -51,7 +51,6 @@ import {
   RelationshipToHoH,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
-  UserFieldsFragment,
 } from '@/types/gqlTypes';
 
 /**
@@ -309,13 +308,25 @@ export const maskSSN = (value?: string) => {
   return cleaned.replace(/^(...)(.{2})(.{0,4}).*/, '$1-$2-$3');
 };
 
-export const lastUpdatedBy = (
-  dateUpdated?: string | null,
-  user?: UserFieldsFragment | null
-) => {
-  const dateString = dateUpdated
-    ? parseAndFormatDateTime(dateUpdated)
-    : undefined;
+export const lastUpdatedBy = ({
+  dateUpdated,
+  user,
+  relativeDate = false,
+}: {
+  dateUpdated?: string | null;
+  user?: { name: string } | null;
+  relativeDate?: boolean;
+}) => {
+  const parsed = parseHmisDateString(dateUpdated);
+
+  let dateString = dateUpdated;
+  if (parsed) {
+    if (relativeDate) {
+      dateString = formatRelativeDate(parsed);
+    } else {
+      dateString = formatDateForDisplay(parsed);
+    }
+  }
 
   if (user) {
     return `${dateString || 'Unknown date'} by ${user.name}`;

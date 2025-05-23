@@ -39,9 +39,8 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
 
   const action = useMemo(() => {
     if (referral) {
-      const to = generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
+      const to = generateSafePath(ProjectDashboardRoutes.REFERRAL, {
         projectId: opportunity.projectId,
-        opportunityId: opportunity.id,
         referralId: referral.id,
       });
 

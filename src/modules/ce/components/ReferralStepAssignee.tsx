@@ -1,13 +1,26 @@
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import React, { Fragment, useMemo } from 'react';
-import { CeReferralStepSummaryFieldsFragment } from '@/types/gqlTypes';
+import {
+  CeReferralStepStatus,
+  CeReferralStepSummaryFieldsFragment,
+} from '@/types/gqlTypes';
 
 interface Props {
   step: CeReferralStepSummaryFieldsFragment;
 }
 const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
   const { swimlane, assignees = [] } = step;
+
+  const locked = step.status === CeReferralStepStatus.Unavailable;
+
+  const commonChipSx = useMemo(() => {
+    return {
+      ...(locked
+        ? { color: 'grayscale.main', backgroundColor: 'grayscale.surface' }
+        : {}),
+    };
+  }, [locked]);
 
   const content = useMemo(() => {
     // Assignees are the user(s) currently assigned to this step.
@@ -16,18 +29,18 @@ const ReferralStepAssignee: React.FC<Props> = ({ step }) => {
       return assignees.map((assignee) => {
         return (
           <Fragment key={assignee.id}>
-            <Chip size='small' label={assignee.name} />{' '}
+            <Chip sx={commonChipSx} label={assignee.name} />{' '}
           </Fragment>
         );
       });
     }
 
-    return <Chip size='small' label={swimlane} />;
-  }, [swimlane, assignees]);
+    return <Chip sx={commonChipSx} label={swimlane} />;
+  }, [assignees, commonChipSx, swimlane]);
 
   return (
     <Typography component='div' variant='body2'>
-      <strong>Assigned</strong> {content}
+      <strong>Assigned:</strong> {content}
     </Typography>
   );
 };
