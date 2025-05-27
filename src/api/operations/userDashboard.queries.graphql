@@ -1,0 +1,42 @@
+query GetUserDashboardConfig {
+  userDashboard {
+    id
+    userDashboardConfig {
+      ...UserDashboardConfigFields
+    }
+  }
+}
+
+query GetUserCeAssignedSteps($limit: Int = 25, $offset: Int = 0) {
+  userDashboard {
+    id
+    ceReferralSteps(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...UserCeReferralStepFields
+      }
+    }
+  }
+}
+
+query GetUserStaffAssignments(
+  $limit: Int = 25
+  $offset: Int = 0
+  $includeOrganizationName: Boolean = false
+  $includeMoveInDate: Boolean = false
+  $includeLastContact: Boolean = false
+) {
+  userDashboard {
+    id
+    staffAssignments(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...StaffAssignmentWithClients
+      }
+    }
+  }
+}

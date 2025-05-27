@@ -1,0 +1,24 @@
+fragment UserDashboardFields on UserDashboard {
+  id
+  staffAssignments(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...StaffAssignmentWithClients
+    }
+  }
+  ceReferralSteps {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...UserCeReferralStepFields
+    }
+  }
+}
+
+fragment UserDashboardConfigFields on UserDashboardConfig {
+  showStaffAssignment
+  showReferrals
+}

@@ -34,12 +34,10 @@ const YourReferrals = () => {
           GetUserCeAssignedStepsQueryVariables,
           UserCeReferralStepFieldsFragment
         >
-          queryVariables={{
-            id: user.id,
-          }}
+          queryVariables={{}}
           queryDocument={GetUserCeAssignedStepsDocument}
           columns={[]}
-          pagePath='user.ceAssignedSteps'
+          pagePath='userDashboard.ceReferralSteps'
           noData='No referral steps assigned to you'
           paginationItemName='step'
           defaultPageSize={10}

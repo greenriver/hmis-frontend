@@ -121,12 +121,10 @@ const YourClients = () => {
           GetUserStaffAssignmentsQueryVariables,
           StaffAssignmentWithClientsFragment
         >
-          queryVariables={{
-            id: currentUser.id,
-          }}
+          queryVariables={{}}
           queryDocument={GetUserStaffAssignmentsDocument}
           columns={MY_CLIENTS_COLUMNS}
-          pagePath='user.staffAssignments'
+          pagePath='userDashboard.staffAssignments'
           noData='No clients assigned to you'
           paginationItemName='assignment'
           defaultPageSize={10}

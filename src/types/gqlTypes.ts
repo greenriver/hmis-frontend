@@ -151,7 +151,6 @@ export type ApplicationUser = {
   __typename?: 'ApplicationUser';
   activityLogs: ActivityLogsPaginated;
   auditHistory: ApplicationUserAuditEventsPaginated;
-  ceAssignedSteps?: Maybe<CeReferralStepsPaginated>;
   clientAccessSummaries: ClientAccessSummariesPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -165,6 +164,7 @@ export type ApplicationUser = {
   manageAccountUrl: Scalars['String']['output'];
   name: Scalars['String']['output'];
   recentItems: Array<OmnisearchResult>;
+  /** @deprecated Replaced with new UserDashboard type */
   staffAssignments?: Maybe<StaffAssignmentsPaginated>;
 };
 
@@ -177,12 +177,6 @@ export type ApplicationUserActivityLogsArgs = {
 /** User account for a user of the system */
 export type ApplicationUserAuditHistoryArgs = {
   filters?: InputMaybe<UserAuditEventFilterOptions>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** User account for a user of the system */
-export type ApplicationUserCeAssignedStepsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6340,6 +6334,7 @@ export type Query = {
   staticFormDefinition: FormDefinition;
   /** User lookup */
   user?: Maybe<ApplicationUser>;
+  userDashboard: UserDashboard;
 };
 
 export type QueryApplicationUsersArgs = {
@@ -6596,8 +6591,6 @@ export type QueryAccess = {
   canEditProjectDetails: Scalars['Boolean']['output'];
   canEditUsersInWarehouse: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
-  canHaveAssignedReferralTasks: Scalars['Boolean']['output'];
-  canHaveAssignedStaff: Scalars['Boolean']['output'];
   canImpersonateUsers: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
@@ -6630,6 +6623,7 @@ export type QueryAccess = {
   canViewFullSsn: Scalars['Boolean']['output'];
   canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
+  /** @deprecated Replaced with new UserDashboard type */
   canViewMyDashboard: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewOwnReferrals: Scalars['Boolean']['output'];
@@ -8116,6 +8110,34 @@ export type UserAuditEventFilterOptions = {
   enrollmentRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+/** Resolves everything that is needed on the user dashboard */
+export type UserDashboard = {
+  __typename?: 'UserDashboard';
+  ceReferralSteps?: Maybe<CeReferralStepsPaginated>;
+  id: Scalars['ID']['output'];
+  staffAssignments?: Maybe<StaffAssignmentsPaginated>;
+  userDashboardConfig: UserDashboardConfig;
+};
+
+/** Resolves everything that is needed on the user dashboard */
+export type UserDashboardCeReferralStepsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** Resolves everything that is needed on the user dashboard */
+export type UserDashboardStaffAssignmentsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UserDashboardConfig = {
+  __typename?: 'UserDashboardConfig';
+  id: Scalars['ID']['output'];
+  showReferrals: Scalars['Boolean']['output'];
+  showStaffAssignment: Scalars['Boolean']['output'];
+};
+
 export type ValidationError = {
   __typename?: 'ValidationError';
   attribute: Scalars['String']['output'];
@@ -8568,11 +8590,8 @@ export type RootPermissionsFragment = {
   canEditClients: boolean;
   canViewDob: boolean;
   canViewClientAlerts: boolean;
-  canViewMyDashboard: boolean;
   canViewCoordinatedEntry: boolean;
   canAdministrateCoordinatedEntry: boolean;
-  canHaveAssignedStaff: boolean;
-  canHaveAssignedReferralTasks: boolean;
   canEditOrganization: boolean;
   canEditProjectDetails: boolean;
 };
@@ -8670,11 +8689,8 @@ export type GetRootPermissionsQuery = {
     canEditClients: boolean;
     canViewDob: boolean;
     canViewClientAlerts: boolean;
-    canViewMyDashboard: boolean;
     canViewCoordinatedEntry: boolean;
     canAdministrateCoordinatedEntry: boolean;
-    canHaveAssignedStaff: boolean;
-    canHaveAssignedReferralTasks: boolean;
     canEditOrganization: boolean;
     canEditProjectDetails: boolean;
   };
@@ -19405,53 +19421,6 @@ export type GetAdminCeReferralsQuery = {
       } | null;
     }>;
   };
-};
-
-export type GetUserCeAssignedStepsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetUserCeAssignedStepsQuery = {
-  __typename?: 'Query';
-  user?: {
-    __typename?: 'ApplicationUser';
-    ceAssignedSteps?: {
-      __typename?: 'CeReferralStepsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'CeReferralStep';
-        id: string;
-        stepId?: string | null;
-        name: string;
-        availableAt?: string | null;
-        status: CeReferralStepStatus;
-        assignees: Array<{
-          __typename?: 'ApplicationUser';
-          id: string;
-          name: string;
-        }>;
-        referral: {
-          __typename?: 'CeReferral';
-          id: string;
-          targetProjectId: string;
-          targetProjectName: string;
-          clientId: string;
-          opportunity: { __typename?: 'CeOpportunity'; id: string };
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
-        };
-      }>;
-    } | null;
-  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -44515,8 +44484,174 @@ export type GetUserEnrollmentSummariesQuery = {
   } | null;
 };
 
+export type UserDashboardFieldsFragment = {
+  __typename?: 'UserDashboard';
+  id: string;
+  staffAssignments?: {
+    __typename?: 'StaffAssignmentsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'StaffAssignment';
+      id: string;
+      staffAssignmentRelationship: string;
+      assignedAt: string;
+      unassignedAt?: string | null;
+      user: { __typename?: 'ApplicationUser'; id: string; name: string };
+      household: {
+        __typename?: 'Household';
+        id: string;
+        anyInProgress: boolean;
+        latestExitDate?: string | null;
+        householdClients: Array<{
+          __typename?: 'HouseholdClient';
+          id: string;
+          relationshipToHoH: RelationshipToHoH;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+          enrollment: {
+            __typename?: 'Enrollment';
+            id: string;
+            organizationName?: string;
+            moveInDate?: string | null;
+            entryDate: string;
+            exitDate?: string | null;
+            inProgress: boolean;
+            project: {
+              __typename?: 'Project';
+              id: string;
+              projectName: string;
+              projectType?: ProjectType | null;
+            };
+            lastContact?: {
+              __typename?: 'LastContact';
+              contactDate: string;
+              contactType: LastContactType;
+            } | null;
+          };
+        }>;
+      };
+    }>;
+  } | null;
+  ceReferralSteps?: {
+    __typename?: 'CeReferralStepsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeReferralStep';
+      id: string;
+      stepId?: string | null;
+      name: string;
+      availableAt?: string | null;
+      status: CeReferralStepStatus;
+      assignees: Array<{
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      }>;
+      referral: {
+        __typename?: 'CeReferral';
+        id: string;
+        targetProjectId: string;
+        targetProjectName: string;
+        clientId: string;
+        opportunity: { __typename?: 'CeOpportunity'; id: string };
+        client?: {
+          __typename?: 'Client';
+          id: string;
+          lockVersion: number;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        } | null;
+      };
+    }>;
+  } | null;
+};
+
+export type UserDashboardConfigFieldsFragment = {
+  __typename?: 'UserDashboardConfig';
+  showStaffAssignment: boolean;
+  showReferrals: boolean;
+};
+
+export type GetUserDashboardConfigQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetUserDashboardConfigQuery = {
+  __typename?: 'Query';
+  userDashboard: {
+    __typename?: 'UserDashboard';
+    id: string;
+    userDashboardConfig: {
+      __typename?: 'UserDashboardConfig';
+      showStaffAssignment: boolean;
+      showReferrals: boolean;
+    };
+  };
+};
+
+export type GetUserCeAssignedStepsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetUserCeAssignedStepsQuery = {
+  __typename?: 'Query';
+  userDashboard: {
+    __typename?: 'UserDashboard';
+    id: string;
+    ceReferralSteps?: {
+      __typename?: 'CeReferralStepsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeReferralStep';
+        id: string;
+        stepId?: string | null;
+        name: string;
+        availableAt?: string | null;
+        status: CeReferralStepStatus;
+        assignees: Array<{
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        }>;
+        referral: {
+          __typename?: 'CeReferral';
+          id: string;
+          targetProjectId: string;
+          targetProjectName: string;
+          clientId: string;
+          opportunity: { __typename?: 'CeOpportunity'; id: string };
+          client?: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          } | null;
+        };
+      }>;
+    } | null;
+  };
+};
+
 export type GetUserStaffAssignmentsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
@@ -44526,8 +44661,8 @@ export type GetUserStaffAssignmentsQueryVariables = Exact<{
 
 export type GetUserStaffAssignmentsQuery = {
   __typename?: 'Query';
-  user?: {
-    __typename?: 'ApplicationUser';
+  userDashboard: {
+    __typename?: 'UserDashboard';
     id: string;
     staffAssignments?: {
       __typename?: 'StaffAssignmentsPaginated';
@@ -44583,7 +44718,7 @@ export type GetUserStaffAssignmentsQuery = {
         };
       }>;
     } | null;
-  } | null;
+  };
 };
 
 export const RootPermissionsFragmentDoc = gql`
@@ -44603,11 +44738,8 @@ export const RootPermissionsFragmentDoc = gql`
     canEditClients
     canViewDob
     canViewClientAlerts
-    canViewMyDashboard
     canViewCoordinatedEntry
     canAdministrateCoordinatedEntry
-    canHaveAssignedStaff
-    canHaveAssignedReferralTasks
     canEditOrganization
     canEditProjectDetails
   }
@@ -45667,32 +45799,6 @@ export const CeReferralStepFieldsFragmentDoc = gql`
   }
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
-`;
-export const UserCeReferralStepFieldsFragmentDoc = gql`
-  fragment UserCeReferralStepFields on CeReferralStep {
-    id
-    stepId
-    name
-    availableAt
-    status
-    assignees {
-      id
-      name
-    }
-    referral {
-      id
-      opportunity {
-        id
-      }
-      targetProjectId
-      targetProjectName
-      clientId
-      client {
-        ...ClientName
-      }
-    }
-  }
-  ${ClientNameFragmentDoc}
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
@@ -47038,47 +47144,6 @@ export const ServiceCategoryFieldsFragmentDoc = gql`
     }
   }
 `;
-export const StaffAssignmentWithClientsFragmentDoc = gql`
-  fragment StaffAssignmentWithClients on StaffAssignment {
-    id
-    user {
-      id
-      name
-    }
-    staffAssignmentRelationship
-    assignedAt
-    unassignedAt
-    household {
-      id
-      anyInProgress
-      latestExitDate
-      householdClients {
-        id
-        relationshipToHoH
-        client {
-          id
-          ...ClientName
-        }
-        enrollment {
-          id
-          ...EnrollmentRangeFields
-          project {
-            ...ProjectNameAndType
-          }
-          organizationName @include(if: $includeOrganizationName)
-          moveInDate @include(if: $includeMoveInDate)
-          lastContact @include(if: $includeLastContact) {
-            contactDate
-            contactType
-          }
-        }
-      }
-    }
-  }
-  ${ClientNameFragmentDoc}
-  ${EnrollmentRangeFieldsFragmentDoc}
-  ${ProjectNameAndTypeFragmentDoc}
-`;
 export const UnitTypeCapacityFieldsFragmentDoc = gql`
   fragment UnitTypeCapacityFields on UnitTypeCapacity {
     id
@@ -47156,6 +47221,102 @@ export const EnrollmentAccessSummaryFieldsFragmentDoc = gql`
     clientName
     projectId
     projectName
+  }
+`;
+export const StaffAssignmentWithClientsFragmentDoc = gql`
+  fragment StaffAssignmentWithClients on StaffAssignment {
+    id
+    user {
+      id
+      name
+    }
+    staffAssignmentRelationship
+    assignedAt
+    unassignedAt
+    household {
+      id
+      anyInProgress
+      latestExitDate
+      householdClients {
+        id
+        relationshipToHoH
+        client {
+          id
+          ...ClientName
+        }
+        enrollment {
+          id
+          ...EnrollmentRangeFields
+          project {
+            ...ProjectNameAndType
+          }
+          organizationName @include(if: $includeOrganizationName)
+          moveInDate @include(if: $includeMoveInDate)
+          lastContact @include(if: $includeLastContact) {
+            contactDate
+            contactType
+          }
+        }
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+`;
+export const UserCeReferralStepFieldsFragmentDoc = gql`
+  fragment UserCeReferralStepFields on CeReferralStep {
+    id
+    stepId
+    name
+    availableAt
+    status
+    assignees {
+      id
+      name
+    }
+    referral {
+      id
+      opportunity {
+        id
+      }
+      targetProjectId
+      targetProjectName
+      clientId
+      client {
+        ...ClientName
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
+export const UserDashboardFieldsFragmentDoc = gql`
+  fragment UserDashboardFields on UserDashboard {
+    id
+    staffAssignments(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...StaffAssignmentWithClients
+      }
+    }
+    ceReferralSteps {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...UserCeReferralStepFields
+      }
+    }
+  }
+  ${StaffAssignmentWithClientsFragmentDoc}
+  ${UserCeReferralStepFieldsFragmentDoc}
+`;
+export const UserDashboardConfigFieldsFragmentDoc = gql`
+  fragment UserDashboardConfigFields on UserDashboardConfig {
+    showStaffAssignment
+    showReferrals
   }
 `;
 export const GetRootPermissionsDocument = gql`
@@ -50311,96 +50472,6 @@ export type GetAdminCeReferralsSuspenseQueryHookResult = ReturnType<
 export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables
->;
-export const GetUserCeAssignedStepsDocument = gql`
-  query GetUserCeAssignedSteps($id: ID!) {
-    user(id: $id) {
-      ceAssignedSteps {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...UserCeReferralStepFields
-        }
-      }
-    }
-  }
-  ${UserCeReferralStepFieldsFragmentDoc}
-`;
-
-/**
- * __useGetUserCeAssignedStepsQuery__
- *
- * To run a query within a React component, call `useGetUserCeAssignedStepsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserCeAssignedStepsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserCeAssignedStepsQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetUserCeAssignedStepsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetUserCeAssignedStepsQuery,
-    GetUserCeAssignedStepsQueryVariables
-  > &
-    (
-      | { variables: GetUserCeAssignedStepsQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetUserCeAssignedStepsQuery,
-    GetUserCeAssignedStepsQueryVariables
-  >(GetUserCeAssignedStepsDocument, options);
-}
-export function useGetUserCeAssignedStepsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetUserCeAssignedStepsQuery,
-    GetUserCeAssignedStepsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetUserCeAssignedStepsQuery,
-    GetUserCeAssignedStepsQueryVariables
-  >(GetUserCeAssignedStepsDocument, options);
-}
-export function useGetUserCeAssignedStepsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetUserCeAssignedStepsQuery,
-        GetUserCeAssignedStepsQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetUserCeAssignedStepsQuery,
-    GetUserCeAssignedStepsQueryVariables
-  >(GetUserCeAssignedStepsDocument, options);
-}
-export type GetUserCeAssignedStepsQueryHookResult = ReturnType<
-  typeof useGetUserCeAssignedStepsQuery
->;
-export type GetUserCeAssignedStepsLazyQueryHookResult = ReturnType<
-  typeof useGetUserCeAssignedStepsLazyQuery
->;
-export type GetUserCeAssignedStepsSuspenseQueryHookResult = ReturnType<
-  typeof useGetUserCeAssignedStepsSuspenseQuery
->;
-export type GetUserCeAssignedStepsQueryResult = Apollo.QueryResult<
-  GetUserCeAssignedStepsQuery,
-  GetUserCeAssignedStepsQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
@@ -62170,16 +62241,184 @@ export type GetUserEnrollmentSummariesQueryResult = Apollo.QueryResult<
   GetUserEnrollmentSummariesQuery,
   GetUserEnrollmentSummariesQueryVariables
 >;
+export const GetUserDashboardConfigDocument = gql`
+  query GetUserDashboardConfig {
+    userDashboard {
+      id
+      userDashboardConfig {
+        ...UserDashboardConfigFields
+      }
+    }
+  }
+  ${UserDashboardConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserDashboardConfigQuery__
+ *
+ * To run a query within a React component, call `useGetUserDashboardConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserDashboardConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserDashboardConfigQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserDashboardConfigQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetUserDashboardConfigQuery,
+    GetUserDashboardConfigQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserDashboardConfigQuery,
+    GetUserDashboardConfigQueryVariables
+  >(GetUserDashboardConfigDocument, options);
+}
+export function useGetUserDashboardConfigLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserDashboardConfigQuery,
+    GetUserDashboardConfigQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserDashboardConfigQuery,
+    GetUserDashboardConfigQueryVariables
+  >(GetUserDashboardConfigDocument, options);
+}
+export function useGetUserDashboardConfigSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetUserDashboardConfigQuery,
+        GetUserDashboardConfigQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetUserDashboardConfigQuery,
+    GetUserDashboardConfigQueryVariables
+  >(GetUserDashboardConfigDocument, options);
+}
+export type GetUserDashboardConfigQueryHookResult = ReturnType<
+  typeof useGetUserDashboardConfigQuery
+>;
+export type GetUserDashboardConfigLazyQueryHookResult = ReturnType<
+  typeof useGetUserDashboardConfigLazyQuery
+>;
+export type GetUserDashboardConfigSuspenseQueryHookResult = ReturnType<
+  typeof useGetUserDashboardConfigSuspenseQuery
+>;
+export type GetUserDashboardConfigQueryResult = Apollo.QueryResult<
+  GetUserDashboardConfigQuery,
+  GetUserDashboardConfigQueryVariables
+>;
+export const GetUserCeAssignedStepsDocument = gql`
+  query GetUserCeAssignedSteps($limit: Int = 25, $offset: Int = 0) {
+    userDashboard {
+      id
+      ceReferralSteps(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...UserCeReferralStepFields
+        }
+      }
+    }
+  }
+  ${UserCeReferralStepFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserCeAssignedStepsQuery__
+ *
+ * To run a query within a React component, call `useGetUserCeAssignedStepsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCeAssignedStepsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCeAssignedStepsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetUserCeAssignedStepsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >(GetUserCeAssignedStepsDocument, options);
+}
+export function useGetUserCeAssignedStepsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >(GetUserCeAssignedStepsDocument, options);
+}
+export function useGetUserCeAssignedStepsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetUserCeAssignedStepsQuery,
+        GetUserCeAssignedStepsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetUserCeAssignedStepsQuery,
+    GetUserCeAssignedStepsQueryVariables
+  >(GetUserCeAssignedStepsDocument, options);
+}
+export type GetUserCeAssignedStepsQueryHookResult = ReturnType<
+  typeof useGetUserCeAssignedStepsQuery
+>;
+export type GetUserCeAssignedStepsLazyQueryHookResult = ReturnType<
+  typeof useGetUserCeAssignedStepsLazyQuery
+>;
+export type GetUserCeAssignedStepsSuspenseQueryHookResult = ReturnType<
+  typeof useGetUserCeAssignedStepsSuspenseQuery
+>;
+export type GetUserCeAssignedStepsQueryResult = Apollo.QueryResult<
+  GetUserCeAssignedStepsQuery,
+  GetUserCeAssignedStepsQueryVariables
+>;
 export const GetUserStaffAssignmentsDocument = gql`
   query GetUserStaffAssignments(
-    $id: ID!
     $limit: Int = 25
     $offset: Int = 0
     $includeOrganizationName: Boolean = false
     $includeMoveInDate: Boolean = false
     $includeLastContact: Boolean = false
   ) {
-    user(id: $id) {
+    userDashboard {
       id
       staffAssignments(limit: $limit, offset: $offset) {
         offset
@@ -62206,7 +62445,6 @@ export const GetUserStaffAssignmentsDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserStaffAssignmentsQuery({
  *   variables: {
- *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      includeOrganizationName: // value for 'includeOrganizationName'
@@ -62216,14 +62454,10 @@ export const GetUserStaffAssignmentsDocument = gql`
  * });
  */
 export function useGetUserStaffAssignmentsQuery(
-  baseOptions: Apollo.QueryHookOptions<
+  baseOptions?: Apollo.QueryHookOptions<
     GetUserStaffAssignmentsQuery,
     GetUserStaffAssignmentsQueryVariables
-  > &
-    (
-      | { variables: GetUserStaffAssignmentsQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
+  >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<

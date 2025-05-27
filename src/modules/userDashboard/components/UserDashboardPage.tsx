@@ -4,42 +4,41 @@ import PageContainer from '@/components/layout/PageContainer';
 import NotFound from '@/components/pages/NotFound';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import YourClients from '@/modules/staffAssignment/components/YourClients';
 import YourReferrals from '@/modules/userDashboard/components/YourReferrals';
+import { useGetUserDashboardConfigQuery } from '@/types/gqlTypes';
 
 const UserDashboardPage = () => {
   const { user: { id } = {} } = useAuth();
   // Session storage doesn't store the user's firstName, so fetch with graphql
   const { user } = useUser(id);
 
-  const [canHaveAssignedStaff] = useHasRootPermissions([
-    'canHaveAssignedStaff',
-  ]);
-  const [canHaveAssignedReferralTasks] = useHasRootPermissions([
-    'canHaveAssignedReferralTasks',
-  ]);
+  const { data, loading, error } = useGetUserDashboardConfigQuery({
+    fetchPolicy: 'cache-first',
+  });
 
-  if (!user) return <Loading />;
-  if (!canHaveAssignedStaff && !canHaveAssignedReferralTasks)
-    return <NotFound />; // user shouldn't even see the link, but just in case
+  const showStaffAssignment =
+    data?.userDashboard.userDashboardConfig.showStaffAssignment;
+  const showReferrals = data?.userDashboard.userDashboardConfig.showReferrals;
+
+  if (loading) return <Loading />;
+  if (error) throw error;
+  if (!showStaffAssignment && !showReferrals) return <NotFound />;
 
   return (
     <PageContainer
       title={'HMIS Dashboard'}
       overlineText={`${user.firstName} ${user.lastName}`}
-      maxWidth={
-        canHaveAssignedStaff && canHaveAssignedReferralTasks ? 'xl' : 'lg'
-      }
+      maxWidth={showStaffAssignment && showReferrals ? 'xl' : 'lg'}
     >
       <Grid container spacing={2}>
-        {canHaveAssignedStaff && (
-          <Grid item xs={12} lg={canHaveAssignedReferralTasks ? 7 : 12}>
+        {showStaffAssignment && (
+          <Grid item xs={12} lg={showReferrals ? 7 : 12}>
             <YourClients />
           </Grid>
         )}
-        {canHaveAssignedReferralTasks && (
-          <Grid item xs={12} lg={canHaveAssignedStaff ? 5 : 12}>
+        {showReferrals && (
+          <Grid item xs={12} lg={showStaffAssignment ? 5 : 12}>
             <YourReferrals />
           </Grid>
         )}

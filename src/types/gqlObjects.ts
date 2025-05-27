@@ -5670,22 +5670,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canHaveAssignedReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canHaveAssignedStaff',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canImpersonateUsers',
         type: {
           kind: 'NON_NULL',
@@ -6641,6 +6625,48 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       { name: 'unitSize', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
+    ],
+  },
+  {
+    name: 'UserDashboard',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'UserDashboardConfig',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'showReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'showStaffAssignment',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
     ],
   },
   {

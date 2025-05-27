@@ -146,16 +146,3 @@ query GetAdminCeReferrals(
     }
   }
 }
-
-query GetUserCeAssignedSteps($id: ID!) {
-  user(id: $id) {
-    ceAssignedSteps {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...UserCeReferralStepFields
-      }
-    }
-  }
-}
