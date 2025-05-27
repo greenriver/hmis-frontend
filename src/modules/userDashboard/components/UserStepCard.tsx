@@ -1,6 +1,7 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import { Box, Card, Link, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import {
   AssigneesIcon,
   ClientIcon,
@@ -8,16 +9,44 @@ import {
   InfoIcon,
   ProjectIcon,
 } from '@/components/elements/SemanticIcons';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import {
   clientNameFromRecordWithOptionalClient,
   formatRelativeDate,
   parseHmisDateString,
   stringifyArray,
 } from '@/modules/hmis/hmisUtil';
-import TooltipKeyValue from '@/modules/userDashboard/components/TooltipKeyValue';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { UserCeReferralStepFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
+
+// internal component for common styles in the caption-text info under the step title
+const StepCardInfo: React.FC<{
+  children: ReactNode;
+  Icon?: SvgIconComponent;
+}> = ({ children, Icon }) => {
+  const isMobile = useIsMobile('sm');
+
+  return (
+    <Typography
+      variant='caption'
+      color='text.secondary'
+      component={isMobile ? 'p' : 'span'}
+    >
+      <Box
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 1,
+          mr: isMobile ? 0 : 2,
+        }}
+      >
+        {Icon && <Icon fontSize='inherit' color='inherit' />}
+        {children}
+      </Box>
+    </Typography>
+  );
+};
 
 interface Props {
   step: UserCeReferralStepFieldsFragment;
@@ -38,7 +67,7 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
     const assigneeNames = [
       ...assignees
         .filter((assignee) => assignee.id === currentUserId)
-        .map(() => 'You'),
+        .map(() => 'you'),
       ...assignees
         .filter((assignee) => assignee.id !== currentUserId)
         .map(({ name }) => name),
@@ -98,28 +127,28 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
           {step.name}
         </Typography>
 
-        <TooltipKeyValue title={'Available Since'} Icon={DaysAvailableIcon}>
-          {availableSince}
-        </TooltipKeyValue>
+        <StepCardInfo Icon={DaysAvailableIcon}>
+          Assigned {availableSince}
+        </StepCardInfo>
 
-        <TooltipKeyValue title={'Project'} Icon={ProjectIcon}>
+        <StepCardInfo Icon={InfoIcon}>
+          {startCase(step.status.replace('_', ' '))}
+        </StepCardInfo>
+
+        <StepCardInfo Icon={ProjectIcon}>
           {step.referral.targetProjectName}
-        </TooltipKeyValue>
+        </StepCardInfo>
 
-        <TooltipKeyValue title={'Client'} Icon={ClientIcon}>
+        <StepCardInfo Icon={ClientIcon}>
           {clientNameFromRecordWithOptionalClient(step.referral)}
-        </TooltipKeyValue>
+        </StepCardInfo>
 
         {/* only show assignees if there are any besides the current user */}
         {assignees.length > 1 && (
-          <TooltipKeyValue title={'Assignees'} Icon={AssigneesIcon}>
-            {truncatedAssignees}
-          </TooltipKeyValue>
+          <StepCardInfo Icon={AssigneesIcon}>
+            Assigned to {truncatedAssignees}
+          </StepCardInfo>
         )}
-
-        <TooltipKeyValue title={'Status'} Icon={InfoIcon}>
-          {startCase(step.status.replace('_', ' '))}
-        </TooltipKeyValue>
       </Box>
     </Card>
   );
