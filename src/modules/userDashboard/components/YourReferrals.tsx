@@ -16,8 +16,6 @@ const YourReferrals = () => {
   const { user } = useAuth();
   if (!user) return <NotFound />;
 
-  // TODO(#7507) - using this "table" to display cards results in some dom validation issues that cause console warning.
-  // When we refactor GenericTable to use hooks, we should consider supporting non-table layouts more gracefully.
   return (
     <>
       <Paper>
@@ -26,7 +24,7 @@ const YourReferrals = () => {
             Referrals
           </Typography>
           <Typography variant='caption'>
-            Referral steps assigned to you
+            Referral tasks assigned to you
           </Typography>
         </Stack>
         <GenericTableWithData<
@@ -38,12 +36,16 @@ const YourReferrals = () => {
           queryDocument={GetUserCeAssignedStepsDocument}
           columns={[]}
           pagePath='userDashboard.ceReferralSteps'
-          noData='No referral steps assigned to you'
-          paginationItemName='step'
+          noData='No referral tasks assigned to you'
+          paginationItemName='task'
           defaultPageSize={10}
           recordType='CeReferralStep'
           renderRow={(step) => (
-            <UserStepCard key={step.id} step={step} currentUserId={user.id} />
+            <tr key={step.id}>
+              <td>
+                <UserStepCard step={step} currentUserId={user.id} />
+              </td>
+            </tr>
           )}
         />
       </Paper>

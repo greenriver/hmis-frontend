@@ -1,4 +1,4 @@
-import { Container, ContainerProps, Stack } from '@mui/system';
+import { Container, Stack } from '@mui/system';
 import { ReactNode } from 'react';
 import PageTitle from '@/components/layout/PageTitle';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -8,20 +8,18 @@ const PageContainer = ({
   title,
   overlineText,
   actions,
-  maxWidth = 'lg',
 }: {
   children: ReactNode;
   title: ReactNode;
   overlineText?: string;
   actions?: ReactNode;
-  maxWidth?: ContainerProps['maxWidth'];
 }) => {
   const isTiny = useIsMobile('sm');
   return (
     <Container
       component='main'
-      maxWidth={maxWidth}
-      sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: 4, pb: 6 }}
+      maxWidth='lg'
+      sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: overlineText ? 1 : 4, pb: 6 }}
     >
       <Stack
         spacing={2}
