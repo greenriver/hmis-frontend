@@ -1,6 +1,5 @@
-import { Paper, Stack } from '@mui/material';
-import Typography from '@mui/material/Typography';
 import React from 'react';
+import CommonCard from '@/components/elements/CommonCard';
 import NotFound from '@/components/pages/NotFound';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -18,15 +17,7 @@ const YourReferrals = () => {
 
   return (
     <>
-      <Paper>
-        <Stack gap={1} m={2}>
-          <Typography component='h2' variant='h4'>
-            Referrals
-          </Typography>
-          <Typography variant='caption'>
-            Referral tasks assigned to you
-          </Typography>
-        </Stack>
+      <CommonCard title='Referrals' sx={{ pb: 1 }}>
         <GenericTableWithData<
           GetUserCeAssignedStepsQuery,
           GetUserCeAssignedStepsQueryVariables,
@@ -48,7 +39,7 @@ const YourReferrals = () => {
             </tr>
           )}
         />
-      </Paper>
+      </CommonCard>
     </>
   );
 };

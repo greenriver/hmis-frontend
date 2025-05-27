@@ -57,7 +57,6 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
   return (
     <Card
       sx={{
-        mx: 2,
         mb: 1,
         backgroundColor: 'primary.surface',
         borderColor: 'primary.100',

@@ -19,7 +19,7 @@ const TooltipKeyValue: React.FC<TooltipKeyValueProps> = ({
   return (
     <Tooltip title={title} arrow>
       <Typography
-        variant='body2'
+        variant='caption'
         color='text.secondary'
         component={isMobile ? 'p' : 'span'}
         {...typographyProps}
