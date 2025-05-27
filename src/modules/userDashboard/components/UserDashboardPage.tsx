@@ -20,11 +20,7 @@ const UserDashboardPage = () => {
   if (!showStaffAssignment && !showReferrals) return <NotFound />;
 
   return (
-    <PageContainer
-      title={'HMIS Dashboard'}
-      overlineText={name}
-      maxWidth={showStaffAssignment && showReferrals ? 'xl' : 'lg'}
-    >
+    <PageContainer title={'HMIS Dashboard'} overlineText={name}>
       <Grid container spacing={2}>
         {showStaffAssignment && (
           <Grid item xs={12} lg={showReferrals ? 7 : 12}>

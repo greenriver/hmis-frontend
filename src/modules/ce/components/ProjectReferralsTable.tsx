@@ -63,7 +63,7 @@ export const REFERRAL_COLUMNS: Record<
   },
   currentSteps: {
     key: 'currentSteps',
-    header: 'Current Tasks',
+    header: 'Current Task',
     render: (referral) => {
       if (!referral.currentSteps || referral.currentSteps.length === 0) return;
       return (
