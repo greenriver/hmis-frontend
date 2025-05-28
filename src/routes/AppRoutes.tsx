@@ -17,7 +17,6 @@ import SessionStatusManager from '@/modules/auth/components/SessionStatusManager
 import useAuth from '@/modules/auth/hooks/useAuth';
 import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
-import { useGetUserDashboardConfigQuery } from '@/types/gqlTypes';
 
 const REQUESTED_PATH_KEY = 'hmis_requested_path';
 
@@ -98,12 +97,6 @@ const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
 
 const AppRoutes = () => {
   const { user } = useAuth();
-
-  // Although we don't use it here, fetch the dashboard config for determining
-  // whether to show the Dashboard link in the toolbar. This batches the query
-  // with the other root-permissions query, avoiding the awkwardness of the
-  // Dashboard link flickering into place after the rest of the page has loaded.
-  useGetUserDashboardConfigQuery();
 
   return user ? <ProtectedRoutes user={user} /> : <PublicRoutes />;
 };

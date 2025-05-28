@@ -44486,6 +44486,7 @@ export type GetUserEnrollmentSummariesQuery = {
 
 export type UserDashboardConfigFieldsFragment = {
   __typename?: 'UserDashboardConfig';
+  id: string;
   showStaffAssignment: boolean;
   showReferrals: boolean;
 };
@@ -44501,6 +44502,7 @@ export type GetUserDashboardConfigQuery = {
     id: string;
     userDashboardConfig: {
       __typename?: 'UserDashboardConfig';
+      id: string;
       showStaffAssignment: boolean;
       showReferrals: boolean;
     };
@@ -47197,6 +47199,7 @@ export const EnrollmentAccessSummaryFieldsFragmentDoc = gql`
 `;
 export const UserDashboardConfigFieldsFragmentDoc = gql`
   fragment UserDashboardConfigFields on UserDashboardConfig {
+    id
     showStaffAssignment
     showReferrals
   }
