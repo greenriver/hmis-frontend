@@ -181,7 +181,6 @@ fragment CeReferralStepFields on CeReferralStep {
   submittedValues
 }
 
-
 # used for resolving assigned steps on the User Dashboard
 fragment UserCeReferralStepFields on CeReferralStep {
   id
