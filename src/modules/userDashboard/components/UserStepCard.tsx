@@ -1,12 +1,11 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import { Box, Card, Link, Typography } from '@mui/material';
+import { Box, Card, Link, SxProps, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import React, { ReactNode, useMemo } from 'react';
 import {
   AssigneesIcon,
   ClientIcon,
   DaysAvailableIcon,
-  InfoIcon,
   ProjectIcon,
 } from '@/components/elements/SemanticIcons';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -23,8 +22,9 @@ import { generateSafePath } from '@/utils/pathEncoding';
 // internal component for common styles in the caption-text info under the step title
 const StepCardInfo: React.FC<{
   children: ReactNode;
+  sx?: SxProps;
   Icon?: SvgIconComponent;
-}> = ({ children, Icon }) => {
+}> = ({ children, sx, Icon }) => {
   const isMobile = useIsMobile('sm');
 
   return (
@@ -32,8 +32,10 @@ const StepCardInfo: React.FC<{
       variant='caption'
       color='text.secondary'
       component={isMobile ? 'p' : 'span'}
+      sx={sx}
     >
       <Box
+        component='span'
         sx={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -86,7 +88,7 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
   return (
     <Card
       sx={{
-        backgroundColor: 'primary.surface',
+        backgroundColor: 'primary.100',
         borderColor: 'primary.100',
         transition: (theme) =>
           theme.transitions.create(['background-color', 'border-color'], {
@@ -94,8 +96,8 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
             easing: theme.transitions.easing.easeInOut,
           }),
         '&:hover': {
-          borderColor: 'primary.300',
-          backgroundColor: 'primary.100',
+          borderColor: 'primary.main',
+          backgroundColor: 'primary.300',
         },
       }}
     >
@@ -126,28 +128,31 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
           {step.name}
         </Typography>
 
-        <StepCardInfo Icon={DaysAvailableIcon}>
-          Assigned {availableSince}
-        </StepCardInfo>
-
-        <StepCardInfo Icon={InfoIcon}>
-          {startCase(step.status.replace('_', ' '))}
-        </StepCardInfo>
-
-        <StepCardInfo Icon={ProjectIcon}>
-          {step.referral.targetProjectName}
-        </StepCardInfo>
-
-        <StepCardInfo Icon={ClientIcon}>
-          {clientNameFromRecordWithOptionalClient(step.referral)}
-        </StepCardInfo>
-
-        {/* only show assignees if there are any besides the current user */}
-        {assignees.length > 1 && (
-          <StepCardInfo Icon={AssigneesIcon}>
-            Assigned to {truncatedAssignees}
+        <Box>
+          <StepCardInfo sx={{ fontWeight: 700 }}>
+            {startCase(step.status.replace('_', ' '))}
           </StepCardInfo>
-        )}
+
+          <StepCardInfo Icon={DaysAvailableIcon}>
+            Assigned {availableSince}
+          </StepCardInfo>
+
+          {/* only show assignees if there are any besides the current user */}
+          {assignees.length > 1 && (
+            <StepCardInfo Icon={AssigneesIcon}>
+              Assigned to {truncatedAssignees}
+            </StepCardInfo>
+          )}
+        </Box>
+        <Box>
+          <StepCardInfo Icon={ProjectIcon}>
+            {step.referral.targetProjectName}
+          </StepCardInfo>
+
+          <StepCardInfo Icon={ClientIcon}>
+            {clientNameFromRecordWithOptionalClient(step.referral)}
+          </StepCardInfo>
+        </Box>
       </Box>
     </Card>
   );
