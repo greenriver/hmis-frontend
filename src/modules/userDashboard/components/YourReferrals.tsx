@@ -28,6 +28,11 @@ const YourReferrals = () => {
           columns={[]}
           pagePath='userDashboard.ceReferralSteps'
           noData='No referral tasks assigned to you'
+          noDataCellStyles={{
+            border: 'none',
+            p: 0,
+            textAlign: 'left',
+          }}
           paginationItemName='task'
           defaultPageSize={10}
           recordType='CeReferralStep'

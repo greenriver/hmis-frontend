@@ -75,6 +75,7 @@ export interface Props<T> {
   >;
   filterToolbar?: ReactNode;
   noData?: ReactNode;
+  noDataCellStyles?: SxProps;
   // columnKeys contains the keys of columns currently rendered, so renderRow knows about which optional columns are shown/hidden.
   renderRow?: (row: T, columnKeys: string[]) => ReactNode;
   // TableBodyComponent can be overridden. This should only be used by tables that take over rendering using renderRow and render a `tbody` within their custom render fn
@@ -294,6 +295,7 @@ const GenericTable = <T extends { id: string }>({
   filterToolbar,
   renderRow,
   noData = 'No data',
+  noDataCellStyles,
   loadingVariant = 'circular',
   TableBodyComponent = TableBody,
   belowRowsContent,
@@ -427,6 +429,7 @@ const GenericTable = <T extends { id: string }>({
             py: 4,
             textAlign: 'center',
             typography: 'body1',
+            ...noDataCellStyles,
           }}
         >
           {noData}
