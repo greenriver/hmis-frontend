@@ -6,7 +6,10 @@ import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
 import { PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS } from '@/modules/admin/components/AdminDashboard';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
-import { RootPermissionsFragment, UserDashboardConfig } from '@/types/gqlTypes';
+import {
+  RootPermissionsFragment,
+  useGetUserDashboardConfigQuery,
+} from '@/types/gqlTypes';
 
 export const useActiveNavItem = () => {
   const { pathname } = useLocation();
@@ -31,18 +34,20 @@ export const useActiveNavItem = () => {
 
 interface ToolbarMenuProps {
   mobile?: boolean;
-  userDashboardConfig: UserDashboardConfig;
 }
-const ToolbarMenu: React.FC<ToolbarMenuProps> = ({
-  mobile,
-  userDashboardConfig,
-}) => {
+const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
+  const { data: userDashboardConfigData } = useGetUserDashboardConfigQuery();
+
   const showDashboard = useMemo(() => {
+    if (!userDashboardConfigData) return false;
+
+    const { userDashboardConfig } = userDashboardConfigData?.userDashboard;
+
     return (
       userDashboardConfig?.showReferrals ||
       userDashboardConfig?.showStaffAssignment
     );
-  }, [userDashboardConfig]);
+  }, [userDashboardConfigData]);
 
   const baseMenuItems: (Required<
     Pick<NavItem<RootPermissionsFragment>, 'path'>

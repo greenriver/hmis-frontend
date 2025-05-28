@@ -138,11 +138,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
               alignItems='center'
               spacing={{ md: 0.5, lg: 2 }}
             >
-              <ToolbarMenu
-                userDashboardConfig={
-                  userDashboardData.userDashboard.userDashboardConfig
-                }
-              />
+              <ToolbarMenu />
               <OmniSearch />
               <UserMenu />
             </Stack>
