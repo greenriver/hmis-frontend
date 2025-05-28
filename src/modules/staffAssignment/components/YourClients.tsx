@@ -106,7 +106,7 @@ const YourClients = () => {
   if (!currentUser) return;
 
   return (
-    <CommonCard title='Your Clients' padContent={false}>
+    <CommonCard title='Your Clients' TitleComponent='h2' padContent={false}>
       <Typography variant='body2' color='text.secondary' sx={{ px: 2 }}>
         Households with active enrollments assigned to you
       </Typography>

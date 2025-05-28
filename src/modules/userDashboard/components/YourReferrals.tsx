@@ -17,7 +17,7 @@ const YourReferrals = () => {
 
   return (
     <>
-      <CommonCard title='Referrals' sx={{ pb: 1 }}>
+      <CommonCard title='Referrals' TitleComponent='h2' sx={{ pb: 1 }}>
         <GenericTableWithData<
           GetUserCeAssignedStepsQuery,
           GetUserCeAssignedStepsQueryVariables,
