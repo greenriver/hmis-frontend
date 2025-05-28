@@ -36,6 +36,7 @@ const YourReferrals = () => {
           paginationItemName='task'
           defaultPageSize={10}
           recordType='CeReferralStep'
+          tableProps={{ sx: { 'tbody > :not(:last-child) td': { pb: 1 } } }}
           renderRow={(step) => (
             <tr key={step.id}>
               <td>
