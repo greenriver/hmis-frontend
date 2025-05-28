@@ -44484,101 +44484,6 @@ export type GetUserEnrollmentSummariesQuery = {
   } | null;
 };
 
-export type UserDashboardFieldsFragment = {
-  __typename?: 'UserDashboard';
-  id: string;
-  staffAssignments?: {
-    __typename?: 'StaffAssignmentsPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'StaffAssignment';
-      id: string;
-      staffAssignmentRelationship: string;
-      assignedAt: string;
-      unassignedAt?: string | null;
-      user: { __typename?: 'ApplicationUser'; id: string; name: string };
-      household: {
-        __typename?: 'Household';
-        id: string;
-        anyInProgress: boolean;
-        latestExitDate?: string | null;
-        householdClients: Array<{
-          __typename?: 'HouseholdClient';
-          id: string;
-          relationshipToHoH: RelationshipToHoH;
-          client: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          };
-          enrollment: {
-            __typename?: 'Enrollment';
-            id: string;
-            organizationName?: string;
-            moveInDate?: string | null;
-            entryDate: string;
-            exitDate?: string | null;
-            inProgress: boolean;
-            project: {
-              __typename?: 'Project';
-              id: string;
-              projectName: string;
-              projectType?: ProjectType | null;
-            };
-            lastContact?: {
-              __typename?: 'LastContact';
-              contactDate: string;
-              contactType: LastContactType;
-            } | null;
-          };
-        }>;
-      };
-    }>;
-  } | null;
-  ceReferralSteps?: {
-    __typename?: 'CeReferralStepsPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'CeReferralStep';
-      id: string;
-      stepId?: string | null;
-      name: string;
-      availableAt?: string | null;
-      status: CeReferralStepStatus;
-      assignees: Array<{
-        __typename?: 'ApplicationUser';
-        id: string;
-        name: string;
-      }>;
-      referral: {
-        __typename?: 'CeReferral';
-        id: string;
-        targetProjectId: string;
-        targetProjectName: string;
-        clientId: string;
-        opportunity: { __typename?: 'CeOpportunity'; id: string };
-        client?: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        } | null;
-      };
-    }>;
-  } | null;
-};
-
 export type UserDashboardConfigFieldsFragment = {
   __typename?: 'UserDashboardConfig';
   showStaffAssignment: boolean;
@@ -45799,6 +45704,32 @@ export const CeReferralStepFieldsFragmentDoc = gql`
   }
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
+`;
+export const UserCeReferralStepFieldsFragmentDoc = gql`
+  fragment UserCeReferralStepFields on CeReferralStep {
+    id
+    stepId
+    name
+    availableAt
+    status
+    assignees {
+      id
+      name
+    }
+    referral {
+      id
+      opportunity {
+        id
+      }
+      targetProjectId
+      targetProjectName
+      clientId
+      client {
+        ...ClientName
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
@@ -47144,6 +47075,47 @@ export const ServiceCategoryFieldsFragmentDoc = gql`
     }
   }
 `;
+export const StaffAssignmentWithClientsFragmentDoc = gql`
+  fragment StaffAssignmentWithClients on StaffAssignment {
+    id
+    user {
+      id
+      name
+    }
+    staffAssignmentRelationship
+    assignedAt
+    unassignedAt
+    household {
+      id
+      anyInProgress
+      latestExitDate
+      householdClients {
+        id
+        relationshipToHoH
+        client {
+          id
+          ...ClientName
+        }
+        enrollment {
+          id
+          ...EnrollmentRangeFields
+          project {
+            ...ProjectNameAndType
+          }
+          organizationName @include(if: $includeOrganizationName)
+          moveInDate @include(if: $includeMoveInDate)
+          lastContact @include(if: $includeLastContact) {
+            contactDate
+            contactType
+          }
+        }
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+`;
 export const UnitTypeCapacityFieldsFragmentDoc = gql`
   fragment UnitTypeCapacityFields on UnitTypeCapacity {
     id
@@ -47222,96 +47194,6 @@ export const EnrollmentAccessSummaryFieldsFragmentDoc = gql`
     projectId
     projectName
   }
-`;
-export const StaffAssignmentWithClientsFragmentDoc = gql`
-  fragment StaffAssignmentWithClients on StaffAssignment {
-    id
-    user {
-      id
-      name
-    }
-    staffAssignmentRelationship
-    assignedAt
-    unassignedAt
-    household {
-      id
-      anyInProgress
-      latestExitDate
-      householdClients {
-        id
-        relationshipToHoH
-        client {
-          id
-          ...ClientName
-        }
-        enrollment {
-          id
-          ...EnrollmentRangeFields
-          project {
-            ...ProjectNameAndType
-          }
-          organizationName @include(if: $includeOrganizationName)
-          moveInDate @include(if: $includeMoveInDate)
-          lastContact @include(if: $includeLastContact) {
-            contactDate
-            contactType
-          }
-        }
-      }
-    }
-  }
-  ${ClientNameFragmentDoc}
-  ${EnrollmentRangeFieldsFragmentDoc}
-  ${ProjectNameAndTypeFragmentDoc}
-`;
-export const UserCeReferralStepFieldsFragmentDoc = gql`
-  fragment UserCeReferralStepFields on CeReferralStep {
-    id
-    stepId
-    name
-    availableAt
-    status
-    assignees {
-      id
-      name
-    }
-    referral {
-      id
-      opportunity {
-        id
-      }
-      targetProjectId
-      targetProjectName
-      clientId
-      client {
-        ...ClientName
-      }
-    }
-  }
-  ${ClientNameFragmentDoc}
-`;
-export const UserDashboardFieldsFragmentDoc = gql`
-  fragment UserDashboardFields on UserDashboard {
-    id
-    staffAssignments(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...StaffAssignmentWithClients
-      }
-    }
-    ceReferralSteps {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...UserCeReferralStepFields
-      }
-    }
-  }
-  ${StaffAssignmentWithClientsFragmentDoc}
-  ${UserCeReferralStepFieldsFragmentDoc}
 `;
 export const UserDashboardConfigFieldsFragmentDoc = gql`
   fragment UserDashboardConfigFields on UserDashboardConfig {
