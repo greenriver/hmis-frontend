@@ -708,7 +708,7 @@ export type CeReferral = {
 };
 
 export type CeReferralFilterOptions = {
-  onCurrentStepSince?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  onCurrentTaskSince?: InputMaybe<Scalars['ISO8601Date']['input']>;
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
