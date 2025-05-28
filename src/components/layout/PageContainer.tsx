@@ -25,7 +25,7 @@ const PageContainer = ({
         spacing={2}
         direction={isTiny ? 'column' : 'row'}
         justifyContent='space-between'
-        sx={{ mb: { xs: actions ? 2 : 0, sm: 4 } }}
+        sx={{ mb: { xs: 2, sm: 4 } }}
         alignItems={isTiny ? 'left' : 'center'}
       >
         <PageTitle
