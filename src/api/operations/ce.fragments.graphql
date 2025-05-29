@@ -118,6 +118,9 @@ fragment ClientCeReferralTableFields on CeReferral {
   targetProjectId
   targetProjectName
   targetProjectType
+  access {
+    canViewTargetProject
+  }
 }
 
 fragment CeReferralFields on CeReferral {

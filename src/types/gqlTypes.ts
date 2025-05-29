@@ -687,6 +687,7 @@ export type CeParticipationsPaginated = {
 
 export type CeReferral = {
   __typename?: 'CeReferral';
+  access: CeReferralAccess;
   active: Scalars['Boolean']['output'];
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
@@ -705,6 +706,12 @@ export type CeReferral = {
   targetProjectName: Scalars['String']['output'];
   targetProjectType: ProjectType;
   updatedBy?: Maybe<ApplicationUser>;
+};
+
+export type CeReferralAccess = {
+  __typename?: 'CeReferralAccess';
+  canViewTargetProject: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type CeReferralFilterOptions = {
@@ -16332,6 +16339,7 @@ export type ClientCeReferralTableFieldsFragment = {
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
+  access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
   currentSteps?: Array<{
     __typename?: 'CeReferralStep';
@@ -19258,6 +19266,10 @@ export type GetClientCeReferralsQuery = {
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
+        access: {
+          __typename?: 'CeReferralAccess';
+          canViewTargetProject: boolean;
+        };
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
         currentSteps?: Array<{
           __typename?: 'CeReferralStep';
@@ -45489,6 +45501,9 @@ export const ClientCeReferralTableFieldsFragmentDoc = gql`
     targetProjectId
     targetProjectName
     targetProjectType
+    access {
+      canViewTargetProject
+    }
   }
   ${CeReferralTableFieldsFragmentDoc}
 `;
