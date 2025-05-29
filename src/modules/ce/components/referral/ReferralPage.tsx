@@ -15,8 +15,8 @@ import CommonStickyBar from '@/components/layout/CommonStickyBar';
 import NotFound from '@/components/pages/NotFound';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
-import AssignContactsForm from '@/modules/ce/components/AssignContactsForm';
-import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
+import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
+import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {

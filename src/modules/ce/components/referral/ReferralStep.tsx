@@ -7,7 +7,7 @@ import Loading from '@/components/elements/Loading';
 import { BackIcon } from '@/components/elements/SemanticIcons';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
+import ReferralStepAssignee from '@/modules/ce/components/referral/ReferralStepAssignee';
 import {
   emptyErrorState,
   ErrorState,

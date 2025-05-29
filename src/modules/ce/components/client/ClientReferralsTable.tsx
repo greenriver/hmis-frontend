@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
-import { REFERRAL_COLUMNS } from '@/modules/ce/components/ProjectReferralsTable';
+import { REFERRAL_COLUMNS } from '@/modules/ce/components/project/ProjectReferralsTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';

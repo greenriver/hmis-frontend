@@ -3,9 +3,9 @@ import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
 import { GoToIcon } from '@/components/elements/SemanticIcons';
-import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
-import ReferralStepStatusChip from '@/modules/ce/components/ReferralStepStatusChip';
-import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
+import ReferralStepAssignee from '@/modules/ce/components/referral/ReferralStepAssignee';
+import ReferralStepStatusChip from '@/modules/ce/components/referral/ReferralStepStatusChip';
+import StartCeReferralStepButton from '@/modules/ce/components/referral/StartCeReferralStepButton';
 import { lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
