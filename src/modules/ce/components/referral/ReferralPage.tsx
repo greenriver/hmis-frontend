@@ -22,11 +22,13 @@ import useSafeParams from '@/hooks/useSafeParams';
 import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
+import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
   ProjectAllFieldsFragment,
   useGetCeReferralQuery,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   // Referral is sometimes, but not always, rendered in the context of a Project.
@@ -50,10 +52,47 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
     },
   });
 
-  const outletContext: ReferralContext | undefined = useMemo(
-    () => (referral ? { referral } : undefined),
-    [referral]
-  );
+  // Provide the referral in an outlet context so it can be accessed easily by sub-pages, like the Referral Step page
+  const outletContext: ReferralContext | undefined = useMemo(() => {
+    if (!referral) return undefined;
+
+    // Depending on whether this referral is being rendered in the context of a Project or as "floating" referral,
+    // the links used by the sub-pages will be different. Provide helpers for them here in the outlet contexts
+    // so the sub-pages don't have to do any thinking about it.
+    if (project) {
+      return {
+        referral,
+        referralPath: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
+          projectId: project.id,
+          referralId: referral.id,
+        }),
+        opportunityPath: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+          projectId: project.id,
+          opportunityId: referral.opportunity.id,
+        }),
+        generateReferralStepPath: (stepId: string) => {
+          return generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
+            projectId: project.id,
+            referralId: referral.id,
+            stepId: stepId,
+          });
+        },
+      };
+    }
+
+    return {
+      referral,
+      referralPath: generateSafePath(Routes.REFERRAL_STEPS, {
+        referralId: referral.id,
+      }),
+      generateReferralStepPath: (stepId: string) => {
+        return generateSafePath(Routes.REFERRAL_STEP, {
+          referralId: referral.id,
+          stepId: stepId,
+        });
+      },
+    };
+  }, [referral, project]);
 
   const isMobile = useIsMobile();
 
@@ -139,7 +178,12 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
   );
 };
 
-export type ReferralContext = { referral: CeReferralFieldsFragment };
+export type ReferralContext = {
+  referral: CeReferralFieldsFragment;
+  referralPath: string;
+  opportunityPath?: string;
+  generateReferralStepPath: (stepId: string) => string;
+};
 export const useReferralContext = () => useOutletContext<ReferralContext>();
 
 export default ReferralPage;

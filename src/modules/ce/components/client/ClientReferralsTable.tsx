@@ -3,35 +3,32 @@ import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import { REFERRAL_COLUMNS } from '@/modules/ce/components/project/ProjectReferralsTable';
+import { getReferralLink } from '@/modules/ce/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  CeReferralAdminFieldsFragment,
   CeReferralStatus,
+  CeReferralWithProjectFieldsFragment,
   ClientCeReferralTableFieldsFragment,
   GetClientCeReferralsDocument,
   GetClientCeReferralsQuery,
   GetClientCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 export const REFERRAL_WITH_PROJECT_COLUMNS: {
-  [key: string]: ColumnDef<
-    ClientCeReferralTableFieldsFragment | CeReferralAdminFieldsFragment
-  >;
+  [key: string]: ColumnDef<CeReferralWithProjectFieldsFragment>;
 } = {
   projectName: {
     header: 'Project Name',
     key: 'projectName',
-    render: (referral: ClientCeReferralTableFieldsFragment) =>
+    render: (referral: CeReferralWithProjectFieldsFragment) =>
       referral.targetProjectName,
   },
   projectType: {
     header: 'Project Type',
     key: 'projectType',
-    render: (referral: ClientCeReferralTableFieldsFragment) => (
+    render: (referral: CeReferralWithProjectFieldsFragment) => (
       <ProjectTypeChip projectType={referral.targetProjectType} />
     ),
   },
@@ -73,12 +70,7 @@ const ClientReferralsTable: React.FC = () => {
         pagePath='client.ceReferrals'
         noData='No referrals'
         paginationItemName='referrals'
-        rowLinkTo={(referral) =>
-          generateSafePath(ProjectDashboardRoutes.REFERRAL, {
-            projectId: referral.targetProjectId,
-            referralId: referral.id,
-          })
-        }
+        rowLinkTo={getReferralLink}
         rowActionTitle='View Referral'
         filters={filters}
       />
