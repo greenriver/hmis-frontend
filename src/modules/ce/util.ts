@@ -1,12 +1,11 @@
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
-import { ClientCeReferralTableFieldsFragment } from '@/types/gqlTypes';
+import { CeReferralWithProjectAccessFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 // Helper function for linking to referrals. Use this anywhere we need to link to referrals,
 // except from within a project context, where we know the user already has access to view the project
-// todo @martha - use this on My Dashboard once that is merged
 export const getReferralLink = (
-  referral: ClientCeReferralTableFieldsFragment
+  referral: CeReferralWithProjectAccessFieldsFragment
 ) => {
   if (referral.access.canViewTargetProject) {
     // If the user can view the target project, link to the referral in the project context

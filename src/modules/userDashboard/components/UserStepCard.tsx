@@ -9,15 +9,14 @@ import {
   ProjectIcon,
 } from '@/components/elements/SemanticIcons';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { getReferralLink } from '@/modules/ce/util';
 import {
   clientNameFromRecordWithOptionalClient,
   formatRelativeDate,
   parseHmisDateString,
   stringifyArray,
 } from '@/modules/hmis/hmisUtil';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import { UserCeReferralStepFieldsFragment } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 // internal component for common styles in the caption-text info under the step title
 const StepCardInfo: React.FC<{
@@ -57,10 +56,7 @@ interface Props {
 
 const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
   const { referral, assignees } = step;
-  const path = generateSafePath(ProjectDashboardRoutes.REFERRAL, {
-    projectId: referral.targetProjectId,
-    referralId: referral.id,
-  });
+  const path = getReferralLink(referral);
 
   const truncatedAssignees = useMemo(() => {
     if (assignees.length <= 1) return '';
