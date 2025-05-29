@@ -16,9 +16,9 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import Pagination from '@/components/elements/table/Pagination';
-import TableFilters, {
+import TableControls, {
   TableFiltersProps,
-} from '@/components/elements/tableFilters/TableFilters';
+} from '@/components/elements/tableFilters/TableControls';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColumns';
@@ -150,14 +150,24 @@ const GenericTableWithData = <
   const {
     optionalColumns,
     includedOptionalColumns,
-    setIncludedOptionalColumns,
     optionalQueryVariables,
+    optionalColumnsMenuProps,
   } = useOptionalColumns<RowDataType, QueryVariables>({ columns: columnsProp });
 
   // if the filters change, return to the first page
   useEffect(() => {
     setPage(0);
   }, [filterValues]);
+
+  const filterProps = useMemo(() => {
+    if (!filters || Object.keys(filters).length === 0) return;
+
+    return {
+      filters,
+      filterValues,
+      setFilterValues,
+    };
+  }, [filterValues, filters]);
 
   const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
     if (sortOrder) return sortOrder;
@@ -348,23 +358,11 @@ const GenericTableWithData = <
                     borderBottom: `1px solid ${theme.palette.divider}`,
                   })}
                 >
-                  <TableFilters
+                  <TableControls
                     noSort={noSort}
                     loading={loading && !data}
                     tableDisplayOptionButtons={tableDisplayOptionButtons}
-                    optionalColumns={
-                      !isEmpty(optionalColumns)
-                        ? {
-                            columns: optionalColumns.map((col) => ({
-                              value: col.key,
-                              header: col.header,
-                              defaultHidden: !!col.optional?.defaultHidden,
-                            })),
-                            columnsValue: includedOptionalColumns,
-                            setColumnsValue: setIncludedOptionalColumns,
-                          }
-                        : undefined
-                    }
+                    optionalColumns={optionalColumnsMenuProps}
                     sorting={
                       sortOptions
                         ? {
@@ -374,15 +372,7 @@ const GenericTableWithData = <
                           }
                         : undefined
                     }
-                    filters={
-                      !isEmpty(filters)
-                        ? {
-                            filters,
-                            filterValues,
-                            setFilterValues,
-                          }
-                        : undefined
-                    }
+                    filters={filterProps}
                     pagination={{
                       limit,
                       offset,
