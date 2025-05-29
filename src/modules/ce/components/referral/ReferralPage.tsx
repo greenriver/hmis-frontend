@@ -12,28 +12,33 @@ import {
   PersonIcon,
 } from '@/components/elements/SemanticIcons';
 import CommonStickyBar from '@/components/layout/CommonStickyBar';
+import {
+  CONTEXT_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import NotFound from '@/components/pages/NotFound';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
-import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   CeReferralFieldsFragment,
+  ProjectAllFieldsFragment,
   useGetCeReferralQuery,
 } from '@/types/gqlTypes';
 
-interface Props {}
+interface Props {
+  // Referral is sometimes, but not always, rendered in the context of a Project.
+  project?: ProjectAllFieldsFragment;
+}
 
 /**
  * Provides navigational context for a single Referral.
  * Uses react router outlet to render sub-pages.
  */
-const ReferralPage: React.FC<Props> = ({}) => {
+const ReferralPage: React.FC<Props> = ({ project }) => {
   const { referralId } = useSafeParams() as { referralId: string };
-
-  const { project } = useProjectDashboardContext();
 
   const {
     data: { ceReferral: referral } = {},
@@ -58,8 +63,16 @@ const ReferralPage: React.FC<Props> = ({}) => {
 
   return (
     <>
-      {/* Apply 0 padding to the bar, so the divider can take up full height */}
-      <CommonStickyBar sx={{ py: 0 }}>
+      <CommonStickyBar
+        // If in project context, leave more room above the sticky bar
+        top={
+          project
+            ? STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT
+            : STICKY_BAR_HEIGHT
+        }
+        // Apply 0 padding to the bar, so the divider can take up full height
+        sx={{ py: 0 }}
+      >
         <Stack
           divider={
             <Divider
@@ -95,6 +108,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
               ButtonProps={{ startIcon: <InfoIcon /> }}
             />
             {referral.swimlanes.length > 0 &&
+              project &&
               project.access.canAssignReferralTasks && (
                 // If this referral has no swimlanes, hide the Contacts button. This will only happen if the referral also has no tasks
                 <CommonButtonDrawer

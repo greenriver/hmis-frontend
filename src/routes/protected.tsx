@@ -55,6 +55,7 @@ import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinate
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import Opportunity from '@/modules/ce/components/opportunity/Opportunity';
 import ProjectCePage from '@/modules/ce/components/project/ProjectCePage';
+import ProjectReferralPage from '@/modules/ce/components/project/ProjectReferralPage';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/referral/ReferralSteps';
@@ -170,6 +171,28 @@ export const protectedRoutes: RouteNode[] = [
       {
         path: Routes.MY_DASHBOARD,
         element: <Navigate to='/dashboard' replace />,
+      },
+      {
+        // "Floating" referrals for users who have permission to view referrals in projects where they don't have access to the project dashboard.
+        path: Routes.REFERRAL,
+        element: (
+          // Doesn't need a permission filter wrapper; internally it will just return NotFound if the client doesn't have access to view the referral.
+          <ReferralPage />
+        ),
+        children: [
+          {
+            path: Routes.REFERRAL_STEPS,
+            element: <ReferralSteps />,
+          },
+          {
+            path: Routes.REFERRAL_STEP,
+            element: <ReferralStep />,
+          },
+          {
+            path: '',
+            element: <Navigate to={'tasks'} replace />,
+          },
+        ],
       },
       {
         path: Routes.PROJECT,
@@ -459,7 +482,7 @@ export const protectedRoutes: RouteNode[] = [
               <ProjectRoute
                 permissions={['canViewReferrals', 'canViewOwnReferrals']}
               >
-                <ReferralPage />
+                <ProjectReferralPage />
               </ProjectRoute>
             ),
             children: [
