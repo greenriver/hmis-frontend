@@ -4555,14 +4555,14 @@
             "deprecationReason": null
           },
           {
-            "name": "templateId",
+            "name": "templateIdentifier",
             "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "ID",
+                "name": "String",
                 "ofType": null
               }
             },
@@ -35889,6 +35889,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CE_WORKFLOW_TEMPLATE_IDENTIFIERS",
+            "description": "Templates for CE workflow definitions",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CE_WORKFLOW_TEMPLATE_IDENTIFIERS_INCLUDING_RETIRED",
             "description": "Templates for CE workflow definitions, including fully retired workflows",
             "isDeprecated": false,
@@ -36071,12 +36077,6 @@
           {
             "name": "USERS",
             "description": "User accounts. Deprecated in favor of AUDITABLE_USERS",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "WORKFLOW_DEFINITION_TEMPLATES",
-            "description": "Templates for CE workflow definitions",
             "isDeprecated": false,
             "deprecationReason": null
           }

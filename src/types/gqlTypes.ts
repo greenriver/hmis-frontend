@@ -636,7 +636,7 @@ export type CeOpportunityFilterOptions = {
 
 export type CeOpportunityInput = {
   name: Scalars['String']['input'];
-  templateId: Scalars['ID']['input'];
+  templateIdentifier: Scalars['String']['input'];
 };
 
 /** Opportunity Sorting Options */
@@ -5116,6 +5116,8 @@ export enum PickListType {
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
+  /** Templates for CE workflow definitions */
+  CeWorkflowTemplateIdentifiers = 'CE_WORKFLOW_TEMPLATE_IDENTIFIERS',
   /** Templates for CE workflow definitions, including fully retired workflows */
   CeWorkflowTemplateIdentifiersIncludingRetired = 'CE_WORKFLOW_TEMPLATE_IDENTIFIERS_INCLUDING_RETIRED',
   ClientAuditEventRecordTypes = 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
@@ -5165,8 +5167,6 @@ export enum PickListType {
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
   /** User accounts. Deprecated in favor of AUDITABLE_USERS */
   Users = 'USERS',
-  /** Templates for CE workflow definitions */
-  WorkflowDefinitionTemplates = 'WORKFLOW_DEFINITION_TEMPLATES',
 }
 
 /** HUD PreferredLanguage (C4.A) */

@@ -21,7 +21,9 @@ interface Props {
 const CreateOpportunityButton: React.FC<Props> = ({ projectId }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState<string | null>(null);
-  const [templateId, setTemplateId] = useState<string | null>(null);
+  const [templateIdentifier, setTemplateIdentifier] = useState<string | null>(
+    null
+  );
 
   const [createOpportunity, { loading, error }] =
     useCreateCeOpportunityMutation({
@@ -29,7 +31,7 @@ const CreateOpportunityButton: React.FC<Props> = ({ projectId }) => {
         projectId,
         input: {
           name: name || '',
-          templateId: templateId || '',
+          templateIdentifier: templateIdentifier || '',
         },
       },
       onCompleted: () => {
@@ -45,7 +47,7 @@ const CreateOpportunityButton: React.FC<Props> = ({ projectId }) => {
     item: {
       linkId: 'fake',
       type: ItemType.Choice,
-      pickListReference: PickListType.WorkflowDefinitionTemplates,
+      pickListReference: PickListType.CeWorkflowTemplateIdentifiers,
     },
   });
 
@@ -86,7 +88,7 @@ const CreateOpportunityButton: React.FC<Props> = ({ projectId }) => {
               options={templateList}
               onChange={(_event, option) => {
                 if (isPickListOption(option)) {
-                  setTemplateId(option.code);
+                  setTemplateIdentifier(option.code);
                 }
               }}
             />
@@ -95,7 +97,7 @@ const CreateOpportunityButton: React.FC<Props> = ({ projectId }) => {
         <DialogActions>
           <FormDialogActionContent
             onSubmit={() => createOpportunity()}
-            disabled={!name || !templateId}
+            disabled={!name || !templateIdentifier}
             onDiscard={() => setOpen(false)}
             submitLoading={loading}
           />
