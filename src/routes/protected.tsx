@@ -82,7 +82,6 @@ import HouseholdPage from '@/modules/enrollment/components/pages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
-import MyDashboardPage from '@/modules/myDashboard/components/MyDashboardPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
 import CeParticipationsPage from '@/modules/projectAdministration/components/CeParticipationsPage';
@@ -120,6 +119,7 @@ import EnrollmentServicesPage from '@/modules/services/components/EnrollmentServ
 import ProjectServicesPage from '@/modules/services/components/ProjectServicesPage';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
+import UserDashboardPage from '@/modules/userDashboard/components/UserDashboardPage';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
 
 const App = () => {
@@ -165,7 +165,12 @@ export const protectedRoutes: RouteNode[] = [
     element: <App />,
     children: [
       { path: Routes.ALL_PROJECTS, element: <AllProjectsPage /> },
-      { path: Routes.MY_DASHBOARD, element: <MyDashboardPage /> },
+      { path: Routes.USER_DASHBOARD, element: <UserDashboardPage /> },
+      // For backwards compat, old '/my-dashboard' redirects to '/dashboard'
+      {
+        path: Routes.MY_DASHBOARD,
+        element: <Navigate to='/dashboard' replace />,
+      },
       {
         path: Routes.PROJECT,
         element: <ProjectDashboard />,

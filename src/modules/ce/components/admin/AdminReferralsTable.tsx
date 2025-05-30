@@ -31,7 +31,7 @@ const COLUMNS: DataColumnDef<
     // TODO - Ideally this column "Time in Current Step" should correspond with the filter "On Current Step Since..."
     // aka, they should have the same title and use the same unit (days)
     key: 'daysOnCurrentSteps',
-    header: 'Days on Current Step',
+    header: 'Days on Current Task',
     render: ({ daysOnCurrentSteps }) => {
       if (isNil(daysOnCurrentSteps)) return; // no open steps
       if (daysOnCurrentSteps === 0) return '< 1 day';
