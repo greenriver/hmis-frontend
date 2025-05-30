@@ -16,6 +16,7 @@ fragment UnitTypeFields on UnitTypeObject {
 
 fragment UnitFields on Unit {
   id
+  name
   unitSize
   unitType {
     ...UnitTypeFields
@@ -28,6 +29,9 @@ fragment UnitFields on Unit {
       ...ClientName
     }
   }
+  unitGroup {
+    ...UnitGroupFields
+  }
   ...UnitWithCeFields @include(if: $includeCeFields)
 }
 
@@ -39,4 +43,18 @@ fragment UnitWithCeFields on Unit {
     }
   }
   acceptingCeReferrals
+  workflowTemplateName
+}
+
+fragment UnitGroupFields on UnitGroup {
+  id
+  name
+}
+
+fragment UnitGroupCapacityFields on UnitGroup {
+  id
+  name
+  units {
+    nodesCount
+  }
 }

@@ -1,88 +1,37 @@
 import AddIcon from '@mui/icons-material/Add';
-import {
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Paper,
-  Stack,
-} from '@mui/material';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { Button, Paper, Stack } from '@mui/material';
+import { useMemo, useState } from 'react';
 
-import UnitCapacityTable from './UnitCapacityTable';
-import UnitManagementTable from './UnitManagementTable';
-
-import CommonDialog from '@/components/elements/CommonDialog';
-import TitleCard from '@/components/elements/TitleCard';
+import CommonCard from '@/components/elements/CommonCard';
+import Loading from '@/components/elements/Loading';
+import RouterLink from '@/components/elements/RouterLink';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
-import {
-  emptyErrorState,
-  ErrorState,
-  partitionValidations,
-} from '@/modules/errors/util';
-import DynamicForm, {
-  DynamicFormOnSubmit,
-  DynamicFormRef,
-} from '@/modules/form/components/DynamicForm';
-import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
-import { UnitsDefinition } from '@/modules/form/data';
-import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { evictUnitsQuery } from '@/modules/units/util';
-import { CreateUnitsInput, useCreateUnitsMutation } from '@/types/gqlTypes';
+import AllUnitsTable from '@/modules/units/components/AllUnitsTable';
+import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
+import { ProjectDashboardRoutes } from '@/routes/routes';
+import { useGetUnitGroupsQuery } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const Units = () => {
   const { project } = useProjectDashboardContext();
-  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
+
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const formRef = useRef<DynamicFormRef>(null);
-  const closeDialog = useCallback(() => {
-    setDialogOpen(false);
-    setErrors(emptyErrorState);
-  }, []);
-  const [createUnits, { loading: createUnitsLoading }] = useCreateUnitsMutation(
-    {
-      onCompleted: (data) => {
-        if (data.createUnits?.errors?.length) {
-          setErrors(partitionValidations(data.createUnits?.errors));
-        } else {
-          evictUnitsQuery(project.id);
-          closeDialog();
-        }
-      },
-      onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
-    }
-  );
 
-  // TODO(7409) - instead of using the global permission, check project-level config
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
+  const { data, error, loading } = useGetUnitGroupsQuery({
+    variables: { id: project.id, limit: 100 },
+  });
 
-  const handleCreateUnits: DynamicFormOnSubmit = useCallback(
-    ({ rawValues }) => {
-      const input = transformSubmitValues({
-        definition: UnitsDefinition,
-        values: rawValues,
-        keyByFieldName: true,
-      });
-      input.projectId = project.id;
-      if (!input.prefix) input.prefix = 'Unit';
-      createUnits({
-        variables: {
-          input: { input } as CreateUnitsInput,
-          includeCeFields: canViewCoordinatedEntry,
-        },
-      });
-    },
-    [canViewCoordinatedEntry, createUnits, project.id]
-  );
-  const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
+  const unitGroups = useMemo(() => {
+    if (!data?.project?.unitGroups) return [];
+    return data.project.unitGroups.nodes;
+  }, [data]);
 
   if (!project.access.canViewUnits) return <NotFound />;
+  if (error) throw error;
+  if (loading) return <Loading />;
 
   return (
     <>
@@ -94,57 +43,46 @@ const Units = () => {
             permissions='canManageUnits'
           >
             <Button
-              data-testid='addInventoryButton'
               onClick={() => setDialogOpen(true)}
               startIcon={<AddIcon />}
               variant='outlined'
             >
-              Add Units
+              Add Unit Group
             </Button>
           </ProjectPermissionsFilter>
         }
       />
       <Stack gap={4}>
-        <TitleCard title='Capacity' headerSx={{ p: 2 }}>
+        {unitGroups.length > 0 && (
+          <CommonCard title='Unit Groups'>
+            {unitGroups.map((group) => (
+              <div>
+                <RouterLink
+                  key={group.id}
+                  to={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+                    projectId: project.id,
+                    unitGroupId: group.id,
+                  })}
+                >
+                  {group.name}
+                </RouterLink>
+              </div>
+            ))}
+          </CommonCard>
+        )}
+        {/* <TitleCard title='Capacity' headerSx={{ p: 2 }}>
           <UnitCapacityTable projectId={project.id} />
-        </TitleCard>
+        </TitleCard> */}
+
         <Paper>
-          <UnitManagementTable
-            projectId={project.id}
-            allowDeleteUnits={project.access.canManageUnits}
-          />
+          <AllUnitsTable projectId={project.id} />
         </Paper>
       </Stack>
-      <CommonDialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
-        <DialogTitle>Add Units</DialogTitle>
-        <DialogContent sx={{ my: 2 }}>
-          {dialogOpen && (
-            <DynamicForm
-              ref={formRef}
-              definition={UnitsDefinition}
-              pickListArgs={pickListArgs}
-              FormActionProps={{
-                submitButtonText: 'Add Units',
-                discardButtonText: 'Cancel',
-                onDiscard: closeDialog,
-              }}
-              onSubmit={handleCreateUnits}
-              loading={createUnitsLoading}
-              errors={errors}
-              hideSubmit
-            />
-          )}
-        </DialogContent>
-        <DialogActions>
-          <FormDialogActionContent
-            onSubmit={() => formRef.current && formRef.current.SubmitForm()}
-            onDiscard={closeDialog}
-            discardButtonText='Cancel'
-            submitButtonText='Add Units'
-            submitLoading={createUnitsLoading}
-          />
-        </DialogActions>
-      </CommonDialog>
+      <UnitGroupFormDialog
+        projectId={project.id}
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+      />
     </>
   );
 };

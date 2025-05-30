@@ -517,6 +517,26 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeMatchRule',
     fields: [
       {
+        name: 'expression',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'funders',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+          },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -538,6 +558,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'projectTypes',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+            },
+          },
         },
       },
     ],
@@ -778,6 +814,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
         },
+      },
+      {
+        name: 'workflowTemplateName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
@@ -6546,6 +6586,39 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       { name: 'unitSize', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
+      {
+        name: 'workflowTemplateName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'UnitGroup',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'workflowTemplateIdentifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'workflowTemplateName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
     ],
   },
   {
@@ -8872,6 +8945,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
+        name: 'unitGroup',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
         name: 'unitType',
         type: {
           kind: 'LIST',
@@ -8882,6 +8967,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
+      },
+    ],
+  },
+  {
+    name: 'UnitGroupInput',
+    args: [
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'projectId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'workflowTemplateIdentifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
@@ -8900,6 +9010,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+      {
+        name: 'unitGroupId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'unitTypeId',

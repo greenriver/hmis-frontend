@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 import CommonButtonDrawer from '@/components/elements/CommonButtonDrawer';
+import CommonDetailGrid from '@/components/elements/CommonDetailGrid';
 import Loading from '@/components/elements/Loading';
 import {
   ActivityIcon,
@@ -93,7 +94,29 @@ const ReferralPage: React.FC<Props> = ({}) => {
             <CommonButtonDrawer
               title={'Referral'}
               ButtonProps={{ startIcon: <InfoIcon /> }}
-            />
+            >
+              {/* TODO: move content to own component ReferralDetailsContent and style */}
+              <CommonDetailGrid
+                rows={[
+                  { id: 'id', label: 'Referral ID', value: referral.id },
+                  {
+                    id: 'id',
+                    label: 'Client Name',
+                    value: clientNameFromRecordWithOptionalClient(referral),
+                  },
+                  {
+                    id: 'id',
+                    label: 'Unit Name',
+                    value: referral.opportunity.name,
+                  },
+                  {
+                    id: 'workflow',
+                    label: 'Referral Workflow',
+                    value: referral.workflowTemplateName,
+                  },
+                ]}
+              />
+            </CommonButtonDrawer>
             {referral.swimlanes.length > 0 &&
               project.access.canAssignReferralTasks && (
                 // If this referral has no swimlanes, hide the Contacts button. This will only happen if the referral also has no tasks

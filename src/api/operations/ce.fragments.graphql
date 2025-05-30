@@ -43,6 +43,9 @@ fragment CeMatchRuleFields on CeMatchRule {
   id
   name
   ownerType
+  expression
+  projectTypes
+  funders
 }
 
 fragment CeCandidateFields on CeCandidate {
@@ -123,6 +126,7 @@ fragment ClientCeReferralTableFields on CeReferral {
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
   ...CeReferralWithSwimlanes
+  workflowTemplateName
   steps {
     ...CeReferralStepSummaryFields
   }

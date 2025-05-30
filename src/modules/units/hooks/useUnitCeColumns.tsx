@@ -1,6 +1,5 @@
-import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { UnitFieldsFragment } from '@/types/gqlTypes';
+import { CeReferralStatus, UnitFieldsFragment } from '@/types/gqlTypes';
 
 export const useUnitCeColumns = () => {
   // TODO(7409) - instead of using the global permission, check project-level config
@@ -11,22 +10,28 @@ export const useUnitCeColumns = () => {
   if (!canViewCoordinatedEntry) return [];
 
   return [
-    {
-      header: 'Accepting Referrals?',
-      key: 'available',
-      render: (unit: UnitFieldsFragment) =>
-        unit.acceptingCeReferrals ? 'Yes' : 'No',
-    },
+    // {
+    //   header: 'Accepting Referrals?',
+    //   key: 'available',
+    //   render: (unit: UnitFieldsFragment) =>
+    //     unit.acceptingCeReferrals ? 'Yes' : 'No',
+    // },
     {
       header: 'Referral Status',
-      key: 'referralStatus',
+      key: 'ceStatus',
       render: (unit: UnitFieldsFragment) => {
         const opportunity = unit.latestOpportunity;
         const referral = opportunity?.referral;
 
-        if (opportunity && !referral) return 'Available for referrals';
+        if (unit.acceptingCeReferrals) {
+          return 'Accepting Referrals';
+        }
 
-        if (referral) return <ReferralStatusChip status={referral.status} />;
+        if (referral && referral.status === CeReferralStatus.InProgress) {
+          return 'Referral In Progress';
+        }
+
+        return 'Not Accepting Referrals';
       },
     },
   ];

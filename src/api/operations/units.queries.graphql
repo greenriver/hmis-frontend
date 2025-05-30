@@ -18,6 +18,35 @@ query GetUnits(
   }
 }
 
+query GetUnitGroups($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    unitGroups(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...UnitGroupFields
+      }
+    }
+  }
+}
+
+query GetUnitGroup($id: ID!) {
+  unitGroup(id: $id) {
+    ...UnitGroupFields
+  }
+}
+
+query GetUnit($id: ID!, $includeCeFields: Boolean = false) {
+  unit(id: $id) {
+    ...UnitFields
+    latestOpportunity @include(if: $includeCeFields) {
+      ...CeOpportunityFields
+    }
+  }
+}
+
 query GetProjectUnitTypes($id: ID!) {
   project(id: $id) {
     id
@@ -60,6 +89,17 @@ mutation UpdateUnits(
     clientMutationId
     units {
       ...UnitFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateUnitGroup($input: UnitGroupInput!) {
+  createUnitGroup(input: $input) {
+    unitGroup {
+      ...UnitGroupFields
     }
     errors {
       ...ValidationErrorFields

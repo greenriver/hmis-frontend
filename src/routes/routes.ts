@@ -105,13 +105,18 @@ const projectDashboardRoutes = {
   COCS: 'coc',
   NEW_COC: 'coc/new',
   EDIT_COC: 'coc/:cocId/edit',
-  UNITS: 'units',
   INVENTORY: 'inventory',
   NEW_INVENTORY: 'inventory/new',
   EDIT_INVENTORY: 'inventory/:inventoryId/edit',
   HMIS_PARTICIPATION: 'hmis-participation',
   CE_PARTICIPATION: 'ce-participation',
   EXTERNAL_FORM_SUBMISSIONS: 'external-form-submissions',
+
+  // Unit Management
+  UNITS: 'units',
+  UNIT_GROUP: 'unitGroup/:unitGroupId',
+  UNIT_GROUP_UNIT: 'unitGroup/:unitGroupId/unit/:unitId',
+  UNIT: 'unit/:unitId', // TODO remove this and constrain all units must be in groups? makes things simpler
 
   // CE
   CE: 'ce',

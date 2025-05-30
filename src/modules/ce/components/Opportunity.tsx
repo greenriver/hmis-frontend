@@ -10,29 +10,23 @@ import OpportunityBanner from '@/modules/ce/components/OpportunityBanner';
 import PrioritizedClientsTable from '@/modules/ce/components/PrioritizedClientsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
+  CeOpportunityFieldsFragment,
   useGetCeOpportunityCandidatesQuery,
-  useGetCeOpportunityQuery,
 } from '@/types/gqlTypes';
 
-interface Props {}
-const Opportunity: React.FC<Props> = ({}) => {
-  const { opportunityId, projectId } = useSafeParams() as {
-    opportunityId: string;
-    projectId: string;
-  };
+interface Props {
+  projectId?: string;
+  opportunity?: CeOpportunityFieldsFragment;
+}
 
+// Temp: allow rendering as own page or receiving params from Unit page
+// this page will probably go away, route to unit page instead
+const Opportunity: React.FC<Props> = ({ opportunity, projectId }) => {
   const { project } = useProjectDashboardContext();
-
-  const {
-    data: { ceOpportunity: opportunity } = {},
-    loading,
-    error,
-  } = useGetCeOpportunityQuery({
-    variables: {
-      id: opportunityId,
-    },
-  });
-
+  const { opportunityId: paramOpportunityId } = useSafeParams() as {
+    opportunityId: string;
+  };
+  const opportunityId = opportunity?.id || paramOpportunityId;
   // query for the opportunity's top candidate here, rather than inside the OpportunityBanner,
   // so we can batch it with the above query for the Opportunity
   const {
@@ -100,7 +94,7 @@ const Opportunity: React.FC<Props> = ({}) => {
           <Paper>
             <PrioritizedClientsTable
               opportunityId={opportunityId}
-              projectId={projectId}
+              projectId={project.id}
               status={opportunity.status}
             />
           </Paper>
@@ -114,12 +108,11 @@ const Opportunity: React.FC<Props> = ({}) => {
     opportunityId,
     project.access.canViewPrioritizedClientLists,
     project.access.canViewUnits,
-    projectId,
+    project.id,
     topCandidate,
   ]);
 
-  if (loading || topCandidateLoading) return <Loading />;
-  if (error) throw error;
+  if (topCandidateLoading) return <Loading />;
   if (topCandidateError) throw topCandidateError;
   if (!opportunity) return <NotFound />;
 

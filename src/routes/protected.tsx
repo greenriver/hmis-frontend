@@ -119,6 +119,8 @@ import ClientServicesPage from '@/modules/services/components/ClientServicesPage
 import EnrollmentServicesPage from '@/modules/services/components/EnrollmentServicesPage';
 import ProjectServicesPage from '@/modules/services/components/ProjectServicesPage';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
+import UnitGroupPage from '@/modules/units/components/UnitGroupPage';
+import UnitPage from '@/modules/units/components/UnitPage';
 import Units from '@/modules/units/components/Units';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
 
@@ -335,7 +337,19 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.UNITS,
-            element: <Units />,
+            element: (
+              <ProjectRoute permissions={['canViewUnits', 'canManageUnits']}>
+                <Units />
+              </ProjectRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.UNIT_GROUP,
+            element: (
+              <ProjectRoute permissions={['canViewUnits', 'canManageUnits']}>
+                <UnitGroupPage />
+              </ProjectRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.NEW_INVENTORY,
@@ -451,6 +465,32 @@ export const protectedRoutes: RouteNode[] = [
               <ProjectRoute permissions={['canViewUnits']}>
                 <Opportunity />
               </ProjectRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.UNIT,
+            element: (
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry
+                otherwise={<NotFound />}
+              >
+                <ProjectRoute permissions={['canViewUnits']}>
+                  <UnitPage />
+                </ProjectRoute>
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.UNIT_GROUP_UNIT,
+            element: (
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry
+                otherwise={<NotFound />}
+              >
+                <ProjectRoute permissions={['canViewUnits']}>
+                  <UnitPage />
+                </ProjectRoute>
+              </RootPermissionsFilter>
             ),
           },
           {

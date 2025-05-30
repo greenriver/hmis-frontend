@@ -36,10 +36,31 @@ export const useUnitCeActions = ({
 
   const getCeActions = useCallback(
     (unit: UnitFieldsFragment) => {
-      const actions: CommonMenuItem[] = [];
+      const actions: CommonMenuItem[] = [
+        {
+          title: 'View Unit Group',
+          key: 'viewUnitGroup',
+          ariaLabel: `View Unit Group ${unit.unitGroup.name}`,
+          to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+            projectId: project.id,
+            unitGroupId: unit.unitGroup.id,
+          }),
+        },
+      ];
       if (!canViewCoordinatedEntry) return actions;
 
       if (unit.latestOpportunity) {
+        actions.push({
+          title: 'View Unit',
+          key: 'viewUnit',
+          ariaLabel: `View Unit ${unit.id}`,
+          to: generateSafePath(ProjectDashboardRoutes.UNIT, {
+            projectId: project.id,
+            unitId: unit.id,
+          }),
+        });
+
+        // TODO remove
         actions.push({
           title: 'View Opportunity',
           key: 'viewOpportunity',
@@ -51,7 +72,10 @@ export const useUnitCeActions = ({
         });
       }
 
-      if (project.access.canManageUnits) {
+      // Opportunity creation is only available if the unit has an associated CE Workflow Template
+      const hasWorkflowTemplate = unit.workflowTemplateName;
+
+      if (hasWorkflowTemplate && project.access.canManageUnits) {
         if (unit.latestOpportunity && unit.latestOpportunity.active) {
           // Show this option if the opportunity is active, but disable it if it's locked
           actions.push({
@@ -68,7 +92,7 @@ export const useUnitCeActions = ({
           });
         } else {
           actions.push({
-            title: 'Mark as Available for Referrals',
+            title: 'Mark as Available for Referrals', // hide if unit doesnt belong to a group
             key: 'markAvailable',
             ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
             onClick: () => {
