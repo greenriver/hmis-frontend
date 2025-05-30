@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   DataCollectionFeatureRole,
@@ -12,8 +13,13 @@ import {
 export const useProjectDashboardNavItems = (
   project?: ProjectAllFieldsFragment
 ) => {
+  const [canViewCoordinatedEntry] = useHasRootPermissions([
+    'canViewCoordinatedEntry',
+  ]);
+
   const navItems: NavItem<ProjectAccessFieldsFragment>[] = useMemo(() => {
     if (!project) return [];
+
     const dataCollectionRoles = project.dataCollectionFeatures.map(
       (r) => r.role
     );
@@ -104,6 +110,7 @@ export const useProjectDashboardNavItems = (
               'canViewOwnReferrals',
             ],
             permissionMode: 'any',
+            hide: !canViewCoordinatedEntry,
           },
         ],
       },
@@ -146,7 +153,7 @@ export const useProjectDashboardNavItems = (
         ],
       },
     ];
-  }, [project]);
+  }, [project, canViewCoordinatedEntry]);
 
   return navItems;
 };

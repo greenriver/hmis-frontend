@@ -457,15 +457,20 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.CE,
             element: (
-              <ProjectRoute
-                permissions={[
-                  'canViewUnits',
-                  'canViewReferrals',
-                  'canViewOwnReferrals',
-                ]}
+              <RootPermissionsFilter
+                permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry
+                otherwise={<NotFound />}
               >
-                <ProjectCePage />
-              </ProjectRoute>
+                <ProjectRoute
+                  permissions={[
+                    'canViewUnits',
+                    'canViewReferrals',
+                    'canViewOwnReferrals',
+                  ]}
+                >
+                  <ProjectCePage />
+                </ProjectRoute>
+              </RootPermissionsFilter>
             ),
           },
           {
