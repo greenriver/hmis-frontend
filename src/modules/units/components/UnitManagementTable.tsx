@@ -18,7 +18,7 @@ import {
 
 interface Props {
   projectId: string;
-  unitGroupId: string;
+  unitGroupId?: string;
   allowDeleteUnits: boolean;
 }
 

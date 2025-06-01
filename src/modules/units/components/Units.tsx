@@ -9,10 +9,10 @@ import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import ProjectUnitsTable from '@/modules/units/components/ProjectUnitsTable';
 import UnitCapacityTable from '@/modules/units/components/UnitCapacityTable';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
 import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
+import UnitManagementTable from '@/modules/units/components/UnitManagementTable';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   UnitGroupFieldsFragment,
@@ -94,7 +94,12 @@ const Units = () => {
           </CommonCard>
         )}
         <Paper>
-          <ProjectUnitsTable projectId={project.id} />
+          {/* Once we migrate all Units into Groups, we can revert this to use ProjectUnitsTable, because all editing can happen on the Project Group page */}
+          {/* <ProjectUnitsTable projectId={project.id} /> */}
+          <UnitManagementTable
+            projectId={project.id}
+            allowDeleteUnits={project.access.canManageUnits}
+          />
         </Paper>
       </Stack>
       <UnitGroupFormDialog

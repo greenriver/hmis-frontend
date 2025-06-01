@@ -32,6 +32,7 @@ export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
             display: 'table-cell',
             verticalAlign: 'middle',
             lineHeight: 'inherit',
+            fontWeight: 'bold',
           },
         }}
       >

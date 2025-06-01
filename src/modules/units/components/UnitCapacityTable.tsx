@@ -17,8 +17,8 @@ const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
     return null;
   }
   return (
-    <Box>
-      <UnitUtilizationByUnitType unitTypes={rows} />
+    <Box sx={{ width: '100%' }}>
+      <UnitUtilizationByUnitType unitTypes={rows} variant='grid' />
     </Box>
   );
 };
