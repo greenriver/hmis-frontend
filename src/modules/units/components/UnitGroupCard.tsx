@@ -2,7 +2,7 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import CommonMenuButton, {
   CommonMenuItem,
 } from '@/components/elements/CommonMenuButton';
-import UnitCapacityTable from '@/modules/units/components/UnitCapacityTable';
+import UnitUtilizationByUnitType from '@/modules/units/components/UnitUtilizationByUnitType';
 import { UnitGroupCapacityFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -45,7 +45,7 @@ const UnitGroupCard: React.FC<Props> = ({ unitGroup, menuItems }) => {
             <b>Availability:</b> {unitGroup.availability} units available
           </Typography>
           <Box sx={{ mt: 2 }}>
-            <UnitCapacityTable unitTypes={unitGroup.unitTypes} />
+            <UnitUtilizationByUnitType unitTypes={unitGroup.unitTypes} />
           </Box>
         </>
       )}

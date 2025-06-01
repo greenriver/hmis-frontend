@@ -1,32 +1,25 @@
-import { Stack, Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import Loading from '@/components/elements/Loading';
+import UnitUtilizationByUnitType from '@/modules/units/components/UnitUtilizationByUnitType';
+import { useGetProjectUnitTypesQuery } from '@/types/gqlTypes';
 
-import UnitUtilizationChart, {
-  UnitVisualizationChartLegend,
-} from '@/modules/units/components/UnitUtilizationChart';
-import { UnitTypeCapacityFieldsFragment } from '@/types/gqlTypes';
+const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
+  const { data, error, loading } = useGetProjectUnitTypesQuery({
+    variables: { id: projectId },
+    fetchPolicy: 'cache-and-network',
+  });
 
-interface Props {
-  unitTypes: UnitTypeCapacityFieldsFragment[];
-}
+  if (loading && !data) return <Loading />;
+  if (error) throw error;
 
-// Unit capacity charts grouped by unit type
-const UnitCapacityTable: React.FC<Props> = ({ unitTypes }) => {
-  const hasMultipleUnitTypes = unitTypes.length > 1;
-
+  const rows = data?.project?.unitTypes || [];
+  if (rows.length === 0) {
+    return null;
+  }
   return (
-    <Stack gap={1}>
-      {unitTypes.map((unitType) => (
-        <Stack gap={0.25}>
-          {hasMultipleUnitTypes && (
-            <Typography variant='body2' color='text.secondary'>
-              {unitType.unitType}
-            </Typography>
-          )}
-          <UnitUtilizationChart unitType={unitType} />
-        </Stack>
-      ))}
-      <UnitVisualizationChartLegend />
-    </Stack>
+    <Box>
+      <UnitUtilizationByUnitType unitTypes={rows} />
+    </Box>
   );
 };
 export default UnitCapacityTable;
