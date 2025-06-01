@@ -6570,6 +6570,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'deletable',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -6583,6 +6591,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'occupancyStatus',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'UnitOccupancyStatus', ofType: null },
         },
       },
       { name: 'unitSize', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
@@ -6596,6 +6612,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'UnitGroup',
     fields: [
       {
+        name: 'availability',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
+        name: 'capacity',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -6610,6 +6642,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
+      },
+      {
+        name: 'utilization',
+        type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
         name: 'workflowTemplateIdentifier',
@@ -8928,6 +8964,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'UnitFilterOptions',
     args: [
+      {
+        name: 'occupancyStatus',
+        type: { kind: 'ENUM', name: 'UnitOccupancyStatus', ofType: null },
+      },
       {
         name: 'status',
         type: {

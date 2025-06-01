@@ -7956,11 +7956,13 @@ export type Unit = {
   acceptingCeReferrals: Scalars['Boolean']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
+  deletable: Scalars['Boolean']['output'];
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
   /** The unit's most recent opportunity, which could be currently active or already closed */
   latestOpportunity?: Maybe<CeOpportunity>;
   name: Scalars['String']['output'];
+  occupancyStatus: UnitOccupancyStatus;
   occupants: Array<Enrollment>;
   priorityScheme?: Maybe<CeMatchRule>;
   project?: Maybe<Project>;
@@ -7979,6 +7981,8 @@ export enum UnitFilterOptionStatus {
 }
 
 export type UnitFilterOptions = {
+  occupancyStatus?: InputMaybe<UnitOccupancyStatus>;
+  /** @deprecated Use `occupancy_status` instead. This will be removed in a future version. */
   status?: InputMaybe<Array<UnitFilterOptionStatus>>;
   unitGroup?: InputMaybe<Array<Scalars['ID']['input']>>;
   unitType?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -7986,11 +7990,17 @@ export type UnitFilterOptions = {
 
 export type UnitGroup = {
   __typename?: 'UnitGroup';
+  /** Number of units in this group that are currently unoccupied */
+  availability: Scalars['Int']['output'];
+  /** Total number of units in the group */
+  capacity: Scalars['Int']['output'];
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   priorityScheme?: Maybe<CeMatchRule>;
   units: UnitsPaginated;
+  /** Percentage of units in this group that are currently occupied */
+  utilization?: Maybe<Scalars['Float']['output']>;
   workflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
@@ -8027,6 +8037,13 @@ export type UnitInput = {
   unitGroupId?: InputMaybe<Scalars['ID']['input']>;
   unitTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
+
+export enum UnitOccupancyStatus {
+  /** Occupied */
+  Occupied = 'OCCUPIED',
+  /** Vacant */
+  Vacant = 'VACANT',
+}
 
 export type UnitTypeCapacity = {
   __typename?: 'UnitTypeCapacity';
@@ -16150,24 +16167,23 @@ export type CeOpportunitySummaryFieldsFragment = {
   __typename?: 'CeOpportunity';
   id: string;
   name: string;
-  categories: Array<string>;
   status: CeOpportunityStatus;
   active: boolean;
-  expiresAt?: string | null;
   projectId: string;
   projectName: string;
+  dateAvailable: string;
+  unit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
 
 export type CeOpportunityFieldsFragment = {
   __typename?: 'CeOpportunity';
   id: string;
   name: string;
-  categories: Array<string>;
   status: CeOpportunityStatus;
   active: boolean;
-  expiresAt?: string | null;
   projectId: string;
   projectName: string;
+  dateAvailable: string;
   referral?: {
     __typename?: 'CeReferral';
     id: string;
@@ -16202,6 +16218,7 @@ export type CeOpportunityFieldsFragment = {
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
   } | null;
+  unit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
 
 export type CeOpportunityAdminFieldsFragment = {
@@ -16211,10 +16228,8 @@ export type CeOpportunityAdminFieldsFragment = {
   dateAvailable: string;
   id: string;
   name: string;
-  categories: Array<string>;
   status: CeOpportunityStatus;
   active: boolean;
-  expiresAt?: string | null;
   projectId: string;
   projectName: string;
   unit?: { __typename?: 'Unit'; id: string; name: string } | null;
@@ -16226,12 +16241,12 @@ export type ClientCeOpportunitySummaryFieldsFragment = {
   projectType: ProjectType;
   id: string;
   name: string;
-  categories: Array<string>;
   status: CeOpportunityStatus;
   active: boolean;
-  expiresAt?: string | null;
   projectId: string;
   projectName: string;
+  dateAvailable: string;
+  unit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
 
 export type CeMatchRuleFieldsFragment = {
@@ -16427,12 +16442,12 @@ export type CeReferralFieldsFragment = {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
-    categories: Array<string>;
     status: CeOpportunityStatus;
     active: boolean;
-    expiresAt?: string | null;
     projectId: string;
     projectName: string;
+    dateAvailable: string;
+    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
   };
   targetEnrollment?: {
     __typename?: 'Enrollment';
@@ -17052,12 +17067,12 @@ export type CreateCeOpportunityMutation = {
       __typename?: 'CeOpportunity';
       id: string;
       name: string;
-      categories: Array<string>;
       status: CeOpportunityStatus;
       active: boolean;
-      expiresAt?: string | null;
       projectId: string;
       projectName: string;
+      dateAvailable: string;
+      unit?: { __typename?: 'Unit'; id: string; name: string } | null;
     };
   } | null;
 };
@@ -18187,12 +18202,11 @@ export type SubmitCeReferralStepMutation = {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
-        categories: Array<string>;
         status: CeOpportunityStatus;
         active: boolean;
-        expiresAt?: string | null;
         projectId: string;
         projectName: string;
+        dateAvailable: string;
         referral?: {
           __typename?: 'CeReferral';
           id: string;
@@ -18227,6 +18241,7 @@ export type SubmitCeReferralStepMutation = {
           projectTypes: Array<ProjectType>;
           funders?: Array<FundingSource> | null;
         } | null;
+        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
       };
       targetEnrollment?: {
         __typename?: 'Enrollment';
@@ -18296,6 +18311,7 @@ export type SubmitCeReferralStepMutation = {
 export type MarkUnitsAvailableMutationVariables = Exact<{
   unitIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
   includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
+  includeClientOccupants?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type MarkUnitsAvailableMutation = {
@@ -18307,6 +18323,8 @@ export type MarkUnitsAvailableMutation = {
       id: string;
       name: string;
       unitSize?: number | null;
+      occupancyStatus: UnitOccupancyStatus;
+      deletable: boolean;
       acceptingCeReferrals: boolean;
       workflowTemplateName?: string | null;
       unitType?: {
@@ -18318,7 +18336,7 @@ export type MarkUnitsAvailableMutation = {
         dateUpdated: string;
         dateCreated: string;
       } | null;
-      occupants: Array<{
+      occupants?: Array<{
         __typename?: 'Enrollment';
         id: string;
         relationshipToHoH: RelationshipToHoH;
@@ -18337,12 +18355,11 @@ export type MarkUnitsAvailableMutation = {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
-        categories: Array<string>;
         status: CeOpportunityStatus;
         active: boolean;
-        expiresAt?: string | null;
         projectId: string;
         projectName: string;
+        dateAvailable: string;
         referral?: {
           __typename?: 'CeReferral';
           id: string;
@@ -18359,6 +18376,7 @@ export type MarkUnitsAvailableMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
+        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
       } | null;
     }>;
   } | null;
@@ -18367,6 +18385,7 @@ export type MarkUnitsAvailableMutation = {
 export type MarkUnitsUnavailableMutationVariables = Exact<{
   unitIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
   includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
+  includeClientOccupants?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type MarkUnitsUnavailableMutation = {
@@ -18378,6 +18397,8 @@ export type MarkUnitsUnavailableMutation = {
       id: string;
       name: string;
       unitSize?: number | null;
+      occupancyStatus: UnitOccupancyStatus;
+      deletable: boolean;
       acceptingCeReferrals: boolean;
       workflowTemplateName?: string | null;
       unitType?: {
@@ -18389,7 +18410,7 @@ export type MarkUnitsUnavailableMutation = {
         dateUpdated: string;
         dateCreated: string;
       } | null;
-      occupants: Array<{
+      occupants?: Array<{
         __typename?: 'Enrollment';
         id: string;
         relationshipToHoH: RelationshipToHoH;
@@ -18408,12 +18429,11 @@ export type MarkUnitsUnavailableMutation = {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
-        categories: Array<string>;
         status: CeOpportunityStatus;
         active: boolean;
-        expiresAt?: string | null;
         projectId: string;
         projectName: string;
+        dateAvailable: string;
         referral?: {
           __typename?: 'CeReferral';
           id: string;
@@ -18430,6 +18450,7 @@ export type MarkUnitsUnavailableMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
+        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
       } | null;
     }>;
   } | null;
@@ -18505,12 +18526,12 @@ export type GetProjectCeOpportunitiesQuery = {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
-        categories: Array<string>;
         status: CeOpportunityStatus;
         active: boolean;
-        expiresAt?: string | null;
         projectId: string;
         projectName: string;
+        dateAvailable: string;
+        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -18575,12 +18596,11 @@ export type GetCeOpportunityQuery = {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
-    categories: Array<string>;
     status: CeOpportunityStatus;
     active: boolean;
-    expiresAt?: string | null;
     projectId: string;
     projectName: string;
+    dateAvailable: string;
     referral?: {
       __typename?: 'CeReferral';
       id: string;
@@ -18615,6 +18635,7 @@ export type GetCeOpportunityQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     } | null;
+    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
 };
 
@@ -18690,12 +18711,12 @@ export type GetCeReferralQuery = {
       __typename?: 'CeOpportunity';
       id: string;
       name: string;
-      categories: Array<string>;
       status: CeOpportunityStatus;
       active: boolean;
-      expiresAt?: string | null;
       projectId: string;
       projectName: string;
+      dateAvailable: string;
+      unit?: { __typename?: 'Unit'; id: string; name: string } | null;
     };
     targetEnrollment?: {
       __typename?: 'Enrollment';
@@ -19338,12 +19359,12 @@ export type GetClientEligibleOpportunitiesQuery = {
         projectType: ProjectType;
         id: string;
         name: string;
-        categories: Array<string>;
         status: CeOpportunityStatus;
         active: boolean;
-        expiresAt?: string | null;
         projectId: string;
         projectName: string;
+        dateAvailable: string;
+        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -19370,10 +19391,8 @@ export type GetAdminCeOpportunitiesQuery = {
       dateAvailable: string;
       id: string;
       name: string;
-      categories: Array<string>;
       status: CeOpportunityStatus;
       active: boolean;
-      expiresAt?: string | null;
       projectId: string;
       projectName: string;
       unit?: { __typename?: 'Unit'; id: string; name: string } | null;
@@ -43941,11 +43960,13 @@ export type UnitTypeFieldsFragment = {
   dateCreated: string;
 };
 
-export type UnitFieldsFragment = {
+export type UnitTableRowFieldsFragment = {
   __typename?: 'Unit';
   id: string;
   name: string;
   unitSize?: number | null;
+  occupancyStatus: UnitOccupancyStatus;
+  deletable: boolean;
   acceptingCeReferrals: boolean;
   workflowTemplateName?: string | null;
   unitType?: {
@@ -43957,7 +43978,7 @@ export type UnitFieldsFragment = {
     dateUpdated: string;
     dateCreated: string;
   } | null;
-  occupants: Array<{
+  occupants?: Array<{
     __typename?: 'Enrollment';
     id: string;
     relationshipToHoH: RelationshipToHoH;
@@ -43976,12 +43997,11 @@ export type UnitFieldsFragment = {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
-    categories: Array<string>;
     status: CeOpportunityStatus;
     active: boolean;
-    expiresAt?: string | null;
     projectId: string;
     projectName: string;
+    dateAvailable: string;
     referral?: {
       __typename?: 'CeReferral';
       id: string;
@@ -43998,7 +44018,157 @@ export type UnitFieldsFragment = {
         nameSuffix?: string | null;
       } | null;
     } | null;
+    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
+};
+
+export type UnitFieldsFragment = {
+  __typename?: 'Unit';
+  id: string;
+  name: string;
+  unitSize?: number | null;
+  acceptingCeReferrals: boolean;
+  workflowTemplateName?: string | null;
+  unitType?: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    description?: string | null;
+    bedType?: InventoryBedType | null;
+    unitSize?: number | null;
+    dateUpdated: string;
+    dateCreated: string;
+  } | null;
+  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  latestOpportunity?: {
+    __typename?: 'CeOpportunity';
+    id: string;
+    name: string;
+    status: CeOpportunityStatus;
+    active: boolean;
+    projectId: string;
+    projectName: string;
+    dateAvailable: string;
+    referral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      status: CeReferralStatus;
+      active: boolean;
+      clientId: string;
+      client?: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      } | null;
+    } | null;
+    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  } | null;
+};
+
+export type UnitDetailFieldsFragment = {
+  __typename?: 'Unit';
+  id: string;
+  name: string;
+  unitSize?: number | null;
+  acceptingCeReferrals: boolean;
+  workflowTemplateName?: string | null;
+  eligibilityRequirements?: Array<{
+    __typename?: 'CeMatchRule';
+    id: string;
+    name: string;
+    ownerType: string;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
+  }> | null;
+  priorityScheme?: {
+    __typename?: 'CeMatchRule';
+    id: string;
+    name: string;
+    ownerType: string;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
+  } | null;
+  latestOpportunity?: {
+    __typename?: 'CeOpportunity';
+    id: string;
+    name: string;
+    status: CeOpportunityStatus;
+    active: boolean;
+    projectId: string;
+    projectName: string;
+    dateAvailable: string;
+    candidates: {
+      __typename?: 'CeCandidatesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeCandidate';
+        id: string;
+        priorityScore: number;
+        clientId: string;
+        client?: {
+          __typename?: 'Client';
+          id: string;
+          lockVersion: number;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        } | null;
+      }>;
+    };
+    referral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      status: CeReferralStatus;
+      active: boolean;
+      clientId: string;
+      client?: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      } | null;
+    } | null;
+    eligibilityRequirements?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: string;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }> | null;
+    priorityScheme?: {
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: string;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    } | null;
+    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  } | null;
+  unitType?: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    description?: string | null;
+    bedType?: InventoryBedType | null;
+    unitSize?: number | null;
+    dateUpdated: string;
+    dateCreated: string;
+  } | null;
+  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
 };
 
 export type UnitWithCeFieldsFragment = {
@@ -44009,12 +44179,11 @@ export type UnitWithCeFieldsFragment = {
     __typename?: 'CeOpportunity';
     id: string;
     name: string;
-    categories: Array<string>;
     status: CeOpportunityStatus;
     active: boolean;
-    expiresAt?: string | null;
     projectId: string;
     projectName: string;
+    dateAvailable: string;
     referral?: {
       __typename?: 'CeReferral';
       id: string;
@@ -44031,6 +44200,7 @@ export type UnitWithCeFieldsFragment = {
         nameSuffix?: string | null;
       } | null;
     } | null;
+    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
 };
 
@@ -44044,7 +44214,38 @@ export type UnitGroupCapacityFieldsFragment = {
   __typename?: 'UnitGroup';
   id: string;
   name: string;
-  units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+  capacity: number;
+  availability: number;
+  utilization?: number | null;
+};
+
+export type UnitGroupDetailFieldsFragment = {
+  __typename?: 'UnitGroup';
+  workflowTemplateName?: string | null;
+  workflowTemplateIdentifier?: string | null;
+  id: string;
+  name: string;
+  capacity: number;
+  availability: number;
+  utilization?: number | null;
+  eligibilityRequirements?: Array<{
+    __typename?: 'CeMatchRule';
+    id: string;
+    name: string;
+    ownerType: string;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
+  }> | null;
+  priorityScheme?: {
+    __typename?: 'CeMatchRule';
+    id: string;
+    name: string;
+    ownerType: string;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
+  } | null;
 };
 
 export type GetUnitsQueryVariables = Exact<{
@@ -44053,6 +44254,7 @@ export type GetUnitsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<UnitFilterOptions>;
   includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
+  includeClientOccupants?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetUnitsQuery = {
@@ -44070,6 +44272,8 @@ export type GetUnitsQuery = {
         id: string;
         name: string;
         unitSize?: number | null;
+        occupancyStatus: UnitOccupancyStatus;
+        deletable: boolean;
         acceptingCeReferrals: boolean;
         workflowTemplateName?: string | null;
         unitType?: {
@@ -44081,7 +44285,7 @@ export type GetUnitsQuery = {
           dateUpdated: string;
           dateCreated: string;
         } | null;
-        occupants: Array<{
+        occupants?: Array<{
           __typename?: 'Enrollment';
           id: string;
           relationshipToHoH: RelationshipToHoH;
@@ -44104,12 +44308,11 @@ export type GetUnitsQuery = {
           __typename?: 'CeOpportunity';
           id: string;
           name: string;
-          categories: Array<string>;
           status: CeOpportunityStatus;
           active: boolean;
-          expiresAt?: string | null;
           projectId: string;
           projectName: string;
+          dateAvailable: string;
           referral?: {
             __typename?: 'CeReferral';
             id: string;
@@ -44126,6 +44329,7 @@ export type GetUnitsQuery = {
               nameSuffix?: string | null;
             } | null;
           } | null;
+          unit?: { __typename?: 'Unit'; id: string; name: string } | null;
         } | null;
       }>;
     };
@@ -44148,7 +44352,14 @@ export type GetUnitGroupsQuery = {
       offset: number;
       limit: number;
       nodesCount: number;
-      nodes: Array<{ __typename?: 'UnitGroup'; id: string; name: string }>;
+      nodes: Array<{
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        capacity: number;
+        availability: number;
+        utilization?: number | null;
+      }>;
     };
   } | null;
 };
@@ -44159,7 +44370,34 @@ export type GetUnitGroupQueryVariables = Exact<{
 
 export type GetUnitGroupQuery = {
   __typename?: 'Query';
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  unitGroup?: {
+    __typename?: 'UnitGroup';
+    workflowTemplateName?: string | null;
+    workflowTemplateIdentifier?: string | null;
+    id: string;
+    name: string;
+    capacity: number;
+    availability: number;
+    utilization?: number | null;
+    eligibilityRequirements?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: string;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }> | null;
+    priorityScheme?: {
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: string;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    } | null;
+  } | null;
 };
 
 export type GetUnitQueryVariables = Exact<{
@@ -44176,16 +44414,54 @@ export type GetUnitQuery = {
     unitSize?: number | null;
     acceptingCeReferrals: boolean;
     workflowTemplateName?: string | null;
+    eligibilityRequirements?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: string;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }> | null;
+    priorityScheme?: {
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: string;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    } | null;
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
       id: string;
       name: string;
-      categories: Array<string>;
       status: CeOpportunityStatus;
       active: boolean;
-      expiresAt?: string | null;
       projectId: string;
       projectName: string;
+      dateAvailable: string;
+      candidates: {
+        __typename?: 'CeCandidatesPaginated';
+        offset: number;
+        limit: number;
+        nodesCount: number;
+        nodes: Array<{
+          __typename?: 'CeCandidate';
+          id: string;
+          priorityScore: number;
+          clientId: string;
+          client?: {
+            __typename?: 'Client';
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          } | null;
+        }>;
+      };
       referral?: {
         __typename?: 'CeReferral';
         id: string;
@@ -44220,6 +44496,7 @@ export type GetUnitQuery = {
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
       } | null;
+      unit?: { __typename?: 'Unit'; id: string; name: string } | null;
     } | null;
     unitType?: {
       __typename?: 'UnitTypeObject';
@@ -44230,20 +44507,6 @@ export type GetUnitQuery = {
       dateUpdated: string;
       dateCreated: string;
     } | null;
-    occupants: Array<{
-      __typename?: 'Enrollment';
-      id: string;
-      relationshipToHoH: RelationshipToHoH;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      };
-    }>;
     unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
   } | null;
 };
@@ -44270,6 +44533,7 @@ export type GetProjectUnitTypesQuery = {
 export type CreateUnitsMutationVariables = Exact<{
   input: CreateUnitsInput;
   includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
+  includeClientOccupants?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type CreateUnitsMutation = {
@@ -44282,6 +44546,8 @@ export type CreateUnitsMutation = {
       id: string;
       name: string;
       unitSize?: number | null;
+      occupancyStatus: UnitOccupancyStatus;
+      deletable: boolean;
       acceptingCeReferrals: boolean;
       workflowTemplateName?: string | null;
       unitType?: {
@@ -44293,7 +44559,7 @@ export type CreateUnitsMutation = {
         dateUpdated: string;
         dateCreated: string;
       } | null;
-      occupants: Array<{
+      occupants?: Array<{
         __typename?: 'Enrollment';
         id: string;
         relationshipToHoH: RelationshipToHoH;
@@ -44312,12 +44578,11 @@ export type CreateUnitsMutation = {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
-        categories: Array<string>;
         status: CeOpportunityStatus;
         active: boolean;
-        expiresAt?: string | null;
         projectId: string;
         projectName: string;
+        dateAvailable: string;
         referral?: {
           __typename?: 'CeReferral';
           id: string;
@@ -44334,6 +44599,7 @@ export type CreateUnitsMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
+        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
       } | null;
     }> | null;
     errors: Array<{
@@ -44383,6 +44649,7 @@ export type DeleteUnitsMutation = {
 export type UpdateUnitsMutationVariables = Exact<{
   input: UpdateUnitsInput;
   includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
+  includeClientOccupants?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type UpdateUnitsMutation = {
@@ -44395,6 +44662,8 @@ export type UpdateUnitsMutation = {
       id: string;
       name: string;
       unitSize?: number | null;
+      occupancyStatus: UnitOccupancyStatus;
+      deletable: boolean;
       acceptingCeReferrals: boolean;
       workflowTemplateName?: string | null;
       unitType?: {
@@ -44406,7 +44675,7 @@ export type UpdateUnitsMutation = {
         dateUpdated: string;
         dateCreated: string;
       } | null;
-      occupants: Array<{
+      occupants?: Array<{
         __typename?: 'Enrollment';
         id: string;
         relationshipToHoH: RelationshipToHoH;
@@ -44425,12 +44694,11 @@ export type UpdateUnitsMutation = {
         __typename?: 'CeOpportunity';
         id: string;
         name: string;
-        categories: Array<string>;
         status: CeOpportunityStatus;
         active: boolean;
-        expiresAt?: string | null;
         projectId: string;
         projectName: string;
+        dateAvailable: string;
         referral?: {
           __typename?: 'CeReferral';
           id: string;
@@ -44447,6 +44715,7 @@ export type UpdateUnitsMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
+        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
       } | null;
     }>;
     errors: Array<{
@@ -45475,53 +45744,16 @@ export const CeOpportunitySummaryFieldsFragmentDoc = gql`
   fragment CeOpportunitySummaryFields on CeOpportunity {
     id
     name
-    categories
     status
     active
-    expiresAt
     projectId
     projectName
-  }
-`;
-export const CeReferralSummaryFieldsFragmentDoc = gql`
-  fragment CeReferralSummaryFields on CeReferral {
-    id
-    status
-    active
-    clientId
-    client {
+    unit {
       id
-      ...ClientName
+      name
     }
+    dateAvailable
   }
-  ${ClientNameFragmentDoc}
-`;
-export const CeMatchRuleFieldsFragmentDoc = gql`
-  fragment CeMatchRuleFields on CeMatchRule {
-    id
-    name
-    ownerType
-    expression
-    projectTypes
-    funders
-  }
-`;
-export const CeOpportunityFieldsFragmentDoc = gql`
-  fragment CeOpportunityFields on CeOpportunity {
-    ...CeOpportunitySummaryFields
-    referral {
-      ...CeReferralSummaryFields
-    }
-    eligibilityRequirements {
-      ...CeMatchRuleFields
-    }
-    priorityScheme {
-      ...CeMatchRuleFields
-    }
-  }
-  ${CeOpportunitySummaryFieldsFragmentDoc}
-  ${CeReferralSummaryFieldsFragmentDoc}
-  ${CeMatchRuleFieldsFragmentDoc}
 `;
 export const CeOpportunityAdminFieldsFragmentDoc = gql`
   fragment CeOpportunityAdminFields on CeOpportunity {
@@ -45544,12 +45776,14 @@ export const ClientCeOpportunitySummaryFieldsFragmentDoc = gql`
   }
   ${CeOpportunitySummaryFieldsFragmentDoc}
 `;
-export const CeCandidateFieldsFragmentDoc = gql`
-  fragment CeCandidateFields on CeCandidate {
+export const CeReferralSummaryFieldsFragmentDoc = gql`
+  fragment CeReferralSummaryFields on CeReferral {
     id
-    priorityScore
+    status
+    active
     clientId
     client {
+      id
       ...ClientName
     }
   }
@@ -47256,15 +47490,17 @@ export const UnitWithCeFieldsFragmentDoc = gql`
   ${CeOpportunitySummaryFieldsFragmentDoc}
   ${CeReferralSummaryFieldsFragmentDoc}
 `;
-export const UnitFieldsFragmentDoc = gql`
-  fragment UnitFields on Unit {
+export const UnitTableRowFieldsFragmentDoc = gql`
+  fragment UnitTableRowFields on Unit {
     id
     name
     unitSize
     unitType {
       ...UnitTypeFields
     }
-    occupants {
+    occupancyStatus
+    deletable
+    occupants @include(if: $includeClientOccupants) {
       id
       relationshipToHoH
       client {
@@ -47282,14 +47518,110 @@ export const UnitFieldsFragmentDoc = gql`
   ${UnitGroupFieldsFragmentDoc}
   ${UnitWithCeFieldsFragmentDoc}
 `;
+export const UnitFieldsFragmentDoc = gql`
+  fragment UnitFields on Unit {
+    id
+    name
+    unitSize
+    unitType {
+      ...UnitTypeFields
+    }
+    unitGroup {
+      ...UnitGroupFields
+    }
+    ...UnitWithCeFields @include(if: $includeCeFields)
+  }
+  ${UnitTypeFieldsFragmentDoc}
+  ${UnitGroupFieldsFragmentDoc}
+  ${UnitWithCeFieldsFragmentDoc}
+`;
+export const CeMatchRuleFieldsFragmentDoc = gql`
+  fragment CeMatchRuleFields on CeMatchRule {
+    id
+    name
+    ownerType
+    expression
+    projectTypes
+    funders
+  }
+`;
+export const CeOpportunityFieldsFragmentDoc = gql`
+  fragment CeOpportunityFields on CeOpportunity {
+    ...CeOpportunitySummaryFields
+    referral {
+      ...CeReferralSummaryFields
+    }
+    eligibilityRequirements {
+      ...CeMatchRuleFields
+    }
+    priorityScheme {
+      ...CeMatchRuleFields
+    }
+  }
+  ${CeOpportunitySummaryFieldsFragmentDoc}
+  ${CeReferralSummaryFieldsFragmentDoc}
+  ${CeMatchRuleFieldsFragmentDoc}
+`;
+export const CeCandidateFieldsFragmentDoc = gql`
+  fragment CeCandidateFields on CeCandidate {
+    id
+    priorityScore
+    clientId
+    client {
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
+export const UnitDetailFieldsFragmentDoc = gql`
+  fragment UnitDetailFields on Unit {
+    ...UnitFields
+    eligibilityRequirements {
+      ...CeMatchRuleFields
+    }
+    priorityScheme {
+      ...CeMatchRuleFields
+    }
+    latestOpportunity @include(if: $includeCeFields) {
+      ...CeOpportunityFields
+      candidates(limit: 1, offset: 0) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CeCandidateFields
+        }
+      }
+    }
+  }
+  ${UnitFieldsFragmentDoc}
+  ${CeMatchRuleFieldsFragmentDoc}
+  ${CeOpportunityFieldsFragmentDoc}
+  ${CeCandidateFieldsFragmentDoc}
+`;
 export const UnitGroupCapacityFieldsFragmentDoc = gql`
   fragment UnitGroupCapacityFields on UnitGroup {
     id
     name
-    units {
-      nodesCount
+    capacity
+    availability
+    utilization
+  }
+`;
+export const UnitGroupDetailFieldsFragmentDoc = gql`
+  fragment UnitGroupDetailFields on UnitGroup {
+    ...UnitGroupCapacityFields
+    workflowTemplateName
+    workflowTemplateIdentifier
+    eligibilityRequirements {
+      ...CeMatchRuleFields
+    }
+    priorityScheme {
+      ...CeMatchRuleFields
     }
   }
+  ${UnitGroupCapacityFieldsFragmentDoc}
+  ${CeMatchRuleFieldsFragmentDoc}
 `;
 export const UserAdminFieldsFragmentDoc = gql`
   fragment UserAdminFields on ApplicationUser {
@@ -49370,14 +49702,15 @@ export const MarkUnitsAvailableDocument = gql`
   mutation MarkUnitsAvailable(
     $unitIds: [ID!]!
     $includeCeFields: Boolean = true
+    $includeClientOccupants: Boolean = false
   ) {
     markUnitsAvailable(unitIds: $unitIds) {
       units {
-        ...UnitFields
+        ...UnitTableRowFields
       }
     }
   }
-  ${UnitFieldsFragmentDoc}
+  ${UnitTableRowFieldsFragmentDoc}
 `;
 export type MarkUnitsAvailableMutationFn = Apollo.MutationFunction<
   MarkUnitsAvailableMutation,
@@ -49399,6 +49732,7 @@ export type MarkUnitsAvailableMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      unitIds: // value for 'unitIds'
  *      includeCeFields: // value for 'includeCeFields'
+ *      includeClientOccupants: // value for 'includeClientOccupants'
  *   },
  * });
  */
@@ -49427,14 +49761,15 @@ export const MarkUnitsUnavailableDocument = gql`
   mutation MarkUnitsUnavailable(
     $unitIds: [ID!]!
     $includeCeFields: Boolean = true
+    $includeClientOccupants: Boolean = false
   ) {
     markUnitsUnavailable(unitIds: $unitIds) {
       units {
-        ...UnitFields
+        ...UnitTableRowFields
       }
     }
   }
-  ${UnitFieldsFragmentDoc}
+  ${UnitTableRowFieldsFragmentDoc}
 `;
 export type MarkUnitsUnavailableMutationFn = Apollo.MutationFunction<
   MarkUnitsUnavailableMutation,
@@ -49456,6 +49791,7 @@ export type MarkUnitsUnavailableMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      unitIds: // value for 'unitIds'
  *      includeCeFields: // value for 'includeCeFields'
+ *      includeClientOccupants: // value for 'includeClientOccupants'
  *   },
  * });
  */
@@ -61396,6 +61732,7 @@ export const GetUnitsDocument = gql`
     $offset: Int = 0
     $filters: UnitFilterOptions
     $includeCeFields: Boolean = false
+    $includeClientOccupants: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -61404,12 +61741,12 @@ export const GetUnitsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...UnitFields
+          ...UnitTableRowFields
         }
       }
     }
   }
-  ${UnitFieldsFragmentDoc}
+  ${UnitTableRowFieldsFragmentDoc}
 `;
 
 /**
@@ -61429,6 +61766,7 @@ export const GetUnitsDocument = gql`
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
  *      includeCeFields: // value for 'includeCeFields'
+ *      includeClientOccupants: // value for 'includeClientOccupants'
  *   },
  * });
  */
@@ -61488,12 +61826,12 @@ export const GetUnitGroupsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...UnitGroupFields
+          ...UnitGroupCapacityFields
         }
       }
     }
   }
-  ${UnitGroupFieldsFragmentDoc}
+  ${UnitGroupCapacityFieldsFragmentDoc}
 `;
 
 /**
@@ -61575,10 +61913,10 @@ export type GetUnitGroupsQueryResult = Apollo.QueryResult<
 export const GetUnitGroupDocument = gql`
   query GetUnitGroup($id: ID!) {
     unitGroup(id: $id) {
-      ...UnitGroupFields
+      ...UnitGroupDetailFields
     }
   }
-  ${UnitGroupFieldsFragmentDoc}
+  ${UnitGroupDetailFieldsFragmentDoc}
 `;
 
 /**
@@ -61658,14 +61996,10 @@ export type GetUnitGroupQueryResult = Apollo.QueryResult<
 export const GetUnitDocument = gql`
   query GetUnit($id: ID!, $includeCeFields: Boolean = false) {
     unit(id: $id) {
-      ...UnitFields
-      latestOpportunity @include(if: $includeCeFields) {
-        ...CeOpportunityFields
-      }
+      ...UnitDetailFields
     }
   }
-  ${UnitFieldsFragmentDoc}
-  ${CeOpportunityFieldsFragmentDoc}
+  ${UnitDetailFieldsFragmentDoc}
 `;
 
 /**
@@ -61817,18 +62151,19 @@ export const CreateUnitsDocument = gql`
   mutation CreateUnits(
     $input: CreateUnitsInput!
     $includeCeFields: Boolean = false
+    $includeClientOccupants: Boolean = false
   ) {
     createUnits(input: $input) {
       clientMutationId
       units {
-        ...UnitFields
+        ...UnitTableRowFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${UnitFieldsFragmentDoc}
+  ${UnitTableRowFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateUnitsMutationFn = Apollo.MutationFunction<
@@ -61851,6 +62186,7 @@ export type CreateUnitsMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      input: // value for 'input'
  *      includeCeFields: // value for 'includeCeFields'
+ *      includeClientOccupants: // value for 'includeClientOccupants'
  *   },
  * });
  */
@@ -61934,18 +62270,19 @@ export const UpdateUnitsDocument = gql`
   mutation UpdateUnits(
     $input: UpdateUnitsInput!
     $includeCeFields: Boolean = false
+    $includeClientOccupants: Boolean = false
   ) {
     updateUnits(input: $input) {
       clientMutationId
       units {
-        ...UnitFields
+        ...UnitTableRowFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${UnitFieldsFragmentDoc}
+  ${UnitTableRowFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateUnitsMutationFn = Apollo.MutationFunction<
@@ -61968,6 +62305,7 @@ export type UpdateUnitsMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      input: // value for 'input'
  *      includeCeFields: // value for 'includeCeFields'
+ *      includeClientOccupants: // value for 'includeClientOccupants'
  *   },
  * });
  */

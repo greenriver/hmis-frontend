@@ -42,6 +42,7 @@ const mockReferral = {
     status: CeOpportunityStatus.Locked,
     active: true,
     projectName: 'Project ABC',
+    dateAvailable: '2025-01-01',
   },
   steps: [],
   swimlanes: [],

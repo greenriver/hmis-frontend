@@ -35,8 +35,8 @@ export const REFERRAL_COLUMNS: Record<
     sticky: 'left',
   },
   opportunity: {
-    header: 'Opportunity',
-    key: 'opportunity',
+    header: 'Unit',
+    key: 'unit',
     render: (
       referral:
         | CeReferralTableFieldsFragment

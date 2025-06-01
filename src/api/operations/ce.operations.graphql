@@ -60,10 +60,11 @@ mutation SubmitCeReferralStep(
 mutation MarkUnitsAvailable(
   $unitIds: [ID!]!
   $includeCeFields: Boolean = true
+  $includeClientOccupants: Boolean = false
 ) {
   markUnitsAvailable(unitIds: $unitIds) {
     units {
-      ...UnitFields
+      ...UnitTableRowFields
     }
   }
 }
@@ -71,10 +72,11 @@ mutation MarkUnitsAvailable(
 mutation MarkUnitsUnavailable(
   $unitIds: [ID!]!
   $includeCeFields: Boolean = true
+  $includeClientOccupants: Boolean = false
 ) {
   markUnitsUnavailable(unitIds: $unitIds) {
     units {
-      ...UnitFields
+      ...UnitTableRowFields
     }
   }
 }

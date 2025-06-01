@@ -3,7 +3,6 @@ import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 import CommonButtonDrawer from '@/components/elements/CommonButtonDrawer';
-import CommonDetailGrid from '@/components/elements/CommonDetailGrid';
 import Loading from '@/components/elements/Loading';
 import {
   ActivityIcon,
@@ -17,6 +16,8 @@ import NotFound from '@/components/pages/NotFound';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import AssignContactsForm from '@/modules/ce/components/AssignContactsForm';
+
+import ReferralDetailContent from '@/modules/ce/components/ReferralDetailContent';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
@@ -95,27 +96,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
               title={'Referral'}
               ButtonProps={{ startIcon: <InfoIcon /> }}
             >
-              {/* TODO: move content to own component ReferralDetailsContent and style */}
-              <CommonDetailGrid
-                rows={[
-                  { id: 'id', label: 'Referral ID', value: referral.id },
-                  {
-                    id: 'id',
-                    label: 'Client Name',
-                    value: clientNameFromRecordWithOptionalClient(referral),
-                  },
-                  {
-                    id: 'id',
-                    label: 'Unit Name',
-                    value: referral.opportunity.name,
-                  },
-                  {
-                    id: 'workflow',
-                    label: 'Referral Workflow',
-                    value: referral.workflowTemplateName,
-                  },
-                ]}
-              />
+              <ReferralDetailContent referral={referral} />
             </CommonButtonDrawer>
             {referral.swimlanes.length > 0 &&
               project.access.canAssignReferralTasks && (

@@ -1926,6 +1926,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   UnitFilterOptionStatus: { AVAILABLE: 'Available', FILLED: 'Filled' },
+  UnitOccupancyStatus: { OCCUPIED: 'Occupied', VACANT: 'Vacant' },
   ValidationSeverity: { error: 'error', warning: 'warning' },
   ValidationType: {
     data_not_collected: 'data_not_collected',

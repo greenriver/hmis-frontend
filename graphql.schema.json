@@ -51273,6 +51273,22 @@
             "deprecationReason": null
           },
           {
+            "name": "deletable",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "eligibilityRequirements",
             "description": null,
             "args": [],
@@ -51330,6 +51346,22 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "occupancyStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "UnitOccupancyStatus",
                 "ofType": null
               }
             },
@@ -51482,6 +51514,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "occupancyStatus",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "UnitOccupancyStatus",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "type": {
@@ -51498,8 +51542,8 @@
               }
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use `occupancy_status` instead. This will be removed in a future version."
           },
           {
             "name": "unitGroup",
@@ -51552,6 +51596,38 @@
         "description": null,
         "isOneOf": null,
         "fields": [
+          {
+            "name": "availability",
+            "description": "Number of units in this group that are currently unoccupied",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "capacity",
+            "description": "Total number of units in the group",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "eligibilityRequirements",
             "description": null,
@@ -51665,6 +51741,18 @@
                 "name": "UnitsPaginated",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "utilization",
+            "description": "Percentage of units in this group that are currently occupied",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Float",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -51961,6 +52049,30 @@
         ],
         "interfaces": null,
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "UnitOccupancyStatus",
+        "description": null,
+        "isOneOf": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "OCCUPIED",
+            "description": "Occupied",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VACANT",
+            "description": "Vacant",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

@@ -53,7 +53,6 @@ import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNo
 
 import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinatedEntry';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
-import Opportunity from '@/modules/ce/components/Opportunity';
 import ProjectCePage from '@/modules/ce/components/ProjectCePage';
 import ReferralPage from '@/modules/ce/components/ReferralPage';
 import ReferralStep from '@/modules/ce/components/ReferralStep';
@@ -460,28 +459,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: ProjectDashboardRoutes.OPPORTUNITY,
-            element: (
-              <ProjectRoute permissions={['canViewUnits']}>
-                <Opportunity />
-              </ProjectRoute>
-            ),
-          },
-          {
             path: ProjectDashboardRoutes.UNIT,
-            element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry
-                otherwise={<NotFound />}
-              >
-                <ProjectRoute permissions={['canViewUnits']}>
-                  <UnitPage />
-                </ProjectRoute>
-              </RootPermissionsFilter>
-            ),
-          },
-          {
-            path: ProjectDashboardRoutes.UNIT_GROUP_UNIT,
             element: (
               <RootPermissionsFilter
                 permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry

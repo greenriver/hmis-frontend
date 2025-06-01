@@ -1,15 +1,14 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Paper, Stack } from '@mui/material';
+import { Button, Grid, Paper, Stack } from '@mui/material';
 import { useMemo, useState } from 'react';
 
-import CommonCard from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
-import RouterLink from '@/components/elements/RouterLink';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import AllUnitsTable from '@/modules/units/components/AllUnitsTable';
+import ProjectUnitsTable from '@/modules/units/components/ProjectUnitsTable';
+import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
 import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { useGetUnitGroupsQuery } from '@/types/gqlTypes';
@@ -54,28 +53,39 @@ const Units = () => {
       />
       <Stack gap={4}>
         {unitGroups.length > 0 && (
-          <CommonCard title='Unit Groups'>
+          <Grid
+            container
+            rowSpacing={{ xs: 1, sm: 2, md: 3 }}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
             {unitGroups.map((group) => (
-              <div>
-                <RouterLink
-                  key={group.id}
-                  to={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-                    projectId: project.id,
-                    unitGroupId: group.id,
-                  })}
-                >
-                  {group.name}
-                </RouterLink>
-              </div>
+              <Grid
+                item
+                xs={12}
+                md={unitGroups.length > 1 ? 6 : 12}
+                key={group.id}
+              >
+                <UnitGroupCard
+                  unitGroup={group}
+                  menuItems={[
+                    {
+                      key: 'manage',
+                      title: project.access.canManageUnits
+                        ? 'Manage Unit Group'
+                        : 'View Unit Group',
+                      to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+                        projectId: project.id,
+                        unitGroupId: group.id,
+                      }),
+                    },
+                  ]}
+                />
+              </Grid>
             ))}
-          </CommonCard>
+          </Grid>
         )}
-        {/* <TitleCard title='Capacity' headerSx={{ p: 2 }}>
-          <UnitCapacityTable projectId={project.id} />
-        </TitleCard> */}
-
         <Paper>
-          <AllUnitsTable projectId={project.id} />
+          <ProjectUnitsTable projectId={project.id} />
         </Paper>
       </Stack>
       <UnitGroupFormDialog

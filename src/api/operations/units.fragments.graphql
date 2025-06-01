@@ -14,14 +14,16 @@ fragment UnitTypeFields on UnitTypeObject {
   dateCreated
 }
 
-fragment UnitFields on Unit {
+fragment UnitTableRowFields on Unit {
   id
   name
   unitSize
   unitType {
     ...UnitTypeFields
   }
-  occupants {
+  occupancyStatus
+  deletable
+  occupants @include(if: $includeClientOccupants) {
     id
     relationshipToHoH
     client {
@@ -35,7 +37,42 @@ fragment UnitFields on Unit {
   ...UnitWithCeFields @include(if: $includeCeFields)
 }
 
+fragment UnitFields on Unit {
+  id
+  name
+  unitSize
+  unitType {
+    ...UnitTypeFields
+  }
+  unitGroup {
+    ...UnitGroupFields
+  }
+  ...UnitWithCeFields @include(if: $includeCeFields)
+}
+
+fragment UnitDetailFields on Unit {
+  ...UnitFields
+  eligibilityRequirements {
+    ...CeMatchRuleFields
+  }
+  priorityScheme {
+    ...CeMatchRuleFields
+  }
+  latestOpportunity @include(if: $includeCeFields) {
+    ...CeOpportunityFields
+    candidates(limit: 1, offset: 0) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeCandidateFields
+      }
+    }
+  }
+}
+
 fragment UnitWithCeFields on Unit {
+  # remove?
   latestOpportunity {
     ...CeOpportunitySummaryFields
     referral {
@@ -54,7 +91,19 @@ fragment UnitGroupFields on UnitGroup {
 fragment UnitGroupCapacityFields on UnitGroup {
   id
   name
-  units {
-    nodesCount
+  capacity
+  availability
+  utilization
+}
+
+fragment UnitGroupDetailFields on UnitGroup {
+  ...UnitGroupCapacityFields
+  workflowTemplateName
+  workflowTemplateIdentifier
+  eligibilityRequirements {
+    ...CeMatchRuleFields
+  }
+  priorityScheme {
+    ...CeMatchRuleFields
   }
 }

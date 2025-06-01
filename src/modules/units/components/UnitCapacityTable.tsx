@@ -29,7 +29,11 @@ const LabeledNumber = ({
   );
 };
 
-const CapacityProgressBar = ({ percentFilled }: { percentFilled: number }) => {
+export const CapacityProgressBar = ({
+  percentFilled,
+}: {
+  percentFilled: number;
+}) => {
   const baseColor = useMemo(() => {
     if (percentFilled === 0) return '#c9c9c9'; // gray
     if (percentFilled <= 25) return '#8BC34A'; // green
@@ -55,6 +59,7 @@ const CapacityProgressBar = ({ percentFilled }: { percentFilled: number }) => {
   );
 };
 
+// remove?
 const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
   const { data, error, loading } = useGetProjectUnitTypesQuery({
     variables: { id: projectId },

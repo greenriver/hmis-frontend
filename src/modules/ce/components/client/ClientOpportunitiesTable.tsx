@@ -18,8 +18,8 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
   {
-    header: 'Opportunity Name',
-    key: 'opportunityName',
+    header: 'Unit Name',
+    key: 'unitName',
     render: 'name',
     sticky: 'left',
   },
@@ -83,9 +83,9 @@ const ClientOpportunitiesTable: React.FC = () => {
           noData='No opportunities'
           paginationItemName='opportunities'
           rowLinkTo={(opportunity) =>
-            generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+            generateSafePath(ProjectDashboardRoutes.UNIT, {
               projectId: opportunity.projectId,
-              opportunityId: opportunity.id,
+              unitId: opportunity.unit?.id,
             })
           }
           rowActionTitle='View Opportunity'

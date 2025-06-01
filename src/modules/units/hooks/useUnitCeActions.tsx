@@ -36,41 +36,20 @@ export const useUnitCeActions = ({
 
   const getCeActions = useCallback(
     (unit: UnitFieldsFragment) => {
-      const actions: CommonMenuItem[] = [
-        {
-          title: 'View Unit Group',
-          key: 'viewUnitGroup',
-          ariaLabel: `View Unit Group ${unit.unitGroup.name}`,
-          to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-            projectId: project.id,
-            unitGroupId: unit.unitGroup.id,
-          }),
-        },
-      ];
-      if (!canViewCoordinatedEntry) return actions;
+      if (!canViewCoordinatedEntry) return [];
 
-      if (unit.latestOpportunity) {
-        actions.push({
-          title: 'View Unit',
-          key: 'viewUnit',
-          ariaLabel: `View Unit ${unit.id}`,
-          to: generateSafePath(ProjectDashboardRoutes.UNIT, {
-            projectId: project.id,
-            unitId: unit.id,
-          }),
-        });
+      const actions: CommonMenuItem[] = [];
 
-        // TODO remove
-        actions.push({
-          title: 'View Opportunity',
-          key: 'viewOpportunity',
-          ariaLabel: `View Opportunity for Unit ${unit.id}`,
-          to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-            projectId: project.id,
-            opportunityId: unit.latestOpportunity.id,
-          }),
-        });
-      }
+      // Always allow linking to Unit page, if CE is enabled, to view/manage eligibility criteria
+      actions.push({
+        title: 'View Unit',
+        key: 'viewUnit',
+        ariaLabel: `View Unit ${unit.id}`,
+        to: generateSafePath(ProjectDashboardRoutes.UNIT, {
+          projectId: project.id,
+          unitId: unit.id,
+        }),
+      });
 
       // Opportunity creation is only available if the unit has an associated CE Workflow Template
       const hasWorkflowTemplate = unit.workflowTemplateName;

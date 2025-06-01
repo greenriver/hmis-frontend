@@ -7,13 +7,13 @@ import {
   DialogTitle,
   Grid,
   Stack,
-  TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TextInput from '@/components/elements/input/TextInput';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
 import {
   emptyErrorState,
   ErrorState,
@@ -23,11 +23,14 @@ import FormSelect from '@/modules/form/components/FormSelect';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import { isPickListOption } from '@/modules/form/types';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { evictUnitsQuery } from '@/modules/units/util';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   PickListType,
   useCreateUnitGroupMutation,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface UnitGroupFormDialogProps {
   projectId: string;
@@ -45,6 +48,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     string | null
   >(null);
   const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
+  const navigate = useNavigate();
 
   const handleClose = useCallback(() => {
     setName('');
@@ -57,8 +61,16 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     onCompleted: (data) => {
       if (data.createUnitGroup?.errors?.length) {
         setErrors(partitionValidations(data.createUnitGroup.errors));
-      } else {
-        handleClose(); // navigate
+      } else if (data.createUnitGroup?.unitGroup) {
+        const unitGroupId = data.createUnitGroup.unitGroup.id;
+        evictUnitsQuery(projectId, unitGroupId);
+        handleClose();
+        navigate(
+          generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+            projectId,
+            unitGroupId,
+          })
+        );
       }
     },
     onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
@@ -99,6 +111,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             <ErrorAlert key='errors' errors={errorState.errors} fixable />
           </Box>
         )}
+        <ApolloErrorAlert error={errorState.apolloError} />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextInput

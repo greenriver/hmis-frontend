@@ -18,9 +18,8 @@ interface Props {
 }
 const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
   const { referral } = useReferralContext();
-  const { projectId, opportunityId } = useSafeParams() as {
+  const { projectId } = useSafeParams() as {
     projectId: string;
-    opportunityId: string;
   };
 
   const { status, opportunity } = referral;
@@ -37,7 +36,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           alertText={`${clientName} has been accepted to ${opportunity.name}`}
           items={[
             {
-              title: 'Return to Opportunity Overview',
+              title: 'Return to Unit Overview',
               to: generateSafePath(ProjectDashboardRoutes.CE, { projectId }),
             },
             {
@@ -75,10 +74,10 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           }}
           items={[
             {
-              title: 'Back to Opportunity',
-              to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+              title: 'Back to Unit',
+              to: generateSafePath(ProjectDashboardRoutes.UNIT, {
                 projectId,
-                opportunityId,
+                unitId: opportunity.unit?.id,
               }),
             },
             {

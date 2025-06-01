@@ -1,12 +1,16 @@
 fragment CeOpportunitySummaryFields on CeOpportunity {
   id
   name
-  categories
   status
   active
-  expiresAt
   projectId
   projectName
+  unit {
+    id
+    name
+    # unit type / unit group?
+  }
+  dateAvailable
 }
 
 fragment CeOpportunityFields on CeOpportunity {

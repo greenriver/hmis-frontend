@@ -11,11 +11,14 @@ export const evictUnitsQuery = (projectId: string, unitGroupId?: string) => {
     id: `Project:${projectId}`,
     fieldName: 'unitTypes',
   });
+  cache.evict({
+    id: `Project:${projectId}`,
+    fieldName: 'unitGroups',
+  });
+
   if (unitGroupId) {
-    cache.evict({
-      id: `UnitGroup:${unitGroupId}`,
-      fieldName: 'units',
-    });
+    cache.evict({ id: `UnitGroup:${unitGroupId}` });
   }
   evictPickList(PickListType.AvailableUnitsForEnrollment, { projectId });
+  cache.gc();
 };
