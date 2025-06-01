@@ -11,8 +11,8 @@ const occupiedColor = 'primary.dark';
 const vacantColor = 'primary.light';
 
 export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
-  const vacant = unitType.capacity - unitType.availability;
-  const occupied = unitType.availability;
+  const occupied = unitType.capacity - unitType.availability;
+  const vacant = unitType.availability;
   const referralInProgress = 0; // TODO add
   const total = vacant + occupied + referralInProgress;
 

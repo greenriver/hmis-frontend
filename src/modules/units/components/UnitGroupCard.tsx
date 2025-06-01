@@ -38,12 +38,14 @@ const UnitGroupCard: React.FC<Props> = ({ unitGroup, menuItems }) => {
       </Stack>
       {unitGroup.capacity > 0 && (
         <>
-          <Typography variant='body2'>
-            <b>Units:</b> {unitGroup.capacity}
-          </Typography>
-          <Typography variant='body2'>
-            <b>Availability:</b> {unitGroup.availability} units available
-          </Typography>
+          <Stack direction='row' gap={2}>
+            <Typography variant='body2'>
+              <b>Units:</b> {unitGroup.capacity}
+            </Typography>
+            <Typography variant='body2'>
+              <b>Vacancies:</b> {unitGroup.availability}
+            </Typography>
+          </Stack>
           <Box sx={{ mt: 2 }}>
             <UnitUtilizationByUnitType unitTypes={unitGroup.unitTypes} />
           </Box>

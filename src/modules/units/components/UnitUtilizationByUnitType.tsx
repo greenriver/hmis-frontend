@@ -31,7 +31,7 @@ const UnitUtilizationByUnitType: React.FC<Props> = ({
           </Stack>
         ) : (
           <Grid container>
-            <Grid item xs={3} sx={{ mb: 0.5 }}>
+            <Grid item xs={3}>
               <Typography variant='body1' color='text.primary'>
                 {unitType.unitType}
               </Typography>
