@@ -37,7 +37,7 @@ fragment UnitTableRowFields on Unit {
   ...UnitWithCeFields @include(if: $includeCeFields)
 }
 
-fragment UnitFields on Unit {
+fragment UnitDetailFields on Unit {
   id
   name
   unitSize
@@ -47,15 +47,10 @@ fragment UnitFields on Unit {
   unitGroup {
     ...UnitGroupFields
   }
-  ...UnitWithCeFields @include(if: $includeCeFields)
-}
-
-fragment UnitDetailFields on Unit {
-  ...UnitFields
-  eligibilityRequirements {
+  eligibilityRequirements @include(if: $includeCeFields) {
     ...CeMatchRuleFields
   }
-  priorityScheme {
+  priorityScheme @include(if: $includeCeFields) {
     ...CeMatchRuleFields
   }
   latestOpportunity @include(if: $includeCeFields) {
@@ -72,7 +67,6 @@ fragment UnitDetailFields on Unit {
 }
 
 fragment UnitWithCeFields on Unit {
-  # remove?
   latestOpportunity {
     ...CeOpportunitySummaryFields
     referral {
@@ -93,7 +87,9 @@ fragment UnitGroupCapacityFields on UnitGroup {
   name
   capacity
   availability
-  utilization
+  unitTypes {
+    ...UnitTypeCapacityFields
+  }
 }
 
 fragment UnitGroupDetailFields on UnitGroup {

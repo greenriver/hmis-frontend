@@ -7998,9 +7998,8 @@ export type UnitGroup = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   priorityScheme?: Maybe<CeMatchRule>;
+  unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
-  /** Percentage of units in this group that are currently occupied */
-  utilization?: Maybe<Scalars['Float']['output']>;
   workflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
@@ -44022,13 +44021,11 @@ export type UnitTableRowFieldsFragment = {
   } | null;
 };
 
-export type UnitFieldsFragment = {
+export type UnitDetailFieldsFragment = {
   __typename?: 'Unit';
   id: string;
   name: string;
   unitSize?: number | null;
-  acceptingCeReferrals: boolean;
-  workflowTemplateName?: string | null;
   unitType?: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -44039,42 +44036,6 @@ export type UnitFieldsFragment = {
     dateCreated: string;
   } | null;
   unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
-  latestOpportunity?: {
-    __typename?: 'CeOpportunity';
-    id: string;
-    name: string;
-    status: CeOpportunityStatus;
-    active: boolean;
-    projectId: string;
-    projectName: string;
-    dateAvailable: string;
-    referral?: {
-      __typename?: 'CeReferral';
-      id: string;
-      status: CeReferralStatus;
-      active: boolean;
-      clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
-    } | null;
-    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
-  } | null;
-};
-
-export type UnitDetailFieldsFragment = {
-  __typename?: 'Unit';
-  id: string;
-  name: string;
-  unitSize?: number | null;
-  acceptingCeReferrals: boolean;
-  workflowTemplateName?: string | null;
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
@@ -44159,16 +44120,6 @@ export type UnitDetailFieldsFragment = {
     } | null;
     unit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
-  unitType?: {
-    __typename?: 'UnitTypeObject';
-    id: string;
-    description?: string | null;
-    bedType?: InventoryBedType | null;
-    unitSize?: number | null;
-    dateUpdated: string;
-    dateCreated: string;
-  } | null;
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
 };
 
 export type UnitWithCeFieldsFragment = {
@@ -44216,7 +44167,13 @@ export type UnitGroupCapacityFieldsFragment = {
   name: string;
   capacity: number;
   availability: number;
-  utilization?: number | null;
+  unitTypes: Array<{
+    __typename?: 'UnitTypeCapacity';
+    id: string;
+    unitType: string;
+    capacity: number;
+    availability: number;
+  }>;
 };
 
 export type UnitGroupDetailFieldsFragment = {
@@ -44227,7 +44184,6 @@ export type UnitGroupDetailFieldsFragment = {
   name: string;
   capacity: number;
   availability: number;
-  utilization?: number | null;
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
@@ -44246,6 +44202,13 @@ export type UnitGroupDetailFieldsFragment = {
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
   } | null;
+  unitTypes: Array<{
+    __typename?: 'UnitTypeCapacity';
+    id: string;
+    unitType: string;
+    capacity: number;
+    availability: number;
+  }>;
 };
 
 export type GetUnitsQueryVariables = Exact<{
@@ -44358,7 +44321,13 @@ export type GetUnitGroupsQuery = {
         name: string;
         capacity: number;
         availability: number;
-        utilization?: number | null;
+        unitTypes: Array<{
+          __typename?: 'UnitTypeCapacity';
+          id: string;
+          unitType: string;
+          capacity: number;
+          availability: number;
+        }>;
       }>;
     };
   } | null;
@@ -44378,7 +44347,6 @@ export type GetUnitGroupQuery = {
     name: string;
     capacity: number;
     availability: number;
-    utilization?: number | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
@@ -44397,6 +44365,13 @@ export type GetUnitGroupQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     } | null;
+    unitTypes: Array<{
+      __typename?: 'UnitTypeCapacity';
+      id: string;
+      unitType: string;
+      capacity: number;
+      availability: number;
+    }>;
   } | null;
 };
 
@@ -44412,8 +44387,16 @@ export type GetUnitQuery = {
     id: string;
     name: string;
     unitSize?: number | null;
-    acceptingCeReferrals: boolean;
-    workflowTemplateName?: string | null;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+      bedType?: InventoryBedType | null;
+      unitSize?: number | null;
+      dateUpdated: string;
+      dateCreated: string;
+    } | null;
+    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
@@ -44498,16 +44481,6 @@ export type GetUnitQuery = {
       } | null;
       unit?: { __typename?: 'Unit'; id: string; name: string } | null;
     } | null;
-    unitType?: {
-      __typename?: 'UnitTypeObject';
-      id: string;
-      description?: string | null;
-      bedType?: InventoryBedType | null;
-      unitSize?: number | null;
-      dateUpdated: string;
-      dateCreated: string;
-    } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
   } | null;
 };
 
@@ -47462,14 +47435,6 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
   ${EnrollmentRangeFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
-export const UnitTypeCapacityFieldsFragmentDoc = gql`
-  fragment UnitTypeCapacityFields on UnitTypeCapacity {
-    id
-    unitType
-    capacity
-    availability
-  }
-`;
 export const UnitGroupFieldsFragmentDoc = gql`
   fragment UnitGroupFields on UnitGroup {
     id
@@ -47518,23 +47483,6 @@ export const UnitTableRowFieldsFragmentDoc = gql`
   ${UnitGroupFieldsFragmentDoc}
   ${UnitWithCeFieldsFragmentDoc}
 `;
-export const UnitFieldsFragmentDoc = gql`
-  fragment UnitFields on Unit {
-    id
-    name
-    unitSize
-    unitType {
-      ...UnitTypeFields
-    }
-    unitGroup {
-      ...UnitGroupFields
-    }
-    ...UnitWithCeFields @include(if: $includeCeFields)
-  }
-  ${UnitTypeFieldsFragmentDoc}
-  ${UnitGroupFieldsFragmentDoc}
-  ${UnitWithCeFieldsFragmentDoc}
-`;
 export const CeMatchRuleFieldsFragmentDoc = gql`
   fragment CeMatchRuleFields on CeMatchRule {
     id
@@ -47575,11 +47523,19 @@ export const CeCandidateFieldsFragmentDoc = gql`
 `;
 export const UnitDetailFieldsFragmentDoc = gql`
   fragment UnitDetailFields on Unit {
-    ...UnitFields
-    eligibilityRequirements {
+    id
+    name
+    unitSize
+    unitType {
+      ...UnitTypeFields
+    }
+    unitGroup {
+      ...UnitGroupFields
+    }
+    eligibilityRequirements @include(if: $includeCeFields) {
       ...CeMatchRuleFields
     }
-    priorityScheme {
+    priorityScheme @include(if: $includeCeFields) {
       ...CeMatchRuleFields
     }
     latestOpportunity @include(if: $includeCeFields) {
@@ -47594,10 +47550,19 @@ export const UnitDetailFieldsFragmentDoc = gql`
       }
     }
   }
-  ${UnitFieldsFragmentDoc}
+  ${UnitTypeFieldsFragmentDoc}
+  ${UnitGroupFieldsFragmentDoc}
   ${CeMatchRuleFieldsFragmentDoc}
   ${CeOpportunityFieldsFragmentDoc}
   ${CeCandidateFieldsFragmentDoc}
+`;
+export const UnitTypeCapacityFieldsFragmentDoc = gql`
+  fragment UnitTypeCapacityFields on UnitTypeCapacity {
+    id
+    unitType
+    capacity
+    availability
+  }
 `;
 export const UnitGroupCapacityFieldsFragmentDoc = gql`
   fragment UnitGroupCapacityFields on UnitGroup {
@@ -47605,8 +47570,11 @@ export const UnitGroupCapacityFieldsFragmentDoc = gql`
     name
     capacity
     availability
-    utilization
+    unitTypes {
+      ...UnitTypeCapacityFields
+    }
   }
+  ${UnitTypeCapacityFieldsFragmentDoc}
 `;
 export const UnitGroupDetailFieldsFragmentDoc = gql`
   fragment UnitGroupDetailFields on UnitGroup {

@@ -6644,10 +6644,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'utilization',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
-      },
-      {
         name: 'workflowTemplateIdentifier',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },

@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Grid, Paper, Stack } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { Masonry } from '@mui/lab';
+import { Button, Paper, Stack } from '@mui/material';
+import { useCallback, useMemo, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
@@ -11,7 +12,10 @@ import ProjectUnitsTable from '@/modules/units/components/ProjectUnitsTable';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
 import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { useGetUnitGroupsQuery } from '@/types/gqlTypes';
+import {
+  UnitGroupFieldsFragment,
+  useGetUnitGroupsQuery,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const Units = () => {
@@ -27,6 +31,24 @@ const Units = () => {
     if (!data?.project?.unitGroups) return [];
     return data.project.unitGroups.nodes;
   }, [data]);
+
+  const unitGroupMenuItems = useCallback(
+    (group: UnitGroupFieldsFragment) => {
+      return [
+        {
+          key: 'manage',
+          title: project.access.canManageUnits
+            ? 'Manage Unit Group'
+            : 'View Unit Group',
+          to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+            projectId: project.id,
+            unitGroupId: group.id,
+          }),
+        },
+      ];
+    },
+    [project.access.canManageUnits, project.id]
+  );
 
   if (!project.access.canViewUnits) return <NotFound />;
   if (error) throw error;
@@ -53,36 +75,15 @@ const Units = () => {
       />
       <Stack gap={4}>
         {unitGroups.length > 0 && (
-          <Grid
-            container
-            rowSpacing={{ xs: 1, sm: 2, md: 3 }}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
+          <Masonry columns={{ xs: 1, md: 2 }} spacing={2}>
             {unitGroups.map((group) => (
-              <Grid
-                item
-                xs={12}
-                md={unitGroups.length > 1 ? 6 : 12}
+              <UnitGroupCard
                 key={group.id}
-              >
-                <UnitGroupCard
-                  unitGroup={group}
-                  menuItems={[
-                    {
-                      key: 'manage',
-                      title: project.access.canManageUnits
-                        ? 'Manage Unit Group'
-                        : 'View Unit Group',
-                      to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-                        projectId: project.id,
-                        unitGroupId: group.id,
-                      }),
-                    },
-                  ]}
-                />
-              </Grid>
+                unitGroup={group}
+                menuItems={unitGroupMenuItems(group)}
+              />
             ))}
-          </Grid>
+          </Masonry>
         )}
         <Paper>
           <ProjectUnitsTable projectId={project.id} />

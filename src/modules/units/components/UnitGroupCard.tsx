@@ -2,7 +2,7 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import CommonMenuButton, {
   CommonMenuItem,
 } from '@/components/elements/CommonMenuButton';
-import { CapacityProgressBar } from '@/modules/units/components/UnitCapacityTable';
+import UnitCapacityTable from '@/modules/units/components/UnitCapacityTable';
 import { UnitGroupCapacityFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -44,11 +44,8 @@ const UnitGroupCard: React.FC<Props> = ({ unitGroup, menuItems }) => {
           <Typography variant='body2'>
             <b>Availability:</b> {unitGroup.availability} units available
           </Typography>
-          <Typography variant='body2'>
-            <b>Utilization:</b> {unitGroup.utilization || 0}% occupancy
-          </Typography>
           <Box sx={{ mt: 2 }}>
-            <CapacityProgressBar percentFilled={unitGroup.utilization || 0} />
+            <UnitCapacityTable unitTypes={unitGroup.unitTypes} />
           </Box>
         </>
       )}
