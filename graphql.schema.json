@@ -3990,7 +3990,7 @@
           },
           {
             "name": "ownerType",
-            "description": "Rule applies to all projects within this related entity (eg a Data Source, Project, Organization)",
+            "description": "Rule applies to projects within this related entity (eg a Data Source,\nProject, Organization), possibly limited by project type or funder",
             "args": [],
             "type": {
               "kind": "NON_NULL",

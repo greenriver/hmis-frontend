@@ -587,7 +587,10 @@ export type CeMatchRule = {
   funders?: Maybe<Array<FundingSource>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  /** Rule applies to all projects within this related entity (eg a Data Source, Project, Organization) */
+  /**
+   * Rule applies to projects within this related entity (eg a Data Source,
+   * Project, Organization), possibly limited by project type or funder
+   */
   ownerType: Scalars['String']['output'];
   /** Rule applicability is limited to projects with these types */
   projectTypes: Array<ProjectType>;
