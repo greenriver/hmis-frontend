@@ -687,6 +687,7 @@ export type CeParticipationsPaginated = {
 
 export type CeReferral = {
   __typename?: 'CeReferral';
+  access: CeReferralAccess;
   active: Scalars['Boolean']['output'];
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
@@ -705,6 +706,12 @@ export type CeReferral = {
   targetProjectName: Scalars['String']['output'];
   targetProjectType: ProjectType;
   updatedBy?: Maybe<ApplicationUser>;
+};
+
+export type CeReferralAccess = {
+  __typename?: 'CeReferralAccess';
+  canViewTargetProject: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type CeReferralFilterOptions = {
@@ -16264,15 +16271,32 @@ export type CeReferralTableFieldsFragment = {
   } | null;
 };
 
-export type CeReferralAdminFieldsFragment = {
+export type CeReferralWithProjectFieldsFragment = {
   __typename?: 'CeReferral';
+  id: string;
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
+};
+
+export type CeReferralWithProjectAccessFieldsFragment = {
+  __typename?: 'CeReferral';
+  id: string;
+  targetProjectId: string;
+  targetProjectName: string;
+  targetProjectType: ProjectType;
+  access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
+};
+
+export type CeReferralAdminFieldsFragment = {
+  __typename?: 'CeReferral';
   targetOrganizationName: string;
   daysOnCurrentSteps?: number | null;
   createdAt: string;
   id: string;
+  targetProjectId: string;
+  targetProjectName: string;
+  targetProjectType: ProjectType;
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
@@ -16324,14 +16348,14 @@ export type CeReferralAdminFieldsFragment = {
 
 export type ClientCeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
-  targetProjectId: string;
-  targetProjectName: string;
-  targetProjectType: ProjectType;
   createdAt: string;
   id: string;
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
+  targetProjectId: string;
+  targetProjectName: string;
+  targetProjectType: ProjectType;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
   currentSteps?: Array<{
     __typename?: 'CeReferralStep';
@@ -16343,6 +16367,7 @@ export type ClientCeReferralTableFieldsFragment = {
     id: string;
     name: string;
   } | null;
+  access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
   client?: {
     __typename?: 'Client';
     id: string;
@@ -17011,9 +17036,10 @@ export type UserCeReferralStepFieldsFragment = {
   referral: {
     __typename?: 'CeReferral';
     id: string;
+    clientId: string;
     targetProjectId: string;
     targetProjectName: string;
-    clientId: string;
+    targetProjectType: ProjectType;
     opportunity: { __typename?: 'CeOpportunity'; id: string };
     client?: {
       __typename?: 'Client';
@@ -17024,6 +17050,7 @@ export type UserCeReferralStepFieldsFragment = {
       lastName?: string | null;
       nameSuffix?: string | null;
     } | null;
+    access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
   };
 };
 
@@ -19250,14 +19277,14 @@ export type GetClientCeReferralsQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'CeReferral';
-        targetProjectId: string;
-        targetProjectName: string;
-        targetProjectType: ProjectType;
         createdAt: string;
         id: string;
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
+        targetProjectId: string;
+        targetProjectName: string;
+        targetProjectType: ProjectType;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
         currentSteps?: Array<{
           __typename?: 'CeReferralStep';
@@ -19269,6 +19296,10 @@ export type GetClientCeReferralsQuery = {
           id: string;
           name: string;
         } | null;
+        access: {
+          __typename?: 'CeReferralAccess';
+          canViewTargetProject: boolean;
+        };
         client?: {
           __typename?: 'Client';
           id: string;
@@ -19365,13 +19396,13 @@ export type GetAdminCeReferralsQuery = {
     nodesCount: number;
     nodes: Array<{
       __typename?: 'CeReferral';
-      targetProjectId: string;
-      targetProjectName: string;
-      targetProjectType: ProjectType;
       targetOrganizationName: string;
       daysOnCurrentSteps?: number | null;
       createdAt: string;
       id: string;
+      targetProjectId: string;
+      targetProjectName: string;
+      targetProjectType: ProjectType;
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
@@ -44539,9 +44570,10 @@ export type GetUserCeAssignedStepsQuery = {
         referral: {
           __typename?: 'CeReferral';
           id: string;
+          clientId: string;
           targetProjectId: string;
           targetProjectName: string;
-          clientId: string;
+          targetProjectType: ProjectType;
           opportunity: { __typename?: 'CeOpportunity'; id: string };
           client?: {
             __typename?: 'Client';
@@ -44552,6 +44584,10 @@ export type GetUserCeAssignedStepsQuery = {
             lastName?: string | null;
             nameSuffix?: string | null;
           } | null;
+          access: {
+            __typename?: 'CeReferralAccess';
+            canViewTargetProject: boolean;
+          };
         };
       }>;
     } | null;
@@ -45439,6 +45475,14 @@ export const CeReferralTableFieldsFragmentDoc = gql`
   }
   ${CeReferralSummaryFieldsFragmentDoc}
 `;
+export const CeReferralWithProjectFieldsFragmentDoc = gql`
+  fragment CeReferralWithProjectFields on CeReferral {
+    id
+    targetProjectId
+    targetProjectName
+    targetProjectType
+  }
+`;
 export const UnitTypeFieldsFragmentDoc = gql`
   fragment UnitTypeFields on UnitTypeObject {
     id
@@ -45452,9 +45496,7 @@ export const UnitTypeFieldsFragmentDoc = gql`
 export const CeReferralAdminFieldsFragmentDoc = gql`
   fragment CeReferralAdminFields on CeReferral {
     ...CeReferralTableFields
-    targetProjectId
-    targetProjectName
-    targetProjectType
+    ...CeReferralWithProjectFields
     targetEnrollment {
       id
     }
@@ -45481,16 +45523,26 @@ export const CeReferralAdminFieldsFragmentDoc = gql`
     }
   }
   ${CeReferralTableFieldsFragmentDoc}
+  ${CeReferralWithProjectFieldsFragmentDoc}
   ${UnitTypeFieldsFragmentDoc}
+`;
+export const CeReferralWithProjectAccessFieldsFragmentDoc = gql`
+  fragment CeReferralWithProjectAccessFields on CeReferral {
+    id
+    ...CeReferralWithProjectFields
+    access {
+      canViewTargetProject
+    }
+  }
+  ${CeReferralWithProjectFieldsFragmentDoc}
 `;
 export const ClientCeReferralTableFieldsFragmentDoc = gql`
   fragment ClientCeReferralTableFields on CeReferral {
     ...CeReferralTableFields
-    targetProjectId
-    targetProjectName
-    targetProjectType
+    ...CeReferralWithProjectAccessFields
   }
   ${CeReferralTableFieldsFragmentDoc}
+  ${CeReferralWithProjectAccessFieldsFragmentDoc}
 `;
 export const CeReferralSwimlaneFieldsFragmentDoc = gql`
   fragment CeReferralSwimlaneFields on CeReferralSwimlane {
@@ -45720,17 +45772,17 @@ export const UserCeReferralStepFieldsFragmentDoc = gql`
     }
     referral {
       id
+      ...CeReferralWithProjectAccessFields
       opportunity {
         id
       }
-      targetProjectId
-      targetProjectName
       clientId
       client {
         ...ClientName
       }
     }
   }
+  ${CeReferralWithProjectAccessFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`

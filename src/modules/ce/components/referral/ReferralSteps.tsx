@@ -2,14 +2,14 @@ import { Divider, Paper, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import NotFound from '@/components/pages/NotFound';
 import useSearchParamsState from '@/hooks/useSearchParamState';
-import { useReferralContext } from '@/modules/ce/components/ReferralPage';
-import ReferralStepCard from '@/modules/ce/components/ReferralStepCard';
-import ReferralWayfinder from '@/modules/ce/components/ReferralWayfinder';
+import { useReferralContext } from '@/modules/ce/components/referral/ReferralPage';
+import ReferralStepCard from '@/modules/ce/components/referral/ReferralStepCard';
+import ReferralWayfinder from '@/modules/ce/components/referral/ReferralWayfinder';
 import { CeReferralStepStatus } from '@/types/gqlTypes';
 
 interface Props {}
 const ReferralSteps: React.FC<Props> = () => {
-  const { referral } = useReferralContext();
+  const { referral, generateReferralStepPath } = useReferralContext();
 
   const [{ wayfinding }, setFilterParams] = useSearchParamsState({
     paramsDefinition: {
@@ -52,7 +52,12 @@ const ReferralSteps: React.FC<Props> = () => {
         </Paper>
 
         {referral.steps.map((s) => (
-          <ReferralStepCard key={s.id} step={s} referral={referral} />
+          <ReferralStepCard
+            key={s.id}
+            step={s}
+            path={generateReferralStepPath(s.stepId || '')}
+            referral={referral}
+          />
         ))}
       </Stack>
       <ReferralWayfinder

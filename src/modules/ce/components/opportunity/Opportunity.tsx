@@ -6,8 +6,8 @@ import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import OpportunityBanner from '@/modules/ce/components/OpportunityBanner';
-import PrioritizedClientsTable from '@/modules/ce/components/PrioritizedClientsTable';
+import OpportunityBanner from '@/modules/ce/components/opportunity/OpportunityBanner';
+import PrioritizedClientsTable from '@/modules/ce/components/opportunity/PrioritizedClientsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   useGetCeOpportunityCandidatesQuery,

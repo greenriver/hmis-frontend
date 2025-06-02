@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 import { REFERRAL_WITH_PROJECT_COLUMNS } from '@/modules/ce/components/client/ClientReferralsTable';
-import { REFERRAL_COLUMNS } from '@/modules/ce/components/ProjectReferralsTable';
+import { REFERRAL_COLUMNS } from '@/modules/ce/components/project/ProjectReferralsTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';

@@ -3,26 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import LoadingButton from '@/components/elements/LoadingButton';
 import { GoToIcon } from '@/components/elements/SemanticIcons';
 import { cache } from '@/providers/apolloClient';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralStepStatus,
   CeReferralStepSummaryFieldsFragment,
   GetCeReferralStepDocument,
   useStartCeReferralStepMutation,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   step: CeReferralStepSummaryFieldsFragment;
   referralId: string;
-  projectId: string;
+  path: string;
   children: ReactNode;
 }
 
 const StartCeReferralStepButton: React.FC<Props> = ({
   step,
   referralId,
-  projectId,
+  path,
   children,
 }) => {
   const navigate = useNavigate();
@@ -51,13 +49,7 @@ const StartCeReferralStepButton: React.FC<Props> = ({
             },
           });
 
-          navigate(
-            generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
-              projectId,
-              referralId: referralId,
-              stepId: step.stepId || '',
-            })
-          );
+          navigate(path);
         }
       },
     });

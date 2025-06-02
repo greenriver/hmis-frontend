@@ -82,11 +82,24 @@ fragment CeReferralTableFields on CeReferral {
   }
 }
 
-fragment CeReferralAdminFields on CeReferral {
-  ...CeReferralTableFields
+fragment CeReferralWithProjectFields on CeReferral {
+  id
   targetProjectId
   targetProjectName
   targetProjectType
+}
+
+fragment CeReferralWithProjectAccessFields on CeReferral {
+  id
+  ...CeReferralWithProjectFields
+  access {
+    canViewTargetProject
+  }
+}
+
+fragment CeReferralAdminFields on CeReferral {
+  ...CeReferralTableFields
+  ...CeReferralWithProjectFields
   targetEnrollment {
     id
   }
@@ -115,9 +128,7 @@ fragment CeReferralAdminFields on CeReferral {
 
 fragment ClientCeReferralTableFields on CeReferral {
   ...CeReferralTableFields
-  targetProjectId
-  targetProjectName
-  targetProjectType
+  ...CeReferralWithProjectAccessFields
 }
 
 fragment CeReferralFields on CeReferral {
@@ -194,11 +205,10 @@ fragment UserCeReferralStepFields on CeReferralStep {
   }
   referral {
     id
+    ...CeReferralWithProjectAccessFields
     opportunity {
       id
     }
-    targetProjectId
-    targetProjectName
     clientId
     client {
       ...ClientName
