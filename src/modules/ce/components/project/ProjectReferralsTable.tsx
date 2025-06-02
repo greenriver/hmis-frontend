@@ -3,7 +3,7 @@ import React from 'react';
 import CommonTruncatedList from '@/components/elements/CommonTruncatedList';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
-import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
+import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   clientNameFromRecordWithOptionalClient,
@@ -63,7 +63,7 @@ export const REFERRAL_COLUMNS: Record<
   },
   currentSteps: {
     key: 'currentSteps',
-    header: 'Current Steps',
+    header: 'Current Task',
     render: (referral) => {
       if (!referral.currentSteps || referral.currentSteps.length === 0) return;
       return (
@@ -118,9 +118,8 @@ const ProjectReferralsTable: React.FC<Props> = ({}) => {
         noData='No referrals'
         paginationItemName='referrals'
         rowLinkTo={(referral) =>
-          generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
+          generateSafePath(ProjectDashboardRoutes.REFERRAL, {
             projectId,
-            opportunityId: referral.opportunity.id,
             referralId: referral.id,
           })
         }

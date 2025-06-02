@@ -108,6 +108,15 @@ declare module '@mui/material/IconButton' {
   }
 }
 
+declare module '@mui/material/Chip' {
+  interface ChipPropsVariantOverrides {
+    status: true;
+  }
+  interface ChipPropsColorOverrides {
+    grayscale: true;
+  }
+}
+
 const generateShades = (mainColor: string) => ({
   100: alpha(mainColor, 0.08),
   200: alpha(mainColor, 0.12),
@@ -447,6 +456,55 @@ const createThemeOptions = (theme: Theme) => ({
           borderRadius: 2,
         }),
       },
+    },
+    MuiChip: {
+      variants: [
+        {
+          props: { variant: 'status' },
+          style: ({
+            theme,
+            ownerState,
+          }: {
+            theme: Theme;
+            ownerState: {
+              color?: 'primary' | 'warning' | 'success' | 'grayscale';
+            };
+          }) => {
+            const paletteColor = ownerState.color
+              ? theme.palette[ownerState.color]
+              : undefined;
+
+            let color;
+            let backgroundColor;
+            let iconColor;
+
+            if (!paletteColor) {
+              color = theme.palette.text.primary;
+              iconColor = theme.palette.text.secondary;
+              backgroundColor = theme.palette.grayscale.surface;
+            } else if (ownerState.color === 'grayscale') {
+              color = paletteColor.main;
+              iconColor = paletteColor.light;
+              backgroundColor = paletteColor.surface;
+            } else {
+              color = paletteColor.darkest;
+              iconColor = paletteColor.main;
+              backgroundColor = paletteColor.surface;
+            }
+
+            return {
+              fontWeight: 600,
+              fontSize: '14px',
+              border: 'none',
+              backgroundColor: backgroundColor,
+              color: color,
+              '& .MuiChip-icon': {
+                color: iconColor,
+              },
+            };
+          },
+        },
+      ],
     },
     MuiAlert: {
       styleOverrides: {

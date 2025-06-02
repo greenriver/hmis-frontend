@@ -1,8 +1,9 @@
-import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
+import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { UnitFieldsFragment } from '@/types/gqlTypes';
 
 export const useUnitCeColumns = () => {
+  // TODO(7409) - instead of using the global permission, check project-level config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
     'canViewCoordinatedEntry',
   ]);

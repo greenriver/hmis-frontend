@@ -1,7 +1,7 @@
-import { Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { memoize } from 'lodash-es';
 import React from 'react';
+import CommonCard from '@/components/elements/CommonCard';
 import { renderCellContents } from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import useAuth from '@/modules/auth/hooks/useAuth';
@@ -101,49 +101,42 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
   },
 ];
 
-const MyClients = () => {
+const YourClients = () => {
   const { user: currentUser } = useAuth();
   if (!currentUser) return;
 
   return (
-    <>
-      <Typography component='h2' variant='h4'>
-        My Clients
-      </Typography>
-      <Typography variant='body1'>
+    <CommonCard title='Your Clients' TitleComponent='h2' padContent={false}>
+      <Typography variant='body2' color='text.secondary' sx={{ px: 2 }}>
         Households with active enrollments assigned to you
       </Typography>
-      <Paper>
-        <GenericTableWithData<
-          GetUserStaffAssignmentsQuery,
-          GetUserStaffAssignmentsQueryVariables,
-          StaffAssignmentWithClientsFragment
-        >
-          queryVariables={{
-            id: currentUser.id,
-          }}
-          queryDocument={GetUserStaffAssignmentsDocument}
-          columns={MY_CLIENTS_COLUMNS}
-          pagePath='user.staffAssignments'
-          noData='No clients assigned to you'
-          paginationItemName='assignment'
-          defaultPageSize={10}
-          recordType='StaffAssignment'
-          rowLinkTo={(assignment) => {
-            return generateSafePath(
-              EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-              {
-                clientId: memoizedHoh(assignment).client.id,
-                enrollmentId: memoizedHoh(assignment).enrollment.id,
-              }
-            );
-          }}
-          rowName={(row) => clientBriefName(memoizedHoh(row).client)}
-          rowActionTitle='View Household'
-        />
-      </Paper>
-    </>
+      <GenericTableWithData<
+        GetUserStaffAssignmentsQuery,
+        GetUserStaffAssignmentsQueryVariables,
+        StaffAssignmentWithClientsFragment
+      >
+        queryVariables={{}}
+        queryDocument={GetUserStaffAssignmentsDocument}
+        columns={MY_CLIENTS_COLUMNS}
+        pagePath='userDashboard.staffAssignments'
+        noData='No clients assigned to you'
+        paginationItemName='assignment'
+        defaultPageSize={10}
+        recordType='StaffAssignment'
+        rowLinkTo={(assignment) => {
+          return generateSafePath(
+            EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+            {
+              clientId: memoizedHoh(assignment).client.id,
+              enrollmentId: memoizedHoh(assignment).enrollment.id,
+            }
+          );
+        }}
+        rowName={(row) => clientBriefName(memoizedHoh(row).client)}
+        rowActionTitle='View Household'
+      />
+    </CommonCard>
   );
 };
 
-export default MyClients;
+export default YourClients;

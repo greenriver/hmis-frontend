@@ -28,7 +28,7 @@ fragment UnitFields on Unit {
       ...ClientName
     }
   }
-  ...UnitWithCeFields @include(if: $ceEnabled)
+  ...UnitWithCeFields @include(if: $includeCeFields)
 }
 
 fragment UnitWithCeFields on Unit {

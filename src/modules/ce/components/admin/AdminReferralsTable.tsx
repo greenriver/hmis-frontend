@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 import { REFERRAL_WITH_PROJECT_COLUMNS } from '@/modules/ce/components/client/ClientReferralsTable';
-import { REFERRAL_COLUMNS } from '@/modules/ce/components/ProjectReferralsTable';
+import { REFERRAL_COLUMNS } from '@/modules/ce/components/project/ProjectReferralsTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -31,7 +31,7 @@ const COLUMNS: DataColumnDef<
     // TODO - Ideally this column "Time in Current Step" should correspond with the filter "On Current Step Since..."
     // aka, they should have the same title and use the same unit (days)
     key: 'daysOnCurrentSteps',
-    header: 'Days on Current Step',
+    header: 'Days on Current Task',
     render: ({ daysOnCurrentSteps }) => {
       if (isNil(daysOnCurrentSteps)) return; // no open steps
       if (daysOnCurrentSteps === 0) return '< 1 day';
@@ -128,9 +128,8 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
         paginationItemName='referrals'
         filters={filters}
         rowLinkTo={(row) =>
-          generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
+          generateSafePath(ProjectDashboardRoutes.REFERRAL, {
             projectId: row.targetProjectId,
-            opportunityId: row.opportunity.id,
             referralId: row.id,
           })
         }

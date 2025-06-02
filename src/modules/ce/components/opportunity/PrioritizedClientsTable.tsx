@@ -2,12 +2,13 @@ import React, { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import BeginReferralButton from '@/modules/ce/components/BeginReferralButton';
+import BeginReferralButton from '@/modules/ce/components/opportunity/BeginReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   clientBriefName,
   clientNameFromRecordWithOptionalClient,
 } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
@@ -42,6 +43,8 @@ const PrioritizedClientsTable: React.FC<Props> = ({
   projectId,
   status,
 }) => {
+  const { project } = useProjectDashboardContext();
+
   const columns = useMemo(() => {
     return [
       ...COLUMNS,
@@ -52,7 +55,8 @@ const PrioritizedClientsTable: React.FC<Props> = ({
             record={row}
             recordName={`ID ${row.id}`}
             primaryAction={
-              status === CeOpportunityStatus.Open && (
+              status === CeOpportunityStatus.Open &&
+              project.access.canStartReferrals && (
                 <BeginReferralButton
                   opportunityId={opportunityId}
                   projectId={projectId}
@@ -80,7 +84,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
         ),
       },
     ];
-  }, [opportunityId, projectId, status]);
+  }, [opportunityId, project.access.canStartReferrals, projectId, status]);
 
   return (
     <GenericTableWithData<

@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import React from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { ColumnDef } from '@/components/elements/table/types';
-import { OPPORTUNITY_COLUMNS } from '@/modules/ce/components/ProjectOpportunitiesTable';
+import { OPPORTUNITY_COLUMNS } from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';

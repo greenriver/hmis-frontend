@@ -1,4 +1,11 @@
-import { TimelapseRounded } from '@mui/icons-material';
+import {
+  ContentPasteOutlined,
+  HistoryRounded,
+  HomeRounded,
+  InfoOutlined,
+  StickyNote2Rounded,
+  TimelapseRounded,
+} from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import AddchartRoundedIcon from '@mui/icons-material/AddchartRounded';
@@ -82,7 +89,9 @@ export {
   ArrowDropDownRoundedIcon as DownIcon,
   DownloadIcon as DownloadIcon,
   EditIcon as EditIcon,
+  // TODO(#7362) - resolve a new icon for Enrollments, use "home" for Projects, per our style guide
   Home as EnrollmentIcon,
+  HomeRounded as ProjectIcon,
   ExitToAppRoundedIcon as ExitAssessmentIcon,
   ExpandLessRoundedIcon as ExpandLessIcon,
   ExpandMoreRoundedIcon as ExpandMoreIcon,
@@ -128,4 +137,9 @@ export {
   CheckCircleRounded as CompletedIcon,
   CancelIcon as DeclinedIcon,
   TimelapseRounded as InProgressIcon,
+  InfoOutlined as InfoIcon,
+  ContentPasteOutlined as AssigneesIcon,
+  DateRangeIcon as DaysAvailableIcon,
+  HistoryRounded as ActivityIcon,
+  StickyNote2Rounded as NotesIcon,
 };

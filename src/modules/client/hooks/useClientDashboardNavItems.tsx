@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
-
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientDashboardFeature, ClientFieldsFragment } from '@/types/gqlTypes';
@@ -54,7 +53,13 @@ export const useClientDashboardNavItems = (
             id: 'referrals',
             title: 'Referrals',
             path: ClientDashboardRoutes.REFERRALS,
-            hide: !canViewCoordinatedEntry,
+            permissions: [
+              'canViewClientEligibleOpportunities',
+              'canViewReferrals',
+              'canViewOwnReferrals',
+            ],
+            permissionMode: 'any',
+            hide: !canViewCoordinatedEntry, // feature flag for Coordinated Entry
           },
           {
             id: 'case-notes',
@@ -90,7 +95,7 @@ export const useClientDashboardNavItems = (
         ],
       },
     ];
-  }, [canViewCoordinatedEntry, enabledFeatures]);
+  }, [enabledFeatures, canViewCoordinatedEntry]);
 
   return navItems;
 };

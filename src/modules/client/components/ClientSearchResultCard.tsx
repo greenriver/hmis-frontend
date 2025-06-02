@@ -170,7 +170,8 @@ const ClientSearchResultCard: React.FC<Props> = ({
           </Stack>
           {client.dateUpdated && (
             <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-              Last Updated on {lastUpdatedBy(client.dateUpdated)}
+              Last Updated on{' '}
+              {lastUpdatedBy({ dateUpdated: client.dateUpdated })}
             </Typography>
           )}
         </Stack>

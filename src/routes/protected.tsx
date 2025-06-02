@@ -53,12 +53,12 @@ import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNo
 
 import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinatedEntry';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
-import Opportunity from '@/modules/ce/components/Opportunity';
-import ProjectCePage from '@/modules/ce/components/ProjectCePage';
-import ReferralDetails from '@/modules/ce/components/ReferralDetails';
-import ReferralPage from '@/modules/ce/components/ReferralPage';
-import ReferralStep from '@/modules/ce/components/ReferralStep';
-import ReferralSteps from '@/modules/ce/components/ReferralSteps';
+import Opportunity from '@/modules/ce/components/opportunity/Opportunity';
+import ProjectCePage from '@/modules/ce/components/project/ProjectCePage';
+import ProjectReferralPage from '@/modules/ce/components/project/ProjectReferralPage';
+import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
+import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
+import ReferralSteps from '@/modules/ce/components/referral/ReferralSteps';
 import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
 import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
 import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
@@ -83,7 +83,6 @@ import HouseholdPage from '@/modules/enrollment/components/pages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
-import MyDashboardPage from '@/modules/myDashboard/components/MyDashboardPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
 import CeParticipationsPage from '@/modules/projectAdministration/components/CeParticipationsPage';
@@ -121,6 +120,7 @@ import EnrollmentServicesPage from '@/modules/services/components/EnrollmentServ
 import ProjectServicesPage from '@/modules/services/components/ProjectServicesPage';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
+import UserDashboardPage from '@/modules/userDashboard/components/UserDashboardPage';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
 
 const App = () => {
@@ -166,7 +166,34 @@ export const protectedRoutes: RouteNode[] = [
     element: <App />,
     children: [
       { path: Routes.ALL_PROJECTS, element: <AllProjectsPage /> },
-      { path: Routes.MY_DASHBOARD, element: <MyDashboardPage /> },
+      { path: Routes.USER_DASHBOARD, element: <UserDashboardPage /> },
+      // For backwards compat, old '/my-dashboard' redirects to '/dashboard'
+      {
+        path: Routes.MY_DASHBOARD,
+        element: <Navigate to='/dashboard' replace />,
+      },
+      {
+        // "Floating" referrals for users who have permission to view referrals in projects where they don't have access to the project dashboard.
+        path: Routes.REFERRAL,
+        element: (
+          // Doesn't need a permission filter wrapper; internally it will just return NotFound if the client doesn't have access to view the referral.
+          <ReferralPage />
+        ),
+        children: [
+          {
+            path: Routes.REFERRAL_STEPS,
+            element: <ReferralSteps />,
+          },
+          {
+            path: Routes.REFERRAL_STEP,
+            element: <ReferralStep />,
+          },
+          {
+            path: '',
+            element: <Navigate to={'tasks'} replace />,
+          },
+        ],
+      },
       {
         path: Routes.PROJECT,
         element: <ProjectDashboard />,
@@ -431,39 +458,39 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.CE,
             element: (
               <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
+                permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry
                 otherwise={<NotFound />}
               >
-                <ProjectCePage />
+                <ProjectRoute
+                  permissions={[
+                    'canViewUnits',
+                    'canViewReferrals',
+                    'canViewOwnReferrals',
+                  ]}
+                >
+                  <ProjectCePage />
+                </ProjectRoute>
               </RootPermissionsFilter>
             ),
           },
           {
             path: ProjectDashboardRoutes.OPPORTUNITY,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
-                otherwise={<NotFound />}
-              >
+              <ProjectRoute permissions={['canViewUnits']}>
                 <Opportunity />
-              </RootPermissionsFilter>
+              </ProjectRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.REFERRAL,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
-                otherwise={<NotFound />}
+              <ProjectRoute
+                permissions={['canViewReferrals', 'canViewOwnReferrals']}
               >
-                <ReferralPage />
-              </RootPermissionsFilter>
+                <ProjectReferralPage />
+              </ProjectRoute>
             ),
             children: [
-              {
-                path: ProjectDashboardRoutes.REFERRAL_DETAILS,
-                element: <ReferralDetails />,
-              },
               {
                 path: ProjectDashboardRoutes.REFERRAL_STEPS,
                 element: <ReferralSteps />,
@@ -471,6 +498,10 @@ export const protectedRoutes: RouteNode[] = [
               {
                 path: ProjectDashboardRoutes.REFERRAL_STEP,
                 element: <ReferralStep />,
+              },
+              {
+                path: '',
+                element: <Navigate to={'tasks'} replace />,
               },
             ],
           },
@@ -780,9 +811,17 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ClientDashboardRoutes.REFERRALS,
             element: (
-              <RootPermissionsFilter permissions='canViewCoordinatedEntry'>
+              <ClientRoute
+                permissions={[
+                  'canViewClientEligibleOpportunities',
+                  'canViewReferrals',
+                  'canViewOwnReferrals',
+                ]}
+                permissionMode='any'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <ClientReferralsPage />
-              </RootPermissionsFilter>
+              </ClientRoute>
             ),
           },
           { path: '*', element: <Navigate to='profile' replace /> },
@@ -815,7 +854,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.COORDINATED_ENTRY,
             element: (
-              <RootPermissionsFilter permissions='canViewCoordinatedEntry'>
+              <RootPermissionsFilter
+                permissions='canAdministrateCoordinatedEntry'
+                otherwise={<NotFound />}
+              >
                 <AdminCoordinatedEntry />
               </RootPermissionsFilter>
             ),

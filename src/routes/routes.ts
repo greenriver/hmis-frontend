@@ -10,7 +10,13 @@ export const Routes = {
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
   CREATE_PROJECT: '/organizations/:organizationId/new-project',
   CREATE_ORGANIZATION: '/projects/new-organization',
-  MY_DASHBOARD: '/my-dashboard',
+  USER_DASHBOARD: '/dashboard',
+  MY_DASHBOARD: '/my-dashboard', // maintained for backwards compat
+
+  // "Floating" referrals:
+  REFERRAL: '/referrals/:referralId',
+  REFERRAL_STEPS: '/referrals/:referralId/tasks',
+  REFERRAL_STEP: '/referrals/:referralId/tasks/:stepId',
 } as const;
 
 const adminDashboardRoutes = {
@@ -116,11 +122,9 @@ const projectDashboardRoutes = {
   // CE
   CE: 'ce',
   OPPORTUNITY: 'ce/opportunities/:opportunityId',
-  REFERRAL: 'ce/opportunities/:opportunityId/referrals',
-  REFERRAL_DETAILS: 'ce/opportunities/:opportunityId/referrals/:referralId',
-  REFERRAL_STEPS: 'ce/opportunities/:opportunityId/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
-  REFERRAL_STEP:
-    'ce/opportunities/:opportunityId/referrals/:referralId/tasks/:stepId',
+  REFERRAL: 'ce/referrals/:referralId',
+  REFERRAL_STEPS: 'ce/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
+  REFERRAL_STEP: 'ce/referrals/:referralId/tasks/:stepId',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`
@@ -168,7 +172,6 @@ export const AdminDashboardRoutes: {
 // Routes that live "under" one of the dashboards, but they need to take up the full screen, so they shouldn't get the default padding applied.
 export const NO_PADDING_ROUTES: string[] = [
   ProjectDashboardRoutes.REFERRAL,
-  ProjectDashboardRoutes.REFERRAL_DETAILS,
   ProjectDashboardRoutes.REFERRAL_STEPS,
   ProjectDashboardRoutes.REFERRAL_STEP,
   AdminDashboardRoutes.EDIT_FORM,
@@ -177,7 +180,6 @@ export const NO_PADDING_ROUTES: string[] = [
 // Auto-hide left desktop nav for some routes
 export const HIDE_NAV_ROUTES: string[] = [
   ProjectDashboardRoutes.REFERRAL,
-  ProjectDashboardRoutes.REFERRAL_DETAILS,
   ProjectDashboardRoutes.REFERRAL_STEPS,
   ProjectDashboardRoutes.REFERRAL_STEP,
 ];

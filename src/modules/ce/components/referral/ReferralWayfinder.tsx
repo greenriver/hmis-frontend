@@ -1,14 +1,9 @@
 import React from 'react';
 import WayfindingDialog from '@/components/elements/navigation/WayfindingDialog';
 import { DeclinedIcon } from '@/components/elements/SemanticIcons';
-import useSafeParams from '@/hooks/useSafeParams';
-import { useReferralContext } from '@/modules/ce/components/ReferralPage';
+import { useReferralContext } from '@/modules/ce/components/referral/ReferralPage';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
-import {
-  EnrollmentDashboardRoutes,
-  ProjectDashboardRoutes,
-  Routes,
-} from '@/routes/routes';
+import { EnrollmentDashboardRoutes, Routes } from '@/routes/routes';
 import { CeReferralStatus } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -17,11 +12,7 @@ interface Props {
   onClose: VoidFunction;
 }
 const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
-  const { referral } = useReferralContext();
-  const { projectId, opportunityId } = useSafeParams() as {
-    projectId: string;
-    opportunityId: string;
-  };
+  const { referral, opportunityPath } = useReferralContext();
 
   const { status, opportunity } = referral;
   const clientName = clientNameFromRecordWithOptionalClient(referral);
@@ -37,12 +28,8 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           alertText={`${clientName} has been accepted to ${opportunity.name}`}
           items={[
             {
-              title: 'Return to Opportunity Overview',
-              to: generateSafePath(ProjectDashboardRoutes.CE, { projectId }),
-            },
-            {
-              title: 'Go to My Dashboard',
-              to: generateSafePath(Routes.MY_DASHBOARD),
+              title: 'Go to HMIS Dashboard',
+              to: generateSafePath(Routes.USER_DASHBOARD),
             },
             ...(!!referral.targetEnrollment
               ? [
@@ -74,16 +61,17 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
             severity: 'info',
           }}
           items={[
+            ...(opportunityPath
+              ? [
+                  {
+                    title: 'Back to Opportunity',
+                    to: opportunityPath,
+                  },
+                ]
+              : []),
             {
-              title: 'Back to Opportunity',
-              to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-                projectId,
-                opportunityId,
-              }),
-            },
-            {
-              title: 'Go to My Dashboard',
-              to: generateSafePath(Routes.MY_DASHBOARD),
+              title: 'Go to HMIS Dashboard',
+              to: generateSafePath(Routes.USER_DASHBOARD),
             },
           ]}
         />

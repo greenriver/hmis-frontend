@@ -1,0 +1,5 @@
+fragment UserDashboardConfigFields on UserDashboardConfig {
+  id
+  showStaffAssignment
+  showReferrals
+}

@@ -19,6 +19,7 @@ export const useProjectDashboardNavItems = (
 
   const navItems: NavItem<ProjectAccessFieldsFragment>[] = useMemo(() => {
     if (!project) return [];
+
     const dataCollectionRoles = project.dataCollectionFeatures.map(
       (r) => r.role
     );
@@ -103,6 +104,12 @@ export const useProjectDashboardNavItems = (
             id: 'coordinated-entry',
             title: 'Coordinated Entry',
             path: ProjectDashboardRoutes.CE,
+            permissions: [
+              'canViewUnits',
+              'canViewReferrals',
+              'canViewOwnReferrals',
+            ],
+            permissionMode: 'any',
             hide: !canViewCoordinatedEntry,
           },
         ],
