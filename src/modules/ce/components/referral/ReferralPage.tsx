@@ -132,7 +132,8 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
           >
             <Box>
               <Typography variant='h3' component='h1'>
-                Referral for {clientNameFromRecordWithOptionalClient(referral)}
+                Referral for {clientNameFromRecordWithOptionalClient(referral)}{' '}
+                to {referral.targetProjectName}
               </Typography>
             </Box>
             <ReferralStatusChip status={referral.status} />

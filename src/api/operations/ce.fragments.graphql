@@ -140,6 +140,7 @@ fragment CeReferralFields on CeReferral {
   opportunity {
     ...CeOpportunitySummaryFields
   }
+  targetProjectName
   targetEnrollment {
     id
     client {

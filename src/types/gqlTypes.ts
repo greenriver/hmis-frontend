@@ -16381,6 +16381,7 @@ export type ClientCeReferralTableFieldsFragment = {
 
 export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
+  targetProjectName: string;
   id: string;
   status: CeReferralStatus;
   active: boolean;
@@ -18193,6 +18194,7 @@ export type SubmitCeReferralStepMutation = {
     } | null;
     referral?: {
       __typename?: 'CeReferral';
+      targetProjectName: string;
       id: string;
       status: CeReferralStatus;
       active: boolean;
@@ -18657,6 +18659,7 @@ export type GetCeReferralQuery = {
   __typename?: 'Query';
   ceReferral?: {
     __typename?: 'CeReferral';
+    targetProjectName: string;
     id: string;
     status: CeReferralStatus;
     active: boolean;
@@ -45594,6 +45597,7 @@ export const CeReferralFieldsFragmentDoc = gql`
     opportunity {
       ...CeOpportunitySummaryFields
     }
+    targetProjectName
     targetEnrollment {
       id
       client {
