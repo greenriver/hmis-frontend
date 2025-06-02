@@ -10,7 +10,13 @@ export const Routes = {
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
   CREATE_PROJECT: '/organizations/:organizationId/new-project',
   CREATE_ORGANIZATION: '/projects/new-organization',
-  MY_DASHBOARD: '/my-dashboard',
+  USER_DASHBOARD: '/dashboard',
+  MY_DASHBOARD: '/my-dashboard', // maintained for backwards compat
+
+  // "Floating" referrals:
+  REFERRAL: '/referrals/:referralId',
+  REFERRAL_STEPS: '/referrals/:referralId/tasks',
+  REFERRAL_STEP: '/referrals/:referralId/tasks/:stepId',
 } as const;
 
 const adminDashboardRoutes = {

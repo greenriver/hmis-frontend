@@ -24,8 +24,7 @@ fragment RootPermissions on QueryAccess {
   canViewClientAlerts
 
   # Application permissions:
-  canViewMyDashboard
-  canViewCoordinatedEntry
+  canViewCoordinatedEntry # TODO(7409) - stop resolving this permission once we remove all references
   canAdministrateCoordinatedEntry
 
   # Root Project permissions:

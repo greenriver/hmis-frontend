@@ -1,7 +1,8 @@
 import { Grid } from '@mui/material';
 import React from 'react';
-import MatchRuleGrid from '@/modules/ce/components/MatchRuleGrid';
-import OpportunityBanner from '@/modules/ce/components/OpportunityBanner';
+
+import MatchRuleGrid from '@/modules/ce/components/unit/MatchRuleGrid';
+import OpportunityBanner from '@/modules/ce/components/unit/OpportunityBanner';
 import { UnitDetailFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {

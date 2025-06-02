@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import BeginReferralButton from '@/modules/ce/components/BeginReferralButton';
+import BeginReferralButton from '@/modules/ce/components/unit/BeginReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   clientBriefName,

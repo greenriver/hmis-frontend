@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import ReferralStepCard from '@/modules/ce/components/ReferralStepCard';
+import ReferralStepCard from '@/modules/ce/components/referral/ReferralStepCard';
 import {
   CeOpportunityStatus,
   CeReferralStatus,

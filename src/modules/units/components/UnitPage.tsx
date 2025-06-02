@@ -5,7 +5,8 @@ import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import PrioritizedClientsTable from '@/modules/ce/components/PrioritizedClientsTable';
+
+import PrioritizedClientsTable from '@/modules/ce/components/unit/PrioritizedClientsTable';
 import UnitReferralStatus from '@/modules/ce/components/UnitReferralStatus';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import UnitOverview from '@/modules/units/components/UnitOverview';

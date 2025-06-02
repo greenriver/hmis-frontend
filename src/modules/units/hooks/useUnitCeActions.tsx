@@ -5,7 +5,7 @@ import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeOpportunityStatus,
   ProjectAllFieldsFragment,
-  UnitFieldsFragment,
+  UnitTableRowFieldsFragment,
   useMarkUnitsAvailableMutation,
   useMarkUnitsUnavailableMutation,
 } from '@/types/gqlTypes';
@@ -17,7 +17,7 @@ export const useUnitCeActions = ({
   project: ProjectAllFieldsFragment;
 }): {
   loading: boolean;
-  getCeActions: (unit: UnitFieldsFragment) => CommonMenuItem[];
+  getCeActions: (unit: UnitTableRowFieldsFragment) => CommonMenuItem[];
 } => {
   // TODO(7409) - instead of using the global permission, check project-level config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
@@ -35,7 +35,7 @@ export const useUnitCeActions = ({
   ] = useMarkUnitsUnavailableMutation();
 
   const getCeActions = useCallback(
-    (unit: UnitFieldsFragment) => {
+    (unit: UnitTableRowFieldsFragment) => {
       if (!canViewCoordinatedEntry) return [];
 
       const actions: CommonMenuItem[] = [];
@@ -71,7 +71,7 @@ export const useUnitCeActions = ({
           });
         } else {
           actions.push({
-            title: 'Mark as Available for Referrals', // hide if unit doesnt belong to a group
+            title: 'Mark as Available for Referrals',
             key: 'markAvailable',
             ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
             onClick: () => {

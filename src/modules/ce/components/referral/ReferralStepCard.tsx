@@ -3,26 +3,24 @@ import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
 import { GoToIcon } from '@/components/elements/SemanticIcons';
-import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
-import ReferralStepStatusChip from '@/modules/ce/components/ReferralStepStatusChip';
-import StartCeReferralStepButton from '@/modules/ce/components/StartCeReferralStepButton';
+import ReferralStepAssignee from '@/modules/ce/components/referral/ReferralStepAssignee';
+import ReferralStepStatusChip from '@/modules/ce/components/referral/ReferralStepStatusChip';
+import StartCeReferralStepButton from '@/modules/ce/components/referral/StartCeReferralStepButton';
 import { lastUpdatedBy } from '@/modules/hmis/hmisUtil';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
   CeReferralStepStatus,
   CeReferralStepSummaryFieldsFragment,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   step: CeReferralStepSummaryFieldsFragment;
   referral: CeReferralFieldsFragment;
+  path: string;
 }
 
-const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
+const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
   const { name, status, updatedBy, updatedAt } = step;
-  const projectId = referral.opportunity.projectId;
 
   const action = useMemo(() => {
     if (status === CeReferralStepStatus.Available) {
@@ -30,7 +28,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
         <StartCeReferralStepButton
           step={step}
           referralId={referral.id}
-          projectId={projectId}
+          path={path}
         >
           Start
         </StartCeReferralStepButton>
@@ -38,11 +36,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
     }
 
     const buttonProps: ButtonLinkProps = {
-      to: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
-        projectId,
-        referralId: referral.id,
-        stepId: step.stepId || '',
-      }),
+      to: path,
       variant: 'text',
       endIcon: <GoToIcon />,
     };
@@ -66,7 +60,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral }) => {
         </ButtonLink>
       );
     }
-  }, [name, projectId, referral.id, status, step]);
+  }, [name, path, referral.id, status, step]);
 
   const locked = step.status === CeReferralStepStatus.Unavailable;
   const paperSx = useMemo(() => {

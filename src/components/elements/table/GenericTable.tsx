@@ -427,6 +427,7 @@ const GenericTable = <T extends { id: string }>({
             py: 4,
             textAlign: 'center',
             typography: 'body1',
+            border: 'none',
           }}
         >
           {noData}

@@ -3,8 +3,8 @@ import CommonTabs from '@/components/elements/CommonTabs';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import CreateOpportunityButton from '@/modules/ce/components/CreateOpportunityButton';
-import ProjectOpportunitiesTable from '@/modules/ce/components/ProjectOpportunitiesTable';
-import ProjectReferralsTable from '@/modules/ce/components/ProjectReferralsTable';
+import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOpportunitiesTable';
+import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
 const ProjectCePage: React.FC = () => {

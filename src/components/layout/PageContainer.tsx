@@ -1,15 +1,17 @@
-import { Typography } from '@mui/material';
-import { Box, Container, Stack } from '@mui/system';
+import { Container, Stack } from '@mui/system';
 import { ReactNode } from 'react';
+import PageTitle from '@/components/layout/PageTitle';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 const PageContainer = ({
   children,
   title,
+  overlineText,
   actions,
 }: {
   children: ReactNode;
   title: ReactNode;
+  overlineText?: string;
   actions?: ReactNode;
 }) => {
   const isTiny = useIsMobile('sm');
@@ -17,19 +19,20 @@ const PageContainer = ({
     <Container
       component='main'
       maxWidth='lg'
-      sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: 4, pb: 6 }}
+      sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: overlineText ? 1 : 4, pb: 6 }}
     >
       <Stack
         spacing={2}
         direction={isTiny ? 'column' : 'row'}
         justifyContent='space-between'
-        sx={{ mb: { xs: actions ? 2 : 0, sm: 4 } }}
+        sx={{ mb: { xs: 2, sm: 4 } }}
         alignItems={isTiny ? 'left' : 'center'}
       >
-        <Typography component='h1' variant='h3'>
-          {title}
-        </Typography>
-        <Box sx={{ width: 'fit-content' }}>{actions}</Box>
+        <PageTitle
+          overlineText={overlineText}
+          title={title}
+          actions={actions}
+        />
       </Stack>
 
       {children}

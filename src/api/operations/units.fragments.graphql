@@ -41,6 +41,7 @@ fragment UnitDetailFields on Unit {
   id
   name
   unitSize
+  acceptingCeReferrals
   unitType {
     ...UnitTypeFields
   }

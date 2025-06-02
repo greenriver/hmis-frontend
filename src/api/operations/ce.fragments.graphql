@@ -89,11 +89,24 @@ fragment CeReferralTableFields on CeReferral {
   }
 }
 
-fragment CeReferralAdminFields on CeReferral {
-  ...CeReferralTableFields
+fragment CeReferralWithProjectFields on CeReferral {
+  id
   targetProjectId
   targetProjectName
   targetProjectType
+}
+
+fragment CeReferralWithProjectAccessFields on CeReferral {
+  id
+  ...CeReferralWithProjectFields
+  access {
+    canViewTargetProject
+  }
+}
+
+fragment CeReferralAdminFields on CeReferral {
+  ...CeReferralTableFields
+  ...CeReferralWithProjectFields
   targetEnrollment {
     id
   }
@@ -122,9 +135,7 @@ fragment CeReferralAdminFields on CeReferral {
 
 fragment ClientCeReferralTableFields on CeReferral {
   ...CeReferralTableFields
-  targetProjectId
-  targetProjectName
-  targetProjectType
+  ...CeReferralWithProjectAccessFields
 }
 
 fragment CeReferralFields on CeReferral {
@@ -187,4 +198,28 @@ fragment CeReferralStepFields on CeReferralStep {
     ...FormDefinitionFields
   }
   submittedValues
+}
+
+# used for resolving assigned steps on the User Dashboard
+fragment UserCeReferralStepFields on CeReferralStep {
+  id
+  stepId
+  name
+  availableAt
+  status
+  assignees {
+    id
+    name
+  }
+  referral {
+    id
+    ...CeReferralWithProjectAccessFields
+    opportunity {
+      id
+    }
+    clientId
+    client {
+      ...ClientName
+    }
+  }
 }
