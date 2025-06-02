@@ -7,8 +7,8 @@ interface Props {
 }
 
 const occupiedColor = 'primary.dark';
-// const inProgressColor = 'primary.main';
-const vacantColor = 'primary.light';
+const inProgressColor = 'primary.main';
+const vacantColor = 'primary.200';
 
 export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
   const occupied = unitType.capacity - unitType.availability;
@@ -38,7 +38,7 @@ export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
       >
         <Box
           sx={{
-            backgroundColor: 'primary.dark',
+            backgroundColor: occupiedColor,
             width: `${(occupied / total) * 100}%`,
           }}
         >
@@ -48,7 +48,7 @@ export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
         </Box>
         <Box
           sx={{
-            backgroundColor: 'primary.main',
+            backgroundColor: inProgressColor,
             width: `${(referralInProgress / total) * 100}%`,
           }}
         >
@@ -58,7 +58,7 @@ export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
         </Box>
         <Box
           sx={{
-            backgroundColor: 'primary.light',
+            backgroundColor: vacantColor,
             width: `${(vacant / total) * 100}%`,
           }}
         >
