@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import ReferralStepCard from '@/modules/ce/components/referral/ReferralStepCard';
 import {
   CeOpportunityStatus,
+  CeReferralFieldsFragment,
   CeReferralStatus,
   CeReferralStepStatus,
 } from '@/types/gqlTypes';
@@ -29,9 +30,10 @@ const mockStep = {
   },
 };
 
-const mockReferral = {
+const mockReferral: CeReferralFieldsFragment = {
   id: '1',
   status: CeReferralStatus.InProgress,
+  targetProjectName: 'My Project',
   active: true,
   clientId: '1',
   opportunity: {

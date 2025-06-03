@@ -1,12 +1,8 @@
-import { Divider, Paper, Stack, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
-import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
-import { GoToIcon } from '@/components/elements/SemanticIcons';
-import ReferralStepAssignee from '@/modules/ce/components/referral/ReferralStepAssignee';
-import ReferralStepStatusChip from '@/modules/ce/components/referral/ReferralStepStatusChip';
+import ReferralStepDetails from './ReferralStepDetails';
+import ButtonLink from '@/components/elements/ButtonLink';
 import StartCeReferralStepButton from '@/modules/ce/components/referral/StartCeReferralStepButton';
-import { lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import {
   CeReferralFieldsFragment,
   CeReferralStepStatus,
@@ -20,7 +16,7 @@ interface Props {
 }
 
 const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
-  const { name, status, updatedBy, updatedAt } = step;
+  const { name, status } = step;
 
   const action = useMemo(() => {
     if (status === CeReferralStepStatus.Available) {
@@ -35,15 +31,17 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
       );
     }
 
-    const buttonProps: ButtonLinkProps = {
-      to: path,
-      variant: 'text',
-      endIcon: <GoToIcon />,
-    };
+    if (status === CeReferralStepStatus.Unavailable) {
+      return <Button disabled>Start</Button>;
+    }
 
     if (status === CeReferralStepStatus.InProgress) {
       return (
-        <ButtonLink aria-label={`View step: ${name}`} {...buttonProps}>
+        <ButtonLink
+          variant='contained'
+          to={path}
+          aria-label={`View step: ${name}`}
+        >
           View
         </ButtonLink>
       );
@@ -53,7 +51,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
       return (
         <ButtonLink
           aria-label={`View step: ${name}`}
-          {...buttonProps}
+          to={path}
           color='grayscale'
         >
           View
@@ -62,44 +60,22 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
     }
   }, [name, path, referral.id, status, step]);
 
-  const locked = step.status === CeReferralStepStatus.Unavailable;
-  const paperSx = useMemo(() => {
-    if (locked)
-      return {
-        color: 'grayscale.main',
-      };
-  }, [locked]);
-
   return (
-    <Paper sx={paperSx}>
-      <Stack
-        sx={{ px: 2, py: 1 }}
-        direction='row'
-        alignItems='center'
-        justifyContent='space-between'
-      >
-        <ReferralStepAssignee step={step} />
-        {action}
+    <Paper
+      sx={{
+        p: 3,
+        ...(status === CeReferralStepStatus.Unavailable
+          ? { color: 'grayscale.main' }
+          : {}),
+      }}
+    >
+      <Stack gap={1}>
+        <Typography variant='body1' fontWeight='bold' component='h3'>
+          {name}
+        </Typography>
+        <ReferralStepDetails step={step} />
+        <Box sx={{ alignSelf: 'start' }}>{action}</Box>
       </Stack>
-      <Divider orientation='horizontal' flexItem />
-      <Box p={2}>
-        <Stack gap={1}>
-          <ReferralStepStatusChip status={status} sx={{ alignSelf: 'start' }} />
-          <Typography variant='h5' component='h3'>
-            {name}
-          </Typography>
-          {!!updatedAt && (
-            <Typography variant='caption' color='grayscale.main'>
-              Last updated{' '}
-              {lastUpdatedBy({
-                dateUpdated: updatedAt,
-                user: updatedBy,
-                relativeDate: true,
-              })}
-            </Typography>
-          )}
-        </Stack>
-      </Box>
     </Paper>
   );
 };

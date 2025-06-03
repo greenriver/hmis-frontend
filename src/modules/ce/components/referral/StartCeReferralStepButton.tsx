@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingButton from '@/components/elements/LoadingButton';
-import { GoToIcon } from '@/components/elements/SemanticIcons';
 import { cache } from '@/providers/apolloClient';
 import {
   CeReferralStepStatus,
@@ -63,8 +62,6 @@ const StartCeReferralStepButton: React.FC<Props> = ({
   return (
     <LoadingButton
       loading={loading}
-      variant='text'
-      endIcon={<GoToIcon />}
       onClick={() => startStepMutation()}
       aria-label={`Start step: ${step.name}`}
     >

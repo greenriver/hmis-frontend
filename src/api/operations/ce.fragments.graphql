@@ -175,11 +175,8 @@ fragment CeReferralStepSummaryFields on CeReferralStep {
     id
     name
   }
+  availableAt
   updatedAt
-  updatedBy {
-    id
-    name
-  }
   access {
     canPerformStep
   }
