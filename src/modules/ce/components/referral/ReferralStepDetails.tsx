@@ -4,6 +4,7 @@ import {
   AssigneesIcon,
   StepCalendarIcon,
 } from '@/components/elements/SemanticIcons';
+import useAuth from '@/modules/auth/hooks/useAuth';
 import ReferralStepDatum from '@/modules/ce/components/referral/ReferralStepDatum';
 import {
   formatRelativeDate,
@@ -19,6 +20,7 @@ const ReferralStepDetails: React.FC<{
   step: CeReferralStepSummaryFieldsFragment;
 }> = ({ step }) => {
   const { status, availableAt, updatedAt, assignees } = step;
+  const { user: currentUser } = useAuth();
 
   const dateText = useMemo(() => {
     if (status === CeReferralStepStatus.Unavailable) return;
@@ -32,8 +34,12 @@ const ReferralStepDetails: React.FC<{
 
   const assigneeText = useMemo(() => {
     if (assignees.length === 0) return;
-    return `Assigned to ${stringifyArray(assignees.map(({ name }) => name))}`;
-  }, [assignees]);
+
+    const assigneeNames = assignees.map(({ id, name }) =>
+      id === currentUser?.id ? 'you' : name
+    );
+    return `Assigned to ${stringifyArray(assigneeNames)}`;
+  }, [assignees, currentUser?.id]);
 
   return (
     <Box>

@@ -55,6 +55,7 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
   if (status === CeReferralStepStatus.Available && step.access.canPerformStep) {
     return (
       <LoadingButton
+        sx={{ width: '116px' }}
         loading={loading}
         onClick={() => startStepMutation()}
         aria-label={`Start step: ${name}`}
@@ -65,20 +66,28 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
   }
 
   if (status === CeReferralStepStatus.InProgress) {
+    // Someone has already kicked off the "Start Step" mutation, but we don't save in-progress form values,
+    // so from the user's perspective, whether or not the step is "started" isn't very meaningful.
     return (
       <ButtonLink
+        sx={{ width: '116px' }}
         variant='contained'
         to={path}
-        aria-label={`View step: ${name}`}
+        aria-label={`Start step: ${name}`}
       >
-        View
+        Start
       </ButtonLink>
     );
   }
 
   if (status === CeReferralStepStatus.Completed) {
     return (
-      <ButtonLink aria-label={`View step: ${name}`} to={path} color='grayscale'>
+      <ButtonLink
+        sx={{ width: '116px' }}
+        aria-label={`View step: ${name}`}
+        to={path}
+        color='grayscale'
+      >
         View
       </ButtonLink>
     );

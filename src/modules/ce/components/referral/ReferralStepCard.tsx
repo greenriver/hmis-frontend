@@ -20,7 +20,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
   return (
     <Paper
       sx={{
-        p: 3,
+        p: 2,
         ...(status === CeReferralStepStatus.Unavailable
           ? { color: 'grayscale.main' }
           : {}),
