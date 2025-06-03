@@ -1,5 +1,7 @@
-import React, { ReactNode } from 'react';
+import { Button } from '@mui/material';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import ButtonLink from '@/components/elements/ButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
 import { cache } from '@/providers/apolloClient';
 import {
@@ -13,15 +15,10 @@ interface Props {
   step: CeReferralStepSummaryFieldsFragment;
   referralId: string;
   path: string;
-  children: ReactNode;
 }
 
-const StartCeReferralStepButton: React.FC<Props> = ({
-  step,
-  referralId,
-  path,
-  children,
-}) => {
+const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
+  const { status, name } = step;
   const navigate = useNavigate();
 
   const [startStepMutation, { loading, error }] =
@@ -55,19 +52,40 @@ const StartCeReferralStepButton: React.FC<Props> = ({
 
   if (error) throw error;
 
-  if (step.status !== CeReferralStepStatus.Available) return;
+  if (status === CeReferralStepStatus.Available && step.access.canPerformStep) {
+    return (
+      <LoadingButton
+        loading={loading}
+        onClick={() => startStepMutation()}
+        aria-label={`Start step: ${name}`}
+      >
+        Start
+      </LoadingButton>
+    );
+  }
 
-  if (!step.access.canPerformStep) return;
+  if (status === CeReferralStepStatus.InProgress) {
+    return (
+      <ButtonLink
+        variant='contained'
+        to={path}
+        aria-label={`View step: ${name}`}
+      >
+        View
+      </ButtonLink>
+    );
+  }
 
-  return (
-    <LoadingButton
-      loading={loading}
-      onClick={() => startStepMutation()}
-      aria-label={`Start step: ${step.name}`}
-    >
-      {children}
-    </LoadingButton>
-  );
+  if (status === CeReferralStepStatus.Completed) {
+    return (
+      <ButtonLink aria-label={`View step: ${name}`} to={path} color='grayscale'>
+        View
+      </ButtonLink>
+    );
+  }
+
+  // Either the step is unavailable, or the current user does not have permission to start it
+  return <Button disabled>Start</Button>;
 };
 
-export default StartCeReferralStepButton;
+export default ReferralStepAction;
