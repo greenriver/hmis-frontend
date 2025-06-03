@@ -19,11 +19,21 @@ const mockStep = {
   name: 'A Test Step',
   status: CeReferralStepStatus.InProgress,
   swimlane: 'Case Managers',
-  assignees: [],
+  assignees: [
+    {
+      id: '1',
+      name: 'Test User',
+    },
+    {
+      id: '2',
+      name: 'Another User',
+    },
+  ],
   updatedBy: {
     id: '1',
     name: 'Test User',
   },
+  availableAt: '2023-10-01T12:00:00Z',
   updatedAt: '2023-10-01T12:00:00Z',
   access: {
     canPerformStep: true,
