@@ -139,7 +139,7 @@ export {
   TimelapseRounded as InProgressIcon,
   InfoOutlined as InfoIcon,
   ContentPasteOutlined as AssigneesIcon,
-  DateRangeIcon as DaysAvailableIcon,
+  DateRangeIcon as StepCalendarIcon,
   HistoryRounded as ActivityIcon,
   StickyNote2Rounded as NotesIcon,
 };

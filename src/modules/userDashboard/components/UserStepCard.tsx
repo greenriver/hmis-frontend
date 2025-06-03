@@ -1,14 +1,13 @@
-import { SvgIconComponent } from '@mui/icons-material';
-import { Box, Card, Link, SxProps, Typography } from '@mui/material';
+import { Box, Card, Link, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import React, { ReactNode, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   AssigneesIcon,
   ClientIcon,
-  DaysAvailableIcon,
   ProjectIcon,
+  StepCalendarIcon,
 } from '@/components/elements/SemanticIcons';
-import { useIsMobile } from '@/hooks/useIsMobile';
+import ReferralStepDatum from '@/modules/ce/components/referral/ReferralStepDatum';
 import { getReferralLink } from '@/modules/ce/util';
 import {
   clientNameFromRecordWithOptionalClient,
@@ -17,37 +16,6 @@ import {
   stringifyArray,
 } from '@/modules/hmis/hmisUtil';
 import { UserCeReferralStepFieldsFragment } from '@/types/gqlTypes';
-
-// internal component for common styles in the caption-text info under the step title
-const StepCardInfo: React.FC<{
-  children: ReactNode;
-  sx?: SxProps;
-  Icon?: SvgIconComponent;
-}> = ({ children, sx, Icon }) => {
-  const isMobile = useIsMobile('sm');
-
-  return (
-    <Typography
-      variant='caption'
-      color='text.secondary'
-      component={isMobile ? 'p' : 'span'}
-      sx={sx}
-    >
-      <Box
-        component='span'
-        sx={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 1,
-          mr: isMobile ? 0 : 2,
-        }}
-      >
-        {Icon && <Icon fontSize='inherit' color='inherit' />}
-        {children}
-      </Box>
-    </Typography>
-  );
-};
 
 interface Props {
   step: UserCeReferralStepFieldsFragment;
@@ -125,29 +93,29 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
         </Typography>
 
         <Box>
-          <StepCardInfo sx={{ fontWeight: 700 }}>
+          <ReferralStepDatum sx={{ fontWeight: 700 }}>
             {startCase(step.status.replace('_', ' '))}
-          </StepCardInfo>
+          </ReferralStepDatum>
 
-          <StepCardInfo Icon={DaysAvailableIcon}>
+          <ReferralStepDatum Icon={StepCalendarIcon}>
             Assigned {availableSince}
-          </StepCardInfo>
+          </ReferralStepDatum>
 
           {/* only show assignees if there are any besides the current user */}
           {assignees.length > 1 && (
-            <StepCardInfo Icon={AssigneesIcon}>
+            <ReferralStepDatum Icon={AssigneesIcon}>
               Assigned to {truncatedAssignees}
-            </StepCardInfo>
+            </ReferralStepDatum>
           )}
         </Box>
         <Box>
-          <StepCardInfo Icon={ProjectIcon}>
+          <ReferralStepDatum Icon={ProjectIcon}>
             {step.referral.targetProjectName}
-          </StepCardInfo>
+          </ReferralStepDatum>
 
-          <StepCardInfo Icon={ClientIcon}>
+          <ReferralStepDatum Icon={ClientIcon}>
             {clientNameFromRecordWithOptionalClient(step.referral)}
-          </StepCardInfo>
+          </ReferralStepDatum>
         </Box>
       </Box>
     </Card>
