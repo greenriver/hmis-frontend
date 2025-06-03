@@ -126,6 +126,7 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
           <Stack
             sx={{ py: 2 }}
             flex={1}
+            gap={2}
             direction='row'
             alignItems='center'
             justifyContent='space-between'
