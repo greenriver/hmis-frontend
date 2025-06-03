@@ -27,7 +27,7 @@ const ReferralStepDetails: React.FC<{
       if (date) return `Completed ${formatRelativeDate(date)}`;
     }
     const date = parseHmisDateString(availableAt);
-    if (date) return `Available since ${formatRelativeDate(date)}`;
+    if (date) return `Available ${formatRelativeDate(date)}`;
   }, [availableAt, updatedAt, status]);
 
   const assigneeText = useMemo(() => {
