@@ -4,7 +4,8 @@ import {
   CommonDetailGridContainer,
   CommonDetailGridItem,
 } from '@/components/elements/CommonDetailGrid';
-import { CeMatchRuleFieldsFragment } from '@/types/gqlTypes';
+import { HmisEnums } from '@/types/gqlEnums';
+import { CeMatchRuleFieldsFragment, CeMatchRuleOwner } from '@/types/gqlTypes';
 
 interface Props {
   title: string;
@@ -19,9 +20,9 @@ const MatchRuleGrid: React.FC<Props> = ({ title, rules }) => {
       <CommonDetailGridContainer>
         {rules.map((rule) => (
           <CommonDetailGridItem key={rule.id} label={rule.name}>
-            {rule.ownerType === 'Unit'
+            {rule.ownerType === CeMatchRuleOwner.Unit
               ? 'Applies to this Unit'
-              : `Inherited from ${rule.ownerType}`}
+              : `Inherited from ${HmisEnums.CeMatchRuleOwner[rule.ownerType]}`}
           </CommonDetailGridItem>
         ))}
       </CommonDetailGridContainer>

@@ -148,6 +148,7 @@ fragment CeReferralFields on CeReferral {
   opportunity {
     ...CeOpportunitySummaryFields
   }
+  targetProjectName
   targetEnrollment {
     id
     client {
@@ -182,11 +183,8 @@ fragment CeReferralStepSummaryFields on CeReferralStep {
     id
     name
   }
+  availableAt
   updatedAt
-  updatedBy {
-    id
-    name
-  }
   access {
     canPerformStep
   }

@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react';
+import { Button } from '@mui/material';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import ButtonLink from '@/components/elements/ButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
-import { GoToIcon } from '@/components/elements/SemanticIcons';
 import { cache } from '@/providers/apolloClient';
 import {
   CeReferralStepStatus,
@@ -14,15 +15,10 @@ interface Props {
   step: CeReferralStepSummaryFieldsFragment;
   referralId: string;
   path: string;
-  children: ReactNode;
 }
 
-const StartCeReferralStepButton: React.FC<Props> = ({
-  step,
-  referralId,
-  path,
-  children,
-}) => {
+const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
+  const { status, name } = step;
   const navigate = useNavigate();
 
   const [startStepMutation, { loading, error }] =
@@ -56,21 +52,49 @@ const StartCeReferralStepButton: React.FC<Props> = ({
 
   if (error) throw error;
 
-  if (step.status !== CeReferralStepStatus.Available) return;
+  if (status === CeReferralStepStatus.Available && step.access.canPerformStep) {
+    return (
+      <LoadingButton
+        sx={{ width: '116px' }}
+        loading={loading}
+        onClick={() => startStepMutation()}
+        aria-label={`Start step: ${name}`}
+      >
+        Start
+      </LoadingButton>
+    );
+  }
 
-  if (!step.access.canPerformStep) return;
+  if (status === CeReferralStepStatus.InProgress) {
+    // Someone has already kicked off the "Start Step" mutation, but we don't save in-progress form values,
+    // so from the user's perspective, whether or not the step is "started" isn't very meaningful.
+    return (
+      <ButtonLink
+        sx={{ width: '116px' }}
+        variant='contained'
+        to={path}
+        aria-label={`Start step: ${name}`}
+      >
+        Start
+      </ButtonLink>
+    );
+  }
 
-  return (
-    <LoadingButton
-      loading={loading}
-      variant='text'
-      endIcon={<GoToIcon />}
-      onClick={() => startStepMutation()}
-      aria-label={`Start step: ${step.name}`}
-    >
-      {children}
-    </LoadingButton>
-  );
+  if (status === CeReferralStepStatus.Completed) {
+    return (
+      <ButtonLink
+        sx={{ width: '116px' }}
+        aria-label={`View step: ${name}`}
+        to={path}
+        color='grayscale'
+      >
+        View
+      </ButtonLink>
+    );
+  }
+
+  // Either the step is unavailable, or the current user does not have permission to start it
+  return <Button disabled>Start</Button>;
 };
 
-export default StartCeReferralStepButton;
+export default ReferralStepAction;

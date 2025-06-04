@@ -591,10 +591,23 @@ export type CeMatchRule = {
    * Rule applies to projects within this related entity (eg a Data Source,
    * Project, Organization), possibly limited by project type or funder
    */
-  ownerType: Scalars['String']['output'];
+  ownerType: CeMatchRuleOwner;
   /** Rule applicability is limited to projects with these types */
   projectTypes: Array<ProjectType>;
 };
+
+export enum CeMatchRuleOwner {
+  /** Data Source */
+  DataSource = 'DATA_SOURCE',
+  /** Organization */
+  Organization = 'ORGANIZATION',
+  /** Project */
+  Project = 'PROJECT',
+  /** Unit */
+  Unit = 'UNIT',
+  /** Unit Group */
+  UnitGroup = 'UNIT_GROUP',
+}
 
 export type CeOpportunitiesPaginated = {
   __typename?: 'CeOpportunitiesPaginated';
@@ -8008,7 +8021,7 @@ export enum UnitFilterOptionStatus {
 
 export type UnitFilterOptions = {
   occupancyStatus?: InputMaybe<UnitOccupancyStatus>;
-  /** @deprecated Use `occupancy_status` instead. This will be removed in a future version. */
+  /** @deprecated Use `occupancyStatus` instead */
   status?: InputMaybe<Array<UnitFilterOptionStatus>>;
   unitGroup?: InputMaybe<Array<Scalars['ID']['input']>>;
   unitType?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -16255,7 +16268,7 @@ export type CeOpportunityFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: string;
+    ownerType: CeMatchRuleOwner;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -16264,7 +16277,7 @@ export type CeOpportunityFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: string;
+    ownerType: CeMatchRuleOwner;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -16304,7 +16317,7 @@ export type CeMatchRuleFieldsFragment = {
   __typename?: 'CeMatchRule';
   id: string;
   name: string;
-  ownerType: string;
+  ownerType: CeMatchRuleOwner;
   expression: string;
   projectTypes: Array<ProjectType>;
   funders?: Array<FundingSource> | null;
@@ -16483,6 +16496,7 @@ export type ClientCeReferralTableFieldsFragment = {
 export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
   workflowTemplateName?: string | null;
+  targetProjectName: string;
   id: string;
   status: CeReferralStatus;
   active: boolean;
@@ -16494,17 +16508,13 @@ export type CeReferralFieldsFragment = {
     name: string;
     status: CeReferralStepStatus;
     swimlane: string;
+    availableAt?: string | null;
     updatedAt?: string | null;
     assignees: Array<{
       __typename?: 'ApplicationUser';
       id: string;
       name: string;
     }>;
-    updatedBy?: {
-      __typename?: 'ApplicationUser';
-      id: string;
-      name: string;
-    } | null;
     access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   }>;
   opportunity: {
@@ -16577,17 +16587,13 @@ export type CeReferralStepSummaryFieldsFragment = {
   name: string;
   status: CeReferralStepStatus;
   swimlane: string;
+  availableAt?: string | null;
   updatedAt?: string | null;
   assignees: Array<{
     __typename?: 'ApplicationUser';
     id: string;
     name: string;
   }>;
-  updatedBy?: {
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  } | null;
   access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
@@ -16599,6 +16605,7 @@ export type CeReferralStepFieldsFragment = {
   name: string;
   status: CeReferralStepStatus;
   swimlane: string;
+  availableAt?: string | null;
   updatedAt?: string | null;
   formDefinition: {
     __typename?: 'FormDefinition';
@@ -17115,11 +17122,6 @@ export type CeReferralStepFieldsFragment = {
     id: string;
     name: string;
   }>;
-  updatedBy?: {
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  } | null;
   access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
@@ -17224,6 +17226,7 @@ export type StartCeReferralStepMutation = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
+      availableAt?: string | null;
       updatedAt?: string | null;
       formDefinition: {
         __typename?: 'FormDefinition';
@@ -17740,11 +17743,6 @@ export type StartCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
-      updatedBy?: {
-        __typename?: 'ApplicationUser';
-        id: string;
-        name: string;
-      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     };
   } | null;
@@ -17770,6 +17768,7 @@ export type SubmitCeReferralStepMutation = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
+      availableAt?: string | null;
       updatedAt?: string | null;
       formDefinition: {
         __typename?: 'FormDefinition';
@@ -18286,16 +18285,12 @@ export type SubmitCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
-      updatedBy?: {
-        __typename?: 'ApplicationUser';
-        id: string;
-        name: string;
-      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     } | null;
     referral?: {
       __typename?: 'CeReferral';
       workflowTemplateName?: string | null;
+      targetProjectName: string;
       id: string;
       status: CeReferralStatus;
       active: boolean;
@@ -18329,7 +18324,7 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'CeMatchRule';
           id: string;
           name: string;
-          ownerType: string;
+          ownerType: CeMatchRuleOwner;
           expression: string;
           projectTypes: Array<ProjectType>;
           funders?: Array<FundingSource> | null;
@@ -18338,7 +18333,7 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'CeMatchRule';
           id: string;
           name: string;
-          ownerType: string;
+          ownerType: CeMatchRuleOwner;
           expression: string;
           projectTypes: Array<ProjectType>;
           funders?: Array<FundingSource> | null;
@@ -18357,17 +18352,13 @@ export type SubmitCeReferralStepMutation = {
         name: string;
         status: CeReferralStepStatus;
         swimlane: string;
+        availableAt?: string | null;
         updatedAt?: string | null;
         assignees: Array<{
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
         }>;
-        updatedBy?: {
-          __typename?: 'ApplicationUser';
-          id: string;
-          name: string;
-        } | null;
         access: {
           __typename?: 'CeReferralStepAccess';
           canPerformStep: boolean;
@@ -18577,17 +18568,13 @@ export type AssignParticipantsMutation = {
         name: string;
         status: CeReferralStepStatus;
         swimlane: string;
+        availableAt?: string | null;
         updatedAt?: string | null;
         assignees: Array<{
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
         }>;
-        updatedBy?: {
-          __typename?: 'ApplicationUser';
-          id: string;
-          name: string;
-        } | null;
         access: {
           __typename?: 'CeReferralStepAccess';
           canPerformStep: boolean;
@@ -18723,7 +18710,7 @@ export type GetCeOpportunityQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: string;
+      ownerType: CeMatchRuleOwner;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -18732,7 +18719,7 @@ export type GetCeOpportunityQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: string;
+      ownerType: CeMatchRuleOwner;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -18785,6 +18772,7 @@ export type GetCeReferralQuery = {
   ceReferral?: {
     __typename?: 'CeReferral';
     workflowTemplateName?: string | null;
+    targetProjectName: string;
     id: string;
     status: CeReferralStatus;
     active: boolean;
@@ -18796,17 +18784,13 @@ export type GetCeReferralQuery = {
       name: string;
       status: CeReferralStepStatus;
       swimlane: string;
+      availableAt?: string | null;
       updatedAt?: string | null;
       assignees: Array<{
         __typename?: 'ApplicationUser';
         id: string;
         name: string;
       }>;
-      updatedBy?: {
-        __typename?: 'ApplicationUser';
-        id: string;
-        name: string;
-      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     }>;
     opportunity: {
@@ -18861,6 +18845,7 @@ export type GetCeReferralStepQuery = {
     name: string;
     status: CeReferralStepStatus;
     swimlane: string;
+    availableAt?: string | null;
     updatedAt?: string | null;
     formDefinition: {
       __typename?: 'FormDefinition';
@@ -19377,11 +19362,6 @@ export type GetCeReferralStepQuery = {
       id: string;
       name: string;
     }>;
-    updatedBy?: {
-      __typename?: 'ApplicationUser';
-      id: string;
-      name: string;
-    } | null;
     access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   } | null;
 };
@@ -44148,7 +44128,7 @@ export type UnitDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: string;
+    ownerType: CeMatchRuleOwner;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -44157,7 +44137,7 @@ export type UnitDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: string;
+    ownerType: CeMatchRuleOwner;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -44212,7 +44192,7 @@ export type UnitDetailFieldsFragment = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: string;
+      ownerType: CeMatchRuleOwner;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -44221,7 +44201,7 @@ export type UnitDetailFieldsFragment = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: string;
+      ownerType: CeMatchRuleOwner;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -44296,7 +44276,7 @@ export type UnitGroupDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: string;
+    ownerType: CeMatchRuleOwner;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -44305,7 +44285,7 @@ export type UnitGroupDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: string;
+    ownerType: CeMatchRuleOwner;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -44459,7 +44439,7 @@ export type GetUnitGroupQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: string;
+      ownerType: CeMatchRuleOwner;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -44468,7 +44448,7 @@ export type GetUnitGroupQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: string;
+      ownerType: CeMatchRuleOwner;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -44510,7 +44490,7 @@ export type GetUnitQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: string;
+      ownerType: CeMatchRuleOwner;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -44519,7 +44499,7 @@ export type GetUnitQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: string;
+      ownerType: CeMatchRuleOwner;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -44574,7 +44554,7 @@ export type GetUnitQuery = {
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
-        ownerType: string;
+        ownerType: CeMatchRuleOwner;
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
@@ -44583,7 +44563,7 @@ export type GetUnitQuery = {
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
-        ownerType: string;
+        ownerType: CeMatchRuleOwner;
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
@@ -46066,11 +46046,8 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
       id
       name
     }
+    availableAt
     updatedAt
-    updatedBy {
-      id
-      name
-    }
     access {
       canPerformStep
     }
@@ -46087,6 +46064,7 @@ export const CeReferralFieldsFragmentDoc = gql`
     opportunity {
       ...CeOpportunitySummaryFields
     }
+    targetProjectName
     targetEnrollment {
       id
       client {

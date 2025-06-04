@@ -3996,8 +3996,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "CeMatchRuleOwner",
                 "ofType": null
               }
             },
@@ -4032,6 +4032,48 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "CeMatchRuleOwner",
+        "description": null,
+        "isOneOf": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATA_SOURCE",
+            "description": "Data Source",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ORGANIZATION",
+            "description": "Organization",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECT",
+            "description": "Project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNIT",
+            "description": "Unit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNIT_GROUP",
+            "description": "Unit Group",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -51779,7 +51821,7 @@
             },
             "defaultValue": null,
             "isDeprecated": true,
-            "deprecationReason": "Use `occupancy_status` instead. This will be removed in a future version."
+            "deprecationReason": "Use `occupancyStatus` instead"
           },
           {
             "name": "unitGroup",

@@ -75,6 +75,13 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  CeMatchRuleOwner: {
+    DATA_SOURCE: 'Data Source',
+    ORGANIZATION: 'Organization',
+    PROJECT: 'Project',
+    UNIT: 'Unit',
+    UNIT_GROUP: 'Unit Group',
+  },
   CeOpportunitySortOption: {
     DATE_AVAILABLE_EARLIEST_FIRST: 'Date Available, earliest first',
     DATE_AVAILABLE_LATEST_FIRST: 'Date Available, latest first',
