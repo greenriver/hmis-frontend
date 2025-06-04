@@ -9,6 +9,7 @@ import { UNIT_COLUMNS } from '@/modules/units/components/ProjectUnitsTable';
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
 import { useUnitCeColumns } from '@/modules/units/hooks/useUnitCeColumns';
+import { evictUnitsQuery } from '@/modules/units/util';
 import {
   GetUnitsDocument,
   GetUnitsQuery,
@@ -30,7 +31,7 @@ const UnitManagementTable: React.FC<Props> = ({
 }) => {
   const { setUnitToDelete, renderSingleDeleteDialog, renderBulkDeleteButton } =
     useDeleteUnits({
-      projectId,
+      onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
     });
 
   // TODO(7409) - instead of using the global permission, check project-level config
@@ -85,7 +86,7 @@ const UnitManagementTable: React.FC<Props> = ({
         GetUnitsQueryVariables,
         UnitTableRowFieldsFragment
       >
-        defaultPageSize={10}
+        defaultPageSize={25}
         queryVariables={{
           id: projectId,
           includeCeFields: canViewCoordinatedEntry,

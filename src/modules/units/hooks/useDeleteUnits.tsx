@@ -5,18 +5,19 @@ import { useCallback, useMemo, useState } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import DeleteMutationConfirmationDialog from '@/modules/dataFetching/components/DeleteMutationConfirmationDialog';
-import { evictUnitsQuery } from '@/modules/units/util';
 import {
   DeleteUnitsDocument,
   DeleteUnitsMutation,
   DeleteUnitsMutationVariables,
 } from '@/types/gqlTypes';
 
+type Args = {
+  onSuccess?: () => void;
+};
+
 export const useDeleteUnits = ({
-  projectId,
-}: {
-  projectId: string;
-}): {
+  onSuccess,
+}: Args): {
   setUnitToDelete: (unitId: string) => void;
   renderSingleDeleteDialog: () => JSX.Element;
   renderBulkDeleteButton: (
@@ -29,9 +30,9 @@ export const useDeleteUnits = ({
       idPath: 'deleteUnits.unitIds[0]',
       recordName: 'unit',
       queryDocument: DeleteUnitsDocument,
-      onSuccess: () => evictUnitsQuery(projectId),
+      onSuccess,
     };
-  }, [projectId]);
+  }, [onSuccess]);
 
   const [unitToDelete, setUnitToDelete] = useState<string | undefined>(
     undefined
