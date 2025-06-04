@@ -77,7 +77,10 @@ const Units = () => {
       />
       <Stack gap={4}>
         {unitGroups.length > 0 && (
-          <Masonry columns={{ xs: 1, md: 2 }} spacing={2}>
+          <Masonry
+            columns={{ xs: 1, md: unitGroups.length === 1 ? 1 : 2 }}
+            spacing={2}
+          >
             {unitGroups.map((group) => (
               <UnitGroupCard
                 key={group.id}
