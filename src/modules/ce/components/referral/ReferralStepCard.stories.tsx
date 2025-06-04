@@ -50,7 +50,6 @@ const mockReferral: CeReferralFieldsFragment = {
     id: '1',
     projectId: '1',
     name: 'Unit 1',
-    categories: [],
     status: CeOpportunityStatus.Locked,
     active: true,
     projectName: 'Project ABC',
