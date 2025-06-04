@@ -82,6 +82,7 @@ const ProjectUnitsTable = ({ projectId }: { projectId: string }) => {
   const filters = useFilters({
     type: 'UnitFilterOptions',
     omit: ['status'], // deprecated filter option, remove
+    pickListArgs: { projectId },
   });
 
   const { project } = useProjectDashboardContext();
