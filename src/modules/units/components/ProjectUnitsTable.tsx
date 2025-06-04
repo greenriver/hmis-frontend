@@ -4,14 +4,19 @@ import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { useUnitCeColumns } from '@/modules/units/hooks/useUnitCeColumns';
-import { ProjectDashboardRoutes } from '@/routes/routes';
+import {
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+} from '@/routes/routes';
 import {
   GetUnitsDocument,
   GetUnitsQuery,
   GetUnitsQueryVariables,
+  RelationshipToHoH,
   UnitOccupancyStatus,
   UnitTableRowFieldsFragment,
 } from '@/types/gqlTypes';
@@ -83,13 +88,15 @@ const ProjectUnitsTable = ({ projectId }: { projectId: string }) => {
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      if (!unit.unitGroup) return [];
+      const actions = [];
 
-      const label = project.access.canManageUnits
-        ? 'Manage Unit Group'
-        : 'View Unit Group';
-      return [
-        {
+      // Link to Unit Group
+      if (unit.unitGroup) {
+        const label = project.access.canManageUnits
+          ? 'Manage Unit Group'
+          : 'View Unit Group';
+
+        actions.push({
           title: label,
           key: 'viewGroup',
           ariaLabel: `${label} ${unit.unitGroup.name}`,
@@ -97,21 +104,41 @@ const ProjectUnitsTable = ({ projectId }: { projectId: string }) => {
             projectId: project.id,
             unitGroupId: unit.unitGroup.id,
           }),
-        },
-      ];
+        });
+      }
+
+      // If unit is occupied, link to hoh Enrollment
+      const occupant =
+        unit.occupants?.find(
+          (e) => e.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+        ) || unit.occupants?.[0];
+
+      if (occupant) {
+        actions.push({
+          title: 'View Occupant Enrollment',
+          key: 'viewEnrollment',
+          ariaLabel: `View Enrollment for ${clientBriefName(occupant.client)}`,
+          to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+            clientId: occupant.client.id,
+            enrollmentId: occupant.id,
+          }),
+        });
+      }
+
+      return actions;
     },
     [project.access.canManageUnits, project.id]
   );
 
   const rowLinkToUnit = useCallback(
-    (row: UnitTableRowFieldsFragment) => {
-      return generateSafePath(ProjectDashboardRoutes.UNIT, {
+    (row: UnitTableRowFieldsFragment) =>
+      generateSafePath(ProjectDashboardRoutes.UNIT, {
         projectId,
         unitId: row.id,
-      });
-    },
+      }),
     [projectId]
   );
+
   return (
     <>
       <GenericTableWithData<
