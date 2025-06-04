@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from 'react';
 import UnitOccupants from './UnitOccupants';
-import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -84,23 +83,24 @@ const ProjectUnitsTable = ({ projectId }: { projectId: string }) => {
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      const actions: CommonMenuItem[] = [];
+      if (!unit.unitGroup) return [];
 
-      if (unit.unitGroup) {
-        actions.push({
-          title: 'View Unit Group',
+      const label = project.access.canManageUnits
+        ? 'Manage Unit Group'
+        : 'View Unit Group';
+      return [
+        {
+          title: label,
           key: 'viewGroup',
-          ariaLabel: `View Unit Group ${unit.unitGroup.name}`,
+          ariaLabel: `${label} ${unit.unitGroup.name}`,
           to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
             projectId: project.id,
             unitGroupId: unit.unitGroup.id,
           }),
-        });
-      }
-
-      return actions;
+        },
+      ];
     },
-    [project.id]
+    [project.access.canManageUnits, project.id]
   );
 
   const rowLinkToUnit = useCallback(
