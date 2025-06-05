@@ -5947,14 +5947,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canViewMyDashboard',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canViewOpenEnrollmentSummary',
         type: {
           kind: 'NON_NULL',
