@@ -1,18 +1,12 @@
 import { ApolloError } from '@apollo/client';
-import {
-  Alert,
-  AlertProps,
-  AlertTitle,
-  Box,
-  Button,
-  Snackbar,
-} from '@mui/material';
+import { Alert, AlertProps, AlertTitle, Box, Button } from '@mui/material';
 import isString from 'lodash-es/isString';
 
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 
 import { isServerError, UNKNOWN_ERROR_HEADING } from '../util';
 import ApolloErrorTrace from './ApolloErrorTrace';
+import CommonSnackbar from '@/components/elements/CommonSnackbar';
 
 const showDeveloperInfo = import.meta.env.MODE === 'development';
 
@@ -70,16 +64,12 @@ const SnackbarAlert: React.FC<BaseAlertProps> = ({
   }, [errors]);
 
   return (
-    <Snackbar
+    <CommonSnackbar
       open={counter > 0}
       onClose={handleClose}
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      sx={({ shadows }) => ({
-        boxShadow: shadows[4],
-        borderRadius: 2,
+      sx={{
         '.MuiAlertTitle-root': { fontWeight: 600 },
-        marginTop: '100px',
-      })}
+      }}
     >
       <BaseAlert
         errors={errors}
@@ -90,7 +80,7 @@ const SnackbarAlert: React.FC<BaseAlertProps> = ({
         }}
         {...props}
       />
-    </Snackbar>
+    </CommonSnackbar>
   );
 };
 

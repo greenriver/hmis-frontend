@@ -89,9 +89,12 @@ const EnrollmentDetails = ({
       );
     }
 
-    if (enrollment.client.hudChronic !== null) {
+    // HUD Chronic field is hidden if it is Null, which indicates that the user lacks access can_view_hud_chronic_status, or that the client has no open enrollments.
+    // HUD Chronic field is also hidden if the Enrollment is exited. (The Client may have a chronicity status from other open enrollments, but there is no need to display that on the Exited enrollment.)
+    if (enrollment.client.hudChronic !== null && !enrollment.exitDate) {
       content['HUD Chronic'] = yesNo(enrollment.client.hudChronic);
     }
+
     if (
       enrollment.sourceReferralPosting &&
       enrollment.project.access.canManageIncomingReferrals
@@ -118,9 +121,18 @@ const EnrollmentDetails = ({
       );
     }
 
-    const tooltips: Record<string, string> = {
-      'HUD Chronic':
-        'Whether this client is considered chronically homeless, as of today. Follows the HUD definition for Chronic at PIT.',
+    const tooltips: Record<string, ReactNode> = {
+      'HUD Chronic': (
+        <>
+          Indicates whether the client is currently considered chronically
+          homeless, based on the HUD definition for Chronic at Point-In-Time.
+          <br />
+          <br />A client qualifies as chronically homeless if they have a
+          disabling condition and have been continuously homeless for at least
+          12 months, or have experienced at least four episodes of homelessness
+          in the past three years, totaling 12 or more months.
+        </>
+      ),
     };
 
     return Object.entries(content).map(([id, value], index) => ({

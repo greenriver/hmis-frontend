@@ -42,6 +42,12 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
         path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
         permissions: ['canMergeClients'],
       },
+      {
+        id: 'coordinated-entry',
+        title: 'Coordinated Entry',
+        path: AdminDashboardRoutes.COORDINATED_ENTRY,
+        permissions: ['canViewCoordinatedEntry'], // TODO (#7506) - update permission
+      },
     ],
   },
   {

@@ -1,5 +1,6 @@
 import { Paper } from '@mui/material';
 import React from 'react';
+import CommonTruncatedList from '@/components/elements/CommonTruncatedList';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
@@ -60,14 +61,17 @@ export const REFERRAL_COLUMNS: Record<
     ) => <ReferralStatusChip status={referral.status} />,
     key: 'status',
   },
-  step: {
-    header: 'Current Step',
-    key: 'step',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => referral.currentStepName,
+  currentSteps: {
+    key: 'currentSteps',
+    header: 'Current Steps',
+    render: (referral) => {
+      if (!referral.currentSteps || referral.currentSteps.length === 0) return;
+      return (
+        <CommonTruncatedList
+          items={referral.currentSteps?.map((s) => s.name)}
+        />
+      );
+    },
   },
   referredBy: {
     header: 'Referred By',
@@ -86,7 +90,7 @@ const COLUMNS: ColumnDef<CeReferralTableFieldsFragment>[] = [
   REFERRAL_COLUMNS.opportunity,
   REFERRAL_COLUMNS.date,
   REFERRAL_COLUMNS.status,
-  REFERRAL_COLUMNS.step,
+  REFERRAL_COLUMNS.currentSteps,
 ];
 
 interface Props {}

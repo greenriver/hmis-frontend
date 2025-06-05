@@ -1,5 +1,4 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
@@ -8,9 +7,9 @@ import RouterLink from '@/components/elements/RouterLink';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import {
+  customDataElementValueAsString,
   parseAndFormatDate,
   parseAndFormatDateTime,
-  customDataElementValueAsString,
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -53,28 +52,24 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
     ['Assigned At', parseAndFormatDateTime(referralPosting.assignedDate)],
   ];
 
+  // If household was referred to a particular unit type, show it
+  if (referralPosting.unitType?.description) {
+    standardDetails.push(['Unit Type', referralPosting.unitType.description]);
+  }
+
   const externalDetails: Array<[string, ReactNode]> = useMemo(() => {
     if (!externalReferrals) return [];
 
     return [
-      ['Referral ID', referralPosting.referralIdentifier],
-      ['Unit Type', referralPosting?.unitType?.description],
-      ['Score', referralPosting.score],
+      ['Referral ID', referralPosting.referralIdentifier], // External system identifier
+      ['Score', referralPosting.score], // External system score
       [
-        'Chronically Homeless',
+        'Chronically Homeless', // External system chronicity status
         <YesNoDisplay
           booleanValue={referralPosting.chronic}
           fallback={<NotCollectedText variant='body2' />}
         />,
       ],
-      [
-        'HUD Chronically Homeless' as string,
-        !isNil(referralPosting.hudChronic) ? (
-          <YesNoDisplay booleanValue={referralPosting.hudChronic} />
-        ) : (
-          (undefined as ReactNode)
-        ),
-      ] as const,
       [
         'Needs Wheelchair Accessible Unit',
         <YesNoDisplay
@@ -82,7 +77,7 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
           fallback={<NotCollectedText variant='body2' />}
         />,
       ],
-    ].filter((ary): ary is [string, ReactNode] => !!ary[1]);
+    ];
   }, [externalReferrals, referralPosting]);
 
   const customDetails: Array<[string, ReactNode]> = useMemo(() => {
@@ -91,6 +86,7 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
       customDataElementValueAsString(element),
     ]);
   }, [referralPosting]);
+
   return (
     <Grid container columnSpacing={6} rowSpacing={2}>
       {[standardDetails, externalDetails, customDetails]
