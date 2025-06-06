@@ -33,7 +33,6 @@ const UnitBulkActionButton = ({
       buttonTooltip={tooltip}
       ButtonProps={{
         disabled: disabled,
-        variant: 'contained',
         sx: { width: '100%' },
       }}
       ConfirmationDialogProps={{

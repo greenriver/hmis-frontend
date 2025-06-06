@@ -71,7 +71,7 @@ const GenericMutationButton = <Mutation, MutationVariables>({
   return (
     <>
       <ButtonTooltipContainer title={buttonTooltip}>
-        <Button onClick={onClick} variant='outlined' {...ButtonProps}>
+        <Button onClick={onClick} {...ButtonProps}>
           {children}
         </Button>
       </ButtonTooltipContainer>
