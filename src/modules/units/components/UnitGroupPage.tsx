@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import UnitManagementTable from './UnitManagementTable';
 
 import CommonCard from '@/components/elements/CommonCard';
@@ -29,9 +29,15 @@ const UnitGroupPage = () => {
   });
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
+  // TODO(7409) - instead of using the global permission, check project-level CE config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
     'canViewCoordinatedEntry',
   ]);
+
+  const canAcceptReferrals = useMemo(
+    () => canViewCoordinatedEntry && !!unitGroup?.workflowTemplateIdentifier,
+    [canViewCoordinatedEntry, unitGroup?.workflowTemplateIdentifier]
+  );
 
   if (loading) return <Loading />;
   if (error) throw error;
@@ -58,7 +64,7 @@ const UnitGroupPage = () => {
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
         {canViewCoordinatedEntry && (
-          <Grid item xs={4}>
+          <Grid item xs={12} sm={4}>
             <Stack gap={2}>
               <CommonCard title='Configuration'>
                 <Typography>
@@ -77,7 +83,7 @@ const UnitGroupPage = () => {
             </Stack>
           </Grid>
         )}
-        <Grid item xs={canViewCoordinatedEntry ? 8 : 12}>
+        <Grid item xs={12} sm={canViewCoordinatedEntry ? 8 : 12}>
           <Stack gap={2}>
             <UnitGroupCard unitGroup={unitGroup} />
             {!!unitGroup.capacity && (
@@ -85,7 +91,7 @@ const UnitGroupPage = () => {
                 <UnitManagementTable
                   projectId={project.id}
                   unitGroupId={unitGroupId}
-                  allowDeleteUnits={project.access.canManageUnits}
+                  canAcceptReferrals={canAcceptReferrals}
                 />
               </Paper>
             )}

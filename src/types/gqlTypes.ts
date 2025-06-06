@@ -7993,6 +7993,9 @@ export type UnassignStaffPayload = {
 export type Unit = {
   __typename?: 'Unit';
   acceptingCeReferrals: Scalars['Boolean']['output'];
+  canBeMarkedAvailable: Scalars['Boolean']['output'];
+  canBeMarkedAvailableToday: Scalars['Boolean']['output'];
+  canBeMarkedUnavailable: Scalars['Boolean']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   deletable: Scalars['Boolean']['output'];
@@ -18418,6 +18421,9 @@ export type MarkUnitsAvailableMutation = {
       unitSize?: number | null;
       occupancyStatus: UnitOccupancyStatus;
       deletable: boolean;
+      canBeMarkedAvailable: boolean;
+      canBeMarkedAvailableToday: boolean;
+      canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
       workflowTemplateName?: string | null;
       unitType?: {
@@ -18492,6 +18498,9 @@ export type MarkUnitsUnavailableMutation = {
       unitSize?: number | null;
       occupancyStatus: UnitOccupancyStatus;
       deletable: boolean;
+      canBeMarkedAvailable: boolean;
+      canBeMarkedAvailableToday: boolean;
+      canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
       workflowTemplateName?: string | null;
       unitType?: {
@@ -44053,6 +44062,9 @@ export type UnitTableRowFieldsFragment = {
   unitSize?: number | null;
   occupancyStatus: UnitOccupancyStatus;
   deletable: boolean;
+  canBeMarkedAvailable: boolean;
+  canBeMarkedAvailableToday: boolean;
+  canBeMarkedUnavailable: boolean;
   acceptingCeReferrals: boolean;
   workflowTemplateName?: string | null;
   unitType?: {
@@ -44212,6 +44224,9 @@ export type UnitDetailFieldsFragment = {
 
 export type UnitWithCeFieldsFragment = {
   __typename?: 'Unit';
+  canBeMarkedAvailable: boolean;
+  canBeMarkedAvailableToday: boolean;
+  canBeMarkedUnavailable: boolean;
   acceptingCeReferrals: boolean;
   workflowTemplateName?: string | null;
   latestOpportunity?: {
@@ -44325,6 +44340,9 @@ export type GetUnitsQuery = {
         unitSize?: number | null;
         occupancyStatus: UnitOccupancyStatus;
         deletable: boolean;
+        canBeMarkedAvailable: boolean;
+        canBeMarkedAvailableToday: boolean;
+        canBeMarkedUnavailable: boolean;
         acceptingCeReferrals: boolean;
         workflowTemplateName?: string | null;
         unitType?: {
@@ -44610,6 +44628,9 @@ export type CreateUnitsMutation = {
       unitSize?: number | null;
       occupancyStatus: UnitOccupancyStatus;
       deletable: boolean;
+      canBeMarkedAvailable: boolean;
+      canBeMarkedAvailableToday: boolean;
+      canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
       workflowTemplateName?: string | null;
       unitType?: {
@@ -44726,6 +44747,9 @@ export type UpdateUnitsMutation = {
       unitSize?: number | null;
       occupancyStatus: UnitOccupancyStatus;
       deletable: boolean;
+      canBeMarkedAvailable: boolean;
+      canBeMarkedAvailableToday: boolean;
+      canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
       workflowTemplateName?: string | null;
       unitType?: {
@@ -47655,6 +47679,9 @@ export const UnitWithCeFieldsFragmentDoc = gql`
         ...CeReferralSummaryFields
       }
     }
+    canBeMarkedAvailable
+    canBeMarkedAvailableToday
+    canBeMarkedUnavailable
     acceptingCeReferrals
     workflowTemplateName
   }

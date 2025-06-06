@@ -6579,6 +6579,30 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canBeMarkedAvailable',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canBeMarkedAvailableToday',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canBeMarkedUnavailable',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'dateCreated',
         type: {
           kind: 'NON_NULL',

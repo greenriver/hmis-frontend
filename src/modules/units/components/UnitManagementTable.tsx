@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import UnitBulkActions from './UnitBulkActions';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -19,20 +19,18 @@ import {
 
 interface Props {
   projectId: string;
-  unitGroupId?: string;
-  allowDeleteUnits: boolean;
+  unitGroupId: string;
+  canAcceptReferrals: boolean;
 }
 
-// TODO(#7773) support "mark available" as a bulk action when CE is enabled
 const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
-  allowDeleteUnits,
+  canAcceptReferrals,
 }) => {
-  const { setUnitToDelete, renderSingleDeleteDialog, renderBulkDeleteButton } =
-    useDeleteUnits({
-      onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
-    });
+  const { setUnitToDelete, renderSingleDeleteDialog } = useDeleteUnits({
+    onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
+  });
 
   // TODO(7409) - instead of using the global permission, check project-level config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
@@ -56,13 +54,15 @@ const UnitManagementTable: React.FC<Props> = ({
   });
 
   const { project } = useProjectDashboardContext();
+  const canEdit = project.access.canManageUnits;
+
   const { getCeActions, loading } = useUnitCeActions({ project });
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
       return [
         ...getCeActions(unit),
-        ...(allowDeleteUnits
+        ...(canEdit
           ? [
               {
                 title: 'Delete Unit',
@@ -76,7 +76,7 @@ const UnitManagementTable: React.FC<Props> = ({
           : []),
       ];
     },
-    [allowDeleteUnits, getCeActions, setUnitToDelete]
+    [canEdit, getCeActions, setUnitToDelete]
   );
 
   return (
@@ -95,18 +95,25 @@ const UnitManagementTable: React.FC<Props> = ({
         columns={columns}
         pagePath='project.units'
         noData='No units'
-        selectable={allowDeleteUnits ? 'checkbox' : undefined}
-        isRowSelectable={(row) => !!row.deletable}
+        selectable={canEdit ? 'checkbox' : undefined}
+        isRowSelectable={(row) =>
+          row.deletable ||
+          row.canBeMarkedAvailableToday ||
+          row.canBeMarkedUnavailable
+        }
         defaultFilterValues={{ unitGroup: unitGroupId }}
         filters={filters}
         recordType='Unit'
         EnhancedTableToolbarProps={{
           title: 'Manage Units',
-          renderBulkAction: allowDeleteUnits
-            ? (selectedUnitIds) => (
-                <ButtonTooltipContainer title='Delete Selected Units'>
-                  {renderBulkDeleteButton(selectedUnitIds as string[])}
-                </ButtonTooltipContainer>
+          renderBulkAction: canEdit
+            ? (_selectedIds, selectedRows) => (
+                <UnitBulkActions
+                  projectId={projectId}
+                  unitGroupId={unitGroupId}
+                  units={selectedRows}
+                  canAcceptReferrals={canAcceptReferrals}
+                />
               )
             : undefined,
         }}
