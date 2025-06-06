@@ -55,9 +55,9 @@ export const useUnitCeActions = ({
           // TODO(#7537) - canBeMarkedAvailable doesn't guarantee that there are no current occupants.
           // Implement a confirmation modal enabling the user to specify the "available on date".
           actions.push({
-            title: 'Mark as Available for Referrals',
+            title: 'Start Accepting Referrals',
             key: 'markAvailable',
-            ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
+            ariaLabel: `Start Accepting Referrals for ${unit.id}`,
             onClick: () => {
               markUnitsAvailable({ variables: { unitIds: [unit.id] } });
             },
@@ -66,9 +66,9 @@ export const useUnitCeActions = ({
 
         if (unit.canBeMarkedUnavailable) {
           actions.push({
-            title: 'Mark as Unavailable for Referrals',
+            title: 'Stop Accepting Referrals',
             key: 'markUnavailable',
-            ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
+            ariaLabel: `Stop Accepting Referrals for ${unit.id}`,
             onClick: () => {
               markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
             },
