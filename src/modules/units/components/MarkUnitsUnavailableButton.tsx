@@ -35,7 +35,11 @@ const MarkUnitsAvailableButton: React.FC<Props> = ({ unitIds, disabled }) => {
   return (
     <>
       <ButtonTooltipContainer title={tooltip}>
-        <Button disabled={disabled} onClick={() => setDialogOpen(true)}>
+        <Button
+          sx={{ width: '100%' }}
+          disabled={disabled}
+          onClick={() => setDialogOpen(true)}
+        >
           Stop Accepting Referrals ({unitIds.length})
         </Button>
       </ButtonTooltipContainer>

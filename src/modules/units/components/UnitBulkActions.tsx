@@ -40,7 +40,7 @@ const UnitBulkActions: React.FC<Props> = ({
   const disableDelete = unitIdsToDelete.length < units.length;
 
   return (
-    <Stack gap={2} direction='row'>
+    <Stack gap={1} my={1}>
       {canAcceptReferrals && (
         <>
           <MarkUnitsAvailableButton

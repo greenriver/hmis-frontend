@@ -67,6 +67,7 @@ export const useDeleteUnits = ({
           ButtonProps={{
             variant: 'contained',
             color: 'error',
+            sx: { width: '100%' },
             disabled,
           }}
           confirmationDialogContent={
