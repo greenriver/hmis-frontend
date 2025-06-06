@@ -33,6 +33,7 @@ export interface DeleteMutationConfirmationDialogProps<
   awaitRefetchQueries?: boolean;
 }
 
+// todo @martha - what happens here? should it get combined?
 const DeleteMutationConfirmationDialog = <Mutation, MutationVariables>({
   variables,
   queryDocument,
