@@ -10,7 +10,6 @@ export interface EnhancedTableToolbarProps<T> {
     selectedIds: readonly string[],
     selectedRows: T[]
   ) => ReactNode;
-  stackVertically?: boolean;
 }
 
 const EnhancedTableToolbar = <T extends { id: string }>({
@@ -18,14 +17,12 @@ const EnhancedTableToolbar = <T extends { id: string }>({
   title,
   renderBulkAction,
   rows,
-  stackVertically = false,
 }: EnhancedTableToolbarProps<T>) => {
   const selectedRows = useMemo(() => {
     return rows.filter((r) => selectedIds.includes(r.id));
   }, [rows, selectedIds]);
 
-  const isTiny = useIsMobile('sm');
-  const shouldStack = stackVertically || isTiny;
+  const stackVertically = useIsMobile('sm');
 
   return (
     <Toolbar
@@ -45,11 +42,11 @@ const EnhancedTableToolbar = <T extends { id: string }>({
       }}
     >
       <Stack
-        justifyContent={shouldStack ? undefined : 'space-between'}
-        alignItems={shouldStack ? 'right' : 'center'}
-        direction={shouldStack ? 'column' : 'row'}
+        justifyContent={stackVertically ? undefined : 'space-between'}
+        alignItems={stackVertically ? 'right' : 'center'}
+        direction={stackVertically ? 'column' : 'row'}
         gap={1}
-        my={shouldStack ? 1 : 0}
+        my={stackVertically ? 1 : 0}
         sx={{
           width: '100%',
           pr: 1,
