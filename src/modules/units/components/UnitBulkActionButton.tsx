@@ -2,8 +2,8 @@ import { Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import GenericMutationButton from '@/modules/dataFetching/components/GenericMutationButton';
 import {
-  MarkUnitsUnavailableDocument,
   MarkUnitsAvailableDocument,
+  MarkUnitsUnavailableDocument,
 } from '@/types/gqlTypes';
 
 interface Props {

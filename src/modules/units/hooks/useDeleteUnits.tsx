@@ -1,3 +1,4 @@
+import { DocumentNode } from '@apollo/client';
 import { Typography } from '@mui/material';
 import pluralize from 'pluralize';
 import { useCallback, useMemo, useState } from 'react';
@@ -11,10 +12,14 @@ import {
 
 type Args = {
   onSuccess?: () => void;
+  refetchQueries?: DocumentNode[];
+  awaitRefetchQueries?: boolean;
 };
 
 export const useDeleteUnits = ({
   onSuccess,
+  refetchQueries,
+  awaitRefetchQueries = false,
 }: Args): {
   setUnitToDelete: (unitId: string) => void;
   renderSingleDeleteDialog: () => JSX.Element;
@@ -82,13 +87,15 @@ export const useDeleteUnits = ({
             confirmText: `Yes, delete ${pluralUnits}`,
             title: 'Delete units',
           }}
+          refetchQueries={refetchQueries}
+          awaitRefetchQueries={awaitRefetchQueries}
           {...deleteDialogProps}
         >
           Delete ({unitIds.length})
         </DeleteMutationButton>
       );
     },
-    [deleteDialogProps]
+    [awaitRefetchQueries, deleteDialogProps, refetchQueries]
   );
 
   return { setUnitToDelete, renderSingleDeleteDialog, renderBulkDeleteButton };

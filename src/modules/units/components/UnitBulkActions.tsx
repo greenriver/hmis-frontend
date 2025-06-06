@@ -5,6 +5,7 @@ import UnitBulkActionButton from '@/modules/units/components/UnitBulkActionButto
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
+  GetUnitsDocument,
   MarkUnitsAvailableDocument,
   MarkUnitsUnavailableDocument,
   UnitTableRowFieldsFragment,
@@ -49,7 +50,9 @@ const UnitBulkActions: React.FC<Props> = ({
   // "1 of 2 selected units cannot be deleted".
 
   const { renderBulkDeleteButton } = useDeleteUnits({
-    onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
+    onSuccess: () => evictUnitsQuery(projectId, unitGroupId), // refresh the UnitVisualizationCharts
+    refetchQueries: [GetUnitsDocument], // *also* pass refetchQueries with awaitRefetchQueries, so the UI correctly displays loading state instead of jittering
+    awaitRefetchQueries: true,
   });
 
   const { unitIdsToDelete, disableDelete, deleteTooltip } = useMemo(() => {

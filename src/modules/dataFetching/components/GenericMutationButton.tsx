@@ -61,8 +61,6 @@ const GenericMutationButton = <Mutation, MutationVariables>({
       },
       onError: (apolloError) =>
         setErrorState({ ...emptyErrorState, apolloError }),
-      // refetchQueries,
-      // awaitRefetchQueries,
     }
   );
 
