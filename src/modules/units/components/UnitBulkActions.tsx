@@ -10,6 +10,25 @@ import {
   UnitTableRowFieldsFragment,
 } from '@/types/gqlTypes';
 
+// Local util for generating the correct tooltip for a bulk action button.
+const getTooltip = ({
+  selectedUnitsCount,
+  eligibleUnitsCount,
+  ineligibleText,
+}: {
+  selectedUnitsCount: number;
+  eligibleUnitsCount: number;
+  ineligibleText: string;
+}) => {
+  if (selectedUnitsCount === 0) return;
+  if (eligibleUnitsCount === 0) {
+    return `Selected units ${ineligibleText}`;
+  }
+  if (eligibleUnitsCount < selectedUnitsCount) {
+    return `${selectedUnitsCount - eligibleUnitsCount} of ${selectedUnitsCount} selected units ${ineligibleText}`;
+  }
+};
+
 interface Props {
   projectId: string;
   unitGroupId: string;
@@ -23,20 +42,27 @@ const UnitBulkActions: React.FC<Props> = ({
   units,
   canAcceptReferrals,
 }) => {
+  // This component's philosophy is to let the user do what they are trying to
+  // do as long as it's allowed on *any* of the units they have selected.
+  // For example, if they have selected 2 units, 1 of which is not deletable,
+  // the Delete button will be enabled, with a tooltip that says
+  // "1 of 2 selected units cannot be deleted".
+
   const { renderBulkDeleteButton } = useDeleteUnits({
     onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
   });
 
   const { unitIdsToDelete, disableDelete, deleteTooltip } = useMemo(() => {
     const unitIdsToDelete = units.filter((u) => u.deletable).map((u) => u.id);
-    const disabled = unitIdsToDelete.length < units.length;
-    const tooltip = disabled
-      ? 'Some selected units cannot be deleted'
-      : undefined;
+
     return {
       unitIdsToDelete,
-      disableDelete: disabled,
-      deleteTooltip: tooltip,
+      disableDelete: unitIdsToDelete.length === 0,
+      deleteTooltip: getTooltip({
+        selectedUnitsCount: units.length,
+        eligibleUnitsCount: unitIdsToDelete.length,
+        ineligibleText: 'cannot be deleted',
+      }),
     };
   }, [units]);
 
@@ -45,23 +71,23 @@ const UnitBulkActions: React.FC<Props> = ({
       const unitIdsToMarkAvailable = units
         .filter((u) => u.canBeMarkedAvailableToday)
         .map((u) => u.id);
-      const disabled = unitIdsToMarkAvailable.length === 0;
-      const difference = units.length - unitIdsToMarkAvailable.length;
-      let tooltip;
-      if (disabled) tooltip = 'Selected units are already accepting referrals';
-
-      // reasons they might not be able to be marked available (copied from backend):
-      // - CE is not enabled, in which case the button won't appear
-      // - Unit group doesn't have a workflow template, in which case the button won't appear
-      // - Unit is already available - that is the case we describe in the tooltip
-      // - Unit has occupants, in which case it won't be selectable in the table (this is brittle, depends on `deletable` logic)
-      if (difference > 0)
-        tooltip = `${difference} of ${units.length} selected units are already accepting referrals`;
 
       return {
         unitIdsToMarkAvailable,
-        disableMarkAvailable: disabled,
-        markAvailableTooltip: tooltip,
+        disableMarkAvailable: unitIdsToMarkAvailable.length === 0,
+        markAvailableTooltip: getTooltip({
+          selectedUnitsCount: units.length,
+          eligibleUnitsCount: unitIdsToMarkAvailable.length,
+
+          // "Already accepting referrals" is NOT actually the only reason units might be ineligible,
+          // but it's helpful UI simplification.
+          // All reasons they might not be able to be marked available (copied from backend):
+          // - CE is not enabled, in which case the button won't appear
+          // - Unit group doesn't have a workflow template, in which case the button won't appear
+          // - Unit is already available - that is the case we describe in the tooltip
+          // - Unit has occupants, in which case it won't be selectable in the table (this is brittle, depends on `deletable` logic)
+          ineligibleText: 'are already accepting referrals',
+        }),
       };
     }, [units]);
 
@@ -74,22 +100,16 @@ const UnitBulkActions: React.FC<Props> = ({
       .filter((u) => u.canBeMarkedUnavailable)
       .map((u) => u.id);
 
-    const disabled =
-      unitIdsToMarkUnavailable.length === 0 ||
-      unitIdsToMarkAvailable.length > 0;
-
-    let tooltip;
-    if (unitIdsToMarkUnavailable.length === 0)
-      tooltip = 'No selected units are accepting referrals';
-    if (unitIdsToMarkAvailable.length > 0)
-      tooltip = 'Not all of the selected units are accepting referrals';
-
     return {
       unitIdsToMarkUnavailable,
-      disableMarkUnavailable: disabled,
-      markUnavailableTooltip: tooltip,
+      disableMarkUnavailable: unitIdsToMarkUnavailable.length === 0,
+      markUnavailableTooltip: getTooltip({
+        selectedUnitsCount: units.length,
+        eligibleUnitsCount: unitIdsToMarkUnavailable.length,
+        ineligibleText: 'are not accepting referrals',
+      }),
     };
-  }, [unitIdsToMarkAvailable.length, units]);
+  }, [units]);
 
   return (
     <Stack gap={1} my={1}>

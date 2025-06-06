@@ -34,6 +34,7 @@ const UnitBulkActionButton = ({
       ButtonProps={{
         disabled: disabled,
         variant: 'contained',
+        sx: { width: '100%' },
       }}
       ConfirmationDialogProps={{
         title: `${capitalized} Accepting Referrals for Unit(s)`,
