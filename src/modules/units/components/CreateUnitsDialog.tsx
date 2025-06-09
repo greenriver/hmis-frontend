@@ -11,6 +11,7 @@ import {
 import { Box } from '@mui/system';
 import React, { useCallback, useState } from 'react';
 import NumberInput from '@/components/elements/input/NumberInput';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import {
   emptyErrorState,
@@ -116,6 +117,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
             <ErrorAlert key='errors' errors={errorState.errors} fixable />
           </Box>
         )}
+        <ApolloErrorAlert error={errorState.apolloError} />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <FormSelect
@@ -137,6 +139,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
               label={getRequiredLabel('Number of Units to Add', true)}
               value={numberOfUnits ?? ''}
               onChange={(e) => setNumberOfUnits(Number(e.target.value))}
+              max={200}
             />
           </Grid>
         </Grid>
