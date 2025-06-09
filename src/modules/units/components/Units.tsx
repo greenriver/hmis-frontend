@@ -16,7 +16,7 @@ import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog'
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   UnitGroupFieldsFragment,
-  useGetUnitGroupsQuery,
+  useGetProjectUnitGroupsQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -25,7 +25,7 @@ const Units = () => {
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const { data, error, loading } = useGetUnitGroupsQuery({
+  const { data, error, loading } = useGetProjectUnitGroupsQuery({
     variables: { id: project.id, limit: 100 },
   });
 

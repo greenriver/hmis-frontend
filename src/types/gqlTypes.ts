@@ -44503,13 +44503,13 @@ export type GetUnitsQuery = {
   } | null;
 };
 
-export type GetUnitGroupsQueryVariables = Exact<{
+export type GetProjectUnitGroupsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
-export type GetUnitGroupsQuery = {
+export type GetProjectUnitGroupsQuery = {
   __typename?: 'Query';
   project?: {
     __typename?: 'Project';
@@ -62146,8 +62146,8 @@ export type GetUnitsQueryResult = Apollo.QueryResult<
   GetUnitsQuery,
   GetUnitsQueryVariables
 >;
-export const GetUnitGroupsDocument = gql`
-  query GetUnitGroups($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+export const GetProjectUnitGroupsDocument = gql`
+  query GetProjectUnitGroups($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     project(id: $id) {
       id
       unitGroups(limit: $limit, offset: $offset) {
@@ -62164,16 +62164,16 @@ export const GetUnitGroupsDocument = gql`
 `;
 
 /**
- * __useGetUnitGroupsQuery__
+ * __useGetProjectUnitGroupsQuery__
  *
- * To run a query within a React component, call `useGetUnitGroupsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUnitGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProjectUnitGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectUnitGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUnitGroupsQuery({
+ * const { data, loading, error } = useGetProjectUnitGroupsQuery({
  *   variables: {
  *      id: // value for 'id'
  *      limit: // value for 'limit'
@@ -62181,40 +62181,40 @@ export const GetUnitGroupsDocument = gql`
  *   },
  * });
  */
-export function useGetUnitGroupsQuery(
+export function useGetProjectUnitGroupsQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetUnitGroupsQuery,
-    GetUnitGroupsQueryVariables
+    GetProjectUnitGroupsQuery,
+    GetProjectUnitGroupsQueryVariables
   > &
     (
-      | { variables: GetUnitGroupsQueryVariables; skip?: boolean }
+      | { variables: GetProjectUnitGroupsQueryVariables; skip?: boolean }
       | { skip: boolean }
     )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetUnitGroupsQuery, GetUnitGroupsQueryVariables>(
-    GetUnitGroupsDocument,
-    options
-  );
+  return Apollo.useQuery<
+    GetProjectUnitGroupsQuery,
+    GetProjectUnitGroupsQueryVariables
+  >(GetProjectUnitGroupsDocument, options);
 }
-export function useGetUnitGroupsLazyQuery(
+export function useGetProjectUnitGroupsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetUnitGroupsQuery,
-    GetUnitGroupsQueryVariables
+    GetProjectUnitGroupsQuery,
+    GetProjectUnitGroupsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetUnitGroupsQuery, GetUnitGroupsQueryVariables>(
-    GetUnitGroupsDocument,
-    options
-  );
+  return Apollo.useLazyQuery<
+    GetProjectUnitGroupsQuery,
+    GetProjectUnitGroupsQueryVariables
+  >(GetProjectUnitGroupsDocument, options);
 }
-export function useGetUnitGroupsSuspenseQuery(
+export function useGetProjectUnitGroupsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetUnitGroupsQuery,
-        GetUnitGroupsQueryVariables
+        GetProjectUnitGroupsQuery,
+        GetProjectUnitGroupsQueryVariables
       >
 ) {
   const options =
@@ -62222,22 +62222,22 @@ export function useGetUnitGroupsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetUnitGroupsQuery,
-    GetUnitGroupsQueryVariables
-  >(GetUnitGroupsDocument, options);
+    GetProjectUnitGroupsQuery,
+    GetProjectUnitGroupsQueryVariables
+  >(GetProjectUnitGroupsDocument, options);
 }
-export type GetUnitGroupsQueryHookResult = ReturnType<
-  typeof useGetUnitGroupsQuery
+export type GetProjectUnitGroupsQueryHookResult = ReturnType<
+  typeof useGetProjectUnitGroupsQuery
 >;
-export type GetUnitGroupsLazyQueryHookResult = ReturnType<
-  typeof useGetUnitGroupsLazyQuery
+export type GetProjectUnitGroupsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectUnitGroupsLazyQuery
 >;
-export type GetUnitGroupsSuspenseQueryHookResult = ReturnType<
-  typeof useGetUnitGroupsSuspenseQuery
+export type GetProjectUnitGroupsSuspenseQueryHookResult = ReturnType<
+  typeof useGetProjectUnitGroupsSuspenseQuery
 >;
-export type GetUnitGroupsQueryResult = Apollo.QueryResult<
-  GetUnitGroupsQuery,
-  GetUnitGroupsQueryVariables
+export type GetProjectUnitGroupsQueryResult = Apollo.QueryResult<
+  GetProjectUnitGroupsQuery,
+  GetProjectUnitGroupsQueryVariables
 >;
 export const GetUnitGroupDocument = gql`
   query GetUnitGroup($id: ID!) {

@@ -19,7 +19,7 @@ query GetUnits(
   }
 }
 
-query GetUnitGroups($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetProjectUnitGroups($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   project(id: $id) {
     id
     unitGroups(limit: $limit, offset: $offset) {
