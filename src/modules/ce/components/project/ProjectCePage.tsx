@@ -29,7 +29,6 @@ const ProjectCePage: React.FC = () => {
       defs.push({
         title: 'Available Units',
         key: 'available-units',
-        // TODO add helper: these units are available for referrals
         contents: <ProjectOpportunitiesTable />,
       });
     }
