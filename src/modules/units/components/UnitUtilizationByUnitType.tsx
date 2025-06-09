@@ -21,7 +21,7 @@ const UnitUtilizationByUnitType: React.FC<Props> = ({
     <Stack gap={1}>
       {unitTypes.map((unitType, idx) =>
         variant === 'stacked' ? (
-          <Stack gap={0.25}>
+          <Stack key={unitType.id} gap={0.25}>
             {hasMultipleUnitTypes && (
               <Typography variant='body2' color='text.secondary'>
                 {unitType.unitType}
@@ -30,7 +30,7 @@ const UnitUtilizationByUnitType: React.FC<Props> = ({
             <UnitUtilizationChart unitType={unitType} />
           </Stack>
         ) : (
-          <Grid container>
+          <Grid container key={unitType.id}>
             <Grid item xs={3}>
               <Typography variant='body1' color='text.primary'>
                 {unitType.unitType}
