@@ -19,6 +19,11 @@ import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
 
 const navItems: NavItem<RootPermissionsFragment>[] = [
+  // CAUTION: Don't use permissionMode: 'all' on any of these nav items.
+  // If we really need to, then we would also need a logical update to
+  // ToolbarMenu's use of PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS.
+  // Currently, it gloms all the permissions mentioned here together
+  // and then checks using permissionMode: 'any'.
   {
     id: 'admin-nav',
     type: 'category',
@@ -46,11 +51,7 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
         id: 'coordinated-entry',
         title: 'Coordinated Entry',
         path: AdminDashboardRoutes.COORDINATED_ENTRY,
-        permissions: [
-          'canAdministrateCoordinatedEntry',
-          'canViewCoordinatedEntry',
-        ],
-        permissionMode: 'all',
+        permissions: ['canAdministrateCoordinatedEntry'],
       },
     ],
   },
