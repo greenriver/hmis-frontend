@@ -80,6 +80,7 @@ const Units = () => {
           <Masonry
             columns={{ xs: 1, md: unitGroups.length === 1 ? 1 : 2 }}
             spacing={2}
+            sx={{ width: 'auto' }}
           >
             {unitGroups.map((group) => (
               <UnitGroupCard
