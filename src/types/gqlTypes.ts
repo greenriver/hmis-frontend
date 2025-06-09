@@ -16226,7 +16226,12 @@ export type CeOpportunitySummaryFieldsFragment = {
   projectId: string;
   projectName: string;
   dateAvailable: string;
-  unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  unit?: {
+    __typename?: 'Unit';
+    id: string;
+    name: string;
+    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  } | null;
 };
 
 export type CeOpportunityFieldsFragment = {
@@ -16272,7 +16277,12 @@ export type CeOpportunityFieldsFragment = {
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
   } | null;
-  unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  unit?: {
+    __typename?: 'Unit';
+    id: string;
+    name: string;
+    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  } | null;
 };
 
 export type CeOpportunityAdminFieldsFragment = {
@@ -16286,7 +16296,12 @@ export type CeOpportunityAdminFieldsFragment = {
   active: boolean;
   projectId: string;
   projectName: string;
-  unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  unit?: {
+    __typename?: 'Unit';
+    id: string;
+    name: string;
+    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  } | null;
 };
 
 export type ClientCeOpportunitySummaryFieldsFragment = {
@@ -16300,7 +16315,12 @@ export type ClientCeOpportunitySummaryFieldsFragment = {
   projectId: string;
   projectName: string;
   dateAvailable: string;
-  unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  unit?: {
+    __typename?: 'Unit';
+    id: string;
+    name: string;
+    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  } | null;
 };
 
 export type CeMatchRuleFieldsFragment = {
@@ -16516,7 +16536,12 @@ export type CeReferralFieldsFragment = {
     projectId: string;
     projectName: string;
     dateAvailable: string;
-    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    unit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    } | null;
   };
   targetEnrollment?: {
     __typename?: 'Enrollment';
@@ -17166,7 +17191,16 @@ export type CreateCeOpportunityMutation = {
       projectId: string;
       projectName: string;
       dateAvailable: string;
-      unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+      unit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitGroup?: {
+          __typename?: 'UnitGroup';
+          id: string;
+          name: string;
+        } | null;
+      } | null;
     };
   } | null;
 };
@@ -18328,7 +18362,16 @@ export type SubmitCeReferralStepMutation = {
           projectTypes: Array<ProjectType>;
           funders?: Array<FundingSource> | null;
         } | null;
-        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+        unit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitGroup?: {
+            __typename?: 'UnitGroup';
+            id: string;
+            name: string;
+          } | null;
+        } | null;
       };
       targetEnrollment?: {
         __typename?: 'Enrollment';
@@ -18459,7 +18502,16 @@ export type MarkUnitsAvailableMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
-        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+        unit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitGroup?: {
+            __typename?: 'UnitGroup';
+            id: string;
+            name: string;
+          } | null;
+        } | null;
       } | null;
     }>;
   } | null;
@@ -18533,7 +18585,16 @@ export type MarkUnitsUnavailableMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
-        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+        unit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitGroup?: {
+            __typename?: 'UnitGroup';
+            id: string;
+            name: string;
+          } | null;
+        } | null;
       } | null;
     }>;
   } | null;
@@ -18610,7 +18671,16 @@ export type GetProjectCeOpportunitiesQuery = {
         projectId: string;
         projectName: string;
         dateAvailable: string;
-        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+        unit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitGroup?: {
+            __typename?: 'UnitGroup';
+            id: string;
+            name: string;
+          } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -18714,7 +18784,12 @@ export type GetCeOpportunityQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     } | null;
-    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    unit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    } | null;
   } | null;
 };
 
@@ -18792,7 +18867,16 @@ export type GetCeReferralQuery = {
       projectId: string;
       projectName: string;
       dateAvailable: string;
-      unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+      unit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitGroup?: {
+          __typename?: 'UnitGroup';
+          id: string;
+          name: string;
+        } | null;
+      } | null;
     };
     targetEnrollment?: {
       __typename?: 'Enrollment';
@@ -19440,7 +19524,16 @@ export type GetClientEligibleOpportunitiesQuery = {
         projectId: string;
         projectName: string;
         dateAvailable: string;
-        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+        unit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitGroup?: {
+            __typename?: 'UnitGroup';
+            id: string;
+            name: string;
+          } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -19471,7 +19564,16 @@ export type GetAdminCeOpportunitiesQuery = {
       active: boolean;
       projectId: string;
       projectName: string;
-      unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+      unit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitGroup?: {
+          __typename?: 'UnitGroup';
+          id: string;
+          name: string;
+        } | null;
+      } | null;
     }>;
   };
 };
@@ -44094,7 +44196,12 @@ export type UnitTableRowFieldsFragment = {
         nameSuffix?: string | null;
       } | null;
     } | null;
-    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    unit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    } | null;
   } | null;
 };
 
@@ -44196,7 +44303,12 @@ export type UnitDetailFieldsFragment = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     } | null;
-    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    unit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    } | null;
   } | null;
 };
 
@@ -44229,7 +44341,12 @@ export type UnitWithCeFieldsFragment = {
         nameSuffix?: string | null;
       } | null;
     } | null;
-    unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    unit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    } | null;
   } | null;
 };
 
@@ -44370,7 +44487,16 @@ export type GetUnitsQuery = {
               nameSuffix?: string | null;
             } | null;
           } | null;
-          unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+          unit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+            unitGroup?: {
+              __typename?: 'UnitGroup';
+              id: string;
+              name: string;
+            } | null;
+          } | null;
         } | null;
       }>;
     };
@@ -44558,7 +44684,16 @@ export type GetUnitQuery = {
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
       } | null;
-      unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+      unit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitGroup?: {
+          __typename?: 'UnitGroup';
+          id: string;
+          name: string;
+        } | null;
+      } | null;
     } | null;
   } | null;
 };
@@ -44651,7 +44786,16 @@ export type CreateUnitsMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
-        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+        unit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitGroup?: {
+            __typename?: 'UnitGroup';
+            id: string;
+            name: string;
+          } | null;
+        } | null;
       } | null;
     }> | null;
     errors: Array<{
@@ -44767,7 +44911,16 @@ export type UpdateUnitsMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
-        unit?: { __typename?: 'Unit'; id: string; name: string } | null;
+        unit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitGroup?: {
+            __typename?: 'UnitGroup';
+            id: string;
+            name: string;
+          } | null;
+        } | null;
       } | null;
     }>;
     errors: Array<{
@@ -45880,6 +46033,10 @@ export const CeOpportunitySummaryFieldsFragmentDoc = gql`
     unit {
       id
       name
+      unitGroup {
+        id
+        name
+      }
     }
     dateAvailable
   }
