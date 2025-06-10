@@ -53,6 +53,7 @@ const UnitManagementTable: React.FC<Props> = ({
   const filters = useFilters({
     type: 'UnitFilterOptions',
     omit: ['status'], // deprecated filter option, remove
+    pickListArgs: { projectId },
   });
 
   const { project } = useProjectDashboardContext();
