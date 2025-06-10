@@ -21,7 +21,6 @@ import {
 import FormSelect from '@/modules/form/components/FormSelect';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import { isPickListOption } from '@/modules/form/types';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { evictUnitsQuery } from '@/modules/units/util';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -35,12 +34,14 @@ interface UnitGroupFormDialogProps {
   projectId: string;
   open: boolean;
   onClose: () => void;
+  ceEnabled?: boolean;
 }
 
 const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
   projectId,
   open,
   onClose,
+  ceEnabled = false,
 }) => {
   const [name, setName] = useState('');
   const [workflowTemplateIdentifier, setWorkflowTemplateIdentifier] = useState<
@@ -83,10 +84,6 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     });
   }, [name, projectId, workflowTemplateIdentifier, createUnitGroup]);
 
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
-
   const {
     data: { pickList: templatePickList } = {},
     loading: templatePickListLoading,
@@ -96,7 +93,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
       pickListType: PickListType.CeWorkflowTemplateIdentifiers,
       projectId: projectId,
     },
-    skip: !canViewCoordinatedEntry,
+    skip: !ceEnabled,
   });
 
   if (templatePickListError) throw templatePickListError;
@@ -117,7 +114,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {canViewCoordinatedEntry && (
+          {ceEnabled && (
             <FormSelect
               value={
                 workflowTemplateIdentifier

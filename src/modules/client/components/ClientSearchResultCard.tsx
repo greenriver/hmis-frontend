@@ -10,6 +10,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { LabeledExternalIdDisplay } from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import {
   clientNameAllParts,
   entryExitRange,
@@ -17,7 +18,6 @@ import {
   lastUpdatedBy,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
@@ -97,7 +97,7 @@ const ClientSearchResultCard: React.FC<Props> = ({
   const { data, loading: enrollmentsLoading } = useGetClientEnrollmentsQuery({
     variables: { id: client.id },
   });
-  const { globalFeatureFlags } = useHmisAppSettings();
+  const { globalFeatureFlags } = useGlobalFeatureFlags();
   const recentEnrollments = useMemo(
     () =>
       data?.client
@@ -147,7 +147,7 @@ const ClientSearchResultCard: React.FC<Props> = ({
               <ClientCardImageElement size={150} client={clientImageData} />
             )}
             <Stack gap={1} sx={{ pr: 1 }}>
-              {globalFeatureFlags?.mciId && (
+              {globalFeatureFlags?.mciIdEnabled && (
                 <LabeledExternalIdDisplay
                   type={ExternalIdentifierType.MciId}
                   externalIds={client.externalIds}

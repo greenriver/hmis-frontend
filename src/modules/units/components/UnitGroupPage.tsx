@@ -11,7 +11,6 @@ import useSafeParams from '@/hooks/useSafeParams';
 import UnitGroupCeConfigurationCard from '@/modules/ce/components/unitGroup/UnitGroupCeConfigurationCard';
 import UnitGroupDefaultContactsCard from '@/modules/ce/components/unitGroup/UnitGroupDefaultContactsCard';
 import UnitGroupEligibilityCard from '@/modules/ce/components/unitGroup/UnitGroupEligibilityCard';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
@@ -31,9 +30,7 @@ const UnitGroupPage = () => {
   });
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
+  const { coordinatedEntryEnabled } = project;
 
   // Set the breadcrumb so it says the correct name of this unit group
   useEffect(() => {
@@ -69,7 +66,7 @@ const UnitGroupPage = () => {
       />
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
-        {canViewCoordinatedEntry && (
+        {coordinatedEntryEnabled && (
           <Grid item xs={4}>
             <Stack gap={2}>
               <UnitGroupCeConfigurationCard unitGroup={unitGroup} />
@@ -84,7 +81,7 @@ const UnitGroupPage = () => {
             </Stack>
           </Grid>
         )}
-        <Grid item xs={canViewCoordinatedEntry ? 8 : 12}>
+        <Grid item xs={coordinatedEntryEnabled ? 8 : 12}>
           <Stack gap={2}>
             <UnitGroupCard unitGroup={unitGroup} />
             {!!unitGroup.capacity && (
@@ -92,7 +89,7 @@ const UnitGroupPage = () => {
                 <UnitManagementTable
                   projectId={project.id}
                   unitGroupId={unitGroupId}
-                  ceEnabled={canViewCoordinatedEntry}
+                  ceEnabled={coordinatedEntryEnabled}
                 />
               </Paper>
             )}
@@ -105,6 +102,7 @@ const UnitGroupPage = () => {
         unitGroupId={unitGroupId}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        includeCeFields={coordinatedEntryEnabled}
       />
     </>
   );

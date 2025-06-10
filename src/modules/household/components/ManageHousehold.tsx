@@ -16,11 +16,11 @@ import Loading from '@/components/elements/Loading';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import NotFound from '@/components/pages/NotFound';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import AssociatedHouseholdMembers from '@/modules/household/components/AssociatedHouseholdMembers';
 import HouseholdActionButtons from '@/modules/household/components/elements/HouseholdActionButtons';
 import { RecentHouseholdMember } from '@/modules/household/types';
@@ -62,7 +62,7 @@ const ManageHousehold = ({
   onFirstMemberAdded,
   canEdit,
 }: Props) => {
-  const { globalFeatureFlags } = useHmisAppSettings();
+  const { globalFeatureFlags } = useGlobalFeatureFlags();
 
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [hasSearched, setHasSearched] = useState(false);
@@ -106,7 +106,7 @@ const ManageHousehold = ({
   >[] = useMemo(() => {
     return [
       { ...CLIENT_COLUMNS.name, key: 'name', sticky: 'left', width: '25%' },
-      ...(globalFeatureFlags?.mciId
+      ...(globalFeatureFlags?.mciIdEnabled
         ? [externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID')]
         : []),
       // On mobile, show enrollment button right next to the client name so user.
@@ -115,7 +115,7 @@ const ManageHousehold = ({
       CLIENT_COLUMNS.dobAge,
       ...(isMobile ? [] : addToEnrollmentColumns),
     ];
-  }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
+  }, [addToEnrollmentColumns, globalFeatureFlags, isMobile]);
 
   const filters = useFilters({
     type: 'ClientFilterOptions',

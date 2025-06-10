@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   ProjectAllFieldsFragment,
@@ -18,11 +17,6 @@ export const useUnitCeActions = ({
   loading: boolean;
   getCeActions: (unit: UnitTableRowFieldsFragment) => CommonMenuItem[];
 } => {
-  // TODO(7409) - instead of using the global permission, check project-level config
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
-
   const [
     markUnitsAvailable,
     { loading: availableLoading, error: availableError },
@@ -35,7 +29,7 @@ export const useUnitCeActions = ({
 
   const getCeActions = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      if (!canViewCoordinatedEntry) return [];
+      if (!project.coordinatedEntryEnabled) return [];
 
       const actions: CommonMenuItem[] = [];
 
@@ -81,13 +75,7 @@ export const useUnitCeActions = ({
 
       return actions;
     },
-    [
-      canViewCoordinatedEntry,
-      markUnitsAvailable,
-      markUnitsUnavailable,
-      project.access.canManageUnits,
-      project.id,
-    ]
+    [markUnitsAvailable, markUnitsUnavailable, project]
   );
 
   if (availableError) throw availableError;
