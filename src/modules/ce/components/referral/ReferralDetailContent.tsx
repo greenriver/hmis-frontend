@@ -13,12 +13,12 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       rows={[
         { id: 'id', label: 'Referral ID', value: referral.id },
         {
-          id: 'id',
+          id: 'clientName',
           label: 'Client Name',
           value: clientNameFromRecordWithOptionalClient(referral),
         },
         {
-          id: 'id',
+          id: 'unit',
           label: 'Unit Name',
           value: referral.opportunity.name,
         },
