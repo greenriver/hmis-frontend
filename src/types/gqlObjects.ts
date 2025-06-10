@@ -8590,6 +8590,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ProjectConfigFilterOptions',
+    args: [
+      {
+        name: 'configType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'ProjectConfigInput',
     args: [
       {

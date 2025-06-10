@@ -5190,6 +5190,7 @@ export enum PickListType {
   Project = 'PROJECT',
   /** Open Projects that can receive referrals */
   ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
+  ProjectConfigTypes = 'PROJECT_CONFIG_TYPES',
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Residential Projects */
   ResidentialProjects = 'RESIDENTIAL_PROJECTS',
@@ -6191,6 +6192,11 @@ export type ProjectConfig = {
   projectType?: Maybe<ProjectType>;
 };
 
+export type ProjectConfigFilterOptions = {
+  configType?: InputMaybe<Array<ProjectConfigType>>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 /** Project Config Input */
 export type ProjectConfigInput = {
   configType?: InputMaybe<ProjectConfigType>;
@@ -6205,6 +6211,8 @@ export enum ProjectConfigType {
   AutoEnter = 'AUTO_ENTER',
   /** Auto Exit */
   AutoExit = 'AUTO_EXIT',
+  /** Coordinated Entry */
+  CoordinatedEntry = 'COORDINATED_ENTRY',
   /** Staff Assignment */
   StaffAssignment = 'STAFF_ASSIGNMENT',
 }
@@ -6554,6 +6562,7 @@ export type QueryProjectCocArgs = {
 };
 
 export type QueryProjectConfigsArgs = {
+  filters?: InputMaybe<ProjectConfigFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -7983,7 +7992,9 @@ export type UnassignStaffPayload = {
 export type Unit = {
   __typename?: 'Unit';
   acceptingCeReferrals: Scalars['Boolean']['output'];
+  /** Whether the unit can be marked available for a future date */
   canBeMarkedAvailable: Scalars['Boolean']['output'];
+  /** Whether the unit can be marked available for referrals now */
   canBeMarkedAvailableToday: Scalars['Boolean']['output'];
   canBeMarkedUnavailable: Scalars['Boolean']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
@@ -41445,6 +41456,7 @@ export type DeleteProjectConfigMutation = {
 export type GetProjectConfigsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ProjectConfigFilterOptions>;
 }>;
 
 export type GetProjectConfigsQuery = {
@@ -60483,8 +60495,12 @@ export type DeleteProjectConfigMutationOptions = Apollo.BaseMutationOptions<
   DeleteProjectConfigMutationVariables
 >;
 export const GetProjectConfigsDocument = gql`
-  query GetProjectConfigs($limit: Int = 10, $offset: Int = 0) {
-    projectConfigs(limit: $limit, offset: $offset) {
+  query GetProjectConfigs(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ProjectConfigFilterOptions
+  ) {
+    projectConfigs(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount
@@ -60510,6 +60526,7 @@ export const GetProjectConfigsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
