@@ -8728,12 +8728,11 @@ export type RootPermissionsFragment = {
   canMergeClients: boolean;
   canTransferEnrollments: boolean;
   canEditUsersInWarehouse: boolean;
+  canAdministrateCoordinatedEntry: boolean;
   canViewClients: boolean;
   canEditClients: boolean;
   canViewDob: boolean;
   canViewClientAlerts: boolean;
-  canViewCoordinatedEntry: boolean;
-  canAdministrateCoordinatedEntry: boolean;
   canEditOrganization: boolean;
   canEditProjectDetails: boolean;
 };
@@ -8827,12 +8826,11 @@ export type GetRootPermissionsQuery = {
     canMergeClients: boolean;
     canTransferEnrollments: boolean;
     canEditUsersInWarehouse: boolean;
+    canAdministrateCoordinatedEntry: boolean;
     canViewClients: boolean;
     canEditClients: boolean;
     canViewDob: boolean;
     canViewClientAlerts: boolean;
-    canViewCoordinatedEntry: boolean;
-    canAdministrateCoordinatedEntry: boolean;
     canEditOrganization: boolean;
     canEditProjectDetails: boolean;
   };
@@ -45410,12 +45408,11 @@ export const RootPermissionsFragmentDoc = gql`
     canMergeClients
     canTransferEnrollments
     canEditUsersInWarehouse
+    canAdministrateCoordinatedEntry
     canViewClients
     canEditClients
     canViewDob
     canViewClientAlerts
-    canViewCoordinatedEntry
-    canAdministrateCoordinatedEntry
     canEditOrganization
     canEditProjectDetails
   }
