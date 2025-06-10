@@ -3,7 +3,6 @@ import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  CeOpportunityStatus,
   ProjectAllFieldsFragment,
   UnitTableRowFieldsFragment,
   useMarkUnitsAvailableMutation,
@@ -55,27 +54,26 @@ export const useUnitCeActions = ({
       const hasWorkflowTemplate = unit.workflowTemplateName;
 
       if (hasWorkflowTemplate && project.access.canManageUnits) {
-        if (unit.latestOpportunity && unit.latestOpportunity.active) {
-          // Show this option if the opportunity is active, but disable it if it's locked
+        // TODO(#7537) - canBeMarkedAvailable doesn't guarantee that there are no current occupants.
+        // Implement a confirmation modal enabling the user to specify the "available on date".
+        if (unit.canBeMarkedAvailable) {
           actions.push({
-            title: 'Mark as Unavailable for Referrals',
-            key: 'markUnavailable',
-            ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
-            onClick: () => {
-              markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
-            },
-            disabled:
-              unit.latestOpportunity.status === CeOpportunityStatus.Locked,
-            disabledReason:
-              'Unit with in-progress referral cannot be marked as unavailable',
-          });
-        } else {
-          actions.push({
-            title: 'Mark as Available for Referrals',
+            title: 'Start Accepting Referrals',
             key: 'markAvailable',
-            ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
+            ariaLabel: `Start Accepting Referrals for ${unit.id}`,
             onClick: () => {
               markUnitsAvailable({ variables: { unitIds: [unit.id] } });
+            },
+          });
+        }
+
+        if (unit.canBeMarkedUnavailable) {
+          actions.push({
+            title: 'Stop Accepting Referrals',
+            key: 'markUnavailable',
+            ariaLabel: `Stop Accepting Referrals for ${unit.id}`,
+            onClick: () => {
+              markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
             },
           });
         }

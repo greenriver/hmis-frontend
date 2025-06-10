@@ -74,6 +74,9 @@ fragment UnitWithCeFields on Unit {
       ...CeReferralSummaryFields
     }
   }
+  canBeMarkedAvailable
+  canBeMarkedAvailableToday
+  canBeMarkedUnavailable
   acceptingCeReferrals
   workflowTemplateName
 }

@@ -92,7 +92,6 @@ const UnitGroupPage = () => {
                 <UnitManagementTable
                   projectId={project.id}
                   unitGroupId={unitGroupId}
-                  allowDeleteUnits={project.access.canManageUnits}
                   ceEnabled={canViewCoordinatedEntry}
                 />
               </Paper>

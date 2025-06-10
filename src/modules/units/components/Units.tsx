@@ -138,7 +138,6 @@ const Units = () => {
             // If Unit Groups are not enabled, use the Unit Management Table so Units can be managed directly on this page
             <UnitManagementTable
               projectId={project.id}
-              allowDeleteUnits={project.access.canManageUnits}
               ceEnabled={canViewCoordinatedEntry}
             />
           )}

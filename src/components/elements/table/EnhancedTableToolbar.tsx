@@ -22,7 +22,7 @@ const EnhancedTableToolbar = <T extends { id: string }>({
     return rows.filter((r) => selectedIds.includes(r.id));
   }, [rows, selectedIds]);
 
-  const isTiny = useIsMobile('sm');
+  const stackVertically = useIsMobile('sm');
 
   return (
     <Toolbar
@@ -42,12 +42,16 @@ const EnhancedTableToolbar = <T extends { id: string }>({
       }}
     >
       <Stack
-        justifyContent='space-between'
-        alignItems={'center'}
-        direction={isTiny ? 'column' : 'row'}
+        justifyContent={stackVertically ? undefined : 'space-between'}
+        alignItems={stackVertically ? 'right' : 'center'}
+        direction={stackVertically ? 'column' : 'row'}
+        columnGap={1}
+        rowGap={0.5}
+        my={stackVertically ? 1 : 0}
         sx={{
           width: '100%',
           pr: 1,
+          flexWrap: 'wrap',
         }}
       >
         {selectedIds.length > 0 ? (

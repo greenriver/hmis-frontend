@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -10,6 +9,7 @@ import {
   getViewOccupantEnrollmentAction,
   UNIT_COLUMNS,
 } from '@/modules/units/columns/unitColumns';
+import UnitBulkActions from '@/modules/units/components/UnitBulkActions';
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
 
@@ -23,22 +23,23 @@ import {
 
 interface Props {
   projectId: string;
-  allowDeleteUnits: boolean;
   unitGroupId?: string; // if this table is for a specific unit group
   ceEnabled?: boolean; // whether to show CE details
 }
 
-// TODO(#7773) support "mark available" as a bulk action when CE is enabled
+// Table for managing units within a Project or Unit Group.
+//
+// - If the user lacks permission to manage units, this will be a read-only table.
+// - If CE is enabled, this table will show additional CE-related information and actions,
+// such as marking units as available for referrals (a.k.a. creating Opportunities).
 const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
-  allowDeleteUnits,
   ceEnabled = false,
 }) => {
-  const { setUnitToDelete, renderSingleDeleteDialog, renderBulkDeleteButton } =
-    useDeleteUnits({
-      onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
-    });
+  const { setUnitToDelete, renderSingleDeleteDialog } = useDeleteUnits({
+    onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
+  });
 
   const columns: ColumnDef<UnitTableRowFieldsFragment>[] = useMemo(() => {
     return [
@@ -57,6 +58,8 @@ const UnitManagementTable: React.FC<Props> = ({
   });
 
   const { project } = useProjectDashboardContext();
+  const canManageUnits = project.access.canManageUnits;
+
   const { getCeActions, loading } = useUnitCeActions({ project });
 
   const rowSecondaryActionConfigs = useCallback(
@@ -72,7 +75,7 @@ const UnitManagementTable: React.FC<Props> = ({
       }
 
       // Delete unit
-      if (allowDeleteUnits) {
+      if (canManageUnits) {
         actions.push({
           title: 'Delete Unit',
           key: 'delete',
@@ -84,7 +87,7 @@ const UnitManagementTable: React.FC<Props> = ({
 
       return actions;
     },
-    [allowDeleteUnits, ceEnabled, getCeActions, setUnitToDelete]
+    [canManageUnits, ceEnabled, getCeActions, setUnitToDelete]
   );
 
   return (
@@ -103,18 +106,27 @@ const UnitManagementTable: React.FC<Props> = ({
         columns={columns}
         pagePath='project.units'
         noData='No units'
-        selectable={ceEnabled || allowDeleteUnits ? 'checkbox' : undefined}
-        isRowSelectable={(row) => !!row.deletable}
+        selectable={canManageUnits ? 'checkbox' : undefined}
+        isRowSelectable={(row) =>
+          !!(
+            row.deletable ||
+            row.canBeMarkedAvailableToday ||
+            row.canBeMarkedUnavailable
+          )
+        }
         defaultFilterValues={{ unitGroup: unitGroupId }}
         filters={filters}
         recordType='Unit'
         EnhancedTableToolbarProps={{
-          title: 'Manage Units',
-          renderBulkAction: allowDeleteUnits
-            ? (selectedUnitIds) => (
-                <ButtonTooltipContainer title='Delete Selected Units'>
-                  {renderBulkDeleteButton(selectedUnitIds as string[])}
-                </ButtonTooltipContainer>
+          title: canManageUnits ? 'Manage Units' : 'Units',
+          renderBulkAction: canManageUnits
+            ? (_selectedIds, selectedRows) => (
+                <UnitBulkActions
+                  projectId={projectId}
+                  unitGroupId={unitGroupId}
+                  units={selectedRows}
+                  ceEnabled={ceEnabled}
+                />
               )
             : undefined,
         }}
