@@ -1,54 +1,44 @@
 import { useCallback, useMemo } from 'react';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-
 import {
   getViewOccupantEnrollmentAction,
   UNIT_COLUMNS,
 } from '@/modules/units/columns/unitColumns';
-import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
-import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
-
-import { evictUnitsQuery } from '@/modules/units/util';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetUnitsDocument,
   GetUnitsQuery,
   GetUnitsQueryVariables,
+  UnitOccupancyStatus,
   UnitTableRowFieldsFragment,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   projectId: string;
-  allowDeleteUnits: boolean;
-  unitGroupId?: string; // if this table is for a specific unit group
+  unitGroupsEnabled?: boolean; // whether to show Unit Groups functionality
   ceEnabled?: boolean; // whether to show CE details
 }
 
-// TODO(#7773) support "mark available" as a bulk action when CE is enabled
-const UnitManagementTable: React.FC<Props> = ({
+// Table for displaying all Units in the Project. This table is read-only.
+const ProjectUnitsTable: React.FC<Props> = ({
   projectId,
-  unitGroupId,
-  allowDeleteUnits,
+  unitGroupsEnabled = false,
   ceEnabled = false,
 }) => {
-  const { setUnitToDelete, renderSingleDeleteDialog, renderBulkDeleteButton } =
-    useDeleteUnits({
-      onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
-    });
-
   const columns: ColumnDef<UnitTableRowFieldsFragment>[] = useMemo(() => {
     return [
       UNIT_COLUMNS.unitType,
       UNIT_COLUMNS.unitId,
+      ...(unitGroupsEnabled ? [UNIT_COLUMNS.unitGroup] : []),
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
       ...(ceEnabled ? [UNIT_COLUMNS.ceReferralStatus] : []),
     ];
-  }, [ceEnabled]);
+  }, [unitGroupsEnabled, ceEnabled]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
@@ -57,34 +47,42 @@ const UnitManagementTable: React.FC<Props> = ({
   });
 
   const { project } = useProjectDashboardContext();
-  const { getCeActions, loading } = useUnitCeActions({ project });
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
       const actions = [];
-      if (ceEnabled) {
-        actions.push(...getCeActions(unit));
+
+      // Link to Unit Group
+      if (unitGroupsEnabled && unit.unitGroup) {
+        actions.push({
+          title: 'View Unit Group',
+          key: 'viewGroup',
+          ariaLabel: `'View Unit Group' ${unit.unitGroup.name}`,
+          to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+            projectId: project.id,
+            unitGroupId: unit.unitGroup.id,
+          }),
+        });
       }
+
       // If unit is occupied, link to hoh Enrollment
       const viewEnrollmentAction = getViewOccupantEnrollmentAction(unit);
       if (viewEnrollmentAction) {
         actions.push(viewEnrollmentAction);
       }
 
-      // Delete unit
-      if (allowDeleteUnits) {
-        actions.push({
-          title: 'Delete Unit',
-          key: 'delete',
-          ariaLabel: `Delete Unit ${unit.id}`,
-          onClick: () => setUnitToDelete(unit.id),
-          disabled: !unit.deletable,
-        });
-      }
-
       return actions;
     },
-    [allowDeleteUnits, ceEnabled, getCeActions, setUnitToDelete]
+    [unitGroupsEnabled, project.id]
+  );
+
+  const rowLinkToUnit = useCallback(
+    (row: UnitTableRowFieldsFragment) =>
+      generateSafePath(ProjectDashboardRoutes.UNIT, {
+        projectId,
+        unitId: row.id,
+      }),
+    [projectId]
   );
 
   return (
@@ -103,28 +101,19 @@ const UnitManagementTable: React.FC<Props> = ({
         columns={columns}
         pagePath='project.units'
         noData='No units'
-        selectable={ceEnabled || allowDeleteUnits ? 'checkbox' : undefined}
-        isRowSelectable={(row) => !!row.deletable}
-        defaultFilterValues={{ unitGroup: unitGroupId }}
+        isRowSelectable={(row) =>
+          row.occupancyStatus === UnitOccupancyStatus.Vacant
+        }
         filters={filters}
         recordType='Unit'
-        EnhancedTableToolbarProps={{
-          title: 'Manage Units',
-          renderBulkAction: allowDeleteUnits
-            ? (selectedUnitIds) => (
-                <ButtonTooltipContainer title='Delete Selected Units'>
-                  {renderBulkDeleteButton(selectedUnitIds as string[])}
-                </ButtonTooltipContainer>
-              )
-            : undefined,
-        }}
         rowName={(row) => `${row.unitType?.description} - ${row.id}`}
         rowSecondaryActionConfigs={rowSecondaryActionConfigs}
-        loading={loading}
         loadingVariant='linear'
+        // Only link to Unit page if CE is enabled. For now we don't have anything non-CE to show.
+        rowLinkTo={ceEnabled ? rowLinkToUnit : undefined}
+        rowActionTitle={ceEnabled ? 'View Unit' : undefined}
       />
-      {renderSingleDeleteDialog()}
     </>
   );
 };
-export default UnitManagementTable;
+export default ProjectUnitsTable;

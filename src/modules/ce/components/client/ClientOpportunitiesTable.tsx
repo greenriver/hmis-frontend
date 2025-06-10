@@ -18,8 +18,8 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
   {
-    header: 'Opportunity Name',
-    key: 'opportunityName',
+    header: 'Unit Name',
+    key: 'unitName',
     render: 'name',
     sticky: 'left',
   },
@@ -46,6 +46,12 @@ const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
   },
 ];
 
+/**
+ * This component displays a table of open opportunities that the client is eligible for.
+ * While the term "units" has been adopted in many other tables and contexts, we are
+ * keeping the "opportunities" language here. May want to revisit this to call them
+ * "available units" or "vacancies" in the future, depending on user feedback.
+ */
 const ClientOpportunitiesTable: React.FC = () => {
   const { client } = useClientDashboardContext();
   const { id: clientId } = client;
@@ -83,9 +89,9 @@ const ClientOpportunitiesTable: React.FC = () => {
           noData='No opportunities'
           paginationItemName='opportunities'
           rowLinkTo={(opportunity) =>
-            generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+            generateSafePath(ProjectDashboardRoutes.UNIT, {
               projectId: opportunity.projectId,
-              opportunityId: opportunity.id,
+              unitId: opportunity.unit?.id,
             })
           }
           rowActionTitle='View Opportunity'

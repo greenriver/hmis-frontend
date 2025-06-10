@@ -1,12 +1,19 @@
 fragment CeOpportunitySummaryFields on CeOpportunity {
   id
   name
-  categories
   status
   active
-  expiresAt
   projectId
   projectName
+  unit {
+    id
+    name
+    unitGroup {
+      id
+      name
+    }
+  }
+  dateAvailable
 }
 
 fragment CeOpportunityFields on CeOpportunity {
@@ -43,6 +50,9 @@ fragment CeMatchRuleFields on CeMatchRule {
   id
   name
   ownerType
+  expression
+  projectTypes
+  funders
 }
 
 fragment CeCandidateFields on CeCandidate {
@@ -134,6 +144,7 @@ fragment ClientCeReferralTableFields on CeReferral {
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
   ...CeReferralWithSwimlanes
+  workflowTemplateName
   steps {
     ...CeReferralStepSummaryFields
   }

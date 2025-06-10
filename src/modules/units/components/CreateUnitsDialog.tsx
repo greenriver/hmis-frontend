@@ -1,0 +1,165 @@
+import LoadingButton from '@mui/lab/LoadingButton';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Stack,
+} from '@mui/material';
+import { Box } from '@mui/system';
+import React, { useCallback, useState } from 'react';
+import NumberInput from '@/components/elements/input/NumberInput';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
+import FormSelect from '@/modules/form/components/FormSelect';
+import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
+import { isPickListOption } from '@/modules/form/types';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { evictUnitsQuery } from '@/modules/units/util';
+import {
+  PickListType,
+  useCreateUnitsMutation,
+  useGetPickListQuery,
+} from '@/types/gqlTypes';
+
+interface CreateUnitsDialogProps {
+  projectId: string;
+  unitGroupId?: string; // If provided, units will be created in this group
+  open: boolean;
+  onClose: () => void;
+}
+
+const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
+  projectId,
+  unitGroupId,
+  open,
+  onClose,
+}) => {
+  const [unitType, setUnitType] = useState<string | null>(null);
+  const [numberOfUnits, setNumberOfUnits] = useState<number | null>(null);
+  const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
+
+  const handleClose = useCallback(() => {
+    setUnitType(null);
+    setNumberOfUnits(null);
+    setErrors(emptyErrorState);
+    onClose();
+  }, [onClose]);
+
+  const [createUnits, { loading }] = useCreateUnitsMutation({
+    onCompleted: (data) => {
+      if (data.createUnits?.errors?.length) {
+        setErrors(partitionValidations(data.createUnits.errors));
+      } else {
+        evictUnitsQuery(projectId, unitGroupId);
+        handleClose();
+      }
+    },
+    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+  });
+
+  // TODO(7409) - instead of using the global permission, check project-level config
+  const [canViewCoordinatedEntry] = useHasRootPermissions([
+    'canViewCoordinatedEntry',
+  ]);
+
+  const handleSubmit = useCallback(() => {
+    if (!unitType || !numberOfUnits) return;
+
+    createUnits({
+      variables: {
+        input: {
+          input: {
+            projectId,
+            unitGroupId,
+            unitTypeId: unitType,
+            count: numberOfUnits,
+          },
+        },
+        includeCeFields: canViewCoordinatedEntry,
+      },
+    });
+  }, [
+    unitType,
+    numberOfUnits,
+    createUnits,
+    projectId,
+    unitGroupId,
+    canViewCoordinatedEntry,
+  ]);
+
+  const {
+    data: { pickList: unitTypePickList } = {},
+    loading: unitTypePickListLoading,
+    error: unitTypePickListError,
+  } = useGetPickListQuery({
+    variables: {
+      pickListType: PickListType.PossibleUnitTypesForProject,
+      projectId: projectId,
+    },
+  });
+
+  if (unitTypePickListError) throw unitTypePickListError;
+
+  return (
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
+      <DialogTitle>Create Units</DialogTitle>
+      <DialogContent sx={{ my: 2 }}>
+        {errorState.errors.length > 0 && (
+          <Box sx={{ mb: 2 }}>
+            <ErrorAlert key='errors' errors={errorState.errors} fixable />
+          </Box>
+        )}
+        <ApolloErrorAlert error={errorState.apolloError} />
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <FormSelect
+              value={unitType ? { code: unitType } : null}
+              label={getRequiredLabel('Unit Type', true)}
+              placeholder='Select Unit Type'
+              loading={unitTypePickListLoading}
+              options={unitTypePickList || []}
+              onChange={(_event, option) => {
+                if (isPickListOption(option)) {
+                  setUnitType(option.code);
+                }
+              }}
+              maxWidth={400}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <NumberInput
+              label={getRequiredLabel('Number of Units to Add', true)}
+              value={numberOfUnits ?? ''}
+              onChange={(e) => setNumberOfUnits(Number(e.target.value))}
+              max={200}
+            />
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Stack gap={3} direction='row'>
+          <Button onClick={handleClose} disabled={loading} color='grayscale'>
+            Cancel
+          </Button>
+          <LoadingButton
+            onClick={handleSubmit}
+            loading={loading}
+            disabled={!unitType || !numberOfUnits || numberOfUnits <= 0}
+          >
+            Add Units
+          </LoadingButton>
+        </Stack>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+export default CreateUnitsDialog;

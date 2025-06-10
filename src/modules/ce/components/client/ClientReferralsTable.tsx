@@ -35,10 +35,10 @@ export const REFERRAL_WITH_PROJECT_COLUMNS: {
 };
 
 const COLUMNS: ColumnDef<ClientCeReferralTableFieldsFragment>[] = [
-  { ...REFERRAL_COLUMNS.date, sticky: 'left' },
-  REFERRAL_WITH_PROJECT_COLUMNS.projectName,
-  REFERRAL_WITH_PROJECT_COLUMNS.projectType,
+  { ...REFERRAL_WITH_PROJECT_COLUMNS.projectName, sticky: 'left' },
+  REFERRAL_COLUMNS.date,
   REFERRAL_COLUMNS.status,
+  REFERRAL_WITH_PROJECT_COLUMNS.projectType,
   REFERRAL_COLUMNS.referredBy,
   REFERRAL_COLUMNS.currentSteps,
 ];

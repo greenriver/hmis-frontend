@@ -1,5 +1,5 @@
 import { Container, Stack, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useDetailedProject } from '../hooks/useDetailedProject';
@@ -72,13 +72,21 @@ const ProjectDashboard: React.FC = () => {
   const isPrint = useIsPrintView();
   const navItems = useProjectDashboardNavItems(project);
   const { noPadding, ...dashboardState } = useDashboardState();
+  // allow pages to "override" the default breadcrumb text
+  const [breadcrumbOverrides, overrideBreadcrumbTitles] = useState<
+    Record<string, string> | undefined
+  >();
+
   const outletContext: ProjectDashboardContext | undefined = useMemo(
-    () => (project ? { project } : undefined),
+    () => (project ? { project, overrideBreadcrumbTitles } : undefined),
     [project]
   );
 
   const breadCrumbConfig = useProjectBreadcrumbConfig(outletContext);
-  const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
+  const breadcrumbs = useDashboardBreadcrumbs(
+    breadCrumbConfig,
+    breadcrumbOverrides
+  );
 
   if ((loading && !project) || !navItems) return <Loading />;
   if (!project || !outletContext) return <NotFound />;
@@ -113,7 +121,10 @@ const ProjectDashboard: React.FC = () => {
   );
 };
 
-export type ProjectDashboardContext = { project: ProjectAllFieldsFragment };
+export type ProjectDashboardContext = {
+  project: ProjectAllFieldsFragment;
+  overrideBreadcrumbTitles: (crumbs: any) => void;
+};
 export const useProjectDashboardContext = () =>
   useOutletContext<ProjectDashboardContext>();
 

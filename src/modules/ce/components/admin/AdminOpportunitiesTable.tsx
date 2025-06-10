@@ -1,6 +1,5 @@
 import { Paper } from '@mui/material';
 import React from 'react';
-import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { ColumnDef } from '@/components/elements/table/types';
 import { OPPORTUNITY_COLUMNS } from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -18,7 +17,12 @@ import {
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: ColumnDef<CeOpportunityAdminFieldsFragment>[] = [
-  OPPORTUNITY_COLUMNS.project,
+  {
+    header: 'Project',
+    key: 'project',
+    sticky: 'left',
+    render: 'projectName',
+  },
   {
     header: 'Project Type',
     key: 'projectType',
@@ -29,20 +33,8 @@ const COLUMNS: ColumnDef<CeOpportunityAdminFieldsFragment>[] = [
     key: 'organization',
     render: 'organizationName',
   },
-  {
-    header: 'Unit',
-    key: 'unit',
-    render: ({ unit }) => unit?.name,
-  },
-  {
-    header: 'Date Available',
-    key: 'dateAvailable',
-    render: ({ dateAvailable }) => {
-      if (dateAvailable)
-        return <DateWithRelativeTooltip dateString={dateAvailable} />;
-      return 'Available now';
-    },
-  },
+  OPPORTUNITY_COLUMNS.unitName,
+  OPPORTUNITY_COLUMNS.dateAvailable,
 ];
 
 interface Props {}
@@ -69,19 +61,19 @@ const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
         queryDocument={GetAdminCeOpportunitiesDocument}
         recordType='CeOpportunity'
         pagePath='ceOpportunities'
-        noData='No opportunities'
-        paginationItemName='opportunities'
+        noData='No available units'
+        paginationItemName='unit'
         filters={filters}
         defaultFilterValues={{
           status: [CeOpportunityStatus.Open],
         }}
         rowLinkTo={(row) =>
-          generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+          generateSafePath(ProjectDashboardRoutes.UNIT, {
             projectId: row.projectId,
-            opportunityId: row.id,
+            unitId: row.unit?.id,
           })
         }
-        rowActionTitle='View Opportunity'
+        rowActionTitle='View Unit'
         rowSecondaryActionConfigs={(row) => [
           {
             key: 'project',

@@ -5,7 +5,7 @@ import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeOpportunityStatus,
   ProjectAllFieldsFragment,
-  UnitFieldsFragment,
+  UnitTableRowFieldsFragment,
   useMarkUnitsAvailableMutation,
   useMarkUnitsUnavailableMutation,
 } from '@/types/gqlTypes';
@@ -17,7 +17,7 @@ export const useUnitCeActions = ({
   project: ProjectAllFieldsFragment;
 }): {
   loading: boolean;
-  getCeActions: (unit: UnitFieldsFragment) => CommonMenuItem[];
+  getCeActions: (unit: UnitTableRowFieldsFragment) => CommonMenuItem[];
 } => {
   // TODO(7409) - instead of using the global permission, check project-level config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
@@ -35,23 +35,26 @@ export const useUnitCeActions = ({
   ] = useMarkUnitsUnavailableMutation();
 
   const getCeActions = useCallback(
-    (unit: UnitFieldsFragment) => {
+    (unit: UnitTableRowFieldsFragment) => {
+      if (!canViewCoordinatedEntry) return [];
+
       const actions: CommonMenuItem[] = [];
-      if (!canViewCoordinatedEntry) return actions;
 
-      if (unit.latestOpportunity) {
-        actions.push({
-          title: 'View Opportunity',
-          key: 'viewOpportunity',
-          ariaLabel: `View Opportunity for Unit ${unit.id}`,
-          to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-            projectId: project.id,
-            opportunityId: unit.latestOpportunity.id,
-          }),
-        });
-      }
+      // Always allow linking to Unit page, if CE is enabled, to view/manage eligibility criteria
+      actions.push({
+        title: 'View Unit',
+        key: 'viewUnit',
+        ariaLabel: `View Unit ${unit.id}`,
+        to: generateSafePath(ProjectDashboardRoutes.UNIT, {
+          projectId: project.id,
+          unitId: unit.id,
+        }),
+      });
 
-      if (project.access.canManageUnits) {
+      // Opportunity creation is only available if the unit has an associated CE Workflow Template
+      const hasWorkflowTemplate = unit.workflowTemplateName;
+
+      if (hasWorkflowTemplate && project.access.canManageUnits) {
         if (unit.latestOpportunity && unit.latestOpportunity.active) {
           // Show this option if the opportunity is active, but disable it if it's locked
           actions.push({

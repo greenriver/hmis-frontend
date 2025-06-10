@@ -14,13 +14,16 @@ fragment UnitTypeFields on UnitTypeObject {
   dateCreated
 }
 
-fragment UnitFields on Unit {
+fragment UnitTableRowFields on Unit {
   id
+  name
   unitSize
   unitType {
     ...UnitTypeFields
   }
-  occupants {
+  occupancyStatus
+  deletable
+  occupants @include(if: $includeClientOccupants) {
     id
     relationshipToHoH
     client {
@@ -28,7 +31,40 @@ fragment UnitFields on Unit {
       ...ClientName
     }
   }
+  unitGroup {
+    ...UnitGroupFields
+  }
   ...UnitWithCeFields @include(if: $includeCeFields)
+}
+
+fragment UnitDetailFields on Unit {
+  id
+  name
+  unitSize
+  acceptingCeReferrals
+  unitType {
+    ...UnitTypeFields
+  }
+  unitGroup {
+    ...UnitGroupFields
+  }
+  eligibilityRequirements @include(if: $includeCeFields) {
+    ...CeMatchRuleFields
+  }
+  priorityScheme @include(if: $includeCeFields) {
+    ...CeMatchRuleFields
+  }
+  latestOpportunity @include(if: $includeCeFields) {
+    ...CeOpportunityFields
+    candidates(limit: 1, offset: 0) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeCandidateFields
+      }
+    }
+  }
 }
 
 fragment UnitWithCeFields on Unit {
@@ -39,4 +75,32 @@ fragment UnitWithCeFields on Unit {
     }
   }
   acceptingCeReferrals
+  workflowTemplateName
+}
+
+fragment UnitGroupFields on UnitGroup {
+  id
+  name
+}
+
+fragment UnitGroupCapacityFields on UnitGroup {
+  id
+  name
+  capacity
+  availability
+  unitTypes {
+    ...UnitTypeCapacityFields
+  }
+}
+
+fragment UnitGroupDetailFields on UnitGroup {
+  ...UnitGroupCapacityFields
+  workflowTemplateName
+  workflowTemplateIdentifier
+  eligibilityRequirements {
+    ...CeMatchRuleFields
+  }
+  priorityScheme {
+    ...CeMatchRuleFields
+  }
 }

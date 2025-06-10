@@ -12,7 +12,7 @@ interface Props {
   onClose: VoidFunction;
 }
 const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
-  const { referral, opportunityPath } = useReferralContext();
+  const { referral, unitPath } = useReferralContext();
 
   const { status, opportunity } = referral;
   const clientName = clientNameFromRecordWithOptionalClient(referral);
@@ -61,11 +61,11 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
             severity: 'info',
           }}
           items={[
-            ...(opportunityPath
+            ...(unitPath
               ? [
                   {
-                    title: 'Back to Opportunity',
-                    to: opportunityPath,
+                    title: 'Back to Unit',
+                    to: unitPath,
                   },
                 ]
               : []),

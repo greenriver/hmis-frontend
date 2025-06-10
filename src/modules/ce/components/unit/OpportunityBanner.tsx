@@ -4,8 +4,8 @@ import React, { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import BeginReferralButton from '@/modules/ce/components/opportunity/BeginReferralButton';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
+import BeginReferralButton from '@/modules/ce/components/unit/BeginReferralButton';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
@@ -28,7 +28,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
   const header = useMemo(() => {
     if (referral?.status === CeReferralStatus.Accepted) return 'Filled By';
     if (referral && referral.active) return 'In-Progress Referral';
-    if (topCandidate) return 'Top Prioritization';
+    if (topCandidate) return 'Top Prioritized Client';
   }, [referral, topCandidate]);
 
   const clientName = useMemo(() => {

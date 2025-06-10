@@ -17,14 +17,6 @@ const ProjectCePage: React.FC = () => {
   const tabDefinitions = useMemo(() => {
     const defs = [];
 
-    if (project.access.canViewUnits) {
-      defs.push({
-        title: 'Available Units',
-        key: 'opportunities',
-        contents: <ProjectOpportunitiesTable />,
-      });
-    }
-
     if (project.access.canViewReferrals || project.access.canViewOwnReferrals) {
       defs.push({
         title: 'Ongoing Referrals',
@@ -33,6 +25,13 @@ const ProjectCePage: React.FC = () => {
       });
     }
 
+    if (project.access.canViewUnits) {
+      defs.push({
+        title: 'Available Units',
+        key: 'available-units',
+        contents: <ProjectOpportunitiesTable />,
+      });
+    }
     return defs;
   }, [
     project.access.canViewOwnReferrals,
