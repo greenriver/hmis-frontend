@@ -1,19 +1,20 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Button, Grid, Paper, Stack } from '@mui/material';
 
 import { useEffect, useState } from 'react';
 import UnitManagementTable from './UnitManagementTable';
 
-import CommonCard from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import UnitGroupCeConfigurationCard from '@/modules/ce/components/unitGroup/UnitGroupCeConfigurationCard';
+import UnitGroupDefaultContactsCard from '@/modules/ce/components/unitGroup/UnitGroupDefaultContactsCard';
+import UnitGroupEligibilityCard from '@/modules/ce/components/unitGroup/UnitGroupEligibilityCard';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
-import UnitGroupEligibilityCard from '@/modules/units/components/UnitGroupEligibilityCard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { useGetUnitGroupQuery } from '@/types/gqlTypes';
 
@@ -45,15 +46,17 @@ const UnitGroupPage = () => {
   if (loading) return <Loading />;
   if (error) throw error;
   if (!unitGroup) return <NotFound />;
-  const canEdit = project.access.canManageUnits;
+  const canEditUnitGroup = project.access.canManageUnits;
 
   return (
     <>
       <PageTitle
-        overlineText={canEdit ? 'Manage Unit Group' : 'View Unit Group'}
+        overlineText={
+          canEditUnitGroup ? 'Manage Unit Group' : 'View Unit Group'
+        }
         title={unitGroup.name}
         actions={
-          canEdit && (
+          canEditUnitGroup && (
             <Button
               onClick={() => setDialogOpen(true)}
               startIcon={<AddIcon />}
@@ -69,19 +72,14 @@ const UnitGroupPage = () => {
         {canViewCoordinatedEntry && (
           <Grid item xs={4}>
             <Stack gap={2}>
-              <CommonCard title='Configuration'>
-                <Typography>
-                  <b>Workflow Template:</b>{' '}
-                  {unitGroup.workflowTemplateName || 'None'}
-                </Typography>
-              </CommonCard>
-              {/* TODO(#7538) */}
-              <CommonCard title='Default Contacts'>
-                Assign Default Contacts
-              </CommonCard>
+              <UnitGroupCeConfigurationCard unitGroup={unitGroup} />
+              <UnitGroupDefaultContactsCard
+                unitGroup={unitGroup}
+                canEdit={canEditUnitGroup}
+              />
               <UnitGroupEligibilityCard
                 unitGroup={unitGroup}
-                canEdit={canEdit}
+                canEdit={canEditUnitGroup}
               />
             </Stack>
           </Grid>
