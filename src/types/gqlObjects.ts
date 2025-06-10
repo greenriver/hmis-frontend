@@ -1146,6 +1146,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
+      { name: 'sex', type: { kind: 'ENUM', name: 'Sex', ofType: null } },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'ssnDataQuality',
@@ -2712,6 +2713,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'losUnderThreshold',
         type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'mentalHealthConsultation',
+        type: { kind: 'ENUM', name: 'MentalHealthConsultation', ofType: null },
       },
       {
         name: 'mentalHealthDisorderFam',
@@ -5987,6 +5992,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewMyDashboard',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewOpenEnrollmentSummary',
         type: {
           kind: 'NON_NULL',
@@ -6393,6 +6406,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+      {
+        name: 'informationDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
         name: 'movingOnOtherType',

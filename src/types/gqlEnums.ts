@@ -622,7 +622,8 @@ export const HmisEnums = {
     HUD_COC_TRANSITIONAL_HOUSING: 'HUD: CoC - Transitional Housing',
     HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP:
       'HUD: CoC - Youth Homeless Demonstration Program (YHDP)',
-    HUD_ESG_CV: 'HUD: ESG - CV',
+    HUD_COC_BUILDS: 'HUD: CoC Builds',
+    HUD_ESG_CV_DEPRECATED: 'HUD: ESG - CV [Deprecated]',
     HUD_ESG_EMERGENCY_SHELTER:
       'HUD: ESG - Emergency Shelter (operating and/or essential services)',
     HUD_ESG_HOMELESSNESS_PREVENTION: 'HUD: ESG - Homelessness Prevention',
@@ -631,7 +632,7 @@ export const HmisEnums = {
     HUD_ESG_STREET_OUTREACH: 'HUD: ESG - Street Outreach',
     HUD_HOME: 'HUD: HOME',
     HUD_HOME_ARP: 'HUD: HOME (ARP)',
-    HUD_HOPWA_CV: 'HUD: HOPWA - CV',
+    HUD_HOPWA_CV_DEPRECATED: 'HUD: HOPWA - CV [Deprecated]',
     HUD_HOPWA_HOTEL_MOTEL_VOUCHERS: 'HUD: HOPWA - Hotel/Motel Vouchers',
     HUD_HOPWA_HOUSING_INFORMATION: 'HUD: HOPWA - Housing Information',
     HUD_HOPWA_PERMANENT_HOUSING:
@@ -846,6 +847,16 @@ export const HmisEnums = {
       'Most recent episode occurred more than one year ago',
     NONE: 'None',
     DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  MentalHealthConsultation: {
+    INVALID: 'Invalid Value',
+    MENTAL_HEALTH_CONSULTATION_COMPLETED:
+      'Mental health consultation completed',
+    MENTAL_HEALTH_CONSULTATION_BEING_COORDINATED_ARRANGED_WITH_VA_PROVIDER:
+      'Mental health consultation being coordinated/arranged with VA provider',
+    MENTAL_HEALTH_CONSULTATION_BEING_COORDINATED_ARRANGED_WITH_OTHER_PROVIDER:
+      'Mental health consultation being coordinated/arranged with other provider',
+    OFFER_DECLINED: 'Offer declined',
   },
   MilitaryBranch: {
     INVALID: 'Invalid Value',
@@ -1798,13 +1809,12 @@ export const HmisEnums = {
     RHY_SERVICE_CONNECTIONS__PARENTING_EDUCATION_FOR_YOUTH_WITH_CHILDREN:
       'Parenting education for youth with children',
     SSVF_FINANCIAL_ASSISTANCE__CHILD_CARE: 'Child care',
+    SSVF_SERVICE__HEALTHCARE_NAVIGATION: 'Healthcare Navigation',
     HOPWA_SERVICE__OUTREACH_AND_OR_ENGAGEMENT: 'Outreach and/or engagement',
     HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_PRIOR_TO_EVER_RECEIVING_A_VOUCHER:
       'Veteran exited - prior to ever receiving a voucher',
     PATH_REFERRAL__TEMPORARY_HOUSING: 'Temporary housing',
     PATH_SERVICE__SECURITY_DEPOSITS: 'Security deposits',
-    SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED:
-      'General housing stability assistance - emergency supplies [Deprecated]',
     HOPWA_SERVICE__SUBSTANCE_USE_SERVICES_TREATMENT:
       'Substance use services/treatment',
     HUD_VASH_OTH_VOUCHER_TRACKING__OTHER: 'Other',
@@ -1854,6 +1864,7 @@ export const HmisEnums = {
       'Transportation services: vehicle repair/maintenance',
     SSVF_SERVICE__RAPID_RESOLUTION: 'Rapid Resolution',
   },
+  Sex: { INVALID: 'Invalid Value', FEMALE: 'Female', MALE: 'Male' },
   SexualOrientation: {
     INVALID: 'Invalid Value',
     HETEROSEXUAL: 'Heterosexual',
