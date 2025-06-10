@@ -122,7 +122,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
           <Grid item xs={12}>
             <FormSelect
               value={unitType ? { code: unitType } : null}
-              label={getRequiredLabel('Unit Type', false)}
+              label={getRequiredLabel('Unit Type', true)}
               placeholder='Select Unit Type'
               loading={unitTypePickListLoading}
               options={unitTypePickList || []}

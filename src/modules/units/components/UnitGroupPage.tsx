@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UnitManagementTable from './UnitManagementTable';
 
 import CommonCard from '@/components/elements/CommonCard';
@@ -14,11 +14,12 @@ import { useProjectDashboardContext } from '@/modules/projects/components/Projec
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
 import UnitGroupEligibilityCard from '@/modules/units/components/UnitGroupEligibilityCard';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { useGetUnitGroupQuery } from '@/types/gqlTypes';
 
 // Page for viewing/managing a single unit group, and the units within it
 const UnitGroupPage = () => {
-  const { project } = useProjectDashboardContext();
+  const { project, overrideBreadcrumbTitles } = useProjectDashboardContext();
   const { unitGroupId } = useSafeParams() as { unitGroupId: string };
   const {
     data: { unitGroup } = {},
@@ -32,6 +33,14 @@ const UnitGroupPage = () => {
   const [canViewCoordinatedEntry] = useHasRootPermissions([
     'canViewCoordinatedEntry',
   ]);
+
+  // Set the breadcrumb so it says the correct name of this unit group
+  useEffect(() => {
+    if (!unitGroup) return;
+    overrideBreadcrumbTitles({
+      [ProjectDashboardRoutes.UNIT_GROUP]: unitGroup.name,
+    });
+  }, [overrideBreadcrumbTitles, unitGroup]);
 
   if (loading) return <Loading />;
   if (error) throw error;
