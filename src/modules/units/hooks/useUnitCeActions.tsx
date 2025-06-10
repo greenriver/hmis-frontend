@@ -50,10 +50,13 @@ export const useUnitCeActions = ({
         }),
       });
 
-      if (project.access.canManageUnits) {
+      // Opportunity creation is only available if the unit has an associated CE Workflow Template
+      const hasWorkflowTemplate = unit.workflowTemplateName;
+
+      if (hasWorkflowTemplate && project.access.canManageUnits) {
+        // TODO(#7537) - canBeMarkedAvailable doesn't guarantee that there are no current occupants.
+        // Implement a confirmation modal enabling the user to specify the "available on date".
         if (unit.canBeMarkedAvailable) {
-          // TODO(#7537) - canBeMarkedAvailable doesn't guarantee that there are no current occupants.
-          // Implement a confirmation modal enabling the user to specify the "available on date".
           actions.push({
             title: 'Start Accepting Referrals',
             key: 'markAvailable',

@@ -6,8 +6,8 @@ interface Props {
   unitType: UnitTypeCapacityFieldsFragment;
 }
 
-const occupiedColor = 'primary.dark';
-const inProgressColor = 'primary.main';
+const occupiedColor = 'primary.main';
+const inProgressColor = 'primary.dark';
 const vacantColor = 'primary.200';
 
 export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {

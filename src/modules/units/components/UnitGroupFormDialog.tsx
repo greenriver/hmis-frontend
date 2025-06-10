@@ -5,7 +5,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   Stack,
 } from '@mui/material';
 import { Box } from '@mui/system';
@@ -112,36 +111,32 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
           </Box>
         )}
         <ApolloErrorAlert error={errorState.apolloError} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextInput
-              label={getRequiredLabel('Unit Group Name', true)}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Grid>
+        <Stack gap={2}>
+          <TextInput
+            label={getRequiredLabel('Unit Group Name', true)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           {canViewCoordinatedEntry && (
-            <Grid item xs={12}>
-              <FormSelect
-                value={
-                  workflowTemplateIdentifier
-                    ? { code: workflowTemplateIdentifier }
-                    : null
+            <FormSelect
+              value={
+                workflowTemplateIdentifier
+                  ? { code: workflowTemplateIdentifier }
+                  : null
+              }
+              placeholder='Select Workflow'
+              label={getRequiredLabel('Referral Workflow', false)}
+              loading={templatePickListLoading}
+              options={templatePickList || []}
+              helperText='Select a workflow template to use for filling vacancies in this unit group.'
+              onChange={(_event, option) => {
+                if (isPickListOption(option)) {
+                  setWorkflowTemplateIdentifier(option.code);
                 }
-                placeholder='Select Workflow'
-                label={getRequiredLabel('Referral Workflow', false)}
-                loading={templatePickListLoading}
-                options={templatePickList || []}
-                helperText='Select a workflow template to use for filling vacancies in this unit group.'
-                onChange={(_event, option) => {
-                  if (isPickListOption(option)) {
-                    setWorkflowTemplateIdentifier(option.code);
-                  }
-                }}
-              />
-            </Grid>
+              }}
+            />
           )}
-        </Grid>
+        </Stack>
       </DialogContent>
       <DialogActions>
         <Stack gap={3} direction='row'>

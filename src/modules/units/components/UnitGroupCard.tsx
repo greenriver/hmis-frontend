@@ -19,8 +19,10 @@ const UnitGroupCard: React.FC<Props> = ({ unitGroup, menuItems }) => {
         alignItems='flex-start'
       >
         <div>
-          <Typography variant='overline'>Unit Group</Typography>
-          <Typography variant='h5' sx={{ mb: 1 }}>
+          <Typography component='h2' variant='h5' sx={{ mb: 1 }}>
+            <Typography variant='overline' display='block'>
+              Unit Group
+            </Typography>
             {unitGroup.name}
           </Typography>
         </div>

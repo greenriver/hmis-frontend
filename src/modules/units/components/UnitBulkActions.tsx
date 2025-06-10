@@ -32,16 +32,16 @@ const getTooltip = ({
 
 interface Props {
   projectId: string;
-  unitGroupId: string;
+  unitGroupId?: string;
   units: UnitTableRowFieldsFragment[];
-  canAcceptReferrals: boolean;
+  ceEnabled?: boolean;
 }
 
 const UnitBulkActions: React.FC<Props> = ({
   projectId,
   unitGroupId,
   units,
-  canAcceptReferrals,
+  ceEnabled = false,
 }) => {
   // This component's philosophy is to let the user do what they are trying to
   // do as long as it's allowed on *any* of the units they have selected.
@@ -115,8 +115,14 @@ const UnitBulkActions: React.FC<Props> = ({
   }, [units]);
 
   return (
-    <Stack gap={1} my={1}>
-      {canAcceptReferrals && (
+    <Stack
+      gap={1}
+      my={1}
+      direction='row'
+      flexWrap='wrap'
+      sx={{ button: { width: 'auto' } }}
+    >
+      {ceEnabled && (
         <>
           <UnitBulkActionButton
             action='start'

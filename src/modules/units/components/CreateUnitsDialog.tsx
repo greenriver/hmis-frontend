@@ -11,6 +11,7 @@ import {
 import { Box } from '@mui/system';
 import React, { useCallback, useState } from 'react';
 import NumberInput from '@/components/elements/input/NumberInput';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import {
   emptyErrorState,
@@ -30,7 +31,7 @@ import {
 
 interface CreateUnitsDialogProps {
   projectId: string;
-  unitGroupId: string;
+  unitGroupId?: string; // If provided, units will be created in this group
   open: boolean;
   onClose: () => void;
 }
@@ -116,11 +117,12 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
             <ErrorAlert key='errors' errors={errorState.errors} fixable />
           </Box>
         )}
+        <ApolloErrorAlert error={errorState.apolloError} />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <FormSelect
               value={unitType ? { code: unitType } : null}
-              label={getRequiredLabel('Unit Type', false)}
+              label={getRequiredLabel('Unit Type', true)}
               placeholder='Select Unit Type'
               loading={unitTypePickListLoading}
               options={unitTypePickList || []}
@@ -137,6 +139,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
               label={getRequiredLabel('Number of Units to Add', true)}
               value={numberOfUnits ?? ''}
               onChange={(e) => setNumberOfUnits(Number(e.target.value))}
+              max={200}
             />
           </Grid>
         </Grid>
@@ -151,7 +154,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
             loading={loading}
             disabled={!unitType || !numberOfUnits || numberOfUnits <= 0}
           >
-            Create
+            Add Units
           </LoadingButton>
         </Stack>
       </DialogActions>

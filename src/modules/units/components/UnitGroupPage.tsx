@@ -1,24 +1,26 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Button, Grid, Paper, Stack } from '@mui/material';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import UnitManagementTable from './UnitManagementTable';
 
-import CommonCard from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import UnitGroupCeConfigurationCard from '@/modules/ce/components/unitGroup/UnitGroupCeConfigurationCard';
+import UnitGroupDefaultContactsCard from '@/modules/ce/components/unitGroup/UnitGroupDefaultContactsCard';
+import UnitGroupEligibilityCard from '@/modules/ce/components/unitGroup/UnitGroupEligibilityCard';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
-import UnitGroupEligibilityCard from '@/modules/units/components/UnitGroupEligibilityCard';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { useGetUnitGroupQuery } from '@/types/gqlTypes';
 
 // Page for viewing/managing a single unit group, and the units within it
 const UnitGroupPage = () => {
-  const { project } = useProjectDashboardContext();
+  const { project, overrideBreadcrumbTitles } = useProjectDashboardContext();
   const { unitGroupId } = useSafeParams() as { unitGroupId: string };
   const {
     data: { unitGroup } = {},
@@ -29,28 +31,32 @@ const UnitGroupPage = () => {
   });
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  // TODO(7409) - instead of using the global permission, check project-level CE config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
     'canViewCoordinatedEntry',
   ]);
 
-  const canAcceptReferrals = useMemo(
-    () => canViewCoordinatedEntry && !!unitGroup?.workflowTemplateIdentifier,
-    [canViewCoordinatedEntry, unitGroup?.workflowTemplateIdentifier]
-  );
+  // Set the breadcrumb so it says the correct name of this unit group
+  useEffect(() => {
+    if (!unitGroup) return;
+    overrideBreadcrumbTitles({
+      [ProjectDashboardRoutes.UNIT_GROUP]: unitGroup.name,
+    });
+  }, [overrideBreadcrumbTitles, unitGroup]);
 
   if (loading) return <Loading />;
   if (error) throw error;
   if (!unitGroup) return <NotFound />;
-  const canEdit = project.access.canManageUnits;
+  const canEditUnitGroup = project.access.canManageUnits;
 
   return (
     <>
       <PageTitle
-        overlineText={canEdit ? 'Manage Unit Group' : 'View Unit Group'}
+        overlineText={
+          canEditUnitGroup ? 'Manage Unit Group' : 'View Unit Group'
+        }
         title={unitGroup.name}
         actions={
-          canEdit && (
+          canEditUnitGroup && (
             <Button
               onClick={() => setDialogOpen(true)}
               startIcon={<AddIcon />}
@@ -64,26 +70,21 @@ const UnitGroupPage = () => {
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
         {canViewCoordinatedEntry && (
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={4}>
             <Stack gap={2}>
-              <CommonCard title='Configuration'>
-                <Typography>
-                  <b>Workflow Template:</b>{' '}
-                  {unitGroup.workflowTemplateName || 'None'}
-                </Typography>
-              </CommonCard>
-              {/* TODO(#7538) */}
-              <CommonCard title='Default Contacts'>
-                Assign Default Contacts
-              </CommonCard>
+              <UnitGroupCeConfigurationCard unitGroup={unitGroup} />
+              <UnitGroupDefaultContactsCard
+                unitGroup={unitGroup}
+                canEdit={canEditUnitGroup}
+              />
               <UnitGroupEligibilityCard
                 unitGroup={unitGroup}
-                canEdit={canEdit}
+                canEdit={canEditUnitGroup}
               />
             </Stack>
           </Grid>
         )}
-        <Grid item xs={12} sm={canViewCoordinatedEntry ? 8 : 12}>
+        <Grid item xs={canViewCoordinatedEntry ? 8 : 12}>
           <Stack gap={2}>
             <UnitGroupCard unitGroup={unitGroup} />
             {!!unitGroup.capacity && (
@@ -91,7 +92,7 @@ const UnitGroupPage = () => {
                 <UnitManagementTable
                   projectId={project.id}
                   unitGroupId={unitGroupId}
-                  canAcceptReferrals={canAcceptReferrals}
+                  ceEnabled={canViewCoordinatedEntry}
                 />
               </Paper>
             )}

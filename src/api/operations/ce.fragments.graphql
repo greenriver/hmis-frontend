@@ -8,7 +8,10 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
   unit {
     id
     name
-    # unit type / unit group?
+    unitGroup {
+      id
+      name
+    }
   }
   dateAvailable
 }

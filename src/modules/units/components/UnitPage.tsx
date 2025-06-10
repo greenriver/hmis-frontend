@@ -11,7 +11,7 @@ import UnitReferralStatus from '@/modules/ce/components/UnitReferralStatus';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import UnitOverview from '@/modules/units/components/UnitOverview';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { useGetUnitQuery } from '@/types/gqlTypes';
+import { CeOpportunityStatus, useGetUnitQuery } from '@/types/gqlTypes';
 
 interface Props {}
 const UnitPage: React.FC<Props> = ({}) => {
@@ -39,7 +39,6 @@ const UnitPage: React.FC<Props> = ({}) => {
 
     overrideBreadcrumbTitles({
       [ProjectDashboardRoutes.UNIT]: unit.name,
-      // fixme unable to inject unit group name
       [ProjectDashboardRoutes.UNIT_GROUP]: unit.unitGroup?.name || 'Unit Group',
     });
   }, [overrideBreadcrumbTitles, unit]);
@@ -55,7 +54,11 @@ const UnitPage: React.FC<Props> = ({}) => {
     });
 
     const opportunity = unit.latestOpportunity;
-    if (opportunity && project.access.canViewPrioritizedClientLists) {
+    if (
+      opportunity &&
+      opportunity.status !== CeOpportunityStatus.Closed &&
+      project.access.canViewPrioritizedClientLists
+    ) {
       defs.push({
         title: 'Eligible Clients',
         key: 'clients',

@@ -45,11 +45,13 @@ const EnhancedTableToolbar = <T extends { id: string }>({
         justifyContent={stackVertically ? undefined : 'space-between'}
         alignItems={stackVertically ? 'right' : 'center'}
         direction={stackVertically ? 'column' : 'row'}
-        gap={1}
+        columnGap={1}
+        rowGap={0.5}
         my={stackVertically ? 1 : 0}
         sx={{
           width: '100%',
           pr: 1,
+          flexWrap: 'wrap',
         }}
       >
         {selectedIds.length > 0 ? (
