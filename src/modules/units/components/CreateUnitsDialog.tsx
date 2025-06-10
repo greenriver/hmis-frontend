@@ -31,7 +31,7 @@ import {
 
 interface CreateUnitsDialogProps {
   projectId: string;
-  unitGroupId: string;
+  unitGroupId?: string; // If provided, units will be created in this group
   open: boolean;
   onClose: () => void;
 }
@@ -154,7 +154,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
             loading={loading}
             disabled={!unitType || !numberOfUnits || numberOfUnits <= 0}
           >
-            Create
+            Add Units
           </LoadingButton>
         </Stack>
       </DialogActions>

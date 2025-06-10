@@ -3,12 +3,16 @@ import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { UNIT_COLUMNS } from '@/modules/units/components/ProjectUnitsTable';
+
+import {
+  getViewOccupantEnrollmentAction,
+  UNIT_COLUMNS,
+} from '@/modules/units/columns/unitColumns';
 import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
-import { useUnitCeColumns } from '@/modules/units/hooks/useUnitCeColumns';
+
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
   GetUnitsDocument,
@@ -19,8 +23,9 @@ import {
 
 interface Props {
   projectId: string;
-  unitGroupId?: string;
   allowDeleteUnits: boolean;
+  unitGroupId?: string; // if this table is for a specific unit group
+  ceEnabled?: boolean; // whether to show CE details
 }
 
 // TODO(#7773) support "mark available" as a bulk action when CE is enabled
@@ -28,27 +33,22 @@ const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
   allowDeleteUnits,
+  ceEnabled = false,
 }) => {
   const { setUnitToDelete, renderSingleDeleteDialog, renderBulkDeleteButton } =
     useDeleteUnits({
       onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
     });
 
-  // TODO(7409) - instead of using the global permission, check project-level config
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
-
-  const ceColumns = useUnitCeColumns();
   const columns: ColumnDef<UnitTableRowFieldsFragment>[] = useMemo(() => {
     return [
       UNIT_COLUMNS.unitType,
       UNIT_COLUMNS.unitId,
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
-      ...ceColumns,
+      ...(ceEnabled ? [UNIT_COLUMNS.ceReferralStatus] : []),
     ];
-  }, [ceColumns]);
+  }, [ceEnabled]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
@@ -60,23 +60,30 @@ const UnitManagementTable: React.FC<Props> = ({
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      return [
-        ...getCeActions(unit),
-        ...(allowDeleteUnits
-          ? [
-              {
-                title: 'Delete Unit',
-                key: 'delete',
-                ariaLabel: `Delete Unit ${unit.id}`,
-                onClick: () => setUnitToDelete(unit.id),
-                disabled: !unit.deletable,
-                // disabledReason: 'Currently assigned units cannot be deleted',
-              },
-            ]
-          : []),
-      ];
+      const actions = [];
+      if (ceEnabled) {
+        actions.push(...getCeActions(unit));
+      }
+      // If unit is occupied, link to hoh Enrollment
+      const viewEnrollmentAction = getViewOccupantEnrollmentAction(unit);
+      if (viewEnrollmentAction) {
+        actions.push(viewEnrollmentAction);
+      }
+
+      // Delete unit
+      if (allowDeleteUnits) {
+        actions.push({
+          title: 'Delete Unit',
+          key: 'delete',
+          ariaLabel: `Delete Unit ${unit.id}`,
+          onClick: () => setUnitToDelete(unit.id),
+          disabled: !unit.deletable,
+        });
+      }
+
+      return actions;
     },
-    [allowDeleteUnits, getCeActions, setUnitToDelete]
+    [allowDeleteUnits, ceEnabled, getCeActions, setUnitToDelete]
   );
 
   return (
@@ -89,13 +96,13 @@ const UnitManagementTable: React.FC<Props> = ({
         defaultPageSize={25}
         queryVariables={{
           id: projectId,
-          includeCeFields: canViewCoordinatedEntry,
+          includeCeFields: ceEnabled,
         }}
         queryDocument={GetUnitsDocument}
         columns={columns}
         pagePath='project.units'
         noData='No units'
-        selectable={allowDeleteUnits ? 'checkbox' : undefined}
+        selectable={ceEnabled || allowDeleteUnits ? 'checkbox' : undefined}
         isRowSelectable={(row) => !!row.deletable}
         defaultFilterValues={{ unitGroup: unitGroupId }}
         filters={filters}

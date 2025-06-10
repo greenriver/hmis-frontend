@@ -86,6 +86,7 @@ const UnitGroupPage = () => {
                   projectId={project.id}
                   unitGroupId={unitGroupId}
                   allowDeleteUnits={project.access.canManageUnits}
+                  ceEnabled={canViewCoordinatedEntry}
                 />
               </Paper>
             )}
