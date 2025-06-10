@@ -122,16 +122,6 @@ const UnitManagementTable: React.FC<Props> = ({
         rowSecondaryActionConfigs={rowSecondaryActionConfigs}
         loading={loading}
         loadingVariant='linear'
-        // Only link to Unit page if CE is enabled. For now we don't have anything non-CE to show.
-        // rowLinkTo={
-        //   canViewCoordinatedEntry
-        //     ? (row) =>
-        //         generateSafePath(ProjectDashboardRoutes.UNIT, {
-        //           projectId,
-        //           unitId: row.id,
-        //         })
-        //     : undefined
-        // }
       />
       {renderSingleDeleteDialog()}
     </>
