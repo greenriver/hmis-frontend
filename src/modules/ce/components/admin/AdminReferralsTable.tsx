@@ -28,9 +28,7 @@ const COLUMNS: DataColumnDef<
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.currentSteps,
   {
-    // TODO - Ideally this column "Time in Current Step" should correspond with the filter "On Current Step Since..."
-    // aka, they should have the same title and use the same unit (days)
-    key: 'daysOnCurrentSteps',
+    key: 'daysOnCurrentTask',
     header: 'Days on Current Task',
     render: ({ daysOnCurrentSteps }) => {
       if (isNil(daysOnCurrentSteps)) return; // no open steps
@@ -38,12 +36,33 @@ const COLUMNS: DataColumnDef<
       return `${daysOnCurrentSteps} day${daysOnCurrentSteps > 1 ? 's' : ''}`;
     },
   },
+  {
+    ...REFERRAL_COLUMNS.currentTaskSwimlane,
+    // FIXME: bug, defaultHidden: false not working
+    // optional: {
+    //   defaultHidden: false,
+    // },
+  },
+  {
+    ...REFERRAL_COLUMNS.currentTaskAssignees,
+    optional: {
+      defaultHidden: true,
+    },
+  },
   REFERRAL_WITH_PROJECT_COLUMNS.projectName,
-  REFERRAL_WITH_PROJECT_COLUMNS.projectType,
+  {
+    ...REFERRAL_WITH_PROJECT_COLUMNS.projectType,
+    optional: {
+      defaultHidden: true,
+    },
+  },
   {
     key: 'organization',
     header: 'Organization',
     render: 'targetOrganizationName',
+    optional: {
+      defaultHidden: true,
+    },
   },
   {
     header: 'Unit',
@@ -54,11 +73,14 @@ const COLUMNS: DataColumnDef<
       queryVariableField: 'includeUnit',
     },
   },
-  REFERRAL_COLUMNS.referredBy,
+  { ...REFERRAL_COLUMNS.referredBy, optional: { defaultHidden: true } },
   {
     key: 'updatedBy',
     header: 'Last Updated By',
     render: ({ updatedBy }) => updatedBy?.name,
+    // optional: {
+    //   defaultHidden: false,
+    // },
   },
 ];
 interface Props {}

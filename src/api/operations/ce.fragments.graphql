@@ -8,6 +8,10 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
   unit {
     id
     name
+    unitType {
+      id
+      description
+    }
     unitGroup {
       id
       name
@@ -85,6 +89,11 @@ fragment CeReferralTableFields on CeReferral {
   currentSteps {
     id
     name
+    swimlane
+    assignees {
+      id
+      name
+    }
   }
   referredBy {
     id

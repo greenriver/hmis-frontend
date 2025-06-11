@@ -23,6 +23,16 @@ export const OPPORTUNITY_COLUMNS: Record<
     key: 'unit',
     render: ({ unit, name }) => unit?.name || name,
   },
+  unitType: {
+    header: 'Unit Type',
+    key: 'unitType',
+    render: ({ unit }) => unit?.unitType?.description,
+  },
+  unitGroup: {
+    header: 'Unit Group',
+    key: 'unitGroup',
+    render: ({ unit }) => unit?.unitGroup?.name,
+  },
   // TODO: eligible clients count
   dateAvailable: {
     header: 'Date Available',

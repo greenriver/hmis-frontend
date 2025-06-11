@@ -1,8 +1,8 @@
 import { Paper } from '@mui/material';
 import React from 'react';
-import { ColumnDef } from '@/components/elements/table/types';
 import { OPPORTUNITY_COLUMNS } from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
@@ -16,25 +16,42 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const COLUMNS: ColumnDef<CeOpportunityAdminFieldsFragment>[] = [
+const COLUMNS: DataColumnDef<
+  CeOpportunityAdminFieldsFragment,
+  GetAdminCeOpportunitiesQueryVariables
+>[] = [
+  { ...OPPORTUNITY_COLUMNS.dateAvailable, sticky: 'left' },
+  {
+    header: 'Organization',
+    key: 'organization',
+    render: 'organizationName',
+  },
   {
     header: 'Project',
     key: 'project',
-    sticky: 'left',
     render: 'projectName',
   },
   {
     header: 'Project Type',
     key: 'projectType',
     render: ({ projectType }) => <ProjectTypeChip projectType={projectType} />,
-  },
-  {
-    header: 'Organization',
-    key: 'organization',
-    render: 'organizationName',
+    optional: {
+      defaultHidden: true,
+    },
   },
   OPPORTUNITY_COLUMNS.unitName,
-  OPPORTUNITY_COLUMNS.dateAvailable,
+  {
+    ...OPPORTUNITY_COLUMNS.unitType,
+    optional: {
+      defaultHidden: true,
+    },
+  },
+  {
+    ...OPPORTUNITY_COLUMNS.unitGroup,
+    optional: {
+      defaultHidden: true,
+    },
+  },
 ];
 
 interface Props {}

@@ -51467,7 +51467,7 @@
           },
           {
             "name": "canBeMarkedAvailable",
-            "description": null,
+            "description": "Whether the unit can be marked available for a future date",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -51483,7 +51483,7 @@
           },
           {
             "name": "canBeMarkedAvailableToday",
-            "description": null,
+            "description": "Whether the unit can be marked available for referrals now",
             "args": [],
             "type": {
               "kind": "NON_NULL",

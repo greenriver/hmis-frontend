@@ -5,10 +5,12 @@ import { CeReferralStatus } from '@/types/gqlTypes';
 
 interface Props {
   status: CeReferralStatus;
+  size?: ChipProps['size'];
 }
-const ReferralStatusChip: React.FC<Props> = ({ status }) => {
+const ReferralStatusChip: React.FC<Props> = ({ status, size }) => {
   const baseChipProps: ChipProps = {
     variant: 'status',
+    size,
   };
 
   switch (status) {

@@ -7983,7 +7983,9 @@ export type UnassignStaffPayload = {
 export type Unit = {
   __typename?: 'Unit';
   acceptingCeReferrals: Scalars['Boolean']['output'];
+  /** Whether the unit can be marked available for a future date */
   canBeMarkedAvailable: Scalars['Boolean']['output'];
+  /** Whether the unit can be marked available for referrals now */
   canBeMarkedAvailableToday: Scalars['Boolean']['output'];
   canBeMarkedUnavailable: Scalars['Boolean']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
@@ -16233,6 +16235,11 @@ export type CeOpportunitySummaryFieldsFragment = {
     __typename?: 'Unit';
     id: string;
     name: string;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    } | null;
     unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
   } | null;
 };
@@ -16284,6 +16291,11 @@ export type CeOpportunityFieldsFragment = {
     __typename?: 'Unit';
     id: string;
     name: string;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    } | null;
     unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
   } | null;
 };
@@ -16303,6 +16315,11 @@ export type CeOpportunityAdminFieldsFragment = {
     __typename?: 'Unit';
     id: string;
     name: string;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    } | null;
     unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
   } | null;
 };
@@ -16322,6 +16339,11 @@ export type ClientCeOpportunitySummaryFieldsFragment = {
     __typename?: 'Unit';
     id: string;
     name: string;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    } | null;
     unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
   } | null;
 };
@@ -16381,6 +16403,12 @@ export type CeReferralTableFieldsFragment = {
     __typename?: 'CeReferralStep';
     id: string;
     name: string;
+    swimlane: string;
+    assignees: Array<{
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    }>;
   }> | null;
   referredBy?: {
     __typename?: 'ApplicationUser';
@@ -16432,6 +16460,12 @@ export type CeReferralAdminFieldsFragment = {
     __typename?: 'CeReferralStep';
     id: string;
     name: string;
+    swimlane: string;
+    assignees: Array<{
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    }>;
   }> | null;
   updatedBy?: {
     __typename?: 'ApplicationUser';
@@ -16488,6 +16522,12 @@ export type ClientCeReferralTableFieldsFragment = {
     __typename?: 'CeReferralStep';
     id: string;
     name: string;
+    swimlane: string;
+    assignees: Array<{
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    }>;
   }> | null;
   referredBy?: {
     __typename?: 'ApplicationUser';
@@ -16543,6 +16583,11 @@ export type CeReferralFieldsFragment = {
       __typename?: 'Unit';
       id: string;
       name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
       unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     } | null;
   };
@@ -17174,38 +17219,6 @@ export type UserCeReferralStepFieldsFragment = {
     } | null;
     access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
   };
-};
-
-export type CreateCeOpportunityMutationVariables = Exact<{
-  projectId: Scalars['ID']['input'];
-  input: CeOpportunityInput;
-}>;
-
-export type CreateCeOpportunityMutation = {
-  __typename?: 'Mutation';
-  createCeOpportunity?: {
-    __typename?: 'CreateCeOpportunityPayload';
-    opportunity: {
-      __typename?: 'CeOpportunity';
-      id: string;
-      name: string;
-      status: CeOpportunityStatus;
-      active: boolean;
-      projectId: string;
-      projectName: string;
-      dateAvailable: string;
-      unit?: {
-        __typename?: 'Unit';
-        id: string;
-        name: string;
-        unitGroup?: {
-          __typename?: 'UnitGroup';
-          id: string;
-          name: string;
-        } | null;
-      } | null;
-    };
-  } | null;
 };
 
 export type CreateCeReferralMutationVariables = Exact<{
@@ -18369,6 +18382,11 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'Unit';
           id: string;
           name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+          } | null;
           unitGroup?: {
             __typename?: 'UnitGroup';
             id: string;
@@ -18512,6 +18530,11 @@ export type MarkUnitsAvailableMutation = {
           __typename?: 'Unit';
           id: string;
           name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+          } | null;
           unitGroup?: {
             __typename?: 'UnitGroup';
             id: string;
@@ -18598,6 +18621,11 @@ export type MarkUnitsUnavailableMutation = {
           __typename?: 'Unit';
           id: string;
           name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+          } | null;
           unitGroup?: {
             __typename?: 'UnitGroup';
             id: string;
@@ -18684,6 +18712,11 @@ export type GetProjectCeOpportunitiesQuery = {
           __typename?: 'Unit';
           id: string;
           name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+          } | null;
           unitGroup?: {
             __typename?: 'UnitGroup';
             id: string;
@@ -18724,6 +18757,12 @@ export type GetProjectCeReferralsQuery = {
           __typename?: 'CeReferralStep';
           id: string;
           name: string;
+          swimlane: string;
+          assignees: Array<{
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          }>;
         }> | null;
         referredBy?: {
           __typename?: 'ApplicationUser';
@@ -18797,6 +18836,11 @@ export type GetCeOpportunityQuery = {
       __typename?: 'Unit';
       id: string;
       name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
       unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     } | null;
   } | null;
@@ -18880,6 +18924,11 @@ export type GetCeReferralQuery = {
         __typename?: 'Unit';
         id: string;
         name: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+        } | null;
         unitGroup?: {
           __typename?: 'UnitGroup';
           id: string;
@@ -19481,6 +19530,12 @@ export type GetClientCeReferralsQuery = {
           __typename?: 'CeReferralStep';
           id: string;
           name: string;
+          swimlane: string;
+          assignees: Array<{
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          }>;
         }> | null;
         referredBy?: {
           __typename?: 'ApplicationUser';
@@ -19537,6 +19592,11 @@ export type GetClientEligibleOpportunitiesQuery = {
           __typename?: 'Unit';
           id: string;
           name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+          } | null;
           unitGroup?: {
             __typename?: 'UnitGroup';
             id: string;
@@ -19577,6 +19637,11 @@ export type GetAdminCeOpportunitiesQuery = {
         __typename?: 'Unit';
         id: string;
         name: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+        } | null;
         unitGroup?: {
           __typename?: 'UnitGroup';
           id: string;
@@ -19618,6 +19683,12 @@ export type GetAdminCeReferralsQuery = {
         __typename?: 'CeReferralStep';
         id: string;
         name: string;
+        swimlane: string;
+        assignees: Array<{
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        }>;
       }> | null;
       updatedBy?: {
         __typename?: 'ApplicationUser';
@@ -44212,6 +44283,11 @@ export type UnitTableRowFieldsFragment = {
       __typename?: 'Unit';
       id: string;
       name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
       unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     } | null;
   } | null;
@@ -44319,6 +44395,11 @@ export type UnitDetailFieldsFragment = {
       __typename?: 'Unit';
       id: string;
       name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
       unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     } | null;
   } | null;
@@ -44360,6 +44441,11 @@ export type UnitWithCeFieldsFragment = {
       __typename?: 'Unit';
       id: string;
       name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
       unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     } | null;
   } | null;
@@ -44509,6 +44595,11 @@ export type GetUnitsQuery = {
             __typename?: 'Unit';
             id: string;
             name: string;
+            unitType?: {
+              __typename?: 'UnitTypeObject';
+              id: string;
+              description?: string | null;
+            } | null;
             unitGroup?: {
               __typename?: 'UnitGroup';
               id: string;
@@ -44706,6 +44797,11 @@ export type GetUnitQuery = {
         __typename?: 'Unit';
         id: string;
         name: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+        } | null;
         unitGroup?: {
           __typename?: 'UnitGroup';
           id: string;
@@ -44811,6 +44907,11 @@ export type CreateUnitsMutation = {
           __typename?: 'Unit';
           id: string;
           name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+          } | null;
           unitGroup?: {
             __typename?: 'UnitGroup';
             id: string;
@@ -44939,6 +45040,11 @@ export type UpdateUnitsMutation = {
           __typename?: 'Unit';
           id: string;
           name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+          } | null;
           unitGroup?: {
             __typename?: 'UnitGroup';
             id: string;
@@ -46057,6 +46163,10 @@ export const CeOpportunitySummaryFieldsFragmentDoc = gql`
     unit {
       id
       name
+      unitType {
+        id
+        description
+      }
       unitGroup {
         id
         name
@@ -46110,6 +46220,11 @@ export const CeReferralTableFieldsFragmentDoc = gql`
     currentSteps {
       id
       name
+      swimlane
+      assignees {
+        id
+        name
+      }
     }
     referredBy {
       id
@@ -49804,60 +49919,6 @@ export type BulkRemoveServiceMutationResult =
 export type BulkRemoveServiceMutationOptions = Apollo.BaseMutationOptions<
   BulkRemoveServiceMutation,
   BulkRemoveServiceMutationVariables
->;
-export const CreateCeOpportunityDocument = gql`
-  mutation CreateCeOpportunity($projectId: ID!, $input: CeOpportunityInput!) {
-    createCeOpportunity(projectId: $projectId, input: $input) {
-      opportunity {
-        ...CeOpportunitySummaryFields
-      }
-    }
-  }
-  ${CeOpportunitySummaryFieldsFragmentDoc}
-`;
-export type CreateCeOpportunityMutationFn = Apollo.MutationFunction<
-  CreateCeOpportunityMutation,
-  CreateCeOpportunityMutationVariables
->;
-
-/**
- * __useCreateCeOpportunityMutation__
- *
- * To run a mutation, you first call `useCreateCeOpportunityMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCeOpportunityMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCeOpportunityMutation, { data, loading, error }] = useCreateCeOpportunityMutation({
- *   variables: {
- *      projectId: // value for 'projectId'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateCeOpportunityMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateCeOpportunityMutation,
-    CreateCeOpportunityMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateCeOpportunityMutation,
-    CreateCeOpportunityMutationVariables
-  >(CreateCeOpportunityDocument, options);
-}
-export type CreateCeOpportunityMutationHookResult = ReturnType<
-  typeof useCreateCeOpportunityMutation
->;
-export type CreateCeOpportunityMutationResult =
-  Apollo.MutationResult<CreateCeOpportunityMutation>;
-export type CreateCeOpportunityMutationOptions = Apollo.BaseMutationOptions<
-  CreateCeOpportunityMutation,
-  CreateCeOpportunityMutationVariables
 >;
 export const CreateCeReferralDocument = gql`
   mutation CreateCeReferral($opportunityId: ID!, $clientId: ID!) {

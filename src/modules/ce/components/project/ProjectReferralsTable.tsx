@@ -58,7 +58,7 @@ export const REFERRAL_COLUMNS: Record<
       referral:
         | CeReferralTableFieldsFragment
         | ClientCeReferralTableFieldsFragment
-    ) => <ReferralStatusChip status={referral.status} />,
+    ) => <ReferralStatusChip status={referral.status} size='small' />,
     key: 'status',
   },
   currentSteps: {
@@ -71,6 +71,30 @@ export const REFERRAL_COLUMNS: Record<
           items={referral.currentSteps?.map((s) => s.name)}
         />
       );
+    },
+  },
+  currentTaskSwimlane: {
+    key: 'currentTaskSwimlane',
+    header: 'Assigned Contact Type',
+    render: (referral) => {
+      if (!referral.currentSteps || referral.currentSteps.length === 0) return;
+      return (
+        <CommonTruncatedList
+          items={referral.currentSteps?.map((s) => s.swimlane)}
+        />
+      );
+    },
+  },
+  currentTaskAssignees: {
+    key: 'currentTaskAssignees',
+    header: 'Current Task Assignees',
+    render: (referral) => {
+      if (!referral.currentSteps || referral.currentSteps.length === 0) return;
+
+      const assignees = referral.currentSteps.flatMap((s) =>
+        s.assignees.map((a) => a.name)
+      );
+      return <CommonTruncatedList items={assignees} />;
     },
   },
   referredBy: {
