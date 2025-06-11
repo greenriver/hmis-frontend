@@ -75,7 +75,7 @@ export const REFERRAL_COLUMNS: Record<
   },
   currentTaskSwimlane: {
     key: 'currentTaskSwimlane',
-    header: 'Assigned Contact Type',
+    header: 'Assigned To',
     render: (referral) => {
       if (!referral.currentSteps || referral.currentSteps.length === 0) return;
       return (
