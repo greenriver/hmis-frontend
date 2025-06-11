@@ -1,3 +1,4 @@
+import { isNil } from 'lodash-es';
 import CommonTruncatedList from '@/components/elements/CommonTruncatedList';
 import { ColumnDef } from '@/components/elements/table/types';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
@@ -63,6 +64,15 @@ export const REFERRAL_COLUMNS: Record<
           items={referral.currentSteps?.map((s) => s.name)}
         />
       );
+    },
+  },
+  daysOnCurrentTask: {
+    key: 'daysOnCurrentTask',
+    header: 'Days on Current Task',
+    render: ({ daysOnCurrentSteps }) => {
+      if (isNil(daysOnCurrentSteps)) return; // no open steps
+      if (daysOnCurrentSteps === 0) return '< 1 day';
+      return `${daysOnCurrentSteps} day${daysOnCurrentSteps > 1 ? 's' : ''}`;
     },
   },
   currentTaskSwimlane: {

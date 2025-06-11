@@ -16394,6 +16394,7 @@ export type CeReferralSummaryFieldsFragment = {
 export type CeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
+  daysOnCurrentSteps?: number | null;
   id: string;
   status: CeReferralStatus;
   active: boolean;
@@ -16446,8 +16447,8 @@ export type CeReferralWithProjectAccessFieldsFragment = {
 export type CeReferralAdminFieldsFragment = {
   __typename?: 'CeReferral';
   targetOrganizationName: string;
-  daysOnCurrentSteps?: number | null;
   createdAt: string;
+  daysOnCurrentSteps?: number | null;
   id: string;
   targetProjectId: string;
   targetProjectName: string;
@@ -16456,17 +16457,6 @@ export type CeReferralAdminFieldsFragment = {
   active: boolean;
   clientId: string;
   targetEnrollment?: { __typename?: 'Enrollment'; id: string } | null;
-  currentSteps?: Array<{
-    __typename?: 'CeReferralStep';
-    id: string;
-    name: string;
-    swimlane: string;
-    assignees: Array<{
-      __typename?: 'ApplicationUser';
-      id: string;
-      name: string;
-    }>;
-  }> | null;
   updatedBy?: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -16491,6 +16481,17 @@ export type CeReferralAdminFieldsFragment = {
       } | null;
     } | null;
   };
+  currentSteps?: Array<{
+    __typename?: 'CeReferralStep';
+    id: string;
+    name: string;
+    swimlane: string;
+    assignees: Array<{
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    }>;
+  }> | null;
   referredBy?: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -16510,6 +16511,7 @@ export type CeReferralAdminFieldsFragment = {
 export type ClientCeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
+  daysOnCurrentSteps?: number | null;
   id: string;
   status: CeReferralStatus;
   active: boolean;
@@ -18748,6 +18750,7 @@ export type GetProjectCeReferralsQuery = {
       nodes: Array<{
         __typename?: 'CeReferral';
         createdAt: string;
+        daysOnCurrentSteps?: number | null;
         id: string;
         status: CeReferralStatus;
         active: boolean;
@@ -19518,6 +19521,7 @@ export type GetClientCeReferralsQuery = {
       nodes: Array<{
         __typename?: 'CeReferral';
         createdAt: string;
+        daysOnCurrentSteps?: number | null;
         id: string;
         status: CeReferralStatus;
         active: boolean;
@@ -19669,8 +19673,8 @@ export type GetAdminCeReferralsQuery = {
     nodes: Array<{
       __typename?: 'CeReferral';
       targetOrganizationName: string;
-      daysOnCurrentSteps?: number | null;
       createdAt: string;
+      daysOnCurrentSteps?: number | null;
       id: string;
       targetProjectId: string;
       targetProjectName: string;
@@ -19679,17 +19683,6 @@ export type GetAdminCeReferralsQuery = {
       active: boolean;
       clientId: string;
       targetEnrollment?: { __typename?: 'Enrollment'; id: string } | null;
-      currentSteps?: Array<{
-        __typename?: 'CeReferralStep';
-        id: string;
-        name: string;
-        swimlane: string;
-        assignees: Array<{
-          __typename?: 'ApplicationUser';
-          id: string;
-          name: string;
-        }>;
-      }> | null;
       updatedBy?: {
         __typename?: 'ApplicationUser';
         id: string;
@@ -19714,6 +19707,17 @@ export type GetAdminCeReferralsQuery = {
           } | null;
         } | null;
       };
+      currentSteps?: Array<{
+        __typename?: 'CeReferralStep';
+        id: string;
+        name: string;
+        swimlane: string;
+        assignees: Array<{
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        }>;
+      }> | null;
       referredBy?: {
         __typename?: 'ApplicationUser';
         id: string;
@@ -46226,6 +46230,7 @@ export const CeReferralTableFieldsFragmentDoc = gql`
         name
       }
     }
+    daysOnCurrentSteps
     referredBy {
       id
       name
@@ -46259,11 +46264,6 @@ export const CeReferralAdminFieldsFragmentDoc = gql`
       id
     }
     targetOrganizationName
-    daysOnCurrentSteps
-    currentSteps {
-      id
-      name
-    }
     updatedBy {
       id
       name

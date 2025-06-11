@@ -1,5 +1,4 @@
 import { Paper } from '@mui/material';
-import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
 import {
@@ -30,15 +29,7 @@ const COLUMNS: DataColumnDef<
   REFERRAL_COLUMNS.client,
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.currentSteps,
-  {
-    key: 'daysOnCurrentTask',
-    header: 'Days on Current Task',
-    render: ({ daysOnCurrentSteps }) => {
-      if (isNil(daysOnCurrentSteps)) return; // no open steps
-      if (daysOnCurrentSteps === 0) return '< 1 day';
-      return `${daysOnCurrentSteps} day${daysOnCurrentSteps > 1 ? 's' : ''}`;
-    },
-  },
+  REFERRAL_COLUMNS.daysOnCurrentTask,
   {
     ...REFERRAL_COLUMNS.currentTaskSwimlane,
     // FIXME(#7832): bug, defaultHidden: false not working
@@ -77,6 +68,7 @@ const COLUMNS: DataColumnDef<
     },
   },
   { ...REFERRAL_COLUMNS.referredBy, optional: { defaultHidden: true } },
+  REFERRAL_COLUMNS.date,
   {
     key: 'updatedBy',
     header: 'Last Updated By',

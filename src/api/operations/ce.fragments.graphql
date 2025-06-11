@@ -95,6 +95,7 @@ fragment CeReferralTableFields on CeReferral {
       name
     }
   }
+  daysOnCurrentSteps
   referredBy {
     id
     name
@@ -123,11 +124,6 @@ fragment CeReferralAdminFields on CeReferral {
     id
   }
   targetOrganizationName
-  daysOnCurrentSteps
-  currentSteps {
-    id
-    name
-  }
   updatedBy {
     id
     name
