@@ -1,16 +1,23 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
-import CommonMenuButton, {
-  CommonMenuItem,
-} from '@/components/elements/CommonMenuButton';
+import ButtonLink from '@/components/elements/ButtonLink';
+import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import UnitUtilizationByUnitType from '@/modules/units/components/UnitUtilizationByUnitType';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { UnitGroupCapacityFieldsFragment } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   unitGroup: UnitGroupCapacityFieldsFragment;
   menuItems?: CommonMenuItem[];
+  projectId?: string;
+  linkToUnitGroup?: boolean;
 }
 
-const UnitGroupCard: React.FC<Props> = ({ unitGroup, menuItems }) => {
+const UnitGroupCard: React.FC<Props> = ({
+  unitGroup,
+  projectId,
+  linkToUnitGroup = false,
+}) => {
   return (
     <Paper sx={{ px: 2, pt: 1, pb: 2 }}>
       <Stack
@@ -26,16 +33,17 @@ const UnitGroupCard: React.FC<Props> = ({ unitGroup, menuItems }) => {
             {unitGroup.name}
           </Typography>
         </div>
-        {menuItems && menuItems.length > 0 && (
-          <CommonMenuButton
-            iconButton
-            title='Actions'
-            items={menuItems}
-            ButtonProps={{
-              'aria-label': `Action menu for ${unitGroup.name}`,
-              sx: { mr: -1 },
-            }}
-          />
+        {linkToUnitGroup && projectId && (
+          <ButtonLink
+            aria-label={`View ${unitGroup.name}`}
+            to={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+              projectId,
+              unitGroupId: unitGroup.id,
+            })}
+            sx={{ mt: 1 }}
+          >
+            View
+          </ButtonLink>
         )}
       </Stack>
       {unitGroup.capacity > 0 && (

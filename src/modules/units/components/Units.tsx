@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Masonry } from '@mui/lab';
 import { Button, Paper, Stack } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import CommonCard from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
@@ -16,12 +16,7 @@ import UnitCapacityTable from '@/modules/units/components/UnitCapacityTable';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
 import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
 import UnitManagementTable from '@/modules/units/components/UnitManagementTable';
-import { ProjectDashboardRoutes } from '@/routes/routes';
-import {
-  UnitGroupFieldsFragment,
-  useGetProjectUnitGroupsQuery,
-} from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
+import { useGetProjectUnitGroupsQuery } from '@/types/gqlTypes';
 
 // This page has 2 "modes" based on whether the project has Coordinated Entry enabled.
 //
@@ -53,26 +48,6 @@ const Units = () => {
     if (!data?.project?.unitGroups) return [];
     return data.project.unitGroups.nodes;
   }, [data, unitGroupsEnabled]);
-
-  const unitGroupMenuItems = useCallback(
-    (group: UnitGroupFieldsFragment) => {
-      if (!unitGroupsEnabled) return [];
-
-      return [
-        {
-          key: 'manage',
-          title: project.access.canManageUnits
-            ? 'Manage Unit Group'
-            : 'View Unit Group',
-          to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-            projectId: project.id,
-            unitGroupId: group.id,
-          }),
-        },
-      ];
-    },
-    [unitGroupsEnabled, project.access.canManageUnits, project.id]
-  );
 
   if (!project.access.canViewUnits) return <NotFound />;
   if (error) throw error;
@@ -118,7 +93,8 @@ const Units = () => {
               <UnitGroupCard
                 key={group.id}
                 unitGroup={group}
-                menuItems={unitGroupMenuItems(group)}
+                projectId={project.id}
+                linkToUnitGroup
               />
             ))}
           </Masonry>
