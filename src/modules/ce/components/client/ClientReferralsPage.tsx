@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import CommonTabs from '@/components/elements/CommonTabs';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import ClientOpportunitiesTable from '@/modules/ce/components/client/ClientOpportunitiesTable';
 import ClientReferralsTable from '@/modules/ce/components/client/ClientReferralsTable';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
@@ -9,6 +10,7 @@ import { useHasPermissions } from '@/modules/permissions/useHasPermissionsHooks'
 
 const ClientReferralsPage: React.FC = () => {
   const { client } = useClientDashboardContext();
+  const { globalFeatureFlags } = useGlobalFeatureFlags();
 
   const canViewClientEligibleOpportunities = useHasPermissions(client?.access, [
     'canViewClientEligibleOpportunities',
@@ -39,6 +41,8 @@ const ClientReferralsPage: React.FC = () => {
 
     return defs;
   }, [canViewAnyReferrals, canViewClientEligibleOpportunities]);
+
+  if (!globalFeatureFlags?.coordinatedEntryEnabled) return <NotFound />;
 
   if (!canViewClientEligibleOpportunities && !canViewAnyReferrals)
     return <NotFound />;
