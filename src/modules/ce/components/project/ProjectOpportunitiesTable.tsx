@@ -2,7 +2,6 @@ import { Paper } from '@mui/material';
 import React from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { ColumnDef } from '@/components/elements/table/types';
-import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -48,12 +47,11 @@ const COLUMNS: ColumnDef<CeOpportunitySummaryFieldsFragment>[] = [
   OPPORTUNITY_COLUMNS.dateAvailable,
 ];
 
-interface Props {}
-const ProjectOpportunitiesTable: React.FC<Props> = ({}) => {
-  const { projectId } = useSafeParams() as {
-    projectId: string;
-  };
+interface Props {
+  projectId: string;
+}
 
+const ProjectOpportunitiesTable: React.FC<Props> = ({ projectId }) => {
   return (
     <Paper>
       <GenericTableWithData<

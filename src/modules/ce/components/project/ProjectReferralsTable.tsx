@@ -1,7 +1,6 @@
 import { Paper } from '@mui/material';
 import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
-import useSafeParams from '@/hooks/useSafeParams';
 import { REFERRAL_COLUMNS } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -25,12 +24,17 @@ const COLUMNS: ColumnDef<CeReferralTableFieldsFragment>[] = [
   REFERRAL_COLUMNS.opportunity,
 ];
 
-interface Props {}
-const ProjectReferralsTable: React.FC<Props> = ({}) => {
-  const { projectId } = useSafeParams() as {
-    projectId: string;
-  };
+interface Props {
+  projectId: string;
+}
 
+/**
+ * Table showing referrals to a specific project.
+ *
+ * If user has "canViewReferrals", then they will be able to see ALL referrals to the project.
+ * If user has "canViewOwnReferrals", then they will only be able to see referrals that have an available task assigned to them.
+ */
+const ProjectReferralsTable: React.FC<Props> = ({ projectId }) => {
   const filters = useFilters({
     type: 'CeReferralFilterOptions',
     omit: ['organization', 'project', 'projectType', 'workflowTemplate'],
@@ -46,9 +50,6 @@ const ProjectReferralsTable: React.FC<Props> = ({}) => {
         columns={COLUMNS}
         queryVariables={{
           id: projectId,
-          // filters: {
-          //   status: [CeReferralStatus.Initialized, CeReferralStatus.InProgress],
-          // },
         }}
         defaultFilterValues={{
           status: [CeReferralStatus.Initialized, CeReferralStatus.InProgress],
