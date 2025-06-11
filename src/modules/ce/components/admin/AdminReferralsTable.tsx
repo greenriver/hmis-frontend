@@ -1,8 +1,11 @@
 import { Paper } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
-import { REFERRAL_WITH_PROJECT_COLUMNS } from '@/modules/ce/components/client/ClientReferralsTable';
-import { REFERRAL_COLUMNS } from '@/modules/ce/components/project/ProjectReferralsTable';
+
+import {
+  REFERRAL_COLUMNS,
+  REFERRAL_WITH_PROJECT_COLUMNS,
+} from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -38,7 +41,7 @@ const COLUMNS: DataColumnDef<
   },
   {
     ...REFERRAL_COLUMNS.currentTaskSwimlane,
-    // FIXME: bug, defaultHidden: false not working
+    // FIXME(#7832): bug, defaultHidden: false not working
     // optional: {
     //   defaultHidden: false,
     // },
