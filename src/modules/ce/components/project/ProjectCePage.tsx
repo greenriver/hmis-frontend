@@ -1,17 +1,11 @@
 import React, { useMemo } from 'react';
 import CommonTabs from '@/components/elements/CommonTabs';
 import PageTitle from '@/components/layout/PageTitle';
-import useSafeParams from '@/hooks/useSafeParams';
-import CreateOpportunityButton from '@/modules/ce/components/CreateOpportunityButton';
 import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
 const ProjectCePage: React.FC = () => {
-  const { projectId } = useSafeParams() as {
-    projectId: string;
-  };
-
   const { project } = useProjectDashboardContext();
 
   const tabDefinitions = useMemo(() => {
@@ -41,10 +35,7 @@ const ProjectCePage: React.FC = () => {
 
   return (
     <>
-      <PageTitle
-        title={'Coordinated Entry'}
-        actions={<CreateOpportunityButton projectId={projectId} />}
-      />
+      <PageTitle title={'Coordinated Entry'} />
       <CommonTabs
         ariaLabel={'Project CE Tabs'}
         tabDefinitions={tabDefinitions}
