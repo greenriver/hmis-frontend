@@ -21,7 +21,6 @@ import {
 import FormSelect from '@/modules/form/components/FormSelect';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import { isPickListOption } from '@/modules/form/types';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
   PickListType,
@@ -34,6 +33,7 @@ interface CreateUnitsDialogProps {
   unitGroupId?: string; // If provided, units will be created in this group
   open: boolean;
   onClose: () => void;
+  includeCeFields?: boolean;
 }
 
 const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
@@ -41,6 +41,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
   unitGroupId,
   open,
   onClose,
+  includeCeFields = false,
 }) => {
   const [unitType, setUnitType] = useState<string | null>(null);
   const [numberOfUnits, setNumberOfUnits] = useState<number | null>(null);
@@ -65,11 +66,6 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
     onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
   });
 
-  // TODO(7409) - instead of using the global permission, check project-level config
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
-
   const handleSubmit = useCallback(() => {
     if (!unitType || !numberOfUnits) return;
 
@@ -83,7 +79,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
             count: numberOfUnits,
           },
         },
-        includeCeFields: canViewCoordinatedEntry,
+        includeCeFields,
       },
     });
   }, [
@@ -92,7 +88,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
     createUnits,
     projectId,
     unitGroupId,
-    canViewCoordinatedEntry,
+    includeCeFields,
   ]);
 
   const {

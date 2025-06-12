@@ -16,6 +16,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 import ClientName from '@/modules/client/components/ClientName';
@@ -29,7 +30,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { SearchFormDefinition } from '@/modules/form/data';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 import { isEnrollment, isHouseholdClient } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -137,7 +137,7 @@ const ClientSearch = () => {
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
-  const { globalFeatureFlags } = useHmisAppSettings();
+  const { globalFeatureFlags } = useGlobalFeatureFlags();
 
   const columns = useMemo(() => {
     if (displayType === 'cards') {
@@ -146,7 +146,7 @@ const ClientSearch = () => {
     let baseColumns = isMobile
       ? MOBILE_SEARCH_RESULT_COLUMNS
       : SEARCH_RESULT_COLUMNS;
-    if (globalFeatureFlags?.mciId) {
+    if (globalFeatureFlags?.mciIdEnabled) {
       baseColumns = [
         externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
         ...baseColumns,

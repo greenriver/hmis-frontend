@@ -1,0 +1,6 @@
+fragment GlobalFeatureFlagFields on GlobalFeatureFlags {
+  id
+  coordinatedEntryEnabled
+  externalReferralsEnabled
+  mciIdEnabled
+}

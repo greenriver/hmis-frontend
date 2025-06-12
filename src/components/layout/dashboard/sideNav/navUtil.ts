@@ -5,6 +5,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
  * Whether or not a user can access the given page item
  */
 const canAccessNavItem = <T>(page: NavItem<T>, access: T): boolean => {
+  if (page.hide) return false;
   if (!page.permissions) return true;
   if (page.permissions.length === 0) return true;
 

@@ -1,5 +1,9 @@
-query GetProjectConfigs($limit: Int = 10, $offset: Int = 0) {
-  projectConfigs(limit: $limit, offset: $offset) {
+query GetProjectConfigs(
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ProjectConfigFilterOptions
+) {
+  projectConfigs(limit: $limit, offset: $offset, filters: $filters) {
     offset
     limit
     nodesCount

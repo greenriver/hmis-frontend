@@ -8,14 +8,14 @@ import ProjectReferralRequestsTable from './ProjectReferralRequestsTable';
 import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectReferralsPage = () => {
-  const { globalFeatureFlags: { externalReferrals } = {} } =
-    useHmisAppSettings();
+  const { globalFeatureFlags: { externalReferralsEnabled } = {} } =
+    useGlobalFeatureFlags();
   const { project } = useProjectDashboardContext();
 
   return (
@@ -46,7 +46,7 @@ const ProjectReferralsPage = () => {
         {project.access.canManageIncomingReferrals && (
           <>
             {/* Referral Requests are only used for external integration */}
-            {externalReferrals && (
+            {externalReferralsEnabled && (
               <TitleCard
                 title='Referral Requests'
                 headerVariant='border'
@@ -79,7 +79,7 @@ const ProjectReferralsPage = () => {
             >
               <ProjectReferralPostingsTable
                 projectId={project.id}
-                externalReferrals={externalReferrals}
+                externalReferrals={externalReferralsEnabled}
               />
             </TitleCard>
           </>

@@ -9,99 +9,26 @@ import {
   useDashboardBreadcrumbs,
 } from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
 import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
-import { firstNavItemWithAccess } from '@/components/layout/dashboard/sideNav/navUtil';
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
-import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import NotFound from '@/components/pages/NotFound';
 import { useDashboardState } from '@/hooks/useDashboardState';
+import { useAdminDashboardNavItems } from '@/modules/admin/hooks/useAdminDashboardNavItems';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
-
-const navItems: NavItem<RootPermissionsFragment>[] = [
-  // CAUTION: Don't use permissionMode: 'all' on any of these nav items.
-  // If we really need to, then we would also need a logical update to
-  // ToolbarMenu's use of PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS.
-  // Currently, it gloms all the permissions mentioned here together
-  // and then checks using permissionMode: 'any'.
-  {
-    id: 'admin-nav',
-    type: 'category',
-    items: [
-      {
-        id: 'denials',
-        title: 'Denials',
-        path: AdminDashboardRoutes.AC_DENIALS,
-        permissions: ['canManageDeniedReferrals'],
-      },
-      {
-        id: 'users',
-        title: 'Users',
-        path: AdminDashboardRoutes.USERS,
-        permissions: ['canImpersonateUsers', 'canAuditUsers'],
-        permissionMode: 'any',
-      },
-      {
-        id: 'merge-clients',
-        title: 'Client Merge History',
-        path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
-        permissions: ['canMergeClients'],
-      },
-      {
-        id: 'coordinated-entry',
-        title: 'Coordinated Entry',
-        path: AdminDashboardRoutes.COORDINATED_ENTRY,
-        permissions: ['canAdministrateCoordinatedEntry'],
-      },
-    ],
-  },
-  {
-    id: 'config',
-    title: 'Config',
-    type: 'category',
-    items: [
-      {
-        id: 'forms',
-        title: 'Forms',
-        path: AdminDashboardRoutes.FORMS,
-        permissions: ['canConfigureDataCollection'],
-      },
-      {
-        id: 'services',
-        title: 'Services',
-        path: AdminDashboardRoutes.CONFIGURE_SERVICES,
-        permissions: ['canConfigureDataCollection'],
-      },
-      {
-        id: 'project-config',
-        title: 'Project',
-        path: AdminDashboardRoutes.PROJECT_CONFIG,
-        permissions: ['canConfigureDataCollection'],
-      },
-    ],
-  },
-];
-
-export const PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS = navItems
-  .flatMap((group) => group.items)
-  .flatMap((item) => item?.permissions || []);
 
 // redirect to whichever admin page that the user has access to
 export const AdminLandingPage = () => {
   const [access, { loading, error }] = useRootPermissions();
 
-  const pageWithAccess = useMemo(
-    () => (access ? firstNavItemWithAccess(navItems, access) : undefined),
-    [access]
-  );
+  const { firstAccessiblePagePath } = useAdminDashboardNavItems();
 
   if (!access && loading) return <Loading />;
 
   if (error) throw error;
   if (!access) return null;
 
-  if (pageWithAccess?.path) {
-    return <Navigate to={pageWithAccess.path} replace />;
+  if (firstAccessiblePagePath) {
+    return <Navigate to={firstAccessiblePagePath} replace />;
   }
 
   return null;
@@ -121,12 +48,15 @@ const AdminDashboard: React.FC = () => {
     breadcrumbOverrides
   );
 
+  const { navItems, showAdminDashboard } = useAdminDashboardNavItems();
+
   const outletContext = useMemo(() => {
     return {
       overrideBreadcrumbTitles,
     };
   }, []);
-  if (!access) return <NotFound />;
+
+  if (!access || !showAdminDashboard) return <NotFound />;
 
   return (
     <DashboardContentContainer

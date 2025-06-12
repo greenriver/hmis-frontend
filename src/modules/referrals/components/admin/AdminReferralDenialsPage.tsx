@@ -3,9 +3,9 @@ import { Paper } from '@mui/material';
 import { useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useReferralFilter } from '@/modules/referrals/hooks/useReferralFilter';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
@@ -24,8 +24,8 @@ const rowLinkTo = (row: ReferralPostingFieldsFragment): string => {
 };
 
 const AdminReferralDenialsPage = () => {
-  const { globalFeatureFlags: { externalReferrals } = {} } =
-    useHmisAppSettings();
+  const { globalFeatureFlags: { externalReferralsEnabled } = {} } =
+    useGlobalFeatureFlags();
 
   const columns: ColumnDef<ReferralPostingFieldsFragment>[] = useMemo(
     () => [
@@ -34,7 +34,7 @@ const AdminReferralDenialsPage = () => {
         key: 'referralId',
         render: (row: ReferralPostingFieldsFragment) =>
           row.referralIdentifier || 'N/A',
-        hide: !externalReferrals, // only show for external referral which have ID from another system
+        hide: !externalReferralsEnabled, // only show for external referral which have ID from another system
       },
       {
         header: 'Referral Date',
@@ -63,7 +63,7 @@ const AdminReferralDenialsPage = () => {
         header: 'HoH MCI ID',
         key: 'hohMciId',
         render: (row: ReferralPostingFieldsFragment) => row.hohMciId,
-        hide: !externalReferrals,
+        hide: !externalReferralsEnabled,
       },
       {
         header: 'Denied By',
@@ -77,7 +77,7 @@ const AdminReferralDenialsPage = () => {
         },
       },
     ],
-    [externalReferrals]
+    [externalReferralsEnabled]
   );
 
   const referralFilter = useReferralFilter([

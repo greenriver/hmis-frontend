@@ -3809,6 +3809,17 @@ export type GeolocationCoordinates = {
   longitude: Scalars['String']['output'];
 };
 
+export type GlobalFeatureFlags = {
+  __typename?: 'GlobalFeatureFlags';
+  /** Whether Coordinated Entry is enabled */
+  coordinatedEntryEnabled: Scalars['Boolean']['output'];
+  /** Whether an external referral integration is enabled */
+  externalReferralsEnabled: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  /** Whether MCI ID integration is enabled */
+  mciIdEnabled: Scalars['Boolean']['output'];
+};
+
 /** HUD HMISParticipationType (2.08.1) */
 export enum HmisParticipationType {
   /** (2) Comparable Database Participating */
@@ -5190,6 +5201,7 @@ export enum PickListType {
   Project = 'PROJECT',
   /** Open Projects that can receive referrals */
   ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
+  ProjectConfigTypes = 'PROJECT_CONFIG_TYPES',
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Residential Projects */
   ResidentialProjects = 'RESIDENTIAL_PROJECTS',
@@ -5941,11 +5953,19 @@ export type Project = {
   active: Scalars['Boolean']['output'];
   affiliatedProjects: Array<Project>;
   assessments: AssessmentsPaginated;
+  /** Whether auto-enter is enabled in this project */
+  autoEnterEnabled: Scalars['Boolean']['output'];
+  /** The number of days of inactivity after which a client will be auto-exited from this project */
+  autoExitDaysThreshold?: Maybe<Scalars['Int']['output']>;
+  /** Whether auto-exit is enabled in this project */
+  autoExitEnabled: Scalars['Boolean']['output'];
   ceOpportunities: CeOpportunitiesPaginated;
   ceParticipations: CeParticipationsPaginated;
   ceReferrals: CeReferralsPaginated;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
+  /** Whether Coordinated Entry is enabled in this project */
+  coordinatedEntryEnabled: Scalars['Boolean']['output'];
   createdBy?: Maybe<ApplicationUser>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
   customDataElements: Array<CustomDataElement>;
@@ -5983,6 +6003,7 @@ export type Project = {
   /** Service types that are collected for this Project */
   serviceTypes: Array<ServiceType>;
   services: ServicesPaginated;
+  /** Whether staff assignment is enabled in this project */
   staffAssignmentsEnabled: Scalars['Boolean']['output'];
   targetPopulation?: Maybe<TargetPopulation>;
   unitGroups: UnitGroupsPaginated;
@@ -6183,12 +6204,19 @@ export type ProjectConfig = {
   __typename?: 'ProjectConfig';
   configOptions?: Maybe<Scalars['JSON']['output']>;
   configType: ProjectConfigType;
+  createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
   organization?: Maybe<Organization>;
   organizationId?: Maybe<Scalars['ID']['output']>;
   project?: Maybe<Project>;
   projectId?: Maybe<Scalars['ID']['output']>;
   projectType?: Maybe<ProjectType>;
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type ProjectConfigFilterOptions = {
+  configType?: InputMaybe<Array<ProjectConfigType>>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 /** Project Config Input */
@@ -6205,6 +6233,8 @@ export enum ProjectConfigType {
   AutoEnter = 'AUTO_ENTER',
   /** Auto Exit */
   AutoExit = 'AUTO_EXIT',
+  /** Coordinated Entry */
+  CoordinatedEntry = 'COORDINATED_ENTRY',
   /** Staff Assignment */
   StaffAssignment = 'STAFF_ASSIGNMENT',
 }
@@ -6337,6 +6367,7 @@ export type Query = {
   formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
+  globalFeatureFlags: GlobalFeatureFlags;
   /** Household lookup */
   household?: Maybe<Household>;
   /** Get group of assessments that are performed together */
@@ -6554,6 +6585,7 @@ export type QueryProjectCocArgs = {
 };
 
 export type QueryProjectConfigsArgs = {
+  filters?: InputMaybe<ProjectConfigFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6666,6 +6698,7 @@ export type QueryAccess = {
   canViewClientName: Scalars['Boolean']['output'];
   canViewClientPhoto: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
+  /** @deprecated Replaced with Project-level coordinatedEntryEnabled field and global feature flag */
   canViewCoordinatedEntry: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
@@ -7983,7 +8016,9 @@ export type UnassignStaffPayload = {
 export type Unit = {
   __typename?: 'Unit';
   acceptingCeReferrals: Scalars['Boolean']['output'];
+  /** Whether the unit can be marked available for a future date */
   canBeMarkedAvailable: Scalars['Boolean']['output'];
+  /** Whether the unit can be marked available for referrals now */
   canBeMarkedAvailableToday: Scalars['Boolean']['output'];
   canBeMarkedUnavailable: Scalars['Boolean']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
@@ -8693,12 +8728,11 @@ export type RootPermissionsFragment = {
   canMergeClients: boolean;
   canTransferEnrollments: boolean;
   canEditUsersInWarehouse: boolean;
+  canAdministrateCoordinatedEntry: boolean;
   canViewClients: boolean;
   canEditClients: boolean;
   canViewDob: boolean;
   canViewClientAlerts: boolean;
-  canViewCoordinatedEntry: boolean;
-  canAdministrateCoordinatedEntry: boolean;
   canEditOrganization: boolean;
   canEditProjectDetails: boolean;
 };
@@ -8792,12 +8826,11 @@ export type GetRootPermissionsQuery = {
     canMergeClients: boolean;
     canTransferEnrollments: boolean;
     canEditUsersInWarehouse: boolean;
+    canAdministrateCoordinatedEntry: boolean;
     canViewClients: boolean;
     canEditClients: boolean;
     canViewDob: boolean;
     canViewClientAlerts: boolean;
-    canViewCoordinatedEntry: boolean;
-    canAdministrateCoordinatedEntry: boolean;
     canEditOrganization: boolean;
     canEditProjectDetails: boolean;
   };
@@ -35335,6 +35368,7 @@ export type SubmitFormMutation = {
           residentialAffiliationProjectIds: Array<string>;
           rrhSubType?: RrhSubType | null;
           staffAssignmentsEnabled: boolean;
+          coordinatedEntryEnabled: boolean;
           targetPopulation?: TargetPopulation | null;
           projectName: string;
           projectType?: ProjectType | null;
@@ -37359,6 +37393,29 @@ export type GetEnrollmentGeolocationsQuery = {
   } | null;
 };
 
+export type GlobalFeatureFlagFieldsFragment = {
+  __typename?: 'GlobalFeatureFlags';
+  id: string;
+  coordinatedEntryEnabled: boolean;
+  externalReferralsEnabled: boolean;
+  mciIdEnabled: boolean;
+};
+
+export type GetGlobalFeatureFlagsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetGlobalFeatureFlagsQuery = {
+  __typename?: 'Query';
+  globalFeatureFlags: {
+    __typename?: 'GlobalFeatureFlags';
+    id: string;
+    coordinatedEntryEnabled: boolean;
+    externalReferralsEnabled: boolean;
+    mciIdEnabled: boolean;
+  };
+};
+
 export type HouseholdFieldsFragment = {
   __typename?: 'Household';
   id: string;
@@ -39027,6 +39084,7 @@ export type ProjectAllFieldsFragment = {
   residentialAffiliationProjectIds: Array<string>;
   rrhSubType?: RrhSubType | null;
   staffAssignmentsEnabled: boolean;
+  coordinatedEntryEnabled: boolean;
   targetPopulation?: TargetPopulation | null;
   projectName: string;
   projectType?: ProjectType | null;
@@ -39918,6 +39976,7 @@ export type GetProjectQuery = {
     residentialAffiliationProjectIds: Array<string>;
     rrhSubType?: RrhSubType | null;
     staffAssignmentsEnabled: boolean;
+    coordinatedEntryEnabled: boolean;
     targetPopulation?: TargetPopulation | null;
     projectName: string;
     projectType?: ProjectType | null;
@@ -41445,6 +41504,7 @@ export type DeleteProjectConfigMutation = {
 export type GetProjectConfigsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ProjectConfigFilterOptions>;
 }>;
 
 export type GetProjectConfigsQuery = {
@@ -45348,12 +45408,11 @@ export const RootPermissionsFragmentDoc = gql`
     canMergeClients
     canTransferEnrollments
     canEditUsersInWarehouse
+    canAdministrateCoordinatedEntry
     canViewClients
     canEditClients
     canViewDob
     canViewClientAlerts
-    canViewCoordinatedEntry
-    canAdministrateCoordinatedEntry
     canEditOrganization
     canEditProjectDetails
   }
@@ -47177,6 +47236,14 @@ export const GeolocationFieldsWithMetadataFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const GlobalFeatureFlagFieldsFragmentDoc = gql`
+  fragment GlobalFeatureFlagFields on GlobalFeatureFlags {
+    id
+    coordinatedEntryEnabled
+    externalReferralsEnabled
+    mciIdEnabled
+  }
+`;
 export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
   fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
     id
@@ -47357,6 +47424,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
     residentialAffiliationProjectIds
     rrhSubType
     staffAssignmentsEnabled
+    coordinatedEntryEnabled
     targetPopulation
     organization {
       ...OrganizationNameFields
@@ -57162,6 +57230,84 @@ export type GetEnrollmentGeolocationsQueryResult = Apollo.QueryResult<
   GetEnrollmentGeolocationsQuery,
   GetEnrollmentGeolocationsQueryVariables
 >;
+export const GetGlobalFeatureFlagsDocument = gql`
+  query GetGlobalFeatureFlags {
+    globalFeatureFlags {
+      ...GlobalFeatureFlagFields
+    }
+  }
+  ${GlobalFeatureFlagFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetGlobalFeatureFlagsQuery__
+ *
+ * To run a query within a React component, call `useGetGlobalFeatureFlagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGlobalFeatureFlagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGlobalFeatureFlagsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGlobalFeatureFlagsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetGlobalFeatureFlagsQuery,
+    GetGlobalFeatureFlagsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetGlobalFeatureFlagsQuery,
+    GetGlobalFeatureFlagsQueryVariables
+  >(GetGlobalFeatureFlagsDocument, options);
+}
+export function useGetGlobalFeatureFlagsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetGlobalFeatureFlagsQuery,
+    GetGlobalFeatureFlagsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetGlobalFeatureFlagsQuery,
+    GetGlobalFeatureFlagsQueryVariables
+  >(GetGlobalFeatureFlagsDocument, options);
+}
+export function useGetGlobalFeatureFlagsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetGlobalFeatureFlagsQuery,
+        GetGlobalFeatureFlagsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetGlobalFeatureFlagsQuery,
+    GetGlobalFeatureFlagsQueryVariables
+  >(GetGlobalFeatureFlagsDocument, options);
+}
+export type GetGlobalFeatureFlagsQueryHookResult = ReturnType<
+  typeof useGetGlobalFeatureFlagsQuery
+>;
+export type GetGlobalFeatureFlagsLazyQueryHookResult = ReturnType<
+  typeof useGetGlobalFeatureFlagsLazyQuery
+>;
+export type GetGlobalFeatureFlagsSuspenseQueryHookResult = ReturnType<
+  typeof useGetGlobalFeatureFlagsSuspenseQuery
+>;
+export type GetGlobalFeatureFlagsQueryResult = Apollo.QueryResult<
+  GetGlobalFeatureFlagsQuery,
+  GetGlobalFeatureFlagsQueryVariables
+>;
 export const JoinHouseholdDocument = gql`
   mutation JoinHousehold(
     $receivingHouseholdId: ID!
@@ -60483,8 +60629,12 @@ export type DeleteProjectConfigMutationOptions = Apollo.BaseMutationOptions<
   DeleteProjectConfigMutationVariables
 >;
 export const GetProjectConfigsDocument = gql`
-  query GetProjectConfigs($limit: Int = 10, $offset: Int = 0) {
-    projectConfigs(limit: $limit, offset: $offset) {
+  query GetProjectConfigs(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ProjectConfigFilterOptions
+  ) {
+    projectConfigs(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount
@@ -60510,6 +60660,7 @@ export const GetProjectConfigsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
