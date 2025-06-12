@@ -1,5 +1,4 @@
 import { Box, Card, Link, Typography } from '@mui/material';
-import { startCase } from 'lodash-es';
 import React, { useMemo } from 'react';
 import {
   AssigneesIcon,
@@ -61,7 +60,7 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
           }),
         '&:hover': {
           borderColor: 'primary.main',
-          backgroundColor: 'primary.300',
+          backgroundColor: 'primary.200',
         },
       }}
     >
@@ -93,9 +92,16 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
         </Typography>
 
         <Box>
-          <ReferralStepDatum sx={{ fontWeight: 700 }}>
-            {startCase(step.status.replace('_', ' '))}
-          </ReferralStepDatum>
+          {/* Step status can be of one of 2 values:
+             "Available" = nobody has clicked "start" on the step yet.
+             "In Progress" = at least one of the assignees has clicked "start" on the step.
+
+             For steps with multiple assignees, it _may_ be useful to know that somebody else has "picked up" the step
+             by clicking "start" on it. However the language of "available" vs "in progress" does not clearly communicate
+             this, so we are opting to hide this status indicator for now, to limit confusion.
+            <ReferralStepDatum sx={{ fontWeight: 700 }}>
+               {startCase(step.status.replace('_', ' '))
+            </ReferralStepDatum> */}
 
           <ReferralStepDatum Icon={StepCalendarIcon}>
             Assigned {availableSince}
