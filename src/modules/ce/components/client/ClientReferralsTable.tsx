@@ -11,7 +11,6 @@ import { getReferralLink } from '@/modules/ce/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
-  CeReferralStatus,
   ClientCeReferralTableFieldsFragment,
   GetClientCeReferralsDocument,
   GetClientCeReferralsQuery,
@@ -34,6 +33,7 @@ const ClientReferralsTable: React.FC = () => {
 
   const filters = useFilters({
     type: 'CeReferralFilterOptions',
+    omit: ['workflowTemplate'],
   });
 
   return (
@@ -46,9 +46,6 @@ const ClientReferralsTable: React.FC = () => {
         columns={COLUMNS}
         queryVariables={{
           id: clientId,
-        }}
-        defaultFilterValues={{
-          status: [CeReferralStatus.Initialized, CeReferralStatus.InProgress],
         }}
         queryDocument={GetClientCeReferralsDocument}
         pagePath='client.ceReferrals'

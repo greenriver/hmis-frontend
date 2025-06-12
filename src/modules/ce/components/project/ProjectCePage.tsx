@@ -13,7 +13,7 @@ const ProjectCePage: React.FC = () => {
 
     if (project.access.canViewReferrals || project.access.canViewOwnReferrals) {
       defs.push({
-        title: 'Ongoing Referrals',
+        title: 'Referrals',
         key: 'referrals',
         contents: <ProjectReferralsTable projectId={project.id} />,
       });

@@ -83,10 +83,10 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
         }}
       >
         <Typography
-          variant='body2'
+          variant='body1'
           fontWeight='bold'
           color='text.primary'
-          sx={{ mb: 0.5 }}
+          sx={{ mb: 1 }}
         >
           {step.name}
         </Typography>
