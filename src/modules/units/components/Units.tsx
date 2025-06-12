@@ -8,7 +8,6 @@ import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import ProjectUnitsTable from '@/modules/units/components/ProjectUnitsTable';
@@ -32,15 +31,13 @@ const Units = () => {
   });
 
   // Check CE feature flag. TODO replace with project config
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
+  const { coordinatedEntryEnabled } = project;
 
   // For now, we assume that if the project has Coordinated Entry enabled,
   // it also has Unit Groups enabled.
   const unitGroupsEnabled = useMemo(
-    () => !!canViewCoordinatedEntry,
-    [canViewCoordinatedEntry]
+    () => !!coordinatedEntryEnabled,
+    [coordinatedEntryEnabled]
   );
 
   const unitGroups = useMemo(() => {
@@ -108,13 +105,13 @@ const Units = () => {
             <ProjectUnitsTable
               projectId={project.id}
               unitGroupsEnabled={unitGroupsEnabled}
-              ceEnabled={canViewCoordinatedEntry}
+              ceEnabled={coordinatedEntryEnabled}
             />
           ) : (
             // If Unit Groups are not enabled, use the Unit Management Table so Units can be managed directly on this page
             <UnitManagementTable
               projectId={project.id}
-              ceEnabled={canViewCoordinatedEntry}
+              ceEnabled={coordinatedEntryEnabled}
             />
           )}
         </Paper>
@@ -124,12 +121,14 @@ const Units = () => {
           projectId={project.id}
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
+          ceEnabled={coordinatedEntryEnabled}
         />
       ) : (
         <CreateUnitsDialog
           projectId={project.id}
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
+          includeCeFields={coordinatedEntryEnabled}
         />
       )}
     </>

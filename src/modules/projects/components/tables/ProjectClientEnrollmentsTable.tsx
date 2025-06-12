@@ -37,9 +37,6 @@ const ProjectClientEnrollmentsTable = ({
   openOnDate?: Date;
   searchTerm?: string;
 }) => {
-  // TODO: show MCI column if enabled
-  // const { globalFeatureFlags } = useHmisAppSettings();
-  // globalFeatureFlags?.mciId
   const openOnDateString = useMemo(
     () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
     [openOnDate]

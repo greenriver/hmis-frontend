@@ -6,6 +6,7 @@ import {
   clientImageLookupMock,
   clientWithEnrollmentsMock,
   getClientPermissionMocks,
+  getGlobalFeatureFlagsMock,
   RITA_ACKROYD,
 } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
@@ -18,6 +19,7 @@ export default {
         getClientPermissionMocks,
         clientWithEnrollmentsMock,
         clientImageLookupMock,
+        getGlobalFeatureFlagsMock,
       ],
     },
   },

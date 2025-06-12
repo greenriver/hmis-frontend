@@ -1,9 +1,9 @@
 import { Stack } from '@mui/system';
 import { isNull } from 'lodash-es';
 import React, { useMemo } from 'react';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import CommonSearchInput, {
   CommonSearchInputProps,
 } from '@/modules/search/components/CommonSearchInput';
@@ -51,11 +51,11 @@ const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
   label = 'Search Clients',
   ...props
 }) => {
-  const { globalFeatureFlags } = useHmisAppSettings();
+  const { globalFeatureFlags } = useGlobalFeatureFlags();
   const isTiny = useIsMobile('sm');
   const [placeholder, helperText] = useMemo(() => {
     const { placeholder, helper } = getDefaultPlaceholderAndHelper(
-      !!globalFeatureFlags?.mciId
+      !!globalFeatureFlags?.mciIdEnabled
     );
     // Construct helper text.
     // Even if helperText passed is `null`, we still need to show the `errorMessage` if present.
@@ -88,7 +88,7 @@ const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
     return [placeholder, helperTextNode];
   }, [
     errorMessage,
-    globalFeatureFlags?.mciId,
+    globalFeatureFlags,
     helperTextProp,
     showSearchTips,
     isTiny,

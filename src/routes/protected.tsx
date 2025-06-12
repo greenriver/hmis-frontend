@@ -471,33 +471,24 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.CE,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry
-                otherwise={<NotFound />}
+              <ProjectRoute
+                permissions={[
+                  'canViewUnits',
+                  'canViewReferrals',
+                  'canViewOwnReferrals',
+                ]}
+                requireCeEnabled
               >
-                <ProjectRoute
-                  permissions={[
-                    'canViewUnits',
-                    'canViewReferrals',
-                    'canViewOwnReferrals',
-                  ]}
-                >
-                  <ProjectCePage />
-                </ProjectRoute>
-              </RootPermissionsFilter>
+                <ProjectCePage />
+              </ProjectRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.UNIT,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry
-                otherwise={<NotFound />}
-              >
-                <ProjectRoute permissions={['canViewUnits']}>
-                  <UnitPage />
-                </ProjectRoute>
-              </RootPermissionsFilter>
+              <ProjectRoute permissions={['canViewUnits']} requireCeEnabled>
+                <UnitPage />
+              </ProjectRoute>
             ),
           },
           {
@@ -505,6 +496,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewReferrals', 'canViewOwnReferrals']}
+                requireCeEnabled
               >
                 <ProjectReferralPage />
               </ProjectRoute>
