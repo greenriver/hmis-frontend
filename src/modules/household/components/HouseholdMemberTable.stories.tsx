@@ -6,6 +6,7 @@ import {
   enrollmentWithHoHMock,
   fakeHousehold,
   fakeProject,
+  getGlobalFeatureFlagsMock,
 } from '@/test/__mocks__/requests';
 import { HouseholdFieldsFragment } from '@/types/gqlTypes';
 
@@ -14,7 +15,7 @@ export default {
   parameters: {
     dashboardContext: 'enrollment',
     apolloClient: {
-      mocks: [enrollmentWithHoHMock],
+      mocks: [enrollmentWithHoHMock, getGlobalFeatureFlagsMock],
     },
   },
 } as Meta<typeof HouseholdMemberTable>;
