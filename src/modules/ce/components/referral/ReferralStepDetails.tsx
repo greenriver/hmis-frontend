@@ -1,3 +1,4 @@
+import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
 import { Box } from '@mui/material';
 import React, { useMemo } from 'react';
 import {
@@ -33,15 +34,13 @@ const ReferralStepDetails: React.FC<{
   }, [availableAt, updatedAt, status]);
 
   const assigneeText = useMemo(() => {
-    if (assignees.length === 0) {
-      return `Assigned to ${step.swimlane}`;
-    }
+    if (assignees.length === 0) return;
 
     const assigneeNames = assignees.map(({ id, name }) =>
       id === currentUser?.id ? 'you' : name
     );
     return `Assigned to ${stringifyArray(assigneeNames)}`;
-  }, [assignees, currentUser?.id, step.swimlane]);
+  }, [assignees, currentUser?.id]);
 
   return (
     <Box>
@@ -56,6 +55,10 @@ const ReferralStepDetails: React.FC<{
           {assigneeText}
         </ReferralStepDatum>
       )}
+
+      <ReferralStepDatum Icon={PeopleOutlineRoundedIcon}>
+        {step.swimlane}
+      </ReferralStepDatum>
     </Box>
   );
 };
