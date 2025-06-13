@@ -33,13 +33,15 @@ const ReferralStepDetails: React.FC<{
   }, [availableAt, updatedAt, status]);
 
   const assigneeText = useMemo(() => {
-    if (assignees.length === 0) return;
+    if (assignees.length === 0) {
+      return `Assigned to ${step.swimlane}`;
+    }
 
     const assigneeNames = assignees.map(({ id, name }) =>
       id === currentUser?.id ? 'you' : name
     );
     return `Assigned to ${stringifyArray(assigneeNames)}`;
-  }, [assignees, currentUser?.id]);
+  }, [assignees, currentUser?.id, step.swimlane]);
 
   return (
     <Box>

@@ -1,6 +1,5 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import ButtonLink from '@/components/elements/ButtonLink';
-import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import UnitUtilizationByUnitType from '@/modules/units/components/UnitUtilizationByUnitType';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { UnitGroupCapacityFieldsFragment } from '@/types/gqlTypes';
@@ -8,7 +7,6 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   unitGroup: UnitGroupCapacityFieldsFragment;
-  menuItems?: CommonMenuItem[];
   projectId?: string;
   linkToUnitGroup?: boolean;
 }
