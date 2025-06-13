@@ -107,6 +107,13 @@ export const useProjectDashboardNavItems = (
             permissionMode: 'any',
             hide: !project.coordinatedEntryEnabled,
           },
+        ],
+      },
+      {
+        id: 'setup',
+        title: 'Configuration',
+        type: 'category',
+        items: [
           {
             id: 'units',
             title: 'Units',
@@ -117,13 +124,6 @@ export const useProjectDashboardNavItems = (
               ProjectDashboardRoutes.UNIT_GROUP,
             ],
           },
-        ],
-      },
-      {
-        id: 'setup',
-        title: 'Configuration',
-        type: 'category',
-        items: [
           {
             id: 'inventory',
             title: 'Inventory',
