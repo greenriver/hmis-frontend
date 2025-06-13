@@ -12,7 +12,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
   const opportunity = unit.latestOpportunity;
 
   return (
-    <Grid container columnSpacing={2} rowSpacing={4}>
+    <Grid container columnSpacing={6} rowSpacing={4}>
       {opportunity && (
         <Grid item xs={12}>
           <OpportunityBanner
@@ -24,7 +24,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
       {unit.eligibilityRequirements && (
         <Grid item xs={12} md={6}>
           <MatchRuleGrid
-            title='Requirements'
+            title='Eligibility Requirements'
             rules={unit.eligibilityRequirements}
           />
         </Grid>

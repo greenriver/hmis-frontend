@@ -13,9 +13,9 @@ const ProjectCePage: React.FC = () => {
 
     if (project.access.canViewReferrals || project.access.canViewOwnReferrals) {
       defs.push({
-        title: 'Ongoing Referrals',
+        title: 'Referrals',
         key: 'referrals',
-        contents: <ProjectReferralsTable />,
+        contents: <ProjectReferralsTable projectId={project.id} />,
       });
     }
 
@@ -23,15 +23,11 @@ const ProjectCePage: React.FC = () => {
       defs.push({
         title: 'Available Units',
         key: 'available-units',
-        contents: <ProjectOpportunitiesTable />,
+        contents: <ProjectOpportunitiesTable projectId={project.id} />,
       });
     }
     return defs;
-  }, [
-    project.access.canViewOwnReferrals,
-    project.access.canViewReferrals,
-    project.access.canViewUnits,
-  ]);
+  }, [project]);
 
   return (
     <>

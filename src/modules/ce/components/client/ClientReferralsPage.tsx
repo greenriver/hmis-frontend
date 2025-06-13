@@ -25,7 +25,7 @@ const ClientReferralsPage: React.FC = () => {
 
     if (canViewAnyReferrals) {
       defs.push({
-        title: 'All Referrals',
+        title: 'Referrals',
         key: 'referrals',
         contents: <ClientReferralsTable />,
       });
@@ -33,8 +33,8 @@ const ClientReferralsPage: React.FC = () => {
 
     if (canViewClientEligibleOpportunities) {
       defs.push({
-        title: 'Eligible Opportunities',
-        key: 'opportunities',
+        title: 'Available Units',
+        key: 'available-units',
         contents: <ClientOpportunitiesTable />,
       });
     }

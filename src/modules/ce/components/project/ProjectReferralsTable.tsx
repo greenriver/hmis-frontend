@@ -1,103 +1,44 @@
 import { Paper } from '@mui/material';
 import React from 'react';
-import CommonTruncatedList from '@/components/elements/CommonTruncatedList';
 import { ColumnDef } from '@/components/elements/table/types';
-import useSafeParams from '@/hooks/useSafeParams';
-import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
+import { REFERRAL_COLUMNS } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  clientNameFromRecordWithOptionalClient,
-  parseAndFormatDate,
-} from '@/modules/hmis/hmisUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralStatus,
   CeReferralTableFieldsFragment,
-  ClientCeReferralTableFieldsFragment,
   GetProjectCeReferralsDocument,
   GetProjectCeReferralsQuery,
   GetProjectCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-export const REFERRAL_COLUMNS: Record<
-  string,
-  ColumnDef<CeReferralTableFieldsFragment | ClientCeReferralTableFieldsFragment>
-> = {
-  client: {
-    header: 'Client',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => clientNameFromRecordWithOptionalClient(referral),
-    key: 'name',
-    sticky: 'left',
-  },
-  opportunity: {
-    header: 'Unit',
-    key: 'unit',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => referral.opportunity.name,
-  },
-  date: {
-    header: 'Referral Date',
-    key: 'date',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => parseAndFormatDate(referral.createdAt),
-  },
-  status: {
-    header: 'Status',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => <ReferralStatusChip status={referral.status} />,
-    key: 'status',
-  },
-  currentSteps: {
-    key: 'currentSteps',
-    header: 'Current Task',
-    render: (referral) => {
-      if (!referral.currentSteps || referral.currentSteps.length === 0) return;
-      return (
-        <CommonTruncatedList
-          items={referral.currentSteps?.map((s) => s.name)}
-        />
-      );
-    },
-  },
-  referredBy: {
-    header: 'Referred By',
-    key: 'referredBy',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => referral.referredBy?.name,
-  },
-  // TODO(#7321) - add column for sending project
-};
-
 const COLUMNS: ColumnDef<CeReferralTableFieldsFragment>[] = [
   REFERRAL_COLUMNS.client,
-  REFERRAL_COLUMNS.opportunity,
-  REFERRAL_COLUMNS.date,
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.currentSteps,
+  REFERRAL_COLUMNS.daysOnCurrentTask,
+  REFERRAL_COLUMNS.currentTaskSwimlane,
+  REFERRAL_COLUMNS.date,
+  REFERRAL_COLUMNS.opportunity,
 ];
 
-interface Props {}
-const ProjectReferralsTable: React.FC<Props> = ({}) => {
-  const { projectId } = useSafeParams() as {
-    projectId: string;
-  };
+interface Props {
+  projectId: string;
+}
+
+/**
+ * Table showing referrals to a specific project.
+ *
+ * If user has "canViewReferrals", then they will be able to see ALL referrals to the project.
+ * If user has "canViewOwnReferrals", then they will only be able to see referrals that have an available task assigned to them.
+ */
+const ProjectReferralsTable: React.FC<Props> = ({ projectId }) => {
+  const filters = useFilters({
+    type: 'CeReferralFilterOptions',
+    omit: ['organization', 'project', 'projectType', 'workflowTemplate'],
+  });
 
   return (
     <Paper>
@@ -109,10 +50,11 @@ const ProjectReferralsTable: React.FC<Props> = ({}) => {
         columns={COLUMNS}
         queryVariables={{
           id: projectId,
-          filters: {
-            status: [CeReferralStatus.Initialized, CeReferralStatus.InProgress],
-          },
         }}
+        defaultFilterValues={{
+          status: [CeReferralStatus.Initialized, CeReferralStatus.InProgress],
+        }}
+        filters={filters}
         queryDocument={GetProjectCeReferralsDocument}
         pagePath='project.ceReferrals'
         noData='No referrals'

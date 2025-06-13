@@ -19,7 +19,7 @@ const MatchRuleGrid: React.FC<Props> = ({ title, rules }) => {
       </Typography>
       <CommonDetailGridContainer>
         {rules.map((rule) => (
-          <CommonDetailGridItem key={rule.id} label={rule.name}>
+          <CommonDetailGridItem key={rule.id} label={rule.name} sx={{ px: 0 }}>
             {rule.ownerType === CeMatchRuleOwner.Unit
               ? 'Applies to this Unit'
               : `Inherited from ${HmisEnums.CeMatchRuleOwner[rule.ownerType]}`}

@@ -2,7 +2,6 @@ import { Paper } from '@mui/material';
 import React from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { ColumnDef } from '@/components/elements/table/types';
-import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -23,6 +22,16 @@ export const OPPORTUNITY_COLUMNS: Record<
     key: 'unit',
     render: ({ unit, name }) => unit?.name || name,
   },
+  unitType: {
+    header: 'Unit Type',
+    key: 'unitType',
+    render: ({ unit }) => unit?.unitType?.description,
+  },
+  unitGroup: {
+    header: 'Unit Group',
+    key: 'unitGroup',
+    render: ({ unit }) => unit?.unitGroup?.name,
+  },
   // TODO: eligible clients count
   dateAvailable: {
     header: 'Date Available',
@@ -38,12 +47,11 @@ const COLUMNS: ColumnDef<CeOpportunitySummaryFieldsFragment>[] = [
   OPPORTUNITY_COLUMNS.dateAvailable,
 ];
 
-interface Props {}
-const ProjectOpportunitiesTable: React.FC<Props> = ({}) => {
-  const { projectId } = useSafeParams() as {
-    projectId: string;
-  };
+interface Props {
+  projectId: string;
+}
 
+const ProjectOpportunitiesTable: React.FC<Props> = ({ projectId }) => {
   return (
     <Paper>
       <GenericTableWithData<
