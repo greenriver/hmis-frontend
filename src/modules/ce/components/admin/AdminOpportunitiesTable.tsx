@@ -1,9 +1,8 @@
 import { Paper } from '@mui/material';
 import React from 'react';
-import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
-import { ColumnDef } from '@/components/elements/table/types';
 import { OPPORTUNITY_COLUMNS } from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
@@ -17,30 +16,40 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const COLUMNS: ColumnDef<CeOpportunityAdminFieldsFragment>[] = [
-  OPPORTUNITY_COLUMNS.project,
-  {
-    header: 'Project Type',
-    key: 'projectType',
-    render: ({ projectType }) => <ProjectTypeChip projectType={projectType} />,
-  },
+const COLUMNS: DataColumnDef<
+  CeOpportunityAdminFieldsFragment,
+  GetAdminCeOpportunitiesQueryVariables
+>[] = [
+  { ...OPPORTUNITY_COLUMNS.dateAvailable, sticky: 'left' },
   {
     header: 'Organization',
     key: 'organization',
     render: 'organizationName',
   },
   {
-    header: 'Unit',
-    key: 'unit',
-    render: ({ unit }) => unit?.name,
+    header: 'Project',
+    key: 'project',
+    render: 'projectName',
   },
   {
-    header: 'Date Available',
-    key: 'dateAvailable',
-    render: ({ dateAvailable }) => {
-      if (dateAvailable)
-        return <DateWithRelativeTooltip dateString={dateAvailable} />;
-      return 'Available now';
+    header: 'Project Type',
+    key: 'projectType',
+    render: ({ projectType }) => <ProjectTypeChip projectType={projectType} />,
+    optional: {
+      defaultHidden: true,
+    },
+  },
+  OPPORTUNITY_COLUMNS.unitName,
+  {
+    ...OPPORTUNITY_COLUMNS.unitType,
+    optional: {
+      defaultHidden: true,
+    },
+  },
+  {
+    ...OPPORTUNITY_COLUMNS.unitGroup,
+    optional: {
+      defaultHidden: true,
     },
   },
 ];
@@ -69,19 +78,19 @@ const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
         queryDocument={GetAdminCeOpportunitiesDocument}
         recordType='CeOpportunity'
         pagePath='ceOpportunities'
-        noData='No opportunities'
-        paginationItemName='opportunities'
+        noData='No available units'
+        paginationItemName='unit'
         filters={filters}
         defaultFilterValues={{
           status: [CeOpportunityStatus.Open],
         }}
         rowLinkTo={(row) =>
-          generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+          generateSafePath(ProjectDashboardRoutes.UNIT, {
             projectId: row.projectId,
-            opportunityId: row.id,
+            unitId: row.unit?.id,
           })
         }
-        rowActionTitle='View Opportunity'
+        rowActionTitle='View Unit'
         rowSecondaryActionConfigs={(row) => [
           {
             key: 'project',

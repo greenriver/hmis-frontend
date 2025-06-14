@@ -9,9 +9,9 @@ import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
 import ProjectReferralPostingDetails from '@/modules/referrals/components/ReferralPostingDetails';
 import { fetchPreventionAssessmentReportUrl } from '@/modules/referrals/externalReportApi';
@@ -23,8 +23,8 @@ import {
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectReferralPostingPage: React.FC = () => {
-  const { globalFeatureFlags: { externalReferrals } = {} } =
-    useHmisAppSettings();
+  const { globalFeatureFlags: { externalReferralsEnabled } = {} } =
+    useGlobalFeatureFlags();
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
@@ -57,11 +57,11 @@ const ProjectReferralPostingPage: React.FC = () => {
           <TitleCard title='Referral Details' sx={{ mb: 2 }} padded>
             <ProjectReferralPostingDetails
               referralPosting={referralPosting}
-              externalReferrals={externalReferrals}
+              externalReferrals={externalReferralsEnabled}
             />
           </TitleCard>
           <Stack gap={2}>
-            {externalReferrals && (
+            {externalReferralsEnabled && (
               <ButtonLink
                 fullWidth
                 variant='outlined'
@@ -116,7 +116,9 @@ const ProjectReferralPostingPage: React.FC = () => {
                     // this label is specific to external referral integration. for other cases, just rely on card title
                     <CommonLabeledTextBlock
                       title={
-                        externalReferrals ? 'Resource Coordinator Notes' : ''
+                        externalReferralsEnabled
+                          ? 'Resource Coordinator Notes'
+                          : ''
                       }
                     >
                       {referralPosting.resourceCoordinatorNotes}

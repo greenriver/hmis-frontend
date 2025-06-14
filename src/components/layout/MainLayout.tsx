@@ -19,6 +19,7 @@ import MobileMenu from '@/components/layout/nav/MobileMenu';
 import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
 import { useIsDashboard } from '@/components/layout/nav/useIsDashboard';
 import { MobileMenuContext } from '@/components/layout/nav/useMobileMenuContext';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
@@ -45,6 +46,9 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
     loading: permissionLoading,
     error,
   } = useGetRootPermissionsQuery();
+
+  // Populate the cache with global feature flags
+  useGlobalFeatureFlags();
 
   // Similarly, preload config for whether to show the Dashboard link in the toolbar
   const {

@@ -18,8 +18,15 @@ const ProjectRoute: React.FC<
     permissions?: ProjectPermissions | ProjectPermissions[];
     redirectRoute?: string;
     dataCollectionFeature?: DataCollectionFeatureRole;
+    requireCeEnabled?: boolean;
   }>
-> = ({ permissions, redirectRoute, dataCollectionFeature, children }) => {
+> = ({
+  permissions,
+  redirectRoute,
+  dataCollectionFeature,
+  children,
+  requireCeEnabled,
+}) => {
   const { project } = useProjectDashboardContext();
   const permissionsArray = ensureArray(permissions);
   const [hasPermission, { loading }] = useHasProjectPermissions(
@@ -36,6 +43,11 @@ const ProjectRoute: React.FC<
     return <NotFound />;
   }
 
+  if (requireCeEnabled && !project.coordinatedEntryEnabled) {
+    return <NotFound />;
+  }
+
+  // If no permissions are specified, we assume the route is accessible
   if (loading) return <Loading />;
 
   if (permissionsArray.length > 0 && !hasPermission) {

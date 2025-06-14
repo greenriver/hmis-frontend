@@ -2,12 +2,15 @@ import { Box } from '@mui/material';
 
 import { Stack } from '@mui/system';
 import { capitalize } from 'lodash-es';
+import { useCallback, useState } from 'react';
 import { ProjectConfigFormRule } from '../formRules/FormRule';
+import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
-import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
+import DeleteMutationConfirmationDialog from '@/modules/dataFetching/components/DeleteMutationConfirmationDialog';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteProjectConfigDocument,
@@ -62,6 +65,30 @@ const ProjectConfigTable = ({
 }: {
   onClickRow: (projectConfig: ProjectConfigFieldsFragment | null) => any;
 }) => {
+  const [recordToDelete, setRecordToDelete] = useState<string | undefined>(
+    undefined
+  );
+
+  const rowSecondaryActionConfigs = useCallback(
+    (row: ProjectConfigFieldsFragment): CommonMenuItem[] => {
+      return [
+        {
+          title: 'Delete Config',
+          key: 'delete',
+          ariaLabel: `Delete Project Config, ${row.configType}`,
+          onClick: () => {
+            setRecordToDelete(row.id);
+          },
+        },
+      ];
+    },
+    []
+  );
+
+  const filters = useFilters({
+    type: 'ProjectConfigFilterOptions',
+  });
+
   return (
     <>
       <GenericTableWithData<
@@ -71,39 +98,28 @@ const ProjectConfigTable = ({
       >
         queryVariables={{}}
         queryDocument={GetProjectConfigsDocument}
-        columns={[
-          ...columns,
-          {
-            key: 'Delete',
-            render: ({ id }) => (
-              <Box
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                }}
-              >
-                <DeleteMutationButton<
-                  DeleteProjectConfigMutation,
-                  DeleteProjectConfigMutationVariables
-                >
-                  queryDocument={DeleteProjectConfigDocument}
-                  variables={{ id }}
-                  idPath={'deleteProjectConfig.projectConfig.id'}
-                  recordName='Project Config'
-                  onSuccess={() => evictProjectConfigs()}
-                  onlyIcon
-                />
-              </Box>
-            ),
-          },
-        ]}
+        rowSecondaryActionConfigs={rowSecondaryActionConfigs}
+        columns={columns}
         pagePath='projectConfigs'
         noData='No project configs'
         recordType='ProjectConfig'
         paginationItemName='project config'
         handleRowClick={onClickRow}
-        rowActionTitle='Edit Project Config'
+        rowActionTitle='Edit Config'
+        filters={filters}
         showTopToolbar
+      />
+      <DeleteMutationConfirmationDialog<
+        DeleteProjectConfigMutation,
+        DeleteProjectConfigMutationVariables
+      >
+        open={!!recordToDelete}
+        onClose={() => setRecordToDelete(undefined)}
+        variables={{ id: recordToDelete || '' }}
+        queryDocument={DeleteProjectConfigDocument}
+        idPath={'deleteProjectConfig.projectConfig.id'}
+        onSuccess={() => evictProjectConfigs()}
+        recordName='Project Config'
       />
     </>
   );

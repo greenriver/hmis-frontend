@@ -13,7 +13,7 @@ const ReferralStepDatum: React.FC<{
 
   return (
     <Typography
-      variant='caption'
+      variant='body2'
       color='text.secondary'
       component={isMobile ? 'p' : 'span'}
       sx={sx}

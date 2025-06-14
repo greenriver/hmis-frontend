@@ -8,9 +8,9 @@ import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
 import {
   ReferralPostingStatus,
@@ -19,8 +19,8 @@ import {
 
 const AdminReferralPosting: React.FC = () => {
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
-  const { globalFeatureFlags: { externalReferrals } = {} } =
-    useHmisAppSettings();
+  const { globalFeatureFlags: { externalReferralsEnabled } = {} } =
+    useGlobalFeatureFlags();
 
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
@@ -45,7 +45,7 @@ const AdminReferralPosting: React.FC = () => {
         <Grid item lg={4} sm={12}>
           <AdminReferralPostingDetails
             referralPosting={referralPosting}
-            externalReferrals={externalReferrals}
+            externalReferrals={externalReferralsEnabled}
           />
         </Grid>
         <Grid item lg={8} sm={12}>

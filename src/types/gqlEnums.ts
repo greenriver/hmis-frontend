@@ -1008,6 +1008,7 @@ export const HmisEnums = {
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     PROJECTS_RECEIVING_REFERRALS: 'Open Projects that can receive referrals',
+    PROJECT_CONFIG_TYPES: 'PROJECT_CONFIG_TYPES',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     RESIDENTIAL_PROJECTS: 'Residential Projects',
     STAFF_ASSIGNMENT_RELATIONSHIPS: 'Staff Assignment Relationships',
@@ -1409,6 +1410,7 @@ export const HmisEnums = {
   ProjectConfigType: {
     AUTO_ENTER: 'Auto Enter',
     AUTO_EXIT: 'Auto Exit',
+    COORDINATED_ENTRY: 'Coordinated Entry',
     STAFF_ASSIGNMENT: 'Staff Assignment',
   },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },

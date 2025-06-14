@@ -1,8 +1,10 @@
 import { Paper } from '@mui/material';
-import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
-import { REFERRAL_WITH_PROJECT_COLUMNS } from '@/modules/ce/components/client/ClientReferralsTable';
-import { REFERRAL_COLUMNS } from '@/modules/ce/components/project/ProjectReferralsTable';
+
+import {
+  REFERRAL_COLUMNS,
+  REFERRAL_WITH_PROJECT_COLUMNS,
+} from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -27,23 +29,34 @@ const COLUMNS: DataColumnDef<
   REFERRAL_COLUMNS.client,
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.currentSteps,
+  REFERRAL_COLUMNS.daysOnCurrentTask,
   {
-    // TODO - Ideally this column "Time in Current Step" should correspond with the filter "On Current Step Since..."
-    // aka, they should have the same title and use the same unit (days)
-    key: 'daysOnCurrentSteps',
-    header: 'Days on Current Task',
-    render: ({ daysOnCurrentSteps }) => {
-      if (isNil(daysOnCurrentSteps)) return; // no open steps
-      if (daysOnCurrentSteps === 0) return '< 1 day';
-      return `${daysOnCurrentSteps} day${daysOnCurrentSteps > 1 ? 's' : ''}`;
+    ...REFERRAL_COLUMNS.currentTaskSwimlane,
+    // FIXME(#7832): bug, defaultHidden: false not working
+    // optional: {
+    //   defaultHidden: false,
+    // },
+  },
+  {
+    ...REFERRAL_COLUMNS.currentTaskAssignees,
+    optional: {
+      defaultHidden: true,
     },
   },
   REFERRAL_WITH_PROJECT_COLUMNS.projectName,
-  REFERRAL_WITH_PROJECT_COLUMNS.projectType,
+  {
+    ...REFERRAL_WITH_PROJECT_COLUMNS.projectType,
+    optional: {
+      defaultHidden: true,
+    },
+  },
   {
     key: 'organization',
     header: 'Organization',
     render: 'targetOrganizationName',
+    optional: {
+      defaultHidden: true,
+    },
   },
   {
     header: 'Unit',
@@ -54,11 +67,15 @@ const COLUMNS: DataColumnDef<
       queryVariableField: 'includeUnit',
     },
   },
-  REFERRAL_COLUMNS.referredBy,
+  { ...REFERRAL_COLUMNS.referredBy, optional: { defaultHidden: true } },
+  REFERRAL_COLUMNS.date,
   {
     key: 'updatedBy',
     header: 'Last Updated By',
     render: ({ updatedBy }) => updatedBy?.name,
+    // optional: {
+    //   defaultHidden: false,
+    // },
   },
 ];
 interface Props {}

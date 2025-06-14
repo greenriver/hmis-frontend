@@ -1,11 +1,9 @@
 import { useCallback } from 'react';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  CeOpportunityStatus,
   ProjectAllFieldsFragment,
-  UnitFieldsFragment,
+  UnitTableRowFieldsFragment,
   useMarkUnitsAvailableMutation,
   useMarkUnitsUnavailableMutation,
 } from '@/types/gqlTypes';
@@ -17,13 +15,8 @@ export const useUnitCeActions = ({
   project: ProjectAllFieldsFragment;
 }): {
   loading: boolean;
-  getCeActions: (unit: UnitFieldsFragment) => CommonMenuItem[];
+  getCeActions: (unit: UnitTableRowFieldsFragment) => CommonMenuItem[];
 } => {
-  // TODO(7409) - instead of using the global permission, check project-level config
-  const [canViewCoordinatedEntry] = useHasRootPermissions([
-    'canViewCoordinatedEntry',
-  ]);
-
   const [
     markUnitsAvailable,
     { loading: availableLoading, error: availableError },
@@ -35,44 +28,46 @@ export const useUnitCeActions = ({
   ] = useMarkUnitsUnavailableMutation();
 
   const getCeActions = useCallback(
-    (unit: UnitFieldsFragment) => {
+    (unit: UnitTableRowFieldsFragment) => {
+      if (!project.coordinatedEntryEnabled) return [];
+
       const actions: CommonMenuItem[] = [];
-      if (!canViewCoordinatedEntry) return actions;
 
-      if (unit.latestOpportunity) {
-        actions.push({
-          title: 'View Opportunity',
-          key: 'viewOpportunity',
-          ariaLabel: `View Opportunity for Unit ${unit.id}`,
-          to: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-            projectId: project.id,
-            opportunityId: unit.latestOpportunity.id,
-          }),
-        });
-      }
+      // Always allow linking to Unit page, if CE is enabled, to view/manage eligibility criteria
+      actions.push({
+        title: 'View Unit',
+        key: 'viewUnit',
+        ariaLabel: `View Unit ${unit.id}`,
+        to: generateSafePath(ProjectDashboardRoutes.UNIT, {
+          projectId: project.id,
+          unitId: unit.id,
+        }),
+      });
 
-      if (project.access.canManageUnits) {
-        if (unit.latestOpportunity && unit.latestOpportunity.active) {
-          // Show this option if the opportunity is active, but disable it if it's locked
+      // Opportunity creation is only available if the unit has an associated CE Workflow Template
+      const hasWorkflowTemplate = unit.workflowTemplateName;
+
+      if (hasWorkflowTemplate && project.access.canManageUnits) {
+        // TODO(#7537) - canBeMarkedAvailable doesn't guarantee that there are no current occupants.
+        // Implement a confirmation modal enabling the user to specify the "available on date".
+        if (unit.canBeMarkedAvailable) {
           actions.push({
-            title: 'Mark as Unavailable for Referrals',
-            key: 'markUnavailable',
-            ariaLabel: `Mark Unit ${unit.id} as Unavailable for Referrals`,
-            onClick: () => {
-              markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
-            },
-            disabled:
-              unit.latestOpportunity.status === CeOpportunityStatus.Locked,
-            disabledReason:
-              'Unit with in-progress referral cannot be marked as unavailable',
-          });
-        } else {
-          actions.push({
-            title: 'Mark as Available for Referrals',
+            title: 'Start Accepting Referrals',
             key: 'markAvailable',
-            ariaLabel: `Mark Unit ${unit.id} as Available for Referrals`,
+            ariaLabel: `Start Accepting Referrals for ${unit.id}`,
             onClick: () => {
               markUnitsAvailable({ variables: { unitIds: [unit.id] } });
+            },
+          });
+        }
+
+        if (unit.canBeMarkedUnavailable) {
+          actions.push({
+            title: 'Stop Accepting Referrals',
+            key: 'markUnavailable',
+            ariaLabel: `Stop Accepting Referrals for ${unit.id}`,
+            onClick: () => {
+              markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
             },
           });
         }
@@ -80,13 +75,7 @@ export const useUnitCeActions = ({
 
       return actions;
     },
-    [
-      canViewCoordinatedEntry,
-      markUnitsAvailable,
-      markUnitsUnavailable,
-      project.access.canManageUnits,
-      project.id,
-    ]
+    [markUnitsAvailable, markUnitsUnavailable, project]
   );
 
   if (availableError) throw availableError;

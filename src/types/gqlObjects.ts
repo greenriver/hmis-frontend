@@ -4178,6 +4178,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'GlobalFeatureFlags',
+    fields: [
+      {
+        name: 'coordinatedEntryEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'externalReferralsEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'mciIdEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'HealthAndDv',
     fields: [
       {
@@ -5184,12 +5221,40 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'autoEnterEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'autoExitDaysThreshold',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'autoExitEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'contactInformation',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'continuumProject',
         type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
+      {
+        name: 'coordinatedEntryEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'dateCreated',
@@ -5562,6 +5627,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -5577,6 +5650,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+      {
+        name: 'updatedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
       },
     ],
   },
@@ -6581,6 +6662,30 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'acceptingCeReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canBeMarkedAvailable',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canBeMarkedAvailableToday',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canBeMarkedUnavailable',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -8577,6 +8682,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'ENUM', name: 'CeReferralStatus', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ProjectConfigFilterOptions',
+    args: [
+      {
+        name: 'configType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
       },

@@ -4,6 +4,7 @@ query GetUnits(
   $offset: Int = 0
   $filters: UnitFilterOptions
   $includeCeFields: Boolean = false
+  $includeClientOccupants: Boolean = false
 ) {
   project(id: $id) {
     id
@@ -12,9 +13,35 @@ query GetUnits(
       limit
       nodesCount
       nodes {
-        ...UnitFields
+        ...UnitTableRowFields
       }
     }
+  }
+}
+
+query GetProjectUnitGroups($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    unitGroups(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...UnitGroupCapacityFields
+      }
+    }
+  }
+}
+
+query GetUnitGroup($id: ID!) {
+  unitGroup(id: $id) {
+    ...UnitGroupDetailFields
+  }
+}
+
+query GetUnit($id: ID!, $includeCeFields: Boolean = false) {
+  unit(id: $id) {
+    ...UnitDetailFields
   }
 }
 
@@ -30,11 +57,12 @@ query GetProjectUnitTypes($id: ID!) {
 mutation CreateUnits(
   $input: CreateUnitsInput!
   $includeCeFields: Boolean = false
+  $includeClientOccupants: Boolean = false
 ) {
   createUnits(input: $input) {
     clientMutationId
     units {
-      ...UnitFields
+      ...UnitTableRowFields
     }
     errors {
       ...ValidationErrorFields
@@ -55,11 +83,23 @@ mutation DeleteUnits($input: DeleteUnitsInput!) {
 mutation UpdateUnits(
   $input: UpdateUnitsInput!
   $includeCeFields: Boolean = false
+  $includeClientOccupants: Boolean = false
 ) {
   updateUnits(input: $input) {
     clientMutationId
     units {
-      ...UnitFields
+      ...UnitTableRowFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateUnitGroup($input: UnitGroupInput!) {
+  createUnitGroup(input: $input) {
+    unitGroup {
+      ...UnitGroupFields
     }
     errors {
       ...ValidationErrorFields

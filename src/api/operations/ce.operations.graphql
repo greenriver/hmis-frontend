@@ -1,11 +1,3 @@
-mutation CreateCeOpportunity($projectId: ID!, $input: CeOpportunityInput!) {
-  createCeOpportunity(projectId: $projectId, input: $input) {
-    opportunity {
-      ...CeOpportunitySummaryFields
-    }
-  }
-}
-
 mutation CreateCeReferral($opportunityId: ID!, $clientId: ID!) {
   createCeReferral(opportunityId: $opportunityId, clientId: $clientId) {
     referral {
@@ -60,10 +52,11 @@ mutation SubmitCeReferralStep(
 mutation MarkUnitsAvailable(
   $unitIds: [ID!]!
   $includeCeFields: Boolean = true
+  $includeClientOccupants: Boolean = false
 ) {
   markUnitsAvailable(unitIds: $unitIds) {
     units {
-      ...UnitFields
+      ...UnitTableRowFields
     }
   }
 }
@@ -71,10 +64,11 @@ mutation MarkUnitsAvailable(
 mutation MarkUnitsUnavailable(
   $unitIds: [ID!]!
   $includeCeFields: Boolean = true
+  $includeClientOccupants: Boolean = false
 ) {
   markUnitsUnavailable(unitIds: $unitIds) {
     units {
-      ...UnitFields
+      ...UnitTableRowFields
     }
   }
 }

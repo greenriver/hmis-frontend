@@ -57,6 +57,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   enrollmentRecordType: PickListType.EnrollmentAuditEventRecordTypes,
   assignedStaff: PickListType.EligibleStaffAssignmentUsers,
   workflowTemplate: PickListType.CeWorkflowTemplateIdentifiersIncludingRetired,
+  unitType: PickListType.PossibleUnitTypesForProject,
 };
 
 function isPicklistType(
