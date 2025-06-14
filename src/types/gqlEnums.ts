@@ -1817,6 +1817,8 @@ export const HmisEnums = {
       'Veteran exited - prior to ever receiving a voucher',
     PATH_REFERRAL__TEMPORARY_HOUSING: 'Temporary housing',
     PATH_SERVICE__SECURITY_DEPOSITS: 'Security deposits',
+    SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED:
+      'General housing stability assistance - emergency supplies [Deprecated]',
     HOPWA_SERVICE__SUBSTANCE_USE_SERVICES_TREATMENT:
       'Substance use services/treatment',
     HUD_VASH_OTH_VOUCHER_TRACKING__OTHER: 'Other',

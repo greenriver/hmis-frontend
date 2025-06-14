@@ -164,8 +164,6 @@ export type ApplicationUser = {
   manageAccountUrl: Scalars['String']['output'];
   name: Scalars['String']['output'];
   recentItems: Array<OmnisearchResult>;
-  /** @deprecated Replaced with new UserDashboard type */
-  staffAssignments?: Maybe<StaffAssignmentsPaginated>;
 };
 
 /** User account for a user of the system */
@@ -197,12 +195,6 @@ export type ApplicationUserEnrollmentAccessSummariesArgs = {
 
 /** User account for a user of the system */
 export type ApplicationUserLoginActivitiesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** User account for a user of the system */
-export type ApplicationUserStaffAssignmentsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6732,8 +6724,6 @@ export type QueryAccess = {
   canViewFullSsn: Scalars['Boolean']['output'];
   canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
-  /** @deprecated Replaced with new UserDashboard type */
-  canViewMyDashboard: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewOwnReferrals: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
@@ -7688,6 +7678,8 @@ export enum ServiceTypeProvided {
   SsvfFinancialAssistanceFoodAssistance = 'SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE',
   /** (12) General housing stability assistance */
   SsvfFinancialAssistanceGeneralHousingStabilityAssistance = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE',
+  /** (11) General housing stability assistance - emergency supplies [Deprecated] */
+  SsvfFinancialAssistanceGeneralHousingStabilityAssistanceEmergencySuppliesDeprecated = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED',
   /** (17) Landlord Incentive */
   SsvfFinancialAssistanceLandlordIncentive = 'SSVF_FINANCIAL_ASSISTANCE__LANDLORD_INCENTIVE',
   /** (5) Moving costs */
