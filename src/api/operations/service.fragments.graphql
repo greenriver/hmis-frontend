@@ -33,6 +33,7 @@ fragment ServiceDetailFields on Service {
   faAmount
   faStartDate
   faEndDate
+  informationDate
   movingOnOtherType
   referralOutcome
   subTypeProvided

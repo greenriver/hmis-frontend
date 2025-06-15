@@ -20770,6 +20770,7 @@ export type GetClientServicesQuery = {
         faAmount?: number | null;
         faStartDate?: string | null;
         faEndDate?: string | null;
+        informationDate?: string | null;
         movingOnOtherType?: string | null;
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
@@ -35726,6 +35727,7 @@ export type SubmitFormMutation = {
           faAmount?: number | null;
           faStartDate?: string | null;
           faEndDate?: string | null;
+          informationDate?: string | null;
           movingOnOtherType?: string | null;
           referralOutcome?: PathReferralOutcome | null;
           subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43031,6 +43033,7 @@ export type ServiceDetailFieldsFragment = {
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
+  informationDate?: string | null;
   movingOnOtherType?: string | null;
   referralOutcome?: PathReferralOutcome | null;
   subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43177,6 +43180,7 @@ export type ServiceFieldsFragment = {
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
+  informationDate?: string | null;
   movingOnOtherType?: string | null;
   referralOutcome?: PathReferralOutcome | null;
   subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43339,6 +43343,7 @@ export type ClientServiceFieldsFragment = {
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
+  informationDate?: string | null;
   movingOnOtherType?: string | null;
   referralOutcome?: PathReferralOutcome | null;
   subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43520,6 +43525,7 @@ export type GetServiceQuery = {
     faAmount?: number | null;
     faStartDate?: string | null;
     faEndDate?: string | null;
+    informationDate?: string | null;
     movingOnOtherType?: string | null;
     referralOutcome?: PathReferralOutcome | null;
     subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43716,6 +43722,7 @@ export type DeleteServiceMutation = {
       faAmount?: number | null;
       faStartDate?: string | null;
       faEndDate?: string | null;
+      informationDate?: string | null;
       movingOnOtherType?: string | null;
       referralOutcome?: PathReferralOutcome | null;
       subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43911,6 +43918,7 @@ export type GetEnrollmentServicesQuery = {
         faAmount?: number | null;
         faStartDate?: string | null;
         faEndDate?: string | null;
+        informationDate?: string | null;
         movingOnOtherType?: string | null;
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
@@ -47949,6 +47957,7 @@ export const ServiceDetailFieldsFragmentDoc = gql`
     faAmount
     faStartDate
     faEndDate
+    informationDate
     movingOnOtherType
     referralOutcome
     subTypeProvided
