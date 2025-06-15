@@ -21,6 +21,7 @@ fragment ClientFields on Client {
   ...ClientVeteranInfoFields
   dobDataQuality
   gender
+  sex
   differentIdentityText
   pronouns
   nameDataQuality

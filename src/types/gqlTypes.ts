@@ -9157,6 +9157,7 @@ export type AssessmentWithRecordsFragment = {
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
     preferredLanguageDifferent?: string | null;
+    mentalHealthConsultation?: MentalHealthConsultation | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -10024,6 +10025,7 @@ export type FullAssessmentFragment = {
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
     preferredLanguageDifferent?: string | null;
+    mentalHealthConsultation?: MentalHealthConsultation | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -11881,6 +11883,7 @@ export type GetAssessmentQuery = {
       translationNeeded?: NoYesReasonsForMissingData | null;
       preferredLanguage?: PreferredLanguage | null;
       preferredLanguageDifferent?: string | null;
+      mentalHealthConsultation?: MentalHealthConsultation | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -13007,6 +13010,7 @@ export type SubmitAssessmentMutation = {
         translationNeeded?: NoYesReasonsForMissingData | null;
         preferredLanguage?: PreferredLanguage | null;
         preferredLanguageDifferent?: string | null;
+        mentalHealthConsultation?: MentalHealthConsultation | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -13861,6 +13865,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         translationNeeded?: NoYesReasonsForMissingData | null;
         preferredLanguage?: PreferredLanguage | null;
         preferredLanguageDifferent?: string | null;
+        mentalHealthConsultation?: MentalHealthConsultation | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -14726,6 +14731,7 @@ export type GetAssessmentsForPopulationQuery = {
           translationNeeded?: NoYesReasonsForMissingData | null;
           preferredLanguage?: PreferredLanguage | null;
           preferredLanguageDifferent?: string | null;
+          mentalHealthConsultation?: MentalHealthConsultation | null;
           project: {
             __typename?: 'Project';
             id: string;
@@ -15582,6 +15588,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
+  mentalHealthConsultation?: MentalHealthConsultation | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -19850,6 +19857,7 @@ export type ClientFieldsFragment = {
   __typename?: 'Client';
   dobDataQuality: DobDataQuality;
   gender: Array<Gender>;
+  sex?: Sex | null;
   differentIdentityText?: string | null;
   pronouns: Array<string>;
   nameDataQuality: NameDataQuality;
@@ -20336,6 +20344,7 @@ export type GetClientQuery = {
     __typename?: 'Client';
     dobDataQuality: DobDataQuality;
     gender: Array<Gender>;
+    sex?: Sex | null;
     differentIdentityText?: string | null;
     pronouns: Array<string>;
     nameDataQuality: NameDataQuality;
@@ -22010,6 +22019,7 @@ export type MergeClientsMutation = {
       __typename?: 'Client';
       dobDataQuality: DobDataQuality;
       gender: Array<Gender>;
+      sex?: Sex | null;
       differentIdentityText?: string | null;
       pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
@@ -25544,6 +25554,7 @@ export type EnrollmentValuesFragment = {
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
+  mentalHealthConsultation?: MentalHealthConsultation | null;
 };
 
 export type SubmittedEnrollmentResultFieldsFragment = {
@@ -25983,6 +25994,7 @@ export type GetEnrollmentQuery = {
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
     preferredLanguageDifferent?: string | null;
+    mentalHealthConsultation?: MentalHealthConsultation | null;
     project: {
       __typename?: 'Project';
       id: string;
@@ -34325,6 +34337,7 @@ export type SubmitFormMutation = {
           __typename?: 'Client';
           dobDataQuality: DobDataQuality;
           gender: Array<Gender>;
+          sex?: Sex | null;
           differentIdentityText?: string | null;
           pronouns: Array<string>;
           nameDataQuality: NameDataQuality;
@@ -45706,6 +45719,7 @@ export const EnrollmentValuesFragmentDoc = gql`
     translationNeeded
     preferredLanguage
     preferredLanguageDifferent
+    mentalHealthConsultation
   }
 `;
 export const FileFieldsFragmentDoc = gql`
@@ -46774,6 +46788,7 @@ export const ClientFieldsFragmentDoc = gql`
     ...ClientVeteranInfoFields
     dobDataQuality
     gender
+    sex
     differentIdentityText
     pronouns
     nameDataQuality
