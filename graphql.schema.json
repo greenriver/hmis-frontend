@@ -49887,12 +49887,6 @@
             "deprecationReason": null
           },
           {
-            "name": "SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED",
-            "description": "(11) General housing stability assistance - emergency supplies [Deprecated]",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "SSVF_FINANCIAL_ASSISTANCE__LANDLORD_INCENTIVE",
             "description": "(17) Landlord Incentive",
             "isDeprecated": false,
@@ -50416,6 +50410,24 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "FEMALE",
             "description": "(0) Female",

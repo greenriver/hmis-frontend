@@ -1817,8 +1817,6 @@ export const HmisEnums = {
       'Veteran exited - prior to ever receiving a voucher',
     PATH_REFERRAL__TEMPORARY_HOUSING: 'Temporary housing',
     PATH_SERVICE__SECURITY_DEPOSITS: 'Security deposits',
-    SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED:
-      'General housing stability assistance - emergency supplies [Deprecated]',
     HOPWA_SERVICE__SUBSTANCE_USE_SERVICES_TREATMENT:
       'Substance use services/treatment',
     HUD_VASH_OTH_VOUCHER_TRACKING__OTHER: 'Other',
@@ -1868,7 +1866,14 @@ export const HmisEnums = {
       'Transportation services: vehicle repair/maintenance',
     SSVF_SERVICE__RAPID_RESOLUTION: 'Rapid Resolution',
   },
-  Sex: { INVALID: 'Invalid Value', FEMALE: 'Female', MALE: 'Male' },
+  Sex: {
+    INVALID: 'Invalid Value',
+    FEMALE: 'Female',
+    MALE: 'Male',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   SexualOrientation: {
     INVALID: 'Invalid Value',
     HETEROSEXUAL: 'Heterosexual',

@@ -7678,8 +7678,6 @@ export enum ServiceTypeProvided {
   SsvfFinancialAssistanceFoodAssistance = 'SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE',
   /** (12) General housing stability assistance */
   SsvfFinancialAssistanceGeneralHousingStabilityAssistance = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE',
-  /** (11) General housing stability assistance - emergency supplies [Deprecated] */
-  SsvfFinancialAssistanceGeneralHousingStabilityAssistanceEmergencySuppliesDeprecated = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED',
   /** (17) Landlord Incentive */
   SsvfFinancialAssistanceLandlordIncentive = 'SSVF_FINANCIAL_ASSISTANCE__LANDLORD_INCENTIVE',
   /** (5) Moving costs */
@@ -7758,6 +7756,12 @@ export type ServicesPaginated = {
 
 /** HUD Sex (4.21) */
 export enum Sex {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (0) Female */
   Female = 'FEMALE',
   /** Invalid Value */
