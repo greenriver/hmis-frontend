@@ -1,15 +1,9 @@
 import { LoadingButton } from '@mui/lab';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { LoadingButtonProps } from '@/components/elements/LoadingButton';
+import BeginReferralDialog from '@/modules/ce/components/unit/BeginReferralDialog';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
-import { ProjectDashboardRoutes } from '@/routes/routes';
-import {
-  CeCandidateFieldsFragment,
-  useCreateCeReferralMutation,
-} from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
+import { CeCandidateFieldsFragment } from '@/types/gqlTypes';
 
 type Props = {
   opportunityId: string;
@@ -23,48 +17,26 @@ const BeginReferralButton: React.FC<Props> = ({
   candidate,
   ...rest
 }) => {
-  const navigate = useNavigate();
-
-  const [createReferral, { loading, error }] = useCreateCeReferralMutation({
-    variables: {
-      opportunityId,
-      clientId: candidate.clientId,
-    },
-    onCompleted: (data) => {
-      if (data.createCeReferral?.referral) {
-        const referral = data.createCeReferral.referral;
-
-        cache.modify({
-          id: `CeOpportunity:${opportunityId}`,
-          fields: {
-            referral() {
-              return referral;
-            },
-          },
-        });
-
-        navigate(
-          generateSafePath(ProjectDashboardRoutes.REFERRAL, {
-            projectId: projectId,
-            referralId: referral.id,
-          })
-        );
-      }
-    },
-  });
-
-  if (error) throw error;
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <LoadingButton
-      onClick={() => createReferral()}
-      loading={loading}
-      color='grayscale'
-      aria-label={`Begin Referral for ${clientNameFromRecordWithOptionalClient(candidate)}`}
-      {...rest}
-    >
-      Begin Referral
-    </LoadingButton>
+    <>
+      <LoadingButton
+        onClick={() => setDialogOpen(true)}
+        color='grayscale'
+        aria-label={`Begin Referral for ${clientNameFromRecordWithOptionalClient(candidate)}`}
+        {...rest}
+      >
+        Begin Referral
+      </LoadingButton>
+      <BeginReferralDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        candidate={candidate}
+        projectId={projectId}
+        opportunityId={opportunityId}
+      />
+    </>
   );
 };
 

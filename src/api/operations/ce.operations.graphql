@@ -3,6 +3,9 @@ mutation CreateCeReferral($opportunityId: ID!, $clientId: ID!) {
     referral {
       ...CeReferralSummaryFields
     }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }
 
