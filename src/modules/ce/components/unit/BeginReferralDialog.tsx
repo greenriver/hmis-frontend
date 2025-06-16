@@ -18,16 +18,16 @@ import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
+  CeOpportunityFieldsFragment,
   useCreateCeReferralMutation,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   candidate: CeCandidateFieldsFragment; // candidate to refer
-  opportunityId: string; // opportunity to refer to
+  opportunity: CeOpportunityFieldsFragment; // opportunity to refer to
   open: boolean;
   onClose: VoidFunction;
-  projectId: string;
 }
 
 /**
@@ -37,11 +37,10 @@ interface Props {
  * TODO(#7539) require setting/confirming contacts before referral creation
  */
 const BeginReferralDialog: React.FC<Props> = ({
+  candidate,
+  opportunity,
   open,
   onClose,
-  candidate,
-  projectId,
-  opportunityId,
 }) => {
   const navigate = useNavigate();
   const { unitId } = useSafeParams() as {
@@ -57,7 +56,7 @@ const BeginReferralDialog: React.FC<Props> = ({
 
   const [createReferral, { loading }] = useCreateCeReferralMutation({
     variables: {
-      opportunityId,
+      opportunityId: opportunity.id,
       clientId: candidate.clientId,
     },
     onCompleted: ({ createCeReferral }) => {
@@ -69,7 +68,7 @@ const BeginReferralDialog: React.FC<Props> = ({
         cache.evict({ id: `Unit:${unitId}` });
         navigate(
           generateSafePath(ProjectDashboardRoutes.REFERRAL, {
-            projectId,
+            projectId: opportunity.projectId,
             referralId: referral.id,
           })
         );
@@ -112,7 +111,8 @@ const BeginReferralDialog: React.FC<Props> = ({
             {errorContent}
             <p>
               You are about to begin a referral for{' '}
-              <strong>{clientName}</strong>. Are you sure you want to proceed?
+              <strong>{clientName}</strong> to <b>{opportunity.name}</b>. Are
+              you sure you want to proceed?
             </p>
           </>
         ),
@@ -151,7 +151,7 @@ const BeginReferralDialog: React.FC<Props> = ({
       //   proceedLoading: loading,
       // },
     ],
-    [clientName, createReferral, errorContent, loading]
+    [clientName, createReferral, errorContent, loading, opportunity.name]
   );
 
   return (

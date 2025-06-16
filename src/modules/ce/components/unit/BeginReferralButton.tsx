@@ -3,17 +3,18 @@ import React, { useState } from 'react';
 import { LoadingButtonProps } from '@/components/elements/LoadingButton';
 import BeginReferralDialog from '@/modules/ce/components/unit/BeginReferralDialog';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
-import { CeCandidateFieldsFragment } from '@/types/gqlTypes';
+import {
+  CeCandidateFieldsFragment,
+  CeOpportunityFieldsFragment,
+} from '@/types/gqlTypes';
 
 type Props = {
-  opportunityId: string;
-  projectId: string;
+  opportunity: CeOpportunityFieldsFragment;
   candidate: CeCandidateFieldsFragment;
 } & LoadingButtonProps;
 
 const BeginReferralButton: React.FC<Props> = ({
-  opportunityId,
-  projectId,
+  opportunity,
   candidate,
   ...rest
 }) => {
@@ -33,8 +34,7 @@ const BeginReferralButton: React.FC<Props> = ({
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
         candidate={candidate}
-        projectId={projectId}
-        opportunityId={opportunityId}
+        opportunity={opportunity}
       />
     </>
   );
