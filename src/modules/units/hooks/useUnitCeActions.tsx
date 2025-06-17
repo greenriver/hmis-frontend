@@ -48,9 +48,8 @@ export const useUnitCeActions = ({
       const hasWorkflowTemplate = unit.workflowTemplateName;
 
       if (hasWorkflowTemplate && project.access.canManageUnits) {
-        // TODO(#7537) - canBeMarkedAvailable doesn't guarantee that there are no current occupants.
-        // Implement a confirmation modal enabling the user to specify the "available on date".
-        if (unit.canBeMarkedAvailable) {
+        if (unit.canBeMarkedAvailableToday) {
+          // TODO(#7537) - use canBeMarkedAvailable and implement a confirmation modal enabling the user to specify the "available on date".
           actions.push({
             title: 'Start Accepting Referrals',
             key: 'markAvailable',
