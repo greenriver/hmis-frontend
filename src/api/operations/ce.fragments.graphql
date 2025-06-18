@@ -175,6 +175,7 @@ fragment CeReferralFields on CeReferral {
     }
   }
   events(limit: 200) {
+    # In the future, we may paginate these in the UI; for now, just query all, with a high query cap
     nodesCount
     nodes {
       ...CeReferralEventFields
