@@ -57,7 +57,7 @@ const mockReferral: CeReferralFieldsFragment = {
   },
   steps: [],
   swimlanes: [],
-  events: {
+  auditEvents: {
     nodesCount: 0,
     nodes: [],
   },
