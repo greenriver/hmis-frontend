@@ -843,7 +843,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
-    name: 'CeReferralEvent',
+    name: 'CeReferralAuditEvent',
     fields: [
       {
         name: 'createdAt',
@@ -870,7 +870,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          ofType: {
+            kind: 'ENUM',
+            name: 'CeReferralAuditEventType',
+            ofType: null,
+          },
         },
       },
     ],

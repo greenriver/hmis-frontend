@@ -87,6 +87,12 @@ export const HmisEnums = {
     DATE_AVAILABLE_LATEST_FIRST: 'Date Available, latest first',
   },
   CeOpportunityStatus: { closed: 'Closed', locked: 'Locked', open: 'Open' },
+  CeReferralAuditEventType: {
+    ACCEPT_REFERRAL: 'Accepted Referral',
+    COMPLETE_STEP: 'Completed Task',
+    REJECT_REFERRAL: 'Declined Referral',
+    START_REFERRAL: 'Started Referral',
+  },
   CeReferralStatus: {
     accepted: 'Accepted',
     in_progress: 'In progress',
