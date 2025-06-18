@@ -47,7 +47,7 @@ const ReferralTimeline: React.FC<Props> = ({ referral }: Props) => {
                   )}
                 </TimelineSeparator>
 
-                <TimelineContent sx={{ m: 'auto' }}>
+                <TimelineContent>
                   <Typography variant='caption'>{event.user?.name}</Typography>
 
                   <Typography variant='body2' fontWeight='bold'>
