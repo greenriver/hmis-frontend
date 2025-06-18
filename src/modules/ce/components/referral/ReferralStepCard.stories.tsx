@@ -57,6 +57,10 @@ const mockReferral: CeReferralFieldsFragment = {
   },
   steps: [],
   swimlanes: [],
+  events: {
+    nodesCount: 0,
+    nodes: [],
+  },
 };
 
 export const InProgress: Story = {
