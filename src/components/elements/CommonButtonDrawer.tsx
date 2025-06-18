@@ -1,6 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
 import {
-  Box,
   Button,
   ButtonProps,
   Divider,
@@ -71,9 +70,7 @@ const CommonButtonDrawer: React.FC<Props> = ({
           <CloseIcon />
         </IconButton>
         <Divider orientation='horizontal' flexItem />
-        <Box p={2}>
-          {children && React.cloneElement(children, { onClose: handleClose })}
-        </Box>
+        {children && React.cloneElement(children, { onClose: handleClose })}
       </Drawer>
     </>
   );

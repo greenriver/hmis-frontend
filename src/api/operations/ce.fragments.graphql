@@ -146,6 +146,17 @@ fragment ClientCeReferralTableFields on CeReferral {
   ...CeReferralWithProjectAccessFields
 }
 
+fragment CeReferralEventFields on CeReferralEvent {
+  id
+  createdAt
+  type
+  stepName
+  user {
+    id
+    name
+  }
+}
+
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
   ...CeReferralWithSwimlanes
@@ -161,6 +172,12 @@ fragment CeReferralFields on CeReferral {
     id
     client {
       id
+    }
+  }
+  events(limit: 200) {
+    nodesCount
+    nodes {
+      ...CeReferralEventFields
     }
   }
 }

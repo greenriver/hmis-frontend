@@ -708,6 +708,7 @@ export type CeReferral = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   currentSteps?: Maybe<Array<CeReferralStep>>;
   daysOnCurrentSteps?: Maybe<Scalars['Int']['output']>;
+  events: CeReferralEventsPaginated;
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
   referredBy?: Maybe<ApplicationUser>;
@@ -723,10 +724,35 @@ export type CeReferral = {
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
 
+export type CeReferralEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type CeReferralAccess = {
   __typename?: 'CeReferralAccess';
   canViewTargetProject: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+};
+
+export type CeReferralEvent = {
+  __typename?: 'CeReferralEvent';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  id: Scalars['ID']['output'];
+  stepName?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+  user?: Maybe<ApplicationUser>;
+};
+
+export type CeReferralEventsPaginated = {
+  __typename?: 'CeReferralEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeReferralEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type CeReferralFilterOptions = {
@@ -16579,6 +16605,15 @@ export type ClientCeReferralTableFieldsFragment = {
   } | null;
 };
 
+export type CeReferralEventFieldsFragment = {
+  __typename?: 'CeReferralEvent';
+  id: string;
+  createdAt: string;
+  type: string;
+  stepName?: string | null;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+};
+
 export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
   workflowTemplateName?: string | null;
@@ -16629,6 +16664,22 @@ export type CeReferralFieldsFragment = {
     id: string;
     client: { __typename?: 'Client'; id: string };
   } | null;
+  events: {
+    __typename?: 'CeReferralEventsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeReferralEvent';
+      id: string;
+      createdAt: string;
+      type: string;
+      stepName?: string | null;
+      user?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+    }>;
+  };
   client?: {
     __typename?: 'Client';
     id: string;
@@ -18451,6 +18502,22 @@ export type SubmitCeReferralStepMutation = {
           canPerformStep: boolean;
         };
       }>;
+      events: {
+        __typename?: 'CeReferralEventsPaginated';
+        nodesCount: number;
+        nodes: Array<{
+          __typename?: 'CeReferralEvent';
+          id: string;
+          createdAt: string;
+          type: string;
+          stepName?: string | null;
+          user?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+        }>;
+      };
       client?: {
         __typename?: 'Client';
         id: string;
@@ -18975,6 +19042,22 @@ export type GetCeReferralQuery = {
       id: string;
       client: { __typename?: 'Client'; id: string };
     } | null;
+    events: {
+      __typename?: 'CeReferralEventsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeReferralEvent';
+        id: string;
+        createdAt: string;
+        type: string;
+        stepName?: string | null;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    };
     client?: {
       __typename?: 'Client';
       id: string;
@@ -46396,6 +46479,18 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     }
   }
 `;
+export const CeReferralEventFieldsFragmentDoc = gql`
+  fragment CeReferralEventFields on CeReferralEvent {
+    id
+    createdAt
+    type
+    stepName
+    user {
+      id
+      name
+    }
+  }
+`;
 export const CeReferralFieldsFragmentDoc = gql`
   fragment CeReferralFields on CeReferral {
     ...CeReferralSummaryFields
@@ -46414,11 +46509,18 @@ export const CeReferralFieldsFragmentDoc = gql`
         id
       }
     }
+    events(limit: 200) {
+      nodesCount
+      nodes {
+        ...CeReferralEventFields
+      }
+    }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeReferralWithSwimlanesFragmentDoc}
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${CeOpportunitySummaryFieldsFragmentDoc}
+  ${CeReferralEventFieldsFragmentDoc}
 `;
 export const FormDefinitionMetadataFragmentDoc = gql`
   fragment FormDefinitionMetadata on FormDefinition {
