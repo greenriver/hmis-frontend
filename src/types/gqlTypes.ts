@@ -3656,8 +3656,6 @@ export enum FundingSource {
   HhsRhyStreetOutreachProject = 'HHS_RHY_STREET_OUTREACH_PROJECT',
   /** (24) HHS: RHY - Transitional Living Program */
   HhsRhyTransitionalLivingProgram = 'HHS_RHY_TRANSITIONAL_LIVING_PROGRAM',
-  /** (56) HUD: CoC Builds */
-  HudCocBuilds = 'HUD_COC_BUILDS',
   /** (1) HUD: CoC - Homelessness Prevention (High Performing Communities Only) */
   HudCocHomelessnessPrevention = 'HUD_COC_HOMELESSNESS_PREVENTION',
   /** (49) HUD: CoC - Joint Component RRH/PSH [Deprecated] */
@@ -3678,8 +3676,8 @@ export enum FundingSource {
   HudCocTransitionalHousing = 'HUD_COC_TRANSITIONAL_HOUSING',
   /** (43) HUD: CoC - Youth Homeless Demonstration Program (YHDP) */
   HudCocYouthHomelessDemonstrationProgramYhdp = 'HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP',
-  /** (47) HUD: ESG - CV [Deprecated] */
-  HudEsgCvDeprecated = 'HUD_ESG_CV_DEPRECATED',
+  /** (47) HUD: ESG - CV */
+  HudEsgCv = 'HUD_ESG_CV',
   /** (8) HUD: ESG - Emergency Shelter (operating and/or essential services) */
   HudEsgEmergencyShelter = 'HUD_ESG_EMERGENCY_SHELTER',
   /** (9) HUD: ESG - Homelessness Prevention */
@@ -3694,8 +3692,8 @@ export enum FundingSource {
   HudHome = 'HUD_HOME',
   /** (51) HUD: HOME (ARP) */
   HudHomeArp = 'HUD_HOME_ARP',
-  /** (48) HUD: HOPWA - CV [Deprecated] */
-  HudHopwaCvDeprecated = 'HUD_HOPWA_CV_DEPRECATED',
+  /** (48) HUD: HOPWA - CV */
+  HudHopwaCv = 'HUD_HOPWA_CV',
   /** (13) HUD: HOPWA - Hotel/Motel Vouchers */
   HudHopwaHotelMotelVouchers = 'HUD_HOPWA_HOTEL_MOTEL_VOUCHERS',
   /** (14) HUD: HOPWA - Housing Information */
@@ -7330,7 +7328,6 @@ export type Service = {
   /** Form Definition that was most recently used to create/update this record */
   formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
-  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   movingOnOtherType?: Maybe<Scalars['String']['output']>;
   otherTypeProvided?: Maybe<Scalars['String']['output']>;
   recordType?: Maybe<RecordType>;
@@ -20774,7 +20771,6 @@ export type GetClientServicesQuery = {
         faAmount?: number | null;
         faStartDate?: string | null;
         faEndDate?: string | null;
-        informationDate?: string | null;
         movingOnOtherType?: string | null;
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
@@ -35731,7 +35727,6 @@ export type SubmitFormMutation = {
           faAmount?: number | null;
           faStartDate?: string | null;
           faEndDate?: string | null;
-          informationDate?: string | null;
           movingOnOtherType?: string | null;
           referralOutcome?: PathReferralOutcome | null;
           subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43037,7 +43032,6 @@ export type ServiceDetailFieldsFragment = {
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
-  informationDate?: string | null;
   movingOnOtherType?: string | null;
   referralOutcome?: PathReferralOutcome | null;
   subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43184,7 +43178,6 @@ export type ServiceFieldsFragment = {
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
-  informationDate?: string | null;
   movingOnOtherType?: string | null;
   referralOutcome?: PathReferralOutcome | null;
   subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43347,7 +43340,6 @@ export type ClientServiceFieldsFragment = {
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
-  informationDate?: string | null;
   movingOnOtherType?: string | null;
   referralOutcome?: PathReferralOutcome | null;
   subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43529,7 +43521,6 @@ export type GetServiceQuery = {
     faAmount?: number | null;
     faStartDate?: string | null;
     faEndDate?: string | null;
-    informationDate?: string | null;
     movingOnOtherType?: string | null;
     referralOutcome?: PathReferralOutcome | null;
     subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43726,7 +43717,6 @@ export type DeleteServiceMutation = {
       faAmount?: number | null;
       faStartDate?: string | null;
       faEndDate?: string | null;
-      informationDate?: string | null;
       movingOnOtherType?: string | null;
       referralOutcome?: PathReferralOutcome | null;
       subTypeProvided?: ServiceSubTypeProvided | null;
@@ -43922,7 +43912,6 @@ export type GetEnrollmentServicesQuery = {
         faAmount?: number | null;
         faStartDate?: string | null;
         faEndDate?: string | null;
-        informationDate?: string | null;
         movingOnOtherType?: string | null;
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
@@ -47961,7 +47950,6 @@ export const ServiceDetailFieldsFragmentDoc = gql`
     faAmount
     faStartDate
     faEndDate
-    informationDate
     movingOnOtherType
     referralOutcome
     subTypeProvided
