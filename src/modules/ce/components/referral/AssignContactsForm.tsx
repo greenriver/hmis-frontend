@@ -64,7 +64,7 @@ const AssignContactsForm: React.FC<Props> = ({
   if (error) throw error;
 
   return (
-    <Stack gap={2} mt={2}>
+    <Stack p={2} gap={2} mt={2}>
       {referral.swimlanes?.map((swimlane) => (
         <AssignContactFormItem
           key={swimlane.id}

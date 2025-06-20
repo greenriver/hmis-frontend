@@ -25,6 +25,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 
+import ReferralTimeline from '@/modules/ce/components/referral/ReferralTimeline';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import {
@@ -176,7 +177,9 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
             <CommonButtonDrawer
               title={'Activity'}
               ButtonProps={{ startIcon: <ActivityIcon /> }}
-            />
+            >
+              <ReferralTimeline referral={referral} />
+            </CommonButtonDrawer>
             <CommonButtonDrawer
               title={'Notes'}
               ButtonProps={{ startIcon: <NotesIcon /> }}

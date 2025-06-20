@@ -703,6 +703,7 @@ export type CeReferral = {
   __typename?: 'CeReferral';
   access: CeReferralAccess;
   active: Scalars['Boolean']['output'];
+  auditEvents: CeReferralAuditEventsPaginated;
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -723,10 +724,46 @@ export type CeReferral = {
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
 
+export type CeReferralAuditEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type CeReferralAccess = {
   __typename?: 'CeReferralAccess';
   canViewTargetProject: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+};
+
+export type CeReferralAuditEvent = {
+  __typename?: 'CeReferralAuditEvent';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  id: Scalars['ID']['output'];
+  stepName?: Maybe<Scalars['String']['output']>;
+  type: CeReferralAuditEventType;
+  user?: Maybe<ApplicationUser>;
+};
+
+export enum CeReferralAuditEventType {
+  /** Accepted Referral */
+  AcceptReferral = 'ACCEPT_REFERRAL',
+  /** Completed Task */
+  CompleteStep = 'COMPLETE_STEP',
+  /** Declined Referral */
+  RejectReferral = 'REJECT_REFERRAL',
+  /** Started Referral */
+  StartReferral = 'START_REFERRAL',
+}
+
+export type CeReferralAuditEventsPaginated = {
+  __typename?: 'CeReferralAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeReferralAuditEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type CeReferralFilterOptions = {
@@ -16579,6 +16616,15 @@ export type ClientCeReferralTableFieldsFragment = {
   } | null;
 };
 
+export type CeReferralAuditEventFieldsFragment = {
+  __typename?: 'CeReferralAuditEvent';
+  id: string;
+  createdAt: string;
+  type: CeReferralAuditEventType;
+  stepName?: string | null;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+};
+
 export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
   workflowTemplateName?: string | null;
@@ -16629,6 +16675,22 @@ export type CeReferralFieldsFragment = {
     id: string;
     client: { __typename?: 'Client'; id: string };
   } | null;
+  auditEvents: {
+    __typename?: 'CeReferralAuditEventsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeReferralAuditEvent';
+      id: string;
+      createdAt: string;
+      type: CeReferralAuditEventType;
+      stepName?: string | null;
+      user?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+    }>;
+  };
   client?: {
     __typename?: 'Client';
     id: string;
@@ -18465,6 +18527,22 @@ export type SubmitCeReferralStepMutation = {
           canPerformStep: boolean;
         };
       }>;
+      auditEvents: {
+        __typename?: 'CeReferralAuditEventsPaginated';
+        nodesCount: number;
+        nodes: Array<{
+          __typename?: 'CeReferralAuditEvent';
+          id: string;
+          createdAt: string;
+          type: CeReferralAuditEventType;
+          stepName?: string | null;
+          user?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+        }>;
+      };
       client?: {
         __typename?: 'Client';
         id: string;
@@ -18989,6 +19067,22 @@ export type GetCeReferralQuery = {
       id: string;
       client: { __typename?: 'Client'; id: string };
     } | null;
+    auditEvents: {
+      __typename?: 'CeReferralAuditEventsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeReferralAuditEvent';
+        id: string;
+        createdAt: string;
+        type: CeReferralAuditEventType;
+        stepName?: string | null;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    };
     client?: {
       __typename?: 'Client';
       id: string;
@@ -46410,6 +46504,18 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     }
   }
 `;
+export const CeReferralAuditEventFieldsFragmentDoc = gql`
+  fragment CeReferralAuditEventFields on CeReferralAuditEvent {
+    id
+    createdAt
+    type
+    stepName
+    user {
+      id
+      name
+    }
+  }
+`;
 export const CeReferralFieldsFragmentDoc = gql`
   fragment CeReferralFields on CeReferral {
     ...CeReferralSummaryFields
@@ -46428,11 +46534,18 @@ export const CeReferralFieldsFragmentDoc = gql`
         id
       }
     }
+    auditEvents(limit: 200) {
+      nodesCount
+      nodes {
+        ...CeReferralAuditEventFields
+      }
+    }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeReferralWithSwimlanesFragmentDoc}
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${CeOpportunitySummaryFieldsFragmentDoc}
+  ${CeReferralAuditEventFieldsFragmentDoc}
 `;
 export const FormDefinitionMetadataFragmentDoc = gql`
   fragment FormDefinitionMetadata on FormDefinition {
