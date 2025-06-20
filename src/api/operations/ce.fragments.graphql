@@ -163,6 +163,14 @@ fragment CeReferralStepSummaryFields on CeReferralStep {
     id
     name
   }
+  updatedAt
+  updatedBy {
+    id
+    name
+  }
+  access {
+    canPerformStep
+  }
 }
 
 fragment CeReferralStepFields on CeReferralStep {

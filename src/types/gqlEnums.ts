@@ -961,6 +961,7 @@ export const HmisEnums = {
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',
+    CE_WORKFLOW_TEMPLATE_IDENTIFIERS: 'Templates for CE workflow definitions',
     CE_WORKFLOW_TEMPLATE_IDENTIFIERS_INCLUDING_RETIRED:
       'Templates for CE workflow definitions, including fully retired workflows',
     CLIENT_AUDIT_EVENT_RECORD_TYPES: 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
@@ -969,8 +970,10 @@ export const HmisEnums = {
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     CUSTOM_SERVICE_CATEGORIES: 'CUSTOM_SERVICE_CATEGORIES',
     DESTINATION: 'DESTINATION',
+    ELIGIBLE_REFERRAL_STEP_ASSIGNMENT_USERS:
+      'Users who can be assigned to referral steps in the specified project',
     ELIGIBLE_STAFF_ASSIGNMENT_USERS:
-      'Current users who are eligible for staff assignment',
+      'Users who are eligible for staff assignment',
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',
@@ -995,7 +998,6 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
     USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
-    WORKFLOW_DEFINITION_TEMPLATES: 'Templates for CE workflow definitions',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',

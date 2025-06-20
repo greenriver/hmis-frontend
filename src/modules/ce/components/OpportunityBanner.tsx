@@ -7,6 +7,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import BeginReferralButton from '@/modules/ce/components/BeginReferralButton';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
@@ -22,6 +23,7 @@ interface Props {
 const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
   const isTiny = useIsMobile('sm');
   const { referral } = opportunity;
+  const { project } = useProjectDashboardContext();
 
   const header = useMemo(() => {
     if (referral?.status === CeReferralStatus.Accepted) return 'Filled By';
@@ -37,9 +39,8 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
 
   const action = useMemo(() => {
     if (referral) {
-      const to = generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
+      const to = generateSafePath(ProjectDashboardRoutes.REFERRAL, {
         projectId: opportunity.projectId,
-        opportunityId: opportunity.id,
         referralId: referral.id,
       });
 
@@ -58,7 +59,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
       );
     }
 
-    if (topCandidate) {
+    if (topCandidate && project.access.canStartReferrals) {
       return (
         <BeginReferralButton
           opportunityId={opportunity.id}
@@ -68,7 +69,13 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
         />
       );
     }
-  }, [referral, opportunity.id, opportunity.projectId, topCandidate]);
+  }, [
+    referral,
+    topCandidate,
+    project.access.canStartReferrals,
+    opportunity.projectId,
+    opportunity.id,
+  ]);
 
   if (!referral && !topCandidate) return;
 

@@ -1,43 +1,39 @@
-import { ListRounded, RadioButtonUncheckedRounded } from '@mui/icons-material';
-import Person from '@mui/icons-material/Person';
 import { Container, Divider, Stack, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
-import ButtonLink from '@/components/elements/ButtonLink';
+import CommonButtonDrawer from '@/components/elements/CommonButtonDrawer';
 import Loading from '@/components/elements/Loading';
-import RouterLink from '@/components/elements/RouterLink';
-import { DetailsIcon } from '@/components/elements/SemanticIcons';
-import CommonStickyBar from '@/components/layout/CommonStickyBar';
 import {
-  CONTEXT_HEADER_HEIGHT,
-  REFERRAL_HEADER_HEIGHT,
-  STICKY_BAR_HEIGHT,
-} from '@/components/layout/layoutConstants';
+  ActivityIcon,
+  ContactsIcon,
+  InfoIcon,
+  NotesIcon,
+  PersonIcon,
+} from '@/components/elements/SemanticIcons';
+import CommonStickyBar from '@/components/layout/CommonStickyBar';
 import NotFound from '@/components/pages/NotFound';
-import useCurrentPath from '@/hooks/useCurrentPath';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
-import AssignContactsButton from '@/modules/ce/components/AssignContactsButton';
+import AssignContactsForm from '@/modules/ce/components/AssignContactsForm';
 import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { ClientDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
+import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   CeReferralFieldsFragment,
   useGetCeReferralQuery,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {}
 
 /**
- * Provides navigational context for a single Referral, like buttons to move between tasks, notes/referral history, etc.
+ * Provides navigational context for a single Referral.
  * Uses react router outlet to render sub-pages.
  */
 const ReferralPage: React.FC<Props> = ({}) => {
-  const { projectId, opportunityId, referralId } = useSafeParams() as {
-    projectId: string;
-    opportunityId: string;
-    referralId: string;
-  };
+  const { referralId } = useSafeParams() as { referralId: string };
+
+  const { project } = useProjectDashboardContext();
 
   const {
     data: { ceReferral: referral } = {},
@@ -54,7 +50,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
     [referral]
   );
 
-  const currentPath = useCurrentPath();
+  const isMobile = useIsMobile();
 
   if (loading) return <Loading />;
   if (error) throw error;
@@ -62,102 +58,67 @@ const ReferralPage: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <CommonStickyBar height={REFERRAL_HEADER_HEIGHT}>
-        <Stack direction='column' gap={2}>
+      {/* Apply 0 padding to the bar, so the divider can take up full height */}
+      <CommonStickyBar sx={{ py: 0 }}>
+        <Stack
+          divider={
+            <Divider
+              orientation={isMobile ? 'horizontal' : 'vertical'}
+              flexItem
+            />
+          }
+          direction={isMobile ? 'column' : 'row'}
+          alignItems={isMobile ? '' : 'center'}
+          gap={2}
+        >
           <Stack
+            sx={{ py: 2 }}
+            flex={1}
             direction='row'
             alignItems='center'
             justifyContent='space-between'
           >
-            <Typography variant='h3' component='h1' display='inline-block'>
-              Referral to {referral.opportunity.name}
-            </Typography>
+            <Box>
+              <Typography variant='h3' component='h1'>
+                Referral for {clientNameFromRecordWithOptionalClient(referral)}
+              </Typography>
+            </Box>
             <ReferralStatusChip status={referral.status} />
           </Stack>
-          <Stack
-            direction='row'
-            gap={2}
-            divider={<Divider orientation='vertical' flexItem />}
-          >
-            <Stack direction='row' alignItems='center' gap={0.5}>
-              <Person sx={{ color: 'grayscale.main' }} />
-              <Typography variant='body1'>
-                {referral.client ? (
-                  <RouterLink
-                    to={generateSafePath(ClientDashboardRoutes.PROFILE, {
-                      clientId: referral.client.id,
-                    })}
-                  >
-                    {clientBriefName(referral.client)}
-                  </RouterLink>
-                ) : (
-                  `Client ${referral.clientId}`
-                )}
-              </Typography>
-            </Stack>
-            <Typography variant='body1'>
-              {referral.opportunity.projectName}
-            </Typography>
+          <Stack sx={{ py: 2 }} direction='row' alignItems='center' gap={1}>
+            <CommonButtonDrawer
+              title={'Client'}
+              ButtonProps={{ startIcon: <PersonIcon /> }}
+            />
+            <CommonButtonDrawer
+              title={'Referral'}
+              ButtonProps={{ startIcon: <InfoIcon /> }}
+            />
+            {referral.swimlanes.length > 0 &&
+              project.access.canAssignReferralTasks && (
+                // If this referral has no swimlanes, hide the Contacts button. This will only happen if the referral also has no tasks
+                <CommonButtonDrawer
+                  title={'Contacts'}
+                  ButtonProps={{ startIcon: <ContactsIcon /> }}
+                >
+                  <AssignContactsForm
+                    referral={referral}
+                    projectId={project.id}
+                  />
+                </CommonButtonDrawer>
+              )}
+            <CommonButtonDrawer
+              title={'Activity'}
+              ButtonProps={{ startIcon: <ActivityIcon /> }}
+            />
+            <CommonButtonDrawer
+              title={'Notes'}
+              ButtonProps={{ startIcon: <NotesIcon /> }}
+            />
           </Stack>
         </Stack>
       </CommonStickyBar>
-      <CommonStickyBar
-        top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT + REFERRAL_HEADER_HEIGHT}
-        sx={{ py: 1 }}
-      >
-        <Stack direction='row' alignItems='center' gap={1}>
-          <ButtonLink
-            to={generateSafePath(ProjectDashboardRoutes.REFERRAL_DETAILS, {
-              projectId,
-              opportunityId,
-              referralId: referral.id,
-            })}
-            color='grayscale'
-            variant={
-              currentPath === '/referrals/:referralId' ? 'contained' : 'text'
-            }
-            startIcon={<DetailsIcon />}
-          >
-            Details
-          </ButtonLink>
-          <Divider orientation='vertical' flexItem />
-          <AssignContactsButton referral={referral} />
-          <Divider orientation='vertical' flexItem />
-          <ButtonLink
-            to={generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
-              projectId,
-              opportunityId,
-              referralId: referral.id,
-            })}
-            color='grayscale'
-            variant={
-              currentPath === '/referrals/:referralId/tasks'
-                ? 'contained'
-                : 'text'
-            }
-            startIcon={<ListRounded />}
-          >
-            Tasks
-          </ButtonLink>
-          {referral.steps.map((step, i) => (
-            <ButtonLink
-              to={generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
-                projectId,
-                opportunityId,
-                referralId: referral.id,
-                stepId: step.stepId || '',
-              })}
-              aria-label={`Step ${i}`}
-              variant='text'
-              key={step.id}
-            >
-              {/* TODO(7393) - update these to show step status, disabled, selected state, etc.*/}
-              <RadioButtonUncheckedRounded />
-            </ButtonLink>
-          ))}
-        </Stack>
-      </CommonStickyBar>
-      <Container maxWidth='lg' sx={{ py: 4 }}>
+      <Container maxWidth='md' sx={{ py: 4 }}>
         <Outlet context={outletContext} />
       </Container>
     </>

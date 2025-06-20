@@ -55,7 +55,6 @@ import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinate
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import Opportunity from '@/modules/ce/components/Opportunity';
 import ProjectCePage from '@/modules/ce/components/ProjectCePage';
-import ReferralDetails from '@/modules/ce/components/ReferralDetails';
 import ReferralPage from '@/modules/ce/components/ReferralPage';
 import ReferralStep from '@/modules/ce/components/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/ReferralSteps';
@@ -431,39 +430,39 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.CE,
             element: (
               <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
+                permissions={['canViewCoordinatedEntry']} // feature flag for Coordinated Entry
                 otherwise={<NotFound />}
               >
-                <ProjectCePage />
+                <ProjectRoute
+                  permissions={[
+                    'canViewUnits',
+                    'canViewReferrals',
+                    'canViewOwnReferrals',
+                  ]}
+                >
+                  <ProjectCePage />
+                </ProjectRoute>
               </RootPermissionsFilter>
             ),
           },
           {
             path: ProjectDashboardRoutes.OPPORTUNITY,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
-                otherwise={<NotFound />}
-              >
+              <ProjectRoute permissions={['canViewUnits']}>
                 <Opportunity />
-              </RootPermissionsFilter>
+              </ProjectRoute>
             ),
           },
           {
             path: ProjectDashboardRoutes.REFERRAL,
             element: (
-              <RootPermissionsFilter
-                permissions={['canViewCoordinatedEntry']}
-                otherwise={<NotFound />}
+              <ProjectRoute
+                permissions={['canViewReferrals', 'canViewOwnReferrals']}
               >
                 <ReferralPage />
-              </RootPermissionsFilter>
+              </ProjectRoute>
             ),
             children: [
-              {
-                path: ProjectDashboardRoutes.REFERRAL_DETAILS,
-                element: <ReferralDetails />,
-              },
               {
                 path: ProjectDashboardRoutes.REFERRAL_STEPS,
                 element: <ReferralSteps />,
@@ -471,6 +470,10 @@ export const protectedRoutes: RouteNode[] = [
               {
                 path: ProjectDashboardRoutes.REFERRAL_STEP,
                 element: <ReferralStep />,
+              },
+              {
+                path: '',
+                element: <Navigate to={'tasks'} replace />,
               },
             ],
           },
@@ -780,9 +783,17 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ClientDashboardRoutes.REFERRALS,
             element: (
-              <RootPermissionsFilter permissions='canViewCoordinatedEntry'>
+              <ClientRoute
+                permissions={[
+                  'canViewClientEligibleOpportunities',
+                  'canViewReferrals',
+                  'canViewOwnReferrals',
+                ]}
+                permissionMode='any'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <ClientReferralsPage />
-              </RootPermissionsFilter>
+              </ClientRoute>
             ),
           },
           { path: '*', element: <Navigate to='profile' replace /> },
@@ -815,7 +826,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.COORDINATED_ENTRY,
             element: (
-              <RootPermissionsFilter permissions='canViewCoordinatedEntry'>
+              <RootPermissionsFilter
+                permissions='canAdministrateCoordinatedEntry'
+                otherwise={<NotFound />}
+              >
                 <AdminCoordinatedEntry />
               </RootPermissionsFilter>
             ),

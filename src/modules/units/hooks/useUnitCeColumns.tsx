@@ -3,6 +3,7 @@ import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHo
 import { UnitFieldsFragment } from '@/types/gqlTypes';
 
 export const useUnitCeColumns = () => {
+  // TODO(7409) - instead of using the global permission, check project-level config
   const [canViewCoordinatedEntry] = useHasRootPermissions([
     'canViewCoordinatedEntry',
   ]);

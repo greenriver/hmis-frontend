@@ -821,6 +821,31 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
+      {
+        name: 'updatedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'CeReferralStepAccess',
+    fields: [
+      {
+        name: 'canPerformStep',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -1235,6 +1260,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewClientEligibleOpportunities',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewClientName',
         type: {
           kind: 'NON_NULL',
@@ -1275,7 +1308,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewOwnReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewPartialSsn',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5178,6 +5227,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ProjectAccess',
     fields: [
       {
+        name: 'canAssignReferralTasks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteAssessments',
         type: {
           kind: 'NON_NULL',
@@ -5266,7 +5323,31 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canPerformAnyReferralTasks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canPerformOwnReferralTasks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canSplitHouseholds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canStartReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5298,7 +5379,31 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewOwnReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewPartialSsn',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewPrioritizedClientLists',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5418,6 +5523,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canAdministrateConfig',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canAdministrateCoordinatedEntry',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canAssignReferralTasks',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5641,7 +5762,31 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canPerformAnyReferralTasks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canPerformOwnReferralTasks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canSplitHouseholds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canStartReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5682,6 +5827,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewClientContactInfo',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientEligibleOpportunities',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5785,6 +5938,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewOwnReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewPartialSsn',
         type: {
           kind: 'NON_NULL',
@@ -5793,7 +5954,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewPrioritizedClientLists',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewProject',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6963,11 +7140,11 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'templateId',
+        name: 'templateIdentifier',
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],
@@ -6976,7 +7153,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'CeReferralFilterOptions',
     args: [
       {
-        name: 'onCurrentStepSince',
+        name: 'onCurrentTaskSince',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {

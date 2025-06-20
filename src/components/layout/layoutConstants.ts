@@ -21,5 +21,3 @@ export const DESKTOP_NAV_SIDEBAR_WIDTH = 300;
 
 // height of sticky header on household assessment view
 export const HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT = 78;
-
-export const REFERRAL_HEADER_HEIGHT = 100;
