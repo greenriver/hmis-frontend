@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  ProjectAllFieldsFragment,
   UnitTableRowFieldsFragment,
   useMarkUnitsAvailableMutation,
   useMarkUnitsUnavailableMutation,
@@ -10,9 +9,13 @@ import {
 import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useUnitCeActions = ({
-  project,
+  projectId,
+  ceEnabled,
+  ceAvailabilityActionsEnabled,
 }: {
-  project: ProjectAllFieldsFragment;
+  projectId: string;
+  ceEnabled: boolean;
+  ceAvailabilityActionsEnabled: boolean;
 }): {
   loading: boolean;
   getCeActions: (unit: UnitTableRowFieldsFragment) => CommonMenuItem[];
@@ -29,7 +32,7 @@ export const useUnitCeActions = ({
 
   const getCeActions = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      if (!project.coordinatedEntryEnabled) return [];
+      if (!ceEnabled) return [];
 
       const actions: CommonMenuItem[] = [];
 
@@ -39,15 +42,12 @@ export const useUnitCeActions = ({
         key: 'viewUnit',
         ariaLabel: `View Unit ${unit.id}`,
         to: generateSafePath(ProjectDashboardRoutes.UNIT, {
-          projectId: project.id,
+          projectId: projectId,
           unitId: unit.id,
         }),
       });
 
-      // Opportunity creation is only available if the unit has an associated CE Workflow Template
-      const hasWorkflowTemplate = unit.workflowTemplateName;
-
-      if (hasWorkflowTemplate && project.access.canManageUnits) {
+      if (ceAvailabilityActionsEnabled) {
         if (unit.canBeMarkedAvailableToday) {
           // TODO(#7537) - use canBeMarkedAvailable and implement a confirmation modal enabling the user to specify the "available on date".
           actions.push({
@@ -74,7 +74,13 @@ export const useUnitCeActions = ({
 
       return actions;
     },
-    [markUnitsAvailable, markUnitsUnavailable, project]
+    [
+      ceAvailabilityActionsEnabled,
+      ceEnabled,
+      markUnitsAvailable,
+      markUnitsUnavailable,
+      projectId,
+    ]
   );
 
   if (availableError) throw availableError;

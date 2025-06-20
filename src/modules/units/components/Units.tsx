@@ -30,7 +30,6 @@ const Units = () => {
     variables: { id: project.id, limit: 100 },
   });
 
-  // Check CE feature flag. TODO replace with project config
   const { coordinatedEntryEnabled } = project;
 
   // For now, we assume that if the project has Coordinated Entry enabled,
