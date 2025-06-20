@@ -12,6 +12,7 @@ import { useProjectDashboardContext } from '@/modules/projects/components/Projec
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
+  CeOpportunityFieldsFragment,
   CeOpportunityStatus,
   GetCeOpportunityCandidatesDocument,
   GetCeOpportunityCandidatesQuery,
@@ -34,16 +35,11 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
 ];
 
 interface Props {
-  opportunityId: string;
-  projectId: string;
-  status: CeOpportunityStatus;
+  opportunity: CeOpportunityFieldsFragment;
 }
-const PrioritizedClientsTable: React.FC<Props> = ({
-  opportunityId,
-  projectId,
-  status,
-}) => {
+const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
   const { project } = useProjectDashboardContext();
+  const { status } = opportunity;
 
   const columns = useMemo(() => {
     return [
@@ -58,8 +54,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
               status === CeOpportunityStatus.Open &&
               project.access.canStartReferrals && (
                 <BeginReferralButton
-                  opportunityId={opportunityId}
-                  projectId={projectId}
+                  opportunity={opportunity}
                   candidate={row}
                 />
               )
@@ -84,7 +79,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
         ),
       },
     ];
-  }, [opportunityId, project.access.canStartReferrals, projectId, status]);
+  }, [project.access.canStartReferrals, opportunity, status]);
 
   return (
     <GenericTableWithData<
@@ -93,7 +88,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
       CeCandidateFieldsFragment
     >
       columns={columns}
-      queryVariables={{ opportunityId: opportunityId }}
+      queryVariables={{ opportunityId: opportunity.id }}
       queryDocument={GetCeOpportunityCandidatesDocument}
       pagePath='ceOpportunity.candidates'
       paginationItemName='candidates'

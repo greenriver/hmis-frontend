@@ -62,20 +62,13 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
     if (topCandidate && project.access.canStartReferrals) {
       return (
         <BeginReferralButton
-          opportunityId={opportunity.id}
-          projectId={opportunity.projectId}
+          opportunity={opportunity}
           candidate={topCandidate}
           color='primary'
         />
       );
     }
-  }, [
-    referral,
-    topCandidate,
-    project.access.canStartReferrals,
-    opportunity.projectId,
-    opportunity.id,
-  ]);
+  }, [referral, topCandidate, project.access.canStartReferrals, opportunity]);
 
   if (!referral && !topCandidate) return;
 
