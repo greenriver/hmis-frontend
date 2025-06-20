@@ -25,6 +25,7 @@ interface Props {
   projectId: string;
   unitGroupId?: string; // if this table is for a specific unit group
   ceEnabled?: boolean; // whether to show CE details
+  ceAvailabilityActionsEnabled?: boolean; // whether to show CE actions for marking units available/unavailable
 }
 
 // Table for managing units within a Project or Unit Group.
@@ -36,6 +37,7 @@ const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
   ceEnabled = false,
+  ceAvailabilityActionsEnabled = false,
 }) => {
   const { setUnitToDelete, renderSingleDeleteDialog } = useDeleteUnits({
     onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
@@ -60,7 +62,11 @@ const UnitManagementTable: React.FC<Props> = ({
   const { project } = useProjectDashboardContext();
   const canManageUnits = project.access.canManageUnits;
 
-  const { getCeActions, loading } = useUnitCeActions({ project });
+  const { getCeActions, loading } = useUnitCeActions({
+    projectId,
+    ceEnabled,
+    ceAvailabilityActionsEnabled,
+  });
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
@@ -125,7 +131,7 @@ const UnitManagementTable: React.FC<Props> = ({
                   projectId={projectId}
                   unitGroupId={unitGroupId}
                   units={selectedRows}
-                  ceEnabled={ceEnabled}
+                  ceAvailabilityActionsEnabled={ceAvailabilityActionsEnabled}
                 />
               )
             : undefined,

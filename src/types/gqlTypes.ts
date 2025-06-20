@@ -17318,6 +17318,20 @@ export type CreateCeReferralMutation = {
         nameSuffix?: string | null;
       } | null;
     };
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -50039,9 +50053,13 @@ export const CreateCeReferralDocument = gql`
       referral {
         ...CeReferralSummaryFields
       }
+      errors {
+        ...ValidationErrorFields
+      }
     }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateCeReferralMutationFn = Apollo.MutationFunction<
   CreateCeReferralMutation,
