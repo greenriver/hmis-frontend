@@ -244,6 +244,7 @@ fragment EnrollmentValues on Enrollment {
   translationNeeded
   preferredLanguage
   preferredLanguageDifferent
+  mentalHealthConsultation
 }
 
 # Fields that need to be returned from SubmitForm. This should include anything
