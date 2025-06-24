@@ -128,7 +128,10 @@ const JoinHouseholdDialog = ({
     loading: joinLoading,
     error: joinError,
     remainingHousehold,
-  } = usePerformJoinHousehold({ onSuccess });
+  } = usePerformJoinHousehold({
+    onSuccess,
+    donorHouseholdId: donorHousehold?.id,
+  });
 
   const remainingHoh = useMemo(() => {
     return findHohOrRep(remainingHousehold?.householdClients || []);

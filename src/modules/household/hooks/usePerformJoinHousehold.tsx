@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -9,8 +10,10 @@ import {
 
 export function usePerformJoinHousehold({
   onSuccess,
+  donorHouseholdId,
 }: {
   onSuccess?: (joinedHousehold: HouseholdFieldsFragment) => void;
+  donorHouseholdId?: string;
 }) {
   const [joinedHousehold, setJoinedHousehold] = useState<
     HouseholdFieldsFragment | undefined
@@ -25,6 +28,12 @@ export function usePerformJoinHousehold({
       if (data.joinHousehold) {
         setJoinedHousehold(data.joinHousehold.receivingHousehold);
         setRemainingHousehold(data.joinHousehold.donorHousehold || undefined);
+
+        if (donorHouseholdId && !data.joinHousehold.donorHousehold) {
+          // There were no remaining members in the donor household, so clear it from the cache
+          cache.evict({ id: `Household:${donorHouseholdId}` });
+        }
+
         onSuccess?.(data.joinHousehold.receivingHousehold);
       }
     },
