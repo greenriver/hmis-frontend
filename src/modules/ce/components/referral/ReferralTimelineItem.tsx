@@ -8,7 +8,10 @@ import {
 import { Typography } from '@mui/material';
 import React from 'react';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
-import { CheckIcon, ClearIcon } from '@/components/elements/SemanticIcons';
+import {
+  ReferralAcceptedIcon,
+  ReferralDeclinedIcon,
+} from '@/components/elements/SemanticIcons';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeReferralAuditEventFieldsFragment,
@@ -47,9 +50,9 @@ const ReferralTimelineItem: React.FC<Props> = ({
       <TimelineSeparator>
         <TimelineDot color='primary'>
           {auditEvent.type === CeReferralAuditEventType.RejectReferral ? (
-            <ClearIcon fontSize='inherit' />
+            <ReferralDeclinedIcon fontSize='inherit' />
           ) : (
-            <CheckIcon fontSize='inherit' />
+            <ReferralAcceptedIcon fontSize='inherit' />
           )}
         </TimelineDot>
         {!lastItem && <TimelineConnector />}

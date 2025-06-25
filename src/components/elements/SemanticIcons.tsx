@@ -99,6 +99,8 @@ export {
   FilterListRoundedIcon as FilterIcon,
   VisibilityRoundedIcon as AuditIcon,
   PeopleOutlineRoundedIcon as ImpersonateIcon,
+  ClearIconRounded as ReferralDeclinedIcon,
+  CheckRoundedIcon as ReferralAcceptedIcon,
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
   RadioButtonCheckedIcon as FormChoiceIcon,
