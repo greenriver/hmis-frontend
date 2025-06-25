@@ -247,3 +247,22 @@ fragment UserCeReferralStepFields on CeReferralStep {
     }
   }
 }
+
+fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
+  id
+  clientName
+  projectName
+  projectType
+  entryDate
+  exitDate
+  inProgress
+  autoExited
+  relationshipToHoH
+  householdSize
+  otherHouseholdMemberNames
+  assessments {
+    id
+    name
+    date
+  }
+}

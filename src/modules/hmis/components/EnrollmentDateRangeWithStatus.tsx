@@ -11,7 +11,8 @@ const EnrollmentDateRangeWithStatus = ({
   enrollment,
   treatIncompleteAsActive = false,
 }: {
-  enrollment: EnrollmentRangeFieldsFragment;
+  // omit __typename so this component is compatible with other enrollment types (such as CeReferralSourceEnrollment)
+  enrollment: Omit<EnrollmentRangeFieldsFragment, '__typename'>;
   // if the status is called out separately, use this prop to render
   // incomplete as if it were active
   treatIncompleteAsActive?: boolean;

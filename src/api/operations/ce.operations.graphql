@@ -1,5 +1,13 @@
-mutation CreateCeReferral($opportunityId: ID!, $clientId: ID!) {
-  createCeReferral(opportunityId: $opportunityId, clientId: $clientId) {
+mutation CreateCeReferral(
+  $opportunityId: ID!
+  $clientId: ID
+  $sourceEnrollmentId: ID
+) {
+  createCeReferral(
+    opportunityId: $opportunityId
+    clientId: $clientId
+    sourceEnrollmentId: $sourceEnrollmentId
+  ) {
     referral {
       ...CeReferralSummaryFields
     }
