@@ -25,10 +25,10 @@ const BeginReferralButton: React.FC<Props> = ({
       <LoadingButton
         onClick={() => setDialogOpen(true)}
         color='grayscale'
-        aria-label={`Begin Referral for ${clientNameFromRecordWithOptionalClient(candidate)}`}
+        aria-label={`Start Referral for ${clientNameFromRecordWithOptionalClient(candidate)}`}
         {...rest}
       >
-        Begin Referral
+        Start Referral
       </LoadingButton>
       <BeginReferralDialog
         open={dialogOpen}
