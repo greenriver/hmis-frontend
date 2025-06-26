@@ -12,28 +12,35 @@ import {
   PersonIcon,
 } from '@/components/elements/SemanticIcons';
 import CommonStickyBar from '@/components/layout/CommonStickyBar';
+import {
+  CONTEXT_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import NotFound from '@/components/pages/NotFound';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
-import AssignContactsForm from '@/modules/ce/components/AssignContactsForm';
-import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
+import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
+import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
-import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
+  ProjectAllFieldsFragment,
   useGetCeReferralQuery,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
-interface Props {}
+interface Props {
+  // Referral is sometimes, but not always, rendered in the context of a Project.
+  project?: ProjectAllFieldsFragment;
+}
 
 /**
  * Provides navigational context for a single Referral.
  * Uses react router outlet to render sub-pages.
  */
-const ReferralPage: React.FC<Props> = ({}) => {
+const ReferralPage: React.FC<Props> = ({ project }) => {
   const { referralId } = useSafeParams() as { referralId: string };
-
-  const { project } = useProjectDashboardContext();
 
   const {
     data: { ceReferral: referral } = {},
@@ -45,10 +52,47 @@ const ReferralPage: React.FC<Props> = ({}) => {
     },
   });
 
-  const outletContext: ReferralContext | undefined = useMemo(
-    () => (referral ? { referral } : undefined),
-    [referral]
-  );
+  // Provide the referral in an outlet context so it can be accessed easily by sub-pages, like the Referral Step page
+  const outletContext: ReferralContext | undefined = useMemo(() => {
+    if (!referral) return undefined;
+
+    // Depending on whether this referral is being rendered in the context of a Project or as "floating" referral,
+    // the links used by the sub-pages will be different. Provide helpers for them here in the outlet contexts
+    // so the sub-pages don't have to do any thinking about it.
+    if (project) {
+      return {
+        referral,
+        referralPath: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
+          projectId: project.id,
+          referralId: referral.id,
+        }),
+        opportunityPath: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+          projectId: project.id,
+          opportunityId: referral.opportunity.id,
+        }),
+        generateReferralStepPath: (stepId: string) => {
+          return generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
+            projectId: project.id,
+            referralId: referral.id,
+            stepId: stepId,
+          });
+        },
+      };
+    }
+
+    return {
+      referral,
+      referralPath: generateSafePath(Routes.REFERRAL_STEPS, {
+        referralId: referral.id,
+      }),
+      generateReferralStepPath: (stepId: string) => {
+        return generateSafePath(Routes.REFERRAL_STEP, {
+          referralId: referral.id,
+          stepId: stepId,
+        });
+      },
+    };
+  }, [referral, project]);
 
   const isMobile = useIsMobile();
 
@@ -58,8 +102,16 @@ const ReferralPage: React.FC<Props> = ({}) => {
 
   return (
     <>
-      {/* Apply 0 padding to the bar, so the divider can take up full height */}
-      <CommonStickyBar sx={{ py: 0 }}>
+      <CommonStickyBar
+        // If in project context, leave more room above the sticky bar
+        top={
+          project
+            ? STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT
+            : STICKY_BAR_HEIGHT
+        }
+        // Apply 0 padding to the bar, so the divider can take up full height
+        sx={{ py: 0 }}
+      >
         <Stack
           divider={
             <Divider
@@ -74,6 +126,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
           <Stack
             sx={{ py: 2 }}
             flex={1}
+            gap={2}
             direction='row'
             alignItems='center'
             justifyContent='space-between'
@@ -81,6 +134,8 @@ const ReferralPage: React.FC<Props> = ({}) => {
             <Box>
               <Typography variant='h3' component='h1'>
                 Referral for {clientNameFromRecordWithOptionalClient(referral)}
+                {/* if this referral page is "floating", show the target project name */}
+                {project ? '' : ` to ${referral.targetProjectName}`}
               </Typography>
             </Box>
             <ReferralStatusChip status={referral.status} />
@@ -95,6 +150,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
               ButtonProps={{ startIcon: <InfoIcon /> }}
             />
             {referral.swimlanes.length > 0 &&
+              project &&
               project.access.canAssignReferralTasks && (
                 // If this referral has no swimlanes, hide the Contacts button. This will only happen if the referral also has no tasks
                 <CommonButtonDrawer
@@ -125,7 +181,12 @@ const ReferralPage: React.FC<Props> = ({}) => {
   );
 };
 
-export type ReferralContext = { referral: CeReferralFieldsFragment };
+export type ReferralContext = {
+  referral: CeReferralFieldsFragment;
+  referralPath: string;
+  opportunityPath?: string;
+  generateReferralStepPath: (stepId: string) => string;
+};
 export const useReferralContext = () => useOutletContext<ReferralContext>();
 
 export default ReferralPage;

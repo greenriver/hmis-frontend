@@ -1,4 +1,4 @@
-import ReferralStatusChip from '@/modules/ce/components/ReferralStatusChip';
+import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { UnitFieldsFragment } from '@/types/gqlTypes';
 

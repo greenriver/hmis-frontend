@@ -3,7 +3,7 @@ import { AppBar, Box, CssBaseline, IconButton, Toolbar } from '@mui/material';
 import { Stack } from '@mui/system';
 import * as React from 'react';
 import RouterLink from '../elements/RouterLink';
-
+import NotFound from '../pages/NotFound';
 import {
   APP_BAR_HEIGHT,
   OP_LINK_BAR_HEIGHT,
@@ -23,7 +23,10 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import OmniSearch from '@/modules/search/components/OmniSearch';
-import { useGetRootPermissionsQuery } from '@/types/gqlTypes';
+import {
+  useGetRootPermissionsQuery,
+  useGetUserDashboardConfigQuery,
+} from '@/types/gqlTypes';
 
 interface Props {
   mobileMenuContext: MobileMenuContext;
@@ -43,6 +46,13 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
     error,
   } = useGetRootPermissionsQuery();
 
+  // Similarly, preload config for whether to show the Dashboard link in the toolbar
+  const {
+    data: userDashboardData,
+    loading: userDashboardLoading,
+    error: userDashboardError,
+  } = useGetUserDashboardConfigQuery();
+
   const isMobile = useIsMobile();
 
   const { mobileNavIsOpen, handleOpenMobileMenu, handleCloseMobileMenu } =
@@ -52,6 +62,9 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
   if (error) throw error;
 
   if (permissionLoading && !data) return <Loading />;
+  if (userDashboardLoading && !userDashboardData) return <Loading />;
+  if (userDashboardError) throw userDashboardError;
+  if (!userDashboardData) return <NotFound />;
 
   if (isPrint)
     return (

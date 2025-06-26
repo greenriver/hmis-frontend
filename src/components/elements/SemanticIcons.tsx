@@ -1,5 +1,7 @@
 import {
+  ContentPasteOutlined,
   HistoryRounded,
+  HomeRounded,
   InfoOutlined,
   StickyNote2Rounded,
   TimelapseRounded,
@@ -87,7 +89,9 @@ export {
   ArrowDropDownRoundedIcon as DownIcon,
   DownloadIcon as DownloadIcon,
   EditIcon as EditIcon,
+  // TODO(#7362) - resolve a new icon for Enrollments, use "home" for Projects, per our style guide
   Home as EnrollmentIcon,
+  HomeRounded as ProjectIcon,
   ExitToAppRoundedIcon as ExitAssessmentIcon,
   ExpandLessRoundedIcon as ExpandLessIcon,
   ExpandMoreRoundedIcon as ExpandMoreIcon,
@@ -133,7 +137,9 @@ export {
   CheckCircleRounded as CompletedIcon,
   CancelIcon as DeclinedIcon,
   TimelapseRounded as InProgressIcon,
-  HistoryRounded as ActivityIcon,
   InfoOutlined as InfoIcon,
+  ContentPasteOutlined as AssigneesIcon,
+  DateRangeIcon as StepCalendarIcon,
+  HistoryRounded as ActivityIcon,
   StickyNote2Rounded as NotesIcon,
 };

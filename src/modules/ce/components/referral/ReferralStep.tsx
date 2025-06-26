@@ -1,13 +1,14 @@
-import { Divider, Paper, Stack } from '@mui/material';
+import { Box, Divider, Stack } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReferralStepDetails from './ReferralStepDetails';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
 import { BackIcon } from '@/components/elements/SemanticIcons';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import ReferralStepAssignee from '@/modules/ce/components/ReferralStepAssignee';
+import { useReferralContext } from '@/modules/ce/components/referral/ReferralPage';
 import {
   emptyErrorState,
   ErrorState,
@@ -20,22 +21,20 @@ import {
   createInitialValuesFromSavedValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
-import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralStatus,
   CeReferralStepStatus,
   useGetCeReferralStepQuery,
   useSubmitCeReferralStepMutation,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {}
 const ReferralStep: React.FC<Props> = ({}) => {
-  const { projectId, referralId, stepId } = useSafeParams() as {
-    projectId: string;
+  const { referralId, stepId } = useSafeParams() as {
     referralId: string;
     stepId: string;
   };
+  const { referralPath } = useReferralContext();
   const navigate = useNavigate();
 
   const {
@@ -66,10 +65,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
         [CeReferralStatus.Rejected, CeReferralStatus.Accepted].includes(status);
 
       navigate({
-        pathname: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
-          projectId,
-          referralId,
-        }),
+        pathname: referralPath,
         search: wayfind
           ? new URLSearchParams({ wayfinding: 'true' }).toString()
           : undefined,
@@ -110,20 +106,14 @@ const ReferralStep: React.FC<Props> = ({}) => {
 
   return (
     <Stack direction='column' gap={2}>
-      <Paper
-        sx={{ p: 2, justifyContent: 'flex-start' }}
-        component={ButtonLink}
-        startIcon={<BackIcon />}
-        to={generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
-          projectId,
-          referralId,
-        })}
-      >
-        Back to All Tasks
-      </Paper>
+      <Box sx={{ alignSelf: 'start' }}>
+        <ButtonLink variant='text' startIcon={<BackIcon />} to={referralPath}>
+          Back to All Tasks
+        </ButtonLink>
+      </Box>
       <CommonCard title={name}>
         <Stack gap={2}>
-          <ReferralStepAssignee step={step} />
+          <ReferralStepDetails step={step} />
           <Divider />
           {editable ? (
             <DynamicForm
@@ -144,19 +134,8 @@ const ReferralStep: React.FC<Props> = ({}) => {
               FormActionProps={{
                 config: [
                   {
-                    id: 'discard',
-                    label: 'Back to All Tasks',
-                    action: FormActionTypes.Discard,
-                    leftAlign: true,
-                    buttonProps: {
-                      color: 'grayscale',
-                      startIcon: <BackIcon />,
-                    },
-                  },
-                  {
                     id: 'submit',
                     label: 'Submit',
-                    rightAlign: true,
                     action: FormActionTypes.Submit,
                     buttonProps: { variant: 'contained' },
                   },
