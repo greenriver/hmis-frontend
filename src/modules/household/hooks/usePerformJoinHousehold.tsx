@@ -30,7 +30,9 @@ export function usePerformJoinHousehold({
         setRemainingHousehold(data.joinHousehold.donorHousehold || undefined);
 
         if (donorHouseholdId && !data.joinHousehold.donorHousehold) {
-          // There were no remaining members in the donor household, so clear it from the cache
+          // If donorHousehold has remaining members, it is updated in the cache
+          // by the donorHousehold resolved on the mutation return value.
+          // Otherwise, clear it from the cache explicitly.
           cache.evict({ id: `Household:${donorHouseholdId}` });
         }
 
