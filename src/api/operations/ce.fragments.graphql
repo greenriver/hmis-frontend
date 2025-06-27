@@ -270,6 +270,7 @@ fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
     id
     assessmentName
     assessmentDate
+    dateUpdated
   }
   access {
     canViewEnrollmentDetails

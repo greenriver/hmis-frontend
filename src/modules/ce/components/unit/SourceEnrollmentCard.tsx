@@ -1,5 +1,6 @@
 import { Alert, Divider, Stack, Typography } from '@mui/material';
 import React, { useId } from 'react';
+import ButtonLink from '@/components/elements/ButtonLink';
 import CommonSelectableCard from '@/components/elements/CommonSelectableCard';
 import CommonTextWithIcon from '@/components/elements/CommonTextWithIcon';
 import CommonTruncatedList from '@/components/elements/CommonTruncatedList';
@@ -14,7 +15,10 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import { CeReferralSourceEnrollmentFieldsFragment } from '@/types/gqlTypes';
+import {
+  CeReferralSourceEnrollmentFieldsFragment,
+  RelationshipToHoH,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -29,6 +33,13 @@ const SourceEnrollmentCard: React.FC<Props> = ({
   onSelect,
 }) => {
   const radioId = useId();
+
+  // will always be true for now (otherwise the enrollment wouldn't have been resolved),
+  // but in the future we will resolve enrollments here that user may not be able to view,
+  // including enrollments in different data sources
+  const includeLinks =
+    enrollment.dataSource.isCurrentDataSource &&
+    enrollment.access.canViewEnrollmentDetails;
 
   return (
     <CommonSelectableCard
@@ -48,7 +59,7 @@ const SourceEnrollmentCard: React.FC<Props> = ({
           ) : (
             <CommonTruncatedList
               items={[
-                enrollment.clientName,
+                `${enrollment.clientName}${enrollment.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ? ' (HoH)' : ''}`,
                 ...enrollment.otherHouseholdMemberNames,
               ]}
             />
@@ -60,29 +71,23 @@ const SourceEnrollmentCard: React.FC<Props> = ({
             Icon={ProjectIcon}
             IconProps={{ sx: { color: 'text.secondary' } }}
           >
-            {
-              // will always be true for now (otherwise the enrollment wouldn't have been resolved),
-              // but in the future we will resolve enrollments here that user may not be able to view,
-              // including enrollments in different data sources
-              enrollment.dataSource.isCurrentDataSource &&
-              enrollment.access.canViewEnrollmentDetails ? (
-                <RouterLink
-                  aria-label={enrollment.projectName}
-                  to={generateSafePath(
-                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-                    {
-                      clientId: enrollment.sourceClientId,
-                      enrollmentId: enrollment.id,
-                    }
-                  )}
-                  openInNew={true}
-                >
-                  {enrollment.projectName}
-                </RouterLink>
-              ) : (
-                enrollment.projectName
-              )
-            }
+            {includeLinks ? (
+              <RouterLink
+                aria-label={enrollment.projectName}
+                to={generateSafePath(
+                  EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                  {
+                    clientId: enrollment.sourceClientId,
+                    enrollmentId: enrollment.id,
+                  }
+                )}
+                openInNew={true}
+              >
+                {enrollment.projectName}
+              </RouterLink>
+            ) : (
+              enrollment.projectName
+            )}
           </CommonTextWithIcon>
 
           <Divider orientation='vertical' flexItem />
@@ -106,9 +111,43 @@ const SourceEnrollmentCard: React.FC<Props> = ({
 
         {enrollment.assessments.map((assessment) => {
           return (
-            <Alert icon={false} color='warning'>
-              {assessment.assessmentName} performed{' '}
-              <RelativeDateDisplay dateString={assessment.assessmentDate} />
+            <Alert
+              icon={false}
+              color='warning'
+              action={
+                includeLinks && (
+                  <ButtonLink
+                    to={generateSafePath(
+                      EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
+                      {
+                        clientId: enrollment.sourceClientId,
+                        enrollmentId: enrollment.id,
+                        assessmentId: assessment.id,
+                      }
+                    )}
+                    variant={'contained'}
+                    color={'grayscale'}
+                  >
+                    View Assessment
+                  </ButtonLink>
+                )
+              }
+            >
+              <Typography variant={'body2'}>
+                {assessment.assessmentName}
+              </Typography>
+              <Typography variant='caption'>
+                <RelativeDateDisplay
+                  prefixVerb={'Assessment date'}
+                  dateString={assessment.assessmentDate}
+                />
+                .{' '}
+                <RelativeDateDisplay
+                  prefixVerb={'Last updated'}
+                  dateString={assessment.dateUpdated}
+                />
+                .
+              </Typography>
             </Alert>
           );
         })}

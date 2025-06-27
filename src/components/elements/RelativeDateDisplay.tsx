@@ -73,12 +73,13 @@ const RelativeDateDisplay = ({
           ...TypographyProps.sx,
         }}
       >
+        {prefixVerb && <>{prefixVerb} </>}
+        {formattedDateRelative}
+        {suffixText && <> {suffixText}</>}
         {/* Include the tooltip text as visually hidden for accessibility */}
-        {prefixVerb || null} {formattedDateRelative}{' '}
         <Box sx={customVisuallyHidden}>
           ({formattedDate} {tooltipSuffixText})
-        </Box>{' '}
-        {suffixText || null}
+        </Box>
       </Typography>
     </Tooltip>
   );

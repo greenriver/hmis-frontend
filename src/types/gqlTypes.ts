@@ -362,8 +362,8 @@ export type AssessmentSummary = {
   __typename?: 'AssessmentSummary';
   assessmentDate: Scalars['ISO8601Date']['output'];
   assessmentName: Scalars['String']['output'];
-  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -17433,6 +17433,7 @@ export type CeReferralSourceEnrollmentFieldsFragment = {
     id: string;
     assessmentName: string;
     assessmentDate: string;
+    dateUpdated: string;
   }>;
   access: {
     __typename?: 'CeReferralSourceEnrollmentAccess';
@@ -19177,6 +19178,7 @@ export type GetCeCandidateSourceEnrollmentsQuery = {
             id: string;
             assessmentName: string;
             assessmentDate: string;
+            dateUpdated: string;
           }>;
           access: {
             __typename?: 'CeReferralSourceEnrollmentAccess';
@@ -46937,6 +46939,7 @@ export const CeReferralSourceEnrollmentFieldsFragmentDoc = gql`
       id
       assessmentName
       assessmentDate
+      dateUpdated
     }
     access {
       canViewEnrollmentDetails
