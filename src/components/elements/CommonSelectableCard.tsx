@@ -4,7 +4,7 @@ import React from 'react';
 export interface CommonSelectableCardProps extends PaperProps {
   selected?: boolean;
   onSelect: () => void;
-  value: string;
+  value: string; // the value of the radio group for this item
   ariaLabelledBy?: string;
 }
 

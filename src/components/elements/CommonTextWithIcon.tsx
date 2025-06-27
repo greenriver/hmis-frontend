@@ -8,6 +8,9 @@ export interface CommonTextWithIconProps extends TypographyProps {
   IconProps?: SvgIconProps;
 }
 
+/**
+ * Icon with text, with correct vertical centering
+ */
 const CommonTextWithIcon: React.FC<CommonTextWithIconProps> = ({
   children,
   Icon,

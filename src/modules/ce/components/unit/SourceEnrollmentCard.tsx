@@ -127,6 +127,7 @@ const SourceEnrollmentCard: React.FC<Props> = ({
                     )}
                     variant={'contained'}
                     color={'grayscale'}
+                    openInNew={true}
                   >
                     View Assessment
                   </ButtonLink>
