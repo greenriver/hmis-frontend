@@ -1019,6 +1019,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
+      {
+        name: 'sourceClientMeetsEligibility',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
     ],
   },
   {

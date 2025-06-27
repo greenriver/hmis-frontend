@@ -817,6 +817,8 @@ export type CeReferralSourceEnrollment = {
   relationshipToHoH: RelationshipToHoH;
   /** The client id on the source enrollment, which is not necessarily in the current data source. */
   sourceClientId: Scalars['ID']['output'];
+  /** Whether the source client on their own meets the eligibility criteria for the opportunity. */
+  sourceClientMeetsEligibility: Scalars['Boolean']['output'];
 };
 
 export type CeReferralSourceEnrollmentAccess = {
