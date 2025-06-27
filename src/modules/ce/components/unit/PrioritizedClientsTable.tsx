@@ -112,6 +112,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
             {parseAndFormatDateTime(opportunity.candidatesGeneratedAt)}).
           </>
         )}
+        {/* May want to add additional explainer text about this list being deduplicated (i.e. it contains destination clients) */}
       </CommonCard>
       <Paper>
         <GenericTableWithData<
