@@ -1,33 +1,33 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import React, { Dispatch, SetStateAction } from 'react';
-import CommonCard from '@/components/elements/CommonCard';
-import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { stringifyArray } from '@/modules/hmis/hmisUtil';
-import { HmisEnums } from '@/types/gqlEnums';
-import { useGetCandidatePossibleSourceEnrollmentsQuery } from '@/types/gqlTypes';
+import SourceEnrollmentCard from '@/modules/ce/components/unit/SourceEnrollmentCard';
+import { useGetCeCandidateSourceEnrollmentsQuery } from '@/types/gqlTypes';
 
 interface Props {
+  clientName: string;
   candidateId: string;
+  opportunityId: string;
   selectedEnrollmentId?: string;
   setSelectedEnrollmentId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const SourceEnrollmentSelector: React.FC<Props> = ({
+  clientName,
   candidateId,
+  opportunityId,
   selectedEnrollmentId,
   setSelectedEnrollmentId,
 }) => {
   const {
-    data: { ceCandidate } = {},
+    data: { ceOpportunity } = {},
     loading: loading,
     error: error,
-  } = useGetCandidatePossibleSourceEnrollmentsQuery({
-    variables: { id: candidateId },
+  } = useGetCeCandidateSourceEnrollmentsQuery({
+    variables: { candidateId: candidateId, opportunityId: opportunityId },
     onCompleted: (data) => {
-      const enrollments = data.ceCandidate?.enrollments.nodes;
+      const enrollments =
+        data.ceOpportunity?.candidateLookup?.enrollments.nodes;
 
       if (!enrollments || enrollments.length === 0)
         throw new Error(
@@ -38,96 +38,34 @@ const SourceEnrollmentSelector: React.FC<Props> = ({
     },
   });
 
+  const enrollments = ceOpportunity?.candidateLookup?.enrollments.nodes;
+
   if (loading) return <Loading />;
   if (error) throw error;
 
   return (
-    <Stack gap={2}>
-      {ceCandidate?.enrollments.nodes.map((enrollment) => {
-        return (
-          <CommonCard
-            key={enrollment.id}
-            title={`Enrollment at ${enrollment.projectName}`}
-            TitleComponent='h4'
-            sx={{
-              backgroundColor:
-                selectedEnrollmentId === enrollment.id
-                  ? 'primary.surface'
-                  : 'background.paper',
-              borderColor:
-                selectedEnrollmentId === enrollment.id
-                  ? 'primary.light'
-                  : 'divider',
-            }}
-            actions={
-              <Button
-                aria-live='polite'
-                onClick={() => {
-                  if (selectedEnrollmentId === enrollment.id) {
-                    setSelectedEnrollmentId(undefined);
-                  } else {
-                    setSelectedEnrollmentId(enrollment.id);
-                  }
-                }}
-              >
-                {selectedEnrollmentId === enrollment.id
-                  ? 'Record selected'
-                  : 'Select this record'}
-              </Button>
-            }
-          >
-            <Stack gap={1}>
-              <CommonLabeledTextBlock title='Project Type'>
-                <HmisEnum
-                  value={enrollment.projectType}
-                  enumMap={HmisEnums.ProjectType}
-                />
-              </CommonLabeledTextBlock>
+    <>
+      <Stack gap={2} direction='row'>
+        <Typography variant='body1'>
+          <strong>Client</strong>: {clientName}
+        </Typography>
 
-              <CommonLabeledTextBlock title='Project Name'>
-                {enrollment.projectName}
-              </CommonLabeledTextBlock>
-
-              <CommonLabeledTextBlock title='Client Name'>
-                {enrollment.clientName}
-              </CommonLabeledTextBlock>
-
-              <CommonLabeledTextBlock title='Enrollment Period'>
-                <EnrollmentDateRangeWithStatus enrollment={enrollment} />
-              </CommonLabeledTextBlock>
-
-              <CommonLabeledTextBlock title={'Relationship to HoH'}>
-                <HmisEnum
-                  value={enrollment.relationshipToHoH}
-                  enumMap={HmisEnums.RelationshipToHoH}
-                />
-              </CommonLabeledTextBlock>
-              {enrollment.otherHouseholdMemberNames.length > 0 && (
-                <CommonLabeledTextBlock title={'Other Household Members'}>
-                  {stringifyArray(enrollment.otherHouseholdMemberNames)}
-                </CommonLabeledTextBlock>
-              )}
-
-              {enrollment.assessments.length > 0 && (
-                <>
-                  <Typography variant={'h5'} component={'p'}>
-                    Relevant Assessments
-                  </Typography>
-                  {enrollment.assessments.map((assessment) => (
-                    <CommonLabeledTextBlock
-                      key={assessment.id}
-                      title={`${assessment.name}`}
-                    >
-                      {assessment.date}
-                    </CommonLabeledTextBlock>
-                  ))}
-                </>
-              )}
-            </Stack>
-          </CommonCard>
-        );
-      })}
-    </Stack>
+        <Typography variant='body1'>
+          <strong>Enrollments</strong>: {enrollments?.length}
+        </Typography>
+      </Stack>
+      <Stack gap={2}>
+        {enrollments?.map((enrollment) => {
+          return (
+            <SourceEnrollmentCard
+              enrollment={enrollment}
+              selected={selectedEnrollmentId === enrollment.id}
+              onSelect={() => setSelectedEnrollmentId(enrollment.id)}
+            />
+          );
+        })}
+      </Stack>
+    </>
   );
 };
 

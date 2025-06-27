@@ -379,10 +379,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
-    name: 'AssessmentNameWithDate',
+    name: 'AssessmentSummary',
     fields: [
       {
-        name: 'date',
+        name: 'assessmentDate',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -390,19 +390,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'assessmentName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'dateCreated',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'name',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],
@@ -1001,6 +1009,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
+        },
+      },
+      {
+        name: 'sourceClientId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'CeReferralSourceEnrollmentAccess',
+    fields: [
+      {
+        name: 'canViewEnrollmentDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
     ],
@@ -2201,6 +2238,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
             name: 'DataCollectionFeatureRole',
             ofType: null,
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'DataSource',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'isCurrentDataSource',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],

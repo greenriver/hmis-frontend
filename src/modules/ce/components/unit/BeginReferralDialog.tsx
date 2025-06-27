@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -114,11 +113,10 @@ const BeginReferralDialog: React.FC<Props> = ({
         content: (
           <>
             {errorContent}
-            <Typography variant='body1'>
-              <strong>Client</strong>: {clientName}
-            </Typography>
             <SourceEnrollmentSelector
+              clientName={clientName}
               candidateId={candidate.id}
+              opportunityId={opportunity.id}
               selectedEnrollmentId={selectedEnrollmentId}
               setSelectedEnrollmentId={setSelectedEnrollmentId}
             />
@@ -157,6 +155,7 @@ const BeginReferralDialog: React.FC<Props> = ({
       createReferral,
       errorContent,
       loading,
+      opportunity.id,
       selectedEnrollmentId,
     ]
   );

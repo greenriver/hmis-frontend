@@ -81,23 +81,6 @@ query GetClientEnrollments(
   }
 }
 
-query GetCandidatePossibleSourceEnrollments(
-  $id: ID!
-  $limit: Int = 100
-  $offset: Int = 0
-) {
-  ceCandidate(id: $id) {
-    enrollments(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...CeReferralSourceEnrollmentFields
-      }
-    }
-  }
-}
-
 query GetClientServices(
   $id: ID!
   $limit: Int = 10
