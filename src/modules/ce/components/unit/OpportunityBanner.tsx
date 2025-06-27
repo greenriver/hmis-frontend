@@ -5,7 +5,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
-import BeginReferralButton from '@/modules/ce/components/unit/BeginReferralButton';
+import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
@@ -61,7 +61,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
 
     if (topCandidate && project.access.canStartReferrals) {
       return (
-        <BeginReferralButton
+        <StartReferralButton
           opportunity={opportunity}
           candidate={topCandidate}
           color='primary'

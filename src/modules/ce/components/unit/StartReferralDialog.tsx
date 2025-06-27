@@ -32,11 +32,11 @@ interface Props {
 }
 
 /**
- * The BeginReferralDialog component provides a multi-step dialog for initiating a referral for a candidate.
+ * The StartReferralDialog component provides a multi-step dialog for initiating a referral for a candidate.
  *
  * TODO(#7539) require setting/confirming contacts before referral creation
  */
-const BeginReferralDialog: React.FC<Props> = ({
+const StartReferralDialog: React.FC<Props> = ({
   candidate,
   opportunity,
   open,
@@ -172,4 +172,4 @@ const BeginReferralDialog: React.FC<Props> = ({
   );
 };
 
-export default BeginReferralDialog;
+export default StartReferralDialog;
