@@ -22,6 +22,7 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
 
 fragment CeOpportunityFields on CeOpportunity {
   ...CeOpportunitySummaryFields
+  candidatesGeneratedAt
   referral {
     ...CeReferralSummaryFields
   }

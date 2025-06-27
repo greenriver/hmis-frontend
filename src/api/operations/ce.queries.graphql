@@ -49,6 +49,7 @@ query GetCeOpportunityCandidates(
 ) {
   ceOpportunity(id: $opportunityId) {
     id
+    candidatesGeneratedAt
     candidates(limit: $limit, offset: $offset) {
       offset
       limit

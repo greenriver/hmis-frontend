@@ -1,4 +1,4 @@
-import { Box, Paper } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
@@ -62,11 +62,7 @@ const UnitPage: React.FC<Props> = ({}) => {
       defs.push({
         title: 'Eligible Clients',
         key: 'clients',
-        contents: (
-          <Paper>
-            <PrioritizedClientsTable opportunity={opportunity} />
-          </Paper>
-        ),
+        contents: <PrioritizedClientsTable opportunity={opportunity} />,
       });
     }
 
