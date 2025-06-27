@@ -24,7 +24,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIconRounded from '@mui/icons-material/ClearRounded';
 import CloseIcon from '@mui/icons-material/Close';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -80,7 +80,7 @@ export {
   CalendarTodayIcon as CalendarIcon,
   AutorenewRoundedIcon as ChangeRelationshipIcon,
   CheckRoundedIcon as CheckIcon,
-  ClearIcon as ClearIcon,
+  ClearIconRounded as ClearIcon,
   ContactsIcon as ContactsIcon,
   Person as ClientIcon,
   CloseIcon as CloseIcon,
@@ -100,6 +100,8 @@ export {
   FilterListRoundedIcon as FilterIcon,
   VisibilityRoundedIcon as AuditIcon,
   PeopleOutlineRoundedIcon as ImpersonateIcon,
+  ClearIconRounded as ReferralDeclinedIcon,
+  CheckRoundedIcon as ReferralAcceptedIcon,
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
   RadioButtonCheckedIcon as FormChoiceIcon,
