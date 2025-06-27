@@ -54,7 +54,7 @@ const SourceEnrollmentSelector: React.FC<Props> = ({
           <strong>Enrollments</strong>: {enrollments?.length}
         </Typography>
       </Stack>
-      <Stack gap={2}>
+      <Stack gap={2} role='radiogroup' aria-label='Select source enrollment'>
         {enrollments?.map((enrollment) => {
           return (
             <SourceEnrollmentCard
