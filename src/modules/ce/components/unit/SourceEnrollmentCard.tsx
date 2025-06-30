@@ -41,6 +41,8 @@ const SourceEnrollmentCard: React.FC<Props> = ({
     enrollment.dataSource.isCurrentDataSource &&
     enrollment.access.canViewEnrollmentDetails;
 
+  const clientNameWithHohIndicator = `${enrollment.clientName}${enrollment.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ? ' (HoH)' : ''}`;
+
   return (
     <CommonSelectableCard
       key={enrollment.id}
@@ -55,11 +57,11 @@ const SourceEnrollmentCard: React.FC<Props> = ({
           IconProps={{ sx: { color: 'text.secondary' } }}
         >
           {enrollment.householdSize === 1 ? (
-            enrollment.clientName
+            clientNameWithHohIndicator
           ) : (
             <CommonTruncatedList
               items={[
-                `${enrollment.clientName}${enrollment.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ? ' (HoH)' : ''}`,
+                clientNameWithHohIndicator,
                 ...enrollment.otherHouseholdMemberNames,
               ]}
             />
