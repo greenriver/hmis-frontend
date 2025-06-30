@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import BeginReferralButton from '@/modules/ce/components/unit/BeginReferralButton';
+import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   clientBriefName,
@@ -53,7 +53,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
             primaryAction={
               status === CeOpportunityStatus.Open &&
               project.access.canStartReferrals && (
-                <BeginReferralButton
+                <StartReferralButton
                   opportunity={opportunity}
                   candidate={row}
                 />

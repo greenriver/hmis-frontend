@@ -1,5 +1,6 @@
 import {
   ContentPasteOutlined,
+  DateRangeRounded,
   HistoryRounded,
   HomeRounded,
   InfoOutlined,
@@ -144,4 +145,5 @@ export {
   DateRangeIcon as StepCalendarIcon,
   HistoryRounded as ActivityIcon,
   StickyNote2Rounded as NotesIcon,
+  DateRangeRounded as DateRangeIcon,
 };

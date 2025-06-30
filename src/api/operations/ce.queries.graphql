@@ -60,6 +60,28 @@ query GetCeOpportunityCandidates(
   }
 }
 
+query GetCeCandidateSourceEnrollments(
+  $opportunityId: ID!
+  $candidateId: ID!
+  $limit: Int = 100
+  $offset: Int = 0
+) {
+  ceOpportunity(id: $opportunityId) {
+    id
+    candidateLookup(id: $candidateId) {
+      id
+      enrollments(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CeReferralSourceEnrollmentFields
+        }
+      }
+    }
+  }
+}
+
 query GetCeReferral($id: ID!) {
   ceReferral(id: $id) {
     ...CeReferralFields

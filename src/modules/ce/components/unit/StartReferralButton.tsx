@@ -1,7 +1,7 @@
 import { LoadingButton } from '@mui/lab';
 import React, { useState } from 'react';
 import { LoadingButtonProps } from '@/components/elements/LoadingButton';
-import BeginReferralDialog from '@/modules/ce/components/unit/BeginReferralDialog';
+import StartReferralDialog from '@/modules/ce/components/unit/StartReferralDialog';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import {
   CeCandidateFieldsFragment,
@@ -13,7 +13,7 @@ type Props = {
   candidate: CeCandidateFieldsFragment;
 } & LoadingButtonProps;
 
-const BeginReferralButton: React.FC<Props> = ({
+const StartReferralButton: React.FC<Props> = ({
   opportunity,
   candidate,
   ...rest
@@ -25,12 +25,12 @@ const BeginReferralButton: React.FC<Props> = ({
       <LoadingButton
         onClick={() => setDialogOpen(true)}
         color='grayscale'
-        aria-label={`Begin Referral for ${clientNameFromRecordWithOptionalClient(candidate)}`}
+        aria-label={`Start Referral for ${clientNameFromRecordWithOptionalClient(candidate)}`}
         {...rest}
       >
-        Begin Referral
+        Start Referral
       </LoadingButton>
-      <BeginReferralDialog
+      <StartReferralDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
         candidate={candidate}
@@ -40,4 +40,4 @@ const BeginReferralButton: React.FC<Props> = ({
   );
 };
 
-export default BeginReferralButton;
+export default StartReferralButton;
