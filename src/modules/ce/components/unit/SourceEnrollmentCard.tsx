@@ -112,6 +112,7 @@ const SourceEnrollmentCard: React.FC<Props> = ({
         {enrollment.assessments.map((assessment) => {
           return (
             <Alert
+              key={assessment.id}
               icon={false}
               color='warning'
               action={
