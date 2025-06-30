@@ -36,7 +36,7 @@ const SourceEnrollmentCard: React.FC<Props> = ({
 
   // will always be true for now (otherwise the enrollment wouldn't have been resolved),
   // but in the future we will resolve enrollments here that user may not be able to view,
-  // including enrollments in different data sources
+  // including enrollments in different data sources. https://github.com/open-path/Green-River/issues/7891
   const includeLinks =
     enrollment.dataSource.isCurrentDataSource &&
     enrollment.access.canViewEnrollmentDetails;

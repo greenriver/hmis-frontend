@@ -24,6 +24,8 @@ const SourceEnrollmentSelector: React.FC<Props> = ({
   selectedEnrollmentId,
   setSelectedEnrollmentId,
 }) => {
+  // TODO(#7890) Support moving forward with the referral for an unenrolled client
+
   return (
     <>
       <Stack gap={2} direction='row'>
