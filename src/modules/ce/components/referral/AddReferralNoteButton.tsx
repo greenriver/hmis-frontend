@@ -38,7 +38,7 @@ const AddReferralNoteButton: React.FC<Props> = ({ referralId }) => {
           color='grayscale'
           startIcon={<AddIcon />}
         >
-          Add New Note
+          Add Note
         </LoadingButton>
       </Box>
 
