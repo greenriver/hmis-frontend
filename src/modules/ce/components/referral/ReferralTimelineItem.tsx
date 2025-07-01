@@ -102,10 +102,14 @@ const ReferralTimelineItem: React.FC<Props> = ({
           </MultilineTypography>
         )}
         <Typography variant='body2' color='text.secondary'>
-          <RelativeDateDisplay dateString={auditEventOrNote.createdAt} />
-          {auditEventOrNote.user?.name
-            ? ` by ${auditEventOrNote.user.name}`
-            : ''}
+          <RelativeDateDisplay
+            dateString={auditEventOrNote.createdAt}
+            suffixText={
+              auditEventOrNote.user
+                ? `by ${auditEventOrNote.user.name}`
+                : undefined
+            }
+          />
         </Typography>
       </TimelineContent>
     </TimelineItem>
