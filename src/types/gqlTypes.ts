@@ -16406,6 +16406,7 @@ export type CeOpportunitySummaryFieldsFragment = {
 
 export type CeOpportunityFieldsFragment = {
   __typename?: 'CeOpportunity';
+  candidatesGeneratedAt?: string | null;
   id: string;
   name: string;
   status: CeOpportunityStatus;
@@ -18572,6 +18573,7 @@ export type SubmitCeReferralStepMutation = {
       clientId: string;
       opportunity: {
         __typename?: 'CeOpportunity';
+        candidatesGeneratedAt?: string | null;
         id: string;
         name: string;
         status: CeOpportunityStatus;
@@ -19043,6 +19045,7 @@ export type GetCeOpportunityQuery = {
   __typename?: 'Query';
   ceOpportunity?: {
     __typename?: 'CeOpportunity';
+    candidatesGeneratedAt?: string | null;
     id: string;
     name: string;
     status: CeOpportunityStatus;
@@ -19109,6 +19112,7 @@ export type GetCeOpportunityCandidatesQuery = {
   ceOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
+    candidatesGeneratedAt?: string | null;
     candidates: {
       __typename?: 'CeCandidatesPaginated';
       offset: number;
@@ -44688,6 +44692,7 @@ export type UnitDetailFieldsFragment = {
   } | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
+    candidatesGeneratedAt?: string | null;
     id: string;
     name: string;
     status: CeOpportunityStatus;
@@ -45090,6 +45095,7 @@ export type GetUnitQuery = {
     } | null;
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
+      candidatesGeneratedAt?: string | null;
       id: string;
       name: string;
       status: CeOpportunityStatus;
@@ -48405,6 +48411,7 @@ export const CeMatchRuleFieldsFragmentDoc = gql`
 export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
     ...CeOpportunitySummaryFields
+    candidatesGeneratedAt
     referral {
       ...CeReferralSummaryFields
     }
@@ -51013,6 +51020,7 @@ export const GetCeOpportunityCandidatesDocument = gql`
   ) {
     ceOpportunity(id: $opportunityId) {
       id
+      candidatesGeneratedAt
       candidates(limit: $limit, offset: $offset) {
         offset
         limit

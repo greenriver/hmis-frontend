@@ -1,4 +1,6 @@
+import { Alert, Paper, Stack } from '@mui/material';
 import React, { useMemo } from 'react';
+import CommonCard from '@/components/elements/CommonCard';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -7,6 +9,9 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import {
   clientBriefName,
   clientNameFromRecordWithOptionalClient,
+  formatRelativeDateTime,
+  parseAndFormatDateTime,
+  parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ClientDashboardRoutes } from '@/routes/routes';
@@ -81,18 +86,49 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
     ];
   }, [project.access.canStartReferrals, opportunity, status]);
 
+  // If CandidatePool has not been generated yet (due to change in eligibility or prioritization requirements), show a message
+  if (!opportunity.candidatesGeneratedAt) {
+    return (
+      <Alert severity='info'>
+        The waitlist for this unit has not been generated yet. Please check back
+        later.
+      </Alert>
+    );
+  }
+  const candidatesGeneratedAt = parseHmisDateString(
+    opportunity.candidatesGeneratedAt
+  );
+
   return (
-    <GenericTableWithData<
-      GetCeOpportunityCandidatesQuery,
-      GetCeOpportunityCandidatesQueryVariables,
-      CeCandidateFieldsFragment
-    >
-      columns={columns}
-      queryVariables={{ opportunityId: opportunity.id }}
-      queryDocument={GetCeOpportunityCandidatesDocument}
-      pagePath='ceOpportunity.candidates'
-      paginationItemName='candidates'
-    />
+    <Stack rowGap={2}>
+      <CommonCard title='Eligible Clients'>
+        This table lists clients who meet the eligibility requirements for this
+        unit. Clients are sorted based on their priority score.
+        {candidatesGeneratedAt && (
+          <>
+            {' '}
+            The waitlist was last updated{' '}
+            {formatRelativeDateTime(candidatesGeneratedAt)} (
+            {parseAndFormatDateTime(opportunity.candidatesGeneratedAt)}).
+          </>
+        )}
+        {/* May want to add additional explainer text about this list being deduplicated (i.e. it contains destination clients) */}
+      </CommonCard>
+      <Paper>
+        <GenericTableWithData<
+          GetCeOpportunityCandidatesQuery,
+          GetCeOpportunityCandidatesQueryVariables,
+          CeCandidateFieldsFragment
+        >
+          columns={columns}
+          queryVariables={{ opportunityId: opportunity.id }}
+          queryDocument={GetCeOpportunityCandidatesDocument}
+          pagePath='ceOpportunity.candidates'
+          paginationItemName='client'
+          noData={'No clients are currently eligible for this unit.'}
+        />
+      </Paper>
+    </Stack>
   );
 };
 
