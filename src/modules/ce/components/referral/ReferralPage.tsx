@@ -10,7 +10,6 @@ import {
   ActivityIcon,
   ContactsIcon,
   InfoIcon,
-  NotesIcon,
   PersonIcon,
 } from '@/components/elements/SemanticIcons';
 import CommonStickyBar from '@/components/layout/CommonStickyBar';
@@ -180,10 +179,10 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
             >
               <ReferralTimeline referral={referral} />
             </CommonButtonDrawer>
-            <CommonButtonDrawer
+            {/* <CommonButtonDrawer
               title={'Notes'}
               ButtonProps={{ startIcon: <NotesIcon /> }}
-            />
+            /> */}
           </Stack>
         </Stack>
       </CommonStickyBar>

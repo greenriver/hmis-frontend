@@ -6,9 +6,11 @@ import {
   TimelineSeparator,
 } from '@mui/lab';
 import { Typography } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
+import MultilineTypography from '@/components/elements/MultilineTypography';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import {
+  NotesIcon,
   ReferralAcceptedIcon,
   ReferralDeclinedIcon,
 } from '@/components/elements/SemanticIcons';
@@ -16,55 +18,94 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeReferralAuditEventFieldsFragment,
   CeReferralAuditEventType,
+  CeReferralNoteFieldsFragment,
 } from '@/types/gqlTypes';
 
 interface Props {
-  auditEvent: CeReferralAuditEventFieldsFragment;
+  auditEventOrNote:
+    | CeReferralAuditEventFieldsFragment
+    | CeReferralNoteFieldsFragment;
   lastItem?: boolean;
 }
 
-const ReferralTimelineItem: React.FC<Props> = ({
-  auditEvent,
-  lastItem = false,
-}) => {
-  let description = '';
+function isAuditEvent(
+  event: CeReferralAuditEventFieldsFragment | CeReferralNoteFieldsFragment
+): event is CeReferralAuditEventFieldsFragment {
+  return event.__typename === 'CeReferralAuditEvent';
+}
+function isNote(
+  event: CeReferralAuditEventFieldsFragment | CeReferralNoteFieldsFragment
+): event is CeReferralNoteFieldsFragment {
+  return event.__typename === 'CeReferralNote';
+}
+
+function auditEventDescription(
+  auditEvent: CeReferralAuditEventFieldsFragment
+): string {
   switch (auditEvent.type) {
     case CeReferralAuditEventType.CompleteStep:
-      description = `${auditEvent.stepName} Completed`;
-      break;
+      return `${auditEvent.stepName} Completed`;
     case CeReferralAuditEventType.RejectReferral:
-      description = 'Referral Declined';
-      break;
+      return 'Referral Declined';
     case CeReferralAuditEventType.StartReferral:
-      description = 'Referral Started';
-      break;
+      return 'Referral Started';
     case CeReferralAuditEventType.AcceptReferral:
-      description = 'Referral Accepted';
-      break;
+      return 'Referral Accepted';
     default:
-      description = HmisEnums.CeReferralAuditEventType[auditEvent.type];
+      return HmisEnums.CeReferralAuditEventType[auditEvent.type];
   }
+}
+
+const ReferralTimelineItem: React.FC<Props> = ({
+  auditEventOrNote,
+  lastItem = false,
+}) => {
+  const title = useMemo(() => {
+    if (isNote(auditEventOrNote)) {
+      return 'Note'; //auditEventOrNote.note;
+    }
+    return auditEventDescription(auditEventOrNote);
+  }, [auditEventOrNote]);
+
+  const description = useMemo(() => {
+    if (isNote(auditEventOrNote)) return auditEventOrNote.note;
+    return null;
+  }, [auditEventOrNote]);
+
+  const Icon = useMemo(() => {
+    if (isAuditEvent(auditEventOrNote)) {
+      const auditEvent = auditEventOrNote;
+      if (auditEvent.type === CeReferralAuditEventType.RejectReferral) {
+        return ReferralDeclinedIcon;
+      }
+      return ReferralAcceptedIcon;
+    }
+    return NotesIcon;
+  }, [auditEventOrNote]);
 
   return (
     <TimelineItem>
       <TimelineSeparator>
-        <TimelineDot color='primary'>
-          {auditEvent.type === CeReferralAuditEventType.RejectReferral ? (
-            <ReferralDeclinedIcon fontSize='inherit' />
-          ) : (
-            <ReferralAcceptedIcon fontSize='inherit' />
-          )}
+        <TimelineDot color={isNote(auditEventOrNote) ? 'grey' : 'primary'}>
+          <Icon fontSize='inherit' />
         </TimelineDot>
         {!lastItem && <TimelineConnector />}
       </TimelineSeparator>
 
-      <TimelineContent>
+      <TimelineContent sx={{ mt: 0.5, mb: lastItem ? 0 : 1.5 }}>
         <Typography variant='body1' fontWeight='bold'>
-          {description}
+          {title}
         </Typography>
-        <Typography variant='body2' color='text.primary'>
-          <RelativeDateDisplay dateString={auditEvent.createdAt} />
-          {auditEvent.user?.name ? `by ${auditEvent.user.name}` : ''}
+        {description && (
+          <MultilineTypography variant='body2' sx={{ py: 0.5 }}>
+            {description}
+          </MultilineTypography>
+        )}
+        <Typography variant='body2' color='text.secondary'>
+          <RelativeDateDisplay dateString={auditEventOrNote.createdAt} />
+          {auditEventOrNote.user?.name
+            ? ` by ${auditEventOrNote.user.name}`
+            : ''}
         </Typography>
       </TimelineContent>
     </TimelineItem>
