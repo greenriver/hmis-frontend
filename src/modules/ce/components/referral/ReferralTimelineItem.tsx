@@ -45,6 +45,10 @@ const ReferralTimelineItem: React.FC<Props> = ({
       description = HmisEnums.CeReferralAuditEventType[auditEvent.type];
   }
 
+  const byUser = auditEvent.user?.name
+    ? `by ${auditEvent.user.name}`
+    : undefined;
+
   return (
     <TimelineItem>
       <TimelineSeparator>
@@ -63,8 +67,10 @@ const ReferralTimelineItem: React.FC<Props> = ({
           {description}
         </Typography>
         <Typography variant='body2' color='text.primary'>
-          <RelativeDateDisplay dateString={auditEvent.createdAt} />
-          {auditEvent.user?.name ? `by ${auditEvent.user.name}` : ''}
+          <RelativeDateDisplay
+            dateString={auditEvent.createdAt}
+            suffixText={byUser}
+          />
         </Typography>
       </TimelineContent>
     </TimelineItem>
