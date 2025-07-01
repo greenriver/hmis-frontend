@@ -24,17 +24,19 @@ const MatchRuleCard: React.FC<Props> = ({ title, rules }) => {
             alignItems='top'
             justifyContent={'space-between'}
           >
-            <Stack direction='row' alignItems='center' gap={0}>
-              {canAdministrateCoordinatedEntry ? (
-                <Tooltip title={rule.expression} arrow placement='top'>
-                  <span>{rule.name}</span>
-                </Tooltip>
-              ) : (
-                rule.name
-              )}
-            </Stack>
+            {canAdministrateCoordinatedEntry ? (
+              <Tooltip title={rule.expression} arrow placement='top'>
+                <span>{rule.name}</span>
+              </Tooltip>
+            ) : (
+              rule.name
+            )}
 
-            <Tooltip title='Inherited from' arrow placement='top'>
+            <Tooltip
+              title={`Inherited from ${HmisEnums.CeMatchRuleOwner[rule.ownerType]}`}
+              arrow
+              placement='top'
+            >
               <Typography variant='body2' color='text.secondary' ml={1}>
                 {HmisEnums.CeMatchRuleOwner[rule.ownerType]}
               </Typography>
