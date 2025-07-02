@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import React from 'react';
 
-import MatchRuleGrid from '@/modules/ce/components/unit/MatchRuleGrid';
+import MatchRuleCard from '@/modules/ce/components/unit/MatchRuleCard';
 import OpportunityBanner from '@/modules/ce/components/unit/OpportunityBanner';
 import { UnitDetailFieldsFragment } from '@/types/gqlTypes';
 
@@ -23,7 +23,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
       )}
       {unit.eligibilityRequirements && (
         <Grid item xs={12} md={6}>
-          <MatchRuleGrid
+          <MatchRuleCard
             title='Eligibility Requirements'
             rules={unit.eligibilityRequirements}
           />
@@ -31,7 +31,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
       )}
       {unit.priorityScheme && (
         <Grid item xs={12} md={6}>
-          <MatchRuleGrid title='Prioritization' rules={[unit.priorityScheme]} />
+          <MatchRuleCard title='Prioritization' rules={[unit.priorityScheme]} />
         </Grid>
       )}
     </Grid>
