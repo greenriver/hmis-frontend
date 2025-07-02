@@ -12,6 +12,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     <CommonDetailGrid
       rows={[
         { id: 'id', label: 'Referral ID', value: referral.id },
+        { id: 'clientId', label: 'Client ID', value: referral.clientId },
         {
           id: 'clientName',
           label: 'Client Name',

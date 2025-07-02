@@ -26,14 +26,14 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
           : {}),
       }}
     >
-      <Stack gap={1}>
-        <Typography variant='body1' fontWeight='bold' component='h3'>
-          {name}
-        </Typography>
-
-        <ReferralStepDetails step={step} />
-
-        <Box sx={{ alignSelf: 'start' }}>
+      <Stack justifyContent='space-between' direction='row'>
+        <Stack gap={1}>
+          <Typography variant='body1' fontWeight='bold' component='h3'>
+            {name}
+          </Typography>
+          <ReferralStepDetails step={step} />
+        </Stack>
+        <Box>
           <ReferralStepAction
             step={step}
             referralId={referral.id}

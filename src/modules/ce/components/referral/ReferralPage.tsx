@@ -1,17 +1,14 @@
-import { Container, Divider, Stack, Typography } from '@mui/material';
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
+import { Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
-import ReferralClientDetailContent from './ReferralClientDetailContent';
 import ReferralDetailContent from './ReferralDetailContent';
 import CommonButtonDrawer from '@/components/elements/CommonButtonDrawer';
 import Loading from '@/components/elements/Loading';
 import {
   ActivityIcon,
   ContactsIcon,
-  InfoIcon,
-  NotesIcon,
-  PersonIcon,
 } from '@/components/elements/SemanticIcons';
 import CommonStickyBar from '@/components/layout/CommonStickyBar';
 import {
@@ -23,7 +20,6 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 
 import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
-import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 
 import ReferralTimeline from '@/modules/ce/components/referral/ReferralTimeline';
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
@@ -107,6 +103,9 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
   if (error) throw error;
   if (!referral) return <NotFound />;
 
+  const showContactsDrawer =
+    referral.swimlanes.length > 0 && project?.access?.canAssignReferralTasks;
+
   return (
     <>
       <CommonStickyBar
@@ -116,56 +115,35 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
             ? STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT
             : STICKY_BAR_HEIGHT
         }
-        // Apply 0 padding to the bar, so the divider can take up full height
-        sx={{ py: 0 }}
+        sx={{ pb: 0, pt: isMobile ? 1 : 0 }}
       >
-        <Stack
-          divider={
-            <Divider
-              orientation={isMobile ? 'horizontal' : 'vertical'}
-              flexItem
-            />
-          }
-          direction={isMobile ? 'column' : 'row'}
-          alignItems={isMobile ? '' : 'center'}
-          gap={2}
-        >
+        <Container maxWidth='md'>
           <Stack
-            sx={{ py: 2 }}
-            flex={1}
-            gap={2}
-            direction='row'
-            alignItems='center'
+            direction={isMobile ? 'column' : 'row'}
+            alignItems={isMobile ? '' : 'center'}
+            columnGap={2}
+            rowGap={0}
             justifyContent='space-between'
           >
-            <Box>
-              <Typography variant='h3' component='h1'>
+            <Box sx={{ overflow: 'hidden', textWrap: 'nowrap' }}>
+              <Typography
+                variant='h5'
+                component='h1'
+                sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
+              >
                 Referral for {clientNameFromRecordWithOptionalClient(referral)}
-                {/* if this referral page is "floating", show the target project name */}
-                {project ? '' : ` to ${referral.targetProjectName}`}
               </Typography>
             </Box>
-            <ReferralStatusChip status={referral.status} />
-          </Stack>
-          <Stack sx={{ py: 2 }} direction='row' alignItems='center' gap={1}>
-            <CommonButtonDrawer
-              title={'Client'}
-              ButtonProps={{ startIcon: <PersonIcon /> }}
-            >
-              <ReferralClientDetailContent referral={referral} />
-            </CommonButtonDrawer>
-            <CommonButtonDrawer
-              title={'Referral'}
-              ButtonProps={{ startIcon: <InfoIcon /> }}
-            >
-              <ReferralDetailContent referral={referral} />
-            </CommonButtonDrawer>
-            {referral.swimlanes.length > 0 &&
-              project &&
-              project.access.canAssignReferralTasks && (
-                // If this referral has no swimlanes, hide the Contacts button. This will only happen if the referral also has no tasks
+            <Stack sx={{ py: 1 }} direction='row' alignItems='center' gap={0.5}>
+              <CommonButtonDrawer
+                title='Details'
+                ButtonProps={{ startIcon: <FolderRoundedIcon /> }}
+              >
+                <ReferralDetailContent referral={referral} />
+              </CommonButtonDrawer>
+              {showContactsDrawer && (
                 <CommonButtonDrawer
-                  title={'Contacts'}
+                  title='Contacts'
                   ButtonProps={{ startIcon: <ContactsIcon /> }}
                 >
                   <AssignContactsForm
@@ -174,18 +152,15 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
                   />
                 </CommonButtonDrawer>
               )}
-            <CommonButtonDrawer
-              title={'Activity'}
-              ButtonProps={{ startIcon: <ActivityIcon /> }}
-            >
-              <ReferralTimeline referral={referral} />
-            </CommonButtonDrawer>
-            <CommonButtonDrawer
-              title={'Notes'}
-              ButtonProps={{ startIcon: <NotesIcon /> }}
-            />
+              <CommonButtonDrawer
+                title={'Activity'}
+                ButtonProps={{ startIcon: <ActivityIcon /> }}
+              >
+                <ReferralTimeline referral={referral} />
+              </CommonButtonDrawer>
+            </Stack>
           </Stack>
-        </Stack>
+        </Container>
       </CommonStickyBar>
       <Container maxWidth='md' sx={{ py: 4 }}>
         <Outlet context={outletContext} />
