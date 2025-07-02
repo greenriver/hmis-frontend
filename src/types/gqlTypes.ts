@@ -727,6 +727,7 @@ export type CeReferral = {
   id: Scalars['ID']['output'];
   opportunity: CeOpportunity;
   referredBy?: Maybe<ApplicationUser>;
+  sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
   status: CeReferralStatus;
   steps: Array<CeReferralStep>;
   swimlanes: Array<CeReferralSwimlane>;
@@ -16731,6 +16732,18 @@ export type CeReferralDetailFieldsFragment = {
     lastName?: string | null;
     nameSuffix?: string | null;
   } | null;
+  sourceEnrollment?: {
+    __typename?: 'CeReferralSourceEnrollment';
+    id: string;
+    projectName: string;
+    projectType: ProjectType;
+    entryDate: string;
+    exitDate?: string | null;
+    access: {
+      __typename?: 'CeReferralSourceEnrollmentAccess';
+      canViewEnrollmentDetails: boolean;
+    };
+  } | null;
 };
 
 export type CeReferralFieldsFragment = {
@@ -16820,6 +16833,18 @@ export type CeReferralFieldsFragment = {
       name: string;
     }>;
   }>;
+  sourceEnrollment?: {
+    __typename?: 'CeReferralSourceEnrollment';
+    id: string;
+    projectName: string;
+    projectType: ProjectType;
+    entryDate: string;
+    exitDate?: string | null;
+    access: {
+      __typename?: 'CeReferralSourceEnrollmentAccess';
+      canViewEnrollmentDetails: boolean;
+    };
+  } | null;
 };
 
 export type CeReferralSwimlaneFieldsFragment = {
@@ -18709,6 +18734,18 @@ export type SubmitCeReferralStepMutation = {
           name: string;
         }>;
       }>;
+      sourceEnrollment?: {
+        __typename?: 'CeReferralSourceEnrollment';
+        id: string;
+        projectName: string;
+        projectType: ProjectType;
+        entryDate: string;
+        exitDate?: string | null;
+        access: {
+          __typename?: 'CeReferralSourceEnrollmentAccess';
+          canViewEnrollmentDetails: boolean;
+        };
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -19310,6 +19347,18 @@ export type GetCeReferralQuery = {
         name: string;
       }>;
     }>;
+    sourceEnrollment?: {
+      __typename?: 'CeReferralSourceEnrollment';
+      id: string;
+      projectName: string;
+      projectType: ProjectType;
+      entryDate: string;
+      exitDate?: string | null;
+      access: {
+        __typename?: 'CeReferralSourceEnrollmentAccess';
+        canViewEnrollmentDetails: boolean;
+      };
+    } | null;
   } | null;
 };
 
@@ -46710,6 +46759,16 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       id
       age
       ...ClientName
+    }
+    sourceEnrollment {
+      id
+      projectName
+      projectType
+      entryDate
+      exitDate
+      access {
+        canViewEnrollmentDetails
+      }
     }
   }
   ${ClientNameFragmentDoc}

@@ -166,6 +166,16 @@ fragment CeReferralDetailFields on CeReferral {
     age
     ...ClientName
   }
+  sourceEnrollment {
+    id
+    projectName
+    projectType
+    entryDate
+    exitDate
+    access {
+      canViewEnrollmentDetails
+    }
+  }
   # TODO(#7591) resolve additional details related to eligibility
 }
 

@@ -96,8 +96,13 @@ export const CommonDetailGridItem: React.FC<{
   );
 };
 
+export type CommonDetailGridItemRow = {
+  id: string;
+  label: ReactNode;
+  value: ReactNode;
+};
 interface Props {
-  rows: { id: string; label: ReactNode; value: ReactNode }[];
+  rows: CommonDetailGridItemRow[];
 }
 const CommonDetailGrid: React.FC<Props> = ({ rows }) => (
   <CommonDetailGridContainer>

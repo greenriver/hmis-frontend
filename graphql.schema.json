@@ -5328,6 +5328,18 @@
             "deprecationReason": null
           },
           {
+            "name": "sourceEnrollment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CeReferralSourceEnrollment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
