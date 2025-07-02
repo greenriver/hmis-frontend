@@ -158,9 +158,21 @@ fragment CeReferralAuditEventFields on CeReferralAuditEvent {
   }
 }
 
+# Fields for the "detail" panel on an individual referral
+fragment CeReferralDetailFields on CeReferral {
+  createdAt
+  client {
+    id
+    age
+    ...ClientName
+  }
+  # TODO(#7591) resolve additional details related to eligibility
+}
+
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
   ...CeReferralWithSwimlanes
+  ...CeReferralDetailFields
   workflowTemplateName
   steps {
     ...CeReferralStepSummaryFields

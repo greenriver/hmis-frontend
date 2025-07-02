@@ -16718,6 +16718,21 @@ export type CeReferralAuditEventFieldsFragment = {
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
 };
 
+export type CeReferralDetailFieldsFragment = {
+  __typename?: 'CeReferral';
+  createdAt: string;
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    age?: number | null;
+    lockVersion: number;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  } | null;
+};
+
 export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
   workflowTemplateName?: string | null;
@@ -16726,6 +16741,7 @@ export type CeReferralFieldsFragment = {
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
+  createdAt: string;
   steps: Array<{
     __typename?: 'CeReferralStep';
     id: string;
@@ -16787,6 +16803,7 @@ export type CeReferralFieldsFragment = {
   client?: {
     __typename?: 'Client';
     id: string;
+    age?: number | null;
     lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
@@ -18571,6 +18588,7 @@ export type SubmitCeReferralStepMutation = {
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
+      createdAt: string;
       opportunity: {
         __typename?: 'CeOpportunity';
         candidatesGeneratedAt?: string | null;
@@ -18674,6 +18692,7 @@ export type SubmitCeReferralStepMutation = {
       client?: {
         __typename?: 'Client';
         id: string;
+        age?: number | null;
         lockVersion: number;
         firstName?: string | null;
         middleName?: string | null;
@@ -19208,6 +19227,7 @@ export type GetCeReferralQuery = {
     status: CeReferralStatus;
     active: boolean;
     clientId: string;
+    createdAt: string;
     steps: Array<{
       __typename?: 'CeReferralStep';
       id: string;
@@ -19273,6 +19293,7 @@ export type GetCeReferralQuery = {
     client?: {
       __typename?: 'Client';
       id: string;
+      age?: number | null;
       lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
@@ -46682,6 +46703,17 @@ export const CeReferralWithSwimlanesFragmentDoc = gql`
   }
   ${CeReferralSwimlaneFieldsFragmentDoc}
 `;
+export const CeReferralDetailFieldsFragmentDoc = gql`
+  fragment CeReferralDetailFields on CeReferral {
+    createdAt
+    client {
+      id
+      age
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
 export const CeReferralStepSummaryFieldsFragmentDoc = gql`
   fragment CeReferralStepSummaryFields on CeReferralStep {
     id
@@ -46716,6 +46748,7 @@ export const CeReferralFieldsFragmentDoc = gql`
   fragment CeReferralFields on CeReferral {
     ...CeReferralSummaryFields
     ...CeReferralWithSwimlanes
+    ...CeReferralDetailFields
     workflowTemplateName
     steps {
       ...CeReferralStepSummaryFields
@@ -46739,6 +46772,7 @@ export const CeReferralFieldsFragmentDoc = gql`
   }
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeReferralWithSwimlanesFragmentDoc}
+  ${CeReferralDetailFieldsFragmentDoc}
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${CeOpportunitySummaryFieldsFragmentDoc}
   ${CeReferralAuditEventFieldsFragmentDoc}
