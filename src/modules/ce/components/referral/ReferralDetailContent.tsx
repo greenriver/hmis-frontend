@@ -91,7 +91,6 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     const { id, projectName, projectType, access } = referral.sourceEnrollment;
 
     const rows: CommonDetailGridItemRow[] = [
-      { id: 'enrollmentId', label: 'Enrollment ID', value: id },
       { id: 'projectName', label: 'Project Name', value: projectName },
       {
         id: 'projectType',
