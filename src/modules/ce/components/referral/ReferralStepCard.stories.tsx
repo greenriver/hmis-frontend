@@ -61,6 +61,10 @@ const mockReferral: CeReferralFieldsFragment = {
     nodesCount: 0,
     nodes: [],
   },
+  notes: {
+    nodesCount: 0,
+    nodes: [],
+  },
 };
 
 export const InProgress: Story = {

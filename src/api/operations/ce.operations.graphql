@@ -101,3 +101,11 @@ mutation AssignParticipants(
     }
   }
 }
+
+mutation CreateCeReferralNote($referralId: ID!, $note: String!) {
+  createCeReferralNote(referralId: $referralId, note: $note) {
+    referral {
+      ...CeReferralWithNotesAndAuditEvents
+    }
+  }
+}
