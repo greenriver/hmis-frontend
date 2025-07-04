@@ -616,6 +616,15 @@ export enum CeMatchRuleOwner {
   UnitGroup = 'UNIT_GROUP',
 }
 
+export type CeMatchValue = {
+  __typename?: 'CeMatchValue';
+  /** Name of this field */
+  fieldName: Scalars['String']['output'];
+  /** String representation of the value for this field */
+  fieldValue?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+};
+
 export type CeOpportunitiesPaginated = {
   __typename?: 'CeOpportunitiesPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -722,6 +731,7 @@ export type CeReferral = {
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
+  currentMatchValues?: Maybe<Array<CeMatchValue>>;
   currentSteps?: Maybe<Array<CeReferralStep>>;
   daysOnCurrentSteps?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
