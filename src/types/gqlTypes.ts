@@ -565,6 +565,7 @@ export type CeCandidate = {
   __typename?: 'CeCandidate';
   /** Masked as "Candidate 123" unless the user has permission to view */
   clientName: Scalars['String']['output'];
+  destinationClientId: Scalars['ID']['output'];
   enrollments: CeReferralSourceEnrollmentsPaginated;
   id: Scalars['ID']['output'];
   priorityScore: Scalars['Int']['output'];
