@@ -63,10 +63,7 @@ fragment CeMatchRuleFields on CeMatchRule {
 fragment CeCandidateFields on CeCandidate {
   id
   priorityScore
-  clientId
-  client {
-    ...ClientName
-  }
+  clientName
 }
 
 fragment CeReferralSummaryFields on CeReferral {
@@ -169,6 +166,16 @@ fragment CeReferralDetailFields on CeReferral {
   # TODO(#7591) resolve additional details related to eligibility
 }
 
+fragment CeReferralNoteFields on CeReferralNote {
+  id
+  createdAt
+  note
+  user {
+    id
+    name
+  }
+}
+
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
   ...CeReferralWithSwimlanes
@@ -187,11 +194,22 @@ fragment CeReferralFields on CeReferral {
       id
     }
   }
+  ...CeReferralWithNotesAndAuditEvents
+}
+
+# In the future, we may paginate these in the UI; for now, just query all, with a high query cap
+fragment CeReferralWithNotesAndAuditEvents on CeReferral {
+  id
   auditEvents(limit: 200) {
-    # In the future, we may paginate these in the UI; for now, just query all, with a high query cap
     nodesCount
     nodes {
       ...CeReferralAuditEventFields
+    }
+  }
+  notes(limit: 200) {
+    nodesCount
+    nodes {
+      ...CeReferralNoteFields
     }
   }
 }

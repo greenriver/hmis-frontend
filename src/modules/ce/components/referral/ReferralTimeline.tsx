@@ -1,14 +1,23 @@
 import { Timeline, timelineItemClasses } from '@mui/lab';
 import { Box, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
+import AddReferralNoteButton from '@/modules/ce/components/referral/AddReferralNoteButton';
 import ReferralTimelineItem from '@/modules/ce/components/referral/ReferralTimelineItem';
 import { CeReferralFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
-  referral: Pick<CeReferralFieldsFragment, 'auditEvents'>;
+  referral: Pick<CeReferralFieldsFragment, 'auditEvents' | 'notes' | 'id'>;
 }
 
 const ReferralTimeline: React.FC<Props> = ({ referral }: Props) => {
+  const combinedEvents = useMemo(() => {
+    // Combine audit events and notes into a single array, sorted by createdAt
+    return [...referral.auditEvents.nodes, ...referral.notes.nodes].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }, [referral.auditEvents.nodes, referral.notes.nodes]);
+
   return (
     <Stack
       direction='column'
@@ -21,6 +30,7 @@ const ReferralTimeline: React.FC<Props> = ({ referral }: Props) => {
           borderColor: 'borders.light',
         }}
       >
+        <AddReferralNoteButton referralId={referral.id} />
         <Timeline
           sx={{
             // https://mui.com/material-ui/react-timeline/#left-aligned-with-no-opposite-content
@@ -30,11 +40,11 @@ const ReferralTimeline: React.FC<Props> = ({ referral }: Props) => {
             },
           }}
         >
-          {referral.auditEvents.nodes.map((auditEvent, index) => (
+          {combinedEvents.map((auditEventOrNote, index) => (
             <ReferralTimelineItem
-              key={auditEvent.id}
-              lastItem={index === referral.auditEvents.nodes.length - 1}
-              auditEvent={auditEvent}
+              key={auditEventOrNote.id}
+              lastItem={index === combinedEvents.length - 1}
+              auditEventOrNote={auditEventOrNote}
             />
           ))}
         </Timeline>

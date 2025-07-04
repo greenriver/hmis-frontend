@@ -533,7 +533,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeCandidate',
     fields: [
       {
-        name: 'clientId',
+        name: 'clientName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'destinationClientId',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -920,6 +928,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
             name: 'CeReferralAuditEventType',
             ofType: null,
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'CeReferralNote',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'note',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],
