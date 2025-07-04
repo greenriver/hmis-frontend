@@ -563,9 +563,9 @@ export type CeAssessmentsPaginated = {
 
 export type CeCandidate = {
   __typename?: 'CeCandidate';
-  /** Null if the user lacks permission to view the client */
-  client?: Maybe<Client>;
-  clientId: Scalars['ID']['output'];
+  /** Masked as "Candidate 123" unless the user has permission to view */
+  clientName: Scalars['String']['output'];
+  destinationClientId: Scalars['ID']['output'];
   enrollments: CeReferralSourceEnrollmentsPaginated;
   id: Scalars['ID']['output'];
   priorityScore: Scalars['Int']['output'];
@@ -16563,16 +16563,7 @@ export type CeCandidateFieldsFragment = {
   __typename?: 'CeCandidate';
   id: string;
   priorityScore: number;
-  clientId: string;
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    lockVersion: number;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-  } | null;
+  clientName: string;
 };
 
 export type CeReferralSummaryFieldsFragment = {
@@ -19283,16 +19274,7 @@ export type GetCeOpportunityCandidatesQuery = {
         __typename?: 'CeCandidate';
         id: string;
         priorityScore: number;
-        clientId: string;
-        client?: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        } | null;
+        clientName: string;
       }>;
     };
   } | null;
@@ -44885,16 +44867,7 @@ export type UnitDetailFieldsFragment = {
         __typename?: 'CeCandidate';
         id: string;
         priorityScore: number;
-        clientId: string;
-        client?: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        } | null;
+        clientName: string;
       }>;
     };
     referral?: {
@@ -45288,16 +45261,7 @@ export type GetUnitQuery = {
           __typename?: 'CeCandidate';
           id: string;
           priorityScore: number;
-          clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
+          clientName: string;
         }>;
       };
       referral?: {
@@ -48631,12 +48595,8 @@ export const CeCandidateFieldsFragmentDoc = gql`
   fragment CeCandidateFields on CeCandidate {
     id
     priorityScore
-    clientId
-    client {
-      ...ClientName
-    }
+    clientName
   }
-  ${ClientNameFragmentDoc}
 `;
 export const UnitDetailFieldsFragmentDoc = gql`
   fragment UnitDetailFields on Unit {

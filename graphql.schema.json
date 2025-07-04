@@ -3772,19 +3772,23 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "client",
-            "description": "Null if the user lacks permission to view the client",
+            "name": "clientName",
+            "description": "Masked as \"Candidate 123\" unless the user has permission to view",
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Client",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "clientId",
+            "name": "destinationClientId",
             "description": null,
             "args": [],
             "type": {
