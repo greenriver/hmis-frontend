@@ -16,6 +16,7 @@ import {
   GetEnrollmentGeolocationsDocument,
   GetEnrollmentWithHouseholdDocument,
   GetFileDocument,
+  GetGlobalFeatureFlagsDocument,
   GetPickListDocument,
   GetProjectHouseholdsDocument,
   GetRootPermissionsDocument,
@@ -677,6 +678,23 @@ export const getRootPermissionsMock = {
   result: {
     data: {
       access: rootAccessMock,
+    },
+  },
+};
+
+export const getGlobalFeatureFlagsMock = {
+  request: {
+    query: GetGlobalFeatureFlagsDocument,
+    variables: {},
+  },
+  result: {
+    data: {
+      globalFeatureFlags: {
+        id: '1',
+        coordinatedEntryEnabled: true,
+        externalReferralsEnabled: false,
+        mciIdEnabled: false,
+      },
     },
   },
 };

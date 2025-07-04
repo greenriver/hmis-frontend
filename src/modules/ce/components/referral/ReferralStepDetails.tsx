@@ -1,3 +1,4 @@
+import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
 import { Box } from '@mui/material';
 import React, { useMemo } from 'react';
 import {
@@ -54,6 +55,10 @@ const ReferralStepDetails: React.FC<{
           {assigneeText}
         </ReferralStepDatum>
       )}
+
+      <ReferralStepDatum Icon={PeopleOutlineRoundedIcon}>
+        {step.swimlane}
+      </ReferralStepDatum>
     </Box>
   );
 };

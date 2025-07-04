@@ -2,6 +2,8 @@ import { Container, Divider, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
+import ReferralClientDetailContent from './ReferralClientDetailContent';
+import ReferralDetailContent from './ReferralDetailContent';
 import CommonButtonDrawer from '@/components/elements/CommonButtonDrawer';
 import Loading from '@/components/elements/Loading';
 import {
@@ -19,8 +21,10 @@ import {
 import NotFound from '@/components/pages/NotFound';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
+
 import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
+
 import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import {
@@ -66,10 +70,12 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
           projectId: project.id,
           referralId: referral.id,
         }),
-        opportunityPath: generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
-          projectId: project.id,
-          opportunityId: referral.opportunity.id,
-        }),
+        unitPath: referral.opportunity.unit
+          ? generateSafePath(ProjectDashboardRoutes.UNIT, {
+              projectId: project.id,
+              unitId: referral.opportunity.unit.id,
+            })
+          : undefined,
         generateReferralStepPath: (stepId: string) => {
           return generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
             projectId: project.id,
@@ -144,11 +150,15 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
             <CommonButtonDrawer
               title={'Client'}
               ButtonProps={{ startIcon: <PersonIcon /> }}
-            />
+            >
+              <ReferralClientDetailContent referral={referral} />
+            </CommonButtonDrawer>
             <CommonButtonDrawer
               title={'Referral'}
               ButtonProps={{ startIcon: <InfoIcon /> }}
-            />
+            >
+              <ReferralDetailContent referral={referral} />
+            </CommonButtonDrawer>
             {referral.swimlanes.length > 0 &&
               project &&
               project.access.canAssignReferralTasks && (
@@ -184,7 +194,7 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
 export type ReferralContext = {
   referral: CeReferralFieldsFragment;
   referralPath: string;
-  opportunityPath?: string;
+  unitPath?: string;
   generateReferralStepPath: (stepId: string) => string;
 };
 export const useReferralContext = () => useOutletContext<ReferralContext>();

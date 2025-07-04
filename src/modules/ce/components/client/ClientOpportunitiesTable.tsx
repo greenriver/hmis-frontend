@@ -18,16 +18,24 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
   {
-    header: 'Opportunity Name',
-    key: 'opportunityName',
-    render: 'name',
-    sticky: 'left',
-  },
-  {
     header: 'Project Name',
     key: 'projectName',
+    sticky: 'left',
     render: (opportunity: ClientCeOpportunitySummaryFieldsFragment) =>
       opportunity.projectName,
+  },
+
+  {
+    header: 'Unit Name',
+    key: 'unitName',
+    render: 'name',
+  },
+  {
+    header: 'Date Available',
+    key: 'dateAvailable',
+    render: ({ dateAvailable }) => (
+      <DateWithRelativeTooltip dateString={dateAvailable} />
+    ),
   },
   {
     header: 'Project Type',
@@ -37,7 +45,7 @@ const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
     ),
   },
   {
-    header: 'Candidates Generated At',
+    header: 'Waitlist Last Updated',
     key: 'generatedAt',
     render: ({ candidatesGeneratedAt }) =>
       candidatesGeneratedAt && (
@@ -46,6 +54,9 @@ const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
   },
 ];
 
+/**
+ * This component displays a table of open opportunities that the client is eligible for.
+ */
 const ClientOpportunitiesTable: React.FC = () => {
   const { client } = useClientDashboardContext();
   const { id: clientId } = client;
@@ -59,12 +70,12 @@ const ClientOpportunitiesTable: React.FC = () => {
     <>
       <Paper sx={{ p: 2, mb: 2 }}>
         <Typography variant='h5' component='h2' pb={1}>
-          About Eligible Opportunities
+          Available Units
         </Typography>
         <Typography variant='body2'>
-          {clientName} is eligible for the below open opportunities. Click the
-          opportunity to see more details, including {clientName}'s position on
-          the waitlist.
+          {clientName} is eligible for the units listed below. These units are
+          currently available and accepting referrals. Click on a unit to view
+          more details, including this client's position on the waitlist.
         </Typography>
       </Paper>
       <Paper>
@@ -80,15 +91,15 @@ const ClientOpportunitiesTable: React.FC = () => {
           filters={filters}
           queryDocument={GetClientEligibleOpportunitiesDocument}
           pagePath='client.eligibleCeOpportunities'
-          noData='No opportunities'
-          paginationItemName='opportunities'
+          noData='No units'
+          paginationItemName='unit'
           rowLinkTo={(opportunity) =>
-            generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+            generateSafePath(ProjectDashboardRoutes.UNIT, {
               projectId: opportunity.projectId,
-              opportunityId: opportunity.id,
+              unitId: opportunity.unit?.id,
             })
           }
-          rowActionTitle='View Opportunity'
+          rowActionTitle='View Unit'
         />
       </Paper>
     </>

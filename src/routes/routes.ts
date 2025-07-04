@@ -111,7 +111,6 @@ const projectDashboardRoutes = {
   COCS: 'coc',
   NEW_COC: 'coc/new',
   EDIT_COC: 'coc/:cocId/edit',
-  UNITS: 'units',
   INVENTORY: 'inventory',
   NEW_INVENTORY: 'inventory/new',
   EDIT_INVENTORY: 'inventory/:inventoryId/edit',
@@ -119,9 +118,13 @@ const projectDashboardRoutes = {
   CE_PARTICIPATION: 'ce-participation',
   EXTERNAL_FORM_SUBMISSIONS: 'external-form-submissions',
 
+  // Unit Management
+  UNITS: 'units',
+  UNIT_GROUP: 'unitGroup/:unitGroupId',
+  UNIT: 'unit/:unitId', // TODO: nest this under Unit Group to get full breadcrumbs
+
   // CE
   CE: 'ce',
-  OPPORTUNITY: 'ce/opportunities/:opportunityId',
   REFERRAL: 'ce/referrals/:referralId',
   REFERRAL_STEPS: 'ce/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
   REFERRAL_STEP: 'ce/referrals/:referralId/tasks/:stepId',
@@ -179,9 +182,10 @@ export const NO_PADDING_ROUTES: string[] = [
 
 // Auto-hide left desktop nav for some routes
 export const HIDE_NAV_ROUTES: string[] = [
-  ProjectDashboardRoutes.REFERRAL,
-  ProjectDashboardRoutes.REFERRAL_STEPS,
-  ProjectDashboardRoutes.REFERRAL_STEP,
+  // Disabling this for now. Add it back if we can make it so the nav re-appears when you leave the page.
+  // ProjectDashboardRoutes.REFERRAL,
+  // ProjectDashboardRoutes.REFERRAL_STEPS,
+  // ProjectDashboardRoutes.REFERRAL_STEP,
 ];
 
 export const FOCUS_MODE_ROUTES = [

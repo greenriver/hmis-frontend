@@ -144,10 +144,6 @@ export const useProjectBreadcrumbConfig = (
       [ProjectDashboardRoutes.CE]: {
         title: 'Coordinated Entry',
       },
-      [ProjectDashboardRoutes.OPPORTUNITY]: {
-        title: 'Opportunity',
-        parent: ProjectDashboardRoutes.CE,
-      },
       [ProjectDashboardRoutes.REFERRAL]: {
         title: 'Referral',
         parent: ProjectDashboardRoutes.CE,
@@ -159,6 +155,14 @@ export const useProjectBreadcrumbConfig = (
       [ProjectDashboardRoutes.REFERRAL_STEP]: {
         title: 'Referral',
         parent: ProjectDashboardRoutes.CE,
+      },
+      [ProjectDashboardRoutes.UNIT_GROUP]: {
+        title: 'Unit Group',
+        parent: ProjectDashboardRoutes.UNITS,
+      },
+      [ProjectDashboardRoutes.UNIT]: {
+        title: 'Unit',
+        parent: ProjectDashboardRoutes.UNITS,
       },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;

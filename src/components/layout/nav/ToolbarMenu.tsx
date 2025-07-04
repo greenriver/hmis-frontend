@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
-import { PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS } from '@/modules/admin/components/AdminDashboard';
+import { useAdminDashboardNavItems } from '@/modules/admin/hooks/useAdminDashboardNavItems';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
 import {
@@ -38,16 +38,16 @@ interface ToolbarMenuProps {
 const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
   const { data: userDashboardConfigData } = useGetUserDashboardConfigQuery();
 
-  const showDashboard = useMemo(() => {
+  const showUserDashboard = useMemo(() => {
     if (!userDashboardConfigData) return false;
-
-    const { userDashboardConfig } = userDashboardConfigData?.userDashboard;
-
+    const { userDashboardConfig } = userDashboardConfigData.userDashboard;
     return (
-      userDashboardConfig?.showReferrals ||
-      userDashboardConfig?.showStaffAssignment
+      userDashboardConfig.showReferrals ||
+      userDashboardConfig.showStaffAssignment
     );
   }, [userDashboardConfigData]);
+
+  const { showAdminDashboard } = useAdminDashboardNavItems();
 
   const baseMenuItems: (Required<
     Pick<NavItem<RootPermissionsFragment>, 'path'>
@@ -57,7 +57,7 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
     })[] = useMemo(() => {
     return [
       {
-        hide: !showDashboard,
+        hide: !showUserDashboard,
         path: Routes.USER_DASHBOARD,
         id: 'navToUserDashboard',
         activeItemPathIncludes: 'dashboard',
@@ -77,15 +77,14 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
         title: 'Projects',
       },
       {
-        permissions: PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS,
         path: Routes.ADMIN,
-        permissionMode: 'any',
         id: 'navToAdmin',
         activeItemPathIncludes: 'admin',
         title: 'Admin',
+        hide: !showAdminDashboard,
       },
     ];
-  }, [showDashboard]);
+  }, [showAdminDashboard, showUserDashboard]);
 
   const activeItem = useActiveNavItem();
 

@@ -1,12 +1,23 @@
 fragment CeOpportunitySummaryFields on CeOpportunity {
   id
   name
-  categories
   status
   active
-  expiresAt
   projectId
   projectName
+  unit {
+    id
+    name
+    unitType {
+      id
+      description
+    }
+    unitGroup {
+      id
+      name
+    }
+  }
+  dateAvailable
 }
 
 fragment CeOpportunityFields on CeOpportunity {
@@ -43,6 +54,9 @@ fragment CeMatchRuleFields on CeMatchRule {
   id
   name
   ownerType
+  expression
+  projectTypes
+  funders
 }
 
 fragment CeCandidateFields on CeCandidate {
@@ -75,7 +89,13 @@ fragment CeReferralTableFields on CeReferral {
   currentSteps {
     id
     name
+    swimlane
+    assignees {
+      id
+      name
+    }
   }
+  daysOnCurrentSteps
   referredBy {
     id
     name
@@ -104,11 +124,6 @@ fragment CeReferralAdminFields on CeReferral {
     id
   }
   targetOrganizationName
-  daysOnCurrentSteps
-  currentSteps {
-    id
-    name
-  }
   updatedBy {
     id
     name
@@ -134,6 +149,7 @@ fragment ClientCeReferralTableFields on CeReferral {
 fragment CeReferralFields on CeReferral {
   ...CeReferralSummaryFields
   ...CeReferralWithSwimlanes
+  workflowTemplateName
   steps {
     ...CeReferralStepSummaryFields
   }

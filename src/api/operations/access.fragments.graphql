@@ -16,16 +16,13 @@ fragment RootPermissions on QueryAccess {
   canMergeClients # provides access to admin client merge
   canTransferEnrollments
   canEditUsersInWarehouse
+  canAdministrateCoordinatedEntry
 
   # Root Client permissions:
   canViewClients
   canEditClients # globally, determines whether user can add new clients
   canViewDob # globally, determines whether to show col header as "DOB" or "Age"
   canViewClientAlerts
-
-  # Application permissions:
-  canViewCoordinatedEntry # TODO(7409) - stop resolving this permission once we remove all references
-  canAdministrateCoordinatedEntry
 
   # Root Project permissions:
   canEditOrganization # globally, determines whether user can create organization

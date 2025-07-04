@@ -17,7 +17,7 @@ const YourReferrals = () => {
 
   return (
     <>
-      <CommonCard title='Referrals' TitleComponent='h2' sx={{ pb: 1 }}>
+      <CommonCard title='Referrals' TitleComponent='h2'>
         <GenericTableWithData<
           GetUserCeAssignedStepsQuery,
           GetUserCeAssignedStepsQueryVariables,
@@ -31,7 +31,7 @@ const YourReferrals = () => {
           paginationItemName='task'
           defaultPageSize={10}
           recordType='CeReferralStep'
-          tableProps={{ sx: { 'tbody > :not(:last-child) td': { pb: 1 } } }}
+          tableProps={{ sx: { 'tbody > :not(:last-child) td': { pb: 1.5 } } }}
           renderRow={(step) => (
             <tr key={step.id}>
               <td>

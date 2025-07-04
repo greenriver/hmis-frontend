@@ -1,7 +1,7 @@
-import { Chip, Paper } from '@mui/material';
+import { Paper } from '@mui/material';
 import React from 'react';
+import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { ColumnDef } from '@/components/elements/table/types';
-import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -17,40 +17,41 @@ export const OPPORTUNITY_COLUMNS: Record<
   string,
   ColumnDef<CeOpportunitySummaryFieldsFragment>
 > = {
-  project: {
-    header: 'Project',
-    key: 'project',
-    sticky: 'left',
-    render: 'projectName',
+  unitName: {
+    header: 'Unit',
+    key: 'unit',
+    render: ({ unit, name }) => unit?.name || name,
   },
-  name: {
-    header: 'Opportunity',
-    key: 'name',
-    sticky: 'left',
-    render: 'name',
+  unitType: {
+    header: 'Unit Type',
+    key: 'unitType',
+    render: ({ unit }) => unit?.unitType?.description,
   },
-  type: {
-    header: 'Type',
-    key: 'type',
-    render: (row) => {
-      return row.categories.map((category) => (
-        <Chip key={category} size='small' variant='outlined' label={category} />
-      ));
-    },
+  unitGroup: {
+    header: 'Unit Group',
+    key: 'unitGroup',
+    render: ({ unit }) => unit?.unitGroup?.name,
+  },
+  // TODO: eligible clients count
+  dateAvailable: {
+    header: 'Date Available',
+    key: 'dateAvailable',
+    render: ({ dateAvailable }) => (
+      <DateWithRelativeTooltip dateString={dateAvailable} />
+    ),
   },
 };
 
 const COLUMNS: ColumnDef<CeOpportunitySummaryFieldsFragment>[] = [
-  OPPORTUNITY_COLUMNS.name,
-  OPPORTUNITY_COLUMNS.type,
+  OPPORTUNITY_COLUMNS.unitName,
+  OPPORTUNITY_COLUMNS.dateAvailable,
 ];
 
-interface Props {}
-const ProjectOpportunitiesTable: React.FC<Props> = ({}) => {
-  const { projectId } = useSafeParams() as {
-    projectId: string;
-  };
+interface Props {
+  projectId: string;
+}
 
+const ProjectOpportunitiesTable: React.FC<Props> = ({ projectId }) => {
   return (
     <Paper>
       <GenericTableWithData<
@@ -67,12 +68,13 @@ const ProjectOpportunitiesTable: React.FC<Props> = ({}) => {
         }}
         queryDocument={GetProjectCeOpportunitiesDocument}
         pagePath='project.ceOpportunities'
-        noData='No opportunities'
-        paginationItemName='opportunities'
+        noData='No available units'
+        defaultPageSize={25}
+        paginationItemName='unit'
         rowLinkTo={(row) =>
-          generateSafePath(ProjectDashboardRoutes.OPPORTUNITY, {
+          generateSafePath(ProjectDashboardRoutes.UNIT, {
             projectId,
-            opportunityId: row.id,
+            unitId: row.unit?.id,
           })
         }
         rowActionTitle='View Opportunity'

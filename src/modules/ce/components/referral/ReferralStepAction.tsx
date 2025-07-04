@@ -52,10 +52,12 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
 
   if (error) throw error;
 
+  const buttonSx = { width: '116px' };
+
   if (status === CeReferralStepStatus.Available && step.access.canPerformStep) {
     return (
       <LoadingButton
-        sx={{ width: '116px' }}
+        sx={buttonSx}
         loading={loading}
         onClick={() => startStepMutation()}
         aria-label={`Start step: ${name}`}
@@ -70,7 +72,7 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
     // so from the user's perspective, whether or not the step is "started" isn't very meaningful.
     return (
       <ButtonLink
-        sx={{ width: '116px' }}
+        sx={buttonSx}
         variant='contained'
         to={path}
         aria-label={`Start step: ${name}`}
@@ -83,7 +85,7 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
   if (status === CeReferralStepStatus.Completed) {
     return (
       <ButtonLink
-        sx={{ width: '116px' }}
+        sx={buttonSx}
         aria-label={`View step: ${name}`}
         to={path}
         color='grayscale'
@@ -94,7 +96,11 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
   }
 
   // Either the step is unavailable, or the current user does not have permission to start it
-  return <Button disabled>Start</Button>;
+  return (
+    <Button sx={buttonSx} disabled>
+      Start
+    </Button>
+  );
 };
 
 export default ReferralStepAction;
