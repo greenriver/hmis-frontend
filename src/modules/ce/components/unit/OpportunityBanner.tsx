@@ -33,8 +33,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
 
   const clientName = useMemo(() => {
     if (referral) return clientNameFromRecordWithOptionalClient(referral);
-    if (topCandidate)
-      return clientNameFromRecordWithOptionalClient(topCandidate);
+    if (topCandidate) return topCandidate.clientName;
   }, [referral, topCandidate]);
 
   const action = useMemo(() => {
