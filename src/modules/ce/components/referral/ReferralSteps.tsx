@@ -2,6 +2,7 @@ import { Divider, Stack, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import NotFound from '@/components/pages/NotFound';
 import useSearchParamsState from '@/hooks/useSearchParamState';
+import ReferralMetadataHeader from '@/modules/ce/components/referral/ReferralMetadataHeader';
 import { useReferralContext } from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStepCard from '@/modules/ce/components/referral/ReferralStepCard';
 import ReferralWayfinder from '@/modules/ce/components/referral/ReferralWayfinder';
@@ -46,17 +47,12 @@ const ReferralSteps: React.FC<Props> = () => {
     };
   }, [completed, open, unavailable]);
 
-  const totalSteps = referral?.steps.length;
-
   if (!referral) return <NotFound />;
 
   return (
     <>
       <Stack gap={4}>
-        <Typography variant='h4' component='h2'>
-          All Referral Tasks ({totalSteps})
-        </Typography>
-
+        {open.length === 0 && <ReferralMetadataHeader referral={referral} />}
         {Object.entries(taskMap).map(([key, steps]) => {
           if (steps.length === 0) return null;
 
@@ -68,6 +64,9 @@ const ReferralSteps: React.FC<Props> = () => {
                 </Typography>
                 <Divider sx={{ flexGrow: 1 }} />
               </Stack>
+              {key === 'Open' && open.length > 0 && (
+                <ReferralMetadataHeader referral={referral} />
+              )}
               {steps.map((s) => (
                 <ReferralStepCard
                   key={s.id}

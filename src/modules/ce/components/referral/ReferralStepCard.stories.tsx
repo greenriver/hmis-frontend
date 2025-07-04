@@ -55,6 +55,7 @@ const mockReferral: CeReferralFieldsFragment = {
     projectName: 'Project ABC',
     dateAvailable: '2025-01-01',
   },
+  createdAt: '2023-10-01T12:00:00Z',
   steps: [],
   swimlanes: [],
   auditEvents: {

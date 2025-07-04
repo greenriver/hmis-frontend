@@ -1,4 +1,3 @@
-import { Button } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -89,18 +88,15 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
         aria-label={`View step: ${name}`}
         to={path}
         color='grayscale'
+        variant='contained'
       >
-        View
+        Review
       </ButtonLink>
     );
   }
 
   // Either the step is unavailable, or the current user does not have permission to start it
-  return (
-    <Button sx={buttonSx} disabled>
-      Start
-    </Button>
-  );
+  return null;
 };
 
 export default ReferralStepAction;
