@@ -176,13 +176,10 @@ fragment CeReferralDetailFields on CeReferral {
       canViewEnrollmentDetails
     }
   }
-  # TODO(#7591) resolve additional details related to eligibility
   currentMatchValues {
     id
     fieldName
     fieldValue
-    # field is referenced by ruleId
-    # field is referenced by ruleName
   }
 }
 

@@ -161,7 +161,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
   }, [referral]);
 
   return (
-    <Stack p={2} gap={2} sx={{ backgroundColor: 'background.default' }}>
+    <Stack p={2} gap={2} sx={{ backgroundColor: 'background.default', mb: 6 }}>
       <CommonCard title='Referral Details' padContent={false}>
         <CommonDetailGrid rows={referralDetails} />
       </CommonCard>
