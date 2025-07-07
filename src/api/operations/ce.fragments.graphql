@@ -181,6 +181,12 @@ fragment CeReferralDetailFields on CeReferral {
     fieldName
     fieldValue
   }
+  opportunity {
+    id
+    eligibilityRequirements {
+      ...CeMatchRuleFields
+    }
+  }
 }
 
 fragment CeReferralNoteFields on CeReferralNote {

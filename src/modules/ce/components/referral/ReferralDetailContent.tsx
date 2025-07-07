@@ -1,6 +1,7 @@
 import { Stack } from '@mui/system';
 import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
+import { CommonUnorderedList } from '@/components/CommonUnorderedList';
 import CommonCard from '@/components/elements/CommonCard';
 import CommonDetailGrid, {
   CommonDetailGridItemRow,
@@ -51,6 +52,19 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
         id: 'project',
         label: 'Project',
         value: referral.targetProjectName,
+      },
+      {
+        id: 'eligibility',
+        label: 'Eligibility Requirements',
+        value: (
+          <CommonUnorderedList>
+            {(referral.opportunity.eligibilityRequirements || []).map(
+              (rule) => (
+                <li key={rule.id}>{rule.name}</li>
+              )
+            )}
+          </CommonUnorderedList>
+        ),
       },
     ],
     [referral]

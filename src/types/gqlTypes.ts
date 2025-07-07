@@ -16806,6 +16806,19 @@ export type CeReferralDetailFieldsFragment = {
     fieldName: string;
     fieldValue?: string | null;
   }> | null;
+  opportunity: {
+    __typename?: 'CeOpportunity';
+    id: string;
+    eligibilityRequirements?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwner;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }> | null;
+  };
 };
 
 export type CeReferralNoteFieldsFragment = {
@@ -16850,6 +16863,15 @@ export type CeReferralFieldsFragment = {
     projectId: string;
     projectName: string;
     dateAvailable: string;
+    eligibilityRequirements?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwner;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }> | null;
     unit?: {
       __typename?: 'Unit';
       id: string;
@@ -18751,14 +18773,23 @@ export type SubmitCeReferralStepMutation = {
       createdAt: string;
       opportunity: {
         __typename?: 'CeOpportunity';
-        candidatesGeneratedAt?: string | null;
         id: string;
+        candidatesGeneratedAt?: string | null;
         name: string;
         status: CeOpportunityStatus;
         active: boolean;
         projectId: string;
         projectName: string;
         dateAvailable: string;
+        eligibilityRequirements?: Array<{
+          __typename?: 'CeMatchRule';
+          id: string;
+          name: string;
+          ownerType: CeMatchRuleOwner;
+          expression: string;
+          projectTypes: Array<ProjectType>;
+          funders?: Array<FundingSource> | null;
+        }> | null;
         referral?: {
           __typename?: 'CeReferral';
           id: string;
@@ -18775,15 +18806,6 @@ export type SubmitCeReferralStepMutation = {
             nameSuffix?: string | null;
           } | null;
         } | null;
-        eligibilityRequirements?: Array<{
-          __typename?: 'CeMatchRule';
-          id: string;
-          name: string;
-          ownerType: CeMatchRuleOwner;
-          expression: string;
-          projectTypes: Array<ProjectType>;
-          funders?: Array<FundingSource> | null;
-        }> | null;
         priorityScheme?: {
           __typename?: 'CeMatchRule';
           id: string;
@@ -19492,6 +19514,15 @@ export type GetCeReferralQuery = {
       projectId: string;
       projectName: string;
       dateAvailable: string;
+      eligibilityRequirements?: Array<{
+        __typename?: 'CeMatchRule';
+        id: string;
+        name: string;
+        ownerType: CeMatchRuleOwner;
+        expression: string;
+        projectTypes: Array<ProjectType>;
+        funders?: Array<FundingSource> | null;
+      }> | null;
       unit?: {
         __typename?: 'Unit';
         id: string;
@@ -46974,6 +47005,16 @@ export const ClientIdentifierFieldsFragmentDoc = gql`
     type
   }
 `;
+export const CeMatchRuleFieldsFragmentDoc = gql`
+  fragment CeMatchRuleFields on CeMatchRule {
+    id
+    name
+    ownerType
+    expression
+    projectTypes
+    funders
+  }
+`;
 export const CeReferralDetailFieldsFragmentDoc = gql`
   fragment CeReferralDetailFields on CeReferral {
     createdAt
@@ -47000,9 +47041,16 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       fieldName
       fieldValue
     }
+    opportunity {
+      id
+      eligibilityRequirements {
+        ...CeMatchRuleFields
+      }
+    }
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
+  ${CeMatchRuleFieldsFragmentDoc}
 `;
 export const CeReferralStepSummaryFieldsFragmentDoc = gql`
   fragment CeReferralStepSummaryFields on CeReferralStep {
@@ -48737,16 +48785,6 @@ export const UnitTableRowFieldsFragmentDoc = gql`
   ${ClientNameFragmentDoc}
   ${UnitGroupFieldsFragmentDoc}
   ${UnitWithCeFieldsFragmentDoc}
-`;
-export const CeMatchRuleFieldsFragmentDoc = gql`
-  fragment CeMatchRuleFields on CeMatchRule {
-    id
-    name
-    ownerType
-    expression
-    projectTypes
-    funders
-  }
 `;
 export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
