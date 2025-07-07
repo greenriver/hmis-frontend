@@ -102,6 +102,14 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       }
     }
 
+    (referral.currentMatchValues || []).forEach((matchValue) => {
+      rows.push({
+        id: `matchValue-${matchValue.fieldName}`,
+        label: matchValue.fieldName,
+        value: matchValue.fieldValue,
+      });
+    });
+
     // TODO(#7591): Dynamic display of Eligibility-related fields
     return rows;
   }, [referral]);

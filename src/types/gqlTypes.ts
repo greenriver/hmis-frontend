@@ -622,7 +622,6 @@ export type CeMatchValue = {
   fieldName: Scalars['String']['output'];
   /** String representation of the value for this field */
   fieldValue?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
 };
 
 export type CeOpportunitiesPaginated = {
@@ -16797,6 +16796,11 @@ export type CeReferralDetailFieldsFragment = {
       canViewEnrollmentDetails: boolean;
     };
   } | null;
+  currentMatchValues?: Array<{
+    __typename?: 'CeMatchValue';
+    fieldName: string;
+    fieldValue?: string | null;
+  }> | null;
 };
 
 export type CeReferralNoteFieldsFragment = {
@@ -16898,6 +16902,11 @@ export type CeReferralFieldsFragment = {
       canViewEnrollmentDetails: boolean;
     };
   } | null;
+  currentMatchValues?: Array<{
+    __typename?: 'CeMatchValue';
+    fieldName: string;
+    fieldValue?: string | null;
+  }> | null;
   auditEvents: {
     __typename?: 'CeReferralAuditEventsPaginated';
     nodesCount: number;
@@ -18858,6 +18867,11 @@ export type SubmitCeReferralStepMutation = {
           canViewEnrollmentDetails: boolean;
         };
       } | null;
+      currentMatchValues?: Array<{
+        __typename?: 'CeMatchValue';
+        fieldName: string;
+        fieldValue?: string | null;
+      }> | null;
       auditEvents: {
         __typename?: 'CeReferralAuditEventsPaginated';
         nodesCount: number;
@@ -19532,6 +19546,11 @@ export type GetCeReferralQuery = {
         canViewEnrollmentDetails: boolean;
       };
     } | null;
+    currentMatchValues?: Array<{
+      __typename?: 'CeMatchValue';
+      fieldName: string;
+      fieldValue?: string | null;
+    }> | null;
     auditEvents: {
       __typename?: 'CeReferralAuditEventsPaginated';
       nodesCount: number;
@@ -46967,6 +46986,10 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       access {
         canViewEnrollmentDetails
       }
+    }
+    currentMatchValues {
+      fieldName
+      fieldValue
     }
   }
   ${ClientNameFragmentDoc}

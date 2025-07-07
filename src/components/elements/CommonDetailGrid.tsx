@@ -74,6 +74,9 @@ export const CommonDetailGridItem: React.FC<{
         xl={4}
         sx={itemSx}
       >
+        {/* overflow-wrap: break-word; */}
+        {/* text-overflow: ellipsis;
+    overflow: hidden; */}
         <Typography fontWeight={600} variant='body2'>
           {label}
         </Typography>

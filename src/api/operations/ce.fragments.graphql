@@ -177,6 +177,10 @@ fragment CeReferralDetailFields on CeReferral {
     }
   }
   # TODO(#7591) resolve additional details related to eligibility
+  currentMatchValues {
+    fieldName
+    fieldValue
+  }
 }
 
 fragment CeReferralNoteFields on CeReferralNote {
