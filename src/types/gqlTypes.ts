@@ -618,11 +618,10 @@ export enum CeMatchRuleOwner {
 
 export type CeMatchValue = {
   __typename?: 'CeMatchValue';
-  /** Name of this field */
+  /** Human-readable label for this field */
   fieldName: Scalars['String']['output'];
   /** String representation of the value for this field */
   fieldValue?: Maybe<Scalars['String']['output']>;
-  /** Unique identifier for this match value */
   id: Scalars['ID']['output'];
   ruleId: Scalars['ID']['output'];
   ruleName: Scalars['String']['output'];

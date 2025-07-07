@@ -4184,7 +4184,7 @@
         "fields": [
           {
             "name": "fieldName",
-            "description": "Name of this field",
+            "description": "Human-readable label for this field",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -4212,7 +4212,7 @@
           },
           {
             "name": "id",
-            "description": "Unique identifier for this match value",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
