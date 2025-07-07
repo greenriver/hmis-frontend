@@ -162,6 +162,9 @@ fragment CeReferralDetailFields on CeReferral {
     id
     age
     ...ClientName
+    externalIds {
+      ...ClientIdentifierFields
+    }
   }
   sourceEnrollment {
     id

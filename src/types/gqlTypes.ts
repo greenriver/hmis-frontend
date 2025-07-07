@@ -728,6 +728,10 @@ export type CeReferral = {
   access: CeReferralAccess;
   active: Scalars['Boolean']['output'];
   auditEvents: CeReferralAuditEventsPaginated;
+  /**
+   * The client associated with this referral. This is only present if the current
+   * user otherwise has access to view this full client.
+   */
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -16772,6 +16776,14 @@ export type CeReferralDetailFieldsFragment = {
     middleName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+    externalIds: Array<{
+      __typename?: 'ExternalIdentifier';
+      id: string;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
+      type: ExternalIdentifierType;
+    }>;
   } | null;
   sourceEnrollment?: {
     __typename?: 'CeReferralSourceEnrollment';
@@ -16855,6 +16867,14 @@ export type CeReferralFieldsFragment = {
     middleName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+    externalIds: Array<{
+      __typename?: 'ExternalIdentifier';
+      id: string;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
+      type: ExternalIdentifierType;
+    }>;
   } | null;
   swimlanes: Array<{
     __typename?: 'CeReferralSwimlane';
@@ -18807,6 +18827,14 @@ export type SubmitCeReferralStepMutation = {
         middleName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+          type: ExternalIdentifierType;
+        }>;
       } | null;
       swimlanes: Array<{
         __typename?: 'CeReferralSwimlane';
@@ -19473,6 +19501,14 @@ export type GetCeReferralQuery = {
       middleName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
+        id: string;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+        type: ExternalIdentifierType;
+      }>;
     } | null;
     swimlanes: Array<{
       __typename?: 'CeReferralSwimlane';
@@ -46902,6 +46938,15 @@ export const CeReferralWithSwimlanesFragmentDoc = gql`
   }
   ${CeReferralSwimlaneFieldsFragmentDoc}
 `;
+export const ClientIdentifierFieldsFragmentDoc = gql`
+  fragment ClientIdentifierFields on ExternalIdentifier {
+    id
+    identifier
+    url
+    label
+    type
+  }
+`;
 export const CeReferralDetailFieldsFragmentDoc = gql`
   fragment CeReferralDetailFields on CeReferral {
     createdAt
@@ -46909,6 +46954,9 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       id
       age
       ...ClientName
+      externalIds {
+        ...ClientIdentifierFields
+      }
     }
     sourceEnrollment {
       id
@@ -46922,6 +46970,7 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
     }
   }
   ${ClientNameFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
 `;
 export const CeReferralStepSummaryFieldsFragmentDoc = gql`
   fragment CeReferralStepSummaryFields on CeReferralStep {
@@ -47240,15 +47289,6 @@ export const ClientSsnFieldsFragmentDoc = gql`
       canViewFullSsn
       canViewPartialSsn
     }
-  }
-`;
-export const ClientIdentifierFieldsFragmentDoc = gql`
-  fragment ClientIdentifierFields on ExternalIdentifier {
-    id
-    identifier
-    url
-    label
-    type
   }
 `;
 export const ClientSearchResultFieldsFragmentDoc = gql`

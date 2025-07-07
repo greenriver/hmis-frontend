@@ -5,6 +5,7 @@ import CommonCard from '@/components/elements/CommonCard';
 import CommonDetailGrid, {
   CommonDetailGridItemRow,
 } from '@/components/elements/CommonDetailGrid';
+import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import {
@@ -17,7 +18,10 @@ import {
   EnrollmentDashboardRoutes,
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import { CeReferralFieldsFragment } from '@/types/gqlTypes';
+import {
+  CeReferralFieldsFragment,
+  ExternalIdentifierType,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -25,20 +29,6 @@ interface Props {
 }
 
 const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
-  const linkedClientName = useMemo(
-    () => (
-      <RouterLink
-        to={generateSafePath(ClientDashboardRoutes.PROFILE, {
-          clientId: referral.clientId,
-        })}
-        openInNew
-      >
-        {clientNameFromRecordWithOptionalClient(referral)}
-      </RouterLink>
-    ),
-    [referral]
-  );
-
   const referralDetails = useMemo(
     () => [
       {
@@ -66,25 +56,55 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     [referral]
   );
 
-  const clientInformation = useMemo(
-    () => [
+  const clientInformation = useMemo(() => {
+    const rows: CommonDetailGridItemRow[] = [
       { id: 'clientId', label: 'Client ID', value: referral.clientId },
-      {
+    ];
+
+    if (referral.client) {
+      rows.push({
         id: 'clientName',
         label: 'Client Name',
-        value: linkedClientName,
-      },
-      {
+        value: (
+          <RouterLink
+            to={generateSafePath(ClientDashboardRoutes.PROFILE, {
+              clientId: referral.clientId,
+            })}
+            openInNew
+          >
+            {clientNameFromRecordWithOptionalClient(referral)}
+          </RouterLink>
+        ),
+      });
+      rows.push({
         id: 'age',
         label: 'Client Age',
-        value: isNil(referral.client?.age)
+        value: isNil(referral.client.age)
           ? 'N/A'
           : `${referral.client.age} years`,
-      },
-      // TODO(#7591): Dynamic display of Eligibility-related fields
-    ],
-    [referral, linkedClientName]
-  );
+      });
+
+      const mciIds = referral.client.externalIds.filter(
+        (eid) => eid.type === ExternalIdentifierType.MciId
+      );
+      if (mciIds.length > 0) {
+        rows.push({
+          id: 'mciId',
+          label: 'MCI ID',
+          value: (
+            <Stack>
+              {mciIds.map((mci) => (
+                <ExternalIdDisplay key={mci.identifier} value={mci} />
+              ))}
+            </Stack>
+          ),
+        });
+      }
+    }
+
+    // TODO(#7591): Dynamic display of Eligibility-related fields
+    return rows;
+  }, [referral]);
 
   const sourceEnrollmentDetails = useMemo(() => {
     if (!referral.sourceEnrollment) return null;

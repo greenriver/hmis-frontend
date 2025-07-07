@@ -5269,7 +5269,7 @@
           },
           {
             "name": "client",
-            "description": null,
+            "description": "The client associated with this referral. This is only present if the current\nuser otherwise has access to view this full client.",
             "args": [],
             "type": {
               "kind": "OBJECT",
