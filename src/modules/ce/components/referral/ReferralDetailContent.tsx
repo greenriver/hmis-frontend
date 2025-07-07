@@ -121,11 +121,15 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     // the interface will display "Requires Accessible Unit: Yes". The value will be the CURRENT value
     // for this client (as evaluated by the Match Engine), so it may no longer match the eligibility rule.
     (referral.currentMatchValues || []).forEach(
-      ({ id, fieldName, fieldValue }) => {
+      ({ id, fieldName, fieldValues }) => {
         rows.push({
           id,
           label: fieldName,
-          value: fieldValue,
+          value: (
+            <Stack>
+              {fieldValues?.map((fv) => <span key={fv}>{fv}</span>)}
+            </Stack>
+          ),
         });
       }
     );

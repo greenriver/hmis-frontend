@@ -179,7 +179,7 @@ fragment CeReferralDetailFields on CeReferral {
   currentMatchValues {
     id
     fieldName
-    fieldValue
+    fieldValues
   }
   opportunity {
     id

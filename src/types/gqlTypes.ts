@@ -620,8 +620,8 @@ export type CeMatchValue = {
   __typename?: 'CeMatchValue';
   /** Human-readable label for this field */
   fieldName: Scalars['String']['output'];
-  /** String representation of the value for this field */
-  fieldValue?: Maybe<Scalars['String']['output']>;
+  /** String representations of the value(s) for this field */
+  fieldValues: Array<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   ruleId: Scalars['ID']['output'];
   ruleName: Scalars['String']['output'];
@@ -735,7 +735,11 @@ export type CeReferral = {
    * user otherwise has access to view this full client.
    */
   client?: Maybe<Client>;
+  /** Age of client being referred. Available even if the user does not have permission to view the full client record. */
+  clientAge?: Maybe<Scalars['Int']['output']>;
   clientId: Scalars['ID']['output'];
+  /** Name of client being referred. Available even if the user does not have permission to view the full client record. */
+  clientName: Scalars['String']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
   currentMatchValues?: Maybe<Array<CeMatchValue>>;
   currentSteps?: Maybe<Array<CeReferralStep>>;
@@ -16803,7 +16807,7 @@ export type CeReferralDetailFieldsFragment = {
     __typename?: 'CeMatchValue';
     id: string;
     fieldName: string;
-    fieldValue?: string | null;
+    fieldValues: Array<string>;
   }> | null;
   opportunity: {
     __typename?: 'CeOpportunity';
@@ -16932,7 +16936,7 @@ export type CeReferralFieldsFragment = {
     __typename?: 'CeMatchValue';
     id: string;
     fieldName: string;
-    fieldValue?: string | null;
+    fieldValues: Array<string>;
   }> | null;
   auditEvents: {
     __typename?: 'CeReferralAuditEventsPaginated';
@@ -18898,7 +18902,7 @@ export type SubmitCeReferralStepMutation = {
         __typename?: 'CeMatchValue';
         id: string;
         fieldName: string;
-        fieldValue?: string | null;
+        fieldValues: Array<string>;
       }> | null;
       auditEvents: {
         __typename?: 'CeReferralAuditEventsPaginated';
@@ -19587,7 +19591,7 @@ export type GetCeReferralQuery = {
       __typename?: 'CeMatchValue';
       id: string;
       fieldName: string;
-      fieldValue?: string | null;
+      fieldValues: Array<string>;
     }> | null;
     auditEvents: {
       __typename?: 'CeReferralAuditEventsPaginated';
@@ -47038,7 +47042,7 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
     currentMatchValues {
       id
       fieldName
-      fieldValue
+      fieldValues
     }
     opportunity {
       id
