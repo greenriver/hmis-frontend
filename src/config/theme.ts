@@ -16,6 +16,7 @@ declare module '@mui/material/Alert' {
     low: true;
     medium: true;
     high: true;
+    primary: true;
   }
 }
 
@@ -512,6 +513,14 @@ const createThemeOptions = (theme: Theme) => ({
         outlined: { backgroundColor: '#fff' },
       },
       variants: [
+        {
+          props: { color: 'primary' },
+          style: theme.unstable_sx({
+            borderColor: 'primary.300',
+            backgroundColor: 'primary.surface',
+            color: 'text.primary',
+          }),
+        },
         {
           // styles that are shared across all withHeader alerts
           props: { variant: 'withHeader' },
