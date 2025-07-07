@@ -102,15 +102,21 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       }
     }
 
-    (referral.currentMatchValues || []).forEach((matchValue) => {
-      rows.push({
-        id: `matchValue-${matchValue.fieldName}`,
-        label: matchValue.fieldName,
-        value: matchValue.fieldValue,
-      });
-    });
+    // Display current "match values", meaning fields that are referenced by
+    // any of this referral's eligibility or prioritization rules.
+    // For example if the rule is "cde.custom_assessment.requires_accessible_unit = 'Yes'", then
+    // the interface will display "Requires Accessible Unit: Yes". The value will be the CURRENT value
+    // for this client (as evaluated by the Match Engine), so it may no longer match the eligibility rule.
+    (referral.currentMatchValues || []).forEach(
+      ({ id, fieldName, fieldValue }) => {
+        rows.push({
+          id,
+          label: fieldName,
+          value: fieldValue,
+        });
+      }
+    );
 
-    // TODO(#7591): Dynamic display of Eligibility-related fields
     return rows;
   }, [referral]);
 

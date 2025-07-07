@@ -622,6 +622,10 @@ export type CeMatchValue = {
   fieldName: Scalars['String']['output'];
   /** String representation of the value for this field */
   fieldValue?: Maybe<Scalars['String']['output']>;
+  /** Unique identifier for this match value */
+  id: Scalars['ID']['output'];
+  ruleId: Scalars['ID']['output'];
+  ruleName: Scalars['String']['output'];
 };
 
 export type CeOpportunitiesPaginated = {
@@ -16798,6 +16802,7 @@ export type CeReferralDetailFieldsFragment = {
   } | null;
   currentMatchValues?: Array<{
     __typename?: 'CeMatchValue';
+    id: string;
     fieldName: string;
     fieldValue?: string | null;
   }> | null;
@@ -16904,6 +16909,7 @@ export type CeReferralFieldsFragment = {
   } | null;
   currentMatchValues?: Array<{
     __typename?: 'CeMatchValue';
+    id: string;
     fieldName: string;
     fieldValue?: string | null;
   }> | null;
@@ -18869,6 +18875,7 @@ export type SubmitCeReferralStepMutation = {
       } | null;
       currentMatchValues?: Array<{
         __typename?: 'CeMatchValue';
+        id: string;
         fieldName: string;
         fieldValue?: string | null;
       }> | null;
@@ -19548,6 +19555,7 @@ export type GetCeReferralQuery = {
     } | null;
     currentMatchValues?: Array<{
       __typename?: 'CeMatchValue';
+      id: string;
       fieldName: string;
       fieldValue?: string | null;
     }> | null;
@@ -46988,6 +46996,7 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       }
     }
     currentMatchValues {
+      id
       fieldName
       fieldValue
     }
