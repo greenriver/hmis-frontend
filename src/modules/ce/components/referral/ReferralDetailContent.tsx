@@ -1,8 +1,7 @@
 import { Stack } from '@mui/system';
 import { isNil } from 'lodash-es';
-import { useMemo } from 'react';
-import { CommonUnstyledList } from '@/components/CommonUnstyledList';
-import CommonCard from '@/components/elements/CommonCard';
+import { useMemo, useState } from 'react';
+import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
 import CommonDetailGrid, {
   CommonDetailGridItemRow,
 } from '@/components/elements/CommonDetailGrid';
@@ -30,6 +29,19 @@ interface Props {
 }
 
 const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
+  const [cardStates, setCardStates] = useState({
+    referralDetails: true,
+    clientDetails: true,
+    sourceEnrollmentDetails: false,
+  });
+
+  const toggleCard = (cardKey: keyof typeof cardStates) => {
+    setCardStates((prev) => ({
+      ...prev,
+      [cardKey]: !prev[cardKey],
+    }));
+  };
+
   const referralDetails = useMemo(
     () => [
       {
@@ -53,24 +65,11 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
         label: 'Project',
         value: referral.targetProjectName,
       },
-      {
-        id: 'eligibility',
-        label: 'Eligibility Requirements',
-        value: (
-          <CommonUnstyledList sx={{ li: { py: 0.5 } }}>
-            {(referral.opportunity.eligibilityRequirements || []).map(
-              (rule) => (
-                <li key={rule.id}>{rule.name}</li>
-              )
-            )}
-          </CommonUnstyledList>
-        ),
-      },
     ],
     [referral]
   );
 
-  const clientInformation = useMemo(() => {
+  const clientDetails = useMemo(() => {
     const rows: CommonDetailGridItemRow[] = [
       { id: 'clientId', label: 'Client ID', value: referral.clientId },
     ];
@@ -176,16 +175,31 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
 
   return (
     <Stack p={2} gap={2} sx={{ backgroundColor: 'background.default', mb: 6 }}>
-      <CommonCard title='Referral Details' padContent={false}>
+      <CommonCollapsibleCard
+        title='Referral Details'
+        open={cardStates.referralDetails}
+        onClick={() => toggleCard('referralDetails')}
+        padContent={false}
+      >
         <CommonDetailGrid rows={referralDetails} />
-      </CommonCard>
-      <CommonCard title='Client Information' padContent={false}>
-        <CommonDetailGrid rows={clientInformation} />
-      </CommonCard>
+      </CommonCollapsibleCard>
+      <CommonCollapsibleCard
+        title='Client Details'
+        open={cardStates.clientDetails}
+        onClick={() => toggleCard('clientDetails')}
+        padContent={false}
+      >
+        <CommonDetailGrid rows={clientDetails} />
+      </CommonCollapsibleCard>
       {sourceEnrollmentDetails && (
-        <CommonCard title='Source Enrollment' padContent={false}>
+        <CommonCollapsibleCard
+          title='Source Enrollment Details'
+          open={cardStates.sourceEnrollmentDetails}
+          onClick={() => toggleCard('sourceEnrollmentDetails')}
+          padContent={false}
+        >
           <CommonDetailGrid rows={sourceEnrollmentDetails} />
-        </CommonCard>
+        </CommonCollapsibleCard>
       )}
     </Stack>
   );
