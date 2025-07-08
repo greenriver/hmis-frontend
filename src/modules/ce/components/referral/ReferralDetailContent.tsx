@@ -33,6 +33,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     referralDetails: true,
     clientDetails: true,
     sourceEnrollmentDetails: false,
+    eligibilityRequirementsDetails: false,
   });
 
   const toggleCard = (cardKey: keyof typeof cardStates) => {
@@ -177,8 +178,28 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     return rows;
   }, [referral]);
 
+  const eligibilityRequirementsDetails = useMemo(() => {
+    if (!referral.opportunity.eligibilityRequirements) return null;
+    const { eligibilityRequirements } = referral.opportunity;
+
+    return eligibilityRequirements.map((requirement) => ({
+      id: requirement.id,
+      label: null,
+      value: requirement.name,
+      fullWidth: true,
+    }));
+  }, [referral]);
+
   return (
-    <Stack p={2} gap={2} sx={{ backgroundColor: 'background.default', mb: 6 }}>
+    <Stack
+      p={2}
+      gap={2}
+      sx={{
+        backgroundColor: 'background.default',
+        mb: 6,
+        '.MuiTypography-h5': { fontSize: 16 }, // custom: reduce font size of CommonCard header
+      }}
+    >
       <CommonCollapsibleCard
         title='Referral Details'
         open={cardStates.referralDetails}
@@ -203,6 +224,16 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
           padContent={false}
         >
           <CommonDetailGrid rows={sourceEnrollmentDetails} />
+        </CommonCollapsibleCard>
+      )}
+      {eligibilityRequirementsDetails && (
+        <CommonCollapsibleCard
+          title='Eligibility Requirements'
+          open={cardStates.eligibilityRequirementsDetails}
+          onClick={() => toggleCard('eligibilityRequirementsDetails')}
+          padContent={false}
+        >
+          <CommonDetailGrid rows={eligibilityRequirementsDetails} />
         </CommonCollapsibleCard>
       )}
     </Stack>

@@ -34,10 +34,10 @@ export const CommonDetailGridContainer: React.FC<{
               borderTopStyle: 'solid',
             }
           : {},
-        '> .MuiGrid-item:nth-last-of-type(2)': {
+        '> .CommonDetailGridLabel:nth-last-of-type(2)': {
           border: 'unset',
         },
-        '> .MuiGrid-item:nth-last-of-type(1)': {
+        '> .CommonDetailGridValue:nth-last-of-type(1)': {
           border: 'unset',
         },
       }}
@@ -51,7 +51,8 @@ export const CommonDetailGridItem: React.FC<{
   label: string | ReactNode;
   children: ReactNode;
   sx?: SxProps;
-}> = ({ label, children, sx = {} }) => {
+  fullWidth?: boolean;
+}> = ({ label, children, sx = {}, fullWidth }) => {
   const labelId = useId();
   const itemSx = {
     py: 1.5,
@@ -61,33 +62,39 @@ export const CommonDetailGridItem: React.FC<{
     ...sx,
   };
 
+  const valueBreakPoints = fullWidth
+    ? { xs: 12 }
+    : {
+        xs: 12,
+        md: 8,
+        lg: 7,
+        xl: 8,
+      };
+
   return (
     <>
-      <Grid
-        key='label'
-        className='CommonDetailGridLabel'
-        id={labelId}
-        item
-        xs={12}
-        md={4}
-        lg={5}
-        xl={4}
-        sx={itemSx}
-      >
-        {/* overflow-wrap: break-word; */}
-        {/* text-overflow: ellipsis;
-    overflow: hidden; */}
-        <Typography fontWeight={600} variant='body2'>
-          {label}
-        </Typography>
-      </Grid>
+      {!fullWidth && (
+        <Grid
+          key='label'
+          className='CommonDetailGridLabel'
+          id={labelId}
+          item
+          xs={12}
+          md={4}
+          lg={5}
+          xl={4}
+          sx={itemSx}
+        >
+          <Typography fontWeight={600} variant='body2'>
+            {label}
+          </Typography>
+        </Grid>
+      )}
       <Grid
         key='value'
+        className='CommonDetailGridValue'
         item
-        xs={12}
-        md={8}
-        lg={7}
-        xl={8}
+        {...valueBreakPoints}
         sx={itemSx}
         aria-labelledby={labelId}
       >
@@ -103,14 +110,15 @@ export type CommonDetailGridItemRow = {
   id: string;
   label: ReactNode;
   value: ReactNode;
+  fullWidth?: boolean; // If true, the value will take the full width of the grid item
 };
 interface Props {
   rows: CommonDetailGridItemRow[];
 }
 const CommonDetailGrid: React.FC<Props> = ({ rows }) => (
   <CommonDetailGridContainer>
-    {rows.map(({ id, label, value }) => (
-      <CommonDetailGridItem label={label} key={id}>
+    {rows.map(({ id, label, value, fullWidth }) => (
+      <CommonDetailGridItem label={label} key={id} fullWidth={fullWidth}>
         {value}
       </CommonDetailGridItem>
     ))}
