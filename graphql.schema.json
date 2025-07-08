@@ -5313,7 +5313,7 @@
           },
           {
             "name": "client",
-            "description": "The client associated with this referral. This is only present if the current\nuser otherwise has access to view this full client.",
+            "description": "The full client record, if the user has permission to view it.",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -5325,7 +5325,7 @@
           },
           {
             "name": "clientAge",
-            "description": "Age of client being referred. Available even if the user does not have permission to view the full client record.",
+            "description": "The age of the referred client. Always available, even without full client record access.",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -5353,7 +5353,7 @@
           },
           {
             "name": "clientName",
-            "description": "Name of client being referred. Available even if the user does not have permission to view the full client record.",
+            "description": "The name of the referred client. Always available, even without full client record access.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -5385,7 +5385,7 @@
           },
           {
             "name": "currentMatchValues",
-            "description": null,
+            "description": "Eligibility-related field values. May expose data beyond normal permissions.",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -5522,7 +5522,7 @@
           },
           {
             "name": "sourceEnrollment",
-            "description": null,
+            "description": "Limited details about the source enrollment. Available even without full access to the source record.",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -5598,7 +5598,7 @@
           },
           {
             "name": "targetEnrollment",
-            "description": null,
+            "description": "Target enrollment, if the user has permission to view it.",
             "args": [],
             "type": {
               "kind": "OBJECT",

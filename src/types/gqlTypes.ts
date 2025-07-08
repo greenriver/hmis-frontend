@@ -730,17 +730,15 @@ export type CeReferral = {
   access: CeReferralAccess;
   active: Scalars['Boolean']['output'];
   auditEvents: CeReferralAuditEventsPaginated;
-  /**
-   * The client associated with this referral. This is only present if the current
-   * user otherwise has access to view this full client.
-   */
+  /** The full client record, if the user has permission to view it. */
   client?: Maybe<Client>;
-  /** Age of client being referred. Available even if the user does not have permission to view the full client record. */
+  /** The age of the referred client. Always available, even without full client record access. */
   clientAge?: Maybe<Scalars['Int']['output']>;
   clientId: Scalars['ID']['output'];
-  /** Name of client being referred. Available even if the user does not have permission to view the full client record. */
+  /** The name of the referred client. Always available, even without full client record access. */
   clientName: Scalars['String']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
+  /** Eligibility-related field values. May expose data beyond normal permissions. */
   currentMatchValues?: Maybe<Array<CeMatchValue>>;
   currentSteps?: Maybe<Array<CeReferralStep>>;
   daysOnCurrentSteps?: Maybe<Scalars['Int']['output']>;
@@ -748,10 +746,12 @@ export type CeReferral = {
   notes: CeReferralNotesPaginated;
   opportunity: CeOpportunity;
   referredBy?: Maybe<ApplicationUser>;
+  /** Limited details about the source enrollment. Available even without full access to the source record. */
   sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
   status: CeReferralStatus;
   steps: Array<CeReferralStep>;
   swimlanes: Array<CeReferralSwimlane>;
+  /** Target enrollment, if the user has permission to view it. */
   targetEnrollment?: Maybe<Enrollment>;
   targetOrganizationName: Scalars['String']['output'];
   targetProjectId: Scalars['ID']['output'];
