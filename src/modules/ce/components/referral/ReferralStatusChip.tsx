@@ -1,17 +1,30 @@
 import { Chip, ChipProps } from '@mui/material';
 import React from 'react';
 import { InProgressIcon } from '@/components/elements/SemanticIcons';
-import { CeReferralStatus } from '@/types/gqlTypes';
+import { CeReferralFieldsFragment, CeReferralStatus } from '@/types/gqlTypes';
 
 interface Props {
-  status: CeReferralStatus;
+  referral: Pick<CeReferralFieldsFragment, 'status' | 'customStatus'>;
   size?: ChipProps['size'];
 }
-const ReferralStatusChip: React.FC<Props> = ({ status, size }) => {
+const ReferralStatusChip: React.FC<Props> = ({ referral, size }) => {
+  const { status, customStatus } = referral;
+
   const baseChipProps: ChipProps = {
     variant: 'status',
     size,
   };
+
+  if (customStatus) {
+    return (
+      <Chip
+        label={customStatus.name}
+        color='primary'
+        icon={<InProgressIcon />}
+        {...baseChipProps}
+      />
+    );
+  }
 
   switch (status) {
     case CeReferralStatus.Initialized:

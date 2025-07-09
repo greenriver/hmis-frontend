@@ -51,7 +51,7 @@ export const REFERRAL_COLUMNS: Record<
       referral:
         | CeReferralTableFieldsFragment
         | ClientCeReferralTableFieldsFragment
-    ) => <ReferralStatusChip status={referral.status} size='small' />,
+    ) => <ReferralStatusChip referral={referral} size='small' />,
     key: 'status',
   },
   currentSteps: {

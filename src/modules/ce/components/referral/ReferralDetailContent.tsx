@@ -25,9 +25,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
             {
               id: 'status',
               label: 'Referral Status',
-              value: (
-                <ReferralStatusChip status={referral.status} size='small' />
-              ),
+              value: <ReferralStatusChip referral={referral} size='small' />,
             },
             { id: 'id', label: 'Referral ID', value: referral.id },
             {
