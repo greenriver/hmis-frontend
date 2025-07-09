@@ -1,0 +1,8 @@
+mutation FetchAhaScore($clientId: ID!) {
+  ahaScore(clientId: $clientId) {
+    score
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

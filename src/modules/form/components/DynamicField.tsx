@@ -46,6 +46,7 @@ import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import Uploader from '@/components/elements/upload/Uploader';
 import useAuth from '@/modules/auth/hooks/useAuth';
+import AhaScore from '@/modules/external/aha/components/AhaScore';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
@@ -177,6 +178,16 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         {...commonInputProps}
         disabled={false}
         handlers={handlers}
+      />
+    );
+  }
+  if (item.component === Component.Aha) {
+    return (
+      <AhaScore
+        value={value}
+        onChange={onChangeValue}
+        handlers={handlers}
+        {...commonInputProps}
       />
     );
   }
