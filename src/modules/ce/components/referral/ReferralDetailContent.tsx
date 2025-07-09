@@ -121,8 +121,9 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     // For example if the rule is "cde.custom_assessment.requires_accessible_unit = 'Yes'", then
     // the interface will display "Requires Accessible Unit: Yes". The value will be the CURRENT value
     // for this client (as evaluated by the Match Engine), so it may no longer match the eligibility rule.
-    (referral.currentMatchValues || []).forEach(
-      ({ id, fieldName, fieldValues }) => {
+    (referral.currentMatchValues || [])
+      .filter(({ fieldName }) => fieldName.toLowerCase() !== 'current age') // exclude "Current Age" as it is redundant with the age field
+      .forEach(({ id, fieldName, fieldValues }) => {
         rows.push({
           id,
           label: fieldName,
@@ -132,8 +133,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
             </Stack>
           ),
         });
-      }
-    );
+      });
 
     return rows;
   }, [referral]);
