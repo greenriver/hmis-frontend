@@ -15,32 +15,25 @@ const ReferralStatusChip: React.FC<Props> = ({ referral, size }) => {
     size,
   };
 
-  if (customStatus) {
-    return (
-      <Chip
-        label={customStatus.name}
-        color='primary'
-        icon={<InProgressIcon />}
-        {...baseChipProps}
-      />
-    );
-  }
-
   switch (status) {
     case CeReferralStatus.Initialized:
     case CeReferralStatus.InProgress:
       return (
         <Chip
-          label='In Progress'
+          label={customStatus?.name || 'In Progress'}
           color='primary'
           icon={<InProgressIcon />}
           {...baseChipProps}
         />
       );
     case CeReferralStatus.Accepted:
-      return <Chip label='Accepted' {...baseChipProps} />;
+      return (
+        <Chip label={customStatus?.name || 'Accepted'} {...baseChipProps} />
+      );
     case CeReferralStatus.Rejected:
-      return <Chip label='Declined' {...baseChipProps} />;
+      return (
+        <Chip label={customStatus?.name || 'Declined'} {...baseChipProps} />
+      );
     default:
       return '';
   }
