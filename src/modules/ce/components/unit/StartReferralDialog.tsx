@@ -54,6 +54,7 @@ const StartReferralDialog: React.FC<Props> = ({
 
   const handleClose = useCallback(() => {
     setErrorState(emptyErrorState);
+    setSelectedEnrollmentId(undefined);
     onClose();
   }, [onClose]);
 
