@@ -169,7 +169,6 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       id: requirement.id,
       label: null,
       value: requirement.name,
-      fullWidth: true,
     }));
   }, [referral]);
 

@@ -48,11 +48,11 @@ export const CommonDetailGridContainer: React.FC<{
 };
 
 export const CommonDetailGridItem: React.FC<{
-  label: string | ReactNode;
+  label: string | ReactNode | null; // if null, children take up full width
   children: ReactNode;
   sx?: SxProps;
   fullWidth?: boolean;
-}> = ({ label, children, sx = {}, fullWidth }) => {
+}> = ({ label, children, sx = {} }) => {
   const labelId = useId();
   const itemSx = {
     py: 1.5,
@@ -62,6 +62,7 @@ export const CommonDetailGridItem: React.FC<{
     ...sx,
   };
 
+  const fullWidth = label === null;
   const valueBreakPoints = fullWidth
     ? { xs: 12 }
     : {
@@ -108,17 +109,16 @@ export const CommonDetailGridItem: React.FC<{
 
 export type CommonDetailGridItemRow = {
   id: string;
-  label: ReactNode;
+  label: ReactNode | null; // if null, value will take up full width
   value: ReactNode;
-  fullWidth?: boolean; // If true, the value will take the full width of the grid item
 };
 interface Props {
   rows: CommonDetailGridItemRow[];
 }
 const CommonDetailGrid: React.FC<Props> = ({ rows }) => (
   <CommonDetailGridContainer>
-    {rows.map(({ id, label, value, fullWidth }) => (
-      <CommonDetailGridItem label={label} key={id} fullWidth={fullWidth}>
+    {rows.map(({ id, label, value }) => (
+      <CommonDetailGridItem label={label} key={id}>
         {value}
       </CommonDetailGridItem>
     ))}

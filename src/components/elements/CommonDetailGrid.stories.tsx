@@ -17,10 +17,9 @@ export const Default: Story = {
       { id: '4', label: 'Label 4', value: 'Value 4' },
       {
         id: '5',
-        label: 'Label 5',
+        label: null,
         value:
           'This is full width row where the value takes up the entire row, and the label is not displayed.',
-        fullWidth: true,
       },
       { id: '6', label: 'Label 6', value: 'Value 6' },
       { id: '7', label: 'Label 7', value: 'Value 7' },
