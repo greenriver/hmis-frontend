@@ -8,11 +8,7 @@ import CommonDetailGrid, {
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
-import {
-  clientNameFromRecordWithOptionalClient,
-  entryExitRange,
-  parseAndFormatDate,
-} from '@/modules/hmis/hmisUtil';
+import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
@@ -71,34 +67,35 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
   );
 
   const clientDetails = useMemo(() => {
-    const rows: CommonDetailGridItemRow[] = [
-      { id: 'clientId', label: 'Client ID', value: referral.clientId },
-    ];
+    const { clientId, clientName, clientAge, client } = referral;
 
-    if (referral.client) {
-      rows.push({
+    const rows: CommonDetailGridItemRow[] = [
+      { id: 'clientId', label: 'Client ID', value: clientId },
+      {
         id: 'clientName',
         label: 'Client Name',
-        value: (
+        value: client ? (
           <RouterLink
             to={generateSafePath(ClientDashboardRoutes.PROFILE, {
               clientId: referral.clientId,
             })}
             openInNew
           >
-            {clientNameFromRecordWithOptionalClient(referral)}
+            {clientName}
           </RouterLink>
+        ) : (
+          clientName
         ),
-      });
-      rows.push({
+      },
+      {
         id: 'age',
         label: 'Client Age',
-        value: isNil(referral.client.age)
-          ? 'N/A'
-          : `${referral.client.age} years`,
-      });
+        value: isNil(clientAge) ? 'N/A' : `${clientAge} years`,
+      },
+    ];
 
-      const mciIds = referral.client.externalIds.filter(
+    if (client) {
+      const mciIds = client.externalIds.filter(
         (eid) => eid.type === ExternalIdentifierType.MciId
       );
       if (mciIds.length > 0) {

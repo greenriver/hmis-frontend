@@ -71,10 +71,7 @@ fragment CeReferralSummaryFields on CeReferral {
   status
   active
   clientId
-  client {
-    id
-    ...ClientName
-  }
+  clientName
 }
 
 fragment CeReferralTableFields on CeReferral {
@@ -121,6 +118,9 @@ fragment CeReferralAdminFields on CeReferral {
   targetEnrollment {
     id
   }
+  client {
+    id
+  }
   targetOrganizationName
   updatedBy {
     id
@@ -158,10 +158,10 @@ fragment CeReferralAuditEventFields on CeReferralAuditEvent {
 # Fields for the "detail" panel on an individual referral
 fragment CeReferralDetailFields on CeReferral {
   createdAt
+  clientName
+  clientAge
   client {
     id
-    age
-    ...ClientName
     externalIds {
       ...ClientIdentifierFields
     }
