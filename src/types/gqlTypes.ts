@@ -616,6 +616,17 @@ export enum CeMatchRuleOwner {
   UnitGroup = 'UNIT_GROUP',
 }
 
+export type CeMatchValue = {
+  __typename?: 'CeMatchValue';
+  /** Human-readable label for this field */
+  fieldName: Scalars['String']['output'];
+  /** String representations of the value(s) for this field */
+  fieldValues: Array<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  ruleId: Scalars['ID']['output'];
+  ruleName: Scalars['String']['output'];
+};
+
 export type CeOpportunitiesPaginated = {
   __typename?: 'CeOpportunitiesPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -719,18 +730,28 @@ export type CeReferral = {
   access: CeReferralAccess;
   active: Scalars['Boolean']['output'];
   auditEvents: CeReferralAuditEventsPaginated;
+  /** The full client record, if the user has permission to view it. */
   client?: Maybe<Client>;
+  /** The age of the referred client. Always available, even without full client record access. */
+  clientAge?: Maybe<Scalars['Int']['output']>;
   clientId: Scalars['ID']['output'];
+  /** The name of the referred client. Always available, even without full client record access. */
+  clientName: Scalars['String']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
+  /** Eligibility-related field values. May expose data beyond normal permissions. */
+  currentMatchValues?: Maybe<Array<CeMatchValue>>;
   currentSteps?: Maybe<Array<CeReferralStep>>;
   daysOnCurrentSteps?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
   notes: CeReferralNotesPaginated;
   opportunity: CeOpportunity;
   referredBy?: Maybe<ApplicationUser>;
+  /** Limited details about the source enrollment. Available even without full access to the source record. */
+  sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
   status: CeReferralStatus;
   steps: Array<CeReferralStep>;
   swimlanes: Array<CeReferralSwimlane>;
+  /** Target enrollment, if the user has permission to view it. */
   targetEnrollment?: Maybe<Enrollment>;
   targetOrganizationName: Scalars['String']['output'];
   targetProjectId: Scalars['ID']['output'];
@@ -16460,15 +16481,7 @@ export type CeOpportunityFieldsFragment = {
     status: CeReferralStatus;
     active: boolean;
     clientId: string;
-    client?: {
-      __typename?: 'Client';
-      id: string;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    } | null;
+    clientName: string;
   } | null;
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
@@ -16572,15 +16585,7 @@ export type CeReferralSummaryFieldsFragment = {
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    lockVersion: number;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-  } | null;
+  clientName: string;
 };
 
 export type CeReferralTableFieldsFragment = {
@@ -16591,6 +16596,7 @@ export type CeReferralTableFieldsFragment = {
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
+  clientName: string;
   opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
   currentSteps?: Array<{
     __typename?: 'CeReferralStep';
@@ -16607,15 +16613,6 @@ export type CeReferralTableFieldsFragment = {
     __typename?: 'ApplicationUser';
     id: string;
     name: string;
-  } | null;
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    lockVersion: number;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
   } | null;
 };
 
@@ -16648,7 +16645,9 @@ export type CeReferralAdminFieldsFragment = {
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
+  clientName: string;
   targetEnrollment?: { __typename?: 'Enrollment'; id: string } | null;
+  client?: { __typename?: 'Client'; id: string } | null;
   updatedBy?: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -16689,15 +16688,6 @@ export type CeReferralAdminFieldsFragment = {
     id: string;
     name: string;
   } | null;
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    lockVersion: number;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-  } | null;
 };
 
 export type ClientCeReferralTableFieldsFragment = {
@@ -16708,6 +16698,7 @@ export type ClientCeReferralTableFieldsFragment = {
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
+  clientName: string;
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
@@ -16729,15 +16720,6 @@ export type ClientCeReferralTableFieldsFragment = {
     name: string;
   } | null;
   access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    lockVersion: number;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-  } | null;
 };
 
 export type CeReferralAuditEventFieldsFragment = {
@@ -16752,16 +16734,51 @@ export type CeReferralAuditEventFieldsFragment = {
 export type CeReferralDetailFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
+  clientName: string;
+  clientAge?: number | null;
   client?: {
     __typename?: 'Client';
     id: string;
-    age?: number | null;
-    lockVersion: number;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
+    externalIds: Array<{
+      __typename?: 'ExternalIdentifier';
+      id: string;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
+      type: ExternalIdentifierType;
+    }>;
   } | null;
+  sourceEnrollment?: {
+    __typename?: 'CeReferralSourceEnrollment';
+    id: string;
+    projectName: string;
+    projectType: ProjectType;
+    entryDate: string;
+    exitDate?: string | null;
+    access: {
+      __typename?: 'CeReferralSourceEnrollmentAccess';
+      canViewEnrollmentDetails: boolean;
+    };
+  } | null;
+  currentMatchValues?: Array<{
+    __typename?: 'CeMatchValue';
+    id: string;
+    fieldName: string;
+    fieldValues: Array<string>;
+  }> | null;
+  opportunity: {
+    __typename?: 'CeOpportunity';
+    id: string;
+    eligibilityRequirements?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwner;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }> | null;
+  };
 };
 
 export type CeReferralNoteFieldsFragment = {
@@ -16780,7 +16797,9 @@ export type CeReferralFieldsFragment = {
   status: CeReferralStatus;
   active: boolean;
   clientId: string;
+  clientName: string;
   createdAt: string;
+  clientAge?: number | null;
   steps: Array<{
     __typename?: 'CeReferralStep';
     id: string;
@@ -16806,6 +16825,15 @@ export type CeReferralFieldsFragment = {
     projectId: string;
     projectName: string;
     dateAvailable: string;
+    eligibilityRequirements?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwner;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }> | null;
     unit?: {
       __typename?: 'Unit';
       id: string;
@@ -16823,16 +16851,6 @@ export type CeReferralFieldsFragment = {
     id: string;
     client: { __typename?: 'Client'; id: string };
   } | null;
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    age?: number | null;
-    lockVersion: number;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-  } | null;
   swimlanes: Array<{
     __typename?: 'CeReferralSwimlane';
     id: string;
@@ -16843,6 +16861,36 @@ export type CeReferralFieldsFragment = {
       name: string;
     }>;
   }>;
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    externalIds: Array<{
+      __typename?: 'ExternalIdentifier';
+      id: string;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
+      type: ExternalIdentifierType;
+    }>;
+  } | null;
+  sourceEnrollment?: {
+    __typename?: 'CeReferralSourceEnrollment';
+    id: string;
+    projectName: string;
+    projectType: ProjectType;
+    entryDate: string;
+    exitDate?: string | null;
+    access: {
+      __typename?: 'CeReferralSourceEnrollmentAccess';
+      canViewEnrollmentDetails: boolean;
+    };
+  } | null;
+  currentMatchValues?: Array<{
+    __typename?: 'CeMatchValue';
+    id: string;
+    fieldName: string;
+    fieldValues: Array<string>;
+  }> | null;
   auditEvents: {
     __typename?: 'CeReferralAuditEventsPaginated';
     nodesCount: number;
@@ -17565,15 +17613,7 @@ export type CreateCeReferralMutation = {
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
+      clientName: string;
     };
     errors: Array<{
       __typename?: 'ValidationError';
@@ -18678,33 +18718,19 @@ export type SubmitCeReferralStepMutation = {
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
+      clientName: string;
       createdAt: string;
+      clientAge?: number | null;
       opportunity: {
         __typename?: 'CeOpportunity';
-        candidatesGeneratedAt?: string | null;
         id: string;
+        candidatesGeneratedAt?: string | null;
         name: string;
         status: CeOpportunityStatus;
         active: boolean;
         projectId: string;
         projectName: string;
         dateAvailable: string;
-        referral?: {
-          __typename?: 'CeReferral';
-          id: string;
-          status: CeReferralStatus;
-          active: boolean;
-          clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
-        } | null;
         eligibilityRequirements?: Array<{
           __typename?: 'CeMatchRule';
           id: string;
@@ -18714,6 +18740,14 @@ export type SubmitCeReferralStepMutation = {
           projectTypes: Array<ProjectType>;
           funders?: Array<FundingSource> | null;
         }> | null;
+        referral?: {
+          __typename?: 'CeReferral';
+          id: string;
+          status: CeReferralStatus;
+          active: boolean;
+          clientId: string;
+          clientName: string;
+        } | null;
         priorityScheme?: {
           __typename?: 'CeMatchRule';
           id: string;
@@ -18763,16 +18797,6 @@ export type SubmitCeReferralStepMutation = {
           canPerformStep: boolean;
         };
       }>;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        age?: number | null;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
       swimlanes: Array<{
         __typename?: 'CeReferralSwimlane';
         id: string;
@@ -18783,6 +18807,36 @@ export type SubmitCeReferralStepMutation = {
           name: string;
         }>;
       }>;
+      client?: {
+        __typename?: 'Client';
+        id: string;
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+          type: ExternalIdentifierType;
+        }>;
+      } | null;
+      sourceEnrollment?: {
+        __typename?: 'CeReferralSourceEnrollment';
+        id: string;
+        projectName: string;
+        projectType: ProjectType;
+        entryDate: string;
+        exitDate?: string | null;
+        access: {
+          __typename?: 'CeReferralSourceEnrollmentAccess';
+          canViewEnrollmentDetails: boolean;
+        };
+      } | null;
+      currentMatchValues?: Array<{
+        __typename?: 'CeMatchValue';
+        id: string;
+        fieldName: string;
+        fieldValues: Array<string>;
+      }> | null;
       auditEvents: {
         __typename?: 'CeReferralAuditEventsPaginated';
         nodesCount: number;
@@ -18893,15 +18947,7 @@ export type MarkUnitsAvailableMutation = {
           status: CeReferralStatus;
           active: boolean;
           clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
+          clientName: string;
         } | null;
         unit?: {
           __typename?: 'Unit';
@@ -18984,15 +19030,7 @@ export type MarkUnitsUnavailableMutation = {
           status: CeReferralStatus;
           active: boolean;
           clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
+          clientName: string;
         } | null;
         unit?: {
           __typename?: 'Unit';
@@ -19177,6 +19215,7 @@ export type GetProjectCeReferralsQuery = {
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
+        clientName: string;
         opportunity: { __typename?: 'CeOpportunity'; id: string; name: string };
         currentSteps?: Array<{
           __typename?: 'CeReferralStep';
@@ -19193,15 +19232,6 @@ export type GetProjectCeReferralsQuery = {
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
-        } | null;
-        client?: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
         } | null;
       }>;
     };
@@ -19230,15 +19260,7 @@ export type GetCeOpportunityQuery = {
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
+      clientName: string;
     } | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
@@ -19370,7 +19392,9 @@ export type GetCeReferralQuery = {
     status: CeReferralStatus;
     active: boolean;
     clientId: string;
+    clientName: string;
     createdAt: string;
+    clientAge?: number | null;
     steps: Array<{
       __typename?: 'CeReferralStep';
       id: string;
@@ -19396,6 +19420,15 @@ export type GetCeReferralQuery = {
       projectId: string;
       projectName: string;
       dateAvailable: string;
+      eligibilityRequirements?: Array<{
+        __typename?: 'CeMatchRule';
+        id: string;
+        name: string;
+        ownerType: CeMatchRuleOwner;
+        expression: string;
+        projectTypes: Array<ProjectType>;
+        funders?: Array<FundingSource> | null;
+      }> | null;
       unit?: {
         __typename?: 'Unit';
         id: string;
@@ -19417,16 +19450,6 @@ export type GetCeReferralQuery = {
       id: string;
       client: { __typename?: 'Client'; id: string };
     } | null;
-    client?: {
-      __typename?: 'Client';
-      id: string;
-      age?: number | null;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    } | null;
     swimlanes: Array<{
       __typename?: 'CeReferralSwimlane';
       id: string;
@@ -19437,6 +19460,36 @@ export type GetCeReferralQuery = {
         name: string;
       }>;
     }>;
+    client?: {
+      __typename?: 'Client';
+      id: string;
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
+        id: string;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+        type: ExternalIdentifierType;
+      }>;
+    } | null;
+    sourceEnrollment?: {
+      __typename?: 'CeReferralSourceEnrollment';
+      id: string;
+      projectName: string;
+      projectType: ProjectType;
+      entryDate: string;
+      exitDate?: string | null;
+      access: {
+        __typename?: 'CeReferralSourceEnrollmentAccess';
+        canViewEnrollmentDetails: boolean;
+      };
+    } | null;
+    currentMatchValues?: Array<{
+      __typename?: 'CeMatchValue';
+      id: string;
+      fieldName: string;
+      fieldValues: Array<string>;
+    }> | null;
     auditEvents: {
       __typename?: 'CeReferralAuditEventsPaginated';
       nodesCount: number;
@@ -20031,6 +20084,7 @@ export type GetClientCeReferralsQuery = {
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
+        clientName: string;
         targetProjectId: string;
         targetProjectName: string;
         targetProjectType: ProjectType;
@@ -20055,15 +20109,6 @@ export type GetClientCeReferralsQuery = {
           __typename?: 'CeReferralAccess';
           canViewTargetProject: boolean;
         };
-        client?: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        } | null;
       }>;
     };
   } | null;
@@ -20187,7 +20232,9 @@ export type GetAdminCeReferralsQuery = {
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
+      clientName: string;
       targetEnrollment?: { __typename?: 'Enrollment'; id: string } | null;
+      client?: { __typename?: 'Client'; id: string } | null;
       updatedBy?: {
         __typename?: 'ApplicationUser';
         id: string;
@@ -20227,15 +20274,6 @@ export type GetAdminCeReferralsQuery = {
         __typename?: 'ApplicationUser';
         id: string;
         name: string;
-      } | null;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
       } | null;
     }>;
   };
@@ -44811,15 +44849,7 @@ export type UnitTableRowFieldsFragment = {
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
+      clientName: string;
     } | null;
     unit?: {
       __typename?: 'Unit';
@@ -44897,15 +44927,7 @@ export type UnitDetailFieldsFragment = {
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
+      clientName: string;
     } | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
@@ -44961,15 +44983,7 @@ export type UnitWithCeFieldsFragment = {
       status: CeReferralStatus;
       active: boolean;
       clientId: string;
-      client?: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      } | null;
+      clientName: string;
     } | null;
     unit?: {
       __typename?: 'Unit';
@@ -45115,15 +45129,7 @@ export type GetUnitsQuery = {
             status: CeReferralStatus;
             active: boolean;
             clientId: string;
-            client?: {
-              __typename?: 'Client';
-              id: string;
-              lockVersion: number;
-              firstName?: string | null;
-              middleName?: string | null;
-              lastName?: string | null;
-              nameSuffix?: string | null;
-            } | null;
+            clientName: string;
           } | null;
           unit?: {
             __typename?: 'Unit';
@@ -45291,15 +45297,7 @@ export type GetUnitQuery = {
         status: CeReferralStatus;
         active: boolean;
         clientId: string;
-        client?: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        } | null;
+        clientName: string;
       } | null;
       eligibilityRequirements?: Array<{
         __typename?: 'CeMatchRule';
@@ -45419,15 +45417,7 @@ export type CreateUnitsMutation = {
           status: CeReferralStatus;
           active: boolean;
           clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
+          clientName: string;
         } | null;
         unit?: {
           __typename?: 'Unit';
@@ -45552,15 +45542,7 @@ export type UpdateUnitsMutation = {
           status: CeReferralStatus;
           active: boolean;
           clientId: string;
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
+          clientName: string;
         } | null;
         unit?: {
           __typename?: 'Unit';
@@ -46728,12 +46710,8 @@ export const CeReferralSummaryFieldsFragmentDoc = gql`
     status
     active
     clientId
-    client {
-      id
-      ...ClientName
-    }
+    clientName
   }
-  ${ClientNameFragmentDoc}
 `;
 export const CeReferralTableFieldsFragmentDoc = gql`
   fragment CeReferralTableFields on CeReferral {
@@ -46783,6 +46761,9 @@ export const CeReferralAdminFieldsFragmentDoc = gql`
     ...CeReferralTableFields
     ...CeReferralWithProjectFields
     targetEnrollment {
+      id
+    }
+    client {
       id
     }
     targetOrganizationName
@@ -46843,16 +46824,60 @@ export const CeReferralWithSwimlanesFragmentDoc = gql`
   }
   ${CeReferralSwimlaneFieldsFragmentDoc}
 `;
+export const ClientIdentifierFieldsFragmentDoc = gql`
+  fragment ClientIdentifierFields on ExternalIdentifier {
+    id
+    identifier
+    url
+    label
+    type
+  }
+`;
+export const CeMatchRuleFieldsFragmentDoc = gql`
+  fragment CeMatchRuleFields on CeMatchRule {
+    id
+    name
+    ownerType
+    expression
+    projectTypes
+    funders
+  }
+`;
 export const CeReferralDetailFieldsFragmentDoc = gql`
   fragment CeReferralDetailFields on CeReferral {
     createdAt
+    clientName
+    clientAge
     client {
       id
-      age
-      ...ClientName
+      externalIds {
+        ...ClientIdentifierFields
+      }
+    }
+    sourceEnrollment {
+      id
+      projectName
+      projectType
+      entryDate
+      exitDate
+      access {
+        canViewEnrollmentDetails
+      }
+    }
+    currentMatchValues {
+      id
+      fieldName
+      fieldValues
+    }
+    opportunity {
+      id
+      eligibilityRequirements {
+        ...CeMatchRuleFields
+      }
     }
   }
-  ${ClientNameFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
+  ${CeMatchRuleFieldsFragmentDoc}
 `;
 export const CeReferralStepSummaryFieldsFragmentDoc = gql`
   fragment CeReferralStepSummaryFields on CeReferralStep {
@@ -47171,15 +47196,6 @@ export const ClientSsnFieldsFragmentDoc = gql`
       canViewFullSsn
       canViewPartialSsn
     }
-  }
-`;
-export const ClientIdentifierFieldsFragmentDoc = gql`
-  fragment ClientIdentifierFields on ExternalIdentifier {
-    id
-    identifier
-    url
-    label
-    type
   }
 `;
 export const ClientSearchResultFieldsFragmentDoc = gql`
@@ -48596,16 +48612,6 @@ export const UnitTableRowFieldsFragmentDoc = gql`
   ${ClientNameFragmentDoc}
   ${UnitGroupFieldsFragmentDoc}
   ${UnitWithCeFieldsFragmentDoc}
-`;
-export const CeMatchRuleFieldsFragmentDoc = gql`
-  fragment CeMatchRuleFields on CeMatchRule {
-    id
-    name
-    ownerType
-    expression
-    projectTypes
-    funders
-  }
 `;
 export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {

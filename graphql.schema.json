@@ -4178,6 +4178,106 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CeMatchValue",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "fieldName",
+            "description": "Human-readable label for this field",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "fieldValues",
+            "description": "String representations of the value(s) for this field",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ruleId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ruleName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CeOpportunitiesPaginated",
         "description": null,
         "isOneOf": null,
@@ -5213,11 +5313,23 @@
           },
           {
             "name": "client",
-            "description": null,
+            "description": "The full client record, if the user has permission to view it.",
             "args": [],
             "type": {
               "kind": "OBJECT",
               "name": "Client",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clientAge",
+            "description": "The age of the referred client. Always available, even without full client record access.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
@@ -5240,6 +5352,22 @@
             "deprecationReason": null
           },
           {
+            "name": "clientName",
+            "description": "The name of the referred client. Always available, even without full client record access.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createdAt",
             "description": null,
             "args": [],
@@ -5250,6 +5378,26 @@
                 "kind": "SCALAR",
                 "name": "ISO8601DateTime",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "currentMatchValues",
+            "description": "Eligibility-related field values. May expose data beyond normal permissions.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CeMatchValue",
+                  "ofType": null
+                }
               }
             },
             "isDeprecated": false,
@@ -5373,6 +5521,18 @@
             "deprecationReason": null
           },
           {
+            "name": "sourceEnrollment",
+            "description": "Limited details about the source enrollment. Available even without full access to the source record.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CeReferralSourceEnrollment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
@@ -5438,7 +5598,7 @@
           },
           {
             "name": "targetEnrollment",
-            "description": null,
+            "description": "Target enrollment, if the user has permission to view it.",
             "args": [],
             "type": {
               "kind": "OBJECT",

@@ -22,7 +22,6 @@ import useSafeParams from '@/hooks/useSafeParams';
 import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
 
 import ReferralTimeline from '@/modules/ce/components/referral/ReferralTimeline';
-import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
@@ -131,7 +130,7 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
                 component='h1'
                 sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
               >
-                Referral for {clientNameFromRecordWithOptionalClient(referral)}
+                Referral for {referral.clientName}
               </Typography>
             </Box>
             <Stack sx={{ py: 1 }} direction='row' alignItems='center' gap={0.5}>

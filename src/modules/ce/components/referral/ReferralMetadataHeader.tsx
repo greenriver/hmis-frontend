@@ -1,7 +1,6 @@
 import { Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
-import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { CeReferralFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -41,9 +40,7 @@ const ReferralMetadataHeader: React.FC<Props> = ({ referral }) => (
     >
       <ReferralStatusChip status={referral.status} size='small' />
       <Stack direction='row' alignItems='center' gap={2.5}>
-        <DetailText>
-          {clientNameFromRecordWithOptionalClient(referral)}
-        </DetailText>
+        <DetailText>{referral.clientName}</DetailText>
         <DetailText>{referral.targetProjectName}</DetailText>
       </Stack>
     </Stack>

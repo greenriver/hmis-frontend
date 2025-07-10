@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import { reduce } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
 import AssignContactFormItem from './AssignContactFormItem';
@@ -64,21 +64,25 @@ const AssignContactsForm: React.FC<Props> = ({
   if (error) throw error;
 
   return (
-    <Stack p={2} gap={2} mt={2}>
-      {referral.swimlanes?.map((swimlane) => (
-        <AssignContactFormItem
-          key={swimlane.id}
-          swimlane={swimlane}
-          users={values[swimlane.id] || []}
-          setUsers={(userIds) => {
-            handleChangeValue(swimlane.id, userIds);
-          }}
-          projectId={projectId}
-        />
-      ))}
-      <LoadingButton onClick={() => handleSubmit()} loading={loading}>
-        Submit
-      </LoadingButton>
+    <Stack p={2} sx={{ backgroundColor: 'background.default', mb: 6 }}>
+      <Paper sx={{ p: 2 }}>
+        <Stack gap={2}>
+          {referral.swimlanes?.map((swimlane) => (
+            <AssignContactFormItem
+              key={swimlane.id}
+              swimlane={swimlane}
+              users={values[swimlane.id] || []}
+              setUsers={(userIds) => {
+                handleChangeValue(swimlane.id, userIds);
+              }}
+              projectId={projectId}
+            />
+          ))}
+          <LoadingButton onClick={() => handleSubmit()} loading={loading}>
+            Submit
+          </LoadingButton>
+        </Stack>
+      </Paper>
     </Stack>
   );
 };
