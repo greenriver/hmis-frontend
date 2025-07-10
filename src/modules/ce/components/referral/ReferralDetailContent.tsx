@@ -184,21 +184,24 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     >
       <CommonCollapsibleCard
         title='Referral Details'
-        initialOpen={true}
+        TitleComponent='h3'
         padContent={false}
+        initialOpen
       >
         <CommonDetailGrid rows={referralDetails} />
       </CommonCollapsibleCard>
       <CommonCollapsibleCard
         title='Client Details'
-        initialOpen={true}
+        TitleComponent='h3'
         padContent={false}
+        initialOpen
       >
         <CommonDetailGrid rows={clientDetails} />
       </CommonCollapsibleCard>
       {sourceEnrollmentDetails && (
         <CommonCollapsibleCard
           title='Source Enrollment Details'
+          TitleComponent='h3'
           padContent={false}
         >
           <CommonDetailGrid rows={sourceEnrollmentDetails} />
@@ -207,6 +210,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       {eligibilityRequirementsDetails && (
         <CommonCollapsibleCard
           title='Eligibility Requirements'
+          TitleComponent='h3'
           padContent={false}
         >
           <CommonDetailGrid rows={eligibilityRequirementsDetails} />
