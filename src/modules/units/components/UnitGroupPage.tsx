@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid, Paper, Stack } from '@mui/material';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import UnitManagementTable from './UnitManagementTable';
 
 import Loading from '@/components/elements/Loading';
@@ -31,6 +31,10 @@ const UnitGroupPage = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const { coordinatedEntryEnabled } = project;
+
+  const ceAvailabilityActionsEnabled = useMemo(() => {
+    return coordinatedEntryEnabled && !!unitGroup?.workflowTemplateName;
+  }, [coordinatedEntryEnabled, unitGroup?.workflowTemplateName]);
 
   // Set the breadcrumb so it says the correct name of this unit group
   useEffect(() => {
@@ -90,6 +94,7 @@ const UnitGroupPage = () => {
                   projectId={project.id}
                   unitGroupId={unitGroupId}
                   ceEnabled={coordinatedEntryEnabled}
+                  ceAvailabilityActionsEnabled={ceAvailabilityActionsEnabled}
                 />
               </Paper>
             )}

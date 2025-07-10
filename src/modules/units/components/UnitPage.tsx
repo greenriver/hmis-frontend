@@ -64,11 +64,7 @@ const UnitPage: React.FC<Props> = ({}) => {
         key: 'clients',
         contents: (
           <Paper>
-            <PrioritizedClientsTable
-              opportunityId={opportunity.id}
-              projectId={project.id}
-              status={opportunity.status}
-            />
+            <PrioritizedClientsTable opportunity={opportunity} />
           </Paper>
         ),
       });

@@ -34,14 +34,14 @@ interface Props {
   projectId: string;
   unitGroupId?: string;
   units: UnitTableRowFieldsFragment[];
-  ceEnabled?: boolean;
+  ceAvailabilityActionsEnabled?: boolean;
 }
 
 const UnitBulkActions: React.FC<Props> = ({
   projectId,
   unitGroupId,
   units,
-  ceEnabled = false,
+  ceAvailabilityActionsEnabled = false,
 }) => {
   // This component's philosophy is to let the user do what they are trying to
   // do as long as it's allowed on *any* of the units they have selected.
@@ -122,7 +122,7 @@ const UnitBulkActions: React.FC<Props> = ({
       flexWrap='wrap'
       sx={{ button: { width: 'auto' } }}
     >
-      {ceEnabled && (
+      {ceAvailabilityActionsEnabled && (
         <>
           <UnitBulkActionButton
             action='start'
