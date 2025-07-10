@@ -1,6 +1,6 @@
 import { Stack } from '@mui/system';
 import { isNil } from 'lodash-es';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import CommonCollapsibleCard from '@/components/elements/CommonCollapsibleCard';
 import CommonDetailGrid, {
   CommonDetailGridItemRow,
@@ -25,20 +25,6 @@ interface Props {
 }
 
 const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
-  const [cardStates, setCardStates] = useState({
-    referralDetails: true,
-    clientDetails: true,
-    sourceEnrollmentDetails: false,
-    eligibilityRequirementsDetails: false,
-  });
-
-  const toggleCard = (cardKey: keyof typeof cardStates) => {
-    setCardStates((prev) => ({
-      ...prev,
-      [cardKey]: !prev[cardKey],
-    }));
-  };
-
   const referralDetails = useMemo(
     () => [
       {
@@ -199,16 +185,14 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
     >
       <CommonCollapsibleCard
         title='Referral Details'
-        open={cardStates.referralDetails}
-        onClick={() => toggleCard('referralDetails')}
+        initialOpen={true}
         padContent={false}
       >
         <CommonDetailGrid rows={referralDetails} />
       </CommonCollapsibleCard>
       <CommonCollapsibleCard
         title='Client Details'
-        open={cardStates.clientDetails}
-        onClick={() => toggleCard('clientDetails')}
+        initialOpen={true}
         padContent={false}
       >
         <CommonDetailGrid rows={clientDetails} />
@@ -216,8 +200,6 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       {sourceEnrollmentDetails && (
         <CommonCollapsibleCard
           title='Source Enrollment Details'
-          open={cardStates.sourceEnrollmentDetails}
-          onClick={() => toggleCard('sourceEnrollmentDetails')}
           padContent={false}
         >
           <CommonDetailGrid rows={sourceEnrollmentDetails} />
@@ -226,8 +208,6 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       {eligibilityRequirementsDetails && (
         <CommonCollapsibleCard
           title='Eligibility Requirements'
-          open={cardStates.eligibilityRequirementsDetails}
-          onClick={() => toggleCard('eligibilityRequirementsDetails')}
           padContent={false}
         >
           <CommonDetailGrid rows={eligibilityRequirementsDetails} />
