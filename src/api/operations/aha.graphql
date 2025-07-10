@@ -1,5 +1,5 @@
 mutation FetchAhaScore($clientId: ID!) {
-  ahaScore(clientId: $clientId) {
+  fetchAhaScore(clientId: $clientId) {
     score
     errors {
       ...ValidationErrorFields

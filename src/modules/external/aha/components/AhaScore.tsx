@@ -30,14 +30,14 @@ const AhaScore = ({
       clientId: clientId,
     },
     onCompleted: (data) => {
-      const errors = data.ahaScore?.errors || [];
+      const errors = data.fetchAhaScore?.errors || [];
       if (errors.length > 0) {
         setErrorState({ ...emptyErrorState, errors });
         return;
       }
 
       setErrorState(emptyErrorState);
-      onChange(data.ahaScore?.score || undefined);
+      onChange(data.fetchAhaScore?.score || undefined);
     },
     onError: (apolloError) => {
       setErrorState({ ...emptyErrorState, apolloError });
