@@ -37,6 +37,7 @@ const AhaScore = ({
       }
 
       setErrorState(emptyErrorState);
+      // TODO(#7812) If score is not available (or bad quality?), calculate alt-AHA
       onChange(data.fetchAhaScore?.score || undefined);
     },
     onError: (apolloError) => {
