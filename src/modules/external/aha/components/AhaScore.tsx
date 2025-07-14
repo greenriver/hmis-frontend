@@ -22,6 +22,7 @@ const AhaScore = ({
   onChange: (value: string | undefined) => void;
 } & DynamicInputCommonProps) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
+  const [scoreUnavailable, setScoreUnavailable] = useState(false);
 
   const clientId = handlers?.localConstants.clientId;
 
@@ -33,15 +34,25 @@ const AhaScore = ({
       const errors = data.fetchAhaScore?.errors || [];
       if (errors.length > 0) {
         setErrorState({ ...emptyErrorState, errors });
+        setScoreUnavailable(false);
         return;
       }
 
       setErrorState(emptyErrorState);
-      // TODO(#7812) If score is not available (or bad quality?), calculate alt-AHA
-      onChange(data.fetchAhaScore?.score || undefined);
+
+      const score = data.fetchAhaScore?.score;
+      if (score) {
+        setScoreUnavailable(false);
+        onChange(score);
+      } else {
+        // TODO(#7812) If score is not available (or bad quality?), calculate alt-AHA
+        setScoreUnavailable(true);
+        onChange(undefined);
+      }
     },
     onError: (apolloError) => {
       setErrorState({ ...emptyErrorState, apolloError });
+      setScoreUnavailable(false);
       onChange(undefined);
     },
   });
@@ -65,11 +76,17 @@ const AhaScore = ({
             Fetch AHA Score
           </LoadingButton>
         </LabelWithContent>
-        {value && (
-          <LabelWithContent label='AHA Score'>
-            <Typography variant='body2'>{value}</Typography>
-          </LabelWithContent>
-        )}
+        {value ||
+          (scoreUnavailable && (
+            <LabelWithContent label='AHA Score'>
+              {scoreUnavailable && (
+                <Typography variant='body2' color='text.secondary'>
+                  AHA score is not available for this client.
+                </Typography>
+              )}
+              {value && <Typography variant='body2'>{value}</Typography>}
+            </LabelWithContent>
+          ))}
       </Stack>
     </>
   );
