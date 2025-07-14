@@ -76,17 +76,16 @@ const AhaScore = ({
             Fetch AHA Score
           </LoadingButton>
         </LabelWithContent>
-        {value ||
-          (scoreUnavailable && (
-            <LabelWithContent label='AHA Score'>
-              {scoreUnavailable && (
-                <Typography variant='body2' color='text.secondary'>
-                  AHA score is not available for this client.
-                </Typography>
-              )}
-              {value && <Typography variant='body2'>{value}</Typography>}
-            </LabelWithContent>
-          ))}
+        {(value || scoreUnavailable) && (
+          <LabelWithContent label='AHA Score'>
+            {scoreUnavailable && (
+              <Typography variant='body2' color='text.secondary'>
+                AHA score is not available for this client.
+              </Typography>
+            )}
+            {value && <Typography variant='body2'>{value}</Typography>}
+          </LabelWithContent>
+        )}
       </Stack>
     </>
   );
