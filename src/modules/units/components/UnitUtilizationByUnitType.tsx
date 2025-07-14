@@ -1,5 +1,6 @@
-import { Grid, Stack, Typography } from '@mui/material';
+import { Divider, Stack, Typography } from '@mui/material';
 
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import UnitUtilizationChart, {
   UnitVisualizationChartLegend,
 } from '@/modules/units/components/UnitUtilizationChart';
@@ -7,44 +8,50 @@ import { UnitTypeCapacityFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
   unitTypes: UnitTypeCapacityFieldsFragment[];
-  variant?: 'stacked' | 'grid';
 }
 
 // Unit capacity charts grouped by unit type
-const UnitUtilizationByUnitType: React.FC<Props> = ({
-  unitTypes,
-  variant = 'stacked',
-}) => {
-  const hasMultipleUnitTypes = unitTypes.length > 1;
-
+const UnitUtilizationByUnitType: React.FC<Props> = ({ unitTypes }) => {
   return (
-    <Stack gap={1}>
-      {unitTypes.map((unitType, idx) =>
-        variant === 'stacked' ? (
-          <Stack key={unitType.id} gap={0.25}>
-            {hasMultipleUnitTypes && (
-              <Typography variant='body2' color='text.secondary'>
+    <>
+      <Stack
+        gap={2}
+        divider={<Divider orientation='horizontal' flexItem />}
+        sx={{ mb: 2 }}
+      >
+        {unitTypes.map((unitType) => (
+          <Stack key={unitType.id} gap={0.5} key={unitType.id}>
+            <Stack justifyContent={'space-between'} direction='row'>
+              <Typography variant='body2' color='text.primary' fontWeight={600}>
                 {unitType.unitType}
               </Typography>
-            )}
+              <Stack
+                direction='row'
+                spacing={1.5}
+                divider={
+                  <Typography variant='body2' color='text.primary'>
+                    •
+                  </Typography>
+                }
+              >
+                <CommonLabeledTextBlock title='Total:' horizontal>
+                  {unitType.capacity || <>0</>}
+                </CommonLabeledTextBlock>
+                <CommonLabeledTextBlock title='Occupied:' horizontal>
+                  {unitType.capacity - unitType.availability || <>0</>}
+                </CommonLabeledTextBlock>
+                <CommonLabeledTextBlock title='Vacant:' horizontal>
+                  {unitType.availability || <>0</>}
+                </CommonLabeledTextBlock>
+              </Stack>
+            </Stack>
+
             <UnitUtilizationChart unitType={unitType} />
           </Stack>
-        ) : (
-          <Grid container key={unitType.id}>
-            <Grid item xs={3}>
-              <Typography variant='body1' color='text.primary'>
-                {unitType.unitType}
-              </Typography>
-            </Grid>
-            <Grid item xs={9}>
-              <UnitUtilizationChart unitType={unitType} />
-              {idx === unitTypes.length - 1 && <UnitVisualizationChartLegend />}
-            </Grid>
-          </Grid>
-        )
-      )}
-      {variant === 'stacked' && <UnitVisualizationChartLegend />}
-    </Stack>
+        ))}
+      </Stack>
+      <UnitVisualizationChartLegend />
+    </>
   );
 };
 export default UnitUtilizationByUnitType;
