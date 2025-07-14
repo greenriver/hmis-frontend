@@ -54,10 +54,9 @@ const AhaScore = ({
           <ErrorAlert errors={errorState.errors} />
         </Stack>
       )}
-      <LabelWithContent label={label} helperText={helperText}>
-        <Stack direction='row' gap={1} alignItems='center'>
+      <Stack direction='column' gap={1} alignItems='flex-start'>
+        <LabelWithContent label={label} helperText={helperText}>
           <LoadingButton
-            variant='outlined'
             loading={loading}
             disabled={disabled}
             type='button'
@@ -65,13 +64,13 @@ const AhaScore = ({
           >
             Fetch AHA Score
           </LoadingButton>
-          {value && (
-            <Typography variant='body2'>
-              <b>Score:</b> {value}
-            </Typography>
-          )}
-        </Stack>
-      </LabelWithContent>
+        </LabelWithContent>
+        {value && (
+          <LabelWithContent label='AHA Score'>
+            <Typography variant='body2'>{value}</Typography>
+          </LabelWithContent>
+        )}
+      </Stack>
     </>
   );
 };
