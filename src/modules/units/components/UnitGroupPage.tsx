@@ -8,9 +8,8 @@ import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import MatchRuleCard from '@/modules/ce/components/unit/MatchRuleCard';
 import UnitGroupCeConfigurationCard from '@/modules/ce/components/unitGroup/UnitGroupCeConfigurationCard';
-import UnitGroupDefaultContactsCard from '@/modules/ce/components/unitGroup/UnitGroupDefaultContactsCard';
-import UnitGroupEligibilityCard from '@/modules/ce/components/unitGroup/UnitGroupEligibilityCard';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
@@ -70,24 +69,9 @@ const UnitGroupPage = () => {
       />
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
-        {coordinatedEntryEnabled && (
-          <Grid item xs={4}>
-            <Stack gap={2}>
-              <UnitGroupCeConfigurationCard unitGroup={unitGroup} />
-              <UnitGroupDefaultContactsCard
-                unitGroup={unitGroup}
-                canEdit={canEditUnitGroup}
-              />
-              <UnitGroupEligibilityCard
-                unitGroup={unitGroup}
-                canEdit={canEditUnitGroup}
-              />
-            </Stack>
-          </Grid>
-        )}
         <Grid item xs={coordinatedEntryEnabled ? 8 : 12}>
           <Stack gap={2}>
-            <UnitGroupCard unitGroup={unitGroup} />
+            <UnitGroupCard unitGroup={unitGroup} hideTitle />
             {!!unitGroup.capacity && (
               <Paper>
                 <UnitManagementTable
@@ -100,6 +84,25 @@ const UnitGroupPage = () => {
             )}
           </Stack>
         </Grid>
+        {coordinatedEntryEnabled && (
+          <Grid item xs={4}>
+            <Stack gap={2}>
+              <UnitGroupCeConfigurationCard unitGroup={unitGroup} />
+              {/* <UnitGroupDefaultContactsCard
+                unitGroup={unitGroup}
+                canEdit={canEditUnitGroup}
+              /> */}
+              {/* <UnitGroupEligibilityCard
+                unitGroup={unitGroup}
+                canEdit={canEditUnitGroup}
+              /> */}
+              <MatchRuleCard
+                title='Eligibility Requirements'
+                rules={unitGroup.eligibilityRequirements || []}
+              />
+            </Stack>
+          </Grid>
+        )}
       </Grid>
 
       <CreateUnitsDialog

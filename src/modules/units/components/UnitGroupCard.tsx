@@ -9,44 +9,48 @@ interface Props {
   unitGroup: UnitGroupCapacityFieldsFragment;
   projectId?: string;
   linkToUnitGroup?: boolean;
+  hideTitle?: boolean;
 }
 
 const UnitGroupCard: React.FC<Props> = ({
   unitGroup,
   projectId,
   linkToUnitGroup = false,
+  hideTitle = false,
 }) => {
   const hasMultipleUnitTypes = unitGroup.unitTypes.length > 1;
   return (
-    <Paper sx={{ px: 2, pt: 1, pb: 2 }}>
-      <Stack
-        justifyContent='space-between'
-        direction='row'
-        alignItems='flex-start'
-        sx={{ mb: 1 }}
-      >
-        <div>
-          <Typography component='h2' variant='h5' sx={{ mb: 1 }}>
-            <Typography variant='overline' display='block'>
-              Unit Group
+    <Paper sx={{ px: 2, pt: hideTitle ? 2 : 1, pb: 2 }}>
+      {!hideTitle && (
+        <Stack
+          justifyContent='space-between'
+          direction='row'
+          alignItems='flex-start'
+          sx={{ mb: 1 }}
+        >
+          <div>
+            <Typography component='h2' variant='h5' sx={{ mb: 1 }}>
+              <Typography variant='overline' display='block'>
+                Unit Group
+              </Typography>
+              {unitGroup.name}
             </Typography>
-            {unitGroup.name}
-          </Typography>
-        </div>
-        {linkToUnitGroup && projectId && (
-          <ButtonLink
-            aria-label={`View ${unitGroup.name}`}
-            to={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-              projectId,
-              unitGroupId: unitGroup.id,
-            })}
-            sx={{ mt: 1 }}
-            size='small'
-          >
-            Manage
-          </ButtonLink>
-        )}
-      </Stack>
+          </div>
+          {linkToUnitGroup && projectId && (
+            <ButtonLink
+              aria-label={`View ${unitGroup.name}`}
+              to={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+                projectId,
+                unitGroupId: unitGroup.id,
+              })}
+              sx={{ mt: 1 }}
+              size='small'
+            >
+              Manage
+            </ButtonLink>
+          )}
+        </Stack>
+      )}
       {unitGroup.capacity > 0 && (
         <>
           {hasMultipleUnitTypes && (
@@ -59,7 +63,6 @@ const UnitGroupCard: React.FC<Props> = ({
                   <b>Vacancies:</b> {unitGroup.availability}
                 </Typography>
               </Stack>
-
               <Divider sx={{ my: 2 }} />
             </>
           )}
