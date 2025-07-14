@@ -20,7 +20,7 @@ const UnitUtilizationByUnitType: React.FC<Props> = ({ unitTypes }) => {
         sx={{ mb: 2 }}
       >
         {unitTypes.map((unitType) => (
-          <Stack key={unitType.id} gap={0.5} key={unitType.id}>
+          <Stack key={unitType.id} gap={0.5}>
             <Stack justifyContent={'space-between'} direction='row'>
               <Typography variant='body2' color='text.primary' fontWeight={600}>
                 {unitType.unitType}
