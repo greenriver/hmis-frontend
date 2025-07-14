@@ -19,7 +19,7 @@ const AhaScore = ({
 }: {
   handlers?: FormDefinitionHandlers;
   value: string;
-  onChange: (value: string | undefined) => void;
+  onChange: (value: number | undefined) => void;
 } & DynamicInputCommonProps) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [scoreUnavailable, setScoreUnavailable] = useState(false);
@@ -78,12 +78,13 @@ const AhaScore = ({
         </LabelWithContent>
         {(value || scoreUnavailable) && (
           <LabelWithContent label='AHA Score'>
-            {scoreUnavailable && (
+            {scoreUnavailable ? (
               <Typography variant='body2' color='text.secondary'>
                 AHA score is not available for this client.
               </Typography>
+            ) : (
+              <Typography variant='body2'>{value}</Typography>
             )}
-            {value && <Typography variant='body2'>{value}</Typography>}
           </LabelWithContent>
         )}
       </Stack>
