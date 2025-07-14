@@ -3368,7 +3368,7 @@ export enum ExternalIdentifierType {
 export type FetchAhaScorePayload = {
   __typename?: 'FetchAhaScorePayload';
   errors: Array<ValidationError>;
-  score?: Maybe<Scalars['Float']['output']>;
+  score?: Maybe<Scalars['Int']['output']>;
 };
 
 export type FieldMapping = {
