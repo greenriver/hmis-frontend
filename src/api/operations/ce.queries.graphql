@@ -92,9 +92,6 @@ query GetCeReferral($id: ID!) {
 query GetCeReferralStep($id: ID!) {
   ceReferralStep(id: $id) {
     ...CeReferralStepFields
-    customDataElements {
-      ...CustomDataElementFields
-    }
   }
 }
 
