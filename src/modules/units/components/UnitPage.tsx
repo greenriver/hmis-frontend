@@ -86,7 +86,6 @@ const UnitPage: React.FC<Props> = ({}) => {
       <CommonTabs
         ariaLabel={'Eligible Clients and Details tabs'}
         tabDefinitions={tabDefinitions}
-        collapseSingleTab={false}
       />
     </>
   );

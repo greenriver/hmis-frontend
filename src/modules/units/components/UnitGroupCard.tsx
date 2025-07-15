@@ -38,7 +38,7 @@ const UnitGroupCard: React.FC<Props> = ({
           </div>
           {linkToUnitGroup && projectId && (
             <ButtonLink
-              aria-label={`View ${unitGroup.name}`}
+              aria-label={`Manage ${unitGroup.name}`}
               to={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
                 projectId,
                 unitGroupId: unitGroup.id,
