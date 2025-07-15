@@ -80,7 +80,6 @@ const UnitPage: React.FC<Props> = ({}) => {
   if (error) throw error;
   if (!unit) return <NotFound />;
 
-  //ceAvailabilityActionsEnabled && unit.canBeMarkedAvailableToday
   return (
     <>
       <PageTitle title={unit.name} />
