@@ -7,11 +7,13 @@ const PageTitle = ({
   overlineText,
   actions,
   endElement,
+  tabbedPage,
 }: {
   title: ReactNode;
   overlineText?: string;
   endElement?: ReactNode; // element to appear directly to the right of the title
   actions?: ReactNode; // element to float to the right (e.g. action button)
+  tabbedPage?: boolean; // whether this is a tabbed page, which will reduce the margin below the page title
 }) => {
   const isTiny = useIsMobile('sm');
 
@@ -22,7 +24,7 @@ const PageTitle = ({
       justifyContent={'space-between'}
       width={isTiny ? 'fit-content' : '100%'}
       sx={{
-        mb: isTiny ? 1 : 3,
+        mb: isTiny || tabbedPage ? 1 : 3,
         alignItems: isTiny ? 'left' : 'center',
         // fixed min height (if not mobile), so height is the same whether there are actions or not
         minHeight: isTiny ? '' : '40px',

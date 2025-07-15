@@ -31,7 +31,7 @@ const ProjectCePage: React.FC = () => {
 
   return (
     <>
-      <PageTitle title={'Coordinated Entry'} />
+      <PageTitle title='Referrals' tabbedPage />
       <CommonTabs
         ariaLabel={'Project CE Tabs'}
         tabDefinitions={tabDefinitions}

@@ -104,7 +104,7 @@ const UserAuditPage: React.FC<Props> = ({
 
   return (
     <>
-      <PageTitle title={`${user.name} Audit History`} />
+      <PageTitle title={`${user.name} Audit History`} tabbedPage />
       <CommonTabs
         tabDefinitions={tabDefinitions}
         ariaLabel={'audit history types'}

@@ -7,7 +7,7 @@ import AdminOpportunitiesTable from '@/modules/ce/components/admin/AdminOpportun
 const AdminCoordinatedEntry: React.FC = () => {
   return (
     <>
-      <PageTitle title='Coordinated Entry' overlineText='Admin' />
+      <PageTitle title='Coordinated Entry' overlineText='Admin' tabbedPage />
       <CommonTabs
         ariaLabel={'Admin CE Tabs'}
         tabDefinitions={[

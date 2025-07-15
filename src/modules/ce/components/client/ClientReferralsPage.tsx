@@ -49,7 +49,7 @@ const ClientReferralsPage: React.FC = () => {
 
   return (
     <>
-      <PageTitle title={'Referrals'} />
+      <PageTitle title='Referrals' tabbedPage />
       <CommonTabs
         ariaLabel={'Client Referrals Tabs'}
         tabDefinitions={tabDefinitions}
