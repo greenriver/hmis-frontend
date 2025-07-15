@@ -72,7 +72,7 @@ const ProjectOpportunitiesTable: React.FC<Props> = ({ projectId }) => {
         defaultPageSize={25}
         paginationItemName='unit'
         rowLinkTo={(row) =>
-          generateSafePath(ProjectDashboardRoutes.UNIT, {
+          generateSafePath(ProjectDashboardRoutes.CE_UNIT, {
             projectId,
             unitId: row.unit?.id,
           })

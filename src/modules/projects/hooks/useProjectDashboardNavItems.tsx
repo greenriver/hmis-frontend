@@ -86,6 +86,7 @@ export const useProjectDashboardNavItems = (
             hide: !project.serviceTypes.find((s) => s.supportsBulkAssignment),
           },
           {
+            // Legacy Referral page. Hidden if CE is enabled for the project.
             id: 'referrals',
             title: 'Referrals',
             path: ProjectDashboardRoutes.REFERRALS,
@@ -94,10 +95,11 @@ export const useProjectDashboardNavItems = (
               'canManageOutgoingReferrals',
             ],
             permissionMode: 'any',
+            hide: project.coordinatedEntryEnabled,
           },
           {
-            id: 'coordinated-entry',
-            title: 'Coordinated Entry',
+            id: 'ce-referrals',
+            title: 'Referrals',
             path: ProjectDashboardRoutes.CE,
             permissions: [
               'canViewUnits',

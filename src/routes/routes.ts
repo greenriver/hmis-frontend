@@ -125,6 +125,7 @@ const projectDashboardRoutes = {
 
   // CE
   CE: 'ce',
+  CE_UNIT: 'ce/unit/:unitId', // render same Unit page, but within CE tab
   REFERRAL: 'ce/referrals/:referralId',
   REFERRAL_STEPS: 'ce/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
   REFERRAL_STEP: 'ce/referrals/:referralId/tasks/:stepId',
