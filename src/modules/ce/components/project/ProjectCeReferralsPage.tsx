@@ -42,7 +42,7 @@ const ProjectCeReferralsPage: React.FC = () => {
   // TODO(#7321) if project can send direct referrals, add button linking to a Send Referral page (similar to NewOutgoingReferralPage)
   return (
     <>
-      <PageTitle title='Referrals' tabbedPage />
+      <PageTitle title='Referrals' />
       <CommonTabs
         ariaLabel={'Project CE Tabs'}
         tabDefinitions={tabDefinitions}

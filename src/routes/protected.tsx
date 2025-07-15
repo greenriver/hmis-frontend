@@ -492,6 +492,14 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: ProjectDashboardRoutes.CE_UNIT,
+            element: (
+              <ProjectRoute permissions={['canViewUnits']} requireCeEnabled>
+                <UnitPage />
+              </ProjectRoute>
+            ),
+          },
+          {
             path: ProjectDashboardRoutes.REFERRAL,
             element: (
               <ProjectRoute
