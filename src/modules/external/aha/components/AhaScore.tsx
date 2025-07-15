@@ -13,12 +13,12 @@ const AhaScore = ({
   handlers,
   value,
   onChange,
-  disabled,
+  disabled: disabledProp,
   label,
   helperText,
 }: {
   handlers?: FormDefinitionHandlers;
-  value: string;
+  value: number;
   onChange: (value: number | undefined) => void;
 } & DynamicInputCommonProps) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
@@ -56,6 +56,9 @@ const AhaScore = ({
       onChange(undefined);
     },
   });
+
+  // If value has already been fetched (including if it's 0), disable the button
+  const disabled = disabledProp || value !== null;
 
   return (
     <>
