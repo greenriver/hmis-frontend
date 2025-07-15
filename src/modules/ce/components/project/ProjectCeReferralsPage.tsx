@@ -20,7 +20,7 @@ const ProjectCeReferralsPage: React.FC = () => {
       });
     }
 
-    // TODO(#7321): only render units tab on this page if this project uses waitlist-based referral creation. It doesn't make sense to link
+    // TODO(#7321): only render units tab on this page if this project uses waitlist-based referral creation. It doesn't make sense to link to unit from here if it doesn't have waitlist.
     if (project.access.canViewUnits) {
       defs.push({
         title: 'Available Units',
