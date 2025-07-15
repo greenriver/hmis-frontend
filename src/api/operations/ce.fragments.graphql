@@ -76,10 +76,7 @@ fragment CeReferralSummaryFields on CeReferral {
   }
   active
   clientId
-  client {
-    id
-    ...ClientName
-  }
+  clientName
 }
 
 fragment CeReferralTableFields on CeReferral {
@@ -126,6 +123,9 @@ fragment CeReferralAdminFields on CeReferral {
   targetEnrollment {
     id
   }
+  client {
+    id
+  }
   targetOrganizationName
   updatedBy {
     id
@@ -163,12 +163,35 @@ fragment CeReferralAuditEventFields on CeReferralAuditEvent {
 # Fields for the "detail" panel on an individual referral
 fragment CeReferralDetailFields on CeReferral {
   createdAt
+  clientName
+  clientAge
   client {
     id
-    age
-    ...ClientName
+    externalIds {
+      ...ClientIdentifierFields
+    }
   }
-  # TODO(#7591) resolve additional details related to eligibility
+  sourceEnrollment {
+    id
+    projectName
+    projectType
+    entryDate
+    exitDate
+    access {
+      canViewEnrollmentDetails
+    }
+  }
+  currentMatchValues {
+    id
+    fieldName
+    fieldValues
+  }
+  opportunity {
+    id
+    eligibilityRequirements {
+      ...CeMatchRuleFields
+    }
+  }
 }
 
 fragment CeReferralNoteFields on CeReferralNote {

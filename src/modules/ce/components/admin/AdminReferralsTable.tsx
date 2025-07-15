@@ -94,7 +94,7 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
           key: 'client',
           title: 'View Client Profile',
           to: generateSafePath(ClientDashboardRoutes.PROFILE, {
-            clientId: row.client.id,
+            clientId: row.clientId,
           }),
         });
 
@@ -106,7 +106,7 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
             to: generateSafePath(
               EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
               {
-                clientId: row.client.id,
+                clientId: row.clientId,
                 enrollmentId: row.targetEnrollment.id,
               }
             ),

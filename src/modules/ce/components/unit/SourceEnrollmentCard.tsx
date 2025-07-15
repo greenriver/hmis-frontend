@@ -116,7 +116,7 @@ const SourceEnrollmentCard: React.FC<Props> = ({
             <Alert
               key={assessment.id}
               icon={false}
-              color='warning'
+              color='primary'
               action={
                 includeLinks && (
                   <ButtonLink

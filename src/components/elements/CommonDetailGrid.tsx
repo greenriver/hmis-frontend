@@ -34,10 +34,10 @@ export const CommonDetailGridContainer: React.FC<{
               borderTopStyle: 'solid',
             }
           : {},
-        '> .MuiGrid-item:nth-last-of-type(2)': {
+        '> .CommonDetailGridLabel:nth-last-of-type(2)': {
           border: 'unset',
         },
-        '> .MuiGrid-item:nth-last-of-type(1)': {
+        '> .CommonDetailGridValue:nth-last-of-type(1)': {
           border: 'unset',
         },
       }}
@@ -48,9 +48,10 @@ export const CommonDetailGridContainer: React.FC<{
 };
 
 export const CommonDetailGridItem: React.FC<{
-  label: string | ReactNode;
+  label: string | ReactNode | null; // if null, children take up full width
   children: ReactNode;
   sx?: SxProps;
+  fullWidth?: boolean;
 }> = ({ label, children, sx = {} }) => {
   const labelId = useId();
   const itemSx = {
@@ -61,30 +62,40 @@ export const CommonDetailGridItem: React.FC<{
     ...sx,
   };
 
+  const fullWidth = label === null;
+  const valueBreakPoints = fullWidth
+    ? { xs: 12 }
+    : {
+        xs: 12,
+        md: 8,
+        lg: 7,
+        xl: 8,
+      };
+
   return (
     <>
-      <Grid
-        key='label'
-        className='CommonDetailGridLabel'
-        id={labelId}
-        item
-        xs={12}
-        md={4}
-        lg={5}
-        xl={4}
-        sx={itemSx}
-      >
-        <Typography fontWeight={600} variant='body2'>
-          {label}
-        </Typography>
-      </Grid>
+      {!fullWidth && (
+        <Grid
+          key='label'
+          className='CommonDetailGridLabel'
+          id={labelId}
+          item
+          xs={12}
+          md={4}
+          lg={5}
+          xl={4}
+          sx={itemSx}
+        >
+          <Typography fontWeight={600} variant='body2'>
+            {label}
+          </Typography>
+        </Grid>
+      )}
       <Grid
         key='value'
+        className='CommonDetailGridValue'
         item
-        xs={12}
-        md={8}
-        lg={7}
-        xl={8}
+        {...valueBreakPoints}
         sx={itemSx}
         aria-labelledby={labelId}
       >
@@ -96,8 +107,13 @@ export const CommonDetailGridItem: React.FC<{
   );
 };
 
+export type CommonDetailGridItemRow = {
+  id: string;
+  label: ReactNode | null; // if null, value will take up full width
+  value: ReactNode;
+};
 interface Props {
-  rows: { id: string; label: ReactNode; value: ReactNode }[];
+  rows: CommonDetailGridItemRow[];
 }
 const CommonDetailGrid: React.FC<Props> = ({ rows }) => (
   <CommonDetailGridContainer>

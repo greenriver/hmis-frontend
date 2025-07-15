@@ -661,6 +661,59 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeMatchValue',
+    fields: [
+      {
+        name: 'fieldName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'fieldValues',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'ruleId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'ruleName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeOpportunity',
     fields: [
       {
@@ -830,11 +883,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'clientAge',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'clientId',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'clientName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
       {

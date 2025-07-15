@@ -3,10 +3,7 @@ import CommonTruncatedList from '@/components/elements/CommonTruncatedList';
 import { ColumnDef } from '@/components/elements/table/types';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import {
-  clientNameFromRecordWithOptionalClient,
-  parseAndFormatDate,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   CeReferralTableFieldsFragment,
   CeReferralWithProjectFieldsFragment,
@@ -23,7 +20,7 @@ export const REFERRAL_COLUMNS: Record<
       referral:
         | CeReferralTableFieldsFragment
         | ClientCeReferralTableFieldsFragment
-    ) => clientNameFromRecordWithOptionalClient(referral),
+    ) => referral.clientName,
     key: 'name',
     sticky: 'left',
   },

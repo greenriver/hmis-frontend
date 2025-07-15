@@ -46,6 +46,8 @@ const mockReferral: CeReferralFieldsFragment = {
   targetProjectName: 'My Project',
   active: true,
   clientId: '1',
+  clientName: 'Test Client',
+  clientAge: 30,
   opportunity: {
     id: '1',
     projectId: '1',
