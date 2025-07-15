@@ -5,7 +5,7 @@ import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOp
 import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
-const ProjectCePage: React.FC = () => {
+const ProjectCeReferralsPage: React.FC = () => {
   const { project } = useProjectDashboardContext();
 
   const tabDefinitions = useMemo(() => {
@@ -40,4 +40,4 @@ const ProjectCePage: React.FC = () => {
   );
 };
 
-export default ProjectCePage;
+export default ProjectCeReferralsPage;

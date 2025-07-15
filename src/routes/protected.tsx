@@ -54,7 +54,7 @@ import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNo
 import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinatedEntry';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 
-import ProjectCePage from '@/modules/ce/components/project/ProjectCePage';
+import ProjectCeReferralsPage from '@/modules/ce/components/project/ProjectCeReferralsPage';
 import ProjectReferralPage from '@/modules/ce/components/project/ProjectReferralPage';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
@@ -479,7 +479,7 @@ export const protectedRoutes: RouteNode[] = [
                 ]}
                 requireCeEnabled
               >
-                <ProjectCePage />
+                <ProjectCeReferralsPage />
               </ProjectRoute>
             ),
           },
