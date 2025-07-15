@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/referral/ReferralPage';
 import {
@@ -25,7 +24,7 @@ interface Props {
 }
 
 /**
- * Renders a form for a completing or viewing a referral step (task)
+ * Render Referral Step (Task) as a DynamicForm or DynamicView
  */
 const ReferralStepForm: React.FC<Props> = ({ step }) => {
   const { referralId, stepId } = useSafeParams() as {
@@ -81,17 +80,6 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
 
   const editable =
     status === CeReferralStepStatus.InProgress && step?.access.canPerformStep;
-
-  if (!step || !formDefinition) return <NotFound />;
-
-  if (
-    [CeReferralStepStatus.Unavailable, CeReferralStepStatus.Available].includes(
-      step.status
-    )
-  ) {
-    // The step has to be started from the Referral Steps page
-    return <NotFound />;
-  }
 
   return (
     <>
