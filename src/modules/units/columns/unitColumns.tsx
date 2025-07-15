@@ -44,7 +44,7 @@ export const UNIT_COLUMNS: Record<
     key: 'clients',
     render: (unit: UnitTableRowFieldsFragment) => <UnitOccupants unit={unit} />,
     optional: {
-      defaultHidden: true,
+      defaultHidden: false,
       queryVariableField:
         'includeClientOccupants' as keyof GetUnitsQueryVariables,
     },

@@ -12,6 +12,7 @@ import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
   CeOpportunityFieldsFragment,
+  CeOpportunityStatus,
   CeReferralStatus,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -26,7 +27,8 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
   const { project } = useProjectDashboardContext();
 
   const header = useMemo(() => {
-    if (referral?.status === CeReferralStatus.Accepted) return 'Filled By';
+    if (referral?.status === CeReferralStatus.Accepted)
+      return 'Accepted Referral';
     if (referral && referral.active) return 'In-Progress Referral';
     if (topCandidate) return 'Top Prioritized Client';
   }, [referral, topCandidate]);
@@ -46,14 +48,14 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
       if (referral.status === CeReferralStatus.Accepted) {
         return (
           <ButtonLink color='grayscale' variant='contained' to={to}>
-            View
+            View Referral
           </ButtonLink>
         );
       }
 
       return (
         <ButtonLink to={to} color='primary' variant='contained'>
-          Continue
+          Continue Referral
         </ButtonLink>
       );
     }
@@ -69,6 +71,11 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
     }
   }, [referral, topCandidate, project.access.canStartReferrals, opportunity]);
 
+  const linkToEligibleClients =
+    opportunity &&
+    opportunity.status !== CeOpportunityStatus.Closed &&
+    project.access.canViewPrioritizedClientLists;
+
   if (!referral && !topCandidate) return;
 
   return (
@@ -83,7 +90,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
         <Typography variant='h5' component='h3'>
           {header}
         </Typography>
-        {!isTiny && (
+        {!isTiny && linkToEligibleClients && (
           <ButtonLink to={'#clients'} startIcon={<PeopleIcon />} variant='text'>
             View All Eligible Clients
           </ButtonLink>
@@ -98,13 +105,17 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
           p: 2,
         }}
       >
-        <Stack direction='row' justifyContent='space-between'>
+        <Stack
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
+        >
           <Stack gap={4} direction={isTiny ? 'column' : 'row'}>
-            <CommonLabeledTextBlock title='Client'>
+            <CommonLabeledTextBlock title='Client Name'>
               {clientName}
             </CommonLabeledTextBlock>
             {referral && (
-              <CommonLabeledTextBlock title='Status'>
+              <CommonLabeledTextBlock title='Referral Status'>
                 <ReferralStatusChip status={referral.status} />
               </CommonLabeledTextBlock>
             )}

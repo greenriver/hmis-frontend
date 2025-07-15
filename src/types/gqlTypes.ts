@@ -44871,6 +44871,7 @@ export type UnitDetailFieldsFragment = {
   name: string;
   unitSize?: number | null;
   acceptingCeReferrals: boolean;
+  canBeMarkedAvailableToday: boolean;
   unitType?: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -45241,6 +45242,7 @@ export type GetUnitQuery = {
     name: string;
     unitSize?: number | null;
     acceptingCeReferrals: boolean;
+    canBeMarkedAvailableToday: boolean;
     unitType?: {
       __typename?: 'UnitTypeObject';
       id: string;
@@ -48644,6 +48646,7 @@ export const UnitDetailFieldsFragmentDoc = gql`
     name
     unitSize
     acceptingCeReferrals
+    canBeMarkedAvailableToday
     unitType {
       ...UnitTypeFields
     }
