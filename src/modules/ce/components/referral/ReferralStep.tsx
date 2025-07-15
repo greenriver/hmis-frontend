@@ -16,11 +16,9 @@ import {
 } from '@/modules/errors/util';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
+import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { FormActionTypes } from '@/modules/form/types';
-import {
-  createInitialValuesFromSavedValues,
-  getItemMap,
-} from '@/modules/form/util/formUtil';
+import { getItemMap } from '@/modules/form/util/formUtil';
 import {
   CeReferralStatus,
   CeReferralStepStatus,
@@ -34,7 +32,7 @@ const ReferralStep: React.FC<Props> = ({}) => {
     referralId: string;
     stepId: string;
   };
-  const { referralPath } = useReferralContext();
+  const { referral, referralPath } = useReferralContext();
   const navigate = useNavigate();
 
   const {
@@ -76,17 +74,20 @@ const ReferralStep: React.FC<Props> = ({}) => {
     },
   });
 
-  const { name, status, formDefinition, submittedValues } = step || {};
+  const { name, status, formDefinition } = step || {};
 
   const itemMap = useMemo(
     () => formDefinition && getItemMap(formDefinition.definition),
     [formDefinition]
   );
 
-  const formState =
-    itemMap &&
-    submittedValues &&
-    createInitialValuesFromSavedValues(itemMap, submittedValues);
+  // Display form values based on the Step record (CustomDataElements) rather than the submittedValues field, to be consistent with other form behavior throughout the application.
+  const initialValues = useInitialFormValues({
+    record: step,
+    itemMap,
+    definition: formDefinition?.definition,
+    localConstants: { projectId: referral.opportunity.projectId },
+  });
 
   const editable =
     status === CeReferralStepStatus.InProgress && step?.access.canPerformStep;
@@ -118,12 +119,13 @@ const ReferralStep: React.FC<Props> = ({}) => {
           {editable ? (
             <DynamicForm
               definition={formDefinition.definition}
-              onSubmit={({ valuesByLinkId, confirmed }) => {
+              onSubmit={({ valuesByLinkId, valuesByFieldName, confirmed }) => {
                 submit({
                   variables: {
                     referralId: referralId,
                     stepId: stepId,
-                    input: valuesByLinkId,
+                    valuesByLinkId,
+                    valuesByFieldName,
                     formDefinitionId: formDefinition.id,
                     confirmed,
                   },
@@ -141,12 +143,12 @@ const ReferralStep: React.FC<Props> = ({}) => {
                   },
                 ],
               }}
-              initialValues={formState}
+              initialValues={initialValues}
             />
           ) : (
             <DynamicView
               definition={formDefinition.definition}
-              values={formState}
+              values={initialValues}
             />
           )}
         </Stack>
