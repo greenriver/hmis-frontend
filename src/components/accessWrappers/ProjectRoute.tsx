@@ -21,7 +21,7 @@ const ProjectRoute: React.FC<
     permissions?: ProjectPermissions | ProjectPermissions[];
     redirectRoute?: string;
     dataCollectionFeature?: DataCollectionFeatureRole;
-    coordinatedEntryFeatures?: (keyof ProjectCoordinatedEntryFeatures)[];
+    coordinatedEntryFeatures?: (keyof ProjectCoordinatedEntryFeatures)[]; // show the route if ANY of these coordinated entry features are enabled on the project
   }>
 > = ({
   permissions,

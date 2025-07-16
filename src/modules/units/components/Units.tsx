@@ -17,10 +17,10 @@ import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog'
 import UnitManagementTable from '@/modules/units/components/UnitManagementTable';
 import { useGetProjectUnitGroupsQuery } from '@/types/gqlTypes';
 
-// This page has 2 "modes" based on whether the project has Coordinated Entry referrals enabled.
+// This page has 2 "modes" based on whether the project supports Coordinated Entry referrals.
 //
-// If referrals are enabled, this page allows adding Unit Groups and linking to Unit Groups for Unit management.
-// If referrals are not enabled, this page retains the legacy behavior of managing Units directly without groups.
+// If yes, this page allows adding Unit Groups and linking to Unit Groups for Unit management.
+// If no, this page retains the legacy behavior of managing Units directly without groups.
 const Units = () => {
   const { project } = useProjectDashboardContext();
 

@@ -40377,7 +40377,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Use ProjectCoordinatedEntryFeatures"
+            "deprecationReason": "Use coordinatedEntryFeatures"
           },
           {
             "name": "coordinatedEntryFeatures",
@@ -42698,13 +42698,13 @@
           },
           {
             "name": "COORDINATED_ENTRY",
-            "description": "Coordinated Entry",
+            "description": "Supports Coordinated Entry Referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SENDS_DIRECT_CE_REFERRALS",
-            "description": "Sends Direct CE Referrals",
+            "description": "Sends Direct Coordinated Entry Referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },

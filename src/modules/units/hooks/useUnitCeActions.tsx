@@ -36,7 +36,7 @@ export const useUnitCeActions = ({
 
       const actions: CommonMenuItem[] = [];
 
-      // Always allow linking to Unit page, if CE referrals are enabled, to view/manage eligibility criteria
+      // Always allow linking to Unit page, if the project supports CE referrals, to view/manage eligibility criteria
       actions.push({
         title: 'View Unit',
         key: 'viewUnit',

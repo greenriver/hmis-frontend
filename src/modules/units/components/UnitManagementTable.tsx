@@ -31,7 +31,7 @@ interface Props {
 // Table for managing units within a Project or Unit Group.
 //
 // - If the user lacks permission to manage units, this will be a read-only table.
-// - If CE referrals are enabled, this table will show additional CE-related information and actions,
+// - If the project supports CE referrals, this table will show additional CE-related information and actions,
 // such as marking units as available for referrals (a.k.a. creating Opportunities).
 const UnitManagementTable: React.FC<Props> = ({
   projectId,

@@ -6133,7 +6133,7 @@ export type Project = {
   continuumProject?: Maybe<NoYes>;
   /**
    * Whether Coordinated Entry is enabled in this project
-   * @deprecated Use ProjectCoordinatedEntryFeatures
+   * @deprecated Use coordinatedEntryFeatures
    */
   coordinatedEntryEnabled: Scalars['Boolean']['output'];
   /** Coordinated Entry features that are enabled for this Project */
@@ -6407,9 +6407,9 @@ export enum ProjectConfigType {
   AutoEnter = 'AUTO_ENTER',
   /** Auto Exit */
   AutoExit = 'AUTO_EXIT',
-  /** Coordinated Entry */
+  /** Supports Coordinated Entry Referrals */
   CoordinatedEntry = 'COORDINATED_ENTRY',
-  /** Sends Direct CE Referrals */
+  /** Sends Direct Coordinated Entry Referrals */
   SendsDirectCeReferrals = 'SENDS_DIRECT_CE_REFERRALS',
   /** Staff Assignment */
   StaffAssignment = 'STAFF_ASSIGNMENT',
