@@ -478,7 +478,10 @@ export const protectedRoutes: RouteNode[] = [
                   'canViewReferrals',
                   'canViewOwnReferrals',
                 ]}
-                coordinatedEntryFeature='id'
+                coordinatedEntryFeatures={[
+                  'isReferrable',
+                  'sendsDirectReferrals',
+                ]}
               >
                 <ProjectCeReferralsPage />
               </ProjectRoute>
@@ -489,7 +492,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewUnits']}
-                coordinatedEntryFeature='isReferrable'
+                coordinatedEntryFeatures={['isReferrable']}
               >
                 <UnitPage />
               </ProjectRoute>
@@ -500,7 +503,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewUnits']}
-                coordinatedEntryFeature='isReferrable'
+                coordinatedEntryFeatures={['isReferrable']}
               >
                 <UnitPage />
               </ProjectRoute>
@@ -511,7 +514,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canManageOutgoingReferrals']}
-                coordinatedEntryFeature='sendsDirectReferrals'
+                coordinatedEntryFeatures={['sendsDirectReferrals']}
                 redirectRoute={ProjectDashboardRoutes.CE}
               >
                 <SendReferralPage />
@@ -523,7 +526,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewReferrals', 'canViewOwnReferrals']}
-                coordinatedEntryFeature='isReferrable'
+                coordinatedEntryFeatures={['isReferrable']}
               >
                 <ProjectReferralPage />
               </ProjectRoute>
