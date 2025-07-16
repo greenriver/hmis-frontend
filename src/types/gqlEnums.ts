@@ -1416,6 +1416,7 @@ export const HmisEnums = {
     AUTO_ENTER: 'Auto Enter',
     AUTO_EXIT: 'Auto Exit',
     COORDINATED_ENTRY: 'Coordinated Entry',
+    SENDS_DIRECT_CE_REFERRALS: 'Sends Direct CE Referrals',
     STAFF_ASSIGNMENT: 'Staff Assignment',
   },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },

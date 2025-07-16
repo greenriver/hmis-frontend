@@ -6388,11 +6388,13 @@ export type ProjectConfigFilterOptions = {
 
 /** Project Config Input */
 export type ProjectConfigInput = {
+  acceptsDirectReferrals?: InputMaybe<Scalars['Boolean']['input']>;
   configType?: InputMaybe<ProjectConfigType>;
   lengthOfAbsenceDays?: InputMaybe<Scalars['Int']['input']>;
   organizationId?: InputMaybe<Scalars['ID']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<ProjectType>;
+  supportsWaitlistReferrals?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export enum ProjectConfigType {
@@ -6402,6 +6404,8 @@ export enum ProjectConfigType {
   AutoExit = 'AUTO_EXIT',
   /** Coordinated Entry */
   CoordinatedEntry = 'COORDINATED_ENTRY',
+  /** Sends Direct CE Referrals */
+  SendsDirectCeReferrals = 'SENDS_DIRECT_CE_REFERRALS',
   /** Staff Assignment */
   StaffAssignment = 'STAFF_ASSIGNMENT',
 }

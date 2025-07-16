@@ -9034,6 +9034,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectConfigInput',
     args: [
       {
+        name: 'acceptsDirectReferrals',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'configType',
         type: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
       },
@@ -9049,6 +9053,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+      {
+        name: 'supportsWaitlistReferrals',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
     ],
   },

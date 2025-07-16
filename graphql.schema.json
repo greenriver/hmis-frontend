@@ -42575,6 +42575,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "acceptsDirectReferrals",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "configType",
             "description": null,
             "type": {
@@ -42633,6 +42645,18 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "supportsWaitlistReferrals",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "interfaces": null,
@@ -42663,6 +42687,12 @@
           {
             "name": "COORDINATED_ENTRY",
             "description": "Coordinated Entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SENDS_DIRECT_CE_REFERRALS",
+            "description": "Sends Direct CE Referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },
