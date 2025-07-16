@@ -29,7 +29,13 @@ fragment ProjectAllFields on Project {
   residentialAffiliationProjectIds
   rrhSubType
   staffAssignmentsEnabled
-  coordinatedEntryEnabled
+  coordinatedEntryFeatures {
+    id
+    isReferrable
+    supportsWaitlistReferrals
+    acceptsDirectReferrals
+    sendsDirectReferrals
+  }
   targetPopulation
   organization {
     ...OrganizationNameFields

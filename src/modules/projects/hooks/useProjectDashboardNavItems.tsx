@@ -95,7 +95,7 @@ export const useProjectDashboardNavItems = (
               'canManageOutgoingReferrals',
             ],
             permissionMode: 'any',
-            hide: project.coordinatedEntryEnabled,
+            hide: !!project.coordinatedEntryFeatures,
           },
           {
             id: 'ce-referrals',
@@ -107,7 +107,7 @@ export const useProjectDashboardNavItems = (
               'canViewOwnReferrals',
             ],
             permissionMode: 'any',
-            hide: !project.coordinatedEntryEnabled,
+            hide: !project.coordinatedEntryFeatures,
           },
         ],
       },

@@ -20,14 +20,14 @@ import { generateSafePath } from '@/utils/pathEncoding';
 interface Props {
   projectId: string;
   unitGroupsEnabled?: boolean; // whether to show Unit Groups functionality
-  ceEnabled?: boolean; // whether to show CE details
+  ceReferrable?: boolean; // whether to show CE details
 }
 
 // Table for displaying all Units in the Project. This table is read-only.
 const ProjectUnitsTable: React.FC<Props> = ({
   projectId,
   unitGroupsEnabled = false,
-  ceEnabled = false,
+  ceReferrable = false,
 }) => {
   const columns: ColumnDef<UnitTableRowFieldsFragment>[] = useMemo(() => {
     return [
@@ -36,9 +36,9 @@ const ProjectUnitsTable: React.FC<Props> = ({
       ...(unitGroupsEnabled ? [UNIT_COLUMNS.unitGroup] : []),
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
-      ...(ceEnabled ? [UNIT_COLUMNS.ceReferralStatus] : []),
+      ...(ceReferrable ? [UNIT_COLUMNS.ceReferralStatus] : []),
     ];
-  }, [unitGroupsEnabled, ceEnabled]);
+  }, [unitGroupsEnabled, ceReferrable]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
@@ -95,7 +95,7 @@ const ProjectUnitsTable: React.FC<Props> = ({
         defaultPageSize={25}
         queryVariables={{
           id: projectId,
-          includeCeFields: ceEnabled,
+          includeCeFields: ceReferrable,
         }}
         queryDocument={GetUnitsDocument}
         columns={columns}
@@ -109,9 +109,9 @@ const ProjectUnitsTable: React.FC<Props> = ({
         rowName={(row) => `${row.unitType?.description} - ${row.id}`}
         rowSecondaryActionConfigs={rowSecondaryActionConfigs}
         loadingVariant='linear'
-        // Only link to Unit page if CE is enabled. For now we don't have anything non-CE to show.
-        rowLinkTo={ceEnabled ? rowLinkToUnit : undefined}
-        rowActionTitle={ceEnabled ? 'View Unit' : undefined}
+        // Only link to Unit page if project supports CE referrals. For now we don't have anything non-CE to show.
+        rowLinkTo={ceReferrable ? rowLinkToUnit : undefined}
+        rowActionTitle={ceReferrable ? 'View Unit' : undefined}
       />
     </>
   );

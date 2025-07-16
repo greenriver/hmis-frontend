@@ -6131,8 +6131,13 @@ export type Project = {
   ceReferrals: CeReferralsPaginated;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
-  /** Whether Coordinated Entry is enabled in this project */
+  /**
+   * Whether Coordinated Entry is enabled in this project
+   * @deprecated Use ProjectCoordinatedEntryFeatures
+   */
   coordinatedEntryEnabled: Scalars['Boolean']['output'];
+  /** Coordinated Entry features that are enabled for this Project */
+  coordinatedEntryFeatures?: Maybe<ProjectCoordinatedEntryFeatures>;
   createdBy?: Maybe<ApplicationUser>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
   customDataElements: Array<CustomDataElement>;
@@ -6419,6 +6424,19 @@ export type ProjectConfigsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+};
+
+export type ProjectCoordinatedEntryFeatures = {
+  __typename?: 'ProjectCoordinatedEntryFeatures';
+  /** Whether this project accepts direct CE referrals, initiated by a sending project */
+  acceptsDirectReferrals: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  /** Whether this project supports referrals, either direct or waitlist */
+  isReferrable: Scalars['Boolean']['output'];
+  /** Whether this project sends direct CE Referrals */
+  sendsDirectReferrals: Scalars['Boolean']['output'];
+  /** Whether this project supports waitlist CE referrals, initiated internally from a unit waitlist */
+  supportsWaitlistReferrals: Scalars['Boolean']['output'];
 };
 
 export enum ProjectFilterOptionStatus {
@@ -35963,12 +35981,19 @@ export type SubmitFormMutation = {
           residentialAffiliationProjectIds: Array<string>;
           rrhSubType?: RrhSubType | null;
           staffAssignmentsEnabled: boolean;
-          coordinatedEntryEnabled: boolean;
           targetPopulation?: TargetPopulation | null;
           projectName: string;
           projectType?: ProjectType | null;
           operatingEndDate?: string | null;
           operatingStartDate?: string | null;
+          coordinatedEntryFeatures?: {
+            __typename?: 'ProjectCoordinatedEntryFeatures';
+            id: string;
+            isReferrable: boolean;
+            supportsWaitlistReferrals: boolean;
+            acceptsDirectReferrals: boolean;
+            sendsDirectReferrals: boolean;
+          } | null;
           organization: {
             __typename?: 'Organization';
             id: string;
@@ -39679,12 +39704,19 @@ export type ProjectAllFieldsFragment = {
   residentialAffiliationProjectIds: Array<string>;
   rrhSubType?: RrhSubType | null;
   staffAssignmentsEnabled: boolean;
-  coordinatedEntryEnabled: boolean;
   targetPopulation?: TargetPopulation | null;
   projectName: string;
   projectType?: ProjectType | null;
   operatingEndDate?: string | null;
   operatingStartDate?: string | null;
+  coordinatedEntryFeatures?: {
+    __typename?: 'ProjectCoordinatedEntryFeatures';
+    id: string;
+    isReferrable: boolean;
+    supportsWaitlistReferrals: boolean;
+    acceptsDirectReferrals: boolean;
+    sendsDirectReferrals: boolean;
+  } | null;
   organization: {
     __typename?: 'Organization';
     id: string;
@@ -40571,12 +40603,19 @@ export type GetProjectQuery = {
     residentialAffiliationProjectIds: Array<string>;
     rrhSubType?: RrhSubType | null;
     staffAssignmentsEnabled: boolean;
-    coordinatedEntryEnabled: boolean;
     targetPopulation?: TargetPopulation | null;
     projectName: string;
     projectType?: ProjectType | null;
     operatingEndDate?: string | null;
     operatingStartDate?: string | null;
+    coordinatedEntryFeatures?: {
+      __typename?: 'ProjectCoordinatedEntryFeatures';
+      id: string;
+      isReferrable: boolean;
+      supportsWaitlistReferrals: boolean;
+      acceptsDirectReferrals: boolean;
+      sendsDirectReferrals: boolean;
+    } | null;
     organization: {
       __typename?: 'Organization';
       id: string;
@@ -48112,7 +48151,13 @@ export const ProjectAllFieldsFragmentDoc = gql`
     residentialAffiliationProjectIds
     rrhSubType
     staffAssignmentsEnabled
-    coordinatedEntryEnabled
+    coordinatedEntryFeatures {
+      id
+      isReferrable
+      supportsWaitlistReferrals
+      acceptsDirectReferrals
+      sendsDirectReferrals
+    }
     targetPopulation
     organization {
       ...OrganizationNameFields

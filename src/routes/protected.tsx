@@ -477,7 +477,7 @@ export const protectedRoutes: RouteNode[] = [
                   'canViewReferrals',
                   'canViewOwnReferrals',
                 ]}
-                requireCeEnabled
+                coordinatedEntryFeature='id'
               >
                 <ProjectCeReferralsPage />
               </ProjectRoute>
@@ -486,7 +486,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.UNIT,
             element: (
-              <ProjectRoute permissions={['canViewUnits']} requireCeEnabled>
+              <ProjectRoute
+                permissions={['canViewUnits']}
+                coordinatedEntryFeature='isReferrable'
+              >
                 <UnitPage />
               </ProjectRoute>
             ),
@@ -494,7 +497,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.CE_UNIT,
             element: (
-              <ProjectRoute permissions={['canViewUnits']} requireCeEnabled>
+              <ProjectRoute
+                permissions={['canViewUnits']}
+                coordinatedEntryFeature='isReferrable'
+              >
                 <UnitPage />
               </ProjectRoute>
             ),
@@ -504,7 +510,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewReferrals', 'canViewOwnReferrals']}
-                requireCeEnabled
+                coordinatedEntryFeature='isReferrable'
               >
                 <ProjectReferralPage />
               </ProjectRoute>

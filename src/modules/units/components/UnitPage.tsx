@@ -27,7 +27,7 @@ const UnitPage: React.FC<Props> = ({}) => {
   } = useGetUnitQuery({
     variables: {
       id: unitId,
-      includeCeFields: true, // we only render this page if CE is enabled
+      includeCeFields: true, // we only render this page if CE referrals are enabled
     },
   });
 
