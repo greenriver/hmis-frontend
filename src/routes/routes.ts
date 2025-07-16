@@ -129,6 +129,7 @@ const projectDashboardRoutes = {
   REFERRAL: 'ce/referrals/:referralId',
   REFERRAL_STEPS: 'ce/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
   REFERRAL_STEP: 'ce/referrals/:referralId/tasks/:stepId',
+  SEND_REFERRAL: 'ce/send-referral',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`

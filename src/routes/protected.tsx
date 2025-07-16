@@ -56,6 +56,7 @@ import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsP
 
 import ProjectCeReferralsPage from '@/modules/ce/components/project/ProjectCeReferralsPage';
 import ProjectReferralPage from '@/modules/ce/components/project/ProjectReferralPage';
+import SendReferralPage from '@/modules/ce/components/project/SendReferralPage';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/referral/ReferralSteps';
@@ -502,6 +503,18 @@ export const protectedRoutes: RouteNode[] = [
                 coordinatedEntryFeature='isReferrable'
               >
                 <UnitPage />
+              </ProjectRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.SEND_REFERRAL,
+            element: (
+              <ProjectRoute
+                permissions={['canManageOutgoingReferrals']}
+                coordinatedEntryFeature='sendsDirectReferrals'
+                redirectRoute={ProjectDashboardRoutes.CE}
+              >
+                <SendReferralPage />
               </ProjectRoute>
             ),
           },
