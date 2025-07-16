@@ -6431,10 +6431,10 @@ export type ProjectCoordinatedEntryFeatures = {
   /** Whether this project accepts direct CE referrals, initiated by a sending project */
   acceptsDirectReferrals: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
-  /** Whether this project supports referrals, either direct or waitlist */
-  isReferrable: Scalars['Boolean']['output'];
   /** Whether this project sends direct CE Referrals */
   sendsDirectReferrals: Scalars['Boolean']['output'];
+  /** Whether this project supports referrals, either direct or waitlist */
+  supportsReferrals: Scalars['Boolean']['output'];
   /** Whether this project supports waitlist CE referrals, initiated internally from a unit waitlist */
   supportsWaitlistReferrals: Scalars['Boolean']['output'];
 };
@@ -35989,7 +35989,7 @@ export type SubmitFormMutation = {
           coordinatedEntryFeatures?: {
             __typename?: 'ProjectCoordinatedEntryFeatures';
             id: string;
-            isReferrable: boolean;
+            supportsReferrals: boolean;
             supportsWaitlistReferrals: boolean;
             acceptsDirectReferrals: boolean;
             sendsDirectReferrals: boolean;
@@ -39712,7 +39712,7 @@ export type ProjectAllFieldsFragment = {
   coordinatedEntryFeatures?: {
     __typename?: 'ProjectCoordinatedEntryFeatures';
     id: string;
-    isReferrable: boolean;
+    supportsReferrals: boolean;
     supportsWaitlistReferrals: boolean;
     acceptsDirectReferrals: boolean;
     sendsDirectReferrals: boolean;
@@ -40611,7 +40611,7 @@ export type GetProjectQuery = {
     coordinatedEntryFeatures?: {
       __typename?: 'ProjectCoordinatedEntryFeatures';
       id: string;
-      isReferrable: boolean;
+      supportsReferrals: boolean;
       supportsWaitlistReferrals: boolean;
       acceptsDirectReferrals: boolean;
       sendsDirectReferrals: boolean;
@@ -48153,7 +48153,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
     staffAssignmentsEnabled
     coordinatedEntryFeatures {
       id
-      isReferrable
+      supportsReferrals
       supportsWaitlistReferrals
       acceptsDirectReferrals
       sendsDirectReferrals

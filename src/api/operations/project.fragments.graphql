@@ -31,7 +31,7 @@ fragment ProjectAllFields on Project {
   staffAssignmentsEnabled
   coordinatedEntryFeatures {
     id
-    isReferrable
+    supportsReferrals
     supportsWaitlistReferrals
     acceptsDirectReferrals
     sendsDirectReferrals

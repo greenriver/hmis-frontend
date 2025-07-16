@@ -29,14 +29,14 @@ const UnitGroupPage = () => {
   });
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const ceReferrable = useMemo(
-    () => project.coordinatedEntryFeatures?.isReferrable,
-    [project.coordinatedEntryFeatures?.isReferrable]
+  const projectSupportsReferrals = useMemo(
+    () => project.coordinatedEntryFeatures?.supportsReferrals,
+    [project.coordinatedEntryFeatures?.supportsReferrals]
   );
 
   const ceAvailabilityActionsEnabled = useMemo(() => {
-    return ceReferrable && !!unitGroup?.workflowTemplateName;
-  }, [ceReferrable, unitGroup?.workflowTemplateName]);
+    return projectSupportsReferrals && !!unitGroup?.workflowTemplateName;
+  }, [projectSupportsReferrals, unitGroup?.workflowTemplateName]);
 
   // Set the breadcrumb so it says the correct name of this unit group
   useEffect(() => {
@@ -72,7 +72,7 @@ const UnitGroupPage = () => {
       />
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={ceReferrable ? 8 : 12}>
+        <Grid item xs={projectSupportsReferrals ? 8 : 12}>
           <Stack gap={2}>
             <UnitGroupCard unitGroup={unitGroup} hideTitle />
             {!!unitGroup.capacity && (
@@ -80,14 +80,14 @@ const UnitGroupPage = () => {
                 <UnitManagementTable
                   projectId={project.id}
                   unitGroupId={unitGroupId}
-                  ceReferrable={ceReferrable}
+                  projectSupportsReferrals={projectSupportsReferrals}
                   ceAvailabilityActionsEnabled={ceAvailabilityActionsEnabled}
                 />
               </Paper>
             )}
           </Stack>
         </Grid>
-        {ceReferrable && (
+        {projectSupportsReferrals && (
           <Grid item xs={4}>
             <Stack gap={2}>
               <UnitGroupCeConfigurationCard unitGroup={unitGroup} />
@@ -116,7 +116,7 @@ const UnitGroupPage = () => {
         unitGroupId={unitGroupId}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-        includeCeFields={ceReferrable}
+        includeCeFields={projectSupportsReferrals}
       />
     </>
   );

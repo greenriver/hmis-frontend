@@ -24,7 +24,7 @@ import {
 interface Props {
   projectId: string;
   unitGroupId?: string; // if this table is for a specific unit group
-  ceReferrable?: boolean; // whether to show CE details
+  projectSupportsReferrals?: boolean; // whether to show CE details
   ceAvailabilityActionsEnabled?: boolean; // whether to show CE actions for marking units available/unavailable
 }
 
@@ -36,7 +36,7 @@ interface Props {
 const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
-  ceReferrable = false,
+  projectSupportsReferrals = false,
   ceAvailabilityActionsEnabled = false,
 }) => {
   const { setUnitToDelete, renderSingleDeleteDialog } = useDeleteUnits({
@@ -49,9 +49,9 @@ const UnitManagementTable: React.FC<Props> = ({
       UNIT_COLUMNS.unitId,
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
-      ...(ceReferrable ? [UNIT_COLUMNS.ceReferralStatus] : []),
+      ...(projectSupportsReferrals ? [UNIT_COLUMNS.ceReferralStatus] : []),
     ];
-  }, [ceReferrable]);
+  }, [projectSupportsReferrals]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
@@ -64,14 +64,14 @@ const UnitManagementTable: React.FC<Props> = ({
 
   const { getCeActions, loading } = useUnitCeActions({
     projectId,
-    ceReferrable,
+    projectSupportsReferrals: projectSupportsReferrals,
     ceAvailabilityActionsEnabled,
   });
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
       const actions = [];
-      if (ceReferrable) {
+      if (projectSupportsReferrals) {
         actions.push(...getCeActions(unit));
       }
       // If unit is occupied, link to hoh Enrollment
@@ -93,7 +93,7 @@ const UnitManagementTable: React.FC<Props> = ({
 
       return actions;
     },
-    [canManageUnits, ceReferrable, getCeActions, setUnitToDelete]
+    [canManageUnits, projectSupportsReferrals, getCeActions, setUnitToDelete]
   );
 
   return (
@@ -106,7 +106,7 @@ const UnitManagementTable: React.FC<Props> = ({
         defaultPageSize={25}
         queryVariables={{
           id: projectId,
-          includeCeFields: ceReferrable,
+          includeCeFields: projectSupportsReferrals,
         }}
         queryDocument={GetUnitsDocument}
         columns={columns}

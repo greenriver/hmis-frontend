@@ -30,13 +30,16 @@ const Units = () => {
     variables: { id: project.id, limit: 100 },
   });
 
-  const ceReferrable = useMemo(
-    () => project.coordinatedEntryFeatures?.isReferrable,
-    [project.coordinatedEntryFeatures?.isReferrable]
+  const projectSupportsReferrals = useMemo(
+    () => project.coordinatedEntryFeatures?.supportsReferrals,
+    [project.coordinatedEntryFeatures?.supportsReferrals]
   );
 
-  // For now, we assume that if the project has CE referrals enabled, it also has Unit Groups enabled.
-  const unitGroupsEnabled = useMemo(() => !!ceReferrable, [ceReferrable]);
+  // For now, we assume that if the project supports CE referrals, it also has Unit Groups enabled.
+  const unitGroupsEnabled = useMemo(
+    () => !!projectSupportsReferrals,
+    [projectSupportsReferrals]
+  );
 
   const unitGroups = useMemo(() => {
     if (!unitGroupsEnabled) return [];
@@ -103,13 +106,13 @@ const Units = () => {
             <ProjectUnitsTable
               projectId={project.id}
               unitGroupsEnabled={unitGroupsEnabled}
-              ceReferrable={ceReferrable}
+              projectSupportsReferrals={projectSupportsReferrals}
             />
           ) : (
             // If Unit Groups are not enabled, use the Unit Management Table so Units can be managed directly on this page
             <UnitManagementTable
               projectId={project.id}
-              ceReferrable={ceReferrable}
+              projectSupportsReferrals={projectSupportsReferrals}
             />
           )}
         </Paper>
@@ -119,14 +122,14 @@ const Units = () => {
           projectId={project.id}
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          ceReferrable={ceReferrable}
+          projectSupportsReferrals={projectSupportsReferrals}
         />
       ) : (
         <CreateUnitsDialog
           projectId={project.id}
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          includeCeFields={ceReferrable}
+          includeCeFields={projectSupportsReferrals}
         />
       )}
     </>

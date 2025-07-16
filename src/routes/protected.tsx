@@ -479,7 +479,7 @@ export const protectedRoutes: RouteNode[] = [
                   'canViewOwnReferrals',
                 ]}
                 coordinatedEntryFeatures={[
-                  'isReferrable',
+                  'supportsReferrals',
                   'sendsDirectReferrals',
                 ]}
               >
@@ -492,7 +492,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewUnits']}
-                coordinatedEntryFeatures={['isReferrable']}
+                coordinatedEntryFeatures={['supportsReferrals']}
               >
                 <UnitPage />
               </ProjectRoute>
@@ -503,7 +503,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewUnits']}
-                coordinatedEntryFeatures={['isReferrable']}
+                coordinatedEntryFeatures={['supportsReferrals']}
               >
                 <UnitPage />
               </ProjectRoute>
@@ -526,7 +526,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewReferrals', 'canViewOwnReferrals']}
-                coordinatedEntryFeatures={['isReferrable']}
+                coordinatedEntryFeatures={['supportsReferrals']}
               >
                 <ProjectReferralPage />
               </ProjectRoute>

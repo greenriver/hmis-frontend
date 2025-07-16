@@ -42888,8 +42888,8 @@
             "deprecationReason": null
           },
           {
-            "name": "isReferrable",
-            "description": "Whether this project supports referrals, either direct or waitlist",
+            "name": "sendsDirectReferrals",
+            "description": "Whether this project sends direct CE Referrals",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -42904,8 +42904,8 @@
             "deprecationReason": null
           },
           {
-            "name": "sendsDirectReferrals",
-            "description": "Whether this project sends direct CE Referrals",
+            "name": "supportsReferrals",
+            "description": "Whether this project supports referrals, either direct or waitlist",
             "args": [],
             "type": {
               "kind": "NON_NULL",

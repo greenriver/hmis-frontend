@@ -10,11 +10,11 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useUnitCeActions = ({
   projectId,
-  ceReferrable,
+  projectSupportsReferrals,
   ceAvailabilityActionsEnabled,
 }: {
   projectId: string;
-  ceReferrable: boolean;
+  projectSupportsReferrals: boolean;
   ceAvailabilityActionsEnabled: boolean;
 }): {
   loading: boolean;
@@ -32,7 +32,7 @@ export const useUnitCeActions = ({
 
   const getCeActions = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      if (!ceReferrable) return [];
+      if (!projectSupportsReferrals) return [];
 
       const actions: CommonMenuItem[] = [];
 
@@ -76,7 +76,7 @@ export const useUnitCeActions = ({
     },
     [
       ceAvailabilityActionsEnabled,
-      ceReferrable,
+      projectSupportsReferrals,
       markUnitsAvailable,
       markUnitsUnavailable,
       projectId,

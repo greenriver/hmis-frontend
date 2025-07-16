@@ -6028,7 +6028,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'isReferrable',
+        name: 'sendsDirectReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6036,7 +6036,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'sendsDirectReferrals',
+        name: 'supportsReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,

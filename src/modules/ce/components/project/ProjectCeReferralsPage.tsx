@@ -18,10 +18,11 @@ const ProjectCeReferralsPage: React.FC = () => {
   const tabDefinitions = useMemo(() => {
     const defs = [];
 
-    const projectIsReferrable = project.coordinatedEntryFeatures?.isReferrable;
+    const projectSupportsReferrals =
+      project.coordinatedEntryFeatures?.supportsReferrals;
     const userCanViewReferrals =
       project.access.canViewReferrals || project.access.canViewOwnReferrals;
-    if (projectIsReferrable && userCanViewReferrals) {
+    if (projectSupportsReferrals && userCanViewReferrals) {
       defs.push({
         title: 'Referrals',
         key: 'referrals',
