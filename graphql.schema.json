@@ -24762,6 +24762,18 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "altAhaFlag",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "errors",
             "description": null,
             "args": [],

@@ -23,6 +23,7 @@ const AhaScore = ({
 } & DynamicInputCommonProps) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [scoreUnavailable, setScoreUnavailable] = useState(false);
+  const [altAhaFlag, setAltAhaFlag] = useState<number | undefined>(undefined);
 
   const clientId = handlers?.localConstants.clientId;
 
@@ -44,16 +45,19 @@ const AhaScore = ({
       if (score) {
         setScoreUnavailable(false);
         onChange(score);
+        setAltAhaFlag(data.fetchAhaScore?.altAhaFlag || undefined);
       } else {
         // TODO(#7812) If score is not available (or bad quality?), calculate alt-AHA
         setScoreUnavailable(true);
         onChange(undefined);
+        setAltAhaFlag(undefined);
       }
     },
     onError: (apolloError) => {
       setErrorState({ ...emptyErrorState, apolloError });
       setScoreUnavailable(false);
       onChange(undefined);
+      setAltAhaFlag(undefined);
     },
   });
 
@@ -79,15 +83,21 @@ const AhaScore = ({
             Fetch AHA Score
           </LoadingButton>
         </LabelWithContent>
-        {(value || scoreUnavailable) && (
+        {scoreUnavailable && (
           <LabelWithContent label='AHA Score'>
-            {scoreUnavailable ? (
-              <Typography variant='body2' color='text.secondary'>
-                AHA score is not available for this client.
-              </Typography>
-            ) : (
-              <Typography variant='body2'>{value}</Typography>
-            )}
+            <Typography variant='body2' color='text.secondary'>
+              AHA score is not available for this client.
+            </Typography>
+          </LabelWithContent>
+        )}
+        {value && ( // todo @martha -this could be 0?
+          <LabelWithContent label='AHA Score'>
+            <Typography variant='body2'>{value}</Typography>
+          </LabelWithContent>
+        )}
+        {altAhaFlag !== undefined && (
+          <LabelWithContent label='Alt AHA Flag'>
+            <Typography variant='body2'>{altAhaFlag}</Typography>
           </LabelWithContent>
         )}
       </Stack>
