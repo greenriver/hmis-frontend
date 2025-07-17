@@ -42698,13 +42698,13 @@
           },
           {
             "name": "COORDINATED_ENTRY",
-            "description": "Supports Coordinated Entry Referrals",
+            "description": "Coordinated Entry Referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SENDS_DIRECT_CE_REFERRALS",
-            "description": "Sends Direct Coordinated Entry Referrals",
+            "description": "Outgoing Referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },

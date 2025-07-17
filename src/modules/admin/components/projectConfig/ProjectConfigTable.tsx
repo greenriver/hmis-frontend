@@ -51,7 +51,8 @@ const columns: ColumnDef<ProjectConfigFieldsFragment>[] = [
         <Stack>
           {Object.keys(parsedOptions).map((key) => (
             <Box key={key}>
-              {capitalize(key.replaceAll(/_/g, ' '))}: {parsedOptions[key]}
+              {capitalize(key.replaceAll(/_/g, ' '))}:{' '}
+              {parsedOptions[key]?.toString()}
             </Box>
           ))}
         </Stack>

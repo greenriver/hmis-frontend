@@ -11,18 +11,34 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const ProjectCeReferralsPage: React.FC = () => {
   const { project } = useProjectDashboardContext();
 
-  const projectSendsDirectReferrals =
-    project.coordinatedEntryFeatures?.sendsDirectReferrals;
-  const userCanSendReferrals = project.access.canManageOutgoingReferrals;
+  // CE Referral features this project supports
+  const { sendsDirectReferrals, supportsReferrals, supportsWaitlistReferrals } =
+    project.coordinatedEntryFeatures || {};
+
+  // User permissions related to CE Referrals
+  const {
+    canManageOutgoingReferrals,
+    canViewReferrals,
+    canViewOwnReferrals,
+    canViewUnits,
+  } = project.access;
+
+  // If the project supports referrals AND the user can view referrals, show the Referrals tab
+  const showReferralsTab =
+    supportsReferrals && (canViewReferrals || canViewOwnReferrals);
+
+  // If the project supports *waitlist* referrals AND the user can view units, show the Units tab.
+  // Only waitlist (not direct) referrals because it doesn't make sense to link to a unit from here if it doesn't have waitlist.
+  const showAvailableUnitsTab = supportsWaitlistReferrals && canViewUnits;
+
+  // If the project can send direct referrals AND the user has permission to manage outgoing referrals, show the Outgoing Referrals tab
+  const showOutgoingReferrals =
+    sendsDirectReferrals && canManageOutgoingReferrals;
 
   const tabDefinitions = useMemo(() => {
     const defs = [];
 
-    const projectSupportsReferrals =
-      project.coordinatedEntryFeatures?.supportsReferrals;
-    const userCanViewReferrals =
-      project.access.canViewReferrals || project.access.canViewOwnReferrals;
-    if (projectSupportsReferrals && userCanViewReferrals) {
+    if (showReferralsTab) {
       defs.push({
         title: 'Referrals',
         key: 'referrals',
@@ -30,12 +46,7 @@ const ProjectCeReferralsPage: React.FC = () => {
       });
     }
 
-    // Only render units tab on this page if this project uses waitlist-based referral creation.
-    // It doesn't make sense to link to unit from here if it doesn't have waitlist.
-    const projectSupportsWaitlistReferrals =
-      project.coordinatedEntryFeatures?.supportsWaitlistReferrals;
-    const userCanViewUnits = project.access.canViewUnits;
-    if (projectSupportsWaitlistReferrals && userCanViewUnits) {
+    if (showAvailableUnitsTab) {
       defs.push({
         title: 'Available Units',
         key: 'available-units',
@@ -43,7 +54,7 @@ const ProjectCeReferralsPage: React.FC = () => {
       });
     }
 
-    if (projectSendsDirectReferrals && userCanSendReferrals) {
+    if (showOutgoingReferrals) {
       defs.push({
         title: 'Sent Referrals',
         key: 'sent-referrals',
@@ -51,10 +62,15 @@ const ProjectCeReferralsPage: React.FC = () => {
       });
     }
     return defs;
-  }, [project, projectSendsDirectReferrals, userCanSendReferrals]);
+  }, [
+    project.id,
+    showAvailableUnitsTab,
+    showOutgoingReferrals,
+    showReferralsTab,
+  ]);
 
   const actions = useMemo(() => {
-    if (userCanSendReferrals && projectSendsDirectReferrals) {
+    if (showOutgoingReferrals) {
       return (
         <ButtonLink
           variant='contained'
@@ -66,7 +82,7 @@ const ProjectCeReferralsPage: React.FC = () => {
         </ButtonLink>
       );
     }
-  }, [project.id, projectSendsDirectReferrals, userCanSendReferrals]);
+  }, [project.id, showOutgoingReferrals]);
 
   return (
     <>

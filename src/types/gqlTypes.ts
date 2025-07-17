@@ -6407,9 +6407,9 @@ export enum ProjectConfigType {
   AutoEnter = 'AUTO_ENTER',
   /** Auto Exit */
   AutoExit = 'AUTO_EXIT',
-  /** Supports Coordinated Entry Referrals */
+  /** Coordinated Entry Referrals */
   CoordinatedEntry = 'COORDINATED_ENTRY',
-  /** Sends Direct Coordinated Entry Referrals */
+  /** Outgoing Referrals */
   SendsDirectCeReferrals = 'SENDS_DIRECT_CE_REFERRALS',
   /** Staff Assignment */
   StaffAssignment = 'STAFF_ASSIGNMENT',
