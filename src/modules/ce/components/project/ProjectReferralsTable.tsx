@@ -6,7 +6,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  CeReferralStatus,
   CeReferralTableFieldsFragment,
   GetProjectCeReferralsDocument,
   GetProjectCeReferralsQuery,
@@ -50,12 +49,6 @@ const ProjectReferralsTable: React.FC<Props> = ({ projectId }) => {
         columns={COLUMNS}
         queryVariables={{
           id: projectId,
-        }}
-        defaultFilterValues={{
-          referralStatus: [
-            CeReferralStatus.Initialized,
-            CeReferralStatus.InProgress,
-          ],
         }}
         filters={filters}
         queryDocument={GetProjectCeReferralsDocument}
