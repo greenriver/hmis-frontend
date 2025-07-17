@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
-import ButtonLink from '@/components/elements/ButtonLink';
+// import ButtonLink from '@/components/elements/ButtonLink';
 import CommonTabs from '@/components/elements/CommonTabs';
 import PageTitle from '@/components/layout/PageTitle';
 import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ProjectDashboardRoutes } from '@/routes/routes';
-import { generateSafePath } from '@/utils/pathEncoding';
+// import { ProjectDashboardRoutes } from '@/routes/routes';
+// import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectCeReferralsPage: React.FC = () => {
   const { project } = useProjectDashboardContext();
@@ -55,11 +55,11 @@ const ProjectCeReferralsPage: React.FC = () => {
     }
 
     if (showOutgoingReferrals) {
-      defs.push({
-        title: 'Sent Referrals',
-        key: 'sent-referrals',
-        contents: 'Placeholder', // Placeholder for future implementation
-      });
+      // defs.push({
+      //   title: 'Sent Referrals',
+      //   key: 'sent-referrals',
+      //   contents: 'Placeholder', // Placeholder for future implementation
+      // });
     }
     return defs;
   }, [
@@ -69,24 +69,27 @@ const ProjectCeReferralsPage: React.FC = () => {
     showReferralsTab,
   ]);
 
-  const actions = useMemo(() => {
-    if (showOutgoingReferrals) {
-      return (
-        <ButtonLink
-          variant='contained'
-          to={generateSafePath(ProjectDashboardRoutes.SEND_REFERRAL, {
-            projectId: project.id,
-          })}
-        >
-          Send Referral
-        </ButtonLink>
-      );
-    }
-  }, [project.id, showOutgoingReferrals]);
+  // const actions = useMemo(() => {
+  //   if (showOutgoingReferrals) {
+  //     return (
+  //       <ButtonLink
+  //         variant='contained'
+  //         to={generateSafePath(ProjectDashboardRoutes.SEND_REFERRAL, {
+  //           projectId: project.id,
+  //         })}
+  //       >
+  //         Send Referral
+  //       </ButtonLink>
+  //     );
+  //   }
+  // }, [project.id, showOutgoingReferrals]);
 
   return (
     <>
-      <PageTitle title='Referrals' actions={actions} />
+      <PageTitle
+        title='Referrals'
+        // actions={actions}
+      />
       <CommonTabs
         ariaLabel={'Project CE Tabs'}
         tabDefinitions={tabDefinitions}
