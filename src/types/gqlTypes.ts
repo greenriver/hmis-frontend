@@ -910,6 +910,7 @@ export type CeReferralStep = {
   /** User(s) currently assigned to this step */
   assignees: Array<ApplicationUser>;
   availableAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  customDataElements: Array<CustomDataElement>;
   formDefinition: FormDefinition;
   /** unique identifier for this step based on node and instance */
   id: Scalars['ID']['output'];
@@ -5043,9 +5044,10 @@ export type MutationSubmitAssessmentArgs = {
 export type MutationSubmitCeReferralStepArgs = {
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   formDefinitionId: Scalars['ID']['input'];
-  input: Scalars['JsonObject']['input'];
   referralId: Scalars['ID']['input'];
   stepId: Scalars['ID']['input'];
+  valuesByFieldName: Scalars['JsonObject']['input'];
+  valuesByLinkId: Scalars['JsonObject']['input'];
 };
 
 export type MutationSubmitFormArgs = {
@@ -17050,7 +17052,6 @@ export type CeReferralStepSummaryFieldsFragment = {
 
 export type CeReferralStepFieldsFragment = {
   __typename?: 'CeReferralStep';
-  submittedValues?: any | null;
   id: string;
   stepId?: string | null;
   name: string;
@@ -17568,6 +17569,127 @@ export type CeReferralStepFieldsFragment = {
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
   assignees: Array<{
     __typename?: 'ApplicationUser';
     id: string;
@@ -17694,7 +17816,6 @@ export type StartCeReferralStepMutation = {
     __typename?: 'StartCeReferralStepPayload';
     step: {
       __typename?: 'CeReferralStep';
-      submittedValues?: any | null;
       id: string;
       stepId?: string | null;
       name: string;
@@ -18212,6 +18333,127 @@ export type StartCeReferralStepMutation = {
         };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        displayHooks: Array<DisplayHook>;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        }> | null;
+      }>;
       assignees: Array<{
         __typename?: 'ApplicationUser';
         id: string;
@@ -18225,7 +18467,8 @@ export type StartCeReferralStepMutation = {
 export type SubmitCeReferralStepMutationVariables = Exact<{
   referralId: Scalars['ID']['input'];
   stepId: Scalars['ID']['input'];
-  input: Scalars['JsonObject']['input'];
+  valuesByLinkId: Scalars['JsonObject']['input'];
+  valuesByFieldName: Scalars['JsonObject']['input'];
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   formDefinitionId: Scalars['ID']['input'];
 }>;
@@ -18236,7 +18479,6 @@ export type SubmitCeReferralStepMutation = {
     __typename?: 'SubmitCeReferralStepPayload';
     step?: {
       __typename?: 'CeReferralStep';
-      submittedValues?: any | null;
       id: string;
       stepId?: string | null;
       name: string;
@@ -18754,6 +18996,127 @@ export type SubmitCeReferralStepMutation = {
         };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        displayHooks: Array<DisplayHook>;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            ownFile: boolean;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        }> | null;
+      }>;
       assignees: Array<{
         __typename?: 'ApplicationUser';
         id: string;
@@ -19625,7 +19988,6 @@ export type GetCeReferralStepQuery = {
   __typename?: 'Query';
   ceReferralStep?: {
     __typename?: 'CeReferralStep';
-    submittedValues?: any | null;
     id: string;
     stepId?: string | null;
     name: string;
@@ -20143,6 +20505,127 @@ export type GetCeReferralStepQuery = {
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      displayHooks: Array<DisplayHook>;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      }> | null;
+    }>;
     assignees: Array<{
       __typename?: 'ApplicationUser';
       id: string;
@@ -47269,10 +47752,13 @@ export const CeReferralStepFieldsFragmentDoc = gql`
     formDefinition {
       ...FormDefinitionFields
     }
-    submittedValues
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const UserCeReferralStepFieldsFragmentDoc = gql`
   fragment UserCeReferralStepFields on CeReferralStep {
@@ -50822,14 +51308,16 @@ export const SubmitCeReferralStepDocument = gql`
   mutation SubmitCeReferralStep(
     $referralId: ID!
     $stepId: ID!
-    $input: JsonObject!
+    $valuesByLinkId: JsonObject!
+    $valuesByFieldName: JsonObject!
     $confirmed: Boolean
     $formDefinitionId: ID!
   ) {
     submitCeReferralStep(
       referralId: $referralId
       stepId: $stepId
-      input: $input
+      valuesByLinkId: $valuesByLinkId
+      valuesByFieldName: $valuesByFieldName
       confirmed: $confirmed
       formDefinitionId: $formDefinitionId
     ) {
@@ -50878,7 +51366,8 @@ export type SubmitCeReferralStepMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      referralId: // value for 'referralId'
  *      stepId: // value for 'stepId'
- *      input: // value for 'input'
+ *      valuesByLinkId: // value for 'valuesByLinkId'
+ *      valuesByFieldName: // value for 'valuesByFieldName'
  *      confirmed: // value for 'confirmed'
  *      formDefinitionId: // value for 'formDefinitionId'
  *   },
