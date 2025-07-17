@@ -843,6 +843,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeReferralAuditEvent',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'stepName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'type',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'CeReferralAuditEventType',
+            ofType: null,
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeReferralStep',
     fields: [
       {
@@ -1146,6 +1183,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
+      { name: 'sex', type: { kind: 'ENUM', name: 'Sex', ofType: null } },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'ssnDataQuality',
@@ -2712,6 +2750,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'losUnderThreshold',
         type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'mentalHealthConsultation',
+        type: { kind: 'ENUM', name: 'MentalHealthConsultation', ofType: null },
       },
       {
         name: 'mentalHealthDisorderFam',

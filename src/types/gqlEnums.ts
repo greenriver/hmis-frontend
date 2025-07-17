@@ -87,6 +87,12 @@ export const HmisEnums = {
     DATE_AVAILABLE_LATEST_FIRST: 'Date Available, latest first',
   },
   CeOpportunityStatus: { closed: 'Closed', locked: 'Locked', open: 'Open' },
+  CeReferralAuditEventType: {
+    ACCEPT_REFERRAL: 'Accepted Referral',
+    COMPLETE_STEP: 'Completed Task',
+    REJECT_REFERRAL: 'Declined Referral',
+    START_REFERRAL: 'Started Referral',
+  },
   CeReferralStatus: {
     accepted: 'Accepted',
     in_progress: 'In progress',
@@ -846,6 +852,16 @@ export const HmisEnums = {
       'Most recent episode occurred more than one year ago',
     NONE: 'None',
     DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  MentalHealthConsultation: {
+    INVALID: 'Invalid Value',
+    MENTAL_HEALTH_CONSULTATION_COMPLETED:
+      'Mental health consultation completed',
+    MENTAL_HEALTH_CONSULTATION_BEING_COORDINATED_ARRANGED_WITH_VA_PROVIDER:
+      'Mental health consultation being coordinated/arranged with VA provider',
+    MENTAL_HEALTH_CONSULTATION_BEING_COORDINATED_ARRANGED_WITH_OTHER_PROVIDER:
+      'Mental health consultation being coordinated/arranged with other provider',
+    OFFER_DECLINED: 'Offer declined',
   },
   MilitaryBranch: {
     INVALID: 'Invalid Value',
@@ -1800,13 +1816,12 @@ export const HmisEnums = {
     RHY_SERVICE_CONNECTIONS__PARENTING_EDUCATION_FOR_YOUTH_WITH_CHILDREN:
       'Parenting education for youth with children',
     SSVF_FINANCIAL_ASSISTANCE__CHILD_CARE: 'Child care',
+    SSVF_SERVICE__HEALTHCARE_NAVIGATION: 'Healthcare Navigation',
     HOPWA_SERVICE__OUTREACH_AND_OR_ENGAGEMENT: 'Outreach and/or engagement',
     HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_PRIOR_TO_EVER_RECEIVING_A_VOUCHER:
       'Veteran exited - prior to ever receiving a voucher',
     PATH_REFERRAL__TEMPORARY_HOUSING: 'Temporary housing',
     PATH_SERVICE__SECURITY_DEPOSITS: 'Security deposits',
-    SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED:
-      'General housing stability assistance - emergency supplies [Deprecated]',
     HOPWA_SERVICE__SUBSTANCE_USE_SERVICES_TREATMENT:
       'Substance use services/treatment',
     HUD_VASH_OTH_VOUCHER_TRACKING__OTHER: 'Other',
@@ -1855,6 +1870,14 @@ export const HmisEnums = {
     SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE:
       'Transportation services: vehicle repair/maintenance',
     SSVF_SERVICE__RAPID_RESOLUTION: 'Rapid Resolution',
+  },
+  Sex: {
+    INVALID: 'Invalid Value',
+    FEMALE: 'Female',
+    MALE: 'Male',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   SexualOrientation: {
     INVALID: 'Invalid Value',

@@ -703,6 +703,7 @@ export type CeReferral = {
   __typename?: 'CeReferral';
   access: CeReferralAccess;
   active: Scalars['Boolean']['output'];
+  auditEvents: CeReferralAuditEventsPaginated;
   client?: Maybe<Client>;
   clientId: Scalars['ID']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -723,10 +724,46 @@ export type CeReferral = {
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
 
+export type CeReferralAuditEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type CeReferralAccess = {
   __typename?: 'CeReferralAccess';
   canViewTargetProject: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+};
+
+export type CeReferralAuditEvent = {
+  __typename?: 'CeReferralAuditEvent';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  id: Scalars['ID']['output'];
+  stepName?: Maybe<Scalars['String']['output']>;
+  type: CeReferralAuditEventType;
+  user?: Maybe<ApplicationUser>;
+};
+
+export enum CeReferralAuditEventType {
+  /** Accepted Referral */
+  AcceptReferral = 'ACCEPT_REFERRAL',
+  /** Completed Task */
+  CompleteStep = 'COMPLETE_STEP',
+  /** Declined Referral */
+  RejectReferral = 'REJECT_REFERRAL',
+  /** Started Referral */
+  StartReferral = 'START_REFERRAL',
+}
+
+export type CeReferralAuditEventsPaginated = {
+  __typename?: 'CeReferralAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeReferralAuditEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type CeReferralFilterOptions = {
@@ -902,6 +939,7 @@ export type Client = {
   race: Array<Race>;
   scanCardCodes: ScanCardCodesPaginated;
   services: ServicesPaginated;
+  sex?: Maybe<Sex>;
   ssn?: Maybe<Scalars['String']['output']>;
   ssnDataQuality: SsnDataQuality;
   user?: Maybe<ApplicationUser>;
@@ -2653,6 +2691,7 @@ export type Enrollment = {
   livingSituation?: Maybe<PriorLivingSituation>;
   lockVersion: Scalars['Int']['output'];
   losUnderThreshold?: Maybe<NoYesMissing>;
+  mentalHealthConsultation?: Maybe<MentalHealthConsultation>;
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   moveInAddresses: Array<ClientAddress>;
@@ -4413,6 +4452,20 @@ export type MciClearanceMatch = {
   score: Scalars['Int']['output'];
   ssn?: Maybe<Scalars['String']['output']>;
 };
+
+/** HUD MentalHealthConsultation (V10) */
+export enum MentalHealthConsultation {
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (3) Mental health consultation being coordinated/arranged with other provider */
+  MentalHealthConsultationBeingCoordinatedArrangedWithOtherProvider = 'MENTAL_HEALTH_CONSULTATION_BEING_COORDINATED_ARRANGED_WITH_OTHER_PROVIDER',
+  /** (2) Mental health consultation being coordinated/arranged with VA provider */
+  MentalHealthConsultationBeingCoordinatedArrangedWithVaProvider = 'MENTAL_HEALTH_CONSULTATION_BEING_COORDINATED_ARRANGED_WITH_VA_PROVIDER',
+  /** (1) Mental health consultation completed */
+  MentalHealthConsultationCompleted = 'MENTAL_HEALTH_CONSULTATION_COMPLETED',
+  /** (4) Offer declined */
+  OfferDeclined = 'OFFER_DECLINED',
+}
 
 export type MergeAuditEvent = {
   __typename?: 'MergeAuditEvent';
@@ -7659,8 +7712,6 @@ export enum ServiceTypeProvided {
   SsvfFinancialAssistanceFoodAssistance = 'SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE',
   /** (12) General housing stability assistance */
   SsvfFinancialAssistanceGeneralHousingStabilityAssistance = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE',
-  /** (11) General housing stability assistance - emergency supplies [Deprecated] */
-  SsvfFinancialAssistanceGeneralHousingStabilityAssistanceEmergencySuppliesDeprecated = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED',
   /** (17) Landlord Incentive */
   SsvfFinancialAssistanceLandlordIncentive = 'SSVF_FINANCIAL_ASSISTANCE__LANDLORD_INCENTIVE',
   /** (5) Moving costs */
@@ -7689,6 +7740,8 @@ export enum ServiceTypeProvided {
   SsvfServiceCaseManagementServices = 'SSVF_SERVICE__CASE_MANAGEMENT_SERVICES',
   /** (5) Direct provision of other public benefits */
   SsvfServiceDirectProvisionOfOtherPublicBenefits = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS',
+  /** (10) Healthcare Navigation */
+  SsvfServiceHealthcareNavigation = 'SSVF_SERVICE__HEALTHCARE_NAVIGATION',
   /** (6) Other (non-TFA) supportive service approved by VA */
   SsvfServiceOtherNonTfaSupportiveServiceApprovedByVa = 'SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA',
   /** (1) Outreach services */
@@ -7734,6 +7787,22 @@ export type ServicesPaginated = {
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
 };
+
+/** HUD Sex (4.21) */
+export enum Sex {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (0) Female */
+  Female = 'FEMALE',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (1) Male */
+  Male = 'MALE',
+}
 
 /** HUD SexualOrientation (R3.1) */
 export enum SexualOrientation {
@@ -9126,6 +9195,7 @@ export type AssessmentWithRecordsFragment = {
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
     preferredLanguageDifferent?: string | null;
+    mentalHealthConsultation?: MentalHealthConsultation | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -9993,6 +10063,7 @@ export type FullAssessmentFragment = {
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
     preferredLanguageDifferent?: string | null;
+    mentalHealthConsultation?: MentalHealthConsultation | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -11850,6 +11921,7 @@ export type GetAssessmentQuery = {
       translationNeeded?: NoYesReasonsForMissingData | null;
       preferredLanguage?: PreferredLanguage | null;
       preferredLanguageDifferent?: string | null;
+      mentalHealthConsultation?: MentalHealthConsultation | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -12976,6 +13048,7 @@ export type SubmitAssessmentMutation = {
         translationNeeded?: NoYesReasonsForMissingData | null;
         preferredLanguage?: PreferredLanguage | null;
         preferredLanguageDifferent?: string | null;
+        mentalHealthConsultation?: MentalHealthConsultation | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -13830,6 +13903,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         translationNeeded?: NoYesReasonsForMissingData | null;
         preferredLanguage?: PreferredLanguage | null;
         preferredLanguageDifferent?: string | null;
+        mentalHealthConsultation?: MentalHealthConsultation | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -14695,6 +14769,7 @@ export type GetAssessmentsForPopulationQuery = {
           translationNeeded?: NoYesReasonsForMissingData | null;
           preferredLanguage?: PreferredLanguage | null;
           preferredLanguageDifferent?: string | null;
+          mentalHealthConsultation?: MentalHealthConsultation | null;
           project: {
             __typename?: 'Project';
             id: string;
@@ -15551,6 +15626,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
+  mentalHealthConsultation?: MentalHealthConsultation | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -16579,6 +16655,15 @@ export type ClientCeReferralTableFieldsFragment = {
   } | null;
 };
 
+export type CeReferralAuditEventFieldsFragment = {
+  __typename?: 'CeReferralAuditEvent';
+  id: string;
+  createdAt: string;
+  type: CeReferralAuditEventType;
+  stepName?: string | null;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+};
+
 export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
   workflowTemplateName?: string | null;
@@ -16629,6 +16714,22 @@ export type CeReferralFieldsFragment = {
     id: string;
     client: { __typename?: 'Client'; id: string };
   } | null;
+  auditEvents: {
+    __typename?: 'CeReferralAuditEventsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeReferralAuditEvent';
+      id: string;
+      createdAt: string;
+      type: CeReferralAuditEventType;
+      stepName?: string | null;
+      user?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+    }>;
+  };
   client?: {
     __typename?: 'Client';
     id: string;
@@ -18465,6 +18566,22 @@ export type SubmitCeReferralStepMutation = {
           canPerformStep: boolean;
         };
       }>;
+      auditEvents: {
+        __typename?: 'CeReferralAuditEventsPaginated';
+        nodesCount: number;
+        nodes: Array<{
+          __typename?: 'CeReferralAuditEvent';
+          id: string;
+          createdAt: string;
+          type: CeReferralAuditEventType;
+          stepName?: string | null;
+          user?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+        }>;
+      };
       client?: {
         __typename?: 'Client';
         id: string;
@@ -18989,6 +19106,22 @@ export type GetCeReferralQuery = {
       id: string;
       client: { __typename?: 'Client'; id: string };
     } | null;
+    auditEvents: {
+      __typename?: 'CeReferralAuditEventsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeReferralAuditEvent';
+        id: string;
+        createdAt: string;
+        type: CeReferralAuditEventType;
+        stepName?: string | null;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    };
     client?: {
       __typename?: 'Client';
       id: string;
@@ -19833,6 +19966,7 @@ export type ClientFieldsFragment = {
   __typename?: 'Client';
   dobDataQuality: DobDataQuality;
   gender: Array<Gender>;
+  sex?: Sex | null;
   differentIdentityText?: string | null;
   pronouns: Array<string>;
   nameDataQuality: NameDataQuality;
@@ -20319,6 +20453,7 @@ export type GetClientQuery = {
     __typename?: 'Client';
     dobDataQuality: DobDataQuality;
     gender: Array<Gender>;
+    sex?: Sex | null;
     differentIdentityText?: string | null;
     pronouns: Array<string>;
     nameDataQuality: NameDataQuality;
@@ -21993,6 +22128,7 @@ export type MergeClientsMutation = {
       __typename?: 'Client';
       dobDataQuality: DobDataQuality;
       gender: Array<Gender>;
+      sex?: Sex | null;
       differentIdentityText?: string | null;
       pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
@@ -25527,6 +25663,7 @@ export type EnrollmentValuesFragment = {
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
+  mentalHealthConsultation?: MentalHealthConsultation | null;
 };
 
 export type SubmittedEnrollmentResultFieldsFragment = {
@@ -25966,6 +26103,7 @@ export type GetEnrollmentQuery = {
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
     preferredLanguageDifferent?: string | null;
+    mentalHealthConsultation?: MentalHealthConsultation | null;
     project: {
       __typename?: 'Project';
       id: string;
@@ -34308,6 +34446,7 @@ export type SubmitFormMutation = {
           __typename?: 'Client';
           dobDataQuality: DobDataQuality;
           gender: Array<Gender>;
+          sex?: Sex | null;
           differentIdentityText?: string | null;
           pronouns: Array<string>;
           nameDataQuality: NameDataQuality;
@@ -45689,6 +45828,7 @@ export const EnrollmentValuesFragmentDoc = gql`
     translationNeeded
     preferredLanguage
     preferredLanguageDifferent
+    mentalHealthConsultation
   }
 `;
 export const FileFieldsFragmentDoc = gql`
@@ -46410,6 +46550,18 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     }
   }
 `;
+export const CeReferralAuditEventFieldsFragmentDoc = gql`
+  fragment CeReferralAuditEventFields on CeReferralAuditEvent {
+    id
+    createdAt
+    type
+    stepName
+    user {
+      id
+      name
+    }
+  }
+`;
 export const CeReferralFieldsFragmentDoc = gql`
   fragment CeReferralFields on CeReferral {
     ...CeReferralSummaryFields
@@ -46428,11 +46580,18 @@ export const CeReferralFieldsFragmentDoc = gql`
         id
       }
     }
+    auditEvents(limit: 200) {
+      nodesCount
+      nodes {
+        ...CeReferralAuditEventFields
+      }
+    }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeReferralWithSwimlanesFragmentDoc}
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${CeOpportunitySummaryFieldsFragmentDoc}
+  ${CeReferralAuditEventFieldsFragmentDoc}
 `;
 export const FormDefinitionMetadataFragmentDoc = gql`
   fragment FormDefinitionMetadata on FormDefinition {
@@ -46757,6 +46916,7 @@ export const ClientFieldsFragmentDoc = gql`
     ...ClientVeteranInfoFields
     dobDataQuality
     gender
+    sex
     differentIdentityText
     pronouns
     nameDataQuality
