@@ -4016,6 +4016,66 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CeCustomReferralStatus",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "key",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CeMatchRule",
         "description": null,
         "isOneOf": null,
@@ -5424,6 +5484,18 @@
             "deprecationReason": null
           },
           {
+            "name": "customStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CeCustomReferralStatus",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "daysOnCurrentSteps",
             "description": null,
             "args": [],
@@ -6078,7 +6150,7 @@
             "deprecationReason": null
           },
           {
-            "name": "status",
+            "name": "referralStatus",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -6087,8 +6159,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "CeReferralStatus",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -10879,7 +10951,7 @@
             "deprecationReason": null
           },
           {
-            "name": "status",
+            "name": "referralStatus",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -10888,8 +10960,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "CeReferralStatus",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -37601,6 +37673,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CE_REFERRAL_STATUSES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CE_WORKFLOW_TEMPLATE_IDENTIFIERS",
             "description": "Templates for CE workflow definitions",
             "isDeprecated": false,
@@ -41991,7 +42069,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "status",
+            "name": "referralStatus",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -42000,8 +42078,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "CeReferralStatus",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }

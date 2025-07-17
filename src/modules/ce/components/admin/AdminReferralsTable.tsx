@@ -137,7 +137,10 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
         columns={COLUMNS}
         queryVariables={{}}
         defaultFilterValues={{
-          status: [CeReferralStatus.Initialized, CeReferralStatus.InProgress],
+          referralStatus: [
+            CeReferralStatus.Initialized,
+            CeReferralStatus.InProgress,
+          ],
         }}
         queryDocument={GetAdminCeReferralsDocument}
         pagePath='ceReferrals'

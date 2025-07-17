@@ -52,7 +52,10 @@ const ProjectReferralsTable: React.FC<Props> = ({ projectId }) => {
           id: projectId,
         }}
         defaultFilterValues={{
-          status: [CeReferralStatus.Initialized, CeReferralStatus.InProgress],
+          referralStatus: [
+            CeReferralStatus.Initialized,
+            CeReferralStatus.InProgress,
+          ],
         }}
         filters={filters}
         queryDocument={GetProjectCeReferralsDocument}
