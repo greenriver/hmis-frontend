@@ -45,6 +45,7 @@ const validOperatorsForType = (type: ItemType, repeats: boolean) => {
     } else {
       // compare if answer is equal to comparison value
       operators.push(EnableOperator.Equal);
+      operators.push(EnableOperator.NotEqual);
     }
     // "exists" evaluates whether the question has a current value or not. Doesn't really make sense for boolean, since you would just use value=true
     if (type !== ItemType.Boolean) operators.push(EnableOperator.Exists);
