@@ -5324,6 +5324,8 @@ export enum PickListType {
    * to units with the same unit type currently occupied by the household, if any.
    */
   AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
+  /** Unit groups with availability for the given project */
+  AvailableUnitGroupsForProject = 'AVAILABLE_UNIT_GROUPS_FOR_PROJECT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
   /** Grouped HUD CE Event types */
@@ -5366,6 +5368,8 @@ export enum PickListType {
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
+  /** Projects that are accepting CE referrals */
+  ProjectsAcceptingCeReferrals = 'PROJECTS_ACCEPTING_CE_REFERRALS',
   /** Open Projects that can receive referrals */
   ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
   ProjectConfigTypes = 'PROJECT_CONFIG_TYPES',

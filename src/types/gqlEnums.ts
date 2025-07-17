@@ -981,6 +981,8 @@ export const HmisEnums = {
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS_FOR_ENROLLMENT:
       'Units available for the given Enrollment at the given project. List is limited to units with the same unit type currently occupied by the household, if any.',
+    AVAILABLE_UNIT_GROUPS_FOR_PROJECT:
+      'Unit groups with availability for the given project',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',
@@ -1012,6 +1014,7 @@ export const HmisEnums = {
       'Unit types that are eligible to be added to project',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
+    PROJECTS_ACCEPTING_CE_REFERRALS: 'Projects that are accepting CE referrals',
     PROJECTS_RECEIVING_REFERRALS: 'Open Projects that can receive referrals',
     PROJECT_CONFIG_TYPES: 'PROJECT_CONFIG_TYPES',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',

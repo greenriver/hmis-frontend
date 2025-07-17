@@ -54,9 +54,9 @@ import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNo
 import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinatedEntry';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 
+import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
 import ProjectCeReferralsPage from '@/modules/ce/components/project/ProjectCeReferralsPage';
 import ProjectReferralPage from '@/modules/ce/components/project/ProjectReferralPage';
-import SendReferralPage from '@/modules/ce/components/project/SendReferralPage';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/referral/ReferralSteps';

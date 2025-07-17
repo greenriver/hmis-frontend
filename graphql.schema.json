@@ -37589,6 +37589,12 @@
             "deprecationReason": null
           },
           {
+            "name": "AVAILABLE_UNIT_GROUPS_FOR_PROJECT",
+            "description": "Unit groups with availability for the given project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "AVAILABLE_UNIT_TYPES",
             "description": "Unit types that have unoccupied units in the specified project",
             "isDeprecated": false,
@@ -37735,6 +37741,12 @@
           {
             "name": "PROJECT",
             "description": "All Projects that the User can see",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECTS_ACCEPTING_CE_REFERRALS",
+            "description": "Projects that are accepting CE referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },
