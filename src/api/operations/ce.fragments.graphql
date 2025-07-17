@@ -69,6 +69,11 @@ fragment CeCandidateFields on CeCandidate {
 fragment CeReferralSummaryFields on CeReferral {
   id
   status
+  customStatus {
+    id
+    key
+    name
+  }
   active
   clientId
   clientName
