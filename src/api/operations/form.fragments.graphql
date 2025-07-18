@@ -21,6 +21,7 @@ fragment PickListOptionFields on PickListOption {
   initialSelected
   helperText
   numericValue
+  disabled
 }
 
 fragment EnableWhenFields on EnableWhen {

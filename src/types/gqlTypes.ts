@@ -5297,7 +5297,7 @@ export type PickListOption = {
   __typename?: 'PickListOption';
   /** Code for the option */
   code: Scalars['String']['output'];
-  /** Whether option should be disabled */
+  /** Whether the option should be disabled */
   disabled?: Maybe<Scalars['Boolean']['output']>;
   /** Code for group that option belongs to, if grouped */
   groupCode?: Maybe<Scalars['String']['output']>;
@@ -11169,6 +11169,7 @@ export type GetAssessmentQuery = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -11243,6 +11244,7 @@ export type GetAssessmentQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -11317,6 +11319,7 @@ export type GetAssessmentQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -11391,6 +11394,7 @@ export type GetAssessmentQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -11465,6 +11469,7 @@ export type GetAssessmentQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -11679,6 +11684,7 @@ export type GetAssessmentQuery = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -11753,6 +11759,7 @@ export type GetAssessmentQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -11827,6 +11834,7 @@ export type GetAssessmentQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -11901,6 +11909,7 @@ export type GetAssessmentQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -11975,6 +11984,7 @@ export type GetAssessmentQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -17233,6 +17243,7 @@ export type CeReferralStepFieldsFragment = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -17307,6 +17318,7 @@ export type CeReferralStepFieldsFragment = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -17381,6 +17393,7 @@ export type CeReferralStepFieldsFragment = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -17455,6 +17468,7 @@ export type CeReferralStepFieldsFragment = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -17529,6 +17543,7 @@ export type CeReferralStepFieldsFragment = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -17871,6 +17886,7 @@ export type StartCeReferralStepMutation = {
                       initialSelected?: boolean | null;
                       helperText?: string | null;
                       numericValue?: number | null;
+                      disabled?: boolean | null;
                     }> | null;
                     initial?: Array<{
                       __typename?: 'InitialValue';
@@ -17945,6 +17961,7 @@ export type StartCeReferralStepMutation = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -18019,6 +18036,7 @@ export type StartCeReferralStepMutation = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -18093,6 +18111,7 @@ export type StartCeReferralStepMutation = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -18167,6 +18186,7 @@ export type StartCeReferralStepMutation = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -18413,6 +18433,7 @@ export type SubmitCeReferralStepMutation = {
                       initialSelected?: boolean | null;
                       helperText?: string | null;
                       numericValue?: number | null;
+                      disabled?: boolean | null;
                     }> | null;
                     initial?: Array<{
                       __typename?: 'InitialValue';
@@ -18487,6 +18508,7 @@ export type SubmitCeReferralStepMutation = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -18561,6 +18583,7 @@ export type SubmitCeReferralStepMutation = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -18635,6 +18658,7 @@ export type SubmitCeReferralStepMutation = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -18709,6 +18733,7 @@ export type SubmitCeReferralStepMutation = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -19797,6 +19822,7 @@ export type GetCeReferralStepQuery = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -19871,6 +19897,7 @@ export type GetCeReferralStepQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -19945,6 +19972,7 @@ export type GetCeReferralStepQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -20019,6 +20047,7 @@ export type GetCeReferralStepQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -20093,6 +20122,7 @@ export type GetCeReferralStepQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -20543,6 +20573,7 @@ export type GetDirectReferralFormQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -20617,6 +20648,7 @@ export type GetDirectReferralFormQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -20691,6 +20723,7 @@ export type GetDirectReferralFormQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -20765,6 +20798,7 @@ export type GetDirectReferralFormQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -20839,6 +20873,7 @@ export type GetDirectReferralFormQuery = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -22616,6 +22651,7 @@ export type ClientDetailFormsQuery = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -22690,6 +22726,7 @@ export type ClientDetailFormsQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -22764,6 +22801,7 @@ export type ClientDetailFormsQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -22838,6 +22876,7 @@ export type ClientDetailFormsQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -22912,6 +22951,7 @@ export type ClientDetailFormsQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -26144,6 +26184,7 @@ export type AllEnrollmentDetailsFragment = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -26218,6 +26259,7 @@ export type AllEnrollmentDetailsFragment = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -26292,6 +26334,7 @@ export type AllEnrollmentDetailsFragment = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -26366,6 +26409,7 @@ export type AllEnrollmentDetailsFragment = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -26440,6 +26484,7 @@ export type AllEnrollmentDetailsFragment = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -27590,6 +27635,7 @@ export type GetEnrollmentDetailsQuery = {
                       initialSelected?: boolean | null;
                       helperText?: string | null;
                       numericValue?: number | null;
+                      disabled?: boolean | null;
                     }> | null;
                     initial?: Array<{
                       __typename?: 'InitialValue';
@@ -27664,6 +27710,7 @@ export type GetEnrollmentDetailsQuery = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -27738,6 +27785,7 @@ export type GetEnrollmentDetailsQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -27812,6 +27860,7 @@ export type GetEnrollmentDetailsQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -27886,6 +27935,7 @@ export type GetEnrollmentDetailsQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -28613,6 +28663,7 @@ export type ExternalFormSubmissionFieldsFragment = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -28687,6 +28738,7 @@ export type ExternalFormSubmissionFieldsFragment = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -28761,6 +28813,7 @@ export type ExternalFormSubmissionFieldsFragment = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -28835,6 +28888,7 @@ export type ExternalFormSubmissionFieldsFragment = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -28909,6 +28963,7 @@ export type ExternalFormSubmissionFieldsFragment = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -29288,6 +29343,7 @@ export type GetExternalFormSubmissionQuery = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -29362,6 +29418,7 @@ export type GetExternalFormSubmissionQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -29436,6 +29493,7 @@ export type GetExternalFormSubmissionQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -29510,6 +29568,7 @@ export type GetExternalFormSubmissionQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -29584,6 +29643,7 @@ export type GetExternalFormSubmissionQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -29703,6 +29763,7 @@ export type PickListOptionFieldsFragment = {
   initialSelected?: boolean | null;
   helperText?: string | null;
   numericValue?: number | null;
+  disabled?: boolean | null;
 };
 
 export type EnableWhenFieldsFragment = {
@@ -29771,6 +29832,7 @@ export type ItemFieldsFragment = {
     initialSelected?: boolean | null;
     helperText?: string | null;
     numericValue?: number | null;
+    disabled?: boolean | null;
   }> | null;
   initial?: Array<{
     __typename?: 'InitialValue';
@@ -29973,6 +30035,7 @@ export type FormDefinitionJsonFieldsFragment = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -30047,6 +30110,7 @@ export type FormDefinitionJsonFieldsFragment = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -30121,6 +30185,7 @@ export type FormDefinitionJsonFieldsFragment = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -30195,6 +30260,7 @@ export type FormDefinitionJsonFieldsFragment = {
         initialSelected?: boolean | null;
         helperText?: string | null;
         numericValue?: number | null;
+        disabled?: boolean | null;
       }> | null;
       initial?: Array<{
         __typename?: 'InitialValue';
@@ -30269,6 +30335,7 @@ export type FormDefinitionJsonFieldsFragment = {
       initialSelected?: boolean | null;
       helperText?: string | null;
       numericValue?: number | null;
+      disabled?: boolean | null;
     }> | null;
     initial?: Array<{
       __typename?: 'InitialValue';
@@ -30495,6 +30562,7 @@ export type FormDefinitionFieldsFragment = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -30569,6 +30637,7 @@ export type FormDefinitionFieldsFragment = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -30643,6 +30712,7 @@ export type FormDefinitionFieldsFragment = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -30717,6 +30787,7 @@ export type FormDefinitionFieldsFragment = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -30791,6 +30862,7 @@ export type FormDefinitionFieldsFragment = {
         initialSelected?: boolean | null;
         helperText?: string | null;
         numericValue?: number | null;
+        disabled?: boolean | null;
       }> | null;
       initial?: Array<{
         __typename?: 'InitialValue';
@@ -31007,6 +31079,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -31081,6 +31154,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -31155,6 +31229,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -31229,6 +31304,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -31303,6 +31379,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
         initialSelected?: boolean | null;
         helperText?: string | null;
         numericValue?: number | null;
+        disabled?: boolean | null;
       }> | null;
       initial?: Array<{
         __typename?: 'InitialValue';
@@ -31519,6 +31596,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -31593,6 +31671,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -31667,6 +31746,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -31741,6 +31821,7 @@ export type FormDefinitionFieldsForEditorFragment = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -31815,6 +31896,7 @@ export type FormDefinitionFieldsForEditorFragment = {
         initialSelected?: boolean | null;
         helperText?: string | null;
         numericValue?: number | null;
+        disabled?: boolean | null;
       }> | null;
       initial?: Array<{
         __typename?: 'InitialValue';
@@ -32071,6 +32153,7 @@ export type UpdateFormDefinitionMutation = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -32145,6 +32228,7 @@ export type UpdateFormDefinitionMutation = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -32219,6 +32303,7 @@ export type UpdateFormDefinitionMutation = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -32293,6 +32378,7 @@ export type UpdateFormDefinitionMutation = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -32367,6 +32453,7 @@ export type UpdateFormDefinitionMutation = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -32608,6 +32695,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                     initialSelected?: boolean | null;
                     helperText?: string | null;
                     numericValue?: number | null;
+                    disabled?: boolean | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -32682,6 +32770,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -32756,6 +32845,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -32830,6 +32920,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -32904,6 +32995,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -33169,6 +33261,7 @@ export type GetPickListQuery = {
     initialSelected?: boolean | null;
     helperText?: string | null;
     numericValue?: number | null;
+    disabled?: boolean | null;
   }>;
 };
 
@@ -33344,6 +33437,7 @@ export type GetFormDefinitionQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -33418,6 +33512,7 @@ export type GetFormDefinitionQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -33492,6 +33587,7 @@ export type GetFormDefinitionQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -33566,6 +33662,7 @@ export type GetFormDefinitionQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -33640,6 +33737,7 @@ export type GetFormDefinitionQuery = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -33862,6 +33960,7 @@ export type GetStaticFormDefinitionQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -33936,6 +34035,7 @@ export type GetStaticFormDefinitionQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -34010,6 +34110,7 @@ export type GetStaticFormDefinitionQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -34084,6 +34185,7 @@ export type GetStaticFormDefinitionQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -34158,6 +34260,7 @@ export type GetStaticFormDefinitionQuery = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -34382,6 +34485,7 @@ export type GetServiceFormDefinitionQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -34456,6 +34560,7 @@ export type GetServiceFormDefinitionQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -34530,6 +34635,7 @@ export type GetServiceFormDefinitionQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -34604,6 +34710,7 @@ export type GetServiceFormDefinitionQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -34678,6 +34785,7 @@ export type GetServiceFormDefinitionQuery = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -34903,6 +35011,7 @@ export type GetAssessmentFormDefinitionQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -34977,6 +35086,7 @@ export type GetAssessmentFormDefinitionQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -35051,6 +35161,7 @@ export type GetAssessmentFormDefinitionQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -35125,6 +35236,7 @@ export type GetAssessmentFormDefinitionQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -35199,6 +35311,7 @@ export type GetAssessmentFormDefinitionQuery = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -37162,6 +37275,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -37236,6 +37350,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -37310,6 +37425,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -37384,6 +37500,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -37458,6 +37575,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -37681,6 +37799,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -37755,6 +37874,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -37829,6 +37949,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -37903,6 +38024,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -37977,6 +38099,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -38192,6 +38315,7 @@ export type GetParsedFormDefinitionQuery = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -38266,6 +38390,7 @@ export type GetParsedFormDefinitionQuery = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -38340,6 +38465,7 @@ export type GetParsedFormDefinitionQuery = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -38414,6 +38540,7 @@ export type GetParsedFormDefinitionQuery = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -38488,6 +38615,7 @@ export type GetParsedFormDefinitionQuery = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -40666,6 +40794,7 @@ export type OccurrencePointFormFieldsFragment = {
                   initialSelected?: boolean | null;
                   helperText?: string | null;
                   numericValue?: number | null;
+                  disabled?: boolean | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -40740,6 +40869,7 @@ export type OccurrencePointFormFieldsFragment = {
                 initialSelected?: boolean | null;
                 helperText?: string | null;
                 numericValue?: number | null;
+                disabled?: boolean | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -40814,6 +40944,7 @@ export type OccurrencePointFormFieldsFragment = {
               initialSelected?: boolean | null;
               helperText?: string | null;
               numericValue?: number | null;
+              disabled?: boolean | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -40888,6 +41019,7 @@ export type OccurrencePointFormFieldsFragment = {
             initialSelected?: boolean | null;
             helperText?: string | null;
             numericValue?: number | null;
+            disabled?: boolean | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -40962,6 +41094,7 @@ export type OccurrencePointFormFieldsFragment = {
           initialSelected?: boolean | null;
           helperText?: string | null;
           numericValue?: number | null;
+          disabled?: boolean | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -47628,6 +47761,7 @@ export const PickListOptionFieldsFragmentDoc = gql`
     initialSelected
     helperText
     numericValue
+    disabled
   }
 `;
 export const EnableWhenFieldsFragmentDoc = gql`

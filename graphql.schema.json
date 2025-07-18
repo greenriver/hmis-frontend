@@ -37568,7 +37568,7 @@
           },
           {
             "name": "disabled",
-            "description": "Whether option should be disabled",
+            "description": "Whether the option should be disabled",
             "args": [],
             "type": {
               "kind": "SCALAR",
