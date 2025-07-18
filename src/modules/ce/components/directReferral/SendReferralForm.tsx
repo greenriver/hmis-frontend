@@ -101,7 +101,7 @@ const SendReferralForm: React.FC<Props> = ({ project }) => {
                 targetUnitGroupId={formState.selectedUnitGroup.code}
                 onSuccess={() => {
                   navigate(
-                    generateSafePath(ProjectDashboardRoutes.REFERRALS, {
+                    generateSafePath(ProjectDashboardRoutes.CE, {
                       projectId: project.id,
                     })
                   );
