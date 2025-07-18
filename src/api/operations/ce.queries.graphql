@@ -169,3 +169,17 @@ query GetAdminCeReferrals(
     }
   }
 }
+
+query GetDirectReferralForm(
+  $targetProjectId: ID!
+  $sourceEnrollmentId: ID!
+  $targetUnitGroupId: ID!
+) {
+  directReferralForm(
+    targetProjectId: $targetProjectId
+    sourceEnrollmentId: $sourceEnrollmentId
+    targetUnitGroupId: $targetUnitGroupId
+  ) {
+    ...FormDefinitionFields
+  }
+}
