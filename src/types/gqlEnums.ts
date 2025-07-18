@@ -1533,6 +1533,7 @@ export const HmisEnums = {
     HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH Voucher Tracking',
     MOVING_ON_ASSISTANCE: 'Moving On Assistance',
   },
+  ReferralMode: { coordinated_entry: 'coordinated_entry', legacy: 'legacy' },
   ReferralPostingDenialReasonType: {
     DoesNotMeetEligibilityCriteria: 'Does not meet eligibility criteria',
     EnrolledButDeclinedHMISDataEntry: 'Enrolled, but declined HMIS data entry',

@@ -45051,6 +45051,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "referralMode",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "ReferralMode",
+                  "ofType": null
+                },
+                "defaultValue": "legacy",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "sourceEnrollmentId",
                 "description": null,
                 "type": {
@@ -47260,6 +47272,30 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ReferralMode",
+        "description": null,
+        "isOneOf": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "coordinated_entry",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "legacy",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

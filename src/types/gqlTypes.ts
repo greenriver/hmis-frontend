@@ -6777,6 +6777,7 @@ export type QueryProjectArgs = {
 
 export type QueryProjectCanAcceptReferralArgs = {
   destinationProjectId: Scalars['ID']['input'];
+  referralMode?: InputMaybe<ReferralMode>;
   sourceEnrollmentId: Scalars['ID']['input'];
 };
 
@@ -7100,6 +7101,11 @@ export type ReferralHouseholdMember = {
   openEnrollmentSummary: Array<EnrollmentSummary>;
   relationshipToHoH: RelationshipToHoH;
 };
+
+export enum ReferralMode {
+  CoordinatedEntry = 'coordinated_entry',
+  Legacy = 'legacy',
+}
 
 /** A referral for a household of one or more clients */
 export type ReferralPosting = {
@@ -42962,6 +42968,7 @@ export type UpdateReferralPostingMutation = {
 export type GetProjectCanAcceptReferralQueryVariables = Exact<{
   sourceEnrollmentId: Scalars['ID']['input'];
   destinationProjectId: Scalars['ID']['input'];
+  referralMode?: InputMaybe<ReferralMode>;
 }>;
 
 export type GetProjectCanAcceptReferralQuery = {
@@ -62300,10 +62307,12 @@ export const GetProjectCanAcceptReferralDocument = gql`
   query GetProjectCanAcceptReferral(
     $sourceEnrollmentId: ID!
     $destinationProjectId: ID!
+    $referralMode: ReferralMode
   ) {
     projectCanAcceptReferral(
       sourceEnrollmentId: $sourceEnrollmentId
       destinationProjectId: $destinationProjectId
+      referralMode: $referralMode
     )
   }
 `;
@@ -62322,6 +62331,7 @@ export const GetProjectCanAcceptReferralDocument = gql`
  *   variables: {
  *      sourceEnrollmentId: // value for 'sourceEnrollmentId'
  *      destinationProjectId: // value for 'destinationProjectId'
+ *      referralMode: // value for 'referralMode'
  *   },
  * });
  */
