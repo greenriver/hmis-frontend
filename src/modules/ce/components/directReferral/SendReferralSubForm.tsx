@@ -28,7 +28,6 @@ const SendReferralSubForm: React.FC<Props> = ({
     error: definitionError,
   } = useGetDirectReferralFormQuery({
     variables: {
-      targetProjectId,
       sourceEnrollmentId,
       targetUnitGroupId,
     },

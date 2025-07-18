@@ -6674,7 +6674,6 @@ export type QueryDeniedPendingReferralPostingsArgs = {
 
 export type QueryDirectReferralFormArgs = {
   sourceEnrollmentId: Scalars['ID']['input'];
-  targetProjectId: Scalars['ID']['input'];
   targetUnitGroupId: Scalars['ID']['input'];
 };
 
@@ -20319,7 +20318,6 @@ export type GetAdminCeReferralsQuery = {
 };
 
 export type GetDirectReferralFormQueryVariables = Exact<{
-  targetProjectId: Scalars['ID']['input'];
   sourceEnrollmentId: Scalars['ID']['input'];
   targetUnitGroupId: Scalars['ID']['input'];
 }>;
@@ -52622,12 +52620,10 @@ export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
 >;
 export const GetDirectReferralFormDocument = gql`
   query GetDirectReferralForm(
-    $targetProjectId: ID!
     $sourceEnrollmentId: ID!
     $targetUnitGroupId: ID!
   ) {
     directReferralForm(
-      targetProjectId: $targetProjectId
       sourceEnrollmentId: $sourceEnrollmentId
       targetUnitGroupId: $targetUnitGroupId
     ) {
@@ -52649,7 +52645,6 @@ export const GetDirectReferralFormDocument = gql`
  * @example
  * const { data, loading, error } = useGetDirectReferralFormQuery({
  *   variables: {
- *      targetProjectId: // value for 'targetProjectId'
  *      sourceEnrollmentId: // value for 'sourceEnrollmentId'
  *      targetUnitGroupId: // value for 'targetUnitGroupId'
  *   },
