@@ -1,10 +1,15 @@
 import { Alert, Stack } from '@mui/material';
 import { useState } from 'react';
 import LoadingSkeleton from '@/components/elements/LoadingSkeleton';
-import { emptyErrorState, ErrorState } from '@/modules/errors/util';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import {
   ReferralMode,
+  useCreateDirectCeReferralMutation,
   useGetDirectReferralFormQuery,
   useGetProjectCanAcceptReferralQuery,
 } from '@/types/gqlTypes';
@@ -34,7 +39,6 @@ const SendReferralSubForm: React.FC<Props> = ({
   });
 
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
-  console.log(setErrors);
 
   const { data: { projectCanAcceptReferral } = {} } =
     useGetProjectCanAcceptReferralQuery({
@@ -42,6 +46,37 @@ const SendReferralSubForm: React.FC<Props> = ({
         destinationProjectId: targetProjectId,
         sourceEnrollmentId,
         referralMode: ReferralMode.CoordinatedEntry,
+      },
+    });
+
+  const [submit, { loading: submitLoading }] =
+    useCreateDirectCeReferralMutation({
+      onCompleted: (data) => {
+        const errors = data.createDirectCeReferral?.errors;
+        if (errors && errors.length > 0) {
+          setErrors(partitionValidations(errors));
+          return;
+        }
+
+        setErrors(emptyErrorState);
+
+        // todo @martha- show success
+        console.log(data);
+        //
+        // const status = data.submitCeReferralStep?.referral?.status;
+        // const wayfind =
+        //   status &&
+        //   [CeReferralStatus.Rejected, CeReferralStatus.Accepted].includes(status);
+        //
+        // navigate({
+        //   pathname: referralPath,
+        //   search: wayfind
+        //     ? new URLSearchParams({ wayfinding: 'true' }).toString()
+        //     : undefined,
+        // });
+      },
+      onError: (apolloError) => {
+        setErrors({ ...emptyErrorState, apolloError });
       },
     });
 
@@ -64,11 +99,20 @@ const SendReferralSubForm: React.FC<Props> = ({
       {formDefinition && (
         <DynamicForm
           definition={formDefinition.definition}
-          onSubmit={() => {
-            console.log('submitting');
+          // todo @martha - move this up
+          onSubmit={({ valuesByLinkId, confirmed }) => {
+            submit({
+              variables: {
+                targetUnitGroupId,
+                sourceEnrollmentId,
+                input: valuesByLinkId,
+                confirmed,
+                formDefinitionId: formDefinition.id,
+              },
+            });
           }}
+          loading={submitLoading}
           errors={errors}
-          // loading={submitLoading}
           FormActionProps={{
             submitButtonText: 'Refer Household',
             discardButtonText: 'Cancel',

@@ -5526,6 +5526,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'disabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'groupCode',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
