@@ -567,6 +567,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeCustomReferralStatus',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'key',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeMatchRule',
     fields: [
       {
@@ -7838,14 +7867,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'status',
+        name: 'referralStatus',
         type: {
           kind: 'LIST',
           name: null,
           ofType: {
             kind: 'NON_NULL',
             name: null,
-            ofType: { kind: 'ENUM', name: 'CeReferralStatus', ofType: null },
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
       },
@@ -8006,14 +8035,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'status',
+        name: 'referralStatus',
         type: {
           kind: 'LIST',
           name: null,
           ofType: {
             kind: 'NON_NULL',
             name: null,
-            ofType: { kind: 'ENUM', name: 'CeReferralStatus', ofType: null },
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
       },
@@ -9033,14 +9062,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectCeReferralFilterOptions',
     args: [
       {
-        name: 'status',
+        name: 'referralStatus',
         type: {
           kind: 'LIST',
           name: null,
           ofType: {
             kind: 'NON_NULL',
             name: null,
-            ofType: { kind: 'ENUM', name: 'CeReferralStatus', ofType: null },
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
       },

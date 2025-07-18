@@ -4016,6 +4016,66 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CeCustomReferralStatus",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "key",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CeMatchRule",
         "description": null,
         "isOneOf": null,
@@ -5424,6 +5484,18 @@
             "deprecationReason": null
           },
           {
+            "name": "customStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CeCustomReferralStatus",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "daysOnCurrentSteps",
             "description": null,
             "args": [],
@@ -6078,7 +6150,7 @@
             "deprecationReason": null
           },
           {
-            "name": "status",
+            "name": "referralStatus",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -6087,8 +6159,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "CeReferralStatus",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -6916,6 +6988,30 @@
               "kind": "SCALAR",
               "name": "ISO8601DateTime",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "customDataElements",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CustomDataElement",
+                    "ofType": null
+                  }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -10879,7 +10975,7 @@
             "deprecationReason": null
           },
           {
-            "name": "status",
+            "name": "referralStatus",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -10888,8 +10984,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "CeReferralStatus",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -35943,22 +36039,6 @@
                 "deprecationReason": null
               },
               {
-                "name": "input",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "JsonObject",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "referralId",
                 "description": null,
                 "type": {
@@ -35983,6 +36063,38 @@
                   "ofType": {
                     "kind": "SCALAR",
                     "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "valuesByFieldName",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "JsonObject",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "valuesByLinkId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "JsonObject",
                     "ofType": null
                   }
                 },
@@ -37597,6 +37709,12 @@
           {
             "name": "CE_EVENTS",
             "description": "Grouped HUD CE Event types",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE_REFERRAL_STATUSES",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -42003,7 +42121,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "status",
+            "name": "referralStatus",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -42012,8 +42130,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "CeReferralStatus",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
