@@ -4869,9 +4869,10 @@ export type MutationCreateClientAlertArgs = {
 export type MutationCreateDirectCeReferralArgs = {
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   formDefinitionId: Scalars['ID']['input'];
-  input: Scalars['JsonObject']['input'];
   sourceEnrollmentId: Scalars['ID']['input'];
   targetUnitGroupId: Scalars['ID']['input'];
+  valuesByFieldName: Scalars['JsonObject']['input'];
+  valuesByLinkId: Scalars['JsonObject']['input'];
 };
 
 export type MutationCreateDirectUploadArgs = {
@@ -19396,7 +19397,8 @@ export type SubmitCeReferralStepMutation = {
 export type CreateDirectCeReferralMutationVariables = Exact<{
   targetUnitGroupId: Scalars['ID']['input'];
   sourceEnrollmentId: Scalars['ID']['input'];
-  input: Scalars['JsonObject']['input'];
+  valuesByLinkId: Scalars['JsonObject']['input'];
+  valuesByFieldName: Scalars['JsonObject']['input'];
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   formDefinitionId: Scalars['ID']['input'];
 }>;
@@ -19412,6 +19414,12 @@ export type CreateDirectCeReferralMutation = {
       active: boolean;
       clientId: string;
       clientName: string;
+      customStatus?: {
+        __typename?: 'CeCustomReferralStatus';
+        id: string;
+        key: string;
+        name: string;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -52172,14 +52180,16 @@ export const CreateDirectCeReferralDocument = gql`
   mutation CreateDirectCeReferral(
     $targetUnitGroupId: ID!
     $sourceEnrollmentId: ID!
-    $input: JsonObject!
+    $valuesByLinkId: JsonObject!
+    $valuesByFieldName: JsonObject!
     $confirmed: Boolean
     $formDefinitionId: ID!
   ) {
     createDirectCeReferral(
       targetUnitGroupId: $targetUnitGroupId
       sourceEnrollmentId: $sourceEnrollmentId
-      input: $input
+      valuesByLinkId: $valuesByLinkId
+      valuesByFieldName: $valuesByFieldName
       confirmed: $confirmed
       formDefinitionId: $formDefinitionId
     ) {
@@ -52214,7 +52224,8 @@ export type CreateDirectCeReferralMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      targetUnitGroupId: // value for 'targetUnitGroupId'
  *      sourceEnrollmentId: // value for 'sourceEnrollmentId'
- *      input: // value for 'input'
+ *      valuesByLinkId: // value for 'valuesByLinkId'
+ *      valuesByFieldName: // value for 'valuesByFieldName'
  *      confirmed: // value for 'confirmed'
  *      formDefinitionId: // value for 'formDefinitionId'
  *   },

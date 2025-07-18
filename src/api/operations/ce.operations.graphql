@@ -65,14 +65,16 @@ mutation SubmitCeReferralStep(
 mutation CreateDirectCeReferral(
   $targetUnitGroupId: ID!
   $sourceEnrollmentId: ID!
-  $input: JsonObject!
+  $valuesByLinkId: JsonObject!
+  $valuesByFieldName: JsonObject!
   $confirmed: Boolean
   $formDefinitionId: ID!
 ) {
   createDirectCeReferral(
     targetUnitGroupId: $targetUnitGroupId
     sourceEnrollmentId: $sourceEnrollmentId
-    input: $input
+    valuesByLinkId: $valuesByLinkId
+    valuesByFieldName: $valuesByFieldName
     confirmed: $confirmed
     formDefinitionId: $formDefinitionId
   ) {

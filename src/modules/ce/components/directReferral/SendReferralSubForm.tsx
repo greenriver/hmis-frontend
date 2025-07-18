@@ -69,14 +69,15 @@ const SendReferralSubForm: React.FC<Props> = ({
     });
 
   const handleSubmit: DynamicFormOnSubmit = useCallback(
-    ({ valuesByLinkId, confirmed }) => {
+    ({ valuesByLinkId, valuesByFieldName, confirmed }) => {
       if (!formDefinition) return;
 
       submit({
         variables: {
           targetUnitGroupId,
           sourceEnrollmentId,
-          input: valuesByLinkId,
+          valuesByLinkId,
+          valuesByFieldName,
           confirmed,
           formDefinitionId: formDefinition.id,
         },
