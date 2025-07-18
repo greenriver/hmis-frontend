@@ -15,7 +15,6 @@ import {
 } from '@/routes/routes';
 import {
   CeReferralAdminFieldsFragment,
-  CeReferralStatus,
   GetAdminCeReferralsDocument,
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables,
@@ -28,20 +27,21 @@ const COLUMNS: DataColumnDef<
 >[] = [
   REFERRAL_COLUMNS.client,
   REFERRAL_COLUMNS.status,
-  REFERRAL_COLUMNS.currentSteps,
-  REFERRAL_COLUMNS.daysOnCurrentTask,
+  {
+    ...REFERRAL_COLUMNS.currentSteps,
+    optional: { defaultHidden: false },
+  },
+  {
+    ...REFERRAL_COLUMNS.daysOnCurrentTask,
+    optional: { defaultHidden: false },
+  },
   {
     ...REFERRAL_COLUMNS.currentTaskSwimlane,
-    // FIXME(#7832): bug, defaultHidden: false not working
-    // optional: {
-    //   defaultHidden: false,
-    // },
+    optional: { defaultHidden: false },
   },
   {
     ...REFERRAL_COLUMNS.currentTaskAssignees,
-    optional: {
-      defaultHidden: true,
-    },
+    optional: { defaultHidden: true },
   },
   REFERRAL_WITH_PROJECT_COLUMNS.projectName,
   {
@@ -68,14 +68,12 @@ const COLUMNS: DataColumnDef<
     },
   },
   { ...REFERRAL_COLUMNS.referredBy, optional: { defaultHidden: true } },
-  REFERRAL_COLUMNS.date,
+  { ...REFERRAL_COLUMNS.date, optional: { defaultHidden: false } },
   {
     key: 'updatedBy',
     header: 'Last Updated By',
     render: ({ updatedBy }) => updatedBy?.name,
-    // optional: {
-    //   defaultHidden: false,
-    // },
+    optional: { defaultHidden: false },
   },
 ];
 interface Props {}
@@ -136,9 +134,6 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
       >
         columns={COLUMNS}
         queryVariables={{}}
-        defaultFilterValues={{
-          status: [CeReferralStatus.Initialized, CeReferralStatus.InProgress],
-        }}
         queryDocument={GetAdminCeReferralsDocument}
         pagePath='ceReferrals'
         noData='No referrals'

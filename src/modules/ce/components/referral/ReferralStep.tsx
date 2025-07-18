@@ -1,41 +1,24 @@
 import { Box, Divider, Stack } from '@mui/material';
-import React, { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import ReferralStepDetails from './ReferralStepDetails';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
-import Loading from '@/components/elements/Loading';
+import LoadingSkeleton from '@/components/elements/LoadingSkeleton';
 import { BackIcon } from '@/components/elements/SemanticIcons';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/referral/ReferralPage';
+import ReferralStepForm from '@/modules/ce/components/referral/ReferralStepForm';
 import {
-  emptyErrorState,
-  ErrorState,
-  partitionValidations,
-} from '@/modules/errors/util';
-import DynamicForm from '@/modules/form/components/DynamicForm';
-import DynamicView from '@/modules/form/components/viewable/DynamicView';
-import { FormActionTypes } from '@/modules/form/types';
-import {
-  createInitialValuesFromSavedValues,
-  getItemMap,
-} from '@/modules/form/util/formUtil';
-import {
-  CeReferralStatus,
   CeReferralStepStatus,
   useGetCeReferralStepQuery,
-  useSubmitCeReferralStepMutation,
 } from '@/types/gqlTypes';
 
-interface Props {}
-const ReferralStep: React.FC<Props> = ({}) => {
-  const { referralId, stepId } = useSafeParams() as {
-    referralId: string;
+const ReferralStep: React.FC = ({}) => {
+  const { referral, referralPath } = useReferralContext();
+  const { stepId } = useSafeParams() as {
     stepId: string;
   };
-  const { referralPath } = useReferralContext();
-  const navigate = useNavigate();
 
   const {
     data: { ceReferralStep: step } = {},
@@ -47,57 +30,15 @@ const ReferralStep: React.FC<Props> = ({}) => {
     },
   });
 
-  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
+  const stepSummary = referral.steps.find((s) => s.stepId === stepId);
 
-  const [submit, { loading: submitLoading }] = useSubmitCeReferralStepMutation({
-    onCompleted: (data) => {
-      const errors = data.submitCeReferralStep?.errors;
-      if (errors && errors.length > 0) {
-        setErrors(partitionValidations(errors));
-        return;
-      }
-
-      setErrors(emptyErrorState);
-
-      const status = data.submitCeReferralStep?.referral?.status;
-      const wayfind =
-        status &&
-        [CeReferralStatus.Rejected, CeReferralStatus.Accepted].includes(status);
-
-      navigate({
-        pathname: referralPath,
-        search: wayfind
-          ? new URLSearchParams({ wayfinding: 'true' }).toString()
-          : undefined,
-      });
-    },
-    onError: (apolloError) => {
-      setErrors({ ...emptyErrorState, apolloError });
-    },
-  });
-
-  const { name, status, formDefinition, submittedValues } = step || {};
-
-  const itemMap = useMemo(
-    () => formDefinition && getItemMap(formDefinition.definition),
-    [formDefinition]
-  );
-
-  const formState =
-    itemMap &&
-    submittedValues &&
-    createInitialValuesFromSavedValues(itemMap, submittedValues);
-
-  const editable =
-    status === CeReferralStepStatus.InProgress && step?.access.canPerformStep;
-
-  if (fetchLoading) return <Loading />;
   if (fetchError) throw fetchError;
-  if (!step || !formDefinition) return <NotFound />;
+  if (!stepSummary) return <NotFound />;
+  if (!fetchLoading && !step) return <NotFound />;
 
   if (
     [CeReferralStepStatus.Unavailable, CeReferralStepStatus.Available].includes(
-      step.status
+      stepSummary.status
     )
   ) {
     // The step has to be started from the Referral Steps page
@@ -111,44 +52,12 @@ const ReferralStep: React.FC<Props> = ({}) => {
           Back to All Tasks
         </ButtonLink>
       </Box>
-      <CommonCard title={name}>
+      <CommonCard title={stepSummary.name}>
         <Stack gap={2}>
-          <ReferralStepDetails step={step} />
+          <ReferralStepDetails step={stepSummary} />
           <Divider />
-          {editable ? (
-            <DynamicForm
-              definition={formDefinition.definition}
-              onSubmit={({ valuesByLinkId, confirmed }) => {
-                submit({
-                  variables: {
-                    referralId: referralId,
-                    stepId: stepId,
-                    input: valuesByLinkId,
-                    formDefinitionId: formDefinition.id,
-                    confirmed,
-                  },
-                });
-              }}
-              errors={errors}
-              loading={submitLoading}
-              FormActionProps={{
-                config: [
-                  {
-                    id: 'submit',
-                    label: 'Submit',
-                    action: FormActionTypes.Submit,
-                    buttonProps: { variant: 'contained' },
-                  },
-                ],
-              }}
-              initialValues={formState}
-            />
-          ) : (
-            <DynamicView
-              definition={formDefinition.definition}
-              values={formState}
-            />
-          )}
+          {fetchLoading && !step && <LoadingSkeleton count={1} height={200} />}
+          {step && <ReferralStepForm step={step} />}
         </Stack>
       </CommonCard>
     </Stack>

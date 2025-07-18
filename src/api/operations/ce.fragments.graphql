@@ -69,6 +69,11 @@ fragment CeCandidateFields on CeCandidate {
 fragment CeReferralSummaryFields on CeReferral {
   id
   status
+  customStatus {
+    id
+    key
+    name
+  }
   active
   clientId
   clientName
@@ -275,7 +280,9 @@ fragment CeReferralStepFields on CeReferralStep {
   formDefinition {
     ...FormDefinitionFields
   }
-  submittedValues
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 # used for resolving assigned steps on the User Dashboard

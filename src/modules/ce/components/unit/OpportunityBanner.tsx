@@ -116,7 +116,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
             </CommonLabeledTextBlock>
             {referral && (
               <CommonLabeledTextBlock title='Referral Status'>
-                <ReferralStatusChip status={referral.status} />
+                <ReferralStatusChip referral={referral} />
               </CommonLabeledTextBlock>
             )}
             {!referral && topCandidate && (

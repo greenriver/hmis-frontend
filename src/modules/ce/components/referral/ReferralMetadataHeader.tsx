@@ -38,7 +38,7 @@ const ReferralMetadataHeader: React.FC<Props> = ({ referral }) => (
       justifyContent={'space-between'}
       sx={{ '.MuiChip-root': { backgroundColor: 'transparent' } }}
     >
-      <ReferralStatusChip status={referral.status} size='small' />
+      <ReferralStatusChip referral={referral} size='small' />
       <Stack direction='row' alignItems='center' gap={2.5}>
         <DetailText>{referral.clientName}</DetailText>
         <DetailText>{referral.targetProjectName}</DetailText>

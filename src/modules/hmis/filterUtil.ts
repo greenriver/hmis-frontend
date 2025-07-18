@@ -58,6 +58,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   assignedStaff: PickListType.EligibleStaffAssignmentUsers,
   workflowTemplate: PickListType.CeWorkflowTemplateIdentifiersIncludingRetired,
   unitType: PickListType.PossibleUnitTypesForProject,
+  referralStatus: PickListType.CeReferralStatuses,
 };
 
 function isPicklistType(
