@@ -55,11 +55,11 @@ const ProjectCeReferralsPage: React.FC = () => {
     }
 
     if (showOutgoingReferrals) {
-      defs.push({
-        title: 'Sent Referrals',
-        key: 'sent-referrals',
-        contents: 'Placeholder', // Placeholder for future implementation
-      });
+      // defs.push({
+      //   title: 'Sent Referrals',
+      //   key: 'sent-referrals',
+      //   contents: 'Placeholder', // Placeholder for future implementation
+      // });
     }
     return defs;
   }, [
@@ -87,10 +87,12 @@ const ProjectCeReferralsPage: React.FC = () => {
   return (
     <>
       <PageTitle title='Referrals' actions={actions} />
-      <CommonTabs
-        ariaLabel={'Project CE Tabs'}
-        tabDefinitions={tabDefinitions}
-      />
+      {tabDefinitions.length > 0 && (
+        <CommonTabs
+          ariaLabel={'Project CE Tabs'}
+          tabDefinitions={tabDefinitions}
+        />
+      )}
     </>
   );
 };
