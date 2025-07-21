@@ -82,7 +82,7 @@ const SendReferralForm: React.FC<Props> = ({ project }) => {
                 required: true,
                 linkId: 'unitGroup',
                 text: 'Unit Group',
-                pickListReference: PickListType.AvailableUnitGroupsForProject,
+                pickListReference: PickListType.UnitGroupsForProjectCeReferral,
               }}
               pickListArgs={{ projectId: formState.selectedProject.code }}
               itemChanged={({ value }) =>

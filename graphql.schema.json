@@ -37866,12 +37866,6 @@
             "deprecationReason": null
           },
           {
-            "name": "AVAILABLE_UNIT_GROUPS_FOR_PROJECT",
-            "description": "Unit groups with availability for the given project",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "AVAILABLE_UNIT_TYPES",
             "description": "Unit types that have unoccupied units in the specified project",
             "isDeprecated": false,
@@ -38084,6 +38078,12 @@
           {
             "name": "SUB_TYPE_PROVIDED_5",
             "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNIT_GROUPS_FOR_PROJECT_CE_REFERRAL",
+            "description": "Unit groups for the given project that can accept CE referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },

@@ -981,8 +981,6 @@ export const HmisEnums = {
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS_FOR_ENROLLMENT:
       'Units available for the given Enrollment at the given project. List is limited to units with the same unit type currently occupied by the household, if any.',
-    AVAILABLE_UNIT_GROUPS_FOR_PROJECT:
-      'Unit groups with availability for the given project',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',
@@ -1025,6 +1023,8 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
+    UNIT_GROUPS_FOR_PROJECT_CE_REFERRAL:
+      'Unit groups for the given project that can accept CE referrals',
     USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
   },
   PreferredLanguage: {
