@@ -42,6 +42,7 @@ fragment UnitDetailFields on Unit {
   name
   unitSize
   acceptingCeReferrals
+  canBeMarkedAvailableToday
   unitType {
     ...UnitTypeFields
   }

@@ -985,6 +985,7 @@ export const HmisEnums = {
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',
+    CE_REFERRAL_STATUSES: 'CE_REFERRAL_STATUSES',
     CE_WORKFLOW_TEMPLATE_IDENTIFIERS: 'Templates for CE workflow definitions',
     CE_WORKFLOW_TEMPLATE_IDENTIFIERS_INCLUDING_RETIRED:
       'Templates for CE workflow definitions, including fully retired workflows',

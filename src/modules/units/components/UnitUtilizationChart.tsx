@@ -22,7 +22,7 @@ export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
         direction='row'
         sx={{
           backgroundColor: 'background.paper',
-          height: '22px',
+          height: '12px',
           borderRadius: '4px',
           overflow: 'hidden',
           width: '100%',
@@ -42,9 +42,7 @@ export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
             width: `${(occupied / total) * 100}%`,
           }}
         >
-          <Typography variant='caption' sx={{ color: 'white' }}>
-            {occupied}
-          </Typography>
+          <Box sx={{ visibility: 'hidden' }}>{occupied}</Box>
         </Box>
         <Box
           sx={{
@@ -52,9 +50,7 @@ export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
             width: `${(referralInProgress / total) * 100}%`,
           }}
         >
-          <Typography variant='caption' sx={{ color: 'white' }}>
-            {referralInProgress}
-          </Typography>
+          <Box sx={{ visibility: 'hidden' }}>{referralInProgress}</Box>
         </Box>
         <Box
           sx={{
@@ -62,9 +58,7 @@ export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
             width: `${(vacant / total) * 100}%`,
           }}
         >
-          <Typography variant='caption' sx={{ color: 'text.primary' }}>
-            {vacant}
-          </Typography>
+          <Box sx={{ visibility: 'hidden' }}>{vacant}</Box>
         </Box>
       </Stack>
     </Box>
