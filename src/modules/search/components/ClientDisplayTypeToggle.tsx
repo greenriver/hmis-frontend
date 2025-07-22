@@ -11,6 +11,7 @@ interface ClientDisplayTypeToggleProps {
   onChange: CommonToggleProps<DisplayType>['onChange'];
 }
 
+// TODO rename, not client-specific
 const ClientDisplayTypeToggle: React.FC<ClientDisplayTypeToggleProps> = ({
   value,
   onChange,

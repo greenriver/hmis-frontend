@@ -1,15 +1,20 @@
-import { Paper } from '@mui/material';
+import { Paper, TableCell, TableRow } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import PrintViewButton from '@/components/layout/PrintViewButton';
 import NotFound from '@/components/pages/NotFound';
+import CaseNoteCard from '@/modules/caseNotes/components/CaseNoteCard';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import ClientDisplayTypeToggle, {
+  DisplayType,
+} from '@/modules/search/components/ClientDisplayTypeToggle';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientCaseNotesDocument,
@@ -60,6 +65,13 @@ const ClientCaseNotes = () => {
     maxWidth: 'sm',
   });
 
+  // type of display (table or cards)
+  const [displayType, setDisplayType] = useState<DisplayType>('table');
+
+  const columns = useMemo(() => {
+    return displayType === 'cards' ? [] : COLUMNS;
+  }, [displayType]);
+
   if (!clientId) return <NotFound />;
 
   return (
@@ -85,7 +97,7 @@ const ClientCaseNotes = () => {
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientCaseNotesDocument}
-          columns={COLUMNS}
+          columns={columns}
           handleRowClick={(row) => onSelectRecord(row)}
           rowName={(row) =>
             `${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`
@@ -103,6 +115,27 @@ const ClientCaseNotes = () => {
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar
+          tableDisplayOptionButtons={
+            <ClientDisplayTypeToggle
+              value={displayType}
+              onChange={setDisplayType}
+            />
+          }
+          renderRow={
+            displayType === 'cards'
+              ? (caseNote) => (
+                  <TableRow key={caseNote.id}>
+                    <TableCell colSpan={columns.length} sx={{ px: 0, py: 0 }}>
+                      <CaseNoteCard
+                        key={caseNote.id}
+                        caseNote={caseNote}
+                        sx={{ border: 'none' }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              : undefined
+          }
         />
       </Paper>
       {viewRecordDialog()}

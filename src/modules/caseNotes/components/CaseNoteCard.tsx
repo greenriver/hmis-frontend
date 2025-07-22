@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Stack, SxProps } from '@mui/system';
 import React from 'react';
 import CommonCard from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -18,11 +18,12 @@ type CaseNoteWithEnrollment = NonNullable<
 
 interface CaseNoteCardProps {
   caseNote: CaseNoteWithEnrollment;
+  sx?: SxProps;
 }
 
-const CaseNoteCard: React.FC<CaseNoteCardProps> = ({ caseNote }) => {
+const CaseNoteCard: React.FC<CaseNoteCardProps> = ({ caseNote, sx }) => {
   return (
-    <CommonCard>
+    <CommonCard sx={sx}>
       <Typography variant='caption' sx={{ mb: 2 }}>
         {`${caseNote.enrollment.projectName} (${entryExitRange(caseNote.enrollment)})`}
       </Typography>
