@@ -36,6 +36,25 @@ query GetProjectCeReferrals(
   }
 }
 
+query GetProjectOutgoingCeReferrals(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: ProjectOutgoingCeReferralFilterOptions = null
+) {
+  project(id: $id) {
+    id
+    outgoingCeReferrals(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeOutgoingReferralsTableFields
+      }
+    }
+  }
+}
+
 query GetCeOpportunity($id: ID!) {
   ceOpportunity(id: $id) {
     ...CeOpportunityFields

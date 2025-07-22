@@ -896,11 +896,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'clientName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'createdAt',
@@ -971,6 +967,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'CeReferralAccess',
     fields: [
+      {
+        name: 'canViewReferralDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
       {
         name: 'canViewTargetProject',
         type: {
@@ -9194,6 +9198,71 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               name: 'ProjectFilterOptionStatus',
               ofType: null,
             },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ProjectOutgoingCeReferralFilterOptions',
+    args: [
+      {
+        name: 'organization',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'referralStatus',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'workflowTemplate',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
       },

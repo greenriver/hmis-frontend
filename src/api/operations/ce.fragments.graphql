@@ -102,6 +102,44 @@ fragment CeReferralTableFields on CeReferral {
   }
 }
 
+fragment CeOutgoingReferralsTableFields on CeReferral {
+  id
+  status
+  customStatus {
+    id
+    key
+    name
+  }
+  clientId
+  client {
+    ...ClientName
+  }
+  sourceEnrollment {
+    id
+    sourceClientId
+    entryDate
+    exitDate
+    access {
+      canViewEnrollmentDetails
+    }
+    dataSource {
+      id
+      name
+      isCurrentDataSource
+    }
+  }
+  targetProjectId
+  targetProjectName
+  targetProjectType
+  referredBy {
+    id
+    name
+  }
+  access {
+    canViewReferralDetails
+  }
+}
+
 fragment CeReferralWithProjectFields on CeReferral {
   id
   targetProjectId

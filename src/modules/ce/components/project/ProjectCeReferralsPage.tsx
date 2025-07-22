@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonTabs from '@/components/elements/CommonTabs';
 import PageTitle from '@/components/layout/PageTitle';
+import ProjectOutgoingReferralsTable from '@/modules/ce/components/directReferral/ProjectOutgoingReferralsTable';
 import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
@@ -55,11 +56,11 @@ const ProjectCeReferralsPage: React.FC = () => {
     }
 
     if (showOutgoingReferrals) {
-      // defs.push({
-      //   title: 'Sent Referrals',
-      //   key: 'sent-referrals',
-      //   contents: 'Placeholder', // Placeholder for future implementation
-      // });
+      defs.push({
+        title: 'Sent Referrals',
+        key: 'sent-referrals',
+        contents: <ProjectOutgoingReferralsTable projectId={project.id} />,
+      });
     }
     return defs;
   }, [
@@ -87,12 +88,10 @@ const ProjectCeReferralsPage: React.FC = () => {
   return (
     <>
       <PageTitle title='Referrals' actions={actions} />
-      {tabDefinitions.length > 0 && (
-        <CommonTabs
-          ariaLabel={'Project CE Tabs'}
-          tabDefinitions={tabDefinitions}
-        />
-      )}
+      <CommonTabs
+        ariaLabel={'Project CE Tabs'}
+        tabDefinitions={tabDefinitions}
+      />
     </>
   );
 };
