@@ -58,7 +58,7 @@ const AhaScore = ({
 
       setErrorState(emptyErrorState);
 
-      if (data.fetchAhaScore) {
+      if (data.fetchAhaScore?.score) {
         setHasScore(true);
 
         if (
