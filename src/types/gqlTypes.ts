@@ -24722,6 +24722,14 @@ export type CustomCaseNoteFieldsFragment = {
     lastName?: string | null;
     email: string;
   } | null;
+  createdBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
+  } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -24871,6 +24879,14 @@ export type GetEnrollmentCustomCaseNotesQuery = {
         dateCreated?: string | null;
         formDefinitionId?: string | null;
         user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+        createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
@@ -25077,6 +25093,14 @@ export type GetClientCaseNotesQuery = {
           };
         };
         user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+        createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
@@ -35826,6 +35850,14 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           formDefinitionId?: string | null;
           user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+          createdBy?: {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
@@ -48186,6 +48218,9 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
     dateCreated
     formDefinitionId
     user {
+      ...UserFields
+    }
+    createdBy {
       ...UserFields
     }
     customDataElements {

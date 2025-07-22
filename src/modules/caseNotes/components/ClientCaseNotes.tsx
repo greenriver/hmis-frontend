@@ -2,6 +2,7 @@ import { Paper } from '@mui/material';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
+import PrintViewButton from '@/components/layout/PrintViewButton';
 import NotFound from '@/components/pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -9,12 +10,14 @@ import { DataColumnDef } from '@/modules/dataFetching/types';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientCaseNotesDocument,
   GetClientCaseNotesQuery,
   GetClientCaseNotesQueryVariables,
   RecordFormRole,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type Row = NonNullable<
   GetClientCaseNotesQuery['client']
@@ -61,7 +64,19 @@ const ClientCaseNotes = () => {
 
   return (
     <>
-      <PageTitle title='Case Notes' />
+      <PageTitle
+        title='Case Notes'
+        actions={
+          <PrintViewButton
+            openInNew
+            to={generateSafePath(ClientDashboardRoutes.PRINT_ALL_CASE_NOTES, {
+              clientId,
+            })}
+          >
+            Print
+          </PrintViewButton>
+        }
+      />
       <Paper>
         <GenericTableWithData<
           GetClientCaseNotesQuery,
