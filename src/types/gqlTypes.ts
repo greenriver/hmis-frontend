@@ -6204,7 +6204,7 @@ export type Project = {
   operatingEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   operatingStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   organization: Organization;
-  outgoingCeReferrals: CeReferralsPaginated;
+  outgoingDirectCeReferrals: CeReferralsPaginated;
   outgoingReferralPostings: ReferralPostingsPaginated;
   projectCocs: ProjectCocsPaginated;
   projectName: Scalars['String']['output'];
@@ -6301,7 +6301,7 @@ export type ProjectInventoriesArgs = {
   sortOrder?: InputMaybe<InventorySortOption>;
 };
 
-export type ProjectOutgoingCeReferralsArgs = {
+export type ProjectOutgoingDirectCeReferralsArgs = {
   filters?: InputMaybe<ProjectOutgoingCeReferralFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -6507,7 +6507,6 @@ export type ProjectOutgoingCeReferralFilterOptions = {
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
-  workflowTemplate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 /** HUD Project Sorting Options */
@@ -19890,19 +19889,19 @@ export type GetProjectCeReferralsQuery = {
   } | null;
 };
 
-export type GetProjectOutgoingCeReferralsQueryVariables = Exact<{
+export type GetProjectOutgoingDirectCeReferralsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<ProjectOutgoingCeReferralFilterOptions>;
 }>;
 
-export type GetProjectOutgoingCeReferralsQuery = {
+export type GetProjectOutgoingDirectCeReferralsQuery = {
   __typename?: 'Query';
   project?: {
     __typename?: 'Project';
     id: string;
-    outgoingCeReferrals: {
+    outgoingDirectCeReferrals: {
       __typename?: 'CeReferralsPaginated';
       offset: number;
       limit: number;
@@ -52883,8 +52882,8 @@ export type GetProjectCeReferralsQueryResult = Apollo.QueryResult<
   GetProjectCeReferralsQuery,
   GetProjectCeReferralsQueryVariables
 >;
-export const GetProjectOutgoingCeReferralsDocument = gql`
-  query GetProjectOutgoingCeReferrals(
+export const GetProjectOutgoingDirectCeReferralsDocument = gql`
+  query GetProjectOutgoingDirectCeReferrals(
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
@@ -52892,7 +52891,11 @@ export const GetProjectOutgoingCeReferralsDocument = gql`
   ) {
     project(id: $id) {
       id
-      outgoingCeReferrals(limit: $limit, offset: $offset, filters: $filters) {
+      outgoingDirectCeReferrals(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -52906,16 +52909,16 @@ export const GetProjectOutgoingCeReferralsDocument = gql`
 `;
 
 /**
- * __useGetProjectOutgoingCeReferralsQuery__
+ * __useGetProjectOutgoingDirectCeReferralsQuery__
  *
- * To run a query within a React component, call `useGetProjectOutgoingCeReferralsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectOutgoingCeReferralsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProjectOutgoingDirectCeReferralsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectOutgoingDirectCeReferralsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetProjectOutgoingCeReferralsQuery({
+ * const { data, loading, error } = useGetProjectOutgoingDirectCeReferralsQuery({
  *   variables: {
  *      id: // value for 'id'
  *      limit: // value for 'limit'
@@ -52924,14 +52927,14 @@ export const GetProjectOutgoingCeReferralsDocument = gql`
  *   },
  * });
  */
-export function useGetProjectOutgoingCeReferralsQuery(
+export function useGetProjectOutgoingDirectCeReferralsQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetProjectOutgoingCeReferralsQuery,
-    GetProjectOutgoingCeReferralsQueryVariables
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
   > &
     (
       | {
-          variables: GetProjectOutgoingCeReferralsQueryVariables;
+          variables: GetProjectOutgoingDirectCeReferralsQueryVariables;
           skip?: boolean;
         }
       | { skip: boolean }
@@ -52939,28 +52942,28 @@ export function useGetProjectOutgoingCeReferralsQuery(
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetProjectOutgoingCeReferralsQuery,
-    GetProjectOutgoingCeReferralsQueryVariables
-  >(GetProjectOutgoingCeReferralsDocument, options);
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
+  >(GetProjectOutgoingDirectCeReferralsDocument, options);
 }
-export function useGetProjectOutgoingCeReferralsLazyQuery(
+export function useGetProjectOutgoingDirectCeReferralsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetProjectOutgoingCeReferralsQuery,
-    GetProjectOutgoingCeReferralsQueryVariables
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetProjectOutgoingCeReferralsQuery,
-    GetProjectOutgoingCeReferralsQueryVariables
-  >(GetProjectOutgoingCeReferralsDocument, options);
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
+  >(GetProjectOutgoingDirectCeReferralsDocument, options);
 }
-export function useGetProjectOutgoingCeReferralsSuspenseQuery(
+export function useGetProjectOutgoingDirectCeReferralsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetProjectOutgoingCeReferralsQuery,
-        GetProjectOutgoingCeReferralsQueryVariables
+        GetProjectOutgoingDirectCeReferralsQuery,
+        GetProjectOutgoingDirectCeReferralsQueryVariables
       >
 ) {
   const options =
@@ -52968,22 +52971,21 @@ export function useGetProjectOutgoingCeReferralsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetProjectOutgoingCeReferralsQuery,
-    GetProjectOutgoingCeReferralsQueryVariables
-  >(GetProjectOutgoingCeReferralsDocument, options);
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
+  >(GetProjectOutgoingDirectCeReferralsDocument, options);
 }
-export type GetProjectOutgoingCeReferralsQueryHookResult = ReturnType<
-  typeof useGetProjectOutgoingCeReferralsQuery
+export type GetProjectOutgoingDirectCeReferralsQueryHookResult = ReturnType<
+  typeof useGetProjectOutgoingDirectCeReferralsQuery
 >;
-export type GetProjectOutgoingCeReferralsLazyQueryHookResult = ReturnType<
-  typeof useGetProjectOutgoingCeReferralsLazyQuery
+export type GetProjectOutgoingDirectCeReferralsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectOutgoingDirectCeReferralsLazyQuery
 >;
-export type GetProjectOutgoingCeReferralsSuspenseQueryHookResult = ReturnType<
-  typeof useGetProjectOutgoingCeReferralsSuspenseQuery
->;
-export type GetProjectOutgoingCeReferralsQueryResult = Apollo.QueryResult<
-  GetProjectOutgoingCeReferralsQuery,
-  GetProjectOutgoingCeReferralsQueryVariables
+export type GetProjectOutgoingDirectCeReferralsSuspenseQueryHookResult =
+  ReturnType<typeof useGetProjectOutgoingDirectCeReferralsSuspenseQuery>;
+export type GetProjectOutgoingDirectCeReferralsQueryResult = Apollo.QueryResult<
+  GetProjectOutgoingDirectCeReferralsQuery,
+  GetProjectOutgoingDirectCeReferralsQueryVariables
 >;
 export const GetCeOpportunityDocument = gql`
   query GetCeOpportunity($id: ID!) {

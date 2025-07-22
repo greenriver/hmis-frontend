@@ -36,7 +36,7 @@ query GetProjectCeReferrals(
   }
 }
 
-query GetProjectOutgoingCeReferrals(
+query GetProjectOutgoingDirectCeReferrals(
   $id: ID!
   $limit: Int = 25
   $offset: Int = 0
@@ -44,7 +44,11 @@ query GetProjectOutgoingCeReferrals(
 ) {
   project(id: $id) {
     id
-    outgoingCeReferrals(limit: $limit, offset: $offset, filters: $filters) {
+    outgoingDirectCeReferrals(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+    ) {
       offset
       limit
       nodesCount

@@ -11,15 +11,15 @@ import {
 } from '@/routes/routes';
 import {
   CeOutgoingReferralsTableFieldsFragment,
-  GetProjectOutgoingCeReferralsDocument,
-  GetProjectOutgoingCeReferralsQuery,
-  GetProjectOutgoingCeReferralsQueryVariables,
+  GetProjectOutgoingDirectCeReferralsDocument,
+  GetProjectOutgoingDirectCeReferralsQuery,
+  GetProjectOutgoingDirectCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: DataColumnDef<
   CeOutgoingReferralsTableFieldsFragment,
-  GetProjectOutgoingCeReferralsQueryVariables
+  GetProjectOutgoingDirectCeReferralsQueryVariables
 >[] = [
   {
     header: 'Client',
@@ -65,8 +65,8 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
   return (
     <Paper>
       <GenericTableWithData<
-        GetProjectOutgoingCeReferralsQuery,
-        GetProjectOutgoingCeReferralsQueryVariables,
+        GetProjectOutgoingDirectCeReferralsQuery,
+        GetProjectOutgoingDirectCeReferralsQueryVariables,
         CeOutgoingReferralsTableFieldsFragment
       >
         columns={COLUMNS}
@@ -74,7 +74,7 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
           id: projectId,
         }}
         filters={filters}
-        queryDocument={GetProjectOutgoingCeReferralsDocument}
+        queryDocument={GetProjectOutgoingDirectCeReferralsDocument}
         pagePath='project.outgoingCeReferrals'
         noData='No referrals'
         paginationItemName='referrals'
@@ -99,6 +99,7 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
           const enrollment = referral.sourceEnrollment;
 
           if (
+            // This *should* always be true -- the referral's source is this project, so it is in the same data source
             enrollment?.dataSource.isCurrentDataSource &&
             enrollment?.access.canViewEnrollmentDetails
           ) {
