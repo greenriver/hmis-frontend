@@ -31,7 +31,7 @@ export const REFERRAL_COLUMNS: Record<
       referral:
         | CeReferralTableFieldsFragment
         | ClientCeReferralTableFieldsFragment
-    ) => referral.opportunity.name,
+    ) => referral.opportunity?.name,
   },
   date: {
     header: 'Referral Date',

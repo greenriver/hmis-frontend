@@ -66,7 +66,7 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
           projectId: project.id,
           referralId: referral.id,
         }),
-        unitPath: referral.opportunity.unit
+        unitPath: referral.opportunity?.unit
           ? generateSafePath(ProjectDashboardRoutes.UNIT, {
               projectId: project.id,
               unitId: referral.opportunity.unit.id,
@@ -103,7 +103,9 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
   if (!referral) return <NotFound />;
 
   const showContactsDrawer =
-    referral.swimlanes.length > 0 && project?.access?.canAssignReferralTasks;
+    referral.swimlanes &&
+    referral.swimlanes.length > 0 &&
+    project?.access?.canAssignReferralTasks;
 
   return (
     <>

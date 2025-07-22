@@ -61,7 +61,7 @@ const COLUMNS: DataColumnDef<
   {
     header: 'Unit',
     key: 'unit',
-    render: ({ opportunity }) => opportunity.unit?.name,
+    render: ({ opportunity }) => opportunity?.unit?.name,
     optional: {
       defaultHidden: true,
       queryVariableField: 'includeUnit',
