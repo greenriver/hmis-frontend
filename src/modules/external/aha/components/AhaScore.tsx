@@ -6,7 +6,19 @@ import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import { ChangeType, GroupItemComponentProps } from '@/modules/form/types';
-import { ItemType, useFetchAhaScoreMutation } from '@/types/gqlTypes';
+import { useFetchAhaScoreMutation } from '@/types/gqlTypes';
+
+const SCORE_LINK_ID = 'aha_score';
+const ALT_AHA_FLAG_LINK_ID = 'aha_alt_aha_flag';
+const DW_CLIENT_LINK_ID = 'aha_dw_client_id';
+const GENERATOR_LINK_ID = 'aha_generator';
+
+const EXPECTED_LINK_IDS = [
+  SCORE_LINK_ID,
+  ALT_AHA_FLAG_LINK_ID,
+  DW_CLIENT_LINK_ID,
+  GENERATOR_LINK_ID,
+];
 
 // Custom component for rendering AHA score. Renders a button to fetch the score, as well as sub-items including:
 // score (value), alt-AHA flag, and hidden items for values that should be submitted but not shown to the user.
@@ -17,24 +29,12 @@ const AhaScore = ({
   renderChildItem,
   severalItemsChanged,
 }: GroupItemComponentProps) => {
-  // Introspect on the group's child elements and find the link IDs for the expected fields
-  const { scoreLinkId, altAhaFlagLinkId, dwClientLinkId, generatorLinkId } =
-    useMemo(() => {
-      return {
-        // Expect to find an integer field and assume it's for storing the score
-        scoreLinkId: item.item?.find((i) => i.type === ItemType.Integer)
-          ?.linkId,
-        // Expect to find a boolean field for alt-AHA flag
-        altAhaFlagLinkId: item.item?.find((i) => i.type === ItemType.Boolean)
-          ?.linkId,
-        // Expect to find two string fields for dwClientId and generator
-        dwClientLinkId: item.item?.find((i) => i.type === ItemType.String)
-          ?.linkId,
-        generatorLinkId: item.item
-          ?.slice(-1)
-          .find((i) => i.type === ItemType.String)?.linkId,
-      };
-    }, [item]);
+  // Introspect on the group's child elements and ensure items exist for the expected link IDs
+  const isComponentValid = useMemo(() => {
+    return EXPECTED_LINK_IDS.every((expectedLinkId) => {
+      return item.item?.find((i) => i.linkId === expectedLinkId);
+    });
+  }, [item]);
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
@@ -61,19 +61,13 @@ const AhaScore = ({
       if (data.fetchAhaScore?.score) {
         setHasScore(true);
 
-        if (
-          severalItemsChanged &&
-          scoreLinkId &&
-          altAhaFlagLinkId &&
-          dwClientLinkId &&
-          generatorLinkId
-        ) {
+        if (severalItemsChanged) {
           severalItemsChanged({
             values: {
-              [scoreLinkId]: data.fetchAhaScore.score,
-              [altAhaFlagLinkId]: data.fetchAhaScore.altAhaFlag,
-              [dwClientLinkId]: data.fetchAhaScore.dwClientId,
-              [generatorLinkId]: data.fetchAhaScore.generator,
+              [SCORE_LINK_ID]: data.fetchAhaScore.score,
+              [ALT_AHA_FLAG_LINK_ID]: data.fetchAhaScore.altAhaFlag,
+              [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
+              [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
             },
             type: ChangeType.User,
           });
@@ -90,14 +84,14 @@ const AhaScore = ({
   });
 
   // console.error instead of throwing an error, so we can still preview how the form looks in non-client contexts
-  if (!clientId)
+  if (!clientId) {
     console.error(
       "AhaScore did not receive a client ID, and won't function properly without one."
     );
+  }
 
-  // Throw an error if the child items don't match the expected structure
-  if (!scoreLinkId || !altAhaFlagLinkId || !dwClientLinkId || !generatorLinkId)
-    throw new Error('Invalid Aha form component');
+  // Throw an error if the children don't match the expected structure
+  if (!isComponentValid) throw new Error('Invalid Aha form component');
 
   return (
     <>
@@ -125,10 +119,13 @@ const AhaScore = ({
             </Typography>
           </LabelWithContent>
         )}
-        {/* Only render the child items if the score has already been fetched */}
-        {hasScore &&
-          renderChildItem &&
-          item.item?.map((childItem) => renderChildItem(childItem))}
+        {renderChildItem &&
+          // Hide items that display the score if the score hasn't been fetched yet
+          item.item
+            ?.filter((i) =>
+              hasScore ? true : !EXPECTED_LINK_IDS.includes(i.linkId)
+            )
+            .map((i) => renderChildItem(i))}
       </Stack>
     </>
   );
