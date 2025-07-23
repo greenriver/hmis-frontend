@@ -52,8 +52,10 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
   if (error) throw error;
 
   const buttonSx = { width: '116px' };
+  const { canPerformStep } = step.access;
 
-  if (status === CeReferralStepStatus.Available && step.access.canPerformStep) {
+  // If the step is "Available" (meaning nobody has clicked "Start" yet), we need to perform a mutation to initialize it
+  if (status === CeReferralStepStatus.Available && canPerformStep) {
     return (
       <LoadingButton
         sx={buttonSx}
@@ -66,9 +68,10 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
     );
   }
 
-  if (status === CeReferralStepStatus.InProgress) {
-    // Someone has already kicked off the "Start Step" mutation, but we don't save in-progress form values,
-    // so from the user's perspective, whether or not the step is "started" isn't very meaningful.
+  // If the step is "In Progress", just link to the step page.
+  // Someone has already kicked off the "Start Step" mutation, but we don't save in-progress form values,
+  // so from the user's perspective, whether or not the step is "started" isn't very meaningful.
+  if (status === CeReferralStepStatus.InProgress && canPerformStep) {
     return (
       <ButtonLink
         sx={buttonSx}
@@ -81,6 +84,7 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
     );
   }
 
+  // If the step is "Completed", link to step page to review it. Anyone who can view the referral can review completed steps.
   if (status === CeReferralStepStatus.Completed) {
     return (
       <ButtonLink
@@ -95,7 +99,7 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
     );
   }
 
-  // Either the step is unavailable, or the current user does not have permission to start it
+  // Step is unavailable or user does not have permission to perform it.
   return null;
 };
 
