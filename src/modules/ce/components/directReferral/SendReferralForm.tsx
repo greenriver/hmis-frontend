@@ -74,23 +74,21 @@ const SendReferralForm: React.FC<Props> = ({ project }) => {
           }
         />
         {formState.selectedProject && (
-          <SentryErrorBoundary>
-            <DynamicField
-              value={formState.selectedUnitGroup}
-              item={{
-                type: ItemType.Choice,
-                required: true,
-                linkId: 'unitGroup',
-                text: 'Unit Group',
-                pickListReference:
-                  PickListType.UnitGroupsForProjectDirectCeReferral,
-              }}
-              pickListArgs={{ projectId: formState.selectedProject.code }}
-              itemChanged={({ value }) =>
-                setFormState((old) => ({ ...old, selectedUnitGroup: value }))
-              }
-            />
-          </SentryErrorBoundary>
+          <DynamicField
+            value={formState.selectedUnitGroup}
+            item={{
+              type: ItemType.Choice,
+              required: true,
+              linkId: 'unitGroup',
+              text: 'Unit Group',
+              pickListReference:
+                PickListType.UnitGroupsForProjectDirectCeReferral,
+            }}
+            pickListArgs={{ projectId: formState.selectedProject.code }}
+            itemChanged={({ value }) =>
+              setFormState((old) => ({ ...old, selectedUnitGroup: value }))
+            }
+          />
         )}
         {formState.selectedProject &&
           formState.selectedEnrollment &&

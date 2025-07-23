@@ -169,9 +169,3 @@ query GetAdminCeReferrals(
     }
   }
 }
-
-query GetDirectReferralFormDefinition($targetUnitGroupId: ID!) {
-  directReferralFormDefinition(targetUnitGroupId: $targetUnitGroupId) {
-    ...FormDefinitionFields
-  }
-}

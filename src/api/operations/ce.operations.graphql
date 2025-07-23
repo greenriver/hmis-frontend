@@ -62,31 +62,6 @@ mutation SubmitCeReferralStep(
   }
 }
 
-mutation CreateDirectCeReferral(
-  $targetUnitGroupId: ID!
-  $sourceEnrollmentId: ID!
-  $valuesByLinkId: JsonObject!
-  $valuesByFieldName: JsonObject!
-  $confirmed: Boolean
-  $formDefinitionId: ID!
-) {
-  createDirectCeReferral(
-    targetUnitGroupId: $targetUnitGroupId
-    sourceEnrollmentId: $sourceEnrollmentId
-    valuesByLinkId: $valuesByLinkId
-    valuesByFieldName: $valuesByFieldName
-    confirmed: $confirmed
-    formDefinitionId: $formDefinitionId
-  ) {
-    referral {
-      ...CeReferralSummaryFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation MarkUnitsAvailable(
   $unitIds: [ID!]!
   $includeCeFields: Boolean = true

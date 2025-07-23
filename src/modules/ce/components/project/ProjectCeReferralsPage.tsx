@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonTabs from '@/components/elements/CommonTabs';
+import { GoToIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
@@ -73,7 +74,7 @@ const ProjectCeReferralsPage: React.FC = () => {
     if (showOutgoingReferrals) {
       return (
         <ButtonLink
-          variant='contained'
+          startIcon={<GoToIcon />}
           to={generateSafePath(ProjectDashboardRoutes.SEND_REFERRAL, {
             projectId: project.id,
           })}
