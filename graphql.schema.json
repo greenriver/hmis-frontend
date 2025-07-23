@@ -38022,7 +38022,7 @@
             "deprecationReason": null
           },
           {
-            "name": "PROJECTS_RECEIVING_CE_REFERRALS",
+            "name": "PROJECTS_RECEIVING_DIRECT_CE_REFERRALS",
             "description": "Projects that can receive CE referrals",
             "isDeprecated": false,
             "deprecationReason": null
@@ -38082,8 +38082,8 @@
             "deprecationReason": null
           },
           {
-            "name": "UNIT_GROUPS_FOR_PROJECT_CE_REFERRAL",
-            "description": "Unit groups for the given project that can accept CE referrals",
+            "name": "UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL",
+            "description": "Unit groups for the given project that can receive CE referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },

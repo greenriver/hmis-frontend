@@ -5397,7 +5397,7 @@ export enum PickListType {
   /** All Projects that the User can see */
   Project = 'PROJECT',
   /** Projects that can receive CE referrals */
-  ProjectsReceivingCeReferrals = 'PROJECTS_RECEIVING_CE_REFERRALS',
+  ProjectsReceivingDirectCeReferrals = 'PROJECTS_RECEIVING_DIRECT_CE_REFERRALS',
   /** Open Projects that can receive referrals */
   ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
   ProjectConfigTypes = 'PROJECT_CONFIG_TYPES',
@@ -5410,8 +5410,8 @@ export enum PickListType {
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
-  /** Unit groups for the given project that can accept CE referrals */
-  UnitGroupsForProjectCeReferral = 'UNIT_GROUPS_FOR_PROJECT_CE_REFERRAL',
+  /** Unit groups for the given project that can receive CE referrals */
+  UnitGroupsForProjectDirectCeReferral = 'UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL',
   /** User accounts. Deprecated in favor of AUDITABLE_USERS */
   Users = 'USERS',
 }
