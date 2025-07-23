@@ -75,7 +75,7 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
         }}
         filters={filters}
         queryDocument={GetProjectOutgoingDirectCeReferralsDocument}
-        pagePath='project.outgoingCeReferrals'
+        pagePath='project.outgoingDirectCeReferrals'
         noData='No referrals'
         paginationItemName='referrals'
         rowLinkTo={(referral) => {
