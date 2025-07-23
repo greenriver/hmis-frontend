@@ -5396,8 +5396,8 @@ export enum PickListType {
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
-  /** Projects that are accepting CE referrals */
-  ProjectsAcceptingCeReferrals = 'PROJECTS_ACCEPTING_CE_REFERRALS',
+  /** Projects that can receive CE referrals */
+  ProjectsReceivingCeReferrals = 'PROJECTS_RECEIVING_CE_REFERRALS',
   /** Open Projects that can receive referrals */
   ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
   ProjectConfigTypes = 'PROJECT_CONFIG_TYPES',
@@ -6427,12 +6427,12 @@ export type ProjectConfigFilterOptions = {
 
 /** Project Config Input */
 export type ProjectConfigInput = {
-  acceptsDirectReferrals?: InputMaybe<Scalars['Boolean']['input']>;
   configType?: InputMaybe<ProjectConfigType>;
   lengthOfAbsenceDays?: InputMaybe<Scalars['Int']['input']>;
   organizationId?: InputMaybe<Scalars['ID']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<ProjectType>;
+  receivesDirectReferrals?: InputMaybe<Scalars['Boolean']['input']>;
   supportsWaitlistReferrals?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -6462,9 +6462,9 @@ export type ProjectConfigsPaginated = {
 
 export type ProjectCoordinatedEntryFeatures = {
   __typename?: 'ProjectCoordinatedEntryFeatures';
-  /** Whether this project accepts direct CE referrals, initiated by a sending project */
-  acceptsDirectReferrals: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+  /** Whether this project receives direct CE referrals, initiated by a sending project */
+  receivesDirectReferrals: Scalars['Boolean']['output'];
   /** Whether this project sends direct CE Referrals */
   sendsDirectReferrals: Scalars['Boolean']['output'];
   /** Whether this project supports referrals, either direct or waitlist */
@@ -6578,7 +6578,7 @@ export type Query = {
   clientSearch: ClientsPaginated;
   currentUser?: Maybe<ApplicationUser>;
   deniedPendingReferralPostings: ReferralPostingsPaginated;
-  directReferralForm?: Maybe<FormDefinition>;
+  directReferralFormDefinition?: Maybe<FormDefinition>;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   esgFundingReport: Array<EsgFundingService>;
@@ -6702,8 +6702,7 @@ export type QueryDeniedPendingReferralPostingsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type QueryDirectReferralFormArgs = {
-  sourceEnrollmentId: Scalars['ID']['input'];
+export type QueryDirectReferralFormDefinitionArgs = {
   targetUnitGroupId: Scalars['ID']['input'];
 };
 
@@ -20998,14 +20997,13 @@ export type GetAdminCeReferralsQuery = {
   };
 };
 
-export type GetDirectReferralFormQueryVariables = Exact<{
-  sourceEnrollmentId: Scalars['ID']['input'];
+export type GetDirectReferralFormDefinitionQueryVariables = Exact<{
   targetUnitGroupId: Scalars['ID']['input'];
 }>;
 
-export type GetDirectReferralFormQuery = {
+export type GetDirectReferralFormDefinitionQuery = {
   __typename?: 'Query';
-  directReferralForm?: {
+  directReferralFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
@@ -37290,7 +37288,7 @@ export type SubmitFormMutation = {
             id: string;
             supportsReferrals: boolean;
             supportsWaitlistReferrals: boolean;
-            acceptsDirectReferrals: boolean;
+            receivesDirectReferrals: boolean;
             sendsDirectReferrals: boolean;
           } | null;
           organization: {
@@ -41028,7 +41026,7 @@ export type ProjectAllFieldsFragment = {
     id: string;
     supportsReferrals: boolean;
     supportsWaitlistReferrals: boolean;
-    acceptsDirectReferrals: boolean;
+    receivesDirectReferrals: boolean;
     sendsDirectReferrals: boolean;
   } | null;
   organization: {
@@ -41932,7 +41930,7 @@ export type GetProjectQuery = {
       id: string;
       supportsReferrals: boolean;
       supportsWaitlistReferrals: boolean;
-      acceptsDirectReferrals: boolean;
+      receivesDirectReferrals: boolean;
       sendsDirectReferrals: boolean;
     } | null;
     organization: {
@@ -49526,7 +49524,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
       id
       supportsReferrals
       supportsWaitlistReferrals
-      acceptsDirectReferrals
+      receivesDirectReferrals
       sendsDirectReferrals
     }
     targetPopulation
@@ -53532,15 +53530,9 @@ export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables
 >;
-export const GetDirectReferralFormDocument = gql`
-  query GetDirectReferralForm(
-    $sourceEnrollmentId: ID!
-    $targetUnitGroupId: ID!
-  ) {
-    directReferralForm(
-      sourceEnrollmentId: $sourceEnrollmentId
-      targetUnitGroupId: $targetUnitGroupId
-    ) {
+export const GetDirectReferralFormDefinitionDocument = gql`
+  query GetDirectReferralFormDefinition($targetUnitGroupId: ID!) {
+    directReferralFormDefinition(targetUnitGroupId: $targetUnitGroupId) {
       ...FormDefinitionFields
     }
   }
@@ -53548,56 +53540,58 @@ export const GetDirectReferralFormDocument = gql`
 `;
 
 /**
- * __useGetDirectReferralFormQuery__
+ * __useGetDirectReferralFormDefinitionQuery__
  *
- * To run a query within a React component, call `useGetDirectReferralFormQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDirectReferralFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetDirectReferralFormDefinitionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDirectReferralFormDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetDirectReferralFormQuery({
+ * const { data, loading, error } = useGetDirectReferralFormDefinitionQuery({
  *   variables: {
- *      sourceEnrollmentId: // value for 'sourceEnrollmentId'
  *      targetUnitGroupId: // value for 'targetUnitGroupId'
  *   },
  * });
  */
-export function useGetDirectReferralFormQuery(
+export function useGetDirectReferralFormDefinitionQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
   > &
     (
-      | { variables: GetDirectReferralFormQueryVariables; skip?: boolean }
+      | {
+          variables: GetDirectReferralFormDefinitionQueryVariables;
+          skip?: boolean;
+        }
       | { skip: boolean }
     )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
-  >(GetDirectReferralFormDocument, options);
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
+  >(GetDirectReferralFormDefinitionDocument, options);
 }
-export function useGetDirectReferralFormLazyQuery(
+export function useGetDirectReferralFormDefinitionLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
-  >(GetDirectReferralFormDocument, options);
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
+  >(GetDirectReferralFormDefinitionDocument, options);
 }
-export function useGetDirectReferralFormSuspenseQuery(
+export function useGetDirectReferralFormDefinitionSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetDirectReferralFormQuery,
-        GetDirectReferralFormQueryVariables
+        GetDirectReferralFormDefinitionQuery,
+        GetDirectReferralFormDefinitionQueryVariables
       >
 ) {
   const options =
@@ -53605,22 +53599,22 @@ export function useGetDirectReferralFormSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
-  >(GetDirectReferralFormDocument, options);
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
+  >(GetDirectReferralFormDefinitionDocument, options);
 }
-export type GetDirectReferralFormQueryHookResult = ReturnType<
-  typeof useGetDirectReferralFormQuery
+export type GetDirectReferralFormDefinitionQueryHookResult = ReturnType<
+  typeof useGetDirectReferralFormDefinitionQuery
 >;
-export type GetDirectReferralFormLazyQueryHookResult = ReturnType<
-  typeof useGetDirectReferralFormLazyQuery
+export type GetDirectReferralFormDefinitionLazyQueryHookResult = ReturnType<
+  typeof useGetDirectReferralFormDefinitionLazyQuery
 >;
-export type GetDirectReferralFormSuspenseQueryHookResult = ReturnType<
-  typeof useGetDirectReferralFormSuspenseQuery
+export type GetDirectReferralFormDefinitionSuspenseQueryHookResult = ReturnType<
+  typeof useGetDirectReferralFormDefinitionSuspenseQuery
 >;
-export type GetDirectReferralFormQueryResult = Apollo.QueryResult<
-  GetDirectReferralFormQuery,
-  GetDirectReferralFormQueryVariables
+export type GetDirectReferralFormDefinitionQueryResult = Apollo.QueryResult<
+  GetDirectReferralFormDefinitionQuery,
+  GetDirectReferralFormDefinitionQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(

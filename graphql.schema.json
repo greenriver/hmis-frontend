@@ -38022,8 +38022,8 @@
             "deprecationReason": null
           },
           {
-            "name": "PROJECTS_ACCEPTING_CE_REFERRALS",
-            "description": "Projects that are accepting CE referrals",
+            "name": "PROJECTS_RECEIVING_CE_REFERRALS",
+            "description": "Projects that can receive CE referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -42882,18 +42882,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "acceptsDirectReferrals",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "configType",
             "description": null,
             "type": {
@@ -42947,6 +42935,18 @@
             "type": {
               "kind": "ENUM",
               "name": "ProjectType",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "receivesDirectReferrals",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "defaultValue": null,
@@ -43151,22 +43151,6 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "acceptsDirectReferrals",
-            "description": "Whether this project accepts direct CE referrals, initiated by a sending project",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": null,
             "args": [],
@@ -43176,6 +43160,22 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "receivesDirectReferrals",
+            "description": "Whether this project receives direct CE referrals, initiated by a sending project",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },
@@ -44409,25 +44409,9 @@
             "deprecationReason": null
           },
           {
-            "name": "directReferralForm",
+            "name": "directReferralFormDefinition",
             "description": null,
             "args": [
-              {
-                "name": "sourceEnrollmentId",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
               {
                 "name": "targetUnitGroupId",
                 "description": null,

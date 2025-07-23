@@ -170,11 +170,8 @@ query GetAdminCeReferrals(
   }
 }
 
-query GetDirectReferralForm($sourceEnrollmentId: ID!, $targetUnitGroupId: ID!) {
-  directReferralForm(
-    sourceEnrollmentId: $sourceEnrollmentId
-    targetUnitGroupId: $targetUnitGroupId
-  ) {
+query GetDirectReferralFormDefinition($targetUnitGroupId: ID!) {
+  directReferralFormDefinition(targetUnitGroupId: $targetUnitGroupId) {
     ...FormDefinitionFields
   }
 }

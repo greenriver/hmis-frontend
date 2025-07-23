@@ -12,7 +12,7 @@ import DynamicForm, {
 import {
   ReferralMode,
   useCreateDirectCeReferralMutation,
-  useGetDirectReferralFormQuery,
+  useGetDirectReferralFormDefinitionQuery,
   useGetProjectCanAcceptReferralQuery,
 } from '@/types/gqlTypes';
 
@@ -30,12 +30,11 @@ const SendReferralSubForm: React.FC<Props> = ({
   onSuccess,
 }) => {
   const {
-    data: { directReferralForm: formDefinition } = {},
+    data: { directReferralFormDefinition: formDefinition } = {},
     loading: definitionLoading,
     error: definitionError,
-  } = useGetDirectReferralFormQuery({
+  } = useGetDirectReferralFormDefinitionQuery({
     variables: {
-      sourceEnrollmentId,
       targetUnitGroupId,
     },
   });

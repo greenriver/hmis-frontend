@@ -33,7 +33,7 @@ fragment ProjectAllFields on Project {
     id
     supportsReferrals
     supportsWaitlistReferrals
-    acceptsDirectReferrals
+    receivesDirectReferrals
     sendsDirectReferrals
   }
   targetPopulation

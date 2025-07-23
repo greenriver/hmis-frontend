@@ -1013,7 +1013,7 @@ export const HmisEnums = {
       'Unit types that are eligible to be added to project',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
-    PROJECTS_ACCEPTING_CE_REFERRALS: 'Projects that are accepting CE referrals',
+    PROJECTS_RECEIVING_CE_REFERRALS: 'Projects that can receive CE referrals',
     PROJECTS_RECEIVING_REFERRALS: 'Open Projects that can receive referrals',
     PROJECT_CONFIG_TYPES: 'PROJECT_CONFIG_TYPES',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
