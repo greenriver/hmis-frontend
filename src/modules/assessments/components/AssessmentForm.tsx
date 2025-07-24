@@ -179,6 +179,7 @@ const AssessmentForm: React.FC<Props> = ({
       clientSsn: client.ssn || undefined,
       clientAge: age(client),
       clientRaceEthnicity: raceEthnicityDisplayString(client.race),
+      clientId: client.id,
       ...AlwaysPresentLocalConstants,
     }),
     [enrollment, client]
