@@ -34,17 +34,20 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   FormDefinitionJson,
+  FormRole,
   useGetParsedFormDefinitionQuery,
 } from '@/types/gqlTypes';
 
 export interface FormEditorProps {
   definition: object;
+  role: FormRole;
   onSave: (defintion: object) => any;
   saveLoading?: boolean;
 }
 
 const JsonFormEditor: React.FC<FormEditorProps> = ({
   definition,
+  role,
   onSave,
   saveLoading = false,
 }) => {
@@ -94,6 +97,7 @@ const JsonFormEditor: React.FC<FormEditorProps> = ({
 
   const effectiveLocalConstants = {
     ...AlwaysPresentLocalConstants,
+    ...(role === FormRole.CustomAssessment ? { clientId: 'dummy-value' } : {}),
     ...localConstants,
   };
   const effectiveInitialValues = data?.parsedFormDefinition?.definition
