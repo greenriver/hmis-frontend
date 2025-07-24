@@ -23,6 +23,7 @@ const EXPECTED_LINK_IDS = [
 // Custom component for rendering AHA score. Renders a button to fetch the score, as well as sub-items including:
 // score (value), alt-AHA flag, and hidden items for values that should be submitted but not shown to the user.
 // Similar to DisabilityGroup, this component is tightly coupled to its expected form structure.
+// `item` is expected to be of type 'GROUP', and have child items with certain link_ids (EXPECTED_LINK_IDS).
 const AhaScore = ({
   item,
   handlers,
@@ -38,9 +39,8 @@ const AhaScore = ({
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
-  // hasScore is a boolean that can be undefined when the user hasn't clicked the fetch button yet.
-  // `false` indicates the user did click the button but the score wasn't available.
-  const [hasScore, setHasScore] = useState<boolean | undefined>(undefined);
+  const [hasScore, setHasScore] = useState<boolean>(false);
+  const [hasFetched, setHasFetched] = useState<boolean>(false);
 
   const clientId = handlers?.localConstants.clientId;
 
@@ -56,6 +56,7 @@ const AhaScore = ({
         return;
       }
 
+      setHasFetched(true);
       setErrorState(emptyErrorState);
 
       if (data.fetchAhaScore?.score && data.fetchAhaScore.score >= 0) {
@@ -73,7 +74,6 @@ const AhaScore = ({
           });
         }
       } else {
-        // TODO(#7812) If score is not available (or bad quality?), calculate alt-AHA
         setHasScore(false);
       }
     },
@@ -85,7 +85,7 @@ const AhaScore = ({
 
   // console.error instead of throwing an error, so we can still preview how the form looks in non-client contexts
   if (!clientId) {
-    console.error(
+    throw new Error(
       "AhaScore did not receive a client ID, and won't function properly without one."
     );
   }
@@ -112,7 +112,7 @@ const AhaScore = ({
             Fetch AHA Score
           </LoadingButton>
         </LabelWithContent>
-        {hasScore === false && (
+        {hasFetched && !hasScore && (
           <LabelWithContent label='AHA Score'>
             <Typography variant='body2' color='text.secondary'>
               AHA score is not available for this client.
