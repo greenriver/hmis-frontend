@@ -5555,6 +5555,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'disabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'groupCode',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -6041,19 +6045,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ProjectCoordinatedEntryFeatures',
     fields: [
       {
-        name: 'acceptsDirectReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'receivesDirectReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
       },
       {
@@ -9108,10 +9112,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectConfigInput',
     args: [
       {
-        name: 'acceptsDirectReferrals',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-      {
         name: 'configType',
         type: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
       },
@@ -9127,6 +9127,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+      {
+        name: 'receivesDirectReferrals',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'supportsWaitlistReferrals',

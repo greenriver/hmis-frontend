@@ -42,7 +42,8 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
               role={StaticFormRole.ProjectConfig}
               initialValues={{
                 lengthOfAbsenceDays: configOptions.length_of_absence_days,
-                acceptsDirectReferrals: configOptions.accepts_direct_referrals,
+                receivesDirectReferrals:
+                  configOptions.receives_direct_referrals,
                 supportsWaitlistReferrals:
                   configOptions.supports_waitlist_referrals,
                 ...config,
