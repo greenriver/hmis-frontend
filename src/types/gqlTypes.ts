@@ -17761,19 +17761,11 @@ export type UserCeReferralStepFieldsFragment = {
     __typename?: 'CeReferral';
     id: string;
     clientId: string;
+    clientName: string;
     targetProjectId: string;
     targetProjectName: string;
     targetProjectType: ProjectType;
     opportunity: { __typename?: 'CeOpportunity'; id: string };
-    client?: {
-      __typename?: 'Client';
-      id: string;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    } | null;
     access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
   };
 };
@@ -46535,19 +46527,11 @@ export type GetUserCeAssignedStepsQuery = {
           __typename?: 'CeReferral';
           id: string;
           clientId: string;
+          clientName: string;
           targetProjectId: string;
           targetProjectName: string;
           targetProjectType: ProjectType;
           opportunity: { __typename?: 'CeOpportunity'; id: string };
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
           access: {
             __typename?: 'CeReferralAccess';
             canViewTargetProject: boolean;
@@ -47825,13 +47809,10 @@ export const UserCeReferralStepFieldsFragmentDoc = gql`
         id
       }
       clientId
-      client {
-        ...ClientName
-      }
+      clientName
     }
   }
   ${CeReferralWithProjectAccessFieldsFragmentDoc}
-  ${ClientNameFragmentDoc}
 `;
 export const CeReferralSourceEnrollmentFieldsFragmentDoc = gql`
   fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
