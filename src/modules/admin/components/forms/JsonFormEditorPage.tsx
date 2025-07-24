@@ -37,6 +37,7 @@ const JsonFormEditorPage = () => {
       {validationErrors && <ErrorAlert errors={validationErrors} />}
       <JsonFormEditor
         definition={formDefinition.rawDefinition}
+        role={formDefinition.role}
         onSave={(values) => {
           updateFormDefinition({
             variables: {
