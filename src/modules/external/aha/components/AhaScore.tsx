@@ -58,7 +58,7 @@ const AhaScore = ({
 
       setErrorState(emptyErrorState);
 
-      if (data.fetchAhaScore?.score) {
+      if (data.fetchAhaScore?.score && data.fetchAhaScore.score >= 0) {
         setHasScore(true);
 
         if (severalItemsChanged) {

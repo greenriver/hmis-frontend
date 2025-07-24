@@ -29,7 +29,7 @@ const DynamicFormFields: React.FC<Props> = ({ handlers, ...props }) => {
       let value = baseValue;
       // Convert string values to appropriate number types
       if (item) {
-        if (item.type === ItemType.Integer) value = parseInt(value) || null;
+        if (item.type === ItemType.Integer) value = parseInt(value) || 0;
         if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
       }
       handlers.methods.setValue(linkId, value, {
