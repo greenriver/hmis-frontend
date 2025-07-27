@@ -1,13 +1,17 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button } from '@mui/material';
+import { Box, Button, TableCell, TableRow } from '@mui/material';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
+import CommonTableDisplayToggle, {
+  DisplayType,
+} from '@/components/elements/CommonTableDisplayToggle';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
+import ClientCaseNoteCard from '@/modules/caseNotes/components/ClientCaseNoteCard';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import {
@@ -115,15 +119,22 @@ const EnrollmentCaseNotes = () => {
       projectId: enrollment?.project.id,
     });
 
-  const getColumnDefs = useCallback((rows: CustomCaseNoteFieldsFragment[]) => {
-    const customColumns = getCustomDataElementColumns(rows);
-    return [
-      CASE_NOTE_COLUMNS.InformationDate,
-      ...customColumns,
-      CASE_NOTE_COLUMNS.NoteContent,
-      CASE_NOTE_COLUMNS.LastUpdated,
-    ];
-  }, []);
+  // type of display (table or cards)
+  const [displayType, setDisplayType] = useState<DisplayType>('table');
+
+  const getColumnDefs = useCallback(
+    (rows: CustomCaseNoteFieldsFragment[]) => {
+      if (displayType === 'cards') return [];
+      const customColumns = getCustomDataElementColumns(rows);
+      return [
+        CASE_NOTE_COLUMNS.InformationDate,
+        ...customColumns,
+        CASE_NOTE_COLUMNS.NoteContent,
+        CASE_NOTE_COLUMNS.LastUpdated,
+      ];
+    },
+    [displayType]
+  );
 
   const caseNotesFeature = getEnrollmentFeature(
     DataCollectionFeatureRole.CaseNote
@@ -167,6 +178,31 @@ const EnrollmentCaseNotes = () => {
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar
+          tableDisplayOptionButtons={
+            <CommonTableDisplayToggle
+              value={displayType}
+              onChange={setDisplayType}
+            />
+          }
+          renderRow={
+            displayType === 'cards'
+              ? (caseNote) => (
+                  <TableRow key={caseNote.id}>
+                    <TableCell
+                      sx={{ px: 0, py: 0 }}
+                      colSpan={getColumnDefs([caseNote]).length}
+                    >
+                      <ClientCaseNoteCard
+                        key={caseNote.id}
+                        caseNote={caseNote}
+                        sx={{ border: 'none' }}
+                        client={enrollment.client}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              : undefined
+          }
         />
       </TitleCard>
       {viewRecordDialog()}

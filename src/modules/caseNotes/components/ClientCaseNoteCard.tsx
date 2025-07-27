@@ -12,14 +12,16 @@ import {
   lastUpdatedBy,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { ClientNameFragment, GetClientCaseNotesQuery } from '@/types/gqlTypes';
-
-type CaseNoteWithEnrollment = NonNullable<
-  GetClientCaseNotesQuery['client']
->['customCaseNotes']['nodes'][0];
+import {
+  ClientEnrollmentFieldsFragment,
+  ClientNameFragment,
+  CustomCaseNoteFieldsFragment,
+} from '@/types/gqlTypes';
 
 interface CaseNoteCardProps {
-  caseNote: CaseNoteWithEnrollment;
+  caseNote: CustomCaseNoteFieldsFragment & {
+    enrollment?: ClientEnrollmentFieldsFragment;
+  };
   client: ClientNameFragment;
   linkToEnrollment?: boolean;
   sx?: SxProps;
@@ -44,19 +46,25 @@ const ClientCaseNoteCard: React.FC<CaseNoteCardProps> = ({
 
   return (
     <CommonCard sx={sx}>
-      <Stack direction='row' alignItems='center' justifyContent='space-between'>
-        <Typography variant='caption'>
-          {`${caseNote.enrollment.projectName} (${entryExitRange(caseNote.enrollment)})`}
-        </Typography>
-        {linkToEnrollment && (
-          <CommonMenuButton
-            iconButton
-            title='View Enrollment'
-            items={[getViewEnrollmentMenuItem(caseNote.enrollment, client)]}
-            ButtonProps={{ sx: { p: 0 } }}
-          />
-        )}
-      </Stack>
+      {caseNote.enrollment && (
+        <Stack
+          direction='row'
+          alignItems='center'
+          justifyContent='space-between'
+        >
+          <Typography variant='caption'>
+            {`${caseNote.enrollment.projectName} (${entryExitRange(caseNote.enrollment)})`}
+          </Typography>
+          {linkToEnrollment && (
+            <CommonMenuButton
+              iconButton
+              title='View Enrollment'
+              items={[getViewEnrollmentMenuItem(caseNote.enrollment, client)]}
+              ButtonProps={{ sx: { p: 0 } }}
+            />
+          )}
+        </Stack>
+      )}
       <Stack sx={{ my: 1 }}>
         {caseNote.informationDate && (
           <CommonLabeledTextBlock title='Information Date' horizontal>
