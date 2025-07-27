@@ -5,7 +5,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
-import CaseNoteCard from '@/modules/caseNotes/components/CaseNoteCard';
+import ClientCaseNoteCard from '@/modules/caseNotes/components/ClientCaseNoteCard';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useGetClientCaseNotesQuery } from '@/types/gqlTypes';
@@ -52,7 +52,7 @@ const ClientCaseNotesPrintPage = () => {
       {loading && <LoadingSkeleton height={200} count={3} />}
       <Stack gap={2}>
         {caseNotes.map((note) => (
-          <CaseNoteCard key={note.id} caseNote={note} />
+          <ClientCaseNoteCard key={note.id} caseNote={note} client={client} />
         ))}
       </Stack>
     </>

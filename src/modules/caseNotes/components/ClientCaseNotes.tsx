@@ -5,7 +5,7 @@ import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowA
 import PageTitle from '@/components/layout/PageTitle';
 import PrintViewButton from '@/components/layout/PrintViewButton';
 import NotFound from '@/components/pages/NotFound';
-import CaseNoteCard from '@/modules/caseNotes/components/CaseNoteCard';
+import ClientCaseNoteCard from '@/modules/caseNotes/components/ClientCaseNoteCard';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -126,10 +126,12 @@ const ClientCaseNotes = () => {
               ? (caseNote) => (
                   <TableRow key={caseNote.id}>
                     <TableCell colSpan={columns.length} sx={{ px: 0, py: 0 }}>
-                      <CaseNoteCard
+                      <ClientCaseNoteCard
                         key={caseNote.id}
                         caseNote={caseNote}
                         sx={{ border: 'none' }}
+                        client={client}
+                        linkToEnrollment
                       />
                     </TableCell>
                   </TableRow>
