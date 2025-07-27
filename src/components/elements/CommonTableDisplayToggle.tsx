@@ -1,18 +1,25 @@
-import ViewCompactIcon from '@mui/icons-material/ViewCompact';
-import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import CommonToggle, {
   CommonToggleProps,
 } from '@/components/elements/CommonToggle';
+import {
+  TableCardsIcon,
+  TableRowsIcon,
+} from '@/components/elements/SemanticIcons';
 
 export type DisplayType = 'table' | 'cards';
 
-interface ClientDisplayTypeToggleProps {
+interface CommonTableDisplayToggleProps {
   value: DisplayType;
   onChange: CommonToggleProps<DisplayType>['onChange'];
 }
 
-// TODO rename, not client-specific
-const ClientDisplayTypeToggle: React.FC<ClientDisplayTypeToggleProps> = ({
+/**
+ * Toggle component for switching between table and card display types for tables.
+ *
+ * @param value - Current display type.
+ * @param onChange - Function to call when the display type changes.
+ */
+const CommonTableDisplayToggle: React.FC<CommonTableDisplayToggleProps> = ({
   value,
   onChange,
 }) => (
@@ -24,13 +31,13 @@ const ClientDisplayTypeToggle: React.FC<ClientDisplayTypeToggleProps> = ({
         value: 'table',
         label: 'Table',
         testId: 'tableToggleButton',
-        Icon: ViewHeadlineIcon,
+        Icon: TableRowsIcon,
       },
       {
         value: 'cards',
         label: 'Cards',
         testId: 'cardToggleButton',
-        Icon: ViewCompactIcon,
+        Icon: TableCardsIcon,
       },
     ]}
     variant='gray'
@@ -39,4 +46,4 @@ const ClientDisplayTypeToggle: React.FC<ClientDisplayTypeToggleProps> = ({
   />
 );
 
-export default ClientDisplayTypeToggle;
+export default CommonTableDisplayToggle;

@@ -1,6 +1,9 @@
 import { Paper, TableCell, TableRow } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
+import CommonTableDisplayToggle, {
+  DisplayType,
+} from '@/components/elements/CommonTableDisplayToggle';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import PrintViewButton from '@/components/layout/PrintViewButton';
@@ -12,9 +15,7 @@ import { DataColumnDef } from '@/modules/dataFetching/types';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import ClientDisplayTypeToggle, {
-  DisplayType,
-} from '@/modules/search/components/ClientDisplayTypeToggle';
+
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientCaseNotesDocument,
@@ -116,7 +117,7 @@ const ClientCaseNotes = () => {
           paginationItemName='case note'
           showTopToolbar
           tableDisplayOptionButtons={
-            <ClientDisplayTypeToggle
+            <CommonTableDisplayToggle
               value={displayType}
               onChange={setDisplayType}
             />
