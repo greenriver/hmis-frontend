@@ -39,7 +39,10 @@ const ClientCaseNotesPrintPage = () => {
   if (!isPrint) {
     return <NotFound />;
   }
-  if (!client) return <NotFound />;
+
+  if (!client || !client.access.canPrintClientCaseNotes) {
+    return <NotFound />;
+  }
 
   return (
     <>

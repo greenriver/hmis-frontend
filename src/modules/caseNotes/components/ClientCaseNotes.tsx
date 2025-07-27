@@ -80,14 +80,16 @@ const ClientCaseNotes = () => {
       <PageTitle
         title='Case Notes'
         actions={
-          <PrintViewButton
-            openInNew
-            to={generateSafePath(ClientDashboardRoutes.PRINT_ALL_CASE_NOTES, {
-              clientId,
-            })}
-          >
-            Print
-          </PrintViewButton>
+          client.access.canPrintClientCaseNotes && (
+            <PrintViewButton
+              openInNew
+              to={generateSafePath(ClientDashboardRoutes.PRINT_ALL_CASE_NOTES, {
+                clientId,
+              })}
+            >
+              Print
+            </PrintViewButton>
+          )
         }
       />
       <Paper>

@@ -183,6 +183,7 @@ export const HmisEnums = {
   },
   Component: {
     ADDRESS: 'Client Address input',
+    AHA: 'AHA component',
     ALERT_ERROR: 'Display text as an error alert',
     ALERT_INFO: 'Display text as an info alert',
     ALERT_SUCCESS: 'Display text as a success alert',
