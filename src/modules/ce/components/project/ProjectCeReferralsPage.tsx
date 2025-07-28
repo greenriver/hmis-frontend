@@ -58,8 +58,8 @@ const ProjectCeReferralsPage: React.FC = () => {
 
     if (showOutgoingReferrals) {
       defs.push({
-        title: 'Sent Referrals',
-        key: 'sent-referrals',
+        title: 'Outgoing Referrals',
+        key: 'outgoing-referrals',
         contents: <ProjectOutgoingReferralsTable projectId={project.id} />,
       });
     }
