@@ -759,6 +759,7 @@ export type CeReferral = {
   id: Scalars['ID']['output'];
   notes?: Maybe<CeReferralNotesPaginated>;
   opportunity?: Maybe<CeOpportunity>;
+  origin: CeReferralOrigin;
   referredBy?: Maybe<ApplicationUser>;
   /** Limited details about the source enrollment. Available even without full access to the source record. */
   sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
@@ -828,6 +829,7 @@ export type CeReferralAuditEventsPaginated = {
 export type CeReferralFilterOptions = {
   onCurrentTaskSince?: InputMaybe<Scalars['ISO8601Date']['input']>;
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
+  origin?: InputMaybe<Array<CeReferralOrigin>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -853,6 +855,13 @@ export type CeReferralNotesPaginated = {
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
 };
+
+export enum CeReferralOrigin {
+  /** Direct */
+  DirectSend = 'direct_send',
+  /** Waitlist */
+  Waitlist = 'waitlist',
+}
 
 export type CeReferralParticipantInput = {
   swimlaneId: Scalars['ID']['input'];
@@ -1356,6 +1365,7 @@ export type ClientAuditEventsPaginated = {
 
 export type ClientCeReferralFilterOptions = {
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
+  origin?: InputMaybe<Array<CeReferralOrigin>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -6377,6 +6387,7 @@ export type ProjectCeOpportunityFilterOptions = {
 };
 
 export type ProjectCeReferralFilterOptions = {
+  origin?: InputMaybe<Array<CeReferralOrigin>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
@@ -16582,6 +16593,7 @@ export type CeOpportunityFieldsFragment = {
     active: boolean;
     clientId: string;
     clientName?: string | null;
+    origin: CeReferralOrigin;
     customStatus?: {
       __typename?: 'CeCustomReferralStatus';
       id: string;
@@ -16692,6 +16704,7 @@ export type CeReferralSummaryFieldsFragment = {
   active: boolean;
   clientId: string;
   clientName?: string | null;
+  origin: CeReferralOrigin;
   customStatus?: {
     __typename?: 'CeCustomReferralStatus';
     id: string;
@@ -16709,6 +16722,7 @@ export type CeReferralTableFieldsFragment = {
   active: boolean;
   clientId: string;
   clientName?: string | null;
+  origin: CeReferralOrigin;
   opportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
@@ -16805,6 +16819,7 @@ export type CeReferralAdminFieldsFragment = {
   active: boolean;
   clientId: string;
   clientName?: string | null;
+  origin: CeReferralOrigin;
   targetEnrollment?: { __typename?: 'Enrollment'; id: string } | null;
   client?: { __typename?: 'Client'; id: string } | null;
   updatedBy?: {
@@ -16864,6 +16879,7 @@ export type ClientCeReferralTableFieldsFragment = {
   active: boolean;
   clientId: string;
   clientName?: string | null;
+  origin: CeReferralOrigin;
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
@@ -16973,6 +16989,7 @@ export type CeReferralFieldsFragment = {
   active: boolean;
   clientId: string;
   clientName?: string | null;
+  origin: CeReferralOrigin;
   createdAt: string;
   clientAge?: number | null;
   steps?: Array<{
@@ -17920,6 +17937,7 @@ export type CreateCeReferralMutation = {
       active: boolean;
       clientId: string;
       clientName?: string | null;
+      origin: CeReferralOrigin;
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
         id: string;
@@ -19282,6 +19300,7 @@ export type SubmitCeReferralStepMutation = {
       active: boolean;
       clientId: string;
       clientName?: string | null;
+      origin: CeReferralOrigin;
       createdAt: string;
       clientAge?: number | null;
       opportunity?: {
@@ -19310,6 +19329,7 @@ export type SubmitCeReferralStepMutation = {
           active: boolean;
           clientId: string;
           clientName?: string | null;
+          origin: CeReferralOrigin;
           customStatus?: {
             __typename?: 'CeCustomReferralStatus';
             id: string;
@@ -19523,6 +19543,7 @@ export type MarkUnitsAvailableMutation = {
           active: boolean;
           clientId: string;
           clientName?: string | null;
+          origin: CeReferralOrigin;
           customStatus?: {
             __typename?: 'CeCustomReferralStatus';
             id: string;
@@ -19612,6 +19633,7 @@ export type MarkUnitsUnavailableMutation = {
           active: boolean;
           clientId: string;
           clientName?: string | null;
+          origin: CeReferralOrigin;
           customStatus?: {
             __typename?: 'CeCustomReferralStatus';
             id: string;
@@ -19803,6 +19825,7 @@ export type GetProjectCeReferralsQuery = {
         active: boolean;
         clientId: string;
         clientName?: string | null;
+        origin: CeReferralOrigin;
         opportunity?: {
           __typename?: 'CeOpportunity';
           id: string;
@@ -19915,6 +19938,7 @@ export type GetCeOpportunityQuery = {
       active: boolean;
       clientId: string;
       clientName?: string | null;
+      origin: CeReferralOrigin;
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
         id: string;
@@ -20053,6 +20077,7 @@ export type GetCeReferralQuery = {
     active: boolean;
     clientId: string;
     clientName?: string | null;
+    origin: CeReferralOrigin;
     createdAt: string;
     clientAge?: number | null;
     steps?: Array<{
@@ -20876,6 +20901,7 @@ export type GetClientCeReferralsQuery = {
         active: boolean;
         clientId: string;
         clientName?: string | null;
+        origin: CeReferralOrigin;
         targetProjectId: string;
         targetProjectName: string;
         targetProjectType: ProjectType;
@@ -21034,6 +21060,7 @@ export type GetAdminCeReferralsQuery = {
       active: boolean;
       clientId: string;
       clientName?: string | null;
+      origin: CeReferralOrigin;
       targetEnrollment?: { __typename?: 'Enrollment'; id: string } | null;
       client?: { __typename?: 'Client'; id: string } | null;
       updatedBy?: {
@@ -25633,6 +25660,7 @@ export type CreateDirectCeReferralMutation = {
       active: boolean;
       clientId: string;
       clientName?: string | null;
+      origin: CeReferralOrigin;
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
         id: string;
@@ -46344,6 +46372,7 @@ export type UnitTableRowFieldsFragment = {
       active: boolean;
       clientId: string;
       clientName?: string | null;
+      origin: CeReferralOrigin;
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
         id: string;
@@ -46429,6 +46458,7 @@ export type UnitDetailFieldsFragment = {
       active: boolean;
       clientId: string;
       clientName?: string | null;
+      origin: CeReferralOrigin;
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
         id: string;
@@ -46491,6 +46521,7 @@ export type UnitWithCeFieldsFragment = {
       active: boolean;
       clientId: string;
       clientName?: string | null;
+      origin: CeReferralOrigin;
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
         id: string;
@@ -46643,6 +46674,7 @@ export type GetUnitsQuery = {
             active: boolean;
             clientId: string;
             clientName?: string | null;
+            origin: CeReferralOrigin;
             customStatus?: {
               __typename?: 'CeCustomReferralStatus';
               id: string;
@@ -46818,6 +46850,7 @@ export type GetUnitQuery = {
         active: boolean;
         clientId: string;
         clientName?: string | null;
+        origin: CeReferralOrigin;
         customStatus?: {
           __typename?: 'CeCustomReferralStatus';
           id: string;
@@ -46944,6 +46977,7 @@ export type CreateUnitsMutation = {
           active: boolean;
           clientId: string;
           clientName?: string | null;
+          origin: CeReferralOrigin;
           customStatus?: {
             __typename?: 'CeCustomReferralStatus';
             id: string;
@@ -47075,6 +47109,7 @@ export type UpdateUnitsMutation = {
           active: boolean;
           clientId: string;
           clientName?: string | null;
+          origin: CeReferralOrigin;
           customStatus?: {
             __typename?: 'CeCustomReferralStatus';
             id: string;
@@ -48283,6 +48318,7 @@ export const CeReferralSummaryFieldsFragmentDoc = gql`
     active
     clientId
     clientName
+    origin
   }
 `;
 export const CeReferralTableFieldsFragmentDoc = gql`

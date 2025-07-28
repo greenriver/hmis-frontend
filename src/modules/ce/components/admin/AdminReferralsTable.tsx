@@ -13,6 +13,7 @@ import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
 } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeReferralAdminFieldsFragment,
   GetAdminCeReferralsDocument,
@@ -73,6 +74,12 @@ const COLUMNS: DataColumnDef<
     key: 'updatedBy',
     header: 'Last Updated By',
     render: ({ updatedBy }) => updatedBy?.name,
+    optional: { defaultHidden: false },
+  },
+  {
+    key: 'origin',
+    header: 'Origin',
+    render: ({ origin }) => HmisEnums.CeReferralOrigin[origin],
     optional: { defaultHidden: false },
   },
 ];

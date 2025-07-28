@@ -919,6 +919,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'origin',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
+        },
+      },
+      {
         name: 'sourceEnrollmentId',
         type: {
           kind: 'NON_NULL',
@@ -7867,6 +7875,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
+        name: 'origin',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
+          },
+        },
+      },
+      {
         name: 'project',
         type: {
           kind: 'LIST',
@@ -8031,6 +8051,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'origin',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
           },
         },
       },
@@ -9085,6 +9117,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ProjectCeReferralFilterOptions',
     args: [
+      {
+        name: 'origin',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
+          },
+        },
+      },
       {
         name: 'referralStatus',
         type: {
