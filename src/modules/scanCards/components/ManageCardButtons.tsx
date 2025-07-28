@@ -46,7 +46,7 @@ export const RestoreScanCardButton: React.FC<{
       startIcon={<RestoreDeletedIcon />}
       size='small'
       variant='outlined'
-      color='info'
+      color='primary'
       loading={loading}
       onClick={() => mutate()}
     >

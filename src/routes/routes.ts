@@ -54,6 +54,7 @@ const clientDashboardRoutes = {
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
   CASE_NOTES: 'case-notes',
+  PRINT_ALL_CASE_NOTES: 'case-notes/print',
   SCAN_CARDS: 'scan-cards',
   MERGE_HISTORY: 'merges',
   NEW_MERGE: 'merges/new',
@@ -213,6 +214,7 @@ export const PRINTABLE_ROUTES = [
   EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
   EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
+  ClientDashboardRoutes.PRINT_ALL_CASE_NOTES,
 ];
 
 export const allRoutes = [

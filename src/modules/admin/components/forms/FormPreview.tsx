@@ -34,6 +34,7 @@ import {
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
+  FormRole,
   FormStatus,
   useGetFormDefinitionFieldsForEditorQuery,
 } from '@/types/gqlTypes';
@@ -66,9 +67,19 @@ const FormPreview = () => {
 
   const formRef = useRef<DynamicFormRef>(null);
 
-  // This form preview is not client- or enrollment-specific, so just use the always-present local constants.
-  // This could be adjusted to show fake constants depending on the form role.
-  const localConstants = AlwaysPresentLocalConstants;
+  const localConstants = useMemo(() => {
+    // Add the always-present local constants
+    const localConstants: Record<string, any> = {
+      ...AlwaysPresentLocalConstants,
+    };
+
+    // Depending on the form role, add fake values for local constants expected by specific forms
+    if (formDefinition?.role === FormRole.CustomAssessment) {
+      localConstants.clientId = 'dummy-value';
+    }
+
+    return localConstants;
+  }, [formDefinition?.role]);
 
   useScrollToHash(loading, STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT);
 
