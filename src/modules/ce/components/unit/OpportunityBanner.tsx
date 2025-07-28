@@ -6,7 +6,6 @@ import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextB
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
-import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -34,7 +33,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
   }, [referral, topCandidate]);
 
   const clientName = useMemo(() => {
-    if (referral) return clientNameFromRecordWithOptionalClient(referral);
+    if (referral) return referral.clientName;
     if (topCandidate) return topCandidate.clientName;
   }, [referral, topCandidate]);
 

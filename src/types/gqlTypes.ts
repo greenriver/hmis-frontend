@@ -9051,6 +9051,35 @@ export type GetRootPermissionsQuery = {
   };
 };
 
+export type FetchAhaScoreMutationVariables = Exact<{
+  clientId: Scalars['ID']['input'];
+}>;
+
+export type FetchAhaScoreMutation = {
+  __typename?: 'Mutation';
+  fetchAhaScore?: {
+    __typename?: 'FetchAhaScorePayload';
+    score?: number | null;
+    altAhaFlag?: boolean | null;
+    dwClientId?: string | null;
+    generator?: string | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
 export type ClientWithAlertFieldsFragment = {
   __typename?: 'Client';
   id: string;
@@ -17735,19 +17764,11 @@ export type UserCeReferralStepFieldsFragment = {
     __typename?: 'CeReferral';
     id: string;
     clientId: string;
+    clientName: string;
     targetProjectId: string;
     targetProjectName: string;
     targetProjectType: ProjectType;
     opportunity: { __typename?: 'CeOpportunity'; id: string };
-    client?: {
-      __typename?: 'Client';
-      id: string;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    } | null;
     access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
   };
 };
@@ -46556,19 +46577,11 @@ export type GetUserCeAssignedStepsQuery = {
           __typename?: 'CeReferral';
           id: string;
           clientId: string;
+          clientName: string;
           targetProjectId: string;
           targetProjectName: string;
           targetProjectType: ProjectType;
           opportunity: { __typename?: 'CeOpportunity'; id: string };
-          client?: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          } | null;
           access: {
             __typename?: 'CeReferralAccess';
             canViewTargetProject: boolean;
@@ -47846,13 +47859,10 @@ export const UserCeReferralStepFieldsFragmentDoc = gql`
         id
       }
       clientId
-      client {
-        ...ClientName
-      }
+      clientName
     }
   }
   ${CeReferralWithProjectAccessFieldsFragmentDoc}
-  ${ClientNameFragmentDoc}
 `;
 export const CeReferralSourceEnrollmentFieldsFragmentDoc = gql`
   fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
@@ -49543,6 +49553,63 @@ export type GetRootPermissionsSuspenseQueryHookResult = ReturnType<
 export type GetRootPermissionsQueryResult = Apollo.QueryResult<
   GetRootPermissionsQuery,
   GetRootPermissionsQueryVariables
+>;
+export const FetchAhaScoreDocument = gql`
+  mutation FetchAhaScore($clientId: ID!) {
+    fetchAhaScore(clientId: $clientId) {
+      score
+      altAhaFlag
+      dwClientId
+      generator
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type FetchAhaScoreMutationFn = Apollo.MutationFunction<
+  FetchAhaScoreMutation,
+  FetchAhaScoreMutationVariables
+>;
+
+/**
+ * __useFetchAhaScoreMutation__
+ *
+ * To run a mutation, you first call `useFetchAhaScoreMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFetchAhaScoreMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fetchAhaScoreMutation, { data, loading, error }] = useFetchAhaScoreMutation({
+ *   variables: {
+ *      clientId: // value for 'clientId'
+ *   },
+ * });
+ */
+export function useFetchAhaScoreMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    FetchAhaScoreMutation,
+    FetchAhaScoreMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    FetchAhaScoreMutation,
+    FetchAhaScoreMutationVariables
+  >(FetchAhaScoreDocument, options);
+}
+export type FetchAhaScoreMutationHookResult = ReturnType<
+  typeof useFetchAhaScoreMutation
+>;
+export type FetchAhaScoreMutationResult =
+  Apollo.MutationResult<FetchAhaScoreMutation>;
+export type FetchAhaScoreMutationOptions = Apollo.BaseMutationOptions<
+  FetchAhaScoreMutation,
+  FetchAhaScoreMutationVariables
 >;
 export const CreateClientAlertDocument = gql`
   mutation CreateClientAlert($input: ClientAlertInput!) {

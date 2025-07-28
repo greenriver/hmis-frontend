@@ -1,5 +1,5 @@
 import { Box, lighten } from '@mui/material';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 import { GroupItemComponentProps } from '../types';
 
@@ -11,6 +11,7 @@ import QuestionGroup from './group/QuestionGroup';
 
 import SignatureGroupCard from './group/SignatureGroupCard';
 import TableGroup from './group/TableGroup';
+import AhaScore from '@/modules/external/aha/components/AhaScore';
 import Signature from '@/modules/form/components/group/Signature';
 import { Component } from '@/types/gqlTypes';
 
@@ -70,6 +71,8 @@ const DynamicGroup: React.FC<Props> = (props) => {
       );
     case Component.Table:
       return <TableGroup key={props.item.linkId} {...props} />;
+    case Component.Aha:
+      return <AhaScore key={props.item.linkId} {...props} />;
     default:
       return <QuestionGroup key={props.item.linkId} {...props} />;
   }
