@@ -747,7 +747,7 @@ export type CeReferral = {
   clientId: Scalars['ID']['output'];
   /**
    * The name of the referred client. Always available to those who can view the
-   * referral, even without full client record access.
+   * full referral, even without full client record access.
    */
   clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -762,6 +762,7 @@ export type CeReferral = {
   referredBy?: Maybe<ApplicationUser>;
   /** Limited details about the source enrollment. Available even without full access to the source record. */
   sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
+  sourceEnrollmentId: Scalars['ID']['output'];
   status: CeReferralStatus;
   steps?: Maybe<Array<CeReferralStep>>;
   swimlanes?: Maybe<Array<CeReferralSwimlane>>;
@@ -788,6 +789,7 @@ export type CeReferralNotesArgs = {
 export type CeReferralAccess = {
   __typename?: 'CeReferralAccess';
   canViewReferralDetails: Scalars['Boolean']['output'];
+  canViewSourceEnrollmentDetails: Scalars['Boolean']['output'];
   canViewTargetProject: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
@@ -16741,6 +16743,8 @@ export type CeOutgoingReferralsTableFieldsFragment = {
   id: string;
   status: CeReferralStatus;
   clientId: string;
+  clientName?: string | null;
+  sourceEnrollmentId: string;
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
@@ -16759,29 +16763,16 @@ export type CeOutgoingReferralsTableFieldsFragment = {
     lastName?: string | null;
     nameSuffix?: string | null;
   } | null;
-  sourceEnrollment?: {
-    __typename?: 'CeReferralSourceEnrollment';
-    id: string;
-    sourceClientId: string;
-    entryDate: string;
-    exitDate?: string | null;
-    access: {
-      __typename?: 'CeReferralSourceEnrollmentAccess';
-      canViewEnrollmentDetails: boolean;
-    };
-    dataSource: {
-      __typename?: 'DataSource';
-      id: string;
-      name: string;
-      isCurrentDataSource: boolean;
-    };
-  } | null;
   referredBy?: {
     __typename?: 'ApplicationUser';
     id: string;
     name: string;
   } | null;
-  access: { __typename?: 'CeReferralAccess'; canViewReferralDetails: boolean };
+  access: {
+    __typename?: 'CeReferralAccess';
+    canViewReferralDetails: boolean;
+    canViewSourceEnrollmentDetails: boolean;
+  };
 };
 
 export type CeReferralWithProjectFieldsFragment = {
@@ -19866,6 +19857,8 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
         id: string;
         status: CeReferralStatus;
         clientId: string;
+        clientName?: string | null;
+        sourceEnrollmentId: string;
         targetProjectId: string;
         targetProjectName: string;
         targetProjectType: ProjectType;
@@ -19884,23 +19877,6 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
           lastName?: string | null;
           nameSuffix?: string | null;
         } | null;
-        sourceEnrollment?: {
-          __typename?: 'CeReferralSourceEnrollment';
-          id: string;
-          sourceClientId: string;
-          entryDate: string;
-          exitDate?: string | null;
-          access: {
-            __typename?: 'CeReferralSourceEnrollmentAccess';
-            canViewEnrollmentDetails: boolean;
-          };
-          dataSource: {
-            __typename?: 'DataSource';
-            id: string;
-            name: string;
-            isCurrentDataSource: boolean;
-          };
-        } | null;
         referredBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -19909,6 +19885,7 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
         access: {
           __typename?: 'CeReferralAccess';
           canViewReferralDetails: boolean;
+          canViewSourceEnrollmentDetails: boolean;
         };
       }>;
     };
@@ -48275,23 +48252,11 @@ export const CeOutgoingReferralsTableFieldsFragmentDoc = gql`
       name
     }
     clientId
+    clientName
     client {
       ...ClientName
     }
-    sourceEnrollment {
-      id
-      sourceClientId
-      entryDate
-      exitDate
-      access {
-        canViewEnrollmentDetails
-      }
-      dataSource {
-        id
-        name
-        isCurrentDataSource
-      }
-    }
+    sourceEnrollmentId
     targetProjectId
     targetProjectName
     targetProjectType
@@ -48301,6 +48266,7 @@ export const CeOutgoingReferralsTableFieldsFragmentDoc = gql`
     }
     access {
       canViewReferralDetails
+      canViewSourceEnrollmentDetails
     }
   }
   ${ClientNameFragmentDoc}

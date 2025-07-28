@@ -4,7 +4,6 @@ import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusC
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -23,7 +22,7 @@ const COLUMNS: DataColumnDef<
 >[] = [
   {
     header: 'Client',
-    render: (referral) => clientNameFromRecordWithOptionalClient(referral),
+    render: 'clientName',
     key: 'name',
     sticky: 'left',
   },
@@ -96,22 +95,16 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
             actions.push(getViewClientMenuItem(referral.client));
           }
 
-          const enrollment = referral.sourceEnrollment;
-
-          if (
-            // This *should* always be true -- the referral's source is this project, so it is in the same data source
-            enrollment?.dataSource.isCurrentDataSource &&
-            enrollment?.access.canViewEnrollmentDetails
-          ) {
+          if (referral.access.canViewSourceEnrollmentDetails) {
             actions.push({
               title: 'View Enrollment',
               key: 'enrollment',
-              ariaLabel: `View Source Enrollment for ${clientNameFromRecordWithOptionalClient(referral)}`,
+              ariaLabel: `View Source Enrollment for ${referral.clientName}`,
               to: generateSafePath(
                 EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
                 {
-                  clientId: enrollment.sourceClientId,
-                  enrollmentId: enrollment.id,
+                  clientId: referral.clientId,
+                  enrollmentId: referral.sourceEnrollmentId,
                 }
               ),
             });

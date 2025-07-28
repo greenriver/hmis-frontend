@@ -5409,7 +5409,7 @@
           },
           {
             "name": "clientName",
-            "description": "The name of the referred client. Always available to those who can view the\nreferral, even without full client record access.",
+            "description": "The name of the referred client. Always available to those who can view the\nfull referral, even without full client record access.",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -5589,6 +5589,22 @@
             "deprecationReason": null
           },
           {
+            "name": "sourceEnrollmentId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
@@ -5758,6 +5774,22 @@
         "fields": [
           {
             "name": "canViewReferralDetails",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewSourceEnrollmentDetails",
             "description": null,
             "args": [],
             "type": {

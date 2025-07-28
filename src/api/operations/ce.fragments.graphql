@@ -111,23 +111,11 @@ fragment CeOutgoingReferralsTableFields on CeReferral {
     name
   }
   clientId
+  clientName
   client {
     ...ClientName
   }
-  sourceEnrollment {
-    id
-    sourceClientId
-    entryDate
-    exitDate
-    access {
-      canViewEnrollmentDetails
-    }
-    dataSource {
-      id
-      name
-      isCurrentDataSource
-    }
-  }
+  sourceEnrollmentId
   targetProjectId
   targetProjectName
   targetProjectType
@@ -137,6 +125,7 @@ fragment CeOutgoingReferralsTableFields on CeReferral {
   }
   access {
     canViewReferralDetails
+    canViewSourceEnrollmentDetails
   }
 }
 
