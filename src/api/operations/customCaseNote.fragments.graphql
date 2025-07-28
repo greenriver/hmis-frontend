@@ -8,6 +8,9 @@ fragment CustomCaseNoteFields on CustomCaseNote {
   user {
     ...UserFields
   }
+  createdBy {
+    ...UserFields
+  }
   customDataElements {
     ...CustomDataElementFields
   }

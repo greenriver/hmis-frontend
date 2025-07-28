@@ -1194,6 +1194,7 @@ export type ClientAccess = {
   canManageOwnClientFiles: Scalars['Boolean']['output'];
   canManageScanCards: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
+  canPrintClientCaseNotes: Scalars['Boolean']['output'];
   canUploadClientFiles: Scalars['Boolean']['output'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyFiles: Scalars['Boolean']['output'];
@@ -6883,6 +6884,7 @@ export type QueryAccess = {
   canMergeClients: Scalars['Boolean']['output'];
   canPerformAnyReferralTasks: Scalars['Boolean']['output'];
   canPerformOwnReferralTasks: Scalars['Boolean']['output'];
+  canPrintClientCaseNotes: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canStartReferrals: Scalars['Boolean']['output'];
   canTransferEnrollments: Scalars['Boolean']['output'];
@@ -8961,6 +8963,7 @@ export type ClientAccessFieldsFragment = {
   canViewClientPhoto: boolean;
   canViewClientAlerts: boolean;
   canManageClientAlerts: boolean;
+  canPrintClientCaseNotes: boolean;
   canViewEnrollmentDetails: boolean;
   canAuditClients: boolean;
   canManageScanCards: boolean;
@@ -21020,6 +21023,7 @@ export type ClientFieldsFragment = {
     canViewClientPhoto: boolean;
     canViewClientAlerts: boolean;
     canManageClientAlerts: boolean;
+    canPrintClientCaseNotes: boolean;
     canViewEnrollmentDetails: boolean;
     canAuditClients: boolean;
     canManageScanCards: boolean;
@@ -21507,6 +21511,7 @@ export type GetClientQuery = {
       canViewClientPhoto: boolean;
       canViewClientAlerts: boolean;
       canManageClientAlerts: boolean;
+      canPrintClientCaseNotes: boolean;
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
@@ -21747,6 +21752,7 @@ export type GetClientPermissionsQuery = {
       canViewClientPhoto: boolean;
       canViewClientAlerts: boolean;
       canManageClientAlerts: boolean;
+      canPrintClientCaseNotes: boolean;
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
@@ -22282,6 +22288,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canViewClientPhoto: boolean;
                 canViewClientAlerts: boolean;
                 canManageClientAlerts: boolean;
+                canPrintClientCaseNotes: boolean;
                 canViewEnrollmentDetails: boolean;
                 canAuditClients: boolean;
                 canManageScanCards: boolean;
@@ -23182,6 +23189,7 @@ export type MergeClientsMutation = {
         canViewClientPhoto: boolean;
         canViewClientAlerts: boolean;
         canManageClientAlerts: boolean;
+        canPrintClientCaseNotes: boolean;
         canViewEnrollmentDetails: boolean;
         canAuditClients: boolean;
         canManageScanCards: boolean;
@@ -24761,6 +24769,14 @@ export type CustomCaseNoteFieldsFragment = {
     lastName?: string | null;
     email: string;
   } | null;
+  createdBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
+  } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -24910,6 +24926,14 @@ export type GetEnrollmentCustomCaseNotesQuery = {
         dateCreated?: string | null;
         formDefinitionId?: string | null;
         user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+        createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
@@ -25116,6 +25140,14 @@ export type GetClientCaseNotesQuery = {
           };
         };
         user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+        createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
@@ -26938,6 +26970,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
           canViewClientPhoto: boolean;
           canViewClientAlerts: boolean;
           canManageClientAlerts: boolean;
+          canPrintClientCaseNotes: boolean;
           canViewEnrollmentDetails: boolean;
           canAuditClients: boolean;
           canManageScanCards: boolean;
@@ -28057,6 +28090,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canViewClientPhoto: boolean;
             canViewClientAlerts: boolean;
             canManageClientAlerts: boolean;
+            canPrintClientCaseNotes: boolean;
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
@@ -35500,6 +35534,7 @@ export type SubmitFormMutation = {
             canViewClientPhoto: boolean;
             canViewClientAlerts: boolean;
             canManageClientAlerts: boolean;
+            canPrintClientCaseNotes: boolean;
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
@@ -35865,6 +35900,14 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           formDefinitionId?: string | null;
           user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+          createdBy?: {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
@@ -38670,6 +38713,7 @@ export type HouseholdFieldsFragment = {
         canViewClientPhoto: boolean;
         canViewClientAlerts: boolean;
         canManageClientAlerts: boolean;
+        canPrintClientCaseNotes: boolean;
         canViewEnrollmentDetails: boolean;
         canAuditClients: boolean;
         canManageScanCards: boolean;
@@ -38752,6 +38796,7 @@ export type HouseholdClientFieldsFragment = {
       canViewClientPhoto: boolean;
       canViewClientAlerts: boolean;
       canManageClientAlerts: boolean;
+      canPrintClientCaseNotes: boolean;
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
@@ -38931,6 +38976,7 @@ export type JoinHouseholdMutation = {
             canViewClientPhoto: boolean;
             canViewClientAlerts: boolean;
             canManageClientAlerts: boolean;
+            canPrintClientCaseNotes: boolean;
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
@@ -39021,6 +39067,7 @@ export type JoinHouseholdMutation = {
             canViewClientPhoto: boolean;
             canViewClientAlerts: boolean;
             canManageClientAlerts: boolean;
+            canPrintClientCaseNotes: boolean;
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
@@ -39124,6 +39171,7 @@ export type SplitHouseholdMutation = {
             canViewClientPhoto: boolean;
             canViewClientAlerts: boolean;
             canManageClientAlerts: boolean;
+            canPrintClientCaseNotes: boolean;
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
@@ -39214,6 +39262,7 @@ export type SplitHouseholdMutation = {
             canViewClientPhoto: boolean;
             canViewClientAlerts: boolean;
             canManageClientAlerts: boolean;
+            canPrintClientCaseNotes: boolean;
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
@@ -39313,6 +39362,7 @@ export type GetHouseholdQuery = {
           canViewClientPhoto: boolean;
           canViewClientAlerts: boolean;
           canManageClientAlerts: boolean;
+          canPrintClientCaseNotes: boolean;
           canViewEnrollmentDetails: boolean;
           canAuditClients: boolean;
           canManageScanCards: boolean;
@@ -47916,6 +47966,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewClientPhoto
     canViewClientAlerts
     canManageClientAlerts
+    canPrintClientCaseNotes
     canViewEnrollmentDetails
     canAuditClients
     canManageScanCards
@@ -48214,6 +48265,9 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
     dateCreated
     formDefinitionId
     user {
+      ...UserFields
+    }
+    createdBy {
       ...UserFields
     }
     customDataElements {
