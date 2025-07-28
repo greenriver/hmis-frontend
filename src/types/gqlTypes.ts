@@ -16806,6 +16806,7 @@ export type CeOutgoingReferralsTableFieldsFragment = {
   __typename?: 'CeReferral';
   id: string;
   status: CeReferralStatus;
+  createdAt: string;
   clientId: string;
   clientName?: string | null;
   sourceEnrollmentId: string;
@@ -19921,6 +19922,7 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
         __typename?: 'CeReferral';
         id: string;
         status: CeReferralStatus;
+        createdAt: string;
         clientId: string;
         clientName?: string | null;
         sourceEnrollmentId: string;
@@ -48362,6 +48364,7 @@ export const CeOutgoingReferralsTableFieldsFragmentDoc = gql`
   fragment CeOutgoingReferralsTableFields on CeReferral {
     id
     status
+    createdAt
     customStatus {
       id
       key

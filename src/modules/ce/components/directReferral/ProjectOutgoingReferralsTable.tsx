@@ -1,4 +1,6 @@
 import { Paper } from '@mui/material';
+import React from 'react';
+import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -45,6 +47,13 @@ const COLUMNS: DataColumnDef<
     optional: {
       defaultHidden: true,
     },
+  },
+  {
+    header: 'Referred At',
+    key: 'createdAt',
+    render: ({ createdAt }) => (
+      <DateWithRelativeTooltip dateString={createdAt} />
+    ),
   },
 ];
 
