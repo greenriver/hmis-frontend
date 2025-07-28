@@ -312,14 +312,17 @@ export const lastUpdatedBy = ({
   dateUpdated,
   user,
   relativeDate = false,
-  dateFormat = 'date',
+  dateFormat: dateFormatArg,
 }: {
   dateUpdated?: string | null;
   user?: { name: string } | null;
   relativeDate?: boolean;
-  // adding this, but I feel like the better default behavior would be to use whichever granularity the `dateUpdated` argument is in. why are we defaulting to showing timestamps as YY/MM/DDDD elsewhere? not our usual pattern for audit timestamps
-  dateFormat?: 'date' | 'timestamp';
+  dateFormat?: 'date' | 'timestamp'; // optionally allow caller to override default format, to format Timestamp as Date for example
 }) => {
+  let dateFormat =
+    dateUpdated?.length === HMIS_DATE_FORMAT.length ? 'date' : 'timestamp';
+  if (dateFormatArg) dateFormat = dateFormatArg;
+
   const parsed = parseHmisDateString(dateUpdated);
 
   let dateString = dateUpdated;

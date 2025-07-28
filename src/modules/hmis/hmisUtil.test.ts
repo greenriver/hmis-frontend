@@ -6,6 +6,7 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
   parseHmisDateString,
+  lastUpdatedBy,
 } from './hmisUtil';
 
 import { ProjectType } from '@/types/gqlTypes';
@@ -86,5 +87,83 @@ describe('Date fns', () => {
       const formatted = formatDateForGql(new Date('this will be invalid'));
       expect(formatted).toBe(null);
     });
+  });
+});
+
+describe('lastUpdatedBy', () => {
+  it('returns formatted date and user name when both are provided', () => {
+    const result = lastUpdatedBy({
+      dateUpdated: '2023-07-28',
+      user: { name: 'John Doe' },
+    });
+    expect(result).toBe('07/28/2023 by John Doe');
+  });
+
+  it('returns formatted date only when user is not provided', () => {
+    const result = lastUpdatedBy({
+      dateUpdated: '2023-07-28',
+    });
+    expect(result).toBe('07/28/2023');
+  });
+
+  it('returns relative date when relativeDate is true', () => {
+    const date = new Date();
+    date.setDate(date.getDate() - 5); // 5 days ago
+    const dateUpdated = formatDateForGql(date);
+
+    const result = lastUpdatedBy({
+      dateUpdated,
+      relativeDate: true,
+    });
+    expect(result).toBe('5 days ago');
+  });
+
+  it('returns "Unknown date" when dateUpdated is null and user is provided', () => {
+    const result = lastUpdatedBy({
+      dateUpdated: null,
+      user: { name: 'John Doe' },
+    });
+    expect(result).toBe('Unknown date by John Doe');
+  });
+
+  it('returns null when dateUpdated is null and user is not provided', () => {
+    const result = lastUpdatedBy({
+      dateUpdated: null,
+    });
+    expect(result).toBe(null);
+  });
+
+  it('formats timestamp as timestamp by default', () => {
+    const result = lastUpdatedBy({
+      dateUpdated: '2023-02-02T15:50:10.000Z',
+    });
+    expect(result).toBe('02/02/2023 10:50 AM');
+  });
+
+  it('format timestamp as date when specified', () => {
+    const result = lastUpdatedBy({
+      dateUpdated: '2023-07-28T15:30:00Z',
+      dateFormat: 'date',
+    });
+    expect(result).toBe('07/28/2023');
+  });
+
+  it('returns null for invalid dateUpdated', () => {
+    const result = lastUpdatedBy({
+      dateUpdated: 'invalid-date',
+    });
+    expect(result).toBe('invalid-date');
+  });
+
+  it('handles future dates correctly with relativeDate', () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 3); // 3 days in the future
+    const dateUpdated = formatDateForGql(date);
+
+    const result = lastUpdatedBy({
+      dateUpdated,
+      relativeDate: true,
+    });
+    expect(result).toBe('In 3 days');
   });
 });

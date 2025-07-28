@@ -76,7 +76,6 @@ const ClientCaseNoteCard: React.FC<CaseNoteCardProps> = ({
             {lastUpdatedBy({
               dateUpdated: caseNote.dateCreated,
               user: caseNote.createdBy,
-              dateFormat: 'timestamp',
             })}
           </CommonLabeledTextBlock>
         )}
@@ -86,7 +85,6 @@ const ClientCaseNoteCard: React.FC<CaseNoteCardProps> = ({
               {lastUpdatedBy({
                 dateUpdated: caseNote.dateUpdated,
                 user: caseNote.user,
-                dateFormat: 'timestamp',
               })}
             </CommonLabeledTextBlock>
           )}
