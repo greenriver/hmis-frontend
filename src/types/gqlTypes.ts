@@ -5403,8 +5403,8 @@ export enum PickListType {
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
-  /** Projects that are accepting CE referrals */
-  ProjectsAcceptingCeReferrals = 'PROJECTS_ACCEPTING_CE_REFERRALS',
+  /** Projects that can receive CE referrals */
+  ProjectsReceivingDirectCeReferrals = 'PROJECTS_RECEIVING_DIRECT_CE_REFERRALS',
   /** Open Projects that can receive referrals */
   ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
   ProjectConfigTypes = 'PROJECT_CONFIG_TYPES',
@@ -5417,8 +5417,8 @@ export enum PickListType {
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
-  /** Unit groups for the given project that can accept CE referrals */
-  UnitGroupsForProjectCeReferral = 'UNIT_GROUPS_FOR_PROJECT_CE_REFERRAL',
+  /** Unit groups for the given project that can receive CE referrals */
+  UnitGroupsForProjectDirectCeReferral = 'UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL',
   /** User accounts. Deprecated in favor of AUDITABLE_USERS */
   Users = 'USERS',
 }
@@ -6441,12 +6441,12 @@ export type ProjectConfigFilterOptions = {
 
 /** Project Config Input */
 export type ProjectConfigInput = {
-  acceptsDirectReferrals?: InputMaybe<Scalars['Boolean']['input']>;
   configType?: InputMaybe<ProjectConfigType>;
   lengthOfAbsenceDays?: InputMaybe<Scalars['Int']['input']>;
   organizationId?: InputMaybe<Scalars['ID']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<ProjectType>;
+  receivesDirectReferrals?: InputMaybe<Scalars['Boolean']['input']>;
   supportsWaitlistReferrals?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -6476,9 +6476,9 @@ export type ProjectConfigsPaginated = {
 
 export type ProjectCoordinatedEntryFeatures = {
   __typename?: 'ProjectCoordinatedEntryFeatures';
-  /** Whether this project accepts direct CE referrals, initiated by a sending project */
-  acceptsDirectReferrals: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+  /** Whether this project receives direct CE referrals, initiated by a sending project */
+  receivesDirectReferrals: Scalars['Boolean']['output'];
   /** Whether this project sends direct CE Referrals */
   sendsDirectReferrals: Scalars['Boolean']['output'];
   /** Whether this project supports referrals, either direct or waitlist */
@@ -6599,7 +6599,7 @@ export type Query = {
   clientSearch: ClientsPaginated;
   currentUser?: Maybe<ApplicationUser>;
   deniedPendingReferralPostings: ReferralPostingsPaginated;
-  directReferralForm?: Maybe<FormDefinition>;
+  directReferralFormDefinition?: Maybe<FormDefinition>;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   esgFundingReport: Array<EsgFundingService>;
@@ -6723,8 +6723,7 @@ export type QueryDeniedPendingReferralPostingsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type QueryDirectReferralFormArgs = {
-  sourceEnrollmentId: Scalars['ID']['input'];
+export type QueryDirectReferralFormDefinitionArgs = {
   targetUnitGroupId: Scalars['ID']['input'];
 };
 
@@ -19471,50 +19470,6 @@ export type SubmitCeReferralStepMutation = {
   } | null;
 };
 
-export type CreateDirectCeReferralMutationVariables = Exact<{
-  targetUnitGroupId: Scalars['ID']['input'];
-  sourceEnrollmentId: Scalars['ID']['input'];
-  valuesByLinkId: Scalars['JsonObject']['input'];
-  valuesByFieldName: Scalars['JsonObject']['input'];
-  confirmed?: InputMaybe<Scalars['Boolean']['input']>;
-  formDefinitionId: Scalars['ID']['input'];
-}>;
-
-export type CreateDirectCeReferralMutation = {
-  __typename?: 'Mutation';
-  createDirectCeReferral?: {
-    __typename?: 'CreateDirectCeReferralPayload';
-    referral?: {
-      __typename?: 'CeReferral';
-      id: string;
-      status: CeReferralStatus;
-      active: boolean;
-      clientId: string;
-      clientName?: string | null;
-      customStatus?: {
-        __typename?: 'CeCustomReferralStatus';
-        id: string;
-        key: string;
-        name: string;
-      } | null;
-    } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
 export type MarkUnitsAvailableMutationVariables = Exact<{
   unitIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
   includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
@@ -21152,530 +21107,6 @@ export type GetAdminCeReferralsQuery = {
       } | null;
     }>;
   };
-};
-
-export type GetDirectReferralFormQueryVariables = Exact<{
-  sourceEnrollmentId: Scalars['ID']['input'];
-  targetUnitGroupId: Scalars['ID']['input'];
-}>;
-
-export type GetDirectReferralFormQuery = {
-  __typename?: 'Query';
-  directReferralForm?: {
-    __typename?: 'FormDefinition';
-    id: string;
-    role: FormRole;
-    title: string;
-    cacheKey: string;
-    identifier: string;
-    status: FormStatus;
-    dateUpdated: string;
-    supportsSaveInProgress: boolean;
-    definition: {
-      __typename?: 'FormDefinitionJson';
-      item: Array<{
-        __typename: 'FormItem';
-        linkId: string;
-        type: ItemType;
-        component?: Component | null;
-        prefix?: string | null;
-        text?: string | null;
-        briefText?: string | null;
-        readonlyText?: string | null;
-        helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
-        pickListReference?: string | null;
-        size?: InputSize | null;
-        assessmentDate?: boolean | null;
-        prefill?: boolean | null;
-        dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
-        rule?: any | null;
-        customRule?: any | null;
-        editorUserIds?: Array<string> | null;
-        item?: Array<{
-          __typename: 'FormItem';
-          linkId: string;
-          type: ItemType;
-          component?: Component | null;
-          prefix?: string | null;
-          text?: string | null;
-          briefText?: string | null;
-          readonlyText?: string | null;
-          helperText?: string | null;
-          required?: boolean | null;
-          warnIfEmpty?: boolean | null;
-          hidden?: boolean | null;
-          readOnly?: boolean | null;
-          repeats?: boolean | null;
-          pickListReference?: string | null;
-          size?: InputSize | null;
-          assessmentDate?: boolean | null;
-          prefill?: boolean | null;
-          dataCollectedAbout?: DataCollectedAbout | null;
-          disabledDisplay?: DisabledDisplay | null;
-          enableBehavior?: EnableBehavior | null;
-          rule?: any | null;
-          customRule?: any | null;
-          editorUserIds?: Array<string> | null;
-          item?: Array<{
-            __typename: 'FormItem';
-            linkId: string;
-            type: ItemType;
-            component?: Component | null;
-            prefix?: string | null;
-            text?: string | null;
-            briefText?: string | null;
-            readonlyText?: string | null;
-            helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
-            pickListReference?: string | null;
-            size?: InputSize | null;
-            assessmentDate?: boolean | null;
-            prefill?: boolean | null;
-            dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
-            rule?: any | null;
-            customRule?: any | null;
-            editorUserIds?: Array<string> | null;
-            item?: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              pickListReference?: string | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              rule?: any | null;
-              customRule?: any | null;
-              editorUserIds?: Array<string> | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                pickListReference?: string | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                rule?: any | null;
-                customRule?: any | null;
-                editorUserIds?: Array<string> | null;
-                mapping?: {
-                  __typename?: 'FieldMapping';
-                  recordType?: RelatedRecordType | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                } | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  valueLocalConstant?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                  helperText?: string | null;
-                  numericValue?: number | null;
-                  disabled?: boolean | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  answerDate?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  formula?: string | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    answerDate?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              mapping?: {
-                __typename?: 'FieldMapping';
-                recordType?: RelatedRecordType | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-              } | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                valueLocalConstant?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-                helperText?: string | null;
-                numericValue?: number | null;
-                disabled?: boolean | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                answerDate?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                formula?: string | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  answerDate?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }> | null;
-            mapping?: {
-              __typename?: 'FieldMapping';
-              recordType?: RelatedRecordType | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-            } | null;
-            bounds?: Array<{
-              __typename?: 'ValueBound';
-              id: string;
-              severity: ValidationSeverity;
-              type: BoundType;
-              question?: string | null;
-              valueNumber?: number | null;
-              valueDate?: string | null;
-              valueLocalConstant?: string | null;
-              offset?: number | null;
-            }> | null;
-            pickListOptions?: Array<{
-              __typename?: 'PickListOption';
-              code: string;
-              label?: string | null;
-              secondaryLabel?: string | null;
-              groupLabel?: string | null;
-              groupCode?: string | null;
-              initialSelected?: boolean | null;
-              helperText?: string | null;
-              numericValue?: number | null;
-              disabled?: boolean | null;
-            }> | null;
-            initial?: Array<{
-              __typename?: 'InitialValue';
-              valueCode?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              valueLocalConstant?: string | null;
-              initialBehavior: InitialBehavior;
-            }> | null;
-            enableWhen?: Array<{
-              __typename?: 'EnableWhen';
-              question?: string | null;
-              localConstant?: string | null;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              answerDate?: string | null;
-              compareQuestion?: string | null;
-            }> | null;
-            autofillValues?: Array<{
-              __typename?: 'AutofillValue';
-              valueCode?: string | null;
-              valueQuestion?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              sumQuestions?: Array<string> | null;
-              formula?: string | null;
-              autofillBehavior: EnableBehavior;
-              autofillReadonly?: boolean | null;
-              autofillWhen: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                answerDate?: string | null;
-                compareQuestion?: string | null;
-              }>;
-            }> | null;
-          }> | null;
-          mapping?: {
-            __typename?: 'FieldMapping';
-            recordType?: RelatedRecordType | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-          } | null;
-          bounds?: Array<{
-            __typename?: 'ValueBound';
-            id: string;
-            severity: ValidationSeverity;
-            type: BoundType;
-            question?: string | null;
-            valueNumber?: number | null;
-            valueDate?: string | null;
-            valueLocalConstant?: string | null;
-            offset?: number | null;
-          }> | null;
-          pickListOptions?: Array<{
-            __typename?: 'PickListOption';
-            code: string;
-            label?: string | null;
-            secondaryLabel?: string | null;
-            groupLabel?: string | null;
-            groupCode?: string | null;
-            initialSelected?: boolean | null;
-            helperText?: string | null;
-            numericValue?: number | null;
-            disabled?: boolean | null;
-          }> | null;
-          initial?: Array<{
-            __typename?: 'InitialValue';
-            valueCode?: string | null;
-            valueBoolean?: boolean | null;
-            valueNumber?: number | null;
-            valueLocalConstant?: string | null;
-            initialBehavior: InitialBehavior;
-          }> | null;
-          enableWhen?: Array<{
-            __typename?: 'EnableWhen';
-            question?: string | null;
-            localConstant?: string | null;
-            operator: EnableOperator;
-            answerCode?: string | null;
-            answerCodes?: Array<string> | null;
-            answerNumber?: number | null;
-            answerBoolean?: boolean | null;
-            answerGroupCode?: string | null;
-            answerDate?: string | null;
-            compareQuestion?: string | null;
-          }> | null;
-          autofillValues?: Array<{
-            __typename?: 'AutofillValue';
-            valueCode?: string | null;
-            valueQuestion?: string | null;
-            valueBoolean?: boolean | null;
-            valueNumber?: number | null;
-            sumQuestions?: Array<string> | null;
-            formula?: string | null;
-            autofillBehavior: EnableBehavior;
-            autofillReadonly?: boolean | null;
-            autofillWhen: Array<{
-              __typename?: 'EnableWhen';
-              question?: string | null;
-              localConstant?: string | null;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              answerDate?: string | null;
-              compareQuestion?: string | null;
-            }>;
-          }> | null;
-        }> | null;
-        mapping?: {
-          __typename?: 'FieldMapping';
-          recordType?: RelatedRecordType | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-        } | null;
-        bounds?: Array<{
-          __typename?: 'ValueBound';
-          id: string;
-          severity: ValidationSeverity;
-          type: BoundType;
-          question?: string | null;
-          valueNumber?: number | null;
-          valueDate?: string | null;
-          valueLocalConstant?: string | null;
-          offset?: number | null;
-        }> | null;
-        pickListOptions?: Array<{
-          __typename?: 'PickListOption';
-          code: string;
-          label?: string | null;
-          secondaryLabel?: string | null;
-          groupLabel?: string | null;
-          groupCode?: string | null;
-          initialSelected?: boolean | null;
-          helperText?: string | null;
-          numericValue?: number | null;
-          disabled?: boolean | null;
-        }> | null;
-        initial?: Array<{
-          __typename?: 'InitialValue';
-          valueCode?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          valueLocalConstant?: string | null;
-          initialBehavior: InitialBehavior;
-        }> | null;
-        enableWhen?: Array<{
-          __typename?: 'EnableWhen';
-          question?: string | null;
-          localConstant?: string | null;
-          operator: EnableOperator;
-          answerCode?: string | null;
-          answerCodes?: Array<string> | null;
-          answerNumber?: number | null;
-          answerBoolean?: boolean | null;
-          answerGroupCode?: string | null;
-          answerDate?: string | null;
-          compareQuestion?: string | null;
-        }> | null;
-        autofillValues?: Array<{
-          __typename?: 'AutofillValue';
-          valueCode?: string | null;
-          valueQuestion?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          sumQuestions?: Array<string> | null;
-          formula?: string | null;
-          autofillBehavior: EnableBehavior;
-          autofillReadonly?: boolean | null;
-          autofillWhen: Array<{
-            __typename?: 'EnableWhen';
-            question?: string | null;
-            localConstant?: string | null;
-            operator: EnableOperator;
-            answerCode?: string | null;
-            answerCodes?: Array<string> | null;
-            answerNumber?: number | null;
-            answerBoolean?: boolean | null;
-            answerGroupCode?: string | null;
-            answerDate?: string | null;
-            compareQuestion?: string | null;
-          }>;
-        }> | null;
-      }>;
-    };
-    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
-  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -26203,6 +25634,573 @@ export type CustomDataElementFieldsFragment = {
       email: string;
     } | null;
   }> | null;
+};
+
+export type CreateDirectCeReferralMutationVariables = Exact<{
+  targetUnitGroupId: Scalars['ID']['input'];
+  sourceEnrollmentId: Scalars['ID']['input'];
+  valuesByLinkId: Scalars['JsonObject']['input'];
+  valuesByFieldName: Scalars['JsonObject']['input'];
+  confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  formDefinitionId: Scalars['ID']['input'];
+}>;
+
+export type CreateDirectCeReferralMutation = {
+  __typename?: 'Mutation';
+  createDirectCeReferral?: {
+    __typename?: 'CreateDirectCeReferralPayload';
+    referral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      status: CeReferralStatus;
+      active: boolean;
+      clientId: string;
+      clientName?: string | null;
+      customStatus?: {
+        __typename?: 'CeCustomReferralStatus';
+        id: string;
+        key: string;
+        name: string;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetDirectReferralFormDefinitionQueryVariables = Exact<{
+  targetUnitGroupId: Scalars['ID']['input'];
+}>;
+
+export type GetDirectReferralFormDefinitionQuery = {
+  __typename?: 'Query';
+  directReferralFormDefinition?: {
+    __typename?: 'FormDefinition';
+    id: string;
+    role: FormRole;
+    title: string;
+    cacheKey: string;
+    identifier: string;
+    status: FormStatus;
+    dateUpdated: string;
+    supportsSaveInProgress: boolean;
+    definition: {
+      __typename?: 'FormDefinitionJson';
+      item: Array<{
+        __typename: 'FormItem';
+        linkId: string;
+        type: ItemType;
+        component?: Component | null;
+        prefix?: string | null;
+        text?: string | null;
+        briefText?: string | null;
+        readonlyText?: string | null;
+        helperText?: string | null;
+        required?: boolean | null;
+        warnIfEmpty?: boolean | null;
+        hidden?: boolean | null;
+        readOnly?: boolean | null;
+        repeats?: boolean | null;
+        pickListReference?: string | null;
+        size?: InputSize | null;
+        assessmentDate?: boolean | null;
+        prefill?: boolean | null;
+        dataCollectedAbout?: DataCollectedAbout | null;
+        disabledDisplay?: DisabledDisplay | null;
+        enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
+        editorUserIds?: Array<string> | null;
+        item?: Array<{
+          __typename: 'FormItem';
+          linkId: string;
+          type: ItemType;
+          component?: Component | null;
+          prefix?: string | null;
+          text?: string | null;
+          briefText?: string | null;
+          readonlyText?: string | null;
+          helperText?: string | null;
+          required?: boolean | null;
+          warnIfEmpty?: boolean | null;
+          hidden?: boolean | null;
+          readOnly?: boolean | null;
+          repeats?: boolean | null;
+          pickListReference?: string | null;
+          size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill?: boolean | null;
+          dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay?: DisabledDisplay | null;
+          enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
+          editorUserIds?: Array<string> | null;
+          item?: Array<{
+            __typename: 'FormItem';
+            linkId: string;
+            type: ItemType;
+            component?: Component | null;
+            prefix?: string | null;
+            text?: string | null;
+            briefText?: string | null;
+            readonlyText?: string | null;
+            helperText?: string | null;
+            required?: boolean | null;
+            warnIfEmpty?: boolean | null;
+            hidden?: boolean | null;
+            readOnly?: boolean | null;
+            repeats?: boolean | null;
+            pickListReference?: string | null;
+            size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill?: boolean | null;
+            dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay?: DisabledDisplay | null;
+            enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
+            editorUserIds?: Array<string> | null;
+            item?: Array<{
+              __typename: 'FormItem';
+              linkId: string;
+              type: ItemType;
+              component?: Component | null;
+              prefix?: string | null;
+              text?: string | null;
+              briefText?: string | null;
+              readonlyText?: string | null;
+              helperText?: string | null;
+              required?: boolean | null;
+              warnIfEmpty?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              pickListReference?: string | null;
+              size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay?: DisabledDisplay | null;
+              enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
+              editorUserIds?: Array<string> | null;
+              item?: Array<{
+                __typename: 'FormItem';
+                linkId: string;
+                type: ItemType;
+                component?: Component | null;
+                prefix?: string | null;
+                text?: string | null;
+                briefText?: string | null;
+                readonlyText?: string | null;
+                helperText?: string | null;
+                required?: boolean | null;
+                warnIfEmpty?: boolean | null;
+                hidden?: boolean | null;
+                readOnly?: boolean | null;
+                repeats?: boolean | null;
+                pickListReference?: string | null;
+                size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill?: boolean | null;
+                dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay?: DisabledDisplay | null;
+                enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
+                editorUserIds?: Array<string> | null;
+                mapping?: {
+                  __typename?: 'FieldMapping';
+                  recordType?: RelatedRecordType | null;
+                  fieldName?: string | null;
+                  customFieldKey?: string | null;
+                } | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  id: string;
+                  severity: ValidationSeverity;
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
+                  valueLocalConstant?: string | null;
+                  offset?: number | null;
+                }> | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  groupCode?: string | null;
+                  initialSelected?: boolean | null;
+                  helperText?: string | null;
+                  numericValue?: number | null;
+                  disabled?: boolean | null;
+                }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question?: string | null;
+                  localConstant?: string | null;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                  answerDate?: string | null;
+                  compareQuestion?: string | null;
+                }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueQuestion?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
+                  formula?: string | null;
+                  autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
+                  autofillWhen: Array<{
+                    __typename?: 'EnableWhen';
+                    question?: string | null;
+                    localConstant?: string | null;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                    answerDate?: string | null;
+                    compareQuestion?: string | null;
+                  }>;
+                }> | null;
+              }> | null;
+              mapping?: {
+                __typename?: 'FieldMapping';
+                recordType?: RelatedRecordType | null;
+                fieldName?: string | null;
+                customFieldKey?: string | null;
+              } | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                id: string;
+                severity: ValidationSeverity;
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
+                valueLocalConstant?: string | null;
+                offset?: number | null;
+              }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                groupCode?: string | null;
+                initialSelected?: boolean | null;
+                helperText?: string | null;
+                numericValue?: number | null;
+                disabled?: boolean | null;
+              }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question?: string | null;
+                localConstant?: string | null;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                answerDate?: string | null;
+                compareQuestion?: string | null;
+              }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueQuestion?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
+                formula?: string | null;
+                autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
+                autofillWhen: Array<{
+                  __typename?: 'EnableWhen';
+                  question?: string | null;
+                  localConstant?: string | null;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                  answerDate?: string | null;
+                  compareQuestion?: string | null;
+                }>;
+              }> | null;
+            }> | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              id: string;
+              severity: ValidationSeverity;
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
+              valueLocalConstant?: string | null;
+              offset?: number | null;
+            }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              groupCode?: string | null;
+              initialSelected?: boolean | null;
+              helperText?: string | null;
+              numericValue?: number | null;
+              disabled?: boolean | null;
+            }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question?: string | null;
+              localConstant?: string | null;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              answerDate?: string | null;
+              compareQuestion?: string | null;
+            }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueQuestion?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
+              formula?: string | null;
+              autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
+              autofillWhen: Array<{
+                __typename?: 'EnableWhen';
+                question?: string | null;
+                localConstant?: string | null;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                answerDate?: string | null;
+                compareQuestion?: string | null;
+              }>;
+            }> | null;
+          }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            id: string;
+            severity: ValidationSeverity;
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
+            valueLocalConstant?: string | null;
+            offset?: number | null;
+          }> | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            groupCode?: string | null;
+            initialSelected?: boolean | null;
+            helperText?: string | null;
+            numericValue?: number | null;
+            disabled?: boolean | null;
+          }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question?: string | null;
+            localConstant?: string | null;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+            answerDate?: string | null;
+            compareQuestion?: string | null;
+          }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueQuestion?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
+            formula?: string | null;
+            autofillBehavior: EnableBehavior;
+            autofillReadonly?: boolean | null;
+            autofillWhen: Array<{
+              __typename?: 'EnableWhen';
+              question?: string | null;
+              localConstant?: string | null;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              answerDate?: string | null;
+              compareQuestion?: string | null;
+            }>;
+          }> | null;
+        }> | null;
+        mapping?: {
+          __typename?: 'FieldMapping';
+          recordType?: RelatedRecordType | null;
+          fieldName?: string | null;
+          customFieldKey?: string | null;
+        } | null;
+        bounds?: Array<{
+          __typename?: 'ValueBound';
+          id: string;
+          severity: ValidationSeverity;
+          type: BoundType;
+          question?: string | null;
+          valueNumber?: number | null;
+          valueDate?: string | null;
+          valueLocalConstant?: string | null;
+          offset?: number | null;
+        }> | null;
+        pickListOptions?: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          groupCode?: string | null;
+          initialSelected?: boolean | null;
+          helperText?: string | null;
+          numericValue?: number | null;
+          disabled?: boolean | null;
+        }> | null;
+        initial?: Array<{
+          __typename?: 'InitialValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
+        }> | null;
+        enableWhen?: Array<{
+          __typename?: 'EnableWhen';
+          question?: string | null;
+          localConstant?: string | null;
+          operator: EnableOperator;
+          answerCode?: string | null;
+          answerCodes?: Array<string> | null;
+          answerNumber?: number | null;
+          answerBoolean?: boolean | null;
+          answerGroupCode?: string | null;
+          answerDate?: string | null;
+          compareQuestion?: string | null;
+        }> | null;
+        autofillValues?: Array<{
+          __typename?: 'AutofillValue';
+          valueCode?: string | null;
+          valueQuestion?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
+          formula?: string | null;
+          autofillBehavior: EnableBehavior;
+          autofillReadonly?: boolean | null;
+          autofillWhen: Array<{
+            __typename?: 'EnableWhen';
+            question?: string | null;
+            localConstant?: string | null;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+            answerDate?: string | null;
+            compareQuestion?: string | null;
+          }>;
+        }> | null;
+      }>;
+    };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  } | null;
 };
 
 export type ProjectEnrollmentFieldsFragment = {
@@ -37446,7 +37444,7 @@ export type SubmitFormMutation = {
             id: string;
             supportsReferrals: boolean;
             supportsWaitlistReferrals: boolean;
-            acceptsDirectReferrals: boolean;
+            receivesDirectReferrals: boolean;
             sendsDirectReferrals: boolean;
           } | null;
           organization: {
@@ -41184,7 +41182,7 @@ export type ProjectAllFieldsFragment = {
     id: string;
     supportsReferrals: boolean;
     supportsWaitlistReferrals: boolean;
-    acceptsDirectReferrals: boolean;
+    receivesDirectReferrals: boolean;
     sendsDirectReferrals: boolean;
   } | null;
   organization: {
@@ -42088,7 +42086,7 @@ export type GetProjectQuery = {
       id: string;
       supportsReferrals: boolean;
       supportsWaitlistReferrals: boolean;
-      acceptsDirectReferrals: boolean;
+      receivesDirectReferrals: boolean;
       sendsDirectReferrals: boolean;
     } | null;
     organization: {
@@ -49722,7 +49720,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
       id
       supportsReferrals
       supportsWaitlistReferrals
-      acceptsDirectReferrals
+      receivesDirectReferrals
       sendsDirectReferrals
     }
     targetPopulation
@@ -52372,82 +52370,6 @@ export type SubmitCeReferralStepMutationOptions = Apollo.BaseMutationOptions<
   SubmitCeReferralStepMutation,
   SubmitCeReferralStepMutationVariables
 >;
-export const CreateDirectCeReferralDocument = gql`
-  mutation CreateDirectCeReferral(
-    $targetUnitGroupId: ID!
-    $sourceEnrollmentId: ID!
-    $valuesByLinkId: JsonObject!
-    $valuesByFieldName: JsonObject!
-    $confirmed: Boolean
-    $formDefinitionId: ID!
-  ) {
-    createDirectCeReferral(
-      targetUnitGroupId: $targetUnitGroupId
-      sourceEnrollmentId: $sourceEnrollmentId
-      valuesByLinkId: $valuesByLinkId
-      valuesByFieldName: $valuesByFieldName
-      confirmed: $confirmed
-      formDefinitionId: $formDefinitionId
-    ) {
-      referral {
-        ...CeReferralSummaryFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${CeReferralSummaryFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type CreateDirectCeReferralMutationFn = Apollo.MutationFunction<
-  CreateDirectCeReferralMutation,
-  CreateDirectCeReferralMutationVariables
->;
-
-/**
- * __useCreateDirectCeReferralMutation__
- *
- * To run a mutation, you first call `useCreateDirectCeReferralMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDirectCeReferralMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDirectCeReferralMutation, { data, loading, error }] = useCreateDirectCeReferralMutation({
- *   variables: {
- *      targetUnitGroupId: // value for 'targetUnitGroupId'
- *      sourceEnrollmentId: // value for 'sourceEnrollmentId'
- *      valuesByLinkId: // value for 'valuesByLinkId'
- *      valuesByFieldName: // value for 'valuesByFieldName'
- *      confirmed: // value for 'confirmed'
- *      formDefinitionId: // value for 'formDefinitionId'
- *   },
- * });
- */
-export function useCreateDirectCeReferralMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateDirectCeReferralMutation,
-    CreateDirectCeReferralMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateDirectCeReferralMutation,
-    CreateDirectCeReferralMutationVariables
-  >(CreateDirectCeReferralDocument, options);
-}
-export type CreateDirectCeReferralMutationHookResult = ReturnType<
-  typeof useCreateDirectCeReferralMutation
->;
-export type CreateDirectCeReferralMutationResult =
-  Apollo.MutationResult<CreateDirectCeReferralMutation>;
-export type CreateDirectCeReferralMutationOptions = Apollo.BaseMutationOptions<
-  CreateDirectCeReferralMutation,
-  CreateDirectCeReferralMutationVariables
->;
 export const MarkUnitsAvailableDocument = gql`
   mutation MarkUnitsAvailable(
     $unitIds: [ID!]!
@@ -53832,96 +53754,6 @@ export type GetAdminCeReferralsSuspenseQueryHookResult = ReturnType<
 export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables
->;
-export const GetDirectReferralFormDocument = gql`
-  query GetDirectReferralForm(
-    $sourceEnrollmentId: ID!
-    $targetUnitGroupId: ID!
-  ) {
-    directReferralForm(
-      sourceEnrollmentId: $sourceEnrollmentId
-      targetUnitGroupId: $targetUnitGroupId
-    ) {
-      ...FormDefinitionFields
-    }
-  }
-  ${FormDefinitionFieldsFragmentDoc}
-`;
-
-/**
- * __useGetDirectReferralFormQuery__
- *
- * To run a query within a React component, call `useGetDirectReferralFormQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDirectReferralFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetDirectReferralFormQuery({
- *   variables: {
- *      sourceEnrollmentId: // value for 'sourceEnrollmentId'
- *      targetUnitGroupId: // value for 'targetUnitGroupId'
- *   },
- * });
- */
-export function useGetDirectReferralFormQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
-  > &
-    (
-      | { variables: GetDirectReferralFormQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
-  >(GetDirectReferralFormDocument, options);
-}
-export function useGetDirectReferralFormLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
-  >(GetDirectReferralFormDocument, options);
-}
-export function useGetDirectReferralFormSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetDirectReferralFormQuery,
-        GetDirectReferralFormQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetDirectReferralFormQuery,
-    GetDirectReferralFormQueryVariables
-  >(GetDirectReferralFormDocument, options);
-}
-export type GetDirectReferralFormQueryHookResult = ReturnType<
-  typeof useGetDirectReferralFormQuery
->;
-export type GetDirectReferralFormLazyQueryHookResult = ReturnType<
-  typeof useGetDirectReferralFormLazyQuery
->;
-export type GetDirectReferralFormSuspenseQueryHookResult = ReturnType<
-  typeof useGetDirectReferralFormSuspenseQuery
->;
-export type GetDirectReferralFormQueryResult = Apollo.QueryResult<
-  GetDirectReferralFormQuery,
-  GetDirectReferralFormQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
@@ -56951,6 +56783,168 @@ export type GetClientCaseNotesSuspenseQueryHookResult = ReturnType<
 export type GetClientCaseNotesQueryResult = Apollo.QueryResult<
   GetClientCaseNotesQuery,
   GetClientCaseNotesQueryVariables
+>;
+export const CreateDirectCeReferralDocument = gql`
+  mutation CreateDirectCeReferral(
+    $targetUnitGroupId: ID!
+    $sourceEnrollmentId: ID!
+    $valuesByLinkId: JsonObject!
+    $valuesByFieldName: JsonObject!
+    $confirmed: Boolean
+    $formDefinitionId: ID!
+  ) {
+    createDirectCeReferral(
+      targetUnitGroupId: $targetUnitGroupId
+      sourceEnrollmentId: $sourceEnrollmentId
+      valuesByLinkId: $valuesByLinkId
+      valuesByFieldName: $valuesByFieldName
+      confirmed: $confirmed
+      formDefinitionId: $formDefinitionId
+    ) {
+      referral {
+        ...CeReferralSummaryFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${CeReferralSummaryFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateDirectCeReferralMutationFn = Apollo.MutationFunction<
+  CreateDirectCeReferralMutation,
+  CreateDirectCeReferralMutationVariables
+>;
+
+/**
+ * __useCreateDirectCeReferralMutation__
+ *
+ * To run a mutation, you first call `useCreateDirectCeReferralMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDirectCeReferralMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDirectCeReferralMutation, { data, loading, error }] = useCreateDirectCeReferralMutation({
+ *   variables: {
+ *      targetUnitGroupId: // value for 'targetUnitGroupId'
+ *      sourceEnrollmentId: // value for 'sourceEnrollmentId'
+ *      valuesByLinkId: // value for 'valuesByLinkId'
+ *      valuesByFieldName: // value for 'valuesByFieldName'
+ *      confirmed: // value for 'confirmed'
+ *      formDefinitionId: // value for 'formDefinitionId'
+ *   },
+ * });
+ */
+export function useCreateDirectCeReferralMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDirectCeReferralMutation,
+    CreateDirectCeReferralMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateDirectCeReferralMutation,
+    CreateDirectCeReferralMutationVariables
+  >(CreateDirectCeReferralDocument, options);
+}
+export type CreateDirectCeReferralMutationHookResult = ReturnType<
+  typeof useCreateDirectCeReferralMutation
+>;
+export type CreateDirectCeReferralMutationResult =
+  Apollo.MutationResult<CreateDirectCeReferralMutation>;
+export type CreateDirectCeReferralMutationOptions = Apollo.BaseMutationOptions<
+  CreateDirectCeReferralMutation,
+  CreateDirectCeReferralMutationVariables
+>;
+export const GetDirectReferralFormDefinitionDocument = gql`
+  query GetDirectReferralFormDefinition($targetUnitGroupId: ID!) {
+    directReferralFormDefinition(targetUnitGroupId: $targetUnitGroupId) {
+      ...FormDefinitionFields
+    }
+  }
+  ${FormDefinitionFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetDirectReferralFormDefinitionQuery__
+ *
+ * To run a query within a React component, call `useGetDirectReferralFormDefinitionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDirectReferralFormDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDirectReferralFormDefinitionQuery({
+ *   variables: {
+ *      targetUnitGroupId: // value for 'targetUnitGroupId'
+ *   },
+ * });
+ */
+export function useGetDirectReferralFormDefinitionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
+  > &
+    (
+      | {
+          variables: GetDirectReferralFormDefinitionQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
+  >(GetDirectReferralFormDefinitionDocument, options);
+}
+export function useGetDirectReferralFormDefinitionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
+  >(GetDirectReferralFormDefinitionDocument, options);
+}
+export function useGetDirectReferralFormDefinitionSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetDirectReferralFormDefinitionQuery,
+        GetDirectReferralFormDefinitionQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetDirectReferralFormDefinitionQuery,
+    GetDirectReferralFormDefinitionQueryVariables
+  >(GetDirectReferralFormDefinitionDocument, options);
+}
+export type GetDirectReferralFormDefinitionQueryHookResult = ReturnType<
+  typeof useGetDirectReferralFormDefinitionQuery
+>;
+export type GetDirectReferralFormDefinitionLazyQueryHookResult = ReturnType<
+  typeof useGetDirectReferralFormDefinitionLazyQuery
+>;
+export type GetDirectReferralFormDefinitionSuspenseQueryHookResult = ReturnType<
+  typeof useGetDirectReferralFormDefinitionSuspenseQuery
+>;
+export type GetDirectReferralFormDefinitionQueryResult = Apollo.QueryResult<
+  GetDirectReferralFormDefinitionQuery,
+  GetDirectReferralFormDefinitionQueryVariables
 >;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
