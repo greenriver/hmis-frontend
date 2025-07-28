@@ -93,6 +93,7 @@ export const HmisEnums = {
     REJECT_REFERRAL: 'Declined Referral',
     START_REFERRAL: 'Started Referral',
   },
+  CeReferralOrigin: { direct_send: 'Direct', waitlist: 'Waitlist' },
   CeReferralStatus: {
     accepted: 'Accepted',
     in_progress: 'In progress',

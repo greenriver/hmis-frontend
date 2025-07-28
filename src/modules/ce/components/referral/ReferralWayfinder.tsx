@@ -23,7 +23,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           onClose={onClose}
           title='Referral Complete'
           alertTitle='Referral Completed'
-          alertText={`${clientName} has been accepted to ${opportunity.name}`}
+          alertText={`${clientName} has been accepted to ${opportunity?.name}`}
           items={[
             {
               title: 'Go to HMIS Dashboard',
@@ -53,7 +53,7 @@ const ReferralWayfinder: React.FC<Props> = ({ open, onClose }) => {
           onClose={onClose}
           title='Referral Complete'
           alertTitle='Referral Declined'
-          alertText={`${clientName} has been declined from ${opportunity.name}`}
+          alertText={`${clientName} has been declined from ${opportunity?.name}`}
           AlertProps={{
             icon: <DeclinedIcon />,
             severity: 'info',
