@@ -312,17 +312,25 @@ export const lastUpdatedBy = ({
   dateUpdated,
   user,
   relativeDate = false,
+  dateFormat: dateFormatArg,
 }: {
   dateUpdated?: string | null;
   user?: { name: string } | null;
   relativeDate?: boolean;
+  dateFormat?: 'date' | 'timestamp'; // optionally allow caller to override default format, to format Timestamp as Date for example
 }) => {
+  let dateFormat =
+    dateUpdated?.length === HMIS_DATE_FORMAT.length ? 'date' : 'timestamp';
+  if (dateFormatArg) dateFormat = dateFormatArg;
+
   const parsed = parseHmisDateString(dateUpdated);
 
   let dateString = dateUpdated;
   if (parsed) {
     if (relativeDate) {
       dateString = formatRelativeDate(parsed);
+    } else if (dateFormat === 'timestamp') {
+      dateString = formatDateTimeForDisplay(parsed);
     } else {
       dateString = formatDateForDisplay(parsed);
     }

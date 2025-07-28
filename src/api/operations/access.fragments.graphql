@@ -43,6 +43,7 @@ fragment ClientAccessFields on ClientAccess {
   canViewClientPhoto
   canViewClientAlerts
   canManageClientAlerts
+  canPrintClientCaseNotes
 
   # Perms for determining which tabs to show on Client dashboard:
   canViewEnrollmentDetails

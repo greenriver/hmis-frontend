@@ -27,9 +27,11 @@ const ReferralStepDetails: React.FC<{
     if (status === CeReferralStepStatus.Unavailable) return;
     if (status === CeReferralStepStatus.Completed) {
       const date = parseHmisDateString(updatedAt);
+      // intentionally format relative datetime as date (eg "Today" instead of "5 minutes ago")
       if (date) return `Completed ${formatRelativeDate(date)}`;
     }
     const date = parseHmisDateString(availableAt);
+    // intentionally format relative datetime as date (eg "Today" instead of "5 minutes ago")
     if (date) return `Available ${formatRelativeDate(date)}`;
   }, [availableAt, updatedAt, status]);
 

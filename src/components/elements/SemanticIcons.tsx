@@ -1,10 +1,12 @@
 import {
   ContentPasteOutlined,
   DateRangeRounded,
+  GridViewRounded,
   HistoryRounded,
   HomeRounded,
   InfoOutlined,
   StickyNote2Rounded,
+  TableRowsRounded,
   TimelapseRounded,
 } from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -103,6 +105,8 @@ export {
   PeopleOutlineRoundedIcon as ImpersonateIcon,
   ClearIconRounded as ReferralDeclinedIcon,
   CheckRoundedIcon as ReferralAcceptedIcon,
+  TableRowsRounded as TableRowsIcon,
+  GridViewRounded as TableCardsIcon,
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
   RadioButtonCheckedIcon as FormChoiceIcon,

@@ -113,6 +113,7 @@ export interface GroupItemComponentProps {
   visible?: boolean;
   viewOnly?: boolean;
   rowSx?: SxProps;
+  handlers?: FormDefinitionHandlers;
 }
 
 export interface ViewGroupItemComponentProps {

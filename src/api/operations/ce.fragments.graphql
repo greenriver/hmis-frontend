@@ -331,9 +331,7 @@ fragment UserCeReferralStepFields on CeReferralStep {
       id
     }
     clientId
-    client {
-      ...ClientName
-    }
+    clientName
   }
 }
 

@@ -6,13 +6,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
 import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
-import ClientDisplayTypeToggle, {
-  DisplayType,
-} from './ClientDisplayTypeToggle';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 
 import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
+import CommonTableDisplayToggle, {
+  DisplayType,
+} from '@/components/elements/CommonTableDisplayToggle';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -280,7 +280,7 @@ const ClientSearch = () => {
                 : ClientSortOption.LastNameAToZ
             }
             tableDisplayOptionButtons={
-              <ClientDisplayTypeToggle
+              <CommonTableDisplayToggle
                 value={displayType}
                 onChange={setDisplayType}
               />

@@ -1661,6 +1661,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canPrintClientCaseNotes',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canUploadClientFiles',
         type: {
           kind: 'NON_NULL',
@@ -6375,6 +6383,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canPerformOwnReferralTasks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canPrintClientCaseNotes',
         type: {
           kind: 'NON_NULL',
           name: null,
