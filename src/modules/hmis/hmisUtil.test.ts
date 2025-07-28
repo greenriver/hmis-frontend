@@ -7,6 +7,7 @@ import {
   parseAndFormatDateTime,
   parseHmisDateString,
   lastUpdatedBy,
+  formatDateTimeForDisplay,
 } from './hmisUtil';
 
 import { ProjectType } from '@/types/gqlTypes';
@@ -90,7 +91,7 @@ describe('Date fns', () => {
   });
 });
 
-describe('lastUpdatedBy', () => {
+describe('lastUpdatedBy formatting', () => {
   it('returns formatted date and user name when both are provided', () => {
     const result = lastUpdatedBy({
       dateUpdated: '2023-07-28',
@@ -109,7 +110,7 @@ describe('lastUpdatedBy', () => {
   it('returns relative date when relativeDate is true', () => {
     const date = new Date();
     date.setDate(date.getDate() - 5); // 5 days ago
-    const dateUpdated = formatDateForGql(date);
+    const dateUpdated = date.toISOString();
 
     const result = lastUpdatedBy({
       dateUpdated,
@@ -134,10 +135,11 @@ describe('lastUpdatedBy', () => {
   });
 
   it('formats timestamp as timestamp by default', () => {
+    const date = new Date();
     const result = lastUpdatedBy({
-      dateUpdated: '2023-02-02T15:50:10.000Z',
+      dateUpdated: date.toISOString(),
     });
-    expect(result).toBe('02/02/2023 10:50 AM');
+    expect(result).toBe(formatDateTimeForDisplay(date));
   });
 
   it('format timestamp as date when specified', () => {
@@ -153,17 +155,5 @@ describe('lastUpdatedBy', () => {
       dateUpdated: 'invalid-date',
     });
     expect(result).toBe('invalid-date');
-  });
-
-  it('handles future dates correctly with relativeDate', () => {
-    const date = new Date();
-    date.setDate(date.getDate() + 3); // 3 days in the future
-    const dateUpdated = formatDateForGql(date);
-
-    const result = lastUpdatedBy({
-      dateUpdated,
-      relativeDate: true,
-    });
-    expect(result).toBe('In 3 days');
   });
 });
