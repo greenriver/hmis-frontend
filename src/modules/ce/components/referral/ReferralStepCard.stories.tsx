@@ -3,6 +3,7 @@ import ReferralStepCard from '@/modules/ce/components/referral/ReferralStepCard'
 import {
   CeOpportunityStatus,
   CeReferralFieldsFragment,
+  CeReferralOrigin,
   CeReferralStatus,
   CeReferralStepStatus,
 } from '@/types/gqlTypes';
@@ -68,6 +69,7 @@ const mockReferral: CeReferralFieldsFragment = {
     nodesCount: 0,
     nodes: [],
   },
+  origin: CeReferralOrigin.Waitlist,
 };
 
 export const InProgress: Story = {

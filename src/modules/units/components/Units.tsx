@@ -17,10 +17,10 @@ import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog'
 import UnitManagementTable from '@/modules/units/components/UnitManagementTable';
 import { useGetProjectUnitGroupsQuery } from '@/types/gqlTypes';
 
-// This page has 2 "modes" based on whether the project has Coordinated Entry enabled.
+// This page has 2 "modes" based on whether the project supports Coordinated Entry referrals.
 //
-// If CE is enabled, this page allows adding Unit Groups and linking to Unit Groups for Unit management.
-// If CE is not enabled, this page retains the legacy behavior of managing Units directly without groups.
+// If yes, this page allows adding Unit Groups and linking to Unit Groups for Unit management.
+// If no, this page retains the legacy behavior of managing Units directly without groups.
 const Units = () => {
   const { project } = useProjectDashboardContext();
 
@@ -30,13 +30,15 @@ const Units = () => {
     variables: { id: project.id, limit: 100 },
   });
 
-  const { coordinatedEntryEnabled } = project;
+  const projectSupportsReferrals = useMemo(
+    () => project.coordinatedEntryFeatures?.supportsReferrals,
+    [project.coordinatedEntryFeatures?.supportsReferrals]
+  );
 
-  // For now, we assume that if the project has Coordinated Entry enabled,
-  // it also has Unit Groups enabled.
+  // For now, we assume that if the project supports CE referrals, it also has Unit Groups enabled.
   const unitGroupsEnabled = useMemo(
-    () => !!coordinatedEntryEnabled,
-    [coordinatedEntryEnabled]
+    () => !!projectSupportsReferrals,
+    [projectSupportsReferrals]
   );
 
   const unitGroups = useMemo(() => {
@@ -104,13 +106,13 @@ const Units = () => {
             <ProjectUnitsTable
               projectId={project.id}
               unitGroupsEnabled={unitGroupsEnabled}
-              ceEnabled={coordinatedEntryEnabled}
+              projectSupportsReferrals={projectSupportsReferrals}
             />
           ) : (
             // If Unit Groups are not enabled, use the Unit Management Table so Units can be managed directly on this page
             <UnitManagementTable
               projectId={project.id}
-              ceEnabled={coordinatedEntryEnabled}
+              projectSupportsReferrals={projectSupportsReferrals}
             />
           )}
         </Paper>
@@ -120,14 +122,14 @@ const Units = () => {
           projectId={project.id}
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          ceEnabled={coordinatedEntryEnabled}
+          projectSupportsReferrals={projectSupportsReferrals}
         />
       ) : (
         <CreateUnitsDialog
           projectId={project.id}
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          includeCeFields={coordinatedEntryEnabled}
+          includeCeFields={projectSupportsReferrals}
         />
       )}
     </>

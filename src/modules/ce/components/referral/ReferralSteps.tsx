@@ -19,24 +19,30 @@ const ReferralSteps: React.FC<Props> = () => {
   });
 
   const open = useMemo(() => {
-    return referral?.steps.filter((s) => {
-      return [
-        CeReferralStepStatus.InProgress,
-        CeReferralStepStatus.Available,
-      ].includes(s.status);
-    });
+    return (
+      referral?.steps?.filter((s) => {
+        return [
+          CeReferralStepStatus.InProgress,
+          CeReferralStepStatus.Available,
+        ].includes(s.status);
+      }) || []
+    );
   }, [referral?.steps]);
 
   const completed = useMemo(() => {
-    return referral?.steps.filter((s) => {
-      return s.status === CeReferralStepStatus.Completed;
-    });
+    return (
+      referral?.steps?.filter((s) => {
+        return s.status === CeReferralStepStatus.Completed;
+      }) || []
+    );
   }, [referral?.steps]);
 
   const unavailable = useMemo(() => {
-    return referral?.steps.filter((s) => {
-      return s.status === CeReferralStepStatus.Unavailable;
-    });
+    return (
+      referral?.steps?.filter((s) => {
+        return s.status === CeReferralStepStatus.Unavailable;
+      }) || []
+    );
   }, [referral?.steps]);
 
   const taskMap = useMemo(() => {

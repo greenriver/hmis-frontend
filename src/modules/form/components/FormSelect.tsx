@@ -133,6 +133,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
   return (
     <GenericSelect
       getOptionLabel={getOptionLabel}
+      getOptionDisabled={(option: Option) => option.disabled || false}
       label={label}
       multiple={multiple}
       options={options}

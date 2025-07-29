@@ -75,7 +75,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
     record: step,
     itemMap,
     definition: formDefinition?.definition,
-    localConstants: { projectId: referral.opportunity.projectId },
+    localConstants: { projectId: referral.opportunity?.projectId },
   });
 
   const editable =
