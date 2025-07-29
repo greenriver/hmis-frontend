@@ -5,6 +5,8 @@ import LoadingButton from '@/components/elements/LoadingButton';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
+import RequiredLabel from '@/modules/form/components/RequiredLabel';
+import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import { ChangeType, GroupItemComponentProps } from '@/modules/form/types';
 import { useFetchAhaScoreMutation } from '@/types/gqlTypes';
 
@@ -29,6 +31,7 @@ const AhaScore = ({
   handlers,
   renderChildItem,
   severalItemsChanged,
+  viewOnly = false,
 }: GroupItemComponentProps) => {
   // Introspect on the group's child elements and ensure items exist for the expected link IDs
   const isComponentValid = useMemo(() => {
@@ -39,7 +42,15 @@ const AhaScore = ({
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
-  const [hasScore, setHasScore] = useState<boolean>(false);
+  // Use RHF to watch the current value of the score field.
+  // This is to disable the fetch button after unlocking an assessment that's already fetched the score.
+  const values = useDynamicFieldWatchValues([SCORE_LINK_ID]);
+  const scoreValue = values[SCORE_LINK_ID];
+
+  // If client has no score (-1 is returned), hasScore is false and the button stays enabled
+  const hasScore =
+    scoreValue !== null && scoreValue !== undefined && scoreValue >= 0;
+
   const [hasFetched, setHasFetched] = useState<boolean>(false);
 
   const clientId = handlers?.localConstants.clientId;
@@ -52,46 +63,41 @@ const AhaScore = ({
       const errors = data.fetchAhaScore?.errors || [];
       if (errors.length > 0) {
         setErrorState({ ...emptyErrorState, errors });
-        setHasScore(false);
         return;
       }
 
       setHasFetched(true);
       setErrorState(emptyErrorState);
 
-      if (data.fetchAhaScore?.score && data.fetchAhaScore.score >= 0) {
-        setHasScore(true);
-
-        if (severalItemsChanged) {
-          severalItemsChanged({
-            values: {
-              [SCORE_LINK_ID]: data.fetchAhaScore.score,
-              [ALT_AHA_FLAG_LINK_ID]: data.fetchAhaScore.altAhaFlag,
-              [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
-              [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
-            },
-            type: ChangeType.User,
-          });
-        }
-      } else {
-        setHasScore(false);
+      if (data.fetchAhaScore && severalItemsChanged) {
+        severalItemsChanged({
+          values: {
+            [SCORE_LINK_ID]: data.fetchAhaScore.score,
+            [ALT_AHA_FLAG_LINK_ID]: data.fetchAhaScore.altAhaFlag,
+            [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
+            [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
+          },
+          type: ChangeType.User,
+        });
       }
     },
     onError: (apolloError) => {
       setErrorState({ ...emptyErrorState, apolloError });
-      setHasScore(false);
     },
   });
 
-  // console.error instead of throwing an error, so we can still preview how the form looks in non-client contexts
+  // Throw an error if the children don't match the expected structure
+  if (!isComponentValid) throw new Error('Invalid Aha form component');
+
+  if (viewOnly) {
+    return item.item?.map((i) => renderChildItem(i));
+  }
+
   if (!clientId) {
     throw new Error(
       "AhaScore did not receive a client ID, and won't function properly without one."
     );
   }
-
-  // Throw an error if the children don't match the expected structure
-  if (!isComponentValid) throw new Error('Invalid Aha form component');
 
   return (
     <>
@@ -102,12 +108,27 @@ const AhaScore = ({
         </Stack>
       )}
       <Stack direction='column' gap={1} alignItems='flex-start'>
-        <LabelWithContent label={item.text} helperText={item.helperText}>
+        <LabelWithContent
+          label={
+            // Custom solution for visually requiring this field.
+            // Form groups can't be required, but in the individual fields are hidden and/or readonly,
+            // so the normal RequiredLabel logic doesn't work automagically.
+            <RequiredLabel
+              text={item.text || 'AHA Score'}
+              required={true}
+              TypographyProps={{
+                fontWeight: 600,
+              }}
+            />
+          }
+          helperText={item.helperText}
+        >
           <LoadingButton
             loading={loading}
-            disabled={hasScore} // If value has already been fetched, disable the button
+            disabled={hasScore} // If value already exists, disable the button
             type='button'
             onClick={() => fetchAha()}
+            sx={{ my: 1 }}
           >
             Fetch AHA Score
           </LoadingButton>
