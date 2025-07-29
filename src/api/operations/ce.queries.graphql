@@ -169,3 +169,32 @@ query GetAdminCeReferrals(
     }
   }
 }
+
+query GetAdminConsolidatedWaitlist(
+  $limit: Int = 25
+  $offset: Int = 0
+  # $filters: ConsolidatedWaitlistFilterOptions = null
+) {
+  consolidatedWaitlist(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      id
+      clientId
+      clientName
+      unitGroupName
+      projectName
+      projectId
+      organizationName
+      whenAddedToCandidatePool
+      whenUpdatedInCandidatePool
+      priorityScore
+      clientAttributes
+      customDataElements
+      clientAge
+      openEnrollmentProjectTypes
+      openReferralProjectTypes
+    }
+  }
+}

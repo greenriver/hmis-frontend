@@ -576,6 +576,37 @@ export type CeCandidateEnrollmentsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type CeCandidateConsolidated = {
+  __typename?: 'CeCandidateConsolidated';
+  clientAge?: Maybe<Scalars['Int']['output']>;
+  clientAttributes?: Maybe<Scalars['JSON']['output']>;
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
+  /** Custom Data Elements that contributed to eligibility and priority for this candidate pool */
+  customDataElements?: Maybe<Scalars['JSON']['output']>;
+  id: Scalars['ID']['output'];
+  openEnrollmentProjectTypes?: Maybe<Array<ProjectType>>;
+  openReferralProjectTypes?: Maybe<Array<ProjectType>>;
+  organizationName?: Maybe<Scalars['String']['output']>;
+  priorityScore?: Maybe<Scalars['Float']['output']>;
+  projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+  unitGroupName?: Maybe<Scalars['String']['output']>;
+  whenAddedToCandidatePool?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  whenUpdatedInCandidatePool?: Maybe<Scalars['ISO8601DateTime']['output']>;
+};
+
+export type CeCandidateConsolidatedsPaginated = {
+  __typename?: 'CeCandidateConsolidatedsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeCandidateConsolidated>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 export type CeCandidatesPaginated = {
   __typename?: 'CeCandidatesPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -6550,6 +6581,7 @@ export type Query = {
   clientOmniSearch: ClientsPaginated;
   /** Search for clients */
   clientSearch: ClientsPaginated;
+  consolidatedWaitlist?: Maybe<CeCandidateConsolidatedsPaginated>;
   currentUser?: Maybe<ApplicationUser>;
   deniedPendingReferralPostings: ReferralPostingsPaginated;
   /** Enrollment lookup */
@@ -6667,6 +6699,11 @@ export type QueryClientSearchArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ClientSortOption>;
+};
+
+export type QueryConsolidatedWaitlistArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryDeniedPendingReferralPostingsArgs = {
@@ -20907,6 +20944,39 @@ export type GetAdminCeReferralsQuery = {
       } | null;
     }>;
   };
+};
+
+export type GetAdminConsolidatedWaitlistQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetAdminConsolidatedWaitlistQuery = {
+  __typename?: 'Query';
+  consolidatedWaitlist?: {
+    __typename?: 'CeCandidateConsolidatedsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeCandidateConsolidated';
+      id: string;
+      clientId?: string | null;
+      clientName?: string | null;
+      unitGroupName?: string | null;
+      projectName?: string | null;
+      projectId?: string | null;
+      organizationName?: string | null;
+      whenAddedToCandidatePool?: string | null;
+      whenUpdatedInCandidatePool?: string | null;
+      priorityScore?: number | null;
+      clientAttributes?: any | null;
+      customDataElements?: any | null;
+      clientAge?: number | null;
+      openEnrollmentProjectTypes?: Array<ProjectType> | null;
+      openReferralProjectTypes?: Array<ProjectType> | null;
+    }>;
+  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -52812,6 +52882,104 @@ export type GetAdminCeReferralsSuspenseQueryHookResult = ReturnType<
 export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables
+>;
+export const GetAdminConsolidatedWaitlistDocument = gql`
+  query GetAdminConsolidatedWaitlist($limit: Int = 25, $offset: Int = 0) {
+    consolidatedWaitlist(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        clientId
+        clientName
+        unitGroupName
+        projectName
+        projectId
+        organizationName
+        whenAddedToCandidatePool
+        whenUpdatedInCandidatePool
+        priorityScore
+        clientAttributes
+        customDataElements
+        clientAge
+        openEnrollmentProjectTypes
+        openReferralProjectTypes
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetAdminConsolidatedWaitlistQuery__
+ *
+ * To run a query within a React component, call `useGetAdminConsolidatedWaitlistQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminConsolidatedWaitlistQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminConsolidatedWaitlistQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetAdminConsolidatedWaitlistQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAdminConsolidatedWaitlistQuery,
+    GetAdminConsolidatedWaitlistQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAdminConsolidatedWaitlistQuery,
+    GetAdminConsolidatedWaitlistQueryVariables
+  >(GetAdminConsolidatedWaitlistDocument, options);
+}
+export function useGetAdminConsolidatedWaitlistLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAdminConsolidatedWaitlistQuery,
+    GetAdminConsolidatedWaitlistQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAdminConsolidatedWaitlistQuery,
+    GetAdminConsolidatedWaitlistQueryVariables
+  >(GetAdminConsolidatedWaitlistDocument, options);
+}
+export function useGetAdminConsolidatedWaitlistSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetAdminConsolidatedWaitlistQuery,
+        GetAdminConsolidatedWaitlistQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAdminConsolidatedWaitlistQuery,
+    GetAdminConsolidatedWaitlistQueryVariables
+  >(GetAdminConsolidatedWaitlistDocument, options);
+}
+export type GetAdminConsolidatedWaitlistQueryHookResult = ReturnType<
+  typeof useGetAdminConsolidatedWaitlistQuery
+>;
+export type GetAdminConsolidatedWaitlistLazyQueryHookResult = ReturnType<
+  typeof useGetAdminConsolidatedWaitlistLazyQuery
+>;
+export type GetAdminConsolidatedWaitlistSuspenseQueryHookResult = ReturnType<
+  typeof useGetAdminConsolidatedWaitlistSuspenseQuery
+>;
+export type GetAdminConsolidatedWaitlistQueryResult = Apollo.QueryResult<
+  GetAdminConsolidatedWaitlistQuery,
+  GetAdminConsolidatedWaitlistQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
