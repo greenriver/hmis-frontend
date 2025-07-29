@@ -45,11 +45,12 @@ const AhaScore = ({
   // Use RHF to watch the current value of the score field.
   // This is to disable the fetch button after unlocking an assessment that's already fetched the score.
   const values = useDynamicFieldWatchValues([SCORE_LINK_ID]);
-  const existingValue = values[SCORE_LINK_ID];
+  const scoreValue = values[SCORE_LINK_ID];
 
-  const [hasScore, setHasScore] = useState<boolean>(
-    !!existingValue && existingValue >= 0
-  );
+  // If client has no score (-1 is returned), hasScore is false and the button stays enabled
+  const hasScore =
+    scoreValue !== null && scoreValue !== undefined && scoreValue >= 0;
+
   const [hasFetched, setHasFetched] = useState<boolean>(false);
 
   const clientId = handlers?.localConstants.clientId;
@@ -62,36 +63,26 @@ const AhaScore = ({
       const errors = data.fetchAhaScore?.errors || [];
       if (errors.length > 0) {
         setErrorState({ ...emptyErrorState, errors });
-        setHasScore(false);
         return;
       }
 
       setHasFetched(true);
       setErrorState(emptyErrorState);
 
-      if (data.fetchAhaScore?.score) {
-        if (data.fetchAhaScore.score >= 0) {
-          setHasScore(true);
-        }
-
-        if (severalItemsChanged) {
-          severalItemsChanged({
-            values: {
-              [SCORE_LINK_ID]: data.fetchAhaScore.score,
-              [ALT_AHA_FLAG_LINK_ID]: data.fetchAhaScore.altAhaFlag,
-              [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
-              [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
-            },
-            type: ChangeType.User,
-          });
-        }
-      } else {
-        setHasScore(false);
+      if (data.fetchAhaScore && severalItemsChanged) {
+        severalItemsChanged({
+          values: {
+            [SCORE_LINK_ID]: data.fetchAhaScore.score,
+            [ALT_AHA_FLAG_LINK_ID]: data.fetchAhaScore.altAhaFlag,
+            [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
+            [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
+          },
+          type: ChangeType.User,
+        });
       }
     },
     onError: (apolloError) => {
       setErrorState({ ...emptyErrorState, apolloError });
-      setHasScore(false);
     },
   });
 
@@ -99,13 +90,7 @@ const AhaScore = ({
   if (!isComponentValid) throw new Error('Invalid Aha form component');
 
   if (viewOnly) {
-    return item.item?.map((i) => {
-      if (i.linkId === SCORE_LINK_ID && !hasScore) {
-        return renderChildItem(i, { value: null });
-      } else {
-        return renderChildItem(i);
-      }
-    });
+    return item.item?.map((i) => renderChildItem(i));
   }
 
   if (!clientId) {

@@ -17,6 +17,12 @@ export const useDynamicFieldAutofillValue = (
   );
 
   return useMemo(() => {
+    // If the item does not have any autofill values defined, return null as there is nothing to evaluate.
+    if (!item.autofillValues) return null;
+
+    // Evaluate the autofill conditions for the item.
+    // Returns an object { value: <computed value> } if there is an autofill value to apply,
+    // or null if no conditions are satisfied.
     const result = autofillValues({
       item,
       values,
@@ -32,7 +38,6 @@ export const useDynamicFieldAutofillValue = (
     **/
     if (
       !result &&
-      !!item.autofillValues &&
       (item.readOnly || item.type === ItemType.Display) &&
       !viewOnly
     ) {
