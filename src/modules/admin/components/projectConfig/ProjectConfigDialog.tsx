@@ -1,5 +1,5 @@
 import { Box, DialogContent, DialogProps, DialogTitle } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import StaticForm from '@/modules/form/components/StaticForm';
@@ -24,6 +24,11 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
   config,
   ...props
 }) => {
+  const configOptions = useMemo(() => {
+    if (!config || !config.configOptions) return {};
+    return JSON.parse(config.configOptions);
+  }, [config]);
+
   return (
     <CommonDialog maxWidth='sm' fullWidth {...props}>
       <DialogTitle>{config ? 'Edit' : 'New'} Project Config</DialogTitle>
@@ -36,8 +41,11 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
             >
               role={StaticFormRole.ProjectConfig}
               initialValues={{
-                lengthOfAbsenceDays: (JSON.parse(config.configOptions) || {})
-                  .length_of_absence_days,
+                lengthOfAbsenceDays: configOptions.length_of_absence_days,
+                receivesDirectReferrals:
+                  configOptions.receives_direct_referrals,
+                supportsWaitlistReferrals:
+                  configOptions.supports_waitlist_referrals,
                 ...config,
               }}
               mutationDocument={UpdateProjectConfigDocument}

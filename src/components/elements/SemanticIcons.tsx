@@ -64,6 +64,7 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import SearchIcon from '@mui/icons-material/Search';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
+import SendIcon from '@mui/icons-material/Send';
 import SwapVertRoundedIcon from '@mui/icons-material/SwapVertRounded';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
@@ -150,4 +151,5 @@ export {
   HistoryRounded as ActivityIcon,
   StickyNote2Rounded as NotesIcon,
   DateRangeRounded as DateRangeIcon,
+  SendIcon as SendIcon,
 };

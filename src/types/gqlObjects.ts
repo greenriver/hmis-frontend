@@ -978,11 +978,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'clientName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'createdAt',
@@ -998,6 +994,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'origin',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
+        },
+      },
+      {
+        name: 'sourceEnrollmentId',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -1053,6 +1065,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'CeReferralAccess',
     fields: [
+      {
+        name: 'canViewReferralDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewSourceEnrollmentDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
       {
         name: 'canViewTargetProject',
         type: {
@@ -5645,6 +5673,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'disabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'groupCode',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -6123,6 +6155,51 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ProjectCoordinatedEntryFeatures',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'receivesDirectReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'sendsDirectReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'supportsReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'supportsWaitlistReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
       },
     ],
@@ -7896,6 +7973,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
+        name: 'origin',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
+          },
+        },
+      },
+      {
         name: 'project',
         type: {
           kind: 'LIST',
@@ -8060,6 +8149,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'origin',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
           },
         },
       },
@@ -9115,6 +9216,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectCeReferralFilterOptions',
     args: [
       {
+        name: 'origin',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
+          },
+        },
+      },
+      {
         name: 'referralStatus',
         type: {
           kind: 'LIST',
@@ -9177,6 +9290,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
       },
+      {
+        name: 'receivesDirectReferrals',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'supportsWaitlistReferrals',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
     ],
   },
   {
@@ -9235,6 +9356,59 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               name: 'ProjectFilterOptionStatus',
               ofType: null,
             },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ProjectOutgoingCeReferralFilterOptions',
+    args: [
+      {
+        name: 'organization',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'referralStatus',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
       },

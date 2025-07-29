@@ -30,7 +30,7 @@ const ReferralStep: React.FC = ({}) => {
     },
   });
 
-  const stepSummary = referral.steps.find((s) => s.stepId === stepId);
+  const stepSummary = referral.steps?.find((s) => s.stepId === stepId);
 
   if (fetchError) throw fetchError;
   if (!stepSummary) return <NotFound />;

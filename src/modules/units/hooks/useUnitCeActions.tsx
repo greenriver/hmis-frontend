@@ -10,11 +10,11 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useUnitCeActions = ({
   projectId,
-  ceEnabled,
+  projectSupportsReferrals,
   ceAvailabilityActionsEnabled,
 }: {
   projectId: string;
-  ceEnabled: boolean;
+  projectSupportsReferrals: boolean;
   ceAvailabilityActionsEnabled: boolean;
 }): {
   loading: boolean;
@@ -32,11 +32,11 @@ export const useUnitCeActions = ({
 
   const getCeActions = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      if (!ceEnabled) return [];
+      if (!projectSupportsReferrals) return [];
 
       const actions: CommonMenuItem[] = [];
 
-      // Always allow linking to Unit page, if CE is enabled, to view/manage eligibility criteria
+      // Always allow linking to Unit page, if the project supports CE referrals, to view/manage eligibility criteria
       actions.push({
         title: 'View Unit',
         key: 'viewUnit',
@@ -76,7 +76,7 @@ export const useUnitCeActions = ({
     },
     [
       ceAvailabilityActionsEnabled,
-      ceEnabled,
+      projectSupportsReferrals,
       markUnitsAvailable,
       markUnitsUnavailable,
       projectId,
