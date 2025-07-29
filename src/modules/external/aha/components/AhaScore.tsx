@@ -42,7 +42,7 @@ const AhaScore = ({
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
-  // Use dynamic field watch to get the current values of the expected link IDs.
+  // Use RHF to watch the current value of the score field.
   // This is to disable the fetch button after unlocking an assessment that's already fetched the score.
   const values = useDynamicFieldWatchValues([SCORE_LINK_ID]);
   const existingValue = values[SCORE_LINK_ID];
