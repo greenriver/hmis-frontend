@@ -95,7 +95,7 @@ export interface DynamicViewItemCommonProps {
 }
 
 export type OverrideableDynamicFieldProps = Optional<
-  Omit<DynamicFieldProps, 'item' | 'value' | 'nestingLevel'>,
+  Omit<DynamicFieldProps, 'item' | 'nestingLevel'>,
   'itemChanged' // allow groups to override item changed
 >;
 

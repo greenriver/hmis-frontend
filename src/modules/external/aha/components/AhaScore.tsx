@@ -47,7 +47,9 @@ const AhaScore = ({
   const values = useDynamicFieldWatchValues([SCORE_LINK_ID]);
   const existingValue = values[SCORE_LINK_ID];
 
-  const [hasScore, setHasScore] = useState<boolean>(!!existingValue);
+  const [hasScore, setHasScore] = useState<boolean>(
+    !!existingValue && existingValue >= 0
+  );
   const [hasFetched, setHasFetched] = useState<boolean>(false);
 
   const clientId = handlers?.localConstants.clientId;
@@ -67,8 +69,10 @@ const AhaScore = ({
       setHasFetched(true);
       setErrorState(emptyErrorState);
 
-      if (data.fetchAhaScore?.score && data.fetchAhaScore.score >= 0) {
-        setHasScore(true);
+      if (data.fetchAhaScore?.score) {
+        if (data.fetchAhaScore.score >= 0) {
+          setHasScore(true);
+        }
 
         if (severalItemsChanged) {
           severalItemsChanged({
@@ -95,7 +99,13 @@ const AhaScore = ({
   if (!isComponentValid) throw new Error('Invalid Aha form component');
 
   if (viewOnly) {
-    return item.item?.map((i) => renderChildItem(i));
+    return item.item?.map((i) => {
+      if (i.linkId === SCORE_LINK_ID && !hasScore) {
+        return renderChildItem(i, { value: null });
+      } else {
+        return renderChildItem(i);
+      }
+    });
   }
 
   if (!clientId) {
