@@ -32,6 +32,7 @@ export const useDynamicFieldAutofillValue = (
     **/
     if (
       !result &&
+      !!item.autofillValues &&
       (item.readOnly || item.type === ItemType.Display) &&
       !viewOnly
     ) {
