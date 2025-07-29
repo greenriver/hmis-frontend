@@ -19901,64 +19901,6 @@ export type GetProjectCeReferralsQuery = {
   } | null;
 };
 
-export type GetProjectOutgoingDirectCeReferralsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<ProjectOutgoingCeReferralFilterOptions>;
-}>;
-
-export type GetProjectOutgoingDirectCeReferralsQuery = {
-  __typename?: 'Query';
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    outgoingDirectCeReferrals: {
-      __typename?: 'CeReferralsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'CeReferral';
-        id: string;
-        status: CeReferralStatus;
-        createdAt: string;
-        clientId: string;
-        clientName?: string | null;
-        sourceEnrollmentId: string;
-        targetProjectId: string;
-        targetProjectName: string;
-        targetProjectType: ProjectType;
-        customStatus?: {
-          __typename?: 'CeCustomReferralStatus';
-          id: string;
-          key: string;
-          name: string;
-        } | null;
-        client?: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        } | null;
-        referredBy?: {
-          __typename?: 'ApplicationUser';
-          id: string;
-          name: string;
-        } | null;
-        access: {
-          __typename?: 'CeReferralAccess';
-          canViewReferralDetails: boolean;
-          canViewSourceEnrollmentDetails: boolean;
-        };
-      }>;
-    };
-  } | null;
-};
-
 export type GetCeOpportunityQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -26278,6 +26220,64 @@ export type GetDirectReferralFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  } | null;
+};
+
+export type GetProjectOutgoingDirectCeReferralsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ProjectOutgoingCeReferralFilterOptions>;
+}>;
+
+export type GetProjectOutgoingDirectCeReferralsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    outgoingDirectCeReferrals: {
+      __typename?: 'CeReferralsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeReferral';
+        id: string;
+        status: CeReferralStatus;
+        createdAt: string;
+        clientId: string;
+        clientName?: string | null;
+        sourceEnrollmentId: string;
+        targetProjectId: string;
+        targetProjectName: string;
+        targetProjectType: ProjectType;
+        customStatus?: {
+          __typename?: 'CeCustomReferralStatus';
+          id: string;
+          key: string;
+          name: string;
+        } | null;
+        client?: {
+          __typename?: 'Client';
+          id: string;
+          lockVersion: number;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        } | null;
+        referredBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        access: {
+          __typename?: 'CeReferralAccess';
+          canViewReferralDetails: boolean;
+          canViewSourceEnrollmentDetails: boolean;
+        };
+      }>;
+    };
   } | null;
 };
 
@@ -52948,111 +52948,6 @@ export type GetProjectCeReferralsQueryResult = Apollo.QueryResult<
   GetProjectCeReferralsQuery,
   GetProjectCeReferralsQueryVariables
 >;
-export const GetProjectOutgoingDirectCeReferralsDocument = gql`
-  query GetProjectOutgoingDirectCeReferrals(
-    $id: ID!
-    $limit: Int = 25
-    $offset: Int = 0
-    $filters: ProjectOutgoingCeReferralFilterOptions = null
-  ) {
-    project(id: $id) {
-      id
-      outgoingDirectCeReferrals(
-        limit: $limit
-        offset: $offset
-        filters: $filters
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...CeOutgoingReferralsTableFields
-        }
-      }
-    }
-  }
-  ${CeOutgoingReferralsTableFieldsFragmentDoc}
-`;
-
-/**
- * __useGetProjectOutgoingDirectCeReferralsQuery__
- *
- * To run a query within a React component, call `useGetProjectOutgoingDirectCeReferralsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectOutgoingDirectCeReferralsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProjectOutgoingDirectCeReferralsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *      filters: // value for 'filters'
- *   },
- * });
- */
-export function useGetProjectOutgoingDirectCeReferralsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetProjectOutgoingDirectCeReferralsQuery,
-    GetProjectOutgoingDirectCeReferralsQueryVariables
-  > &
-    (
-      | {
-          variables: GetProjectOutgoingDirectCeReferralsQueryVariables;
-          skip?: boolean;
-        }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetProjectOutgoingDirectCeReferralsQuery,
-    GetProjectOutgoingDirectCeReferralsQueryVariables
-  >(GetProjectOutgoingDirectCeReferralsDocument, options);
-}
-export function useGetProjectOutgoingDirectCeReferralsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetProjectOutgoingDirectCeReferralsQuery,
-    GetProjectOutgoingDirectCeReferralsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetProjectOutgoingDirectCeReferralsQuery,
-    GetProjectOutgoingDirectCeReferralsQueryVariables
-  >(GetProjectOutgoingDirectCeReferralsDocument, options);
-}
-export function useGetProjectOutgoingDirectCeReferralsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetProjectOutgoingDirectCeReferralsQuery,
-        GetProjectOutgoingDirectCeReferralsQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetProjectOutgoingDirectCeReferralsQuery,
-    GetProjectOutgoingDirectCeReferralsQueryVariables
-  >(GetProjectOutgoingDirectCeReferralsDocument, options);
-}
-export type GetProjectOutgoingDirectCeReferralsQueryHookResult = ReturnType<
-  typeof useGetProjectOutgoingDirectCeReferralsQuery
->;
-export type GetProjectOutgoingDirectCeReferralsLazyQueryHookResult = ReturnType<
-  typeof useGetProjectOutgoingDirectCeReferralsLazyQuery
->;
-export type GetProjectOutgoingDirectCeReferralsSuspenseQueryHookResult =
-  ReturnType<typeof useGetProjectOutgoingDirectCeReferralsSuspenseQuery>;
-export type GetProjectOutgoingDirectCeReferralsQueryResult = Apollo.QueryResult<
-  GetProjectOutgoingDirectCeReferralsQuery,
-  GetProjectOutgoingDirectCeReferralsQueryVariables
->;
 export const GetCeOpportunityDocument = gql`
   query GetCeOpportunity($id: ID!) {
     ceOpportunity(id: $id) {
@@ -57089,6 +56984,111 @@ export type GetDirectReferralFormDefinitionSuspenseQueryHookResult = ReturnType<
 export type GetDirectReferralFormDefinitionQueryResult = Apollo.QueryResult<
   GetDirectReferralFormDefinitionQuery,
   GetDirectReferralFormDefinitionQueryVariables
+>;
+export const GetProjectOutgoingDirectCeReferralsDocument = gql`
+  query GetProjectOutgoingDirectCeReferrals(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: ProjectOutgoingCeReferralFilterOptions = null
+  ) {
+    project(id: $id) {
+      id
+      outgoingDirectCeReferrals(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CeOutgoingReferralsTableFields
+        }
+      }
+    }
+  }
+  ${CeOutgoingReferralsTableFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectOutgoingDirectCeReferralsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectOutgoingDirectCeReferralsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectOutgoingDirectCeReferralsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectOutgoingDirectCeReferralsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetProjectOutgoingDirectCeReferralsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
+  > &
+    (
+      | {
+          variables: GetProjectOutgoingDirectCeReferralsQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
+  >(GetProjectOutgoingDirectCeReferralsDocument, options);
+}
+export function useGetProjectOutgoingDirectCeReferralsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
+  >(GetProjectOutgoingDirectCeReferralsDocument, options);
+}
+export function useGetProjectOutgoingDirectCeReferralsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetProjectOutgoingDirectCeReferralsQuery,
+        GetProjectOutgoingDirectCeReferralsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetProjectOutgoingDirectCeReferralsQuery,
+    GetProjectOutgoingDirectCeReferralsQueryVariables
+  >(GetProjectOutgoingDirectCeReferralsDocument, options);
+}
+export type GetProjectOutgoingDirectCeReferralsQueryHookResult = ReturnType<
+  typeof useGetProjectOutgoingDirectCeReferralsQuery
+>;
+export type GetProjectOutgoingDirectCeReferralsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectOutgoingDirectCeReferralsLazyQuery
+>;
+export type GetProjectOutgoingDirectCeReferralsSuspenseQueryHookResult =
+  ReturnType<typeof useGetProjectOutgoingDirectCeReferralsSuspenseQuery>;
+export type GetProjectOutgoingDirectCeReferralsQueryResult = Apollo.QueryResult<
+  GetProjectOutgoingDirectCeReferralsQuery,
+  GetProjectOutgoingDirectCeReferralsQueryVariables
 >;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
