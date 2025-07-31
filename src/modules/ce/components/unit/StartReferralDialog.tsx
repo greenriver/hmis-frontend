@@ -3,12 +3,13 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
 import useSafeParams from '@/hooks/useSafeParams';
+import SourceEnrollmentSelector from '@/modules/ce/components/unit/SourceEnrollmentSelector';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
 import {
-  ErrorState,
   emptyErrorState,
+  ErrorState,
   hasAnyValue,
   hasOnlyWarnings,
   partitionValidations,
@@ -31,12 +32,11 @@ interface Props {
 }
 
 /**
- * The BeginReferralDialog component provides a multi-step dialog for initiating a referral for a candidate.
+ * The StartReferralDialog component provides a multi-step dialog for initiating a referral for a candidate.
  *
- * TODO(#7671) support selecting source enrollment
  * TODO(#7539) require setting/confirming contacts before referral creation
  */
-const BeginReferralDialog: React.FC<Props> = ({
+const StartReferralDialog: React.FC<Props> = ({
   candidate,
   opportunity,
   open,
@@ -49,6 +49,10 @@ const BeginReferralDialog: React.FC<Props> = ({
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
+  const [selectedEnrollmentId, setSelectedEnrollmentId] = useState<
+    string | undefined
+  >(undefined);
+
   const handleClose = useCallback(() => {
     setErrorState(emptyErrorState);
     onClose();
@@ -57,7 +61,7 @@ const BeginReferralDialog: React.FC<Props> = ({
   const [createReferral, { loading }] = useCreateCeReferralMutation({
     variables: {
       opportunityId: opportunity.id,
-      clientId: candidate.clientId,
+      sourceEnrollmentId: selectedEnrollmentId,
     },
     onCompleted: ({ createCeReferral }) => {
       if (createCeReferral?.referral) {
@@ -104,31 +108,25 @@ const BeginReferralDialog: React.FC<Props> = ({
   const stepDefinitions: StepDefinition[] = useMemo(
     () => [
       {
-        title: 'Confirm Client',
-        key: 'confirm',
+        title: 'Select Source Enrollment',
+        key: 'source-enrollment',
         content: (
           <>
             {errorContent}
-            <p>
-              You are about to begin a referral for{' '}
-              <strong>{clientName}</strong> to <b>{opportunity.name}</b>. Are
-              you sure you want to proceed?
-            </p>
+            <SourceEnrollmentSelector
+              clientName={clientName}
+              candidateId={candidate.id}
+              opportunityId={opportunity.id}
+              selectedEnrollmentId={selectedEnrollmentId}
+              setSelectedEnrollmentId={setSelectedEnrollmentId}
+            />
           </>
         ),
-        proceedButtonText: 'Yes, Begin Referral',
+        proceedButtonText: 'Create Referral',
         onProceed: () => createReferral(),
         proceedLoading: loading,
+        disableProceed: !selectedEnrollmentId,
       },
-      /* TODO(#7671) if client has multiple possible source enrollments/clients, require user to select */
-      // {
-      //   title: 'Select Source Enrollment',
-      //   key: 'source-enrollment',
-      //   content: <></>, // List of potential source enrollments, with information related to eligibility
-      //   proceedButtonText: 'Create Referral',
-      //   onProceed: () => createReferral(),
-      //   proceedLoading: loading,
-      // },
 
       /* TODO(#7539) require user to select/confirm contacts before referral creation */
       // {
@@ -151,12 +149,20 @@ const BeginReferralDialog: React.FC<Props> = ({
       //   proceedLoading: loading,
       // },
     ],
-    [clientName, createReferral, errorContent, loading, opportunity.name]
+    [
+      candidate.id,
+      clientName,
+      createReferral,
+      errorContent,
+      loading,
+      opportunity.id,
+      selectedEnrollmentId,
+    ]
   );
 
   return (
     <StepDialog
-      title='Begin Referral'
+      title='Start Referral'
       open={open}
       fullWidth
       maxWidth='md'
@@ -166,4 +172,4 @@ const BeginReferralDialog: React.FC<Props> = ({
   );
 };
 
-export default BeginReferralDialog;
+export default StartReferralDialog;

@@ -1,6 +1,7 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import { Box, SxProps, Typography } from '@mui/material';
+import { SxProps } from '@mui/material';
 import React, { ReactNode } from 'react';
+import CommonTextWithIcon from '@/components/elements/CommonTextWithIcon';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 // Component for common styles in the info text for steps
@@ -12,25 +13,18 @@ const ReferralStepDatum: React.FC<{
   const isMobile = useIsMobile('sm');
 
   return (
-    <Typography
-      variant='body2'
+    <CommonTextWithIcon
       color='text.secondary'
       component={isMobile ? 'p' : 'span'}
-      sx={sx}
+      sx={{
+        ...sx,
+        display: isMobile ? 'flex' : 'inline-flex',
+        mr: isMobile ? 0 : 2,
+      }}
+      Icon={Icon}
     >
-      <Box
-        component='span'
-        sx={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 1,
-          mr: isMobile ? 0 : 2,
-        }}
-      >
-        {Icon && <Icon fontSize='inherit' color='inherit' />}
-        {children}
-      </Box>
-    </Typography>
+      {children}
+    </CommonTextWithIcon>
   );
 };
 

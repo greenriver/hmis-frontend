@@ -12,11 +12,21 @@ const CommonTruncatedList: React.FC<Props> = ({ items }) => {
   const rest = items.slice(1);
 
   return (
-    <Box aria-label={items.join(', ')}>
+    <Box
+      display='flex'
+      flexDirection='row'
+      alignItems='center'
+      gap={0.5}
+      aria-label={items.join(', ')}
+    >
       {first}{' '}
       {rest.length > 0 && (
         <Tooltip arrow title={rest.join(', ')}>
-          <Chip sx={{ mb: 0.5 }} size='small' label={`+${rest.length} more`} />
+          <Chip
+            sx={{ cursor: 'pointer' }}
+            size='small'
+            label={`+${rest.length} more`}
+          />
         </Tooltip>
       )}
     </Box>

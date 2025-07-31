@@ -49,12 +49,35 @@ query GetCeOpportunityCandidates(
 ) {
   ceOpportunity(id: $opportunityId) {
     id
+    candidatesGeneratedAt
     candidates(limit: $limit, offset: $offset) {
       offset
       limit
       nodesCount
       nodes {
         ...CeCandidateFields
+      }
+    }
+  }
+}
+
+query GetCeCandidateSourceEnrollments(
+  $opportunityId: ID!
+  $candidateId: ID!
+  $limit: Int = 100
+  $offset: Int = 0
+) {
+  ceOpportunity(id: $opportunityId) {
+    id
+    candidateLookup(id: $candidateId) {
+      id
+      enrollments(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CeReferralSourceEnrollmentFields
+        }
       }
     }
   }

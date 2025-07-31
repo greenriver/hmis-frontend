@@ -63,6 +63,7 @@ const RepeatedInputContainer = <T extends object>({
                 {renderChild(val, idx)}
                 <Stack
                   justifyContent={'space-between'}
+                  gap={1}
                   direction='row'
                   sx={{ mt: 3, fontSize: '.825rem' }}
                 >

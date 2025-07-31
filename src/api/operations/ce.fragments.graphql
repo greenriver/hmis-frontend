@@ -22,6 +22,7 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
 
 fragment CeOpportunityFields on CeOpportunity {
   ...CeOpportunitySummaryFields
+  candidatesGeneratedAt
   referral {
     ...CeReferralSummaryFields
   }
@@ -245,5 +246,34 @@ fragment UserCeReferralStepFields on CeReferralStep {
     client {
       ...ClientName
     }
+  }
+}
+
+fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
+  id
+  sourceClientId
+  clientName
+  dataSource {
+    id
+    name
+    isCurrentDataSource
+  }
+  projectName
+  projectType
+  entryDate
+  exitDate
+  inProgress
+  autoExited
+  relationshipToHoH
+  householdSize
+  otherHouseholdMemberNames
+  assessments {
+    id
+    assessmentName
+    assessmentDate
+    dateUpdated
+  }
+  access {
+    canViewEnrollmentDetails
   }
 }
