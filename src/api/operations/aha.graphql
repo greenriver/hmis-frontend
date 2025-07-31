@@ -9,3 +9,13 @@ mutation FetchAhaScore($clientId: ID!) {
     }
   }
 }
+
+# todo @martha - pass client ID, just for the sake of logging
+mutation CalculateAltAhaScore($valuesByLinkId: JsonObject!) {
+  calculateAltAhaScore(valuesByLinkId: $valuesByLinkId) {
+    score
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
