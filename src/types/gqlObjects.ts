@@ -570,6 +570,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeCandidateConsolidated',
     fields: [
       {
+        name: 'capacity',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'clientAge',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
@@ -577,10 +585,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'clientAttributes',
         type: { kind: 'SCALAR', name: 'JSON', ofType: null },
       },
-      {
-        name: 'clientId',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
+      { name: 'clientId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'clientName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
@@ -635,8 +640,20 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'sourceClientId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'unitGroupName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'vacancies',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
       },
       {
         name: 'whenAddedToCandidatePool',

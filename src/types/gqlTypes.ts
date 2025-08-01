@@ -578,9 +578,10 @@ export type CeCandidateEnrollmentsArgs = {
 
 export type CeCandidateConsolidated = {
   __typename?: 'CeCandidateConsolidated';
+  capacity: Scalars['Int']['output'];
   clientAge?: Maybe<Scalars['Int']['output']>;
   clientAttributes?: Maybe<Scalars['JSON']['output']>;
-  clientId?: Maybe<Scalars['String']['output']>;
+  clientId?: Maybe<Scalars['ID']['output']>;
   clientName?: Maybe<Scalars['String']['output']>;
   /** Custom Data Elements that contributed to eligibility and priority for this candidate pool */
   customDataElements?: Maybe<Scalars['JSON']['output']>;
@@ -591,7 +592,9 @@ export type CeCandidateConsolidated = {
   priorityScore?: Maybe<Scalars['Float']['output']>;
   projectId?: Maybe<Scalars['ID']['output']>;
   projectName?: Maybe<Scalars['String']['output']>;
+  sourceClientId?: Maybe<Scalars['ID']['output']>;
   unitGroupName?: Maybe<Scalars['String']['output']>;
+  vacancies: Scalars['Int']['output'];
   whenAddedToCandidatePool?: Maybe<Scalars['ISO8601DateTime']['output']>;
   whenUpdatedInCandidatePool?: Maybe<Scalars['ISO8601DateTime']['output']>;
 };
@@ -21165,6 +21168,8 @@ export type GetAdminConsolidatedWaitlistQuery = {
       clientAge?: number | null;
       openEnrollmentProjectTypes?: Array<ProjectType> | null;
       openReferralProjectTypes?: Array<ProjectType> | null;
+      vacancies: number;
+      capacity: number;
     }>;
   } | null;
 };
@@ -53886,6 +53891,8 @@ export const GetAdminConsolidatedWaitlistDocument = gql`
         clientAge
         openEnrollmentProjectTypes
         openReferralProjectTypes
+        vacancies
+        capacity
       }
     }
   }

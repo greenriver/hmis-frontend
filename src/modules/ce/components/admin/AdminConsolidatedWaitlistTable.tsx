@@ -1,11 +1,13 @@
-import { Paper } from '@mui/material';
+import { Badge, Chip, Paper, Stack } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import React, { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {
   GetAdminConsolidatedWaitlistDocument,
   GetAdminConsolidatedWaitlistQuery,
@@ -60,7 +62,7 @@ const COLUMNS: DataColumnDef<
       whenAddedToCandidatePool
         ? parseAndFormatDateTime(whenAddedToCandidatePool)
         : '',
-    optional: { defaultHidden: true },
+    optional: { defaultHidden: false },
   },
   {
     key: 'whenUpdatedInCandidatePool',
@@ -69,7 +71,7 @@ const COLUMNS: DataColumnDef<
       whenUpdatedInCandidatePool
         ? parseAndFormatDateTime(whenUpdatedInCandidatePool)
         : '',
-    optional: { defaultHidden: true },
+    optional: { defaultHidden: false },
   },
   {
     key: 'priorityScore',
@@ -78,8 +80,29 @@ const COLUMNS: DataColumnDef<
   },
   {
     key: 'clientAge',
-    header: 'Priority Score',
-    render: 'priorityScore',
+    header: 'Client Age',
+    render: 'clientAge',
+  },
+  {
+    key: 'status',
+    header: 'Status',
+    render: (row) => (
+      <Chip
+        label={
+          row.clientAge !== 50
+            ? 'Eligible - Vacancies Available'
+            : 'Eligible - No Vacancies'
+        }
+        color={row.clientAge !== 50 ? 'primary' : 'grayscale'}
+        size='small'
+        variant='status'
+      />
+    ),
+  },
+  {
+    key: 'vacancies',
+    header: 'Availability',
+    render: (row) => `${row.vacancies}/${row.capacity} Units Available`,
   },
   // {
   //   key: 'clientAttributes',
@@ -135,33 +158,55 @@ interface Props {}
 const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   const getColumnDefs = useCallback((rows: Row[]) => {
     const customColumns = getCustomAttributeColumns(rows);
+    return COLUMNS;
     return [...COLUMNS, ...customColumns];
   }, []);
 
+  const filters = useFilters({
+    type: 'CeReferralFilterOptions',
+    omit: ['workflowTemplate'],
+  });
+
   return (
-    <Paper>
-      <GenericTableWithData<
-        GetAdminConsolidatedWaitlistQuery,
-        GetAdminConsolidatedWaitlistQueryVariables,
-        Row
-      >
-        getColumnDefs={getColumnDefs}
-        queryVariables={{}}
-        queryDocument={GetAdminConsolidatedWaitlistDocument}
-        pagePath='consolidatedWaitlist'
-        noData='No clients'
-        paginationItemName='client'
-        // filters={filters}
-        // rowLinkTo={(row) =>
-        //   generateSafePath(ProjectDashboardRoutes.REFERRAL, {
-        //     projectId: row.targetProjectId,
-        //     referralId: row.id,
-        //   })
-        // }
-        // rowActionTitle='View Referral'
-        // rowSecondaryActionConfigs={rowSecondaryActions}
+    <Stack spacing={2}>
+      <CommonSearchInput
+        label='Search clients'
+        name='search clients'
+        placeholder='Search client by name or ID'
+        value={''}
+        onChange={() => {}}
+        fullWidth
+        size='small'
+        searchAdornment
       />
-    </Paper>
+      <Paper>
+        <GenericTableWithData<
+          GetAdminConsolidatedWaitlistQuery,
+          GetAdminConsolidatedWaitlistQueryVariables,
+          Row
+        >
+          columns={COLUMNS}
+          // TODO(#7387) Optional column behavior is currently undefined/unsupported
+          //  when columns are provided by getColumnDefs instead of the columns prop.
+          // getColumnDefs={getColumnDefs}
+          queryVariables={{}}
+          queryDocument={GetAdminConsolidatedWaitlistDocument}
+          pagePath='consolidatedWaitlist'
+          noData='No clients'
+          paginationItemName='client'
+          filters={filters}
+          showTopToolbar
+          // rowLinkTo={(row) =>
+          //   generateSafePath(ProjectDashboardRoutes.REFERRAL, {
+          //     projectId: row.targetProjectId,
+          //     referralId: row.id,
+          //   })
+          // }
+          // rowActionTitle='View Referral'
+          // rowSecondaryActionConfigs={rowSecondaryActions}
+        />
+      </Paper>
+    </Stack>
   );
 };
 
