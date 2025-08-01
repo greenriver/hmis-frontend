@@ -33,6 +33,7 @@ const AltAhaScore = ({
 
   const [calculateAltAhaScore, { loading }] = useCalculateAltAhaScoreMutation({
     variables: {
+      enrollmentId: handlers?.localConstants.enrollmentId,
       valuesByLinkId,
     },
     onCompleted: (data: CalculateAltAhaScoreMutation) => {
