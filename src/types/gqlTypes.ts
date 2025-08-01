@@ -580,23 +580,23 @@ export type CeCandidateConsolidated = {
   __typename?: 'CeCandidateConsolidated';
   capacity: Scalars['Int']['output'];
   clientAge?: Maybe<Scalars['Int']['output']>;
-  clientAttributes?: Maybe<Scalars['JSON']['output']>;
-  clientName?: Maybe<Scalars['String']['output']>;
+  clientAttributes: Scalars['JSON']['output'];
+  clientName: Scalars['String']['output'];
   /** Custom Data Elements that contributed to eligibility and priority for this candidate pool */
-  customDataElements?: Maybe<Scalars['JSON']['output']>;
-  destinationClientId?: Maybe<Scalars['ID']['output']>;
+  customDataElements: Scalars['JSON']['output'];
+  destinationClientId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
   openEnrollmentProjectTypes?: Maybe<Array<ProjectType>>;
   openReferralProjectTypes?: Maybe<Array<ProjectType>>;
-  organizationName?: Maybe<Scalars['String']['output']>;
-  priorityScore?: Maybe<Scalars['Float']['output']>;
-  projectId?: Maybe<Scalars['ID']['output']>;
-  projectName?: Maybe<Scalars['String']['output']>;
-  sourceClientId?: Maybe<Scalars['ID']['output']>;
-  unitGroupName?: Maybe<Scalars['String']['output']>;
+  organizationName: Scalars['String']['output'];
+  priorityScore: Scalars['Float']['output'];
+  projectId: Scalars['ID']['output'];
+  projectName: Scalars['String']['output'];
+  sourceClientIds: Array<Scalars['ID']['output']>;
+  unitGroupName: Scalars['String']['output'];
   vacancies: Scalars['Int']['output'];
-  whenAddedToCandidatePool?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  whenUpdatedInCandidatePool?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  whenAddedToCandidatePool: Scalars['ISO8601DateTime']['output'];
+  whenUpdatedInCandidatePool: Scalars['ISO8601DateTime']['output'];
 };
 
 export type CeCandidateConsolidatedsPaginated = {
@@ -21154,18 +21154,18 @@ export type GetAdminConsolidatedWaitlistQuery = {
     nodes: Array<{
       __typename?: 'CeCandidateConsolidated';
       id: string;
-      destinationClientId?: string | null;
-      sourceClientId?: string | null;
-      clientName?: string | null;
-      unitGroupName?: string | null;
-      projectName?: string | null;
-      projectId?: string | null;
-      organizationName?: string | null;
-      whenAddedToCandidatePool?: string | null;
-      whenUpdatedInCandidatePool?: string | null;
-      priorityScore?: number | null;
-      clientAttributes?: any | null;
-      customDataElements?: any | null;
+      destinationClientId: string;
+      sourceClientIds: Array<string>;
+      clientName: string;
+      unitGroupName: string;
+      projectName: string;
+      projectId: string;
+      organizationName: string;
+      whenAddedToCandidatePool: string;
+      whenUpdatedInCandidatePool: string;
+      priorityScore: number;
+      clientAttributes: any;
+      customDataElements: any;
       clientAge?: number | null;
       openEnrollmentProjectTypes?: Array<ProjectType> | null;
       openReferralProjectTypes?: Array<ProjectType> | null;
@@ -53879,7 +53879,7 @@ export const GetAdminConsolidatedWaitlistDocument = gql`
       nodes {
         id
         destinationClientId
-        sourceClientId
+        sourceClientIds
         clientName
         unitGroupName
         projectName

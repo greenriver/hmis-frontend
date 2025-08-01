@@ -583,19 +583,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'clientAttributes',
-        type: { kind: 'SCALAR', name: 'JSON', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JSON', ofType: null },
+        },
       },
       {
         name: 'clientName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
       {
         name: 'customDataElements',
-        type: { kind: 'SCALAR', name: 'JSON', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JSON', ofType: null },
+        },
       },
       {
         name: 'destinationClientId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
       },
       {
         name: 'id',
@@ -631,24 +647,59 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'organizationName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
       {
         name: 'priorityScore',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Float', ofType: null },
+        },
       },
-      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
       {
         name: 'projectName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
       {
-        name: 'sourceClientId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+        name: 'sourceClientIds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
+        },
       },
       {
         name: 'unitGroupName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
       {
         name: 'vacancies',
@@ -660,11 +711,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'whenAddedToCandidatePool',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
       },
       {
         name: 'whenUpdatedInCandidatePool',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
       },
     ],
   },

@@ -198,9 +198,9 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
           paginationItemName='record'
           filters={filters}
           rowLinkTo={(row) =>
-            row.sourceClientId
+            row.sourceClientIds.length > 0
               ? generateSafePath(ClientDashboardRoutes.PROFILE, {
-                  clientId: row.sourceClientId,
+                  clientId: row.sourceClientIds[0],
                 })
               : undefined
           }
