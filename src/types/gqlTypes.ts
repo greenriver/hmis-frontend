@@ -581,10 +581,10 @@ export type CeCandidateConsolidated = {
   capacity: Scalars['Int']['output'];
   clientAge?: Maybe<Scalars['Int']['output']>;
   clientAttributes?: Maybe<Scalars['JSON']['output']>;
-  clientId?: Maybe<Scalars['ID']['output']>;
   clientName?: Maybe<Scalars['String']['output']>;
   /** Custom Data Elements that contributed to eligibility and priority for this candidate pool */
   customDataElements?: Maybe<Scalars['JSON']['output']>;
+  destinationClientId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   openEnrollmentProjectTypes?: Maybe<Array<ProjectType>>;
   openReferralProjectTypes?: Maybe<Array<ProjectType>>;
@@ -6663,7 +6663,7 @@ export type Query = {
   clientOmniSearch: ClientsPaginated;
   /** Search for clients */
   clientSearch: ClientsPaginated;
-  consolidatedWaitlist?: Maybe<CeCandidateConsolidatedsPaginated>;
+  consolidatedWaitlist: CeCandidateConsolidatedsPaginated;
   currentUser?: Maybe<ApplicationUser>;
   deniedPendingReferralPostings: ReferralPostingsPaginated;
   directReferralFormDefinition?: Maybe<FormDefinition>;
@@ -21146,7 +21146,7 @@ export type GetAdminConsolidatedWaitlistQueryVariables = Exact<{
 
 export type GetAdminConsolidatedWaitlistQuery = {
   __typename?: 'Query';
-  consolidatedWaitlist?: {
+  consolidatedWaitlist: {
     __typename?: 'CeCandidateConsolidatedsPaginated';
     offset: number;
     limit: number;
@@ -21154,7 +21154,8 @@ export type GetAdminConsolidatedWaitlistQuery = {
     nodes: Array<{
       __typename?: 'CeCandidateConsolidated';
       id: string;
-      clientId?: string | null;
+      destinationClientId?: string | null;
+      sourceClientId?: string | null;
       clientName?: string | null;
       unitGroupName?: string | null;
       projectName?: string | null;
@@ -21171,7 +21172,7 @@ export type GetAdminConsolidatedWaitlistQuery = {
       vacancies: number;
       capacity: number;
     }>;
-  } | null;
+  };
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -53877,7 +53878,8 @@ export const GetAdminConsolidatedWaitlistDocument = gql`
       nodesCount
       nodes {
         id
-        clientId
+        destinationClientId
+        sourceClientId
         clientName
         unitGroupName
         projectName

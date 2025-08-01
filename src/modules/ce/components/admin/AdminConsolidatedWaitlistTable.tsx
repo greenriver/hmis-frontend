@@ -1,5 +1,4 @@
-import { Badge, Chip, Paper, Stack } from '@mui/material';
-import { capitalize } from 'lodash-es';
+import { Chip, Paper, Stack } from '@mui/material';
 import React, { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -8,12 +7,14 @@ import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetAdminConsolidatedWaitlistDocument,
   GetAdminConsolidatedWaitlistQuery,
   GetAdminConsolidatedWaitlistQueryVariables,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type Row = NonNullable<
   GetAdminConsolidatedWaitlistQuery['consolidatedWaitlist']
@@ -57,7 +58,7 @@ const COLUMNS: DataColumnDef<
   },
   {
     key: 'whenAddedToCandidatePool',
-    header: 'Added to Candidate Pool',
+    header: 'Added to Waitlist',
     render: ({ whenAddedToCandidatePool }) =>
       whenAddedToCandidatePool
         ? parseAndFormatDateTime(whenAddedToCandidatePool)
@@ -66,7 +67,7 @@ const COLUMNS: DataColumnDef<
   },
   {
     key: 'whenUpdatedInCandidatePool',
-    header: 'Updated in Candidate Pool',
+    header: 'Updated in Waitlist',
     render: ({ whenUpdatedInCandidatePool }) =>
       whenUpdatedInCandidatePool
         ? parseAndFormatDateTime(whenUpdatedInCandidatePool)
@@ -82,6 +83,7 @@ const COLUMNS: DataColumnDef<
     key: 'clientAge',
     header: 'Client Age',
     render: 'clientAge',
+    optional: { defaultHidden: false },
   },
   {
     key: 'status',
@@ -89,11 +91,11 @@ const COLUMNS: DataColumnDef<
     render: (row) => (
       <Chip
         label={
-          row.clientAge !== 50
+          row.vacancies > 0
             ? 'Eligible - Vacancies Available'
             : 'Eligible - No Vacancies'
         }
-        color={row.clientAge !== 50 ? 'primary' : 'grayscale'}
+        color={row.vacancies > 0 ? 'primary' : 'grayscale'}
         size='small'
         variant='status'
       />
@@ -103,6 +105,7 @@ const COLUMNS: DataColumnDef<
     key: 'vacancies',
     header: 'Availability',
     render: (row) => `${row.vacancies}/${row.capacity} Units Available`,
+    optional: { defaultHidden: false },
   },
   // {
   //   key: 'clientAttributes',
@@ -158,7 +161,6 @@ interface Props {}
 const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   const getColumnDefs = useCallback((rows: Row[]) => {
     const customColumns = getCustomAttributeColumns(rows);
-    return COLUMNS;
     return [...COLUMNS, ...customColumns];
   }, []);
 
@@ -193,17 +195,18 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
           queryDocument={GetAdminConsolidatedWaitlistDocument}
           pagePath='consolidatedWaitlist'
           noData='No clients'
-          paginationItemName='client'
+          paginationItemName='record'
           filters={filters}
-          showTopToolbar
-          // rowLinkTo={(row) =>
-          //   generateSafePath(ProjectDashboardRoutes.REFERRAL, {
-          //     projectId: row.targetProjectId,
-          //     referralId: row.id,
-          //   })
-          // }
-          // rowActionTitle='View Referral'
+          rowLinkTo={(row) =>
+            row.sourceClientId
+              ? generateSafePath(ClientDashboardRoutes.PROFILE, {
+                  clientId: row.sourceClientId,
+                })
+              : undefined
+          }
+          rowActionTitle='View Client'
           // rowSecondaryActionConfigs={rowSecondaryActions}
+          // secondary action should probably link to the _unit group waitlist which isnt a thing yet
         />
       </Paper>
     </Stack>

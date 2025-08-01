@@ -585,7 +585,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'clientAttributes',
         type: { kind: 'SCALAR', name: 'JSON', ofType: null },
       },
-      { name: 'clientId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'clientName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
@@ -593,6 +592,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'customDataElements',
         type: { kind: 'SCALAR', name: 'JSON', ofType: null },
+      },
+      {
+        name: 'destinationClientId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
