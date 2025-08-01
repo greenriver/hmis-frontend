@@ -24,15 +24,10 @@ const AltAhaScore = ({
   value,
   onChange,
   label,
-  // disabled = false,  // todo @martha - add rules to make it disabled unless the other form values are filled
+  disabled = false, // todo @martha - add rules to make it disabled unless the other form values are filled?
   handlers,
 }: AltAhaScoreProps) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
-
-  // If we have a valid score (>= 0), disable the button
-  const hasScore = value !== null && value !== undefined && value >= 0;
-
-  const [hasFetched, setHasFetched] = useState<boolean>(false);
 
   const { valuesByLinkId } = handlers?.getValuesForSubmit() || {};
 
@@ -47,7 +42,6 @@ const AltAhaScore = ({
         return;
       }
 
-      setHasFetched(true);
       setErrorState(emptyErrorState);
 
       if (onChange && data.calculateAltAhaScore) {
@@ -58,8 +52,6 @@ const AltAhaScore = ({
       setErrorState({ ...emptyErrorState, apolloError });
     },
   });
-
-  if (hasFetched && !hasScore) throw new Error('Failed to calculate AHA score');
 
   return (
     <Stack direction='column' gap={1} alignItems='flex-start'>
@@ -72,8 +64,7 @@ const AltAhaScore = ({
       )}
       <LoadingButton
         loading={loading}
-        // todo @martha - Commented out for now for ease in testing
-        // disabled={disabled || hasScore} // If value already exists, disable the button
+        disabled={disabled}
         type='button'
         onClick={() => calculateAltAhaScore()}
         sx={{ my: 1 }}
@@ -81,7 +72,7 @@ const AltAhaScore = ({
         Calculate Alt-AHA Score
       </LoadingButton>
 
-      {hasScore && (
+      {value && (
         <LabelWithContent label='Alt-AHA Score'>
           <Typography variant='body2'>{value}</Typography>
         </LabelWithContent>
