@@ -22,4 +22,30 @@ describe('evaluateFormula', () => {
       undefined
     );
   });
+
+  describe('rounding functions', () => {
+    it('rounds division to nearest integer', () => {
+      expect(evaluateFormula('ROUND(a / b)', context({ a: 7, b: 3 }))).toBe(2);
+      expect(evaluateFormula('ROUND(a / b)', context({ a: 8, b: 3 }))).toBe(3);
+    });
+
+    it('rounds division to specific decimal places', () => {
+      expect(
+        evaluateFormula('ROUNDTO(a / b, 2)', context({ a: 10, b: 3 }))
+      ).toBe(3.33);
+      expect(
+        evaluateFormula('ROUNDTO(a / b, 1)', context({ a: 22, b: 7 }))
+      ).toBe(3.1);
+    });
+
+    it('rounds division up (ceiling)', () => {
+      expect(evaluateFormula('CEIL(a / b)', context({ a: 7, b: 3 }))).toBe(3);
+      expect(evaluateFormula('CEIL(a / b)', context({ a: 6, b: 3 }))).toBe(2);
+    });
+
+    it('rounds division down (floor)', () => {
+      expect(evaluateFormula('FLOOR(a / b)', context({ a: 7, b: 3 }))).toBe(2);
+      expect(evaluateFormula('FLOOR(a / b)', context({ a: 8, b: 3 }))).toBe(2);
+    });
+  });
 });
