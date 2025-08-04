@@ -120,7 +120,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
             )}
             {!referral && topCandidate && (
               <CommonLabeledTextBlock title='Prioritization Score'>
-                {topCandidate.priorityScore}
+                {topCandidate.priorityScores.join(', ')}
               </CommonLabeledTextBlock>
             )}
           </Stack>

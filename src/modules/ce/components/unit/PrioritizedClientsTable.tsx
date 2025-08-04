@@ -30,7 +30,7 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
   },
   {
     header: 'Priority Score',
-    render: 'priorityScore',
+    render: ({ priorityScores }) => priorityScores.join(', '),
     key: 'priorityScore',
   },
 ];
