@@ -14,7 +14,6 @@ import {
   hasOnlyWarnings,
   partitionValidations,
 } from '@/modules/errors/util';
-import { clientNameFromRecordWithOptionalClient } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -55,6 +54,7 @@ const StartReferralDialog: React.FC<Props> = ({
 
   const handleClose = useCallback(() => {
     setErrorState(emptyErrorState);
+    setSelectedEnrollmentId(undefined);
     onClose();
   }, [onClose]);
 
@@ -102,8 +102,6 @@ const StartReferralDialog: React.FC<Props> = ({
     [errorState]
   );
 
-  const clientName = clientNameFromRecordWithOptionalClient(candidate);
-
   // Define steps in the workflow dialog. The referral creation mutation is performed in the last step.
   const stepDefinitions: StepDefinition[] = useMemo(
     () => [
@@ -114,7 +112,7 @@ const StartReferralDialog: React.FC<Props> = ({
           <>
             {errorContent}
             <SourceEnrollmentSelector
-              clientName={clientName}
+              clientName={candidate.clientName}
               candidateId={candidate.id}
               opportunityId={opportunity.id}
               selectedEnrollmentId={selectedEnrollmentId}
@@ -151,7 +149,7 @@ const StartReferralDialog: React.FC<Props> = ({
     ],
     [
       candidate.id,
-      clientName,
+      candidate.clientName,
       createReferral,
       errorContent,
       loading,

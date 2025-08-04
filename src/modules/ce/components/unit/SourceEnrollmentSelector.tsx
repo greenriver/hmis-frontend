@@ -51,6 +51,7 @@ const SourceEnrollmentSelector: React.FC<Props> = ({
           recordType='Enrollment'
           paginationItemName='enrollment'
           defaultPageSize={5}
+          rowsPerPageOptions={[5, 10]}
           renderRow={(enrollment: CeReferralSourceEnrollmentFieldsFragment) => (
             <TableRow key={enrollment.id}>
               <TableCell sx={{ py: 1, border: 'none' }}>
