@@ -26,6 +26,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
+import { DUMMY_CLIENT_ID } from '@/modules/admin/components/forms/FormPreview';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import {
@@ -97,7 +98,9 @@ const JsonFormEditor: React.FC<FormEditorProps> = ({
 
   const effectiveLocalConstants = {
     ...AlwaysPresentLocalConstants,
-    ...(role === FormRole.CustomAssessment ? { clientId: 'dummy-value' } : {}),
+    ...(role === FormRole.CustomAssessment
+      ? { clientId: DUMMY_CLIENT_ID }
+      : {}),
     ...localConstants,
   };
   const effectiveInitialValues = data?.parsedFormDefinition?.definition
