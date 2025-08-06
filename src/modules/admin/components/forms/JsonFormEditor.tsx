@@ -26,7 +26,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
-import { DUMMY_CLIENT_ID } from '@/modules/admin/components/forms/FormPreview';
+import { DUMMY_LOCAL_CONSTANT } from '@/modules/admin/components/forms/FormPreview';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import {
@@ -99,7 +99,7 @@ const JsonFormEditor: React.FC<FormEditorProps> = ({
   const effectiveLocalConstants = {
     ...AlwaysPresentLocalConstants,
     ...(role === FormRole.CustomAssessment
-      ? { clientId: DUMMY_CLIENT_ID }
+      ? { clientId: DUMMY_LOCAL_CONSTANT, enrollmentId: DUMMY_LOCAL_CONSTANT }
       : {}),
     ...localConstants,
   };

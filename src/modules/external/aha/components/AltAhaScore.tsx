@@ -1,7 +1,8 @@
 import { Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import LoadingButton from '@/components/elements/LoadingButton';
+import { DUMMY_LOCAL_CONSTANT } from '@/modules/admin/components/forms/FormPreview';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
@@ -30,10 +31,11 @@ const AltAhaScore = ({
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   const { valuesByLinkId } = handlers?.getValuesForSubmit() || {};
+  const enrollmentId = handlers?.localConstants.enrollmentId;
 
   const [calculateAltAhaScore, { loading }] = useCalculateAltAhaScoreMutation({
     variables: {
-      enrollmentId: handlers?.localConstants.enrollmentId,
+      enrollmentId,
       valuesByLinkId,
     },
     onCompleted: (data: CalculateAltAhaScoreMutation) => {
@@ -54,6 +56,15 @@ const AltAhaScore = ({
     },
   });
 
+  const handleFetch = useCallback(() => {
+    if (enrollmentId === DUMMY_LOCAL_CONSTANT) {
+      // If this is the preview environment, mock the response instead of calling the mutation
+      onChange?.(10);
+    } else {
+      calculateAltAhaScore();
+    }
+  }, [calculateAltAhaScore, enrollmentId, onChange]);
+
   return (
     <Stack direction='column' gap={1} alignItems='flex-start'>
       {label}
@@ -67,7 +78,7 @@ const AltAhaScore = ({
         loading={loading}
         disabled={disabled}
         type='button'
-        onClick={() => calculateAltAhaScore()}
+        onClick={handleFetch}
         sx={{ my: 1 }}
       >
         Calculate Alt-AHA Score
