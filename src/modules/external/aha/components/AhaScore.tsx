@@ -1,7 +1,8 @@
 import { Stack, Typography } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import LoadingButton from '@/components/elements/LoadingButton';
+import { DUMMY_CLIENT_ID } from '@/modules/admin/components/forms/FormPreview';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
@@ -11,13 +12,13 @@ import { ChangeType, GroupItemComponentProps } from '@/modules/form/types';
 import { useFetchAhaScoreMutation } from '@/types/gqlTypes';
 
 const SCORE_LINK_ID = 'aha_score';
-const ALT_AHA_FLAG_LINK_ID = 'aha_alt_aha_flag';
+const MCI_QUALITY_INDICATOR_LINK_ID = 'aha_mci_quality_indicator';
 const DW_CLIENT_LINK_ID = 'aha_dw_client_id';
 const GENERATOR_LINK_ID = 'aha_generator';
 
 const EXPECTED_LINK_IDS = [
   SCORE_LINK_ID,
-  ALT_AHA_FLAG_LINK_ID,
+  MCI_QUALITY_INDICATOR_LINK_ID,
   DW_CLIENT_LINK_ID,
   GENERATOR_LINK_ID,
 ];
@@ -73,7 +74,8 @@ const AhaScore = ({
         severalItemsChanged({
           values: {
             [SCORE_LINK_ID]: data.fetchAhaScore.score,
-            [ALT_AHA_FLAG_LINK_ID]: data.fetchAhaScore.altAhaFlag,
+            [MCI_QUALITY_INDICATOR_LINK_ID]:
+              data.fetchAhaScore.mciQualityIndicator,
             [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
             [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
           },
@@ -85,6 +87,22 @@ const AhaScore = ({
       setErrorState({ ...emptyErrorState, apolloError });
     },
   });
+
+  const handleFetch = useCallback(() => {
+    if (clientId === DUMMY_CLIENT_ID) {
+      // If this is the preview environment, mock the response instead of calling the mutation
+      setHasFetched(true);
+      severalItemsChanged?.({
+        values: {
+          [SCORE_LINK_ID]: 10,
+          [MCI_QUALITY_INDICATOR_LINK_ID]: 1,
+        },
+        type: ChangeType.User,
+      });
+    } else {
+      fetchAha();
+    }
+  }, [clientId, fetchAha, severalItemsChanged]);
 
   // Throw an error if the children don't match the expected structure
   if (!isComponentValid) throw new Error('Invalid Aha form component');
@@ -127,7 +145,7 @@ const AhaScore = ({
             loading={loading}
             disabled={hasScore} // If value already exists, disable the button
             type='button'
-            onClick={() => fetchAha()}
+            onClick={handleFetch}
             sx={{ my: 1 }}
           >
             Fetch AHA Score

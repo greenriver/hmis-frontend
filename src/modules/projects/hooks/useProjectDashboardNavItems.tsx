@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
+import { useProjectCeVisibility } from '@/modules/ce/hooks/useProjectCeVisibility';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   DataCollectionFeatureRole,
@@ -12,6 +13,9 @@ import {
 export const useProjectDashboardNavItems = (
   project?: ProjectAllFieldsFragment
 ) => {
+  const { showReferrals, showAvailableUnits, showOutgoingReferrals } =
+    useProjectCeVisibility(project);
+
   const navItems: NavItem<ProjectAccessFieldsFragment>[] = useMemo(() => {
     if (!project) return [];
 
@@ -101,13 +105,8 @@ export const useProjectDashboardNavItems = (
             id: 'ce-referrals',
             title: 'Referrals',
             path: ProjectDashboardRoutes.CE,
-            permissions: [
-              'canViewUnits',
-              'canViewReferrals',
-              'canViewOwnReferrals',
-            ],
-            permissionMode: 'any',
-            hide: !project.coordinatedEntryFeatures,
+            hide:
+              !showReferrals && !showAvailableUnits && !showOutgoingReferrals,
           },
         ],
       },
@@ -154,7 +153,7 @@ export const useProjectDashboardNavItems = (
         ],
       },
     ];
-  }, [project]);
+  }, [project, showAvailableUnits, showOutgoingReferrals, showReferrals]);
 
   return navItems;
 };
