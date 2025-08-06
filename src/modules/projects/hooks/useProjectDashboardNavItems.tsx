@@ -105,13 +105,6 @@ export const useProjectDashboardNavItems = (
             id: 'ce-referrals',
             title: 'Referrals',
             path: ProjectDashboardRoutes.CE,
-            permissions: [
-              'canViewUnits',
-              'canViewReferrals',
-              'canViewOwnReferrals',
-              'canManageOutgoingReferrals',
-            ],
-            permissionMode: 'any',
             hide:
               !showReferrals && !showAvailableUnits && !showOutgoingReferrals,
           },
