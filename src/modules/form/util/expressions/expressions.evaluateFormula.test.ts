@@ -23,6 +23,37 @@ describe('evaluateFormula', () => {
     );
   });
 
+  describe('division operations', () => {
+    it('handles division by zero', () => {
+      expect(evaluateFormula('a / b', context({ a: 10, b: 0 }))).toBe(Infinity);
+      expect(evaluateFormula('a / b', context({ a: -10, b: 0 }))).toBe(
+        -Infinity
+      );
+      expect(evaluateFormula('a / b', context({ a: 0, b: 0 }))).toBe(NaN);
+    });
+
+    it('handles division by undefined (nil) denominator', () => {
+      expect(evaluateFormula('a / b', context({ a: 10, b: undefined }))).toBe(
+        undefined
+      );
+      expect(evaluateFormula('a / b', context({ a: -10, b: undefined }))).toBe(
+        undefined
+      );
+      expect(evaluateFormula('a / b', context({ a: 0, b: undefined }))).toBe(
+        undefined
+      );
+    });
+
+    it('handles undefined numerator', () => {
+      expect(evaluateFormula('a / b', context({ a: undefined, b: 5 }))).toBe(
+        undefined
+      );
+      expect(evaluateFormula('a / b', context({ a: undefined, b: 0 }))).toBe(
+        undefined
+      );
+    });
+  });
+
   describe('rounding functions', () => {
     it('rounds division to nearest integer', () => {
       expect(evaluateFormula('ROUND(a / b)', context({ a: 7, b: 3 }))).toBe(2);
@@ -46,6 +77,51 @@ describe('evaluateFormula', () => {
     it('rounds division down (floor)', () => {
       expect(evaluateFormula('FLOOR(a / b)', context({ a: 7, b: 3 }))).toBe(2);
       expect(evaluateFormula('FLOOR(a / b)', context({ a: 8, b: 3 }))).toBe(2);
+    });
+
+    it('handles rounding functions with division edge cases', () => {
+      // Division by zero returns Infinity, rounding functions preserve Infinity
+      expect(evaluateFormula('ROUND(a / b)', context({ a: 10, b: 0 }))).toBe(
+        Infinity
+      );
+      expect(evaluateFormula('CEIL(a / b)', context({ a: 10, b: 0 }))).toBe(
+        Infinity
+      );
+      expect(evaluateFormula('FLOOR(a / b)', context({ a: 10, b: 0 }))).toBe(
+        Infinity
+      );
+
+      // Negative division by zero returns -Infinity, rounding functions preserve -Infinity
+      expect(evaluateFormula('ROUND(a / b)', context({ a: -10, b: 0 }))).toBe(
+        -Infinity
+      );
+      expect(evaluateFormula('CEIL(a / b)', context({ a: -10, b: 0 }))).toBe(
+        -Infinity
+      );
+      expect(evaluateFormula('FLOOR(a / b)', context({ a: -10, b: 0 }))).toBe(
+        -Infinity
+      );
+
+      // 0/0 returns NaN, rounding functions preserve NaN
+      expect(evaluateFormula('ROUND(a / b)', context({ a: 0, b: 0 }))).toBe(
+        NaN
+      );
+      expect(evaluateFormula('CEIL(a / b)', context({ a: 0, b: 0 }))).toBe(NaN);
+      expect(evaluateFormula('FLOOR(a / b)', context({ a: 0, b: 0 }))).toBe(
+        NaN
+      );
+
+      // Division by undefined returns undefined (due to error handling),
+      // so rounding functions also return undefined
+      expect(
+        evaluateFormula('ROUND(a / b)', context({ a: 10, b: undefined }))
+      ).toBe(undefined);
+      expect(
+        evaluateFormula('CEIL(a / b)', context({ a: 10, b: undefined }))
+      ).toBe(undefined);
+      expect(
+        evaluateFormula('FLOOR(a / b)', context({ a: 10, b: undefined }))
+      ).toBe(undefined);
     });
   });
 });
