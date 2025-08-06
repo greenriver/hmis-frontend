@@ -478,6 +478,7 @@ export const protectedRoutes: RouteNode[] = [
                   'canViewUnits',
                   'canViewReferrals',
                   'canViewOwnReferrals',
+                  'canManageOutgoingReferrals',
                 ]}
                 coordinatedEntryFeatures={[
                   'supportsReferrals',
