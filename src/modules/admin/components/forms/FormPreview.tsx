@@ -51,6 +51,8 @@ export const toggleItems: ToggleItem<PreviewMode>[] = [
   },
 ];
 
+export const DUMMY_CLIENT_ID = 'dummy-value';
+
 // Component for previewing a form, and optionally publishing it.
 // Publish is possible if it is a draft and user has appropriate permission.
 const FormPreview = () => {
@@ -75,7 +77,7 @@ const FormPreview = () => {
 
     // Depending on the form role, add fake values for local constants expected by specific forms
     if (formDefinition?.role === FormRole.CustomAssessment) {
-      localConstants.clientId = 'dummy-value';
+      localConstants.clientId = DUMMY_CLIENT_ID;
     }
 
     return localConstants;
