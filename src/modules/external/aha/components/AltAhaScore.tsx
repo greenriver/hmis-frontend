@@ -30,14 +30,7 @@ const AltAhaScore = ({
 }: AltAhaScoreProps) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
-  const { valuesByLinkId } = handlers?.getValuesForSubmit() || {};
-  const enrollmentId = handlers?.localConstants.enrollmentId;
-
   const [calculateAltAhaScore, { loading }] = useCalculateAltAhaScoreMutation({
-    variables: {
-      enrollmentId,
-      valuesByLinkId,
-    },
     onCompleted: (data: CalculateAltAhaScoreMutation) => {
       const errors = data.calculateAltAhaScore?.errors || [];
       if (errors.length > 0) {
@@ -57,13 +50,20 @@ const AltAhaScore = ({
   });
 
   const handleFetch = useCallback(() => {
+    const enrollmentId = handlers?.localConstants.enrollmentId;
+
     if (enrollmentId === DUMMY_LOCAL_CONSTANT) {
       // If this is the preview environment, mock the response instead of calling the mutation
       onChange?.(10);
     } else {
-      calculateAltAhaScore();
+      calculateAltAhaScore({
+        variables: {
+          enrollmentId,
+          valuesByLinkId: handlers?.getValuesForSubmit().valuesByLinkId || {},
+        },
+      });
     }
-  }, [calculateAltAhaScore, enrollmentId, onChange]);
+  }, [calculateAltAhaScore, handlers, onChange]);
 
   return (
     <Stack direction='column' gap={1} alignItems='flex-start'>
