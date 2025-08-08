@@ -727,6 +727,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
+  { name: 'CeConsolidatedWaitlist', fields: [] },
   {
     name: 'CeCustomReferralStatus',
     fields: [

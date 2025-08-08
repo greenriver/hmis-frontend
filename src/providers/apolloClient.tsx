@@ -112,6 +112,7 @@ export const cache = new InMemoryCache({
     },
     ValueBound: { keyFields: false },
     ValidationError: { keyFields: false },
+    CeConsolidatedWaitlist: { keyFields: false },
   },
 });
 

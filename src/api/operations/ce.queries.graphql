@@ -175,29 +175,40 @@ query GetAdminConsolidatedWaitlist(
   $offset: Int = 0
   # $filters: ConsolidatedWaitlistFilterOptions = null
 ) {
-  consolidatedWaitlist(limit: $limit, offset: $offset) {
-    offset
-    limit
-    nodesCount
-    nodes {
-      id
-      destinationClientId
-      sourceClientIds
-      clientName
-      unitGroupName
-      projectName
-      projectId
-      organizationName
-      whenAddedToCandidatePool
-      whenUpdatedInCandidatePool
-      priorityScore
-      clientAttributes
-      customDataElements
-      clientAge
-      openEnrollmentProjectTypes
-      openReferralProjectTypes
-      vacancies
-      capacity
+  ceConsolidatedWaitlist {
+    candidates(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        destinationClientId
+        sourceClientIds
+        clientName
+        unitGroupName
+        projectName
+        projectId
+        organizationName
+        whenAddedToCandidatePool
+        whenUpdatedInCandidatePool
+        priorityScore
+        clientAttributes
+        customDataElements
+        clientAge
+        openEnrollmentProjectTypes
+        openReferralProjectTypes
+        vacancies
+        capacity
+      }
+    }
+  }
+}
+
+query GetConsolidatedWaitlistColumns {
+  ceConsolidatedWaitlist {
+    clientAttributeColumns {
+      key
+      value
     }
   }
 }

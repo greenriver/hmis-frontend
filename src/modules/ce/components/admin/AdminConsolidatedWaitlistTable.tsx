@@ -1,6 +1,7 @@
 import { Chip, Paper, Stack } from '@mui/material';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
+import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -12,12 +13,13 @@ import {
   GetAdminConsolidatedWaitlistDocument,
   GetAdminConsolidatedWaitlistQuery,
   GetAdminConsolidatedWaitlistQueryVariables,
+  useGetConsolidatedWaitlistColumnsQuery,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 type Row = NonNullable<
-  GetAdminConsolidatedWaitlistQuery['consolidatedWaitlist']
+  GetAdminConsolidatedWaitlistQuery['ceConsolidatedWaitlist']['candidates']
 >['nodes'][0];
 
 const COLUMNS: DataColumnDef<
@@ -125,49 +127,39 @@ const COLUMNS: DataColumnDef<
   // },
 ];
 
-const getCustomAttributeColumns = (rows: Row[]) => {
-  if (!rows || rows.length === 0) return [];
-
-  function generateColumnDefinition(key: string) {
-    return {
-      key: key,
-      header: key
-        .replace(/^cde.custom_assessment./, '')
-        .replace(/_/g, ' ')
-        .replace(/([a-z])([A-Z])/g, '$1 $2'),
-      render: (row: Row) => {
-        if (!row.clientAttributes) return null;
-        return ensureArray(row.clientAttributes[key]).join(', ');
-      },
-      // optional: { defaultHidden: true },
-    };
-  }
-
-  const columnsByKey: Record<string, ColumnDef<Row>> = {};
-  rows.forEach((row) => {
-    Object.keys(row.clientAttributes).forEach((key) => {
-      if (columnsByKey[key]) return; // seen
-      columnsByKey[key] = generateColumnDefinition(key);
-    });
-  });
-
-  // sort columns by CDED Key so they always appear in the same order
-  return Object.keys(columnsByKey)
-    .sort()
-    .map((key) => columnsByKey[key]);
-};
+function clientAttributeDisplay(
+  row: Row,
+  clientAttributeKey: string
+): string | null {
+  if (!row.clientAttributes) return null;
+  return ensureArray(row.clientAttributes[clientAttributeKey]).join(', ');
+}
 
 interface Props {}
 const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
-  const getColumnDefs = useCallback((rows: Row[]) => {
-    const customColumns = getCustomAttributeColumns(rows);
+  const { data, loading, error } = useGetConsolidatedWaitlistColumnsQuery();
+
+  const columnsWithCustom = useMemo(() => {
+    if (!data || !data.ceConsolidatedWaitlist?.clientAttributeColumns)
+      return COLUMNS;
+    const customColumns =
+      data.ceConsolidatedWaitlist.clientAttributeColumns.map(
+        ({ key, value }) => ({
+          key: key,
+          header: value,
+          render: (row: Row) => clientAttributeDisplay(row, key),
+        })
+      );
     return [...COLUMNS, ...customColumns];
-  }, []);
+  }, [data]);
 
   const filters = useFilters({
     type: 'CeReferralFilterOptions',
     omit: ['workflowTemplate'],
   });
+
+  if (error) throw error;
+  if (loading && !data) return <Loading />;
 
   return (
     <Stack spacing={2}>
@@ -187,13 +179,10 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
           GetAdminConsolidatedWaitlistQueryVariables,
           Row
         >
-          columns={COLUMNS}
-          // TODO(#7387) Optional column behavior is currently undefined/unsupported
-          //  when columns are provided by getColumnDefs instead of the columns prop.
-          // getColumnDefs={getColumnDefs}
+          columns={columnsWithCustom}
           queryVariables={{}}
           queryDocument={GetAdminConsolidatedWaitlistDocument}
-          pagePath='consolidatedWaitlist'
+          pagePath='ceConsolidatedWaitlist.candidates'
           noData='No clients'
           paginationItemName='record'
           filters={filters}
