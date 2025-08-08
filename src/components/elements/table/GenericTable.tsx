@@ -644,14 +644,18 @@ const GenericTable = <T extends { id: string }>({
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[10, 25, 50, 100]}
-                  SelectProps={{
-                    inputProps: {
+                  slotProps={{
+                    select: {
                       'aria-label': 'rows per page',
+                      native: true,
                     },
-                    native: true,
                   }}
                   sx={{ borderBottom: 'none' }}
                   colSpan={fullColSpan}
+                  labelDisplayedRows={({ from, to, count }) => {
+                    // Format big numbers, e.g. "1-25 of 1,200"
+                    return `${from}-${to} of ${count !== -1 ? count.toLocaleString('en-US') : `more than ${to}`}`;
+                  }}
                   {...tablePaginationProps}
                 />
               </TableRow>

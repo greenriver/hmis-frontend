@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
@@ -7,7 +6,6 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 
 import PrioritizedClientsTable from '@/modules/ce/components/unit/PrioritizedClientsTable';
-import UnitReferralStatus from '@/modules/ce/components/UnitReferralStatus';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import UnitOverview from '@/modules/units/components/UnitOverview';
 import { ProjectDashboardRoutes } from '@/routes/routes';
@@ -85,14 +83,9 @@ const UnitPage: React.FC<Props> = ({}) => {
   return (
     <>
       <PageTitle title={unit.name} />
-      <Box sx={{ mb: 2 }}>
-        <UnitReferralStatus unit={unit} />
-        {/* TODO button to mark as available/unavailable? */}
-      </Box>
       <CommonTabs
         ariaLabel={'Eligible Clients and Details tabs'}
         tabDefinitions={tabDefinitions}
-        collapseSingleTab={false}
       />
     </>
   );

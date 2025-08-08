@@ -164,6 +164,10 @@ export const useProjectBreadcrumbConfig = (
         title: 'Unit',
         parent: ProjectDashboardRoutes.UNITS,
       },
+      [ProjectDashboardRoutes.CE_UNIT]: {
+        title: 'Unit',
+        parent: ProjectDashboardRoutes.CE,
+      },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;
     return buildDefaultCrumbs(ProjectDashboardRoutes, overrides, projectRoot);

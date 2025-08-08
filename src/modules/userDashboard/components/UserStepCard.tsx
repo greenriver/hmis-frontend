@@ -9,7 +9,6 @@ import {
 import ReferralStepDatum from '@/modules/ce/components/referral/ReferralStepDatum';
 import { getReferralLink } from '@/modules/ce/util';
 import {
-  clientNameFromRecordWithOptionalClient,
   formatRelativeDate,
   parseHmisDateString,
   stringifyArray,
@@ -21,6 +20,10 @@ interface Props {
   currentUserId: string;
 }
 
+/**
+ * Card that displays an assigned CE Referral Task (Step) where action is required.
+ * This card is only displayed on the User Dashboard.
+ */
 const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
   const { referral, assignees } = step;
   const path = getReferralLink(referral);
@@ -120,7 +123,7 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
           </ReferralStepDatum>
 
           <ReferralStepDatum Icon={ClientIcon}>
-            {clientNameFromRecordWithOptionalClient(step.referral)}
+            {step.referral.clientName}
           </ReferralStepDatum>
         </Box>
       </Box>
