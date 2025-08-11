@@ -59,7 +59,9 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
       );
     }
 
-    if (topCandidate && project.access.canStartReferrals) {
+    const canStartReferral =
+      project.access.canStartReferrals && project.access.canViewReferrals;
+    if (topCandidate && canStartReferral) {
       return (
         <StartReferralButton
           opportunity={opportunity}
@@ -68,7 +70,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
         />
       );
     }
-  }, [referral, topCandidate, project.access.canStartReferrals, opportunity]);
+  }, [referral, topCandidate, project.access, opportunity]);
 
   const linkToEligibleClients =
     opportunity &&
