@@ -4889,6 +4889,7 @@ export type MutationBulkReviewExternalSubmissionsArgs = {
 
 export type MutationCalculateAltAhaScoreArgs = {
   enrollmentId: Scalars['ID']['input'];
+  formDefinitionIdentifier: Scalars['String']['input'];
   valuesByLinkId: Scalars['JsonObject']['input'];
 };
 
@@ -9188,6 +9189,7 @@ export type FetchAhaScoreMutation = {
 
 export type CalculateAltAhaScoreMutationVariables = Exact<{
   enrollmentId: Scalars['ID']['input'];
+  formDefinitionIdentifier: Scalars['String']['input'];
   valuesByLinkId: Scalars['JsonObject']['input'];
 }>;
 
@@ -50638,10 +50640,12 @@ export type FetchAhaScoreMutationOptions = Apollo.BaseMutationOptions<
 export const CalculateAltAhaScoreDocument = gql`
   mutation CalculateAltAhaScore(
     $enrollmentId: ID!
+    $formDefinitionIdentifier: String!
     $valuesByLinkId: JsonObject!
   ) {
     calculateAltAhaScore(
       enrollmentId: $enrollmentId
+      formDefinitionIdentifier: $formDefinitionIdentifier
       valuesByLinkId: $valuesByLinkId
     ) {
       score
@@ -50671,6 +50675,7 @@ export type CalculateAltAhaScoreMutationFn = Apollo.MutationFunction<
  * const [calculateAltAhaScoreMutation, { data, loading, error }] = useCalculateAltAhaScoreMutation({
  *   variables: {
  *      enrollmentId: // value for 'enrollmentId'
+ *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
  *      valuesByLinkId: // value for 'valuesByLinkId'
  *   },
  * });

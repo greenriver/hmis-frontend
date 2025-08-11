@@ -6,6 +6,7 @@ import { DUMMY_LOCAL_CONSTANT } from '@/modules/admin/components/forms/FormPrevi
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
+import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
 import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHandlers';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import {
@@ -28,6 +29,7 @@ const AltAhaScore = ({
   disabled = false, // todo @martha - add rules to make it disabled unless the other form values are filled?
   handlers,
 }: AltAhaScoreProps) => {
+  const { identifier } = useDynamicFormContext();
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   const [calculateAltAhaScore, { loading }] = useCalculateAltAhaScoreMutation({
@@ -59,11 +61,12 @@ const AltAhaScore = ({
       calculateAltAhaScore({
         variables: {
           enrollmentId,
+          formDefinitionIdentifier: identifier || '',
           valuesByLinkId: handlers?.getValuesForSubmit().valuesByLinkId || {},
         },
       });
     }
-  }, [calculateAltAhaScore, handlers, onChange]);
+  }, [calculateAltAhaScore, handlers, identifier, onChange]);
 
   return (
     <Stack direction='column' gap={1} alignItems='flex-start'>

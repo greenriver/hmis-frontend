@@ -414,6 +414,7 @@ const AssessmentForm: React.FC<Props> = ({
             // Remount component if a source assessment has been selected
             key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
             definition={definition.definition}
+            identifier={definition.identifier}
             ref={formRef}
             onSubmit={onSubmit}
             onSaveDraft={

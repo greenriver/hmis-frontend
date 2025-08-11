@@ -41,6 +41,7 @@ export interface DynamicFormProps
   extends Omit<DynamicFormBaseProps, 'handlers' | 'onSaveDraft'> {
   clientId?: string;
   definition: FormDefinitionJson;
+  identifier?: string;
   onSubmit: (input: DynamicFormSubmitInput) => void;
   onSaveDraft?: DynamicFormOnSaveDraft;
   onDirty?: (value: boolean) => void;
@@ -123,7 +124,12 @@ const DynamicFormWithHandlers = forwardRef<
   DynamicFormRef,
   DynamicFormProps & { defaultValues: DefaultValues<InitialValues> }
 >((props, ref) => {
-  const { definition, defaultValues, localConstants = BLANK } = props;
+  const {
+    definition,
+    identifier,
+    defaultValues,
+    localConstants = BLANK,
+  } = props;
   const handlers = useFormDefinitionHandlers({
     definition,
     defaultValues,
@@ -147,6 +153,7 @@ const DynamicFormWithHandlers = forwardRef<
           viewOnly,
           autofillInvertedDependencyMap,
           disabledDependencyMap,
+          identifier,
         }}
       >
         <DynamicFormWithoutHandlers {...props} handlers={handlers} ref={ref} />
