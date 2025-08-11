@@ -26,7 +26,7 @@ const AltAhaScore = ({
   value,
   onChange,
   label,
-  disabled = false, // todo @martha - add rules to make it disabled unless the other form values are filled?
+  disabled = false,
   handlers,
 }: AltAhaScoreProps) => {
   const { identifier } = useDynamicFormContext();
