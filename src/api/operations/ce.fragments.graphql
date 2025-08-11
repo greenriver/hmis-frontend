@@ -364,3 +364,16 @@ fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
     canViewEnrollmentDetails
   }
 }
+
+fragment CeUnitGroupCandidateFields on CeUnitGroupCandidate {
+  id
+  unitGroupName
+  projectName
+  projectId
+  projectType
+  organizationName
+  whenAddedToCandidatePool
+  whenUpdatedInCandidatePool
+  vacancies
+  capacity
+}

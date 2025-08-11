@@ -1,14 +1,12 @@
-import { Chip, Paper, Stack } from '@mui/material';
-import React, { useCallback, useMemo } from 'react';
+import { Paper, Stack } from '@mui/material';
+import React, { useMemo } from 'react';
 
 import Loading from '@/components/elements/Loading';
-import { ColumnDef } from '@/components/elements/table/types';
+import ConsolidatedWaitlistDialog from '@/modules/ce/components/admin/ConsolidatedWaitlistDialog';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
-import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetAdminConsolidatedWaitlistDocument,
   GetAdminConsolidatedWaitlistQuery,
@@ -16,10 +14,9 @@ import {
   useGetConsolidatedWaitlistColumnsQuery,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 type Row = NonNullable<
-  GetAdminConsolidatedWaitlistQuery['ceConsolidatedWaitlist']['candidates']
+  GetAdminConsolidatedWaitlistQuery['ceConsolidatedWaitlist']['ceClients']
 >['nodes'][0];
 
 const COLUMNS: DataColumnDef<
@@ -36,79 +33,79 @@ const COLUMNS: DataColumnDef<
     header: 'Client Name',
     render: 'clientName',
   },
-  {
-    key: 'projectName',
-    header: 'Project',
-    render: 'projectName',
-  },
-  {
-    key: 'unitGroupName',
-    header: 'Unit Group',
-    render: 'unitGroupName',
-  },
-
   // {
-  //   key: 'projectId',
-  //   header: 'Project ID',
-  //   render: 'projectId',
+  //   key: 'projectName',
+  //   header: 'Project',
+  //   render: 'projectName',
   // },
-  {
-    key: 'organizationName',
-    header: 'Organization',
-    render: 'organizationName',
-    optional: { defaultHidden: true },
-  },
-  {
-    key: 'whenAddedToCandidatePool',
-    header: 'Added to Waitlist',
-    render: ({ whenAddedToCandidatePool }) =>
-      whenAddedToCandidatePool
-        ? parseAndFormatDateTime(whenAddedToCandidatePool)
-        : '',
-    optional: { defaultHidden: false },
-  },
-  {
-    key: 'whenUpdatedInCandidatePool',
-    header: 'Updated in Waitlist',
-    render: ({ whenUpdatedInCandidatePool }) =>
-      whenUpdatedInCandidatePool
-        ? parseAndFormatDateTime(whenUpdatedInCandidatePool)
-        : '',
-    optional: { defaultHidden: false },
-  },
-  {
-    key: 'priorityScore',
-    header: 'Priority Score',
-    render: 'priorityScore',
-  },
-  {
-    key: 'clientAge',
-    header: 'Client Age',
-    render: 'clientAge',
-    optional: { defaultHidden: false },
-  },
-  {
-    key: 'status',
-    header: 'Status',
-    render: (row) => (
-      <Chip
-        label={
-          row.vacancies > 0
-            ? 'Eligible - Vacancies Available'
-            : 'Eligible - No Vacancies'
-        }
-        color={row.vacancies > 0 ? 'primary' : 'grayscale'}
-        size='small'
-        variant='status'
-      />
-    ),
-  },
-  {
-    key: 'vacancies',
-    header: 'Availability',
-    render: (row) => `${row.vacancies}/${row.capacity} Units Available`,
-    optional: { defaultHidden: false },
-  },
+  // {
+  //   key: 'unitGroupName',
+  //   header: 'Unit Group',
+  //   render: 'unitGroupName',
+  // },
+
+  // // {
+  // //   key: 'projectId',
+  // //   header: 'Project ID',
+  // //   render: 'projectId',
+  // // },
+  // {
+  //   key: 'organizationName',
+  //   header: 'Organization',
+  //   render: 'organizationName',
+  //   optional: { defaultHidden: true },
+  // },
+  // {
+  //   key: 'whenAddedToCandidatePool',
+  //   header: 'Added to Waitlist',
+  //   render: ({ whenAddedToCandidatePool }) =>
+  //     whenAddedToCandidatePool
+  //       ? parseAndFormatDateTime(whenAddedToCandidatePool)
+  //       : '',
+  //   optional: { defaultHidden: false },
+  // },
+  // {
+  //   key: 'whenUpdatedInCandidatePool',
+  //   header: 'Updated in Waitlist',
+  //   render: ({ whenUpdatedInCandidatePool }) =>
+  //     whenUpdatedInCandidatePool
+  //       ? parseAndFormatDateTime(whenUpdatedInCandidatePool)
+  //       : '',
+  //   optional: { defaultHidden: false },
+  // },
+  // {
+  //   key: 'priorityScore',
+  //   header: 'Priority Score',
+  //   render: 'priorityScore',
+  // },
+  // {
+  //   key: 'clientAge',
+  //   header: 'Client Age',
+  //   render: 'clientAge',
+  //   optional: { defaultHidden: false },
+  // },
+  // {
+  //   key: 'status',
+  //   header: 'Status',
+  //   render: (row) => (
+  //     <Chip
+  //       label={
+  //         row.vacancies > 0
+  //           ? 'Eligible - Vacancies Available'
+  //           : 'Eligible - No Vacancies'
+  //       }
+  //       color={row.vacancies > 0 ? 'primary' : 'grayscale'}
+  //       size='small'
+  //       variant='status'
+  //     />
+  //   ),
+  // },
+  // {
+  //   key: 'vacancies',
+  //   header: 'Availability',
+  //   render: (row) => `${row.vacancies}/${row.capacity} Units Available`,
+  //   optional: { defaultHidden: false },
+  // },
   // {
   //   key: 'clientAttributes',
   //   header: 'Client Attributes',
@@ -131,13 +128,16 @@ function clientAttributeDisplay(
   row: Row,
   clientAttributeKey: string
 ): string | null {
-  if (!row.clientAttributes) return null;
-  return ensureArray(row.clientAttributes[clientAttributeKey]).join(', ');
+  if (!row.aggregatedClientAttributes) return null;
+  return ensureArray(row.aggregatedClientAttributes[clientAttributeKey]).join(
+    ', '
+  );
 }
 
 interface Props {}
 const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   const { data, loading, error } = useGetConsolidatedWaitlistColumnsQuery();
+  const [selectedRow, setSelectedRow] = React.useState<Row | null>(null);
 
   const columnsWithCustom = useMemo(() => {
     if (!data || !data.ceConsolidatedWaitlist?.clientAttributeColumns)
@@ -182,22 +182,30 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
           columns={columnsWithCustom}
           queryVariables={{}}
           queryDocument={GetAdminConsolidatedWaitlistDocument}
-          pagePath='ceConsolidatedWaitlist.candidates'
+          pagePath='ceConsolidatedWaitlist.ceClients'
           noData='No clients'
-          paginationItemName='record'
+          paginationItemName='client'
           filters={filters}
-          rowLinkTo={(row) =>
-            row.sourceClientIds.length > 0
-              ? generateSafePath(ClientDashboardRoutes.PROFILE, {
-                  clientId: row.sourceClientIds[0],
-                })
-              : undefined
-          }
-          rowActionTitle='View Client'
+          handleRowClick={(row) => setSelectedRow(row)}
+          // TODO: make linking to client profile a secondary action
+          // rowLinkTo={(row) =>
+          //   row.sourceClientIds.length > 0
+          //     ? generateSafePath(ClientDashboardRoutes.PROFILE, {
+          //         clientId: row.sourceClientIds[0],
+          //       })
+          //     : undefined
+          // }
+          rowActionTitle='View Eligible Projects'
           // rowSecondaryActionConfigs={rowSecondaryActions}
-          // secondary action should probably link to the _unit group waitlist which isnt a thing yet
         />
       </Paper>
+      {selectedRow && (
+        <ConsolidatedWaitlistDialog
+          id={selectedRow.id}
+          onClose={() => setSelectedRow(null)}
+          open
+        />
+      )}
     </Stack>
   );
 };

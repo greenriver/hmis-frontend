@@ -173,10 +173,10 @@ query GetAdminCeReferrals(
 query GetAdminConsolidatedWaitlist(
   $limit: Int = 25
   $offset: Int = 0
-  # $filters: ConsolidatedWaitlistFilterOptions = null
-) {
+) # $filters: ConsolidatedWaitlistFilterOptions = null
+{
   ceConsolidatedWaitlist {
-    candidates(limit: $limit, offset: $offset) {
+    ceClients(limit: $limit, offset: $offset) {
       offset
       limit
       nodesCount
@@ -185,20 +185,7 @@ query GetAdminConsolidatedWaitlist(
         destinationClientId
         sourceClientIds
         clientName
-        unitGroupName
-        projectName
-        projectId
-        organizationName
-        whenAddedToCandidatePool
-        whenUpdatedInCandidatePool
-        priorityScore
-        clientAttributes
-        customDataElements
-        clientAge
-        openEnrollmentProjectTypes
-        openReferralProjectTypes
-        vacancies
-        capacity
+        aggregatedClientAttributes
       }
     }
   }
@@ -209,6 +196,23 @@ query GetConsolidatedWaitlistColumns {
     clientAttributeColumns {
       key
       value
+    }
+  }
+}
+query GetCeClientEligibleUnitGroups(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+) {
+  ceConsolidatedWaitlist {
+    ceClient(id: $id) {
+      id
+      unitGroupsCandidates(limit: $limit, offset: $offset) {
+        nodesCount
+        nodes {
+          ...CeUnitGroupCandidateFields
+        }
+      }
     }
   }
 }

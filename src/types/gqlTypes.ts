@@ -576,40 +576,6 @@ export type CeCandidateEnrollmentsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type CeCandidateConsolidated = {
-  __typename?: 'CeCandidateConsolidated';
-  capacity: Scalars['Int']['output'];
-  clientAge?: Maybe<Scalars['Int']['output']>;
-  clientAttributes: Scalars['JSON']['output'];
-  clientName: Scalars['String']['output'];
-  /** Custom Data Elements that contributed to eligibility and priority for this candidate pool */
-  customDataElements: Scalars['JSON']['output'];
-  destinationClientId: Scalars['ID']['output'];
-  id: Scalars['ID']['output'];
-  openEnrollmentProjectTypes?: Maybe<Array<ProjectType>>;
-  openReferralProjectTypes?: Maybe<Array<ProjectType>>;
-  organizationName: Scalars['String']['output'];
-  priorityScore: Scalars['Float']['output'];
-  projectId: Scalars['ID']['output'];
-  projectName: Scalars['String']['output'];
-  sourceClientIds: Array<Scalars['ID']['output']>;
-  unitGroupName: Scalars['String']['output'];
-  vacancies: Scalars['Int']['output'];
-  whenAddedToCandidatePool: Scalars['ISO8601DateTime']['output'];
-  whenUpdatedInCandidatePool: Scalars['ISO8601DateTime']['output'];
-};
-
-export type CeCandidateConsolidatedsPaginated = {
-  __typename?: 'CeCandidateConsolidatedsPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<CeCandidateConsolidated>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
-};
-
 export type CeCandidatesPaginated = {
   __typename?: 'CeCandidatesPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -621,14 +587,46 @@ export type CeCandidatesPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
+export type CeClient = {
+  __typename?: 'CeClient';
+  aggregatedClientAttributes: Scalars['JSON']['output'];
+  clientName: Scalars['String']['output'];
+  destinationClientId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  sourceClientIds: Array<Scalars['ID']['output']>;
+  unitGroupsCandidates: CeUnitGroupCandidatesPaginated;
+};
+
+export type CeClientUnitGroupsCandidatesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CeClientsPaginated = {
+  __typename?: 'CeClientsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeClient>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 export type CeConsolidatedWaitlist = {
   __typename?: 'CeConsolidatedWaitlist';
-  candidates: CeCandidateConsolidatedsPaginated;
+  ceClient?: Maybe<CeClient>;
+  /** Clients who belong to at least one CE candidate pool */
+  ceClients: CeClientsPaginated;
   /** Columns available in the consolidated waitlist */
   clientAttributeColumns: Array<KeyValue>;
 };
 
-export type CeConsolidatedWaitlistCandidatesArgs = {
+export type CeConsolidatedWaitlistCeClientArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type CeConsolidatedWaitlistCeClientsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1030,6 +1028,33 @@ export type CeReferralsPaginated = {
   hasMoreBefore: Scalars['Boolean']['output'];
   limit: Scalars['Int']['output'];
   nodes: Array<CeReferral>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
+export type CeUnitGroupCandidate = {
+  __typename?: 'CeUnitGroupCandidate';
+  /** Total number of units in the unit group */
+  capacity: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
+  projectId: Scalars['ID']['output'];
+  projectName: Scalars['String']['output'];
+  projectType: ProjectType;
+  unitGroupName: Scalars['String']['output'];
+  /** Number of units that are accepting referrals */
+  vacancies: Scalars['Int']['output'];
+  whenAddedToCandidatePool: Scalars['ISO8601DateTime']['output'];
+  whenUpdatedInCandidatePool: Scalars['ISO8601DateTime']['output'];
+};
+
+export type CeUnitGroupCandidatesPaginated = {
+  __typename?: 'CeUnitGroupCandidatesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeUnitGroupCandidate>;
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
@@ -18010,6 +18035,20 @@ export type CeReferralSourceEnrollmentFieldsFragment = {
   };
 };
 
+export type CeUnitGroupCandidateFieldsFragment = {
+  __typename?: 'CeUnitGroupCandidate';
+  id: string;
+  unitGroupName: string;
+  projectName: string;
+  projectId: string;
+  projectType: ProjectType;
+  organizationName: string;
+  whenAddedToCandidatePool: string;
+  whenUpdatedInCandidatePool: string;
+  vacancies: number;
+  capacity: number;
+};
+
 export type CreateCeReferralMutationVariables = Exact<{
   opportunityId: Scalars['ID']['input'];
   clientId?: InputMaybe<Scalars['ID']['input']>;
@@ -21155,31 +21194,18 @@ export type GetAdminConsolidatedWaitlistQuery = {
   __typename?: 'Query';
   ceConsolidatedWaitlist: {
     __typename?: 'CeConsolidatedWaitlist';
-    candidates: {
-      __typename?: 'CeCandidateConsolidatedsPaginated';
+    ceClients: {
+      __typename?: 'CeClientsPaginated';
       offset: number;
       limit: number;
       nodesCount: number;
       nodes: Array<{
-        __typename?: 'CeCandidateConsolidated';
+        __typename?: 'CeClient';
         id: string;
         destinationClientId: string;
         sourceClientIds: Array<string>;
         clientName: string;
-        unitGroupName: string;
-        projectName: string;
-        projectId: string;
-        organizationName: string;
-        whenAddedToCandidatePool: string;
-        whenUpdatedInCandidatePool: string;
-        priorityScore: number;
-        clientAttributes: any;
-        customDataElements: any;
-        clientAge?: number | null;
-        openEnrollmentProjectTypes?: Array<ProjectType> | null;
-        openReferralProjectTypes?: Array<ProjectType> | null;
-        vacancies: number;
-        capacity: number;
+        aggregatedClientAttributes: any;
       }>;
     };
   };
@@ -21198,6 +21224,40 @@ export type GetConsolidatedWaitlistColumnsQuery = {
       key: string;
       value?: string | null;
     }>;
+  };
+};
+
+export type GetCeClientEligibleUnitGroupsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetCeClientEligibleUnitGroupsQuery = {
+  __typename?: 'Query';
+  ceConsolidatedWaitlist: {
+    __typename?: 'CeConsolidatedWaitlist';
+    ceClient?: {
+      __typename?: 'CeClient';
+      id: string;
+      unitGroupsCandidates: {
+        __typename?: 'CeUnitGroupCandidatesPaginated';
+        nodesCount: number;
+        nodes: Array<{
+          __typename?: 'CeUnitGroupCandidate';
+          id: string;
+          unitGroupName: string;
+          projectName: string;
+          projectId: string;
+          projectType: ProjectType;
+          organizationName: string;
+          whenAddedToCandidatePool: string;
+          whenUpdatedInCandidatePool: string;
+          vacancies: number;
+          capacity: number;
+        }>;
+      };
+    } | null;
   };
 };
 
@@ -48971,6 +49031,20 @@ export const CeReferralSourceEnrollmentFieldsFragmentDoc = gql`
     }
   }
 `;
+export const CeUnitGroupCandidateFieldsFragmentDoc = gql`
+  fragment CeUnitGroupCandidateFields on CeUnitGroupCandidate {
+    id
+    unitGroupName
+    projectName
+    projectId
+    projectType
+    organizationName
+    whenAddedToCandidatePool
+    whenUpdatedInCandidatePool
+    vacancies
+    capacity
+  }
+`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
@@ -53899,7 +53973,7 @@ export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
 export const GetAdminConsolidatedWaitlistDocument = gql`
   query GetAdminConsolidatedWaitlist($limit: Int = 25, $offset: Int = 0) {
     ceConsolidatedWaitlist {
-      candidates(limit: $limit, offset: $offset) {
+      ceClients(limit: $limit, offset: $offset) {
         offset
         limit
         nodesCount
@@ -53908,20 +53982,7 @@ export const GetAdminConsolidatedWaitlistDocument = gql`
           destinationClientId
           sourceClientIds
           clientName
-          unitGroupName
-          projectName
-          projectId
-          organizationName
-          whenAddedToCandidatePool
-          whenUpdatedInCandidatePool
-          priorityScore
-          clientAttributes
-          customDataElements
-          clientAge
-          openEnrollmentProjectTypes
-          openReferralProjectTypes
-          vacancies
-          capacity
+          aggregatedClientAttributes
         }
       }
     }
@@ -54078,6 +54139,106 @@ export type GetConsolidatedWaitlistColumnsSuspenseQueryHookResult = ReturnType<
 export type GetConsolidatedWaitlistColumnsQueryResult = Apollo.QueryResult<
   GetConsolidatedWaitlistColumnsQuery,
   GetConsolidatedWaitlistColumnsQueryVariables
+>;
+export const GetCeClientEligibleUnitGroupsDocument = gql`
+  query GetCeClientEligibleUnitGroups(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+  ) {
+    ceConsolidatedWaitlist {
+      ceClient(id: $id) {
+        id
+        unitGroupsCandidates(limit: $limit, offset: $offset) {
+          nodesCount
+          nodes {
+            ...CeUnitGroupCandidateFields
+          }
+        }
+      }
+    }
+  }
+  ${CeUnitGroupCandidateFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeClientEligibleUnitGroupsQuery__
+ *
+ * To run a query within a React component, call `useGetCeClientEligibleUnitGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientEligibleUnitGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeClientEligibleUnitGroupsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetCeClientEligibleUnitGroupsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  > &
+    (
+      | {
+          variables: GetCeClientEligibleUnitGroupsQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  >(GetCeClientEligibleUnitGroupsDocument, options);
+}
+export function useGetCeClientEligibleUnitGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  >(GetCeClientEligibleUnitGroupsDocument, options);
+}
+export function useGetCeClientEligibleUnitGroupsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeClientEligibleUnitGroupsQuery,
+        GetCeClientEligibleUnitGroupsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  >(GetCeClientEligibleUnitGroupsDocument, options);
+}
+export type GetCeClientEligibleUnitGroupsQueryHookResult = ReturnType<
+  typeof useGetCeClientEligibleUnitGroupsQuery
+>;
+export type GetCeClientEligibleUnitGroupsLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientEligibleUnitGroupsLazyQuery
+>;
+export type GetCeClientEligibleUnitGroupsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeClientEligibleUnitGroupsSuspenseQuery
+>;
+export type GetCeClientEligibleUnitGroupsQueryResult = Apollo.QueryResult<
+  GetCeClientEligibleUnitGroupsQuery,
+  GetCeClientEligibleUnitGroupsQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
