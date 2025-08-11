@@ -3,9 +3,11 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import CommonTabs from '@/components/elements/CommonTabs';
 import { SendIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
+import NotFound from '@/components/pages/NotFound';
 import ProjectOutgoingReferralsTable from '@/modules/ce/components/directReferral/ProjectOutgoingReferralsTable';
 import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
+import { useProjectCeVisibility } from '@/modules/ce/hooks/useProjectCeVisibility';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -13,34 +15,13 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const ProjectCeReferralsPage: React.FC = () => {
   const { project } = useProjectDashboardContext();
 
-  // CE Referral features this project supports
-  const { sendsDirectReferrals, supportsReferrals, supportsWaitlistReferrals } =
-    project.coordinatedEntryFeatures || {};
-
-  // User permissions related to CE Referrals
-  const {
-    canManageOutgoingReferrals,
-    canViewReferrals,
-    canViewOwnReferrals,
-    canViewUnits,
-  } = project.access;
-
-  // If the project supports referrals AND the user can view referrals, show the Referrals tab
-  const showReferralsTab =
-    supportsReferrals && (canViewReferrals || canViewOwnReferrals);
-
-  // If the project supports *waitlist* referrals AND the user can view units, show the Units tab.
-  // Only waitlist (not direct) referrals because it doesn't make sense to link to a unit from here if it doesn't have waitlist.
-  const showAvailableUnitsTab = supportsWaitlistReferrals && canViewUnits;
-
-  // If the project can send direct referrals AND the user has permission to manage outgoing referrals, show the Outgoing Referrals tab
-  const showOutgoingReferrals =
-    sendsDirectReferrals && canManageOutgoingReferrals;
+  const { showReferrals, showAvailableUnits, showOutgoingReferrals } =
+    useProjectCeVisibility(project);
 
   const tabDefinitions = useMemo(() => {
     const defs = [];
 
-    if (showReferralsTab) {
+    if (showReferrals) {
       defs.push({
         title: 'Referrals',
         key: 'referrals',
@@ -48,7 +29,7 @@ const ProjectCeReferralsPage: React.FC = () => {
       });
     }
 
-    if (showAvailableUnitsTab) {
+    if (showAvailableUnits) {
       defs.push({
         title: 'Available Units',
         key: 'available-units',
@@ -64,12 +45,7 @@ const ProjectCeReferralsPage: React.FC = () => {
       });
     }
     return defs;
-  }, [
-    project.id,
-    showAvailableUnitsTab,
-    showOutgoingReferrals,
-    showReferralsTab,
-  ]);
+  }, [project.id, showAvailableUnits, showOutgoingReferrals, showReferrals]);
 
   const actions = useMemo(() => {
     if (showOutgoingReferrals) {
@@ -85,6 +61,10 @@ const ProjectCeReferralsPage: React.FC = () => {
       );
     }
   }, [project.id, showOutgoingReferrals]);
+
+  if (tabDefinitions.length === 0) {
+    return <NotFound />;
+  }
 
   return (
     <>

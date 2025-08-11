@@ -43,6 +43,9 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
   const { status } = opportunity;
 
   const columns = useMemo(() => {
+    const canStartReferrals =
+      project.access.canStartReferrals && project.access.canViewReferrals;
+
     return [
       ...COLUMNS,
       {
@@ -53,7 +56,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
             recordName={`ID ${row.id}`}
             primaryAction={
               status === CeOpportunityStatus.Open &&
-              project.access.canStartReferrals && (
+              canStartReferrals && (
                 <StartReferralButton
                   opportunity={opportunity}
                   candidate={row}
@@ -64,7 +67,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
         ),
       },
     ];
-  }, [project.access.canStartReferrals, opportunity, status]);
+  }, [project.access, opportunity, status]);
 
   // If CandidatePool has not been generated yet (due to change in eligibility or prioritization requirements), show a message
   if (!opportunity.candidatesGeneratedAt) {
