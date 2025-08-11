@@ -20,8 +20,7 @@ interface AltAhaScoreProps extends DynamicInputCommonProps {
   handlers?: FormDefinitionHandlers;
 }
 
-// Simple input component for calculating Alt AHA score. Shows a button to calculate the score
-// based on current form values, and displays the result.
+// Shows a button to calculate the score based on current form values, and displays the result.
 const AltAhaScore = ({
   value,
   onChange,
@@ -29,7 +28,6 @@ const AltAhaScore = ({
   disabled = false,
   handlers,
 }: AltAhaScoreProps) => {
-  const { identifier } = useDynamicFormContext();
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   const [calculateAltAhaScore, { loading }] = useCalculateAltAhaScoreMutation({
@@ -50,6 +48,8 @@ const AltAhaScore = ({
       setErrorState({ ...emptyErrorState, apolloError });
     },
   });
+
+  const { identifier } = useDynamicFormContext();
 
   const handleFetch = useCallback(() => {
     const enrollmentId = handlers?.localConstants.enrollmentId;
