@@ -173,19 +173,15 @@ query GetAdminCeReferrals(
 query GetAdminConsolidatedWaitlist(
   $limit: Int = 25
   $offset: Int = 0
-) # $filters: ConsolidatedWaitlistFilterOptions = null
-{
+  $filters: CeClientFilterOptions = null
+) {
   ceConsolidatedWaitlist {
-    ceClients(limit: $limit, offset: $offset) {
+    ceClients(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount
       nodes {
-        id
-        destinationClientId
-        sourceClientIds
-        clientName
-        aggregatedClientAttributes
+        ...CeClientFields
       }
     }
   }

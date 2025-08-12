@@ -587,19 +587,34 @@ export type CeCandidatesPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
+/**
+ * A client who is a candidate for Coordinated Entry (CE), represented by a
+ * ClientProxy. Underlying client record is Destination Client.
+ */
 export type CeClient = {
   __typename?: 'CeClient';
+  /** Aggregated client attributes from all candidate pools */
   aggregatedClientAttributes: Scalars['JSON']['output'];
   clientName: Scalars['String']['output'];
   destinationClientId: Scalars['ID']['output'];
+  externalIds: Array<ExternalIdentifier>;
   id: Scalars['ID']['output'];
   sourceClientIds: Array<Scalars['ID']['output']>;
+  /** Unit groups that this client is a candidate for */
   unitGroupsCandidates: CeUnitGroupCandidatesPaginated;
 };
 
+/**
+ * A client who is a candidate for Coordinated Entry (CE), represented by a
+ * ClientProxy. Underlying client record is Destination Client.
+ */
 export type CeClientUnitGroupsCandidatesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CeClientFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CeClientsPaginated = {
@@ -627,6 +642,7 @@ export type CeConsolidatedWaitlistCeClientArgs = {
 };
 
 export type CeConsolidatedWaitlistCeClientsArgs = {
+  filters?: InputMaybe<CeClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -18035,6 +18051,23 @@ export type CeReferralSourceEnrollmentFieldsFragment = {
   };
 };
 
+export type CeClientFieldsFragment = {
+  __typename?: 'CeClient';
+  id: string;
+  destinationClientId: string;
+  sourceClientIds: Array<string>;
+  clientName: string;
+  aggregatedClientAttributes: any;
+  externalIds: Array<{
+    __typename?: 'ExternalIdentifier';
+    id: string;
+    identifier?: string | null;
+    url?: string | null;
+    label: string;
+    type: ExternalIdentifierType;
+  }>;
+};
+
 export type CeUnitGroupCandidateFieldsFragment = {
   __typename?: 'CeUnitGroupCandidate';
   id: string;
@@ -21188,6 +21221,7 @@ export type GetAdminCeReferralsQuery = {
 export type GetAdminConsolidatedWaitlistQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeClientFilterOptions>;
 }>;
 
 export type GetAdminConsolidatedWaitlistQuery = {
@@ -21206,6 +21240,14 @@ export type GetAdminConsolidatedWaitlistQuery = {
         sourceClientIds: Array<string>;
         clientName: string;
         aggregatedClientAttributes: any;
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+          type: ExternalIdentifierType;
+        }>;
       }>;
     };
   };
@@ -49031,6 +49073,19 @@ export const CeReferralSourceEnrollmentFieldsFragmentDoc = gql`
     }
   }
 `;
+export const CeClientFieldsFragmentDoc = gql`
+  fragment CeClientFields on CeClient {
+    id
+    destinationClientId
+    sourceClientIds
+    clientName
+    aggregatedClientAttributes
+    externalIds {
+      ...ClientIdentifierFields
+    }
+  }
+  ${ClientIdentifierFieldsFragmentDoc}
+`;
 export const CeUnitGroupCandidateFieldsFragmentDoc = gql`
   fragment CeUnitGroupCandidateFields on CeUnitGroupCandidate {
     id
@@ -53971,22 +54026,23 @@ export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
   GetAdminCeReferralsQueryVariables
 >;
 export const GetAdminConsolidatedWaitlistDocument = gql`
-  query GetAdminConsolidatedWaitlist($limit: Int = 25, $offset: Int = 0) {
+  query GetAdminConsolidatedWaitlist(
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: CeClientFilterOptions = null
+  ) {
     ceConsolidatedWaitlist {
-      ceClients(limit: $limit, offset: $offset) {
+      ceClients(limit: $limit, offset: $offset, filters: $filters) {
         offset
         limit
         nodesCount
         nodes {
-          id
-          destinationClientId
-          sourceClientIds
-          clientName
-          aggregatedClientAttributes
+          ...CeClientFields
         }
       }
     }
   }
+  ${CeClientFieldsFragmentDoc}
 `;
 
 /**
@@ -54003,6 +54059,7 @@ export const GetAdminConsolidatedWaitlistDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

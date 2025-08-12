@@ -1,127 +1,38 @@
 import { Paper, Stack } from '@mui/material';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
+import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
+import useDebouncedState from '@/hooks/useDebouncedState';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import ConsolidatedWaitlistDialog from '@/modules/ce/components/admin/ConsolidatedWaitlistDialog';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  CeClientFieldsFragment,
+  ExternalIdentifierType,
   GetAdminConsolidatedWaitlistDocument,
   GetAdminConsolidatedWaitlistQuery,
   GetAdminConsolidatedWaitlistQueryVariables,
   useGetConsolidatedWaitlistColumnsQuery,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
+import { generateSafePath } from '@/utils/pathEncoding';
 
-type Row = NonNullable<
-  GetAdminConsolidatedWaitlistQuery['ceConsolidatedWaitlist']['ceClients']
->['nodes'][0];
+type Row = CeClientFieldsFragment;
 
 const COLUMNS: DataColumnDef<
   Row,
   GetAdminConsolidatedWaitlistQueryVariables
 >[] = [
-  // {
-  //   key: 'clientId',
-  //   header: 'Client ID',
-  //   render: 'clientId',
-  // },
   {
     key: 'clientName',
     header: 'Client Name',
     render: 'clientName',
   },
-  // {
-  //   key: 'projectName',
-  //   header: 'Project',
-  //   render: 'projectName',
-  // },
-  // {
-  //   key: 'unitGroupName',
-  //   header: 'Unit Group',
-  //   render: 'unitGroupName',
-  // },
-
-  // // {
-  // //   key: 'projectId',
-  // //   header: 'Project ID',
-  // //   render: 'projectId',
-  // // },
-  // {
-  //   key: 'organizationName',
-  //   header: 'Organization',
-  //   render: 'organizationName',
-  //   optional: { defaultHidden: true },
-  // },
-  // {
-  //   key: 'whenAddedToCandidatePool',
-  //   header: 'Added to Waitlist',
-  //   render: ({ whenAddedToCandidatePool }) =>
-  //     whenAddedToCandidatePool
-  //       ? parseAndFormatDateTime(whenAddedToCandidatePool)
-  //       : '',
-  //   optional: { defaultHidden: false },
-  // },
-  // {
-  //   key: 'whenUpdatedInCandidatePool',
-  //   header: 'Updated in Waitlist',
-  //   render: ({ whenUpdatedInCandidatePool }) =>
-  //     whenUpdatedInCandidatePool
-  //       ? parseAndFormatDateTime(whenUpdatedInCandidatePool)
-  //       : '',
-  //   optional: { defaultHidden: false },
-  // },
-  // {
-  //   key: 'priorityScore',
-  //   header: 'Priority Score',
-  //   render: 'priorityScore',
-  // },
-  // {
-  //   key: 'clientAge',
-  //   header: 'Client Age',
-  //   render: 'clientAge',
-  //   optional: { defaultHidden: false },
-  // },
-  // {
-  //   key: 'status',
-  //   header: 'Status',
-  //   render: (row) => (
-  //     <Chip
-  //       label={
-  //         row.vacancies > 0
-  //           ? 'Eligible - Vacancies Available'
-  //           : 'Eligible - No Vacancies'
-  //       }
-  //       color={row.vacancies > 0 ? 'primary' : 'grayscale'}
-  //       size='small'
-  //       variant='status'
-  //     />
-  //   ),
-  // },
-  // {
-  //   key: 'vacancies',
-  //   header: 'Availability',
-  //   render: (row) => `${row.vacancies}/${row.capacity} Units Available`,
-  //   optional: { defaultHidden: false },
-  // },
-  // {
-  //   key: 'clientAttributes',
-  //   header: 'Client Attributes',
-  //   render: ({ clientAttributes }) => {
-  //     return (
-  //       <>
-  //         {Object.keys(clientAttributes).map((key) => (
-  //           <div key={key}>
-  //             <strong>{key}:</strong>{' '}
-  //             {ensureArray(clientAttributes[key]).join(', ')}
-  //           </div>
-  //         ))}
-  //       </>
-  //     );
-  //   },
-  // },
 ];
 
 function clientAttributeDisplay(
@@ -136,30 +47,58 @@ function clientAttributeDisplay(
 
 interface Props {}
 const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
-  const { data, loading, error } = useGetConsolidatedWaitlistColumnsQuery();
+  // Feature flags to check whether to show MCI ID column
+  const { globalFeatureFlags: { mciIdEnabled } = {} } = useGlobalFeatureFlags();
+  // Fetch column configuration for consolidated waitlist
+  const {
+    data: { ceConsolidatedWaitlist } = {},
+    loading,
+    error,
+  } = useGetConsolidatedWaitlistColumnsQuery();
+
+  // Internal state for search and dialog
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
   const [selectedRow, setSelectedRow] = React.useState<Row | null>(null);
 
+  // Define table columns (Default + MCI + Custom configured)
   const columnsWithCustom = useMemo(() => {
-    if (!data || !data.ceConsolidatedWaitlist?.clientAttributeColumns)
-      return COLUMNS;
-    const customColumns =
-      data.ceConsolidatedWaitlist.clientAttributeColumns.map(
-        ({ key, value }) => ({
-          key: key,
-          header: value,
-          render: (row: Row) => clientAttributeDisplay(row, key),
-        })
-      );
-    return [...COLUMNS, ...customColumns];
-  }, [data]);
+    const customColumns = ceConsolidatedWaitlist?.clientAttributeColumns.map(
+      ({ key, value }) => ({
+        key: key,
+        header: value,
+        render: (row: Row) => clientAttributeDisplay(row, key),
+      })
+    );
+    return [
+      ...COLUMNS,
+      ...(mciIdEnabled
+        ? [externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID')]
+        : []),
+      ...(customColumns || []),
+    ];
+  }, [ceConsolidatedWaitlist, mciIdEnabled]);
 
   const filters = useFilters({
-    type: 'CeReferralFilterOptions',
-    omit: ['workflowTemplate'],
+    type: 'CeClientFilterOptions',
+    omit: ['searchTerm'],
   });
 
+  const rowSecondaryActionConfigs = useCallback((row: Row) => {
+    if (!row.sourceClientIds || row.sourceClientIds.length === 0) return [];
+    return [
+      {
+        title: 'View Client',
+        key: 'viewClient',
+        ariaLabel: `View Client, ${row.clientName}`,
+        to: generateSafePath(ClientDashboardRoutes.PROFILE, {
+          clientId: row.sourceClientIds[0],
+        }),
+      },
+    ];
+  }, []);
+
   if (error) throw error;
-  if (loading && !data) return <Loading />;
+  if (loading && !ceConsolidatedWaitlist) return <Loading />;
 
   return (
     <Stack spacing={2}>
@@ -167,8 +106,8 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
         label='Search clients'
         name='search clients'
         placeholder='Search client by name or ID'
-        value={''}
-        onChange={() => {}}
+        value={search}
+        onChange={setSearch}
         fullWidth
         size='small'
         searchAdornment
@@ -180,23 +119,17 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
           Row
         >
           columns={columnsWithCustom}
-          queryVariables={{}}
+          queryVariables={{
+            filters: { searchTerm: debouncedSearch || undefined },
+          }}
           queryDocument={GetAdminConsolidatedWaitlistDocument}
           pagePath='ceConsolidatedWaitlist.ceClients'
           noData='No clients'
           paginationItemName='client'
           filters={filters}
           handleRowClick={(row) => setSelectedRow(row)}
-          // TODO: make linking to client profile a secondary action
-          // rowLinkTo={(row) =>
-          //   row.sourceClientIds.length > 0
-          //     ? generateSafePath(ClientDashboardRoutes.PROFILE, {
-          //         clientId: row.sourceClientIds[0],
-          //       })
-          //     : undefined
-          // }
           rowActionTitle='View Eligible Projects'
-          // rowSecondaryActionConfigs={rowSecondaryActions}
+          rowSecondaryActionConfigs={rowSecondaryActionConfigs}
         />
       </Paper>
       {selectedRow && (

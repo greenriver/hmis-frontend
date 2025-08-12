@@ -5,8 +5,6 @@ import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
   CeUnitGroupCandidateFieldsFragment,
   GetCeClientEligibleUnitGroupsDocument,

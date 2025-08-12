@@ -365,6 +365,16 @@ fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
   }
 }
 
+fragment CeClientFields on CeClient {
+  id
+  destinationClientId
+  sourceClientIds
+  clientName
+  aggregatedClientAttributes
+  externalIds {
+    ...ClientIdentifierFields
+  }
+}
 fragment CeUnitGroupCandidateFields on CeUnitGroupCandidate {
   id
   unitGroupName
