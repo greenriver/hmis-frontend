@@ -193,6 +193,11 @@ query GetConsolidatedWaitlistColumns {
       key
       value
     }
+    availableFilters {
+      key
+      label
+      values
+    }
   }
 }
 query GetCeClientEligibleUnitGroups(

@@ -614,6 +614,7 @@ export type CeClientUnitGroupsCandidatesArgs = {
 };
 
 export type CeClientFilterOptions = {
+  dynamicFilters?: InputMaybe<Array<DynamicFilter>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -630,6 +631,7 @@ export type CeClientsPaginated = {
 
 export type CeConsolidatedWaitlist = {
   __typename?: 'CeConsolidatedWaitlist';
+  availableFilters: Array<DynamicFilterConfig>;
   ceClient?: Maybe<CeClient>;
   /** Clients who belong to at least one CE candidate pool */
   ceClients: CeClientsPaginated;
@@ -2758,6 +2760,25 @@ export enum DisplayHook {
   /** Display value as a column when viewing a table of records (e.g. Current Living Situations) */
   TableSummary = 'TABLE_SUMMARY',
 }
+
+/** Represents a dynamic filter that can be applied to queries. */
+export type DynamicFilter = {
+  /** The key or field name to filter on. Must match key on DynamicFilterConfig. */
+  key: Scalars['String']['input'];
+  /** The value to filter by. Must match one of the values on DynamicFilterConfig. */
+  values?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+/** Represents an available dynamic filter configuration. */
+export type DynamicFilterConfig = {
+  __typename?: 'DynamicFilterConfig';
+  /** The key or field name of the filter. */
+  key: Scalars['String']['output'];
+  /** The display label for the filter. */
+  label: Scalars['String']['output'];
+  /** The list of possible values for this filter. */
+  values: Array<Scalars['String']['output']>;
+};
 
 /** HUD Employment Education */
 export type EmploymentEducation = {
@@ -21265,6 +21286,12 @@ export type GetConsolidatedWaitlistColumnsQuery = {
       __typename?: 'KeyValue';
       key: string;
       value?: string | null;
+    }>;
+    availableFilters: Array<{
+      __typename?: 'DynamicFilterConfig';
+      key: string;
+      label: string;
+      values: Array<string>;
     }>;
   };
 };
@@ -54123,6 +54150,11 @@ export const GetConsolidatedWaitlistColumnsDocument = gql`
       clientAttributeColumns {
         key
         value
+      }
+      availableFilters {
+        key
+        label
+        values
       }
     }
   }

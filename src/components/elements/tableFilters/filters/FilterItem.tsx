@@ -10,6 +10,7 @@ import TableFilterItemSelect from './items/TableFilterItemSelect';
 import { TableFilterItemSelectorProps } from './items/types';
 import { FilterType } from '@/modules/dataFetching/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
+import { PickListOption } from '@/types/gqlTypes';
 
 const TableFilterItemSelector = ({
   variant = 'select',
@@ -80,6 +81,23 @@ const TableFilterItem = <T,>({
             <TableFilterItemSelector
               variant={variant}
               options={options}
+              value={filter.multi ? value || [] : value}
+              onChange={onChange}
+              placeholder={placeholder}
+            />
+          );
+        }
+
+        if (filter.type === 'select') {
+          const options: PickListOption[] = filter.options.map(
+            ({ value, display }) => ({
+              code: value.toString(),
+              label: (display || value).toString(),
+            })
+          );
+          return (
+            <TableFilterItemSelector
+              options={options || []}
               value={filter.multi ? value || [] : value}
               onChange={onChange}
               placeholder={placeholder}

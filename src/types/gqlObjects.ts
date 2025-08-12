@@ -2901,6 +2901,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'DynamicFilterConfig',
+    fields: [
+      {
+        name: 'key',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'label',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'values',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'EmploymentEducation',
     fields: [
       {
@@ -7945,6 +7982,22 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'CeClientFilterOptions',
     args: [
       {
+        name: 'dynamicFilters',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'INPUT_OBJECT',
+              name: 'DynamicFilter',
+              ofType: null,
+            },
+          },
+        },
+      },
+      {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -8747,6 +8800,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'DynamicFilter',
+    args: [
+      {
+        name: 'key',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'values',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
         },
       },
     ],

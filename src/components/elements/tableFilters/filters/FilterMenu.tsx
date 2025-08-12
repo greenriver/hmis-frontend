@@ -8,6 +8,7 @@ import TableControlPopover from './TableControlPopover';
 import { FilterIcon } from '@/components/elements/SemanticIcons';
 import useIntermediateState from '@/hooks/useIntermediateState';
 import { FilterType } from '@/modules/dataFetching/types';
+import { ensureArray } from '@/utils/arrays';
 
 export interface TableFilterMenuProps<T> {
   filters: Partial<Record<keyof T, FilterType<T>>>;
@@ -42,18 +43,33 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
     return { filterCount, filterHint };
   }, [props.filterValues, props.filters]);
 
-  const cleanedValues = useCallback((values: Partial<T>) => {
-    const cleaned: typeof values = {};
-    Object.keys(values).forEach((key) => {
-      const val = values[key as keyof T];
-      if (val && isDate(val) && !isValid(val)) {
-        // skip invalid dates
-      } else {
-        cleaned[key as keyof T] = val;
-      }
-    });
-    return cleaned;
-  }, []);
+  const cleanedValues = useCallback(
+    (values: Partial<T>) => {
+      console.log('cleaning', values, props.filters);
+
+      const cleaned: typeof values = {};
+      Object.keys(values).forEach((key) => {
+        const isDynamicFilter = true; // props.filters[key as keyof T]?.dynamic;
+        const val = values[key as keyof T];
+        if (val && isDate(val) && !isValid(val)) {
+          // skip invalid dates
+        } else {
+          if (isDynamicFilter) {
+            cleaned.dynamicFilters ||= [];
+            cleaned.dynamicFilters.push({
+              key,
+              values: ensureArray(val),
+            });
+          } else {
+            cleaned[key as keyof T] = val;
+          }
+        }
+      });
+      console.log('cleaned', cleaned);
+      return cleaned;
+    },
+    [props.filters]
+  );
 
   return (
     <TableControlPopover

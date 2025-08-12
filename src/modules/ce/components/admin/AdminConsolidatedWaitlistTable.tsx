@@ -81,7 +81,9 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   const filters = useFilters({
     type: 'CeClientFilterOptions',
     omit: ['searchTerm'],
+    dynamicFilters: ceConsolidatedWaitlist?.availableFilters,
   });
+  // console.log('dynamic filters', ceConsolidatedWaitlist?.availableFilters);
 
   const rowSecondaryActionConfigs = useCallback((row: Row) => {
     if (!row.sourceClientIds || row.sourceClientIds.length === 0) return [];

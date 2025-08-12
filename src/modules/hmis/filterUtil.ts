@@ -9,6 +9,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
 import {
   AssessmentSortOption,
+  DynamicFilterConfig,
   EnrollmentSortOption,
   HouseholdSortOption,
   PickListType,
@@ -126,11 +127,13 @@ interface FilterParams {
   type?: string | null; // filter input type type for inferring filters if not provided
   pickListArgs?: PickListArgs; // optional: pick list args to be applied to all PickList filter items
   omit?: Array<string>; // optional: skip some filters
+  dynamicFilters?: DynamicFilterConfig[]; // optional: dynamic filters include
 }
 export function useFilters<T>({
   type,
   pickListArgs = {},
   omit = [],
+  dynamicFilters,
 }: FilterParams): TableFilterType<T> {
   return useMemo(() => {
     if (!type) return {};
@@ -152,6 +155,20 @@ export function useFilters<T>({
       }
     });
 
+    // Add dynamic filters if provided
+    // FIXME: this should make sure they're allowed on the type.
+    if (dynamicFilters) {
+      dynamicFilters.forEach(({ key, label, values }) => {
+        result[key as keyof T] = {
+          key,
+          label,
+          multi: true,
+          type: 'select',
+          options: values.map((value) => ({ value, display: value })),
+        } as FilterType<T>;
+      });
+    }
+
     return result;
-  }, [type, pickListArgs, omit]);
+  }, [type, dynamicFilters, omit, pickListArgs]);
 }
