@@ -43,13 +43,23 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
     return { filterCount, filterHint };
   }, [props.filterValues, props.filters]);
 
+  const { setFilterValues } = props;
+  const handleSetFilterValues = useCallback(
+    (values) => {
+      // TODO pull out dynamic filters here, instead of in cleanedValues
+      setFilterValues(values);
+    },
+    [setFilterValues]
+  );
   const cleanedValues = useCallback(
     (values: Partial<T>) => {
       console.log('cleaning', values, props.filters);
 
-      const cleaned: typeof values = {};
+      const cleaned: typeof values & {
+        dynamicFilters?: Array<{ key: string; values: any[] }>;
+      } = {};
       Object.keys(values).forEach((key) => {
-        const isDynamicFilter = true; // props.filters[key as keyof T]?.dynamic;
+        const isDynamicFilter = !!props.filters[key as keyof T]?.isDynamic;
         const val = values[key as keyof T];
         if (val && isDate(val) && !isValid(val)) {
           // skip invalid dates

@@ -164,6 +164,7 @@ export function useFilters<T>({
           label,
           multi: true,
           type: 'select',
+          isDynamic: true,
           options: values.map((value) => ({ value, display: value })),
         } as FilterType<T>;
       });

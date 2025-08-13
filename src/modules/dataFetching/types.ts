@@ -10,6 +10,7 @@ export interface BaseFilter<I> {
   multi?: boolean;
   toInput?: (value: any) => I;
   fromInput?: (value: I) => any;
+  isDynamic?: boolean;
 }
 
 export type SelectElementVariant = 'checkboxes' | 'select' | 'togglebuttons';
