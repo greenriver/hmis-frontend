@@ -1,20 +1,29 @@
-import { Paper } from '@mui/material';
+import { Paper, TableCell, TableRow } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
+import CommonTableDisplayToggle, {
+  DisplayType,
+} from '@/components/elements/CommonTableDisplayToggle';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
+import PrintViewButton from '@/components/layout/PrintViewButton';
 import NotFound from '@/components/pages/NotFound';
+import ClientCaseNoteCard from '@/modules/caseNotes/components/ClientCaseNoteCard';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientCaseNotesDocument,
   GetClientCaseNotesQuery,
   GetClientCaseNotesQueryVariables,
   RecordFormRole,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type Row = NonNullable<
   GetClientCaseNotesQuery['client']
@@ -57,11 +66,32 @@ const ClientCaseNotes = () => {
     maxWidth: 'sm',
   });
 
+  // type of display (table or cards)
+  const [displayType, setDisplayType] = useState<DisplayType>('table');
+
+  const columns = useMemo(() => {
+    return displayType === 'cards' ? [] : COLUMNS;
+  }, [displayType]);
+
   if (!clientId) return <NotFound />;
 
   return (
     <>
-      <PageTitle title='Case Notes' />
+      <PageTitle
+        title='Case Notes'
+        actions={
+          client.access.canPrintClientCaseNotes && (
+            <PrintViewButton
+              openInNew
+              to={generateSafePath(ClientDashboardRoutes.PRINT_ALL_CASE_NOTES, {
+                clientId,
+              })}
+            >
+              Print
+            </PrintViewButton>
+          )
+        }
+      />
       <Paper>
         <GenericTableWithData<
           GetClientCaseNotesQuery,
@@ -70,7 +100,7 @@ const ClientCaseNotes = () => {
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientCaseNotesDocument}
-          columns={COLUMNS}
+          columns={columns}
           handleRowClick={(row) => onSelectRecord(row)}
           rowName={(row) =>
             `${parseAndFormatDate(row.informationDate)} at ${row.enrollment.projectName}`
@@ -88,6 +118,29 @@ const ClientCaseNotes = () => {
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar
+          tableDisplayOptionButtons={
+            <CommonTableDisplayToggle
+              value={displayType}
+              onChange={setDisplayType}
+            />
+          }
+          renderRow={
+            displayType === 'cards'
+              ? (caseNote) => (
+                  <TableRow key={caseNote.id}>
+                    <TableCell colSpan={columns.length} sx={{ px: 0, py: 0 }}>
+                      <ClientCaseNoteCard
+                        key={caseNote.id}
+                        caseNote={caseNote}
+                        sx={{ border: 'none' }}
+                        client={client}
+                        linkToEnrollment
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              : undefined
+          }
         />
       </Paper>
       {viewRecordDialog()}

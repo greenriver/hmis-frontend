@@ -49,6 +49,7 @@ import BedNightsPage from '@/modules/bulkServices/components/BedNightsPage';
 import BulkServicesPage from '@/modules/bulkServices/components/BulkServicesPage';
 
 import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
+import ClientCaseNotesPrintPage from '@/modules/caseNotes/components/ClientCaseNotesPrintPage';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
 import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinatedEntry';
@@ -737,6 +738,17 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientCaseNotes />
+              </ClientRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.PRINT_ALL_CASE_NOTES,
+            element: (
+              <ClientRoute
+                permissions='canViewEnrollmentDetails'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <ClientCaseNotesPrintPage />
               </ClientRoute>
             ),
           },

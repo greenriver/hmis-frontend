@@ -63,6 +63,7 @@ const DynamicFormField: React.FC<Props> = ({
             clientId={clientId}
             key={item.linkId}
             nestingLevel={nestingLevel}
+            handlers={handlers}
             renderChildItem={(item, props, fn) => (
               <DynamicFormField
                 key={item.linkId}
