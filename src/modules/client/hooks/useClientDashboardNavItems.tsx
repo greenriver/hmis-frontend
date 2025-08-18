@@ -63,7 +63,6 @@ export const useClientDashboardNavItems = (
             id: 'case-notes',
             title: 'Case Notes',
             path: ClientDashboardRoutes.CASE_NOTES,
-            // enabledFeatures undefined?
             hide: !enabledFeatures.includes(ClientDashboardFeature.CaseNote),
           },
         ],

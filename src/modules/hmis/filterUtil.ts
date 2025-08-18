@@ -127,7 +127,7 @@ interface FilterParams {
   type?: string | null; // filter input type type for inferring filters if not provided
   pickListArgs?: PickListArgs; // optional: pick list args to be applied to all PickList filter items
   omit?: Array<string>; // optional: skip some filters
-  dynamicFilters?: DynamicFilterConfig[]; // optional: dynamic filters include
+  dynamicFilters?: DynamicFilterConfig[]; // optional: dynamic filters to include
 }
 export function useFilters<T>({
   type,
