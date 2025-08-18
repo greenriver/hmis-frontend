@@ -22,6 +22,7 @@ const withValueLimit = ({ floatValue }: NumberFormatValues) => {
 interface Props extends TextInputProps {
   onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   currency?: boolean;
+  decimalScale?: number;
 }
 
 const NumberInput: React.FC<Props> = ({
@@ -30,6 +31,7 @@ const NumberInput: React.FC<Props> = ({
   max,
   InputProps,
   currency = false,
+  decimalScale: decimalScaleProp,
   value,
   error,
   helperText,
@@ -57,7 +59,8 @@ const NumberInput: React.FC<Props> = ({
     }
 
     if (typeof value === 'string') {
-      parsed = currency ? parseFloat(value) : parseInt(value);
+      parsed =
+        currency || !!decimalScaleProp ? parseFloat(value) : parseInt(value);
     } else if (typeof value === 'number') {
       parsed = value;
     } else {
@@ -74,9 +77,9 @@ const NumberInput: React.FC<Props> = ({
     } else {
       setErrorMessage(null);
     }
-  }, [value, min, max, currency]);
+  }, [value, min, max, currency, decimalScaleProp]);
 
-  const decimalScale = currency ? 2 : 0;
+  const decimalScale = currency ? 2 : decimalScaleProp || 0;
   const prefix = currency ? '$' : undefined;
 
   const handleChange: OnValueChange = (v) => {

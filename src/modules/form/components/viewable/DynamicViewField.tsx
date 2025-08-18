@@ -118,6 +118,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     case ItemType.String:
       return <TextContent {...commonProps} />;
     case ItemType.Integer:
+    case ItemType.Decimal:
       if (item.component === Component.MinutesDuration) {
         return (
           <TextContent

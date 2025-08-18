@@ -51,7 +51,12 @@ export const FORM_ITEM_PALETTE = {
   [ItemType.Integer]: {
     itemType: ItemType.Integer,
     IconClass: FormIntegerIcon,
-    displayName: 'Number',
+    displayName: 'Integer',
+  },
+  [ItemType.Decimal]: {
+    itemType: ItemType.Decimal,
+    IconClass: FormIntegerIcon,
+    displayName: 'Decimal Number',
   },
   [ItemType.Currency]: {
     itemType: ItemType.Currency,

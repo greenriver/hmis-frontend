@@ -4448,6 +4448,7 @@ export enum ItemType {
   Choice = 'CHOICE',
   Currency = 'CURRENCY',
   Date = 'DATE',
+  Decimal = 'DECIMAL',
   Display = 'DISPLAY',
   File = 'FILE',
   Geolocation = 'GEOLOCATION',

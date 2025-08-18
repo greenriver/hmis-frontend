@@ -266,6 +266,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.Integer:
     case ItemType.Currency:
+    case ItemType.Decimal:
       if (item.component === Component.MinutesDuration)
         return (
           <InputContainer {...commonContainerProps}>
@@ -283,6 +284,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEvent}
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
+            decimalScale={item.type === ItemType.Decimal ? 3 : undefined}
             {...commonInputProps}
             inputWidth={120}
           />

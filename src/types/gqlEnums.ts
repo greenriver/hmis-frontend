@@ -803,6 +803,7 @@ export const HmisEnums = {
     CHOICE: 'CHOICE',
     CURRENCY: 'CURRENCY',
     DATE: 'DATE',
+    DECIMAL: 'DECIMAL',
     DISPLAY: 'DISPLAY',
     FILE: 'FILE',
     GEOLOCATION: 'GEOLOCATION',
