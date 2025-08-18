@@ -42,7 +42,8 @@ export interface EnumFilter<I> extends BaseFilter<I> {
 
 export interface PickListFilter<I> extends BaseFilter<I> {
   type: 'picklist';
-  pickListReference: PickListType; // name of remote pick list
+  pickListReference?: PickListType; // name of remote pick list
+  pickListOptions?: PickListOption[]; // override picklist options
   variant?: SelectElementVariant;
   pickListArgs?: PickListArgs;
 }

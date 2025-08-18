@@ -8,7 +8,7 @@ import PickListWrapper from './items/PickListWrapper';
 import TableFilterItemSelect from './items/TableFilterItemSelect';
 
 import { TableFilterItemSelectorProps } from './items/types';
-import { FilterType } from '@/modules/dataFetching/types';
+import { FilterType, SelectElementVariant } from '@/modules/dataFetching/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
@@ -20,6 +20,19 @@ const TableFilterItemSelector = ({
   if (variant === 'select') return <TableFilterItemSelect {...props} />;
 
   return <TableFilterItemSelect {...props} />;
+};
+
+const selectDefaultFilterVariant = (filter: {
+  variant?: SelectElementVariant;
+  pickListOptions?: PickListOption[];
+  multi?: boolean;
+}): SelectElementVariant => {
+  return (
+    filter.variant ||
+    (filter.pickListOptions && filter.pickListOptions.length < 3 && filter.multi
+      ? 'checkboxes'
+      : 'select')
+  );
 };
 
 export interface TableFilterItemProps<T> {
@@ -74,9 +87,7 @@ const TableFilterItem = <T,>({
             filter.pickListOptions ||
             localResolvePickList(filter.enumType, true) ||
             [];
-          const variant =
-            filter.variant ||
-            (options.length < 3 && filter.multi ? 'checkboxes' : 'select');
+          const variant = selectDefaultFilterVariant(filter);
           return (
             <TableFilterItemSelector
               variant={variant}
@@ -88,24 +99,26 @@ const TableFilterItem = <T,>({
           );
         }
 
-        if (filter.type === 'select') {
-          const options: PickListOption[] = filter.options.map(
-            ({ value, display }) => ({
-              code: value.toString(),
-              label: (display || value).toString(),
-            })
-          );
-          return (
-            <TableFilterItemSelector
-              options={options || []}
-              value={filter.multi ? value || [] : value}
-              onChange={onChange}
-              placeholder={placeholder}
-            />
-          );
-        }
-
-        if (filter.type === 'picklist')
+        if (filter.type === 'picklist') {
+          if (filter.pickListOptions && filter.pickListOptions.length > 0) {
+            const variant = selectDefaultFilterVariant(filter);
+            return (
+              <TableFilterItemSelector
+                variant={variant}
+                options={filter.pickListOptions}
+                value={filter.multi ? value || [] : value}
+                onChange={onChange}
+                placeholder={placeholder}
+              />
+            );
+          }
+          if (!filter.pickListReference) {
+            throw new Error(
+              `Must define either pickListReference or pickListOptions for filter. ${JSON.stringify(
+                filter
+              )}`
+            );
+          }
           return (
             <PickListWrapper
               pickListType={filter.pickListReference}
@@ -123,7 +136,7 @@ const TableFilterItem = <T,>({
               )}
             </PickListWrapper>
           );
-
+        }
         return 'Not Implemented';
       })()}
     </LabelWithContent>

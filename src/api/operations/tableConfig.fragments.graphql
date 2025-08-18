@@ -1,0 +1,12 @@
+fragment TableFilterConfigFields on TableFilterConfig {
+  key
+  label
+  options {
+    ...PickListOptionFields
+  }
+}
+
+fragment TableColumnConfigFields on TableColumnConfig {
+  key
+  label
+}

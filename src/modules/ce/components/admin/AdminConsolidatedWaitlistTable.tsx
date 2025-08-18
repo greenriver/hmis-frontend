@@ -62,10 +62,10 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
 
   // Define table columns (Default + MCI + Custom configured)
   const columnsWithCustom = useMemo(() => {
-    const customColumns = ceConsolidatedWaitlist?.clientAttributeColumns.map(
-      ({ key, value }) => ({
+    const customColumns = ceConsolidatedWaitlist?.tableColumnConfigs.map(
+      ({ key, label }) => ({
         key: key,
-        header: value,
+        header: label,
         render: (row: Row) => clientAttributeDisplay(row, key),
       })
     );
@@ -81,7 +81,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   const filters = useFilters({
     type: 'CeClientFilterOptions',
     omit: ['searchTerm'],
-    dynamicFilters: ceConsolidatedWaitlist?.availableFilters,
+    dynamicFilters: ceConsolidatedWaitlist?.tableFilterConfigs,
   });
 
   const rowSecondaryActionConfigs = useCallback((row: Row) => {

@@ -615,7 +615,7 @@ export type CeClientEligibleUnitGroupsArgs = {
 };
 
 export type CeClientFilterOptions = {
-  dynamicFilters?: InputMaybe<Array<DynamicFilter>>;
+  dynamicFilters?: InputMaybe<Array<TableFilterValue>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -632,11 +632,11 @@ export type CeClientsPaginated = {
 
 export type CeConsolidatedWaitlist = {
   __typename?: 'CeConsolidatedWaitlist';
-  availableFilters: Array<DynamicFilterConfig>;
   /** Clients who belong to at least one CE candidate pool */
   ceClients: CeClientsPaginated;
   /** Columns available in the consolidated waitlist */
-  clientAttributeColumns: Array<KeyValue>;
+  tableColumnConfigs: Array<TableColumnConfig>;
+  tableFilterConfigs: Array<TableFilterConfig>;
 };
 
 export type CeConsolidatedWaitlistCeClientsArgs = {
@@ -2756,25 +2756,6 @@ export enum DisplayHook {
   /** Display value as a column when viewing a table of records (e.g. Current Living Situations) */
   TableSummary = 'TABLE_SUMMARY',
 }
-
-/** Represents a dynamic filter that can be applied to queries. */
-export type DynamicFilter = {
-  /** The key or field name to filter on. Must match key on DynamicFilterConfig. */
-  key: Scalars['String']['input'];
-  /** The value to filter by. Must match one of the values on DynamicFilterConfig. */
-  values?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
-/** Represents an available dynamic filter configuration. */
-export type DynamicFilterConfig = {
-  __typename?: 'DynamicFilterConfig';
-  /** The key or field name of the filter. */
-  key: Scalars['String']['output'];
-  /** The display label for the filter. */
-  label: Scalars['String']['output'];
-  /** The list of possible values for this filter. */
-  values: Array<Scalars['String']['output']>;
-};
 
 /** HUD Employment Education */
 export type EmploymentEducation = {
@@ -8371,6 +8352,31 @@ export enum TCellSourceViralLoadSource {
   /** (3) Other */
   Other = 'OTHER',
 }
+
+export type TableColumnConfig = {
+  __typename?: 'TableColumnConfig';
+  key: Scalars['String']['output'];
+  label: Scalars['String']['output'];
+};
+
+/** Represents a dynamic filter configuration. */
+export type TableFilterConfig = {
+  __typename?: 'TableFilterConfig';
+  /** The key or field name of the filter. */
+  key: Scalars['String']['output'];
+  /** The display label for the filter. */
+  label: Scalars['String']['output'];
+  /** The list of possible values for this filter. */
+  options: Array<PickListOption>;
+};
+
+/** Represents a dynamic filter that can be applied to queries. */
+export type TableFilterValue = {
+  /** The key or field name to filter on. Must match key on TableFilterConfiguration. */
+  key: Scalars['String']['input'];
+  /** The value to filter by. Must match one of the values on TableFilterConfiguration. */
+  values?: InputMaybe<Array<Scalars['String']['input']>>;
+};
 
 /** HUD TargetPopulation (2.02.7) */
 export enum TargetPopulation {
@@ -18100,7 +18106,6 @@ export type CeEligibleUnitGroupFieldsFragment = {
   organizationName: string;
   whenAddedToCandidatePool: string;
   whenUpdatedInCandidatePool: string;
-  totalUnits: number;
   unitsAcceptingReferrals: number;
 };
 
@@ -21283,16 +21288,27 @@ export type GetConsolidatedWaitlistColumnsQuery = {
   __typename?: 'Query';
   ceConsolidatedWaitlist: {
     __typename?: 'CeConsolidatedWaitlist';
-    clientAttributeColumns: Array<{
-      __typename?: 'KeyValue';
-      key: string;
-      value?: string | null;
-    }>;
-    availableFilters: Array<{
-      __typename?: 'DynamicFilterConfig';
+    tableColumnConfigs: Array<{
+      __typename?: 'TableColumnConfig';
       key: string;
       label: string;
-      values: Array<string>;
+    }>;
+    tableFilterConfigs: Array<{
+      __typename?: 'TableFilterConfig';
+      key: string;
+      label: string;
+      options: Array<{
+        __typename?: 'PickListOption';
+        code: string;
+        label?: string | null;
+        secondaryLabel?: string | null;
+        groupLabel?: string | null;
+        groupCode?: string | null;
+        initialSelected?: boolean | null;
+        helperText?: string | null;
+        numericValue?: number | null;
+        disabled?: boolean | null;
+      }>;
     }>;
   };
 };
@@ -21321,7 +21337,6 @@ export type GetCeClientEligibleUnitGroupsQuery = {
         organizationName: string;
         whenAddedToCandidatePool: string;
         whenUpdatedInCandidatePool: string;
-        totalUnits: number;
         unitsAcceptingReferrals: number;
       }>;
     };
@@ -46622,6 +46637,30 @@ export type GetHouseholdStaffAssignmentHistoryQuery = {
   } | null;
 };
 
+export type TableFilterConfigFieldsFragment = {
+  __typename?: 'TableFilterConfig';
+  key: string;
+  label: string;
+  options: Array<{
+    __typename?: 'PickListOption';
+    code: string;
+    label?: string | null;
+    secondaryLabel?: string | null;
+    groupLabel?: string | null;
+    groupCode?: string | null;
+    initialSelected?: boolean | null;
+    helperText?: string | null;
+    numericValue?: number | null;
+    disabled?: boolean | null;
+  }>;
+};
+
+export type TableColumnConfigFieldsFragment = {
+  __typename?: 'TableColumnConfig';
+  key: string;
+  label: string;
+};
+
 export type UnitTypeCapacityFieldsFragment = {
   __typename?: 'UnitTypeCapacity';
   id: string;
@@ -49121,7 +49160,6 @@ export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
     organizationName
     whenAddedToCandidatePool
     whenUpdatedInCandidatePool
-    totalUnits
     unitsAcceptingReferrals
   }
 `;
@@ -50520,6 +50558,22 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
   ${ClientNameFragmentDoc}
   ${EnrollmentRangeFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
+`;
+export const TableFilterConfigFieldsFragmentDoc = gql`
+  fragment TableFilterConfigFields on TableFilterConfig {
+    key
+    label
+    options {
+      ...PickListOptionFields
+    }
+  }
+  ${PickListOptionFieldsFragmentDoc}
+`;
+export const TableColumnConfigFieldsFragmentDoc = gql`
+  fragment TableColumnConfigFields on TableColumnConfig {
+    key
+    label
+  }
 `;
 export const UnitGroupFieldsFragmentDoc = gql`
   fragment UnitGroupFields on UnitGroup {
@@ -54145,17 +54199,16 @@ export type GetAdminConsolidatedWaitlistQueryResult = Apollo.QueryResult<
 export const GetConsolidatedWaitlistColumnsDocument = gql`
   query GetConsolidatedWaitlistColumns {
     ceConsolidatedWaitlist {
-      clientAttributeColumns {
-        key
-        value
+      tableColumnConfigs {
+        ...TableColumnConfigFields
       }
-      availableFilters {
-        key
-        label
-        values
+      tableFilterConfigs {
+        ...TableFilterConfigFields
       }
     }
   }
+  ${TableColumnConfigFieldsFragmentDoc}
+  ${TableFilterConfigFieldsFragmentDoc}
 `;
 
 /**

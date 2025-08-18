@@ -189,14 +189,11 @@ query GetAdminConsolidatedWaitlist(
 
 query GetConsolidatedWaitlistColumns {
   ceConsolidatedWaitlist {
-    clientAttributeColumns {
-      key
-      value
+    tableColumnConfigs {
+      ...TableColumnConfigFields
     }
-    availableFilters {
-      key
-      label
-      values
+    tableFilterConfigs {
+      ...TableFilterConfigFields
     }
   }
 }

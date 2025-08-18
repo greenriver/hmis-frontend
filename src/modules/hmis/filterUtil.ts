@@ -9,11 +9,11 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
 import {
   AssessmentSortOption,
-  DynamicFilterConfig,
   EnrollmentSortOption,
   HouseholdSortOption,
   PickListType,
   ProjectSortOption,
+  TableFilterConfigFieldsFragment,
 } from '@/types/gqlTypes';
 
 const getType = (
@@ -127,7 +127,7 @@ interface FilterParams {
   type?: string | null; // filter input type type for inferring filters if not provided
   pickListArgs?: PickListArgs; // optional: pick list args to be applied to all PickList filter items
   omit?: Array<string>; // optional: skip some filters
-  dynamicFilters?: DynamicFilterConfig[]; // optional: dynamic filters to include
+  dynamicFilters?: TableFilterConfigFieldsFragment[]; // optional: dynamic filters to include
 }
 export function useFilters<T>({
   type,
@@ -156,19 +156,16 @@ export function useFilters<T>({
     });
 
     // Add dynamic filters if provided
-    // FIXME: this should make sure they're allowed on the type.
-    if (dynamicFilters) {
-      dynamicFilters.forEach(({ key, label, values }) => {
-        result[key as keyof T] = {
-          key,
-          label,
-          multi: true,
-          type: 'select',
-          isDynamic: true,
-          options: values.map((value) => ({ value, display: value })),
-        } as FilterType<T>;
-      });
-    }
+    (dynamicFilters || []).forEach(({ key, label, options }) => {
+      result[key as keyof T] = {
+        key,
+        label,
+        multi: true,
+        type: 'picklist',
+        isDynamic: true,
+        pickListOptions: options,
+      } as FilterType<T>;
+    });
 
     return result;
   }, [type, dynamicFilters, omit, pickListArgs]);
