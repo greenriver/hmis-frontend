@@ -378,7 +378,7 @@ fragment CeClientFields on CeClient {
 }
 
 # Used on the Consolidated Waitlist. Unit Groups that a given CE Client is eligible for.
-fragment CeUnitGroupCandidateFields on CeUnitGroupCandidate {
+fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
   id
   unitGroupName
   projectName
@@ -387,6 +387,5 @@ fragment CeUnitGroupCandidateFields on CeUnitGroupCandidate {
   organizationName
   whenAddedToCandidatePool
   whenUpdatedInCandidatePool
-  vacancies
-  capacity
+  unitsAcceptingReferrals
 }

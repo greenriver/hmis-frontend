@@ -205,14 +205,12 @@ query GetCeClientEligibleUnitGroups(
   $limit: Int = 25
   $offset: Int = 0
 ) {
-  ceConsolidatedWaitlist {
-    ceClient(id: $id) {
-      id
-      unitGroupsCandidates(limit: $limit, offset: $offset) {
-        nodesCount
-        nodes {
-          ...CeUnitGroupCandidateFields
-        }
+  ceClient(id: $id) {
+    id
+    eligibleUnitGroups(limit: $limit, offset: $offset) {
+      nodesCount
+      nodes {
+        ...CeEligibleUnitGroupFields
       }
     }
   }

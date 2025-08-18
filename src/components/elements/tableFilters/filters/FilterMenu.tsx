@@ -10,77 +10,99 @@ import useIntermediateState from '@/hooks/useIntermediateState';
 import { FilterType } from '@/modules/dataFetching/types';
 import { ensureArray } from '@/utils/arrays';
 
+type DynamicFiltersArray<T> = Array<{
+  key: string;
+  values: Partial<T>[keyof T][];
+}>;
 export interface TableFilterMenuProps<T> {
   filters: Partial<Record<keyof T, FilterType<T>>>;
   filterValues: Partial<T>;
-  setFilterValues: (value: Partial<T>) => any;
+  setFilterValues: (
+    value: Partial<T> & { dynamicFilters?: DynamicFiltersArray<T> }
+  ) => any;
 }
 
-const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
+const TableFilterMenu = <T,>({
+  filters,
+  filterValues,
+  setFilterValues,
+}: TableFilterMenuProps<T>): JSX.Element => {
   const defaultValue = {};
   const { state, setState, reset, cancel } = useIntermediateState(
-    props.filterValues,
-    defaultValue as typeof props.filterValues
+    filterValues,
+    defaultValue as typeof filterValues
   );
 
   const { filterCount, filterHint } = useMemo(() => {
-    const filters = Object.entries(props.filterValues)
+    const filterLabels = Object.entries(filterValues)
       // Skip filters that aren't visible to the user
-      .filter(([k]) => props.filters.hasOwnProperty(k))
+      .filter(([k]) => filters.hasOwnProperty(k))
       // Count # of filters that have values applied
       .filter(([, v]) => (Array.isArray(v) ? !isEmpty(v) : !isNil(v)))
       // skip false (unchecked checkboxes)
       .filter(([, v]) => v !== false)
       // Get the human-readable label of this filter
-      .map(([k]) => props.filters[k as keyof T]?.label || startCase(k));
+      .map(([k]) => filters[k as keyof T]?.label || startCase(k));
 
-    const filterCount = filters.length;
-    const filterHint = filters
+    const filterCount = filterLabels.length;
+    const filterHint = filterLabels
       .slice(0, 2) // only hint about the first 2
       .join(', ')
       .concat(filterCount > 2 ? `, ${filterCount - 2} more` : ''); // if > 2, show # of remaining filters
 
     return { filterCount, filterHint };
-  }, [props.filterValues, props.filters]);
+  }, [filterValues, filters]);
 
-  const { setFilterValues } = props;
+  const cleanValues = useCallback((values: Partial<T>) => {
+    const cleaned: typeof values = {};
+    Object.keys(values).forEach((key) => {
+      const val = values[key as keyof T];
+      if (val && isDate(val) && !isValid(val)) {
+        // skip invalid dates
+      } else {
+        cleaned[key as keyof T] = val;
+      }
+    });
+
+    return cleaned;
+  }, []);
+
+  /**
+   * Processes and sets the filter values by separating dynamic filters from static ones.
+   *
+   * - Cleans the provided filter values to remove invalid entries (e.g., invalid dates).
+   * - Identifies dynamic filters based on the `isDynamic` property in the `filters` prop.
+   * - Adds dynamic filters to a `dynamicFilters` array within the adjusted values.
+   * - Calls the `setFilterValues` function with the adjusted values.
+   *
+   * @param values - The filter values to process and set.
+   */
   const handleSetFilterValues = useCallback(
-    (values) => {
-      // TODO pull out dynamic filters here, instead of in cleanedValues
-      setFilterValues(values);
-    },
-    [setFilterValues]
-  );
-  const cleanedValues = useCallback(
     (values: Partial<T>) => {
-      console.log('cleaning', values, props.filters);
+      const cleanedValues: Partial<T> = cleanValues(values);
 
-      const cleaned: typeof values & {
-        dynamicFilters?: Array<{ key: string; values: any[] }>;
-      } = {};
-      Object.keys(values).forEach((key) => {
-        const isDynamicFilter = !!props.filters[key as keyof T]?.isDynamic;
-        const val = values[key as keyof T];
-        if (val && isDate(val) && !isValid(val)) {
-          // skip invalid dates
-        } else {
-          if (isDynamicFilter) {
-            cleaned.dynamicFilters ||= [];
-            cleaned.dynamicFilters.push({
-              key,
-              values: ensureArray(val),
-            });
-          } else {
-            cleaned[key as keyof T] = val;
-          }
-        }
-      });
-      console.log('cleaned', cleaned);
-      return cleaned;
+      const dynamicFilters: DynamicFiltersArray<T> = [];
+      // pull out dynamic filters
+      Object.keys(cleanedValues)
+        .filter((key) => !!filters[key as keyof T]?.isDynamic)
+        .forEach((key) => {
+          dynamicFilters.push({
+            key,
+            values: ensureArray(values[key as keyof T]),
+          });
+        });
+
+      const dynamicKeys = new Set(dynamicFilters.map((f) => f.key));
+      const valuesWithoutDynamicKeys = Object.fromEntries(
+        Object.entries(cleanedValues).filter((e) => !dynamicKeys.has(e[0]))
+      );
+      setFilterValues({
+        ...valuesWithoutDynamicKeys,
+        ...(dynamicFilters.length > 0 ? { dynamicFilters } : {}),
+      } as Partial<T> & { dynamicFilters?: DynamicFiltersArray<T> });
     },
-    [props.filters]
+    [cleanValues, filters, setFilterValues]
   );
-
   return (
     <TableControlPopover
       label='Filter'
@@ -90,14 +112,14 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
       filterHint={filterHint}
       filterCount={filterCount}
       onCancel={cancel}
-      onApply={() => props.setFilterValues(cleanedValues(state))}
+      onApply={() => handleSetFilterValues(state)}
       onReset={() => {
-        props.setFilterValues(cleanedValues(defaultValue));
+        handleSetFilterValues(defaultValue);
         reset();
       }}
     >
       <Stack gap={2}>
-        {Object.entries(props.filters).map(([key, filter]) => (
+        {Object.entries(filters).map(([key, filter]) => (
           <TableFilterItem
             key={key}
             filter={filter as FilterType<T>}

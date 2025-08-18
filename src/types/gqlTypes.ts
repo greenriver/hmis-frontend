@@ -597,18 +597,19 @@ export type CeClient = {
   aggregatedClientAttributes: Scalars['JSON']['output'];
   clientName: Scalars['String']['output'];
   destinationClientId: Scalars['ID']['output'];
+  /** Unit groups that this client is a candidate for */
+  eligibleUnitGroups: CeEligibleUnitGroupsPaginated;
   externalIds: Array<ExternalIdentifier>;
   id: Scalars['ID']['output'];
+  /** IDs of the source clients associated with this client that belong to this HMIS data source */
   sourceClientIds: Array<Scalars['ID']['output']>;
-  /** Unit groups that this client is a candidate for */
-  unitGroupsCandidates: CeUnitGroupCandidatesPaginated;
 };
 
 /**
  * A client who is a candidate for Coordinated Entry (CE), represented by a
  * ClientProxy. Underlying client record is Destination Client.
  */
-export type CeClientUnitGroupsCandidatesArgs = {
+export type CeClientEligibleUnitGroupsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -632,15 +633,10 @@ export type CeClientsPaginated = {
 export type CeConsolidatedWaitlist = {
   __typename?: 'CeConsolidatedWaitlist';
   availableFilters: Array<DynamicFilterConfig>;
-  ceClient?: Maybe<CeClient>;
   /** Clients who belong to at least one CE candidate pool */
   ceClients: CeClientsPaginated;
   /** Columns available in the consolidated waitlist */
   clientAttributeColumns: Array<KeyValue>;
-};
-
-export type CeConsolidatedWaitlistCeClientArgs = {
-  id: Scalars['ID']['input'];
 };
 
 export type CeConsolidatedWaitlistCeClientsArgs = {
@@ -654,6 +650,33 @@ export type CeCustomReferralStatus = {
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
   name: Scalars['String']['output'];
+};
+
+export type CeEligibleUnitGroup = {
+  __typename?: 'CeEligibleUnitGroup';
+  id: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
+  projectId: Scalars['ID']['output'];
+  projectName: Scalars['String']['output'];
+  projectType: ProjectType;
+  /** Total number of units in the unit group */
+  totalUnits: Scalars['Int']['output'];
+  unitGroupName: Scalars['String']['output'];
+  /** Number of units that are accepting referrals */
+  unitsAcceptingReferrals: Scalars['Int']['output'];
+  whenAddedToCandidatePool: Scalars['ISO8601DateTime']['output'];
+  whenUpdatedInCandidatePool: Scalars['ISO8601DateTime']['output'];
+};
+
+export type CeEligibleUnitGroupsPaginated = {
+  __typename?: 'CeEligibleUnitGroupsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeEligibleUnitGroup>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type CeMatchRule = {
@@ -1046,33 +1069,6 @@ export type CeReferralsPaginated = {
   hasMoreBefore: Scalars['Boolean']['output'];
   limit: Scalars['Int']['output'];
   nodes: Array<CeReferral>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
-};
-
-export type CeUnitGroupCandidate = {
-  __typename?: 'CeUnitGroupCandidate';
-  /** Total number of units in the unit group */
-  capacity: Scalars['Int']['output'];
-  id: Scalars['ID']['output'];
-  organizationName: Scalars['String']['output'];
-  projectId: Scalars['ID']['output'];
-  projectName: Scalars['String']['output'];
-  projectType: ProjectType;
-  unitGroupName: Scalars['String']['output'];
-  /** Number of units that are accepting referrals */
-  vacancies: Scalars['Int']['output'];
-  whenAddedToCandidatePool: Scalars['ISO8601DateTime']['output'];
-  whenUpdatedInCandidatePool: Scalars['ISO8601DateTime']['output'];
-};
-
-export type CeUnitGroupCandidatesPaginated = {
-  __typename?: 'CeUnitGroupCandidatesPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<CeUnitGroupCandidate>;
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
@@ -6724,6 +6720,7 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
+  ceClient?: Maybe<CeClient>;
   ceConsolidatedWaitlist: CeConsolidatedWaitlist;
   ceOpportunities: CeOpportunitiesPaginated;
   ceOpportunity?: Maybe<CeOpportunity>;
@@ -6811,6 +6808,10 @@ export type QueryAssessmentFormDefinitionArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   projectId: Scalars['ID']['input'];
   role?: InputMaybe<AssessmentRole>;
+};
+
+export type QueryCeClientArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type QueryCeOpportunitiesArgs = {
@@ -18089,8 +18090,8 @@ export type CeClientFieldsFragment = {
   }>;
 };
 
-export type CeUnitGroupCandidateFieldsFragment = {
-  __typename?: 'CeUnitGroupCandidate';
+export type CeEligibleUnitGroupFieldsFragment = {
+  __typename?: 'CeEligibleUnitGroup';
   id: string;
   unitGroupName: string;
   projectName: string;
@@ -18099,8 +18100,8 @@ export type CeUnitGroupCandidateFieldsFragment = {
   organizationName: string;
   whenAddedToCandidatePool: string;
   whenUpdatedInCandidatePool: string;
-  vacancies: number;
-  capacity: number;
+  totalUnits: number;
+  unitsAcceptingReferrals: number;
 };
 
 export type CreateCeReferralMutationVariables = Exact<{
@@ -21304,30 +21305,27 @@ export type GetCeClientEligibleUnitGroupsQueryVariables = Exact<{
 
 export type GetCeClientEligibleUnitGroupsQuery = {
   __typename?: 'Query';
-  ceConsolidatedWaitlist: {
-    __typename?: 'CeConsolidatedWaitlist';
-    ceClient?: {
-      __typename?: 'CeClient';
-      id: string;
-      unitGroupsCandidates: {
-        __typename?: 'CeUnitGroupCandidatesPaginated';
-        nodesCount: number;
-        nodes: Array<{
-          __typename?: 'CeUnitGroupCandidate';
-          id: string;
-          unitGroupName: string;
-          projectName: string;
-          projectId: string;
-          projectType: ProjectType;
-          organizationName: string;
-          whenAddedToCandidatePool: string;
-          whenUpdatedInCandidatePool: string;
-          vacancies: number;
-          capacity: number;
-        }>;
-      };
-    } | null;
-  };
+  ceClient?: {
+    __typename?: 'CeClient';
+    id: string;
+    eligibleUnitGroups: {
+      __typename?: 'CeEligibleUnitGroupsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeEligibleUnitGroup';
+        id: string;
+        unitGroupName: string;
+        projectName: string;
+        projectId: string;
+        projectType: ProjectType;
+        organizationName: string;
+        whenAddedToCandidatePool: string;
+        whenUpdatedInCandidatePool: string;
+        totalUnits: number;
+        unitsAcceptingReferrals: number;
+      }>;
+    };
+  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -49113,8 +49111,8 @@ export const CeClientFieldsFragmentDoc = gql`
   }
   ${ClientIdentifierFieldsFragmentDoc}
 `;
-export const CeUnitGroupCandidateFieldsFragmentDoc = gql`
-  fragment CeUnitGroupCandidateFields on CeUnitGroupCandidate {
+export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
+  fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
     id
     unitGroupName
     projectName
@@ -49123,8 +49121,8 @@ export const CeUnitGroupCandidateFieldsFragmentDoc = gql`
     organizationName
     whenAddedToCandidatePool
     whenUpdatedInCandidatePool
-    vacancies
-    capacity
+    totalUnits
+    unitsAcceptingReferrals
   }
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
@@ -54235,19 +54233,17 @@ export const GetCeClientEligibleUnitGroupsDocument = gql`
     $limit: Int = 25
     $offset: Int = 0
   ) {
-    ceConsolidatedWaitlist {
-      ceClient(id: $id) {
-        id
-        unitGroupsCandidates(limit: $limit, offset: $offset) {
-          nodesCount
-          nodes {
-            ...CeUnitGroupCandidateFields
-          }
+    ceClient(id: $id) {
+      id
+      eligibleUnitGroups(limit: $limit, offset: $offset) {
+        nodesCount
+        nodes {
+          ...CeEligibleUnitGroupFields
         }
       }
     }
   }
-  ${CeUnitGroupCandidateFieldsFragmentDoc}
+  ${CeEligibleUnitGroupFieldsFragmentDoc}
 `;
 
 /**

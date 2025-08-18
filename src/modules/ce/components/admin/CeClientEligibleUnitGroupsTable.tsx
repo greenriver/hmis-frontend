@@ -6,13 +6,13 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import {
-  CeUnitGroupCandidateFieldsFragment,
+  CeEligibleUnitGroupFieldsFragment,
   GetCeClientEligibleUnitGroupsDocument,
   GetCeClientEligibleUnitGroupsQuery,
   GetCeClientEligibleUnitGroupsQueryVariables,
 } from '@/types/gqlTypes';
 
-type Row = CeUnitGroupCandidateFieldsFragment;
+type Row = CeEligibleUnitGroupFieldsFragment;
 
 const COLUMNS: DataColumnDef<
   Row,
@@ -41,11 +41,11 @@ const COLUMNS: DataColumnDef<
   {
     key: 'vacancies',
     header: 'Availability',
-    render: (row) => (
+    render: ({ unitsAcceptingReferrals }) => (
       <Chip
         // label={`${row.vacancies}/${row.capacity} Units Accepting Referrals`}
-        label={`${row.vacancies} Units Accepting Referrals`}
-        color={row.vacancies > 0 ? 'primary' : 'grayscale'}
+        label={`${unitsAcceptingReferrals} Units Accepting Referrals`}
+        color={unitsAcceptingReferrals > 0 ? 'primary' : 'grayscale'}
         size='small'
         variant='status'
       />
@@ -53,7 +53,8 @@ const COLUMNS: DataColumnDef<
   },
   {
     key: 'whenAddedToCandidatePool',
-    header: 'Added to Waitlist', // "became eligible"? waitlist!= vacancy
+    // Date when client became eligible for the pool (not tied to availability)
+    header: 'Added to Waitlist',
     render: ({ whenAddedToCandidatePool }) => {
       if (!whenAddedToCandidatePool) return '';
       return <RelativeDateDisplay dateString={whenAddedToCandidatePool} />;
@@ -67,8 +68,7 @@ interface Props {
 const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ id }) => {
   // TODO: support filtering by project type
   // const filters = useFilters({
-  //   type: 'CeReferralFilterOptions',
-  //   omit: ['workflowTemplate'],
+  //   type: 'CeEligibleUnitGroupFilterOptions',
   // });
 
   return (
@@ -81,7 +81,7 @@ const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ id }) => {
         columns={COLUMNS}
         queryVariables={{ id }}
         queryDocument={GetCeClientEligibleUnitGroupsDocument}
-        pagePath='ceConsolidatedWaitlist.ceClient.unitGroupsCandidates'
+        pagePath='ceClient.eligibleUnitGroups'
         noData='No eligible projects found'
         paginationItemName='record'
         // filters={filters}
