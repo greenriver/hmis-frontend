@@ -99,26 +99,20 @@ const TableFilterItem = <T,>({
           );
         }
 
-        if (filter.type === 'picklist') {
-          if (filter.pickListOptions && filter.pickListOptions.length > 0) {
-            const variant = selectDefaultFilterVariant(filter);
-            return (
-              <TableFilterItemSelector
-                variant={variant}
-                options={filter.pickListOptions}
-                value={filter.multi ? value || [] : value}
-                onChange={onChange}
-                placeholder={placeholder}
-              />
-            );
-          }
-          if (!filter.pickListReference) {
-            throw new Error(
-              `Must define either pickListReference or pickListOptions for filter. ${JSON.stringify(
-                filter
-              )}`
-            );
-          }
+        if (filter.type === 'local_picklist') {
+          const variant = selectDefaultFilterVariant(filter);
+          return (
+            <TableFilterItemSelector
+              variant={variant}
+              options={filter.pickListOptions}
+              value={filter.multi ? value || [] : value}
+              onChange={onChange}
+              placeholder={placeholder}
+            />
+          );
+        }
+
+        if (filter.type === 'remote_picklist') {
           return (
             <PickListWrapper
               pickListType={filter.pickListReference}

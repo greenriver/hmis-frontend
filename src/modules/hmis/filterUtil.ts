@@ -91,7 +91,7 @@ const getFilterForType = (
   if (isPicklistType(fieldName)) {
     filter = {
       ...baseFields,
-      type: 'picklist',
+      type: 'remote_picklist',
       pickListReference: FILTER_NAME_TO_PICK_LIST[fieldName],
       pickListArgs: filterPickListArgs,
     };
@@ -161,7 +161,7 @@ export function useFilters<T>({
         key,
         label,
         multi: true,
-        type: 'picklist',
+        type: 'local_picklist',
         isDynamic: true,
         pickListOptions: options,
       } as FilterType<T>;
