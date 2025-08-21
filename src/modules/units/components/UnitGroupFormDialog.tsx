@@ -207,7 +207,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 options={templatePickList || []}
                 helperText={
                   isEditing && workflowTemplateIdentifier
-                    ? 'Workflow template cannot be changed after creation.'
+                    ? 'Workflow template cannot be changed once set.'
                     : 'Select a workflow template to use for filling vacancies in this unit group.'
                 }
                 disabled={isEditing && !!workflowTemplateIdentifier}
@@ -223,7 +223,12 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 label={getRequiredLabel('CE Event Type', false)}
                 loading={ceEventPicklistLoading}
                 options={ceEventPicklist || []}
-                helperText='Select the event type for referrals in this unit group.'
+                helperText={
+                  isEditing && ceEventType
+                    ? 'CE Event Type cannot be changed once set.'
+                    : 'Select the event type for referrals in this unit group.'
+                }
+                disabled={isEditing && !!ceEventType}
                 onChange={(_event, option) => {
                   if (isPickListOption(option)) {
                     setCeEventType(option.code as EventType);
