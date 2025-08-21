@@ -12,11 +12,14 @@ interface Props {
 const ReferralTimeline: React.FC<Props> = ({ referral }: Props) => {
   const combinedEvents = useMemo(() => {
     // Combine audit events and notes into a single array, sorted by createdAt
-    return [...referral.auditEvents.nodes, ...referral.notes.nodes].sort(
+    return [
+      ...(referral.auditEvents?.nodes || []),
+      ...(referral.notes?.nodes || []),
+    ].sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-  }, [referral.auditEvents.nodes, referral.notes.nodes]);
+  }, [referral.auditEvents?.nodes, referral.notes?.nodes]);
 
   return (
     <Stack

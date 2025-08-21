@@ -1,18 +1,27 @@
 import React, { useMemo } from 'react';
+import ButtonLink from '@/components/elements/ButtonLink';
 import CommonTabs from '@/components/elements/CommonTabs';
+import { SendIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
+import NotFound from '@/components/pages/NotFound';
+import ProjectOutgoingReferralsTable from '@/modules/ce/components/directReferral/ProjectOutgoingReferralsTable';
 import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
+import { useProjectCeVisibility } from '@/modules/ce/hooks/useProjectCeVisibility';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ProjectDashboardRoutes } from '@/routes/routes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectCeReferralsPage: React.FC = () => {
   const { project } = useProjectDashboardContext();
 
+  const { showReferrals, showAvailableUnits, showOutgoingReferrals } =
+    useProjectCeVisibility(project);
+
   const tabDefinitions = useMemo(() => {
     const defs = [];
 
-    // TODO(#7321): only render referrals tab on this page if this project has CE referral feature enabled (either directly or via waitlist)
-    if (project.access.canViewReferrals || project.access.canViewOwnReferrals) {
+    if (showReferrals) {
       defs.push({
         title: 'Referrals',
         key: 'referrals',
@@ -20,8 +29,7 @@ const ProjectCeReferralsPage: React.FC = () => {
       });
     }
 
-    // TODO(#7321): only render units tab on this page if this project uses waitlist-based referral creation. It doesn't make sense to link to unit from here if it doesn't have waitlist.
-    if (project.access.canViewUnits) {
+    if (showAvailableUnits) {
       defs.push({
         title: 'Available Units',
         key: 'available-units',
@@ -29,20 +37,38 @@ const ProjectCeReferralsPage: React.FC = () => {
       });
     }
 
-    // TODO(#7321) if project can send direct referrals (or has any sent referrals?), display table of outgoing referrals
-    // {
-    //   title: 'Sent Referrals',
-    //   key: 'sent-referrals',
-    //   contents: null, // Placeholder for future implementation
-    // }
-
+    if (showOutgoingReferrals) {
+      defs.push({
+        title: 'Outgoing Referrals',
+        key: 'outgoing-referrals',
+        contents: <ProjectOutgoingReferralsTable projectId={project.id} />,
+      });
+    }
     return defs;
-  }, [project]);
+  }, [project.id, showAvailableUnits, showOutgoingReferrals, showReferrals]);
 
-  // TODO(#7321) if project can send direct referrals, add button linking to a Send Referral page (similar to NewOutgoingReferralPage)
+  const actions = useMemo(() => {
+    if (showOutgoingReferrals) {
+      return (
+        <ButtonLink
+          startIcon={<SendIcon />}
+          to={generateSafePath(ProjectDashboardRoutes.SEND_REFERRAL, {
+            projectId: project.id,
+          })}
+        >
+          Send Referral
+        </ButtonLink>
+      );
+    }
+  }, [project.id, showOutgoingReferrals]);
+
+  if (tabDefinitions.length === 0) {
+    return <NotFound />;
+  }
+
   return (
     <>
-      <PageTitle title='Referrals' />
+      <PageTitle title='Referrals' actions={actions} />
       <CommonTabs
         ariaLabel={'Project CE Tabs'}
         tabDefinitions={tabDefinitions}

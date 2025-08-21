@@ -1,10 +1,12 @@
 query GetProjectCanAcceptReferral(
   $sourceEnrollmentId: ID!
   $destinationProjectId: ID!
+  $referralMode: ReferralMode
 ) {
   projectCanAcceptReferral(
     sourceEnrollmentId: $sourceEnrollmentId
     destinationProjectId: $destinationProjectId
+    referralMode: $referralMode
   )
 }
 

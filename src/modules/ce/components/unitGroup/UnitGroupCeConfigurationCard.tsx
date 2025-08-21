@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import React from 'react';
 import CommonCard from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -16,9 +16,11 @@ const UnitGroupCeConfigurationCard: React.FC<Props> = ({ unitGroup }) => {
   );
   return (
     <CommonCard title='Configuration'>
-      <CommonLabeledTextBlock title='Workflow Template' variant='body1'>
-        {unitGroup.workflowTemplateName || missingWorkflowTemplateText}
-      </CommonLabeledTextBlock>
+      <Stack gap={1}>
+        <CommonLabeledTextBlock title='Workflow Template' variant='body1'>
+          {unitGroup.workflowTemplateName || missingWorkflowTemplateText}
+        </CommonLabeledTextBlock>
+      </Stack>
     </CommonCard>
   );
 };

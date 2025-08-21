@@ -41,7 +41,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       {
         id: 'unit',
         label: 'Unit',
-        value: referral.opportunity.name,
+        value: referral.opportunity?.name,
       },
       {
         id: 'project',
@@ -162,7 +162,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
   }, [referral]);
 
   const eligibilityRequirementsDetails = useMemo(() => {
-    if (!referral.opportunity.eligibilityRequirements) return null;
+    if (!referral.opportunity?.eligibilityRequirements) return null;
     const { eligibilityRequirements } = referral.opportunity;
 
     return eligibilityRequirements.map((requirement) => ({

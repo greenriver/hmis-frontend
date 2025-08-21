@@ -34,14 +34,14 @@ interface UnitGroupFormDialogProps {
   projectId: string;
   open: boolean;
   onClose: () => void;
-  ceEnabled?: boolean;
+  projectSupportsReferrals?: boolean;
 }
 
 const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
   projectId,
   open,
   onClose,
-  ceEnabled = false,
+  projectSupportsReferrals = false,
 }) => {
   const [name, setName] = useState('');
   const [workflowTemplateIdentifier, setWorkflowTemplateIdentifier] = useState<
@@ -93,7 +93,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
       pickListType: PickListType.CeWorkflowTemplateIdentifiers,
       projectId: projectId,
     },
-    skip: !ceEnabled,
+    skip: !projectSupportsReferrals,
   });
 
   if (templatePickListError) throw templatePickListError;
@@ -114,7 +114,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {ceEnabled && (
+          {projectSupportsReferrals && (
             <FormSelect
               value={
                 workflowTemplateIdentifier

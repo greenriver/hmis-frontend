@@ -93,6 +93,7 @@ export const HmisEnums = {
     REJECT_REFERRAL: 'Declined Referral',
     START_REFERRAL: 'Started Referral',
   },
+  CeReferralOrigin: { direct_send: 'Direct', waitlist: 'Waitlist' },
   CeReferralStatus: {
     accepted: 'Accepted',
     in_progress: 'In progress',
@@ -1014,6 +1015,8 @@ export const HmisEnums = {
       'Unit types that are eligible to be added to project',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
+    PROJECTS_RECEIVING_DIRECT_CE_REFERRALS:
+      'Projects that can receive CE referrals',
     PROJECTS_RECEIVING_REFERRALS: 'Open Projects that can receive referrals',
     PROJECT_CONFIG_TYPES: 'PROJECT_CONFIG_TYPES',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
@@ -1023,6 +1026,8 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
+    UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL:
+      'Unit groups for the given project that can receive CE referrals',
     USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
   },
   PreferredLanguage: {
@@ -1417,7 +1422,8 @@ export const HmisEnums = {
   ProjectConfigType: {
     AUTO_ENTER: 'Auto Enter',
     AUTO_EXIT: 'Auto Exit',
-    COORDINATED_ENTRY: 'Coordinated Entry',
+    COORDINATED_ENTRY: 'Coordinated Entry Referrals',
+    SENDS_DIRECT_CE_REFERRALS: 'Outgoing Referrals',
     STAFF_ASSIGNMENT: 'Staff Assignment',
   },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
@@ -1531,6 +1537,7 @@ export const HmisEnums = {
     HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH Voucher Tracking',
     MOVING_ON_ASSISTANCE: 'Moving On Assistance',
   },
+  ReferralMode: { coordinated_entry: 'coordinated_entry', legacy: 'legacy' },
   ReferralPostingDenialReasonType: {
     DoesNotMeetEligibilityCriteria: 'Does not meet eligibility criteria',
     EnrolledButDeclinedHMISDataEntry: 'Enrolled, but declined HMIS data entry',

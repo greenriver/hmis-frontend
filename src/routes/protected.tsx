@@ -55,6 +55,7 @@ import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNo
 import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinatedEntry';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 
+import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
 import ProjectCeReferralsPage from '@/modules/ce/components/project/ProjectCeReferralsPage';
 import ProjectReferralPage from '@/modules/ce/components/project/ProjectReferralPage';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
@@ -477,8 +478,12 @@ export const protectedRoutes: RouteNode[] = [
                   'canViewUnits',
                   'canViewReferrals',
                   'canViewOwnReferrals',
+                  'canManageOutgoingReferrals',
                 ]}
-                requireCeEnabled
+                coordinatedEntryFeatures={[
+                  'supportsReferrals',
+                  'sendsDirectReferrals',
+                ]}
               >
                 <ProjectCeReferralsPage />
               </ProjectRoute>
@@ -487,7 +492,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.UNIT,
             element: (
-              <ProjectRoute permissions={['canViewUnits']} requireCeEnabled>
+              <ProjectRoute
+                permissions={['canViewUnits']}
+                coordinatedEntryFeatures={['supportsReferrals']}
+              >
                 <UnitPage />
               </ProjectRoute>
             ),
@@ -495,8 +503,23 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.CE_UNIT,
             element: (
-              <ProjectRoute permissions={['canViewUnits']} requireCeEnabled>
+              <ProjectRoute
+                permissions={['canViewUnits']}
+                coordinatedEntryFeatures={['supportsReferrals']}
+              >
                 <UnitPage />
+              </ProjectRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.SEND_REFERRAL,
+            element: (
+              <ProjectRoute
+                permissions={['canManageOutgoingReferrals']}
+                coordinatedEntryFeatures={['sendsDirectReferrals']}
+                redirectRoute={ProjectDashboardRoutes.CE}
+              >
+                <SendReferralPage />
               </ProjectRoute>
             ),
           },
@@ -505,7 +528,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewReferrals', 'canViewOwnReferrals']}
-                requireCeEnabled
+                coordinatedEntryFeatures={['supportsReferrals']}
               >
                 <ProjectReferralPage />
               </ProjectRoute>

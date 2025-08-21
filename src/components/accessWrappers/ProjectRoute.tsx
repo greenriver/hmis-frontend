@@ -6,7 +6,10 @@ import NotFound from '../pages/NotFound';
 import { ProjectPermissions } from '@/modules/permissions/types';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { DataCollectionFeatureRole } from '@/types/gqlTypes';
+import {
+  DataCollectionFeatureRole,
+  ProjectCoordinatedEntryFeatures,
+} from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -18,14 +21,14 @@ const ProjectRoute: React.FC<
     permissions?: ProjectPermissions | ProjectPermissions[];
     redirectRoute?: string;
     dataCollectionFeature?: DataCollectionFeatureRole;
-    requireCeEnabled?: boolean;
+    coordinatedEntryFeatures?: (keyof ProjectCoordinatedEntryFeatures)[]; // show the route if ANY of these coordinated entry features are enabled on the project
   }>
 > = ({
   permissions,
   redirectRoute,
   dataCollectionFeature,
   children,
-  requireCeEnabled,
+  coordinatedEntryFeatures,
 }) => {
   const { project } = useProjectDashboardContext();
   const permissionsArray = ensureArray(permissions);
@@ -43,8 +46,16 @@ const ProjectRoute: React.FC<
     return <NotFound />;
   }
 
-  if (requireCeEnabled && !project.coordinatedEntryEnabled) {
-    return <NotFound />;
+  // If the route requires a coordinated entry feature, check that it is enabled
+  if (coordinatedEntryFeatures && coordinatedEntryFeatures.length > 0) {
+    if (!project.coordinatedEntryFeatures) return <NotFound />; // No coordinated entry features in this project
+
+    // Check that ANY of the specified features are true
+    const anyFeatureEnabled = coordinatedEntryFeatures.some(
+      (feature) => project.coordinatedEntryFeatures?.[feature] === true
+    );
+
+    if (!anyFeatureEnabled) return <NotFound />;
   }
 
   // If no permissions are specified, we assume the route is accessible
