@@ -9,7 +9,7 @@ import {
   Stack,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextInput from '@/components/elements/input/TextInput';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -172,6 +172,19 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     skip: !projectSupportsReferrals,
   });
 
+  const { ceEventTypeDisabled, workflowTemplateIdentifierDisabled } =
+    useMemo(() => {
+      return {
+        ceEventTypeDisabled: isEditing && !!unitGroup?.ceEventType,
+        workflowTemplateIdentifierDisabled:
+          isEditing && !!unitGroup?.workflowTemplateIdentifier,
+      };
+    }, [
+      isEditing,
+      unitGroup?.ceEventType,
+      unitGroup?.workflowTemplateIdentifier,
+    ]);
+
   if (templatePickListError) throw templatePickListError;
   if (ceEventPicklistError) throw ceEventPicklistError;
 
@@ -206,11 +219,11 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 loading={templatePickListLoading}
                 options={templatePickList || []}
                 helperText={
-                  isEditing && workflowTemplateIdentifier
+                  workflowTemplateIdentifierDisabled
                     ? 'Workflow template cannot be changed once set.'
                     : 'Select a workflow template to use for filling vacancies in this unit group.'
                 }
-                disabled={isEditing && !!workflowTemplateIdentifier}
+                disabled={workflowTemplateIdentifierDisabled}
                 onChange={(_event, option) => {
                   if (isPickListOption(option)) {
                     setWorkflowTemplateIdentifier(option.code);
@@ -224,11 +237,11 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 loading={ceEventPicklistLoading}
                 options={ceEventPicklist || []}
                 helperText={
-                  isEditing && ceEventType
+                  ceEventTypeDisabled
                     ? 'CE Event Type cannot be changed once set.'
                     : 'Select the event type for referrals in this unit group.'
                 }
-                disabled={isEditing && !!ceEventType}
+                disabled={ceEventTypeDisabled}
                 onChange={(_event, option) => {
                   if (isPickListOption(option)) {
                     setCeEventType(option.code as EventType);
