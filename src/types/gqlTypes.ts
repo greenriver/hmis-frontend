@@ -575,7 +575,9 @@ export type CeCandidate = {
   destinationClientId: Scalars['ID']['output'];
   enrollments: CeReferralSourceEnrollmentsPaginated;
   id: Scalars['ID']['output'];
+  /** @deprecated Replaced by priorityScores */
   priorityScore: Scalars['Int']['output'];
+  priorityScores: Array<Scalars['Int']['output']>;
 };
 
 export type CeCandidateEnrollmentsArgs = {
@@ -665,7 +667,9 @@ export type CeOpportunity = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   organizationName: Scalars['String']['output'];
+  /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
+  prioritySchemes?: Maybe<Array<CeMatchRule>>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
@@ -8352,7 +8356,9 @@ export type Unit = {
   name: Scalars['String']['output'];
   occupancyStatus: UnitOccupancyStatus;
   occupants: Array<Enrollment>;
+  /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
+  prioritySchemes?: Maybe<Array<CeMatchRule>>;
   project?: Maybe<Project>;
   unitGroup?: Maybe<UnitGroup>;
   unitSize?: Maybe<Scalars['Int']['output']>;
@@ -8385,7 +8391,9 @@ export type UnitGroup = {
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
+  prioritySchemes?: Maybe<Array<CeMatchRule>>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   workflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
@@ -16705,7 +16713,7 @@ export type CeOpportunityFieldsFragment = {
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
   }> | null;
-  priorityScheme?: {
+  prioritySchemes?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
@@ -16713,7 +16721,7 @@ export type CeOpportunityFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-  } | null;
+  }> | null;
   unit?: {
     __typename?: 'Unit';
     id: string;
@@ -16788,7 +16796,7 @@ export type CeMatchRuleFieldsFragment = {
 export type CeCandidateFieldsFragment = {
   __typename?: 'CeCandidate';
   id: string;
-  priorityScore: number;
+  priorityScores: Array<number>;
   clientName: string;
 };
 
@@ -19425,7 +19433,7 @@ export type SubmitCeReferralStepMutation = {
             name: string;
           } | null;
         } | null;
-        priorityScheme?: {
+        prioritySchemes?: Array<{
           __typename?: 'CeMatchRule';
           id: string;
           name: string;
@@ -19433,7 +19441,7 @@ export type SubmitCeReferralStepMutation = {
           expression: string;
           projectTypes: Array<ProjectType>;
           funders?: Array<FundingSource> | null;
-        } | null;
+        }> | null;
         unit?: {
           __typename?: 'Unit';
           id: string;
@@ -19986,7 +19994,7 @@ export type GetCeOpportunityQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     }> | null;
-    priorityScheme?: {
+    prioritySchemes?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
@@ -19994,7 +20002,7 @@ export type GetCeOpportunityQuery = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-    } | null;
+    }> | null;
     unit?: {
       __typename?: 'Unit';
       id: string;
@@ -20029,7 +20037,7 @@ export type GetCeOpportunityCandidatesQuery = {
       nodes: Array<{
         __typename?: 'CeCandidate';
         id: string;
-        priorityScore: number;
+        priorityScores: Array<number>;
         clientName: string;
       }>;
     };
@@ -46556,7 +46564,7 @@ export type UnitDetailFieldsFragment = {
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
   }> | null;
-  priorityScheme?: {
+  prioritySchemes?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
@@ -46564,7 +46572,7 @@ export type UnitDetailFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-  } | null;
+  }> | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
     candidatesGeneratedAt?: string | null;
@@ -46583,7 +46591,7 @@ export type UnitDetailFieldsFragment = {
       nodes: Array<{
         __typename?: 'CeCandidate';
         id: string;
-        priorityScore: number;
+        priorityScores: Array<number>;
         clientName: string;
       }>;
     };
@@ -46611,7 +46619,7 @@ export type UnitDetailFieldsFragment = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     }> | null;
-    priorityScheme?: {
+    prioritySchemes?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
@@ -46619,7 +46627,7 @@ export type UnitDetailFieldsFragment = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-    } | null;
+    }> | null;
     unit?: {
       __typename?: 'Unit';
       id: string;
@@ -46717,7 +46725,7 @@ export type UnitGroupDetailFieldsFragment = {
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
   }> | null;
-  priorityScheme?: {
+  prioritySchemes?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
@@ -46725,7 +46733,7 @@ export type UnitGroupDetailFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-  } | null;
+  }> | null;
   unitTypes: Array<{
     __typename?: 'UnitTypeCapacity';
     id: string;
@@ -46896,7 +46904,7 @@ export type GetUnitGroupQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     }> | null;
-    priorityScheme?: {
+    prioritySchemes?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
@@ -46904,7 +46912,7 @@ export type GetUnitGroupQuery = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-    } | null;
+    }> | null;
     unitTypes: Array<{
       __typename?: 'UnitTypeCapacity';
       id: string;
@@ -46948,7 +46956,7 @@ export type GetUnitQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     }> | null;
-    priorityScheme?: {
+    prioritySchemes?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
@@ -46956,7 +46964,7 @@ export type GetUnitQuery = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-    } | null;
+    }> | null;
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
       candidatesGeneratedAt?: string | null;
@@ -46975,7 +46983,7 @@ export type GetUnitQuery = {
         nodes: Array<{
           __typename?: 'CeCandidate';
           id: string;
-          priorityScore: number;
+          priorityScores: Array<number>;
           clientName: string;
         }>;
       };
@@ -47003,7 +47011,7 @@ export type GetUnitQuery = {
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
       }> | null;
-      priorityScheme?: {
+      prioritySchemes?: Array<{
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
@@ -47011,7 +47019,7 @@ export type GetUnitQuery = {
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
-      } | null;
+      }> | null;
       unit?: {
         __typename?: 'Unit';
         id: string;
@@ -50371,7 +50379,7 @@ export const CeOpportunityFieldsFragmentDoc = gql`
     eligibilityRequirements {
       ...CeMatchRuleFields
     }
-    priorityScheme {
+    prioritySchemes {
       ...CeMatchRuleFields
     }
   }
@@ -50382,7 +50390,7 @@ export const CeOpportunityFieldsFragmentDoc = gql`
 export const CeCandidateFieldsFragmentDoc = gql`
   fragment CeCandidateFields on CeCandidate {
     id
-    priorityScore
+    priorityScores
     clientName
   }
 `;
@@ -50402,7 +50410,7 @@ export const UnitDetailFieldsFragmentDoc = gql`
     eligibilityRequirements @include(if: $includeCeFields) {
       ...CeMatchRuleFields
     }
-    priorityScheme @include(if: $includeCeFields) {
+    prioritySchemes @include(if: $includeCeFields) {
       ...CeMatchRuleFields
     }
     latestOpportunity @include(if: $includeCeFields) {
@@ -50451,7 +50459,7 @@ export const UnitGroupDetailFieldsFragmentDoc = gql`
     eligibilityRequirements {
       ...CeMatchRuleFields
     }
-    priorityScheme {
+    prioritySchemes {
       ...CeMatchRuleFields
     }
   }
