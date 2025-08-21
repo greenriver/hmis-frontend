@@ -24,6 +24,7 @@ import { isPickListOption } from '@/modules/form/types';
 import { evictUnitsQuery } from '@/modules/units/util';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
+  EventType,
   PickListType,
   useCreateUnitGroupMutation,
   useGetPickListQuery,
@@ -47,6 +48,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
   const [workflowTemplateIdentifier, setWorkflowTemplateIdentifier] = useState<
     string | null
   >(null);
+  const [ceEventType, setCeEventType] = useState<EventType | null>(null);
   const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
   const navigate = useNavigate();
 
@@ -80,9 +82,22 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     if (!name) return;
 
     createUnitGroup({
-      variables: { input: { name, projectId, workflowTemplateIdentifier } },
+      variables: {
+        input: {
+          name,
+          projectId,
+          workflowTemplateIdentifier,
+          ceEventType,
+        },
+      },
     });
-  }, [name, projectId, workflowTemplateIdentifier, createUnitGroup]);
+  }, [
+    name,
+    createUnitGroup,
+    projectId,
+    workflowTemplateIdentifier,
+    ceEventType,
+  ]);
 
   const {
     data: { pickList: templatePickList } = {},
@@ -96,7 +111,19 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     skip: !projectSupportsReferrals,
   });
 
+  const {
+    data: { pickList: ceEventPicklist } = {},
+    loading: ceEventPicklistLoading,
+    error: ceEventPicklistError,
+  } = useGetPickListQuery({
+    variables: {
+      pickListType: PickListType.CeEvents,
+    },
+    skip: !projectSupportsReferrals,
+  });
+
   if (templatePickListError) throw templatePickListError;
+  if (ceEventPicklistError) throw ceEventPicklistError;
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
@@ -115,23 +142,38 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             onChange={(e) => setName(e.target.value)}
           />
           {projectSupportsReferrals && (
-            <FormSelect
-              value={
-                workflowTemplateIdentifier
-                  ? { code: workflowTemplateIdentifier }
-                  : null
-              }
-              placeholder='Select Workflow'
-              label={getRequiredLabel('Referral Workflow', false)}
-              loading={templatePickListLoading}
-              options={templatePickList || []}
-              helperText='Select a workflow template to use for filling vacancies in this unit group.'
-              onChange={(_event, option) => {
-                if (isPickListOption(option)) {
-                  setWorkflowTemplateIdentifier(option.code);
+            <>
+              <FormSelect
+                value={
+                  workflowTemplateIdentifier
+                    ? { code: workflowTemplateIdentifier }
+                    : null
                 }
-              }}
-            />
+                placeholder='Select Workflow'
+                label={getRequiredLabel('Referral Workflow', false)}
+                loading={templatePickListLoading}
+                options={templatePickList || []}
+                helperText='Select a workflow template to use for filling vacancies in this unit group.'
+                onChange={(_event, option) => {
+                  if (isPickListOption(option)) {
+                    setWorkflowTemplateIdentifier(option.code);
+                  }
+                }}
+              />
+              <FormSelect
+                value={ceEventType ? { code: ceEventType } : null}
+                placeholder='Select CE Event Type'
+                label={getRequiredLabel('CE Event Type', false)}
+                loading={ceEventPicklistLoading}
+                options={ceEventPicklist || []}
+                helperText='Select the event type for referrals in this unit group.'
+                onChange={(_event, option) => {
+                  if (isPickListOption(option)) {
+                    setCeEventType(option.code as EventType);
+                  }
+                }}
+              />
+            </>
           )}
         </Stack>
       </DialogContent>

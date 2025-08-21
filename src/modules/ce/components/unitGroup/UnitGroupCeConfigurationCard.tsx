@@ -2,6 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import React from 'react';
 import CommonCard from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
+import { HmisEnums } from '@/types/gqlEnums';
 import { UnitGroupDetailFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -20,6 +21,11 @@ const UnitGroupCeConfigurationCard: React.FC<Props> = ({ unitGroup }) => {
         <CommonLabeledTextBlock title='Workflow Template' variant='body1'>
           {unitGroup.workflowTemplateName || missingWorkflowTemplateText}
         </CommonLabeledTextBlock>
+        {unitGroup.ceEventType && (
+          <CommonLabeledTextBlock title='CE Event Type' variant='body1'>
+            {HmisEnums.EventType[unitGroup.ceEventType]}
+          </CommonLabeledTextBlock>
+        )}
       </Stack>
     </CommonCard>
   );

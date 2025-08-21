@@ -564,6 +564,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
         },
       },
+      {
+        name: 'priorityScores',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+            },
+          },
+        },
+      },
     ],
   },
   {
@@ -7224,6 +7240,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'ceEventType',
+        type: { kind: 'ENUM', name: 'EventType', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -9752,6 +9772,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'UnitGroupInput',
     args: [
+      {
+        name: 'ceEventType',
+        type: { kind: 'ENUM', name: 'EventType', ofType: null },
+      },
       {
         name: 'name',
         type: {

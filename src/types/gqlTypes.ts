@@ -568,7 +568,9 @@ export type CeCandidate = {
   destinationClientId: Scalars['ID']['output'];
   enrollments: CeReferralSourceEnrollmentsPaginated;
   id: Scalars['ID']['output'];
+  /** @deprecated Replaced by priorityScores */
   priorityScore: Scalars['Int']['output'];
+  priorityScores: Array<Scalars['Int']['output']>;
 };
 
 export type CeCandidateEnrollmentsArgs = {
@@ -658,7 +660,9 @@ export type CeOpportunity = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   organizationName: Scalars['String']['output'];
+  /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
+  prioritySchemes?: Maybe<Array<CeMatchRule>>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
@@ -8335,7 +8339,9 @@ export type Unit = {
   name: Scalars['String']['output'];
   occupancyStatus: UnitOccupancyStatus;
   occupants: Array<Enrollment>;
+  /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
+  prioritySchemes?: Maybe<Array<CeMatchRule>>;
   project?: Maybe<Project>;
   unitGroup?: Maybe<UnitGroup>;
   unitSize?: Maybe<Scalars['Int']['output']>;
@@ -8365,10 +8371,13 @@ export type UnitGroup = {
   availability: Scalars['Int']['output'];
   /** Total number of units in the group */
   capacity: Scalars['Int']['output'];
+  ceEventType?: Maybe<EventType>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
+  prioritySchemes?: Maybe<Array<CeMatchRule>>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   workflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
@@ -8382,6 +8391,7 @@ export type UnitGroupUnitsArgs = {
 };
 
 export type UnitGroupInput = {
+  ceEventType?: InputMaybe<EventType>;
   name: Scalars['String']['input'];
   projectId: Scalars['ID']['input'];
   workflowTemplateIdentifier?: InputMaybe<Scalars['String']['input']>;
@@ -46658,6 +46668,7 @@ export type UnitGroupCapacityFieldsFragment = {
 export type UnitGroupDetailFieldsFragment = {
   __typename?: 'UnitGroup';
   workflowTemplateName?: string | null;
+  ceEventType?: EventType | null;
   workflowTemplateIdentifier?: string | null;
   id: string;
   name: string;
@@ -46837,6 +46848,7 @@ export type GetUnitGroupQuery = {
   unitGroup?: {
     __typename?: 'UnitGroup';
     workflowTemplateName?: string | null;
+    ceEventType?: EventType | null;
     workflowTemplateIdentifier?: string | null;
     id: string;
     name: string;
@@ -50402,6 +50414,7 @@ export const UnitGroupDetailFieldsFragmentDoc = gql`
   fragment UnitGroupDetailFields on UnitGroup {
     ...UnitGroupCapacityFields
     workflowTemplateName
+    ceEventType
     workflowTemplateIdentifier
     eligibilityRequirements {
       ...CeMatchRuleFields

@@ -3873,6 +3873,30 @@
                 "ofType": null
               }
             },
+            "isDeprecated": true,
+            "deprecationReason": "Replaced by priorityScores"
+          },
+          {
+            "name": "priorityScores",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  }
+                }
+              }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -4700,6 +4724,26 @@
               "kind": "OBJECT",
               "name": "CeMatchRule",
               "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Replaced by prioritySchemes"
+          },
+          {
+            "name": "prioritySchemes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CeMatchRule",
+                  "ofType": null
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -54318,6 +54362,26 @@
               "name": "CeMatchRule",
               "ofType": null
             },
+            "isDeprecated": true,
+            "deprecationReason": "Replaced by prioritySchemes"
+          },
+          {
+            "name": "prioritySchemes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CeMatchRule",
+                  "ofType": null
+                }
+              }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -54546,6 +54610,18 @@
             "deprecationReason": null
           },
           {
+            "name": "ceEventType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "EventType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "eligibilityRequirements",
             "description": null,
             "args": [],
@@ -54605,6 +54681,26 @@
               "kind": "OBJECT",
               "name": "CeMatchRule",
               "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Replaced by prioritySchemes"
+          },
+          {
+            "name": "prioritySchemes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CeMatchRule",
+                  "ofType": null
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -54723,6 +54819,18 @@
         "isOneOf": false,
         "fields": null,
         "inputFields": [
+          {
+            "name": "ceEventType",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "EventType",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "name",
             "description": null,
