@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Button,
@@ -26,8 +27,10 @@ import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   EventType,
   PickListType,
+  UnitGroupDetailFieldsFragment,
   useCreateUnitGroupMutation,
   useGetPickListQuery,
+  UpdateUnitGroupDocument,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -36,6 +39,7 @@ interface UnitGroupFormDialogProps {
   open: boolean;
   onClose: () => void;
   projectSupportsReferrals?: boolean;
+  unitGroup?: UnitGroupDetailFieldsFragment | null;
 }
 
 const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
@@ -43,57 +47,103 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
   open,
   onClose,
   projectSupportsReferrals = false,
+  unitGroup = null,
 }) => {
-  const [name, setName] = useState('');
+  const isEditing = !!unitGroup;
+
+  const [name, setName] = useState(unitGroup?.name || '');
   const [workflowTemplateIdentifier, setWorkflowTemplateIdentifier] = useState<
     string | null
-  >(null);
-  const [ceEventType, setCeEventType] = useState<EventType | null>(null);
+  >(unitGroup?.workflowTemplateIdentifier || null);
+  const [ceEventType, setCeEventType] = useState<EventType | null>(
+    unitGroup?.ceEventType || null
+  );
   const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
   const navigate = useNavigate();
 
   const handleClose = useCallback(() => {
-    setName('');
-    setWorkflowTemplateIdentifier(null);
+    // Reset to initial values based on current unitGroup
+    setName(unitGroup?.name || '');
+    setWorkflowTemplateIdentifier(
+      unitGroup?.workflowTemplateIdentifier || null
+    );
+    setCeEventType(unitGroup?.ceEventType || null);
     setErrors(emptyErrorState);
     onClose();
-  }, [onClose]);
+  }, [unitGroup, onClose]);
 
-  const [createUnitGroup, { loading }] = useCreateUnitGroupMutation({
-    onCompleted: (data) => {
-      if (data.createUnitGroup?.errors?.length) {
-        setErrors(partitionValidations(data.createUnitGroup.errors));
-      } else if (data.createUnitGroup?.unitGroup) {
-        const unitGroupId = data.createUnitGroup.unitGroup.id;
-        evictUnitsQuery(projectId, unitGroupId);
-        handleClose();
-        navigate(
-          generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-            projectId,
-            unitGroupId,
-          })
-        );
-      }
-    },
-    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
-  });
+  const [createUnitGroup, { loading: createLoading }] =
+    useCreateUnitGroupMutation({
+      onCompleted: (data) => {
+        if (data.createUnitGroup?.errors?.length) {
+          setErrors(partitionValidations(data.createUnitGroup.errors));
+        } else if (data.createUnitGroup?.unitGroup) {
+          const unitGroupId = data.createUnitGroup.unitGroup.id;
+          evictUnitsQuery(projectId, unitGroupId);
+          handleClose();
+          navigate(
+            generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+              projectId,
+              unitGroupId,
+            })
+          );
+        }
+      },
+      onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+    });
+
+  const [updateUnitGroup, { loading: updateLoading }] = useMutation(
+    UpdateUnitGroupDocument,
+    {
+      onCompleted: (data: any) => {
+        if (data.updateUnitGroup?.errors?.length) {
+          setErrors(partitionValidations(data.updateUnitGroup.errors));
+        } else if (data.updateUnitGroup?.unitGroup) {
+          const unitGroupId = data.updateUnitGroup.unitGroup.id;
+          evictUnitsQuery(projectId, unitGroupId);
+          handleClose(); // Stay on current page for edit
+        }
+      },
+      onError: (apolloError: any) =>
+        setErrors({ ...emptyErrorState, apolloError }),
+    }
+  );
+
+  const loading = createLoading || updateLoading;
 
   const handleSubmit = useCallback(() => {
     if (!name) return;
 
-    createUnitGroup({
-      variables: {
-        input: {
-          name,
-          projectId,
-          workflowTemplateIdentifier,
-          ceEventType,
+    if (isEditing && unitGroup) {
+      updateUnitGroup({
+        variables: {
+          id: unitGroup.id,
+          input: {
+            name,
+            projectId,
+            workflowTemplateIdentifier,
+            ceEventType,
+          },
         },
-      },
-    });
+      });
+    } else {
+      createUnitGroup({
+        variables: {
+          input: {
+            name,
+            projectId,
+            workflowTemplateIdentifier,
+            ceEventType,
+          },
+        },
+      });
+    }
   }, [
     name,
+    isEditing,
+    unitGroup,
     createUnitGroup,
+    updateUnitGroup,
     projectId,
     workflowTemplateIdentifier,
     ceEventType,
@@ -127,7 +177,9 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
-      <DialogTitle>Create Unit Group</DialogTitle>
+      <DialogTitle>
+        {isEditing ? 'Edit Unit Group' : 'Create Unit Group'}
+      </DialogTitle>
       <DialogContent sx={{ my: 2 }}>
         {errorState.errors.length > 0 && (
           <Box sx={{ mb: 2 }}>
@@ -153,7 +205,12 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 label={getRequiredLabel('Referral Workflow', false)}
                 loading={templatePickListLoading}
                 options={templatePickList || []}
-                helperText='Select a workflow template to use for filling vacancies in this unit group.'
+                helperText={
+                  isEditing && workflowTemplateIdentifier
+                    ? 'Workflow template cannot be changed after creation.'
+                    : 'Select a workflow template to use for filling vacancies in this unit group.'
+                }
+                disabled={isEditing && !!workflowTemplateIdentifier}
                 onChange={(_event, option) => {
                   if (isPickListOption(option)) {
                     setWorkflowTemplateIdentifier(option.code);
@@ -187,7 +244,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             loading={loading}
             disabled={!name}
           >
-            Create
+            {isEditing ? 'Save Changes' : 'Create'}
           </LoadingButton>
         </Stack>
       </DialogActions>
