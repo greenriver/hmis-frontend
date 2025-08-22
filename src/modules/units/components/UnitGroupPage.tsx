@@ -118,6 +118,10 @@ const UnitGroupPage = () => {
                 title='Eligibility Requirements'
                 rules={unitGroup.eligibilityRequirements || []}
               />
+              <MatchRuleCard
+                title='Priority Schemes'
+                rules={unitGroup.prioritySchemes || []}
+              />
             </Stack>
           </Grid>
         )}

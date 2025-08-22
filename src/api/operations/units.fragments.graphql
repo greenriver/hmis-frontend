@@ -52,7 +52,7 @@ fragment UnitDetailFields on Unit {
   eligibilityRequirements @include(if: $includeCeFields) {
     ...CeMatchRuleFields
   }
-  priorityScheme @include(if: $includeCeFields) {
+  prioritySchemes @include(if: $includeCeFields) {
     ...CeMatchRuleFields
   }
   latestOpportunity @include(if: $includeCeFields) {
@@ -105,7 +105,7 @@ fragment UnitGroupDetailFields on UnitGroup {
   eligibilityRequirements {
     ...CeMatchRuleFields
   }
-  priorityScheme {
+  prioritySchemes {
     ...CeMatchRuleFields
   }
 }
