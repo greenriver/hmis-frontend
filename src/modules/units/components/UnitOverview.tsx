@@ -66,9 +66,9 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
           />
         </Grid>
       )}
-      {unit.priorityScheme && (
+      {unit.prioritySchemes && (
         <Grid item xs={12} md={6}>
-          <MatchRuleCard title='Prioritization' rules={[unit.priorityScheme]} />
+          <MatchRuleCard title='Prioritization' rules={unit.prioritySchemes} />
         </Grid>
       )}
     </Grid>
