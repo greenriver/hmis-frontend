@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import LoadingButton from '@/components/elements/LoadingButton';
-import { DUMMY_LOCAL_CONSTANT } from '@/modules/admin/components/forms/FormPreview';
+import { DUMMY_CLIENT_ID } from '@/modules/admin/components/forms/FormPreview';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
@@ -89,7 +89,7 @@ const AhaScore = ({
   });
 
   const handleFetch = useCallback(() => {
-    if (clientId === DUMMY_LOCAL_CONSTANT) {
+    if (clientId === DUMMY_CLIENT_ID) {
       // If this is the preview environment, mock the response instead of calling the mutation
       setHasFetched(true);
       severalItemsChanged?.({
