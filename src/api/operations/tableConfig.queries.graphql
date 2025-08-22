@@ -1,0 +1,12 @@
+query GetConsolidatedWaitlistColumns {
+  tableConfigLookup {
+    consolidatedWaitlist {
+      columns {
+        ...TableColumnConfigFields
+      }
+      filters {
+        ...TableFilterConfigFields
+      }
+    }
+  }
+}

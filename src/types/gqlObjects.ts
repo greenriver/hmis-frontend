@@ -635,7 +635,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
-  { name: 'CeConsolidatedWaitlist', fields: [] },
   {
     name: 'CeCustomReferralStatus',
     fields: [
@@ -7290,6 +7289,8 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
+  { name: 'TableConfig', fields: [] },
+  { name: 'TableConfigLookup', fields: [] },
   {
     name: 'TableFilterConfig',
     fields: [

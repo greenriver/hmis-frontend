@@ -632,21 +632,6 @@ export type CeClientsPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
-export type CeConsolidatedWaitlist = {
-  __typename?: 'CeConsolidatedWaitlist';
-  /** Clients who belong to at least one CE candidate pool */
-  ceClients: CeClientsPaginated;
-  /** Columns available in the consolidated waitlist */
-  tableColumnConfigs: Array<TableColumnConfig>;
-  tableFilterConfigs: Array<TableFilterConfig>;
-};
-
-export type CeConsolidatedWaitlistCeClientsArgs = {
-  filters?: InputMaybe<CeClientFilterOptions>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type CeCustomReferralStatus = {
   __typename?: 'CeCustomReferralStatus';
   id: Scalars['ID']['output'];
@@ -6706,7 +6691,8 @@ export type Query = {
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
   ceClient?: Maybe<CeClient>;
-  ceConsolidatedWaitlist: CeConsolidatedWaitlist;
+  /** Clients who belong to at least one CE candidate pool */
+  ceClients: CeClientsPaginated;
   ceOpportunities: CeOpportunitiesPaginated;
   ceOpportunity?: Maybe<CeOpportunity>;
   ceReferral?: Maybe<CeReferral>;
@@ -6771,6 +6757,7 @@ export type Query = {
   serviceType?: Maybe<ServiceType>;
   serviceTypes: ServiceTypesPaginated;
   staticFormDefinition: FormDefinition;
+  tableConfigLookup: TableConfigLookup;
   unit?: Maybe<Unit>;
   unitGroup?: Maybe<UnitGroup>;
   /** User lookup */
@@ -6797,6 +6784,12 @@ export type QueryAssessmentFormDefinitionArgs = {
 
 export type QueryCeClientArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryCeClientsArgs = {
+  filters?: InputMaybe<CeClientFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryCeOpportunitiesArgs = {
@@ -8361,6 +8354,22 @@ export type TableColumnConfig = {
   __typename?: 'TableColumnConfig';
   key: Scalars['String']['output'];
   label: Scalars['String']['output'];
+};
+
+export type TableConfig = {
+  __typename?: 'TableConfig';
+  columns: Array<TableColumnConfig>;
+  filters: Array<TableFilterConfig>;
+};
+
+export type TableConfigLookup = {
+  __typename?: 'TableConfigLookup';
+  consolidatedWaitlist?: Maybe<TableConfig>;
+  unitGroupWaitlist?: Maybe<TableConfig>;
+};
+
+export type TableConfigLookupUnitGroupWaitlistArgs = {
+  unitGroupId: Scalars['ID']['input'];
 };
 
 /** Represents a dynamic filter configuration. */
@@ -21261,61 +21270,25 @@ export type GetAdminConsolidatedWaitlistQueryVariables = Exact<{
 
 export type GetAdminConsolidatedWaitlistQuery = {
   __typename?: 'Query';
-  ceConsolidatedWaitlist: {
-    __typename?: 'CeConsolidatedWaitlist';
-    ceClients: {
-      __typename?: 'CeClientsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'CeClient';
+  ceClients: {
+    __typename?: 'CeClientsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeClient';
+      id: string;
+      destinationClientId: string;
+      sourceClientIds: Array<string>;
+      clientName: string;
+      aggregatedClientAttributes: any;
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
         id: string;
-        destinationClientId: string;
-        sourceClientIds: Array<string>;
-        clientName: string;
-        aggregatedClientAttributes: any;
-        externalIds: Array<{
-          __typename?: 'ExternalIdentifier';
-          id: string;
-          identifier?: string | null;
-          url?: string | null;
-          label: string;
-          type: ExternalIdentifierType;
-        }>;
-      }>;
-    };
-  };
-};
-
-export type GetConsolidatedWaitlistColumnsQueryVariables = Exact<{
-  [key: string]: never;
-}>;
-
-export type GetConsolidatedWaitlistColumnsQuery = {
-  __typename?: 'Query';
-  ceConsolidatedWaitlist: {
-    __typename?: 'CeConsolidatedWaitlist';
-    tableColumnConfigs: Array<{
-      __typename?: 'TableColumnConfig';
-      key: string;
-      label: string;
-    }>;
-    tableFilterConfigs: Array<{
-      __typename?: 'TableFilterConfig';
-      key: string;
-      label: string;
-      options: Array<{
-        __typename?: 'PickListOption';
-        code: string;
-        label?: string | null;
-        secondaryLabel?: string | null;
-        groupLabel?: string | null;
-        groupCode?: string | null;
-        initialSelected?: boolean | null;
-        helperText?: string | null;
-        numericValue?: number | null;
-        disabled?: boolean | null;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+        type: ExternalIdentifierType;
       }>;
     }>;
   };
@@ -46669,6 +46642,42 @@ export type TableColumnConfigFieldsFragment = {
   label: string;
 };
 
+export type GetConsolidatedWaitlistColumnsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetConsolidatedWaitlistColumnsQuery = {
+  __typename?: 'Query';
+  tableConfigLookup: {
+    __typename?: 'TableConfigLookup';
+    consolidatedWaitlist?: {
+      __typename?: 'TableConfig';
+      columns: Array<{
+        __typename?: 'TableColumnConfig';
+        key: string;
+        label: string;
+      }>;
+      filters: Array<{
+        __typename?: 'TableFilterConfig';
+        key: string;
+        label: string;
+        options: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          groupCode?: string | null;
+          initialSelected?: boolean | null;
+          helperText?: string | null;
+          numericValue?: number | null;
+          disabled?: boolean | null;
+        }>;
+      }>;
+    } | null;
+  };
+};
+
 export type UnitTypeCapacityFieldsFragment = {
   __typename?: 'UnitTypeCapacity';
   id: string;
@@ -54118,14 +54127,12 @@ export const GetAdminConsolidatedWaitlistDocument = gql`
     $offset: Int = 0
     $filters: CeClientFilterOptions = null
   ) {
-    ceConsolidatedWaitlist {
-      ceClients(limit: $limit, offset: $offset, filters: $filters) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...CeClientFields
-        }
+    ceClients(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeClientFields
       }
     }
   }
@@ -54203,90 +54210,6 @@ export type GetAdminConsolidatedWaitlistSuspenseQueryHookResult = ReturnType<
 export type GetAdminConsolidatedWaitlistQueryResult = Apollo.QueryResult<
   GetAdminConsolidatedWaitlistQuery,
   GetAdminConsolidatedWaitlistQueryVariables
->;
-export const GetConsolidatedWaitlistColumnsDocument = gql`
-  query GetConsolidatedWaitlistColumns {
-    ceConsolidatedWaitlist {
-      tableColumnConfigs {
-        ...TableColumnConfigFields
-      }
-      tableFilterConfigs {
-        ...TableFilterConfigFields
-      }
-    }
-  }
-  ${TableColumnConfigFieldsFragmentDoc}
-  ${TableFilterConfigFieldsFragmentDoc}
-`;
-
-/**
- * __useGetConsolidatedWaitlistColumnsQuery__
- *
- * To run a query within a React component, call `useGetConsolidatedWaitlistColumnsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetConsolidatedWaitlistColumnsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetConsolidatedWaitlistColumnsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetConsolidatedWaitlistColumnsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
-  >(GetConsolidatedWaitlistColumnsDocument, options);
-}
-export function useGetConsolidatedWaitlistColumnsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
-  >(GetConsolidatedWaitlistColumnsDocument, options);
-}
-export function useGetConsolidatedWaitlistColumnsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetConsolidatedWaitlistColumnsQuery,
-        GetConsolidatedWaitlistColumnsQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
-  >(GetConsolidatedWaitlistColumnsDocument, options);
-}
-export type GetConsolidatedWaitlistColumnsQueryHookResult = ReturnType<
-  typeof useGetConsolidatedWaitlistColumnsQuery
->;
-export type GetConsolidatedWaitlistColumnsLazyQueryHookResult = ReturnType<
-  typeof useGetConsolidatedWaitlistColumnsLazyQuery
->;
-export type GetConsolidatedWaitlistColumnsSuspenseQueryHookResult = ReturnType<
-  typeof useGetConsolidatedWaitlistColumnsSuspenseQuery
->;
-export type GetConsolidatedWaitlistColumnsQueryResult = Apollo.QueryResult<
-  GetConsolidatedWaitlistColumnsQuery,
-  GetConsolidatedWaitlistColumnsQueryVariables
 >;
 export const GetCeClientEligibleUnitGroupsDocument = gql`
   query GetCeClientEligibleUnitGroups(
@@ -65645,6 +65568,92 @@ export type GetHouseholdStaffAssignmentHistorySuspenseQueryHookResult =
 export type GetHouseholdStaffAssignmentHistoryQueryResult = Apollo.QueryResult<
   GetHouseholdStaffAssignmentHistoryQuery,
   GetHouseholdStaffAssignmentHistoryQueryVariables
+>;
+export const GetConsolidatedWaitlistColumnsDocument = gql`
+  query GetConsolidatedWaitlistColumns {
+    tableConfigLookup {
+      consolidatedWaitlist {
+        columns {
+          ...TableColumnConfigFields
+        }
+        filters {
+          ...TableFilterConfigFields
+        }
+      }
+    }
+  }
+  ${TableColumnConfigFieldsFragmentDoc}
+  ${TableFilterConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetConsolidatedWaitlistColumnsQuery__
+ *
+ * To run a query within a React component, call `useGetConsolidatedWaitlistColumnsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetConsolidatedWaitlistColumnsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetConsolidatedWaitlistColumnsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetConsolidatedWaitlistColumnsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetConsolidatedWaitlistColumnsQuery,
+    GetConsolidatedWaitlistColumnsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetConsolidatedWaitlistColumnsQuery,
+    GetConsolidatedWaitlistColumnsQueryVariables
+  >(GetConsolidatedWaitlistColumnsDocument, options);
+}
+export function useGetConsolidatedWaitlistColumnsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetConsolidatedWaitlistColumnsQuery,
+    GetConsolidatedWaitlistColumnsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetConsolidatedWaitlistColumnsQuery,
+    GetConsolidatedWaitlistColumnsQueryVariables
+  >(GetConsolidatedWaitlistColumnsDocument, options);
+}
+export function useGetConsolidatedWaitlistColumnsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetConsolidatedWaitlistColumnsQuery,
+        GetConsolidatedWaitlistColumnsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetConsolidatedWaitlistColumnsQuery,
+    GetConsolidatedWaitlistColumnsQueryVariables
+  >(GetConsolidatedWaitlistColumnsDocument, options);
+}
+export type GetConsolidatedWaitlistColumnsQueryHookResult = ReturnType<
+  typeof useGetConsolidatedWaitlistColumnsQuery
+>;
+export type GetConsolidatedWaitlistColumnsLazyQueryHookResult = ReturnType<
+  typeof useGetConsolidatedWaitlistColumnsLazyQuery
+>;
+export type GetConsolidatedWaitlistColumnsSuspenseQueryHookResult = ReturnType<
+  typeof useGetConsolidatedWaitlistColumnsSuspenseQuery
+>;
+export type GetConsolidatedWaitlistColumnsQueryResult = Apollo.QueryResult<
+  GetConsolidatedWaitlistColumnsQuery,
+  GetConsolidatedWaitlistColumnsQueryVariables
 >;
 export const GetUnitsDocument = gql`
   query GetUnits(

@@ -51,7 +51,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   const { globalFeatureFlags: { mciIdEnabled } = {} } = useGlobalFeatureFlags();
   // Fetch column configuration for consolidated waitlist
   const {
-    data: { ceConsolidatedWaitlist } = {},
+    data: { tableConfigLookup } = {},
     loading,
     error,
   } = useGetConsolidatedWaitlistColumnsQuery();
@@ -62,7 +62,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
 
   // Define table columns (Default + MCI + Custom configured)
   const columnsWithCustom = useMemo(() => {
-    const customColumns = ceConsolidatedWaitlist?.tableColumnConfigs.map(
+    const customColumns = tableConfigLookup?.consolidatedWaitlist?.columns.map(
       ({ key, label }) => ({
         key: key,
         header: label,
@@ -76,12 +76,12 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
         : []),
       ...(customColumns || []),
     ];
-  }, [ceConsolidatedWaitlist, mciIdEnabled]);
+  }, [tableConfigLookup, mciIdEnabled]);
 
   const filters = useFilters({
     type: 'CeClientFilterOptions',
     omit: ['searchTerm'],
-    dynamicFilters: ceConsolidatedWaitlist?.tableFilterConfigs,
+    dynamicFilters: tableConfigLookup?.consolidatedWaitlist?.filters,
   });
 
   const rowSecondaryActionConfigs = useCallback((row: Row) => {
@@ -99,7 +99,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   }, []);
 
   if (error) throw error;
-  if (loading && !ceConsolidatedWaitlist) return <Loading />;
+  if (loading && !tableConfigLookup) return <Loading />;
 
   return (
     <Stack spacing={2}>
@@ -124,7 +124,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
             filters: { searchTerm: debouncedSearch || undefined },
           }}
           queryDocument={GetAdminConsolidatedWaitlistDocument}
-          pagePath='ceConsolidatedWaitlist.ceClients'
+          pagePath='ceClients'
           noData='No clients'
           paginationItemName='client'
           filters={filters}
