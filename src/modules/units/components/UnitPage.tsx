@@ -60,7 +60,12 @@ const UnitPage: React.FC<Props> = ({}) => {
       defs.push({
         title: 'Eligible Clients',
         key: 'clients',
-        contents: <PrioritizedClientsTable opportunity={opportunity} />,
+        contents: (
+          <PrioritizedClientsTable
+            opportunity={opportunity}
+            unitGroupId={unit.unitGroup?.id}
+          />
+        ),
       });
     }
 

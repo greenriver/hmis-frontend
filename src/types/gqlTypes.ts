@@ -46678,6 +46678,42 @@ export type GetConsolidatedWaitlistColumnsQuery = {
   };
 };
 
+export type GetUnitGroupWaitlistColumnsQueryVariables = Exact<{
+  unitGroupId: Scalars['ID']['input'];
+}>;
+
+export type GetUnitGroupWaitlistColumnsQuery = {
+  __typename?: 'Query';
+  tableConfigLookup: {
+    __typename?: 'TableConfigLookup';
+    unitGroupWaitlist?: {
+      __typename?: 'TableConfig';
+      columns: Array<{
+        __typename?: 'TableColumnConfig';
+        key: string;
+        label: string;
+      }>;
+      filters: Array<{
+        __typename?: 'TableFilterConfig';
+        key: string;
+        label: string;
+        options: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          groupCode?: string | null;
+          initialSelected?: boolean | null;
+          helperText?: string | null;
+          numericValue?: number | null;
+          disabled?: boolean | null;
+        }>;
+      }>;
+    } | null;
+  };
+};
+
 export type UnitTypeCapacityFieldsFragment = {
   __typename?: 'UnitTypeCapacity';
   id: string;
@@ -65654,6 +65690,97 @@ export type GetConsolidatedWaitlistColumnsSuspenseQueryHookResult = ReturnType<
 export type GetConsolidatedWaitlistColumnsQueryResult = Apollo.QueryResult<
   GetConsolidatedWaitlistColumnsQuery,
   GetConsolidatedWaitlistColumnsQueryVariables
+>;
+export const GetUnitGroupWaitlistColumnsDocument = gql`
+  query GetUnitGroupWaitlistColumns($unitGroupId: ID!) {
+    tableConfigLookup {
+      unitGroupWaitlist(unitGroupId: $unitGroupId) {
+        columns {
+          ...TableColumnConfigFields
+        }
+        filters {
+          ...TableFilterConfigFields
+        }
+      }
+    }
+  }
+  ${TableColumnConfigFieldsFragmentDoc}
+  ${TableFilterConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUnitGroupWaitlistColumnsQuery__
+ *
+ * To run a query within a React component, call `useGetUnitGroupWaitlistColumnsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUnitGroupWaitlistColumnsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUnitGroupWaitlistColumnsQuery({
+ *   variables: {
+ *      unitGroupId: // value for 'unitGroupId'
+ *   },
+ * });
+ */
+export function useGetUnitGroupWaitlistColumnsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUnitGroupWaitlistColumnsQuery,
+    GetUnitGroupWaitlistColumnsQueryVariables
+  > &
+    (
+      | { variables: GetUnitGroupWaitlistColumnsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUnitGroupWaitlistColumnsQuery,
+    GetUnitGroupWaitlistColumnsQueryVariables
+  >(GetUnitGroupWaitlistColumnsDocument, options);
+}
+export function useGetUnitGroupWaitlistColumnsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUnitGroupWaitlistColumnsQuery,
+    GetUnitGroupWaitlistColumnsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUnitGroupWaitlistColumnsQuery,
+    GetUnitGroupWaitlistColumnsQueryVariables
+  >(GetUnitGroupWaitlistColumnsDocument, options);
+}
+export function useGetUnitGroupWaitlistColumnsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetUnitGroupWaitlistColumnsQuery,
+        GetUnitGroupWaitlistColumnsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetUnitGroupWaitlistColumnsQuery,
+    GetUnitGroupWaitlistColumnsQueryVariables
+  >(GetUnitGroupWaitlistColumnsDocument, options);
+}
+export type GetUnitGroupWaitlistColumnsQueryHookResult = ReturnType<
+  typeof useGetUnitGroupWaitlistColumnsQuery
+>;
+export type GetUnitGroupWaitlistColumnsLazyQueryHookResult = ReturnType<
+  typeof useGetUnitGroupWaitlistColumnsLazyQuery
+>;
+export type GetUnitGroupWaitlistColumnsSuspenseQueryHookResult = ReturnType<
+  typeof useGetUnitGroupWaitlistColumnsSuspenseQuery
+>;
+export type GetUnitGroupWaitlistColumnsQueryResult = Apollo.QueryResult<
+  GetUnitGroupWaitlistColumnsQuery,
+  GetUnitGroupWaitlistColumnsQueryVariables
 >;
 export const GetUnitsDocument = gql`
   query GetUnits(

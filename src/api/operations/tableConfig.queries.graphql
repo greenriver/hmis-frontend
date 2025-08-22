@@ -10,3 +10,16 @@ query GetConsolidatedWaitlistColumns {
     }
   }
 }
+
+query GetUnitGroupWaitlistColumns($unitGroupId: ID!) {
+  tableConfigLookup {
+    unitGroupWaitlist(unitGroupId: $unitGroupId) {
+      columns {
+        ...TableColumnConfigFields
+      }
+      filters {
+        ...TableFilterConfigFields
+      }
+    }
+  }
+}

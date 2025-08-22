@@ -1,9 +1,12 @@
 import { Alert, Paper, Stack } from '@mui/material';
 import React, { useMemo } from 'react';
 import CommonCard from '@/components/elements/CommonCard';
+import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
+import Loading from '@/components/elements/Loading';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -16,9 +19,11 @@ import {
   CeCandidateFieldsFragment,
   CeOpportunityFieldsFragment,
   CeOpportunityStatus,
+  ExternalIdentifierType,
   GetCeOpportunityCandidatesDocument,
   GetCeOpportunityCandidatesQuery,
   GetCeOpportunityCandidatesQueryVariables,
+  useGetUnitGroupWaitlistColumnsQuery,
 } from '@/types/gqlTypes';
 
 const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
@@ -37,17 +42,45 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
 
 interface Props {
   opportunity: CeOpportunityFieldsFragment;
+  unitGroupId: string;
 }
-const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
+const PrioritizedClientsTable: React.FC<Props> = ({
+  opportunity,
+  unitGroupId,
+}) => {
   const { project } = useProjectDashboardContext();
   const { status } = opportunity;
 
+  // Feature flags to check whether to show MCI ID column
+  const { globalFeatureFlags: { mciIdEnabled } = {} } = useGlobalFeatureFlags();
+  // Fetch column configuration for consolidated waitlist
+  const {
+    data: { tableConfigLookup } = {},
+    loading,
+    error,
+  } = useGetUnitGroupWaitlistColumnsQuery({
+    variables: { unitGroupId },
+  });
+
+  // Define table columns (Default + MCI + Custom configured + Action)
   const columns = useMemo(() => {
     const canStartReferrals =
       project.access.canStartReferrals && project.access.canViewReferrals;
 
+    const customColumns = tableConfigLookup?.unitGroupWaitlist?.columns.map(
+      ({ key, label }) => ({
+        key: key,
+        header: label,
+
+        render: (row: CeCandidateFieldsFragment) => row.id, //clientAttributeDisplay(row, key),
+      })
+    );
     return [
       ...COLUMNS,
+      ...(mciIdEnabled
+        ? [externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID')]
+        : []),
+      ...(customColumns || []),
       {
         ...BASE_ACTION_COLUMN_DEF,
         render: (row: CeCandidateFieldsFragment) => (
@@ -67,7 +100,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
         ),
       },
     ];
-  }, [project.access, opportunity, status]);
+  }, [project.access, tableConfigLookup, mciIdEnabled, status, opportunity]);
 
   // If CandidatePool has not been generated yet (due to change in eligibility or prioritization requirements), show a message
   if (!opportunity.candidatesGeneratedAt) {
@@ -81,6 +114,9 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
   const candidatesGeneratedAt = parseHmisDateString(
     opportunity.candidatesGeneratedAt
   );
+
+  if (error) throw error;
+  if (loading && !tableConfigLookup) return <Loading />;
 
   return (
     <Stack rowGap={2}>
