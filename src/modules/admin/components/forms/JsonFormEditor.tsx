@@ -99,7 +99,7 @@ const JsonFormEditor: React.FC<FormEditorProps> = ({
   const effectiveLocalConstants = {
     ...AlwaysPresentLocalConstants,
     ...(role === FormRole.CustomAssessment
-      ? { clientId: DUMMY_LOCAL_CONSTANT, enrollmentId: DUMMY_LOCAL_CONSTANT }
+      ? { clientId: DUMMY_LOCAL_CONSTANT }
       : {}),
     ...localConstants,
   };

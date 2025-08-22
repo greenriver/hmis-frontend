@@ -11,7 +11,6 @@ type DynamicFormContextType = {
   viewOnly: boolean;
   autofillInvertedDependencyMap: PartialLinkIdMap;
   disabledDependencyMap: PartialLinkIdMap;
-  identifier?: string;
 };
 
 export const DynamicFormContext = createContext<DynamicFormContextType>(

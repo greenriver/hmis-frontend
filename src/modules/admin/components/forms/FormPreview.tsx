@@ -78,7 +78,6 @@ const FormPreview = () => {
     // Depending on the form role, add fake values for local constants expected by specific forms
     if (formDefinition?.role === FormRole.CustomAssessment) {
       localConstants.clientId = DUMMY_LOCAL_CONSTANT;
-      localConstants.enrollmentId = DUMMY_LOCAL_CONSTANT;
     }
 
     return localConstants;

@@ -1,12 +1,11 @@
 import { Stack, Typography } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import LoadingButton from '@/components/elements/LoadingButton';
-import { DUMMY_LOCAL_CONSTANT } from '@/modules/admin/components/forms/FormPreview';
+import AssessmentContext from '@/modules/assessments/components/AssessmentContext';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
-import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
 import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHandlers';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import {
@@ -49,24 +48,29 @@ const AltAhaScore = ({
     },
   });
 
-  const { identifier } = useDynamicFormContext();
+  const { formDefinitionIdentifier, enrollmentId } =
+    useContext(AssessmentContext) || {};
 
   const handleFetch = useCallback(() => {
-    const enrollmentId = handlers?.localConstants.enrollmentId;
-
-    if (enrollmentId === DUMMY_LOCAL_CONSTANT) {
-      // If this is the preview environment, mock the response instead of calling the mutation
+    if (!enrollmentId || !formDefinitionIdentifier) {
+      // In the preview environment, mock the response instead of calling the mutation
       onChange?.(10);
     } else {
       calculateAltAhaScore({
         variables: {
           enrollmentId,
-          formDefinitionIdentifier: identifier || '',
+          formDefinitionIdentifier: formDefinitionIdentifier,
           valuesByLinkId: handlers?.getValuesForSubmit().valuesByLinkId || {},
         },
       });
     }
-  }, [calculateAltAhaScore, handlers, identifier, onChange]);
+  }, [
+    enrollmentId,
+    onChange,
+    calculateAltAhaScore,
+    formDefinitionIdentifier,
+    handlers,
+  ]);
 
   return (
     <Stack direction='column' gap={1} alignItems='flex-start'>

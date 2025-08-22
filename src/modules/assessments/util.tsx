@@ -36,7 +36,6 @@ export type AssessmentLocalConstants = {
   clientAge?: number | null;
   clientRaceEthnicity?: string;
   clientId?: string;
-  enrollmentId?: string;
 } & typeof AlwaysPresentLocalConstants;
 
 export const generateAssessmentPath = (
