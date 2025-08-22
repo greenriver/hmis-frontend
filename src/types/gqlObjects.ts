@@ -9776,22 +9776,8 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'ceEventType',
         type: { kind: 'ENUM', name: 'EventType', ofType: null },
       },
-      {
-        name: 'name',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'projectId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
+      { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'workflowTemplateIdentifier',
         type: { kind: 'SCALAR', name: 'String', ofType: null },

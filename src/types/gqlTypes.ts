@@ -8398,8 +8398,8 @@ export type UnitGroupUnitsArgs = {
 
 export type UnitGroupInput = {
   ceEventType?: InputMaybe<EventType>;
-  name: Scalars['String']['input'];
-  projectId: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  projectId?: InputMaybe<Scalars['ID']['input']>;
   workflowTemplateIdentifier?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -47320,7 +47320,7 @@ export type UpdateUnitGroupMutation = {
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
       }> | null;
-      priorityScheme?: {
+      prioritySchemes?: Array<{
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
@@ -47328,7 +47328,7 @@ export type UpdateUnitGroupMutation = {
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
-      } | null;
+      }> | null;
       unitTypes: Array<{
         __typename?: 'UnitTypeCapacity';
         id: string;
