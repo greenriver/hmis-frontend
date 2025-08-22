@@ -9,7 +9,7 @@ import {
   Stack,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextInput from '@/components/elements/input/TextInput';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -28,9 +28,9 @@ import {
   EventType,
   PickListType,
   UnitGroupDetailFieldsFragment,
+  UpdateUnitGroupDocument,
   useCreateUnitGroupMutation,
   useGetPickListQuery,
-  UpdateUnitGroupDocument,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -172,18 +172,8 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     skip: !projectSupportsReferrals,
   });
 
-  const { ceEventTypeDisabled, workflowTemplateIdentifierDisabled } =
-    useMemo(() => {
-      return {
-        ceEventTypeDisabled: isEditing && !!unitGroup?.ceEventType,
-        workflowTemplateIdentifierDisabled:
-          isEditing && !!unitGroup?.workflowTemplateIdentifier,
-      };
-    }, [
-      isEditing,
-      unitGroup?.ceEventType,
-      unitGroup?.workflowTemplateIdentifier,
-    ]);
+  const workflowTemplateIdentifierDisabled =
+    isEditing && !!unitGroup?.workflowTemplateIdentifier;
 
   if (templatePickListError) throw templatePickListError;
   if (ceEventPicklistError) throw ceEventPicklistError;
@@ -236,12 +226,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 label={getRequiredLabel('CE Event Type', false)}
                 loading={ceEventPicklistLoading}
                 options={ceEventPicklist || []}
-                helperText={
-                  ceEventTypeDisabled
-                    ? 'CE Event Type cannot be changed once set.'
-                    : 'Select the event type for referrals in this unit group.'
-                }
-                disabled={ceEventTypeDisabled}
+                helperText='Select the event type for referrals in this unit group.'
                 onChange={(_event, option) => {
                   if (isPickListOption(option)) {
                     setCeEventType(option.code as EventType);
