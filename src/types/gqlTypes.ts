@@ -563,6 +563,8 @@ export type CeAssessmentsPaginated = {
 
 export type CeCandidate = {
   __typename?: 'CeCandidate';
+  /** Most recent snapshot of client attributes */
+  clientAttributes: Scalars['JSON']['output'];
   /** Masked as "Candidate 123" unless the user has permission to view */
   clientName: Scalars['String']['output'];
   destinationClientId: Scalars['ID']['output'];
@@ -595,8 +597,8 @@ export type CeCandidatesPaginated = {
  */
 export type CeClient = {
   __typename?: 'CeClient';
-  /** Aggregated client attributes from all candidate pools */
-  aggregatedClientAttributes: Scalars['JSON']['output'];
+  /** Aggregation of most recent snapshots from all candidate pools this client belongs to */
+  clientAttributes: Scalars['JSON']['output'];
   clientName: Scalars['String']['output'];
   destinationClientId: Scalars['ID']['output'];
   /** Unit groups that this client is a candidate for */
@@ -8354,7 +8356,13 @@ export type TableColumnConfig = {
   __typename?: 'TableColumnConfig';
   key: Scalars['String']['output'];
   label: Scalars['String']['output'];
+  type: TableColumnConfigType;
 };
+
+export enum TableColumnConfigType {
+  Date = 'DATE',
+  String = 'STRING',
+}
 
 export type TableConfig = {
   __typename?: 'TableConfig';
@@ -16878,6 +16886,7 @@ export type CeCandidateFieldsFragment = {
   id: string;
   priorityScores: Array<number>;
   clientName: string;
+  clientAttributes: any;
 };
 
 export type CeReferralSummaryFieldsFragment = {
@@ -18102,7 +18111,7 @@ export type CeClientFieldsFragment = {
   destinationClientId: string;
   sourceClientIds: Array<string>;
   clientName: string;
-  aggregatedClientAttributes: any;
+  clientAttributes: any;
   externalIds: Array<{
     __typename?: 'ExternalIdentifier';
     id: string;
@@ -20149,6 +20158,7 @@ export type GetCeOpportunityCandidatesQuery = {
         id: string;
         priorityScores: Array<number>;
         clientName: string;
+        clientAttributes: any;
       }>;
     };
   } | null;
@@ -21281,7 +21291,7 @@ export type GetAdminConsolidatedWaitlistQuery = {
       destinationClientId: string;
       sourceClientIds: Array<string>;
       clientName: string;
-      aggregatedClientAttributes: any;
+      clientAttributes: any;
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
         id: string;
@@ -46639,6 +46649,7 @@ export type TableFilterConfigFieldsFragment = {
 export type TableColumnConfigFieldsFragment = {
   __typename?: 'TableColumnConfig';
   key: string;
+  type: TableColumnConfigType;
   label: string;
 };
 
@@ -46655,6 +46666,7 @@ export type GetConsolidatedWaitlistColumnsQuery = {
       columns: Array<{
         __typename?: 'TableColumnConfig';
         key: string;
+        type: TableColumnConfigType;
         label: string;
       }>;
       filters: Array<{
@@ -46691,6 +46703,7 @@ export type GetUnitGroupWaitlistColumnsQuery = {
       columns: Array<{
         __typename?: 'TableColumnConfig';
         key: string;
+        type: TableColumnConfigType;
         label: string;
       }>;
       filters: Array<{
@@ -46861,6 +46874,7 @@ export type UnitDetailFieldsFragment = {
         id: string;
         priorityScores: Array<number>;
         clientName: string;
+        clientAttributes: any;
       }>;
     };
     referral?: {
@@ -47253,6 +47267,7 @@ export type GetUnitQuery = {
           id: string;
           priorityScores: Array<number>;
           clientName: string;
+          clientAttributes: any;
         }>;
       };
       referral?: {
@@ -49196,7 +49211,7 @@ export const CeClientFieldsFragmentDoc = gql`
     destinationClientId
     sourceClientIds
     clientName
-    aggregatedClientAttributes
+    clientAttributes
     externalIds {
       ...ClientIdentifierFields
     }
@@ -50625,6 +50640,7 @@ export const TableFilterConfigFieldsFragmentDoc = gql`
 export const TableColumnConfigFieldsFragmentDoc = gql`
   fragment TableColumnConfigFields on TableColumnConfig {
     key
+    type
     label
   }
 `;
@@ -50702,6 +50718,7 @@ export const CeCandidateFieldsFragmentDoc = gql`
     id
     priorityScores
     clientName
+    clientAttributes
   }
 `;
 export const UnitDetailFieldsFragmentDoc = gql`

@@ -8,5 +8,6 @@ fragment TableFilterConfigFields on TableFilterConfig {
 
 fragment TableColumnConfigFields on TableColumnConfig {
   key
+  type
   label
 }

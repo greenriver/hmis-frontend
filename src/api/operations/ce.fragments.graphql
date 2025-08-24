@@ -64,6 +64,7 @@ fragment CeCandidateFields on CeCandidate {
   id
   priorityScores
   clientName
+  clientAttributes
 }
 
 fragment CeReferralSummaryFields on CeReferral {
@@ -371,7 +372,7 @@ fragment CeClientFields on CeClient {
   destinationClientId
   sourceClientIds
   clientName
-  aggregatedClientAttributes
+  clientAttributes
   externalIds {
     ...ClientIdentifierFields
   }

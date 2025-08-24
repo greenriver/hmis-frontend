@@ -9,23 +9,25 @@ import ConsolidatedWaitlistDialog from '@/modules/ce/components/admin/Consolidat
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  CeCandidateFieldsFragment,
   CeClientFieldsFragment,
   ExternalIdentifierType,
   GetAdminConsolidatedWaitlistDocument,
   GetAdminConsolidatedWaitlistQuery,
   GetAdminConsolidatedWaitlistQueryVariables,
+  TableColumnConfigFieldsFragment,
+  TableColumnConfigType,
   useGetConsolidatedWaitlistColumnsQuery,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-type Row = CeClientFieldsFragment;
-
 const COLUMNS: DataColumnDef<
-  Row,
+  CeClientFieldsFragment,
   GetAdminConsolidatedWaitlistQueryVariables
 >[] = [
   {
@@ -35,15 +37,24 @@ const COLUMNS: DataColumnDef<
   },
 ];
 
-function clientAttributeDisplay(
-  row: Row,
-  clientAttributeKey: string
-): string | null {
-  if (!row.aggregatedClientAttributes) return null;
-  return ensureArray(row.aggregatedClientAttributes[clientAttributeKey]).join(
-    ', '
-  );
-}
+export const configurableCeColumns = (
+  columns: TableColumnConfigFieldsFragment[]
+) => {
+  return columns.map(({ key, label, type }) => ({
+    key: key,
+    header: label,
+    render: (row: CeClientFieldsFragment | CeCandidateFieldsFragment) => {
+      if (!row.clientAttributes) return null;
+      const value = row.clientAttributes[key];
+      if (!value) return null;
+      let values = ensureArray(value);
+      if (type === TableColumnConfigType.Date) {
+        values = values.map(parseAndFormatDate);
+      }
+      return values.join(', ');
+    },
+  }));
+};
 
 interface Props {}
 const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
@@ -58,17 +69,15 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
 
   // Internal state for search and dialog
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
-  const [selectedRow, setSelectedRow] = React.useState<Row | null>(null);
+  const [selectedRow, setSelectedRow] =
+    React.useState<CeClientFieldsFragment | null>(null);
 
   // Define table columns (Default + MCI + Custom configured)
   const columnsWithCustom = useMemo(() => {
-    const customColumns = tableConfigLookup?.consolidatedWaitlist?.columns.map(
-      ({ key, label }) => ({
-        key: key,
-        header: label,
-        render: (row: Row) => clientAttributeDisplay(row, key),
-      })
-    );
+    const columnConfig = tableConfigLookup?.consolidatedWaitlist?.columns;
+    const customColumns = columnConfig
+      ? configurableCeColumns(columnConfig)
+      : [];
     return [
       ...COLUMNS,
       ...(mciIdEnabled
@@ -84,19 +93,22 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
     dynamicFilters: tableConfigLookup?.consolidatedWaitlist?.filters,
   });
 
-  const rowSecondaryActionConfigs = useCallback((row: Row) => {
-    if (!row.sourceClientIds || row.sourceClientIds.length === 0) return [];
-    return [
-      {
-        title: 'View Client',
-        key: 'viewClient',
-        ariaLabel: `View Client, ${row.clientName}`,
-        to: generateSafePath(ClientDashboardRoutes.PROFILE, {
-          clientId: row.sourceClientIds[0],
-        }),
-      },
-    ];
-  }, []);
+  const rowSecondaryActionConfigs = useCallback(
+    (row: CeClientFieldsFragment) => {
+      if (!row.sourceClientIds || row.sourceClientIds.length === 0) return [];
+      return [
+        {
+          title: 'View Client',
+          key: 'viewClient',
+          ariaLabel: `View Client, ${row.clientName}`,
+          to: generateSafePath(ClientDashboardRoutes.PROFILE, {
+            clientId: row.sourceClientIds[0],
+          }),
+        },
+      ];
+    },
+    []
+  );
 
   if (error) throw error;
   if (loading && !tableConfigLookup) return <Loading />;
@@ -117,7 +129,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
         <GenericTableWithData<
           GetAdminConsolidatedWaitlistQuery,
           GetAdminConsolidatedWaitlistQueryVariables,
-          Row
+          CeClientFieldsFragment
         >
           columns={columnsWithCustom}
           queryVariables={{
@@ -137,6 +149,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
         <ConsolidatedWaitlistDialog
           id={selectedRow.id}
           onClose={() => setSelectedRow(null)}
+          clientName={selectedRow.clientName}
           open
         />
       )}

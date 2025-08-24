@@ -3772,6 +3772,22 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "clientAttributes",
+            "description": "Most recent snapshot of client attributes",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "JSON",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "clientName",
             "description": "Masked as \"Candidate 123\" unless the user has permission to view",
             "args": [],
@@ -4045,8 +4061,8 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "aggregatedClientAttributes",
-            "description": "Aggregated client attributes from all candidate pools",
+            "name": "clientAttributes",
+            "description": "Aggregation of most recent snapshots from all candidate pools this client belongs to",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -54719,11 +54735,51 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "type",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "TableColumnConfigType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "TableColumnConfigType",
+        "description": null,
+        "isOneOf": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "STRING",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

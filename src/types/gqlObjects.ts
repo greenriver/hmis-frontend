@@ -533,6 +533,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeCandidate',
     fields: [
       {
+        name: 'clientAttributes',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JSON', ofType: null },
+        },
+      },
+      {
         name: 'clientName',
         type: {
           kind: 'NON_NULL',
@@ -586,7 +594,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeClient',
     fields: [
       {
-        name: 'aggregatedClientAttributes',
+        name: 'clientAttributes',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -7285,6 +7293,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'type',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'TableColumnConfigType', ofType: null },
         },
       },
     ],

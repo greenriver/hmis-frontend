@@ -1942,6 +1942,7 @@ export const HmisEnums = {
     CLIENT_REPORT: 'Client Report',
     OTHER: 'Other',
   },
+  TableColumnConfigType: { DATE: 'DATE', STRING: 'STRING' },
   TargetPopulation: {
     INVALID: 'Invalid Value',
     DV_SURVIVOR_OF_DOMESTIC_VIOLENCE: 'DV: Survivor of Domestic Violence',
