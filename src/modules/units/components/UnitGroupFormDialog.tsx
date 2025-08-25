@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Button,
@@ -28,9 +27,9 @@ import {
   EventType,
   PickListType,
   UnitGroupDetailFieldsFragment,
-  UpdateUnitGroupDocument,
   useCreateUnitGroupMutation,
   useGetPickListQuery,
+  useUpdateUnitGroupMutation,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -92,9 +91,8 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
       onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
     });
 
-  const [updateUnitGroup, { loading: updateLoading }] = useMutation(
-    UpdateUnitGroupDocument,
-    {
+  const [updateUnitGroup, { loading: updateLoading }] =
+    useUpdateUnitGroupMutation({
       onCompleted: (data: any) => {
         if (data.updateUnitGroup?.errors?.length) {
           setErrors(partitionValidations(data.updateUnitGroup.errors));
@@ -106,8 +104,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
       },
       onError: (apolloError: any) =>
         setErrors({ ...emptyErrorState, apolloError }),
-    }
-  );
+    });
 
   const loading = createLoading || updateLoading;
 
