@@ -77,7 +77,7 @@ const AltAhaScore = ({
       {label}
       {errorState && hasErrors(errorState) && (
         <Stack gap={1} sx={{ mb: 1 }}>
-          <ApolloErrorAlert error={errorState.apolloError} />
+          <ApolloErrorAlert error={errorState.apolloError} inline />
           <ErrorAlert errors={errorState.errors} />
         </Stack>
       )}
