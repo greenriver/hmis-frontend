@@ -577,8 +577,6 @@ export type CeCandidate = {
   destinationClientId: Scalars['ID']['output'];
   enrollments: CeReferralSourceEnrollmentsPaginated;
   id: Scalars['ID']['output'];
-  /** @deprecated Replaced by priorityScores */
-  priorityScore: Scalars['Int']['output'];
   priorityScores: Array<Scalars['Int']['output']>;
 };
 
@@ -611,9 +609,13 @@ export type CeClient = {
   /** Unit groups that this client is a candidate for */
   eligibleUnitGroups: CeEligibleUnitGroupsPaginated;
   externalIds: Array<ExternalIdentifier>;
+  /** Client Proxy ID */
   id: Scalars['ID']['output'];
-  /** IDs of the source clients associated with this client that belong to this HMIS data source */
-  sourceClientIds: Array<Scalars['ID']['output']>;
+  /**
+   * IDs of the source clients associated with this client that belong to this HMIS
+   * data source and are viewable by the current user
+   */
+  viewableSourceClientIds: Array<Scalars['ID']['output']>;
 };
 
 /**
@@ -18169,7 +18171,7 @@ export type CeClientFieldsFragment = {
   __typename?: 'CeClient';
   id: string;
   destinationClientId: string;
-  sourceClientIds: Array<string>;
+  viewableSourceClientIds: Array<string>;
   clientName: string;
   clientAttributes: any;
   externalIds: Array<{
@@ -21349,7 +21351,7 @@ export type GetAdminConsolidatedWaitlistQuery = {
       __typename?: 'CeClient';
       id: string;
       destinationClientId: string;
-      sourceClientIds: Array<string>;
+      viewableSourceClientIds: Array<string>;
       clientName: string;
       clientAttributes: any;
       externalIds: Array<{
@@ -49332,7 +49334,7 @@ export const CeClientFieldsFragmentDoc = gql`
   fragment CeClientFields on CeClient {
     id
     destinationClientId
-    sourceClientIds
+    viewableSourceClientIds
     clientName
     clientAttributes
     externalIds {

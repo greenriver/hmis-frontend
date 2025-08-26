@@ -565,14 +565,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'priorityScore',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
-        },
-      },
-      {
         name: 'priorityScores',
         type: {
           kind: 'NON_NULL',
@@ -626,7 +618,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'sourceClientIds',
+        name: 'viewableSourceClientIds',
         type: {
           kind: 'NON_NULL',
           name: null,

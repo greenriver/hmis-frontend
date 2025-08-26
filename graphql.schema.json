@@ -3925,22 +3925,6 @@
             "deprecationReason": null
           },
           {
-            "name": "priorityScore",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Replaced by priorityScores"
-          },
-          {
             "name": "priorityScores",
             "description": null,
             "args": [],
@@ -4223,7 +4207,7 @@
           },
           {
             "name": "id",
-            "description": null,
+            "description": "Client Proxy ID",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -4238,8 +4222,8 @@
             "deprecationReason": null
           },
           {
-            "name": "sourceClientIds",
-            "description": "IDs of the source clients associated with this client that belong to this HMIS data source",
+            "name": "viewableSourceClientIds",
+            "description": "IDs of the source clients associated with this client that belong to this HMIS\ndata source and are viewable by the current user",
             "args": [],
             "type": {
               "kind": "NON_NULL",

@@ -370,7 +370,7 @@ fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
 fragment CeClientFields on CeClient {
   id
   destinationClientId
-  sourceClientIds
+  viewableSourceClientIds
   clientName
   clientAttributes
   externalIds {

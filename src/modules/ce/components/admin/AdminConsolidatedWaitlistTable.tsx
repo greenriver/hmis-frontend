@@ -95,14 +95,18 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
 
   const rowSecondaryActionConfigs = useCallback(
     (row: CeClientFieldsFragment) => {
-      if (!row.sourceClientIds || row.sourceClientIds.length === 0) return [];
+      if (
+        !row.viewableSourceClientIds ||
+        row.viewableSourceClientIds.length === 0
+      )
+        return [];
       return [
         {
           title: 'View Client',
           key: 'viewClient',
           ariaLabel: `View Client, ${row.clientName}`,
           to: generateSafePath(ClientDashboardRoutes.PROFILE, {
-            clientId: row.sourceClientIds[0],
+            clientId: row.viewableSourceClientIds[0],
           }),
         },
       ];
