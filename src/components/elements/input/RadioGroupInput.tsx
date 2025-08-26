@@ -10,7 +10,7 @@ import {
   RadioGroupProps,
 } from '@mui/material';
 import { SxProps } from '@mui/system';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import RadioGroupInputOption from '@/components/elements/input/RadioGroupInputOption';
 import { DynamicInputCommonProps } from '@/modules/form/types';
@@ -87,6 +87,20 @@ const RadioGroupInput = ({
     [onChange, value, clearable, props.disabled]
   );
 
+  const fieldsetRef = useRef<HTMLFieldSetElement | null>(null);
+
+  // Accessibility: mark up the fieldset DOM element as `disabled` if appropriate,
+  // because MUI FormControl doesn't pass down the `disabled` prop.
+  useEffect(() => {
+    if (fieldsetRef.current) {
+      if (props.disabled) {
+        fieldsetRef.current.setAttribute('disabled', 'true');
+      } else {
+        fieldsetRef.current.removeAttribute('disabled');
+      }
+    }
+  }, [props.disabled]);
+
   const GroupComponent = checkbox ? FormGroup : RadioGroup;
   const ControlComponent = checkbox ? Checkbox : Radio;
 
@@ -94,8 +108,7 @@ const RadioGroupInput = ({
     <FormControl
       component='fieldset'
       sx={{ maxWidth, ...sx }}
-      // this marks up the fieldset DOM element as `disabled`. MUI FormControl doesn't pass down the `disabled` prop
-      ref={(el) => el && props.disabled && el.setAttribute('disabled', 'true')}
+      ref={fieldsetRef}
     >
       <FormLabel
         error={error}
