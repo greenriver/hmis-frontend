@@ -506,7 +506,7 @@ const numericValueForFormValue = (
 
 export const getAutofillComparisonValue = (
   av: AutofillValue,
-  values: FormValues,
+  values: FormValues, // only includes values that are determined to be relevant for autofill (see buildAutofillDependencyMap)
   targetItem: FormItem
 ) => {
   if (av.formula) {
@@ -970,6 +970,11 @@ export const buildAutofillDependencyMap = (
         av.sumQuestions.forEach((summedLinkId) => {
           addDependency(summedLinkId);
         });
+      }
+
+      // If this item populates the value from another question, add that dependency
+      if (av.valueQuestion) {
+        addDependency(av.valueQuestion);
       }
 
       // If this autofill is conditional on other items, add those dependencies
