@@ -661,6 +661,7 @@ export type CeEligibleUnitGroup = {
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
+  unitGroupId: Scalars['ID']['output'];
   unitGroupName: Scalars['String']['output'];
   /** Number of units in the unit group that are currently accepting referrals */
   unitsAcceptingReferrals: Scalars['Int']['output'];
