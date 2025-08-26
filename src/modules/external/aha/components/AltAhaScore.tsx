@@ -51,12 +51,10 @@ const AltAhaScore = ({
   const { formDefinitionIdentifier, enrollmentId } =
     useContext(AssessmentContext) || {};
 
+  const hasRequiredContext = !!enrollmentId && !!formDefinitionIdentifier;
+
   const handleFetch = useCallback(() => {
-    if (!enrollmentId || !formDefinitionIdentifier) {
-      throw new Error(
-        'unable to calculate alt-aha without assessment context values'
-      );
-    } else {
+    if (hasRequiredContext) {
       calculateAltAhaScore({
         variables: {
           enrollmentId,
@@ -66,9 +64,9 @@ const AltAhaScore = ({
       });
     }
   }, [
-    enrollmentId,
-    onChange,
+    hasRequiredContext,
     calculateAltAhaScore,
+    enrollmentId,
     formDefinitionIdentifier,
     handlers,
   ]);
@@ -84,7 +82,9 @@ const AltAhaScore = ({
       )}
       <LoadingButton
         loading={loading}
-        disabled={disabled}
+        // Disable the button if the disabled prop is passed down from the form item,
+        // or if the form is being rendered outside of an assessment context (e.g. in the form preview)
+        disabled={disabled || !hasRequiredContext}
         type='button'
         onClick={handleFetch}
         sx={{ my: 1 }}
