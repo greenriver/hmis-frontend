@@ -386,7 +386,7 @@ fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
   projectId
   projectType
   organizationName
-  whenAddedToCandidatePool
-  whenUpdatedInCandidatePool
+  candidateCreatedAt
+  candidateUpdatedAt
   unitsAcceptingReferrals
 }

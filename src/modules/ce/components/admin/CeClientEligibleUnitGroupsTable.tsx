@@ -52,12 +52,12 @@ const COLUMNS: DataColumnDef<
     ),
   },
   {
-    key: 'whenAddedToCandidatePool',
+    key: 'candidateCreatedAt',
     // Date when client became eligible for the pool (not tied to availability)
     header: 'Added to Waitlist',
-    render: ({ whenAddedToCandidatePool }) => {
-      if (!whenAddedToCandidatePool) return '';
-      return <RelativeDateDisplay dateString={whenAddedToCandidatePool} />;
+    render: ({ candidateCreatedAt }) => {
+      if (!candidateCreatedAt) return '';
+      return <RelativeDateDisplay dateString={candidateCreatedAt} />;
     },
   },
 ];

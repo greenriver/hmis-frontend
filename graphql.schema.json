@@ -4494,6 +4494,38 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "candidateCreatedAt",
+            "description": "Timestamp when the candidate was added to the pool",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "candidateUpdatedAt",
+            "description": "Timestamp when the candidate was last updated",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "id",
             "description": null,
             "args": [],
@@ -4574,22 +4606,6 @@
             "deprecationReason": null
           },
           {
-            "name": "totalUnits",
-            "description": "Total number of units in the unit group",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "unitGroupName",
             "description": null,
             "args": [],
@@ -4607,7 +4623,7 @@
           },
           {
             "name": "unitsAcceptingReferrals",
-            "description": "Number of units that are accepting referrals",
+            "description": "Number of units in the unit group that are currently accepting referrals",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -4615,38 +4631,6 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "whenAddedToCandidatePool",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ISO8601DateTime",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "whenUpdatedInCandidatePool",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ISO8601DateTime",
                 "ofType": null
               }
             },

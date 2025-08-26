@@ -652,18 +652,18 @@ export type CeCustomReferralStatus = {
 
 export type CeEligibleUnitGroup = {
   __typename?: 'CeEligibleUnitGroup';
+  /** Timestamp when the candidate was added to the pool */
+  candidateCreatedAt: Scalars['ISO8601DateTime']['output'];
+  /** Timestamp when the candidate was last updated */
+  candidateUpdatedAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
   organizationName: Scalars['String']['output'];
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
-  /** Total number of units in the unit group */
-  totalUnits: Scalars['Int']['output'];
   unitGroupName: Scalars['String']['output'];
-  /** Number of units that are accepting referrals */
+  /** Number of units in the unit group that are currently accepting referrals */
   unitsAcceptingReferrals: Scalars['Int']['output'];
-  whenAddedToCandidatePool: Scalars['ISO8601DateTime']['output'];
-  whenUpdatedInCandidatePool: Scalars['ISO8601DateTime']['output'];
 };
 
 export type CeEligibleUnitGroupsPaginated = {
@@ -18192,8 +18192,8 @@ export type CeEligibleUnitGroupFieldsFragment = {
   projectId: string;
   projectType: ProjectType;
   organizationName: string;
-  whenAddedToCandidatePool: string;
-  whenUpdatedInCandidatePool: string;
+  candidateCreatedAt: string;
+  candidateUpdatedAt: string;
   unitsAcceptingReferrals: number;
 };
 
@@ -21388,8 +21388,8 @@ export type GetCeClientEligibleUnitGroupsQuery = {
         projectId: string;
         projectType: ProjectType;
         organizationName: string;
-        whenAddedToCandidatePool: string;
-        whenUpdatedInCandidatePool: string;
+        candidateCreatedAt: string;
+        candidateUpdatedAt: string;
         unitsAcceptingReferrals: number;
       }>;
     };
@@ -49351,8 +49351,8 @@ export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
     projectId
     projectType
     organizationName
-    whenAddedToCandidatePool
-    whenUpdatedInCandidatePool
+    candidateCreatedAt
+    candidateUpdatedAt
     unitsAcceptingReferrals
   }
 `;
