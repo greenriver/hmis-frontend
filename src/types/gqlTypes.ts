@@ -629,6 +629,8 @@ export type CeClientEligibleUnitGroupsArgs = {
 
 export type CeClientFilterOptions = {
   dynamicFilters?: InputMaybe<Array<TableFilterValue>>;
+  /** Filter to Clients that are eligible for the specified Project Types */
+  projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
