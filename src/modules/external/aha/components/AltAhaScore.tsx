@@ -53,8 +53,9 @@ const AltAhaScore = ({
 
   const handleFetch = useCallback(() => {
     if (!enrollmentId || !formDefinitionIdentifier) {
-      // In the preview environment, mock the response instead of calling the mutation
-      onChange?.(10);
+      throw new Error(
+        'unable to calculate alt-aha without assessment context values'
+      );
     } else {
       calculateAltAhaScore({
         variables: {
