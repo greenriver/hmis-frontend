@@ -9,6 +9,7 @@ import {
 } from '@/components/layout/layoutConstants';
 import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import { AssessmentContextProvider } from '@/modules/assessments/components/AssessmentContext';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import AssessmentRelatedAnnualsAlert from '@/modules/assessments/components/AssessmentRelatedAnnualsAlert';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
@@ -112,26 +113,33 @@ const IndividualAssessment = ({
   );
 
   return (
-    <AssessmentForm
-      alerts={alertNode}
-      client={client}
-      key={assessment?.id}
-      viewingDefinition={viewingDefinition}
-      editingDefinition={editingDefinition}
-      assessment={assessment}
-      enrollment={enrollment}
-      top={topOffsetHeight}
-      embeddedInWorkflow={embeddedInWorkflow}
-      FormActionProps={FormActionProps}
-      visible={visible}
-      formRef={formRef}
-      onFormStateChange={onFormStateChange}
-      onSubmit={onSubmit}
-      onSaveDraft={onSaveDraft}
-      errors={errors}
-      mutationLoading={mutationLoading}
-      onCancelValidations={onCancelValidations}
-    />
+    <AssessmentContextProvider
+      formDefinitionIdentifier={editingDefinition.identifier}
+      enrollmentId={enrollment.id}
+      clientId={client.id}
+      assessmentId={assessment?.id}
+    >
+      <AssessmentForm
+        alerts={alertNode}
+        client={client}
+        key={assessment?.id}
+        viewingDefinition={viewingDefinition}
+        editingDefinition={editingDefinition}
+        assessment={assessment}
+        enrollment={enrollment}
+        top={topOffsetHeight}
+        embeddedInWorkflow={embeddedInWorkflow}
+        FormActionProps={FormActionProps}
+        visible={visible}
+        formRef={formRef}
+        onFormStateChange={onFormStateChange}
+        onSubmit={onSubmit}
+        onSaveDraft={onSaveDraft}
+        errors={errors}
+        mutationLoading={mutationLoading}
+        onCancelValidations={onCancelValidations}
+      />
+    </AssessmentContextProvider>
   );
 };
 

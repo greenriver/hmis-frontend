@@ -9,3 +9,20 @@ mutation FetchAhaScore($clientId: ID!) {
     }
   }
 }
+
+mutation CalculateAltAhaScore(
+  $enrollmentId: ID!
+  $formDefinitionIdentifier: String!
+  $valuesByLinkId: JsonObject!
+) {
+  calculateAltAhaScore(
+    enrollmentId: $enrollmentId
+    formDefinitionIdentifier: $formDefinitionIdentifier
+    valuesByLinkId: $valuesByLinkId
+  ) {
+    score
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

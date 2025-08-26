@@ -1,4 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import { Button, Grid, Paper, Stack } from '@mui/material';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -13,6 +14,7 @@ import UnitGroupCeConfigurationCard from '@/modules/ce/components/unitGroup/Unit
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
+import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { useGetUnitGroupQuery } from '@/types/gqlTypes';
 
@@ -28,6 +30,7 @@ const UnitGroupPage = () => {
     variables: { id: unitGroupId },
   });
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
   const projectSupportsReferrals = useMemo(
     () => project.coordinatedEntryFeatures?.supportsReferrals,
@@ -60,13 +63,22 @@ const UnitGroupPage = () => {
         title={unitGroup.name}
         actions={
           canEditUnitGroup && (
-            <Button
-              onClick={() => setDialogOpen(true)}
-              startIcon={<AddIcon />}
-              variant='outlined'
-            >
-              Add Units
-            </Button>
+            <Stack direction='row' gap={1}>
+              <Button
+                onClick={() => setEditDialogOpen(true)}
+                startIcon={<EditIcon />}
+                variant='outlined'
+              >
+                Edit Unit Group
+              </Button>
+              <Button
+                onClick={() => setDialogOpen(true)}
+                startIcon={<AddIcon />}
+                variant='outlined'
+              >
+                Add Units
+              </Button>
+            </Stack>
           )
         }
       />
@@ -121,6 +133,13 @@ const UnitGroupPage = () => {
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
         includeCeFields={projectSupportsReferrals}
+      />
+      <UnitGroupFormDialog
+        projectId={project.id}
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        projectSupportsReferrals={projectSupportsReferrals}
+        unitGroup={unitGroup}
       />
     </>
   );

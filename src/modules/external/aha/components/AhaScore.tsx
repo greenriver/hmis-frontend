@@ -88,21 +88,13 @@ const AhaScore = ({
     },
   });
 
+  const hasRequiredContext = !!clientId && clientId !== DUMMY_CLIENT_ID;
+
   const handleFetch = useCallback(() => {
-    if (clientId === DUMMY_CLIENT_ID) {
-      // If this is the preview environment, mock the response instead of calling the mutation
-      setHasFetched(true);
-      severalItemsChanged?.({
-        values: {
-          [SCORE_LINK_ID]: 10,
-          [MCI_QUALITY_INDICATOR_LINK_ID]: 1,
-        },
-        type: ChangeType.User,
-      });
-    } else {
+    if (hasRequiredContext) {
       fetchAha();
     }
-  }, [clientId, fetchAha, severalItemsChanged]);
+  }, [fetchAha, hasRequiredContext]);
 
   // Throw an error if the children don't match the expected structure
   if (!isComponentValid) throw new Error('Invalid Aha form component');
@@ -143,7 +135,9 @@ const AhaScore = ({
         >
           <LoadingButton
             loading={loading}
-            disabled={hasScore} // If value already exists, disable the button
+            // If value already exists, disable the button
+            // If this is not in the assessment context (such as form preview mode), disable the button
+            disabled={hasScore || !hasRequiredContext}
             type='button'
             onClick={handleFetch}
             sx={{ my: 1 }}
