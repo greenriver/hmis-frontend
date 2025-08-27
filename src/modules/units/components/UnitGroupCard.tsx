@@ -17,8 +17,6 @@ interface Props {
   unitGroup: UnitGroupCapacityFieldsFragment;
   projectId?: string;
   linkToUnitGroup?: boolean;
-  hideTitle?: boolean;
-  includeUtilizationChart?: boolean;
 }
 
 const UnitGroupCard: React.FC<Props> = ({

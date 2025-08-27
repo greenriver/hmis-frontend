@@ -36,18 +36,19 @@ const Units = () => {
     [project.coordinatedEntryFeatures?.supportsReferrals]
   );
 
-  // For now, we assume that if the project supports CE referrals, it also has Unit Groups enabled.
-  // TODO(#7814) update this- for now maybe I expand this to include if unit groups exists in the project at all?
-  const unitGroupsEnabled = useMemo(
-    () => !!projectSupportsReferrals,
-    [projectSupportsReferrals]
-  );
-
   const unitGroups = useMemo(() => {
-    if (!unitGroupsEnabled) return [];
     if (!data?.project?.unitGroups) return [];
     return data.project.unitGroups.nodes;
-  }, [data, unitGroupsEnabled]);
+  }, [data]);
+
+  // Enable Unit Groups management UI if:
+  // - the project supports CE referrals (direct or waitlist), OR
+  // - the project already has at least one unit group. (This will allow UI to switch over when Units are migrated into Unit Groups)
+  // TODO(#7814) remove this flag once Unit Group migration is complete. At that point all projects will have Unit Groups Enabled.
+  const unitGroupsEnabled = useMemo(
+    () => !!projectSupportsReferrals || unitGroups.length > 0,
+    [projectSupportsReferrals, unitGroups.length]
+  );
 
   if (!project.access.canViewUnits) return <NotFound />;
   if (error) throw error;
@@ -93,7 +94,7 @@ const Units = () => {
                 {/* This is split out by Unit Type, which should be the same as splitting out by Unit Group
                 since Unit Groups each contain exactly 1 Unit Type. It would be better to show the Unit Group name here,
                 but that requires reworking the graphql capacity type. */}
-                <UnitCapacityTable projectId={project.id} breakdownByUnitType />
+                <UnitCapacityTable projectId={project.id} />
               </CommonCard>
             )}
             <Paper>

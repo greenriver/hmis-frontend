@@ -14,7 +14,6 @@ const vacantColor = 'primary.200';
 export const UnitVisualizationChart: React.FC<Props> = ({
   occupied,
   vacant,
-  // referralInProgress, Not yet implemented
 }) => {
   const referralInProgress = 0; // TODO(#7796) add category for units with a referral in progress
   const total = vacant + occupied + referralInProgress;

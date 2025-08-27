@@ -8,14 +8,10 @@ import { UnitTypeCapacityFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
   unitTypes: UnitTypeCapacityFieldsFragment[];
-  hideUnitTypeTitle?: boolean;
 }
 
 // Unit capacity charts grouped by unit type
-const UnitUtilizationByUnitType: React.FC<Props> = ({
-  unitTypes,
-  hideUnitTypeTitle = false,
-}) => {
+const UnitUtilizationByUnitType: React.FC<Props> = ({ unitTypes }) => {
   return (
     <>
       <Stack
@@ -26,15 +22,9 @@ const UnitUtilizationByUnitType: React.FC<Props> = ({
         {unitTypes.map((unitType) => (
           <Stack key={unitType.id} gap={0.5}>
             <Stack justifyContent={'space-between'} direction='row'>
-              {!hideUnitTypeTitle && (
-                <Typography
-                  variant='body2'
-                  color='text.primary'
-                  fontWeight={600}
-                >
-                  {unitType.unitType}
-                </Typography>
-              )}
+              <Typography variant='body2' color='text.primary' fontWeight={600}>
+                {unitType.unitType}
+              </Typography>
               <Stack
                 direction='row'
                 spacing={1.5}
