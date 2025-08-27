@@ -24,6 +24,7 @@ import { isPickListOption } from '@/modules/form/types';
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
   PickListType,
+  UnitGroupCapacityFieldsFragment,
   useCreateUnitsMutation,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
@@ -34,22 +35,26 @@ interface CreateUnitsDialogProps {
   open: boolean;
   onClose: () => void;
   includeCeFields?: boolean;
+  unitGroups: UnitGroupCapacityFieldsFragment[];
 }
 
 const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
   projectId,
   unitGroupId,
+  unitGroups,
   open,
   onClose,
   includeCeFields = false,
 }) => {
   const [unitType, setUnitType] = useState<string | null>(null);
+  const [unitGroupIdState, setUnitGroupIdState] = useState<string | null>(null);
   const [numberOfUnits, setNumberOfUnits] = useState<number | null>(null);
   const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const handleClose = useCallback(() => {
     setUnitType(null);
     setNumberOfUnits(null);
+    setUnitGroupIdState(null);
     setErrors(emptyErrorState);
     onClose();
   }, [onClose]);
@@ -67,14 +72,12 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
   });
 
   const handleSubmit = useCallback(() => {
-    if (!unitType || !numberOfUnits) return;
-
     createUnits({
       variables: {
         input: {
           input: {
             projectId,
-            unitGroupId,
+            unitGroupId: unitGroupId || unitGroupIdState,
             unitTypeId: unitType,
             count: numberOfUnits,
           },
@@ -88,6 +91,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
     createUnits,
     projectId,
     unitGroupId,
+    unitGroupIdState,
     includeCeFields,
   ]);
 
@@ -106,7 +110,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
-      <DialogTitle>Create Units</DialogTitle>
+      <DialogTitle>Add Units</DialogTitle>
       <DialogContent sx={{ my: 2 }}>
         {errorState.errors.length > 0 && (
           <Box sx={{ mb: 2 }}>
@@ -115,24 +119,52 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
         )}
         <ApolloErrorAlert error={errorState.apolloError} />
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <FormSelect
-              value={unitType ? { code: unitType } : null}
-              label={getRequiredLabel('Unit Type', true)}
-              placeholder='Select Unit Type'
-              loading={unitTypePickListLoading}
-              options={unitTypePickList || []}
-              onChange={(_event, option) => {
-                if (isPickListOption(option)) {
-                  setUnitType(option.code);
-                }
-              }}
-              maxWidth={400}
-            />
-          </Grid>
+          {unitGroups.length > 1 && (
+            <Grid item xs={12}>
+              <FormSelect
+                value={unitGroupIdState ? { code: unitGroupIdState } : null}
+                label={getRequiredLabel('Unit Group', true)}
+                placeholder='Select Unit Group'
+                options={unitGroups.map((group) => ({
+                  label: group.name,
+                  code: group.id,
+                }))}
+                onChange={(_event, option) => {
+                  if (isPickListOption(option)) {
+                    setUnitGroupIdState(option.code);
+                  } else if (!option) {
+                    setUnitGroupIdState(null);
+                  }
+                }}
+                maxWidth={400}
+              />
+            </Grid>
+          )}
+          {unitGroups.length === 0 && (
+            <Grid item xs={12}>
+              <FormSelect
+                value={unitType ? { code: unitType } : null}
+                label={getRequiredLabel('Unit Type', true)}
+                placeholder='Select Unit Type'
+                loading={unitTypePickListLoading}
+                options={unitTypePickList || []}
+                onChange={(_event, option) => {
+                  if (isPickListOption(option)) {
+                    setUnitType(option.code);
+                  } else if (!option) {
+                    setUnitType(null);
+                  }
+                }}
+                maxWidth={400}
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <NumberInput
-              label={getRequiredLabel('Number of Units to Add', true)}
+              label={getRequiredLabel(
+                `Number of Units to Add ${unitGroups.length > 0 ? 'to Group' : ''}`,
+                true
+              )}
               value={numberOfUnits ?? ''}
               onChange={(e) => setNumberOfUnits(Number(e.target.value))}
               max={200}
@@ -148,7 +180,11 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
           <LoadingButton
             onClick={handleSubmit}
             loading={loading}
-            disabled={!unitType || !numberOfUnits || numberOfUnits <= 0}
+            disabled={
+              (!unitType && !unitGroupIdState) ||
+              !numberOfUnits ||
+              numberOfUnits <= 0
+            }
           >
             Add Units
           </LoadingButton>

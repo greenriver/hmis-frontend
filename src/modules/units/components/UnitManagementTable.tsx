@@ -26,7 +26,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 interface Props {
   projectId: string;
   unitGroupId?: string; // if this table is for a specific unit group
-  unitGroupsEnabled?: boolean; // temporary, will be true for all projects when migrated
+  unitGroupsEnabled?: boolean; // TEMP(#7814), remove when all projects moved to unit groups
   projectSupportsReferrals?: boolean; // whether to show CE details
 }
 
