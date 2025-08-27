@@ -65,6 +65,7 @@ import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import SearchIcon from '@mui/icons-material/Search';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
 import SendIcon from '@mui/icons-material/Send';
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import SwapVertRoundedIcon from '@mui/icons-material/SwapVertRounded';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
@@ -107,6 +108,7 @@ export {
   CheckRoundedIcon as ReferralAcceptedIcon,
   TableRowsRounded as TableRowsIcon,
   GridViewRounded as TableCardsIcon,
+  SettingsRoundedIcon as SettingsIcon,
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
   RadioButtonCheckedIcon as FormChoiceIcon,

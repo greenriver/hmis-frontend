@@ -1,6 +1,14 @@
-import { Divider, Paper, Stack, Typography } from '@mui/material';
+import {
+  CardActionArea,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import ButtonLink from '@/components/elements/ButtonLink';
-import UnitUtilizationByUnitType from '@/modules/units/components/UnitUtilizationByUnitType';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import RouterLink from '@/components/elements/RouterLink';
+import { SettingsIcon } from '@/components/elements/SemanticIcons';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { UnitGroupCapacityFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -10,64 +18,53 @@ interface Props {
   projectId?: string;
   linkToUnitGroup?: boolean;
   hideTitle?: boolean;
+  includeUtilizationChart?: boolean;
 }
 
 const UnitGroupCard: React.FC<Props> = ({
   unitGroup,
   projectId,
   linkToUnitGroup = false,
-  hideTitle = false,
 }) => {
-  const hasMultipleUnitTypes = unitGroup.unitTypes.length > 1;
-  return (
-    <Paper sx={{ px: 2, pt: hideTitle ? 2 : 1, pb: 2 }}>
-      {!hideTitle && (
-        <Stack
-          justifyContent='space-between'
-          direction='row'
-          alignItems='flex-start'
-          sx={{ mb: 1 }}
-        >
-          <div>
-            <Typography component='h2' variant='h5' sx={{ mb: 1 }}>
-              <Typography variant='overline' display='block'>
-                Unit Group
-              </Typography>
-              {unitGroup.name}
+  const content = (
+    <Paper sx={{ px: 2, pt: 1, pb: 2 }}>
+      <Stack
+        justifyContent='space-between'
+        direction='row'
+        alignItems='flex-start'
+        sx={{ mb: 1 }}
+      >
+        <div>
+          <Typography component='h2' variant='h5' sx={{ mb: 1 }}>
+            <Typography variant='overline' display='block'>
+              Unit Group
             </Typography>
-          </div>
-          {linkToUnitGroup && projectId && (
-            <ButtonLink
+            {unitGroup.name}
+          </Typography>
+        </div>
+
+        {linkToUnitGroup && projectId && (
+          <ButtonTooltipContainer title='Manage Unit Group'>
+            <IconButton
               aria-label={`Manage ${unitGroup.name}`}
+              component={ButtonLink}
               to={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
                 projectId,
                 unitGroupId: unitGroup.id,
               })}
-              sx={{ mt: 1 }}
               size='small'
+              sx={{ mt: 1, borderRadius: 1 }}
             >
-              Manage
-            </ButtonLink>
-          )}
-        </Stack>
-      )}
+              <SettingsIcon />
+            </IconButton>
+          </ButtonTooltipContainer>
+        )}
+      </Stack>
+
       {unitGroup.capacity > 0 && (
-        <>
-          {hasMultipleUnitTypes && (
-            <>
-              <Stack direction='row' gap={2}>
-                <Typography variant='body2'>
-                  <b>Total Units:</b> {unitGroup.capacity}
-                </Typography>
-                <Typography variant='body2'>
-                  <b>Vacancies:</b> {unitGroup.availability}
-                </Typography>
-              </Stack>
-              <Divider sx={{ my: 2 }} />
-            </>
-          )}
-          <UnitUtilizationByUnitType unitTypes={unitGroup.unitTypes} />
-        </>
+        <Typography variant='body2' color='text.secondary'>
+          {unitGroup.availability} / {unitGroup.capacity} units vacant
+        </Typography>
       )}
       {unitGroup.capacity === 0 && (
         <Typography variant='body2' color='text.secondary'>
@@ -76,5 +73,21 @@ const UnitGroupCard: React.FC<Props> = ({
       )}
     </Paper>
   );
+
+  if (linkToUnitGroup) {
+    return (
+      <CardActionArea
+        component={RouterLink}
+        to={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+          projectId,
+          unitGroupId: unitGroup.id,
+        })}
+        aria-label='Manage Unit Group'
+      >
+        {content}
+      </CardActionArea>
+    );
+  }
+  return content;
 };
 export default UnitGroupCard;

@@ -37592,6 +37592,7 @@ export type SubmitFormMutation = {
           rrhSubType?: RrhSubType | null;
           staffAssignmentsEnabled: boolean;
           targetPopulation?: TargetPopulation | null;
+          hasUnits: boolean;
           projectName: string;
           projectType?: ProjectType | null;
           operatingEndDate?: string | null;
@@ -41337,6 +41338,7 @@ export type ProjectAllFieldsFragment = {
   rrhSubType?: RrhSubType | null;
   staffAssignmentsEnabled: boolean;
   targetPopulation?: TargetPopulation | null;
+  hasUnits: boolean;
   projectName: string;
   projectType?: ProjectType | null;
   operatingEndDate?: string | null;
@@ -42241,6 +42243,7 @@ export type GetProjectQuery = {
     rrhSubType?: RrhSubType | null;
     staffAssignmentsEnabled: boolean;
     targetPopulation?: TargetPopulation | null;
+    hasUnits: boolean;
     projectName: string;
     projectType?: ProjectType | null;
     operatingEndDate?: string | null;
@@ -49961,6 +49964,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
       ...ServiceTypeFields
     }
     ...ProjectCocCount
+    hasUnits
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}

@@ -5,7 +5,13 @@ import Loading from '@/components/elements/Loading';
 import UnitUtilizationByUnitType from '@/modules/units/components/UnitUtilizationByUnitType';
 import { useGetProjectUnitTypesQuery } from '@/types/gqlTypes';
 
-const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
+const UnitCapacityTable = ({
+  projectId,
+  breakdownByUnitType = false,
+}: {
+  projectId: string;
+  breakdownByUnitType?: boolean;
+}) => {
   const { data, error, loading } = useGetProjectUnitTypesQuery({
     variables: { id: projectId },
     fetchPolicy: 'cache-and-network',
@@ -18,12 +24,14 @@ const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
   if (rows.length === 0) {
     return null;
   }
-  const total = data?.project?.unitTypes
-    .map((type) => type.capacity)
-    .reduce((acc, capacity) => acc + capacity, 0);
-  const vacancies = data?.project?.unitTypes
-    .map((type) => type.availability)
-    .reduce((acc, availability) => acc + availability, 0);
+  const total =
+    data?.project?.unitTypes
+      .map((type) => type.capacity)
+      .reduce((acc, capacity) => acc + capacity, 0) || 0;
+  const vacancies =
+    data?.project?.unitTypes
+      .map((type) => type.availability)
+      .reduce((acc, availability) => acc + availability, 0) || 0;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -35,8 +43,13 @@ const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
           {vacancies}
         </CommonLabeledTextBlock>
       </Stack>
-      <Divider sx={{ mb: 2 }} />
-      <UnitUtilizationByUnitType unitTypes={rows} />
+
+      {breakdownByUnitType && (
+        <>
+          <Divider sx={{ mb: 2 }} />{' '}
+          <UnitUtilizationByUnitType unitTypes={rows} />
+        </>
+      )}
     </Box>
   );
 };

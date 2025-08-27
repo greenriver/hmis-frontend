@@ -31,19 +31,23 @@ import {
 
 interface CreateUnitsDialogProps {
   projectId: string;
+  allowSelectUnitGroup: boolean; // Whether to include Unit Group selector on form. If true, must pass `unitGroups`
+  allowSelectUnitType: boolean; // Whether to include Unit Type selector on form
   unitGroupId?: string; // If provided, units will be created in this group
+  unitGroups?: UnitGroupCapacityFieldsFragment[];
   open: boolean;
   onClose: () => void;
   includeCeFields?: boolean;
-  unitGroups: UnitGroupCapacityFieldsFragment[];
 }
 
 const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
   projectId,
   unitGroupId,
-  unitGroups,
   open,
   onClose,
+  allowSelectUnitGroup,
+  allowSelectUnitType,
+  unitGroups = [],
   includeCeFields = false,
 }) => {
   const [unitType, setUnitType] = useState<string | null>(null);
@@ -119,7 +123,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
         )}
         <ApolloErrorAlert error={errorState.apolloError} />
         <Grid container spacing={2}>
-          {unitGroups.length > 1 && (
+          {allowSelectUnitGroup && unitGroups.length > 1 && (
             <Grid item xs={12}>
               <FormSelect
                 value={unitGroupIdState ? { code: unitGroupIdState } : null}
@@ -140,7 +144,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
               />
             </Grid>
           )}
-          {unitGroups.length === 0 && (
+          {allowSelectUnitType && (
             <Grid item xs={12}>
               <FormSelect
                 value={unitType ? { code: unitType } : null}
@@ -181,7 +185,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
             onClick={handleSubmit}
             loading={loading}
             disabled={
-              (!unitType && !unitGroupIdState) ||
+              (!unitType && !unitGroupIdState && !unitGroupId) ||
               !numberOfUnits ||
               numberOfUnits <= 0
             }

@@ -11,14 +11,14 @@ interface Props {
 
 const UnitGroupCeConfigurationCard: React.FC<Props> = ({ unitGroup }) => {
   const missingWorkflowTemplateText = (
-    <Typography variant='inherit' color='error.dark'>
-      Configure Workflow
+    <Typography variant='inherit' color='text.secondary'>
+      Not Specified
     </Typography>
   );
   return (
     <CommonCard title='Configuration'>
       <Stack gap={1}>
-        <CommonLabeledTextBlock title='Workflow Template' variant='body1'>
+        <CommonLabeledTextBlock title='Referral Workflow' variant='body1'>
           {unitGroup.workflowTemplateName || missingWorkflowTemplateText}
         </CommonLabeledTextBlock>
         {unitGroup.ceEventType && (

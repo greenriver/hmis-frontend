@@ -28,6 +28,7 @@ const Units = () => {
 
   const { data, error, loading } = useGetProjectUnitGroupsQuery({
     variables: { id: project.id, limit: 100 },
+    fetchPolicy: 'cache-and-network',
   });
 
   const projectSupportsReferrals = useMemo(
@@ -61,29 +62,40 @@ const Units = () => {
             id={project.id}
             permissions='canManageUnits'
           >
-            {/* FIXME: should be hidden if unitGroupsEnabled and there are no unit groups yet, because you need to create one first */}
-            <Button
-              onClick={() => setAddUnitsDialogOpen(true)}
-              startIcon={<AddIcon />}
-              variant='outlined'
-            >
-              Add Units
-            </Button>
+            {/* If this is a new project with NO unit groups, hide "Add Units" button and instead
+            show "Add Unit Group" to add the initial group */}
+            {unitGroupsEnabled && unitGroups.length === 0 ? (
+              <Button
+                onClick={() => setAddUnitGroupDialogOpen(true)}
+                startIcon={<AddIcon />}
+                variant='outlined'
+              >
+                Add Unit Group
+              </Button>
+            ) : (
+              <Button
+                onClick={() => setAddUnitsDialogOpen(true)}
+                startIcon={<AddIcon />}
+                variant='outlined'
+              >
+                Add Units
+              </Button>
+            )}
           </ProjectPermissionsFilter>
         }
       />
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={unitGroupsEnabled ? 8 : 12}>
+        <Grid item xs={unitGroups.length > 0 ? 8 : 12}>
           <Stack gap={4}>
-            {unitGroupsEnabled ? (
-              <CommonCard title='Capacity'>total capacity: x</CommonCard>
-            ) : (
+            {project.hasUnits && (
               <CommonCard title='Capacity'>
-                <UnitCapacityTable projectId={project.id} />
+                {/* This is split out by Unit Type, which should be the same as splitting out by Unit Group
+                since Unit Groups each contain exactly 1 Unit Type. It would be better to show the Unit Group name here,
+                but that requires reworking the graphql capacity type. */}
+                <UnitCapacityTable projectId={project.id} breakdownByUnitType />
               </CommonCard>
             )}
-
             <Paper>
               <UnitManagementTable
                 projectId={project.id}
@@ -93,7 +105,7 @@ const Units = () => {
             </Paper>
           </Stack>
         </Grid>
-        {projectSupportsReferrals && (
+        {unitGroups.length > 0 && (
           <Grid item xs={4}>
             <Stack gap={2}>
               {unitGroups.map((group) => (
@@ -104,6 +116,7 @@ const Units = () => {
                   linkToUnitGroup
                 />
               ))}
+
               <ProjectPermissionsFilter
                 id={project.id}
                 permissions='canManageUnits'
@@ -112,7 +125,6 @@ const Units = () => {
                   onClick={() => setAddUnitGroupDialogOpen(true)}
                   startIcon={<AddIcon />}
                   color='grayscale'
-                  variant='outlined'
                 >
                   Add Unit Group
                 </Button>
@@ -125,6 +137,8 @@ const Units = () => {
         projectId={project.id}
         open={addUnitsDialogOpen}
         onClose={() => setAddUnitsDialogOpen(false)}
+        allowSelectUnitType={!unitGroupsEnabled}
+        allowSelectUnitGroup={unitGroupsEnabled}
         includeCeFields={projectSupportsReferrals}
         unitGroups={unitGroups}
       />
