@@ -10,7 +10,6 @@ import NotFound from '@/components/pages/NotFound';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
-import ProjectUnitsTable from '@/modules/units/components/ProjectUnitsTable';
 import UnitCapacityTable from '@/modules/units/components/UnitCapacityTable';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
 import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
@@ -102,19 +101,11 @@ const Units = () => {
           </CommonCard>
         )}
         <Paper>
-          {unitGroupsEnabled ? (
-            <ProjectUnitsTable
-              projectId={project.id}
-              unitGroupsEnabled={unitGroupsEnabled}
-              projectSupportsReferrals={projectSupportsReferrals}
-            />
-          ) : (
-            // If Unit Groups are not enabled, use the Unit Management Table so Units can be managed directly on this page
-            <UnitManagementTable
-              projectId={project.id}
-              projectSupportsReferrals={projectSupportsReferrals}
-            />
-          )}
+          <UnitManagementTable
+            projectId={project.id}
+            unitGroupsEnabled={unitGroupsEnabled}
+            projectSupportsReferrals={projectSupportsReferrals}
+          />
         </Paper>
       </Stack>
       {unitGroupsEnabled ? (

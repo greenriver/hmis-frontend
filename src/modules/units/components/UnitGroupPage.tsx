@@ -37,10 +37,6 @@ const UnitGroupPage = () => {
     [project.coordinatedEntryFeatures?.supportsReferrals]
   );
 
-  const ceAvailabilityActionsEnabled = useMemo(() => {
-    return projectSupportsReferrals && !!unitGroup?.workflowTemplateName;
-  }, [projectSupportsReferrals, unitGroup?.workflowTemplateName]);
-
   // Set the breadcrumb so it says the correct name of this unit group
   useEffect(() => {
     if (!unitGroup) return;
@@ -93,7 +89,6 @@ const UnitGroupPage = () => {
                   projectId={project.id}
                   unitGroupId={unitGroupId}
                   projectSupportsReferrals={projectSupportsReferrals}
-                  ceAvailabilityActionsEnabled={ceAvailabilityActionsEnabled}
                 />
               </Paper>
             )}
