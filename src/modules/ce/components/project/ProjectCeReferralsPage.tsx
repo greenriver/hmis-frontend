@@ -88,7 +88,7 @@ const ProjectCeReferralsPage: React.FC = () => {
 
   return (
     <>
-      <PageTitle title='Referrals (new)' actions={actions} />
+      <PageTitle title='Referrals' actions={actions} />
       <CommonTabs
         ariaLabel={'Project CE Tabs'}
         tabDefinitions={tabDefinitions}
