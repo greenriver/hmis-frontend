@@ -8401,6 +8401,8 @@ export type UnitGroup = {
   /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
+  /** Unit type for this group */
+  unitType?: Maybe<UnitTypeObject>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   workflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
@@ -8417,6 +8419,7 @@ export type UnitGroupInput = {
   ceEventType?: InputMaybe<EventType>;
   name?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
+  unitTypeId?: InputMaybe<Scalars['ID']['input']>;
   workflowTemplateIdentifier?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -46735,6 +46738,7 @@ export type UnitGroupDetailFieldsFragment = {
   name: string;
   capacity: number;
   availability: number;
+  unitType?: { __typename?: 'UnitTypeObject'; id: string } | null;
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
@@ -46915,6 +46919,7 @@ export type GetUnitGroupQuery = {
     name: string;
     capacity: number;
     availability: number;
+    unitType?: { __typename?: 'UnitTypeObject'; id: string } | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
@@ -47359,6 +47364,7 @@ export type UpdateUnitGroupMutation = {
       name: string;
       capacity: number;
       availability: number;
+      unitType?: { __typename?: 'UnitTypeObject'; id: string } | null;
       eligibilityRequirements?: Array<{
         __typename?: 'CeMatchRule';
         id: string;
@@ -50538,6 +50544,9 @@ export const UnitGroupDetailFieldsFragmentDoc = gql`
     ...UnitGroupCapacityFields
     workflowTemplateName
     ceEventType
+    unitType {
+      id
+    }
     workflowTemplateIdentifier
     eligibilityRequirements {
       ...CeMatchRuleFields

@@ -101,6 +101,9 @@ fragment UnitGroupDetailFields on UnitGroup {
   ...UnitGroupCapacityFields
   workflowTemplateName
   ceEventType
+  unitType {
+    id
+  }
   workflowTemplateIdentifier
   eligibilityRequirements {
     ...CeMatchRuleFields
