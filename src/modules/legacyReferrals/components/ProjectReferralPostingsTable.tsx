@@ -6,8 +6,8 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { useReferralFilter } from '@/modules/referrals/hooks/useReferralFilter';
+import ReferralPostingStatusDisplay from '@/modules/legacyReferrals/components/ReferralPostingStatusDisplay';
+import { useReferralFilter } from '@/modules/legacyReferrals/hooks/useReferralFilter';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectReferralPostingsDocument,

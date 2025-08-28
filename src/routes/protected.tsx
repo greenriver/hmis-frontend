@@ -85,6 +85,11 @@ import HouseholdPage from '@/modules/enrollment/components/pages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
+import AdminReferralDenialsPage from '@/modules/legacyReferrals/components/admin/AdminReferralDenialsPage';
+import AdminReferralPosting from '@/modules/legacyReferrals/components/admin/AdminReferralPosting';
+import NewOutgoingReferralPage from '@/modules/legacyReferrals/components/NewOutgoingReferralPage';
+import NewReferralRequestPage from '@/modules/legacyReferrals/components/NewReferralRequestPage';
+import ProjectReferralPostingPage from '@/modules/legacyReferrals/components/ProjectReferralPostingPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
 import CeParticipationsPage from '@/modules/projectAdministration/components/CeParticipationsPage';
@@ -107,13 +112,7 @@ import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments
 import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
 import ProjectExternalFormSubmissions from '@/modules/projects/components/ProjectExternalFormSubmissions';
 import ProjectOverviewPage from '@/modules/projects/components/ProjectOverviewPage';
-import AdminReferralDenialsPage from '@/modules/referrals/components/admin/AdminReferralDenialsPage';
-import AdminReferralPosting from '@/modules/referrals/components/admin/AdminReferralPosting';
-import NewOutgoingReferralPage from '@/modules/referrals/components/NewOutgoingReferralPage';
-import NewReferralRequestPage from '@/modules/referrals/components/NewReferralRequestPage';
-import ProjectReferralPostingPage from '@/modules/referrals/components/ProjectReferralPostingPage';
 
-import ProjectReferralsPage from '@/modules/referrals/components/ProjectReferralsPage';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
 import ClientSearchPage from '@/modules/search/components/ClientSearchPage';
 
@@ -290,15 +289,19 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.REFERRALS,
             element: (
-              <ProjectEditRoute
-                permissions={[
-                  'canManageIncomingReferrals',
-                  'canManageOutgoingReferrals',
-                ]}
-                redirectRoute={Routes.PROJECT}
-              >
-                <ProjectReferralsPage />
-              </ProjectEditRoute>
+              // No ProjectRoute wrapper due to complexity: some parts of page are visible for Legacy referrals,
+              // other parts visible if CE is enabled, etc. ProjectCeReferralsPage component handles permissions internally.
+              // See useProjectCeVisibility hook for details.
+              <ProjectCeReferralsPage />
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.CE,
+            element: (
+              // No ProjectRoute wrapper due to complexity: some parts of page are visible for Legacy referrals,
+              // other parts visible if CE is enabled, etc. ProjectCeReferralsPage component handles permissions internally.
+              // See useProjectCeVisibility hook for details.
+              <ProjectCeReferralsPage />
             ),
           },
           {
@@ -468,25 +471,6 @@ export const protectedRoutes: RouteNode[] = [
               >
                 <CreateHouseholdPage />
               </ProjectEditRoute>
-            ),
-          },
-          {
-            path: ProjectDashboardRoutes.CE,
-            element: (
-              <ProjectRoute
-                permissions={[
-                  'canViewUnits',
-                  'canViewReferrals',
-                  'canViewOwnReferrals',
-                  'canManageOutgoingReferrals',
-                ]}
-                coordinatedEntryFeatures={[
-                  'supportsReferrals',
-                  'sendsDirectReferrals',
-                ]}
-              >
-                <ProjectCeReferralsPage />
-              </ProjectRoute>
             ),
           },
           {

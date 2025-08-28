@@ -6,7 +6,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { useReferralFilter } from '@/modules/referrals/hooks/useReferralFilter';
+import { useReferralFilter } from '@/modules/legacyReferrals/hooks/useReferralFilter';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetDeniedPendingReferralPostingsDocument,

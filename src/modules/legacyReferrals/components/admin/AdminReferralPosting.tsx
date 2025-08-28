@@ -11,7 +11,7 @@ import NotFound from '@/components/pages/NotFound';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
+import ReferralHouseholdMembersTable from '@/modules/legacyReferrals/components/ProjectReferralHouseholdMembersTable';
 import {
   ReferralPostingStatus,
   useGetReferralPostingQuery,
