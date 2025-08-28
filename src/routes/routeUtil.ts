@@ -1,8 +1,12 @@
 import { Location, To } from 'react-router-dom';
 
+// Key used in location state to indicate that the desktop nav should be expanded
+export const EXPAND_DESKTOP_NAV_KEY = 'expandDesktopNav';
+
 export type LocationState = {
   fromLoginRedirect?: boolean;
   backToLabel?: string; // title of page to go back to. Used like `Back to ${backToLabel}`
+  [EXPAND_DESKTOP_NAV_KEY]?: boolean; // whether to expand desktop nav
 };
 
 export const STATE_FROM_LOGIN_REDIRECT: LocationState = {

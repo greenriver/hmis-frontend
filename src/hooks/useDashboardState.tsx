@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import useCurrentPath from './useCurrentPath';
 import { useMobileMenu } from '@/components/layout/nav/useMobileMenuContext';
 import {
@@ -6,10 +7,11 @@ import {
   HIDE_NAV_ROUTES,
   NO_PADDING_ROUTES,
 } from '@/routes/routes';
+import { EXPAND_DESKTOP_NAV_KEY } from '@/routes/routeUtil';
 
 export function useDashboardState() {
   const currentPath = useCurrentPath();
-
+  const { state } = useLocation();
   const { mobileNavIsOpen, handleCloseMobileMenu, handleOpenMobileMenu } =
     useMobileMenu();
 
@@ -34,6 +36,14 @@ export function useDashboardState() {
       setFocusMode(undefined);
     }
   }, [currentPath]);
+
+  // Expand desktop nav if specified in location state. This supports re-expanding
+  // the nav when navigating back from a page that auto-collapsed it.
+  useEffect(() => {
+    if (state?.[EXPAND_DESKTOP_NAV_KEY]) {
+      setDesktopNavState(true);
+    }
+  }, [state]);
 
   const handleCloseDesktopMenu = useCallback(() => {
     setDesktopNavState(false);

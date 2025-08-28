@@ -5,11 +5,13 @@ import {
   AssessmentResponseStatus,
   useAssessmentHandlers,
 } from '../hooks/useAssessmentHandlers';
+
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { cache } from '@/providers/apolloClient';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import { EXPAND_DESKTOP_NAV_KEY } from '@/routes/routeUtil';
 import {
   EnrolledClientFieldsFragment,
   FormDefinitionFieldsFragment,
@@ -43,7 +45,9 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
         generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
           enrollmentId: enrollment.id,
           clientId: client.id,
-        })
+        }),
+        // Re-expand desktop nav when navigating back to enrollment
+        { state: { [EXPAND_DESKTOP_NAV_KEY]: true } }
       ),
     [navigate, enrollment, client]
   );

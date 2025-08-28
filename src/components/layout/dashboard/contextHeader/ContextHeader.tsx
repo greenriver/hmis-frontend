@@ -3,17 +3,21 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Button } from '@mui/material';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavigateOptions, useLocation, useNavigate } from 'react-router-dom';
 import CommonStickyBar from '../../CommonStickyBar';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '../../layoutConstants';
+
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { locationFromDefaultOrLogin } from '@/routes/routeUtil';
+import {
+  locationFromDefaultOrLogin,
+  EXPAND_DESKTOP_NAV_KEY,
+} from '@/routes/routeUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -70,8 +74,13 @@ const ContextHeader: React.FC<Props> = ({
   const exitFocusMode = useCallback(() => {
     if (!focusMode) return;
 
+    // When navigating out of focus mode, pass special state to re-expand the desktop nav
+    const navOptions: NavigateOptions = {
+      state: { [EXPAND_DESKTOP_NAV_KEY]: true },
+    };
+
     if (location?.state?.focusModeReturnPath) {
-      navigate(location.state.focusModeReturnPath);
+      navigate(location.state.focusModeReturnPath, navOptions);
     } else if (
       locationFromDefaultOrLogin(location) &&
       focusModeDefaultReturnPath
@@ -81,7 +90,7 @@ const ContextHeader: React.FC<Props> = ({
         clientId,
         enrollmentId,
       });
-      navigate(defaultBackPath);
+      navigate(defaultBackPath, navOptions);
     } else {
       navigate(-1);
     }
