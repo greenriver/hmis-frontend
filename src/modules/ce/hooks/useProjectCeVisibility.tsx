@@ -32,6 +32,13 @@ export function useProjectCeVisibility(project?: ProjectAllFieldsFragment) {
     const showOutgoingReferrals =
       sendsDirectReferrals && canManageOutgoingReferrals;
 
-    return { showReferrals, showAvailableUnits, showOutgoingReferrals };
+    return {
+      showReferrals,
+      showAvailableUnits,
+      showOutgoingReferrals,
+      // If user has 'canManageIncomingReferrals' in the project, they can see the legacy incoming referrals tab. This tab will be deprecated and removed once all projects are
+      // using CE referrals instead.
+      showLegacyReferrals: project.access.canManageIncomingReferrals,
+    };
   }, [project]);
 }
