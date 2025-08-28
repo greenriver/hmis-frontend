@@ -27,7 +27,9 @@ const ProjectLegacyReferrals = () => {
   // If this project has CE Referrals enabled (either Direct or Waitlist),
   // show this page "legacy mode" which turns off the ability to create new
   // legacy referrals and referral requests.
-  const legacyMode = !!project.coordinatedEntryFeatures?.supportsReferrals;
+  const { supportsReferrals, sendsDirectReferrals } =
+    project.coordinatedEntryFeatures || {};
+  const legacyMode = supportsReferrals || sendsDirectReferrals;
 
   return (
     <Stack spacing={4}>
