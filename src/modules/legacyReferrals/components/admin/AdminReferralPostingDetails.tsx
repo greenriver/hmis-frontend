@@ -13,7 +13,7 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
+import ReferralPostingStatusDisplay from '@/modules/legacyReferrals/components/ReferralPostingStatusDisplay';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
