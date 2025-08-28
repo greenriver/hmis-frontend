@@ -102,6 +102,11 @@ const Units = () => {
                 projectId={project.id}
                 unitGroupsEnabled={unitGroupsEnabled}
                 projectSupportsReferrals={projectSupportsReferrals}
+                noUnitsMessage={
+                  unitGroupsEnabled && unitGroups.length === 0
+                    ? 'No units. Add a unit group to get started.'
+                    : undefined
+                }
               />
             </Paper>
           </Stack>

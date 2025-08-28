@@ -28,6 +28,7 @@ interface Props {
   unitGroupId?: string; // if this table is for a specific unit group
   unitGroupsEnabled?: boolean; // TEMP(#7814), remove when all projects moved to unit groups
   projectSupportsReferrals?: boolean; // whether to show CE details
+  noUnitsMessage?: string; // custom message to show when there are no units
 }
 
 // Table for managing units within a Project or Unit Group.
@@ -40,6 +41,7 @@ const UnitManagementTable: React.FC<Props> = ({
   unitGroupId,
   unitGroupsEnabled = false,
   projectSupportsReferrals = false,
+  noUnitsMessage,
 }) => {
   const { setUnitToDelete, renderSingleDeleteDialog } = useDeleteUnits({
     onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
@@ -137,7 +139,7 @@ const UnitManagementTable: React.FC<Props> = ({
         queryDocument={GetUnitsDocument}
         columns={columns}
         pagePath='project.units'
-        noData='No units'
+        noData={noUnitsMessage || 'No units'}
         selectable={canManageUnits ? 'checkbox' : undefined}
         isRowSelectable={(row) =>
           !!(
