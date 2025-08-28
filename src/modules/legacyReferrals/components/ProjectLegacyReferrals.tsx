@@ -25,11 +25,10 @@ const ProjectLegacyReferrals = () => {
   const { project } = useProjectDashboardContext();
 
   // If this project has CE Referrals enabled (either Direct or Waitlist),
-  // show this page "legacy mode" which turns off the ability to create new
-  // legacy referrals and referral requests.
+  // hide functions to create new legacy referrals and referral requests.
   const { supportsReferrals, sendsDirectReferrals } =
     project.coordinatedEntryFeatures || {};
-  const legacyMode = supportsReferrals || sendsDirectReferrals;
+  const allowCreatingNewReferrals = !supportsReferrals && !sendsDirectReferrals;
 
   return (
     <Stack spacing={4}>
@@ -38,7 +37,7 @@ const ProjectLegacyReferrals = () => {
           title='Outgoing Referrals'
           headerVariant='border'
           actions={
-            !legacyMode && (
+            allowCreatingNewReferrals && (
               <ButtonLink
                 to={generateSafePath(
                   ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL,
@@ -64,7 +63,7 @@ const ProjectLegacyReferrals = () => {
               title='Referral Requests'
               headerVariant='border'
               actions={
-                !legacyMode && (
+                allowCreatingNewReferrals && (
                   <ButtonLink
                     to={generateSafePath(
                       ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,

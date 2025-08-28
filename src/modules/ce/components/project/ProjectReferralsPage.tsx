@@ -13,7 +13,7 @@ import { useProjectDashboardContext } from '@/modules/projects/components/Projec
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const ProjectCeReferralsPage: React.FC = () => {
+const ProjectReferralsPage: React.FC = () => {
   const { project } = useProjectDashboardContext();
 
   const {
@@ -97,4 +97,4 @@ const ProjectCeReferralsPage: React.FC = () => {
   );
 };
 
-export default ProjectCeReferralsPage;
+export default ProjectReferralsPage;

@@ -56,8 +56,8 @@ import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinate
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 
 import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
-import ProjectCeReferralsPage from '@/modules/ce/components/project/ProjectCeReferralsPage';
 import ProjectReferralPage from '@/modules/ce/components/project/ProjectReferralPage';
+import ProjectReferralsPage from '@/modules/ce/components/project/ProjectReferralsPage';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/referral/ReferralSteps';
@@ -290,18 +290,18 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.REFERRALS,
             element: (
               // No ProjectRoute wrapper due to complexity: some parts of page are visible for Legacy referrals,
-              // other parts visible if CE is enabled, etc. ProjectCeReferralsPage component handles permissions internally.
+              // other parts visible if CE is enabled, etc. ProjectReferralsPage component handles permissions internally.
               // See useProjectCeVisibility hook for details.
-              <ProjectCeReferralsPage />
+              <ProjectReferralsPage />
             ),
           },
           {
             path: ProjectDashboardRoutes.CE,
             element: (
               // No ProjectRoute wrapper due to complexity: some parts of page are visible for Legacy referrals,
-              // other parts visible if CE is enabled, etc. ProjectCeReferralsPage component handles permissions internally.
+              // other parts visible if CE is enabled, etc. ProjectReferralsPage component handles permissions internally.
               // See useProjectCeVisibility hook for details.
-              <ProjectCeReferralsPage />
+              <ProjectReferralsPage />
             ),
           },
           {
