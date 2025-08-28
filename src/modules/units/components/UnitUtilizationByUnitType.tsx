@@ -46,7 +46,10 @@ const UnitUtilizationByUnitType: React.FC<Props> = ({ unitTypes }) => {
               </Stack>
             </Stack>
 
-            <UnitUtilizationChart unitType={unitType} />
+            <UnitUtilizationChart
+              occupied={unitType.capacity - unitType.availability}
+              vacant={unitType.availability}
+            />
           </Stack>
         ))}
       </Stack>
