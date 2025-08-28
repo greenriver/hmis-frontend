@@ -123,7 +123,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
         )}
         <ApolloErrorAlert error={errorState.apolloError} />
         <Grid container spacing={2}>
-          {allowSelectUnitGroup && unitGroups.length > 1 && (
+          {allowSelectUnitGroup && unitGroups.length > 0 && (
             <Grid item xs={12}>
               <FormSelect
                 value={unitGroupIdState ? { code: unitGroupIdState } : null}
