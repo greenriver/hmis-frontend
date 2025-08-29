@@ -20,7 +20,7 @@ import {
 const ReferralStepDetails: React.FC<{
   step: CeReferralStepSummaryFieldsFragment;
 }> = ({ step }) => {
-  const { status, availableAt, updatedAt, assignees } = step;
+  const { status, availableAt, updatedAt, updatedBy, assignees } = step;
   const { user: currentUser } = useAuth();
 
   const dateText = useMemo(() => {
@@ -28,13 +28,13 @@ const ReferralStepDetails: React.FC<{
     if (status === CeReferralStepStatus.Completed) {
       const date = parseHmisDateString(updatedAt);
       // intentionally format relative datetime as date (eg "Today" instead of "5 minutes ago")
-      const user = step.updatedBy?.name || 'Unknown User';
+      const user = updatedBy?.name || 'Unknown User';
       if (date) return `Completed ${formatRelativeDate(date)} by ${user}`;
     }
     const date = parseHmisDateString(availableAt);
     // intentionally format relative datetime as date (eg "Today" instead of "5 minutes ago")
     if (date) return `Available ${formatRelativeDate(date)}`;
-  }, [status, availableAt, updatedAt, step.updatedBy?.name]);
+  }, [status, availableAt, updatedAt, updatedBy]);
 
   const assigneeText = useMemo(() => {
     if (status === CeReferralStepStatus.Completed) return; // hide and show user who completed step instead
