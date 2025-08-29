@@ -37,7 +37,8 @@ const ReferralStepDetails: React.FC<{
   }, [status, availableAt, updatedAt, step.updatedBy?.name]);
 
   const assigneeText = useMemo(() => {
-    if (status === CeReferralStepStatus.Completed) return;
+    if (status === CeReferralStepStatus.Completed) return; // hide and show user who completed step instead
+    if (status === CeReferralStepStatus.Unavailable) return; // hide to reduce confusion, no action can be taken
     if (assignees.length === 0) return;
 
     const assigneeNames = assignees.map(({ id, name }) =>
