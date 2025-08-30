@@ -20,7 +20,7 @@ import {
 const ReferralStepDetails: React.FC<{
   step: CeReferralStepSummaryFieldsFragment;
 }> = ({ step }) => {
-  const { status, availableAt, updatedAt, assignees } = step;
+  const { status, availableAt, updatedAt, updatedBy, assignees } = step;
   const { user: currentUser } = useAuth();
 
   const dateText = useMemo(() => {
@@ -28,21 +28,24 @@ const ReferralStepDetails: React.FC<{
     if (status === CeReferralStepStatus.Completed) {
       const date = parseHmisDateString(updatedAt);
       // intentionally format relative datetime as date (eg "Today" instead of "5 minutes ago")
-      if (date) return `Completed ${formatRelativeDate(date)}`;
+      const user = updatedBy?.name || 'Unknown User';
+      if (date) return `Completed ${formatRelativeDate(date)} by ${user}`;
     }
     const date = parseHmisDateString(availableAt);
     // intentionally format relative datetime as date (eg "Today" instead of "5 minutes ago")
     if (date) return `Available ${formatRelativeDate(date)}`;
-  }, [availableAt, updatedAt, status]);
+  }, [status, availableAt, updatedAt, updatedBy]);
 
   const assigneeText = useMemo(() => {
+    if (status === CeReferralStepStatus.Completed) return; // hide and show user who completed step instead
+    if (status === CeReferralStepStatus.Unavailable) return; // hide to reduce confusion, no action can be taken
     if (assignees.length === 0) return;
 
     const assigneeNames = assignees.map(({ id, name }) =>
       id === currentUser?.id ? 'you' : name
     );
     return `Assigned to ${stringifyArray(assigneeNames)}`;
-  }, [assignees, currentUser?.id]);
+  }, [assignees, currentUser?.id, status]);
 
   return (
     <Box>

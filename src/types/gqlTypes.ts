@@ -17125,6 +17125,11 @@ export type CeReferralFieldsFragment = {
       id: string;
       name: string;
     }>;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
     access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   }> | null;
   opportunity?: {
@@ -17317,6 +17322,11 @@ export type CeReferralStepSummaryFieldsFragment = {
     id: string;
     name: string;
   }>;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
   access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
@@ -17970,6 +17980,11 @@ export type CeReferralStepFieldsFragment = {
     id: string;
     name: string;
   }>;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
   access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
@@ -18732,6 +18747,11 @@ export type StartCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     };
   } | null;
@@ -19400,6 +19420,11 @@ export type SubmitCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     } | null;
     referral?: {
@@ -19492,6 +19517,11 @@ export type SubmitCeReferralStepMutation = {
           id: string;
           name: string;
         }>;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         access: {
           __typename?: 'CeReferralStepAccess';
           canPerformStep: boolean;
@@ -19798,6 +19828,11 @@ export type AssignParticipantsMutation = {
           id: string;
           name: string;
         }>;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         access: {
           __typename?: 'CeReferralStepAccess';
           canPerformStep: boolean;
@@ -20148,6 +20183,11 @@ export type GetCeReferralQuery = {
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     }> | null;
     opportunity?: {
@@ -20925,6 +20965,11 @@ export type GetCeReferralStepQuery = {
       id: string;
       name: string;
     }>;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
     access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   } | null;
 };
@@ -48718,6 +48763,10 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     }
     availableAt
     updatedAt
+    updatedBy {
+      id
+      name
+    }
     access {
       canPerformStep
     }
