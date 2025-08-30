@@ -134,7 +134,6 @@ const UnitGroupPage = () => {
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
         includeCeFields={projectSupportsReferrals}
-        allowSelectUnitGroup={false}
       />
       <UnitGroupFormDialog
         projectId={project.id}
