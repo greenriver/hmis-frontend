@@ -14,7 +14,6 @@ import UnitGroupCeConfigurationCard from '@/modules/ce/components/unitGroup/Unit
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
-import UnitUtilizationByUnitType from '@/modules/units/components/UnitUtilizationByUnitType';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { useGetUnitGroupQuery } from '@/types/gqlTypes';
 
@@ -84,9 +83,9 @@ const UnitGroupPage = () => {
         <Grid item xs={projectSupportsReferrals ? 8 : 12}>
           {!!unitGroup.capacity ? (
             <Stack gap={2}>
-              <Paper sx={{ py: 3, px: 2 }}>
-                <UnitUtilizationByUnitType unitTypes={unitGroup.unitTypes} />
-              </Paper>
+              {/*<Paper sx={{ py: 3, px: 2 }}>*/}
+              {/*  <UnitUtilizationByUnitType unitTypes={unitGroup.unitTypes} />*/}
+              {/*</Paper>*/}
               <Paper>
                 <UnitManagementTable
                   projectId={project.id}
@@ -135,8 +134,6 @@ const UnitGroupPage = () => {
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
         includeCeFields={projectSupportsReferrals}
-        // If adding first units to group, allow user to select unit type. After that, don't allow unit type selection and let the backend infer it.
-        allowSelectUnitType={unitGroup.capacity === 0}
         allowSelectUnitGroup={false}
       />
       <UnitGroupFormDialog

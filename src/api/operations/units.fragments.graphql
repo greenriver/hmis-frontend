@@ -92,9 +92,6 @@ fragment UnitGroupCapacityFields on UnitGroup {
   name
   capacity
   availability
-  unitTypes {
-    ...UnitTypeCapacityFields
-  }
 }
 
 fragment UnitGroupDetailFields on UnitGroup {
