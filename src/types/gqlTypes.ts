@@ -7064,7 +7064,7 @@ export enum Race {
   ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (HispanicLatinaeo) Hispanic/Latina/e/o */
+  /** (HispanicLatinaeo) Hispanic/Latina/o */
   HispanicLatinaeo = 'HISPANIC_LATINAEO',
   /** (MidEastNAfrican) Middle Eastern or North African */
   MidEastNAfrican = 'MID_EAST_N_AFRICAN',
