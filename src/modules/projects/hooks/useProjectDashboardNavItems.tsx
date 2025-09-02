@@ -106,7 +106,10 @@ export const useProjectDashboardNavItems = (
             title: 'Referrals',
             path: ProjectDashboardRoutes.CE,
             hide:
-              !showReferrals && !showAvailableUnits && !showOutgoingReferrals,
+              !showReferrals &&
+              !showAvailableUnits &&
+              !showOutgoingReferrals &&
+              !project.access.canManageIncomingReferrals,
           },
         ],
       },
