@@ -11,18 +11,18 @@ interface Props {
   onClose: () => void;
 }
 
-const ConsolidatedWaitlistDialog: React.FC<Props> = ({
+const EligibleUnitGroupsDialog: React.FC<Props> = ({
   id,
   clientName,
   ...props
 }) => {
   return (
     <CommonDialog maxWidth='lg' fullWidth enableBackdropClick {...props}>
-      <DialogTitle>Client Waitlists</DialogTitle>
+      <DialogTitle>Eligible Projects</DialogTitle>
       <DialogContent>
         <Stack my={4} gap={4}>
           <Typography variant='body2'>
-            {clientName} is on the waitlist for the following unit groups:
+            {clientName} is eligible for the following unit groups:
           </Typography>
           <CeClientEligibleUnitGroupsTable id={id} />
         </Stack>
@@ -31,4 +31,4 @@ const ConsolidatedWaitlistDialog: React.FC<Props> = ({
   );
 };
 
-export default ConsolidatedWaitlistDialog;
+export default EligibleUnitGroupsDialog;

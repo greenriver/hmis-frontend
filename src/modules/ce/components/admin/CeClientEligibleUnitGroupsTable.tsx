@@ -1,4 +1,4 @@
-import { Chip, Paper } from '@mui/material';
+import { Chip, Paper, Tooltip } from '@mui/material';
 import React from 'react';
 
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
@@ -54,7 +54,15 @@ const COLUMNS: DataColumnDef<
   {
     key: 'candidateCreatedAt',
     // Date when client became eligible for the pool (not tied to availability)
-    header: 'Added to Waitlist',
+    header: (
+      <Tooltip
+        title='Date when the client became eligible'
+        placement='top'
+        arrow
+      >
+        <span>Eligibility Date</span>
+      </Tooltip>
+    ),
     render: ({ candidateCreatedAt }) => {
       if (!candidateCreatedAt) return '';
       return <RelativeDateDisplay dateString={candidateCreatedAt} />;

@@ -5,7 +5,7 @@ import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
-import ConsolidatedWaitlistDialog from '@/modules/ce/components/admin/ConsolidatedWaitlistDialog';
+import EligibleUnitGroupsDialog from '@/modules/ce/components/admin/EligibleUnitGroupsDialog';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -150,7 +150,7 @@ const AdminCeClientsTable: React.FC<Props> = ({}) => {
         />
       </Paper>
       {selectedRow && (
-        <ConsolidatedWaitlistDialog
+        <EligibleUnitGroupsDialog
           id={selectedRow.id}
           onClose={() => setSelectedRow(null)}
           clientName={selectedRow.clientName}

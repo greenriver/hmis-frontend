@@ -97,8 +97,8 @@ const PrioritizedClientsTable: React.FC<Props> = ({
   if (!opportunity.candidatesGeneratedAt) {
     return (
       <Alert severity='info'>
-        The waitlist for this unit has not been generated yet. Please check back
-        later.
+        The eligible client list for this unit has not been generated yet.
+        Please check back later.
       </Alert>
     );
   }
@@ -117,7 +117,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
         {candidatesGeneratedAt && (
           <>
             {' '}
-            The waitlist was last updated{' '}
+            The eligible client list was last updated{' '}
             {formatRelativeDateTime(candidatesGeneratedAt)} (
             {parseAndFormatDateTime(opportunity.candidatesGeneratedAt)}).
           </>
