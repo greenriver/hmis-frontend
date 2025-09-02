@@ -3889,7 +3889,7 @@ export enum FundingSource {
   /** (43) HUD: CoC - Youth Homeless Demonstration Program (YHDP) */
   HudCocYouthHomelessDemonstrationProgramYhdp = 'HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP',
   /** (47) HUD: ESG - CV [Deprecated] */
-  HudEsgCvDeprecated = 'HUD_ESG_CV_DEPRECATED',
+  HudEsgCv = 'HUD_ESG_CV',
   /** (8) HUD: ESG - Emergency Shelter (operating and/or essential services) */
   HudEsgEmergencyShelter = 'HUD_ESG_EMERGENCY_SHELTER',
   /** (9) HUD: ESG - Homelessness Prevention */
@@ -3905,7 +3905,7 @@ export enum FundingSource {
   /** (51) HUD: HOME (ARP) */
   HudHomeArp = 'HUD_HOME_ARP',
   /** (48) HUD: HOPWA - CV [Deprecated] */
-  HudHopwaCvDeprecated = 'HUD_HOPWA_CV_DEPRECATED',
+  HudHopwaCv = 'HUD_HOPWA_CV',
   /** (13) HUD: HOPWA - Hotel/Motel Vouchers */
   HudHopwaHotelMotelVouchers = 'HUD_HOPWA_HOTEL_MOTEL_VOUCHERS',
   /** (14) HUD: HOPWA - Housing Information */

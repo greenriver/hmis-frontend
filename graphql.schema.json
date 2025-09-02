@@ -28741,7 +28741,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_ESG_CV_DEPRECATED",
+            "name": "HUD_ESG_CV",
             "description": "(47) HUD: ESG - CV [Deprecated]",
             "isDeprecated": false,
             "deprecationReason": null
@@ -28789,7 +28789,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_HOPWA_CV_DEPRECATED",
+            "name": "HUD_HOPWA_CV",
             "description": "(48) HUD: HOPWA - CV [Deprecated]",
             "isDeprecated": false,
             "deprecationReason": null
