@@ -8,15 +8,20 @@ import ProjectOutgoingReferralsTable from '@/modules/ce/components/directReferra
 import ProjectOpportunitiesTable from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import ProjectReferralsTable from '@/modules/ce/components/project/ProjectReferralsTable';
 import { useProjectCeVisibility } from '@/modules/ce/hooks/useProjectCeVisibility';
+import ProjectLegacyReferrals from '@/modules/legacyReferrals/components/ProjectLegacyReferrals';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const ProjectCeReferralsPage: React.FC = () => {
+const ProjectReferralsPage: React.FC = () => {
   const { project } = useProjectDashboardContext();
 
-  const { showReferrals, showAvailableUnits, showOutgoingReferrals } =
-    useProjectCeVisibility(project);
+  const {
+    showReferrals,
+    showAvailableUnits,
+    showOutgoingReferrals,
+    showLegacyReferrals,
+  } = useProjectCeVisibility(project);
 
   const tabDefinitions = useMemo(() => {
     const defs = [];
@@ -44,8 +49,23 @@ const ProjectCeReferralsPage: React.FC = () => {
         contents: <ProjectOutgoingReferralsTable projectId={project.id} />,
       });
     }
+
+    // TODO(#8142) fully sunset legacy referrals, remove this tab
+    if (showLegacyReferrals) {
+      defs.push({
+        title: 'Legacy Referrals',
+        key: 'legacy-referrals',
+        contents: <ProjectLegacyReferrals />,
+      });
+    }
     return defs;
-  }, [project.id, showAvailableUnits, showOutgoingReferrals, showReferrals]);
+  }, [
+    project,
+    showAvailableUnits,
+    showLegacyReferrals,
+    showOutgoingReferrals,
+    showReferrals,
+  ]);
 
   const actions = useMemo(() => {
     if (showOutgoingReferrals) {
@@ -77,4 +97,4 @@ const ProjectCeReferralsPage: React.FC = () => {
   );
 };
 
-export default ProjectCeReferralsPage;
+export default ProjectReferralsPage;

@@ -17264,6 +17264,11 @@ export type CeReferralFieldsFragment = {
       id: string;
       name: string;
     }>;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
     access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   }> | null;
   opportunity?: {
@@ -17456,6 +17461,11 @@ export type CeReferralStepSummaryFieldsFragment = {
     id: string;
     name: string;
   }>;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
   access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
@@ -18109,6 +18119,11 @@ export type CeReferralStepFieldsFragment = {
     id: string;
     name: string;
   }>;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
   access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
@@ -18901,6 +18916,11 @@ export type StartCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     };
   } | null;
@@ -19569,6 +19589,11 @@ export type SubmitCeReferralStepMutation = {
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     } | null;
     referral?: {
@@ -19661,6 +19686,11 @@ export type SubmitCeReferralStepMutation = {
           id: string;
           name: string;
         }>;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         access: {
           __typename?: 'CeReferralStepAccess';
           canPerformStep: boolean;
@@ -19967,6 +19997,11 @@ export type AssignParticipantsMutation = {
           id: string;
           name: string;
         }>;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         access: {
           __typename?: 'CeReferralStepAccess';
           canPerformStep: boolean;
@@ -20318,6 +20353,11 @@ export type GetCeReferralQuery = {
         id: string;
         name: string;
       }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     }> | null;
     opportunity?: {
@@ -21095,6 +21135,11 @@ export type GetCeReferralStepQuery = {
       id: string;
       name: string;
     }>;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
     access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   } | null;
 };
@@ -37824,6 +37869,7 @@ export type SubmitFormMutation = {
           rrhSubType?: RrhSubType | null;
           staffAssignmentsEnabled: boolean;
           targetPopulation?: TargetPopulation | null;
+          hasUnits: boolean;
           projectName: string;
           projectType?: ProjectType | null;
           operatingEndDate?: string | null;
@@ -41569,6 +41615,7 @@ export type ProjectAllFieldsFragment = {
   rrhSubType?: RrhSubType | null;
   staffAssignmentsEnabled: boolean;
   targetPopulation?: TargetPopulation | null;
+  hasUnits: boolean;
   projectName: string;
   projectType?: ProjectType | null;
   operatingEndDate?: string | null;
@@ -42473,6 +42520,7 @@ export type GetProjectQuery = {
     rrhSubType?: RrhSubType | null;
     staffAssignmentsEnabled: boolean;
     targetPopulation?: TargetPopulation | null;
+    hasUnits: boolean;
     projectName: string;
     projectType?: ProjectType | null;
     operatingEndDate?: string | null;
@@ -49048,6 +49096,10 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     }
     availableAt
     updatedAt
+    updatedBy {
+      id
+      name
+    }
     access {
       canPerformStep
     }
@@ -50320,6 +50372,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
       ...ServiceTypeFields
     }
     ...ProjectCocCount
+    hasUnits
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}

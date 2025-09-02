@@ -214,6 +214,8 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 onChange={(_event, option) => {
                   if (isPickListOption(option)) {
                     setWorkflowTemplateIdentifier(option.code);
+                  } else if (!option) {
+                    setWorkflowTemplateIdentifier(null);
                   }
                 }}
               />
@@ -227,6 +229,8 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 onChange={(_event, option) => {
                   if (isPickListOption(option)) {
                     setCeEventType(option.code as EventType);
+                  } else if (!option) {
+                    setCeEventType(null);
                   }
                 }}
               />

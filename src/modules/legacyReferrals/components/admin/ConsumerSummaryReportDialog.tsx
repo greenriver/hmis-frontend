@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import DatePicker from '@/components/elements/input/DatePicker';
 import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
-import { fetchConsumerSummaryReportUrl } from '@/modules/referrals/externalReportApi';
+import { fetchConsumerSummaryReportUrl } from '@/modules/legacyReferrals/externalReportApi';
 
 export interface ConsumerSummaryReportDialogProps extends DialogProps {
   referralIdentifier: string;

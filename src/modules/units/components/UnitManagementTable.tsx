@@ -14,18 +14,21 @@ import { useDeleteUnits } from '@/modules/units/hooks/useDeleteUnits';
 import { useUnitCeActions } from '@/modules/units/hooks/useUnitCeActions';
 
 import { evictUnitsQuery } from '@/modules/units/util';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetUnitsDocument,
   GetUnitsQuery,
   GetUnitsQueryVariables,
   UnitTableRowFieldsFragment,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   projectId: string;
   unitGroupId?: string; // if this table is for a specific unit group
+  unitGroupsEnabled?: boolean; // TEMP(#7814), remove when all projects moved to unit groups
   projectSupportsReferrals?: boolean; // whether to show CE details
-  ceAvailabilityActionsEnabled?: boolean; // whether to show CE actions for marking units available/unavailable
+  noUnitsMessage?: string; // custom message to show when there are no units
 }
 
 // Table for managing units within a Project or Unit Group.
@@ -36,8 +39,9 @@ interface Props {
 const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
+  unitGroupsEnabled = false,
   projectSupportsReferrals = false,
-  ceAvailabilityActionsEnabled = false,
+  noUnitsMessage,
 }) => {
   const { setUnitToDelete, renderSingleDeleteDialog } = useDeleteUnits({
     onSuccess: () => evictUnitsQuery(projectId, unitGroupId),
@@ -47,15 +51,19 @@ const UnitManagementTable: React.FC<Props> = ({
     return [
       UNIT_COLUMNS.unitType,
       UNIT_COLUMNS.unitId,
+      ...(unitGroupsEnabled ? [UNIT_COLUMNS.unitGroup] : []),
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
       ...(projectSupportsReferrals ? [UNIT_COLUMNS.ceReferralStatus] : []),
     ];
-  }, [projectSupportsReferrals]);
+  }, [projectSupportsReferrals, unitGroupsEnabled]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
-    omit: ['status'], // deprecated filter option, remove
+    omit: [
+      'status', // deprecated filter option, remove
+      ...(unitGroupId ? ['unitType'] : []), // if looking at units in one group, no need to show this filter
+    ],
     pickListArgs: { projectId },
   });
 
@@ -64,8 +72,7 @@ const UnitManagementTable: React.FC<Props> = ({
 
   const { getCeActions, loading } = useUnitCeActions({
     projectId,
-    projectSupportsReferrals: projectSupportsReferrals,
-    ceAvailabilityActionsEnabled,
+    projectSupportsReferrals,
   });
 
   const rowSecondaryActionConfigs = useCallback(
@@ -78,6 +85,19 @@ const UnitManagementTable: React.FC<Props> = ({
       const viewEnrollmentAction = getViewOccupantEnrollmentAction(unit);
       if (viewEnrollmentAction) {
         actions.push(viewEnrollmentAction);
+      }
+
+      // Link to Unit Group
+      if (!unitGroupId && unitGroupsEnabled && unit.unitGroup) {
+        actions.push({
+          title: 'View Unit Group',
+          key: 'viewGroup',
+          ariaLabel: `'View Unit Group' ${unit.unitGroup.name}`,
+          to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+            projectId: project.id,
+            unitGroupId: unit.unitGroup.id,
+          }),
+        });
       }
 
       // Delete unit
@@ -93,7 +113,15 @@ const UnitManagementTable: React.FC<Props> = ({
 
       return actions;
     },
-    [canManageUnits, projectSupportsReferrals, getCeActions, setUnitToDelete]
+    [
+      projectSupportsReferrals,
+      unitGroupId,
+      unitGroupsEnabled,
+      canManageUnits,
+      getCeActions,
+      project.id,
+      setUnitToDelete,
+    ]
   );
 
   return (
@@ -111,7 +139,7 @@ const UnitManagementTable: React.FC<Props> = ({
         queryDocument={GetUnitsDocument}
         columns={columns}
         pagePath='project.units'
-        noData='No units'
+        noData={noUnitsMessage || 'No units'}
         selectable={canManageUnits ? 'checkbox' : undefined}
         isRowSelectable={(row) =>
           !!(
@@ -131,7 +159,7 @@ const UnitManagementTable: React.FC<Props> = ({
                   projectId={projectId}
                   unitGroupId={unitGroupId}
                   units={selectedRows}
-                  ceAvailabilityActionsEnabled={ceAvailabilityActionsEnabled}
+                  ceAvailabilityActionsEnabled={projectSupportsReferrals}
                 />
               )
             : undefined,

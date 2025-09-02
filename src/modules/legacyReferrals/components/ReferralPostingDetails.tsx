@@ -11,7 +11,7 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
+import ReferralPostingStatusDisplay from '@/modules/legacyReferrals/components/ReferralPostingStatusDisplay';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
