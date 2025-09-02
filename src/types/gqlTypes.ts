@@ -8400,11 +8400,11 @@ export type TableConfig = {
 
 export type TableConfigLookup = {
   __typename?: 'TableConfigLookup';
-  consolidatedWaitlist?: Maybe<TableConfig>;
-  unitGroupWaitlist?: Maybe<TableConfig>;
+  ceClientsGlobalConfig?: Maybe<TableConfig>;
+  ceClientsUnitGroupConfig?: Maybe<TableConfig>;
 };
 
-export type TableConfigLookupUnitGroupWaitlistArgs = {
+export type TableConfigLookupCeClientsUnitGroupConfigArgs = {
   unitGroupId: Scalars['ID']['input'];
 };
 
@@ -21382,13 +21382,13 @@ export type GetAdminCeReferralsQuery = {
   };
 };
 
-export type GetAdminConsolidatedWaitlistQueryVariables = Exact<{
+export type GetCeClientsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<CeClientFilterOptions>;
 }>;
 
-export type GetAdminConsolidatedWaitlistQuery = {
+export type GetCeClientsQuery = {
   __typename?: 'Query';
   ceClients: {
     __typename?: 'CeClientsPaginated';
@@ -46766,15 +46766,15 @@ export type TableColumnConfigFieldsFragment = {
   label: string;
 };
 
-export type GetConsolidatedWaitlistColumnsQueryVariables = Exact<{
+export type GetCeClientsGlobalTableConfigQueryVariables = Exact<{
   [key: string]: never;
 }>;
 
-export type GetConsolidatedWaitlistColumnsQuery = {
+export type GetCeClientsGlobalTableConfigQuery = {
   __typename?: 'Query';
   tableConfigLookup: {
     __typename?: 'TableConfigLookup';
-    consolidatedWaitlist?: {
+    ceClientsGlobalConfig?: {
       __typename?: 'TableConfig';
       columns: Array<{
         __typename?: 'TableColumnConfig';
@@ -46803,15 +46803,15 @@ export type GetConsolidatedWaitlistColumnsQuery = {
   };
 };
 
-export type GetUnitGroupWaitlistColumnsQueryVariables = Exact<{
+export type GetCeClientsUnitGroupTableConfigQueryVariables = Exact<{
   unitGroupId: Scalars['ID']['input'];
 }>;
 
-export type GetUnitGroupWaitlistColumnsQuery = {
+export type GetCeClientsUnitGroupTableConfigQuery = {
   __typename?: 'Query';
   tableConfigLookup: {
     __typename?: 'TableConfigLookup';
-    unitGroupWaitlist?: {
+    ceClientsUnitGroupConfig?: {
       __typename?: 'TableConfig';
       columns: Array<{
         __typename?: 'TableColumnConfig';
@@ -54420,8 +54420,8 @@ export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables
 >;
-export const GetAdminConsolidatedWaitlistDocument = gql`
-  query GetAdminConsolidatedWaitlist(
+export const GetCeClientsDocument = gql`
+  query GetCeClients(
     $limit: Int = 25
     $offset: Int = 0
     $filters: CeClientFilterOptions = null
@@ -54439,16 +54439,16 @@ export const GetAdminConsolidatedWaitlistDocument = gql`
 `;
 
 /**
- * __useGetAdminConsolidatedWaitlistQuery__
+ * __useGetCeClientsQuery__
  *
- * To run a query within a React component, call `useGetAdminConsolidatedWaitlistQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAdminConsolidatedWaitlistQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCeClientsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAdminConsolidatedWaitlistQuery({
+ * const { data, loading, error } = useGetCeClientsQuery({
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
@@ -54456,59 +54456,59 @@ export const GetAdminConsolidatedWaitlistDocument = gql`
  *   },
  * });
  */
-export function useGetAdminConsolidatedWaitlistQuery(
+export function useGetCeClientsQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetAdminConsolidatedWaitlistQuery,
-    GetAdminConsolidatedWaitlistQueryVariables
+    GetCeClientsQuery,
+    GetCeClientsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetAdminConsolidatedWaitlistQuery,
-    GetAdminConsolidatedWaitlistQueryVariables
-  >(GetAdminConsolidatedWaitlistDocument, options);
+  return Apollo.useQuery<GetCeClientsQuery, GetCeClientsQueryVariables>(
+    GetCeClientsDocument,
+    options
+  );
 }
-export function useGetAdminConsolidatedWaitlistLazyQuery(
+export function useGetCeClientsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAdminConsolidatedWaitlistQuery,
-    GetAdminConsolidatedWaitlistQueryVariables
+    GetCeClientsQuery,
+    GetCeClientsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetAdminConsolidatedWaitlistQuery,
-    GetAdminConsolidatedWaitlistQueryVariables
-  >(GetAdminConsolidatedWaitlistDocument, options);
+  return Apollo.useLazyQuery<GetCeClientsQuery, GetCeClientsQueryVariables>(
+    GetCeClientsDocument,
+    options
+  );
 }
-export function useGetAdminConsolidatedWaitlistSuspenseQuery(
+export function useGetCeClientsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetAdminConsolidatedWaitlistQuery,
-        GetAdminConsolidatedWaitlistQueryVariables
+        GetCeClientsQuery,
+        GetCeClientsQueryVariables
       >
 ) {
   const options =
     baseOptions === Apollo.skipToken
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetAdminConsolidatedWaitlistQuery,
-    GetAdminConsolidatedWaitlistQueryVariables
-  >(GetAdminConsolidatedWaitlistDocument, options);
+  return Apollo.useSuspenseQuery<GetCeClientsQuery, GetCeClientsQueryVariables>(
+    GetCeClientsDocument,
+    options
+  );
 }
-export type GetAdminConsolidatedWaitlistQueryHookResult = ReturnType<
-  typeof useGetAdminConsolidatedWaitlistQuery
+export type GetCeClientsQueryHookResult = ReturnType<
+  typeof useGetCeClientsQuery
 >;
-export type GetAdminConsolidatedWaitlistLazyQueryHookResult = ReturnType<
-  typeof useGetAdminConsolidatedWaitlistLazyQuery
+export type GetCeClientsLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientsLazyQuery
 >;
-export type GetAdminConsolidatedWaitlistSuspenseQueryHookResult = ReturnType<
-  typeof useGetAdminConsolidatedWaitlistSuspenseQuery
+export type GetCeClientsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeClientsSuspenseQuery
 >;
-export type GetAdminConsolidatedWaitlistQueryResult = Apollo.QueryResult<
-  GetAdminConsolidatedWaitlistQuery,
-  GetAdminConsolidatedWaitlistQueryVariables
+export type GetCeClientsQueryResult = Apollo.QueryResult<
+  GetCeClientsQuery,
+  GetCeClientsQueryVariables
 >;
 export const GetCeClientEligibleUnitGroupsDocument = gql`
   query GetCeClientEligibleUnitGroups(
@@ -65868,10 +65868,10 @@ export type GetHouseholdStaffAssignmentHistoryQueryResult = Apollo.QueryResult<
   GetHouseholdStaffAssignmentHistoryQuery,
   GetHouseholdStaffAssignmentHistoryQueryVariables
 >;
-export const GetConsolidatedWaitlistColumnsDocument = gql`
-  query GetConsolidatedWaitlistColumns {
+export const GetCeClientsGlobalTableConfigDocument = gql`
+  query GetCeClientsGlobalTableConfig {
     tableConfigLookup {
-      consolidatedWaitlist {
+      ceClientsGlobalConfig {
         columns {
           ...TableColumnConfigFields
         }
@@ -65886,50 +65886,50 @@ export const GetConsolidatedWaitlistColumnsDocument = gql`
 `;
 
 /**
- * __useGetConsolidatedWaitlistColumnsQuery__
+ * __useGetCeClientsGlobalTableConfigQuery__
  *
- * To run a query within a React component, call `useGetConsolidatedWaitlistColumnsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetConsolidatedWaitlistColumnsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCeClientsGlobalTableConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientsGlobalTableConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetConsolidatedWaitlistColumnsQuery({
+ * const { data, loading, error } = useGetCeClientsGlobalTableConfigQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetConsolidatedWaitlistColumnsQuery(
+export function useGetCeClientsGlobalTableConfigQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
-  >(GetConsolidatedWaitlistColumnsDocument, options);
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
+  >(GetCeClientsGlobalTableConfigDocument, options);
 }
-export function useGetConsolidatedWaitlistColumnsLazyQuery(
+export function useGetCeClientsGlobalTableConfigLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
-  >(GetConsolidatedWaitlistColumnsDocument, options);
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
+  >(GetCeClientsGlobalTableConfigDocument, options);
 }
-export function useGetConsolidatedWaitlistColumnsSuspenseQuery(
+export function useGetCeClientsGlobalTableConfigSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetConsolidatedWaitlistColumnsQuery,
-        GetConsolidatedWaitlistColumnsQueryVariables
+        GetCeClientsGlobalTableConfigQuery,
+        GetCeClientsGlobalTableConfigQueryVariables
       >
 ) {
   const options =
@@ -65937,27 +65937,27 @@ export function useGetConsolidatedWaitlistColumnsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetConsolidatedWaitlistColumnsQuery,
-    GetConsolidatedWaitlistColumnsQueryVariables
-  >(GetConsolidatedWaitlistColumnsDocument, options);
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
+  >(GetCeClientsGlobalTableConfigDocument, options);
 }
-export type GetConsolidatedWaitlistColumnsQueryHookResult = ReturnType<
-  typeof useGetConsolidatedWaitlistColumnsQuery
+export type GetCeClientsGlobalTableConfigQueryHookResult = ReturnType<
+  typeof useGetCeClientsGlobalTableConfigQuery
 >;
-export type GetConsolidatedWaitlistColumnsLazyQueryHookResult = ReturnType<
-  typeof useGetConsolidatedWaitlistColumnsLazyQuery
+export type GetCeClientsGlobalTableConfigLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientsGlobalTableConfigLazyQuery
 >;
-export type GetConsolidatedWaitlistColumnsSuspenseQueryHookResult = ReturnType<
-  typeof useGetConsolidatedWaitlistColumnsSuspenseQuery
+export type GetCeClientsGlobalTableConfigSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeClientsGlobalTableConfigSuspenseQuery
 >;
-export type GetConsolidatedWaitlistColumnsQueryResult = Apollo.QueryResult<
-  GetConsolidatedWaitlistColumnsQuery,
-  GetConsolidatedWaitlistColumnsQueryVariables
+export type GetCeClientsGlobalTableConfigQueryResult = Apollo.QueryResult<
+  GetCeClientsGlobalTableConfigQuery,
+  GetCeClientsGlobalTableConfigQueryVariables
 >;
-export const GetUnitGroupWaitlistColumnsDocument = gql`
-  query GetUnitGroupWaitlistColumns($unitGroupId: ID!) {
+export const GetCeClientsUnitGroupTableConfigDocument = gql`
+  query GetCeClientsUnitGroupTableConfig($unitGroupId: ID!) {
     tableConfigLookup {
-      unitGroupWaitlist(unitGroupId: $unitGroupId) {
+      ceClientsUnitGroupConfig(unitGroupId: $unitGroupId) {
         columns {
           ...TableColumnConfigFields
         }
@@ -65972,55 +65972,58 @@ export const GetUnitGroupWaitlistColumnsDocument = gql`
 `;
 
 /**
- * __useGetUnitGroupWaitlistColumnsQuery__
+ * __useGetCeClientsUnitGroupTableConfigQuery__
  *
- * To run a query within a React component, call `useGetUnitGroupWaitlistColumnsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUnitGroupWaitlistColumnsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCeClientsUnitGroupTableConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientsUnitGroupTableConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUnitGroupWaitlistColumnsQuery({
+ * const { data, loading, error } = useGetCeClientsUnitGroupTableConfigQuery({
  *   variables: {
  *      unitGroupId: // value for 'unitGroupId'
  *   },
  * });
  */
-export function useGetUnitGroupWaitlistColumnsQuery(
+export function useGetCeClientsUnitGroupTableConfigQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetUnitGroupWaitlistColumnsQuery,
-    GetUnitGroupWaitlistColumnsQueryVariables
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
   > &
     (
-      | { variables: GetUnitGroupWaitlistColumnsQueryVariables; skip?: boolean }
+      | {
+          variables: GetCeClientsUnitGroupTableConfigQueryVariables;
+          skip?: boolean;
+        }
       | { skip: boolean }
     )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetUnitGroupWaitlistColumnsQuery,
-    GetUnitGroupWaitlistColumnsQueryVariables
-  >(GetUnitGroupWaitlistColumnsDocument, options);
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
+  >(GetCeClientsUnitGroupTableConfigDocument, options);
 }
-export function useGetUnitGroupWaitlistColumnsLazyQuery(
+export function useGetCeClientsUnitGroupTableConfigLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetUnitGroupWaitlistColumnsQuery,
-    GetUnitGroupWaitlistColumnsQueryVariables
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetUnitGroupWaitlistColumnsQuery,
-    GetUnitGroupWaitlistColumnsQueryVariables
-  >(GetUnitGroupWaitlistColumnsDocument, options);
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
+  >(GetCeClientsUnitGroupTableConfigDocument, options);
 }
-export function useGetUnitGroupWaitlistColumnsSuspenseQuery(
+export function useGetCeClientsUnitGroupTableConfigSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetUnitGroupWaitlistColumnsQuery,
-        GetUnitGroupWaitlistColumnsQueryVariables
+        GetCeClientsUnitGroupTableConfigQuery,
+        GetCeClientsUnitGroupTableConfigQueryVariables
       >
 ) {
   const options =
@@ -66028,22 +66031,21 @@ export function useGetUnitGroupWaitlistColumnsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetUnitGroupWaitlistColumnsQuery,
-    GetUnitGroupWaitlistColumnsQueryVariables
-  >(GetUnitGroupWaitlistColumnsDocument, options);
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
+  >(GetCeClientsUnitGroupTableConfigDocument, options);
 }
-export type GetUnitGroupWaitlistColumnsQueryHookResult = ReturnType<
-  typeof useGetUnitGroupWaitlistColumnsQuery
+export type GetCeClientsUnitGroupTableConfigQueryHookResult = ReturnType<
+  typeof useGetCeClientsUnitGroupTableConfigQuery
 >;
-export type GetUnitGroupWaitlistColumnsLazyQueryHookResult = ReturnType<
-  typeof useGetUnitGroupWaitlistColumnsLazyQuery
+export type GetCeClientsUnitGroupTableConfigLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientsUnitGroupTableConfigLazyQuery
 >;
-export type GetUnitGroupWaitlistColumnsSuspenseQueryHookResult = ReturnType<
-  typeof useGetUnitGroupWaitlistColumnsSuspenseQuery
->;
-export type GetUnitGroupWaitlistColumnsQueryResult = Apollo.QueryResult<
-  GetUnitGroupWaitlistColumnsQuery,
-  GetUnitGroupWaitlistColumnsQueryVariables
+export type GetCeClientsUnitGroupTableConfigSuspenseQueryHookResult =
+  ReturnType<typeof useGetCeClientsUnitGroupTableConfigSuspenseQuery>;
+export type GetCeClientsUnitGroupTableConfigQueryResult = Apollo.QueryResult<
+  GetCeClientsUnitGroupTableConfigQuery,
+  GetCeClientsUnitGroupTableConfigQueryVariables
 >;
 export const GetUnitsDocument = gql`
   query GetUnits(

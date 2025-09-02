@@ -1,6 +1,6 @@
-query GetConsolidatedWaitlistColumns {
+query GetCeClientsGlobalTableConfig {
   tableConfigLookup {
-    consolidatedWaitlist {
+    ceClientsGlobalConfig {
       columns {
         ...TableColumnConfigFields
       }
@@ -11,9 +11,9 @@ query GetConsolidatedWaitlistColumns {
   }
 }
 
-query GetUnitGroupWaitlistColumns($unitGroupId: ID!) {
+query GetCeClientsUnitGroupTableConfig($unitGroupId: ID!) {
   tableConfigLookup {
-    unitGroupWaitlist(unitGroupId: $unitGroupId) {
+    ceClientsUnitGroupConfig(unitGroupId: $unitGroupId) {
       columns {
         ...TableColumnConfigFields
       }

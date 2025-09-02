@@ -370,7 +370,7 @@ fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
   }
 }
 
-# CE Client (backed by Client Proxy) is used on the Consolidated Waitlist
+# CE Client (backed by Client Proxy) is used on the global eligible clients list
 fragment CeClientFields on CeClient {
   id
   destinationClientId
@@ -382,7 +382,7 @@ fragment CeClientFields on CeClient {
   }
 }
 
-# Used on the Consolidated Waitlist. Unit Groups that a given CE Client is eligible for.
+# Used on the global eligible clients list. Unit Groups that a given CE Client is eligible for.
 fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
   id
   unitGroupName

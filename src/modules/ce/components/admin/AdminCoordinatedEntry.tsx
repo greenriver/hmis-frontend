@@ -2,7 +2,7 @@ import React from 'react';
 import AdminReferralsTable from './AdminReferralsTable';
 import CommonTabs from '@/components/elements/CommonTabs';
 import PageTitle from '@/components/layout/PageTitle';
-import ConsolidatedWaitlistTable from '@/modules/ce/components/admin/AdminConsolidatedWaitlistTable';
+import AdminCeClientsTable from '@/modules/ce/components/admin/AdminCeClientsTable';
 import AdminOpportunitiesTable from '@/modules/ce/components/admin/AdminOpportunitiesTable';
 
 const AdminCoordinatedEntry: React.FC = () => {
@@ -23,9 +23,9 @@ const AdminCoordinatedEntry: React.FC = () => {
             contents: <AdminReferralsTable />,
           },
           {
-            title: 'Consolidated Waitlist',
-            key: 'consolidated_waitlist',
-            contents: <ConsolidatedWaitlistTable />,
+            title: 'Eligible Clients',
+            key: 'eligible_clients',
+            contents: <AdminCeClientsTable />,
           },
         ]}
       />

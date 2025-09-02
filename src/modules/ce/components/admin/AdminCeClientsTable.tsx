@@ -16,19 +16,19 @@ import {
   CeCandidateFieldsFragment,
   CeClientFieldsFragment,
   ExternalIdentifierType,
-  GetAdminConsolidatedWaitlistDocument,
-  GetAdminConsolidatedWaitlistQuery,
-  GetAdminConsolidatedWaitlistQueryVariables,
+  GetCeClientsDocument,
+  GetCeClientsQuery,
+  GetCeClientsQueryVariables,
   TableColumnConfigFieldsFragment,
   TableColumnConfigType,
-  useGetConsolidatedWaitlistColumnsQuery,
+  useGetCeClientsGlobalTableConfigQuery,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: DataColumnDef<
   CeClientFieldsFragment,
-  GetAdminConsolidatedWaitlistQueryVariables
+  GetCeClientsQueryVariables
 >[] = [
   {
     key: 'clientName',
@@ -57,15 +57,15 @@ export const configurableCeColumns = (
 };
 
 interface Props {}
-const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
+const AdminCeClientsTable: React.FC<Props> = ({}) => {
   // Feature flags to check whether to show MCI ID column
   const { globalFeatureFlags: { mciIdEnabled } = {} } = useGlobalFeatureFlags();
-  // Fetch column configuration for consolidated waitlist
+  // Fetch column configuration for global ce client list
   const {
     data: { tableConfigLookup } = {},
     loading,
     error,
-  } = useGetConsolidatedWaitlistColumnsQuery();
+  } = useGetCeClientsGlobalTableConfigQuery();
 
   // Internal state for search and dialog
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
@@ -74,7 +74,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
 
   // Define table columns (Default + MCI + Custom configured)
   const columnsWithCustom = useMemo(() => {
-    const columnConfig = tableConfigLookup?.consolidatedWaitlist?.columns;
+    const columnConfig = tableConfigLookup?.ceClientsGlobalConfig?.columns;
     const customColumns = columnConfig
       ? configurableCeColumns(columnConfig)
       : [];
@@ -90,7 +90,7 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   const filters = useFilters({
     type: 'CeClientFilterOptions',
     omit: ['searchTerm'],
-    dynamicFilters: tableConfigLookup?.consolidatedWaitlist?.filters,
+    dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
   });
 
   const rowSecondaryActionConfigs = useCallback(
@@ -131,15 +131,15 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
       />
       <Paper>
         <GenericTableWithData<
-          GetAdminConsolidatedWaitlistQuery,
-          GetAdminConsolidatedWaitlistQueryVariables,
+          GetCeClientsQuery,
+          GetCeClientsQueryVariables,
           CeClientFieldsFragment
         >
           columns={columnsWithCustom}
           queryVariables={{
             filters: { searchTerm: debouncedSearch || undefined },
           }}
-          queryDocument={GetAdminConsolidatedWaitlistDocument}
+          queryDocument={GetCeClientsDocument}
           pagePath='ceClients'
           noData='No clients'
           paginationItemName='client'
@@ -161,4 +161,4 @@ const ConsolidatedWaitlistTable: React.FC<Props> = ({}) => {
   );
 };
 
-export default ConsolidatedWaitlistTable;
+export default AdminCeClientsTable;

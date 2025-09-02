@@ -170,7 +170,7 @@ query GetAdminCeReferrals(
   }
 }
 
-query GetAdminConsolidatedWaitlist(
+query GetCeClients(
   $limit: Int = 25
   $offset: Int = 0
   $filters: CeClientFilterOptions = null

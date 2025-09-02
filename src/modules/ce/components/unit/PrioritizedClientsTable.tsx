@@ -5,7 +5,7 @@ import Loading from '@/components/elements/Loading';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import { configurableCeColumns } from '@/modules/ce/components/admin/AdminConsolidatedWaitlistTable';
+import { configurableCeColumns } from '@/modules/ce/components/admin/AdminCeClientsTable';
 import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -21,7 +21,7 @@ import {
   GetCeOpportunityCandidatesDocument,
   GetCeOpportunityCandidatesQuery,
   GetCeOpportunityCandidatesQueryVariables,
-  useGetUnitGroupWaitlistColumnsQuery,
+  useGetCeClientsUnitGroupTableConfigQuery,
 } from '@/types/gqlTypes';
 
 const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
@@ -55,7 +55,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
     data: { tableConfigLookup } = {},
     loading,
     error,
-  } = useGetUnitGroupWaitlistColumnsQuery({
+  } = useGetCeClientsUnitGroupTableConfigQuery({
     variables: { unitGroupId },
   });
 
@@ -64,7 +64,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
     const canStartReferrals =
       project.access.canStartReferrals && project.access.canViewReferrals;
 
-    const columnConfig = tableConfigLookup?.unitGroupWaitlist?.columns;
+    const columnConfig = tableConfigLookup?.ceClientsUnitGroupConfig?.columns;
     const customColumns = (
       columnConfig ? configurableCeColumns(columnConfig) : []
     ) as ColumnDef<CeCandidateFieldsFragment>[];

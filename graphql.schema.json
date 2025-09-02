@@ -55013,7 +55013,7 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "consolidatedWaitlist",
+            "name": "ceClientsGlobalConfig",
             "description": null,
             "args": [],
             "type": {
@@ -55025,7 +55025,7 @@
             "deprecationReason": null
           },
           {
-            "name": "unitGroupWaitlist",
+            "name": "ceClientsUnitGroupConfig",
             "description": null,
             "args": [
               {
