@@ -27,10 +27,6 @@ export const useProjectDashboardNavItems = (
       (r) => r.role
     );
 
-    const ceReferralsTabEnabled =
-      showReferrals || showAvailableUnits || showOutgoingReferrals;
-    const legacyReferralTabEnabled = showLegacyReferrals;
-
     return [
       {
         id: 'project-nav',
@@ -101,7 +97,13 @@ export const useProjectDashboardNavItems = (
             id: 'referrals',
             title: 'Referrals',
             path: ProjectDashboardRoutes.CE,
-            hide: !ceReferralsTabEnabled && !legacyReferralTabEnabled,
+            // If none of the components within the CE page are visible, hide from the left-hand nav
+            hide: !(
+              showReferrals ||
+              showAvailableUnits ||
+              showOutgoingReferrals ||
+              showLegacyReferrals
+            ),
           },
         ],
       },

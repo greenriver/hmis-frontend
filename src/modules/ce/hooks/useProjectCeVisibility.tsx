@@ -21,7 +21,7 @@ export function useProjectCeVisibility(project?: ProjectAllFieldsFragment) {
     } = project.access;
 
     // If the project supports referrals AND the user can view referrals, show the Referrals tab.
-    // This refers to the "Referrals" sub-tab within the referral page, not the project page Referrals tab.
+    // This refers to the "Referrals" sub-tab within the Project Referrals page, not the Project Referrals page itself.
     const showReferrals =
       supportsReferrals && (canViewReferrals || canViewOwnReferrals);
 
