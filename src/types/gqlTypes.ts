@@ -8401,6 +8401,7 @@ export type UnitGroup = {
   /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
+  unitType?: Maybe<UnitTypeObject>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   workflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
