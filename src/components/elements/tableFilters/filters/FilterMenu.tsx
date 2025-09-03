@@ -15,38 +15,34 @@ export interface TableFilterMenuProps<T> {
   setFilterValues: (value: Partial<T>) => any;
 }
 
-const TableFilterMenu = <T,>({
-  filters,
-  filterValues,
-  setFilterValues,
-}: TableFilterMenuProps<T>): JSX.Element => {
+const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
   const defaultValue = {};
   const { state, setState, reset, cancel } = useIntermediateState(
-    filterValues,
-    defaultValue as typeof filterValues
+    props.filterValues,
+    defaultValue as typeof props.filterValues
   );
 
   const { filterCount, filterHint } = useMemo(() => {
-    const filterLabels = Object.entries(filterValues)
+    const filters = Object.entries(props.filterValues)
       // Skip filters that aren't visible to the user
-      .filter(([k]) => filters.hasOwnProperty(k))
+      .filter(([k]) => props.filters.hasOwnProperty(k))
       // Count # of filters that have values applied
       .filter(([, v]) => (Array.isArray(v) ? !isEmpty(v) : !isNil(v)))
       // skip false (unchecked checkboxes)
       .filter(([, v]) => v !== false)
       // Get the human-readable label of this filter
-      .map(([k]) => filters[k as keyof T]?.label || startCase(k));
+      .map(([k]) => props.filters[k as keyof T]?.label || startCase(k));
 
-    const filterCount = filterLabels.length;
-    const filterHint = filterLabels
+    const filterCount = filters.length;
+    const filterHint = filters
       .slice(0, 2) // only hint about the first 2
       .join(', ')
       .concat(filterCount > 2 ? `, ${filterCount - 2} more` : ''); // if > 2, show # of remaining filters
 
     return { filterCount, filterHint };
-  }, [filterValues, filters]);
+  }, [props.filterValues, props.filters]);
 
-  const cleanValues = useCallback((values: Partial<T>) => {
+  const cleanedValues = useCallback((values: Partial<T>) => {
     const cleaned: typeof values = {};
     Object.keys(values).forEach((key) => {
       const val = values[key as keyof T];
@@ -56,17 +52,9 @@ const TableFilterMenu = <T,>({
         cleaned[key as keyof T] = val;
       }
     });
-
     return cleaned;
   }, []);
 
-  const handleSetFilterValues = useCallback(
-    (values: Partial<T>) => {
-      const cleanedValues: Partial<T> = cleanValues(values);
-      setFilterValues(cleanedValues);
-    },
-    [cleanValues, setFilterValues]
-  );
   return (
     <TableControlPopover
       label='Filter'
@@ -76,14 +64,14 @@ const TableFilterMenu = <T,>({
       filterHint={filterHint}
       filterCount={filterCount}
       onCancel={cancel}
-      onApply={() => handleSetFilterValues(state)}
+      onApply={() => props.setFilterValues(cleanedValues(state))}
       onReset={() => {
-        handleSetFilterValues(defaultValue);
+        props.setFilterValues(cleanedValues(defaultValue));
         reset();
       }}
     >
       <Stack gap={2}>
-        {Object.entries(filters).map(([key, filter]) => (
+        {Object.entries(props.filters).map(([key, filter]) => (
           <TableFilterItem
             key={key}
             filter={filter as FilterType<T>}
