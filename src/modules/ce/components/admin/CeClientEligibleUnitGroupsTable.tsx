@@ -95,6 +95,7 @@ const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ ceClientId }) => {
         noData='No eligible projects found'
         paginationItemName='record'
         filters={filters}
+        defaultPageSize={10}
         loadingVariant='linear'
         rowSecondaryActionConfigs={({ projectId, projectName }) => [
           {

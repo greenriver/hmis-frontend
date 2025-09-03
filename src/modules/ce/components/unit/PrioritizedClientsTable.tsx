@@ -41,7 +41,7 @@ const defaultPriorityColumn: ColumnDef<CeCandidateFieldsFragment> = {
 
 interface Props {
   opportunity: CeOpportunityFieldsFragment;
-  unitGroupId: string;
+  unitGroupId?: string;
 }
 const PrioritizedClientsTable: React.FC<Props> = ({
   opportunity,
@@ -57,6 +57,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
     error,
   } = useGetCeClientsUnitGroupTableConfigQuery({
     variables: { unitGroupId },
+    skip: !unitGroupId,
   });
 
   // Define table columns (Default + MCI + Custom configured + Action)
