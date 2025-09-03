@@ -133,7 +133,7 @@ const Units = () => {
         projectId={project.id}
         open={addUnitsDialogOpen}
         onClose={() => setAddUnitsDialogOpen(false)}
-        allowSelectUnitType={false} //todo @martha - discuss this ux. How should this dialog behave when unit group is new and doesn't yet have an established type?
+        allowSelectUnitType={true} //todo @martha - discuss this ux. How should this dialog behave when unit group is new and doesn't yet have an established type?
         allowSelectUnitGroup={true}
         includeCeFields={projectSupportsReferrals}
         unitGroups={unitGroups}
