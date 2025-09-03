@@ -102,9 +102,7 @@ const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ ceClientId }) => {
             title: 'View Project',
             key: 'project',
             ariaLabel: `View Project, ${projectName}`,
-            to: generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
-              projectId: projectId,
-            }),
+            to: generateSafePath(ProjectDashboardRoutes.CE, { projectId }),
           },
         ]}
       />
