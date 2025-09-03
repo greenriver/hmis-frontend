@@ -50,14 +50,14 @@ const UnitManagementTable: React.FC<Props> = ({
     return [
       UNIT_COLUMNS.unitType,
       UNIT_COLUMNS.unitId,
-      UNIT_COLUMNS.unitGroup,
+      ...(unitGroupId ? [] : [UNIT_COLUMNS.unitGroup]), // if looking at units in one group, no need to show the unit group col
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
       ...(coordinatedEntryFeatures.supportsReferrals
         ? [UNIT_COLUMNS.ceReferralStatus]
         : []),
     ];
-  }, [coordinatedEntryFeatures.supportsReferrals]);
+  }, [coordinatedEntryFeatures.supportsReferrals, unitGroupId]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
