@@ -56,7 +56,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
     loading,
     error,
   } = useGetCeClientsUnitGroupTableConfigQuery({
-    variables: { unitGroupId },
+    variables: { unitGroupId: unitGroupId || '' },
     skip: !unitGroupId,
   });
 
