@@ -64,6 +64,7 @@ fragment CeCandidateFields on CeCandidate {
   id
   priorityScores
   clientName
+  clientAttributes
 }
 
 fragment CeReferralSummaryFields on CeReferral {
@@ -367,4 +368,29 @@ fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
   access {
     canViewEnrollmentDetails
   }
+}
+
+# CE Client (backed by Client Proxy) is used on the global eligible clients list
+fragment CeClientFields on CeClient {
+  id
+  destinationClientId
+  viewableSourceClientIds
+  clientName
+  clientAttributes
+  externalIds {
+    ...ClientIdentifierFields
+  }
+}
+
+# Used on the global eligible clients list. Unit Groups that a given CE Client is eligible for.
+fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
+  id
+  unitGroupName
+  projectName
+  projectId
+  projectType
+  organizationName
+  candidateCreatedAt
+  candidateUpdatedAt
+  unitsAcceptingReferrals
 }
