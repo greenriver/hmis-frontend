@@ -1,4 +1,5 @@
 import { Chip, Paper, Tooltip } from '@mui/material';
+import pluralize from 'pluralize';
 import React from 'react';
 
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
@@ -6,12 +7,14 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeEligibleUnitGroupFieldsFragment,
   GetCeClientEligibleUnitGroupsDocument,
   GetCeClientEligibleUnitGroupsQuery,
   GetCeClientEligibleUnitGroupsQueryVariables,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type Row = CeEligibleUnitGroupFieldsFragment;
 
@@ -44,8 +47,7 @@ const COLUMNS: DataColumnDef<
     header: 'Availability',
     render: ({ unitsAcceptingReferrals }) => (
       <Chip
-        // label={`${row.vacancies}/${row.capacity} Units Accepting Referrals`}
-        label={`${unitsAcceptingReferrals} Units Accepting Referrals`}
+        label={`${unitsAcceptingReferrals} ${pluralize('Unit', unitsAcceptingReferrals)} Accepting Referrals`}
         color={unitsAcceptingReferrals > 0 ? 'primary' : 'grayscale'}
         size='small'
         variant='status'
@@ -72,9 +74,9 @@ const COLUMNS: DataColumnDef<
 ];
 
 interface Props {
-  id: string;
+  ceClientId: string;
 }
-const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ id }) => {
+const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ ceClientId }) => {
   const filters = useFilters({
     type: 'CeEligibleUnitGroupFilterOptions',
   });
@@ -87,14 +89,23 @@ const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ id }) => {
         Row
       >
         columns={COLUMNS}
-        queryVariables={{ id }}
+        queryVariables={{ id: ceClientId }}
         queryDocument={GetCeClientEligibleUnitGroupsDocument}
         pagePath='ceClient.eligibleUnitGroups'
         noData='No eligible projects found'
         paginationItemName='record'
         filters={filters}
-        // rowActionTitle='View Waitlist' // nav to unit group waitlist?
-        // rowSecondaryActionConfigs={rowSecondaryActions}
+        loadingVariant='linear'
+        rowSecondaryActionConfigs={({ projectId, projectName }) => [
+          {
+            title: 'View Project',
+            key: 'project',
+            ariaLabel: `View Project, ${projectName}`,
+            to: generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
+              projectId: projectId,
+            }),
+          },
+        ]}
       />
     </Paper>
   );

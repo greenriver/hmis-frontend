@@ -5,6 +5,7 @@ import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
+
 import EligibleUnitGroupsDialog from '@/modules/ce/components/admin/EligibleUnitGroupsDialog';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -151,7 +152,7 @@ const AdminCeClientsTable: React.FC<Props> = ({}) => {
       </Paper>
       {selectedRow && (
         <EligibleUnitGroupsDialog
-          id={selectedRow.id}
+          ceClientId={selectedRow.id}
           onClose={() => setSelectedRow(null)}
           clientName={selectedRow.clientName}
           open

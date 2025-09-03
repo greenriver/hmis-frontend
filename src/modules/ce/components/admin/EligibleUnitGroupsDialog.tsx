@@ -5,14 +5,14 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import CeClientEligibleUnitGroupsTable from '@/modules/ce/components/admin/CeClientEligibleUnitGroupsTable';
 
 interface Props {
-  id: string;
+  ceClientId: string;
   open: boolean;
   clientName: string;
   onClose: () => void;
 }
 
 const EligibleUnitGroupsDialog: React.FC<Props> = ({
-  id,
+  ceClientId,
   clientName,
   ...props
 }) => {
@@ -20,11 +20,11 @@ const EligibleUnitGroupsDialog: React.FC<Props> = ({
     <CommonDialog maxWidth='lg' fullWidth enableBackdropClick {...props}>
       <DialogTitle>Eligible Projects</DialogTitle>
       <DialogContent>
-        <Stack my={4} gap={4}>
+        <Stack my={2} gap={2}>
           <Typography variant='body2'>
-            {clientName} is eligible for the following unit groups:
+            {clientName} is eligible for the following projects.
           </Typography>
-          <CeClientEligibleUnitGroupsTable id={id} />
+          <CeClientEligibleUnitGroupsTable ceClientId={ceClientId} />
         </Stack>
       </DialogContent>
     </CommonDialog>
