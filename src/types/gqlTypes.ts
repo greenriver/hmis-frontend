@@ -570,13 +570,13 @@ export type CeAssessmentsPaginated = {
 
 export type CeCandidate = {
   __typename?: 'CeCandidate';
+  /** Most recent snapshot of client attributes */
+  clientAttributes: Scalars['JSON']['output'];
   /** Masked as "Candidate 123" unless the user has permission to view */
   clientName: Scalars['String']['output'];
   destinationClientId: Scalars['ID']['output'];
   enrollments: CeReferralSourceEnrollmentsPaginated;
   id: Scalars['ID']['output'];
-  /** @deprecated Replaced by priorityScores */
-  priorityScore: Scalars['Int']['output'];
   priorityScores: Array<Scalars['Int']['output']>;
 };
 
@@ -596,11 +596,93 @@ export type CeCandidatesPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
+/**
+ * A client who is eligible for Coordinated Entry (CE), represented by a
+ * ClientProxy. Underlying client record is Destination Client.
+ */
+export type CeClient = {
+  __typename?: 'CeClient';
+  /** Aggregation of most recent snapshots from all candidate pools this client belongs to */
+  clientAttributes: Scalars['JSON']['output'];
+  clientName: Scalars['String']['output'];
+  destinationClientId: Scalars['ID']['output'];
+  /** Unit groups that this client is a candidate for */
+  eligibleUnitGroups: CeEligibleUnitGroupsPaginated;
+  externalIds: Array<ExternalIdentifier>;
+  /** Client Proxy ID */
+  id: Scalars['ID']['output'];
+  /**
+   * IDs of the source clients associated with this client that belong to this HMIS
+   * data source and are viewable by the current user
+   */
+  viewableSourceClientIds: Array<Scalars['ID']['output']>;
+};
+
+/**
+ * A client who is eligible for Coordinated Entry (CE), represented by a
+ * ClientProxy. Underlying client record is Destination Client.
+ */
+export type CeClientEligibleUnitGroupsArgs = {
+  filters?: InputMaybe<CeEligibleUnitGroupFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CeClientFilterOptions = {
+  dynamicFilters?: InputMaybe<Array<TableFilterValue>>;
+  /** Filter to Clients that are eligible for the specified Project Types */
+  projectType?: InputMaybe<Array<ProjectType>>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CeClientsPaginated = {
+  __typename?: 'CeClientsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeClient>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 export type CeCustomReferralStatus = {
   __typename?: 'CeCustomReferralStatus';
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
   name: Scalars['String']['output'];
+};
+
+export type CeEligibleUnitGroup = {
+  __typename?: 'CeEligibleUnitGroup';
+  /** Timestamp when the candidate was added to the pool */
+  candidateCreatedAt: Scalars['ISO8601DateTime']['output'];
+  /** Timestamp when the candidate was last updated */
+  candidateUpdatedAt: Scalars['ISO8601DateTime']['output'];
+  id: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
+  projectId: Scalars['ID']['output'];
+  projectName: Scalars['String']['output'];
+  projectType: ProjectType;
+  unitGroupId: Scalars['ID']['output'];
+  unitGroupName: Scalars['String']['output'];
+  /** Number of units in the unit group that are currently accepting referrals */
+  unitsAcceptingReferrals: Scalars['Int']['output'];
+};
+
+export type CeEligibleUnitGroupFilterOptions = {
+  projectType?: InputMaybe<Array<ProjectType>>;
+};
+
+export type CeEligibleUnitGroupsPaginated = {
+  __typename?: 'CeEligibleUnitGroupsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeEligibleUnitGroup>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type CeMatchRule = {
@@ -6643,6 +6725,9 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
+  ceClient?: Maybe<CeClient>;
+  /** Clients who belong to at least one CE candidate pool */
+  ceClients: CeClientsPaginated;
   ceOpportunities: CeOpportunitiesPaginated;
   ceOpportunity?: Maybe<CeOpportunity>;
   ceReferral?: Maybe<CeReferral>;
@@ -6707,6 +6792,7 @@ export type Query = {
   serviceType?: Maybe<ServiceType>;
   serviceTypes: ServiceTypesPaginated;
   staticFormDefinition: FormDefinition;
+  tableConfigLookup: TableConfigLookup;
   unit?: Maybe<Unit>;
   unitGroup?: Maybe<UnitGroup>;
   /** User lookup */
@@ -6729,6 +6815,16 @@ export type QueryAssessmentFormDefinitionArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   projectId: Scalars['ID']['input'];
   role?: InputMaybe<AssessmentRole>;
+};
+
+export type QueryCeClientArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QueryCeClientsArgs = {
+  filters?: InputMaybe<CeClientFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryCeOpportunitiesArgs = {
@@ -7064,7 +7160,7 @@ export enum Race {
   ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (HispanicLatinaeo) Hispanic/Latina/e/o */
+  /** (HispanicLatinaeo) Hispanic/Latina/o */
   HispanicLatinaeo = 'HISPANIC_LATINAEO',
   /** (MidEastNAfrican) Middle Eastern or North African */
   MidEastNAfrican = 'MID_EAST_N_AFRICAN',
@@ -8288,6 +8384,53 @@ export enum TCellSourceViralLoadSource {
   /** (3) Other */
   Other = 'OTHER',
 }
+
+export type TableColumnConfig = {
+  __typename?: 'TableColumnConfig';
+  key: Scalars['String']['output'];
+  label: Scalars['String']['output'];
+  type: TableColumnConfigType;
+};
+
+export enum TableColumnConfigType {
+  Date = 'DATE',
+  String = 'STRING',
+}
+
+export type TableConfig = {
+  __typename?: 'TableConfig';
+  columns: Array<TableColumnConfig>;
+  filters: Array<TableFilterConfig>;
+};
+
+export type TableConfigLookup = {
+  __typename?: 'TableConfigLookup';
+  ceClientsGlobalConfig?: Maybe<TableConfig>;
+  ceClientsUnitGroupConfig?: Maybe<TableConfig>;
+};
+
+export type TableConfigLookupCeClientsUnitGroupConfigArgs = {
+  unitGroupId: Scalars['ID']['input'];
+};
+
+/** Represents a dynamic filter configuration. */
+export type TableFilterConfig = {
+  __typename?: 'TableFilterConfig';
+  /** The key or field name of the filter. */
+  key: Scalars['String']['output'];
+  /** The display label for the filter. */
+  label: Scalars['String']['output'];
+  /** The list of possible values for this filter. */
+  options: Array<PickListOption>;
+};
+
+/** Represents a dynamic filter that can be applied to queries. */
+export type TableFilterValue = {
+  /** The key or field name to filter on. Must match key on TableFilterConfiguration. */
+  key: Scalars['String']['input'];
+  /** The value to filter by. Must match one of the values on TableFilterConfiguration. */
+  values?: InputMaybe<Array<Scalars['String']['input']>>;
+};
 
 /** HUD TargetPopulation (2.02.7) */
 export enum TargetPopulation {
@@ -16814,6 +16957,7 @@ export type CeCandidateFieldsFragment = {
   id: string;
   priorityScores: Array<number>;
   clientName: string;
+  clientAttributes: any;
 };
 
 export type CeReferralSummaryFieldsFragment = {
@@ -18045,6 +18189,36 @@ export type CeReferralSourceEnrollmentFieldsFragment = {
     __typename?: 'CeReferralSourceEnrollmentAccess';
     canViewEnrollmentDetails: boolean;
   };
+};
+
+export type CeClientFieldsFragment = {
+  __typename?: 'CeClient';
+  id: string;
+  destinationClientId: string;
+  viewableSourceClientIds: Array<string>;
+  clientName: string;
+  clientAttributes: any;
+  externalIds: Array<{
+    __typename?: 'ExternalIdentifier';
+    id: string;
+    identifier?: string | null;
+    url?: string | null;
+    label: string;
+    type: ExternalIdentifierType;
+  }>;
+};
+
+export type CeEligibleUnitGroupFieldsFragment = {
+  __typename?: 'CeEligibleUnitGroup';
+  id: string;
+  unitGroupName: string;
+  projectName: string;
+  projectId: string;
+  projectType: ProjectType;
+  organizationName: string;
+  candidateCreatedAt: string;
+  candidateUpdatedAt: string;
+  unitsAcceptingReferrals: number;
 };
 
 export type CreateCeReferralMutationVariables = Exact<{
@@ -20090,6 +20264,7 @@ export type GetCeOpportunityCandidatesQuery = {
         id: string;
         priorityScores: Array<number>;
         clientName: string;
+        clientAttributes: any;
       }>;
     };
   } | null;
@@ -21211,6 +21386,69 @@ export type GetAdminCeReferralsQuery = {
       } | null;
     }>;
   };
+};
+
+export type GetCeClientsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeClientFilterOptions>;
+}>;
+
+export type GetCeClientsQuery = {
+  __typename?: 'Query';
+  ceClients: {
+    __typename?: 'CeClientsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeClient';
+      id: string;
+      destinationClientId: string;
+      viewableSourceClientIds: Array<string>;
+      clientName: string;
+      clientAttributes: any;
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
+        id: string;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+        type: ExternalIdentifierType;
+      }>;
+    }>;
+  };
+};
+
+export type GetCeClientEligibleUnitGroupsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeEligibleUnitGroupFilterOptions>;
+}>;
+
+export type GetCeClientEligibleUnitGroupsQuery = {
+  __typename?: 'Query';
+  ceClient?: {
+    __typename?: 'CeClient';
+    id: string;
+    eligibleUnitGroups: {
+      __typename?: 'CeEligibleUnitGroupsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeEligibleUnitGroup';
+        id: string;
+        unitGroupName: string;
+        projectName: string;
+        projectId: string;
+        projectType: ProjectType;
+        organizationName: string;
+        candidateCreatedAt: string;
+        candidateUpdatedAt: string;
+        unitsAcceptingReferrals: number;
+      }>;
+    };
+  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -46510,6 +46748,105 @@ export type GetHouseholdStaffAssignmentHistoryQuery = {
   } | null;
 };
 
+export type TableFilterConfigFieldsFragment = {
+  __typename?: 'TableFilterConfig';
+  key: string;
+  label: string;
+  options: Array<{
+    __typename?: 'PickListOption';
+    code: string;
+    label?: string | null;
+    secondaryLabel?: string | null;
+    groupLabel?: string | null;
+    groupCode?: string | null;
+    initialSelected?: boolean | null;
+    helperText?: string | null;
+    numericValue?: number | null;
+    disabled?: boolean | null;
+  }>;
+};
+
+export type TableColumnConfigFieldsFragment = {
+  __typename?: 'TableColumnConfig';
+  key: string;
+  type: TableColumnConfigType;
+  label: string;
+};
+
+export type GetCeClientsGlobalTableConfigQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetCeClientsGlobalTableConfigQuery = {
+  __typename?: 'Query';
+  tableConfigLookup: {
+    __typename?: 'TableConfigLookup';
+    ceClientsGlobalConfig?: {
+      __typename?: 'TableConfig';
+      columns: Array<{
+        __typename?: 'TableColumnConfig';
+        key: string;
+        type: TableColumnConfigType;
+        label: string;
+      }>;
+      filters: Array<{
+        __typename?: 'TableFilterConfig';
+        key: string;
+        label: string;
+        options: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          groupCode?: string | null;
+          initialSelected?: boolean | null;
+          helperText?: string | null;
+          numericValue?: number | null;
+          disabled?: boolean | null;
+        }>;
+      }>;
+    } | null;
+  };
+};
+
+export type GetCeClientsUnitGroupTableConfigQueryVariables = Exact<{
+  unitGroupId: Scalars['ID']['input'];
+}>;
+
+export type GetCeClientsUnitGroupTableConfigQuery = {
+  __typename?: 'Query';
+  tableConfigLookup: {
+    __typename?: 'TableConfigLookup';
+    ceClientsUnitGroupConfig?: {
+      __typename?: 'TableConfig';
+      columns: Array<{
+        __typename?: 'TableColumnConfig';
+        key: string;
+        type: TableColumnConfigType;
+        label: string;
+      }>;
+      filters: Array<{
+        __typename?: 'TableFilterConfig';
+        key: string;
+        label: string;
+        options: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          groupCode?: string | null;
+          initialSelected?: boolean | null;
+          helperText?: string | null;
+          numericValue?: number | null;
+          disabled?: boolean | null;
+        }>;
+      }>;
+    } | null;
+  };
+};
+
 export type UnitTypeCapacityFieldsFragment = {
   __typename?: 'UnitTypeCapacity';
   id: string;
@@ -46657,6 +46994,7 @@ export type UnitDetailFieldsFragment = {
         id: string;
         priorityScores: Array<number>;
         clientName: string;
+        clientAttributes: any;
       }>;
     };
     referral?: {
@@ -47051,6 +47389,7 @@ export type GetUnitQuery = {
           id: string;
           priorityScores: Array<number>;
           clientName: string;
+          clientAttributes: any;
         }>;
       };
       referral?: {
@@ -49053,6 +49392,32 @@ export const CeReferralSourceEnrollmentFieldsFragmentDoc = gql`
     }
   }
 `;
+export const CeClientFieldsFragmentDoc = gql`
+  fragment CeClientFields on CeClient {
+    id
+    destinationClientId
+    viewableSourceClientIds
+    clientName
+    clientAttributes
+    externalIds {
+      ...ClientIdentifierFields
+    }
+  }
+  ${ClientIdentifierFieldsFragmentDoc}
+`;
+export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
+  fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
+    id
+    unitGroupName
+    projectName
+    projectId
+    projectType
+    organizationName
+    candidateCreatedAt
+    candidateUpdatedAt
+    unitsAcceptingReferrals
+  }
+`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
@@ -50450,6 +50815,23 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
   ${EnrollmentRangeFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
+export const TableFilterConfigFieldsFragmentDoc = gql`
+  fragment TableFilterConfigFields on TableFilterConfig {
+    key
+    label
+    options {
+      ...PickListOptionFields
+    }
+  }
+  ${PickListOptionFieldsFragmentDoc}
+`;
+export const TableColumnConfigFieldsFragmentDoc = gql`
+  fragment TableColumnConfigFields on TableColumnConfig {
+    key
+    type
+    label
+  }
+`;
 export const UnitGroupFieldsFragmentDoc = gql`
   fragment UnitGroupFields on UnitGroup {
     id
@@ -50524,6 +50906,7 @@ export const CeCandidateFieldsFragmentDoc = gql`
     id
     priorityScores
     clientName
+    clientAttributes
   }
 `;
 export const UnitDetailFieldsFragmentDoc = gql`
@@ -54043,6 +54426,196 @@ export type GetAdminCeReferralsSuspenseQueryHookResult = ReturnType<
 export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables
+>;
+export const GetCeClientsDocument = gql`
+  query GetCeClients(
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: CeClientFilterOptions = null
+  ) {
+    ceClients(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeClientFields
+      }
+    }
+  }
+  ${CeClientFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeClientsQuery__
+ *
+ * To run a query within a React component, call `useGetCeClientsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeClientsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetCeClientsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeClientsQuery,
+    GetCeClientsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCeClientsQuery, GetCeClientsQueryVariables>(
+    GetCeClientsDocument,
+    options
+  );
+}
+export function useGetCeClientsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeClientsQuery,
+    GetCeClientsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCeClientsQuery, GetCeClientsQueryVariables>(
+    GetCeClientsDocument,
+    options
+  );
+}
+export function useGetCeClientsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeClientsQuery,
+        GetCeClientsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetCeClientsQuery, GetCeClientsQueryVariables>(
+    GetCeClientsDocument,
+    options
+  );
+}
+export type GetCeClientsQueryHookResult = ReturnType<
+  typeof useGetCeClientsQuery
+>;
+export type GetCeClientsLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientsLazyQuery
+>;
+export type GetCeClientsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeClientsSuspenseQuery
+>;
+export type GetCeClientsQueryResult = Apollo.QueryResult<
+  GetCeClientsQuery,
+  GetCeClientsQueryVariables
+>;
+export const GetCeClientEligibleUnitGroupsDocument = gql`
+  query GetCeClientEligibleUnitGroups(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: CeEligibleUnitGroupFilterOptions = null
+  ) {
+    ceClient(id: $id) {
+      id
+      eligibleUnitGroups(limit: $limit, offset: $offset, filters: $filters) {
+        nodesCount
+        nodes {
+          ...CeEligibleUnitGroupFields
+        }
+      }
+    }
+  }
+  ${CeEligibleUnitGroupFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeClientEligibleUnitGroupsQuery__
+ *
+ * To run a query within a React component, call `useGetCeClientEligibleUnitGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientEligibleUnitGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeClientEligibleUnitGroupsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetCeClientEligibleUnitGroupsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  > &
+    (
+      | {
+          variables: GetCeClientEligibleUnitGroupsQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  >(GetCeClientEligibleUnitGroupsDocument, options);
+}
+export function useGetCeClientEligibleUnitGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  >(GetCeClientEligibleUnitGroupsDocument, options);
+}
+export function useGetCeClientEligibleUnitGroupsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeClientEligibleUnitGroupsQuery,
+        GetCeClientEligibleUnitGroupsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeClientEligibleUnitGroupsQuery,
+    GetCeClientEligibleUnitGroupsQueryVariables
+  >(GetCeClientEligibleUnitGroupsDocument, options);
+}
+export type GetCeClientEligibleUnitGroupsQueryHookResult = ReturnType<
+  typeof useGetCeClientEligibleUnitGroupsQuery
+>;
+export type GetCeClientEligibleUnitGroupsLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientEligibleUnitGroupsLazyQuery
+>;
+export type GetCeClientEligibleUnitGroupsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeClientEligibleUnitGroupsSuspenseQuery
+>;
+export type GetCeClientEligibleUnitGroupsQueryResult = Apollo.QueryResult<
+  GetCeClientEligibleUnitGroupsQuery,
+  GetCeClientEligibleUnitGroupsQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
@@ -65303,6 +65876,185 @@ export type GetHouseholdStaffAssignmentHistorySuspenseQueryHookResult =
 export type GetHouseholdStaffAssignmentHistoryQueryResult = Apollo.QueryResult<
   GetHouseholdStaffAssignmentHistoryQuery,
   GetHouseholdStaffAssignmentHistoryQueryVariables
+>;
+export const GetCeClientsGlobalTableConfigDocument = gql`
+  query GetCeClientsGlobalTableConfig {
+    tableConfigLookup {
+      ceClientsGlobalConfig {
+        columns {
+          ...TableColumnConfigFields
+        }
+        filters {
+          ...TableFilterConfigFields
+        }
+      }
+    }
+  }
+  ${TableColumnConfigFieldsFragmentDoc}
+  ${TableFilterConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeClientsGlobalTableConfigQuery__
+ *
+ * To run a query within a React component, call `useGetCeClientsGlobalTableConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientsGlobalTableConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeClientsGlobalTableConfigQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCeClientsGlobalTableConfigQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
+  >(GetCeClientsGlobalTableConfigDocument, options);
+}
+export function useGetCeClientsGlobalTableConfigLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
+  >(GetCeClientsGlobalTableConfigDocument, options);
+}
+export function useGetCeClientsGlobalTableConfigSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeClientsGlobalTableConfigQuery,
+        GetCeClientsGlobalTableConfigQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeClientsGlobalTableConfigQuery,
+    GetCeClientsGlobalTableConfigQueryVariables
+  >(GetCeClientsGlobalTableConfigDocument, options);
+}
+export type GetCeClientsGlobalTableConfigQueryHookResult = ReturnType<
+  typeof useGetCeClientsGlobalTableConfigQuery
+>;
+export type GetCeClientsGlobalTableConfigLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientsGlobalTableConfigLazyQuery
+>;
+export type GetCeClientsGlobalTableConfigSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeClientsGlobalTableConfigSuspenseQuery
+>;
+export type GetCeClientsGlobalTableConfigQueryResult = Apollo.QueryResult<
+  GetCeClientsGlobalTableConfigQuery,
+  GetCeClientsGlobalTableConfigQueryVariables
+>;
+export const GetCeClientsUnitGroupTableConfigDocument = gql`
+  query GetCeClientsUnitGroupTableConfig($unitGroupId: ID!) {
+    tableConfigLookup {
+      ceClientsUnitGroupConfig(unitGroupId: $unitGroupId) {
+        columns {
+          ...TableColumnConfigFields
+        }
+        filters {
+          ...TableFilterConfigFields
+        }
+      }
+    }
+  }
+  ${TableColumnConfigFieldsFragmentDoc}
+  ${TableFilterConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeClientsUnitGroupTableConfigQuery__
+ *
+ * To run a query within a React component, call `useGetCeClientsUnitGroupTableConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientsUnitGroupTableConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeClientsUnitGroupTableConfigQuery({
+ *   variables: {
+ *      unitGroupId: // value for 'unitGroupId'
+ *   },
+ * });
+ */
+export function useGetCeClientsUnitGroupTableConfigQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
+  > &
+    (
+      | {
+          variables: GetCeClientsUnitGroupTableConfigQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
+  >(GetCeClientsUnitGroupTableConfigDocument, options);
+}
+export function useGetCeClientsUnitGroupTableConfigLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
+  >(GetCeClientsUnitGroupTableConfigDocument, options);
+}
+export function useGetCeClientsUnitGroupTableConfigSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeClientsUnitGroupTableConfigQuery,
+        GetCeClientsUnitGroupTableConfigQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeClientsUnitGroupTableConfigQuery,
+    GetCeClientsUnitGroupTableConfigQueryVariables
+  >(GetCeClientsUnitGroupTableConfigDocument, options);
+}
+export type GetCeClientsUnitGroupTableConfigQueryHookResult = ReturnType<
+  typeof useGetCeClientsUnitGroupTableConfigQuery
+>;
+export type GetCeClientsUnitGroupTableConfigLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientsUnitGroupTableConfigLazyQuery
+>;
+export type GetCeClientsUnitGroupTableConfigSuspenseQueryHookResult =
+  ReturnType<typeof useGetCeClientsUnitGroupTableConfigSuspenseQuery>;
+export type GetCeClientsUnitGroupTableConfigQueryResult = Apollo.QueryResult<
+  GetCeClientsUnitGroupTableConfigQuery,
+  GetCeClientsUnitGroupTableConfigQueryVariables
 >;
 export const GetUnitsDocument = gql`
   query GetUnits(

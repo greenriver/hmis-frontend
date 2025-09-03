@@ -73,12 +73,9 @@ const TableFilterItem = <T,>({
             filter.pickListOptions ||
             localResolvePickList(filter.enumType, true) ||
             [];
-          const variant =
-            filter.variant ||
-            (options.length < 3 && filter.multi ? 'checkboxes' : 'select');
           return (
             <TableFilterItemSelector
-              variant={variant}
+              variant={filter.variant}
               options={options}
               value={filter.multi ? value || [] : value}
               onChange={onChange}
@@ -87,7 +84,19 @@ const TableFilterItem = <T,>({
           );
         }
 
-        if (filter.type === 'picklist')
+        if (filter.type === 'local_picklist') {
+          return (
+            <TableFilterItemSelector
+              variant={filter.variant}
+              options={filter.pickListOptions}
+              value={filter.multi ? value || [] : value}
+              onChange={onChange}
+              placeholder={placeholder}
+            />
+          );
+        }
+
+        if (filter.type === 'remote_picklist') {
           return (
             <PickListWrapper
               pickListType={filter.pickListReference}
@@ -105,7 +114,7 @@ const TableFilterItem = <T,>({
               )}
             </PickListWrapper>
           );
-
+        }
         return 'Not Implemented';
       })()}
     </LabelWithContent>
