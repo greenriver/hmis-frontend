@@ -6,6 +6,7 @@ import {
   useAssessmentHandlers,
 } from '../hooks/useAssessmentHandlers';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
+import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { FormActionTypes } from '@/modules/form/types';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { cache } from '@/providers/apolloClient';
@@ -36,17 +37,19 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
   editingDefinition,
   assessment,
 }) => {
+  const { handleOpenDesktopMenu } = useEnrollmentDashboardContext();
   const navigate = useNavigate();
-  const navigateToEnrollment = useCallback(
-    () =>
-      navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
-          enrollmentId: enrollment.id,
-          clientId: client.id,
-        })
-      ),
-    [navigate, enrollment, client]
-  );
+
+  const navigateToEnrollment = useCallback(() => {
+    navigate(
+      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
+        enrollmentId: enrollment.id,
+        clientId: client.id,
+      })
+    );
+    // Assessment is always displayed in 'focus mode', so re-expand desktop nav when navigating way.
+    handleOpenDesktopMenu();
+  }, [enrollment.id, client.id, navigate, handleOpenDesktopMenu]);
 
   const onCompletedMutation = useCallback(
     (status: AssessmentResponseStatus) => {

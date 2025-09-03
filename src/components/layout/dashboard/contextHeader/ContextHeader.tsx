@@ -86,13 +86,14 @@ const ContextHeader: React.FC<Props> = ({
       navigate(-1);
     }
 
-    handleOpenMenu(); // expand left nav
+    if (!isMobile) handleOpenMenu(); // re-expand left nav on desktop
   }, [
     clientId,
     enrollmentId,
     focusMode,
     focusModeDefaultReturnPath,
     handleOpenMenu,
+    isMobile,
     location,
     navigate,
   ]);
