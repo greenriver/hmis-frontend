@@ -5,6 +5,7 @@ import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   CeEligibleUnitGroupFieldsFragment,
   GetCeClientEligibleUnitGroupsDocument,
@@ -60,7 +61,7 @@ const COLUMNS: DataColumnDef<
         placement='top'
         arrow
       >
-        <span>Eligibility Date</span>
+        <span>Date Added</span>
       </Tooltip>
     ),
     render: ({ candidateCreatedAt }) => {
@@ -74,10 +75,9 @@ interface Props {
   id: string;
 }
 const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ id }) => {
-  // TODO: support filtering by project type
-  // const filters = useFilters({
-  //   type: 'CeEligibleUnitGroupFilterOptions',
-  // });
+  const filters = useFilters({
+    type: 'CeEligibleUnitGroupFilterOptions',
+  });
 
   return (
     <Paper>
@@ -92,7 +92,7 @@ const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ id }) => {
         pagePath='ceClient.eligibleUnitGroups'
         noData='No eligible projects found'
         paginationItemName='record'
-        // filters={filters}
+        filters={filters}
         // rowActionTitle='View Waitlist' // nav to unit group waitlist?
         // rowSecondaryActionConfigs={rowSecondaryActions}
       />

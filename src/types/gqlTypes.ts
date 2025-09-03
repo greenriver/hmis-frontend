@@ -623,6 +623,7 @@ export type CeClient = {
  * ClientProxy. Underlying client record is Destination Client.
  */
 export type CeClientEligibleUnitGroupsArgs = {
+  filters?: InputMaybe<CeEligibleUnitGroupFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -667,6 +668,10 @@ export type CeEligibleUnitGroup = {
   unitGroupName: Scalars['String']['output'];
   /** Number of units in the unit group that are currently accepting referrals */
   unitsAcceptingReferrals: Scalars['Int']['output'];
+};
+
+export type CeEligibleUnitGroupFilterOptions = {
+  projectType?: InputMaybe<Array<ProjectType>>;
 };
 
 export type CeEligibleUnitGroupsPaginated = {
@@ -21418,6 +21423,7 @@ export type GetCeClientEligibleUnitGroupsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeEligibleUnitGroupFilterOptions>;
 }>;
 
 export type GetCeClientEligibleUnitGroupsQuery = {
@@ -54515,10 +54521,11 @@ export const GetCeClientEligibleUnitGroupsDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
+    $filters: CeEligibleUnitGroupFilterOptions = null
   ) {
     ceClient(id: $id) {
       id
-      eligibleUnitGroups(limit: $limit, offset: $offset) {
+      eligibleUnitGroups(limit: $limit, offset: $offset, filters: $filters) {
         nodesCount
         nodes {
           ...CeEligibleUnitGroupFields
@@ -54544,6 +54551,7 @@ export const GetCeClientEligibleUnitGroupsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

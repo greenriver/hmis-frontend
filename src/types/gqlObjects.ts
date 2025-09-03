@@ -8050,6 +8050,23 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'CeEligibleUnitGroupFilterOptions',
+    args: [
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeOpportunityFilterOptions',
     args: [
       {

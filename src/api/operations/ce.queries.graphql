@@ -189,10 +189,11 @@ query GetCeClientEligibleUnitGroups(
   $id: ID!
   $limit: Int = 25
   $offset: Int = 0
+  $filters: CeEligibleUnitGroupFilterOptions = null
 ) {
   ceClient(id: $id) {
     id
-    eligibleUnitGroups(limit: $limit, offset: $offset) {
+    eligibleUnitGroups(limit: $limit, offset: $offset, filters: $filters) {
       nodesCount
       nodes {
         ...CeEligibleUnitGroupFields
