@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
+  ProjectCoordinatedEntryFeatures,
   UnitTableRowFieldsFragment,
   useMarkUnitsAvailableMutation,
   useMarkUnitsUnavailableMutation,
@@ -10,10 +11,10 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useUnitCeActions = ({
   projectId,
-  projectSupportsReferrals,
+  coordinatedEntryFeatures,
 }: {
   projectId: string;
-  projectSupportsReferrals: boolean;
+  coordinatedEntryFeatures: Partial<ProjectCoordinatedEntryFeatures>;
 }): {
   loading: boolean;
   getCeActions: (unit: UnitTableRowFieldsFragment) => CommonMenuItem[];
@@ -30,20 +31,23 @@ export const useUnitCeActions = ({
 
   const getCeActions = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      if (!projectSupportsReferrals) return [];
+      if (!coordinatedEntryFeatures.supportsReferrals) return [];
 
       const actions: CommonMenuItem[] = [];
 
-      // Always allow linking to Unit page, if the project supports CE referrals, to view/manage eligibility criteria
-      actions.push({
-        title: 'View Unit',
-        key: 'viewUnit',
-        ariaLabel: `View Unit ${unit.id}`,
-        to: generateSafePath(ProjectDashboardRoutes.UNIT, {
-          projectId: projectId,
-          unitId: unit.id,
-        }),
-      });
+      // Only allow linking to the Unit page, if the project supports CE waitlist-based referrals. In the future
+      // we may want to expand this if we add more functionality to this page that is relevant to Direct-referral projects.
+      if (coordinatedEntryFeatures.supportsWaitlistReferrals) {
+        actions.push({
+          title: 'View Unit',
+          key: 'viewUnit',
+          ariaLabel: `View Unit ${unit.id}`,
+          to: generateSafePath(ProjectDashboardRoutes.UNIT, {
+            projectId: projectId,
+            unitId: unit.id,
+          }),
+        });
+      }
 
       // Note: canBeMarkedAvailableToday will be false if there is no workflow template configured
       if (unit.canBeMarkedAvailableToday) {
@@ -72,10 +76,10 @@ export const useUnitCeActions = ({
       return actions;
     },
     [
-      projectSupportsReferrals,
+      coordinatedEntryFeatures,
+      projectId,
       markUnitsAvailable,
       markUnitsUnavailable,
-      projectId,
     ]
   );
 

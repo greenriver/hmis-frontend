@@ -101,7 +101,9 @@ const Units = () => {
               <UnitManagementTable
                 projectId={project.id}
                 unitGroupsEnabled={unitGroupsEnabled}
-                projectSupportsReferrals={projectSupportsReferrals}
+                coordinatedEntryFeatures={
+                  project.coordinatedEntryFeatures || {}
+                }
                 noUnitsMessage={
                   unitGroupsEnabled && unitGroups.length === 0
                     ? 'No units. Add a unit group to get started.'

@@ -478,7 +478,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewUnits']}
-                coordinatedEntryFeatures={['supportsReferrals']}
+                coordinatedEntryFeatures={['supportsWaitlistReferrals']}
               >
                 <UnitPage />
               </ProjectRoute>
@@ -489,7 +489,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectRoute
                 permissions={['canViewUnits']}
-                coordinatedEntryFeatures={['supportsReferrals']}
+                coordinatedEntryFeatures={['supportsWaitlistReferrals']}
               >
                 <UnitPage />
               </ProjectRoute>

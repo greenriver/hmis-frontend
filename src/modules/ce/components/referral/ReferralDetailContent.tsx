@@ -207,15 +207,17 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
           <CommonDetailGrid rows={sourceEnrollmentDetails} />
         </CommonCollapsibleCard>
       )}
-      {eligibilityRequirementsDetails && (
-        <CommonCollapsibleCard
-          title='Eligibility Requirements'
-          TitleComponent='h3'
-          padContent={false}
-        >
-          <CommonDetailGrid rows={eligibilityRequirementsDetails} />
-        </CommonCollapsibleCard>
-      )}
+
+      {eligibilityRequirementsDetails &&
+        eligibilityRequirementsDetails.length > 0 && (
+          <CommonCollapsibleCard
+            title='Eligibility Requirements'
+            TitleComponent='h3'
+            padContent={false}
+          >
+            <CommonDetailGrid rows={eligibilityRequirementsDetails} />
+          </CommonCollapsibleCard>
+        )}
     </Stack>
   );
 };
