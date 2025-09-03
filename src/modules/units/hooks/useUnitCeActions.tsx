@@ -35,7 +35,8 @@ export const useUnitCeActions = ({
 
       const actions: CommonMenuItem[] = [];
 
-      // Always allow linking to Unit page, if the project supports CE referrals, to view/manage eligibility criteria
+      // Only allow linking to the Unit page, if the project supports CE waitlist-based referrals. In the future
+      // we may want to expand this if we add more functionality to this page that is relevant to Direct-referral projects.
       if (coordinatedEntryFeatures.supportsWaitlistReferrals) {
         actions.push({
           title: 'View Unit',
