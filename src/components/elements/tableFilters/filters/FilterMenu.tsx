@@ -8,18 +8,11 @@ import TableControlPopover from './TableControlPopover';
 import { FilterIcon } from '@/components/elements/SemanticIcons';
 import useIntermediateState from '@/hooks/useIntermediateState';
 import { FilterType } from '@/modules/dataFetching/types';
-import { ensureArray } from '@/utils/arrays';
 
-type DynamicFiltersArray<T> = Array<{
-  key: string;
-  values: Partial<T>[keyof T][];
-}>;
 export interface TableFilterMenuProps<T> {
   filters: Partial<Record<keyof T, FilterType<T>>>;
   filterValues: Partial<T>;
-  setFilterValues: (
-    value: Partial<T> & { dynamicFilters?: DynamicFiltersArray<T> }
-  ) => any;
+  setFilterValues: (value: Partial<T>) => any;
 }
 
 const TableFilterMenu = <T,>({
@@ -67,41 +60,12 @@ const TableFilterMenu = <T,>({
     return cleaned;
   }, []);
 
-  /**
-   * Processes and sets the filter values by separating dynamic filters from static ones.
-   *
-   * - Cleans the provided filter values to remove invalid entries (e.g., invalid dates).
-   * - Identifies dynamic filters based on the `isDynamic` property in the `filters` prop.
-   * - Adds dynamic filters to a `dynamicFilters` array within the adjusted values.
-   * - Calls the `setFilterValues` function with the adjusted values.
-   *
-   * @param values - The filter values to process and set.
-   */
   const handleSetFilterValues = useCallback(
     (values: Partial<T>) => {
       const cleanedValues: Partial<T> = cleanValues(values);
-
-      const dynamicFilters: DynamicFiltersArray<T> = [];
-      // pull out dynamic filters
-      Object.keys(cleanedValues)
-        .filter((key) => !!filters[key as keyof T]?.isDynamic)
-        .forEach((key) => {
-          dynamicFilters.push({
-            key,
-            values: ensureArray(values[key as keyof T]),
-          });
-        });
-
-      const dynamicKeys = new Set(dynamicFilters.map((f) => f.key));
-      const valuesWithoutDynamicKeys = Object.fromEntries(
-        Object.entries(cleanedValues).filter((e) => !dynamicKeys.has(e[0]))
-      );
-      setFilterValues({
-        ...valuesWithoutDynamicKeys,
-        ...(dynamicFilters.length > 0 ? { dynamicFilters } : {}),
-      } as Partial<T> & { dynamicFilters?: DynamicFiltersArray<T> });
+      setFilterValues(cleanedValues);
     },
-    [cleanValues, filters, setFilterValues]
+    [cleanValues, setFilterValues]
   );
   return (
     <TableControlPopover

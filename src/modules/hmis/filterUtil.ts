@@ -15,6 +15,7 @@ import {
   ProjectSortOption,
   TableFilterConfigFieldsFragment,
 } from '@/types/gqlTypes';
+import { ensureArray } from '@/utils/arrays';
 
 const getType = (
   type: GqlInputObjectSchemaType
@@ -170,3 +171,40 @@ export function useFilters<T>({
     return result;
   }, [type, dynamicFilters, omit, pickListArgs]);
 }
+
+/**
+ * Method for transforming filter values by pulling out dynamic filters into separate key.
+ * This is necessary when filtering by dynamic filters, which are backed by HMIS Table Configuration.
+ *
+ * Example transformation:
+ *
+ * { "ActualFilter": "1", "SomeDynamicFilter": "2"}
+ *     =>
+ * { "ActualFilter":  "1", "dynamicFilters": [ { "key": "SomeDynamicFilter", "values": ["2"] }] }
+ */
+export const transformDynamicFilters = <FilterOptionsType>(
+  filters?: TableFilterType<FilterOptionsType>, // Filter configuration, so we know which ones are dynamic
+  filterValues?: Partial<FilterOptionsType> // Current filter values
+) => {
+  if (!filters || !filterValues) return;
+
+  // Pull out dynamic filters into separate array
+  const dynamicFilters: Array<{ key: string; values: any[] }> = [];
+  Object.keys(filterValues)
+    .filter((key) => !!filters[key as keyof FilterOptionsType]?.isDynamic)
+    .forEach((key) => {
+      dynamicFilters.push({
+        key,
+        values: ensureArray(filterValues[key as keyof FilterOptionsType]),
+      });
+    });
+
+  const dynamicKeys = new Set(dynamicFilters.map((f) => f.key));
+  const valuesWithoutDynamicKeys = Object.fromEntries(
+    Object.entries(filterValues).filter((e) => !dynamicKeys.has(e[0]))
+  );
+  return {
+    ...valuesWithoutDynamicKeys,
+    ...(dynamicFilters.length > 0 ? { dynamicFilters } : {}),
+  };
+};
