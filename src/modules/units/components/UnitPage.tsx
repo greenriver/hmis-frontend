@@ -53,6 +53,7 @@ const UnitPage: React.FC<Props> = ({}) => {
 
     const opportunity = unit.latestOpportunity;
     if (
+      project.coordinatedEntryFeatures?.supportsWaitlistReferrals &&
       opportunity &&
       opportunity.status !== CeOpportunityStatus.Closed &&
       project.access.canViewPrioritizedClientLists
