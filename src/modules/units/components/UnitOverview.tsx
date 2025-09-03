@@ -58,19 +58,18 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
           </Paper>
         </Grid>
       )}
-      {unit.eligibilityRequirements && (
-        <Grid item xs={12} md={6}>
-          <MatchRuleCard
-            title='Eligibility Requirements'
-            rules={unit.eligibilityRequirements}
-          />
-        </Grid>
-      )}
-      {unit.prioritySchemes && (
-        <Grid item xs={12} md={6}>
-          <MatchRuleCard title='Prioritization' rules={unit.prioritySchemes} />
-        </Grid>
-      )}
+      <Grid item xs={12} md={6}>
+        <MatchRuleCard
+          title='Eligibility Requirements'
+          rules={unit.eligibilityRequirements || []}
+        />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <MatchRuleCard
+          title='Prioritization'
+          rules={unit.prioritySchemes || []}
+        />
+      </Grid>
     </Grid>
   );
 };

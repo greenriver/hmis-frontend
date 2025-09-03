@@ -20,6 +20,9 @@ const UnitPage: React.FC<Props> = ({}) => {
 
   const { project, overrideBreadcrumbTitles } = useProjectDashboardContext();
 
+  const { supportsWaitlistReferrals: projectSupportsWaitlistReferrals } =
+    project.coordinatedEntryFeatures || {};
+
   const {
     data: { unit } = {},
     loading,
@@ -53,7 +56,6 @@ const UnitPage: React.FC<Props> = ({}) => {
 
     const opportunity = unit.latestOpportunity;
     if (
-      project.coordinatedEntryFeatures?.supportsWaitlistReferrals &&
       opportunity &&
       opportunity.status !== CeOpportunityStatus.Closed &&
       project.access.canViewPrioritizedClientLists
@@ -80,6 +82,11 @@ const UnitPage: React.FC<Props> = ({}) => {
   if (loading && !unit) return <Loading />;
   if (error) throw error;
   if (!unit) return <NotFound />;
+
+  // This page is only available for projects that use waitlists.
+  // Currently there is not really anything to show on a Unit page for projects
+  // that only do direct referrals.
+  if (!projectSupportsWaitlistReferrals) return <NotFound />;
 
   return (
     <>
