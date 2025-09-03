@@ -20,7 +20,8 @@ export function useProjectCeVisibility(project?: ProjectAllFieldsFragment) {
       canViewUnits,
     } = project.access;
 
-    // If the project supports referrals AND the user can view referrals, show the Referrals tab
+    // If the project supports referrals AND the user can view referrals, show the Referrals tab.
+    // This refers to the "Referrals" sub-tab within the referral page, not the project page Referrals tab.
     const showReferrals =
       supportsReferrals && (canViewReferrals || canViewOwnReferrals);
 
@@ -32,13 +33,20 @@ export function useProjectCeVisibility(project?: ProjectAllFieldsFragment) {
     const showOutgoingReferrals =
       sendsDirectReferrals && canManageOutgoingReferrals;
 
+    // When to enable the 'Legacy Referrals' tab:
+    //   1) if the user has "canManageIncomingReferrals". This is a legacy perm that enables the ability to manage incoming legacy referrals.
+    //   2) if the user has "canManageOutgoingReferrals" and outgoing CE referrals are _not_ enabled. This permission is shared across legacy and CE.
+    //      This means that if the project had legacy outgoing referrals, but now CE Outgoing Direct Referrals are enabled, the Legacy
+    //      Referral tab will no longer be visible. (Unless the user has "canManageIncomingReferrals", in which case the legacy tab always shows.)
+    const showLegacyReferrals =
+      project.access.canManageIncomingReferrals ||
+      (!sendsDirectReferrals && canManageOutgoingReferrals);
+
     return {
       showReferrals,
       showAvailableUnits,
       showOutgoingReferrals,
-      // If user has 'canManageIncomingReferrals' in the project, they can see the legacy incoming referrals tab. This tab will be deprecated and removed once all projects are
-      // using CE referrals instead.
-      showLegacyReferrals: project.access.canManageIncomingReferrals,
+      showLegacyReferrals,
     };
   }, [project]);
 }

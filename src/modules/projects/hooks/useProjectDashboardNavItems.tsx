@@ -13,8 +13,12 @@ import {
 export const useProjectDashboardNavItems = (
   project?: ProjectAllFieldsFragment
 ) => {
-  const { showReferrals, showAvailableUnits, showOutgoingReferrals } =
-    useProjectCeVisibility(project);
+  const {
+    showReferrals,
+    showAvailableUnits,
+    showOutgoingReferrals,
+    showLegacyReferrals,
+  } = useProjectCeVisibility(project);
 
   const navItems: NavItem<ProjectAccessFieldsFragment>[] = useMemo(() => {
     if (!project) return [];
@@ -22,6 +26,10 @@ export const useProjectDashboardNavItems = (
     const dataCollectionRoles = project.dataCollectionFeatures.map(
       (r) => r.role
     );
+
+    const ceReferralsTabEnabled =
+      showReferrals || showAvailableUnits || showOutgoingReferrals;
+    const legacyReferralTabEnabled = showLegacyReferrals;
 
     return [
       {
@@ -90,23 +98,10 @@ export const useProjectDashboardNavItems = (
             hide: !project.serviceTypes.find((s) => s.supportsBulkAssignment),
           },
           {
-            // Legacy Referral page. Hidden if CE is enabled for the project.
             id: 'referrals',
             title: 'Referrals',
-            path: ProjectDashboardRoutes.REFERRALS,
-            permissions: [
-              'canManageIncomingReferrals',
-              'canManageOutgoingReferrals',
-            ],
-            permissionMode: 'any',
-            hide: !!project.coordinatedEntryFeatures,
-          },
-          {
-            id: 'ce-referrals',
-            title: 'Referrals',
             path: ProjectDashboardRoutes.CE,
-            hide:
-              !showReferrals && !showAvailableUnits && !showOutgoingReferrals,
+            hide: !ceReferralsTabEnabled && !legacyReferralTabEnabled,
           },
         ],
       },
@@ -153,7 +148,13 @@ export const useProjectDashboardNavItems = (
         ],
       },
     ];
-  }, [project, showAvailableUnits, showOutgoingReferrals, showReferrals]);
+  }, [
+    project,
+    showAvailableUnits,
+    showLegacyReferrals,
+    showOutgoingReferrals,
+    showReferrals,
+  ]);
 
   return navItems;
 };
