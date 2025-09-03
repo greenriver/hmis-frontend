@@ -92,15 +92,15 @@ fragment UnitGroupCapacityFields on UnitGroup {
   name
   capacity
   availability
-  unitTypes {
-    ...UnitTypeCapacityFields
-  }
 }
 
 fragment UnitGroupDetailFields on UnitGroup {
   ...UnitGroupCapacityFields
   workflowTemplateName
   ceEventType
+  unitType {
+    id
+  }
   workflowTemplateIdentifier
   eligibilityRequirements {
     ...CeMatchRuleFields

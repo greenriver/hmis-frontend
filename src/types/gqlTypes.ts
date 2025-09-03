@@ -8366,7 +8366,7 @@ export type Unit = {
   priorityScheme?: Maybe<CeMatchRule>;
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
   project?: Maybe<Project>;
-  unitGroup?: Maybe<UnitGroup>;
+  unitGroup: UnitGroup;
   unitSize?: Maybe<Scalars['Int']['output']>;
   unitType?: Maybe<UnitTypeObject>;
   user?: Maybe<ApplicationUser>;
@@ -8401,7 +8401,8 @@ export type UnitGroup = {
   /** @deprecated Replaced by prioritySchemes */
   priorityScheme?: Maybe<CeMatchRule>;
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
-  unitTypes: Array<UnitTypeCapacity>;
+  /** Unit type for this group */
+  unitType?: Maybe<UnitTypeObject>;
   units: UnitsPaginated;
   workflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
@@ -8417,6 +8418,7 @@ export type UnitGroupInput = {
   ceEventType?: InputMaybe<EventType>;
   name?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
+  unitTypeId?: InputMaybe<Scalars['ID']['input']>;
   workflowTemplateIdentifier?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -8436,8 +8438,10 @@ export type UnitInput = {
   count?: InputMaybe<Scalars['Int']['input']>;
   /** Prefix for unit names */
   prefix?: InputMaybe<Scalars['String']['input']>;
-  projectId: Scalars['ID']['input'];
-  unitGroupId?: InputMaybe<Scalars['ID']['input']>;
+  /** @deprecated Specify project through unit group */
+  projectId?: InputMaybe<Scalars['ID']['input']>;
+  unitGroupId: Scalars['ID']['input'];
+  /** @deprecated Specify unit type through unit group */
   unitTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -16690,7 +16694,7 @@ export type CeOpportunitySummaryFieldsFragment = {
       id: string;
       description?: string | null;
     } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
   } | null;
 };
 
@@ -16746,7 +16750,7 @@ export type CeOpportunityFieldsFragment = {
       id: string;
       description?: string | null;
     } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
   } | null;
 };
 
@@ -16770,7 +16774,7 @@ export type CeOpportunityAdminFieldsFragment = {
       id: string;
       description?: string | null;
     } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
   } | null;
 };
 
@@ -16794,7 +16798,7 @@ export type ClientCeOpportunitySummaryFieldsFragment = {
       id: string;
       description?: string | null;
     } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
   } | null;
 };
 
@@ -17159,7 +17163,7 @@ export type CeReferralFieldsFragment = {
         id: string;
         description?: string | null;
       } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
     } | null;
   } | null;
   targetEnrollment?: {
@@ -19491,11 +19495,7 @@ export type SubmitCeReferralStepMutation = {
             id: string;
             description?: string | null;
           } | null;
-          unitGroup?: {
-            __typename?: 'UnitGroup';
-            id: string;
-            name: string;
-          } | null;
+          unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
         } | null;
       } | null;
       targetEnrollment?: {
@@ -19667,7 +19667,7 @@ export type MarkUnitsAvailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -19701,11 +19701,7 @@ export type MarkUnitsAvailableMutation = {
             id: string;
             description?: string | null;
           } | null;
-          unitGroup?: {
-            __typename?: 'UnitGroup';
-            id: string;
-            name: string;
-          } | null;
+          unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
         } | null;
       } | null;
     }>;
@@ -19757,7 +19753,7 @@ export type MarkUnitsUnavailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -19791,11 +19787,7 @@ export type MarkUnitsUnavailableMutation = {
             id: string;
             description?: string | null;
           } | null;
-          unitGroup?: {
-            __typename?: 'UnitGroup';
-            id: string;
-            name: string;
-          } | null;
+          unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
         } | null;
       } | null;
     }>;
@@ -19934,11 +19926,7 @@ export type GetProjectCeOpportunitiesQuery = {
             id: string;
             description?: string | null;
           } | null;
-          unitGroup?: {
-            __typename?: 'UnitGroup';
-            id: string;
-            name: string;
-          } | null;
+          unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
         } | null;
       }>;
     };
@@ -20062,7 +20050,7 @@ export type GetCeOpportunityQuery = {
         id: string;
         description?: string | null;
       } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
     } | null;
   } | null;
 };
@@ -20217,11 +20205,7 @@ export type GetCeReferralQuery = {
           id: string;
           description?: string | null;
         } | null;
-        unitGroup?: {
-          __typename?: 'UnitGroup';
-          id: string;
-          name: string;
-        } | null;
+        unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
       } | null;
     } | null;
     targetEnrollment?: {
@@ -21077,11 +21061,7 @@ export type GetClientEligibleOpportunitiesQuery = {
             id: string;
             description?: string | null;
           } | null;
-          unitGroup?: {
-            __typename?: 'UnitGroup';
-            id: string;
-            name: string;
-          } | null;
+          unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
         } | null;
       }>;
     };
@@ -21122,11 +21102,7 @@ export type GetAdminCeOpportunitiesQuery = {
           id: string;
           description?: string | null;
         } | null;
-        unitGroup?: {
-          __typename?: 'UnitGroup';
-          id: string;
-          name: string;
-        } | null;
+        unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
       } | null;
     }>;
   };
@@ -46562,7 +46538,7 @@ export type UnitTableRowFieldsFragment = {
       nameSuffix?: string | null;
     };
   }>;
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
@@ -46596,7 +46572,7 @@ export type UnitTableRowFieldsFragment = {
         id: string;
         description?: string | null;
       } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
     } | null;
   } | null;
 };
@@ -46617,7 +46593,7 @@ export type UnitDetailFieldsFragment = {
     dateUpdated: string;
     dateCreated: string;
   } | null;
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
@@ -46700,7 +46676,7 @@ export type UnitDetailFieldsFragment = {
         id: string;
         description?: string | null;
       } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
     } | null;
   } | null;
 };
@@ -46745,7 +46721,7 @@ export type UnitWithCeFieldsFragment = {
         id: string;
         description?: string | null;
       } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
     } | null;
   } | null;
 };
@@ -46762,13 +46738,6 @@ export type UnitGroupCapacityFieldsFragment = {
   name: string;
   capacity: number;
   availability: number;
-  unitTypes: Array<{
-    __typename?: 'UnitTypeCapacity';
-    id: string;
-    unitType: string;
-    capacity: number;
-    availability: number;
-  }>;
 };
 
 export type UnitGroupDetailFieldsFragment = {
@@ -46780,6 +46749,7 @@ export type UnitGroupDetailFieldsFragment = {
   name: string;
   capacity: number;
   availability: number;
+  unitType?: { __typename?: 'UnitTypeObject'; id: string } | null;
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
@@ -46798,13 +46768,6 @@ export type UnitGroupDetailFieldsFragment = {
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
   }> | null;
-  unitTypes: Array<{
-    __typename?: 'UnitTypeCapacity';
-    id: string;
-    unitType: string;
-    capacity: number;
-    availability: number;
-  }>;
 };
 
 export type GetUnitsQueryVariables = Exact<{
@@ -46861,11 +46824,7 @@ export type GetUnitsQuery = {
             nameSuffix?: string | null;
           };
         }>;
-        unitGroup?: {
-          __typename?: 'UnitGroup';
-          id: string;
-          name: string;
-        } | null;
+        unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
         latestOpportunity?: {
           __typename?: 'CeOpportunity';
           id: string;
@@ -46899,11 +46858,7 @@ export type GetUnitsQuery = {
               id: string;
               description?: string | null;
             } | null;
-            unitGroup?: {
-              __typename?: 'UnitGroup';
-              id: string;
-              name: string;
-            } | null;
+            unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
           } | null;
         } | null;
       }>;
@@ -46933,13 +46888,6 @@ export type GetProjectUnitGroupsQuery = {
         name: string;
         capacity: number;
         availability: number;
-        unitTypes: Array<{
-          __typename?: 'UnitTypeCapacity';
-          id: string;
-          unitType: string;
-          capacity: number;
-          availability: number;
-        }>;
       }>;
     };
   } | null;
@@ -46960,6 +46908,7 @@ export type GetUnitGroupQuery = {
     name: string;
     capacity: number;
     availability: number;
+    unitType?: { __typename?: 'UnitTypeObject'; id: string } | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
@@ -46978,13 +46927,6 @@ export type GetUnitGroupQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     }> | null;
-    unitTypes: Array<{
-      __typename?: 'UnitTypeCapacity';
-      id: string;
-      unitType: string;
-      capacity: number;
-      availability: number;
-    }>;
   } | null;
 };
 
@@ -47011,7 +46953,7 @@ export type GetUnitQuery = {
       dateUpdated: string;
       dateCreated: string;
     } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
@@ -47094,11 +47036,7 @@ export type GetUnitQuery = {
           id: string;
           description?: string | null;
         } | null;
-        unitGroup?: {
-          __typename?: 'UnitGroup';
-          id: string;
-          name: string;
-        } | null;
+        unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
       } | null;
     } | null;
   } | null;
@@ -47169,7 +47107,7 @@ export type CreateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -47203,11 +47141,7 @@ export type CreateUnitsMutation = {
             id: string;
             description?: string | null;
           } | null;
-          unitGroup?: {
-            __typename?: 'UnitGroup';
-            id: string;
-            name: string;
-          } | null;
+          unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
         } | null;
       } | null;
     }> | null;
@@ -47301,7 +47235,7 @@ export type UpdateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -47335,11 +47269,7 @@ export type UpdateUnitsMutation = {
             id: string;
             description?: string | null;
           } | null;
-          unitGroup?: {
-            __typename?: 'UnitGroup';
-            id: string;
-            name: string;
-          } | null;
+          unitGroup: { __typename?: 'UnitGroup'; id: string; name: string };
         } | null;
       } | null;
     }>;
@@ -47404,6 +47334,7 @@ export type UpdateUnitGroupMutation = {
       name: string;
       capacity: number;
       availability: number;
+      unitType?: { __typename?: 'UnitTypeObject'; id: string } | null;
       eligibilityRequirements?: Array<{
         __typename?: 'CeMatchRule';
         id: string;
@@ -47422,13 +47353,6 @@ export type UpdateUnitGroupMutation = {
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
       }> | null;
-      unitTypes: Array<{
-        __typename?: 'UnitTypeCapacity';
-        id: string;
-        unitType: string;
-        capacity: number;
-        availability: number;
-      }>;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -50449,6 +50373,14 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
   ${EnrollmentRangeFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
+export const UnitTypeCapacityFieldsFragmentDoc = gql`
+  fragment UnitTypeCapacityFields on UnitTypeCapacity {
+    id
+    unitType
+    capacity
+    availability
+  }
+`;
 export const UnitGroupFieldsFragmentDoc = gql`
   fragment UnitGroupFields on UnitGroup {
     id
@@ -50562,31 +50494,22 @@ export const UnitDetailFieldsFragmentDoc = gql`
   ${CeOpportunityFieldsFragmentDoc}
   ${CeCandidateFieldsFragmentDoc}
 `;
-export const UnitTypeCapacityFieldsFragmentDoc = gql`
-  fragment UnitTypeCapacityFields on UnitTypeCapacity {
-    id
-    unitType
-    capacity
-    availability
-  }
-`;
 export const UnitGroupCapacityFieldsFragmentDoc = gql`
   fragment UnitGroupCapacityFields on UnitGroup {
     id
     name
     capacity
     availability
-    unitTypes {
-      ...UnitTypeCapacityFields
-    }
   }
-  ${UnitTypeCapacityFieldsFragmentDoc}
 `;
 export const UnitGroupDetailFieldsFragmentDoc = gql`
   fragment UnitGroupDetailFields on UnitGroup {
     ...UnitGroupCapacityFields
     workflowTemplateName
     ceEventType
+    unitType {
+      id
+    }
     workflowTemplateIdentifier
     eligibilityRequirements {
       ...CeMatchRuleFields

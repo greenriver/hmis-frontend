@@ -51,6 +51,9 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
   const isEditing = !!unitGroup;
 
   const [name, setName] = useState(unitGroup?.name || '');
+  const [unitType, setUnitType] = useState<string | null>(
+    unitGroup?.unitType?.id || null
+  );
   const [workflowTemplateIdentifier, setWorkflowTemplateIdentifier] = useState<
     string | null
   >(unitGroup?.workflowTemplateIdentifier || null);
@@ -106,6 +109,19 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
         setErrors({ ...emptyErrorState, apolloError }),
     });
 
+  const {
+    data: { pickList: unitTypePickList } = {},
+    loading: unitTypePickListLoading,
+    error: unitTypePickListError,
+  } = useGetPickListQuery({
+    variables: {
+      pickListType: PickListType.PossibleUnitTypesForProject,
+      projectId: projectId,
+    },
+  });
+
+  if (unitTypePickListError) throw unitTypePickListError;
+
   const loading = createLoading || updateLoading;
 
   const handleSubmit = useCallback(() => {
@@ -131,6 +147,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             projectId,
             workflowTemplateIdentifier,
             ceEventType,
+            unitTypeId: unitType,
           },
         },
       });
@@ -139,11 +156,12 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     name,
     isEditing,
     unitGroup,
-    createUnitGroup,
     updateUnitGroup,
     projectId,
     workflowTemplateIdentifier,
     ceEventType,
+    createUnitGroup,
+    unitType,
   ]);
 
   const {
@@ -192,6 +210,21 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             label={getRequiredLabel('Unit Group Name', true)}
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+          <FormSelect
+            disabled={isEditing}
+            value={unitType ? { code: unitType } : null}
+            label={getRequiredLabel('Unit Type', true)}
+            placeholder='Select Unit Type'
+            loading={unitTypePickListLoading}
+            options={unitTypePickList || []}
+            onChange={(_event, option) => {
+              if (isPickListOption(option)) {
+                setUnitType(option.code);
+              } else if (!option) {
+                setUnitType(null);
+              }
+            }}
           />
           {projectSupportsReferrals && (
             <>
@@ -246,7 +279,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
           <LoadingButton
             onClick={handleSubmit}
             loading={loading}
-            disabled={!name}
+            disabled={!name || !unitType}
           >
             {isEditing ? 'Save Changes' : 'Create'}
           </LoadingButton>

@@ -26,7 +26,6 @@ import { generateSafePath } from '@/utils/pathEncoding';
 interface Props {
   projectId: string;
   unitGroupId?: string; // if this table is for a specific unit group
-  unitGroupsEnabled?: boolean; // TEMP(#7814), remove when all projects moved to unit groups
   projectSupportsReferrals?: boolean; // whether to show CE details
   noUnitsMessage?: string; // custom message to show when there are no units
 }
@@ -39,7 +38,6 @@ interface Props {
 const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
-  unitGroupsEnabled = false,
   projectSupportsReferrals = false,
   noUnitsMessage,
 }) => {
@@ -51,12 +49,12 @@ const UnitManagementTable: React.FC<Props> = ({
     return [
       UNIT_COLUMNS.unitType,
       UNIT_COLUMNS.unitId,
-      ...(unitGroupsEnabled ? [UNIT_COLUMNS.unitGroup] : []),
+      UNIT_COLUMNS.unitGroup,
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
       ...(projectSupportsReferrals ? [UNIT_COLUMNS.ceReferralStatus] : []),
     ];
-  }, [projectSupportsReferrals, unitGroupsEnabled]);
+  }, [projectSupportsReferrals]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
@@ -88,7 +86,7 @@ const UnitManagementTable: React.FC<Props> = ({
       }
 
       // Link to Unit Group
-      if (!unitGroupId && unitGroupsEnabled && unit.unitGroup) {
+      if (!unitGroupId) {
         actions.push({
           title: 'View Unit Group',
           key: 'viewGroup',
@@ -116,7 +114,6 @@ const UnitManagementTable: React.FC<Props> = ({
     [
       projectSupportsReferrals,
       unitGroupId,
-      unitGroupsEnabled,
       canManageUnits,
       getCeActions,
       project.id,

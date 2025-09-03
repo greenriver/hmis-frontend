@@ -23,16 +23,12 @@ import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import { isPickListOption } from '@/modules/form/types';
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
-  PickListType,
   UnitGroupCapacityFieldsFragment,
   useCreateUnitsMutation,
-  useGetPickListQuery,
 } from '@/types/gqlTypes';
 
 interface CreateUnitsDialogProps {
   projectId: string;
-  allowSelectUnitGroup: boolean; // Whether to include Unit Group selector on form. If true, must pass `unitGroups`
-  allowSelectUnitType: boolean; // Whether to include Unit Type selector on form
   unitGroupId?: string; // If provided, units will be created in this group
   unitGroups?: UnitGroupCapacityFieldsFragment[];
   open: boolean;
@@ -45,8 +41,6 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
   unitGroupId,
   open,
   onClose,
-  allowSelectUnitGroup,
-  allowSelectUnitType,
   unitGroups = [],
   includeCeFields = false,
 }) => {
@@ -80,9 +74,7 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
       variables: {
         input: {
           input: {
-            projectId,
-            unitGroupId: unitGroupId || unitGroupIdState,
-            unitTypeId: unitType,
+            unitGroupId: unitGroupId || unitGroupIdState || '',
             count: numberOfUnits,
           },
         },
@@ -90,27 +82,15 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
       },
     });
   }, [
-    unitType,
     numberOfUnits,
     createUnits,
-    projectId,
     unitGroupId,
     unitGroupIdState,
     includeCeFields,
   ]);
 
-  const {
-    data: { pickList: unitTypePickList } = {},
-    loading: unitTypePickListLoading,
-    error: unitTypePickListError,
-  } = useGetPickListQuery({
-    variables: {
-      pickListType: PickListType.PossibleUnitTypesForProject,
-      projectId: projectId,
-    },
-  });
-
-  if (unitTypePickListError) throw unitTypePickListError;
+  if (unitGroups.length === 0)
+    throw new Error('Cannot create units in project with no unit groups');
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
@@ -123,46 +103,25 @@ const CreateUnitsDialog: React.FC<CreateUnitsDialogProps> = ({
         )}
         <ApolloErrorAlert error={errorState.apolloError} />
         <Grid container spacing={2}>
-          {allowSelectUnitGroup && unitGroups.length > 0 && (
-            <Grid item xs={12}>
-              <FormSelect
-                value={unitGroupIdState ? { code: unitGroupIdState } : null}
-                label={getRequiredLabel('Unit Group', true)}
-                placeholder='Select Unit Group'
-                options={unitGroups.map((group) => ({
-                  label: group.name,
-                  code: group.id,
-                }))}
-                onChange={(_event, option) => {
-                  if (isPickListOption(option)) {
-                    setUnitGroupIdState(option.code);
-                  } else if (!option) {
-                    setUnitGroupIdState(null);
-                  }
-                }}
-                maxWidth={400}
-              />
-            </Grid>
-          )}
-          {allowSelectUnitType && (
-            <Grid item xs={12}>
-              <FormSelect
-                value={unitType ? { code: unitType } : null}
-                label={getRequiredLabel('Unit Type', true)}
-                placeholder='Select Unit Type'
-                loading={unitTypePickListLoading}
-                options={unitTypePickList || []}
-                onChange={(_event, option) => {
-                  if (isPickListOption(option)) {
-                    setUnitType(option.code);
-                  } else if (!option) {
-                    setUnitType(null);
-                  }
-                }}
-                maxWidth={400}
-              />
-            </Grid>
-          )}
+          <Grid item xs={12}>
+            <FormSelect
+              value={unitGroupIdState ? { code: unitGroupIdState } : null}
+              label={getRequiredLabel('Unit Group', true)}
+              placeholder='Select Unit Group'
+              options={unitGroups.map((group) => ({
+                label: group.name,
+                code: group.id,
+              }))}
+              onChange={(_event, option) => {
+                if (isPickListOption(option)) {
+                  setUnitGroupIdState(option.code);
+                } else if (!option) {
+                  setUnitGroupIdState(null);
+                }
+              }}
+              maxWidth={400}
+            />
+          </Grid>
           <Grid item xs={12}>
             <NumberInput
               label={getRequiredLabel(
