@@ -597,7 +597,7 @@ export type CeCandidatesPaginated = {
 };
 
 /**
- * A client who is a candidate for Coordinated Entry (CE), represented by a
+ * A client who is eligible for Coordinated Entry (CE), represented by a
  * ClientProxy. Underlying client record is Destination Client.
  */
 export type CeClient = {
@@ -619,7 +619,7 @@ export type CeClient = {
 };
 
 /**
- * A client who is a candidate for Coordinated Entry (CE), represented by a
+ * A client who is eligible for Coordinated Entry (CE), represented by a
  * ClientProxy. Underlying client record is Destination Client.
  */
 export type CeClientEligibleUnitGroupsArgs = {

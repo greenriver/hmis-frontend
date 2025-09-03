@@ -4089,7 +4089,7 @@
       {
         "kind": "OBJECT",
         "name": "CeClient",
-        "description": "A client who is a candidate for Coordinated Entry (CE), represented by a\nClientProxy. Underlying client record is Destination Client.",
+        "description": "A client who is eligible for Coordinated Entry (CE), represented by a\nClientProxy. Underlying client record is Destination Client.",
         "isOneOf": null,
         "fields": [
           {
