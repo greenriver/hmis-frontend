@@ -111,3 +111,20 @@ mutation CreateCeReferralNote($referralId: ID!, $note: String!) {
     }
   }
 }
+
+mutation CalculateClientEligibility(
+  $enrollmentId: ID!
+  $formDefinitionIdentifier: String!
+  $valuesByLinkId: JsonObject!
+) {
+  calculateClientEligibility(
+    enrollmentId: $enrollmentId
+    formDefinitionIdentifier: $formDefinitionIdentifier
+    valuesByLinkId: $valuesByLinkId
+  ) {
+    projectTypes
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

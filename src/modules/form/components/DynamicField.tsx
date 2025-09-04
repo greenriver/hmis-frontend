@@ -46,6 +46,7 @@ import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import Uploader from '@/components/elements/upload/Uploader';
 import useAuth from '@/modules/auth/hooks/useAuth';
+import ClientEligibility from '@/modules/ce/components/ClientEligibility';
 import AltAhaScore from '@/modules/external/aha/components/AltAhaScore';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
@@ -360,6 +361,21 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.Choice:
       const currentValue = value ? value : item.repeats ? [] : null;
+
+      if (item.component === Component.ClientEligibility) {
+        return (
+          <InputContainer {...commonContainerProps}>
+            <ClientEligibility
+              value={value}
+              onChange={onChangeValue}
+              label={label}
+              disabled={isDisabled}
+              handlers={handlers}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
+      }
 
       const componentType = chooseSelectComponentType(
         item.component,
