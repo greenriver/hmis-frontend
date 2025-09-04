@@ -41,15 +41,6 @@ const Units = () => {
     return data.project.unitGroups.nodes;
   }, [data]);
 
-  // Enable Unit Groups management UI if:
-  // - the project supports CE referrals (direct or waitlist), OR
-  // - the project already has at least one unit group. (This will allow UI to switch over when Units are migrated into Unit Groups)
-  // TODO(#7814) remove this flag once Unit Group migration is complete. At that point all projects will have Unit Groups Enabled.
-  const unitGroupsEnabled = useMemo(
-    () => !!projectSupportsReferrals || unitGroups.length > 0,
-    [projectSupportsReferrals, unitGroups.length]
-  );
-
   if (!project.access.canViewUnits) return <NotFound />;
   if (error) throw error;
   if (loading) return <Loading />;
@@ -65,7 +56,7 @@ const Units = () => {
           >
             {/* If this is a new project with NO unit groups, hide "Add Units" button and instead
             show "Add Unit Group" to add the initial group */}
-            {unitGroupsEnabled && unitGroups.length === 0 ? (
+            {unitGroups.length === 0 ? (
               <Button
                 onClick={() => setAddUnitGroupDialogOpen(true)}
                 startIcon={<AddIcon />}
@@ -100,12 +91,11 @@ const Units = () => {
             <Paper>
               <UnitManagementTable
                 projectId={project.id}
-                unitGroupsEnabled={unitGroupsEnabled}
                 coordinatedEntryFeatures={
                   project.coordinatedEntryFeatures || {}
                 }
                 noUnitsMessage={
-                  unitGroupsEnabled && unitGroups.length === 0
+                  unitGroups.length === 0
                     ? 'No units. Add a unit group to get started.'
                     : undefined
                 }
@@ -145,10 +135,10 @@ const Units = () => {
         projectId={project.id}
         open={addUnitsDialogOpen}
         onClose={() => setAddUnitsDialogOpen(false)}
-        allowSelectUnitType={!unitGroupsEnabled}
-        allowSelectUnitGroup={unitGroupsEnabled}
+        allowSelectUnitType={false}
+        allowSelectUnitGroup={true}
         includeCeFields={projectSupportsReferrals}
-        unitGroups={unitGroups}
+        unitGroups={unitGroups.filter((ug) => ug.unitTypes.length > 0)}
       />
       <UnitGroupFormDialog
         projectId={project.id}

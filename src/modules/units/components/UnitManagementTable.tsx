@@ -27,7 +27,6 @@ import { generateSafePath } from '@/utils/pathEncoding';
 interface Props {
   projectId: string;
   unitGroupId?: string; // if this table is for a specific unit group
-  unitGroupsEnabled?: boolean; // TEMP(#7814), remove when all projects moved to unit groups
   coordinatedEntryFeatures: Partial<ProjectCoordinatedEntryFeatures>;
   noUnitsMessage?: string; // custom message to show when there are no units
 }
@@ -40,7 +39,6 @@ interface Props {
 const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
-  unitGroupsEnabled = false,
   coordinatedEntryFeatures,
   noUnitsMessage,
 }) => {
@@ -52,14 +50,14 @@ const UnitManagementTable: React.FC<Props> = ({
     return [
       UNIT_COLUMNS.unitType,
       UNIT_COLUMNS.unitId,
-      ...(unitGroupsEnabled ? [UNIT_COLUMNS.unitGroup] : []),
+      ...(unitGroupId ? [] : [UNIT_COLUMNS.unitGroup]), // if looking at units in one group, no need to show the unit group col
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
       ...(coordinatedEntryFeatures.supportsReferrals
         ? [UNIT_COLUMNS.ceReferralStatus]
         : []),
     ];
-  }, [coordinatedEntryFeatures.supportsReferrals, unitGroupsEnabled]);
+  }, [coordinatedEntryFeatures.supportsReferrals, unitGroupId]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
@@ -89,14 +87,14 @@ const UnitManagementTable: React.FC<Props> = ({
       }
 
       // Link to Unit Group
-      if (!unitGroupId && unitGroupsEnabled && unit.unitGroup) {
+      if (!unitGroupId) {
         actions.push({
           title: 'View Unit Group',
           key: 'viewGroup',
-          ariaLabel: `'View Unit Group' ${unit.unitGroup.name}`,
+          ariaLabel: `'View Unit Group' ${unit.unitGroup?.name}`,
           to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
             projectId: project.id,
-            unitGroupId: unit.unitGroup.id,
+            unitGroupId: unit.unitGroup?.id,
           }),
         });
       }
@@ -114,14 +112,7 @@ const UnitManagementTable: React.FC<Props> = ({
 
       return actions;
     },
-    [
-      unitGroupId,
-      unitGroupsEnabled,
-      canManageUnits,
-      getCeActions,
-      project.id,
-      setUnitToDelete,
-    ]
+    [unitGroupId, canManageUnits, getCeActions, project.id, setUnitToDelete]
   );
 
   return (
