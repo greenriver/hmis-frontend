@@ -22,7 +22,6 @@ interface ClientEligibilityProps extends DynamicInputCommonProps {
   handlers?: FormDefinitionHandlers;
 }
 
-// todo @martha - refactor this to share code?
 // Shows a button to calculate client eligibility based on current form values, and displays the result.
 const ClientEligibility = ({
   value,
