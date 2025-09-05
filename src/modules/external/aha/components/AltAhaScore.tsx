@@ -1,17 +1,9 @@
-import { Stack, Typography } from '@mui/material';
-import { useCallback, useContext, useState } from 'react';
+import { Typography } from '@mui/material';
 import LabelWithContent from '@/components/elements/LabelWithContent';
-import LoadingButton from '@/components/elements/LoadingButton';
-import AssessmentContext from '@/modules/assessments/components/AssessmentContext';
-import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
+import MutationButtonField from '@/modules/form/components/MutationButtonField';
 import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHandlers';
 import { DynamicInputCommonProps } from '@/modules/form/types';
-import {
-  CalculateAltAhaScoreMutation,
-  useCalculateAltAhaScoreMutation,
-} from '@/types/gqlTypes';
+import { useCalculateAltAhaScoreMutation } from '@/types/gqlTypes';
 
 interface AltAhaScoreProps extends DynamicInputCommonProps {
   value?: number | null;
@@ -27,77 +19,33 @@ const AltAhaScore = ({
   disabled = false,
   handlers,
 }: AltAhaScoreProps) => {
-  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
-
-  const [calculateAltAhaScore, { loading }] = useCalculateAltAhaScoreMutation({
-    onCompleted: (data: CalculateAltAhaScoreMutation) => {
-      const errors = data.calculateAltAhaScore?.errors || [];
-      if (errors.length > 0) {
-        setErrorState({ ...emptyErrorState, errors });
-        return;
-      }
-
-      setErrorState(emptyErrorState);
-
-      if (onChange && data.calculateAltAhaScore) {
-        onChange(data.calculateAltAhaScore.score || null);
-      }
-    },
-    onError: (apolloError: any) => {
-      setErrorState({ ...emptyErrorState, apolloError });
-    },
-  });
-
-  const { formDefinitionIdentifier, enrollmentId } =
-    useContext(AssessmentContext) || {};
-
-  const hasRequiredContext = !!enrollmentId && !!formDefinitionIdentifier;
-
-  const handleFetch = useCallback(() => {
-    if (hasRequiredContext) {
-      calculateAltAhaScore({
-        variables: {
-          enrollmentId,
-          formDefinitionIdentifier: formDefinitionIdentifier,
-          valuesByLinkId: handlers?.getValuesForSubmit().valuesByLinkId || {},
-        },
-      });
+  const handleMutationCompleted = (
+    resultData: any,
+    onChange?: (value: number | null) => void
+  ) => {
+    if (onChange && resultData) {
+      onChange(resultData.score || null);
     }
-  }, [
-    hasRequiredContext,
-    calculateAltAhaScore,
-    enrollmentId,
-    formDefinitionIdentifier,
-    handlers,
-  ]);
+  };
 
   return (
-    <Stack direction='column' gap={1} alignItems='flex-start'>
-      {label}
-      {errorState && hasErrors(errorState) && (
-        <Stack gap={1} sx={{ mb: 1 }}>
-          <ApolloErrorAlert error={errorState.apolloError} inline />
-          <ErrorAlert fixable errors={errorState.errors} />
-        </Stack>
-      )}
-      <LoadingButton
-        loading={loading}
-        // Disable the button if the disabled prop is passed down from the form item,
-        // or if the form is being rendered outside of an assessment context (e.g. in the form preview)
-        disabled={disabled || !hasRequiredContext}
-        type='button'
-        onClick={handleFetch}
-        sx={{ my: 1 }}
-      >
-        Calculate Alt-AHA Score
-      </LoadingButton>
-
-      {value && (
+    <MutationButtonField
+      value={value}
+      onChange={onChange}
+      label={label}
+      disabled={disabled}
+      handlers={handlers}
+      buttonText="Calculate Alt-AHA Score"
+      dataPath="calculateAltAhaScore"
+      useMutation={useCalculateAltAhaScoreMutation}
+      onMutationCompleted={handleMutationCompleted}
+    >
+      {(value !== null && value !== undefined) && (
         <LabelWithContent label='Alt-AHA Score'>
           <Typography variant='body2'>{value}</Typography>
         </LabelWithContent>
       )}
-    </Stack>
+    </MutationButtonField>
   );
 };
 

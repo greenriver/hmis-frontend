@@ -1,15 +1,9 @@
 import { Stack, Typography } from '@mui/material';
-import { useCallback, useContext, useState } from 'react';
-import LoadingButton from '@/components/elements/LoadingButton';
-import AssessmentContext from '@/modules/assessments/components/AssessmentContext';
-import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
+import MutationButtonField from '@/modules/form/components/MutationButtonField';
 import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHandlers';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
 import {
-  CalculateClientEligibilityMutation,
   PickListOption,
   useCalculateClientEligibilityMutation,
 } from '@/types/gqlTypes';
@@ -22,7 +16,6 @@ interface ClientEligibilityProps extends DynamicInputCommonProps {
   handlers?: FormDefinitionHandlers;
 }
 
-// todo @martha - refactor this to share code?
 // Shows a button to calculate client eligibility based on current form values, and displays the result.
 const ClientEligibility = ({
   value,
@@ -31,85 +24,39 @@ const ClientEligibility = ({
   disabled = false,
   handlers,
 }: ClientEligibilityProps) => {
-  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
+  const handleMutationCompleted = (
+    resultData: any,
+    onChange?: (value: PickListOption[] | null) => void
+  ) => {
+    if (onChange && resultData) {
+      const eligibleProjectTypes = resultData.projectTypes;
 
-  const [calculateClientEligibility, { loading }] =
-    useCalculateClientEligibilityMutation({
-      onCompleted: (data: CalculateClientEligibilityMutation) => {
-        const errors = data.calculateClientEligibility?.errors || [];
-        if (errors.length > 0) {
-          setErrorState({ ...emptyErrorState, errors });
-          return;
-        }
+      // Convert the returned project type codes to their corresponding pick list options.
+      const matchingPickListOptions = eligibleProjectTypes
+        .map((projectTypeCode: string) =>
+          projectTypePickList?.find(
+            (pickListOption) => pickListOption.code === projectTypeCode
+          )
+        )
+        // Filter out undefined values to keep typescript happy
+        .filter((option: PickListOption | undefined): option is PickListOption => option !== undefined);
 
-        setErrorState(emptyErrorState);
-
-        if (onChange && data.calculateClientEligibility) {
-          const eligibleProjectTypes =
-            data.calculateClientEligibility.projectTypes;
-
-          // Convert the returned project type codes to their corresponding pick list options.
-          // Filter out undefined values to keep typescript happy
-          const matchingPickListOptions = eligibleProjectTypes
-            .map((projectTypeCode) =>
-              projectTypePickList?.find(
-                (pickListOption) => pickListOption.code === projectTypeCode
-              )
-            )
-            .filter((option): option is PickListOption => option !== undefined);
-
-          onChange(matchingPickListOptions);
-        }
-      },
-      onError: (apolloError: any) => {
-        setErrorState({ ...emptyErrorState, apolloError });
-      },
-    });
-
-  const { formDefinitionIdentifier, enrollmentId } =
-    useContext(AssessmentContext) || {};
-
-  const hasRequiredContext = !!enrollmentId && !!formDefinitionIdentifier;
-
-  const handleFetch = useCallback(() => {
-    if (hasRequiredContext) {
-      calculateClientEligibility({
-        variables: {
-          enrollmentId,
-          formDefinitionIdentifier: formDefinitionIdentifier,
-          valuesByLinkId: handlers?.getValuesForSubmit().valuesByLinkId || {},
-        },
-      });
+      onChange(matchingPickListOptions);
     }
-  }, [
-    hasRequiredContext,
-    calculateClientEligibility,
-    enrollmentId,
-    formDefinitionIdentifier,
-    handlers,
-  ]);
+  };
 
   return (
-    <Stack direction='column' gap={1} alignItems='flex-start'>
-      {label}
-      {errorState && hasErrors(errorState) && (
-        <Stack gap={1} sx={{ mb: 1 }}>
-          <ApolloErrorAlert error={errorState.apolloError} inline />
-          <ErrorAlert fixable errors={errorState.errors} />
-        </Stack>
-      )}
-      <LoadingButton
-        loading={loading}
-        // Disable the button if the disabled prop is passed down from the form item,
-        // or if the form is being rendered outside of an assessment context (e.g. in the form preview)
-        disabled={disabled || !hasRequiredContext}
-        type='button'
-        onClick={handleFetch}
-        sx={{ my: 1 }}
-      >
-        Calculate Client Eligibility
-      </LoadingButton>
-
+    <MutationButtonField
+      value={value}
+      onChange={onChange}
+      label={label}
+      disabled={disabled}
+      handlers={handlers}
+      buttonText="Calculate Client Eligibility"
+      dataPath="calculateClientEligibility"
+      useMutation={useCalculateClientEligibilityMutation}
+      onMutationCompleted={handleMutationCompleted}
+    >
       {value && value.length > 0 && (
         <Stack direction='column' gap={0.5}>
           {value.map((projectType) => (
@@ -128,7 +75,7 @@ const ClientEligibility = ({
           No eligible project types found
         </Typography>
       )}
-    </Stack>
+    </MutationButtonField>
   );
 };
 
