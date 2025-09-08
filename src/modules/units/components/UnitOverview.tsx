@@ -5,6 +5,7 @@ import React from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
 import MatchRuleCard from '@/modules/ce/components/unit/MatchRuleCard';
 import OpportunityBanner from '@/modules/ce/components/unit/OpportunityBanner';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { cache } from '@/providers/apolloClient';
 import {
   UnitDetailFieldsFragment,
@@ -15,6 +16,8 @@ interface Props {
   unit: UnitDetailFieldsFragment;
 }
 const UnitOverview: React.FC<Props> = ({ unit }) => {
+  const { project } = useProjectDashboardContext();
+
   const opportunity = unit.latestOpportunity;
   const [
     markUnitAvailable,
@@ -48,12 +51,14 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
               <Typography>
                 This unit is not currently accepting referrals.
               </Typography>
-              <LoadingButton
-                onClick={() => markUnitAvailable()}
-                loading={availableLoading}
-              >
-                Start Accepting Referrals
-              </LoadingButton>
+              {project.access.canManageUnits && (
+                <LoadingButton
+                  onClick={() => markUnitAvailable()}
+                  loading={availableLoading}
+                >
+                  Start Accepting Referrals
+                </LoadingButton>
+              )}
             </Stack>
           </Paper>
         </Grid>
