@@ -46,7 +46,7 @@ import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import Uploader from '@/components/elements/upload/Uploader';
 import useAuth from '@/modules/auth/hooks/useAuth';
-import ClientEligibility from '@/modules/ce/components/ClientEligibility';
+import ClientCeEligibility from '@/modules/ce/components/ClientCeEligibility';
 import AltAhaScore from '@/modules/external/aha/components/AltAhaScore';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
@@ -362,10 +362,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     case ItemType.Choice:
       const currentValue = value ? value : item.repeats ? [] : null;
 
-      if (item.component === Component.ClientEligibility) {
+      if (item.component === Component.ClientCeEligibility) {
         return (
           <InputContainer {...commonContainerProps}>
-            <ClientEligibility
+            <ClientCeEligibility
               value={value}
               onChange={onChangeValue}
               label={label}

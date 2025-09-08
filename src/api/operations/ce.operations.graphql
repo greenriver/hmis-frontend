@@ -112,12 +112,12 @@ mutation CreateCeReferralNote($referralId: ID!, $note: String!) {
   }
 }
 
-mutation CalculateClientEligibility(
+mutation CalculateClientCeEligibility(
   $enrollmentId: ID!
   $formDefinitionIdentifier: String!
   $valuesByLinkId: JsonObject!
 ) {
-  calculateClientEligibility(
+  calculateClientCeEligibility(
     enrollmentId: $enrollmentId
     formDefinitionIdentifier: $formDefinitionIdentifier
     valuesByLinkId: $valuesByLinkId

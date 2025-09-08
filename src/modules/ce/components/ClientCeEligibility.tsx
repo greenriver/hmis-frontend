@@ -9,9 +9,9 @@ import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHa
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
 import {
-  CalculateClientEligibilityMutation,
+  CalculateClientCeEligibilityMutation,
   PickListOption,
-  useCalculateClientEligibilityMutation,
+  useCalculateClientCeEligibilityMutation,
 } from '@/types/gqlTypes';
 
 const projectTypePickList = localResolvePickList('ProjectType');
@@ -23,7 +23,7 @@ interface ClientEligibilityProps extends DynamicInputCommonProps {
 }
 
 // Shows a button to calculate client eligibility based on current form values, and displays the result.
-const ClientEligibility = ({
+const ClientCeEligibility = ({
   value,
   onChange,
   label,
@@ -33,9 +33,9 @@ const ClientEligibility = ({
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   const [calculateClientEligibility, { loading }] =
-    useCalculateClientEligibilityMutation({
-      onCompleted: (data: CalculateClientEligibilityMutation) => {
-        const errors = data.calculateClientEligibility?.errors || [];
+    useCalculateClientCeEligibilityMutation({
+      onCompleted: (data: CalculateClientCeEligibilityMutation) => {
+        const errors = data.calculateClientCeEligibility?.errors || [];
         if (errors.length > 0) {
           setErrorState({ ...emptyErrorState, errors });
           return;
@@ -43,9 +43,9 @@ const ClientEligibility = ({
 
         setErrorState(emptyErrorState);
 
-        if (onChange && data.calculateClientEligibility) {
+        if (onChange && data.calculateClientCeEligibility) {
           const eligibleProjectTypes =
-            data.calculateClientEligibility.projectTypes;
+            data.calculateClientCeEligibility.projectTypes;
 
           // Convert the returned project type codes to their corresponding pick list options.
           // Filter out undefined values to keep typescript happy
@@ -131,4 +131,4 @@ const ClientEligibility = ({
   );
 };
 
-export default ClientEligibility;
+export default ClientCeEligibility;
