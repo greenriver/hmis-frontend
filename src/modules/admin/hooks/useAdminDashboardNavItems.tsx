@@ -39,7 +39,7 @@ export const useAdminDashboardNavItems = () => {
           },
           {
             id: 'denials',
-            title: 'Denials (Legacy)',
+            title: 'Denials',
             path: AdminDashboardRoutes.AC_DENIALS,
             permissions: ['canManageDeniedReferrals'],
           },
