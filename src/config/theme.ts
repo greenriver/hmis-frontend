@@ -770,6 +770,17 @@ const createThemeOptions = (theme: Theme) => ({
         },
       },
     },
+    MuiBadge: {
+      styleOverrides: {
+        badge: theme.unstable_sx({
+          backgroundColor: 'error.light',
+          color: 'error.darkest',
+          fontWeight: 600,
+          right: 5,
+          top: 5,
+        }),
+      },
+    },
     MuiTreeItem2: {
       styleOverrides: {
         root: {

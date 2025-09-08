@@ -1,5 +1,5 @@
 import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
-import { Container, Stack, Typography } from '@mui/material';
+import { Badge, Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
@@ -109,6 +109,10 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
     referral.swimlanes.length > 0 &&
     project?.access?.canAssignReferralTasks;
 
+  const unassignedSwimlanesCount = referral.swimlanes?.filter(
+    (s) => s.participants.length === 0
+  ).length;
+
   return (
     <>
       <CommonStickyBar
@@ -145,15 +149,18 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
                 <ReferralDetailContent referral={referral} />
               </CommonButtonDrawer>
               {showContactsDrawer && (
-                <CommonButtonDrawer
-                  title='Contacts'
-                  ButtonProps={{ startIcon: <ContactsIcon /> }}
-                >
-                  <AssignContactsForm
-                    referral={referral}
-                    projectId={project.id}
-                  />
-                </CommonButtonDrawer>
+                // MUI badge auto-hides when count is 0
+                <Badge badgeContent={unassignedSwimlanesCount}>
+                  <CommonButtonDrawer
+                    title='Contacts'
+                    ButtonProps={{ startIcon: <ContactsIcon /> }}
+                  >
+                    <AssignContactsForm
+                      referral={referral}
+                      projectId={project.id}
+                    />
+                  </CommonButtonDrawer>
+                </Badge>
               )}
               <CommonButtonDrawer
                 title={'Activity'}
