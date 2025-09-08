@@ -79,6 +79,7 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
             stepId: stepId,
           });
         },
+        canAssignReferralTasks: project?.access?.canAssignReferralTasks,
       };
     }
 
@@ -93,6 +94,7 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
           stepId: stepId,
         });
       },
+      canAssignReferralTasks: false,
     };
   }, [referral, project]);
 
@@ -175,6 +177,7 @@ export type ReferralContext = {
   referralPath: string;
   unitPath?: string;
   generateReferralStepPath: (stepId: string) => string;
+  canAssignReferralTasks?: boolean;
 };
 export const useReferralContext = () => useOutletContext<ReferralContext>();
 

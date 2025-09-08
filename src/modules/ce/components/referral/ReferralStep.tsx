@@ -8,6 +8,7 @@ import { BackIcon } from '@/components/elements/SemanticIcons';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useReferralContext } from '@/modules/ce/components/referral/ReferralPage';
+import ReferralStepAssigneeAlert from '@/modules/ce/components/referral/ReferralStepAssigneeAlert';
 import ReferralStepForm from '@/modules/ce/components/referral/ReferralStepForm';
 import {
   CeReferralStepStatus,
@@ -15,7 +16,8 @@ import {
 } from '@/types/gqlTypes';
 
 const ReferralStep: React.FC = ({}) => {
-  const { referral, referralPath } = useReferralContext();
+  const { referral, referralPath, canAssignReferralTasks } =
+    useReferralContext();
   const { stepId } = useSafeParams() as {
     stepId: string;
   };
@@ -55,6 +57,10 @@ const ReferralStep: React.FC = ({}) => {
       <CommonCard title={stepSummary.name}>
         <Stack gap={2}>
           <ReferralStepDetails step={stepSummary} />
+          <ReferralStepAssigneeAlert
+            step={stepSummary}
+            canAssignReferralTasks={canAssignReferralTasks}
+          />
           <Divider />
           {fetchLoading && !step && <LoadingSkeleton count={1} height={200} />}
           {step && <ReferralStepForm step={step} />}

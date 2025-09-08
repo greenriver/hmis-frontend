@@ -10,7 +10,8 @@ import { CeReferralStepStatus } from '@/types/gqlTypes';
 
 interface Props {}
 const ReferralSteps: React.FC<Props> = () => {
-  const { referral, generateReferralStepPath } = useReferralContext();
+  const { referral, generateReferralStepPath, canAssignReferralTasks } =
+    useReferralContext();
 
   const [{ wayfinding }, setFilterParams] = useSearchParamsState({
     paramsDefinition: {
@@ -79,6 +80,7 @@ const ReferralSteps: React.FC<Props> = () => {
                   step={s}
                   path={generateReferralStepPath(s.stepId || '')}
                   referral={referral}
+                  canAssignReferralTasks={canAssignReferralTasks}
                 />
               ))}
             </Stack>
