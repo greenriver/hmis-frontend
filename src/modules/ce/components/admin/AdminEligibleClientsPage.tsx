@@ -1,12 +1,12 @@
 import React from 'react';
-import AdminReferralsTable from './AdminReferralsTable';
 import PageTitle from '@/components/layout/PageTitle';
+import AdminCeClientsTable from '@/modules/ce/components/admin/AdminCeClientsTable';
 
 const AdminEligibleClientsPage: React.FC = () => {
   return (
     <>
       <PageTitle title='Eligible Clients' overlineText='Coordinated Entry' />
-      <AdminReferralsTable />
+      <AdminCeClientsTable />
     </>
   );
 };
