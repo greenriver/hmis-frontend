@@ -94,7 +94,7 @@ const ClientCeEligibility = ({
       {errorState && hasErrors(errorState) && (
         <Stack gap={1} sx={{ mb: 1 }}>
           <ApolloErrorAlert error={errorState.apolloError} inline />
-          <ErrorAlert fixable errors={errorState.errors} />
+          <ErrorAlert errors={errorState.errors} />
         </Stack>
       )}
       <LoadingButton
