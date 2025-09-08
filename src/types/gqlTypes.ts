@@ -541,7 +541,7 @@ export type CalculateAltAhaScorePayload = {
 export type CalculateClientCeEligibilityPayload = {
   __typename?: 'CalculateClientCeEligibilityPayload';
   errors: Array<ValidationError>;
-  projectTypes: Array<ProjectType>;
+  projectTypes?: Maybe<Array<ProjectType>>;
 };
 
 /** HUD Coordinated Entry Assessment */
@@ -20101,7 +20101,7 @@ export type CalculateClientCeEligibilityMutation = {
   __typename?: 'Mutation';
   calculateClientCeEligibility?: {
     __typename?: 'CalculateClientCeEligibilityPayload';
-    projectTypes: Array<ProjectType>;
+    projectTypes?: Array<ProjectType> | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;

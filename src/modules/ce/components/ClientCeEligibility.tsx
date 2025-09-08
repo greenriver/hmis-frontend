@@ -43,7 +43,7 @@ const ClientCeEligibility = ({
 
         setErrorState(emptyErrorState);
 
-        if (onChange && data.calculateClientCeEligibility) {
+        if (onChange && data.calculateClientCeEligibility?.projectTypes) {
           const eligibleProjectTypes =
             data.calculateClientCeEligibility.projectTypes;
 
