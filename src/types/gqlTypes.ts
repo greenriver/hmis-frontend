@@ -9287,9 +9287,6 @@ export type ProjectAccessFieldsFragment = {
   canViewOwnReferrals: boolean;
   canViewPrioritizedClientLists: boolean;
   canStartReferrals: boolean;
-  canPerformAnyReferralTasks: boolean;
-  canPerformOwnReferralTasks: boolean;
-  canAssignReferralTasks: boolean;
 };
 
 export type OrganizationAccessFieldsFragment = {
@@ -37919,9 +37916,6 @@ export type SubmitFormMutation = {
             canViewOwnReferrals: boolean;
             canViewPrioritizedClientLists: boolean;
             canStartReferrals: boolean;
-            canPerformAnyReferralTasks: boolean;
-            canPerformOwnReferralTasks: boolean;
-            canAssignReferralTasks: boolean;
           };
           user?: {
             __typename: 'ApplicationUser';
@@ -41665,9 +41659,6 @@ export type ProjectAllFieldsFragment = {
     canViewOwnReferrals: boolean;
     canViewPrioritizedClientLists: boolean;
     canStartReferrals: boolean;
-    canPerformAnyReferralTasks: boolean;
-    canPerformOwnReferralTasks: boolean;
-    canAssignReferralTasks: boolean;
   };
   user?: {
     __typename: 'ApplicationUser';
@@ -42570,9 +42561,6 @@ export type GetProjectQuery = {
       canViewOwnReferrals: boolean;
       canViewPrioritizedClientLists: boolean;
       canStartReferrals: boolean;
-      canPerformAnyReferralTasks: boolean;
-      canPerformOwnReferralTasks: boolean;
-      canAssignReferralTasks: boolean;
     };
     user?: {
       __typename: 'ApplicationUser';
@@ -42757,9 +42745,6 @@ export type GetProjectPermissionsQuery = {
       canViewOwnReferrals: boolean;
       canViewPrioritizedClientLists: boolean;
       canStartReferrals: boolean;
-      canPerformAnyReferralTasks: boolean;
-      canPerformOwnReferralTasks: boolean;
-      canAssignReferralTasks: boolean;
     };
   } | null;
 };
@@ -50341,9 +50326,6 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canViewOwnReferrals
     canViewPrioritizedClientLists
     canStartReferrals
-    canPerformAnyReferralTasks
-    canPerformOwnReferralTasks
-    canAssignReferralTasks
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
