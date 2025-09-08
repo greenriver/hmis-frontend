@@ -74,6 +74,7 @@ const UnitManagementTable: React.FC<Props> = ({
   const { getCeActions, loading } = useUnitCeActions({
     projectId,
     coordinatedEntryFeatures,
+    canManageUnits,
   });
 
   const rowSecondaryActionConfigs = useCallback(
