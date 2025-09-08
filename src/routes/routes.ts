@@ -27,11 +27,10 @@ const adminDashboardRoutes = {
   CLIENT_MERGE_HISTORY: 'client-merge-history',
   PERFORM_CLIENT_MERGES: 'client-merge-history/candidates',
   AVAILABLE_UNITS: 'available-units',
+  ELIGIBLE_CLIENTS: 'eligible-clients',
   REFERRALS: 'referrals',
-  // convenience page for accessing referral within Admin dashboard
   REFERRAL: ReferralSubRoutes.ReferralPath,
   REFERRAL_STEP: ReferralSubRoutes.ReferralStepPath,
-  ELIGIBLE_CLIENTS: 'eligible-clients',
   AC_DENIALS: 'referral-denials',
   AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',
   USERS: 'users',

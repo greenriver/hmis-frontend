@@ -188,10 +188,8 @@ export const protectedRoutes: RouteNode[] = [
             path: Routes.REFERRAL_STEP,
             element: <ReferralStep />,
           },
-          {
-            path: '',
-            element: <ReferralSteps />,
-          },
+          { path: '', element: <ReferralSteps /> },
+          { path: '*', element: <Navigate to='' replace /> },
         ],
       },
       {
@@ -519,10 +517,8 @@ export const protectedRoutes: RouteNode[] = [
                 path: ProjectDashboardRoutes.REFERRAL_STEP,
                 element: <ReferralStep />,
               },
-              {
-                path: '',
-                element: <ReferralSteps />,
-              },
+              { path: '', element: <ReferralSteps /> },
+              { path: '*', element: <Navigate to='' replace /> },
             ],
           },
         ],
@@ -919,10 +915,8 @@ export const protectedRoutes: RouteNode[] = [
                 path: AdminDashboardRoutes.REFERRAL_STEP,
                 element: <ReferralStep />,
               },
-              {
-                path: '',
-                element: <ReferralSteps />,
-              },
+              { path: '', element: <ReferralSteps /> },
+              { path: '*', element: <Navigate to='' replace /> },
             ],
           },
           {
