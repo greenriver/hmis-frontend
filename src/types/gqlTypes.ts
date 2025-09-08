@@ -882,6 +882,7 @@ export type CeReferralNotesArgs = {
 
 export type CeReferralAccess = {
   __typename?: 'CeReferralAccess';
+  canAssignReferralTasks: Scalars['Boolean']['output'];
   canViewReferralDetails: Scalars['Boolean']['output'];
   canViewSourceEnrollmentDetails: Scalars['Boolean']['output'];
   canViewTargetProject: Scalars['Boolean']['output'];
@@ -17210,10 +17211,6 @@ export type CeReferralDetailFieldsFragment = {
     projectType: ProjectType;
     entryDate: string;
     exitDate?: string | null;
-    access: {
-      __typename?: 'CeReferralSourceEnrollmentAccess';
-      canViewEnrollmentDetails: boolean;
-    };
   } | null;
   currentMatchValues?: Array<{
     __typename?: 'CeMatchValue';
@@ -17248,6 +17245,7 @@ export type CeReferralFieldsFragment = {
   __typename?: 'CeReferral';
   workflowTemplateName?: string | null;
   targetProjectName: string;
+  targetProjectId: string;
   id: string;
   status: CeReferralStatus;
   active: boolean;
@@ -17312,6 +17310,12 @@ export type CeReferralFieldsFragment = {
     id: string;
     client: { __typename?: 'Client'; id: string };
   } | null;
+  access: {
+    __typename?: 'CeReferralAccess';
+    canAssignReferralTasks: boolean;
+    canViewSourceEnrollmentDetails: boolean;
+    canViewTargetProject: boolean;
+  };
   customStatus?: {
     __typename?: 'CeCustomReferralStatus';
     id: string;
@@ -17347,10 +17351,6 @@ export type CeReferralFieldsFragment = {
     projectType: ProjectType;
     entryDate: string;
     exitDate?: string | null;
-    access: {
-      __typename?: 'CeReferralSourceEnrollmentAccess';
-      canViewEnrollmentDetails: boolean;
-    };
   } | null;
   currentMatchValues?: Array<{
     __typename?: 'CeMatchValue';
@@ -19606,6 +19606,7 @@ export type SubmitCeReferralStepMutation = {
       __typename?: 'CeReferral';
       workflowTemplateName?: string | null;
       targetProjectName: string;
+      targetProjectId: string;
       id: string;
       status: CeReferralStatus;
       active: boolean;
@@ -19702,6 +19703,12 @@ export type SubmitCeReferralStepMutation = {
           canPerformStep: boolean;
         };
       }> | null;
+      access: {
+        __typename?: 'CeReferralAccess';
+        canAssignReferralTasks: boolean;
+        canViewSourceEnrollmentDetails: boolean;
+        canViewTargetProject: boolean;
+      };
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
         id: string;
@@ -19737,10 +19744,6 @@ export type SubmitCeReferralStepMutation = {
         projectType: ProjectType;
         entryDate: string;
         exitDate?: string | null;
-        access: {
-          __typename?: 'CeReferralSourceEnrollmentAccess';
-          canViewEnrollmentDetails: boolean;
-        };
       } | null;
       currentMatchValues?: Array<{
         __typename?: 'CeMatchValue';
@@ -20337,6 +20340,7 @@ export type GetCeReferralQuery = {
     __typename?: 'CeReferral';
     workflowTemplateName?: string | null;
     targetProjectName: string;
+    targetProjectId: string;
     id: string;
     status: CeReferralStatus;
     active: boolean;
@@ -20405,6 +20409,12 @@ export type GetCeReferralQuery = {
       id: string;
       client: { __typename?: 'Client'; id: string };
     } | null;
+    access: {
+      __typename?: 'CeReferralAccess';
+      canAssignReferralTasks: boolean;
+      canViewSourceEnrollmentDetails: boolean;
+      canViewTargetProject: boolean;
+    };
     customStatus?: {
       __typename?: 'CeCustomReferralStatus';
       id: string;
@@ -20440,10 +20450,6 @@ export type GetCeReferralQuery = {
       projectType: ProjectType;
       entryDate: string;
       exitDate?: string | null;
-      access: {
-        __typename?: 'CeReferralSourceEnrollmentAccess';
-        canViewEnrollmentDetails: boolean;
-      };
     } | null;
     currentMatchValues?: Array<{
       __typename?: 'CeMatchValue';
@@ -49071,9 +49077,6 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       projectType
       entryDate
       exitDate
-      access {
-        canViewEnrollmentDetails
-      }
     }
     currentMatchValues {
       id
@@ -49174,6 +49177,12 @@ export const CeReferralFieldsFragmentDoc = gql`
       }
     }
     ...CeReferralWithNotesAndAuditEvents
+    targetProjectId
+    access {
+      canAssignReferralTasks
+      canViewSourceEnrollmentDetails
+      canViewTargetProject
+    }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
   ${CeReferralWithSwimlanesFragmentDoc}

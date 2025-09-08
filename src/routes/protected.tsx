@@ -58,7 +58,6 @@ import AdminReferralsPage from '@/modules/ce/components/admin/AdminReferralsPage
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 
 import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
-import ProjectReferralPage from '@/modules/ce/components/project/ProjectReferralPage';
 import ProjectReferralsPage from '@/modules/ce/components/project/ProjectReferralsPage';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
@@ -186,16 +185,12 @@ export const protectedRoutes: RouteNode[] = [
         ),
         children: [
           {
-            path: Routes.REFERRAL_STEPS,
-            element: <ReferralSteps />,
-          },
-          {
             path: Routes.REFERRAL_STEP,
             element: <ReferralStep />,
           },
           {
             path: '',
-            element: <Navigate to={'tasks'} replace />,
+            element: <ReferralSteps />,
           },
         ],
       },
@@ -516,21 +511,17 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canViewReferrals', 'canViewOwnReferrals']}
                 coordinatedEntryFeatures={['supportsReferrals']}
               >
-                <ProjectReferralPage />
+                <ReferralPage />
               </ProjectRoute>
             ),
             children: [
-              {
-                path: ProjectDashboardRoutes.REFERRAL_STEPS,
-                element: <ReferralSteps />,
-              },
               {
                 path: ProjectDashboardRoutes.REFERRAL_STEP,
                 element: <ReferralStep />,
               },
               {
                 path: '',
-                element: <Navigate to={'tasks'} replace />,
+                element: <ReferralSteps />,
               },
             ],
           },
@@ -912,6 +903,27 @@ export const protectedRoutes: RouteNode[] = [
                 <AdminReferralsPage />
               </RootPermissionsFilter>
             ),
+          },
+          {
+            path: AdminDashboardRoutes.REFERRAL,
+            element: (
+              <RootPermissionsFilter
+                permissions='canAdministrateCoordinatedEntry'
+                otherwise={<NotFound />}
+              >
+                <ReferralPage />
+              </RootPermissionsFilter>
+            ),
+            children: [
+              {
+                path: AdminDashboardRoutes.REFERRAL_STEP,
+                element: <ReferralStep />,
+              },
+              {
+                path: '',
+                element: <ReferralSteps />,
+              },
+            ],
           },
           {
             path: AdminDashboardRoutes.ELIGIBLE_CLIENTS,

@@ -1,3 +1,8 @@
+const ReferralSubRoutes = {
+  ReferralPath: 'referrals/:referralId',
+  ReferralStepPath: 'referrals/:referralId/tasks/:stepId',
+};
+
 export const Routes = {
   CLIENT_SEARCH: '/',
   CREATE_CLIENT: '/client/new',
@@ -14,9 +19,8 @@ export const Routes = {
   MY_DASHBOARD: '/my-dashboard', // maintained for backwards compat
 
   // "Floating" referrals:
-  REFERRAL: '/referrals/:referralId',
-  REFERRAL_STEPS: '/referrals/:referralId/tasks',
-  REFERRAL_STEP: '/referrals/:referralId/tasks/:stepId',
+  REFERRAL: '/' + ReferralSubRoutes.ReferralPath,
+  REFERRAL_STEP: '/' + ReferralSubRoutes.ReferralStepPath,
 } as const;
 
 const adminDashboardRoutes = {
@@ -24,6 +28,9 @@ const adminDashboardRoutes = {
   PERFORM_CLIENT_MERGES: 'client-merge-history/candidates',
   AVAILABLE_UNITS: 'available-units',
   REFERRALS: 'referrals',
+  // convenience page for accessing referral within Admin dashboard
+  REFERRAL: ReferralSubRoutes.ReferralPath,
+  REFERRAL_STEP: ReferralSubRoutes.ReferralStepPath,
   ELIGIBLE_CLIENTS: 'eligible-clients',
   AC_DENIALS: 'referral-denials',
   AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',
@@ -129,9 +136,8 @@ const projectDashboardRoutes = {
   // CE
   CE: 'ce', // referrals page, also rendered under /referrals for backwards compatibility
   CE_UNIT: 'ce/unit/:unitId', // render same Unit page, but within CE tab
-  REFERRAL: 'ce/referrals/:referralId',
-  REFERRAL_STEPS: 'ce/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code
-  REFERRAL_STEP: 'ce/referrals/:referralId/tasks/:stepId',
+  REFERRAL: 'ce/' + ReferralSubRoutes.ReferralPath,
+  REFERRAL_STEP: 'ce/' + ReferralSubRoutes.ReferralStepPath,
   SEND_REFERRAL: 'ce/send-referral',
 };
 
@@ -180,8 +186,9 @@ export const AdminDashboardRoutes: {
 // Routes that live "under" one of the dashboards, but they need to take up the full screen, so they shouldn't get the default padding applied.
 export const NO_PADDING_ROUTES: string[] = [
   ProjectDashboardRoutes.REFERRAL,
-  ProjectDashboardRoutes.REFERRAL_STEPS,
   ProjectDashboardRoutes.REFERRAL_STEP,
+  AdminDashboardRoutes.REFERRAL,
+  AdminDashboardRoutes.REFERRAL_STEP,
   AdminDashboardRoutes.EDIT_FORM,
 ];
 
