@@ -12,22 +12,44 @@ export const useAdminDashboardNavItems = () => {
   const navItems: NavItem<RootPermissionsFragment>[] = useMemo(
     () => [
       {
-        id: 'admin-nav',
+        id: 'ce',
         type: 'category',
+        title: 'Coordinated Entry',
         items: [
           {
-            id: 'denials',
-            title: 'Denials',
-            path: AdminDashboardRoutes.AC_DENIALS,
-            permissions: ['canManageDeniedReferrals'],
-          },
-          {
-            id: 'coordinated-entry',
-            title: 'Coordinated Entry',
-            path: AdminDashboardRoutes.COORDINATED_ENTRY,
+            id: 'available-units',
+            title: 'Available Units',
+            path: AdminDashboardRoutes.AVAILABLE_UNITS,
             permissions: ['canAdministrateCoordinatedEntry'],
             hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
+          {
+            id: 'referrals',
+            title: 'Referrals',
+            path: AdminDashboardRoutes.REFERRALS,
+            permissions: ['canAdministrateCoordinatedEntry'],
+            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
+          },
+          {
+            id: 'eligible-clients',
+            title: 'Eligible Clients',
+            path: AdminDashboardRoutes.ELIGIBLE_CLIENTS,
+            permissions: ['canAdministrateCoordinatedEntry'],
+            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
+          },
+          {
+            id: 'denials',
+            title: 'Denials (Legacy)',
+            path: AdminDashboardRoutes.AC_DENIALS,
+            permissions: ['canManageDeniedReferrals'],
+          },
+        ],
+      },
+      {
+        id: 'users',
+        type: 'category',
+        title: 'Users',
+        items: [
           {
             id: 'users',
             title: 'Users',
@@ -35,6 +57,13 @@ export const useAdminDashboardNavItems = () => {
             permissions: ['canImpersonateUsers', 'canAuditUsers'],
             permissionMode: 'any',
           },
+        ],
+      },
+      {
+        id: 'admin-nav',
+        type: 'category',
+        title: 'Records',
+        items: [
           {
             id: 'merge-clients',
             title: 'Client Merge History',
@@ -62,7 +91,7 @@ export const useAdminDashboardNavItems = () => {
           },
           {
             id: 'project-config',
-            title: 'Project',
+            title: 'Projects',
             path: AdminDashboardRoutes.PROJECT_CONFIG,
             permissions: ['canConfigureDataCollection'],
           },

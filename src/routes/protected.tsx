@@ -52,7 +52,9 @@ import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import ClientCaseNotesPrintPage from '@/modules/caseNotes/components/ClientCaseNotesPrintPage';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
-import AdminCoordinatedEntry from '@/modules/ce/components/admin/AdminCoordinatedEntry';
+import AdminAvailableUnitsPage from '@/modules/ce/components/admin/AdminAvailableUnitsPage';
+import AdminEligibleClientsPage from '@/modules/ce/components/admin/AdminEligibleClientsPage';
+import AdminReferralsPage from '@/modules/ce/components/admin/AdminReferralsPage';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 
 import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
@@ -890,13 +892,35 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.COORDINATED_ENTRY,
+            path: AdminDashboardRoutes.AVAILABLE_UNITS,
             element: (
               <RootPermissionsFilter
                 permissions='canAdministrateCoordinatedEntry'
                 otherwise={<NotFound />}
               >
-                <AdminCoordinatedEntry />
+                <AdminAvailableUnitsPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.REFERRALS,
+            element: (
+              <RootPermissionsFilter
+                permissions='canAdministrateCoordinatedEntry'
+                otherwise={<NotFound />}
+              >
+                <AdminReferralsPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.ELIGIBLE_CLIENTS,
+            element: (
+              <RootPermissionsFilter
+                permissions='canAdministrateCoordinatedEntry'
+                otherwise={<NotFound />}
+              >
+                <AdminEligibleClientsPage />
               </RootPermissionsFilter>
             ),
           },
