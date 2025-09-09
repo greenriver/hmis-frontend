@@ -474,6 +474,7 @@ export const protectedRoutes: RouteNode[] = [
               <ProjectRoute
                 permissions={['canViewUnits']}
                 coordinatedEntryFeatures={['supportsWaitlistReferrals']}
+                redirectRoute={ProjectDashboardRoutes.UNITS}
               >
                 <UnitPage />
               </ProjectRoute>
