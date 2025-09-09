@@ -207,9 +207,6 @@ fragment CeReferralDetailFields on CeReferral {
     projectType
     entryDate
     exitDate
-    access {
-      canViewEnrollmentDetails
-    }
   }
   currentMatchValues {
     id
@@ -253,6 +250,12 @@ fragment CeReferralFields on CeReferral {
     }
   }
   ...CeReferralWithNotesAndAuditEvents
+  targetProjectId
+  access {
+    canAssignReferralTasks
+    canViewSourceEnrollmentDetails
+    canViewTargetProject
+  }
 }
 
 # In the future, we may paginate these in the UI; for now, just query all, with a high query cap
