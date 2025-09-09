@@ -45,6 +45,7 @@ const mockReferral: CeReferralFieldsFragment = {
   id: '1',
   status: CeReferralStatus.InProgress,
   targetProjectName: 'My Project',
+  targetProjectId: '2',
   active: true,
   clientId: '1',
   clientName: 'Test Client',
@@ -70,6 +71,11 @@ const mockReferral: CeReferralFieldsFragment = {
     nodes: [],
   },
   origin: CeReferralOrigin.Waitlist,
+  access: {
+    canAssignReferralTasks: true,
+    canViewSourceEnrollmentDetails: true,
+    canViewTargetProject: true,
+  },
 };
 
 export const InProgress: Story = {
