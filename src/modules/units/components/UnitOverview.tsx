@@ -28,7 +28,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
 
   return (
     <Grid container columnSpacing={6} rowSpacing={4}>
-      {opportunity && (
+      {opportunity?.active && (
         <Grid item xs={12}>
           <OpportunityBanner
             topCandidate={opportunity.candidates.nodes[0]}
