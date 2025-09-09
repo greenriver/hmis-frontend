@@ -125,7 +125,7 @@ const UnitManagementTable: React.FC<Props> = ({
         defaultPageSize={25}
         queryVariables={{
           id: projectId,
-          includeCeFields: coordinatedEntryFeatures.supportsReferrals,
+          includeCeFields: coordinatedEntryFeatures.supportsReferrals || false,
         }}
         queryDocument={GetUnitsDocument}
         columns={columns}
