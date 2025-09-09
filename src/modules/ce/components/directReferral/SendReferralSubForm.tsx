@@ -97,8 +97,8 @@ const SendReferralSubForm: React.FC<Props> = ({
       {definitionLoading && <LoadingSkeleton width={'100%'} count={1} />}
       {projectCanAcceptReferral === false && (
         <Alert severity='warning'>
-          At least one client in the household already has an open enrollment in
-          this project.
+          At least one client in the household already has an open enrollment or
+          in-progress referral in this project.
         </Alert>
       )}
       {formDefinition && (

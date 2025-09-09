@@ -74,6 +74,7 @@ const UnitManagementTable: React.FC<Props> = ({
   const { getCeActions, loading } = useUnitCeActions({
     projectId,
     coordinatedEntryFeatures,
+    canManageUnits,
   });
 
   const rowSecondaryActionConfigs = useCallback(
@@ -125,7 +126,7 @@ const UnitManagementTable: React.FC<Props> = ({
         defaultPageSize={25}
         queryVariables={{
           id: projectId,
-          includeCeFields: coordinatedEntryFeatures.supportsReferrals,
+          includeCeFields: coordinatedEntryFeatures.supportsReferrals || false,
         }}
         queryDocument={GetUnitsDocument}
         columns={columns}
