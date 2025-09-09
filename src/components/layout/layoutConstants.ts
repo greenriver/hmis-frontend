@@ -21,3 +21,6 @@ export const DESKTOP_NAV_SIDEBAR_WIDTH = 300;
 
 // height of sticky header on household assessment view
 export const HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT = 78;
+
+// dashboard content px which is shared with ContextHeader (breadcrumbs)
+export const DASHBOARD_CONTENT_PX = { xs: 1, sm: 3, lg: 4 };
