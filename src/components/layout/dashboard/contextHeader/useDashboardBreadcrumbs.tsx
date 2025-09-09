@@ -148,10 +148,6 @@ export const useProjectBreadcrumbConfig = (
         title: 'Referral',
         parent: ProjectDashboardRoutes.CE,
       },
-      [ProjectDashboardRoutes.REFERRAL_STEPS]: {
-        title: 'Referral',
-        parent: ProjectDashboardRoutes.CE,
-      },
       [ProjectDashboardRoutes.REFERRAL_STEP]: {
         title: 'Referral',
         parent: ProjectDashboardRoutes.CE,
@@ -309,9 +305,14 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         parent: AdminDashboardRoutes.USERS,
         title: 'Audit User',
       },
-      // [Routes.ADMIN]: {
-      //   title: 'Admin',
-      // },
+      [AdminDashboardRoutes.REFERRAL]: {
+        title: 'Referral',
+        parent: AdminDashboardRoutes.REFERRALS,
+      },
+      [AdminDashboardRoutes.REFERRAL_STEP]: {
+        title: 'Referral',
+        parent: AdminDashboardRoutes.REFERRALS,
+      },
     };
     return buildDefaultCrumbs(AdminDashboardRoutes, overrides);
   }, []);
