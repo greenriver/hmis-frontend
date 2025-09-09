@@ -16,8 +16,7 @@ import {
 } from '@/types/gqlTypes';
 
 const ReferralStep: React.FC = ({}) => {
-  const { referral, referralPath, canAssignReferralTasks } =
-    useReferralContext();
+  const { referral, referralPath } = useReferralContext();
   const { stepId } = useSafeParams() as {
     stepId: string;
   };
@@ -59,7 +58,7 @@ const ReferralStep: React.FC = ({}) => {
           <ReferralStepDetails step={stepSummary} />
           <ReferralStepAssigneeAlert
             step={stepSummary}
-            canAssignReferralTasks={canAssignReferralTasks}
+            canAssignReferralTasks={referral.access.canAssignReferralTasks}
           />
           <Divider />
           {fetchLoading && !step && <LoadingSkeleton count={1} height={200} />}

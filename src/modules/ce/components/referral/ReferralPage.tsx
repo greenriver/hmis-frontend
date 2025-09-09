@@ -199,7 +199,6 @@ export type ReferralContext = {
   referralPath: string;
   unitPath?: string;
   generateReferralStepPath: (stepId: string) => string;
-  canAssignReferralTasks?: boolean;
 };
 export const useReferralContext = () => useOutletContext<ReferralContext>();
 

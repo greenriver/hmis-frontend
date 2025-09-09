@@ -13,15 +13,9 @@ interface Props {
   step: CeReferralStepSummaryFieldsFragment;
   referral: CeReferralFieldsFragment;
   path: string;
-  canAssignReferralTasks?: boolean;
 }
 
-const ReferralStepCard: React.FC<Props> = ({
-  step,
-  referral,
-  path,
-  canAssignReferralTasks,
-}) => {
+const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
   const { name, status } = step;
 
   return (
@@ -51,7 +45,7 @@ const ReferralStepCard: React.FC<Props> = ({
         </Stack>
         <ReferralStepAssigneeAlert
           step={step}
-          canAssignReferralTasks={canAssignReferralTasks}
+          canAssignReferralTasks={referral.access.canAssignReferralTasks}
         />
       </Stack>
     </Paper>
