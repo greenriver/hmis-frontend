@@ -119,14 +119,6 @@ const ClientCeEligibility = ({
         </Stack>
       )}
 
-      {value && value.length === 0 && (
-        <Typography
-          variant='body2'
-          sx={{ fontStyle: 'italic', color: 'text.secondary' }}
-        >
-          No eligible project types found
-        </Typography>
-      )}
     </Stack>
   );
 };
