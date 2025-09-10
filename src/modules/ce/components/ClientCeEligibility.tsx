@@ -17,7 +17,7 @@ import {
 interface ClientEligibilityProps extends DynamicInputCommonProps {
   value?: PickListOption[] | null; // array of PickListOptions representing Project Types that this client is eligible for
   onChange?: (value: PickListOption[] | null) => void;
-  handlers?: FormDefinitionHandlers;
+  handlers: FormDefinitionHandlers;
 }
 
 // Shows a button to calculate client eligibility based on current form values, and displays the result.
@@ -69,7 +69,7 @@ const ClientCeEligibility = ({
         variables: {
           enrollmentId,
           formDefinitionIdentifier: formDefinitionIdentifier,
-          valuesByLinkId: handlers?.getValuesForSubmit().valuesByLinkId || {},
+          valuesByLinkId: handlers.getValuesForSubmit().valuesByLinkId,
         },
       });
     }

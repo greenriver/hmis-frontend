@@ -363,6 +363,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       const currentValue = value ? value : item.repeats ? [] : null;
 
       if (item.component === Component.ClientCeEligibility) {
+        if (!handlers)
+          throw new Error(
+            'CE Client Eligibility field missing required handlers'
+          );
+
         return (
           <InputContainer {...commonContainerProps}>
             <ClientCeEligibility
