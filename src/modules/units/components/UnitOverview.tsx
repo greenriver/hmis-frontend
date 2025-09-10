@@ -51,7 +51,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
               <Typography>
                 This unit is not currently accepting referrals.
               </Typography>
-              {project.access.canManageUnits && (
+              {project.access.canUpdateUnitAvailability && (
                 <LoadingButton
                   onClick={() => markUnitAvailable()}
                   loading={availableLoading}
