@@ -17,7 +17,7 @@ import {
 const projectTypePickList = localResolvePickList('ProjectType');
 
 interface ClientEligibilityProps extends DynamicInputCommonProps {
-  value?: PickListOption[] | null;
+  value?: PickListOption[] | null; // array of PickListOptions representing Project Types that this client is eligible for
   onChange?: (value: PickListOption[] | null) => void;
   handlers?: FormDefinitionHandlers;
 }
