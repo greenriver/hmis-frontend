@@ -47,17 +47,12 @@ const ClientCeEligibility = ({
           const eligibleProjectTypes =
             data.calculateClientCeEligibility.projectTypes;
 
-          // Convert the returned project type codes to their corresponding pick list options.
-          // Filter out undefined values to keep typescript happy
-          const matchingPickListOptions = eligibleProjectTypes
-            .map((projectTypeCode) =>
-              projectTypePickList?.find(
-                (pickListOption) => pickListOption.code === projectTypeCode
-              )
-            )
-            .filter((option): option is PickListOption => option !== undefined);
-
-          onChange(matchingPickListOptions);
+          // Convert the returned project type codes to pick list options
+          // (because..? this is this expected format for form items that collect multi-value arrays?)
+          const eligibleProjectTypesAsPickList = eligibleProjectTypes.map(
+            (code) => ({ code, label: HmisEnums.ProjectType[code] })
+          );
+          onChange(eligibleProjectTypesAsPickList);
         }
       },
       onError: (apolloError) => {
