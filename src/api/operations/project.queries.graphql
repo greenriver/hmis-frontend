@@ -133,6 +133,7 @@ query GetProjectAssessments(
   $offset: Int = 0
   $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
   $filters: AssessmentsForProjectFilterOptions = null
+  $includeCdes: Boolean = false
 ) {
   project(id: $id) {
     id
@@ -146,7 +147,7 @@ query GetProjectAssessments(
       limit
       nodesCount
       nodes {
-        ...AssessmentFields
+        ...AssessmentWithCdes
         enrollment {
           ...EnrollmentFields
         }

@@ -2,6 +2,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
+  ASSESSMENT_DETAILS_COL,
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -25,6 +26,7 @@ const COLUMNS: ColumnDef<HhmAssessmentType>[] = [
   ASSESSMENT_COLUMNS.date,
   ASSESSMENT_COLUMNS.type,
   ASSESSMENT_COLUMNS.lastUpdated,
+  ASSESSMENT_DETAILS_COL,
 ];
 
 interface Props {

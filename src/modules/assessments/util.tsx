@@ -1,13 +1,29 @@
+import { Stack, Typography } from '@mui/material';
 import { AlwaysPresentLocalConstants } from '../form/util/formUtil';
 import { ClientAssessmentType } from './assessmentTypes';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
+import { textTruncationSx } from '@/config/theme';
+import { DataColumnDef } from '@/modules/dataFetching/types';
 import { HhmAssessmentType } from '@/modules/enrollment/components/HouseholdAssessmentsTable';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
-import { clientBriefName, formRoleDisplay } from '@/modules/hmis/hmisUtil';
+import {
+  clientBriefName,
+  customDataElementValueAsString,
+  formRoleDisplay,
+} from '@/modules/hmis/hmisUtil';
 import { ProjectAssessmentType } from '@/modules/projects/components/ProjectAssessments';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { AssessmentFieldsFragment, AssessmentRole } from '@/types/gqlTypes';
+import {
+  AssessmentFieldsFragment,
+  AssessmentRole,
+  AssessmentWithCdesFragment,
+  DisplayHook,
+  GetClientAssessmentsQueryVariables,
+  GetEnrollmentAssessmentsQueryVariables,
+  GetHouseholdAssessmentsQueryVariables,
+  GetProjectAssessmentsQueryVariables,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 export const assessmentPrefix = (role: AssessmentRole) => {
@@ -96,6 +112,42 @@ export const ASSESSMENT_COLUMNS: {
           />
         );
     },
+  },
+};
+
+// Assessment Details column for showing custom data elements in tables
+export const ASSESSMENT_DETAILS_COL: DataColumnDef<
+  AssessmentWithCdesFragment,
+  | GetEnrollmentAssessmentsQueryVariables
+  | GetHouseholdAssessmentsQueryVariables
+  | GetClientAssessmentsQueryVariables
+  | GetProjectAssessmentsQueryVariables
+> = {
+  header: 'Assessment Details',
+  key: 'assessmentDetails',
+  render: (assessment) => {
+    return (
+      <Stack>
+        {(assessment.customDataElements || [])
+          .filter((cde) => cde.displayHooks.includes(DisplayHook.TableSummary))
+          .map((cde) => {
+            const val = customDataElementValueAsString(cde);
+            return (
+              <Typography
+                key={cde.key}
+                variant='body2'
+                sx={textTruncationSx('300px')}
+              >
+                {cde.label}: {val}
+              </Typography>
+            );
+          })}
+      </Stack>
+    );
+  },
+  optional: {
+    defaultHidden: true,
+    queryVariableField: 'includeCdes',
   },
 };
 
