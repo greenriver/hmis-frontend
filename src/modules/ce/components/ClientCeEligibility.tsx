@@ -109,15 +109,6 @@ const ClientCeEligibility = ({
         Calculate Client Eligibility
       </LoadingButton>
 
-      {value && value.length > 0 && (
-        <Stack direction='column' gap={0.5}>
-          {value.map((projectType) => (
-            <Typography key={projectType.code} variant='body2'>
-              {projectType.label}
-            </Typography>
-          ))}
-        </Stack>
-      )}
 
     </Stack>
   );
