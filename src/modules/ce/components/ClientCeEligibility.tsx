@@ -62,6 +62,7 @@ const ClientCeEligibility = ({
     useContext(AssessmentContext) || {};
 
   const hasRequiredContext = !!enrollmentId && !!formDefinitionIdentifier;
+  const { getValuesForSubmit } = handlers;
 
   const handleFetch = useCallback(() => {
     if (hasRequiredContext) {
@@ -69,7 +70,7 @@ const ClientCeEligibility = ({
         variables: {
           enrollmentId,
           formDefinitionIdentifier: formDefinitionIdentifier,
-          valuesByLinkId: handlers.getValuesForSubmit().valuesByLinkId,
+          valuesByLinkId: getValuesForSubmit().valuesByLinkId,
         },
       });
     }
@@ -78,7 +79,7 @@ const ClientCeEligibility = ({
     calculateClientEligibility,
     enrollmentId,
     formDefinitionIdentifier,
-    handlers,
+    getValuesForSubmit,
   ]);
 
   return (
