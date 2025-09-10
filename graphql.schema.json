@@ -35641,14 +35641,14 @@
                 "deprecationReason": null
               },
               {
-                "name": "formDefinitionIdentifier",
+                "name": "formDefinitionId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "ID",
                     "ofType": null
                   }
                 },

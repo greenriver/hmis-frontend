@@ -4994,7 +4994,7 @@ export type MutationCalculateAltAhaScoreArgs = {
 
 export type MutationCalculateClientCeEligibilityArgs = {
   enrollmentId: Scalars['ID']['input'];
-  formDefinitionIdentifier: Scalars['String']['input'];
+  formDefinitionId: Scalars['ID']['input'];
   valuesByLinkId: Scalars['JsonObject']['input'];
 };
 
@@ -20096,7 +20096,7 @@ export type CreateCeReferralNoteMutation = {
 
 export type CalculateClientCeEligibilityMutationVariables = Exact<{
   enrollmentId: Scalars['ID']['input'];
-  formDefinitionIdentifier: Scalars['String']['input'];
+  formDefinitionId: Scalars['ID']['input'];
   valuesByLinkId: Scalars['JsonObject']['input'];
 }>;
 
@@ -53430,12 +53430,12 @@ export type CreateCeReferralNoteMutationOptions = Apollo.BaseMutationOptions<
 export const CalculateClientCeEligibilityDocument = gql`
   mutation CalculateClientCeEligibility(
     $enrollmentId: ID!
-    $formDefinitionIdentifier: String!
+    $formDefinitionId: ID!
     $valuesByLinkId: JsonObject!
   ) {
     calculateClientCeEligibility(
       enrollmentId: $enrollmentId
-      formDefinitionIdentifier: $formDefinitionIdentifier
+      formDefinitionId: $formDefinitionId
       valuesByLinkId: $valuesByLinkId
     ) {
       projectTypes
@@ -53465,7 +53465,7 @@ export type CalculateClientCeEligibilityMutationFn = Apollo.MutationFunction<
  * const [calculateClientCeEligibilityMutation, { data, loading, error }] = useCalculateClientCeEligibilityMutation({
  *   variables: {
  *      enrollmentId: // value for 'enrollmentId'
- *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
+ *      formDefinitionId: // value for 'formDefinitionId'
  *      valuesByLinkId: // value for 'valuesByLinkId'
  *   },
  * });
