@@ -60,7 +60,7 @@ const ClientCeEligibility = ({
           onChange(matchingPickListOptions);
         }
       },
-      onError: (apolloError: any) => {
+      onError: (apolloError) => {
         setErrorState({ ...emptyErrorState, apolloError });
       },
     });
