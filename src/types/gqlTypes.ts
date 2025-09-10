@@ -6517,6 +6517,7 @@ export type ProjectAccess = {
   canPerformOwnReferralTasks: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canStartReferrals: Scalars['Boolean']['output'];
+  canUpdateUnitAvailability: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
@@ -7114,6 +7115,7 @@ export type QueryAccess = {
   canSplitHouseholds: Scalars['Boolean']['output'];
   canStartReferrals: Scalars['Boolean']['output'];
   canTransferEnrollments: Scalars['Boolean']['output'];
+  canUpdateUnitAvailability: Scalars['Boolean']['output'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
@@ -9296,6 +9298,7 @@ export type ProjectAccessFieldsFragment = {
   canEditProjectDetails: boolean;
   canViewUnits: boolean;
   canManageUnits: boolean;
+  canUpdateUnitAvailability: boolean;
   canManageIncomingReferrals: boolean;
   canManageOutgoingReferrals: boolean;
   canManageExternalFormSubmissions: boolean;
@@ -37953,6 +37956,7 @@ export type SubmitFormMutation = {
             canEditProjectDetails: boolean;
             canViewUnits: boolean;
             canManageUnits: boolean;
+            canUpdateUnitAvailability: boolean;
             canManageIncomingReferrals: boolean;
             canManageOutgoingReferrals: boolean;
             canManageExternalFormSubmissions: boolean;
@@ -41696,6 +41700,7 @@ export type ProjectAllFieldsFragment = {
     canEditProjectDetails: boolean;
     canViewUnits: boolean;
     canManageUnits: boolean;
+    canUpdateUnitAvailability: boolean;
     canManageIncomingReferrals: boolean;
     canManageOutgoingReferrals: boolean;
     canManageExternalFormSubmissions: boolean;
@@ -42598,6 +42603,7 @@ export type GetProjectQuery = {
       canEditProjectDetails: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
+      canUpdateUnitAvailability: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
@@ -42782,6 +42788,7 @@ export type GetProjectPermissionsQuery = {
       canEditProjectDetails: boolean;
       canViewUnits: boolean;
       canManageUnits: boolean;
+      canUpdateUnitAvailability: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
       canManageExternalFormSubmissions: boolean;
@@ -50363,6 +50370,7 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canEditProjectDetails
     canViewUnits
     canManageUnits
+    canUpdateUnitAvailability
     canManageIncomingReferrals
     canManageOutgoingReferrals
     canManageExternalFormSubmissions
