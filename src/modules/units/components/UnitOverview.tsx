@@ -5,6 +5,7 @@ import React from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
 import MatchRuleCard from '@/modules/ce/components/unit/MatchRuleCard';
 import OpportunityBanner from '@/modules/ce/components/unit/OpportunityBanner';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { cache } from '@/providers/apolloClient';
 import {
   UnitDetailFieldsFragment,
@@ -15,6 +16,8 @@ interface Props {
   unit: UnitDetailFieldsFragment;
 }
 const UnitOverview: React.FC<Props> = ({ unit }) => {
+  const { project } = useProjectDashboardContext();
+
   const opportunity = unit.latestOpportunity;
   const [
     markUnitAvailable,
@@ -28,7 +31,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
 
   return (
     <Grid container columnSpacing={6} rowSpacing={4}>
-      {opportunity && (
+      {opportunity?.active && (
         <Grid item xs={12}>
           <OpportunityBanner
             topCandidate={opportunity.candidates.nodes[0]}
@@ -48,29 +51,30 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
               <Typography>
                 This unit is not currently accepting referrals.
               </Typography>
-              <LoadingButton
-                onClick={() => markUnitAvailable()}
-                loading={availableLoading}
-              >
-                Start Accepting Referrals
-              </LoadingButton>
+              {project.access.canUpdateUnitAvailability && (
+                <LoadingButton
+                  onClick={() => markUnitAvailable()}
+                  loading={availableLoading}
+                >
+                  Start Accepting Referrals
+                </LoadingButton>
+              )}
             </Stack>
           </Paper>
         </Grid>
       )}
-      {unit.eligibilityRequirements && (
-        <Grid item xs={12} md={6}>
-          <MatchRuleCard
-            title='Eligibility Requirements'
-            rules={unit.eligibilityRequirements}
-          />
-        </Grid>
-      )}
-      {unit.prioritySchemes && (
-        <Grid item xs={12} md={6}>
-          <MatchRuleCard title='Prioritization' rules={unit.prioritySchemes} />
-        </Grid>
-      )}
+      <Grid item xs={12} md={6}>
+        <MatchRuleCard
+          title='Eligibility Requirements'
+          rules={unit.eligibilityRequirements || []}
+        />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <MatchRuleCard
+          title='Prioritization'
+          rules={unit.prioritySchemes || []}
+        />
+      </Grid>
     </Grid>
   );
 };

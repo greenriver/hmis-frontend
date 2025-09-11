@@ -34,6 +34,7 @@ interface Props {
   projectId: string;
   unitGroupId?: string;
   units: UnitTableRowFieldsFragment[];
+  deletionEnabled?: boolean;
   ceAvailabilityActionsEnabled?: boolean;
 }
 
@@ -41,6 +42,7 @@ const UnitBulkActions: React.FC<Props> = ({
   projectId,
   unitGroupId,
   units,
+  deletionEnabled,
   ceAvailabilityActionsEnabled = false,
 }) => {
   // This component's philosophy is to let the user do what they are trying to
@@ -82,14 +84,13 @@ const UnitBulkActions: React.FC<Props> = ({
           selectedUnitsCount: units.length,
           eligibleUnitsCount: unitIdsToMarkAvailable.length,
 
-          // "Already accepting referrals" is NOT actually the only reason units might be ineligible,
-          // but it's helpful UI simplification.
           // All reasons they might not be able to be marked available (copied from backend):
           // - CE is not enabled, in which case the button won't appear
-          // - Unit group doesn't have a workflow template, in which case the button won't appear
-          // - Unit is already available - that is the case we describe in the tooltip
+          // - Unit is already available - "already accepting referrals"
+          // - Unit group doesn't have a workflow template - "need configuration"
           // - Unit has occupants, in which case it won't be selectable in the table (this is brittle, depends on `deletable` logic)
-          ineligibleText: 'are already accepting referrals',
+          ineligibleText:
+            'are already accepting referrals, or need workflow configuration',
         }),
       };
     }, [units]);
@@ -141,9 +142,11 @@ const UnitBulkActions: React.FC<Props> = ({
         </>
       )}
 
-      <ButtonTooltipContainer title={deleteTooltip}>
-        {renderBulkDeleteButton(unitIdsToDelete, disableDelete)}
-      </ButtonTooltipContainer>
+      {deletionEnabled && (
+        <ButtonTooltipContainer title={deleteTooltip}>
+          {renderBulkDeleteButton(unitIdsToDelete, disableDelete)}
+        </ButtonTooltipContainer>
+      )}
     </Stack>
   );
 };

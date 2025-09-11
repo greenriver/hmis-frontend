@@ -12,6 +12,7 @@ import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -22,9 +23,13 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   referral: CeReferralFieldsFragment;
+  linkToProject?: boolean;
 }
 
-const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
+const ReferralDetailContent: React.FC<Props> = ({
+  referral,
+  linkToProject = false,
+}) => {
   const referralDetails = useMemo(
     () => [
       {
@@ -46,10 +51,22 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
       {
         id: 'project',
         label: 'Project',
-        value: referral.targetProjectName,
+        value:
+          referral.access.canViewTargetProject && linkToProject ? (
+            <RouterLink
+              to={generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
+                projectId: referral.targetProjectId,
+              })}
+              openInNew
+            >
+              {referral.targetProjectName}
+            </RouterLink>
+          ) : (
+            referral.targetProjectName
+          ),
       },
     ],
-    [referral]
+    [linkToProject, referral]
   );
 
   const clientDetails = useMemo(() => {
@@ -123,7 +140,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
 
   const sourceEnrollmentDetails = useMemo(() => {
     if (!referral.sourceEnrollment) return null;
-    const { id, projectName, projectType, access } = referral.sourceEnrollment;
+    const { id, projectName, projectType } = referral.sourceEnrollment;
 
     const rows: CommonDetailGridItemRow[] = [
       { id: 'projectName', label: 'Project Name', value: projectName },
@@ -138,7 +155,7 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
         value: entryExitRange(referral.sourceEnrollment),
       },
     ];
-    if (access.canViewEnrollmentDetails) {
+    if (referral.access.canViewSourceEnrollmentDetails) {
       rows.push({
         id: 'linkToEnrollment',
         label: 'Enrollment Link',
@@ -207,15 +224,17 @@ const ReferralDetailContent: React.FC<Props> = ({ referral }) => {
           <CommonDetailGrid rows={sourceEnrollmentDetails} />
         </CommonCollapsibleCard>
       )}
-      {eligibilityRequirementsDetails && (
-        <CommonCollapsibleCard
-          title='Eligibility Requirements'
-          TitleComponent='h3'
-          padContent={false}
-        >
-          <CommonDetailGrid rows={eligibilityRequirementsDetails} />
-        </CommonCollapsibleCard>
-      )}
+
+      {eligibilityRequirementsDetails &&
+        eligibilityRequirementsDetails.length > 0 && (
+          <CommonCollapsibleCard
+            title='Eligibility Requirements'
+            TitleComponent='h3'
+            padContent={false}
+          >
+            <CommonDetailGrid rows={eligibilityRequirementsDetails} />
+          </CommonCollapsibleCard>
+        )}
     </Stack>
   );
 };

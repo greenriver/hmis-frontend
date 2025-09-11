@@ -16,31 +16,64 @@ import {
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
 import NotFound from '@/components/pages/NotFound';
+import useCurrentPath from '@/hooks/useCurrentPath';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 
 import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
 
 import ReferralTimeline from '@/modules/ce/components/referral/ReferralTimeline';
-import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import {
+  AdminDashboardRoutes,
+  ProjectDashboardRoutes,
+  Routes,
+} from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
-  ProjectAllFieldsFragment,
   useGetCeReferralQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-interface Props {
-  // Referral is sometimes, but not always, rendered in the context of a Project.
-  project?: ProjectAllFieldsFragment;
-}
+const getReferralPaths = (currentPath: string) => {
+  switch (currentPath) {
+    case AdminDashboardRoutes.REFERRAL: {
+      return [
+        AdminDashboardRoutes.REFERRAL,
+        AdminDashboardRoutes.REFERRAL_STEP,
+      ];
+    }
+    case ProjectDashboardRoutes.REFERRAL: {
+      return [
+        ProjectDashboardRoutes.REFERRAL,
+        ProjectDashboardRoutes.REFERRAL_STEP,
+      ];
+    }
+    case Routes.REFERRAL: {
+      return [Routes.REFERRAL, Routes.REFERRAL_STEP];
+    }
+    default: {
+      throw new Error(`unexpected path rendered ReferralPage: ${currentPath}`);
+    }
+  }
+};
+
+interface Props {}
 
 /**
  * Provides navigational context for a single Referral.
  * Uses react router outlet to render sub-pages.
+ *
+ * This page is rendered in multiple contexts:
+ * - In the Project Dashboard
+ * - In the Admin Dashboard
+ * - "Floating" as its own page (when accessed from user dashboard notification if user lacks target project visibility)
  */
-const ReferralPage: React.FC<Props> = ({ project }) => {
+const ReferralPage: React.FC<Props> = ({}) => {
   const { referralId } = useSafeParams() as { referralId: string };
+
+  // Referral is sometimes, but not always, rendered in the context of a Project.
+  const { project } = useProjectDashboardContext();
 
   const {
     data: { ceReferral: referral } = {},
@@ -51,50 +84,32 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
       id: referralId,
     },
   });
+  const currentPath = useCurrentPath();
+  const currentBasePath = currentPath?.replace(/(:referralId).*$/, '$1'); // drop everything after :referralId
 
   // Provide the referral in an outlet context so it can be accessed easily by sub-pages, like the Referral Step page
   const outletContext: ReferralContext | undefined = useMemo(() => {
-    if (!referral) return undefined;
+    if (!referral) return;
+    if (!currentBasePath) return;
 
     // Depending on whether this referral is being rendered in the context of a Project or as "floating" referral,
     // the links used by the sub-pages will be different. Provide helpers for them here in the outlet contexts
     // so the sub-pages don't have to do any thinking about it.
-    if (project) {
-      return {
-        referral,
-        referralPath: generateSafePath(ProjectDashboardRoutes.REFERRAL_STEPS, {
-          projectId: project.id,
-          referralId: referral.id,
-        }),
-        unitPath: referral.opportunity?.unit
-          ? generateSafePath(ProjectDashboardRoutes.UNIT, {
-              projectId: project.id,
-              unitId: referral.opportunity.unit.id,
-            })
-          : undefined,
-        generateReferralStepPath: (stepId: string) => {
-          return generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
-            projectId: project.id,
-            referralId: referral.id,
-            stepId: stepId,
-          });
-        },
-      };
-    }
-
+    const [referralPath, referralStepPath] = getReferralPaths(currentBasePath);
     return {
       referral,
-      referralPath: generateSafePath(Routes.REFERRAL_STEPS, {
+      referralPath: generateSafePath(referralPath, {
         referralId: referral.id,
+        projectId: project?.id,
       }),
-      generateReferralStepPath: (stepId: string) => {
-        return generateSafePath(Routes.REFERRAL_STEP, {
+      generateReferralStepPath: (stepId: string) =>
+        generateSafePath(referralStepPath, {
           referralId: referral.id,
           stepId: stepId,
-        });
-      },
+          projectId: project?.id,
+        }),
     };
-  }, [referral, project]);
+  }, [referral, currentBasePath, project?.id]);
 
   const isMobile = useIsMobile();
 
@@ -105,16 +120,15 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
   const showContactsDrawer =
     referral.swimlanes &&
     referral.swimlanes.length > 0 &&
-    project?.access?.canAssignReferralTasks;
+    referral.access.canAssignReferralTasks;
 
   return (
     <>
       <CommonStickyBar
-        // If in project context, leave more room above the sticky bar
         top={
-          project
-            ? STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT
-            : STICKY_BAR_HEIGHT
+          currentBasePath === Routes.REFERRAL
+            ? STICKY_BAR_HEIGHT // Floating context doesn't need additional height for sticky scroll
+            : STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT // Project/Admin dashboard contexts do
         }
         sx={{ pb: 0, pt: isMobile ? 1 : 0 }}
       >
@@ -140,7 +154,10 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
                 title='Details'
                 ButtonProps={{ startIcon: <FolderRoundedIcon /> }}
               >
-                <ReferralDetailContent referral={referral} />
+                <ReferralDetailContent
+                  referral={referral}
+                  linkToProject={!project} // only link to project if rendered outside Project Dashboard context
+                />
               </CommonButtonDrawer>
               {showContactsDrawer && (
                 <CommonButtonDrawer
@@ -149,7 +166,7 @@ const ReferralPage: React.FC<Props> = ({ project }) => {
                 >
                   <AssignContactsForm
                     referral={referral}
-                    projectId={project.id}
+                    projectId={referral.targetProjectId}
                   />
                 </CommonButtonDrawer>
               )}

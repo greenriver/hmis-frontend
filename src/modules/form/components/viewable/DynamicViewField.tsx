@@ -166,6 +166,9 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           </LabelWithContent>
         );
       }
+      if (item.component === Component.ClientCeEligibility) {
+        return; // Hide eligibility component entirely in read-only view
+      }
       return (
         <TextContent
           {...commonProps}

@@ -1,9 +1,11 @@
 import { Alert, Paper, Stack } from '@mui/material';
 import React, { useMemo } from 'react';
 import CommonCard from '@/components/elements/CommonCard';
+import Loading from '@/components/elements/Loading';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import { configurableCeColumns } from '@/modules/ce/components/admin/AdminCeClientsTable';
 import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -19,6 +21,7 @@ import {
   GetCeOpportunityCandidatesDocument,
   GetCeOpportunityCandidatesQuery,
   GetCeOpportunityCandidatesQueryVariables,
+  useGetCeClientsUnitGroupTableConfigQuery,
 } from '@/types/gqlTypes';
 
 const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
@@ -28,26 +31,48 @@ const COLUMNS: ColumnDef<CeCandidateFieldsFragment>[] = [
     sticky: 'left',
     render: (candidate) => candidate.clientName,
   },
-  {
-    header: 'Priority Score',
-    render: ({ priorityScores }) => priorityScores.join(', '),
-    key: 'priorityScore',
-  },
 ];
+
+const defaultPriorityColumn: ColumnDef<CeCandidateFieldsFragment> = {
+  header: 'Priority Score',
+  render: ({ priorityScores }) => priorityScores.join(', '),
+  key: 'priorityScore',
+};
 
 interface Props {
   opportunity: CeOpportunityFieldsFragment;
+  unitGroupId?: string;
 }
-const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
+const PrioritizedClientsTable: React.FC<Props> = ({
+  opportunity,
+  unitGroupId,
+}) => {
   const { project } = useProjectDashboardContext();
   const { status } = opportunity;
 
-  const columns = useMemo(() => {
+  // Fetch column configuration
+  const {
+    data: { tableConfigLookup } = {},
+    loading,
+    error,
+  } = useGetCeClientsUnitGroupTableConfigQuery({
+    variables: { unitGroupId: unitGroupId || '' },
+    skip: !unitGroupId,
+  });
+
+  // Define table columns (Default + MCI + Custom configured + Action)
+  const columns: ColumnDef<CeCandidateFieldsFragment>[] = useMemo(() => {
     const canStartReferrals =
       project.access.canStartReferrals && project.access.canViewReferrals;
 
+    const columnConfig = tableConfigLookup?.ceClientsUnitGroupConfig?.columns;
+    const customColumns = (
+      columnConfig ? configurableCeColumns(columnConfig) : []
+    ) as ColumnDef<CeCandidateFieldsFragment>[];
+
     return [
       ...COLUMNS,
+      ...(customColumns || [defaultPriorityColumn]),
       {
         ...BASE_ACTION_COLUMN_DEF,
         render: (row: CeCandidateFieldsFragment) => (
@@ -67,20 +92,23 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
         ),
       },
     ];
-  }, [project.access, opportunity, status]);
+  }, [project.access, tableConfigLookup, status, opportunity]);
 
   // If CandidatePool has not been generated yet (due to change in eligibility or prioritization requirements), show a message
   if (!opportunity.candidatesGeneratedAt) {
     return (
       <Alert severity='info'>
-        The waitlist for this unit has not been generated yet. Please check back
-        later.
+        The eligible client list for this unit has not been generated yet.
+        Please check back later.
       </Alert>
     );
   }
   const candidatesGeneratedAt = parseHmisDateString(
     opportunity.candidatesGeneratedAt
   );
+
+  if (error) throw error;
+  if (loading && !tableConfigLookup) return <Loading />;
 
   return (
     <Stack rowGap={2}>
@@ -90,7 +118,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({ opportunity }) => {
         {candidatesGeneratedAt && (
           <>
             {' '}
-            The waitlist was last updated{' '}
+            The eligible client list was last updated{' '}
             {formatRelativeDateTime(candidatesGeneratedAt)} (
             {parseAndFormatDateTime(opportunity.candidatesGeneratedAt)}).
           </>

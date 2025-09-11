@@ -87,6 +87,7 @@ fragment ProjectAccessFields on ProjectAccess {
   canEditProjectDetails
   canViewUnits
   canManageUnits
+  canUpdateUnitAvailability
   canManageIncomingReferrals
   canManageOutgoingReferrals
   canManageExternalFormSubmissions
@@ -95,9 +96,6 @@ fragment ProjectAccessFields on ProjectAccess {
   canViewOwnReferrals
   canViewPrioritizedClientLists
   canStartReferrals
-  canPerformAnyReferralTasks
-  canPerformOwnReferralTasks
-  canAssignReferralTasks
 }
 
 fragment OrganizationAccessFields on OrganizationAccess {
