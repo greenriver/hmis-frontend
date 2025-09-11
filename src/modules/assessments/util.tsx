@@ -136,7 +136,7 @@ export const ASSESSMENT_DETAILS_COL: DataColumnDef<
               <Typography
                 key={cde.key}
                 variant='body2'
-                sx={textTruncationSx('300px')}
+                sx={textTruncationSx()}
               >
                 {cde.label}: {val}
               </Typography>
