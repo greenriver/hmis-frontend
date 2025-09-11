@@ -133,11 +133,7 @@ export const ASSESSMENT_DETAILS_COL: DataColumnDef<
           .map((cde) => {
             const val = customDataElementValueAsString(cde);
             return (
-              <Typography
-                key={cde.key}
-                variant='body2'
-                sx={textTruncationSx()}
-              >
+              <Typography key={cde.key} variant='body2' sx={textTruncationSx()}>
                 {cde.label}: {val}
               </Typography>
             );
