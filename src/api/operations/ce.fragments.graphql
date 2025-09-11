@@ -29,7 +29,7 @@ fragment CeOpportunityFields on CeOpportunity {
   eligibilityRequirements {
     ...CeMatchRuleFields
   }
-  priorityScheme {
+  prioritySchemes {
     ...CeMatchRuleFields
   }
 }
@@ -62,7 +62,7 @@ fragment CeMatchRuleFields on CeMatchRule {
 
 fragment CeCandidateFields on CeCandidate {
   id
-  priorityScore
+  priorityScores
   clientName
 }
 
