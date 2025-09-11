@@ -9,52 +9,58 @@ import StartReferralButton from '@/modules/ce/components/unit/StartReferralButto
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  CeCandidateFieldsFragment,
-  CeOpportunityFieldsFragment,
   CeOpportunityStatus,
   CeReferralStatus,
+  UnitDetailFieldsFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
-  opportunity: CeOpportunityFieldsFragment;
-  topCandidate?: CeCandidateFieldsFragment;
+  opportunity: NonNullable<UnitDetailFieldsFragment['latestOpportunity']>;
 }
-const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
+
+/**
+ * Banner for displaying current status of Open or Locked opportunity
+ */
+const OpportunityBanner: React.FC<Props> = ({ opportunity }) => {
   const isTiny = useIsMobile('sm');
   const { referral } = opportunity;
   const { project } = useProjectDashboardContext();
 
-  const header = useMemo(() => {
-    if (referral?.status === CeReferralStatus.Accepted)
-      return 'Accepted Referral';
-    if (referral && referral.active) return 'In-Progress Referral';
-    if (topCandidate) return 'Top Prioritized Client';
-  }, [referral, topCandidate]);
+  // Top prioritized candidate on the candidate pool, if this opportunity is open
+  const topCandidate = useMemo(() => {
+    if (opportunity.status !== CeOpportunityStatus.Open) return;
+    return opportunity.candidates.nodes[0];
+  }, [opportunity]);
 
+  // Header is the current "ce status" of the unit
+  const header = useMemo(() => {
+    switch (opportunity.status) {
+      case CeOpportunityStatus.Locked:
+        return 'Referral In Progress';
+      case CeOpportunityStatus.Open:
+        return topCandidate ? 'Top Prioritized Client' : 'Accepting Referrals';
+      default:
+        throw new Error(`Unhandled opportunity status: ${opportunity.status}`);
+    }
+  }, [opportunity.status, topCandidate]);
+
+  // Client name is either the name of the currently referred client (if viewable) or the name of the top candidate
   const clientName = useMemo(() => {
     if (referral) return referral.clientName;
     if (topCandidate) return topCandidate.clientName;
   }, [referral, topCandidate]);
 
+  // Action to view in-progress referral, or start referral for new candidate
   const action = useMemo(() => {
     if (referral) {
       const to = generateSafePath(ProjectDashboardRoutes.REFERRAL, {
         projectId: opportunity.projectId,
         referralId: referral.id,
       });
-
-      if (referral.status === CeReferralStatus.Accepted) {
-        return (
-          <ButtonLink color='grayscale' variant='contained' to={to}>
-            View Referral
-          </ButtonLink>
-        );
-      }
-
       return (
         <ButtonLink to={to} color='primary' variant='contained'>
-          Continue Referral
+          View Referral
         </ButtonLink>
       );
     }
@@ -63,6 +69,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
       project.access.canStartReferrals &&
       project.access.canViewReferrals &&
       opportunity.status === CeOpportunityStatus.Open;
+
     if (topCandidate && canStartReferral) {
       return (
         <StartReferralButton
@@ -79,15 +86,13 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
     opportunity.status !== CeOpportunityStatus.Closed &&
     project.access.canViewPrioritizedClientLists;
 
-  if (!referral && !topCandidate) return;
-
   return (
     <>
       <Stack
-        mb={2}
         alignItems='center'
         justifyContent='space-between'
         gap={2}
+        mb={1}
         direction='row'
       >
         <Typography variant='h5' component='h3'>
@@ -99,38 +104,35 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
           </ButtonLink>
         )}
       </Stack>
-      <Paper
-        sx={{
-          backgroundColor:
-            referral?.status === CeReferralStatus.Accepted
-              ? undefined
-              : 'primary.surface',
-          p: 2,
-        }}
-      >
-        <Stack
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
+      {clientName && (
+        <Paper
+          sx={{
+            backgroundColor:
+              referral?.status === CeReferralStatus.Accepted
+                ? undefined
+                : 'primary.surface',
+            p: 2,
+          }}
         >
-          <Stack gap={4} direction={isTiny ? 'column' : 'row'}>
-            <CommonLabeledTextBlock title='Client Name'>
-              {clientName}
-            </CommonLabeledTextBlock>
-            {referral && (
-              <CommonLabeledTextBlock title='Referral Status'>
-                <ReferralStatusChip referral={referral} />
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            alignItems='center'
+          >
+            <Stack gap={4} direction={isTiny ? 'column' : 'row'}>
+              <CommonLabeledTextBlock title='Client Name'>
+                {clientName}
               </CommonLabeledTextBlock>
-            )}
-            {/* {!referral && topCandidate && (
-              <CommonLabeledTextBlock title='Prioritization Score'>
-                {topCandidate.priorityScores.join(', ')}
-              </CommonLabeledTextBlock>
-            )} */}
+              {referral && (
+                <CommonLabeledTextBlock title='Referral Status'>
+                  <ReferralStatusChip referral={referral} />
+                </CommonLabeledTextBlock>
+              )}
+            </Stack>
+            {action}
           </Stack>
-          {action}
-        </Stack>
-      </Paper>
+        </Paper>
+      )}
     </>
   );
 };
