@@ -186,7 +186,11 @@ export const transformDynamicFilters = <FilterOptionsType>(
   filters?: TableFilterType<FilterOptionsType>, // Filter configuration, so we know which ones are dynamic
   filterValues?: Partial<FilterOptionsType> // Current filter values
 ) => {
-  if (!filters || !filterValues) return;
+  if (!filterValues) return;
+
+  // `filterValues` may be present even if `filters` is absent, on tables where `defaultFilterValues` are used without any user-facing filters (such as Bulk Services).
+  // In this case, we know the filters aren't dynamic so we don't need to transform them, just return `filterValues` as-is
+  if (!filters) return filterValues;
 
   // Pull out dynamic filters into separate array
   const dynamicFilters: Array<{ key: string; values: any[] }> = [];
