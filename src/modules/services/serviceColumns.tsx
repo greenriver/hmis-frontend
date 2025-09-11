@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
 import { ColumnDef } from '@/components/elements/table/types';
+import { textTruncationSx } from '@/config/theme';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import {
   ServiceBasicFieldsFragment,
@@ -50,14 +51,7 @@ export const SERVICE_COLUMNS: {
             // eslint-disable-next-line react/no-array-index-key
             key={i}
             variant='body2'
-            sx={{
-              whiteSpace: 'pre-wrap',
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: '1',
-              overflow: 'hidden',
-              maxWidth: '300px',
-            }}
+            sx={textTruncationSx('300px')}
           >
             {s}
           </Typography>

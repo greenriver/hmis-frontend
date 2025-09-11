@@ -1,6 +1,7 @@
 import { ColumnDef } from '@/components/elements/table/types';
 import {
   ASSESSMENT_COLUMNS,
+  ASSESSMENT_DETAILS_COL,
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -23,6 +24,7 @@ const COLUMNS: ColumnDef<AssessmentFieldsFragment>[] = [
   { ...ASSESSMENT_COLUMNS.date, sticky: 'left' },
   ASSESSMENT_COLUMNS.type,
   ASSESSMENT_COLUMNS.lastUpdated,
+  ASSESSMENT_DETAILS_COL,
 ];
 
 const EnrollmentAssessmentsTable: React.FC<Props> = ({

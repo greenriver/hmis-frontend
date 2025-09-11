@@ -804,3 +804,16 @@ export const customVisuallyHidden: SxProps = {
   ...visuallyHidden,
   position: 'fixed',
 };
+
+/**
+ * Text truncation utility using CSS line clamp
+ * Creates single-line text with ellipsis overflow handling
+ */
+export const textTruncationSx = (maxWidth?: string): SxProps<Theme> => ({
+  whiteSpace: 'pre-wrap',
+  display: '-webkit-box',
+  WebkitBoxOrient: 'vertical',
+  WebkitLineClamp: '1',
+  overflow: 'hidden',
+  ...(maxWidth && { maxWidth }),
+});
