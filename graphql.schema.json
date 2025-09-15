@@ -20188,6 +20188,12 @@
             "deprecationReason": null
           },
           {
+            "name": "EXCLUDES",
+            "description": "Whether the value excludes the given item",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "EXISTS",
             "description": "Use with answerBoolean to specify if an answer should exist or not.",
             "isDeprecated": false,

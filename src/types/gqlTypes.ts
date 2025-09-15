@@ -2831,6 +2831,8 @@ export enum EnableOperator {
   /** Use with answerBoolean to specify is the item should be enabled or not. */
   Enabled = 'ENABLED',
   Equal = 'EQUAL',
+  /** Whether the value excludes the given item */
+  Excludes = 'EXCLUDES',
   /** Use with answerBoolean to specify if an answer should exist or not. */
   Exists = 'EXISTS',
   GreaterThan = 'GREATER_THAN',
