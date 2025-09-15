@@ -431,8 +431,9 @@ const evaluateEnableWhen = ({
       }
       break;
     case EnableOperator.Includes:
-      if (Array.isArray(currentValue)) {
-        result = !!currentValue.find((v) => v === comparisonValue);
+      const currentValues = currentValue || []; // if null, fall back to [] to avoid console warning
+      if (Array.isArray(currentValues)) {
+        result = !!currentValues.find((v) => v === comparisonValue);
       } else {
         console.warn(
           "Can't use INCLUDES operator without array comparison value"
