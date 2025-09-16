@@ -65,6 +65,29 @@ const ReferralDetailContent: React.FC<Props> = ({
             referral.targetProjectName
           ),
       },
+      ...(referral.targetEnrollment
+        ? [
+            {
+              id: 'targetEnrollment',
+              label: 'Destination Enrollment',
+              value: (
+                <RouterLink
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                    {
+                      clientId: referral.targetEnrollment?.client?.id,
+                      enrollmentId: referral.targetEnrollment?.id,
+                    }
+                  )}
+                  aria-label={`View Enrollment at ${referral.targetProjectName}`}
+                  openInNew
+                >
+                  View Enrollment
+                </RouterLink>
+              ),
+            },
+          ]
+        : []),
     ],
     [linkToProject, referral]
   );
