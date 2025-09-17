@@ -12,7 +12,7 @@ proxy_set_header X-Forwarded-Host $host;
 
 # We might need to tune buffers
 # proxy_buffers 10 4k;
-# proxy_buffer_size 12k;
+proxy_buffer_size 32k;
 # proxy_busy_buffers_size 16k;
 
 # Defaults to 60 seconds.
@@ -23,4 +23,3 @@ proxy_set_header X-Forwarded-Host $host;
 # enable upstream caching
 proxy_http_version 1.1;
 proxy_set_header Connection "";
-
