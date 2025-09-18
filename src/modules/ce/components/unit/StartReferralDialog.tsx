@@ -166,7 +166,6 @@ const StartReferralDialog: React.FC<Props> = ({
       maxWidth='md'
       onClose={handleClose}
       stepDefinitions={stepDefinitions}
-      enableBackdropClick
     />
   );
 };
