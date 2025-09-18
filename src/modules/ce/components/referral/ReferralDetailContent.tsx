@@ -8,7 +8,11 @@ import CommonDetailGrid, {
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
-import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  entryExitRange,
+  parseAndFormatDate,
+  relationshipToHohForDisplay,
+} from '@/modules/hmis/hmisUtil';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
@@ -20,7 +24,6 @@ import {
   ExternalIdentifierType,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
-
 interface Props {
   referral: CeReferralFieldsFragment;
   linkToProject?: boolean;
@@ -144,9 +147,8 @@ const ReferralDetailContent: React.FC<Props> = ({
     // For example if the rule is "cde.custom_assessment.requires_accessible_unit = 'Yes'", then
     // the interface will display "Requires Accessible Unit: Yes". The value will be the CURRENT value
     // for this client (as evaluated by the Match Engine), so it may no longer match the eligibility rule.
-    (referral.currentMatchValues || [])
-      .filter(({ fieldName }) => fieldName.toLowerCase() !== 'current age') // exclude "Current Age" as it is redundant with the age field
-      .forEach(({ id, fieldName, fieldValues }) => {
+    (referral.currentMatchValues || []).forEach(
+      ({ id, fieldName, fieldValues }) => {
         rows.push({
           id,
           label: fieldName,
@@ -156,7 +158,8 @@ const ReferralDetailContent: React.FC<Props> = ({
             </Stack>
           ),
         });
-      });
+      }
+    );
 
     return rows;
   }, [referral]);
@@ -198,6 +201,36 @@ const ReferralDetailContent: React.FC<Props> = ({
         ),
       });
     }
+    rows.push({
+      id: 'householdMembers',
+      label: 'Household Members',
+      value: (
+        <Stack gap={1}>
+          {referral.sourceEnrollment.householdMembers.map(
+            ({ id, clientName, relationshipToHoH, access }) => {
+              const nameAndRelationship = `${clientName} (${relationshipToHohForDisplay(
+                relationshipToHoH,
+                true
+              )})`;
+              if (access.canViewClients) {
+                return (
+                  <RouterLink
+                    key={id}
+                    to={generateSafePath(ClientDashboardRoutes.PROFILE, {
+                      clientId: id,
+                    })}
+                    openInNew
+                  >
+                    {nameAndRelationship}
+                  </RouterLink>
+                );
+              }
+              return <span>{nameAndRelationship}</span>;
+            }
+          )}
+        </Stack>
+      ),
+    });
     return rows;
   }, [referral]);
 

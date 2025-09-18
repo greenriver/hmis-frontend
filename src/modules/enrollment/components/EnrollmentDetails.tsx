@@ -99,6 +99,7 @@ const EnrollmentDetails = ({
       enrollment.sourceReferralPosting &&
       enrollment.project.access.canManageIncomingReferrals
     ) {
+      // TODO- update
       // Basic details about the referral. If this section needs more customization, it could be implemented
       // as a read-only occurrence point form.
       content['Referral Source'] = (
