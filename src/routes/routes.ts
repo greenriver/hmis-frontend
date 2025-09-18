@@ -99,11 +99,11 @@ const projectDashboardRoutes = {
   ADD_SERVICES: 'add-services',
   ADD_HOUSEHOLD: 'add-household/:household?',
   REFERRALS: 'referrals',
-  NEW_REFERRAL_REQUEST: 'referrals/new-referral-request',
-  NEW_REFERRAL: 'referrals/new-referral',
-  NEW_OUTGOING_REFERRAL: 'referrals/new-outgoing-referral',
-  REFERRAL_POSTING: 'referrals/:referralPostingId',
-  ESG_FUNDING_REPORT: 'referrals/:referralPostingId/esg-funding-report',
+  NEW_REFERRAL_REQUEST: 'referrals/new-referral-request', // TODO(#8142) remove legacy route
+  NEW_REFERRAL: 'referrals/new-referral', // TODO(#8142) remove legacy route
+  NEW_OUTGOING_REFERRAL: 'referrals/new-outgoing-referral', // TODO(#8142) remove legacy route
+  REFERRAL_POSTING: 'referrals/:referralPostingId', // TODO(#8142) remove legacy route
+  ESG_FUNDING_REPORT: 'referrals/:referralPostingId/esg-funding-report', // TODO(#8142) remove route
 
   // Project setup
   FUNDERS: 'funder',
@@ -125,7 +125,7 @@ const projectDashboardRoutes = {
   UNIT: 'unit/:unitId', // TODO: nest this under Unit Group to get full breadcrumbs
 
   // CE
-  CE: 'ce',
+  CE: 'ce', // referrals page, also rendered under /referrals for backwards compatibility
   CE_UNIT: 'ce/unit/:unitId', // render same Unit page, but within CE tab
   REFERRAL: 'ce/referrals/:referralId',
   REFERRAL_STEPS: 'ce/referrals/:referralId/tasks', // "task" is user-facing language, but we use "step" in the code

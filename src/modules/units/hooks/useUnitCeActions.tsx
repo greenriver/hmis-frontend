@@ -11,11 +11,9 @@ import { generateSafePath } from '@/utils/pathEncoding';
 export const useUnitCeActions = ({
   projectId,
   projectSupportsReferrals,
-  ceAvailabilityActionsEnabled,
 }: {
   projectId: string;
   projectSupportsReferrals: boolean;
-  ceAvailabilityActionsEnabled: boolean;
 }): {
   loading: boolean;
   getCeActions: (unit: UnitTableRowFieldsFragment) => CommonMenuItem[];
@@ -47,35 +45,33 @@ export const useUnitCeActions = ({
         }),
       });
 
-      if (ceAvailabilityActionsEnabled) {
-        if (unit.canBeMarkedAvailableToday) {
-          // TODO(#7537) - use canBeMarkedAvailable and implement a confirmation modal enabling the user to specify the "available on date".
-          actions.push({
-            title: 'Start Accepting Referrals',
-            key: 'markAvailable',
-            ariaLabel: `Start Accepting Referrals for ${unit.id}`,
-            onClick: () => {
-              markUnitsAvailable({ variables: { unitIds: [unit.id] } });
-            },
-          });
-        }
+      // Note: canBeMarkedAvailableToday will be false if there is no workflow template configured
+      if (unit.canBeMarkedAvailableToday) {
+        // TODO(#7537) - use canBeMarkedAvailable and implement a confirmation modal enabling the user to specify the "available on date".
+        actions.push({
+          title: 'Start Accepting Referrals',
+          key: 'markAvailable',
+          ariaLabel: `Start Accepting Referrals for ${unit.id}`,
+          onClick: () => {
+            markUnitsAvailable({ variables: { unitIds: [unit.id] } });
+          },
+        });
+      }
 
-        if (unit.canBeMarkedUnavailable) {
-          actions.push({
-            title: 'Stop Accepting Referrals',
-            key: 'markUnavailable',
-            ariaLabel: `Stop Accepting Referrals for ${unit.id}`,
-            onClick: () => {
-              markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
-            },
-          });
-        }
+      if (unit.canBeMarkedUnavailable) {
+        actions.push({
+          title: 'Stop Accepting Referrals',
+          key: 'markUnavailable',
+          ariaLabel: `Stop Accepting Referrals for ${unit.id}`,
+          onClick: () => {
+            markUnitsUnavailable({ variables: { unitIds: [unit.id] } });
+          },
+        });
       }
 
       return actions;
     },
     [
-      ceAvailabilityActionsEnabled,
       projectSupportsReferrals,
       markUnitsAvailable,
       markUnitsUnavailable,

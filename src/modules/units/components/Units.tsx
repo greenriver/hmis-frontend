@@ -1,6 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Masonry } from '@mui/lab';
-import { Button, Paper, Stack } from '@mui/material';
+import { Button, Grid, Paper, Stack } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import CommonCard from '@/components/elements/CommonCard';
@@ -10,7 +9,6 @@ import NotFound from '@/components/pages/NotFound';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
-import ProjectUnitsTable from '@/modules/units/components/ProjectUnitsTable';
 import UnitCapacityTable from '@/modules/units/components/UnitCapacityTable';
 import UnitGroupCard from '@/modules/units/components/UnitGroupCard';
 import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
@@ -24,10 +22,13 @@ import { useGetProjectUnitGroupsQuery } from '@/types/gqlTypes';
 const Units = () => {
   const { project } = useProjectDashboardContext();
 
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [addUnitsDialogOpen, setAddUnitsDialogOpen] = useState<boolean>(false);
+  const [addUnitGroupDialogOpen, setAddUnitGroupDialogOpen] =
+    useState<boolean>(false);
 
   const { data, error, loading } = useGetProjectUnitGroupsQuery({
     variables: { id: project.id, limit: 100 },
+    fetchPolicy: 'cache-and-network',
   });
 
   const projectSupportsReferrals = useMemo(
@@ -35,17 +36,19 @@ const Units = () => {
     [project.coordinatedEntryFeatures?.supportsReferrals]
   );
 
-  // For now, we assume that if the project supports CE referrals, it also has Unit Groups enabled.
-  const unitGroupsEnabled = useMemo(
-    () => !!projectSupportsReferrals,
-    [projectSupportsReferrals]
-  );
-
   const unitGroups = useMemo(() => {
-    if (!unitGroupsEnabled) return [];
     if (!data?.project?.unitGroups) return [];
     return data.project.unitGroups.nodes;
-  }, [data, unitGroupsEnabled]);
+  }, [data]);
+
+  // Enable Unit Groups management UI if:
+  // - the project supports CE referrals (direct or waitlist), OR
+  // - the project already has at least one unit group. (This will allow UI to switch over when Units are migrated into Unit Groups)
+  // TODO(#7814) remove this flag once Unit Group migration is complete. At that point all projects will have Unit Groups Enabled.
+  const unitGroupsEnabled = useMemo(
+    () => !!projectSupportsReferrals || unitGroups.length > 0,
+    [projectSupportsReferrals, unitGroups.length]
+  );
 
   if (!project.access.canViewUnits) return <NotFound />;
   if (error) throw error;
@@ -60,9 +63,11 @@ const Units = () => {
             id={project.id}
             permissions='canManageUnits'
           >
-            {unitGroupsEnabled ? (
+            {/* If this is a new project with NO unit groups, hide "Add Units" button and instead
+            show "Add Unit Group" to add the initial group */}
+            {unitGroupsEnabled && unitGroups.length === 0 ? (
               <Button
-                onClick={() => setDialogOpen(true)}
+                onClick={() => setAddUnitGroupDialogOpen(true)}
                 startIcon={<AddIcon />}
                 variant='outlined'
               >
@@ -70,7 +75,7 @@ const Units = () => {
               </Button>
             ) : (
               <Button
-                onClick={() => setDialogOpen(true)} // FIXME!
+                onClick={() => setAddUnitsDialogOpen(true)}
                 startIcon={<AddIcon />}
                 variant='outlined'
               >
@@ -80,58 +85,75 @@ const Units = () => {
           </ProjectPermissionsFilter>
         }
       />
-      <Stack gap={4}>
-        {unitGroupsEnabled ? (
-          <Masonry
-            columns={{ xs: 1, md: unitGroups.length === 1 ? 1 : 2 }}
-            spacing={2}
-            sx={{ width: 'auto' }}
-          >
-            {unitGroups.map((group) => (
-              <UnitGroupCard
-                key={group.id}
-                unitGroup={group}
+
+      <Grid container spacing={2} sx={{ mb: 2 }}>
+        <Grid item xs={unitGroups.length > 0 ? 8 : 12}>
+          <Stack gap={4}>
+            {project.hasUnits && (
+              <CommonCard title='Capacity'>
+                {/* This is split out by Unit Type, which should be the same as splitting out by Unit Group
+                since Unit Groups each contain exactly 1 Unit Type. It would be better to show the Unit Group name here,
+                but that requires reworking the graphql capacity type. */}
+                <UnitCapacityTable projectId={project.id} />
+              </CommonCard>
+            )}
+            <Paper>
+              <UnitManagementTable
                 projectId={project.id}
-                linkToUnitGroup
+                unitGroupsEnabled={unitGroupsEnabled}
+                projectSupportsReferrals={projectSupportsReferrals}
+                noUnitsMessage={
+                  unitGroupsEnabled && unitGroups.length === 0
+                    ? 'No units. Add a unit group to get started.'
+                    : undefined
+                }
               />
-            ))}
-          </Masonry>
-        ) : (
-          <CommonCard title='Capacity'>
-            <UnitCapacityTable projectId={project.id} />
-          </CommonCard>
+            </Paper>
+          </Stack>
+        </Grid>
+        {unitGroups.length > 0 && (
+          <Grid item xs={4}>
+            <Stack gap={2}>
+              {unitGroups.map((group) => (
+                <UnitGroupCard
+                  key={group.id}
+                  unitGroup={group}
+                  projectId={project.id}
+                  linkToUnitGroup
+                />
+              ))}
+
+              <ProjectPermissionsFilter
+                id={project.id}
+                permissions='canManageUnits'
+              >
+                <Button
+                  onClick={() => setAddUnitGroupDialogOpen(true)}
+                  startIcon={<AddIcon />}
+                  color='grayscale'
+                >
+                  Add Unit Group
+                </Button>
+              </ProjectPermissionsFilter>
+            </Stack>
+          </Grid>
         )}
-        <Paper>
-          {unitGroupsEnabled ? (
-            <ProjectUnitsTable
-              projectId={project.id}
-              unitGroupsEnabled={unitGroupsEnabled}
-              projectSupportsReferrals={projectSupportsReferrals}
-            />
-          ) : (
-            // If Unit Groups are not enabled, use the Unit Management Table so Units can be managed directly on this page
-            <UnitManagementTable
-              projectId={project.id}
-              projectSupportsReferrals={projectSupportsReferrals}
-            />
-          )}
-        </Paper>
-      </Stack>
-      {unitGroupsEnabled ? (
-        <UnitGroupFormDialog
-          projectId={project.id}
-          open={dialogOpen}
-          onClose={() => setDialogOpen(false)}
-          projectSupportsReferrals={projectSupportsReferrals}
-        />
-      ) : (
-        <CreateUnitsDialog
-          projectId={project.id}
-          open={dialogOpen}
-          onClose={() => setDialogOpen(false)}
-          includeCeFields={projectSupportsReferrals}
-        />
-      )}
+      </Grid>
+      <CreateUnitsDialog
+        projectId={project.id}
+        open={addUnitsDialogOpen}
+        onClose={() => setAddUnitsDialogOpen(false)}
+        allowSelectUnitType={!unitGroupsEnabled}
+        allowSelectUnitGroup={unitGroupsEnabled}
+        includeCeFields={projectSupportsReferrals}
+        unitGroups={unitGroups}
+      />
+      <UnitGroupFormDialog
+        projectId={project.id}
+        open={addUnitGroupDialogOpen}
+        onClose={() => setAddUnitGroupDialogOpen(false)}
+        projectSupportsReferrals={projectSupportsReferrals}
+      />
     </>
   );
 };

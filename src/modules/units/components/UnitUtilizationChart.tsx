@@ -1,18 +1,20 @@
 import { Box, Stack, Typography } from '@mui/material';
 
-import { UnitTypeCapacityFieldsFragment } from '@/types/gqlTypes';
-
 interface Props {
-  unitType: UnitTypeCapacityFieldsFragment;
+  occupied: number;
+  vacant: number;
+  // TODO(#7796) add category for units with a referral in progress
+  // referralInProgress: number;
 }
 
 const occupiedColor = 'primary.main';
 const inProgressColor = 'primary.dark';
 const vacantColor = 'primary.200';
 
-export const UnitVisualizationChart: React.FC<Props> = ({ unitType }) => {
-  const occupied = unitType.capacity - unitType.availability;
-  const vacant = unitType.availability;
+export const UnitVisualizationChart: React.FC<Props> = ({
+  occupied,
+  vacant,
+}) => {
   const referralInProgress = 0; // TODO(#7796) add category for units with a referral in progress
   const total = vacant + occupied + referralInProgress;
 

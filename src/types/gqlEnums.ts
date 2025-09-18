@@ -189,6 +189,7 @@ export const HmisEnums = {
     ALERT_INFO: 'Display text as an info alert',
     ALERT_SUCCESS: 'Display text as a success alert',
     ALERT_WARNING: 'Display text as a warning alert',
+    ALT_AHA: 'Alt AHA component',
     CHECKBOX: 'Render a boolean input item as a checkbox',
     DISABILITY_TABLE:
       'Specialized component for rendering disabilities in a table',

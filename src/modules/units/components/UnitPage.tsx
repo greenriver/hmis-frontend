@@ -76,7 +76,7 @@ const UnitPage: React.FC<Props> = ({}) => {
     return defs;
   }, [project, unit]);
 
-  if (loading) return <Loading />;
+  if (loading && !unit) return <Loading />;
   if (error) throw error;
   if (!unit) return <NotFound />;
 

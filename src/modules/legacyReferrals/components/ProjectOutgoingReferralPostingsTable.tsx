@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { useReferralFilter } from '@/modules/referrals/hooks/useReferralFilter';
+import ReferralPostingStatusDisplay from '@/modules/legacyReferrals/components/ReferralPostingStatusDisplay';
+import { useReferralFilter } from '@/modules/legacyReferrals/hooks/useReferralFilter';
 import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
