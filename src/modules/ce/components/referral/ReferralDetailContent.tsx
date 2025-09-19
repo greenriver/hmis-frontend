@@ -207,7 +207,7 @@ const ReferralDetailContent: React.FC<Props> = ({
       value: (
         <Stack gap={1}>
           {referral.sourceEnrollment.householdMembers.map(
-            ({ id, clientName, relationshipToHoH, access }) => {
+            ({ id, clientId, clientName, relationshipToHoH, access }) => {
               const nameAndRelationship = `${clientName} (${relationshipToHohForDisplay(
                 relationshipToHoH,
                 true
@@ -217,7 +217,7 @@ const ReferralDetailContent: React.FC<Props> = ({
                   <RouterLink
                     key={id}
                     to={generateSafePath(ClientDashboardRoutes.PROFILE, {
-                      clientId: id,
+                      clientId,
                     })}
                     openInNew
                   >

@@ -1383,6 +1383,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeReferralSourceHouseholdMember',
     fields: [
       {
+        name: 'clientId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
         name: 'clientName',
         type: {
           kind: 'NON_NULL',
