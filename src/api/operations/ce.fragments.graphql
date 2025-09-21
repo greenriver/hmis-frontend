@@ -209,6 +209,7 @@ fragment CeReferralDetailFields on CeReferral {
     exitDate
     householdMembers {
       id
+      clientId
       clientName
       relationshipToHoH
       access {

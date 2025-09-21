@@ -1017,6 +1017,7 @@ export type CeReferralSourceEnrollmentsPaginated = {
 export type CeReferralSourceHouseholdMember = {
   __typename?: 'CeReferralSourceHouseholdMember';
   access: CeReferralSourceHouseholdMemberAccess;
+  clientId: Scalars['ID']['output'];
   /** The name of the client. Returns masked name if the user does not have permission to view the client name. */
   clientName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -17772,6 +17773,7 @@ export type CeReferralDetailFieldsFragment = {
     householdMembers: Array<{
       __typename?: 'CeReferralSourceHouseholdMember';
       id: string;
+      clientId: string;
       clientName: string;
       relationshipToHoH: RelationshipToHoH;
       access: {
@@ -17922,6 +17924,7 @@ export type CeReferralFieldsFragment = {
     householdMembers: Array<{
       __typename?: 'CeReferralSourceHouseholdMember';
       id: string;
+      clientId: string;
       clientName: string;
       relationshipToHoH: RelationshipToHoH;
       access: {
@@ -20323,6 +20326,7 @@ export type SubmitCeReferralStepMutation = {
         householdMembers: Array<{
           __typename?: 'CeReferralSourceHouseholdMember';
           id: string;
+          clientId: string;
           clientName: string;
           relationshipToHoH: RelationshipToHoH;
           access: {
@@ -21067,6 +21071,7 @@ export type GetCeReferralQuery = {
       householdMembers: Array<{
         __typename?: 'CeReferralSourceHouseholdMember';
         id: string;
+        clientId: string;
         clientName: string;
         relationshipToHoH: RelationshipToHoH;
         access: {
@@ -49825,6 +49830,7 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       exitDate
       householdMembers {
         id
+        clientId
         clientName
         relationshipToHoH
         access {
