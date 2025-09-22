@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import FormSelect from '@/modules/form/components/FormSelect';
-import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import {
   CeReferralSwimlaneFieldsFragment,
   PickListOption,
@@ -44,7 +43,7 @@ const AssignContactFormItem: React.FC<Props> = ({
     <FormSelect
       value={users}
       placeholder={'Select Staff'}
-      label={getRequiredLabel(swimlane.name, true)}
+      label={swimlane.name}
       loading={staffPickListLoading}
       options={staffPickList || []}
       onChange={handleChange}
