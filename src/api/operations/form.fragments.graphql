@@ -163,6 +163,10 @@ fragment FormIdentifierDetails on FormIdentifier {
   id
   identifier
   managedInVersionControl
+  adminEditableOnly
+  access {
+    canManageForm
+  }
   displayVersion {
     ...FormDefinitionMetadata
   }

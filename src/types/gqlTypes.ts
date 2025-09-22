@@ -3652,6 +3652,9 @@ export type FormDefinitionsPaginated = {
 /** Type representing one form Identifier, which collects all versioned FormDefinitions for the same identifier */
 export type FormIdentifier = {
   __typename?: 'FormIdentifier';
+  access: FormIdentifierAccess;
+  /** todo */
+  adminEditableOnly: Scalars['Boolean']['output'];
   allVersions: FormDefinitionsPaginated;
   /** Form version to use for display in the configuration tool interface. The form itself may be draft, status, or retired. */
   displayVersion: FormDefinition;
@@ -3667,6 +3670,12 @@ export type FormIdentifier = {
 export type FormIdentifierAllVersionsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type FormIdentifierAccess = {
+  __typename?: 'FormIdentifierAccess';
+  canManageForm: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type FormIdentifierFilterOptions = {
@@ -33768,6 +33777,8 @@ export type FormIdentifierDetailsFragment = {
   id: string;
   identifier: string;
   managedInVersionControl: boolean;
+  adminEditableOnly: boolean;
+  access: { __typename?: 'FormIdentifierAccess'; canManageForm: boolean };
   displayVersion: {
     __typename?: 'FormDefinition';
     id: string;
@@ -34984,6 +34995,8 @@ export type PublishFormDefinitionMutation = {
       id: string;
       identifier: string;
       managedInVersionControl: boolean;
+      adminEditableOnly: boolean;
+      access: { __typename?: 'FormIdentifierAccess'; canManageForm: boolean };
       displayVersion: {
         __typename?: 'FormDefinition';
         id: string;
@@ -37190,6 +37203,8 @@ export type GetFormIdentifierDetailsQuery = {
     id: string;
     identifier: string;
     managedInVersionControl: boolean;
+    adminEditableOnly: boolean;
+    access: { __typename?: 'FormIdentifierAccess'; canManageForm: boolean };
     displayVersion: {
       __typename?: 'FormDefinition';
       id: string;
@@ -50906,6 +50921,10 @@ export const FormIdentifierDetailsFragmentDoc = gql`
     id
     identifier
     managedInVersionControl
+    adminEditableOnly
+    access {
+      canManageForm
+    }
     displayVersion {
       ...FormDefinitionMetadata
     }

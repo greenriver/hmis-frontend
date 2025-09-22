@@ -11,7 +11,6 @@ import {
   formatRelativeDateTime,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { FormIdentifierDetailsFragment, FormStatus } from '@/types/gqlTypes';
 
@@ -58,41 +57,46 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             {publishedBy && `by ${publishedBy.name}`}
           </Typography>
         )}
-        <RootPermissionsFilter permissions='canManageForms'>
-          <Divider />
-          {formIdentifier.managedInVersionControl ? (
-            <DuplicateFormButton formIdentifier={formIdentifier} />
-          ) : (
-            <>
-              <EditFormButton
-                formIdentifier={formIdentifier}
-                text={'Edit Draft'}
-                variant='outlined'
-              />
-              {hasDraft && (
-                <>
-                  <ButtonLink
-                    to={generatePath(AdminDashboardRoutes.PREVIEW_FORM_DRAFT, {
-                      identifier: formIdentifier.identifier,
-                      formId: formIdentifier.draftVersion?.id || '',
-                    })}
-                    variant='contained'
-                    fullWidth
-                  >
-                    Preview / Publish Draft
-                  </ButtonLink>
-                  <Typography variant='caption'>
-                    Last edited{' '}
-                    {draftUpdatedOn
-                      ? formatRelativeDateTime(draftUpdatedOn)
-                      : ''}{' '}
-                    {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
-                  </Typography>
-                </>
-              )}
-            </>
-          )}
-        </RootPermissionsFilter>
+        {formIdentifier.access.canManageForm && (
+          <>
+            <Divider />
+            {formIdentifier.managedInVersionControl ? (
+              <DuplicateFormButton formIdentifier={formIdentifier} />
+            ) : (
+              <>
+                <EditFormButton
+                  formIdentifier={formIdentifier}
+                  text={'Edit Draft'}
+                  variant='outlined'
+                />
+                {hasDraft && (
+                  <>
+                    <ButtonLink
+                      to={generatePath(
+                        AdminDashboardRoutes.PREVIEW_FORM_DRAFT,
+                        {
+                          identifier: formIdentifier.identifier,
+                          formId: formIdentifier.draftVersion?.id || '',
+                        }
+                      )}
+                      variant='contained'
+                      fullWidth
+                    >
+                      Preview / Publish Draft
+                    </ButtonLink>
+                    <Typography variant='caption'>
+                      Last edited{' '}
+                      {draftUpdatedOn
+                        ? formatRelativeDateTime(draftUpdatedOn)
+                        : ''}{' '}
+                      {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
+                    </Typography>
+                  </>
+                )}
+              </>
+            )}
+          </>
+        )}
       </Stack>
     </CommonCard>
   );
