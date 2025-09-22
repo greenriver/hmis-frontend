@@ -115,6 +115,7 @@ const IndividualAssessment = ({
   return (
     <AssessmentContextProvider
       formDefinitionIdentifier={editingDefinition.identifier}
+      formDefinitionId={editingDefinition.id}
       enrollmentId={enrollment.id}
       clientId={client.id}
       assessmentId={assessment?.id}

@@ -191,6 +191,8 @@ export const HmisEnums = {
     ALERT_WARNING: 'Display text as a warning alert',
     ALT_AHA: 'Alt AHA component',
     CHECKBOX: 'Render a boolean input item as a checkbox',
+    CLIENT_CE_ELIGIBILITY:
+      'Button to fetch information about client eligibility, based on current form values',
     DISABILITY_TABLE:
       'Specialized component for rendering disabilities in a table',
     DROPDOWN: 'Render a choice input item as a dropdown',
@@ -459,6 +461,7 @@ export const HmisEnums = {
     ENABLED:
       'Use with answerBoolean to specify is the item should be enabled or not.',
     EQUAL: 'EQUAL',
+    EXCLUDES: 'Whether the value excludes the given item',
     EXISTS:
       'Use with answerBoolean to specify if an answer should exist or not.',
     GREATER_THAN: 'GREATER_THAN',

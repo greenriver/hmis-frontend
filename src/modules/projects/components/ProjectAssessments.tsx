@@ -7,6 +7,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
+  ASSESSMENT_DETAILS_COL,
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -33,6 +34,7 @@ const COLUMNS: ColumnDef<ProjectAssessmentType>[] = [
   ASSESSMENT_COLUMNS.type,
   WITH_ENROLLMENT_COLUMNS.entryDate,
   WITH_ENROLLMENT_COLUMNS.exitDate,
+  ASSESSMENT_DETAILS_COL,
 ];
 
 const ProjectAssessments = () => {

@@ -69,12 +69,13 @@ const UnitManagementTable: React.FC<Props> = ({
   });
 
   const { project } = useProjectDashboardContext();
-  const canManageUnits = project.access.canManageUnits;
+  const { canManageUnits, canUpdateUnitAvailability } = project.access;
+  const canDoAnyUnitActions = canManageUnits || canUpdateUnitAvailability;
 
   const { getCeActions, loading } = useUnitCeActions({
     projectId,
     coordinatedEntryFeatures,
-    canManageUnits,
+    canUpdateUnitAvailability,
   });
 
   const rowSecondaryActionConfigs = useCallback(
@@ -113,7 +114,7 @@ const UnitManagementTable: React.FC<Props> = ({
 
       return actions;
     },
-    [unitGroupId, canManageUnits, getCeActions, project.id, setUnitToDelete]
+    [getCeActions, unitGroupId, canManageUnits, project.id, setUnitToDelete]
   );
 
   return (
@@ -132,7 +133,7 @@ const UnitManagementTable: React.FC<Props> = ({
         columns={columns}
         pagePath='project.units'
         noData={noUnitsMessage || 'No units'}
-        selectable={canManageUnits ? 'checkbox' : undefined}
+        selectable={canDoAnyUnitActions ? 'checkbox' : undefined}
         isRowSelectable={(row) =>
           !!(
             row.deletable ||
@@ -144,15 +145,17 @@ const UnitManagementTable: React.FC<Props> = ({
         filters={filters}
         recordType='Unit'
         EnhancedTableToolbarProps={{
-          title: canManageUnits ? 'Manage Units' : 'Units',
-          renderBulkAction: canManageUnits
+          title: canDoAnyUnitActions ? 'Manage Units' : 'Units',
+          renderBulkAction: canDoAnyUnitActions
             ? (_selectedIds, selectedRows) => (
                 <UnitBulkActions
                   projectId={projectId}
                   unitGroupId={unitGroupId}
                   units={selectedRows}
+                  deletionEnabled={canManageUnits}
                   ceAvailabilityActionsEnabled={
-                    coordinatedEntryFeatures.supportsReferrals
+                    coordinatedEntryFeatures.supportsReferrals &&
+                    canUpdateUnitAvailability
                   }
                 />
               )

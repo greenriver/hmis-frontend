@@ -87,6 +87,7 @@ fragment ProjectAccessFields on ProjectAccess {
   canEditProjectDetails
   canViewUnits
   canManageUnits
+  canUpdateUnitAvailability
   canManageIncomingReferrals
   canManageOutgoingReferrals
   canManageExternalFormSubmissions

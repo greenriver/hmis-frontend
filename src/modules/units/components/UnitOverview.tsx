@@ -8,6 +8,7 @@ import OpportunityBanner from '@/modules/ce/components/unit/OpportunityBanner';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { cache } from '@/providers/apolloClient';
 import {
+  CeOpportunityStatus,
   UnitDetailFieldsFragment,
   useMarkUnitsAvailableMutation,
 } from '@/types/gqlTypes';
@@ -31,14 +32,19 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
 
   return (
     <Grid container columnSpacing={6} rowSpacing={4}>
-      {opportunity && (
+      {opportunity?.active && (
         <Grid item xs={12}>
           <OpportunityBanner
-            topCandidate={opportunity.candidates.nodes[0]}
+            topCandidate={
+              opportunity.status === CeOpportunityStatus.Open
+                ? opportunity.candidates.nodes[0]
+                : undefined // dont pass topCandidate for locked referral
+            }
             opportunity={opportunity}
           />
         </Grid>
       )}
+
       {unit.canBeMarkedAvailableToday && (
         <Grid item xs={12}>
           <Paper sx={{ p: 2, backgroundColor: 'primary.surface' }}>
@@ -51,7 +57,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
               <Typography>
                 This unit is not currently accepting referrals.
               </Typography>
-              {project.access.canManageUnits && (
+              {project.access.canUpdateUnitAvailability && (
                 <LoadingButton
                   onClick={() => markUnitAvailable()}
                   loading={availableLoading}

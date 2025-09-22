@@ -12,11 +12,11 @@ import { generateSafePath } from '@/utils/pathEncoding';
 export const useUnitCeActions = ({
   projectId,
   coordinatedEntryFeatures,
-  canManageUnits,
+  canUpdateUnitAvailability,
 }: {
   projectId: string;
   coordinatedEntryFeatures: Partial<ProjectCoordinatedEntryFeatures>;
-  canManageUnits: boolean;
+  canUpdateUnitAvailability: boolean;
 }): {
   loading: boolean;
   getCeActions: (unit: UnitTableRowFieldsFragment) => CommonMenuItem[];
@@ -52,7 +52,7 @@ export const useUnitCeActions = ({
       }
 
       // Note: canBeMarkedAvailableToday will be false if there is no workflow template configured
-      if (canManageUnits && unit.canBeMarkedAvailableToday) {
+      if (canUpdateUnitAvailability && unit.canBeMarkedAvailableToday) {
         // TODO(#7537) - use canBeMarkedAvailable and implement a confirmation modal enabling the user to specify the "available on date".
         actions.push({
           title: 'Start Accepting Referrals',
@@ -64,7 +64,7 @@ export const useUnitCeActions = ({
         });
       }
 
-      if (canManageUnits && unit.canBeMarkedUnavailable) {
+      if (canUpdateUnitAvailability && unit.canBeMarkedUnavailable) {
         actions.push({
           title: 'Stop Accepting Referrals',
           key: 'markUnavailable',
@@ -82,7 +82,7 @@ export const useUnitCeActions = ({
       projectId,
       markUnitsAvailable,
       markUnitsUnavailable,
-      canManageUnits,
+      canUpdateUnitAvailability,
     ]
   );
 
