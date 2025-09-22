@@ -76,7 +76,11 @@ const ReferralStepDetails: React.FC<{
             placement='top'
             arrow
           >
-            <ReferralStepDatum Icon={ErrorIcon} sx={{ mt: 1 }} color='error'>
+            <ReferralStepDatum
+              Icon={ErrorIcon}
+              color='error.dark'
+              IconProps={{ color: 'error' }}
+            >
               No assigned users
             </ReferralStepDatum>
           </ButtonTooltipContainer>
