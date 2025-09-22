@@ -1,8 +1,10 @@
 import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
 import { Box } from '@mui/material';
 import React, { useMemo } from 'react';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {
   AssigneesIcon,
+  ErrorIcon,
   StepCalendarIcon,
 } from '@/components/elements/SemanticIcons';
 import useAuth from '@/modules/auth/hooks/useAuth';
@@ -60,10 +62,25 @@ const ReferralStepDetails: React.FC<{
           {assigneeText}
         </ReferralStepDatum>
       )}
-
       <ReferralStepDatum Icon={PeopleOutlineRoundedIcon}>
         {step.swimlane}
       </ReferralStepDatum>
+      {/* If step is available and has no assignees, show alert message */}
+      {assignees.length === 0 &&
+        [
+          CeReferralStepStatus.Available,
+          CeReferralStepStatus.InProgress,
+        ].includes(status) && (
+          <ButtonTooltipContainer
+            title={`No users will be notified for this task until contacts are specified for the '${step.swimlane}' contact type.`}
+            placement='top'
+            arrow
+          >
+            <ReferralStepDatum Icon={ErrorIcon} sx={{ mt: 1 }} color='error'>
+              No assigned users
+            </ReferralStepDatum>
+          </ButtonTooltipContainer>
+        )}
     </Box>
   );
 };

@@ -2,7 +2,6 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
 import ReferralStepDetails from './ReferralStepDetails';
 import ReferralStepAction from '@/modules/ce/components/referral/ReferralStepAction';
-import ReferralStepAssigneeAlert from '@/modules/ce/components/referral/ReferralStepAssigneeAlert';
 import {
   CeReferralFieldsFragment,
   CeReferralStepStatus,
@@ -43,10 +42,6 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
             />
           </Box>
         </Stack>
-        <ReferralStepAssigneeAlert
-          step={step}
-          canAssignReferralTasks={referral.access.canAssignReferralTasks}
-        />
       </Stack>
     </Paper>
   );
