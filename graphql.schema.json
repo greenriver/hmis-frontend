@@ -13933,13 +13933,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "CeReferral",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "CeReferral",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -27251,7 +27247,7 @@
           },
           {
             "name": "adminEditableOnly",
-            "description": "todo",
+            "description": "Whether this form is locked for editing by non-admins",
             "args": [],
             "type": {
               "kind": "NON_NULL",
