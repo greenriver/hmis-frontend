@@ -18799,6 +18799,8 @@ export type CeEligibleUnitGroupFieldsFragment = {
   projectId: string;
   projectType: ProjectType;
   organizationName: string;
+  candidateCreatedAt: string;
+  candidateUpdatedAt: string;
   unitsAcceptingReferrals: number;
 };
 
@@ -22023,67 +22025,6 @@ export type GetAdminCeReferralsQuery = {
       } | null;
     }>;
   };
-};
-
-export type GetCeClientsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<CeClientFilterOptions>;
-}>;
-
-export type GetCeClientsQuery = {
-  __typename?: 'Query';
-  ceClients: {
-    __typename?: 'CeClientsPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'CeClient';
-      id: string;
-      destinationClientId: string;
-      viewableSourceClientIds: Array<string>;
-      clientName: string;
-      clientAttributes: any;
-      externalIds: Array<{
-        __typename?: 'ExternalIdentifier';
-        id: string;
-        identifier?: string | null;
-        url?: string | null;
-        label: string;
-        type: ExternalIdentifierType;
-      }>;
-    }>;
-  };
-};
-
-export type GetCeClientEligibleUnitGroupsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<CeEligibleUnitGroupFilterOptions>;
-}>;
-
-export type GetCeClientEligibleUnitGroupsQuery = {
-  __typename?: 'Query';
-  ceClient?: {
-    __typename?: 'CeClient';
-    id: string;
-    eligibleUnitGroups: {
-      __typename?: 'CeEligibleUnitGroupsPaginated';
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'CeEligibleUnitGroup';
-        id: string;
-        unitGroupName: string;
-        projectName: string;
-        projectId: string;
-        projectType: ProjectType;
-        organizationName: string;
-        unitsAcceptingReferrals: number;
-      }>;
-    };
-  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -50136,30 +50077,6 @@ export const CeReferralSourceEnrollmentFieldsFragmentDoc = gql`
     access {
       canViewEnrollmentDetails
     }
-  }
-`;
-export const CeClientFieldsFragmentDoc = gql`
-  fragment CeClientFields on CeClient {
-    id
-    destinationClientId
-    viewableSourceClientIds
-    clientName
-    clientAttributes
-    externalIds {
-      ...ClientIdentifierFields
-    }
-  }
-  ${ClientIdentifierFieldsFragmentDoc}
-`;
-export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
-  fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
-    id
-    unitGroupName
-    projectName
-    projectId
-    projectType
-    organizationName
-    unitsAcceptingReferrals
   }
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
