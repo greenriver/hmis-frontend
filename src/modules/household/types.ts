@@ -1,7 +1,6 @@
 import { isNil } from 'lodash-es';
 
 import {
-  CeClientFieldsFragment,
   ClientFieldsFragment,
   ClientIdentificationFieldsFragment,
   ClientSearchResultFieldsFragment,
@@ -26,7 +25,6 @@ export function isHouseholdClient(
     | EnrollmentFieldsFragment
     | ProjectEnrollmentFieldsFragment
     | ProjectEnrollmentsHouseholdClientFieldsFragment
-    | CeClientFieldsFragment
 ): value is
   | HouseholdClientFieldsFragment
   | ProjectEnrollmentsHouseholdClientFieldsFragment {

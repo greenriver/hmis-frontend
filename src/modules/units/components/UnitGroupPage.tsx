@@ -2,7 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import UnitManagementTable from './UnitManagementTable';
 
 import Loading from '@/components/elements/Loading';
@@ -33,10 +33,10 @@ const UnitGroupPage = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
-  const {
-    supportsReferrals: projectSupportsReferrals,
-    supportsWaitlistReferrals: projectSupportsWaitlistReferrals,
-  } = project.coordinatedEntryFeatures || {};
+  const projectSupportsReferrals = useMemo(
+    () => project.coordinatedEntryFeatures?.supportsReferrals,
+    [project.coordinatedEntryFeatures?.supportsReferrals]
+  );
 
   // Set the breadcrumb so it says the correct name of this unit group
   useEffect(() => {
@@ -91,9 +91,7 @@ const UnitGroupPage = () => {
                 <UnitManagementTable
                   projectId={project.id}
                   unitGroupId={unitGroupId}
-                  coordinatedEntryFeatures={
-                    project.coordinatedEntryFeatures || {}
-                  }
+                  projectSupportsReferrals={projectSupportsReferrals}
                 />
               </Paper>
             </Stack>
@@ -118,19 +116,14 @@ const UnitGroupPage = () => {
                 unitGroup={unitGroup}
                 canEdit={canEditUnitGroup}
               /> */}
-
-              {projectSupportsWaitlistReferrals && (
-                <>
-                  <MatchRuleCard
-                    title='Eligibility Requirements'
-                    rules={unitGroup.eligibilityRequirements || []}
-                  />
-                  <MatchRuleCard
-                    title='Prioritization'
-                    rules={unitGroup.prioritySchemes || []}
-                  />
-                </>
-              )}
+              <MatchRuleCard
+                title='Eligibility Requirements'
+                rules={unitGroup.eligibilityRequirements || []}
+              />
+              <MatchRuleCard
+                title='Prioritization'
+                rules={unitGroup.prioritySchemes || []}
+              />
             </Stack>
           </Grid>
         )}

@@ -2,10 +2,7 @@ import { Box, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ReactNode, useMemo } from 'react';
 
-import {
-  DASHBOARD_CONTENT_PX,
-  DESKTOP_NAV_SIDEBAR_WIDTH,
-} from '../layoutConstants';
+import { DESKTOP_NAV_SIDEBAR_WIDTH } from '../layoutConstants';
 
 import ContextHeader from './contextHeader/ContextHeader';
 import DashboardContentNav from './DashboardContentNav';
@@ -72,7 +69,7 @@ const DashboardContentContainer: React.FC<Props> = ({
     return {
       pt: 2,
       pb: 8,
-      px: DASHBOARD_CONTENT_PX,
+      px: { xs: 1, sm: 3, lg: 4 },
       maxWidth: `${maxPageWidth}px`,
     };
   }, [noPadding, maxPageWidth]);

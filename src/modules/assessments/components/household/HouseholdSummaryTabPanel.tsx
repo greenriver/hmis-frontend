@@ -9,7 +9,6 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { assessmentPrefix } from '../../util';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
@@ -20,14 +19,13 @@ import {
   tabPanelA11yProps,
 } from './util';
 
-import BackButton from '@/components/elements/BackButton';
+import BackButtonLink from '@/components/elements/BackButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
 import LoadingSkeleton from '@/components/elements/LoadingSkeleton';
 import TitleCard from '@/components/elements/TitleCard';
 import useSafeParams from '@/hooks/useSafeParams';
 import HouseholdSummaryExitHelpCard from '@/modules/assessments/components/household/HouseholdSummaryExitHelpCard';
 import HouseholdSummaryIntakeHelpCard from '@/modules/assessments/components/household/HouseholdSummaryIntakeHelpCard';
-import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
@@ -146,23 +144,17 @@ const HouseholdSummaryTabPanel = memo(
 
     const { renderValidationDialog } = useValidationDialog({ errorState });
 
-    const { handleOpenDesktopMenu } = useEnrollmentDashboardContext();
-    const navigate = useNavigate();
     const { clientId, enrollmentId } = useSafeParams() as {
       clientId: string;
       enrollmentId: string;
     };
-
-    const navigateToEnrollment = useCallback(() => {
-      navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-          clientId,
-          enrollmentId,
-        })
-      );
-      // Household Assessments are always displayed in 'focus mode', so re-expand desktop nav when navigating way.
-      handleOpenDesktopMenu();
-    }, [navigate, clientId, enrollmentId, handleOpenDesktopMenu]);
+    const enrollmentPath = generateSafePath(
+      EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+      {
+        clientId,
+        enrollmentId,
+      }
+    );
 
     return (
       <AlwaysMountedTabPanel
@@ -225,9 +217,9 @@ const HouseholdSummaryTabPanel = memo(
             </TitleCard>
             {(submitResponseData?.submitHouseholdAssessments?.assessments ||
               allSubmitted) && (
-              <BackButton sx={{ my: 4 }} onClick={navigateToEnrollment}>
+              <BackButtonLink sx={{ my: 4 }} to={enrollmentPath}>
                 Back to Enrollment
-              </BackButton>
+              </BackButtonLink>
             )}
           </Grid>
         </Grid>

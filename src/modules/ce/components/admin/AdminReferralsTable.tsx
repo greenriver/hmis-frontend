@@ -9,7 +9,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import {
-  AdminDashboardRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -148,7 +147,7 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
         paginationItemName='referrals'
         filters={filters}
         rowLinkTo={(row) =>
-          generateSafePath(AdminDashboardRoutes.REFERRAL, {
+          generateSafePath(ProjectDashboardRoutes.REFERRAL, {
             projectId: row.targetProjectId,
             referralId: row.id,
           })

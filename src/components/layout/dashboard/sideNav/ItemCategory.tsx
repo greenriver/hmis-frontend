@@ -16,21 +16,14 @@ const ItemCategory = <T extends object>({ item, first }: Props<T>) => {
 
   // If all children in category are hidden, hide parent
   if (childItems.length === 0) return null;
-
   return (
     <ItemBase
       item={item}
       renderTitle={(title) => (
         <Typography
-          variant='caption'
+          variant='body2'
           color='text.secondary'
-          display='block'
-          sx={{
-            px: 1,
-            mt: first ? -1 : 1,
-            mb: -0.5,
-            textTransform: 'uppercase',
-          }}
+          sx={{ pt: first ? 0 : 2, px: 2, textTransform: 'uppercase' }}
         >
           {title}
         </Typography>

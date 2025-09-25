@@ -58,8 +58,7 @@ const EnrollmentDashboard: React.FC = () => {
 
   const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
 
-  const { currentPath, focusMode, handleOpenDesktopMenu, ...dashboardState } =
-    useDashboardState();
+  const { currentPath, focusMode, ...dashboardState } = useDashboardState();
 
   const outletContext: EnrollmentDashboardContext | undefined = useMemo(
     () =>
@@ -70,10 +69,9 @@ const EnrollmentDashboard: React.FC = () => {
             enrollment,
             enrollmentLoading: loading,
             getEnrollmentFeature,
-            handleOpenDesktopMenu,
           }
         : undefined,
-    [client, enrollment, loading, getEnrollmentFeature, handleOpenDesktopMenu]
+    [client, enrollment, loading, getEnrollmentFeature]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
@@ -114,7 +112,6 @@ const EnrollmentDashboard: React.FC = () => {
       navLabel='Enrollment'
       {...dashboardState}
       focusMode={focusMode}
-      handleOpenDesktopMenu={handleOpenDesktopMenu}
     >
       <Container maxWidth='xl' disableGutters>
         <LocalVersionCoordinationPrompt
@@ -141,7 +138,6 @@ export type EnrollmentDashboardContext = {
   getEnrollmentFeature: (
     role: DataCollectionFeatureRole
   ) => DataCollectionFeature | void;
-  handleOpenDesktopMenu: VoidFunction;
 };
 
 export function isEnrollmentDashboardContext(

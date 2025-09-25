@@ -8,9 +8,7 @@ import CommonStickyBar from '../../CommonStickyBar';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
-  DASHBOARD_CONTENT_PX,
 } from '../../layoutConstants';
-
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
@@ -36,7 +34,6 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
     sx={{
       alignItems: 'stretch',
       justifyContent: 'center',
-      px: DASHBOARD_CONTENT_PX,
     }}
   >
     {children}
@@ -89,14 +86,13 @@ const ContextHeader: React.FC<Props> = ({
       navigate(-1);
     }
 
-    if (!isMobile) handleOpenMenu(); // re-expand left nav on desktop
+    handleOpenMenu(); // expand left nav
   }, [
     clientId,
     enrollmentId,
     focusMode,
     focusModeDefaultReturnPath,
     handleOpenMenu,
-    isMobile,
     location,
     navigate,
   ]);
@@ -110,7 +106,7 @@ const ContextHeader: React.FC<Props> = ({
             variant='text'
             color='grayscale'
             startIcon={<ArrowBackIcon fontSize='small' />}
-            sx={{ height: '32px', fontWeight: 600 }}
+            sx={{ height: '32px', fontWeight: 600, ml: 2 }}
             data-testid='headerBackButton'
           >
             {backToLabel}

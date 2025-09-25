@@ -79,13 +79,12 @@ const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
         recordType='CeOpportunity'
         pagePath='ceOpportunities'
         noData='No available units'
-        paginationItemName='available unit'
+        paginationItemName='unit'
         filters={filters}
         defaultFilterValues={{
           status: [CeOpportunityStatus.Open],
         }}
         rowLinkTo={(row) =>
-          // Link to Unit Page. If the project doesn't support waitlists, this will redirect to the All Units page.
           generateSafePath(ProjectDashboardRoutes.UNIT, {
             projectId: row.projectId,
             unitId: row.unit?.id,

@@ -95,6 +95,9 @@ fragment ProjectAccessFields on ProjectAccess {
   canViewOwnReferrals
   canViewPrioritizedClientLists
   canStartReferrals
+  canPerformAnyReferralTasks
+  canPerformOwnReferralTasks
+  canAssignReferralTasks
 }
 
 fragment OrganizationAccessFields on OrganizationAccess {

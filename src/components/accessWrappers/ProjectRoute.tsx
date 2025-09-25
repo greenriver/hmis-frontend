@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
@@ -38,47 +37,43 @@ const ProjectRoute: React.FC<
     permissionsArray
   );
 
-  const redirectOrNotFound = useMemo(
-    () =>
-      redirectRoute ? (
-        <Navigate
-          to={generateSafePath(redirectRoute, { projectId: project.id })}
-          replace
-        />
-      ) : (
-        <NotFound />
-      ),
-    [project.id, redirectRoute]
-  );
-
   if (
     dataCollectionFeature &&
     !project.dataCollectionFeatures
       .map((f) => f.role)
       .includes(dataCollectionFeature)
   ) {
-    return redirectOrNotFound;
+    return <NotFound />;
   }
 
   // If the route requires a coordinated entry feature, check that it is enabled
   if (coordinatedEntryFeatures && coordinatedEntryFeatures.length > 0) {
-    if (!project.coordinatedEntryFeatures) return redirectOrNotFound; // No coordinated entry features in this project
+    if (!project.coordinatedEntryFeatures) return <NotFound />; // No coordinated entry features in this project
 
     // Check that ANY of the specified features are true
     const anyFeatureEnabled = coordinatedEntryFeatures.some(
       (feature) => project.coordinatedEntryFeatures?.[feature] === true
     );
-    if (!anyFeatureEnabled) return redirectOrNotFound;
+
+    if (!anyFeatureEnabled) return <NotFound />;
   }
 
   // If no permissions are specified, we assume the route is accessible
   if (loading) return <Loading />;
 
   if (permissionsArray.length > 0 && !hasPermission) {
-    return redirectOrNotFound;
+    return redirectRoute ? (
+      <Navigate
+        to={generateSafePath(redirectRoute, {
+          projectId: project.id,
+        })}
+        replace
+      />
+    ) : (
+      <NotFound />
+    );
   }
 
   return <>{children}</>;
 };
-
 export default ProjectRoute;

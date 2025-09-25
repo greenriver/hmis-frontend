@@ -28,7 +28,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
 
   return (
     <Grid container columnSpacing={6} rowSpacing={4}>
-      {opportunity?.active && (
+      {opportunity && (
         <Grid item xs={12}>
           <OpportunityBanner
             topCandidate={opportunity.candidates.nodes[0]}
@@ -58,18 +58,19 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
           </Paper>
         </Grid>
       )}
-      <Grid item xs={12} md={6}>
-        <MatchRuleCard
-          title='Eligibility Requirements'
-          rules={unit.eligibilityRequirements || []}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <MatchRuleCard
-          title='Prioritization'
-          rules={unit.prioritySchemes || []}
-        />
-      </Grid>
+      {unit.eligibilityRequirements && (
+        <Grid item xs={12} md={6}>
+          <MatchRuleCard
+            title='Eligibility Requirements'
+            rules={unit.eligibilityRequirements}
+          />
+        </Grid>
+      )}
+      {unit.prioritySchemes && (
+        <Grid item xs={12} md={6}>
+          <MatchRuleCard title='Prioritization' rules={unit.prioritySchemes} />
+        </Grid>
+      )}
     </Grid>
   );
 };

@@ -43,9 +43,6 @@ const MatchRuleCard: React.FC<Props> = ({ title, rules }) => {
             </Tooltip>
           </Stack>
         ))}
-        {rules.length === 0 && (
-          <Typography color='text.secondary'>No rules specified.</Typography>
-        )}
       </Stack>
     </CommonCard>
   );

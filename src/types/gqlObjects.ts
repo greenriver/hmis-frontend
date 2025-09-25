@@ -533,14 +533,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeCandidate',
     fields: [
       {
-        name: 'clientAttributes',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'JSON', ofType: null },
-        },
-      },
-      {
         name: 'clientName',
         type: {
           kind: 'NON_NULL',
@@ -562,6 +554,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'priorityScore',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
         },
       },
       {
@@ -576,59 +576,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
               kind: 'NON_NULL',
               name: null,
               ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
-            },
-          },
-        },
-      },
-    ],
-  },
-  {
-    name: 'CeClient',
-    fields: [
-      {
-        name: 'clientAttributes',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'JSON', ofType: null },
-        },
-      },
-      {
-        name: 'clientName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'destinationClientId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'viewableSourceClientIds',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
             },
           },
         },
@@ -660,91 +607,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'CeEligibleUnitGroup',
-    fields: [
-      {
-        name: 'candidateCreatedAt',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
-      },
-      {
-        name: 'candidateUpdatedAt',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
-      },
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'organizationName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'projectId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'projectName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'projectType',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-        },
-      },
-      {
-        name: 'unitGroupId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'unitGroupName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'unitsAcceptingReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
         },
       },
     ],
@@ -1137,14 +999,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'CeReferralAccess',
     fields: [
-      {
-        name: 'canAssignReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
       {
         name: 'canViewReferralDetails',
         type: {
@@ -7277,58 +7131,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
-    name: 'TableColumnConfig',
-    fields: [
-      {
-        name: 'key',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'label',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'type',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'TableColumnConfigType', ofType: null },
-        },
-      },
-    ],
-  },
-  { name: 'TableConfig', fields: [] },
-  { name: 'TableConfigLookup', fields: [] },
-  {
-    name: 'TableFilterConfig',
-    fields: [
-      {
-        name: 'key',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'label',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-    ],
-  },
-  {
     name: 'Unit',
     fields: [
       {
@@ -8015,60 +7817,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
                 ofType: null,
               },
             },
-          },
-        },
-      },
-    ],
-  },
-  {
-    name: 'CeClientFilterOptions',
-    args: [
-      {
-        name: 'dynamicFilters',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: {
-              kind: 'INPUT_OBJECT',
-              name: 'TableFilterValue',
-              ofType: null,
-            },
-          },
-        },
-      },
-      {
-        name: 'projectType',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'searchTerm',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'CeEligibleUnitGroupFilterOptions',
-    args: [
-      {
-        name: 'projectType',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
           },
         },
       },
@@ -9969,31 +9717,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'validateOnly',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'TableFilterValue',
-    args: [
-      {
-        name: 'key',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'values',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-          },
-        },
       },
     ],
   },
