@@ -4673,6 +4673,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
       },

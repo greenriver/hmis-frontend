@@ -3872,8 +3872,10 @@ export type FormRule = {
   organization?: Maybe<Organization>;
   organizationId?: Maybe<Scalars['ID']['output']>;
   otherFunder?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use projectName instead */
   project?: Maybe<Project>;
   projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   projectType?: Maybe<ProjectType>;
   serviceCategory?: Maybe<ServiceCategory>;
   serviceType?: Maybe<ServiceType>;
@@ -24628,15 +24630,10 @@ export type FormRuleFieldsFragment = {
   otherFunder?: string | null;
   projectType?: ProjectType | null;
   projectId?: string | null;
+  projectName?: string | null;
   organizationId?: string | null;
   createdAt: string;
   updatedAt: string;
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  } | null;
   organization?: {
     __typename?: 'Organization';
     id: string;
@@ -24832,15 +24829,10 @@ export type GetFormRulesQuery = {
       otherFunder?: string | null;
       projectType?: ProjectType | null;
       projectId?: string | null;
+      projectName?: string | null;
       organizationId?: string | null;
       createdAt: string;
       updatedAt: string;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
       organization?: {
         __typename?: 'Organization';
         id: string;
@@ -24933,15 +24925,10 @@ export type GetServiceCategoryRulesQuery = {
         otherFunder?: string | null;
         projectType?: ProjectType | null;
         projectId?: string | null;
+        projectName?: string | null;
         organizationId?: string | null;
         createdAt: string;
         updatedAt: string;
-        project?: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        } | null;
         organization?: {
           __typename?: 'Organization';
           id: string;
@@ -24995,15 +24982,10 @@ export type GetFormRuleQuery = {
     otherFunder?: string | null;
     projectType?: ProjectType | null;
     projectId?: string | null;
+    projectName?: string | null;
     organizationId?: string | null;
     createdAt: string;
     updatedAt: string;
-    project?: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    } | null;
     organization?: {
       __typename?: 'Organization';
       id: string;
@@ -25058,15 +25040,10 @@ export type CreateFormRuleMutation = {
       otherFunder?: string | null;
       projectType?: ProjectType | null;
       projectId?: string | null;
+      projectName?: string | null;
       organizationId?: string | null;
       createdAt: string;
       updatedAt: string;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
       organization?: {
         __typename?: 'Organization';
         id: string;
@@ -50453,9 +50430,7 @@ export const FormRuleFieldsFragmentDoc = gql`
     otherFunder
     projectType
     projectId
-    project {
-      ...ProjectNameAndType
-    }
+    projectName
     organizationId
     organization {
       ...OrganizationNameFields
@@ -50470,7 +50445,6 @@ export const FormRuleFieldsFragmentDoc = gql`
       ...ServiceTypeFields
     }
   }
-  ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
 `;
