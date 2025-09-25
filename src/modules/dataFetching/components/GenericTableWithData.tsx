@@ -28,6 +28,7 @@ import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import {
   getDefaultSortOptionForType,
   getSortOptionForType,
+  transformDynamicFilters,
 } from '@/modules/hmis/filterUtil';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 
@@ -185,15 +186,15 @@ const GenericTableWithData = <
     QueryVariables
   >(queryDocument, {
     variables: {
-      ...queryVariables,
+      ...queryVariables, // Query variables passed directly from parent
+      ...optionalQueryVariables, // Directives to include additional data for optional columns
       filters: {
-        ...get(queryVariables, 'filters'),
-        ...filterValues,
+        ...get(queryVariables, 'filters'), // Filter values passed directly from parent
+        ...transformDynamicFilters<FilterOptionsType>(filters, filterValues), // Filters from FilterMenu
       },
       sortOrder: effectiveSortOrder,
       offset,
       limit,
-      ...optionalQueryVariables,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,

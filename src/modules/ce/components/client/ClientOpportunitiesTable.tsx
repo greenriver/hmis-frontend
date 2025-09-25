@@ -45,7 +45,7 @@ const COLUMNS: ColumnDef<ClientCeOpportunitySummaryFieldsFragment>[] = [
     ),
   },
   {
-    header: 'Waitlist Last Updated',
+    header: 'Last Updated',
     key: 'generatedAt',
     render: ({ candidatesGeneratedAt }) =>
       candidatesGeneratedAt && (

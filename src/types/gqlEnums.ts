@@ -1466,7 +1466,7 @@ export const HmisEnums = {
     AM_IND_AK_NATIVE: 'American Indian, Alaska Native, or Indigenous',
     ASIAN: 'Asian or Asian American',
     BLACK_AF_AMERICAN: 'Black, African American, or African',
-    HISPANIC_LATINAEO: 'Hispanic/Latina/e/o',
+    HISPANIC_LATINAEO: 'Hispanic/Latina/o',
     MID_EAST_N_AFRICAN: 'Middle Eastern or North African',
     NATIVE_HI_PACIFIC: 'Native Hawaiian or Pacific Islander',
     WHITE: 'White',
@@ -1943,6 +1943,7 @@ export const HmisEnums = {
     CLIENT_REPORT: 'Client Report',
     OTHER: 'Other',
   },
+  TableColumnConfigType: { DATE: 'DATE', STRING: 'STRING' },
   TargetPopulation: {
     INVALID: 'Invalid Value',
     DV_SURVIVOR_OF_DOMESTIC_VIOLENCE: 'DV: Survivor of Domestic Violence',

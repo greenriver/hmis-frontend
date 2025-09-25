@@ -19,6 +19,7 @@ import {
   GetUnitsDocument,
   GetUnitsQuery,
   GetUnitsQueryVariables,
+  ProjectCoordinatedEntryFeatures,
   UnitTableRowFieldsFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -26,8 +27,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 interface Props {
   projectId: string;
   unitGroupId?: string; // if this table is for a specific unit group
-  unitGroupsEnabled?: boolean; // TEMP(#7814), remove when all projects moved to unit groups
-  projectSupportsReferrals?: boolean; // whether to show CE details
+  coordinatedEntryFeatures: Partial<ProjectCoordinatedEntryFeatures>;
   noUnitsMessage?: string; // custom message to show when there are no units
 }
 
@@ -39,8 +39,7 @@ interface Props {
 const UnitManagementTable: React.FC<Props> = ({
   projectId,
   unitGroupId,
-  unitGroupsEnabled = false,
-  projectSupportsReferrals = false,
+  coordinatedEntryFeatures,
   noUnitsMessage,
 }) => {
   const { setUnitToDelete, renderSingleDeleteDialog } = useDeleteUnits({
@@ -51,12 +50,14 @@ const UnitManagementTable: React.FC<Props> = ({
     return [
       UNIT_COLUMNS.unitType,
       UNIT_COLUMNS.unitId,
-      ...(unitGroupsEnabled ? [UNIT_COLUMNS.unitGroup] : []),
+      ...(unitGroupId ? [] : [UNIT_COLUMNS.unitGroup]), // if looking at units in one group, no need to show the unit group col
       UNIT_COLUMNS.unitOccupancyStatus,
       UNIT_COLUMNS.clientOccupants,
-      ...(projectSupportsReferrals ? [UNIT_COLUMNS.ceReferralStatus] : []),
+      ...(coordinatedEntryFeatures.supportsReferrals
+        ? [UNIT_COLUMNS.ceReferralStatus]
+        : []),
     ];
-  }, [projectSupportsReferrals, unitGroupsEnabled]);
+  }, [coordinatedEntryFeatures.supportsReferrals, unitGroupId]);
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
@@ -72,15 +73,13 @@ const UnitManagementTable: React.FC<Props> = ({
 
   const { getCeActions, loading } = useUnitCeActions({
     projectId,
-    projectSupportsReferrals,
+    coordinatedEntryFeatures,
   });
 
   const rowSecondaryActionConfigs = useCallback(
     (unit: UnitTableRowFieldsFragment) => {
-      const actions = [];
-      if (projectSupportsReferrals) {
-        actions.push(...getCeActions(unit));
-      }
+      const actions = getCeActions(unit);
+
       // If unit is occupied, link to hoh Enrollment
       const viewEnrollmentAction = getViewOccupantEnrollmentAction(unit);
       if (viewEnrollmentAction) {
@@ -88,14 +87,14 @@ const UnitManagementTable: React.FC<Props> = ({
       }
 
       // Link to Unit Group
-      if (!unitGroupId && unitGroupsEnabled && unit.unitGroup) {
+      if (!unitGroupId) {
         actions.push({
           title: 'View Unit Group',
           key: 'viewGroup',
-          ariaLabel: `'View Unit Group' ${unit.unitGroup.name}`,
+          ariaLabel: `'View Unit Group' ${unit.unitGroup?.name}`,
           to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
             projectId: project.id,
-            unitGroupId: unit.unitGroup.id,
+            unitGroupId: unit.unitGroup?.id,
           }),
         });
       }
@@ -113,15 +112,7 @@ const UnitManagementTable: React.FC<Props> = ({
 
       return actions;
     },
-    [
-      projectSupportsReferrals,
-      unitGroupId,
-      unitGroupsEnabled,
-      canManageUnits,
-      getCeActions,
-      project.id,
-      setUnitToDelete,
-    ]
+    [unitGroupId, canManageUnits, getCeActions, project.id, setUnitToDelete]
   );
 
   return (
@@ -134,7 +125,7 @@ const UnitManagementTable: React.FC<Props> = ({
         defaultPageSize={25}
         queryVariables={{
           id: projectId,
-          includeCeFields: projectSupportsReferrals,
+          includeCeFields: coordinatedEntryFeatures.supportsReferrals || false,
         }}
         queryDocument={GetUnitsDocument}
         columns={columns}
@@ -159,7 +150,9 @@ const UnitManagementTable: React.FC<Props> = ({
                   projectId={projectId}
                   unitGroupId={unitGroupId}
                   units={selectedRows}
-                  ceAvailabilityActionsEnabled={projectSupportsReferrals}
+                  ceAvailabilityActionsEnabled={
+                    coordinatedEntryFeatures.supportsReferrals
+                  }
                 />
               )
             : undefined,

@@ -13,7 +13,9 @@ import {
   HouseholdSortOption,
   PickListType,
   ProjectSortOption,
+  TableFilterConfigFieldsFragment,
 } from '@/types/gqlTypes';
+import { ensureArray } from '@/utils/arrays';
 
 const getType = (
   type: GqlInputObjectSchemaType
@@ -90,7 +92,7 @@ const getFilterForType = (
   if (isPicklistType(fieldName)) {
     filter = {
       ...baseFields,
-      type: 'picklist',
+      type: 'remote_picklist',
       pickListReference: FILTER_NAME_TO_PICK_LIST[fieldName],
       pickListArgs: filterPickListArgs,
     };
@@ -126,11 +128,13 @@ interface FilterParams {
   type?: string | null; // filter input type type for inferring filters if not provided
   pickListArgs?: PickListArgs; // optional: pick list args to be applied to all PickList filter items
   omit?: Array<string>; // optional: skip some filters
+  dynamicFilters?: TableFilterConfigFieldsFragment[]; // optional: dynamic filters to include
 }
 export function useFilters<T>({
   type,
   pickListArgs = {},
   omit = [],
+  dynamicFilters,
 }: FilterParams): TableFilterType<T> {
   return useMemo(() => {
     if (!type) return {};
@@ -152,6 +156,59 @@ export function useFilters<T>({
       }
     });
 
+    // Add dynamic filters if provided
+    (dynamicFilters || []).forEach(({ key, label, options }) => {
+      result[key as keyof T] = {
+        key,
+        label,
+        multi: true,
+        type: 'local_picklist',
+        isDynamic: true,
+        pickListOptions: options,
+      } as FilterType<T>;
+    });
+
     return result;
-  }, [type, pickListArgs, omit]);
+  }, [type, dynamicFilters, omit, pickListArgs]);
 }
+
+/**
+ * Method for transforming filter values by pulling out dynamic filters into separate key.
+ * This is necessary when filtering by dynamic filters, which are backed by HMIS Table Configuration.
+ *
+ * Example transformation:
+ *
+ * { "ActualFilter": "1", "SomeDynamicFilter": "2"}
+ *     =>
+ * { "ActualFilter":  "1", "dynamicFilters": [ { "key": "SomeDynamicFilter", "values": ["2"] }] }
+ */
+export const transformDynamicFilters = <FilterOptionsType>(
+  filters?: TableFilterType<FilterOptionsType>, // Filter configuration, so we know which ones are dynamic
+  filterValues?: Partial<FilterOptionsType> // Current filter values
+) => {
+  if (!filterValues) return;
+
+  // `filterValues` may be present even if `filters` is absent, on tables where `defaultFilterValues` are used without any user-facing filters (such as Bulk Services).
+  // In this case, we know the filters aren't dynamic so we don't need to transform them, just return `filterValues` as-is
+  if (!filters) return filterValues;
+
+  // Pull out dynamic filters into separate array
+  const dynamicFilters: Array<{ key: string; values: any[] }> = [];
+  Object.keys(filterValues)
+    .filter((key) => !!filters[key as keyof FilterOptionsType]?.isDynamic)
+    .forEach((key) => {
+      dynamicFilters.push({
+        key,
+        values: ensureArray(filterValues[key as keyof FilterOptionsType]),
+      });
+    });
+
+  const dynamicKeys = new Set(dynamicFilters.map((f) => f.key));
+  const valuesWithoutDynamicKeys = Object.fromEntries(
+    Object.entries(filterValues).filter((e) => !dynamicKeys.has(e[0]))
+  );
+  return {
+    ...valuesWithoutDynamicKeys,
+    ...(dynamicFilters.length > 0 ? { dynamicFilters } : {}),
+  };
+};
