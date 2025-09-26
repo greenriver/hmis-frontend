@@ -77,7 +77,7 @@ const ProjectOpportunitiesTable: React.FC<Props> = ({ projectId }) => {
             unitId: row.unit?.id,
           })
         }
-        rowActionTitle='View Opportunity'
+        rowActionTitle='View Unit'
       />
     </Paper>
   );
