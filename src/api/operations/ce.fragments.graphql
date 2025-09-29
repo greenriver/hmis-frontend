@@ -207,6 +207,15 @@ fragment CeReferralDetailFields on CeReferral {
     projectType
     entryDate
     exitDate
+    householdMembers {
+      id
+      clientId
+      clientName
+      relationshipToHoH
+      access {
+        canViewClients
+      }
+    }
   }
   currentMatchValues {
     id

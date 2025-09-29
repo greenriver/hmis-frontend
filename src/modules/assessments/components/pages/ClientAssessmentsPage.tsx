@@ -6,6 +6,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
 import {
   ASSESSMENT_COLUMNS,
+  ASSESSMENT_DETAILS_COL,
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
@@ -42,6 +43,7 @@ const COLUMNS: DataColumnDef<
   },
   WITH_ENROLLMENT_COLUMNS.exitDate,
   WITH_ENROLLMENT_COLUMNS.organizationName,
+  ASSESSMENT_DETAILS_COL,
 ];
 
 const ClientAssessmentsPage = () => {

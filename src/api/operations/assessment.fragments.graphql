@@ -86,3 +86,10 @@ fragment FullAssessment on Assessment {
   ...AssessmentWithRecords
   ...AssessmentWithValues
 }
+
+fragment AssessmentWithCdes on Assessment {
+  ...AssessmentFields
+  customDataElements @include(if: $includeCdes) {
+    ...CustomDataElementFields
+  }
+}

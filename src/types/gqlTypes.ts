@@ -982,9 +982,11 @@ export type CeReferralSourceEnrollment = {
   dataSource: DataSource;
   entryDate: Scalars['ISO8601Date']['output'];
   exitDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  householdMembers: Array<CeReferralSourceHouseholdMember>;
   householdSize: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
+  /** @deprecated Use household_members field instead */
   otherHouseholdMemberNames: Array<Scalars['String']['output']>;
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
@@ -1010,6 +1012,22 @@ export type CeReferralSourceEnrollmentsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+};
+
+export type CeReferralSourceHouseholdMember = {
+  __typename?: 'CeReferralSourceHouseholdMember';
+  access: CeReferralSourceHouseholdMemberAccess;
+  clientId: Scalars['ID']['output'];
+  /** The name of the client. Returns masked name if the user does not have permission to view the client name. */
+  clientName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  relationshipToHoH: RelationshipToHoH;
+};
+
+export type CeReferralSourceHouseholdMemberAccess = {
+  __typename?: 'CeReferralSourceHouseholdMemberAccess';
+  canViewClients: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export enum CeReferralStatus {
@@ -2831,6 +2849,8 @@ export enum EnableOperator {
   /** Use with answerBoolean to specify is the item should be enabled or not. */
   Enabled = 'ENABLED',
   Equal = 'EQUAL',
+  /** Whether the value excludes the given item */
+  Excludes = 'EXCLUDES',
   /** Use with answerBoolean to specify if an answer should exist or not. */
   Exists = 'EXISTS',
   GreaterThan = 'GREATER_THAN',
@@ -11314,6 +11334,162 @@ export type FullAssessmentFragment = {
   };
 };
 
+export type AssessmentWithCdesFragment = {
+  __typename?: 'Assessment';
+  id: string;
+  lockVersion: number;
+  inProgress: boolean;
+  assessmentDate: string;
+  dataCollectionStage?: DataCollectionStage | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  dateDeleted?: string | null;
+  role: AssessmentRole;
+  customDataElements?: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
+  } | null;
+  createdBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
+  } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
+};
+
 export type GetAssessmentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -13184,6 +13360,7 @@ export type GetClientAssessmentsQueryVariables = Exact<{
   sortOrder?: InputMaybe<AssessmentSortOption>;
   filters?: InputMaybe<AssessmentFilterOptions>;
   includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
+  includeCdes?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientAssessmentsQuery = {
@@ -13227,6 +13404,127 @@ export type GetClientAssessmentsQuery = {
             canViewEnrollmentDetails: boolean;
           };
         };
+        customDataElements?: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -13261,6 +13559,7 @@ export type GetEnrollmentAssessmentsQueryVariables = Exact<{
   inProgress?: InputMaybe<Scalars['Boolean']['input']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
   filters?: InputMaybe<AssessmentsForEnrollmentFilterOptions>;
+  includeCdes?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetEnrollmentAssessmentsQuery = {
@@ -13284,6 +13583,127 @@ export type GetEnrollmentAssessmentsQuery = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         role: AssessmentRole;
+        customDataElements?: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -13318,6 +13738,7 @@ export type GetHouseholdAssessmentsQueryVariables = Exact<{
   inProgress?: InputMaybe<Scalars['Boolean']['input']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
   filters?: InputMaybe<AssessmentsForHouseholdFilterOptions>;
+  includeCdes?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetHouseholdAssessmentsQuery = {
@@ -13355,6 +13776,127 @@ export type GetHouseholdAssessmentsQuery = {
             nameSuffix?: string | null;
           };
         };
+        customDataElements?: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17230,6 +17772,17 @@ export type CeReferralDetailFieldsFragment = {
     projectType: ProjectType;
     entryDate: string;
     exitDate?: string | null;
+    householdMembers: Array<{
+      __typename?: 'CeReferralSourceHouseholdMember';
+      id: string;
+      clientId: string;
+      clientName: string;
+      relationshipToHoH: RelationshipToHoH;
+      access: {
+        __typename?: 'CeReferralSourceHouseholdMemberAccess';
+        canViewClients: boolean;
+      };
+    }>;
   } | null;
   currentMatchValues?: Array<{
     __typename?: 'CeMatchValue';
@@ -17370,6 +17923,17 @@ export type CeReferralFieldsFragment = {
     projectType: ProjectType;
     entryDate: string;
     exitDate?: string | null;
+    householdMembers: Array<{
+      __typename?: 'CeReferralSourceHouseholdMember';
+      id: string;
+      clientId: string;
+      clientName: string;
+      relationshipToHoH: RelationshipToHoH;
+      access: {
+        __typename?: 'CeReferralSourceHouseholdMemberAccess';
+        canViewClients: boolean;
+      };
+    }>;
   } | null;
   currentMatchValues?: Array<{
     __typename?: 'CeMatchValue';
@@ -19763,6 +20327,17 @@ export type SubmitCeReferralStepMutation = {
         projectType: ProjectType;
         entryDate: string;
         exitDate?: string | null;
+        householdMembers: Array<{
+          __typename?: 'CeReferralSourceHouseholdMember';
+          id: string;
+          clientId: string;
+          clientName: string;
+          relationshipToHoH: RelationshipToHoH;
+          access: {
+            __typename?: 'CeReferralSourceHouseholdMemberAccess';
+            canViewClients: boolean;
+          };
+        }>;
       } | null;
       currentMatchValues?: Array<{
         __typename?: 'CeMatchValue';
@@ -20497,6 +21072,17 @@ export type GetCeReferralQuery = {
       projectType: ProjectType;
       entryDate: string;
       exitDate?: string | null;
+      householdMembers: Array<{
+        __typename?: 'CeReferralSourceHouseholdMember';
+        id: string;
+        clientId: string;
+        clientName: string;
+        relationshipToHoH: RelationshipToHoH;
+        access: {
+          __typename?: 'CeReferralSourceHouseholdMemberAccess';
+          canViewClients: boolean;
+        };
+      }>;
     } | null;
     currentMatchValues?: Array<{
       __typename?: 'CeMatchValue';
@@ -43009,6 +43595,7 @@ export type GetProjectAssessmentsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
   filters?: InputMaybe<AssessmentsForProjectFilterOptions>;
+  includeCdes?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetProjectAssessmentsQuery = {
@@ -43077,6 +43664,127 @@ export type GetProjectAssessmentsQuery = {
             name: string;
           } | null;
         };
+        customDataElements?: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -48744,6 +49452,16 @@ export const FullAssessmentFragmentDoc = gql`
   ${AssessmentWithRecordsFragmentDoc}
   ${AssessmentWithValuesFragmentDoc}
 `;
+export const AssessmentWithCdesFragmentDoc = gql`
+  fragment AssessmentWithCdes on Assessment {
+    ...AssessmentFields
+    customDataElements @include(if: $includeCdes) {
+      ...CustomDataElementFields
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+`;
 export const ProjectNameAndTypeFragmentDoc = gql`
   fragment ProjectNameAndType on Project {
     id
@@ -49116,6 +49834,15 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       projectType
       entryDate
       exitDate
+      householdMembers {
+        id
+        clientId
+        clientName
+        relationshipToHoH
+        access {
+          canViewClients
+        }
+      }
     }
     currentMatchValues {
       id
@@ -51572,6 +52299,7 @@ export const GetClientAssessmentsDocument = gql`
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
     $filters: AssessmentFilterOptions = null
     $includeOrganizationName: Boolean = false
+    $includeCdes: Boolean = false
   ) {
     client(id: $id) {
       id
@@ -51585,7 +52313,7 @@ export const GetClientAssessmentsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...AssessmentFields
+          ...AssessmentWithCdes
           enrollment {
             ...ClientEnrollmentFields
           }
@@ -51593,7 +52321,7 @@ export const GetClientAssessmentsDocument = gql`
       }
     }
   }
-  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentWithCdesFragmentDoc}
   ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
@@ -51615,6 +52343,7 @@ export const GetClientAssessmentsDocument = gql`
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
  *      includeOrganizationName: // value for 'includeOrganizationName'
+ *      includeCdes: // value for 'includeCdes'
  *   },
  * });
  */
@@ -51684,6 +52413,7 @@ export const GetEnrollmentAssessmentsDocument = gql`
     $inProgress: Boolean
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
     $filters: AssessmentsForEnrollmentFilterOptions
+    $includeCdes: Boolean = false
   ) {
     enrollment(id: $id) {
       id
@@ -51698,12 +52428,12 @@ export const GetEnrollmentAssessmentsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...AssessmentFields
+          ...AssessmentWithCdes
         }
       }
     }
   }
-  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentWithCdesFragmentDoc}
 `;
 
 /**
@@ -51724,6 +52454,7 @@ export const GetEnrollmentAssessmentsDocument = gql`
  *      inProgress: // value for 'inProgress'
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
+ *      includeCdes: // value for 'includeCdes'
  *   },
  * });
  */
@@ -51793,6 +52524,7 @@ export const GetHouseholdAssessmentsDocument = gql`
     $inProgress: Boolean
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
     $filters: AssessmentsForHouseholdFilterOptions
+    $includeCdes: Boolean = false
   ) {
     household(id: $id) {
       id
@@ -51807,7 +52539,7 @@ export const GetHouseholdAssessmentsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...AssessmentFields
+          ...AssessmentWithCdes
           enrollment {
             id
             relationshipToHoH
@@ -51819,7 +52551,7 @@ export const GetHouseholdAssessmentsDocument = gql`
       }
     }
   }
-  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentWithCdesFragmentDoc}
   ${ClientNameFragmentDoc}
 `;
 
@@ -51841,6 +52573,7 @@ export const GetHouseholdAssessmentsDocument = gql`
  *      inProgress: // value for 'inProgress'
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
+ *      includeCdes: // value for 'includeCdes'
  *   },
  * });
  */
@@ -62738,6 +63471,7 @@ export const GetProjectAssessmentsDocument = gql`
     $offset: Int = 0
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
     $filters: AssessmentsForProjectFilterOptions = null
+    $includeCdes: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -62751,7 +63485,7 @@ export const GetProjectAssessmentsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...AssessmentFields
+          ...AssessmentWithCdes
           enrollment {
             ...EnrollmentFields
           }
@@ -62759,7 +63493,7 @@ export const GetProjectAssessmentsDocument = gql`
       }
     }
   }
-  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentWithCdesFragmentDoc}
   ${EnrollmentFieldsFragmentDoc}
 `;
 
@@ -62780,6 +63514,7 @@ export const GetProjectAssessmentsDocument = gql`
  *      offset: // value for 'offset'
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
+ *      includeCdes: // value for 'includeCdes'
  *   },
  * });
  */

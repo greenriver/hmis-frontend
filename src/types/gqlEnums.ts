@@ -461,6 +461,7 @@ export const HmisEnums = {
     ENABLED:
       'Use with answerBoolean to specify is the item should be enabled or not.',
     EQUAL: 'EQUAL',
+    EXCLUDES: 'Whether the value excludes the given item',
     EXISTS:
       'Use with answerBoolean to specify if an answer should exist or not.',
     GREATER_THAN: 'GREATER_THAN',
