@@ -13933,13 +13933,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "CeReferral",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "CeReferral",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -28723,8 +28719,8 @@
               "name": "Project",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use projectName instead"
           },
           {
             "name": "projectId",
@@ -28733,6 +28729,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
