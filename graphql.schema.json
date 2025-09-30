@@ -29636,6 +29636,12 @@
             "deprecationReason": null
           },
           {
+            "name": "HUD_COC_BUILDS",
+            "description": "(56) HUD: CoC Builds",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "HUD_COC_HOMELESSNESS_PREVENTION",
             "description": "(1) HUD: CoC - Homelessness Prevention (High Performing Communities Only)",
             "isDeprecated": false,
@@ -29697,7 +29703,7 @@
           },
           {
             "name": "HUD_ESG_CV",
-            "description": "(47) HUD: ESG - CV",
+            "description": "(47) HUD: ESG - CV [Deprecated]",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -29745,7 +29751,7 @@
           },
           {
             "name": "HUD_HOPWA_CV",
-            "description": "(48) HUD: HOPWA - CV",
+            "description": "(48) HUD: HOPWA - CV [Deprecated]",
             "isDeprecated": false,
             "deprecationReason": null
           },

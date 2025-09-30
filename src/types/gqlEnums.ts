@@ -634,7 +634,8 @@ export const HmisEnums = {
     HUD_COC_TRANSITIONAL_HOUSING: 'HUD: CoC - Transitional Housing',
     HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP:
       'HUD: CoC - Youth Homeless Demonstration Program (YHDP)',
-    HUD_ESG_CV: 'HUD: ESG - CV',
+    HUD_COC_BUILDS: 'HUD: CoC Builds',
+    HUD_ESG_CV: 'HUD: ESG - CV [Deprecated]',
     HUD_ESG_EMERGENCY_SHELTER:
       'HUD: ESG - Emergency Shelter (operating and/or essential services)',
     HUD_ESG_HOMELESSNESS_PREVENTION: 'HUD: ESG - Homelessness Prevention',
@@ -643,7 +644,7 @@ export const HmisEnums = {
     HUD_ESG_STREET_OUTREACH: 'HUD: ESG - Street Outreach',
     HUD_HOME: 'HUD: HOME',
     HUD_HOME_ARP: 'HUD: HOME (ARP)',
-    HUD_HOPWA_CV: 'HUD: HOPWA - CV',
+    HUD_HOPWA_CV: 'HUD: HOPWA - CV [Deprecated]',
     HUD_HOPWA_HOTEL_MOTEL_VOUCHERS: 'HUD: HOPWA - Hotel/Motel Vouchers',
     HUD_HOPWA_HOUSING_INFORMATION: 'HUD: HOPWA - Housing Information',
     HUD_HOPWA_PERMANENT_HOUSING:
