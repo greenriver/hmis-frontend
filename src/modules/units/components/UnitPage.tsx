@@ -1,3 +1,4 @@
+import { Alert } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
@@ -63,12 +64,20 @@ const UnitPage: React.FC<Props> = ({}) => {
       defs.push({
         title: 'Eligible Clients',
         key: 'clients',
-        contents: (
-          <PrioritizedClientsTable
-            opportunity={opportunity}
-            unitGroupId={unit.unitGroup?.id}
-          />
-        ),
+        contents:
+          !!unit.eligibilityRequirements &&
+          unit.eligibilityRequirements.length > 0 &&
+          !!unit.prioritySchemes ? (
+            <PrioritizedClientsTable
+              opportunity={opportunity}
+              unitGroupId={unit.unitGroup?.id}
+            />
+          ) : (
+            <Alert severity='warning'>
+              This unit does not have any eligibility or prioritization rules
+              specified.
+            </Alert>
+          ),
       });
     }
 

@@ -19,6 +19,7 @@ query GetClientAssessments(
   $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
   $filters: AssessmentFilterOptions = null
   $includeOrganizationName: Boolean = false
+  $includeCdes: Boolean = false
 ) {
   client(id: $id) {
     id
@@ -32,7 +33,7 @@ query GetClientAssessments(
       limit
       nodesCount
       nodes {
-        ...AssessmentFields
+        ...AssessmentWithCdes
         enrollment {
           ...ClientEnrollmentFields
         }
@@ -48,6 +49,7 @@ query GetEnrollmentAssessments(
   $inProgress: Boolean
   $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
   $filters: AssessmentsForEnrollmentFilterOptions
+  $includeCdes: Boolean = false
 ) {
   enrollment(id: $id) {
     id
@@ -62,7 +64,7 @@ query GetEnrollmentAssessments(
       limit
       nodesCount
       nodes {
-        ...AssessmentFields
+        ...AssessmentWithCdes
       }
     }
   }
@@ -75,6 +77,7 @@ query GetHouseholdAssessments(
   $inProgress: Boolean
   $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
   $filters: AssessmentsForHouseholdFilterOptions
+  $includeCdes: Boolean = false
 ) {
   household(id: $id) {
     id
@@ -89,7 +92,7 @@ query GetHouseholdAssessments(
       limit
       nodesCount
       nodes {
-        ...AssessmentFields
+        ...AssessmentWithCdes
         enrollment {
           id
           relationshipToHoH

@@ -145,7 +145,7 @@ export const FormRule: React.FC<FormRuleProps> = ({
 }) => {
   return (
     <BaseFormRule
-      projectName={rule.project?.projectName}
+      projectName={rule.projectName || undefined}
       projectType={rule.projectType || undefined}
       organizationName={rule.organization?.organizationName}
       dataCollectedAbout={rule.dataCollectedAbout || undefined}

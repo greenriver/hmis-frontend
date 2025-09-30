@@ -770,6 +770,17 @@ const createThemeOptions = (theme: Theme) => ({
         },
       },
     },
+    MuiBadge: {
+      styleOverrides: {
+        badge: theme.unstable_sx({
+          backgroundColor: 'error.light',
+          color: 'error.darkest',
+          fontWeight: 600,
+          right: 5,
+          top: 5,
+        }),
+      },
+    },
     MuiTreeItem2: {
       styleOverrides: {
         root: {
@@ -804,3 +815,16 @@ export const customVisuallyHidden: SxProps = {
   ...visuallyHidden,
   position: 'fixed',
 };
+
+/**
+ * Text truncation utility using CSS line clamp
+ * Creates single-line text with ellipsis overflow handling
+ */
+export const textTruncationSx = (maxWidth?: string): SxProps<Theme> => ({
+  whiteSpace: 'pre-wrap',
+  display: '-webkit-box',
+  WebkitBoxOrient: 'vertical',
+  WebkitLineClamp: '1',
+  overflow: 'hidden',
+  ...(maxWidth && { maxWidth }),
+});

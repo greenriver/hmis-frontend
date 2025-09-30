@@ -233,6 +233,13 @@ const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                       </MultiHmisEnum>
                     </>
                   ),
+                  Sex: (
+                    <HmisEnum
+                      value={client.sex}
+                      enumMap={HmisEnums.Sex}
+                      noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
+                    />
+                  ),
                   Pronouns: pronouns(client) || <NotCollectedText />,
                   'Veteran Status': (
                     <HmisEnum

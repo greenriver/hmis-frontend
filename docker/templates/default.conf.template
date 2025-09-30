@@ -45,17 +45,6 @@ server {
       proxy_set_header Host $backend_server;
     }
 
-    location /rails/active_storage/blob {
-      set $backend_server ${HMIS_BACKEND};
-      proxy_pass https://$backend_server;
-
-      # include default proxy headers
-      include /etc/nginx/conf.d/proxy_headers.conf;
-
-      # add location specific headers
-      proxy_set_header Host $backend_server;
-    }
-
     location /assets/theme {
       set $backend_server ${HMIS_BACKEND};
       proxy_pass https://$backend_server;
