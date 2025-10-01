@@ -44,6 +44,8 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
                 lengthOfAbsenceDays: configOptions.length_of_absence_days,
                 receivesDirectReferrals:
                   configOptions.receives_direct_referrals,
+                receivesDirectReferralsFrom:
+                  configOptions.receives_direct_referrals_from,
                 supportsWaitlistReferrals:
                   configOptions.supports_waitlist_referrals,
                 ...config,

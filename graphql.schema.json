@@ -44514,6 +44514,26 @@
             "deprecationReason": null
           },
           {
+            "name": "receivesDirectReferralsFrom",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "supportsWaitlistReferrals",
             "description": null,
             "type": {

@@ -6631,6 +6631,7 @@ export type ProjectConfigInput = {
   projectId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<ProjectType>;
   receivesDirectReferrals?: InputMaybe<Scalars['Boolean']['input']>;
+  receivesDirectReferralsFrom?: InputMaybe<Array<Scalars['ID']['input']>>;
   supportsWaitlistReferrals?: InputMaybe<Scalars['Boolean']['input']>;
 };
 

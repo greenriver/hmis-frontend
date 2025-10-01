@@ -9563,6 +9563,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
+        name: 'receivesDirectReferralsFrom',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
         name: 'supportsWaitlistReferrals',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
