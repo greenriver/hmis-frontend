@@ -70,7 +70,9 @@ const UnitManagementTable: React.FC<Props> = ({
 
   const { project } = useProjectDashboardContext();
   const { canManageUnits, canUpdateUnitAvailability } = project.access;
-  const canDoAnyUnitActions = canManageUnits || canUpdateUnitAvailability;
+  const canDoAnyUnitActions =
+    canManageUnits ||
+    (canUpdateUnitAvailability && coordinatedEntryFeatures.supportsReferrals);
 
   const { getCeActions, loading } = useUnitCeActions({
     projectId,
