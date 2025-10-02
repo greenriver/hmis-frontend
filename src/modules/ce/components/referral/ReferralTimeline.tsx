@@ -6,7 +6,10 @@ import ReferralTimelineItem from '@/modules/ce/components/referral/ReferralTimel
 import { CeReferralFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
-  referral: Pick<CeReferralFieldsFragment, 'auditEvents' | 'notes' | 'id'>;
+  referral: Pick<
+    CeReferralFieldsFragment,
+    'auditEvents' | 'notes' | 'id' | 'access'
+  >;
 }
 
 const ReferralTimeline: React.FC<Props> = ({ referral }: Props) => {
@@ -33,7 +36,9 @@ const ReferralTimeline: React.FC<Props> = ({ referral }: Props) => {
           borderColor: 'borders.light',
         }}
       >
-        <AddReferralNoteButton referralId={referral.id} />
+        {referral.access.canCreateReferralGlobalNote && (
+          <AddReferralNoteButton referralId={referral.id} />
+        )}
         <Timeline
           sx={{
             // https://mui.com/material-ui/react-timeline/#left-aligned-with-no-opposite-content

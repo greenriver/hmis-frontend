@@ -890,6 +890,8 @@ export type CeReferralNotesArgs = {
 export type CeReferralAccess = {
   __typename?: 'CeReferralAccess';
   canAssignReferralTasks: Scalars['Boolean']['output'];
+  /** Whether or not the user can create a note on this referral at the global level, i.e., not tied to a specific task. */
+  canCreateReferralGlobalNote: Scalars['Boolean']['output'];
   canViewReferralDetails: Scalars['Boolean']['output'];
   canViewSourceEnrollmentDetails: Scalars['Boolean']['output'];
   canViewTargetProject: Scalars['Boolean']['output'];
@@ -17889,6 +17891,7 @@ export type CeReferralFieldsFragment = {
     canAssignReferralTasks: boolean;
     canViewSourceEnrollmentDetails: boolean;
     canViewTargetProject: boolean;
+    canCreateReferralGlobalNote: boolean;
   };
   customStatus?: {
     __typename?: 'CeCustomReferralStatus';
@@ -20293,6 +20296,7 @@ export type SubmitCeReferralStepMutation = {
         canAssignReferralTasks: boolean;
         canViewSourceEnrollmentDetails: boolean;
         canViewTargetProject: boolean;
+        canCreateReferralGlobalNote: boolean;
       };
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
@@ -21038,6 +21042,7 @@ export type GetCeReferralQuery = {
       canAssignReferralTasks: boolean;
       canViewSourceEnrollmentDetails: boolean;
       canViewTargetProject: boolean;
+      canCreateReferralGlobalNote: boolean;
     };
     customStatus?: {
       __typename?: 'CeCustomReferralStatus';
@@ -49925,6 +49930,7 @@ export const CeReferralFieldsFragmentDoc = gql`
       canAssignReferralTasks
       canViewSourceEnrollmentDetails
       canViewTargetProject
+      canCreateReferralGlobalNote
     }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
