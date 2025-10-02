@@ -264,7 +264,7 @@ fragment CeReferralFields on CeReferral {
     canAssignReferralTasks
     canViewSourceEnrollmentDetails
     canViewTargetProject
-    canCreateReferralGlobalNote
+    canCreateReferralNote
   }
 }
 

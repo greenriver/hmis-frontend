@@ -6662,8 +6662,8 @@
             "deprecationReason": null
           },
           {
-            "name": "canCreateReferralGlobalNote",
-            "description": "Whether or not the user can create a note on this referral at the global level, i.e., not tied to a specific task.",
+            "name": "canCreateReferralNote",
+            "description": "Whether or not the user can create a note on this referral at the top level, i.e., not tied to a specific task.",
             "args": [],
             "type": {
               "kind": "NON_NULL",

@@ -1146,7 +1146,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canCreateReferralGlobalNote',
+        name: 'canCreateReferralNote',
         type: {
           kind: 'NON_NULL',
           name: null,

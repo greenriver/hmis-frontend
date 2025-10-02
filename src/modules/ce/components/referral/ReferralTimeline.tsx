@@ -36,7 +36,7 @@ const ReferralTimeline: React.FC<Props> = ({ referral }: Props) => {
           borderColor: 'borders.light',
         }}
       >
-        {referral.access.canCreateReferralGlobalNote && (
+        {referral.access.canCreateReferralNote && (
           <AddReferralNoteButton referralId={referral.id} />
         )}
         <Timeline
