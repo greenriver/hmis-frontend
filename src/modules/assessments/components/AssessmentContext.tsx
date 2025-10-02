@@ -4,7 +4,8 @@ import { createContext, ReactNode } from 'react';
  * Context to provide assessment-specific information to components within an assessment form.
  */
 interface AssessmentContextType {
-  formDefinitionIdentifier?: string;
+  formDefinitionIdentifier?: string; // string identifier such as "housing_assessment"
+  formDefinitionId?: string; // database ID of this specific form version
   enrollmentId: string;
   clientId: string;
   assessmentId?: string;

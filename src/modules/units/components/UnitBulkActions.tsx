@@ -34,6 +34,7 @@ interface Props {
   projectId: string;
   unitGroupId?: string;
   units: UnitTableRowFieldsFragment[];
+  deletionEnabled?: boolean;
   ceAvailabilityActionsEnabled?: boolean;
 }
 
@@ -41,6 +42,7 @@ const UnitBulkActions: React.FC<Props> = ({
   projectId,
   unitGroupId,
   units,
+  deletionEnabled,
   ceAvailabilityActionsEnabled = false,
 }) => {
   // This component's philosophy is to let the user do what they are trying to
@@ -140,9 +142,11 @@ const UnitBulkActions: React.FC<Props> = ({
         </>
       )}
 
-      <ButtonTooltipContainer title={deleteTooltip}>
-        {renderBulkDeleteButton(unitIdsToDelete, disableDelete)}
-      </ButtonTooltipContainer>
+      {deletionEnabled && (
+        <ButtonTooltipContainer title={deleteTooltip}>
+          {renderBulkDeleteButton(unitIdsToDelete, disableDelete)}
+        </ButtonTooltipContainer>
+      )}
     </Stack>
   );
 };
