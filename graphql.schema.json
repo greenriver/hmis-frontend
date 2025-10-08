@@ -6662,6 +6662,22 @@
             "deprecationReason": null
           },
           {
+            "name": "canCreateReferralNote",
+            "description": "Whether or not the user can create a note on this referral at the top level, i.e., not tied to a specific task.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canViewReferralDetails",
             "description": null,
             "args": [],
