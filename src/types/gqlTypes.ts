@@ -982,9 +982,11 @@ export type CeReferralSourceEnrollment = {
   dataSource: DataSource;
   entryDate: Scalars['ISO8601Date']['output'];
   exitDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  householdMembers: Array<CeReferralSourceHouseholdMember>;
   householdSize: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
+  /** @deprecated Use household_members field instead */
   otherHouseholdMemberNames: Array<Scalars['String']['output']>;
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
@@ -1010,6 +1012,22 @@ export type CeReferralSourceEnrollmentsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+};
+
+export type CeReferralSourceHouseholdMember = {
+  __typename?: 'CeReferralSourceHouseholdMember';
+  access: CeReferralSourceHouseholdMemberAccess;
+  clientId: Scalars['ID']['output'];
+  /** The name of the client. Returns masked name if the user does not have permission to view the client name. */
+  clientName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  relationshipToHoH: RelationshipToHoH;
+};
+
+export type CeReferralSourceHouseholdMemberAccess = {
+  __typename?: 'CeReferralSourceHouseholdMemberAccess';
+  canViewClients: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export enum CeReferralStatus {
@@ -2831,6 +2849,8 @@ export enum EnableOperator {
   /** Use with answerBoolean to specify is the item should be enabled or not. */
   Enabled = 'ENABLED',
   Equal = 'EQUAL',
+  /** Whether the value excludes the given item */
+  Excludes = 'EXCLUDES',
   /** Use with answerBoolean to specify if an answer should exist or not. */
   Exists = 'EXISTS',
   GreaterThan = 'GREATER_THAN',
@@ -17750,6 +17770,17 @@ export type CeReferralDetailFieldsFragment = {
     projectType: ProjectType;
     entryDate: string;
     exitDate?: string | null;
+    householdMembers: Array<{
+      __typename?: 'CeReferralSourceHouseholdMember';
+      id: string;
+      clientId: string;
+      clientName: string;
+      relationshipToHoH: RelationshipToHoH;
+      access: {
+        __typename?: 'CeReferralSourceHouseholdMemberAccess';
+        canViewClients: boolean;
+      };
+    }>;
   } | null;
   currentMatchValues?: Array<{
     __typename?: 'CeMatchValue';
@@ -17890,6 +17921,17 @@ export type CeReferralFieldsFragment = {
     projectType: ProjectType;
     entryDate: string;
     exitDate?: string | null;
+    householdMembers: Array<{
+      __typename?: 'CeReferralSourceHouseholdMember';
+      id: string;
+      clientId: string;
+      clientName: string;
+      relationshipToHoH: RelationshipToHoH;
+      access: {
+        __typename?: 'CeReferralSourceHouseholdMemberAccess';
+        canViewClients: boolean;
+      };
+    }>;
   } | null;
   currentMatchValues?: Array<{
     __typename?: 'CeMatchValue';
@@ -20283,6 +20325,17 @@ export type SubmitCeReferralStepMutation = {
         projectType: ProjectType;
         entryDate: string;
         exitDate?: string | null;
+        householdMembers: Array<{
+          __typename?: 'CeReferralSourceHouseholdMember';
+          id: string;
+          clientId: string;
+          clientName: string;
+          relationshipToHoH: RelationshipToHoH;
+          access: {
+            __typename?: 'CeReferralSourceHouseholdMemberAccess';
+            canViewClients: boolean;
+          };
+        }>;
       } | null;
       currentMatchValues?: Array<{
         __typename?: 'CeMatchValue';
@@ -21017,6 +21070,17 @@ export type GetCeReferralQuery = {
       projectType: ProjectType;
       entryDate: string;
       exitDate?: string | null;
+      householdMembers: Array<{
+        __typename?: 'CeReferralSourceHouseholdMember';
+        id: string;
+        clientId: string;
+        clientName: string;
+        relationshipToHoH: RelationshipToHoH;
+        access: {
+          __typename?: 'CeReferralSourceHouseholdMemberAccess';
+          canViewClients: boolean;
+        };
+      }>;
     } | null;
     currentMatchValues?: Array<{
       __typename?: 'CeMatchValue';
@@ -49768,6 +49832,15 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       projectType
       entryDate
       exitDate
+      householdMembers {
+        id
+        clientId
+        clientName
+        relationshipToHoH
+        access {
+          canViewClients
+        }
+      }
     }
     currentMatchValues {
       id
