@@ -3112,7 +3112,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'alcoholDrugUseDisorderFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'annualPercentAmi',
@@ -3304,11 +3308,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'incarceratedParent',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'insufficientIncome',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'juvenileJusticeMonths',
@@ -3360,7 +3372,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'mentalHealthDisorderFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'monthsHomelessPastThreeYears',
@@ -3396,7 +3412,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'physicalDisabilityFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'preferredLanguage',
@@ -3516,7 +3536,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'unemploymentFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'vamcStation',
