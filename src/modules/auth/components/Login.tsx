@@ -39,7 +39,7 @@ const Login: React.FC = () => {
         >
           {logoPath && (
             <Box
-              src={`${window.origin}${logoPath}`}
+              src={`${warehouseUrl}${logoPath}`}
               component='img'
               sx={{ maxWidth: '100%', mb: 2 }}
             />
