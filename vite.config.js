@@ -129,6 +129,7 @@ export default defineConfig(({ command, mode }) => {
         proxy: {
           '/hmis': warehouseProxyServer,
           '/dev-assets/theme': warehouseProxyServer,
+          '/logo': warehouseProxyServer,
         },
       },
     }),
