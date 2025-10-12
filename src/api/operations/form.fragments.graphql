@@ -135,6 +135,11 @@ fragment FormDefinitionMetadata on FormDefinition {
   }
   dateUpdated
   supportsSaveInProgress
+  access {
+    canManageForm
+    canPublishForm
+    canDuplicateForm
+  }
 }
 
 # FormDefinition to use for rendering a dynamic form
@@ -166,6 +171,8 @@ fragment FormIdentifierDetails on FormIdentifier {
   adminEditableOnly
   access {
     canManageForm
+    canPublishForm
+    canDuplicateForm
   }
   displayVersion {
     ...FormDefinitionMetadata

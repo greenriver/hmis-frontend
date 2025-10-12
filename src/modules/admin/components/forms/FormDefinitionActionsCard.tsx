@@ -37,6 +37,9 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
     ? parseHmisDateString(formIdentifier.draftVersion?.dateUpdated)
     : undefined;
 
+  const { managedInVersionControl, access } = formIdentifier;
+  const { canManageForm, canPublishForm, canDuplicateForm } = access;
+
   return (
     <CommonCard title='Actions' TitleComponent='h5'>
       <Stack gap={1.5}>
@@ -57,44 +60,34 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             {publishedBy && `by ${publishedBy.name}`}
           </Typography>
         )}
-        {formIdentifier.access.canManageForm && (
+        {canManageForm || canDuplicateForm || (canPublishForm && <Divider />)}
+        {managedInVersionControl && canDuplicateForm && (
+          <DuplicateFormButton formIdentifier={formIdentifier} />
+        )}
+        {canManageForm && (
+          <EditFormButton
+            formIdentifier={formIdentifier}
+            text={'Edit Draft'}
+            variant='outlined'
+          />
+        )}
+        {hasDraft && canPublishForm && (
           <>
-            <Divider />
-            {formIdentifier.managedInVersionControl ? (
-              <DuplicateFormButton formIdentifier={formIdentifier} />
-            ) : (
-              <>
-                <EditFormButton
-                  formIdentifier={formIdentifier}
-                  text={'Edit Draft'}
-                  variant='outlined'
-                />
-                {hasDraft && (
-                  <>
-                    <ButtonLink
-                      to={generatePath(
-                        AdminDashboardRoutes.PREVIEW_FORM_DRAFT,
-                        {
-                          identifier: formIdentifier.identifier,
-                          formId: formIdentifier.draftVersion?.id || '',
-                        }
-                      )}
-                      variant='contained'
-                      fullWidth
-                    >
-                      Preview / Publish Draft
-                    </ButtonLink>
-                    <Typography variant='caption'>
-                      Last edited{' '}
-                      {draftUpdatedOn
-                        ? formatRelativeDateTime(draftUpdatedOn)
-                        : ''}{' '}
-                      {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
-                    </Typography>
-                  </>
-                )}
-              </>
-            )}
+            <ButtonLink
+              to={generatePath(AdminDashboardRoutes.PREVIEW_FORM_DRAFT, {
+                identifier: formIdentifier.identifier,
+                formId: formIdentifier.draftVersion?.id || '',
+              })}
+              variant='contained'
+              fullWidth
+            >
+              Preview / Publish Draft
+            </ButtonLink>
+            <Typography variant='caption'>
+              Last edited{' '}
+              {draftUpdatedOn ? formatRelativeDateTime(draftUpdatedOn) : ''}{' '}
+              {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
+            </Typography>
           </>
         )}
       </Stack>

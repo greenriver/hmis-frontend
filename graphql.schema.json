@@ -6662,6 +6662,22 @@
             "deprecationReason": null
           },
           {
+            "name": "canCreateReferralNote",
+            "description": "Whether or not the user can create a note on this referral at the top level, i.e., not tied to a specific task.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canViewReferralDetails",
             "description": null,
             "args": [],
@@ -20572,7 +20588,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "NoYesMissing",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
@@ -21726,7 +21742,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "NoYesMissing",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
@@ -21779,7 +21795,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "NoYesMissing",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
@@ -21968,7 +21984,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "NoYesMissing",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
@@ -22120,7 +22136,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "NoYesMissing",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
@@ -22557,7 +22573,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "NoYesMissing",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
@@ -26616,6 +26632,22 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "access",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "FormDefinitionAccess",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "cacheKey",
             "description": null,
             "args": [],
@@ -26927,6 +26959,82 @@
           },
           {
             "name": "version",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "FormDefinitionAccess",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "canDuplicateForm",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canManageForm",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canPublishForm",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
             "description": null,
             "args": [],
             "type": {
@@ -27403,7 +27511,39 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "canDuplicateForm",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canManageForm",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canPublishForm",
             "description": null,
             "args": [],
             "type": {
@@ -28795,8 +28935,8 @@
               "name": "Project",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use projectName instead"
           },
           {
             "name": "projectId",
@@ -28805,6 +28945,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -29700,6 +29852,12 @@
             "deprecationReason": null
           },
           {
+            "name": "HUD_COC_BUILDS",
+            "description": "(56) HUD: CoC Builds",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "HUD_COC_HOMELESSNESS_PREVENTION",
             "description": "(1) HUD: CoC - Homelessness Prevention (High Performing Communities Only)",
             "isDeprecated": false,
@@ -29761,7 +29919,7 @@
           },
           {
             "name": "HUD_ESG_CV",
-            "description": "(47) HUD: ESG - CV",
+            "description": "(47) HUD: ESG - CV [Deprecated]",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -29809,7 +29967,7 @@
           },
           {
             "name": "HUD_HOPWA_CV",
-            "description": "(48) HUD: HOPWA - CV",
+            "description": "(48) HUD: HOPWA - CV [Deprecated]",
             "isDeprecated": false,
             "deprecationReason": null
           },

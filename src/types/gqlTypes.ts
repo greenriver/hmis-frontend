@@ -890,6 +890,8 @@ export type CeReferralNotesArgs = {
 export type CeReferralAccess = {
   __typename?: 'CeReferralAccess';
   canAssignReferralTasks: Scalars['Boolean']['output'];
+  /** Whether or not the user can create a note on this referral at the top level, i.e., not tied to a specific task. */
+  canCreateReferralNote: Scalars['Boolean']['output'];
   canViewReferralDetails: Scalars['Boolean']['output'];
   canViewSourceEnrollmentDetails: Scalars['Boolean']['output'];
   canViewTargetProject: Scalars['Boolean']['output'];
@@ -2892,7 +2894,7 @@ export type EnableWhen = {
 export type Enrollment = {
   __typename?: 'Enrollment';
   access: EnrollmentAccess;
-  alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
+  alcoholDrugUseDisorderFam?: Maybe<NoYesReasonsForMissingData>;
   annualPercentAmi?: Maybe<AnnualPercentAmi>;
   assessmentEligibilities: Array<AssessmentEligibility>;
   assessments: AssessmentsPaginated;
@@ -2951,9 +2953,9 @@ export type Enrollment = {
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
   incarceratedAdult?: Maybe<IncarceratedAdult>;
-  incarceratedParent?: Maybe<NoYesMissing>;
+  incarceratedParent?: Maybe<NoYesReasonsForMissingData>;
   incomeBenefits: IncomeBenefitsPaginated;
-  insufficientIncome?: Maybe<NoYesMissing>;
+  insufficientIncome?: Maybe<NoYesReasonsForMissingData>;
   intakeAssessment?: Maybe<Assessment>;
   juvenileJusticeMonths?: Maybe<Scalars['Int']['output']>;
   juvenileJusticeYears?: Maybe<RhyNumberofYears>;
@@ -2967,7 +2969,7 @@ export type Enrollment = {
   lockVersion: Scalars['Int']['output'];
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthConsultation?: Maybe<MentalHealthConsultation>;
-  mentalHealthDisorderFam?: Maybe<NoYesMissing>;
+  mentalHealthDisorderFam?: Maybe<NoYesReasonsForMissingData>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   moveInAddresses: Array<ClientAddress>;
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -2977,7 +2979,7 @@ export type Enrollment = {
   openEnrollmentSummary: Array<EnrollmentSummary>;
   organizationName: Scalars['String']['output'];
   percentAmi?: Maybe<PercentAmi>;
-  physicalDisabilityFam?: Maybe<NoYesMissing>;
+  physicalDisabilityFam?: Maybe<NoYesReasonsForMissingData>;
   preferredLanguage?: Maybe<PreferredLanguage>;
   preferredLanguageDifferent?: Maybe<Scalars['String']['output']>;
   previousStreetEssh?: Maybe<NoYesMissing>;
@@ -3007,7 +3009,7 @@ export type Enrollment = {
   timeToHousingLoss?: Maybe<TimeToHousingLoss>;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
   translationNeeded?: Maybe<NoYesReasonsForMissingData>;
-  unemploymentFam?: Maybe<NoYesMissing>;
+  unemploymentFam?: Maybe<NoYesReasonsForMissingData>;
   user?: Maybe<ApplicationUser>;
   vamcStation?: Maybe<VamcStationNumber>;
   youthEducationStatuses: YouthEducationStatusesPaginated;
@@ -3587,6 +3589,7 @@ export type FilesPaginated = {
 /** FormDefinition */
 export type FormDefinition = {
   __typename?: 'FormDefinition';
+  access: FormDefinitionAccess;
   cacheKey: Scalars['ID']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
@@ -3617,6 +3620,14 @@ export type FormDefinitionFormRulesArgs = {
 export type FormDefinitionProjectMatchesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type FormDefinitionAccess = {
+  __typename?: 'FormDefinitionAccess';
+  canDuplicateForm: Scalars['Boolean']['output'];
+  canManageForm: Scalars['Boolean']['output'];
+  canPublishForm: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type FormDefinitionForJsonResult = {
@@ -3674,7 +3685,9 @@ export type FormIdentifierAllVersionsArgs = {
 
 export type FormIdentifierAccess = {
   __typename?: 'FormIdentifierAccess';
+  canDuplicateForm: Scalars['Boolean']['output'];
   canManageForm: Scalars['Boolean']['output'];
+  canPublishForm: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -3881,8 +3894,10 @@ export type FormRule = {
   organization?: Maybe<Organization>;
   organizationId?: Maybe<Scalars['ID']['output']>;
   otherFunder?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use projectName instead */
   project?: Maybe<Project>;
   projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   projectType?: Maybe<ProjectType>;
   serviceCategory?: Maybe<ServiceCategory>;
   serviceType?: Maybe<ServiceType>;
@@ -3987,6 +4002,8 @@ export enum FundingSource {
   HhsRhyStreetOutreachProject = 'HHS_RHY_STREET_OUTREACH_PROJECT',
   /** (24) HHS: RHY - Transitional Living Program */
   HhsRhyTransitionalLivingProgram = 'HHS_RHY_TRANSITIONAL_LIVING_PROGRAM',
+  /** (56) HUD: CoC Builds */
+  HudCocBuilds = 'HUD_COC_BUILDS',
   /** (1) HUD: CoC - Homelessness Prevention (High Performing Communities Only) */
   HudCocHomelessnessPrevention = 'HUD_COC_HOMELESSNESS_PREVENTION',
   /** (49) HUD: CoC - Joint Component RRH/PSH [Deprecated] */
@@ -4007,7 +4024,7 @@ export enum FundingSource {
   HudCocTransitionalHousing = 'HUD_COC_TRANSITIONAL_HOUSING',
   /** (43) HUD: CoC - Youth Homeless Demonstration Program (YHDP) */
   HudCocYouthHomelessDemonstrationProgramYhdp = 'HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP',
-  /** (47) HUD: ESG - CV */
+  /** (47) HUD: ESG - CV [Deprecated] */
   HudEsgCv = 'HUD_ESG_CV',
   /** (8) HUD: ESG - Emergency Shelter (operating and/or essential services) */
   HudEsgEmergencyShelter = 'HUD_ESG_EMERGENCY_SHELTER',
@@ -4023,7 +4040,7 @@ export enum FundingSource {
   HudHome = 'HUD_HOME',
   /** (51) HUD: HOME (ARP) */
   HudHomeArp = 'HUD_HOME_ARP',
-  /** (48) HUD: HOPWA - CV */
+  /** (48) HUD: HOPWA - CV [Deprecated] */
   HudHopwaCv = 'HUD_HOPWA_CV',
   /** (13) HUD: HOPWA - Hotel/Motel Vouchers */
   HudHopwaHotelMotelVouchers = 'HUD_HOPWA_HOTEL_MOTEL_VOUCHERS',
@@ -9689,12 +9706,12 @@ export type AssessmentWithRecordsFragment = {
     formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
     juvenileJusticeYears?: RhyNumberofYears | null;
     juvenileJusticeMonths?: number | null;
-    unemploymentFam?: NoYesMissing | null;
-    mentalHealthDisorderFam?: NoYesMissing | null;
-    physicalDisabilityFam?: NoYesMissing | null;
-    alcoholDrugUseDisorderFam?: NoYesMissing | null;
-    insufficientIncome?: NoYesMissing | null;
-    incarceratedParent?: NoYesMissing | null;
+    unemploymentFam?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+    physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+    alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+    insufficientIncome?: NoYesReasonsForMissingData | null;
+    incarceratedParent?: NoYesReasonsForMissingData | null;
     targetScreenReqd?: NoYesMissing | null;
     timeToHousingLoss?: TimeToHousingLoss | null;
     annualPercentAmi?: AnnualPercentAmi | null;
@@ -10557,12 +10574,12 @@ export type FullAssessmentFragment = {
     formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
     juvenileJusticeYears?: RhyNumberofYears | null;
     juvenileJusticeMonths?: number | null;
-    unemploymentFam?: NoYesMissing | null;
-    mentalHealthDisorderFam?: NoYesMissing | null;
-    physicalDisabilityFam?: NoYesMissing | null;
-    alcoholDrugUseDisorderFam?: NoYesMissing | null;
-    insufficientIncome?: NoYesMissing | null;
-    incarceratedParent?: NoYesMissing | null;
+    unemploymentFam?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+    physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+    alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+    insufficientIncome?: NoYesReasonsForMissingData | null;
+    incarceratedParent?: NoYesReasonsForMissingData | null;
     targetScreenReqd?: NoYesMissing | null;
     timeToHousingLoss?: TimeToHousingLoss | null;
     annualPercentAmi?: AnnualPercentAmi | null;
@@ -12029,6 +12046,12 @@ export type GetAssessmentQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
     upgradedDefinitionForEditing?: {
       __typename?: 'FormDefinition';
@@ -12544,6 +12567,12 @@ export type GetAssessmentQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
     enrollment: {
       __typename?: 'Enrollment';
@@ -12581,12 +12610,12 @@ export type GetAssessmentQuery = {
       formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
       juvenileJusticeYears?: RhyNumberofYears | null;
       juvenileJusticeMonths?: number | null;
-      unemploymentFam?: NoYesMissing | null;
-      mentalHealthDisorderFam?: NoYesMissing | null;
-      physicalDisabilityFam?: NoYesMissing | null;
-      alcoholDrugUseDisorderFam?: NoYesMissing | null;
-      insufficientIncome?: NoYesMissing | null;
-      incarceratedParent?: NoYesMissing | null;
+      unemploymentFam?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+      physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+      alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+      insufficientIncome?: NoYesReasonsForMissingData | null;
+      incarceratedParent?: NoYesReasonsForMissingData | null;
       targetScreenReqd?: NoYesMissing | null;
       timeToHousingLoss?: TimeToHousingLoss | null;
       annualPercentAmi?: AnnualPercentAmi | null;
@@ -14074,12 +14103,12 @@ export type SubmitAssessmentMutation = {
         formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
         juvenileJusticeYears?: RhyNumberofYears | null;
         juvenileJusticeMonths?: number | null;
-        unemploymentFam?: NoYesMissing | null;
-        mentalHealthDisorderFam?: NoYesMissing | null;
-        physicalDisabilityFam?: NoYesMissing | null;
-        alcoholDrugUseDisorderFam?: NoYesMissing | null;
-        insufficientIncome?: NoYesMissing | null;
-        incarceratedParent?: NoYesMissing | null;
+        unemploymentFam?: NoYesReasonsForMissingData | null;
+        mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+        physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+        alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+        insufficientIncome?: NoYesReasonsForMissingData | null;
+        incarceratedParent?: NoYesReasonsForMissingData | null;
         targetScreenReqd?: NoYesMissing | null;
         timeToHousingLoss?: TimeToHousingLoss | null;
         annualPercentAmi?: AnnualPercentAmi | null;
@@ -14929,12 +14958,12 @@ export type SubmitHouseholdAssessmentsMutation = {
         formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
         juvenileJusticeYears?: RhyNumberofYears | null;
         juvenileJusticeMonths?: number | null;
-        unemploymentFam?: NoYesMissing | null;
-        mentalHealthDisorderFam?: NoYesMissing | null;
-        physicalDisabilityFam?: NoYesMissing | null;
-        alcoholDrugUseDisorderFam?: NoYesMissing | null;
-        insufficientIncome?: NoYesMissing | null;
-        incarceratedParent?: NoYesMissing | null;
+        unemploymentFam?: NoYesReasonsForMissingData | null;
+        mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+        physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+        alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+        insufficientIncome?: NoYesReasonsForMissingData | null;
+        incarceratedParent?: NoYesReasonsForMissingData | null;
         targetScreenReqd?: NoYesMissing | null;
         timeToHousingLoss?: TimeToHousingLoss | null;
         annualPercentAmi?: AnnualPercentAmi | null;
@@ -15795,12 +15824,12 @@ export type GetAssessmentsForPopulationQuery = {
           formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
           juvenileJusticeYears?: RhyNumberofYears | null;
           juvenileJusticeMonths?: number | null;
-          unemploymentFam?: NoYesMissing | null;
-          mentalHealthDisorderFam?: NoYesMissing | null;
-          physicalDisabilityFam?: NoYesMissing | null;
-          alcoholDrugUseDisorderFam?: NoYesMissing | null;
-          insufficientIncome?: NoYesMissing | null;
-          incarceratedParent?: NoYesMissing | null;
+          unemploymentFam?: NoYesReasonsForMissingData | null;
+          mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+          physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+          alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+          insufficientIncome?: NoYesReasonsForMissingData | null;
+          incarceratedParent?: NoYesReasonsForMissingData | null;
           targetScreenReqd?: NoYesMissing | null;
           timeToHousingLoss?: TimeToHousingLoss | null;
           annualPercentAmi?: AnnualPercentAmi | null;
@@ -16652,12 +16681,12 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
   juvenileJusticeYears?: RhyNumberofYears | null;
   juvenileJusticeMonths?: number | null;
-  unemploymentFam?: NoYesMissing | null;
-  mentalHealthDisorderFam?: NoYesMissing | null;
-  physicalDisabilityFam?: NoYesMissing | null;
-  alcoholDrugUseDisorderFam?: NoYesMissing | null;
-  insufficientIncome?: NoYesMissing | null;
-  incarceratedParent?: NoYesMissing | null;
+  unemploymentFam?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+  physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+  alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+  insufficientIncome?: NoYesReasonsForMissingData | null;
+  incarceratedParent?: NoYesReasonsForMissingData | null;
   targetScreenReqd?: NoYesMissing | null;
   timeToHousingLoss?: TimeToHousingLoss | null;
   annualPercentAmi?: AnnualPercentAmi | null;
@@ -18588,6 +18617,12 @@ export type CeReferralStepFieldsFragment = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -19383,6 +19418,12 @@ export type StartCeReferralStepMutation = {
           }>;
         };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -20056,6 +20097,12 @@ export type SubmitCeReferralStepMutation = {
           }>;
         };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -21658,6 +21705,12 @@ export type GetCeReferralStepQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -24172,6 +24225,12 @@ export type ClientDetailFormsQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
   }>;
 };
@@ -27214,6 +27273,12 @@ export type GetDirectReferralFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -28356,6 +28421,12 @@ export type AllEnrollmentDetailsFragment = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
   }>;
   project: {
@@ -28477,12 +28548,12 @@ export type EnrollmentValuesFragment = {
   formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
   juvenileJusticeYears?: RhyNumberofYears | null;
   juvenileJusticeMonths?: number | null;
-  unemploymentFam?: NoYesMissing | null;
-  mentalHealthDisorderFam?: NoYesMissing | null;
-  physicalDisabilityFam?: NoYesMissing | null;
-  alcoholDrugUseDisorderFam?: NoYesMissing | null;
-  insufficientIncome?: NoYesMissing | null;
-  incarceratedParent?: NoYesMissing | null;
+  unemploymentFam?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+  physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+  alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+  insufficientIncome?: NoYesReasonsForMissingData | null;
+  incarceratedParent?: NoYesReasonsForMissingData | null;
   targetScreenReqd?: NoYesMissing | null;
   timeToHousingLoss?: TimeToHousingLoss | null;
   annualPercentAmi?: AnnualPercentAmi | null;
@@ -28918,12 +28989,12 @@ export type GetEnrollmentQuery = {
     formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
     juvenileJusticeYears?: RhyNumberofYears | null;
     juvenileJusticeMonths?: number | null;
-    unemploymentFam?: NoYesMissing | null;
-    mentalHealthDisorderFam?: NoYesMissing | null;
-    physicalDisabilityFam?: NoYesMissing | null;
-    alcoholDrugUseDisorderFam?: NoYesMissing | null;
-    insufficientIncome?: NoYesMissing | null;
-    incarceratedParent?: NoYesMissing | null;
+    unemploymentFam?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+    physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+    alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+    insufficientIncome?: NoYesReasonsForMissingData | null;
+    incarceratedParent?: NoYesReasonsForMissingData | null;
     targetScreenReqd?: NoYesMissing | null;
     timeToHousingLoss?: TimeToHousingLoss | null;
     annualPercentAmi?: AnnualPercentAmi | null;
@@ -29808,6 +29879,12 @@ export type GetEnrollmentDetailsQuery = {
           }>;
         };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
     }>;
     project: {
@@ -30837,6 +30914,12 @@ export type ExternalFormSubmissionFieldsFragment = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
   summaryFields: Array<{
     __typename?: 'KeyValue';
@@ -31517,6 +31600,12 @@ export type GetExternalFormSubmissionQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
     summaryFields: Array<{
       __typename?: 'KeyValue';
@@ -32220,6 +32309,12 @@ export type FormDefinitionMetadataFragment = {
   dateUpdated: string;
   supportsSaveInProgress: boolean;
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  access: {
+    __typename?: 'FormDefinitionAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
 };
 
 export type FormDefinitionFieldsFragment = {
@@ -32736,6 +32831,12 @@ export type FormDefinitionFieldsFragment = {
     }>;
   };
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  access: {
+    __typename?: 'FormDefinitionAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
 };
 
 export type FormDefinitionFieldsForJsonEditorFragment = {
@@ -33253,6 +33354,12 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
     }>;
   };
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  access: {
+    __typename?: 'FormDefinitionAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
 };
 
 export type FormDefinitionFieldsForEditorFragment = {
@@ -33770,6 +33877,12 @@ export type FormDefinitionFieldsForEditorFragment = {
     }>;
   };
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  access: {
+    __typename?: 'FormDefinitionAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
 };
 
 export type FormIdentifierDetailsFragment = {
@@ -33778,7 +33891,12 @@ export type FormIdentifierDetailsFragment = {
   identifier: string;
   managedInVersionControl: boolean;
   adminEditableOnly: boolean;
-  access: { __typename?: 'FormIdentifierAccess'; canManageForm: boolean };
+  access: {
+    __typename?: 'FormIdentifierAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
   displayVersion: {
     __typename?: 'FormDefinition';
     id: string;
@@ -33790,6 +33908,12 @@ export type FormIdentifierDetailsFragment = {
     dateUpdated: string;
     supportsSaveInProgress: boolean;
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
   draftVersion?: {
     __typename?: 'FormDefinition';
@@ -33802,6 +33926,12 @@ export type FormIdentifierDetailsFragment = {
     dateUpdated: string;
     supportsSaveInProgress: boolean;
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -34329,6 +34459,12 @@ export type UpdateFormDefinitionMutation = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -34871,6 +35007,12 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -34908,6 +35050,12 @@ export type CreateFormDefinitionMutation = {
       dateUpdated: string;
       supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -34949,6 +35097,12 @@ export type CreateNextDraftFormDefinitionMutation = {
         dateUpdated: string;
         supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       } | null;
     } | null;
   } | null;
@@ -34977,6 +35131,12 @@ export type CreateDuplicateFormDefinitionMutation = {
         dateUpdated: string;
         supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       } | null;
     } | null;
   } | null;
@@ -34996,7 +35156,12 @@ export type PublishFormDefinitionMutation = {
       identifier: string;
       managedInVersionControl: boolean;
       adminEditableOnly: boolean;
-      access: { __typename?: 'FormIdentifierAccess'; canManageForm: boolean };
+      access: {
+        __typename?: 'FormIdentifierAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
       displayVersion: {
         __typename?: 'FormDefinition';
         id: string;
@@ -35008,6 +35173,12 @@ export type PublishFormDefinitionMutation = {
         dateUpdated: string;
         supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
       draftVersion?: {
         __typename?: 'FormDefinition';
@@ -35020,6 +35191,12 @@ export type PublishFormDefinitionMutation = {
         dateUpdated: string;
         supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       } | null;
     } | null;
     errors: Array<{
@@ -35615,6 +35792,12 @@ export type GetFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -36138,6 +36321,12 @@ export type GetStaticFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
 };
 
@@ -36663,6 +36852,12 @@ export type GetServiceFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -37189,6 +37384,12 @@ export type GetAssessmentFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -37204,7 +37405,12 @@ export type GetFormIdentifierDetailsQuery = {
     identifier: string;
     managedInVersionControl: boolean;
     adminEditableOnly: boolean;
-    access: { __typename?: 'FormIdentifierAccess'; canManageForm: boolean };
+    access: {
+      __typename?: 'FormIdentifierAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
     displayVersion: {
       __typename?: 'FormDefinition';
       id: string;
@@ -37216,6 +37422,12 @@ export type GetFormIdentifierDetailsQuery = {
       dateUpdated: string;
       supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
     draftVersion?: {
       __typename?: 'FormDefinition';
@@ -37228,6 +37440,12 @@ export type GetFormIdentifierDetailsQuery = {
       dateUpdated: string;
       supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
   } | null;
 };
@@ -37268,6 +37486,12 @@ export type GetFormIdentifierVersionsQuery = {
           lastName?: string | null;
           email: string;
         } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       }>;
     };
   } | null;
@@ -37304,6 +37528,12 @@ export type GetFormIdentifiersQuery = {
         supportsSaveInProgress: boolean;
         formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
     }>;
   };
@@ -39463,6 +39693,12 @@ export type GetFormDefinitionFieldsForEditorQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -39987,6 +40223,12 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -42988,6 +43230,12 @@ export type OccurrencePointFormFieldsFragment = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
 };
 
@@ -49979,6 +50227,11 @@ export const FormDefinitionMetadataFragmentDoc = gql`
     }
     dateUpdated
     supportsSaveInProgress
+    access {
+      canManageForm
+      canPublishForm
+      canDuplicateForm
+    }
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`
@@ -50924,6 +51177,8 @@ export const FormIdentifierDetailsFragmentDoc = gql`
     adminEditableOnly
     access {
       canManageForm
+      canPublishForm
+      canDuplicateForm
     }
     displayVersion {
       ...FormDefinitionMetadata

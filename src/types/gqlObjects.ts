@@ -1146,6 +1146,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canCreateReferralNote',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewReferralDetails',
         type: {
           kind: 'NON_NULL',
@@ -3104,7 +3112,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'alcoholDrugUseDisorderFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'annualPercentAmi',
@@ -3296,11 +3308,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'incarceratedParent',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'insufficientIncome',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'juvenileJusticeMonths',
@@ -3352,7 +3372,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'mentalHealthDisorderFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'monthsHomelessPastThreeYears',
@@ -3388,7 +3412,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'physicalDisabilityFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'preferredLanguage',
@@ -3508,7 +3536,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'unemploymentFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'vamcStation',
@@ -4405,6 +4437,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'FormDefinitionAccess',
+    fields: [
+      {
+        name: 'canDuplicateForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canPublishForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'FormDefinitionForJsonResult',
     fields: [
       {
@@ -4467,7 +4536,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FormIdentifierAccess',
     fields: [
       {
+        name: 'canDuplicateForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canPublishForm',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -4701,6 +4786,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
