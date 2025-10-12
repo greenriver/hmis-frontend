@@ -17923,6 +17923,7 @@ export type CeReferralFieldsFragment = {
     canAssignReferralTasks: boolean;
     canViewSourceEnrollmentDetails: boolean;
     canViewTargetProject: boolean;
+    canCreateReferralNote: boolean;
   };
   customStatus?: {
     __typename?: 'CeCustomReferralStatus';
@@ -18841,6 +18842,8 @@ export type CeEligibleUnitGroupFieldsFragment = {
   projectId: string;
   projectType: ProjectType;
   organizationName: string;
+  candidateCreatedAt: string;
+  candidateUpdatedAt: string;
   unitsAcceptingReferrals: number;
 };
 
@@ -20343,6 +20346,7 @@ export type SubmitCeReferralStepMutation = {
         canAssignReferralTasks: boolean;
         canViewSourceEnrollmentDetails: boolean;
         canViewTargetProject: boolean;
+        canCreateReferralNote: boolean;
       };
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
@@ -21088,6 +21092,7 @@ export type GetCeReferralQuery = {
       canAssignReferralTasks: boolean;
       canViewSourceEnrollmentDetails: boolean;
       canViewTargetProject: boolean;
+      canCreateReferralNote: boolean;
     };
     customStatus?: {
       __typename?: 'CeCustomReferralStatus';
@@ -22140,6 +22145,8 @@ export type GetCeClientEligibleUnitGroupsQuery = {
         projectId: string;
         projectType: ProjectType;
         organizationName: string;
+        candidateCreatedAt: string;
+        candidateUpdatedAt: string;
         unitsAcceptingReferrals: number;
       }>;
     };
@@ -24696,15 +24703,10 @@ export type FormRuleFieldsFragment = {
   otherFunder?: string | null;
   projectType?: ProjectType | null;
   projectId?: string | null;
+  projectName?: string | null;
   organizationId?: string | null;
   createdAt: string;
   updatedAt: string;
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  } | null;
   organization?: {
     __typename?: 'Organization';
     id: string;
@@ -24900,15 +24902,10 @@ export type GetFormRulesQuery = {
       otherFunder?: string | null;
       projectType?: ProjectType | null;
       projectId?: string | null;
+      projectName?: string | null;
       organizationId?: string | null;
       createdAt: string;
       updatedAt: string;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
       organization?: {
         __typename?: 'Organization';
         id: string;
@@ -25001,15 +24998,10 @@ export type GetServiceCategoryRulesQuery = {
         otherFunder?: string | null;
         projectType?: ProjectType | null;
         projectId?: string | null;
+        projectName?: string | null;
         organizationId?: string | null;
         createdAt: string;
         updatedAt: string;
-        project?: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        } | null;
         organization?: {
           __typename?: 'Organization';
           id: string;
@@ -25063,15 +25055,10 @@ export type GetFormRuleQuery = {
     otherFunder?: string | null;
     projectType?: ProjectType | null;
     projectId?: string | null;
+    projectName?: string | null;
     organizationId?: string | null;
     createdAt: string;
     updatedAt: string;
-    project?: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    } | null;
     organization?: {
       __typename?: 'Organization';
       id: string;
@@ -25126,15 +25113,10 @@ export type CreateFormRuleMutation = {
       otherFunder?: string | null;
       projectType?: ProjectType | null;
       projectId?: string | null;
+      projectName?: string | null;
       organizationId?: string | null;
       createdAt: string;
       updatedAt: string;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
       organization?: {
         __typename?: 'Organization';
         id: string;
@@ -50205,6 +50187,7 @@ export const CeReferralFieldsFragmentDoc = gql`
       canAssignReferralTasks
       canViewSourceEnrollmentDetails
       canViewTargetProject
+      canCreateReferralNote
     }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
@@ -50450,6 +50433,8 @@ export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
     projectId
     projectType
     organizationName
+    candidateCreatedAt
+    candidateUpdatedAt
     unitsAcceptingReferrals
   }
 `;
@@ -50721,9 +50706,7 @@ export const FormRuleFieldsFragmentDoc = gql`
     otherFunder
     projectType
     projectId
-    project {
-      ...ProjectNameAndType
-    }
+    projectName
     organizationId
     organization {
       ...OrganizationNameFields
@@ -50738,7 +50721,6 @@ export const FormRuleFieldsFragmentDoc = gql`
       ...ServiceTypeFields
     }
   }
-  ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
 `;

@@ -264,6 +264,7 @@ fragment CeReferralFields on CeReferral {
     canAssignReferralTasks
     canViewSourceEnrollmentDetails
     canViewTargetProject
+    canCreateReferralNote
   }
 }
 
@@ -402,5 +403,7 @@ fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
   projectId
   projectType
   organizationName
+  candidateCreatedAt
+  candidateUpdatedAt
   unitsAcceptingReferrals
 }
