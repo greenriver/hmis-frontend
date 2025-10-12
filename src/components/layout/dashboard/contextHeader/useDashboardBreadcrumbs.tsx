@@ -286,7 +286,7 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Preview Form',
       },
       [AdminDashboardRoutes.PREVIEW_FORM_DRAFT]: {
-        parent: AdminDashboardRoutes.EDIT_FORM,
+        parent: AdminDashboardRoutes.VIEW_FORM,
         title: 'Preview Form',
       },
       [AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY]: {
