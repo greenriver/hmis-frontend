@@ -79,7 +79,6 @@ fragment UnitWithCeFields on Unit {
   canBeMarkedAvailableToday
   canBeMarkedUnavailable
   acceptingCeReferrals
-  workflowTemplateName
 }
 
 fragment UnitGroupFields on UnitGroup {
@@ -102,6 +101,8 @@ fragment UnitGroupDetailFields on UnitGroup {
   workflowTemplateName
   ceEventType
   workflowTemplateIdentifier
+  directReferralWorkflowTemplateName
+  directReferralWorkflowTemplateIdentifier
   eligibilityRequirements {
     ...CeMatchRuleFields
   }

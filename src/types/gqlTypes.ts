@@ -8559,6 +8559,7 @@ export type Unit = {
   unitSize?: Maybe<Scalars['Int']['output']>;
   unitType?: Maybe<UnitTypeObject>;
   user?: Maybe<ApplicationUser>;
+  /** @deprecated Unused on frontend. Use workflow template fields on unit group */
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
 
@@ -8584,6 +8585,8 @@ export type UnitGroup = {
   /** Total number of units in the group */
   capacity: Scalars['Int']['output'];
   ceEventType?: Maybe<EventType>;
+  directReferralWorkflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
+  directReferralWorkflowTemplateName?: Maybe<Scalars['String']['output']>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -8605,6 +8608,9 @@ export type UnitGroupUnitsArgs = {
 
 export type UnitGroupInput = {
   ceEventType?: InputMaybe<EventType>;
+  directReferralWorkflowTemplateIdentifier?: InputMaybe<
+    Scalars['String']['input']
+  >;
   name?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   workflowTemplateIdentifier?: InputMaybe<Scalars['String']['input']>;
@@ -20421,7 +20427,6 @@ export type MarkUnitsAvailableMutation = {
       canBeMarkedAvailableToday: boolean;
       canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
-      workflowTemplateName?: string | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -20511,7 +20516,6 @@ export type MarkUnitsUnavailableMutation = {
       canBeMarkedAvailableToday: boolean;
       canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
-      workflowTemplateName?: string | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -47611,7 +47615,6 @@ export type UnitTableRowFieldsFragment = {
   canBeMarkedAvailableToday: boolean;
   canBeMarkedUnavailable: boolean;
   acceptingCeReferrals: boolean;
-  workflowTemplateName?: string | null;
   unitType?: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -47785,7 +47788,6 @@ export type UnitWithCeFieldsFragment = {
   canBeMarkedAvailableToday: boolean;
   canBeMarkedUnavailable: boolean;
   acceptingCeReferrals: boolean;
-  workflowTemplateName?: string | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
@@ -47850,6 +47852,8 @@ export type UnitGroupDetailFieldsFragment = {
   workflowTemplateName?: string | null;
   ceEventType?: EventType | null;
   workflowTemplateIdentifier?: string | null;
+  directReferralWorkflowTemplateName?: string | null;
+  directReferralWorkflowTemplateIdentifier?: string | null;
   id: string;
   name: string;
   capacity: number;
@@ -47911,7 +47915,6 @@ export type GetUnitsQuery = {
         canBeMarkedAvailableToday: boolean;
         canBeMarkedUnavailable: boolean;
         acceptingCeReferrals: boolean;
-        workflowTemplateName?: string | null;
         unitType?: {
           __typename?: 'UnitTypeObject';
           id: string;
@@ -48030,6 +48033,8 @@ export type GetUnitGroupQuery = {
     workflowTemplateName?: string | null;
     ceEventType?: EventType | null;
     workflowTemplateIdentifier?: string | null;
+    directReferralWorkflowTemplateName?: string | null;
+    directReferralWorkflowTemplateIdentifier?: string | null;
     id: string;
     name: string;
     capacity: number;
@@ -48220,7 +48225,6 @@ export type CreateUnitsMutation = {
       canBeMarkedAvailableToday: boolean;
       canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
-      workflowTemplateName?: string | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -48352,7 +48356,6 @@ export type UpdateUnitsMutation = {
       canBeMarkedAvailableToday: boolean;
       canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
-      workflowTemplateName?: string | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -48475,6 +48478,8 @@ export type UpdateUnitGroupMutation = {
       workflowTemplateName?: string | null;
       ceEventType?: EventType | null;
       workflowTemplateIdentifier?: string | null;
+      directReferralWorkflowTemplateName?: string | null;
+      directReferralWorkflowTemplateIdentifier?: string | null;
       id: string;
       name: string;
       capacity: number;
@@ -51603,7 +51608,6 @@ export const UnitWithCeFieldsFragmentDoc = gql`
     canBeMarkedAvailableToday
     canBeMarkedUnavailable
     acceptingCeReferrals
-    workflowTemplateName
   }
   ${CeOpportunitySummaryFieldsFragmentDoc}
   ${CeReferralSummaryFieldsFragmentDoc}
@@ -51725,6 +51729,8 @@ export const UnitGroupDetailFieldsFragmentDoc = gql`
     workflowTemplateName
     ceEventType
     workflowTemplateIdentifier
+    directReferralWorkflowTemplateName
+    directReferralWorkflowTemplateIdentifier
     eligibilityRequirements {
       ...CeMatchRuleFields
     }

@@ -54,6 +54,12 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
   const [workflowTemplateIdentifier, setWorkflowTemplateIdentifier] = useState<
     string | null
   >(unitGroup?.workflowTemplateIdentifier || null);
+  const [
+    directReferralWorkflowTemplateIdentifier,
+    setDirectReferralWorkflowTemplateIdentifier,
+  ] = useState<string | null>(
+    unitGroup?.directReferralWorkflowTemplateIdentifier || null
+  );
   const [ceEventType, setCeEventType] = useState<EventType | null>(
     unitGroup?.ceEventType || null
   );
@@ -65,6 +71,9 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     setName(unitGroup?.name || '');
     setWorkflowTemplateIdentifier(
       unitGroup?.workflowTemplateIdentifier || null
+    );
+    setDirectReferralWorkflowTemplateIdentifier(
+      unitGroup?.directReferralWorkflowTemplateIdentifier || null
     );
     setCeEventType(unitGroup?.ceEventType || null);
     setErrors(emptyErrorState);
@@ -119,6 +128,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             name,
             projectId,
             workflowTemplateIdentifier,
+            directReferralWorkflowTemplateIdentifier,
             ceEventType,
           },
         },
@@ -130,6 +140,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             name,
             projectId,
             workflowTemplateIdentifier,
+            directReferralWorkflowTemplateIdentifier,
             ceEventType,
           },
         },
@@ -143,6 +154,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     updateUnitGroup,
     projectId,
     workflowTemplateIdentifier,
+    directReferralWorkflowTemplateIdentifier,
     ceEventType,
   ]);
 
@@ -171,6 +183,8 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
 
   const workflowTemplateIdentifierDisabled =
     isEditing && !!unitGroup?.workflowTemplateIdentifier;
+  const directReferralWorkflowTemplateIdentifierDisabled =
+    isEditing && !!unitGroup?.directReferralWorkflowTemplateIdentifier;
 
   if (templatePickListError) throw templatePickListError;
   if (ceEventPicklistError) throw ceEventPicklistError;
@@ -216,6 +230,30 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                     setWorkflowTemplateIdentifier(option.code);
                   } else if (!option) {
                     setWorkflowTemplateIdentifier(null);
+                  }
+                }}
+              />
+              <FormSelect
+                value={
+                  directReferralWorkflowTemplateIdentifier
+                    ? { code: directReferralWorkflowTemplateIdentifier }
+                    : null
+                }
+                placeholder='Select Direct Referral Workflow'
+                label={getRequiredLabel('Workflow for Direct Referrals', false)}
+                loading={templatePickListLoading}
+                options={templatePickList || []}
+                helperText={
+                  directReferralWorkflowTemplateIdentifierDisabled
+                    ? 'Workflow template cannot be changed once set.'
+                    : 'Select a workflow template to use for filling vacancies in this unit group.'
+                }
+                disabled={directReferralWorkflowTemplateIdentifierDisabled}
+                onChange={(_event, option) => {
+                  if (isPickListOption(option)) {
+                    setDirectReferralWorkflowTemplateIdentifier(option.code);
+                  } else if (!option) {
+                    setDirectReferralWorkflowTemplateIdentifier(null);
                   }
                 }}
               />
