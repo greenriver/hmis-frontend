@@ -60,7 +60,10 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             {publishedBy && `by ${publishedBy.name}`}
           </Typography>
         )}
-        {canManageForm || canDuplicateForm || (canPublishForm && <Divider />)}
+        {/* Show divider if any of the buttons below will be shown */}
+        {((managedInVersionControl && canDuplicateForm) ||
+          canManageForm ||
+          (hasDraft && canPublishForm)) && <Divider />}
         {managedInVersionControl && canDuplicateForm && (
           <DuplicateFormButton formIdentifier={formIdentifier} />
         )}
