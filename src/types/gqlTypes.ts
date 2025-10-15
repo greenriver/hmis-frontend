@@ -8551,16 +8551,12 @@ export type Unit = {
   name: Scalars['String']['output'];
   occupancyStatus: UnitOccupancyStatus;
   occupants: Array<Enrollment>;
-  /** @deprecated Replaced by prioritySchemes */
-  priorityScheme?: Maybe<CeMatchRule>;
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
   project?: Maybe<Project>;
   unitGroup?: Maybe<UnitGroup>;
   unitSize?: Maybe<Scalars['Int']['output']>;
   unitType?: Maybe<UnitTypeObject>;
   user?: Maybe<ApplicationUser>;
-  /** @deprecated Unused on frontend. Use workflow template fields on unit group */
-  workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
 
 export enum UnitFilterOptionStatus {
