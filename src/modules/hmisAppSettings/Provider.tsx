@@ -104,7 +104,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     const cachedUser = getValidCachedUser();
     const promises: Array<Promise<any>> = [];
 
-    // Pre-warm the backend rails cache with the logo image
+    // Pre-warm the backend cache with the logo image
     const prefetchLogo = (logoPath?: string) => {
       if (!logoPath) return Promise.resolve();
       const src = `${window.origin}${logoPath}`;
