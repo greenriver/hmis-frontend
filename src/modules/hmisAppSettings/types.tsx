@@ -2,6 +2,7 @@ import { ThemeOptions } from '@mui/material';
 export interface HmisAppSettings {
   oktaPath?: string;
   logoPath?: string;
+  logo?: HTMLImageElement;
   warehouseUrl?: string;
   warehouseName?: string;
   resetPasswordUrl?: string;

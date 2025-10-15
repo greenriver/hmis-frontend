@@ -3,7 +3,6 @@ import {
   Card,
   Container,
   Link,
-  Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
@@ -15,10 +14,9 @@ import LoginForm from '@/modules/auth/components/LoginForm';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const Login: React.FC = () => {
-  const { oktaPath, logoPath, warehouseUrl, warehouseName } =
+  const { oktaPath, logoPath, logo, warehouseUrl, warehouseName } =
     useHmisAppSettings();
   const [showPwLogin, setShowPwLogin] = useState(!oktaPath);
-  const [logoLoaded, setLogoLoaded] = useState(!logoPath); // If no logo, consider it loaded
 
   return (
     <Box sx={{ backgroundColor: 'background.default', height: '100vh' }}>
@@ -46,26 +44,16 @@ const Login: React.FC = () => {
             boxShadow: (theme) => theme.shadows[2],
           }}
         >
-          {logoPath && (
-            <>
-              {!logoLoaded && (
-                // If logo isn't loaded yet, show a skeleton while it loads
-                <Skeleton variant='rectangular' width='100%' height={60} />
-              )}
-              <Box
-                // Note that this image must always be rendered, even if logoLoaded is false,
-                // otherwise the onLoad callback won't get called and logoLoaded would never become true.
-                src={`${window.origin}${logoPath}`}
-                onLoad={() => setLogoLoaded(true)}
-                onError={() => setLogoLoaded(true)}
-                component='img'
-                sx={{
-                  maxWidth: '100%',
-                  mb: 2,
-                  display: logoLoaded ? 'block' : 'none',
-                }}
-              />
-            </>
+          {logo && <Box dangerouslySetInnerHTML={{ __html: logo.outerHTML }} />}
+          {!logo && logoPath && (
+            <Box
+              src={`${window.origin}${logoPath}`}
+              component='img'
+              sx={{
+                maxWidth: '100%',
+                mb: 2,
+              }}
+            />
           )}
           {oktaPath && !showPwLogin && (
             <Box sx={{ width: '100%' }}>

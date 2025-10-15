@@ -104,6 +104,17 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     const cachedUser = getValidCachedUser();
     const promises: Array<Promise<any>> = [];
 
+    const prefetchLogo = (logoPath?: string) => {
+      if (!logoPath) return Promise.resolve();
+      const src = `${window.origin}${logoPath}`;
+      return new Promise<HTMLImageElement>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(img);
+        img.src = src;
+      });
+    };
+
     const saveSettings = (value: HmisAppSettings) => {
       setAppSettings(value);
       storage.setAppSettings(value);
@@ -114,12 +125,35 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       const cachedAppSettings = storage.getAppSettings();
       if (cachedAppSettings) {
         setAppSettings(cachedAppSettings);
+        promises.push(
+          prefetchLogo(cachedAppSettings.logoPath).then((logo) => {
+            saveSettings({...cachedAppSettings, ...(logo ? { logo } : {})});
+          })
+        );
       } else {
-        promises.push(fetchHmisAppSettings().then(saveSettings));
+        promises.push(
+          fetchHmisAppSettings().then((value) => {
+            return prefetchLogo(value.logoPath).then((logo) => {
+              const next: HmisAppSettings = logo
+                ? { ...value, logo }
+                : value;
+              saveSettings(next);
+            });
+          })
+        );
       }
     } else {
       promises.push(fetchCurrentUser().then(setUser));
-      promises.push(fetchHmisAppSettings().then(saveSettings));
+      promises.push(
+        fetchHmisAppSettings().then((value) => {
+          return prefetchLogo(value.logoPath).then((logo) => {
+            const next: HmisAppSettings = logo
+              ? { ...value, logo }
+              : value;
+            saveSettings(next);
+          });
+        })
+      );
     }
 
     if (promises.length) {
