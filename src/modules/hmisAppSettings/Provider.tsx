@@ -104,9 +104,22 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     const cachedUser = getValidCachedUser();
     const promises: Array<Promise<any>> = [];
 
-    const saveSettings = (value: HmisAppSettings) => {
+    // Pre-warm the backend rails cache with the logo image
+    const prefetchLogo = (logoPath?: string) => {
+      if (!logoPath) return Promise.resolve();
+      const src = `${window.origin}${logoPath}`;
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = src;
+      });
+    };
+
+    const saveSettings = (value: HmisAppSettings): Promise<void> => {
       setAppSettings(value);
       storage.setAppSettings(value);
+      return prefetchLogo(value.logoPath);
     };
 
     if (cachedUser) {
@@ -114,6 +127,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       const cachedAppSettings = storage.getAppSettings();
       if (cachedAppSettings) {
         setAppSettings(cachedAppSettings);
+        promises.push(prefetchLogo(cachedAppSettings.logoPath));
       } else {
         promises.push(fetchHmisAppSettings().then(saveSettings));
       }
