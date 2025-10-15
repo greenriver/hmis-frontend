@@ -99,12 +99,20 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // tracking needs to be in place before we start making API calls
   useSessionTrackingObserver();
 
+  const [logoLoaded, setLogoLoaded] = useState(false);
+
   // fetch data from remote
   useEffect(() => {
     const cachedUser = getValidCachedUser();
     const promises: Array<Promise<any>> = [];
 
     const saveSettings = (value: HmisAppSettings) => {
+      if (value.logoPath) {
+        const logo = <img src={`${window.origin}${value.logoPath}`} onLoad={() => setLogoLoaded(true)} onError={() => setLogoLoaded(true)} />;
+        value.logo = logo;
+      }
+      // const logo = value.logoPath ? <img src={`${window.origin}${value.logoPath}`} onLoad={() => setLogoLoaded(true)} onError={() => setLogoLoaded(true)} /> : value.logo;
+
       setAppSettings(value);
       storage.setAppSettings(value);
     };
