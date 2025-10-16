@@ -26,7 +26,7 @@ const CommonTextWithIcon: React.FC<CommonTextWithIconProps> = ({
       sx={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 1,
+        gap: 0.8,
         ...sx,
       }}
       {...typographyProps}

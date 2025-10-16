@@ -1,5 +1,5 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import { SxProps } from '@mui/material';
+import { SvgIconProps, SxProps, TypographyProps } from '@mui/material';
 import React, { ReactNode } from 'react';
 import CommonTextWithIcon from '@/components/elements/CommonTextWithIcon';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -9,12 +9,14 @@ const ReferralStepDatum: React.FC<{
   children: ReactNode;
   sx?: SxProps;
   Icon?: SvgIconComponent;
-}> = ({ children, sx, Icon }) => {
+  IconProps?: SvgIconProps;
+  color?: TypographyProps['color'];
+}> = ({ children, sx, Icon, color, IconProps }) => {
   const isMobile = useIsMobile('sm');
 
   return (
     <CommonTextWithIcon
-      color='text.secondary'
+      color={color || 'text.secondary'}
       component={isMobile ? 'p' : 'span'}
       sx={{
         ...sx,
@@ -22,6 +24,7 @@ const ReferralStepDatum: React.FC<{
         mr: isMobile ? 0 : 2,
       }}
       Icon={Icon}
+      IconProps={IconProps}
     >
       {children}
     </CommonTextWithIcon>
