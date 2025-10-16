@@ -20450,7 +20450,12 @@ export type MarkUnitsAvailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup?: {
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        workflowTemplateIdentifier?: string | null;
+      } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -20539,7 +20544,12 @@ export type MarkUnitsUnavailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup?: {
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        workflowTemplateIdentifier?: string | null;
+      } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -47638,7 +47648,12 @@ export type UnitTableRowFieldsFragment = {
       nameSuffix?: string | null;
     };
   }>;
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  unitGroup?: {
+    __typename?: 'UnitGroup';
+    id: string;
+    name: string;
+    workflowTemplateIdentifier?: string | null;
+  } | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
@@ -47693,7 +47708,12 @@ export type UnitDetailFieldsFragment = {
     dateUpdated: string;
     dateCreated: string;
   } | null;
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  unitGroup?: {
+    __typename?: 'UnitGroup';
+    id: string;
+    name: string;
+    workflowTemplateIdentifier?: string | null;
+  } | null;
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
@@ -47830,6 +47850,7 @@ export type UnitGroupFieldsFragment = {
   __typename?: 'UnitGroup';
   id: string;
   name: string;
+  workflowTemplateIdentifier?: string | null;
 };
 
 export type UnitGroupCapacityFieldsFragment = {
@@ -47942,6 +47963,7 @@ export type GetUnitsQuery = {
           __typename?: 'UnitGroup';
           id: string;
           name: string;
+          workflowTemplateIdentifier?: string | null;
         } | null;
         latestOpportunity?: {
           __typename?: 'CeOpportunity';
@@ -48090,7 +48112,12 @@ export type GetUnitQuery = {
       dateUpdated: string;
       dateCreated: string;
     } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup?: {
+      __typename?: 'UnitGroup';
+      id: string;
+      name: string;
+      workflowTemplateIdentifier?: string | null;
+    } | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
@@ -48248,7 +48275,12 @@ export type CreateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup?: {
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        workflowTemplateIdentifier?: string | null;
+      } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -48379,7 +48411,12 @@ export type UpdateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup?: {
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        workflowTemplateIdentifier?: string | null;
+      } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -48446,7 +48483,12 @@ export type CreateUnitGroupMutation = {
   __typename?: 'Mutation';
   createUnitGroup?: {
     __typename?: 'CreateUnitGroupPayload';
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup?: {
+      __typename?: 'UnitGroup';
+      id: string;
+      name: string;
+      workflowTemplateIdentifier?: string | null;
+    } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -51594,6 +51636,7 @@ export const UnitGroupFieldsFragmentDoc = gql`
   fragment UnitGroupFields on UnitGroup {
     id
     name
+    workflowTemplateIdentifier
   }
 `;
 export const UnitWithCeFieldsFragmentDoc = gql`
