@@ -7634,6 +7634,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'EventType', ofType: null },
       },
       {
+        name: 'directReferralWorkflowTemplateIdentifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'directReferralWorkflowTemplateName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -10244,6 +10252,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'ceEventType',
         type: { kind: 'ENUM', name: 'EventType', ofType: null },
+      },
+      {
+        name: 'directReferralWorkflowTemplateIdentifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },

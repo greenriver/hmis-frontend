@@ -8579,6 +8579,7 @@ export type Unit = {
   unitSize?: Maybe<Scalars['Int']['output']>;
   unitType?: Maybe<UnitTypeObject>;
   user?: Maybe<ApplicationUser>;
+  /** @deprecated Unused on frontend. Use workflow template fields on unit group */
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
 
@@ -8604,6 +8605,8 @@ export type UnitGroup = {
   /** Total number of units in the group */
   capacity: Scalars['Int']['output'];
   ceEventType?: Maybe<EventType>;
+  directReferralWorkflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
+  directReferralWorkflowTemplateName?: Maybe<Scalars['String']['output']>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -8625,6 +8628,9 @@ export type UnitGroupUnitsArgs = {
 
 export type UnitGroupInput = {
   ceEventType?: InputMaybe<EventType>;
+  directReferralWorkflowTemplateIdentifier?: InputMaybe<
+    Scalars['String']['input']
+  >;
   name?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   workflowTemplateIdentifier?: InputMaybe<Scalars['String']['input']>;
@@ -20471,7 +20477,6 @@ export type MarkUnitsAvailableMutation = {
       canBeMarkedAvailableToday: boolean;
       canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
-      workflowTemplateName?: string | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -20495,7 +20500,12 @@ export type MarkUnitsAvailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup?: {
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        workflowTemplateIdentifier?: string | null;
+      } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -20561,7 +20571,6 @@ export type MarkUnitsUnavailableMutation = {
       canBeMarkedAvailableToday: boolean;
       canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
-      workflowTemplateName?: string | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -20585,7 +20594,12 @@ export type MarkUnitsUnavailableMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup?: {
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        workflowTemplateIdentifier?: string | null;
+      } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -47868,7 +47882,6 @@ export type UnitTableRowFieldsFragment = {
   canBeMarkedAvailableToday: boolean;
   canBeMarkedUnavailable: boolean;
   acceptingCeReferrals: boolean;
-  workflowTemplateName?: string | null;
   unitType?: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -47892,7 +47905,12 @@ export type UnitTableRowFieldsFragment = {
       nameSuffix?: string | null;
     };
   }>;
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  unitGroup?: {
+    __typename?: 'UnitGroup';
+    id: string;
+    name: string;
+    workflowTemplateIdentifier?: string | null;
+  } | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
@@ -47947,7 +47965,12 @@ export type UnitDetailFieldsFragment = {
     dateUpdated: string;
     dateCreated: string;
   } | null;
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+  unitGroup?: {
+    __typename?: 'UnitGroup';
+    id: string;
+    name: string;
+    workflowTemplateIdentifier?: string | null;
+  } | null;
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
     id: string;
@@ -48042,7 +48065,6 @@ export type UnitWithCeFieldsFragment = {
   canBeMarkedAvailableToday: boolean;
   canBeMarkedUnavailable: boolean;
   acceptingCeReferrals: boolean;
-  workflowTemplateName?: string | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
     id: string;
@@ -48085,6 +48107,7 @@ export type UnitGroupFieldsFragment = {
   __typename?: 'UnitGroup';
   id: string;
   name: string;
+  workflowTemplateIdentifier?: string | null;
 };
 
 export type UnitGroupCapacityFieldsFragment = {
@@ -48107,6 +48130,8 @@ export type UnitGroupDetailFieldsFragment = {
   workflowTemplateName?: string | null;
   ceEventType?: EventType | null;
   workflowTemplateIdentifier?: string | null;
+  directReferralWorkflowTemplateName?: string | null;
+  directReferralWorkflowTemplateIdentifier?: string | null;
   id: string;
   name: string;
   capacity: number;
@@ -48168,7 +48193,6 @@ export type GetUnitsQuery = {
         canBeMarkedAvailableToday: boolean;
         canBeMarkedUnavailable: boolean;
         acceptingCeReferrals: boolean;
-        workflowTemplateName?: string | null;
         unitType?: {
           __typename?: 'UnitTypeObject';
           id: string;
@@ -48196,6 +48220,7 @@ export type GetUnitsQuery = {
           __typename?: 'UnitGroup';
           id: string;
           name: string;
+          workflowTemplateIdentifier?: string | null;
         } | null;
         latestOpportunity?: {
           __typename?: 'CeOpportunity';
@@ -48287,6 +48312,8 @@ export type GetUnitGroupQuery = {
     workflowTemplateName?: string | null;
     ceEventType?: EventType | null;
     workflowTemplateIdentifier?: string | null;
+    directReferralWorkflowTemplateName?: string | null;
+    directReferralWorkflowTemplateIdentifier?: string | null;
     id: string;
     name: string;
     capacity: number;
@@ -48342,7 +48369,12 @@ export type GetUnitQuery = {
       dateUpdated: string;
       dateCreated: string;
     } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup?: {
+      __typename?: 'UnitGroup';
+      id: string;
+      name: string;
+      workflowTemplateIdentifier?: string | null;
+    } | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
       id: string;
@@ -48477,7 +48509,6 @@ export type CreateUnitsMutation = {
       canBeMarkedAvailableToday: boolean;
       canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
-      workflowTemplateName?: string | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -48501,7 +48532,12 @@ export type CreateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup?: {
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        workflowTemplateIdentifier?: string | null;
+      } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -48609,7 +48645,6 @@ export type UpdateUnitsMutation = {
       canBeMarkedAvailableToday: boolean;
       canBeMarkedUnavailable: boolean;
       acceptingCeReferrals: boolean;
-      workflowTemplateName?: string | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -48633,7 +48668,12 @@ export type UpdateUnitsMutation = {
           nameSuffix?: string | null;
         };
       }>;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+      unitGroup?: {
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        workflowTemplateIdentifier?: string | null;
+      } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
@@ -48700,7 +48740,12 @@ export type CreateUnitGroupMutation = {
   __typename?: 'Mutation';
   createUnitGroup?: {
     __typename?: 'CreateUnitGroupPayload';
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    unitGroup?: {
+      __typename?: 'UnitGroup';
+      id: string;
+      name: string;
+      workflowTemplateIdentifier?: string | null;
+    } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -48732,6 +48777,8 @@ export type UpdateUnitGroupMutation = {
       workflowTemplateName?: string | null;
       ceEventType?: EventType | null;
       workflowTemplateIdentifier?: string | null;
+      directReferralWorkflowTemplateName?: string | null;
+      directReferralWorkflowTemplateIdentifier?: string | null;
       id: string;
       name: string;
       capacity: number;
@@ -51857,6 +51904,7 @@ export const UnitGroupFieldsFragmentDoc = gql`
   fragment UnitGroupFields on UnitGroup {
     id
     name
+    workflowTemplateIdentifier
   }
 `;
 export const UnitWithCeFieldsFragmentDoc = gql`
@@ -51871,7 +51919,6 @@ export const UnitWithCeFieldsFragmentDoc = gql`
     canBeMarkedAvailableToday
     canBeMarkedUnavailable
     acceptingCeReferrals
-    workflowTemplateName
   }
   ${CeOpportunitySummaryFieldsFragmentDoc}
   ${CeReferralSummaryFieldsFragmentDoc}
@@ -51993,6 +52040,8 @@ export const UnitGroupDetailFieldsFragmentDoc = gql`
     workflowTemplateName
     ceEventType
     workflowTemplateIdentifier
+    directReferralWorkflowTemplateName
+    directReferralWorkflowTemplateIdentifier
     eligibilityRequirements {
       ...CeMatchRuleFields
     }

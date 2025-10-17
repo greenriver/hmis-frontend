@@ -102,6 +102,9 @@ const UnitPage: React.FC<Props> = ({}) => {
   // that only do direct referrals.
   if (!projectSupportsWaitlistReferrals) return <NotFound />;
 
+  // If the unit group doesn't have a workflow template identifier, creating client-list-based referrals will not work
+  if (!unit.unitGroup?.workflowTemplateIdentifier) return <NotFound />;
+
   return (
     <>
       <PageTitle title={unit.name} />
