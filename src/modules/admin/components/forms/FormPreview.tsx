@@ -31,7 +31,6 @@ import {
   getInitialValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
@@ -167,6 +166,8 @@ const FormPreview = () => {
 
   if (!formDefinition) return <NotFound />;
 
+  const { canManageForm, canPublishForm } = formDefinition.access;
+
   return (
     <>
       <PageTitle
@@ -193,8 +194,8 @@ const FormPreview = () => {
         />
 
         {formDefinition.status === FormStatus.Draft && (
-          <RootPermissionsFilter permissions='canManageForms'>
-            <Stack direction='row' spacing={4}>
+          <Stack direction='row' spacing={4}>
+            {canManageForm && (
               <ButtonLink
                 onClick={() => setConfirmOpen(true)}
                 variant='text'
@@ -206,22 +207,26 @@ const FormPreview = () => {
               >
                 Edit Draft
               </ButtonLink>
-              <Button onClick={() => setConfirmOpen(true)} sx={{ px: 6 }}>
-                Publish
-              </Button>
-            </Stack>
-            <ConfirmationDialog
-              id='publish'
-              open={confirmOpen}
-              title='Confirm Publish'
-              onConfirm={onPublishForm}
-              onCancel={() => setConfirmOpen(false)}
-              loading={publishLoading}
-              errorState={publishErrorState}
-            >
-              <div>Are you sure you want to publish this form?</div>
-            </ConfirmationDialog>
-          </RootPermissionsFilter>
+            )}
+            {canPublishForm && (
+              <>
+                <Button onClick={() => setConfirmOpen(true)} sx={{ px: 6 }}>
+                  Publish
+                </Button>
+                <ConfirmationDialog
+                  id='publish'
+                  open={confirmOpen}
+                  title='Confirm Publish'
+                  onConfirm={onPublishForm}
+                  onCancel={() => setConfirmOpen(false)}
+                  loading={publishLoading}
+                  errorState={publishErrorState}
+                >
+                  <div>Are you sure you want to publish this form?</div>
+                </ConfirmationDialog>
+              </>
+            )}
+          </Stack>
         )}
       </Stack>
 

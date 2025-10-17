@@ -84,6 +84,7 @@ fragment UnitWithCeFields on Unit {
 fragment UnitGroupFields on UnitGroup {
   id
   name
+  workflowTemplateIdentifier
 }
 
 fragment UnitGroupCapacityFields on UnitGroup {

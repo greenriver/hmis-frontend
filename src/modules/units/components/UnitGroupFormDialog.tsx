@@ -222,7 +222,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 helperText={
                   workflowTemplateIdentifierDisabled
                     ? 'Workflow template cannot be changed once set.'
-                    : 'Select a workflow template to use for filling vacancies in this unit group.'
+                    : 'Select a workflow template to use for filling vacancies in this unit group. If blank, referrals cannot be created from client lists in this unit group.'
                 }
                 disabled={workflowTemplateIdentifierDisabled}
                 onChange={(_event, option) => {
@@ -245,8 +245,8 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
                 options={templatePickList || []}
                 helperText={
                   directReferralWorkflowTemplateIdentifierDisabled
-                    ? 'Workflow template cannot be changed once set.'
-                    : 'Select a workflow template to use for filling vacancies in this unit group.'
+                    ? 'Workflow template for direct referrals cannot be changed once set.'
+                    : 'Select a workflow template to use for direct referrals in this unit group. If blank, the workflow template above will be used. If both are blank, direct referrals cannot be created in this group.'
                 }
                 disabled={directReferralWorkflowTemplateIdentifierDisabled}
                 onChange={(_event, option) => {

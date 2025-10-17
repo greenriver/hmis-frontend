@@ -45,7 +45,7 @@ server {
       proxy_set_header Host $backend_server;
     }
 
-    location /assets/theme {
+    location /logo {
       set $backend_server ${HMIS_BACKEND};
       proxy_pass https://$backend_server;
 

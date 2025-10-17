@@ -11,7 +11,6 @@ import {
   formatRelativeDateTime,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { FormIdentifierDetailsFragment, FormStatus } from '@/types/gqlTypes';
 
@@ -38,6 +37,9 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
     ? parseHmisDateString(formIdentifier.draftVersion?.dateUpdated)
     : undefined;
 
+  const { managedInVersionControl, access } = formIdentifier;
+  const { canManageForm, canPublishForm, canDuplicateForm } = access;
+
   return (
     <CommonCard title='Actions' TitleComponent='h5'>
       <Stack gap={1.5}>
@@ -58,41 +60,39 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             {publishedBy && `by ${publishedBy.name}`}
           </Typography>
         )}
-        <RootPermissionsFilter permissions='canManageForms'>
-          <Divider />
-          {formIdentifier.managedInVersionControl ? (
-            <DuplicateFormButton formIdentifier={formIdentifier} />
-          ) : (
-            <>
-              <EditFormButton
-                formIdentifier={formIdentifier}
-                text={'Edit Draft'}
-                variant='outlined'
-              />
-              {hasDraft && (
-                <>
-                  <ButtonLink
-                    to={generatePath(AdminDashboardRoutes.PREVIEW_FORM_DRAFT, {
-                      identifier: formIdentifier.identifier,
-                      formId: formIdentifier.draftVersion?.id || '',
-                    })}
-                    variant='contained'
-                    fullWidth
-                  >
-                    Preview / Publish Draft
-                  </ButtonLink>
-                  <Typography variant='caption'>
-                    Last edited{' '}
-                    {draftUpdatedOn
-                      ? formatRelativeDateTime(draftUpdatedOn)
-                      : ''}{' '}
-                    {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
-                  </Typography>
-                </>
-              )}
-            </>
-          )}
-        </RootPermissionsFilter>
+        {/* Show divider if any of the buttons below will be shown */}
+        {((managedInVersionControl && canDuplicateForm) ||
+          canManageForm ||
+          (hasDraft && canPublishForm)) && <Divider />}
+        {managedInVersionControl && canDuplicateForm && (
+          <DuplicateFormButton formIdentifier={formIdentifier} />
+        )}
+        {canManageForm && (
+          <EditFormButton
+            formIdentifier={formIdentifier}
+            text={'Edit Draft'}
+            variant='outlined'
+          />
+        )}
+        {hasDraft && canPublishForm && (
+          <>
+            <ButtonLink
+              to={generatePath(AdminDashboardRoutes.PREVIEW_FORM_DRAFT, {
+                identifier: formIdentifier.identifier,
+                formId: formIdentifier.draftVersion?.id || '',
+              })}
+              variant='contained'
+              fullWidth
+            >
+              Preview / Publish Draft
+            </ButtonLink>
+            <Typography variant='caption'>
+              Last edited{' '}
+              {draftUpdatedOn ? formatRelativeDateTime(draftUpdatedOn) : ''}{' '}
+              {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
+            </Typography>
+          </>
+        )}
       </Stack>
     </CommonCard>
   );
