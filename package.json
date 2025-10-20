@@ -147,7 +147,7 @@
     "husky": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^12.4.1",
-    "playwright": "^1.50.1",
+    "playwright": "^1.55.1",
     "prettier": "^3.3.3",
     "rollup-plugin-visualizer": "^5.6.0",
     "storybook": "^8.6.4",
