@@ -75,6 +75,7 @@ const mockReferral: CeReferralFieldsFragment = {
     canAssignReferralTasks: true,
     canViewSourceEnrollmentDetails: true,
     canViewTargetProject: true,
+    canCreateReferralNote: true,
   },
 };
 

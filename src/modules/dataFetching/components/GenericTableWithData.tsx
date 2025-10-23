@@ -298,10 +298,10 @@ const GenericTableWithData = <
     const isFiltered = Object.values(filterValues).some(hasMeaningfulValue);
     if (isFiltered)
       return `No ${pluralize(
-        startCase(recordType || 'record').toLowerCase()
+        startCase(paginationItemName || recordType || 'record').toLowerCase()
       )} matching selected filters`;
     return noData;
-  }, [noData, filters, filterValues, recordType]);
+  }, [noData, filterValues, filters, paginationItemName, recordType]);
 
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched && !data) return <Loading />;

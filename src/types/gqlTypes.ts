@@ -890,6 +890,8 @@ export type CeReferralNotesArgs = {
 export type CeReferralAccess = {
   __typename?: 'CeReferralAccess';
   canAssignReferralTasks: Scalars['Boolean']['output'];
+  /** Whether or not the user can create a note on this referral at the top level, i.e., not tied to a specific task. */
+  canCreateReferralNote: Scalars['Boolean']['output'];
   canViewReferralDetails: Scalars['Boolean']['output'];
   canViewSourceEnrollmentDetails: Scalars['Boolean']['output'];
   canViewTargetProject: Scalars['Boolean']['output'];
@@ -2892,7 +2894,7 @@ export type EnableWhen = {
 export type Enrollment = {
   __typename?: 'Enrollment';
   access: EnrollmentAccess;
-  alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
+  alcoholDrugUseDisorderFam?: Maybe<NoYesReasonsForMissingData>;
   annualPercentAmi?: Maybe<AnnualPercentAmi>;
   assessmentEligibilities: Array<AssessmentEligibility>;
   assessments: AssessmentsPaginated;
@@ -2951,9 +2953,9 @@ export type Enrollment = {
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
   incarceratedAdult?: Maybe<IncarceratedAdult>;
-  incarceratedParent?: Maybe<NoYesMissing>;
+  incarceratedParent?: Maybe<NoYesReasonsForMissingData>;
   incomeBenefits: IncomeBenefitsPaginated;
-  insufficientIncome?: Maybe<NoYesMissing>;
+  insufficientIncome?: Maybe<NoYesReasonsForMissingData>;
   intakeAssessment?: Maybe<Assessment>;
   juvenileJusticeMonths?: Maybe<Scalars['Int']['output']>;
   juvenileJusticeYears?: Maybe<RhyNumberofYears>;
@@ -2967,7 +2969,7 @@ export type Enrollment = {
   lockVersion: Scalars['Int']['output'];
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthConsultation?: Maybe<MentalHealthConsultation>;
-  mentalHealthDisorderFam?: Maybe<NoYesMissing>;
+  mentalHealthDisorderFam?: Maybe<NoYesReasonsForMissingData>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   moveInAddresses: Array<ClientAddress>;
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -2977,7 +2979,7 @@ export type Enrollment = {
   openEnrollmentSummary: Array<EnrollmentSummary>;
   organizationName: Scalars['String']['output'];
   percentAmi?: Maybe<PercentAmi>;
-  physicalDisabilityFam?: Maybe<NoYesMissing>;
+  physicalDisabilityFam?: Maybe<NoYesReasonsForMissingData>;
   preferredLanguage?: Maybe<PreferredLanguage>;
   preferredLanguageDifferent?: Maybe<Scalars['String']['output']>;
   previousStreetEssh?: Maybe<NoYesMissing>;
@@ -3007,7 +3009,7 @@ export type Enrollment = {
   timeToHousingLoss?: Maybe<TimeToHousingLoss>;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
   translationNeeded?: Maybe<NoYesReasonsForMissingData>;
-  unemploymentFam?: Maybe<NoYesMissing>;
+  unemploymentFam?: Maybe<NoYesReasonsForMissingData>;
   user?: Maybe<ApplicationUser>;
   vamcStation?: Maybe<VamcStationNumber>;
   youthEducationStatuses: YouthEducationStatusesPaginated;
@@ -9684,12 +9686,12 @@ export type AssessmentWithRecordsFragment = {
     formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
     juvenileJusticeYears?: RhyNumberofYears | null;
     juvenileJusticeMonths?: number | null;
-    unemploymentFam?: NoYesMissing | null;
-    mentalHealthDisorderFam?: NoYesMissing | null;
-    physicalDisabilityFam?: NoYesMissing | null;
-    alcoholDrugUseDisorderFam?: NoYesMissing | null;
-    insufficientIncome?: NoYesMissing | null;
-    incarceratedParent?: NoYesMissing | null;
+    unemploymentFam?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+    physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+    alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+    insufficientIncome?: NoYesReasonsForMissingData | null;
+    incarceratedParent?: NoYesReasonsForMissingData | null;
     targetScreenReqd?: NoYesMissing | null;
     timeToHousingLoss?: TimeToHousingLoss | null;
     annualPercentAmi?: AnnualPercentAmi | null;
@@ -10552,12 +10554,12 @@ export type FullAssessmentFragment = {
     formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
     juvenileJusticeYears?: RhyNumberofYears | null;
     juvenileJusticeMonths?: number | null;
-    unemploymentFam?: NoYesMissing | null;
-    mentalHealthDisorderFam?: NoYesMissing | null;
-    physicalDisabilityFam?: NoYesMissing | null;
-    alcoholDrugUseDisorderFam?: NoYesMissing | null;
-    insufficientIncome?: NoYesMissing | null;
-    incarceratedParent?: NoYesMissing | null;
+    unemploymentFam?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+    physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+    alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+    insufficientIncome?: NoYesReasonsForMissingData | null;
+    incarceratedParent?: NoYesReasonsForMissingData | null;
     targetScreenReqd?: NoYesMissing | null;
     timeToHousingLoss?: TimeToHousingLoss | null;
     annualPercentAmi?: AnnualPercentAmi | null;
@@ -12576,12 +12578,12 @@ export type GetAssessmentQuery = {
       formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
       juvenileJusticeYears?: RhyNumberofYears | null;
       juvenileJusticeMonths?: number | null;
-      unemploymentFam?: NoYesMissing | null;
-      mentalHealthDisorderFam?: NoYesMissing | null;
-      physicalDisabilityFam?: NoYesMissing | null;
-      alcoholDrugUseDisorderFam?: NoYesMissing | null;
-      insufficientIncome?: NoYesMissing | null;
-      incarceratedParent?: NoYesMissing | null;
+      unemploymentFam?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+      physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+      alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+      insufficientIncome?: NoYesReasonsForMissingData | null;
+      incarceratedParent?: NoYesReasonsForMissingData | null;
       targetScreenReqd?: NoYesMissing | null;
       timeToHousingLoss?: TimeToHousingLoss | null;
       annualPercentAmi?: AnnualPercentAmi | null;
@@ -14069,12 +14071,12 @@ export type SubmitAssessmentMutation = {
         formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
         juvenileJusticeYears?: RhyNumberofYears | null;
         juvenileJusticeMonths?: number | null;
-        unemploymentFam?: NoYesMissing | null;
-        mentalHealthDisorderFam?: NoYesMissing | null;
-        physicalDisabilityFam?: NoYesMissing | null;
-        alcoholDrugUseDisorderFam?: NoYesMissing | null;
-        insufficientIncome?: NoYesMissing | null;
-        incarceratedParent?: NoYesMissing | null;
+        unemploymentFam?: NoYesReasonsForMissingData | null;
+        mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+        physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+        alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+        insufficientIncome?: NoYesReasonsForMissingData | null;
+        incarceratedParent?: NoYesReasonsForMissingData | null;
         targetScreenReqd?: NoYesMissing | null;
         timeToHousingLoss?: TimeToHousingLoss | null;
         annualPercentAmi?: AnnualPercentAmi | null;
@@ -14924,12 +14926,12 @@ export type SubmitHouseholdAssessmentsMutation = {
         formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
         juvenileJusticeYears?: RhyNumberofYears | null;
         juvenileJusticeMonths?: number | null;
-        unemploymentFam?: NoYesMissing | null;
-        mentalHealthDisorderFam?: NoYesMissing | null;
-        physicalDisabilityFam?: NoYesMissing | null;
-        alcoholDrugUseDisorderFam?: NoYesMissing | null;
-        insufficientIncome?: NoYesMissing | null;
-        incarceratedParent?: NoYesMissing | null;
+        unemploymentFam?: NoYesReasonsForMissingData | null;
+        mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+        physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+        alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+        insufficientIncome?: NoYesReasonsForMissingData | null;
+        incarceratedParent?: NoYesReasonsForMissingData | null;
         targetScreenReqd?: NoYesMissing | null;
         timeToHousingLoss?: TimeToHousingLoss | null;
         annualPercentAmi?: AnnualPercentAmi | null;
@@ -15790,12 +15792,12 @@ export type GetAssessmentsForPopulationQuery = {
           formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
           juvenileJusticeYears?: RhyNumberofYears | null;
           juvenileJusticeMonths?: number | null;
-          unemploymentFam?: NoYesMissing | null;
-          mentalHealthDisorderFam?: NoYesMissing | null;
-          physicalDisabilityFam?: NoYesMissing | null;
-          alcoholDrugUseDisorderFam?: NoYesMissing | null;
-          insufficientIncome?: NoYesMissing | null;
-          incarceratedParent?: NoYesMissing | null;
+          unemploymentFam?: NoYesReasonsForMissingData | null;
+          mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+          physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+          alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+          insufficientIncome?: NoYesReasonsForMissingData | null;
+          incarceratedParent?: NoYesReasonsForMissingData | null;
           targetScreenReqd?: NoYesMissing | null;
           timeToHousingLoss?: TimeToHousingLoss | null;
           annualPercentAmi?: AnnualPercentAmi | null;
@@ -16647,12 +16649,12 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
   juvenileJusticeYears?: RhyNumberofYears | null;
   juvenileJusticeMonths?: number | null;
-  unemploymentFam?: NoYesMissing | null;
-  mentalHealthDisorderFam?: NoYesMissing | null;
-  physicalDisabilityFam?: NoYesMissing | null;
-  alcoholDrugUseDisorderFam?: NoYesMissing | null;
-  insufficientIncome?: NoYesMissing | null;
-  incarceratedParent?: NoYesMissing | null;
+  unemploymentFam?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+  physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+  alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+  insufficientIncome?: NoYesReasonsForMissingData | null;
+  incarceratedParent?: NoYesReasonsForMissingData | null;
   targetScreenReqd?: NoYesMissing | null;
   timeToHousingLoss?: TimeToHousingLoss | null;
   annualPercentAmi?: AnnualPercentAmi | null;
@@ -17889,6 +17891,7 @@ export type CeReferralFieldsFragment = {
     canAssignReferralTasks: boolean;
     canViewSourceEnrollmentDetails: boolean;
     canViewTargetProject: boolean;
+    canCreateReferralNote: boolean;
   };
   customStatus?: {
     __typename?: 'CeCustomReferralStatus';
@@ -20293,6 +20296,7 @@ export type SubmitCeReferralStepMutation = {
         canAssignReferralTasks: boolean;
         canViewSourceEnrollmentDetails: boolean;
         canViewTargetProject: boolean;
+        canCreateReferralNote: boolean;
       };
       customStatus?: {
         __typename?: 'CeCustomReferralStatus';
@@ -21038,6 +21042,7 @@ export type GetCeReferralQuery = {
       canAssignReferralTasks: boolean;
       canViewSourceEnrollmentDetails: boolean;
       canViewTargetProject: boolean;
+      canCreateReferralNote: boolean;
     };
     customStatus?: {
       __typename?: 'CeCustomReferralStatus';
@@ -28451,12 +28456,12 @@ export type EnrollmentValuesFragment = {
   formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
   juvenileJusticeYears?: RhyNumberofYears | null;
   juvenileJusticeMonths?: number | null;
-  unemploymentFam?: NoYesMissing | null;
-  mentalHealthDisorderFam?: NoYesMissing | null;
-  physicalDisabilityFam?: NoYesMissing | null;
-  alcoholDrugUseDisorderFam?: NoYesMissing | null;
-  insufficientIncome?: NoYesMissing | null;
-  incarceratedParent?: NoYesMissing | null;
+  unemploymentFam?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+  physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+  alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+  insufficientIncome?: NoYesReasonsForMissingData | null;
+  incarceratedParent?: NoYesReasonsForMissingData | null;
   targetScreenReqd?: NoYesMissing | null;
   timeToHousingLoss?: TimeToHousingLoss | null;
   annualPercentAmi?: AnnualPercentAmi | null;
@@ -28892,12 +28897,12 @@ export type GetEnrollmentQuery = {
     formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
     juvenileJusticeYears?: RhyNumberofYears | null;
     juvenileJusticeMonths?: number | null;
-    unemploymentFam?: NoYesMissing | null;
-    mentalHealthDisorderFam?: NoYesMissing | null;
-    physicalDisabilityFam?: NoYesMissing | null;
-    alcoholDrugUseDisorderFam?: NoYesMissing | null;
-    insufficientIncome?: NoYesMissing | null;
-    incarceratedParent?: NoYesMissing | null;
+    unemploymentFam?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorderFam?: NoYesReasonsForMissingData | null;
+    physicalDisabilityFam?: NoYesReasonsForMissingData | null;
+    alcoholDrugUseDisorderFam?: NoYesReasonsForMissingData | null;
+    insufficientIncome?: NoYesReasonsForMissingData | null;
+    incarceratedParent?: NoYesReasonsForMissingData | null;
     targetScreenReqd?: NoYesMissing | null;
     timeToHousingLoss?: TimeToHousingLoss | null;
     annualPercentAmi?: AnnualPercentAmi | null;
@@ -49925,6 +49930,7 @@ export const CeReferralFieldsFragmentDoc = gql`
       canAssignReferralTasks
       canViewSourceEnrollmentDetails
       canViewTargetProject
+      canCreateReferralNote
     }
   }
   ${CeReferralSummaryFieldsFragmentDoc}
