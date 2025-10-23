@@ -46,11 +46,12 @@ query GetCeOpportunityCandidates(
   $opportunityId: ID!
   $limit: Int = 25
   $offset: Int = 0
+  $filters: CeOpportunityCandidatesFilterOptions
 ) {
   ceOpportunity(id: $opportunityId) {
     id
     candidatesGeneratedAt
-    candidates(limit: $limit, offset: $offset) {
+    candidates(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount

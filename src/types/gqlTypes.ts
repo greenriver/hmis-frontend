@@ -773,8 +773,13 @@ export type CeOpportunityCandidateLookupArgs = {
 };
 
 export type CeOpportunityCandidatesArgs = {
+  filters?: InputMaybe<CeOpportunityCandidatesFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CeOpportunityCandidatesFilterOptions = {
+  excludeRecentlyDeclined?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CeOpportunityFilterOptions = {
@@ -20941,6 +20946,7 @@ export type GetCeOpportunityCandidatesQueryVariables = Exact<{
   opportunityId: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeOpportunityCandidatesFilterOptions>;
 }>;
 
 export type GetCeOpportunityCandidatesQuery = {
@@ -51998,7 +52004,11 @@ export const UnitDetailFieldsFragmentDoc = gql`
     }
     latestOpportunity @include(if: $includeCeFields) {
       ...CeOpportunityFields
-      candidates(limit: 1, offset: 0) {
+      candidates(
+        limit: 1
+        offset: 0
+        filters: { excludeRecentlyDeclined: true }
+      ) {
         offset
         limit
         nodesCount
@@ -54810,11 +54820,12 @@ export const GetCeOpportunityCandidatesDocument = gql`
     $opportunityId: ID!
     $limit: Int = 25
     $offset: Int = 0
+    $filters: CeOpportunityCandidatesFilterOptions
   ) {
     ceOpportunity(id: $opportunityId) {
       id
       candidatesGeneratedAt
-      candidates(limit: $limit, offset: $offset) {
+      candidates(limit: $limit, offset: $offset, filters: $filters) {
         offset
         limit
         nodesCount
@@ -54842,6 +54853,7 @@ export const GetCeOpportunityCandidatesDocument = gql`
  *      opportunityId: // value for 'opportunityId'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

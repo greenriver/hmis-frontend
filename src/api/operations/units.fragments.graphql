@@ -57,7 +57,11 @@ fragment UnitDetailFields on Unit {
   }
   latestOpportunity @include(if: $includeCeFields) {
     ...CeOpportunityFields
-    candidates(limit: 1, offset: 0) {
+    candidates(
+      limit: 1
+      offset: 0
+      filters: { excludeRecentlyDeclined: true }
+    ) {
       offset
       limit
       nodesCount
