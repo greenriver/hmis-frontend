@@ -8278,7 +8278,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'CeOpportunityCandidatesFilterOptions',
     args: [
       {
-        name: 'excludeRecentlyDeclined',
+        name: 'excludeDeclinedClients',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
     ],

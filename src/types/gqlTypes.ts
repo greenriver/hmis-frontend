@@ -779,7 +779,7 @@ export type CeOpportunityCandidatesArgs = {
 };
 
 export type CeOpportunityCandidatesFilterOptions = {
-  excludeRecentlyDeclined?: InputMaybe<Scalars['Boolean']['input']>;
+  excludeDeclinedClients?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CeOpportunityFilterOptions = {
@@ -51874,7 +51874,7 @@ export const UnitDetailFieldsFragmentDoc = gql`
       candidates(
         limit: 1
         offset: 0
-        filters: { excludeRecentlyDeclined: true }
+        filters: { excludeDeclinedClients: true }
       ) {
         offset
         limit

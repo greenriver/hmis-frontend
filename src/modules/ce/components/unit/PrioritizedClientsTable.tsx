@@ -144,7 +144,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
           noData={'No clients are currently eligible for this unit.'}
           filters={filters}
           defaultFilterValues={{
-            excludeRecentlyDeclined: true,
+            excludeDeclinedClients: true,
           }}
         />
       </Paper>

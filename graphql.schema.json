@@ -5675,7 +5675,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "excludeRecentlyDeclined",
+            "name": "excludeDeclinedClients",
             "description": null,
             "type": {
               "kind": "SCALAR",
