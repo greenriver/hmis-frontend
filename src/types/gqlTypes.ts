@@ -773,8 +773,13 @@ export type CeOpportunityCandidateLookupArgs = {
 };
 
 export type CeOpportunityCandidatesArgs = {
+  filters?: InputMaybe<CeOpportunityCandidatesFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CeOpportunityCandidatesFilterOptions = {
+  excludeDeclinedClients?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CeOpportunityFilterOptions = {
@@ -17463,24 +17468,6 @@ export type CeOpportunityFieldsFragment = {
       name: string;
     } | null;
   } | null;
-  eligibilityRequirements?: Array<{
-    __typename?: 'CeMatchRule';
-    id: string;
-    name: string;
-    ownerType: CeMatchRuleOwner;
-    expression: string;
-    projectTypes: Array<ProjectType>;
-    funders?: Array<FundingSource> | null;
-  }> | null;
-  prioritySchemes?: Array<{
-    __typename?: 'CeMatchRule';
-    id: string;
-    name: string;
-    ownerType: CeMatchRuleOwner;
-    expression: string;
-    projectTypes: Array<ProjectType>;
-    funders?: Array<FundingSource> | null;
-  }> | null;
   unit?: {
     __typename?: 'Unit';
     id: string;
@@ -20289,15 +20276,6 @@ export type SubmitCeReferralStepMutation = {
             name: string;
           } | null;
         } | null;
-        prioritySchemes?: Array<{
-          __typename?: 'CeMatchRule';
-          id: string;
-          name: string;
-          ownerType: CeMatchRuleOwner;
-          expression: string;
-          projectTypes: Array<ProjectType>;
-          funders?: Array<FundingSource> | null;
-        }> | null;
         unit?: {
           __typename?: 'Unit';
           id: string;
@@ -20870,73 +20848,11 @@ export type GetProjectCeReferralsQuery = {
   } | null;
 };
 
-export type GetCeOpportunityQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetCeOpportunityQuery = {
-  __typename?: 'Query';
-  ceOpportunity?: {
-    __typename?: 'CeOpportunity';
-    candidatesGeneratedAt?: string | null;
-    id: string;
-    name: string;
-    status: CeOpportunityStatus;
-    active: boolean;
-    projectId: string;
-    projectName: string;
-    dateAvailable: string;
-    referral?: {
-      __typename?: 'CeReferral';
-      id: string;
-      status: CeReferralStatus;
-      active: boolean;
-      clientId: string;
-      clientName?: string | null;
-      origin: CeReferralOrigin;
-      customStatus?: {
-        __typename?: 'CeCustomReferralStatus';
-        id: string;
-        key: string;
-        name: string;
-      } | null;
-    } | null;
-    eligibilityRequirements?: Array<{
-      __typename?: 'CeMatchRule';
-      id: string;
-      name: string;
-      ownerType: CeMatchRuleOwner;
-      expression: string;
-      projectTypes: Array<ProjectType>;
-      funders?: Array<FundingSource> | null;
-    }> | null;
-    prioritySchemes?: Array<{
-      __typename?: 'CeMatchRule';
-      id: string;
-      name: string;
-      ownerType: CeMatchRuleOwner;
-      expression: string;
-      projectTypes: Array<ProjectType>;
-      funders?: Array<FundingSource> | null;
-    }> | null;
-    unit?: {
-      __typename?: 'Unit';
-      id: string;
-      name: string;
-      unitType?: {
-        __typename?: 'UnitTypeObject';
-        id: string;
-        description?: string | null;
-      } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
-    } | null;
-  } | null;
-};
-
 export type GetCeOpportunityCandidatesQueryVariables = Exact<{
   opportunityId: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<CeOpportunityCandidatesFilterOptions>;
 }>;
 
 export type GetCeOpportunityCandidatesQuery = {
@@ -48023,24 +47939,6 @@ export type UnitDetailFieldsFragment = {
         name: string;
       } | null;
     } | null;
-    eligibilityRequirements?: Array<{
-      __typename?: 'CeMatchRule';
-      id: string;
-      name: string;
-      ownerType: CeMatchRuleOwner;
-      expression: string;
-      projectTypes: Array<ProjectType>;
-      funders?: Array<FundingSource> | null;
-    }> | null;
-    prioritySchemes?: Array<{
-      __typename?: 'CeMatchRule';
-      id: string;
-      name: string;
-      ownerType: CeMatchRuleOwner;
-      expression: string;
-      projectTypes: Array<ProjectType>;
-      funders?: Array<FundingSource> | null;
-    }> | null;
     unit?: {
       __typename?: 'Unit';
       id: string;
@@ -48427,24 +48325,6 @@ export type GetUnitQuery = {
           name: string;
         } | null;
       } | null;
-      eligibilityRequirements?: Array<{
-        __typename?: 'CeMatchRule';
-        id: string;
-        name: string;
-        ownerType: CeMatchRuleOwner;
-        expression: string;
-        projectTypes: Array<ProjectType>;
-        funders?: Array<FundingSource> | null;
-      }> | null;
-      prioritySchemes?: Array<{
-        __typename?: 'CeMatchRule';
-        id: string;
-        name: string;
-        ownerType: CeMatchRuleOwner;
-        expression: string;
-        projectTypes: Array<ProjectType>;
-        funders?: Array<FundingSource> | null;
-      }> | null;
       unit?: {
         __typename?: 'Unit';
         id: string;
@@ -51954,16 +51834,9 @@ export const CeOpportunityFieldsFragmentDoc = gql`
     referral {
       ...CeReferralSummaryFields
     }
-    eligibilityRequirements {
-      ...CeMatchRuleFields
-    }
-    prioritySchemes {
-      ...CeMatchRuleFields
-    }
   }
   ${CeOpportunitySummaryFieldsFragmentDoc}
   ${CeReferralSummaryFieldsFragmentDoc}
-  ${CeMatchRuleFieldsFragmentDoc}
 `;
 export const CeCandidateFieldsFragmentDoc = gql`
   fragment CeCandidateFields on CeCandidate {
@@ -51994,7 +51867,11 @@ export const UnitDetailFieldsFragmentDoc = gql`
     }
     latestOpportunity @include(if: $includeCeFields) {
       ...CeOpportunityFields
-      candidates(limit: 1, offset: 0) {
+      candidates(
+        limit: 1
+        offset: 0
+        filters: { excludeDeclinedClients: true }
+      ) {
         offset
         limit
         nodesCount
@@ -54718,99 +54595,17 @@ export type GetProjectCeReferralsQueryResult = Apollo.QueryResult<
   GetProjectCeReferralsQuery,
   GetProjectCeReferralsQueryVariables
 >;
-export const GetCeOpportunityDocument = gql`
-  query GetCeOpportunity($id: ID!) {
-    ceOpportunity(id: $id) {
-      ...CeOpportunityFields
-    }
-  }
-  ${CeOpportunityFieldsFragmentDoc}
-`;
-
-/**
- * __useGetCeOpportunityQuery__
- *
- * To run a query within a React component, call `useGetCeOpportunityQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCeOpportunityQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCeOpportunityQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetCeOpportunityQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetCeOpportunityQuery,
-    GetCeOpportunityQueryVariables
-  > &
-    (
-      | { variables: GetCeOpportunityQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetCeOpportunityQuery, GetCeOpportunityQueryVariables>(
-    GetCeOpportunityDocument,
-    options
-  );
-}
-export function useGetCeOpportunityLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetCeOpportunityQuery,
-    GetCeOpportunityQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetCeOpportunityQuery,
-    GetCeOpportunityQueryVariables
-  >(GetCeOpportunityDocument, options);
-}
-export function useGetCeOpportunitySuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetCeOpportunityQuery,
-        GetCeOpportunityQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetCeOpportunityQuery,
-    GetCeOpportunityQueryVariables
-  >(GetCeOpportunityDocument, options);
-}
-export type GetCeOpportunityQueryHookResult = ReturnType<
-  typeof useGetCeOpportunityQuery
->;
-export type GetCeOpportunityLazyQueryHookResult = ReturnType<
-  typeof useGetCeOpportunityLazyQuery
->;
-export type GetCeOpportunitySuspenseQueryHookResult = ReturnType<
-  typeof useGetCeOpportunitySuspenseQuery
->;
-export type GetCeOpportunityQueryResult = Apollo.QueryResult<
-  GetCeOpportunityQuery,
-  GetCeOpportunityQueryVariables
->;
 export const GetCeOpportunityCandidatesDocument = gql`
   query GetCeOpportunityCandidates(
     $opportunityId: ID!
     $limit: Int = 25
     $offset: Int = 0
+    $filters: CeOpportunityCandidatesFilterOptions
   ) {
     ceOpportunity(id: $opportunityId) {
       id
       candidatesGeneratedAt
-      candidates(limit: $limit, offset: $offset) {
+      candidates(limit: $limit, offset: $offset, filters: $filters) {
         offset
         limit
         nodesCount
@@ -54838,6 +54633,7 @@ export const GetCeOpportunityCandidatesDocument = gql`
  *      opportunityId: // value for 'opportunityId'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
