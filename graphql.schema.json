@@ -56237,18 +56237,6 @@
             "deprecationReason": null
           },
           {
-            "name": "priorityScheme",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CeMatchRule",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Replaced by prioritySchemes"
-          },
-          {
             "name": "prioritySchemes",
             "description": null,
             "args": [],
@@ -56327,18 +56315,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "workflowTemplateName",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Unused on frontend. Use workflow template fields on unit group"
           }
         ],
         "inputFields": null,
