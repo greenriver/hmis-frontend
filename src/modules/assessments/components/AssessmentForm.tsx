@@ -385,10 +385,14 @@ const AssessmentForm: React.FC<Props> = ({
             onClick={() => setDialogOpen(true)}
           />
         )}
-        {locked && assessment ? (
+        {locked ? (
+          // Locked scenarios:
+          // - Locked assessment that was previously submitted
+          // - Locked assessment that was previously saved, not submitted
+          // - Locked because the user doesn't have access to edit
           <FormContainer
             actions={
-              canEdit && !isPrintView ? (
+              assessment && canEdit && !isPrintView ? (
                 <FormActions
                   onSubmit={() => undefined}
                   onSaveDraft={() => undefined}
@@ -401,8 +405,14 @@ const AssessmentForm: React.FC<Props> = ({
             sticky={embeddedInWorkflow ? 'always' : 'auto'}
           >
             <DynamicView
-              // don't use `initialValues` because we don't want the OVERWRITE fields
-              values={initialValuesFromAssessment(itemMap, assessment)}
+              // don't use `initialValues` because we don't want the OVERWRITE fields.
+              // If no assessment exists, just display an empty locked form.
+              // (Can happen on the Household Assessments view, if another assessment in the household was previously saved/submitted)
+              values={
+                assessment
+                  ? initialValuesFromAssessment(itemMap, assessment)
+                  : {}
+              }
               definition={definition.definition}
               pickListArgs={pickListArgs}
               localConstants={localConstants}
