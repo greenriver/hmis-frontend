@@ -26,12 +26,6 @@ fragment CeOpportunityFields on CeOpportunity {
   referral {
     ...CeReferralSummaryFields
   }
-  eligibilityRequirements {
-    ...CeMatchRuleFields
-  }
-  prioritySchemes {
-    ...CeMatchRuleFields
-  }
 }
 
 fragment CeOpportunityAdminFields on CeOpportunity {
