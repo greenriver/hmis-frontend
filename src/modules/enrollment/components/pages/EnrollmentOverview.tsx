@@ -73,30 +73,36 @@ const EnrollmentOverview = () => {
               enrollment={enrollment}
               getEnrollmentFeature={getEnrollmentFeature}
             />
-            {enrollment.access.canDeleteEnrollments &&
-              (enrollment.inProgress || !enrollment.intakeAssessment) && (
-                <DeleteMutationButton<
-                  DeleteEnrollmentMutation,
-                  DeleteEnrollmentMutationVariables
-                >
-                  queryDocument={DeleteEnrollmentDocument}
-                  variables={{ input: { id: enrollment.id } }}
-                  idPath='deleteEnrollment.enrollment.id'
-                  recordName='Enrollment'
-                  onSuccess={onSuccessfulDelete}
-                  ButtonProps={{
-                    sx: {
-                      justifyContent: 'left',
-                      alignSelf: 'flex-end',
-                      width: 'fit-content',
-                    },
-                    size: 'small',
-                  }}
-                  deleteIcon
-                >
-                  Delete Enrollment
-                </DeleteMutationButton>
-              )}
+            {// User sees the Delete Enrollment button here under two circumstances:
+            // 1. The enrollment is incomplete, and the user has permission to edit the enrollment
+            ((enrollment.access.canEditEnrollments && enrollment.inProgress) ||
+              // 2. The enrollment is complete but missing an intake (bad data), and the user has permission to delete the enrollment.
+              // (Normally completed enrollments can only be deleted by deleting their intake assessment, so this workaround enables cleaning up bad data)
+              (enrollment.access.canDeleteEnrollments &&
+                !enrollment.inProgress &&
+                !enrollment.intakeAssessment)) && (
+              <DeleteMutationButton<
+                DeleteEnrollmentMutation,
+                DeleteEnrollmentMutationVariables
+              >
+                queryDocument={DeleteEnrollmentDocument}
+                variables={{ input: { id: enrollment.id } }}
+                idPath='deleteEnrollment.enrollment.id'
+                recordName='Enrollment'
+                onSuccess={onSuccessfulDelete}
+                ButtonProps={{
+                  sx: {
+                    justifyContent: 'left',
+                    alignSelf: 'flex-end',
+                    width: 'fit-content',
+                  },
+                  size: 'small',
+                }}
+                deleteIcon
+              >
+                Delete Enrollment
+              </DeleteMutationButton>
+            )}
           </Stack>
         </Grid>
       </Grid>
