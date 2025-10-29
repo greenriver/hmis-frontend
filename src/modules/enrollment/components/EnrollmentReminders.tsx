@@ -93,7 +93,7 @@ const generateColumns = (
           {canEditEnrollment ? (
             <Link component='span'>{reminderTitle(reminder)}</Link>
           ) : (
-            <span>{reminderTitle(reminder)}</span>
+            reminderTitle(reminder)
           )}
           <Typography color='text.secondary' variant='inherit'>
             {reminderDesciption(reminder, currentClientId)}
