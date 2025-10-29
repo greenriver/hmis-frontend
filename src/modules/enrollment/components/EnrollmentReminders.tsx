@@ -80,7 +80,8 @@ const reminderDesciption = (
 };
 
 const generateColumns = (
-  currentClientId: string
+  currentClientId: string,
+  canEditEnrollment: boolean
 ): ColumnDef<ReminderFieldsFragment>[] => [
   {
     key: 'name',
@@ -88,8 +89,12 @@ const generateColumns = (
     render: (reminder: ReminderFieldsFragment) => {
       return (
         <Stack gap={0.4}>
-          {/* style reminder as a link, even though it's not (the row is clickable) */}
-          <Link component='span'>{reminderTitle(reminder)}</Link>
+          {/* if user can edit this enrollment, style the reminder as a link (the row is clickable) */}
+          {canEditEnrollment ? (
+            <Link component='span'>{reminderTitle(reminder)}</Link>
+          ) : (
+            <span>{reminderTitle(reminder)}</span>
+          )}
           <Typography color='text.secondary' variant='inherit'>
             {reminderDesciption(reminder, currentClientId)}
           </Typography>
@@ -238,7 +243,13 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
   }, [enrollmentId, data?.enrollment?.reminders, enrollment]);
 
   const columns = useMemo(
-    () => (enrollment ? generateColumns(enrollment.client.id) : []),
+    () =>
+      enrollment
+        ? generateColumns(
+            enrollment.client.id,
+            enrollment.access.canEditEnrollments
+          )
+        : [],
     [enrollment]
   );
 
