@@ -115,12 +115,18 @@ const HouseholdAssessments: React.FC<Props> = ({
 
   const hasRefetched = useHasRefetched(fetchAssessmentsStatus.networkStatus);
 
+  const readOnlyView = !enrollment.access.canEditEnrollments;
+
   useEffect(() => {
     if (!householdMembers) return;
     if (!assessmentByEnrollmentId) return;
     setTabs((oldTabs) => {
-      const newTabs: TabDefinition[] = householdMembers.map(
-        ({ client, enrollment, relationshipToHoH }, index) => {
+      const newTabs: TabDefinition[] = householdMembers
+        .filter(({ enrollment }) =>
+          // If user has read-only access, only show tabs for which there is an assessment
+          readOnlyView ? !!assessmentByEnrollmentId[enrollment.id] : true
+        )
+        .map(({ client, enrollment, relationshipToHoH }, index) => {
           const assessment = assessmentByEnrollmentId[enrollment.id];
           const assessmentId = assessment?.id;
           const assessmentInProgress = assessment?.inProgress;
@@ -165,11 +171,10 @@ const HouseholdAssessments: React.FC<Props> = ({
           }
 
           return tabData;
-        }
-      );
+        });
       return newTabs;
     });
-  }, [householdMembers, assessmentByEnrollmentId, role]);
+  }, [householdMembers, assessmentByEnrollmentId, role, readOnlyView]);
 
   const { hash } = useLocation();
 
@@ -257,8 +262,6 @@ const HouseholdAssessments: React.FC<Props> = ({
     px: 4,
   };
 
-  const showSummaryTab = enrollment.access.canEditEnrollments;
-
   return (
     <>
       <AppBar
@@ -320,7 +323,7 @@ const HouseholdAssessments: React.FC<Props> = ({
           {/* <Grid item xs={1} sm={0.1}></Grid> */}
           <Grid
             item
-            xs={showSummaryTab ? 8 : 10}
+            xs={readOnlyView ? 10 : 8}
             sx={{
               height: '100%',
               pr: 6,
@@ -351,7 +354,7 @@ const HouseholdAssessments: React.FC<Props> = ({
               ))}
             </Tabs>
           </Grid>
-          {showSummaryTab && (
+          {!readOnlyView && (
             <Grid
               item
               xs={2}
