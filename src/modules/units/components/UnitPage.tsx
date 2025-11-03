@@ -98,11 +98,12 @@ const UnitPage: React.FC<Props> = ({}) => {
 
   // This page is only available for projects that use waitlists.
   // Currently there is not really anything to show on a Unit page for projects that only do direct referrals.
-  // (This condition should never be met because of the redirectRoute provided in route definitions; see protected.tsx)
+  // (This condition should never be met because of the redirectRoute in the route definition; see protected.tsx)
   if (!project.coordinatedEntryFeatures?.supportsWaitlistReferrals)
     return <NotFound />;
 
-  // If the unit group doesn't have a workflow template identifier, creating client-list-based referrals will not work
+  // If the unit group doesn't have a workflow template identifier, creating client-list-based referrals will not work.
+  // Redirect to the project units page. (redirectRoute in the route definition doesn't handle this)
   if (!unit.unitGroup?.workflowTemplateIdentifier) {
     return (
       <Navigate
