@@ -51,33 +51,25 @@ import { useFetchAhaScoreMutation } from '@/types/gqlTypes';
  *        "type": "STRING",
  *        ...
  *      },
- *      {
- *        "link_id": "aha_failed_reason",
- *        "type": "STRING",
- *        ...
- *      },
  *      ... may have additional items
  *    ]
  *  }
  */
 
-// Numeric AHA score, may be -1 or 1..10
+// Numeric AHA score, may be -1 or 1..10. -1 means no score, which can occur if (1) the client has no MCI Unique ID yet, OR (2) the API call return -1 for the client.
 const SCORE_LINK_ID = 'aha_score';
-// This field is a 0/1 flag indicating whether the Alt-AHA should be performed or not. (1 = Alt-AHA is required, 0 = Alt-AHA is not required)
+// This field is a 0/1 flag indicating whether the Alt-AHA should be performed or not. (1 = Alt-AHA is required, 0 = Alt-AHA is not required). Only present if the API call was successful.
 const MCI_QUALITY_INDICATOR_LINK_ID = 'aha_mci_quality_indicator';
-// MCI Unique ID that is associated with the retrieved score
+// MCI Unique ID that is associated with the retrieved score. Only present if the API call was successful.
 const DW_CLIENT_LINK_ID = 'aha_dw_client_id';
-// Generator of the score, always 'AHA'
+// Generator of the score, always 'AHA'. Only present if the API call was successful.
 const GENERATOR_LINK_ID = 'aha_generator';
-// Reason for failure to retrieve the score, if any. Stored in a form item so that there can be dependent question to display additional instructions.
-const AHA_FAILED_REASON_LINK_ID = 'aha_failed_reason';
 
 const EXPECTED_LINK_IDS = [
   SCORE_LINK_ID,
   MCI_QUALITY_INDICATOR_LINK_ID,
   DW_CLIENT_LINK_ID,
   GENERATOR_LINK_ID,
-  AHA_FAILED_REASON_LINK_ID,
 ];
 
 const AhaScore = ({
@@ -95,15 +87,11 @@ const AhaScore = ({
   }, [item]);
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
-
+  const [missingMciUniqueId, setMissingMciUniqueId] = useState<boolean>(false);
   // Use RHF to watch the current value of the score field.
   // This is to disable the fetch button after unlocking an assessment that's already fetched the score.
-  const values = useDynamicFieldWatchValues([
-    SCORE_LINK_ID,
-    AHA_FAILED_REASON_LINK_ID,
-  ]);
+  const values = useDynamicFieldWatchValues([SCORE_LINK_ID]);
   const scoreValue = values[SCORE_LINK_ID];
-  const failedReason = values[AHA_FAILED_REASON_LINK_ID];
 
   // If client has no score (-1 is returned), hasScore is false and the button stays enabled
   const hasScore =
@@ -127,6 +115,12 @@ const AhaScore = ({
       setHasFetched(true);
       setErrorState(emptyErrorState);
 
+      // If response indicates that the score is not available because the client doesn't have an MCI Unique ID assigned yet, update state to display a message.
+      setMissingMciUniqueId(
+        data.fetchAhaScore?.ahaFailedReason ===
+          HmisEnums.AhaFailedReason.NO_MCI_UNIQUE_ID
+      );
+
       if (data.fetchAhaScore && severalItemsChanged) {
         severalItemsChanged({
           values: {
@@ -135,7 +129,6 @@ const AhaScore = ({
               data.fetchAhaScore.mciQualityIndicator,
             [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
             [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
-            [AHA_FAILED_REASON_LINK_ID]: data.fetchAhaScore.ahaFailedReason,
           },
           type: ChangeType.User,
         });
@@ -208,7 +201,7 @@ const AhaScore = ({
             <Typography variant='body2' color='text.secondary'>
               {/* If AHA is not available due to the client not having an MCI Unique ID assigned yet, the score is not available TODAY.
               The expectation is that the client will be assigned an MCI Unique ID the following day. */}
-              {failedReason === HmisEnums.AhaFailedReason.NO_MCI_UNIQUE_ID
+              {missingMciUniqueId
                 ? 'AHA score is not available for this client TODAY'
                 : 'AHA score is not available for this client'}
             </Typography>
