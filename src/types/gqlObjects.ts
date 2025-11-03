@@ -10318,27 +10318,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'UpdateFormRuleInput',
-    args: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'input',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'INPUT_OBJECT', name: 'FormRuleInput', ofType: null },
-        },
-      },
-    ],
-  },
-  {
     name: 'UpdateRelationshipToHoHInput',
     args: [
       {
