@@ -35,7 +35,8 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
   const canLinkToIntake =
     enrollment.access.canEditEnrollments || !enrollment.inProgress;
   const canLinkToExit =
-    !enrollment.inProgress && (enrollment.access.canEditEnrollments || enrollment.exitDate);
+    !enrollment.inProgress &&
+    (enrollment.access.canEditEnrollments || enrollment.exitDate);
 
   const exitDateOrActive = enrollment.exitDate ? (
     parseAndFormatDate(enrollment.exitDate)
