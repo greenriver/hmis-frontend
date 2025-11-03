@@ -389,7 +389,7 @@ const AssessmentForm: React.FC<Props> = ({
           // Locked scenarios:
           // - Locked assessment that was previously submitted
           // - Locked assessment that was previously saved, not submitted
-          // - Locked because the user doesn't have access to edit
+          // - Locked because the user doesn't have access to edit. (Should not arise, user shouldn't see this page)
           <FormContainer
             actions={
               assessment && canEdit && !isPrintView ? (
