@@ -9,24 +9,77 @@ import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import { ChangeType, GroupItemComponentProps } from '@/modules/form/types';
+import { HmisEnums } from '@/types/gqlEnums';
 import { useFetchAhaScoreMutation } from '@/types/gqlTypes';
 
+/**
+ * AHA Score Component
+ *
+ * This component is used when a group item specifies "component: AHA".
+ * The component renders a button to fetch the AHA score from the backend, and dynamically renders
+ * its child items (which may be visible or hidden depending on the form definition).
+ *
+ *
+ * Similar to DisabilityGroup, this component is tightly coupled to its expected form structure.
+ * It MUST have certain child items with specific link_ids (see EXPECTED_LINK_IDS below).
+ * Data associated with the AHA score retrieval is stored in separate form items so that they can
+ * be stored and exported as custom data elements.
+ *
+ *
+ * EXPECTED GROUP ITEM SHAPE:
+ *  {
+ *    "type": "GROUP",
+ *    "component": "AHA",
+ *    "item": [
+ *      {
+ *        "link_id": "aha_score",
+ *        "type": "INTEGER",
+ *        ...
+ *      },
+ *      {
+ *        "link_id": "aha_mci_quality_indicator",
+ *        "type": "INTEGER",
+ *        ...
+ *      },
+ *      {
+ *        "link_id": "aha_dw_client_id",
+ *        "type": "STRING",
+ *        ...
+ *      },
+ *      {
+ *        "link_id": "aha_generator",
+ *        "type": "STRING",
+ *        ...
+ *      },
+ *      {
+ *        "link_id": "aha_failed_reason",
+ *        "type": "STRING",
+ *        ...
+ *      },
+ *      ... may have additional items
+ *    ]
+ *  }
+ */
+
+// Numeric AHA score, may be -1 or 1..10
 const SCORE_LINK_ID = 'aha_score';
+// This field is a 0/1 flag indicating whether the Alt-AHA should be performed or not. (1 = Alt-AHA is required, 0 = Alt-AHA is not required)
 const MCI_QUALITY_INDICATOR_LINK_ID = 'aha_mci_quality_indicator';
+// MCI Unique ID that is associated with the retrieved score
 const DW_CLIENT_LINK_ID = 'aha_dw_client_id';
+// Generator of the score, always 'AHA'
 const GENERATOR_LINK_ID = 'aha_generator';
+// Reason for failure to retrieve the score, if any. Stored in a form item so that there can be dependent question to display additional instructions.
+const AHA_FAILED_REASON_LINK_ID = 'aha_failed_reason';
 
 const EXPECTED_LINK_IDS = [
   SCORE_LINK_ID,
   MCI_QUALITY_INDICATOR_LINK_ID,
   DW_CLIENT_LINK_ID,
   GENERATOR_LINK_ID,
+  AHA_FAILED_REASON_LINK_ID,
 ];
 
-// Custom component for rendering AHA score. Renders a button to fetch the score, as well as sub-items including:
-// score (value), alt-AHA flag, and hidden items for values that should be submitted but not shown to the user.
-// Similar to DisabilityGroup, this component is tightly coupled to its expected form structure.
-// `item` is expected to be of type 'GROUP', and have child items with certain link_ids (EXPECTED_LINK_IDS).
 const AhaScore = ({
   item,
   handlers,
@@ -45,8 +98,12 @@ const AhaScore = ({
 
   // Use RHF to watch the current value of the score field.
   // This is to disable the fetch button after unlocking an assessment that's already fetched the score.
-  const values = useDynamicFieldWatchValues([SCORE_LINK_ID]);
+  const values = useDynamicFieldWatchValues([
+    SCORE_LINK_ID,
+    AHA_FAILED_REASON_LINK_ID,
+  ]);
   const scoreValue = values[SCORE_LINK_ID];
+  const failedReason = values[AHA_FAILED_REASON_LINK_ID];
 
   // If client has no score (-1 is returned), hasScore is false and the button stays enabled
   const hasScore =
@@ -78,6 +135,7 @@ const AhaScore = ({
               data.fetchAhaScore.mciQualityIndicator,
             [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
             [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
+            [AHA_FAILED_REASON_LINK_ID]: data.fetchAhaScore.ahaFailedReason,
           },
           type: ChangeType.User,
         });
@@ -148,7 +206,11 @@ const AhaScore = ({
         {hasFetched && !hasScore && (
           <LabelWithContent label='AHA Score'>
             <Typography variant='body2' color='text.secondary'>
-              AHA score is not available for this client.
+              {/* If AHA is not available due to the client not having an MCI Unique ID assigned yet, the score is not available TODAY.
+              The expectation is that the client will be assigned an MCI Unique ID the following day. */}
+              {failedReason === HmisEnums.AhaFailedReason.NO_MCI_UNIQUE_ID
+                ? 'AHA score is not available for this client TODAY'
+                : 'AHA score is not available for this client'}
             </Typography>
           </LabelWithContent>
         )}
