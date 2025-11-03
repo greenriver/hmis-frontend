@@ -73,16 +73,8 @@ const EnrollmentOverview = () => {
               enrollment={enrollment}
               getEnrollmentFeature={getEnrollmentFeature}
             />
-            {
-              // User sees the Delete Enrollment button here under two circumstances:
-              // 1. The enrollment is incomplete, and the user has permission to edit the enrollment
-              ((enrollment.access.canEditEnrollments &&
-                enrollment.inProgress) ||
-                // 2. The enrollment is complete but missing an intake (bad data), and the user has permission to delete the enrollment.
-                // (Normally completed enrollments can only be deleted by deleting their intake assessment, so this workaround enables cleaning up bad data)
-                (enrollment.access.canDeleteEnrollments &&
-                  !enrollment.inProgress &&
-                  !enrollment.intakeAssessment)) && (
+            {enrollment.access.canDeleteEnrollments &&
+              (enrollment.inProgress || !enrollment.intakeAssessment) && (
                 <DeleteMutationButton<
                   DeleteEnrollmentMutation,
                   DeleteEnrollmentMutationVariables
@@ -104,8 +96,7 @@ const EnrollmentOverview = () => {
                 >
                   Delete Enrollment
                 </DeleteMutationButton>
-              )
-            }
+              )}
           </Stack>
         </Grid>
       </Grid>
