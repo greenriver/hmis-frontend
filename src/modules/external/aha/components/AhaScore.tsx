@@ -9,8 +9,7 @@ import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import { ChangeType, GroupItemComponentProps } from '@/modules/form/types';
-import { HmisEnums } from '@/types/gqlEnums';
-import { useFetchAhaScoreMutation } from '@/types/gqlTypes';
+import { AhaFailedReason, useFetchAhaScoreMutation } from '@/types/gqlTypes';
 
 /**
  * AHA Score Component
@@ -87,7 +86,9 @@ const AhaScore = ({
   }, [item]);
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
-  const [missingMciUniqueId, setMissingMciUniqueId] = useState<boolean>(false);
+  const [ahaFailedReason, setAhaFailedReason] = useState<
+    AhaFailedReason | undefined | null
+  >();
   // Use RHF to watch the current value of the score field.
   // This is to disable the fetch button after unlocking an assessment that's already fetched the score.
   const values = useDynamicFieldWatchValues([SCORE_LINK_ID]);
@@ -115,12 +116,6 @@ const AhaScore = ({
       setHasFetched(true);
       setErrorState(emptyErrorState);
 
-      // If response indicates that the score is not available because the client doesn't have an MCI Unique ID assigned yet, update state to display a message.
-      setMissingMciUniqueId(
-        data.fetchAhaScore?.ahaFailedReason ===
-          HmisEnums.AhaFailedReason.NO_MCI_UNIQUE_ID
-      );
-
       if (data.fetchAhaScore && severalItemsChanged) {
         severalItemsChanged({
           values: {
@@ -132,6 +127,8 @@ const AhaScore = ({
           },
           type: ChangeType.User,
         });
+        // Store aha failed reason in state so message can be displayed if needed.
+        setAhaFailedReason(data.fetchAhaScore?.ahaFailedReason);
       }
     },
     onError: (apolloError) => {
@@ -201,7 +198,7 @@ const AhaScore = ({
             <Typography variant='body2' color='text.secondary'>
               {/* If AHA is not available due to the client not having an MCI Unique ID assigned yet, the score is not available TODAY.
               The expectation is that the client will be assigned an MCI Unique ID the following day. */}
-              {missingMciUniqueId
+              {ahaFailedReason === AhaFailedReason.NoMciUniqueId
                 ? 'AHA score is not available for this client TODAY'
                 : 'AHA score is not available for this client'}
             </Typography>
