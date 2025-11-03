@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
+import ValidationErrorSnackbarAlert from '@/modules/errors/components/ValidationErrorSnackbarAlert';
+import {
+  emptyErrorState,
+  ErrorState,
+  hasAnyValue,
+  partitionValidations,
+} from '@/modules/errors/util';
 import { cache } from '@/providers/apolloClient';
 import {
   CeReferralStepStatus,
@@ -19,6 +26,7 @@ interface Props {
 const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
   const { status, name } = step;
   const navigate = useNavigate();
+  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   const [startStepMutation, { loading, error }] =
     useStartCeReferralStepMutation({
@@ -27,7 +35,12 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
         stepId: step.stepId || '',
       },
       onCompleted: (data) => {
-        if (data.startCeReferralStep?.step) {
+        const errors = data.startCeReferralStep?.errors || [];
+        if (errors.length > 0) {
+          setErrorState(partitionValidations(errors));
+        } else if (data.startCeReferralStep?.step) {
+          setErrorState(emptyErrorState);
+
           const step = data.startCeReferralStep?.step;
 
           // The step returned from the mutation is now auto added to the Apollo cache.
@@ -57,14 +70,19 @@ const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
   // If the step is "Available" (meaning nobody has clicked "Start" yet), we need to perform a mutation to initialize it
   if (status === CeReferralStepStatus.Available && canPerformStep) {
     return (
-      <LoadingButton
-        sx={buttonSx}
-        loading={loading}
-        onClick={() => startStepMutation()}
-        aria-label={`Start step: ${name}`}
-      >
-        Start
-      </LoadingButton>
+      <>
+        {hasAnyValue(errorState) && (
+          <ValidationErrorSnackbarAlert errors={errorState.errors} />
+        )}
+        <LoadingButton
+          sx={buttonSx}
+          loading={loading}
+          onClick={() => startStepMutation()}
+          aria-label={`Start step: ${name}`}
+        >
+          Start
+        </LoadingButton>
+      </>
     );
   }
 
