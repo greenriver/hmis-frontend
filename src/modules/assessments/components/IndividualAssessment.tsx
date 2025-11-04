@@ -1,5 +1,5 @@
 import { Alert, Box } from '@mui/material';
-import { Ref } from 'react';
+import { Ref, useEffect, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import {
@@ -97,11 +97,22 @@ const IndividualAssessment = ({
 
   useScrollToHash(enrollmentLoading, topOffsetHeight);
 
+  const { canEditEnrollments: canEdit } = enrollment?.access || {};
+
+  const [locked, setLocked] = useState(
+    !!(assessment && !assessment.inProgress)
+  );
+
+  useEffect(() => {
+    if (!canEdit) return;
+    if (assessment && !assessment.inProgress) setLocked(true);
+  }, [assessment, canEdit, setLocked]); // re-runs after assessment is refetched, which leads to assessment re-locking after submit
+
   if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
   if (!viewingDefinition || !editingDefinition) return <NotFound />;
 
-  if (!assessment && !enrollment.access.canEditEnrollments) {
+  if (!assessment && !canEdit) {
     // if the assessment doesn't exist already, and the user doesn't have edit access, it doesn't make sense to render a form
     // since they wouldn't be able to see any existing data (no assessment exists)
     // and they wouldn't be able to submit any data (no edit access)
@@ -128,6 +139,8 @@ const IndividualAssessment = ({
       assessmentId={assessment?.id}
     >
       <AssessmentForm
+        locked={canEdit ? locked : false}
+        setLocked={canEdit ? setLocked : () => {}}
         alerts={alertNode}
         client={client}
         key={assessment?.id}
