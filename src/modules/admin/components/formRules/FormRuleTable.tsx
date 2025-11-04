@@ -14,6 +14,7 @@ import {
   GetFormRulesQueryVariables,
   useDeactivateFormRuleMutation,
 } from '@/types/gqlTypes';
+import { evictQuery } from '@/utils/cacheUtil';
 
 type RowType = FormRuleFieldsFragment;
 
@@ -27,7 +28,7 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
   const [deactivate, { loading, error }] = useDeactivateFormRuleMutation({
     onCompleted: (data) => {
       if (data.deleteFormRule?.formRule) {
-        cache.evict({ id: `FormRule:${data.deleteFormRule?.formRule?.id}` });
+        evictQuery('formRules');
         cache.evict({
           id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
           fieldName: 'projectMatches',
