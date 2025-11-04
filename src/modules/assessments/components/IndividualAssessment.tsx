@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import { Ref } from 'react';
 
 import Loading from '@/components/elements/Loading';
@@ -100,6 +100,13 @@ const IndividualAssessment = ({
   if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
   if (!viewingDefinition || !editingDefinition) return <NotFound />;
+
+  if (!assessment && !enrollment.access.canEditEnrollments) {
+    // if the assessment doesn't exist already, and the user doesn't have edit access, it doesn't make sense to render a form
+    // since they wouldn't be able to see any existing data (no assessment exists)
+    // and they wouldn't be able to submit any data (no edit access)
+    return <Alert>Assessment does not exist</Alert>;
+  }
 
   const alertNode = (
     <AssessmentRelatedAnnualsAlert
