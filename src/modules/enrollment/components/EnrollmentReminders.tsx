@@ -89,8 +89,9 @@ const generateColumns = (
     render: (reminder: ReminderFieldsFragment) => {
       return (
         <Stack gap={0.4}>
-          {/* if user can edit this enrollment, style the reminder as a link (the row is clickable) */}
           {canEditEnrollment ? (
+            // If the user can edit this enrollment, style the reminder as a link (the row is clickable).
+            // This is not our usual table pattern, it's a special case for quick-action links.
             <Link component='span'>{reminderTitle(reminder)}</Link>
           ) : (
             reminderTitle(reminder)
