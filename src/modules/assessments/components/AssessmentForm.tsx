@@ -2,11 +2,10 @@ import UnlockIcon from '@mui/icons-material/Lock';
 import { Alert, Stack, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
-  Dispatch,
   ReactNode,
   Ref,
-  SetStateAction,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -64,8 +63,6 @@ import {
 } from '@/types/gqlTypes';
 
 interface Props {
-  locked: boolean;
-  setLocked: Dispatch<SetStateAction<boolean>>;
   enrollment: EnrollmentFieldsFragment;
   client: AssessedClientFieldsFragment;
   // FormDefiniton to use for rendering the assessment in read-only mode
@@ -91,8 +88,6 @@ interface Props {
 }
 
 const AssessmentForm: React.FC<Props> = ({
-  locked,
-  setLocked,
   assessment,
   client,
   alerts,
@@ -116,7 +111,15 @@ const AssessmentForm: React.FC<Props> = ({
 
   // Whether assessment is locked. By default, submitted assessments are locked.
   const canEdit = enrollment?.access.canEditEnrollments;
-  const handleUnlock = useCallback(() => setLocked(false), [setLocked]);
+  const [locked, setLocked] = useState(
+    !canEdit || !!(assessment && !assessment.inProgress)
+  );
+  const handleUnlock = useCallback(() => setLocked(false), []);
+
+  useEffect(() => {
+    if (!canEdit) return;
+    if (assessment && !assessment.inProgress) setLocked(true);
+  }, [assessment, canEdit]); // re-runs after assessment is refetched, which leads to assessment re-locking after submit
 
   // Choose the FormDefiniton to use for rendering, and filter it down based on client attributes (Data Collected About rules).
   const definition = useMemo(() => {
