@@ -1,5 +1,5 @@
 import UnlockIcon from '@mui/icons-material/Lock';
-import { Stack, Typography } from '@mui/material';
+import { Alert, Stack, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -386,38 +386,32 @@ const AssessmentForm: React.FC<Props> = ({
           />
         )}
         {locked ? (
-          // Locked scenarios:
-          // - Locked assessment that was previously submitted
-          // - Locked assessment that was previously saved, not submitted
-          // - Locked because the user doesn't have access to edit. (Should not arise, user shouldn't see this page)
-          <FormContainer
-            actions={
-              assessment && canEdit && !isPrintView ? (
-                <FormActions
-                  onSubmit={() => undefined}
-                  onSaveDraft={() => undefined}
-                  disabled={false}
-                  loading={false}
-                  {...formActionPropsWithLock}
-                />
-              ) : undefined
-            }
-            sticky={embeddedInWorkflow ? 'always' : 'auto'}
-          >
-            <DynamicView
-              // don't use `initialValues` because we don't want the OVERWRITE fields.
-              // If no assessment exists, just display an empty locked form.
-              // (Can happen on the Household Assessments view, if another assessment in the household was previously saved/submitted)
-              values={
-                assessment
-                  ? initialValuesFromAssessment(itemMap, assessment)
-                  : {}
+          assessment ? (
+            <FormContainer
+              actions={
+                canEdit && !isPrintView ? (
+                  <FormActions
+                    onSubmit={() => undefined}
+                    onSaveDraft={() => undefined}
+                    disabled={false}
+                    loading={false}
+                    {...formActionPropsWithLock}
+                  />
+                ) : undefined
               }
-              definition={definition.definition}
-              pickListArgs={pickListArgs}
-              localConstants={localConstants}
-            />
-          </FormContainer>
+              sticky={embeddedInWorkflow ? 'always' : 'auto'}
+            >
+              <DynamicView
+                // don't use `initialValues` because we don't want the OVERWRITE fields
+                values={initialValuesFromAssessment(itemMap, assessment)}
+                definition={definition.definition}
+                pickListArgs={pickListArgs}
+                localConstants={localConstants}
+              />
+            </FormContainer>
+          ) : (
+            <Alert>Assessment does not exist</Alert>
+          )
         ) : (
           <DynamicForm
             // Remount component if a source assessment has been selected
