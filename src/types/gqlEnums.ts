@@ -27,6 +27,9 @@ export const HmisEnums = {
     Age62Plus: '62+',
     Age65Plus: '65+',
   },
+  AhaFailedReason: {
+    NO_MCI_UNIQUE_ID: 'Client does not have an MCI unique ID',
+  },
   AnnualPercentAMI: {
     INVALID: 'Invalid Value',
     NUM_0:

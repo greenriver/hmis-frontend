@@ -512,6 +512,24 @@
       },
       {
         "kind": "ENUM",
+        "name": "AhaFailedReason",
+        "description": null,
+        "isOneOf": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "NO_MCI_UNIQUE_ID",
+            "description": "Client does not have an MCI unique ID",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "AnnualPercentAMI",
         "description": "HUD AnnualPercentAMI (V7.B)",
         "isOneOf": null,
@@ -26125,6 +26143,18 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "ahaFailedReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "AhaFailedReason",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dwClientId",
             "description": null,
             "args": [],
@@ -29205,7 +29235,7 @@
             },
             "defaultValue": null,
             "isDeprecated": true,
-            "deprecationReason": "Use DeleteFormRule to deactivate instead. Rules are always active when created."
+            "deprecationReason": "Rules are always active when created. This type is no longer used for updating a form rule. To deactivate, use DeleteFormRule mutation."
           },
           {
             "name": "dataCollectedAbout",
