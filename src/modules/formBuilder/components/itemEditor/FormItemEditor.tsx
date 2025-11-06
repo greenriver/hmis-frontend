@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import { DeepPartial, useForm, Controller } from 'react-hook-form';
+import { DeepPartial, useForm } from 'react-hook-form';
 import { v4 } from 'uuid';
 import FormEditorItemPreview from '../FormEditorItemPreview';
 import AutofillProperties from './conditionals/AutofillProperties';
@@ -21,7 +21,6 @@ import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextB
 import { scrollToElement } from '@/hooks/useScrollToHash';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { hasErrors } from '@/modules/errors/util';
-import FormSelect from '@/modules/form/components/FormSelect';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
@@ -52,7 +51,6 @@ import {
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionJson,
   FormItem,
-  PickListOption,
   PickListType,
   useGetPickListQuery,
   ItemType,
@@ -459,37 +457,14 @@ const FormItemEditor: React.FC<Props> = ({
           </RootPermissionsFilter>
           <RootPermissionsFilter permissions='canAdministrateConfig'>
             <Section title='Editor Access'>
-              <Controller // todo @martha - why controller? because there is no out-of-the-box ControlledMultiSelect?
+              <ControlledSelect
                 name='editorUserIds'
                 control={control}
-                render={({ field }) => {
-                  const selected: PickListOption[] = Array.isArray(field.value)
-                    ? (field.value as (string | number)[]).map(
-                        (id) =>
-                          userOptions?.find(
-                            (opt) => opt.code === id.toString()
-                          ) || {
-                            code: id.toString(),
-                            label: id.toString(),
-                          }
-                      )
-                    : [];
-                  return (
-                    <FormSelect
-                      multiple
-                      label='Editor Users'
-                      placeholder='Select users allowed to edit this item'
-                      options={userOptions || []}
-                      loading={usersLoading}
-                      value={selected}
-                      onChange={(_e, options) =>
-                        field.onChange(
-                          (options as PickListOption[]).map((o) => o.code)
-                        )
-                      }
-                    />
-                  );
-                }}
+                label='Editor Users'
+                placeholder='Select users allowed to edit this item'
+                options={userOptions || []}
+                loading={usersLoading}
+                multiple
               />
             </Section>
           </RootPermissionsFilter>

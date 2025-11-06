@@ -11,7 +11,7 @@ import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 export type ControlledSelectProps = Omit<
-  GenericSelectProps<PickListOption, false, false>,
+  GenericSelectProps<PickListOption, boolean, false>, // GenericSelect's
   'value' | 'onChange' | 'onBlur'
 > & {
   name: string;
@@ -20,8 +20,9 @@ export type ControlledSelectProps = Omit<
   required?: boolean;
   helperText?: ReactNode;
   placeholder?: string;
-  onChange?: (option: PickListOption | null) => void;
-  setValueAs?: (option: PickListOption | null) => any; // allow transform PickListOption to desired value (to support boolean)
+  multiple?: boolean;
+  onChange?: (option: PickListOption | PickListOption[] | null) => void;
+  setValueAs?: (option: PickListOption | PickListOption[] | null) => any; // allow transform PickListOption to desired value (to support boolean)
 };
 
 // React-Hook-Form wrapper around GenericSelect.
@@ -37,6 +38,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   helperText,
   onChange,
   setValueAs,
+  multiple,
   ...props
 }) => {
   const {
@@ -54,11 +56,31 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
 
   const isGrouped = !!options[0]?.groupLabel;
 
-  // The 'value' thats stored in the form state is a string, but the value that gets
-  // passed to GenericSelect is a PickListOption. If the value is not found,
-  // display it anyway as the selected option. This could occur if there is a value
-  // set that is not in the options list.
+  // The 'value' stored in the form state is a string or array of strings, but the value that gets
+  // passed to GenericSelect is a PickListOption or PickListOption[]. If the value is not found,
+  // display it anyway as the selected option. This could occur if there is a value set that is not in the options list.
   const valueOption = useMemo(() => {
+    // Organize the available pick list options into a map by code for lookup
+    const optionsByCode = options.reduce(
+      (acc, option) => {
+        acc[option.code] = option;
+        return acc;
+      },
+      {} as Record<string, PickListOption>
+    );
+
+    if (multiple) {
+      if (isNil(field.value) || field.value === '') return [];
+      const selectedOptions = Array.isArray(field.value)
+        ? field.value
+        : [field.value];
+      // For each selected option, return the PickListOption with the same code.
+      // If not found, create an option with that code so it can be displayed anyway
+      return selectedOptions.map(
+        (val: any) => optionsByCode[val.toString()] || { code: val.toString() }
+      );
+    }
+
     if (isNil(field.value) || field.value === '') return null;
 
     return (
@@ -67,22 +89,39 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
         code: field.value,
       }
     );
-  }, [field.value, options]);
+  }, [field.value, options, multiple]);
 
   const getOptionLabel = useCallback(
     (option: PickListOption) => findOptionLabel(option, options),
     [options]
   );
 
+  const handleChange = useCallback(
+    (value: PickListOption | PickListOption[] | null) => {
+      if (multiple) {
+        // If it's a multi picklist, cast the value to a PickListOption[] array
+        const arr = (value || []) as PickListOption[];
+        const val = setValueAs
+          ? setValueAs(arr)
+          : arr.map((o) => o.code || null).filter((c) => c !== null);
+        field.onChange(val);
+        if (onChange) onChange(arr);
+      } else {
+        // If it's a single (non multi) picklist, cast the value to a single PickListOption
+        const single = value as PickListOption | null;
+        const val = setValueAs ? setValueAs(single) : single?.code || null;
+        field.onChange(val);
+        if (onChange) onChange(single);
+      }
+    },
+    [field, multiple, onChange, setValueAs]
+  );
+
   return (
-    <GenericSelect<PickListOption, false, false>
+    <GenericSelect<PickListOption, typeof multiple, false>
       {...props}
       value={valueOption}
-      onChange={(_event, option) => {
-        const val = setValueAs ? setValueAs(option) : option?.code || null;
-        field.onChange(val);
-        if (onChange) onChange(val);
-      }}
+      onChange={(_event, value) => handleChange(value)}
       textInputProps={{
         name: field.name,
         helperText: error?.message || helperText,
@@ -93,7 +132,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
         ...props.textInputProps, // allow overriding any of the above
       }}
       onBlur={field.onBlur}
-      multiple={false}
+      multiple={multiple}
       // fields for using PickListOoption as the option type
       options={options}
       getOptionLabel={getOptionLabel}
