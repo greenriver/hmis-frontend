@@ -455,19 +455,6 @@ const FormItemEditor: React.FC<Props> = ({
               />
             </Section>
           </RootPermissionsFilter>
-          <RootPermissionsFilter permissions='canAdministrateConfig'>
-            <Section title='Editor Access'>
-              <ControlledSelect
-                name='editorUserIds'
-                control={control}
-                label='Editor Users'
-                placeholder='Select users allowed to edit this item'
-                options={userOptions || []}
-                loading={usersLoading}
-                multiple
-              />
-            </Section>
-          </RootPermissionsFilter>
           <Section title='Advanced Properties' noDivider>
             {componentOverridePicklist.length > 0 && (
               <ControlledSelect
@@ -507,6 +494,18 @@ const FormItemEditor: React.FC<Props> = ({
                     initialItem.mapping?.fieldName}
                 </CommonLabeledTextBlock>
               )}
+            <RootPermissionsFilter permissions='canAdministrateConfig'>
+              <ControlledSelect
+                name='editorUserIds'
+                control={control}
+                label='Editor Users'
+                helperText='Select the users who are allowed to edit this item. If blank, the item will be editable by all users.'
+                placeholder='Select users'
+                options={userOptions || []}
+                loading={usersLoading}
+                multiple
+              />
+            </RootPermissionsFilter>
           </Section>
         </Box>
         <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
