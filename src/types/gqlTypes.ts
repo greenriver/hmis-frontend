@@ -8292,7 +8292,7 @@ export type StaffAssignmentsPaginated = {
 export type StartCeReferralStepPayload = {
   __typename?: 'StartCeReferralStepPayload';
   errors: Array<ValidationError>;
-  step: CeReferralStep;
+  step?: Maybe<CeReferralStep>;
 };
 
 /** Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations. */
@@ -18872,7 +18872,7 @@ export type StartCeReferralStepMutation = {
   __typename?: 'Mutation';
   startCeReferralStep?: {
     __typename?: 'StartCeReferralStepPayload';
-    step: {
+    step?: {
       __typename?: 'CeReferralStep';
       id: string;
       stepId?: string | null;
@@ -19534,7 +19534,21 @@ export type StartCeReferralStepMutation = {
         name: string;
       } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
-    };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -53944,9 +53958,13 @@ export const StartCeReferralStepDocument = gql`
       step {
         ...CeReferralStepFields
       }
+      errors {
+        ...ValidationErrorFields
+      }
     }
   }
   ${CeReferralStepFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
 `;
 export type StartCeReferralStepMutationFn = Apollo.MutationFunction<
   StartCeReferralStepMutation,
