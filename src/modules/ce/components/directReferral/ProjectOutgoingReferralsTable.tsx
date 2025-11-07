@@ -67,7 +67,6 @@ interface Props {
 const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
   const filters = useFilters({
     type: 'ProjectOutgoingCeReferralFilterOptions',
-    omit: ['organization', 'project', 'projectType'],
   });
 
   return (
