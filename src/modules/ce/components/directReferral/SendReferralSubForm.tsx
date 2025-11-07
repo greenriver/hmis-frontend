@@ -48,6 +48,7 @@ const SendReferralSubForm: React.FC<Props> = ({
         sourceEnrollmentId,
         referralMode: ReferralMode.CoordinatedEntry,
       },
+      fetchPolicy: 'network-only', // always fetch the latest data
     });
 
   const [submit, { loading: submitLoading }] =
