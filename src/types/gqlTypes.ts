@@ -3589,6 +3589,7 @@ export type FilesPaginated = {
 /** FormDefinition */
 export type FormDefinition = {
   __typename?: 'FormDefinition';
+  access: FormDefinitionAccess;
   cacheKey: Scalars['ID']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
@@ -3619,6 +3620,14 @@ export type FormDefinitionFormRulesArgs = {
 export type FormDefinitionProjectMatchesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type FormDefinitionAccess = {
+  __typename?: 'FormDefinitionAccess';
+  canDuplicateForm: Scalars['Boolean']['output'];
+  canManageForm: Scalars['Boolean']['output'];
+  canPublishForm: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type FormDefinitionForJsonResult = {
@@ -3654,6 +3663,9 @@ export type FormDefinitionsPaginated = {
 /** Type representing one form Identifier, which collects all versioned FormDefinitions for the same identifier */
 export type FormIdentifier = {
   __typename?: 'FormIdentifier';
+  access: FormIdentifierAccess;
+  /** Whether this form is locked for editing by non-admins */
+  adminEditableOnly: Scalars['Boolean']['output'];
   allVersions: FormDefinitionsPaginated;
   /** Form version to use for display in the configuration tool interface. The form itself may be draft, status, or retired. */
   displayVersion: FormDefinition;
@@ -3669,6 +3681,14 @@ export type FormIdentifier = {
 export type FormIdentifierAllVersionsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type FormIdentifierAccess = {
+  __typename?: 'FormIdentifierAccess';
+  canDuplicateForm: Scalars['Boolean']['output'];
+  canManageForm: Scalars['Boolean']['output'];
+  canPublishForm: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type FormIdentifierFilterOptions = {
@@ -12026,6 +12046,12 @@ export type GetAssessmentQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
     upgradedDefinitionForEditing?: {
       __typename?: 'FormDefinition';
@@ -12541,6 +12567,12 @@ export type GetAssessmentQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
     enrollment: {
       __typename?: 'Enrollment';
@@ -18586,6 +18618,12 @@ export type CeReferralStepFieldsFragment = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -19383,6 +19421,12 @@ export type StartCeReferralStepMutation = {
           }>;
         };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -20056,6 +20100,12 @@ export type SubmitCeReferralStepMutation = {
           }>;
         };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -21660,6 +21710,12 @@ export type GetCeReferralStepQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -24176,6 +24232,12 @@ export type ClientDetailFormsQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
   }>;
 };
@@ -27193,6 +27255,12 @@ export type GetDirectReferralFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -28335,6 +28403,12 @@ export type AllEnrollmentDetailsFragment = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
   }>;
   project: {
@@ -29787,6 +29861,12 @@ export type GetEnrollmentDetailsQuery = {
           }>;
         };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
     }>;
     project: {
@@ -30816,6 +30896,12 @@ export type ExternalFormSubmissionFieldsFragment = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
   summaryFields: Array<{
     __typename?: 'KeyValue';
@@ -31496,6 +31582,12 @@ export type GetExternalFormSubmissionQuery = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
     summaryFields: Array<{
       __typename?: 'KeyValue';
@@ -32199,6 +32291,12 @@ export type FormDefinitionMetadataFragment = {
   dateUpdated: string;
   supportsSaveInProgress: boolean;
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  access: {
+    __typename?: 'FormDefinitionAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
 };
 
 export type FormDefinitionFieldsFragment = {
@@ -32715,6 +32813,12 @@ export type FormDefinitionFieldsFragment = {
     }>;
   };
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  access: {
+    __typename?: 'FormDefinitionAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
 };
 
 export type FormDefinitionFieldsForJsonEditorFragment = {
@@ -33232,6 +33336,12 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
     }>;
   };
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  access: {
+    __typename?: 'FormDefinitionAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
 };
 
 export type FormDefinitionFieldsForEditorFragment = {
@@ -33749,6 +33859,12 @@ export type FormDefinitionFieldsForEditorFragment = {
     }>;
   };
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+  access: {
+    __typename?: 'FormDefinitionAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
 };
 
 export type FormIdentifierDetailsFragment = {
@@ -33756,6 +33872,13 @@ export type FormIdentifierDetailsFragment = {
   id: string;
   identifier: string;
   managedInVersionControl: boolean;
+  adminEditableOnly: boolean;
+  access: {
+    __typename?: 'FormIdentifierAccess';
+    canManageForm: boolean;
+    canPublishForm: boolean;
+    canDuplicateForm: boolean;
+  };
   displayVersion: {
     __typename?: 'FormDefinition';
     id: string;
@@ -33767,6 +33890,12 @@ export type FormIdentifierDetailsFragment = {
     dateUpdated: string;
     supportsSaveInProgress: boolean;
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
   draftVersion?: {
     __typename?: 'FormDefinition';
@@ -33779,6 +33908,12 @@ export type FormIdentifierDetailsFragment = {
     dateUpdated: string;
     supportsSaveInProgress: boolean;
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -34306,6 +34441,12 @@ export type UpdateFormDefinitionMutation = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -34848,6 +34989,12 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
         }>;
       };
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -34885,6 +35032,12 @@ export type CreateFormDefinitionMutation = {
       dateUpdated: string;
       supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -34926,6 +35079,12 @@ export type CreateNextDraftFormDefinitionMutation = {
         dateUpdated: string;
         supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       } | null;
     } | null;
   } | null;
@@ -34954,6 +35113,12 @@ export type CreateDuplicateFormDefinitionMutation = {
         dateUpdated: string;
         supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       } | null;
     } | null;
   } | null;
@@ -34972,6 +35137,13 @@ export type PublishFormDefinitionMutation = {
       id: string;
       identifier: string;
       managedInVersionControl: boolean;
+      adminEditableOnly: boolean;
+      access: {
+        __typename?: 'FormIdentifierAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
       displayVersion: {
         __typename?: 'FormDefinition';
         id: string;
@@ -34983,6 +35155,12 @@ export type PublishFormDefinitionMutation = {
         dateUpdated: string;
         supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
       draftVersion?: {
         __typename?: 'FormDefinition';
@@ -34995,6 +35173,12 @@ export type PublishFormDefinitionMutation = {
         dateUpdated: string;
         supportsSaveInProgress: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       } | null;
     } | null;
     errors: Array<{
@@ -35590,6 +35774,12 @@ export type GetFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -36113,6 +36303,12 @@ export type GetStaticFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
 };
 
@@ -36638,6 +36834,12 @@ export type GetServiceFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -37164,6 +37366,12 @@ export type GetAssessmentFormDefinitionQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -37178,6 +37386,13 @@ export type GetFormIdentifierDetailsQuery = {
     id: string;
     identifier: string;
     managedInVersionControl: boolean;
+    adminEditableOnly: boolean;
+    access: {
+      __typename?: 'FormIdentifierAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
     displayVersion: {
       __typename?: 'FormDefinition';
       id: string;
@@ -37189,6 +37404,12 @@ export type GetFormIdentifierDetailsQuery = {
       dateUpdated: string;
       supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     };
     draftVersion?: {
       __typename?: 'FormDefinition';
@@ -37201,6 +37422,12 @@ export type GetFormIdentifierDetailsQuery = {
       dateUpdated: string;
       supportsSaveInProgress: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+      access: {
+        __typename?: 'FormDefinitionAccess';
+        canManageForm: boolean;
+        canPublishForm: boolean;
+        canDuplicateForm: boolean;
+      };
     } | null;
   } | null;
 };
@@ -37241,6 +37468,12 @@ export type GetFormIdentifierVersionsQuery = {
           lastName?: string | null;
           email: string;
         } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       }>;
     };
   } | null;
@@ -37277,6 +37510,12 @@ export type GetFormIdentifiersQuery = {
         supportsSaveInProgress: boolean;
         formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+        access: {
+          __typename?: 'FormDefinitionAccess';
+          canManageForm: boolean;
+          canPublishForm: boolean;
+          canDuplicateForm: boolean;
+        };
       };
     }>;
   };
@@ -39436,6 +39675,12 @@ export type GetFormDefinitionFieldsForEditorQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -39960,6 +40205,12 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   } | null;
 };
 
@@ -42961,6 +43212,12 @@ export type OccurrencePointFormFieldsFragment = {
       }>;
     };
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
+    access: {
+      __typename?: 'FormDefinitionAccess';
+      canManageForm: boolean;
+      canPublishForm: boolean;
+      canDuplicateForm: boolean;
+    };
   };
 };
 
@@ -49953,6 +50210,11 @@ export const FormDefinitionMetadataFragmentDoc = gql`
     }
     dateUpdated
     supportsSaveInProgress
+    access {
+      canManageForm
+      canPublishForm
+      canDuplicateForm
+    }
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`
@@ -50894,6 +51156,12 @@ export const FormIdentifierDetailsFragmentDoc = gql`
     id
     identifier
     managedInVersionControl
+    adminEditableOnly
+    access {
+      canManageForm
+      canPublishForm
+      canDuplicateForm
+    }
     displayVersion {
       ...FormDefinitionMetadata
     }
