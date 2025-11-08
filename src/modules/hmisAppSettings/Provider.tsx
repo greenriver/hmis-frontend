@@ -39,7 +39,7 @@ interface Props {
   children: ReactNode;
 }
 export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
-  const [appSettings, setAppSettings] = useState<HmisAppSettings>();
+  const [appSettings, setAppSettings] = useState<HmisAppSettings | null>(null);
   const [user, setUser] = useState<HmisUser>();
   const [error, setError] = useState<Error | HttpError>();
   const [loading, setLoading] = useState(true);
@@ -62,15 +62,36 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
   const logoutUser = useCallback(() => {
     setLoading(true);
-    const fn = user?.impersonating ? stopImpersonating : logout;
-    return fn()
-      .then(() => {
-        reloadWindow();
-      })
-      .catch((e) => {
-        setLoading(false);
-        setError(e);
-      });
+    if (user?.impersonating) {
+      // Stop impersonating returns HmisUser
+      return stopImpersonating()
+        .then(() => {
+          reloadWindow();
+        })
+        .catch((e) => {
+          setLoading(false);
+          setError(e);
+        });
+    } else {
+      // Logout returns Response with redirect_url
+      return logout()
+        .then((response) => {
+          if (response.ok) {
+            return response.json().then((data: { redirect_url?: string }) => {
+              if (data.redirect_url) {
+                window.location.href = data.redirect_url;
+              } else {
+                reloadWindow();
+              }
+            });
+          }
+          reloadWindow();
+        })
+        .catch((e) => {
+          setLoading(false);
+          setError(e);
+        });
+    }
   }, [user?.impersonating]);
 
   const impersonateUser = useCallback((userId: string) => {
