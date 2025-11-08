@@ -123,7 +123,9 @@ export default defineConfig(({ command, mode }) => {
       server: {
         port: 5173,
         open: true,
-        host: env.HMIS_HOST || 'hmis.dev.test',
+        host: '0.0.0.0', // env.HMIS_HOST || 'hmis.dev.test',
+        allowedHosts: ['hmis.dev.test', 'loclhost'],
+        hmr: { host: 'localhost' },
         https:
           env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
         proxy: {

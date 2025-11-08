@@ -123,6 +123,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     };
 
     if (cachedUser) {
+      // We have a cached user, try to load settings
       setUser(cachedUser);
       const cachedAppSettings = storage.getAppSettings();
       if (cachedAppSettings) {
@@ -132,13 +133,35 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
         promises.push(fetchHmisAppSettings().then(saveSettings));
       }
     } else {
-      promises.push(fetchCurrentUser().then(setUser));
-      promises.push(fetchHmisAppSettings().then(saveSettings));
+      // No cached user - attempt to fetch user to check if authenticated
+      // If successful, user is authenticated. If 401, show public landing page.
+      promises.push(
+        fetchCurrentUser()
+          .then((user) => {
+            setUser(user);
+            // Also fetch app settings after successful user fetch
+            return fetchHmisAppSettings().then(saveSettings);
+          })
+          .catch((err) => {
+            if (err?.status === 401) {
+              // Not authenticated - this is expected for public landing page
+              console.info(
+                'User not authenticated, showing public landing page'
+              );
+            } else {
+              // Real error - throw it
+              throw err;
+            }
+          })
+      );
     }
 
     if (promises.length) {
       Promise.all(promises)
-        .catch(setError)
+        .catch((err) => {
+          // Only set error for non-401 errors
+          setError(err);
+        })
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
@@ -183,7 +206,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     );
   }
 
-  if (!appSettings) throw new Error(); // shouldn't get here
+  // Allow null appSettings for public/unauthenticated pages
   return (
     <HmisAppSettingsContext.Provider value={appSettings}>
       <HmisAuthContext.Provider value={authState}>

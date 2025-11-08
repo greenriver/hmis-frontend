@@ -7,7 +7,8 @@ import { fetchTheme, fetchThemes } from './utils';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const MergedThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { theme: defaultThemeOptions } = useHmisAppSettings();
+  const appSettings = useHmisAppSettings();
+  const defaultThemeOptions = appSettings?.theme;
   const [themeOptions, setThemeOptions] = useState<ThemeOptions | undefined>(
     defaultThemeOptions
   );

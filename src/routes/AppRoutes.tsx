@@ -11,8 +11,8 @@ import { protectedRoutes } from './protected';
 
 import { STATE_FROM_LOGIN_REDIRECT } from './routeUtil';
 import PathHandler from '@/components/elements/PathHandler';
+import PublicLanding from '@/components/pages/PublicLanding';
 import { HmisUser } from '@/modules/auth/api/sessions';
-import Login from '@/modules/auth/components/Login';
 import SessionStatusManager from '@/modules/auth/components/SessionStatusManager';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
@@ -47,7 +47,7 @@ const PublicRoutes: React.FC = () => {
       },
       {
         path: '/',
-        element: <Login />,
+        element: <PublicLanding />,
       },
       {
         path: '*',
