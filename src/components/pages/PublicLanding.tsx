@@ -1,13 +1,18 @@
 import { Box, Button, Card, Container, Typography } from '@mui/material';
 
+import { getLastConnectorId } from '@/modules/auth/api/storage';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const PublicLanding: React.FC = () => {
   const { logoPath } = useHmisAppSettings() || {};
   const logoSrc = logoPath || '/logo/hmis_logo';
   const handleSignIn = () => {
-    // Redirect to oauth2-proxy sign-in, which will redirect to Dex IdP picker
-    window.location.href = '/oauth2/sign_in';
+    // Get last used connector ID to bypass IDP picker
+    const connectorId = getLastConnectorId();
+    const signInUrl = connectorId
+      ? `/oauth2/sign_in?connector_id=${encodeURIComponent(connectorId)}`
+      : '/oauth2/sign_in';
+    window.location.href = signInUrl;
   };
 
   return (

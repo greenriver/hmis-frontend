@@ -16,6 +16,7 @@ export interface HmisUser {
   phone?: string;
   sessionDuration: number;
   impersonating: boolean;
+  primaryIdp?: string;
 }
 interface HmisError {
   type: string;
@@ -85,6 +86,10 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
     const user: HmisUser | undefined = await response.json();
     if (user?.id) {
       storage.setUser(user);
+      // Store primaryIdp for bypassing IDP picker on next sign-in
+      if (user.primaryIdp) {
+        storage.setLastConnectorId(user.primaryIdp);
+      }
       return user;
     }
     storage.clearUser();
