@@ -97,7 +97,6 @@ export const CommonDetailGridItem: React.FC<{
         item
         {...valueBreakPoints}
         sx={itemSx}
-        aria-labelledby={labelId}
       >
         <Typography variant='body2' component='div' sx={{ width: '100%' }}>
           {children}
