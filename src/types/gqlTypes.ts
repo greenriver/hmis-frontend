@@ -5008,7 +5008,10 @@ export type Mutation = {
   updateServiceType?: Maybe<UpdateServiceTypePayload>;
   updateUnitGroup?: Maybe<UpdateUnitGroupPayload>;
   updateUnits?: Maybe<UpdateUnitsPayload>;
-  /** Void a referral request */
+  /**
+   * Void a referral request
+   * @deprecated External ReferralRequests integration is deprecated and will be removed in a future release
+   */
   voidReferralRequest?: Maybe<VoidReferralRequestPayload>;
 };
 
