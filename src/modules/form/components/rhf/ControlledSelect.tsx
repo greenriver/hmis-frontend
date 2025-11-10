@@ -11,7 +11,7 @@ import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 export type ControlledSelectProps = Omit<
-  GenericSelectProps<PickListOption, boolean, false>, // GenericSelect's
+  GenericSelectProps<PickListOption, boolean, false>,
   'value' | 'onChange' | 'onBlur'
 > & {
   name: string;
@@ -62,25 +62,32 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   const valueOption = useMemo(() => {
     // Organize the available pick list options into a map by code for lookup
     const optionsByCode = options.reduce(
-      (acc, option) => {
+      (acc: Record<string, PickListOption>, option: PickListOption) => {
         acc[option.code] = option;
         return acc;
       },
-      {} as Record<string, PickListOption>
+      {}
     );
 
     if (multiple) {
-      if (isNil(field.value) || field.value === '') return [];
-      const selectedOptions = Array.isArray(field.value)
-        ? field.value
-        : [field.value];
+      if (!field.value) return [];
+
+      if (!Array.isArray(field.value))
+        throw new Error(
+          `ControlledSelect expects an array when multiple is true, but received ${field.value}`
+        );
+
       // For each selected option, return the PickListOption with the same code.
       // If not found, create an option with that code so it can be displayed anyway
-      return selectedOptions.map(
+      return field.value.map(
         (val: any) => optionsByCode[val.toString()] || { code: val.toString() }
       );
     }
 
+    if (Array.isArray(field.value))
+      throw new Error(
+        `ControlledSelect expects a single value when multiple is false, but received an array ${field.value}`
+      );
     if (isNil(field.value) || field.value === '') return null;
 
     return (
@@ -99,19 +106,25 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   const handleChange = useCallback(
     (value: PickListOption | PickListOption[] | null) => {
       if (multiple) {
-        // If it's a multi picklist, cast the value to a PickListOption[] array
-        const arr = (value || []) as PickListOption[];
-        const val = setValueAs
-          ? setValueAs(arr)
-          : arr.map((o) => o.code || null).filter((c) => c !== null);
+        if (!Array.isArray(value))
+          throw new Error(
+            `ControlledSelect expects an array when multiple is true, but received ${value}`
+          );
+
+        const val = setValueAs ? setValueAs(value) : value.map((o) => o.code);
+
         field.onChange(val);
-        if (onChange) onChange(arr);
+        if (onChange) onChange(value);
       } else {
-        // If it's a single (non multi) picklist, cast the value to a single PickListOption
-        const single = value as PickListOption | null;
-        const val = setValueAs ? setValueAs(single) : single?.code || null;
+        if (Array.isArray(value))
+          throw new Error(
+            `ControlledSelect expects a single value when multiple is false, but received an array ${value}`
+          );
+
+        const val = setValueAs ? setValueAs(value) : value?.code || null;
+
         field.onChange(val);
-        if (onChange) onChange(single);
+        if (onChange) onChange(value);
       }
     },
     [field, multiple, onChange, setValueAs]
