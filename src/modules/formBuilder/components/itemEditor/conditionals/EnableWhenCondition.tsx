@@ -228,6 +228,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 control={control}
                 label='Value'
                 options={[TRUE_OPT, FALSE_OPT]}
+                multiple={false}
                 setValueAs={(option) => {
                   if (option?.code === 'true') return true;
                   if (option?.code === 'false') return false;

@@ -10,8 +10,12 @@ import { RhfRules } from '@/modules/form/types';
 import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
-export type ControlledSelectProps = Omit<
-  GenericSelectProps<PickListOption, boolean, false>, // GenericSelect's
+export type ControlledSelectValue<Multiple> = Multiple extends true
+  ? Array<PickListOption>
+  : PickListOption | null;
+
+export type ControlledSelectProps<Multiple extends boolean> = Omit<
+  GenericSelectProps<PickListOption, Multiple, false>,
   'value' | 'onChange' | 'onBlur'
 > & {
   name: string;
@@ -20,14 +24,14 @@ export type ControlledSelectProps = Omit<
   required?: boolean;
   helperText?: ReactNode;
   placeholder?: string;
-  multiple?: boolean;
-  onChange?: (option: PickListOption | PickListOption[] | null) => void;
-  setValueAs?: (option: PickListOption | PickListOption[] | null) => any; // allow transform PickListOption to desired value (to support boolean)
+  multiple?: Multiple;
+  onChange?: (option: ControlledSelectValue<Multiple>) => void;
+  setValueAs?: (option: ControlledSelectValue<Multiple>) => any; // allow transform PickListOption to desired value (to support boolean)
 };
 
 // React-Hook-Form wrapper around GenericSelect.
 // This component stores a string as the field value, but passes a PickListOption to the GenericSelect. (Logic that is redundant with TableFilterItemSelect, among others)
-const ControlledSelect: React.FC<ControlledSelectProps> = ({
+const ControlledSelect = <Multiple extends boolean>({
   name,
   control,
   rules,
@@ -40,7 +44,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   setValueAs,
   multiple,
   ...props
-}) => {
+}: ControlledSelectProps<Multiple>) => {
   const {
     field,
     fieldState: { error },
@@ -102,25 +106,27 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
         // If it's a multi picklist, cast the value to a PickListOption[] array
         const arr = (value || []) as PickListOption[];
         const val = setValueAs
-          ? setValueAs(arr)
+          ? setValueAs(arr as any)
           : arr.map((o) => o.code || null).filter((c) => c !== null);
         field.onChange(val);
-        if (onChange) onChange(arr);
+        if (onChange) onChange(arr as any);
       } else {
         // If it's a single (non multi) picklist, cast the value to a single PickListOption
         const single = value as PickListOption | null;
-        const val = setValueAs ? setValueAs(single) : single?.code || null;
+        const val = setValueAs
+          ? setValueAs(single as any)
+          : single?.code || null;
         field.onChange(val);
-        if (onChange) onChange(single);
+        if (onChange) onChange(single as any);
       }
     },
     [field, multiple, onChange, setValueAs]
   );
 
   return (
-    <GenericSelect<PickListOption, typeof multiple, false>
+    <GenericSelect
       {...props}
-      value={valueOption}
+      value={valueOption as any}
       onChange={(_event, value) => handleChange(value)}
       textInputProps={{
         name: field.name,
