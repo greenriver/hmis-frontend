@@ -228,7 +228,9 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 control={control}
                 label='Value'
                 options={[TRUE_OPT, FALSE_OPT]}
+                multiple={false}
                 setValueAs={(option) => {
+                  if (Array.isArray(option)) return null; // unexpected since multiple is false. handled explicitly to keep typescript happy
                   if (option?.code === 'true') return true;
                   if (option?.code === 'false') return false;
                   return null;
