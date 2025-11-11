@@ -11,7 +11,7 @@ import mkcert from 'vite-plugin-mkcert';
 dns.setDefaultResultOrder('ipv4first');
 
 const VISUALIZER = false; // enable to generate bundle visualization on build
-const DEFAULT_WAREHOUSE_SERVER = 'https://hmis-warehouse.dev.test';
+const DEFAULT_WAREHOUSE_SERVER = 'https://hmis-backend.dev.test';
 
 // https://github.com/vitejs/vite/issues/2433#issuecomment-1487472995
 function sourcemapExclude(opts) {
