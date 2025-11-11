@@ -34,8 +34,11 @@ export type SeveralItemsChangedFn = (input: {
   type: ChangeType;
 }) => void;
 
-export type SubmitFormAllowedTypes = NonNullable<
-  NonNullable<SubmitFormMutation['submitForm']>['record']
+// Types that are allowed to be submitted using SubmitForm.
+// Exclude ReferralRequest type that is no longer supported but is still part of the schema.
+export type SubmitFormAllowedTypes = Exclude<
+  NonNullable<NonNullable<SubmitFormMutation['submitForm']>['record']>,
+  { __typename?: 'ReferralRequest' }
 >;
 
 export type PickListArgs = {

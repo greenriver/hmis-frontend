@@ -1,14 +1,3 @@
-mutation VoidReferralRequest($id: ID!) {
-  voidReferralRequest(referralRequestId: $id) {
-    record {
-      id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
   updateReferralPosting(id: $id, input: $input) {
     record {
