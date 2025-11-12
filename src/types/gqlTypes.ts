@@ -3012,7 +3012,7 @@ export type Enrollment = {
   singleParent?: Maybe<NoYesMissing>;
   /** Present if this household was enrolled as the result of a CE referral. */
   sourceCeReferral?: Maybe<CeReferral>;
-  /** Present if this household was enrolled as the result of a referral from another project. */
+  /** Present if this household was enrolled as the result of a legacy (pre-CE) referral from another project. */
   sourceReferralPosting?: Maybe<ReferralPosting>;
   staffAssignments?: Maybe<Array<StaffAssignment>>;
   status: EnrollmentStatus;

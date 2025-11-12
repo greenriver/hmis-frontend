@@ -22531,7 +22531,7 @@
           },
           {
             "name": "sourceReferralPosting",
-            "description": "Present if this household was enrolled as the result of a referral from another project.",
+            "description": "Present if this household was enrolled as the result of a legacy (pre-CE) referral from another project.",
             "args": [],
             "type": {
               "kind": "OBJECT",
