@@ -6532,6 +6532,22 @@
             "deprecationReason": null
           },
           {
+            "name": "sourceProjectName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
@@ -22496,6 +22512,18 @@
             "type": {
               "kind": "ENUM",
               "name": "NoYesMissing",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "sourceCeReferral",
+            "description": "Present if this household was enrolled as the result of a CE referral.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CeReferral",
               "ofType": null
             },
             "isDeprecated": false,

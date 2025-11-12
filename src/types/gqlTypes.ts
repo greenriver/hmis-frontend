@@ -874,6 +874,7 @@ export type CeReferral = {
   /** Limited details about the source enrollment. Available even without full access to the source record. */
   sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
   sourceEnrollmentId: Scalars['ID']['output'];
+  sourceProjectName: Scalars['String']['output'];
   status: CeReferralStatus;
   steps?: Maybe<Array<CeReferralStep>>;
   swimlanes?: Maybe<Array<CeReferralSwimlane>>;
@@ -3009,6 +3010,8 @@ export type Enrollment = {
   sexualOrientation?: Maybe<SexualOrientation>;
   sexualOrientationOther?: Maybe<Scalars['String']['output']>;
   singleParent?: Maybe<NoYesMissing>;
+  /** Present if this household was enrolled as the result of a CE referral. */
+  sourceCeReferral?: Maybe<CeReferral>;
   /** Present if this household was enrolled as the result of a referral from another project. */
   sourceReferralPosting?: Maybe<ReferralPosting>;
   staffAssignments?: Maybe<Array<StaffAssignment>>;
@@ -28360,6 +28363,16 @@ export type AllEnrollmentDetailsFragment = {
     referredFrom: string;
     referralDate: string;
   } | null;
+  sourceCeReferral?: {
+    __typename?: 'CeReferral';
+    id: string;
+    createdAt: string;
+    sourceProjectName: string;
+    access: {
+      __typename?: 'CeReferralAccess';
+      canViewReferralDetails: boolean;
+    };
+  } | null;
   access: {
     __typename?: 'EnrollmentAccess';
     id: string;
@@ -29817,6 +29830,16 @@ export type GetEnrollmentDetailsQuery = {
       id: string;
       referredFrom: string;
       referralDate: string;
+    } | null;
+    sourceCeReferral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      createdAt: string;
+      sourceProjectName: string;
+      access: {
+        __typename?: 'CeReferralAccess';
+        canViewReferralDetails: boolean;
+      };
     } | null;
     access: {
       __typename?: 'EnrollmentAccess';
@@ -50833,6 +50856,14 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       id
       referredFrom
       referralDate
+    }
+    sourceCeReferral {
+      id
+      createdAt
+      sourceProjectName
+      access {
+        canViewReferralDetails
+      }
     }
   }
   ${EnrollmentFieldsFragmentDoc}

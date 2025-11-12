@@ -121,6 +121,28 @@ const EnrollmentDetails = ({
       );
     }
 
+    if (enrollment.sourceCeReferral) {
+      const referral = enrollment.sourceCeReferral;
+      const referredOn = parseAndFormatDate(referral.createdAt);
+
+      content['Referral Source'] = (
+        <Stack gap={1}>
+          {`Referred from ${referral.sourceProjectName} on ${referredOn}`}
+          {referral.access.canViewReferralDetails && (
+            <RouterLink
+              to={generateSafePath(ProjectDashboardRoutes.REFERRAL, {
+                projectId: enrollment.project.id,
+                referralId: enrollment.sourceCeReferral.id,
+              })}
+              openInNew
+            >
+              View Referral
+            </RouterLink>
+          )}
+        </Stack>
+      );
+    }
+
     const tooltips: Record<string, ReactNode> = {
       'HUD Chronic': (
         <>
