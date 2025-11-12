@@ -873,7 +873,7 @@ export type CeReferral = {
   referredBy?: Maybe<ApplicationUser>;
   /** Limited details about the source enrollment. Available even without full access to the source record. */
   sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
-  sourceEnrollmentId: Scalars['ID']['output'];
+  sourceEnrollmentId?: Maybe<Scalars['ID']['output']>;
   status: CeReferralStatus;
   steps?: Maybe<Array<CeReferralStep>>;
   swimlanes?: Maybe<Array<CeReferralSwimlane>>;
@@ -17597,7 +17597,7 @@ export type CeOutgoingReferralsTableFieldsFragment = {
   createdAt: string;
   clientId: string;
   clientName?: string | null;
-  sourceEnrollmentId: string;
+  sourceEnrollmentId?: string | null;
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
@@ -27216,7 +27216,7 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
         createdAt: string;
         clientId: string;
         clientName?: string | null;
-        sourceEnrollmentId: string;
+        sourceEnrollmentId?: string | null;
         targetProjectId: string;
         targetProjectName: string;
         targetProjectType: ProjectType;
