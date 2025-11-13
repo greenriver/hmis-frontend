@@ -56,15 +56,19 @@ jobs:
           SHA: ${{ github.sha }}
         run: |
           export NODE_VERSION=`cat .nvmrc`
-          export GITHASH="${SHA::9}"
+          export GITHASH="${SHA::7}"
+          export GITHASH_9="${SHA::9}"
           export IMAGE_TAG="githash-${GITHASH}"
+          export IMAGE_TAG_9="githash-${GITHASH_9}"
 
           echo "## Git Hash" >> $GITHUB_STEP_SUMMARY
           echo $IMAGE_TAG >> $GITHUB_STEP_SUMMARY
 
           echo "node_version=$NODE_VERSION" >> $GITHUB_OUTPUT
           echo "git_hash=$GITHASH" >> $GITHUB_OUTPUT
+          echo "git_hash_9=$GITHASH_9" >> $GITHUB_OUTPUT
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "image_tag_9=$IMAGE_TAG_9" >> $GITHUB_OUTPUT
 
       # Build and scan on PRs
       - name: Build container image for PR
@@ -162,10 +166,14 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         id: metadata
         uses: docker/metadata-action@v4
+        env:
+          DOCKER_METADATA_SHORT_SHA_LENGTH: 7
         with:
           images: ${{ secrets.AWS_ECR_REGISTRY }}
           tags: |
             ${{ steps.env.outputs.image_tag }}
+            ${{ steps.env.outputs.image_tag_9 }}
+            type=raw,event=branch,value=branch-{{branch}}-{{sha}}
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'stable') }}
             type=raw,value=stable,enable=${{ github.ref == format('refs/heads/{0}', 'stable') }}
             type=ref,event=branch
