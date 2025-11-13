@@ -37,9 +37,13 @@ export const useUnitCeActions = ({
 
       const actions: CommonMenuItem[] = [];
 
-      // Only allow linking to the Unit page, if the project supports CE waitlist-based referrals. In the future
-      // we may want to expand this if we add more functionality to this page that is relevant to Direct-referral projects.
-      if (coordinatedEntryFeatures.supportsWaitlistReferrals) {
+      // Only allow linking to the Unit page, if the project supports CE waitlist-based referrals,
+      // *and* the unit group is configured to accept them.
+      // In the future we may want to expand this if we add more functionality to this page that is relevant to Direct-referral projects.
+      if (
+        coordinatedEntryFeatures.supportsWaitlistReferrals &&
+        unit.unitGroup?.workflowTemplateIdentifier
+      ) {
         actions.push({
           title: 'View Unit',
           key: 'viewUnit',
