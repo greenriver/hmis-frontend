@@ -61,9 +61,6 @@ jobs:
           export IMAGE_TAG="githash-${GITHASH}"
           export IMAGE_TAG_9="githash-${GITHASH_9}"
 
-          echo "## Git Hash" >> $GITHUB_STEP_SUMMARY
-          echo $IMAGE_TAG >> $GITHUB_STEP_SUMMARY
-
           echo "node_version=$NODE_VERSION" >> $GITHUB_OUTPUT
           echo "git_hash=$GITHASH" >> $GITHUB_OUTPUT
           echo "git_hash_9=$GITHASH_9" >> $GITHUB_OUTPUT
@@ -180,6 +177,14 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
+
+      - name: Report
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        run: |
+          echo "### Tags" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.metadata.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
 
       - name: Build and push container image
         if: ${{ github.event_name != 'pull_request' }}
