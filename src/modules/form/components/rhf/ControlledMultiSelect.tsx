@@ -20,7 +20,6 @@ export type ControlledMultiSelectProps = Omit<
   helperText?: ReactNode;
   placeholder?: string;
   onChange?: (options: PickListOption[]) => void;
-  setValueAs?: (options: PickListOption[]) => any;
 };
 
 // React-Hook-Form wrapper around GenericSelect for multiple selection.
@@ -35,7 +34,6 @@ const ControlledMultiSelect: React.FC<ControlledMultiSelectProps> = ({
   placeholder,
   helperText,
   onChange,
-  setValueAs,
   ...props
 }) => {
   const {
@@ -75,19 +73,17 @@ const ControlledMultiSelect: React.FC<ControlledMultiSelectProps> = ({
     const values = Array.isArray(field.value) ? field.value : [field.value];
     // For each selected value, return the PickListOption with the same code.
     // If not found, create a fallback option with that code so it can be displayed anyway
-    return values.map(
-      (val: any) => optionsByCode[val.toString()] || { code: val.toString() }
-    );
+    return values.map((val: any) => optionsByCode[val] || { code: val });
   }, [field.value, optionsByCode]);
 
   const handleChange = useCallback(
-    (value: PickListOption | PickListOption[] | null) => {
+    (value: PickListOption[] | null) => {
       const arr = Array.isArray(value) ? value : [];
-      const val = setValueAs ? setValueAs(arr) : arr.map((o) => o.code);
+      const val = arr.map((o) => o.code);
       field.onChange(val);
       if (onChange) onChange(arr);
     },
-    [field, onChange, setValueAs]
+    [field, onChange]
   );
 
   return (
