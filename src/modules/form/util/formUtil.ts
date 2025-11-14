@@ -1341,13 +1341,7 @@ const getMappedValue = (
     // Special cases where we DON'T want to alert Sentry if the field can't be resolved on the record.
     // - imageBlobId and fileBlobId: we pass these fields when first saving a file, but they aren't persisted on the file or returned on a saved file record.
     // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
-    // - resendReferralRequest: special case for the admin update referral posting, not saved on the referral posting record, but used by the custom mutation for this form.
-    const specialCaseFieldNames = [
-      'fileBlobId',
-      'imageBlobId',
-      'mciId',
-      'resendReferralRequest',
-    ];
+    const specialCaseFieldNames = ['fileBlobId', 'imageBlobId', 'mciId'];
     if (!specialCaseFieldNames.includes(mapping.fieldName)) {
       // In general, we do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
       // This would indicate we're not resolving a field that we should be resolving.
