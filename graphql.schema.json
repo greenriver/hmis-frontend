@@ -6520,21 +6520,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "sourceProjectName",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -22510,20 +22502,8 @@
             "deprecationReason": null
           },
           {
-            "name": "sourceCeReferral",
-            "description": "Present if this household was enrolled as the result of a CE referral.",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CeReferral",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "sourceReferralPosting",
-            "description": "Present if this household was enrolled as the result of a legacy (pre-CE) referral from another project.",
+            "description": "Present if this household was enrolled as the result of a referral from another project.",
             "args": [],
             "type": {
               "kind": "OBJECT",
