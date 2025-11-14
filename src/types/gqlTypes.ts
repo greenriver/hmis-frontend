@@ -873,8 +873,8 @@ export type CeReferral = {
   referredBy?: Maybe<ApplicationUser>;
   /** Limited details about the source enrollment. Available even without full access to the source record. */
   sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
-  sourceEnrollmentId: Scalars['ID']['output'];
-  sourceProjectName: Scalars['String']['output'];
+  sourceEnrollmentId?: Maybe<Scalars['ID']['output']>;
+  sourceProjectName?: Maybe<Scalars['String']['output']>;
   status: CeReferralStatus;
   steps?: Maybe<Array<CeReferralStep>>;
   swimlanes?: Maybe<Array<CeReferralSwimlane>>;
@@ -17600,7 +17600,7 @@ export type CeOutgoingReferralsTableFieldsFragment = {
   createdAt: string;
   clientId: string;
   clientName?: string | null;
-  sourceEnrollmentId: string;
+  sourceEnrollmentId?: string | null;
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
@@ -27219,7 +27219,7 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
         createdAt: string;
         clientId: string;
         clientName?: string | null;
-        sourceEnrollmentId: string;
+        sourceEnrollmentId?: string | null;
         targetProjectId: string;
         targetProjectName: string;
         targetProjectType: ProjectType;
@@ -28367,7 +28367,7 @@ export type AllEnrollmentDetailsFragment = {
     __typename?: 'CeReferral';
     id: string;
     createdAt: string;
-    sourceProjectName: string;
+    sourceProjectName?: string | null;
     access: {
       __typename?: 'CeReferralAccess';
       canViewReferralDetails: boolean;
@@ -29835,7 +29835,7 @@ export type GetEnrollmentDetailsQuery = {
       __typename?: 'CeReferral';
       id: string;
       createdAt: string;
-      sourceProjectName: string;
+      sourceProjectName?: string | null;
       access: {
         __typename?: 'CeReferralAccess';
         canViewReferralDetails: boolean;
