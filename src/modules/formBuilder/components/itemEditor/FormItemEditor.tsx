@@ -22,6 +22,7 @@ import { scrollToElement } from '@/hooks/useScrollToHash';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { hasErrors } from '@/modules/errors/util';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
+import ControlledMultiSelect from '@/modules/form/components/rhf/ControlledMultiSelect';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import SaveSlide from '@/modules/form/components/SaveSlide';
@@ -495,7 +496,7 @@ const FormItemEditor: React.FC<Props> = ({
                 </CommonLabeledTextBlock>
               )}
             <RootPermissionsFilter permissions='canAdministrateConfig'>
-              <ControlledSelect
+              <ControlledMultiSelect
                 name='editorUserIds'
                 control={control}
                 label='Editor Users'
@@ -503,7 +504,6 @@ const FormItemEditor: React.FC<Props> = ({
                 placeholder='Select users'
                 options={userOptions || []}
                 loading={usersLoading}
-                multiple
               />
             </RootPermissionsFilter>
           </Section>
