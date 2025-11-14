@@ -127,7 +127,7 @@ const EnrollmentDetails = ({
 
       content['Referral Source'] = (
         <Stack gap={1}>
-          {`Referred from ${referral.sourceProjectName} on ${referredOn}`}
+          {`Referred from ${referral.sourceProjectName || 'Unknown Project'} on ${referredOn}`}
           {referral.access.canViewReferralDetails && (
             <RouterLink
               to={generateSafePath(ProjectDashboardRoutes.REFERRAL, {
