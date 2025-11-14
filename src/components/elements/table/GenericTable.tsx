@@ -646,7 +646,9 @@ const GenericTable = <T extends { id: string }>({
                   rowsPerPageOptions={[10, 25, 50, 100]}
                   slotProps={{
                     select: {
-                      'aria-label': 'rows per page',
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
                       native: true,
                     },
                   }}
