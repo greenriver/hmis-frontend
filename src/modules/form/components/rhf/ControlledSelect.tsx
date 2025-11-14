@@ -25,7 +25,7 @@ export type ControlledSelectProps = Omit<
 };
 
 // React-Hook-Form wrapper around GenericSelect for single selection.
-// This component stores a string as the field value, but passes a PickListOption to the GenericSelect.
+// This component stores a string as the field value, but passes a PickListOption to the GenericSelect. (Logic that is redundant with TableFilterItemSelect, among others)
 const ControlledSelect: React.FC<ControlledSelectProps> = ({
   name,
   control,
