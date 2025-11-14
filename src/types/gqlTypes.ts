@@ -874,7 +874,8 @@ export type CeReferral = {
   referredBy?: Maybe<ApplicationUser>;
   /** Limited details about the source enrollment. Available even without full access to the source record. */
   sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
-  sourceEnrollmentId: Scalars['ID']['output'];
+  sourceEnrollmentId?: Maybe<Scalars['ID']['output']>;
+  sourceProjectName?: Maybe<Scalars['String']['output']>;
   status: CeReferralStatus;
   steps?: Maybe<Array<CeReferralStep>>;
   swimlanes?: Maybe<Array<CeReferralSwimlane>>;
@@ -3010,7 +3011,9 @@ export type Enrollment = {
   sexualOrientation?: Maybe<SexualOrientation>;
   sexualOrientationOther?: Maybe<Scalars['String']['output']>;
   singleParent?: Maybe<NoYesMissing>;
-  /** Present if this household was enrolled as the result of a referral from another project. */
+  /** Present if this household was enrolled as the result of a CE referral. */
+  sourceCeReferral?: Maybe<CeReferral>;
+  /** Present if this household was enrolled as the result of a legacy (pre-CE) referral from another project. */
   sourceReferralPosting?: Maybe<ReferralPosting>;
   staffAssignments?: Maybe<Array<StaffAssignment>>;
   status: EnrollmentStatus;
@@ -17599,7 +17602,7 @@ export type CeOutgoingReferralsTableFieldsFragment = {
   createdAt: string;
   clientId: string;
   clientName?: string | null;
-  sourceEnrollmentId: string;
+  sourceEnrollmentId?: string | null;
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
@@ -27219,7 +27222,7 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
         createdAt: string;
         clientId: string;
         clientName?: string | null;
-        sourceEnrollmentId: string;
+        sourceEnrollmentId?: string | null;
         targetProjectId: string;
         targetProjectName: string;
         targetProjectType: ProjectType;
@@ -28362,6 +28365,16 @@ export type AllEnrollmentDetailsFragment = {
     id: string;
     referredFrom: string;
     referralDate: string;
+  } | null;
+  sourceCeReferral?: {
+    __typename?: 'CeReferral';
+    id: string;
+    createdAt: string;
+    sourceProjectName?: string | null;
+    access: {
+      __typename?: 'CeReferralAccess';
+      canViewReferralDetails: boolean;
+    };
   } | null;
   access: {
     __typename?: 'EnrollmentAccess';
@@ -29820,6 +29833,16 @@ export type GetEnrollmentDetailsQuery = {
       id: string;
       referredFrom: string;
       referralDate: string;
+    } | null;
+    sourceCeReferral?: {
+      __typename?: 'CeReferral';
+      id: string;
+      createdAt: string;
+      sourceProjectName?: string | null;
+      access: {
+        __typename?: 'CeReferralAccess';
+        canViewReferralDetails: boolean;
+      };
     } | null;
     access: {
       __typename?: 'EnrollmentAccess';
@@ -50838,6 +50861,14 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       id
       referredFrom
       referralDate
+    }
+    sourceCeReferral {
+      id
+      createdAt
+      sourceProjectName
+      access {
+        canViewReferralDetails
+      }
     }
   }
   ${EnrollmentFieldsFragmentDoc}

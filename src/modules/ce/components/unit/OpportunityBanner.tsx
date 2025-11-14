@@ -90,7 +90,7 @@ const OpportunityBanner: React.FC<Props> = ({ opportunity, topCandidate }) => {
         gap={2}
         direction='row'
       >
-        <Typography variant='h5' component='h3'>
+        <Typography variant='h5' component='h2'>
           {header}
         </Typography>
         {!isTiny && linkToEligibleClients && (

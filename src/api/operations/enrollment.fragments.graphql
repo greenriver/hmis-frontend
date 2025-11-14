@@ -149,6 +149,14 @@ fragment AllEnrollmentDetails on Enrollment {
     referredFrom
     referralDate
   }
+  sourceCeReferral {
+    id
+    createdAt
+    sourceProjectName
+    access {
+      canViewReferralDetails
+    }
+  }
 }
 
 # Values that could possibly need to be displayed/edited on the Enrollment Details card
