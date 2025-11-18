@@ -769,6 +769,7 @@ export type CeOpportunity = {
   projectType: ProjectType;
   /** Active or accepted referral */
   referral?: Maybe<CeReferral>;
+  stale: Scalars['Boolean']['output'];
   status: CeOpportunityStatus;
   unit?: Maybe<Unit>;
 };
@@ -17436,6 +17437,7 @@ export type CeOpportunitySummaryFieldsFragment = {
 
 export type CeOpportunityFieldsFragment = {
   __typename?: 'CeOpportunity';
+  stale: boolean;
   candidatesGeneratedAt?: string | null;
   id: string;
   name: string;
@@ -20250,6 +20252,7 @@ export type SubmitCeReferralStepMutation = {
       opportunity?: {
         __typename?: 'CeOpportunity';
         id: string;
+        stale: boolean;
         candidatesGeneratedAt?: string | null;
         name: string;
         status: CeOpportunityStatus;
@@ -47825,6 +47828,7 @@ export type UnitDetailFieldsFragment = {
   }> | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
+    stale: boolean;
     candidatesGeneratedAt?: string | null;
     id: string;
     name: string;
@@ -48211,6 +48215,7 @@ export type GetUnitQuery = {
     }> | null;
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
+      stale: boolean;
       candidatesGeneratedAt?: string | null;
       id: string;
       name: string;
@@ -51745,6 +51750,7 @@ export const UnitTableRowFieldsFragmentDoc = gql`
 export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
     ...CeOpportunitySummaryFields
+    stale
     candidatesGeneratedAt
     referral {
       ...CeReferralSummaryFields
