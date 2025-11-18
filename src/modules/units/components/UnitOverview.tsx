@@ -94,9 +94,8 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
               </LoadingButton>
             }
           >
-            This unit is stale, so the requirements below may appear out of
-            date. To bring them up to date, stop and then re-start accepting
-            referrals.
+            The requirements below may be outdated. To refresh them, stop and
+            re-start accepting referrals for this unit.
           </Alert>
         </Grid>
       )}
