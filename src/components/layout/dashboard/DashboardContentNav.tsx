@@ -1,6 +1,6 @@
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -19,16 +19,19 @@ interface Props {
   handleCloseDesktopMenu: VoidFunction;
   label: string;
   skipNavFocusTargetId: string;
+  menuButtonRef?: React.RefObject<HTMLButtonElement>;
 }
 
 const CloseMenuRow = ({
   onClose,
   label,
   skipNavFocusTargetId,
+  closeButtonRef,
 }: {
   onClose: VoidFunction;
   skipNavFocusTargetId: string;
   label: string;
+  closeButtonRef?: React.Ref<HTMLButtonElement>;
 }) => (
   <Stack
     justifyContent='space-between'
@@ -50,6 +53,7 @@ const CloseMenuRow = ({
       Skip {label} navigation
     </SkipToContentButton>
     <Button
+      ref={closeButtonRef}
       variant='text'
       color='grayscale'
       onClick={onClose}
@@ -69,9 +73,30 @@ const DashboardContentNav: React.FC<Props> = ({
   handleCloseDesktopMenu,
   label,
   skipNavFocusTargetId,
+  menuButtonRef,
 }) => {
   const headerHeight = `${STICKY_BAR_HEIGHT}px`;
   const height = `calc(100vh - ${headerHeight})`;
+
+  // Callback ref that focuses the close button when drawer is open
+  const closeButtonRef = useCallback(
+    (node: HTMLButtonElement | null) => {
+      if (node && desktopNavIsOpen) {
+        // Use requestAnimationFrame to ensure element is painted and focusable
+        requestAnimationFrame(() => {
+          node.focus();
+        });
+      }
+    },
+    [desktopNavIsOpen]
+  );
+
+  // Return focus to menu button when closing
+  const handleCloseWithFocus = () => {
+    handleCloseDesktopMenu();
+    // Wait .25s for drawer animation to complete (matches CSS transition duration)
+    setTimeout(() => menuButtonRef?.current?.focus(), 250);
+  };
 
   return (
     <Box
@@ -115,9 +140,10 @@ const DashboardContentNav: React.FC<Props> = ({
       >
         <Box component='nav' aria-label='sidebar-nav'>
           <CloseMenuRow
-            onClose={handleCloseDesktopMenu}
+            onClose={handleCloseWithFocus}
             label={label}
             skipNavFocusTargetId={skipNavFocusTargetId}
+            closeButtonRef={closeButtonRef}
           />
           {navHeader && (
             <Box
