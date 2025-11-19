@@ -62,9 +62,6 @@ const TextInput = ({
       id={htmlId}
       fullWidth={fullWidth}
       label={horizontal ? undefined : label} // hide the label if this text input is part of a horizontal group (informally deprecated)
-      onKeyDown={(e) =>
-        !props.multiline && e.key === 'Enter' && e.preventDefault()
-      }
       autoComplete={formAutoCompleteOff}
       value={value === null ? '' : value} // always used as controlled input, so don't pass null or undefined. Note, value may be a number, such as 0, which is falsy
       {...props}
