@@ -34,6 +34,17 @@ const MultiNameInput = ({ id, value, onChange, label }: Props) => {
     'ClientNameObjectFields'
   );
 
+  const handleChangePrimary = useCallback(
+    (idx: number) => {
+      onChange(
+        value.map((val, i) =>
+          i === idx ? { ...val, primary: true } : { ...val, primary: false }
+        )
+      );
+    },
+    [onChange, value]
+  );
+
   return (
     <RepeatedInputContainer
       id={id}
@@ -51,19 +62,26 @@ const MultiNameInput = ({ id, value, onChange, label }: Props) => {
             radioElement={
               <FormControlLabel
                 checked={nameValue.primary || false}
-                control={<Radio />}
+                control={
+                  <Radio
+                    onKeyDown={(e) => {
+                      // Prevent form submission on Enter. Enter should select the focused option instead.
+                      // (Following the same pattern from RadioGroupInputOption, used in Dynamic Forms)
+                      if (
+                        e.key === 'Enter' ||
+                        e.key === ' ' ||
+                        e.code === 'Space'
+                      ) {
+                        e.preventDefault();
+                        handleChangePrimary(idx);
+                      }
+                    }}
+                  />
+                }
                 label={
                   <Typography variant='body2'>Client's Primary Name</Typography>
                 }
-                onChange={() =>
-                  onChange(
-                    value.map((val, i) =>
-                      i === idx
-                        ? { ...val, primary: true }
-                        : { ...val, primary: false }
-                    )
-                  )
-                }
+                onChange={() => handleChangePrimary(idx)}
               />
             }
           />
