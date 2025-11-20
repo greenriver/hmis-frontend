@@ -22,6 +22,9 @@ mutation StartCeReferralStep($referralId: ID!, $stepId: ID!) {
     step {
       ...CeReferralStepFields
     }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }
 

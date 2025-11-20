@@ -8,6 +8,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import { configurableCeColumns } from '@/modules/ce/components/admin/AdminCeClientsTable';
 import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   formatRelativeDateTime,
   parseAndFormatDateTime,
@@ -94,6 +95,10 @@ const PrioritizedClientsTable: React.FC<Props> = ({
     ];
   }, [project.access, tableConfigLookup, status, opportunity]);
 
+  const filters = useFilters({
+    type: 'CeOpportunityCandidatesFilterOptions',
+  });
+
   // If CandidatePool has not been generated yet (due to change in eligibility or prioritization requirements), show a message
   if (!opportunity.candidatesGeneratedAt) {
     return (
@@ -137,6 +142,10 @@ const PrioritizedClientsTable: React.FC<Props> = ({
           pagePath='ceOpportunity.candidates'
           paginationItemName='client'
           noData={'No clients are currently eligible for this unit.'}
+          filters={filters}
+          defaultFilterValues={{
+            excludeDeclinedClients: true,
+          }}
         />
       </Paper>
     </Stack>
