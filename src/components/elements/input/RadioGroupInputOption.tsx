@@ -1,8 +1,9 @@
 import { Checkbox, FormControlLabel, Radio } from '@mui/material';
-import { KeyboardEventHandler, useCallback, useId } from 'react';
+import { useCallback, useId } from 'react';
 
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { PickListOption } from '@/types/gqlTypes';
+import { preventImplicitSubmission } from '@/utils/forms';
 
 interface Props {
   option: PickListOption;
@@ -38,16 +39,6 @@ const RadioGroupInputOption: React.FC<Props> = ({
     [onChange, disabled, option]
   );
 
-  // Prevent form submission on Enter. Enter should toggle the state.
-  const onKeyDown: KeyboardEventHandler<HTMLButtonElement> = useCallback(
-    (e) => {
-      if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
-        handleClick(e);
-      }
-    },
-    [handleClick]
-  );
-
   return (
     <>
       <FormControlLabel
@@ -58,7 +49,7 @@ const RadioGroupInputOption: React.FC<Props> = ({
         control={
           <ControlComponent
             disabled={disabled}
-            onKeyDown={onKeyDown}
+            onKeyDown={preventImplicitSubmission}
             data-checked={checked}
             inputProps={{
               'aria-labelledby': helperText

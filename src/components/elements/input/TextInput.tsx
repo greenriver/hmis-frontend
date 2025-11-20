@@ -15,6 +15,7 @@ import { useId } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
+import { preventImplicitSubmission } from '@/utils/forms';
 
 interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
@@ -62,6 +63,7 @@ const TextInput = ({
       id={htmlId}
       fullWidth={fullWidth}
       label={horizontal ? undefined : label} // hide the label if this text input is part of a horizontal group (informally deprecated)
+      onKeyDown={props.multiline ? undefined : preventImplicitSubmission}
       autoComplete={formAutoCompleteOff}
       value={value === null ? '' : value} // always used as controlled input, so don't pass null or undefined. Note, value may be a number, such as 0, which is falsy
       {...props}

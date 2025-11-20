@@ -11,6 +11,7 @@ import { useRenderLastUpdated } from '../useRenderLastUpdated';
 import NameInput from './NameInput';
 
 import { ClientNameObjectFieldsFragmentDoc } from '@/types/gqlTypes';
+import { preventImplicitSubmission } from '@/utils/forms';
 import { PartialPick } from '@/utils/typeUtil';
 
 const generateNewName = (primary = false) => ({
@@ -62,22 +63,7 @@ const MultiNameInput = ({ id, value, onChange, label }: Props) => {
             radioElement={
               <FormControlLabel
                 checked={nameValue.primary || false}
-                control={
-                  <Radio
-                    onKeyDown={(e) => {
-                      // Prevent form submission on Enter. Enter should select the focused option instead.
-                      // (Following the same pattern from RadioGroupInputOption, used in Dynamic Forms)
-                      if (
-                        e.key === 'Enter' ||
-                        e.key === ' ' ||
-                        e.code === 'Space'
-                      ) {
-                        e.preventDefault();
-                        handleChangePrimary(idx);
-                      }
-                    }}
-                  />
-                }
+                control={<Radio onKeyDown={preventImplicitSubmission} />}
                 label={
                   <Typography variant='body2'>Client's Primary Name</Typography>
                 }
