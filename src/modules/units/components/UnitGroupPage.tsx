@@ -3,6 +3,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UnitManagementTable from './UnitManagementTable';
 
 import Loading from '@/components/elements/Loading';
@@ -11,12 +12,20 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import MatchRuleCard from '@/modules/ce/components/unit/MatchRuleCard';
 import UnitGroupCeConfigurationCard from '@/modules/ce/components/unitGroup/UnitGroupCeConfigurationCard';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CreateUnitsDialog from '@/modules/units/components/CreateUnitsDialog';
 import UnitGroupFormDialog from '@/modules/units/components/UnitGroupFormDialog';
 import UnitUtilizationByUnitType from '@/modules/units/components/UnitUtilizationByUnitType';
+import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { useGetUnitGroupQuery } from '@/types/gqlTypes';
+import {
+  DeleteUnitGroupDocument,
+  DeleteUnitGroupMutation,
+  DeleteUnitGroupMutationVariables,
+  useGetUnitGroupQuery,
+} from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 // Page for viewing/managing a single unit group, and the units within it
 const UnitGroupPage = () => {
@@ -46,6 +55,8 @@ const UnitGroupPage = () => {
     });
   }, [overrideBreadcrumbTitles, unitGroup]);
 
+  const navigate = useNavigate();
+
   if (loading && !unitGroup) return <Loading />;
   if (error) throw error;
   if (!unitGroup) return <NotFound />;
@@ -60,7 +71,7 @@ const UnitGroupPage = () => {
         title={unitGroup.name}
         actions={
           canEditUnitGroup && (
-            <Stack direction='row' gap={1}>
+            <Stack direction='row' gap={1} alignItems='center'>
               <Button
                 onClick={() => setEditDialogOpen(true)}
                 startIcon={<EditIcon />}
@@ -75,6 +86,27 @@ const UnitGroupPage = () => {
               >
                 Add Units
               </Button>
+              <DeleteMutationButton<
+                DeleteUnitGroupMutation,
+                DeleteUnitGroupMutationVariables
+              >
+                queryDocument={DeleteUnitGroupDocument}
+                variables={{ id: unitGroup.id }}
+                idPath={'deleteUnitGroup.unitGroup.id'}
+                recordName='Unit Group'
+                onSuccess={() => {
+                  cache.evict({
+                    id: `Project:${project.id}`,
+                    fieldName: 'unitGroups',
+                  });
+                  navigate(
+                    generateSafePath(ProjectDashboardRoutes.UNITS, {
+                      projectId: project.id,
+                    })
+                  );
+                }}
+                onlyIcon
+              />
             </Stack>
           )
         }
