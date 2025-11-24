@@ -85,6 +85,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
     <>
       {editable ? (
         <DynamicForm
+          variant='without_top_level_cards'
           definition={formDefinition.definition}
           onSubmit={({ valuesByLinkId, valuesByFieldName, confirmed }) => {
             submit({
