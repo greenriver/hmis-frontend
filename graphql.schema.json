@@ -6772,6 +6772,22 @@
             "deprecationReason": null
           },
           {
+            "name": "canViewReferralInTargetProject",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canViewSourceEnrollmentDetails",
             "description": null,
             "args": [],
@@ -43986,6 +44002,22 @@
             "deprecationReason": null
           },
           {
+            "name": "canViewOutgoingReferralDetails",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canViewOwnReferrals",
             "description": null,
             "args": [],
@@ -48846,6 +48878,22 @@
           },
           {
             "name": "canViewOpenEnrollmentSummary",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewOutgoingReferralDetails",
             "description": null,
             "args": [],
             "type": {

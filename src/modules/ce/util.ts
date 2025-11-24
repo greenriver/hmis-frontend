@@ -7,8 +7,8 @@ import { generateSafePath } from '@/utils/pathEncoding';
 export const getReferralLink = (
   referral: CeReferralWithProjectAccessFieldsFragment
 ) => {
-  if (referral.access.canViewTargetProject) {
-    // If the user can view the target project, link to the referral in the project context
+  if (referral.access.canViewReferralInTargetProject) {
+    // If the user can view referrals in the target project, link to the referral in the project context
     return generateSafePath(ProjectDashboardRoutes.REFERRAL, {
       projectId: referral.targetProjectId,
       referralId: referral.id,

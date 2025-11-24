@@ -3,13 +3,11 @@ import React from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
+import { getReferralLink } from '@/modules/ce/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import {
-  EnrollmentDashboardRoutes,
-  ProjectDashboardRoutes,
-} from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   CeOutgoingReferralsTableFieldsFragment,
   GetProjectOutgoingDirectCeReferralsDocument,
@@ -87,10 +85,7 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
         paginationItemName='outgoing referrals'
         rowLinkTo={(referral) => {
           if (referral.access.canViewReferralDetails) {
-            return generateSafePath(ProjectDashboardRoutes.REFERRAL, {
-              projectId: referral.targetProjectId,
-              referralId: referral.id,
-            });
+            return getReferralLink(referral);
           }
         }}
         rowActionTitle='View Referral'

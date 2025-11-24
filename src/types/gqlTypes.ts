@@ -905,6 +905,7 @@ export type CeReferralAccess = {
   /** Whether or not the user can create a note on this referral at the top level, i.e., not tied to a specific task. */
   canCreateReferralNote: Scalars['Boolean']['output'];
   canViewReferralDetails: Scalars['Boolean']['output'];
+  canViewReferralInTargetProject: Scalars['Boolean']['output'];
   canViewSourceEnrollmentDetails: Scalars['Boolean']['output'];
   canViewTargetProject: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
@@ -6580,6 +6581,7 @@ export type ProjectAccess = {
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
+  canViewOutgoingReferralDetails: Scalars['Boolean']['output'];
   canViewOwnReferrals: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
   canViewPrioritizedClientLists: Scalars['Boolean']['output'];
@@ -7192,6 +7194,7 @@ export type QueryAccess = {
   canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
+  canViewOutgoingReferralDetails: Scalars['Boolean']['output'];
   canViewOwnReferrals: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
   canViewPrioritizedClientLists: Scalars['Boolean']['output'];
@@ -9345,6 +9348,7 @@ export type ProjectAccessFieldsFragment = {
   canUpdateUnitAvailability: boolean;
   canManageIncomingReferrals: boolean;
   canManageOutgoingReferrals: boolean;
+  canViewOutgoingReferralDetails: boolean;
   canManageExternalFormSubmissions: boolean;
   canSplitHouseholds: boolean;
   canViewReferrals: boolean;
@@ -17629,6 +17633,7 @@ export type CeOutgoingReferralsTableFieldsFragment = {
   access: {
     __typename?: 'CeReferralAccess';
     canViewReferralDetails: boolean;
+    canViewReferralInTargetProject: boolean;
     canViewSourceEnrollmentDetails: boolean;
   };
 };
@@ -17647,7 +17652,10 @@ export type CeReferralWithProjectAccessFieldsFragment = {
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
-  access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
+  access: {
+    __typename?: 'CeReferralAccess';
+    canViewReferralInTargetProject: boolean;
+  };
 };
 
 export type CeReferralAdminFieldsFragment = {
@@ -17748,7 +17756,10 @@ export type ClientCeReferralTableFieldsFragment = {
     id: string;
     name: string;
   } | null;
-  access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
+  access: {
+    __typename?: 'CeReferralAccess';
+    canViewReferralInTargetProject: boolean;
+  };
   customStatus?: {
     __typename?: 'CeCustomReferralStatus';
     id: string;
@@ -17905,6 +17916,7 @@ export type CeReferralFieldsFragment = {
     canAssignReferralTasks: boolean;
     canViewSourceEnrollmentDetails: boolean;
     canViewTargetProject: boolean;
+    canViewReferralInTargetProject: boolean;
     canCreateReferralNote: boolean;
   };
   customStatus?: {
@@ -18762,7 +18774,10 @@ export type UserCeReferralStepFieldsFragment = {
     targetProjectName: string;
     targetProjectType: ProjectType;
     opportunity?: { __typename?: 'CeOpportunity'; id: string } | null;
-    access: { __typename?: 'CeReferralAccess'; canViewTargetProject: boolean };
+    access: {
+      __typename?: 'CeReferralAccess';
+      canViewReferralInTargetProject: boolean;
+    };
   };
 };
 
@@ -20334,6 +20349,7 @@ export type SubmitCeReferralStepMutation = {
         canAssignReferralTasks: boolean;
         canViewSourceEnrollmentDetails: boolean;
         canViewTargetProject: boolean;
+        canViewReferralInTargetProject: boolean;
         canCreateReferralNote: boolean;
       };
       customStatus?: {
@@ -21026,6 +21042,7 @@ export type GetCeReferralQuery = {
       canAssignReferralTasks: boolean;
       canViewSourceEnrollmentDetails: boolean;
       canViewTargetProject: boolean;
+      canViewReferralInTargetProject: boolean;
       canCreateReferralNote: boolean;
     };
     customStatus?: {
@@ -21839,7 +21856,7 @@ export type GetClientCeReferralsQuery = {
         } | null;
         access: {
           __typename?: 'CeReferralAccess';
-          canViewTargetProject: boolean;
+          canViewReferralInTargetProject: boolean;
         };
         customStatus?: {
           __typename?: 'CeCustomReferralStatus';
@@ -27249,6 +27266,7 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
         access: {
           __typename?: 'CeReferralAccess';
           canViewReferralDetails: boolean;
+          canViewReferralInTargetProject: boolean;
           canViewSourceEnrollmentDetails: boolean;
         };
       }>;
@@ -38722,6 +38740,7 @@ export type SubmitFormMutation = {
             canUpdateUnitAvailability: boolean;
             canManageIncomingReferrals: boolean;
             canManageOutgoingReferrals: boolean;
+            canViewOutgoingReferralDetails: boolean;
             canManageExternalFormSubmissions: boolean;
             canSplitHouseholds: boolean;
             canViewReferrals: boolean;
@@ -42460,6 +42479,7 @@ export type ProjectAllFieldsFragment = {
     canUpdateUnitAvailability: boolean;
     canManageIncomingReferrals: boolean;
     canManageOutgoingReferrals: boolean;
+    canViewOutgoingReferralDetails: boolean;
     canManageExternalFormSubmissions: boolean;
     canSplitHouseholds: boolean;
     canViewReferrals: boolean;
@@ -43369,6 +43389,7 @@ export type GetProjectQuery = {
       canUpdateUnitAvailability: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
+      canViewOutgoingReferralDetails: boolean;
       canManageExternalFormSubmissions: boolean;
       canSplitHouseholds: boolean;
       canViewReferrals: boolean;
@@ -43554,6 +43575,7 @@ export type GetProjectPermissionsQuery = {
       canUpdateUnitAvailability: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
+      canViewOutgoingReferralDetails: boolean;
       canManageExternalFormSubmissions: boolean;
       canSplitHouseholds: boolean;
       canViewReferrals: boolean;
@@ -48888,7 +48910,7 @@ export type GetUserCeAssignedStepsQuery = {
           opportunity?: { __typename?: 'CeOpportunity'; id: string } | null;
           access: {
             __typename?: 'CeReferralAccess';
-            canViewTargetProject: boolean;
+            canViewReferralInTargetProject: boolean;
           };
         };
       }>;
@@ -49756,6 +49778,7 @@ export const CeOutgoingReferralsTableFieldsFragmentDoc = gql`
     }
     access {
       canViewReferralDetails
+      canViewReferralInTargetProject
       canViewSourceEnrollmentDetails
     }
   }
@@ -49855,7 +49878,7 @@ export const CeReferralWithProjectAccessFieldsFragmentDoc = gql`
     id
     ...CeReferralWithProjectFields
     access {
-      canViewTargetProject
+      canViewReferralInTargetProject
     }
   }
   ${CeReferralWithProjectFieldsFragmentDoc}
@@ -50037,6 +50060,7 @@ export const CeReferralFieldsFragmentDoc = gql`
       canAssignReferralTasks
       canViewSourceEnrollmentDetails
       canViewTargetProject
+      canViewReferralInTargetProject
       canCreateReferralNote
     }
   }
@@ -51208,6 +51232,7 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canUpdateUnitAvailability
     canManageIncomingReferrals
     canManageOutgoingReferrals
+    canViewOutgoingReferralDetails
     canManageExternalFormSubmissions
     canSplitHouseholds
     canViewReferrals
