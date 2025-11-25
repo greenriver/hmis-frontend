@@ -5592,6 +5592,7 @@ export enum PickListType {
   ContinuumProjects = 'CONTINUUM_PROJECTS',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   CustomServiceCategories = 'CUSTOM_SERVICE_CATEGORIES',
+  CustomServiceTypes = 'CUSTOM_SERVICE_TYPES',
   Destination = 'DESTINATION',
   /** Users who can be assigned to referral steps in the specified project */
   EligibleReferralStepAssignmentUsers = 'ELIGIBLE_REFERRAL_STEP_ASSIGNMENT_USERS',

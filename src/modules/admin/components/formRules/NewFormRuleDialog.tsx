@@ -21,6 +21,7 @@ import { localResolvePickList } from '@/modules/form/util/formUtil';
 import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import {
   DataCollectedAbout,
@@ -61,6 +62,7 @@ interface Props {
   formTitle: string;
   formRole: FormRole;
   formCacheKey: string;
+  managedInVersionControl: boolean;
 }
 
 const NewFormRuleDialog: React.FC<Props> = ({
@@ -70,6 +72,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
   formTitle,
   formRole,
   formCacheKey,
+  managedInVersionControl,
 }) => {
   // Form state for the rule
   const [dataCollectedAbout, setDataCollectedAbout] =
@@ -201,6 +204,10 @@ const NewFormRuleDialog: React.FC<Props> = ({
     };
   }, [ruleConditions]);
 
+  const [canAdministrateConfig] = useHasRootPermissions([
+    'canAdministrateConfig',
+  ]);
+
   const { pickList: projectList } = usePickList({
     item: {
       linkId: 'fake',
@@ -217,11 +224,21 @@ const NewFormRuleDialog: React.FC<Props> = ({
     },
   });
 
+  // Logic for Service Type / Service Category picklists:
+  // - If the user has super-admin permissions (can administrate config), show all services including HUD.
+  // - If this is the default service form (managed in version control), show all services including HUD.
+  // - Otherwise, show only custom services.
+  // (Users shouldn't be able to create a custom service form and then apply it to a HUD service,
+  // since form processing wouldn't work correctly out of the box #8460)
+  const includeHudServices = canAdministrateConfig || managedInVersionControl;
+
   const { pickList: serviceTypePickList } = usePickList({
     item: {
       linkId: 'fake',
       type: ItemType.Choice,
-      pickListReference: PickListType.AllServiceTypes,
+      pickListReference: includeHudServices
+        ? PickListType.AllServiceTypes
+        : PickListType.CustomServiceTypes,
     },
   });
 
@@ -229,7 +246,9 @@ const NewFormRuleDialog: React.FC<Props> = ({
     item: {
       linkId: 'fake',
       type: ItemType.Choice,
-      pickListReference: PickListType.AllServiceCategories,
+      pickListReference: includeHudServices
+        ? PickListType.AllServiceCategories
+        : PickListType.CustomServiceCategories,
     },
   });
 

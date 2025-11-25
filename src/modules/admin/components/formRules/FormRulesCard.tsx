@@ -13,12 +13,14 @@ interface Props {
   formTitle: string;
   formRole: FormRole;
   formCacheKey: string;
+  managedInVersionControl: boolean;
 }
 const FormRulesCard: React.FC<Props> = ({
   formId,
   formTitle,
   formRole,
   formCacheKey,
+  managedInVersionControl,
 }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -78,6 +80,7 @@ const FormRulesCard: React.FC<Props> = ({
         formCacheKey={formCacheKey}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        managedInVersionControl={managedInVersionControl}
       />
     </>
   );
