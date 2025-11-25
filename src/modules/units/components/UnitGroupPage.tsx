@@ -86,27 +86,30 @@ const UnitGroupPage = () => {
               >
                 Add Units
               </Button>
-              <DeleteMutationButton<
-                DeleteUnitGroupMutation,
-                DeleteUnitGroupMutationVariables
-              >
-                queryDocument={DeleteUnitGroupDocument}
-                variables={{ id: unitGroup.id }}
-                idPath={'deleteUnitGroup.unitGroup.id'}
-                recordName='Unit Group'
-                onSuccess={() => {
-                  cache.evict({
-                    id: `Project:${project.id}`,
-                    fieldName: 'unitGroups',
-                  });
-                  navigate(
-                    generateSafePath(ProjectDashboardRoutes.UNITS, {
-                      projectId: project.id,
-                    })
-                  );
-                }}
-                onlyIcon
-              />
+              {unitGroup.capacity === 0 && (
+                <DeleteMutationButton<
+                  DeleteUnitGroupMutation,
+                  DeleteUnitGroupMutationVariables
+                >
+                  queryDocument={DeleteUnitGroupDocument}
+                  variables={{ id: unitGroup.id }}
+                  idPath={'deleteUnitGroup.unitGroup.id'}
+                  recordName='Unit Group'
+                  onSuccess={() => {
+                    cache.evict({
+                      id: `Project:${project.id}`,
+                      fieldName: 'unitGroups',
+                    });
+                    navigate(
+                      generateSafePath(ProjectDashboardRoutes.UNITS, {
+                        projectId: project.id,
+                      })
+                    );
+                  }}
+                >
+                  Delete Unit Group
+                </DeleteMutationButton>
+              )}
             </Stack>
           )
         }
