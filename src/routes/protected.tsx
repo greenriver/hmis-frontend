@@ -492,11 +492,25 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            // ReferralPage can be rendered in the Target project context,
+            // or in the Source project context (for direct referrals)
             path: ProjectDashboardRoutes.REFERRAL,
             element: (
               <ProjectRoute
-                permissions={['canViewReferrals', 'canViewOwnReferrals']}
-                coordinatedEntryFeatures={['supportsReferrals']}
+                permissions={[
+                  // Permission mode is `any`
+                  // Target project - User must be able to view (all or own)
+                  'canViewReferrals',
+                  'canViewOwnReferrals',
+                  // Source project - User must be able to view outgoing
+                  'canViewOutgoingReferralDetails',
+                ]}
+                coordinatedEntryFeatures={[
+                  // Target project must support referrals
+                  'supportsReferrals',
+                  // Source project must send direct referrals
+                  'sendsDirectReferrals',
+                ]}
               >
                 <ReferralPage />
               </ProjectRoute>

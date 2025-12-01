@@ -3,11 +3,13 @@ import React from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
-import { getReferralLink } from '@/modules/ce/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import {
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+} from '@/routes/routes';
 import {
   CeOutgoingReferralsTableFieldsFragment,
   GetProjectOutgoingDirectCeReferralsDocument,
@@ -84,8 +86,13 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
         noData='No referrals'
         paginationItemName='outgoing referrals'
         rowLinkTo={(referral) => {
+          // If the user has access to view the full details of this referral (not just the summary)
           if (referral.access.canViewReferralDetails) {
-            return getReferralLink(referral);
+            // Link to the referral in this (source project) context.
+            return generateSafePath(ProjectDashboardRoutes.REFERRAL, {
+              projectId: projectId,
+              referralId: referral.id,
+            });
           }
         }}
         rowActionTitle='View Referral'

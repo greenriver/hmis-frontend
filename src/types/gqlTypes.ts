@@ -9353,6 +9353,7 @@ export type ProjectAccessFieldsFragment = {
   canUpdateUnitAvailability: boolean;
   canManageIncomingReferrals: boolean;
   canManageOutgoingReferrals: boolean;
+  canViewOutgoingReferralDetails: boolean;
   canViewOutgoingReferralSummaries: boolean;
   canManageExternalFormSubmissions: boolean;
   canSplitHouseholds: boolean;
@@ -38745,6 +38746,7 @@ export type SubmitFormMutation = {
             canUpdateUnitAvailability: boolean;
             canManageIncomingReferrals: boolean;
             canManageOutgoingReferrals: boolean;
+            canViewOutgoingReferralDetails: boolean;
             canViewOutgoingReferralSummaries: boolean;
             canManageExternalFormSubmissions: boolean;
             canSplitHouseholds: boolean;
@@ -42484,6 +42486,7 @@ export type ProjectAllFieldsFragment = {
     canUpdateUnitAvailability: boolean;
     canManageIncomingReferrals: boolean;
     canManageOutgoingReferrals: boolean;
+    canViewOutgoingReferralDetails: boolean;
     canViewOutgoingReferralSummaries: boolean;
     canManageExternalFormSubmissions: boolean;
     canSplitHouseholds: boolean;
@@ -43394,6 +43397,7 @@ export type GetProjectQuery = {
       canUpdateUnitAvailability: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
+      canViewOutgoingReferralDetails: boolean;
       canViewOutgoingReferralSummaries: boolean;
       canManageExternalFormSubmissions: boolean;
       canSplitHouseholds: boolean;
@@ -43580,6 +43584,7 @@ export type GetProjectPermissionsQuery = {
       canUpdateUnitAvailability: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
+      canViewOutgoingReferralDetails: boolean;
       canViewOutgoingReferralSummaries: boolean;
       canManageExternalFormSubmissions: boolean;
       canSplitHouseholds: boolean;
@@ -51237,6 +51242,7 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canUpdateUnitAvailability
     canManageIncomingReferrals
     canManageOutgoingReferrals
+    canViewOutgoingReferralDetails
     canViewOutgoingReferralSummaries
     canManageExternalFormSubmissions
     canSplitHouseholds

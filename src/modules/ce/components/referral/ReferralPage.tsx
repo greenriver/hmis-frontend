@@ -65,9 +65,9 @@ interface Props {}
  * Uses react router outlet to render sub-pages.
  *
  * This page is rendered in multiple contexts:
- * - In the Project Dashboard
+ * - In the Project Dashboard - either Source or Target project
  * - In the Admin Dashboard
- * - "Floating" as its own page (when accessed from user dashboard notification if user lacks target project visibility)
+ * - "Floating" as its own page (when accessed from user dashboard notification)
  */
 const ReferralPage: React.FC<Props> = ({}) => {
   const { referralId } = useSafeParams() as { referralId: string };
@@ -160,7 +160,10 @@ const ReferralPage: React.FC<Props> = ({}) => {
               >
                 <ReferralDetailContent
                   referral={referral}
-                  linkToProject={!project} // only link to project if rendered outside Project Dashboard context
+                  // Link to target project if rendered outside target project's context
+                  linkToProject={
+                    !project || project.id !== referral.targetProjectId
+                  }
                 />
               </CommonButtonDrawer>
               {showContactsDrawer && (
