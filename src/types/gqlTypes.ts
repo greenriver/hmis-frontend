@@ -905,11 +905,6 @@ export type CeReferralAccess = {
   /** Whether or not the user can create a note on this referral at the top level, i.e., not tied to a specific task. */
   canCreateReferralNote: Scalars['Boolean']['output'];
   canViewReferralDetails: Scalars['Boolean']['output'];
-  /**
-   * Whether the user can view this referral in the target project context
-   * (separately from their ability to view the project itself)
-   */
-  canViewReferralInTargetProject: Scalars['Boolean']['output'];
   canViewSourceEnrollmentDetails: Scalars['Boolean']['output'];
   canViewTargetProject: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];

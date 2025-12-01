@@ -6772,22 +6772,6 @@
             "deprecationReason": null
           },
           {
-            "name": "canViewReferralInTargetProject",
-            "description": "Whether the user can view this referral in the target project context\n(separately from their ability to view the project itself)",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "canViewSourceEnrollmentDetails",
             "description": null,
             "args": [],
