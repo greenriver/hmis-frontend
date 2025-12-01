@@ -123,7 +123,6 @@ fragment CeOutgoingReferralsTableFields on CeReferral {
   }
   access {
     canViewReferralDetails
-    canViewReferralInTargetProject
     canViewSourceEnrollmentDetails
   }
 }
@@ -138,9 +137,6 @@ fragment CeReferralWithProjectFields on CeReferral {
 fragment CeReferralWithProjectAccessFields on CeReferral {
   id
   ...CeReferralWithProjectFields
-  access {
-    canViewReferralInTargetProject
-  }
 }
 
 fragment CeReferralAdminFields on CeReferral {
@@ -260,7 +256,6 @@ fragment CeReferralFields on CeReferral {
     canAssignReferralTasks
     canViewSourceEnrollmentDetails
     canViewTargetProject
-    canViewReferralInTargetProject
     canCreateReferralNote
   }
 }

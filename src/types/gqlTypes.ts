@@ -17639,7 +17639,6 @@ export type CeOutgoingReferralsTableFieldsFragment = {
   access: {
     __typename?: 'CeReferralAccess';
     canViewReferralDetails: boolean;
-    canViewReferralInTargetProject: boolean;
     canViewSourceEnrollmentDetails: boolean;
   };
 };
@@ -17658,10 +17657,6 @@ export type CeReferralWithProjectAccessFieldsFragment = {
   targetProjectId: string;
   targetProjectName: string;
   targetProjectType: ProjectType;
-  access: {
-    __typename?: 'CeReferralAccess';
-    canViewReferralInTargetProject: boolean;
-  };
 };
 
 export type CeReferralAdminFieldsFragment = {
@@ -17762,10 +17757,6 @@ export type ClientCeReferralTableFieldsFragment = {
     id: string;
     name: string;
   } | null;
-  access: {
-    __typename?: 'CeReferralAccess';
-    canViewReferralInTargetProject: boolean;
-  };
   customStatus?: {
     __typename?: 'CeCustomReferralStatus';
     id: string;
@@ -17922,7 +17913,6 @@ export type CeReferralFieldsFragment = {
     canAssignReferralTasks: boolean;
     canViewSourceEnrollmentDetails: boolean;
     canViewTargetProject: boolean;
-    canViewReferralInTargetProject: boolean;
     canCreateReferralNote: boolean;
   };
   customStatus?: {
@@ -18780,10 +18770,6 @@ export type UserCeReferralStepFieldsFragment = {
     targetProjectName: string;
     targetProjectType: ProjectType;
     opportunity?: { __typename?: 'CeOpportunity'; id: string } | null;
-    access: {
-      __typename?: 'CeReferralAccess';
-      canViewReferralInTargetProject: boolean;
-    };
   };
 };
 
@@ -20355,7 +20341,6 @@ export type SubmitCeReferralStepMutation = {
         canAssignReferralTasks: boolean;
         canViewSourceEnrollmentDetails: boolean;
         canViewTargetProject: boolean;
-        canViewReferralInTargetProject: boolean;
         canCreateReferralNote: boolean;
       };
       customStatus?: {
@@ -21048,7 +21033,6 @@ export type GetCeReferralQuery = {
       canAssignReferralTasks: boolean;
       canViewSourceEnrollmentDetails: boolean;
       canViewTargetProject: boolean;
-      canViewReferralInTargetProject: boolean;
       canCreateReferralNote: boolean;
     };
     customStatus?: {
@@ -21860,10 +21844,6 @@ export type GetClientCeReferralsQuery = {
           id: string;
           name: string;
         } | null;
-        access: {
-          __typename?: 'CeReferralAccess';
-          canViewReferralInTargetProject: boolean;
-        };
         customStatus?: {
           __typename?: 'CeCustomReferralStatus';
           id: string;
@@ -27272,7 +27252,6 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
         access: {
           __typename?: 'CeReferralAccess';
           canViewReferralDetails: boolean;
-          canViewReferralInTargetProject: boolean;
           canViewSourceEnrollmentDetails: boolean;
         };
       }>;
@@ -48918,10 +48897,6 @@ export type GetUserCeAssignedStepsQuery = {
           targetProjectName: string;
           targetProjectType: ProjectType;
           opportunity?: { __typename?: 'CeOpportunity'; id: string } | null;
-          access: {
-            __typename?: 'CeReferralAccess';
-            canViewReferralInTargetProject: boolean;
-          };
         };
       }>;
     } | null;
@@ -49788,7 +49763,6 @@ export const CeOutgoingReferralsTableFieldsFragmentDoc = gql`
     }
     access {
       canViewReferralDetails
-      canViewReferralInTargetProject
       canViewSourceEnrollmentDetails
     }
   }
@@ -49887,9 +49861,6 @@ export const CeReferralWithProjectAccessFieldsFragmentDoc = gql`
   fragment CeReferralWithProjectAccessFields on CeReferral {
     id
     ...CeReferralWithProjectFields
-    access {
-      canViewReferralInTargetProject
-    }
   }
   ${CeReferralWithProjectFieldsFragmentDoc}
 `;
@@ -50070,7 +50041,6 @@ export const CeReferralFieldsFragmentDoc = gql`
       canAssignReferralTasks
       canViewSourceEnrollmentDetails
       canViewTargetProject
-      canViewReferralInTargetProject
       canCreateReferralNote
     }
   }
