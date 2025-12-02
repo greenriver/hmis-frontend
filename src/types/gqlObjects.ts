@@ -6284,6 +6284,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewOutgoingReferralDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewOutgoingReferralSummaries',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewOwnReferrals',
         type: {
           kind: 'NON_NULL',
@@ -6905,6 +6921,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewOpenEnrollmentSummary',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewOutgoingReferralDetails',
         type: {
           kind: 'NON_NULL',
           name: null,
