@@ -11,6 +11,7 @@ import { useRenderLastUpdated } from '../useRenderLastUpdated';
 import NameInput from './NameInput';
 
 import { ClientNameObjectFieldsFragmentDoc } from '@/types/gqlTypes';
+import { preventImplicitSubmission } from '@/utils/forms';
 import { PartialPick } from '@/utils/typeUtil';
 
 const generateNewName = (primary = false) => ({
@@ -34,6 +35,17 @@ const MultiNameInput = ({ id, value, onChange, label }: Props) => {
     'ClientNameObjectFields'
   );
 
+  const handleChangePrimary = useCallback(
+    (idx: number) => {
+      onChange(
+        value.map((val, i) =>
+          i === idx ? { ...val, primary: true } : { ...val, primary: false }
+        )
+      );
+    },
+    [onChange, value]
+  );
+
   return (
     <RepeatedInputContainer
       id={id}
@@ -51,19 +63,11 @@ const MultiNameInput = ({ id, value, onChange, label }: Props) => {
             radioElement={
               <FormControlLabel
                 checked={nameValue.primary || false}
-                control={<Radio />}
+                control={<Radio onKeyDown={preventImplicitSubmission} />}
                 label={
                   <Typography variant='body2'>Client's Primary Name</Typography>
                 }
-                onChange={() =>
-                  onChange(
-                    value.map((val, i) =>
-                      i === idx
-                        ? { ...val, primary: true }
-                        : { ...val, primary: false }
-                    )
-                  )
-                }
+                onChange={() => handleChangePrimary(idx)}
               />
             }
           />

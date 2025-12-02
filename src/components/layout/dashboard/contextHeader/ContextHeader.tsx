@@ -24,6 +24,7 @@ interface Props {
   children?: ReactNode;
   focusMode?: boolean;
   focusModeDefaultReturnPath?: string;
+  menuButtonRef?: React.RefObject<HTMLButtonElement>;
 }
 
 export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
@@ -49,6 +50,7 @@ const ContextHeader: React.FC<Props> = ({
   focusModeDefaultReturnPath,
   isOpen,
   handleOpenMenu,
+  menuButtonRef,
 }) => {
   const isMobile = useIsMobile();
   const { clientId, enrollmentId } = useSafeParams();
@@ -131,6 +133,7 @@ const ContextHeader: React.FC<Props> = ({
               }}
             >
               <Button
+                ref={menuButtonRef}
                 startIcon={<MenuIcon />}
                 variant='text'
                 color='grayscale'

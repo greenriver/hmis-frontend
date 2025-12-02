@@ -8,6 +8,7 @@ import {
   OnValueChange,
 } from 'react-number-format';
 import TextInput, { TextInputProps } from './TextInput';
+import { preventImplicitSubmission } from '@/utils/forms';
 
 // protect from integer overflows
 const withValueLimit = ({ floatValue }: NumberFormatValues) => {
@@ -111,6 +112,7 @@ const NumberInput: React.FC<Props> = ({
         min,
         max,
         'aria-labelledby': ariaLabelledBy,
+        onKeyDown: preventImplicitSubmission,
         ...inputProps,
       }}
       placeholder={currency ? '0' : undefined}
