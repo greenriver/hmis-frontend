@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel, Radio } from '@mui/material';
-import { useCallback, useId } from 'react';
+import { KeyboardEventHandler, useCallback, useId } from 'react';
 
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { PickListOption } from '@/types/gqlTypes';
@@ -39,6 +39,17 @@ const RadioGroupInputOption: React.FC<Props> = ({
     [onChange, disabled, option]
   );
 
+  const onKeyDown: KeyboardEventHandler<HTMLButtonElement> = useCallback(
+    (e) => {
+      if (e.key === ' ' || e.code === 'Space') {
+        handleClick(e);
+      } else {
+        preventImplicitSubmission(e);
+      }
+    },
+    [handleClick]
+  );
+
   return (
     <>
       <FormControlLabel
@@ -49,7 +60,7 @@ const RadioGroupInputOption: React.FC<Props> = ({
         control={
           <ControlComponent
             disabled={disabled}
-            onKeyDown={preventImplicitSubmission}
+            onKeyDown={onKeyDown}
             data-checked={checked}
             inputProps={{
               'aria-labelledby': helperText
