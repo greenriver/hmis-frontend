@@ -24818,6 +24818,7 @@ export type UpdateServiceTypeMutation = {
 };
 
 export type GetFormRulesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<FormRuleFilterOptions>;
@@ -24826,59 +24827,64 @@ export type GetFormRulesQueryVariables = Exact<{
 
 export type GetFormRulesQuery = {
   __typename?: 'Query';
-  formRules: {
-    __typename?: 'FormRulesPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'FormRule';
-      id: string;
-      active: boolean;
-      activeStatus: ActiveStatus;
-      system: boolean;
-      definitionIdentifier: string;
-      definitionId?: string | null;
-      definitionTitle?: string | null;
-      definitionRole?: FormRole | null;
-      dataCollectedAbout?: DataCollectedAbout | null;
-      funder?: FundingSource | null;
-      otherFunder?: string | null;
-      projectType?: ProjectType | null;
-      projectId?: string | null;
-      projectName?: string | null;
-      organizationId?: string | null;
-      createdAt: string;
-      updatedAt: string;
-      organization?: {
-        __typename?: 'Organization';
+  formDefinition?: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    formRules: {
+      __typename?: 'FormRulesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'FormRule';
         id: string;
-        hudId: string;
-        organizationName: string;
-      } | null;
-      serviceCategory?: {
-        __typename?: 'ServiceCategory';
-        id: string;
-        name: string;
-      } | null;
-      serviceType?: {
-        __typename?: 'ServiceType';
-        id: string;
-        name: string;
-        hud: boolean;
-        hudRecordType?: RecordType | null;
-        hudTypeProvided?: ServiceTypeProvided | null;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-        supportsBulkAssignment: boolean;
-        serviceCategory: {
+        active: boolean;
+        activeStatus: ActiveStatus;
+        system: boolean;
+        definitionIdentifier: string;
+        definitionId?: string | null;
+        definitionTitle?: string | null;
+        definitionRole?: FormRole | null;
+        dataCollectedAbout?: DataCollectedAbout | null;
+        funder?: FundingSource | null;
+        otherFunder?: string | null;
+        projectType?: ProjectType | null;
+        projectId?: string | null;
+        projectName?: string | null;
+        organizationId?: string | null;
+        createdAt: string;
+        updatedAt: string;
+        organization?: {
+          __typename?: 'Organization';
+          id: string;
+          hudId: string;
+          organizationName: string;
+        } | null;
+        serviceCategory?: {
           __typename?: 'ServiceCategory';
           id: string;
           name: string;
-        };
-      } | null;
-    }>;
-  };
+        } | null;
+        serviceType?: {
+          __typename?: 'ServiceType';
+          id: string;
+          name: string;
+          hud: boolean;
+          hudRecordType?: RecordType | null;
+          hudTypeProvided?: ServiceTypeProvided | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
+          serviceCategory: {
+            __typename?: 'ServiceCategory';
+            id: string;
+            name: string;
+          };
+        } | null;
+      }>;
+    };
+  } | null;
 };
 
 export type GetFormProjectMatchesQueryVariables = Exact<{
@@ -57370,22 +57376,27 @@ export type UpdateServiceTypeMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const GetFormRulesDocument = gql`
   query GetFormRules(
+    $id: ID!
     $limit: Int = 25
     $offset: Int = 0
     $filters: FormRuleFilterOptions
     $sortOrder: FormRuleSortOption
   ) {
-    formRules(
-      limit: $limit
-      offset: $offset
-      filters: $filters
-      sortOrder: $sortOrder
-    ) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...FormRuleFields
+    formDefinition(id: $id) {
+      id
+      cacheKey
+      formRules(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+        sortOrder: $sortOrder
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...FormRuleFields
+        }
       }
     }
   }
@@ -57404,6 +57415,7 @@ export const GetFormRulesDocument = gql`
  * @example
  * const { data, loading, error } = useGetFormRulesQuery({
  *   variables: {
+ *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
@@ -57412,10 +57424,14 @@ export const GetFormRulesDocument = gql`
  * });
  */
 export function useGetFormRulesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     GetFormRulesQuery,
     GetFormRulesQueryVariables
-  >
+  > &
+    (
+      | { variables: GetFormRulesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<GetFormRulesQuery, GetFormRulesQueryVariables>(
