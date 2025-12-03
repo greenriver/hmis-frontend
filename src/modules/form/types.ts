@@ -6,6 +6,7 @@ import { RegisterOptions } from 'react-hook-form';
 import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHandlers';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  FormDefinitionJsonFieldsFragment,
   FormItem,
   GetAssessmentsForPopulationQuery,
   ItemType,
@@ -205,3 +206,5 @@ export type RhfRules = Omit<
   RegisterOptions,
   'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 >;
+
+export type FormItemType = FormDefinitionJsonFieldsFragment['item'][number];
