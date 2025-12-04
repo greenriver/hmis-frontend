@@ -115,12 +115,18 @@ const HouseholdAssessments: React.FC<Props> = ({
 
   const hasRefetched = useHasRefetched(fetchAssessmentsStatus.networkStatus);
 
+  const readOnlyView = !enrollment.access.canEditEnrollments;
+
   useEffect(() => {
     if (!householdMembers) return;
     if (!assessmentByEnrollmentId) return;
     setTabs((oldTabs) => {
-      const newTabs: TabDefinition[] = householdMembers.map(
-        ({ client, enrollment, relationshipToHoH }, index) => {
+      const newTabs: TabDefinition[] = householdMembers
+        .filter(({ enrollment }) =>
+          // If user has read-only access, only show tabs for which there is an assessment
+          readOnlyView ? !!assessmentByEnrollmentId[enrollment.id] : true
+        )
+        .map(({ client, enrollment, relationshipToHoH }, index) => {
           const assessment = assessmentByEnrollmentId[enrollment.id];
           const assessmentId = assessment?.id;
           const assessmentInProgress = assessment?.inProgress;
@@ -165,11 +171,10 @@ const HouseholdAssessments: React.FC<Props> = ({
           }
 
           return tabData;
-        }
-      );
+        });
       return newTabs;
     });
-  }, [householdMembers, assessmentByEnrollmentId, role]);
+  }, [householdMembers, assessmentByEnrollmentId, role, readOnlyView]);
 
   const { hash } = useLocation();
 
@@ -318,7 +323,7 @@ const HouseholdAssessments: React.FC<Props> = ({
           {/* <Grid item xs={1} sm={0.1}></Grid> */}
           <Grid
             item
-            xs={8}
+            xs={readOnlyView ? 10 : 8}
             sx={{
               height: '100%',
               pr: 6,
@@ -349,39 +354,41 @@ const HouseholdAssessments: React.FC<Props> = ({
               ))}
             </Tabs>
           </Grid>
-          <Grid
-            item
-            xs={2}
-            sx={({ shadows }) => ({
-              height: '100%',
-              boxShadow: shadows[2],
-              clipPath: 'inset(0px 0px 0px -15px)',
-              display: 'flex',
-              alignItems: 'flex-end',
-            })}
-          >
-            <Tabs
-              value={currentTab === SUMMARY_TAB_ID ? currentTab : false}
-              onChange={handleChangeTab}
-              aria-label='review and submit tab'
-              scrollButtons={false}
-              TabIndicatorProps={{ style: { height: '4px' } }}
+          {!readOnlyView && (
+            <Grid
+              item
+              xs={2}
+              sx={({ shadows }) => ({
+                height: '100%',
+                boxShadow: shadows[2],
+                clipPath: 'inset(0px 0px 0px -15px)',
+                display: 'flex',
+                alignItems: 'flex-end',
+              })}
             >
-              <Tab
-                value={SUMMARY_TAB_ID}
-                key={SUMMARY_TAB_ID}
-                label={<SummaryTabLabel role={role} />}
-                sx={{
-                  ...tabSx,
-                  // justifyContent: 'left',
-                  pb: 3,
-                  alignItems: 'flex-start',
-                }}
-                onClick={() => navigateToTab('summary')}
-                {...tabA11yProps(SUMMARY_TAB_ID)}
-              />
-            </Tabs>
-          </Grid>
+              <Tabs
+                value={currentTab === SUMMARY_TAB_ID ? currentTab : false}
+                onChange={handleChangeTab}
+                aria-label='review and submit tab'
+                scrollButtons={false}
+                TabIndicatorProps={{ style: { height: '4px' } }}
+              >
+                <Tab
+                  value={SUMMARY_TAB_ID}
+                  key={SUMMARY_TAB_ID}
+                  label={<SummaryTabLabel role={role} />}
+                  sx={{
+                    ...tabSx,
+                    // justifyContent: 'left',
+                    pb: 3,
+                    alignItems: 'flex-start',
+                  }}
+                  onClick={() => navigateToTab('summary')}
+                  {...tabA11yProps(SUMMARY_TAB_ID)}
+                />
+              </Tabs>
+            </Grid>
+          )}
         </Grid>
       </AppBar>
       <Grid container spacing={4} sx={{ py: 2 }}>

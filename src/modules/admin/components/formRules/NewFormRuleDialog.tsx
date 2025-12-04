@@ -23,7 +23,6 @@ import CardGroup, {
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import { cache } from '@/providers/apolloClient';
 import {
-  ActiveStatus,
   DataCollectedAbout,
   FormRole,
   FormRuleInput,
@@ -90,7 +89,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
     );
 
     return {
-      activeStatus: ActiveStatus.Active,
       dataCollectedAbout: dataCollectedAbout,
       projectId: conditions.projectId,
       projectType: conditions.projectType as ProjectType,

@@ -66,8 +66,7 @@ interface Props {
  */
 const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
   const filters = useFilters({
-    type: 'CeReferralFilterOptions',
-    omit: ['onCurrentTaskSince', 'workflowTemplate'],
+    type: 'ProjectOutgoingCeReferralFilterOptions',
   });
 
   return (
