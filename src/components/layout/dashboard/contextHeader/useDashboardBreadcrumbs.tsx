@@ -96,6 +96,7 @@ export const useProjectBreadcrumbConfig = (
         title: 'ESG Funding Report',
         parent: ProjectDashboardRoutes.REFERRALS,
       },
+      // TODO(#8142) remove legacy referral routes
       [ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL]: {
         title: 'Create Referral',
         parent: ProjectDashboardRoutes.REFERRALS,
@@ -151,6 +152,10 @@ export const useProjectBreadcrumbConfig = (
       [ProjectDashboardRoutes.REFERRAL_STEP]: {
         title: 'Referral',
         parent: ProjectDashboardRoutes.CE,
+      },
+      [ProjectDashboardRoutes.SEND_REFERRAL]: {
+        title: 'Send Referral',
+        parent: ProjectDashboardRoutes.REFERRALS,
       },
       [ProjectDashboardRoutes.UNIT_GROUP]: {
         title: 'Unit Group',

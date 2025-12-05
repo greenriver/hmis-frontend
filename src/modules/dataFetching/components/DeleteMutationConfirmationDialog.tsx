@@ -68,9 +68,15 @@ const DeleteMutationConfirmationDialog = <Mutation, MutationVariables>({
       awaitRefetchQueries,
     }
   );
+
   const handleDelete = useCallback(() => {
     deleteRecord();
   }, [deleteRecord]);
+
+  const handleClose = useCallback(() => {
+    setErrorState(emptyErrorState);
+    onClose();
+  }, [onClose]);
 
   return (
     <ConfirmationDialog
@@ -80,7 +86,7 @@ const DeleteMutationConfirmationDialog = <Mutation, MutationVariables>({
       confirmText={`Yes, ${verb} ${recordName}`}
       cancelText='Close'
       onConfirm={handleDelete}
-      onCancel={onClose}
+      onCancel={handleClose}
       loading={loading}
       errorState={errorState}
       color='error'
