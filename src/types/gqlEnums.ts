@@ -1016,6 +1016,8 @@ export const HmisEnums = {
     EXTERNAL_FORM_TYPES_FOR_PROJECT: 'External form types for the project.',
     FORM_TYPES: 'Form Types',
     GEOCODE: 'GEOCODE',
+    HUD_SERVICE_CATEGORIES: 'HUD_SERVICE_CATEGORIES',
+    HUD_SERVICE_TYPES: 'HUD_SERVICE_TYPES',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     OPEN_PROJECTS: 'Open Projects that the user can see',
     ORGANIZATION: 'All Organizations that the User can see',

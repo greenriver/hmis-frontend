@@ -39746,6 +39746,18 @@
             "deprecationReason": null
           },
           {
+            "name": "HUD_SERVICE_CATEGORIES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_SERVICE_TYPES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "OPEN_HOH_ENROLLMENTS_FOR_PROJECT",
             "description": "Open HoH enrollments at the project.",
             "isDeprecated": false,

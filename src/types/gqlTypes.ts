@@ -5608,6 +5608,8 @@ export enum PickListType {
   /** Form Types */
   FormTypes = 'FORM_TYPES',
   Geocode = 'GEOCODE',
+  HudServiceCategories = 'HUD_SERVICE_CATEGORIES',
+  HudServiceTypes = 'HUD_SERVICE_TYPES',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
   /** Open Projects that the user can see */
