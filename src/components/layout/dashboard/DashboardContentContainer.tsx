@@ -1,6 +1,6 @@
 import { Box, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useRef } from 'react';
 
 import {
   DASHBOARD_CONTENT_PX,
@@ -51,6 +51,7 @@ const DashboardContentContainer: React.FC<Props> = ({
 }) => {
   const theme = useTheme();
   const maxPageWidth = useMaxPageWidth();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const desktopContainerWidth = desktopNavIsOpen
     ? // FIXME using vw causes horizontal scrollbar when vertical scroll is present
@@ -105,6 +106,7 @@ const DashboardContentContainer: React.FC<Props> = ({
             handleCloseDesktopMenu={handleCloseDesktopMenu}
             label={navLabel}
             skipNavFocusTargetId={FOCUS_TARGET_ID}
+            menuButtonRef={menuButtonRef}
           >
             {sidebar}
           </DashboardContentNav>
@@ -129,6 +131,7 @@ const DashboardContentContainer: React.FC<Props> = ({
               handleOpenMenu={
                 isMobile ? handleOpenMobileMenu : handleOpenDesktopMenu
               }
+              menuButtonRef={menuButtonRef}
             >
               {contextHeader}
             </ContextHeader>

@@ -17,6 +17,13 @@ export const scrollToElement = (
   } else {
     element.scrollIntoView();
   }
+
+  // Move focus to the section for keyboard navigation and screen readers
+  // First make the element focusable (same approach as SkipToContentButton)
+  if (!element.hasAttribute('tabindex')) {
+    element.setAttribute('tabindex', '-1');
+  }
+  element.focus({ preventScroll: true }); // We already smooth-scrolled to it
 };
 
 export function useScrollToHash(pageLoading?: boolean, offset?: number) {

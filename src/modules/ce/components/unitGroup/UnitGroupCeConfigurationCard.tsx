@@ -19,7 +19,7 @@ const UnitGroupCeConfigurationCard: React.FC<Props> = ({ unitGroup }) => {
     unitGroup;
 
   return (
-    <CommonCard title='Configuration'>
+    <CommonCard title='Configuration' TitleComponent='h2'>
       <Stack gap={1}>
         <CommonLabeledTextBlock title='Referral Workflow' variant='body1'>
           {workflowTemplateName || missingWorkflowTemplateText}

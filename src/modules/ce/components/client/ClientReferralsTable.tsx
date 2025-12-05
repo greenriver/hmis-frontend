@@ -7,15 +7,16 @@ import {
   REFERRAL_COLUMNS,
   REFERRAL_WITH_PROJECT_COLUMNS,
 } from '@/modules/ce/referralColumns';
-import { getReferralLink } from '@/modules/ce/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import { Routes } from '@/routes/routes';
 import {
   ClientCeReferralTableFieldsFragment,
   GetClientCeReferralsDocument,
   GetClientCeReferralsQuery,
   GetClientCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: ColumnDef<ClientCeReferralTableFieldsFragment>[] = [
   { ...REFERRAL_WITH_PROJECT_COLUMNS.projectName, sticky: 'left' },
@@ -51,7 +52,11 @@ const ClientReferralsTable: React.FC = () => {
         pagePath='client.ceReferrals'
         noData='No referrals'
         paginationItemName='referrals'
-        rowLinkTo={getReferralLink}
+        rowLinkTo={({ id }) =>
+          generateSafePath(Routes.REFERRAL, {
+            referralId: id,
+          })
+        }
         rowActionTitle='View Referral'
         filters={filters}
       />

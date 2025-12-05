@@ -28,6 +28,7 @@ import {
 import {
   AssessmentForPopulation,
   DynamicInputCommonProps,
+  FormItemType,
   FormValues,
   HIDDEN_VALUE,
   isHmisEnum,
@@ -1112,12 +1113,16 @@ export type ClientNameDobVeteranFields = {
 /**
  * Recursively filters out any items where "data collected about" does not apply.
  * Returns a modified copy of the definition.
+ *
+ * Note: logic is similar to Hmis::Form::DefinitionItemFilter on the backend, which handles
+ * filtering out items based on Project applicability. Client applicability ("data collected about") is handled
+ * on the frontend, so that household members can use the same shared form definition returned from the API.
  */
 export const applyDataCollectedAbout = (
-  items: FormDefinitionFieldsFragment['definition']['item'],
+  items: FormItemType[],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
-): FormDefinitionFieldsFragment['definition']['item'] => {
+): FormItemType[] => {
   function isApplicable(item: FormItem) {
     if (!item.dataCollectedAbout) return true;
 
@@ -1128,18 +1133,27 @@ export const applyDataCollectedAbout = (
     );
   }
 
-  function recur(item: (typeof items)[0]) {
+  function recur(item: FormItemType) {
     if (!item.item) return item;
+
     const { item: childItems, ...rest } = item;
-    const filteredItems: typeof items = childItems
+    const filteredItems: FormItemType[] = childItems
       .filter((child) => isApplicable(child))
-      .map((child) => recur(child));
+      .map((child) => recur(child))
+      .filter((child) => child !== null);
+
+    // If the group is empty, return null so it is filtered out
+    if (rest.type === ItemType.Group && filteredItems.length === 0) {
+      return null;
+    }
+
     return { ...rest, item: filteredItems };
   }
 
   return items
     .filter((child) => isApplicable(child))
-    .map((child) => recur(child));
+    .map((child) => recur(child))
+    .filter((child) => child !== null);
 };
 
 // Apply DataCollectedAbout to a FormDefinition. Return cloned definition.

@@ -21,7 +21,7 @@ const QuestionGroup = ({
   const hasTitle = !!item.text;
   const isConditionalGroup =
     !!item.item &&
-    (!!item.enableWhen || !!item.item[0].enableWhen) &&
+    (!!item.enableWhen || !!item.item[0]?.enableWhen) &&
     // Don't indent InfoGroup because it already has visual distinction
     item.component !== Component.InfoGroup;
 

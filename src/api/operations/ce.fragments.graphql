@@ -137,9 +137,6 @@ fragment CeReferralWithProjectFields on CeReferral {
 fragment CeReferralWithProjectAccessFields on CeReferral {
   id
   ...CeReferralWithProjectFields
-  access {
-    canViewTargetProject
-  }
 }
 
 fragment CeReferralAdminFields on CeReferral {
