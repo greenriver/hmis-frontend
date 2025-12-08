@@ -1,10 +1,10 @@
 import {
   Alert,
+  Box,
   Card,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -21,7 +21,6 @@ import { localResolvePickList } from '@/modules/form/util/formUtil';
 import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import {
   DataCollectedAbout,
   FormRole,
@@ -181,10 +180,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
     };
   }, [ruleConditions]);
 
-  const [canAdministrateConfig] = useHasRootPermissions([
-    'canAdministrateConfig',
-  ]);
-
   const { pickList: projectList } = usePickList({
     item: {
       linkId: 'fake',
@@ -202,18 +197,10 @@ const NewFormRuleDialog: React.FC<Props> = ({
   });
 
   // Logic for Service Type / Service Category picklists:
-  // - If the user has super-admin permissions (can administrate config), show all services including HUD and custom.
   // - If this is the default service form (managed in version control), show only HUD services.
   // - Otherwise, show only custom services.
-  // (Non-super-admin users shouldn't be able to create a custom service form and then apply it to a HUD service,
-  // or vice versa, since form processing wouldn't work correctly out of the box.)
   const { serviceTypePickListReference, serviceCategoryPickListReference } =
     useMemo(() => {
-      if (canAdministrateConfig)
-        return {
-          serviceTypePickListReference: PickListType.AllServiceTypes,
-          serviceCategoryPickListReference: PickListType.AllServiceCategories,
-        };
       if (managedInVersionControl)
         return {
           serviceTypePickListReference: PickListType.HudServiceTypes,
@@ -223,7 +210,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
         serviceTypePickListReference: PickListType.CustomServiceTypes,
         serviceCategoryPickListReference: PickListType.CustomServiceCategories,
       };
-    }, [canAdministrateConfig, managedInVersionControl]);
+    }, [managedInVersionControl]);
 
   const { pickList: serviceTypePickList } = usePickList({
     item: {
@@ -315,14 +302,13 @@ const NewFormRuleDialog: React.FC<Props> = ({
           </Card>
           {validationError && <Alert severity='error'>{validationError}</Alert>}
           {formRole === FormRole.Service && (
-            <Stack
+            <Box
               sx={{
                 backgroundColor: theme.palette.grey[100],
                 borderRadius: 1,
                 py: 1,
                 px: 2,
               }}
-              gap={1}
             >
               <FormRuleCondition
                 prefixText='Collects'
@@ -347,19 +333,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                   !rule.serviceTypeId
                 }
               />
-              {canAdministrateConfig && (
-                <Typography
-                  variant='body2'
-                  color='warning.darkest'
-                  sx={{ fontStyle: 'italic' }}
-                >
-                  As an administrator, you see both HUD and Custom options in
-                  the list above. Note that if you select a HUD service for a
-                  custom form, or vice versa, it will require backend changes to
-                  custom data elements.
-                </Typography>
-              )}
-            </Stack>
+            </Box>
           )}
           <FormSelect
             label={
