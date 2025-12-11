@@ -134,9 +134,6 @@ mutation SubmitForm($input: SubmitFormInput!) {
       ... on Inventory {
         ...InventoryFields
       }
-      ... on ReferralRequest {
-        ...ReferralRequestFields
-      }
       ... on Service {
         ...ServiceFields
       }

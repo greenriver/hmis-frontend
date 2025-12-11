@@ -89,7 +89,6 @@ import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdP
 import AdminReferralDenialsPage from '@/modules/legacyReferrals/components/admin/AdminReferralDenialsPage';
 import AdminReferralPosting from '@/modules/legacyReferrals/components/admin/AdminReferralPosting';
 import NewOutgoingReferralPage from '@/modules/legacyReferrals/components/NewOutgoingReferralPage';
-import NewReferralRequestPage from '@/modules/legacyReferrals/components/NewReferralRequestPage';
 import ProjectReferralPostingPage from '@/modules/legacyReferrals/components/ProjectReferralPostingPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
@@ -318,17 +317,6 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={Routes.PROJECT}
               >
                 <ProjectEsgFundingReport />
-              </ProjectEditRoute>
-            ),
-          },
-          {
-            path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
-            element: (
-              <ProjectEditRoute
-                permissions={['canManageIncomingReferrals']}
-                redirectRoute={Routes.PROJECT}
-              >
-                <NewReferralRequestPage />
               </ProjectEditRoute>
             ),
           },

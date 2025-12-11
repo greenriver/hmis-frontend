@@ -5008,7 +5008,10 @@ export type Mutation = {
   updateServiceType?: Maybe<UpdateServiceTypePayload>;
   updateUnitGroup?: Maybe<UpdateUnitGroupPayload>;
   updateUnits?: Maybe<UpdateUnitsPayload>;
-  /** Void a referral request */
+  /**
+   * Void a referral request
+   * @deprecated External ReferralRequests integration is deprecated and will be removed in a future release
+   */
   voidReferralRequest?: Maybe<VoidReferralRequestPayload>;
 };
 
@@ -38881,25 +38884,7 @@ export type SubmitFormMutation = {
           } | null;
         }
       | { __typename?: 'ReferralPosting'; id: string }
-      | {
-          __typename?: 'ReferralRequest';
-          id: string;
-          requestedOn: string;
-          identifier: string;
-          neededBy: string;
-          requestorName: string;
-          requestorPhone: string;
-          requestorEmail: string;
-          unitType: {
-            __typename?: 'UnitTypeObject';
-            id: string;
-            description?: string | null;
-            bedType?: InventoryBedType | null;
-            unitSize?: number | null;
-            dateUpdated: string;
-            dateCreated: string;
-          };
-        }
+      | { __typename?: 'ReferralRequest' }
       | {
           __typename?: 'Service';
           id: string;
@@ -44392,45 +44377,6 @@ export type GetProjectInventoriesQuery = {
   } | null;
 };
 
-export type GetProjectReferralRequestsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetProjectReferralRequestsQuery = {
-  __typename?: 'Query';
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    referralRequests: {
-      __typename?: 'ReferralRequestsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'ReferralRequest';
-        id: string;
-        requestedOn: string;
-        identifier: string;
-        neededBy: string;
-        requestorName: string;
-        requestorPhone: string;
-        requestorEmail: string;
-        unitType: {
-          __typename?: 'UnitTypeObject';
-          id: string;
-          description?: string | null;
-          bedType?: InventoryBedType | null;
-          unitSize?: number | null;
-          dateUpdated: string;
-          dateCreated: string;
-        };
-      }>;
-    };
-  } | null;
-};
-
 export type GetProjectReferralPostingsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -45009,32 +44955,6 @@ export type GetProjectConfigsQuery = {
       } | null;
     }>;
   };
-};
-
-export type VoidReferralRequestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type VoidReferralRequestMutation = {
-  __typename?: 'Mutation';
-  voidReferralRequest?: {
-    __typename?: 'VoidReferralRequestPayload';
-    record?: { __typename?: 'ReferralRequest'; id: string } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
 };
 
 export type UpdateReferralPostingMutationVariables = Exact<{
@@ -45770,26 +45690,6 @@ export type ReferralPostingDetailFieldsFragment = {
       } | null;
     }> | null;
   }>;
-};
-
-export type ReferralRequestFieldsFragment = {
-  __typename?: 'ReferralRequest';
-  id: string;
-  requestedOn: string;
-  identifier: string;
-  neededBy: string;
-  requestorName: string;
-  requestorPhone: string;
-  requestorEmail: string;
-  unitType: {
-    __typename?: 'UnitTypeObject';
-    id: string;
-    description?: string | null;
-    bedType?: InventoryBedType | null;
-    unitSize?: number | null;
-    dateUpdated: string;
-    dateCreated: string;
-  };
 };
 
 export type ReminderFieldsFragment = {
@@ -51563,21 +51463,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-`;
-export const ReferralRequestFieldsFragmentDoc = gql`
-  fragment ReferralRequestFields on ReferralRequest {
-    id
-    requestedOn
-    identifier
-    unitType {
-      ...UnitTypeFields
-    }
-    neededBy
-    requestorName
-    requestorPhone
-    requestorEmail
-  }
-  ${UnitTypeFieldsFragmentDoc}
 `;
 export const ReminderFieldsFragmentDoc = gql`
   fragment ReminderFields on Reminder {
@@ -61367,9 +61252,6 @@ export const SubmitFormDocument = gql`
         ... on Inventory {
           ...InventoryFields
         }
-        ... on ReferralRequest {
-          ...ReferralRequestFields
-        }
         ... on Service {
           ...ServiceFields
         }
@@ -61412,7 +61294,6 @@ export const SubmitFormDocument = gql`
   ${FunderFieldsFragmentDoc}
   ${ProjectCocFieldsFragmentDoc}
   ${InventoryFieldsFragmentDoc}
-  ${ReferralRequestFieldsFragmentDoc}
   ${ServiceFieldsFragmentDoc}
   ${FileFieldsFragmentDoc}
   ${SubmittedEnrollmentResultFieldsFragmentDoc}
@@ -64060,103 +63941,6 @@ export type GetProjectInventoriesQueryResult = Apollo.QueryResult<
   GetProjectInventoriesQuery,
   GetProjectInventoriesQueryVariables
 >;
-export const GetProjectReferralRequestsDocument = gql`
-  query GetProjectReferralRequests(
-    $id: ID!
-    $limit: Int = 10
-    $offset: Int = 0
-  ) {
-    project(id: $id) {
-      id
-      referralRequests(limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...ReferralRequestFields
-        }
-      }
-    }
-  }
-  ${ReferralRequestFieldsFragmentDoc}
-`;
-
-/**
- * __useGetProjectReferralRequestsQuery__
- *
- * To run a query within a React component, call `useGetProjectReferralRequestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectReferralRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProjectReferralRequestsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetProjectReferralRequestsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetProjectReferralRequestsQuery,
-    GetProjectReferralRequestsQueryVariables
-  > &
-    (
-      | { variables: GetProjectReferralRequestsQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetProjectReferralRequestsQuery,
-    GetProjectReferralRequestsQueryVariables
-  >(GetProjectReferralRequestsDocument, options);
-}
-export function useGetProjectReferralRequestsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetProjectReferralRequestsQuery,
-    GetProjectReferralRequestsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetProjectReferralRequestsQuery,
-    GetProjectReferralRequestsQueryVariables
-  >(GetProjectReferralRequestsDocument, options);
-}
-export function useGetProjectReferralRequestsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetProjectReferralRequestsQuery,
-        GetProjectReferralRequestsQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetProjectReferralRequestsQuery,
-    GetProjectReferralRequestsQueryVariables
-  >(GetProjectReferralRequestsDocument, options);
-}
-export type GetProjectReferralRequestsQueryHookResult = ReturnType<
-  typeof useGetProjectReferralRequestsQuery
->;
-export type GetProjectReferralRequestsLazyQueryHookResult = ReturnType<
-  typeof useGetProjectReferralRequestsLazyQuery
->;
-export type GetProjectReferralRequestsSuspenseQueryHookResult = ReturnType<
-  typeof useGetProjectReferralRequestsSuspenseQuery
->;
-export type GetProjectReferralRequestsQueryResult = Apollo.QueryResult<
-  GetProjectReferralRequestsQuery,
-  GetProjectReferralRequestsQueryVariables
->;
 export const GetProjectReferralPostingsDocument = gql`
   query GetProjectReferralPostings(
     $id: ID!
@@ -65298,62 +65082,6 @@ export type GetProjectConfigsSuspenseQueryHookResult = ReturnType<
 export type GetProjectConfigsQueryResult = Apollo.QueryResult<
   GetProjectConfigsQuery,
   GetProjectConfigsQueryVariables
->;
-export const VoidReferralRequestDocument = gql`
-  mutation VoidReferralRequest($id: ID!) {
-    voidReferralRequest(referralRequestId: $id) {
-      record {
-        id
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type VoidReferralRequestMutationFn = Apollo.MutationFunction<
-  VoidReferralRequestMutation,
-  VoidReferralRequestMutationVariables
->;
-
-/**
- * __useVoidReferralRequestMutation__
- *
- * To run a mutation, you first call `useVoidReferralRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useVoidReferralRequestMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [voidReferralRequestMutation, { data, loading, error }] = useVoidReferralRequestMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useVoidReferralRequestMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    VoidReferralRequestMutation,
-    VoidReferralRequestMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    VoidReferralRequestMutation,
-    VoidReferralRequestMutationVariables
-  >(VoidReferralRequestDocument, options);
-}
-export type VoidReferralRequestMutationHookResult = ReturnType<
-  typeof useVoidReferralRequestMutation
->;
-export type VoidReferralRequestMutationResult =
-  Apollo.MutationResult<VoidReferralRequestMutation>;
-export type VoidReferralRequestMutationOptions = Apollo.BaseMutationOptions<
-  VoidReferralRequestMutation,
-  VoidReferralRequestMutationVariables
 >;
 export const UpdateReferralPostingDocument = gql`
   mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
