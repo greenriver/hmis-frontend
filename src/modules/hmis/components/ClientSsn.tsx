@@ -9,8 +9,7 @@ import { maskSSN } from '@/modules/hmis/hmisUtil';
 import { ClientSsnFieldsFragment } from '@/types/gqlTypes';
 
 export interface Props
-  extends TypographyProps,
-    Pick<ClickToShowProps, 'hide' | 'onToggle'> {
+  extends TypographyProps, Pick<ClickToShowProps, 'hide' | 'onToggle'> {
   client: ClientSsnFieldsFragment;
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];

@@ -14,8 +14,10 @@ import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnD
 import { RecentHouseholdMember } from '@/modules/household/types';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 
-interface Props
-  extends Omit<GenericTableProps<RecentHouseholdMember>, 'rows' | 'columns'> {
+interface Props extends Omit<
+  GenericTableProps<RecentHouseholdMember>,
+  'rows' | 'columns'
+> {
   recentMembers: RecentHouseholdMember[];
   additionalColumns?: ColumnDef<RecentHouseholdMember>[];
 }

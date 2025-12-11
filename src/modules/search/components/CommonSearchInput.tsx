@@ -22,8 +22,10 @@ const ClearSearchEndAdornmentButton: React.FC<
   </InputAdornment>
 );
 
-export interface CommonSearchInputProps
-  extends Omit<TextInputProps, 'onChange' | 'value'> {
+export interface CommonSearchInputProps extends Omit<
+  TextInputProps,
+  'onChange' | 'value'
+> {
   value?: string;
   onChange: Dispatch<SetStateAction<string>>;
   size?: 'small' | 'medium';

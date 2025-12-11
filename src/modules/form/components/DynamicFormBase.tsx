@@ -12,7 +12,8 @@ import DynamicFormSaveButtons, {
 import { hasErrors } from '@/modules/errors/util';
 
 export interface DynamicFormBaseProps
-  extends DynamicFormSaveButtonsProps,
+  extends
+    DynamicFormSaveButtonsProps,
     DynamicFormErrorsProps,
     DynamicFormFieldsProps,
     Pick<DynamicFormLayoutProps, 'variant'> {
