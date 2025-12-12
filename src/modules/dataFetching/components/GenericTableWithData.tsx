@@ -43,15 +43,15 @@ export interface Props<
   FilterOptionsType = Record<string, any>,
   SortOptionsType = Record<string, string>,
 > extends Omit<
-    GenericTableProps<RowDataType>,
-    | 'rows'
-    | 'tablePaginationProps'
-    | 'loading'
-    | 'paginated'
-    | 'noData'
-    | 'verticalHiddenHeader'
-    | 'columns'
-  > {
+  GenericTableProps<RowDataType>,
+  | 'rows'
+  | 'tablePaginationProps'
+  | 'loading'
+  | 'paginated'
+  | 'noData'
+  | 'verticalHiddenHeader'
+  | 'columns'
+> {
   columns?: DataColumnDef<RowDataType, QueryVariables>[];
   getColumnDefs?: (
     rows: RowDataType[],

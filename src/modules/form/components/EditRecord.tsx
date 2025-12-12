@@ -24,16 +24,15 @@ import FormNavigationContainer, {
 } from '@/modules/form/components/FormNavigationContainer';
 import { FormInput, RecordFormRole } from '@/types/gqlTypes';
 
-export interface Props<RecordType>
-  extends Omit<
-    DynamicFormProps,
-    | 'initialValues'
-    | 'submitHandler'
-    | 'errors'
-    | 'loading'
-    | 'onSubmit'
-    | 'definition'
-  > {
+export interface Props<RecordType> extends Omit<
+  DynamicFormProps,
+  | 'initialValues'
+  | 'submitHandler'
+  | 'errors'
+  | 'loading'
+  | 'onSubmit'
+  | 'definition'
+> {
   formRole: RecordFormRole;
   record?: RecordType;
   inputVariables?: Omit<

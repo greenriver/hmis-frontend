@@ -14,7 +14,8 @@ import { DynamicInputCommonProps } from '@/modules/form/types';
 import { preventImplicitSubmission } from '@/utils/forms';
 
 export interface Props
-  extends Omit<FormControlLabelProps, 'control' | 'label'>,
+  extends
+    Omit<FormControlLabelProps, 'control' | 'label'>,
     DynamicInputCommonProps {
   name?: string;
   horizontal?: boolean;
