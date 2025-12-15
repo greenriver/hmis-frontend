@@ -8660,6 +8660,7 @@ export type UnitGroupInput = {
   >;
   name?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
+  unitTypeId?: InputMaybe<Scalars['ID']['input']>;
   workflowTemplateIdentifier?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -8681,6 +8682,7 @@ export type UnitInput = {
   prefix?: InputMaybe<Scalars['String']['input']>;
   projectId: Scalars['ID']['input'];
   unitGroupId?: InputMaybe<Scalars['ID']['input']>;
+  /** @deprecated Set unit type when creating unit group. This argument will be removed in a future release. */
   unitTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -20504,6 +20506,11 @@ export type MarkUnitsAvailableMutation = {
         id: string;
         name: string;
         workflowTemplateIdentifier?: string | null;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+        } | null;
       } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
@@ -20598,6 +20605,11 @@ export type MarkUnitsUnavailableMutation = {
         id: string;
         name: string;
         workflowTemplateIdentifier?: string | null;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+        } | null;
       } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
@@ -47774,6 +47786,11 @@ export type UnitTableRowFieldsFragment = {
     id: string;
     name: string;
     workflowTemplateIdentifier?: string | null;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    } | null;
   } | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
@@ -47834,6 +47851,11 @@ export type UnitDetailFieldsFragment = {
     id: string;
     name: string;
     workflowTemplateIdentifier?: string | null;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    } | null;
   } | null;
   eligibilityRequirements?: Array<{
     __typename?: 'CeMatchRule';
@@ -47955,6 +47977,11 @@ export type UnitGroupFieldsFragment = {
   id: string;
   name: string;
   workflowTemplateIdentifier?: string | null;
+  unitType?: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    description?: string | null;
+  } | null;
 };
 
 export type UnitGroupCapacityFieldsFragment = {
@@ -48001,6 +48028,11 @@ export type UnitGroupDetailFieldsFragment = {
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
   }> | null;
+  unitType?: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    description?: string | null;
+  } | null;
   unitTypes: Array<{
     __typename?: 'UnitTypeCapacity';
     id: string;
@@ -48068,6 +48100,11 @@ export type GetUnitsQuery = {
           id: string;
           name: string;
           workflowTemplateIdentifier?: string | null;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+          } | null;
         } | null;
         latestOpportunity?: {
           __typename?: 'CeOpportunity';
@@ -48134,8 +48171,14 @@ export type GetProjectUnitGroupsQuery = {
         __typename?: 'UnitGroup';
         id: string;
         name: string;
+        workflowTemplateIdentifier?: string | null;
         capacity: number;
         availability: number;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+        } | null;
         unitTypes: Array<{
           __typename?: 'UnitTypeCapacity';
           id: string;
@@ -48183,6 +48226,11 @@ export type GetUnitGroupQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     }> | null;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    } | null;
     unitTypes: Array<{
       __typename?: 'UnitTypeCapacity';
       id: string;
@@ -48221,6 +48269,11 @@ export type GetUnitQuery = {
       id: string;
       name: string;
       workflowTemplateIdentifier?: string | null;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
     } | null;
     eligibilityRequirements?: Array<{
       __typename?: 'CeMatchRule';
@@ -48367,6 +48420,11 @@ export type CreateUnitsMutation = {
         id: string;
         name: string;
         workflowTemplateIdentifier?: string | null;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+        } | null;
       } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
@@ -48503,6 +48561,11 @@ export type UpdateUnitsMutation = {
         id: string;
         name: string;
         workflowTemplateIdentifier?: string | null;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+        } | null;
       } | null;
       latestOpportunity?: {
         __typename?: 'CeOpportunity';
@@ -48575,6 +48638,11 @@ export type CreateUnitGroupMutation = {
       id: string;
       name: string;
       workflowTemplateIdentifier?: string | null;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -48631,6 +48699,11 @@ export type UpdateUnitGroupMutation = {
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
       }> | null;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
       unitTypes: Array<{
         __typename?: 'UnitTypeCapacity';
         id: string;
@@ -48693,6 +48766,11 @@ export type DeleteUnitGroupMutation = {
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
       }> | null;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      } | null;
       unitTypes: Array<{
         __typename?: 'UnitTypeCapacity';
         id: string;
@@ -51785,6 +51863,10 @@ export const UnitGroupFieldsFragmentDoc = gql`
     id
     name
     workflowTemplateIdentifier
+    unitType {
+      id
+      description
+    }
   }
 `;
 export const UnitWithCeFieldsFragmentDoc = gql`
@@ -51925,6 +52007,10 @@ export const UnitGroupDetailFieldsFragmentDoc = gql`
     }
     prioritySchemes {
       ...CeMatchRuleFields
+    }
+    unitType {
+      id
+      description
     }
   }
   ${UnitGroupCapacityFieldsFragmentDoc}
@@ -66955,11 +67041,13 @@ export const GetProjectUnitGroupsDocument = gql`
         limit
         nodesCount
         nodes {
+          ...UnitGroupFields
           ...UnitGroupCapacityFields
         }
       }
     }
   }
+  ${UnitGroupFieldsFragmentDoc}
   ${UnitGroupCapacityFieldsFragmentDoc}
 `;
 

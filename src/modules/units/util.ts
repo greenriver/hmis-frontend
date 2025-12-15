@@ -15,6 +15,10 @@ export const evictUnitsQuery = (projectId: string, unitGroupId?: string) => {
     id: `Project:${projectId}`,
     fieldName: 'unitGroups',
   });
+  cache.evict({
+    id: `Project:${projectId}`,
+    fieldName: 'hasUnits',
+  });
 
   if (unitGroupId) {
     cache.evict({ id: `UnitGroup:${unitGroupId}` });

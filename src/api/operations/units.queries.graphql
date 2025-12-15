@@ -27,6 +27,7 @@ query GetProjectUnitGroups($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       limit
       nodesCount
       nodes {
+        ...UnitGroupFields
         ...UnitGroupCapacityFields
       }
     }
