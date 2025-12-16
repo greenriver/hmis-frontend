@@ -32,86 +32,84 @@ const SendReferralForm: React.FC<Props> = ({ project }) => {
   const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
 
   return (
-    <Stack gap={2}>
-      <Paper
-        sx={{
-          py: 3,
-          px: 2.5,
-          pageBreakInside: 'avoid',
-        }}
-      >
-        <Stack gap={2}>
+    <Paper
+      sx={{
+        py: 3,
+        px: 2.5,
+        pageBreakInside: 'avoid',
+        maxWidth: 500,
+      }}
+    >
+      <Stack gap={2}>
+        <DynamicField
+          value={formState.selectedEnrollment}
+          item={{
+            type: ItemType.Choice,
+            required: true,
+            linkId: 'enrollment',
+            text: 'HoH Enrollment',
+            pickListReference: PickListType.OpenHohEnrollmentsForProject,
+          }}
+          pickListArgs={pickListArgs}
+          itemChanged={({ value }) =>
+            setFormState((old) => ({ ...old, selectedEnrollment: value }))
+          }
+        />
+        <DynamicField
+          value={formState.selectedProject}
+          item={{
+            type: ItemType.Choice,
+            required: true,
+            linkId: 'project',
+            text: 'Project',
+            pickListReference: PickListType.ProjectsReceivingDirectCeReferrals,
+          }}
+          pickListArgs={pickListArgs}
+          itemChanged={({ value }) =>
+            setFormState((old) => ({
+              ...old,
+              selectedProject: value,
+              selectedUnitGroup: undefined,
+            }))
+          }
+        />
+        {formState.selectedProject && (
           <DynamicField
-            value={formState.selectedEnrollment}
+            value={formState.selectedUnitGroup}
             item={{
               type: ItemType.Choice,
               required: true,
-              linkId: 'enrollment',
-              text: 'HoH Enrollment',
-              pickListReference: PickListType.OpenHohEnrollmentsForProject,
-            }}
-            pickListArgs={pickListArgs}
-            itemChanged={({ value }) =>
-              setFormState((old) => ({ ...old, selectedEnrollment: value }))
-            }
-          />
-          <DynamicField
-            value={formState.selectedProject}
-            item={{
-              type: ItemType.Choice,
-              required: true,
-              linkId: 'project',
-              text: 'Project',
+              linkId: 'unitGroup',
+              text: 'Unit Group',
               pickListReference:
-                PickListType.ProjectsReceivingDirectCeReferrals,
+                PickListType.UnitGroupsForProjectDirectCeReferral,
             }}
-            pickListArgs={pickListArgs}
+            pickListArgs={{ projectId: formState.selectedProject.code }}
             itemChanged={({ value }) =>
-              setFormState((old) => ({
-                ...old,
-                selectedProject: value,
-                selectedUnitGroup: undefined,
-              }))
+              setFormState((old) => ({ ...old, selectedUnitGroup: value }))
             }
           />
-          {formState.selectedProject && (
-            <DynamicField
-              value={formState.selectedUnitGroup}
-              item={{
-                type: ItemType.Choice,
-                required: true,
-                linkId: 'unitGroup',
-                text: 'Unit Group',
-                pickListReference:
-                  PickListType.UnitGroupsForProjectDirectCeReferral,
-              }}
-              pickListArgs={{ projectId: formState.selectedProject.code }}
-              itemChanged={({ value }) =>
-                setFormState((old) => ({ ...old, selectedUnitGroup: value }))
-              }
-            />
-          )}
-        </Stack>
-      </Paper>
-      {formState.selectedProject &&
-        formState.selectedEnrollment &&
-        formState.selectedUnitGroup && (
-          <SentryErrorBoundary>
-            <SendReferralSubForm
-              sourceEnrollmentId={formState.selectedEnrollment.code}
-              targetProjectId={formState.selectedProject.code}
-              targetUnitGroupId={formState.selectedUnitGroup.code}
-              onSuccess={() => {
-                navigate(
-                  generateSafePath(ProjectDashboardRoutes.CE, {
-                    projectId: project.id,
-                  })
-                );
-              }}
-            />
-          </SentryErrorBoundary>
         )}
-    </Stack>
+        {formState.selectedProject &&
+          formState.selectedEnrollment &&
+          formState.selectedUnitGroup && (
+            <SentryErrorBoundary>
+              <SendReferralSubForm
+                sourceEnrollmentId={formState.selectedEnrollment.code}
+                targetProjectId={formState.selectedProject.code}
+                targetUnitGroupId={formState.selectedUnitGroup.code}
+                onSuccess={() => {
+                  navigate(
+                    generateSafePath(ProjectDashboardRoutes.CE, {
+                      projectId: project.id,
+                    })
+                  );
+                }}
+              />
+            </SentryErrorBoundary>
+          )}
+      </Stack>
+    </Paper>
   );
 };
 
