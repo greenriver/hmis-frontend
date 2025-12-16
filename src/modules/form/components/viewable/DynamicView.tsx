@@ -1,4 +1,4 @@
-import { Grid, GridProps } from '@mui/material';
+import { GridProps } from '@mui/material';
 
 import { FormProvider } from 'react-hook-form';
 import useFormDefinitionHandlers from '../../hooks/useFormDefinitionHandlers';
@@ -6,6 +6,9 @@ import { LocalConstants, PickListArgs } from '../../types';
 import DynamicViewFields from './DynamicViewFields';
 
 import Loading from '@/components/elements/Loading';
+import DynamicFormLayout, {
+  DynamicFormLayoutProps,
+} from '@/modules/form/components/DynamicFormLayout';
 import { useEnrichedFormData } from '@/modules/form/hooks/rhf/useEnrichedFormData';
 import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
 import { FormDefinitionJson } from '@/types/gqlTypes';
@@ -16,6 +19,7 @@ export interface DynamicViewProps {
   visible?: boolean;
   GridProps?: GridProps;
   localConstants?: LocalConstants;
+  variant?: DynamicFormLayoutProps['variant'];
 }
 
 const DynamicView: React.FC<
@@ -26,6 +30,7 @@ const DynamicView: React.FC<
   visible = true,
   localConstants = {},
   GridProps,
+  variant = 'standard',
   defaultValues,
 }): JSX.Element => {
   const handlers = useFormDefinitionHandlers({
@@ -53,19 +58,13 @@ const DynamicView: React.FC<
           disabledDependencyMap,
         }}
       >
-        <Grid
-          container
-          direction='column'
-          spacing={2}
-          data-testid='dynamicView'
-          {...GridProps}
-        >
+        <DynamicFormLayout variant={variant} GridProps={GridProps}>
           <DynamicViewFields
             horizontal={horizontal}
             visible={visible}
             handlers={handlers}
           />
-        </Grid>
+        </DynamicFormLayout>
       </DynamicFormContext.Provider>
     </FormProvider>
   );
