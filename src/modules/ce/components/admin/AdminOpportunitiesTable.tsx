@@ -58,7 +58,10 @@ interface Props {}
 const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
   const filters = useFilters({
     type: 'CeOpportunityFilterOptions',
-    omit: ['status'],
+    omit: [
+      'status', // omitted because only 'open' opportunities are shown
+      'availableOnDate', // omitted because filter is not implemented on the backend #7537
+    ],
   });
 
   return (
