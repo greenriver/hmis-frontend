@@ -117,6 +117,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
         <DynamicView
           definition={formDefinition.definition}
           values={initialValues}
+          variant={'without_top_level_cards'}
         />
       )}
     </>
