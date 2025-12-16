@@ -37,8 +37,10 @@ export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 export type DynamicFormOnSaveDraft = (input: DynamicFormSaveDraftInput) => void;
 
 type InitialValues = Record<string, any>;
-export interface DynamicFormProps
-  extends Omit<DynamicFormBaseProps, 'handlers' | 'onSaveDraft'> {
+export interface DynamicFormProps extends Omit<
+  DynamicFormBaseProps,
+  'handlers' | 'onSaveDraft'
+> {
   clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: (input: DynamicFormSubmitInput) => void;

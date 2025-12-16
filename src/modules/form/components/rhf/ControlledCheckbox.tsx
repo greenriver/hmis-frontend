@@ -4,8 +4,10 @@ import LabeledCheckbox, {
 } from '@/components/elements/input/LabeledCheckbox';
 import { RhfRules } from '@/modules/form/types';
 
-interface ControlledCheckboxProps
-  extends Omit<LabeledCheckboxProps, 'value' | 'onChange' | 'onBlur'> {
+interface ControlledCheckboxProps extends Omit<
+  LabeledCheckboxProps,
+  'value' | 'onChange' | 'onBlur'
+> {
   name: string;
   control?: Control; // Optional when using FormProvider
   rules?: RhfRules;

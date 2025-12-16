@@ -12,8 +12,14 @@ interface Props {
   formId: string;
   formTitle: string;
   formRole: FormRole;
+  managedInVersionControl: boolean;
 }
-const FormRulesCard: React.FC<Props> = ({ formId, formTitle, formRole }) => {
+const FormRulesCard: React.FC<Props> = ({
+  formId,
+  formTitle,
+  formRole,
+  managedInVersionControl,
+}) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   // Fetch here in order to display the total number of project matches outside of the table.
@@ -67,6 +73,7 @@ const FormRulesCard: React.FC<Props> = ({ formId, formTitle, formRole }) => {
         formRole={formRole}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        managedInVersionControl={managedInVersionControl}
       />
     </>
   );

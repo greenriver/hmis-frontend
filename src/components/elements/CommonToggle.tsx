@@ -21,8 +21,10 @@ export interface ToggleItem<T> {
   testId?: string;
 }
 
-export interface CommonToggleProps<T>
-  extends Omit<ToggleButtonGroupProps, 'onChange' | 'value'> {
+export interface CommonToggleProps<T> extends Omit<
+  ToggleButtonGroupProps,
+  'onChange' | 'value'
+> {
   value: T;
   onChange: (value: T) => void;
   items: ToggleItem<T>[];

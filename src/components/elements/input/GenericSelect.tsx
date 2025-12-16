@@ -16,9 +16,9 @@ export interface GenericSelectProps<
   Multiple extends boolean | undefined,
   Creatable extends boolean | undefined,
 > extends Omit<
-    AutocompleteProps<T, Multiple, boolean, Creatable, React.ElementType>,
-    'renderInput'
-  > {
+  AutocompleteProps<T, Multiple, boolean, Creatable, React.ElementType>,
+  'renderInput'
+> {
   label?: ReactNode;
   textInputProps?: TextInputProps;
   ariaLabel?: string;

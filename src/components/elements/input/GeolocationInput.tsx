@@ -18,8 +18,10 @@ import { DynamicInputCommonProps } from '@/modules/form/types';
 
 import { LatLon } from '@/types/geolocationTypes';
 
-interface GeolocationInputProps
-  extends Pick<DynamicInputCommonProps, 'label' | 'helperText' | 'disabled'> {
+interface GeolocationInputProps extends Pick<
+  DynamicInputCommonProps,
+  'label' | 'helperText' | 'disabled'
+> {
   value?: LatLon | null;
   onChange: (value: LatLon | null) => void;
 }
