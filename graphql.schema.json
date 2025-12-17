@@ -56905,6 +56905,18 @@
             "deprecationReason": null
           },
           {
+            "name": "unitTypeId",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "workflowTemplateIdentifier",
             "description": null,
             "type": {
@@ -57121,8 +57133,8 @@
               "ofType": null
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Set unit type when creating unit group. This argument will be removed in a future release."
           }
         ],
         "interfaces": null,
