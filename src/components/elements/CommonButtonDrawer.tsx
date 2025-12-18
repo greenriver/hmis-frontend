@@ -54,23 +54,25 @@ const CommonButtonDrawer: React.FC<Props> = ({
         }}
         {...DrawerProps}
       >
-        <Typography p={2} component='h2' variant='h5'>
-          {title}
-        </Typography>
-        <IconButton
-          aria-label='close'
-          onClick={() => setOpen(false)}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: 'grayscale.light',
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <Divider orientation='horizontal' flexItem />
-        {children && React.cloneElement(children, { onClose: handleClose })}
+        <aside>
+          <Typography p={2} component='h2' variant='h5'>
+            {title}
+          </Typography>
+          <IconButton
+            aria-label='close'
+            onClick={() => setOpen(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: 'grayscale.light',
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <Divider orientation='horizontal' flexItem />
+          {children && React.cloneElement(children, { onClose: handleClose })}
+        </aside>
       </Drawer>
     </>
   );

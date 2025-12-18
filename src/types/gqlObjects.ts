@@ -959,6 +959,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'stale',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'status',
         type: {
           kind: 'NON_NULL',
@@ -1082,11 +1090,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'sourceEnrollmentId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'sourceProjectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'status',

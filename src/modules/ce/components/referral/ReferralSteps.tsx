@@ -65,7 +65,7 @@ const ReferralSteps: React.FC<Props> = () => {
           return (
             <Stack gap={2} key={key}>
               <Stack direction='row' alignItems='center' gap={2}>
-                <Typography variant='h5' component='h3'>
+                <Typography variant='h5' component='h2'>
                   {key} Tasks ({steps.length})
                 </Typography>
                 <Divider sx={{ flexGrow: 1 }} />
