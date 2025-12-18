@@ -8672,8 +8672,6 @@ export type UnitInput = {
   prefix?: InputMaybe<Scalars['String']['input']>;
   projectId: Scalars['ID']['input'];
   unitGroupId?: InputMaybe<Scalars['ID']['input']>;
-  /** @deprecated Set unit type when creating unit group. This argument will be removed in a future release. */
-  unitTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export enum UnitOccupancyStatus {
