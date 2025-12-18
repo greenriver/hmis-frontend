@@ -3276,6 +3276,23 @@
   resolved "https://registry.yarnpkg.com/@storybook/components/-/components-8.6.4.tgz#503636d607b1c1a4a094b250e68d61c39a151e65"
   integrity sha512-91VEVFWOgHkEFoNFMk6gs1AuOE9Yp7N283BXQOW+AgP+atpzED6t/fIBPGqJ2ewAuzLJ+cFOrasSzoNwVfg3Jg==
 
+"@storybook/core@8.6.15":
+  version "8.6.15"
+  resolved "https://registry.yarnpkg.com/@storybook/core/-/core-8.6.15.tgz#ba3aa59b02981136fa671d545b64d380c1188c8b"
+  integrity sha512-VFpKcphNurJpSC4fpUfKL3GTXVoL53oytghGR30QIw5jKWwaT50HVbTyb41BLOUuZjmMhUQA8weiQEew6RX0gw==
+  dependencies:
+    "@storybook/theming" "8.6.15"
+    better-opn "^3.0.2"
+    browser-assert "^1.2.1"
+    esbuild "^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0 || ^0.25.0"
+    esbuild-register "^3.5.0"
+    jsdoc-type-pratt-parser "^4.0.0"
+    process "^0.11.10"
+    recast "^0.23.5"
+    semver "^7.6.2"
+    util "^0.12.5"
+    ws "^8.2.3"
+
 "@storybook/core@8.6.4":
   version "8.6.4"
   resolved "https://registry.yarnpkg.com/@storybook/core/-/core-8.6.4.tgz#7cfb5dae8e2ce22eaab8c6c04ef63d7c20686692"
@@ -3408,6 +3425,11 @@
     "@testing-library/user-event" "14.5.2"
     "@vitest/expect" "2.0.5"
     "@vitest/spy" "2.0.5"
+
+"@storybook/theming@8.6.15":
+  version "8.6.15"
+  resolved "https://registry.yarnpkg.com/@storybook/theming/-/theming-8.6.15.tgz#781e6b36f113a10e76379956b9451276e8d5bda2"
+  integrity sha512-dAbL0XOekyT6XsF49R6Etj3WxQ/LpdJDIswUUeHgVJ6/yd2opZOGbPxnwA3zlmAh1c0tvpPyhSDXxSG79u8e4Q==
 
 "@storybook/theming@8.6.4":
   version "8.6.4"
@@ -9959,12 +9981,19 @@ storybook-addon-pseudo-states@^4.0.2:
   dependencies:
     "@storybook/icons" "^1.2.10"
 
-storybook@8.6.4, storybook@^8.6.4:
+storybook@8.6.4:
   version "8.6.4"
   resolved "https://registry.yarnpkg.com/storybook/-/storybook-8.6.4.tgz#cd33fa1082ef22d4784428ace4a3863ccdb30ec2"
   integrity sha512-XXh1Acvf1r3BQX0BDLQw6yhZ7yUGvYxIcKOBuMdetnX7iXtczipJTfw0uyFwk0ltkKEE9PpJvivYmARF3u64VQ==
   dependencies:
     "@storybook/core" "8.6.4"
+
+storybook@^8.6.15:
+  version "8.6.15"
+  resolved "https://registry.yarnpkg.com/storybook/-/storybook-8.6.15.tgz#eb4a3bae1ac0fe875bb322a412fac9709d9b5124"
+  integrity sha512-Ob7DMlwWx8s7dMvcQ3xPc02TvUeralb+xX3oaPRk9wY9Hc6M1IBC/7cEoITkSmRS2v38DHubC+mtEKNc1u2gQg==
+  dependencies:
+    "@storybook/core" "8.6.15"
 
 string-argv@^0.3.1:
   version "0.3.1"
