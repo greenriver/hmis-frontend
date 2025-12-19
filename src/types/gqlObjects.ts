@@ -10326,10 +10326,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'unitGroupId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
-      {
-        name: 'unitTypeId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
     ],
   },
   {
