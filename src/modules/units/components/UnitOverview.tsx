@@ -79,26 +79,27 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
           </Paper>
         </Grid>
       )}
-      {opportunity?.active && opportunity?.stale && (
-        <Grid item xs={12}>
-          <Alert
-            severity='warning'
-            action={
-              <LoadingButton
-                loading={unavailableLoading}
-                color={'warning'}
-                variant={'outlined'}
-                onClick={() => markUnitUnavailable()}
-              >
-                Stop Accepting Referrals
-              </LoadingButton>
-            }
-          >
-            The requirements below may be outdated. To refresh them, stop and
-            re-start accepting referrals for this unit.
-          </Alert>
-        </Grid>
-      )}
+      {opportunity?.status === CeOpportunityStatus.Open &&
+        opportunity?.stale && (
+          <Grid item xs={12}>
+            <Alert
+              severity='warning'
+              action={
+                <LoadingButton
+                  loading={unavailableLoading}
+                  color={'warning'}
+                  variant={'outlined'}
+                  onClick={() => markUnitUnavailable()}
+                >
+                  Stop Accepting Referrals
+                </LoadingButton>
+              }
+            >
+              The requirements below may be outdated. To refresh them, stop and
+              re-start accepting referrals for this unit.
+            </Alert>
+          </Grid>
+        )}
       <Grid item xs={12} md={6}>
         <MatchRuleCard
           title='Eligibility Requirements'
