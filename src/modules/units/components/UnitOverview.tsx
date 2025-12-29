@@ -79,6 +79,7 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
           </Paper>
         </Grid>
       )}
+      {/* If the opportunity is open and stale, show a warning and allow user to refresh the opportunity */}
       {opportunity?.status === CeOpportunityStatus.Open &&
         opportunity?.stale && (
           <Grid item xs={12}>
