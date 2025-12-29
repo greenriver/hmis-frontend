@@ -181,7 +181,9 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       Promise.all(promises)
         .catch((err) => {
           // Only set error for non-401 errors
-          setError(err);
+          if (err?.status !== 401) {
+            setError(err);
+          }
         })
         .finally(() => setLoading(false));
     } else {

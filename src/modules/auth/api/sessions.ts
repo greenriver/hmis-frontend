@@ -16,6 +16,10 @@ export interface HmisUser {
   phone?: string;
   sessionDuration: number;
   impersonating: boolean;
+  trueUser?: {
+    id: string;
+    name: string;
+  };
   primaryIdp?: string;
 }
 interface HmisError {

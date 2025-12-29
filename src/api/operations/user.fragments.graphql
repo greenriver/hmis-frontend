@@ -5,6 +5,11 @@ fragment UserFields on ApplicationUser {
   firstName
   lastName
   email
+  impersonating
+  trueUser {
+    id
+    name
+  }
 }
 
 fragment UserAdminFields on ApplicationUser {
