@@ -12,13 +12,13 @@ interface Props {
   formId: string;
   formTitle: string;
   formRole: FormRole;
-  formCacheKey: string;
+  managedInVersionControl: boolean;
 }
 const FormRulesCard: React.FC<Props> = ({
   formId,
   formTitle,
   formRole,
-  formCacheKey,
+  managedInVersionControl,
 }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -54,11 +54,7 @@ const FormRulesCard: React.FC<Props> = ({
           </Typography>
         </Box>
         <Divider sx={{ borderWidth: 'inherit' }} />
-        <FormRuleTable
-          formId={formId}
-          formRole={formRole}
-          formCacheKey={formCacheKey}
-        />
+        <FormRuleTable formId={formId} formRole={formRole} />
         <Box padding={2}>
           <Typography variant='h6' component='h3' sx={{ pb: 1 }}>
             Projects
@@ -75,9 +71,9 @@ const FormRulesCard: React.FC<Props> = ({
         formId={formId}
         formTitle={formTitle}
         formRole={formRole}
-        formCacheKey={formCacheKey}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        managedInVersionControl={managedInVersionControl}
       />
     </>
   );

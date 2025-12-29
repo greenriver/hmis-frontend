@@ -959,6 +959,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'stale',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'status',
         type: {
           kind: 'NON_NULL',
@@ -1082,11 +1090,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'sourceEnrollmentId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'sourceProjectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'status',
@@ -6276,6 +6284,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewOutgoingReferralDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewOutgoingReferralSummaries',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewOwnReferrals',
         type: {
           kind: 'NON_NULL',
@@ -6897,6 +6921,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewOpenEnrollmentSummary',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewOutgoingReferralDetails',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -10265,6 +10297,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
+        name: 'unitTypeId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'workflowTemplateIdentifier',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -10288,10 +10324,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'unitGroupId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
-        name: 'unitTypeId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
     ],

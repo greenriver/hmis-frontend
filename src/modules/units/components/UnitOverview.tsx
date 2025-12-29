@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography } from '@mui/material';
+import { Alert, Grid, Paper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React from 'react';
 
@@ -11,6 +11,7 @@ import {
   CeOpportunityStatus,
   UnitDetailFieldsFragment,
   useMarkUnitsAvailableMutation,
+  useMarkUnitsUnavailableMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -28,7 +29,16 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
     onCompleted: () => cache.evict({ id: `Unit:${unit.id}` }),
   });
 
+  const [
+    markUnitUnavailable,
+    { loading: unavailableLoading, error: unavailableError },
+  ] = useMarkUnitsUnavailableMutation({
+    variables: { unitIds: [unit.id] },
+    onCompleted: () => cache.evict({ id: `Unit:${unit.id}` }),
+  });
+
   if (availableError) throw availableError;
+  if (unavailableError) throw unavailableError;
 
   return (
     <Grid container columnSpacing={6} rowSpacing={4}>
@@ -67,6 +77,26 @@ const UnitOverview: React.FC<Props> = ({ unit }) => {
               )}
             </Stack>
           </Paper>
+        </Grid>
+      )}
+      {opportunity?.active && opportunity?.stale && (
+        <Grid item xs={12}>
+          <Alert
+            severity='warning'
+            action={
+              <LoadingButton
+                loading={unavailableLoading}
+                color={'warning'}
+                variant={'outlined'}
+                onClick={() => markUnitUnavailable()}
+              >
+                Stop Accepting Referrals
+              </LoadingButton>
+            }
+          >
+            The requirements below may be outdated. To refresh them, stop and
+            re-start accepting referrals for this unit.
+          </Alert>
         </Grid>
       )}
       <Grid item xs={12} md={6}>

@@ -22,8 +22,10 @@ const minutesToDate = (today: Date, minutes: number): Date | undefined => {
   return addMinutes(today, minutes);
 };
 
-interface PickerProps
-  extends Omit<TimePickerProps<Date>, 'onChange' | 'value'> {
+interface PickerProps extends Omit<
+  TimePickerProps<Date>,
+  'onChange' | 'value'
+> {
   sx?: SxProps<Theme>;
   textInputProps?: TextInputProps;
   value: string | undefined | null;

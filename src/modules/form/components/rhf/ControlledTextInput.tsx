@@ -6,8 +6,10 @@ import TextInput, {
 } from '@/components/elements/input/TextInput';
 import { RhfRules } from '@/modules/form/types';
 
-interface ControlledTextInputProps
-  extends Omit<TextInputProps, 'value' | 'onChange'> {
+interface ControlledTextInputProps extends Omit<
+  TextInputProps,
+  'value' | 'onChange'
+> {
   name: string;
   control?: Control; // Optional when using FormProvider
   rules?: RhfRules;

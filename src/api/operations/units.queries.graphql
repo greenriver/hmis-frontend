@@ -27,6 +27,7 @@ query GetProjectUnitGroups($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       limit
       nodesCount
       nodes {
+        ...UnitGroupFields
         ...UnitGroupCapacityFields
       }
     }
@@ -109,6 +110,17 @@ mutation CreateUnitGroup($input: UnitGroupInput!) {
 
 mutation UpdateUnitGroup($input: UnitGroupInput!, $id: ID!) {
   updateUnitGroup(input: $input, id: $id) {
+    unitGroup {
+      ...UnitGroupDetailFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteUnitGroup($id: ID!) {
+  deleteUnitGroup(id: $id) {
     unitGroup {
       ...UnitGroupDetailFields
     }

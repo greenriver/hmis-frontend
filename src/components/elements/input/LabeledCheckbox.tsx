@@ -6,20 +6,16 @@ import {
   FormGroup,
   FormHelperText,
 } from '@mui/material';
-import {
-  KeyboardEventHandler,
-  Ref,
-  SyntheticEvent,
-  useCallback,
-  useMemo,
-} from 'react';
+import { Ref, useMemo } from 'react';
 
 import { horizontalInputSx } from './TextInput';
 
 import { DynamicInputCommonProps } from '@/modules/form/types';
+import { preventImplicitSubmission } from '@/utils/forms';
 
 export interface Props
-  extends Omit<FormControlLabelProps, 'control' | 'label'>,
+  extends
+    Omit<FormControlLabelProps, 'control' | 'label'>,
     DynamicInputCommonProps {
   name?: string;
   horizontal?: boolean;
@@ -55,19 +51,6 @@ const LabeledCheckbox = ({
       { backgroundColor: 'white', '&:hover': { backgroundColor: '#F7F9FD' } }
     : { '.MuiSvgIcon-root': { backgroundColor: 'white' } };
 
-  // Prevent form submission on Enter. Enter should toggle the state.
-  const onKeyDown: KeyboardEventHandler<HTMLButtonElement> = useCallback(
-    (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const checked = (e.target as HTMLInputElement).checked;
-        (e.target as HTMLInputElement).checked = !checked;
-        if (onChange) onChange(e as SyntheticEvent, !checked);
-      }
-    },
-    [onChange]
-  );
-
   // Determine the checked state based on the value OR checked prop
   const checked = useMemo(() => {
     if (props.checked !== undefined) {
@@ -86,7 +69,7 @@ const LabeledCheckbox = ({
           control={
             <Checkbox
               sx={{ width: inputWidth, ...checkboxSx }}
-              onKeyDown={onKeyDown}
+              onKeyDown={preventImplicitSubmission}
               aria-label={ariaLabel}
               inputRef={inputRef}
             />

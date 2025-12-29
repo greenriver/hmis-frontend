@@ -154,7 +154,9 @@ const ReferralDetailContent: React.FC<Props> = ({
           label: fieldName,
           value: (
             <Stack>
-              {fieldValues?.map((fv) => <span key={fv}>{fv}</span>)}
+              {fieldValues?.map((fv) => (
+                <span key={fv}>{fv}</span>
+              ))}
             </Stack>
           ),
         });

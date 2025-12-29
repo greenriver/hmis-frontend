@@ -15,7 +15,7 @@ const MatchRuleCard: React.FC<Props> = ({ title, rules }) => {
   const { canAdministrateCoordinatedEntry } = access || {};
 
   return (
-    <CommonCard title={title}>
+    <CommonCard title={title} TitleComponent={'h3'}>
       <Stack gap={1}>
         {rules.map((rule) => (
           <Stack

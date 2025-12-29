@@ -26,8 +26,7 @@ export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
 };
 
 export interface FormTreeLabelProps
-  extends UseTreeItem2LabelSlotProps,
-    Omit<UseTreeItem2Parameters, 'children'> {
+  extends UseTreeItem2LabelSlotProps, Omit<UseTreeItem2Parameters, 'children'> {
   itemId: string;
 }
 

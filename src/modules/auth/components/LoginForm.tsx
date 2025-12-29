@@ -105,6 +105,7 @@ const LoginForm = () => {
     [handleSuccess, email, password]
   );
 
+  // For the password field, restore html's default implicit form submission behavior, which we override in TextInput
   const onKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (e.key === 'Enter') {

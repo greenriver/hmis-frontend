@@ -48,6 +48,7 @@ const SendReferralSubForm: React.FC<Props> = ({
         sourceEnrollmentId,
         referralMode: ReferralMode.CoordinatedEntry,
       },
+      fetchPolicy: 'network-only', // always fetch the latest data
     });
 
   const [submit, { loading: submitLoading }] =
@@ -103,6 +104,7 @@ const SendReferralSubForm: React.FC<Props> = ({
       )}
       {formDefinition && (
         <DynamicForm
+          variant={'without_top_level_cards'}
           definition={formDefinition.definition}
           onSubmit={handleSubmit}
           loading={submitLoading}

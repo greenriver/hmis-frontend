@@ -6,6 +6,7 @@ import { RegisterOptions } from 'react-hook-form';
 import { FormDefinitionHandlers } from '@/modules/form/hooks/useFormDefinitionHandlers';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  FormDefinitionJsonFieldsFragment,
   FormItem,
   GetAssessmentsForPopulationQuery,
   ItemType,
@@ -34,8 +35,11 @@ export type SeveralItemsChangedFn = (input: {
   type: ChangeType;
 }) => void;
 
-export type SubmitFormAllowedTypes = NonNullable<
-  NonNullable<SubmitFormMutation['submitForm']>['record']
+// Types that are allowed to be submitted using SubmitForm.
+// Exclude ReferralRequest type that is no longer supported but is still part of the schema.
+export type SubmitFormAllowedTypes = Exclude<
+  NonNullable<NonNullable<SubmitFormMutation['submitForm']>['record']>,
+  { __typename?: 'ReferralRequest' }
 >;
 
 export type PickListArgs = {
@@ -202,3 +206,5 @@ export type RhfRules = Omit<
   RegisterOptions,
   'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 >;
+
+export type FormItemType = FormDefinitionJsonFieldsFragment['item'][number];

@@ -22,6 +22,7 @@ import { scrollToElement } from '@/hooks/useScrollToHash';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { hasErrors } from '@/modules/errors/util';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
+import ControlledMultiSelect from '@/modules/form/components/rhf/ControlledMultiSelect';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import SaveSlide from '@/modules/form/components/SaveSlide';
@@ -51,6 +52,8 @@ import {
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionJson,
   FormItem,
+  PickListType,
+  useGetPickListQuery,
   ItemType,
 } from '@/types/gqlTypes';
 
@@ -212,6 +215,16 @@ const FormItemEditor: React.FC<Props> = ({
       itemTypeValue && ![ItemType.File, ItemType.Image].includes(itemTypeValue)
     );
   }, [itemTypeValue]);
+
+  // Picklist for users to power the editorUserIds multi-select (super admin only UI)
+  const {
+    data: { pickList: userOptions } = {},
+    loading: usersLoading,
+    error: usersError,
+  } = useGetPickListQuery({
+    variables: { pickListType: PickListType.Users },
+  });
+  if (usersError) throw usersError;
 
   if (!itemTypeValue) throw Error('Item type must be defined');
 
@@ -482,6 +495,17 @@ const FormItemEditor: React.FC<Props> = ({
                     initialItem.mapping?.fieldName}
                 </CommonLabeledTextBlock>
               )}
+            <RootPermissionsFilter permissions='canAdministrateConfig'>
+              <ControlledMultiSelect
+                name='editorUserIds'
+                control={control}
+                label='Editor Users'
+                helperText='Select the users who are allowed to edit this item. If blank, the item will be editable by all users.'
+                placeholder='Select users'
+                options={userOptions || []}
+                loading={usersLoading}
+              />
+            </RootPermissionsFilter>
           </Section>
         </Box>
         <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
