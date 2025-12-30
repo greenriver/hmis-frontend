@@ -4,6 +4,11 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 const ImpersonationBanner = () => {
   const { user } = useAuth();
 
+  // Debug logging
+  console.log('ImpersonationBanner: user=', user);
+  console.log('ImpersonationBanner: impersonating=', user?.impersonating);
+  console.log('ImpersonationBanner: trueUser=', user?.trueUser);
+
   if (!user?.impersonating || !user?.trueUser) {
     return null;
   }
