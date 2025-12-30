@@ -1709,3 +1709,26 @@ export const getEnrichedValueForChoiceItem = ({
   }
   return { enrichedValue: found };
 };
+
+// Normalize boolean checkbox fields to be bi-state (true/false only)
+//
+// Context: Boolean items default to the YesNoRadio component, which is tri-state (true/false/null).
+// When the Checkbox component is specified, the frontend is responsible for enforcing bi-state behavior (true/false only).
+// Without this, users  would see inconsistent behavior when viewing checkbox responses, seeing "Data Not Collected" instead of "No".
+// See GH#7239 for more details.
+export const normalizeBooleanCheckboxValues = (
+  values: Record<string, any>,
+  itemMap: ItemMap
+) => {
+  Object.entries(itemMap)
+    .filter(
+      ([linkId, item]) =>
+        item.type === ItemType.Boolean &&
+        item.component === Component.Checkbox &&
+        isNil(values[linkId])
+    )
+    .forEach(([linkId]) => {
+      values[linkId] = false;
+    });
+  return values;
+};

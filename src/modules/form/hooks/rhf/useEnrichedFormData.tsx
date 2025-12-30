@@ -10,6 +10,7 @@ import {
   getEnrichedValueForChoiceItem,
   getInitialValues,
   getItemMap,
+  normalizeBooleanCheckboxValues,
 } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
@@ -50,10 +51,12 @@ export const useEnrichedFormData = <T extends FieldValues>({
   });
 
   const [defaultValues] = useState<DefaultValues<T>>(() => {
+    // 1. Start with baseline values: form definition defaults (from "initial" attribute) + previously submitted data (from initialValues prop)
     const newValues: Record<string, any> = {
       ...getInitialValues(definition, localConstants),
       ...cloneDeep(initialValues),
     };
+    // 2. Layer on values that are calculated by "autofill_values" attribute on form items
     Object.keys(itemMap).forEach((linkId) => {
       const change = autofillValues({
         item: itemMap[linkId],
@@ -65,6 +68,9 @@ export const useEnrichedFormData = <T extends FieldValues>({
       //console.info('form init autofill', linkId, change)
       if (change) newValues[linkId] = change.value;
     });
+    // 3. Normalize boolean checkbox fields to be bi-state (true/false only)
+    normalizeBooleanCheckboxValues(newValues, itemMap);
+
     return newValues as DefaultValues<T>;
   });
 
