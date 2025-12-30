@@ -15,7 +15,6 @@ import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import SkipToContentButton from '@/components/elements/SkipToContentButton';
-import ImpersonationBanner from '@/components/layout/ImpersonationBanner';
 import MobileMenu from '@/components/layout/nav/MobileMenu';
 import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
 import { useIsDashboard } from '@/components/layout/nav/useIsDashboard';
@@ -100,7 +99,6 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
   return (
     <React.Fragment>
       {SHOW_OP_LINK_BAR && <WarehouseLinkBar />}
-      <ImpersonationBanner />
       <AppBar
         position='sticky'
         color='default'
