@@ -21,7 +21,10 @@ const useSessionStatus = ({
   const tracking = useSessionTracking();
 
   // useState prevents user from changing underneath us
-  const [{ sessionDuration, id: initialUserId }] = useState(initialUser);
+  // When impersonating, use the true user's ID for session tracking
+  const [{ sessionDuration, id: initialUserId, trueUser }] =
+    useState(initialUser);
+  const sessionTrackingUserId = trueUser?.id || initialUserId;
   // if this session has ended
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();
   // how long until the session expires
@@ -86,11 +89,11 @@ const useSessionStatus = ({
     // here since it's only set once
     if (exitStatus) return;
 
-    if (tracking?.userId !== initialUserId) {
+    if (tracking?.userId !== sessionTrackingUserId) {
       // Add a small delay to allow for temporary inconsistencies to resolve
       const timeout = setTimeout(() => {
         // Check again after delay
-        if (tracking?.userId !== initialUserId) {
+        if (tracking?.userId !== sessionTrackingUserId) {
           setExitStatus('invalid');
         }
       }, 500);
@@ -99,7 +102,7 @@ const useSessionStatus = ({
     } else if (timeRemaining !== undefined && timeRemaining <= 1) {
       setExitStatus('expired');
     }
-  }, [exitStatus, timeRemaining, tracking?.userId, initialUserId]);
+  }, [exitStatus, timeRemaining, tracking?.userId, sessionTrackingUserId]);
 
   // debugging
   /*
