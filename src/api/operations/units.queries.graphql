@@ -117,3 +117,14 @@ mutation UpdateUnitGroup($input: UnitGroupInput!, $id: ID!) {
     }
   }
 }
+
+mutation DeleteUnitGroup($id: ID!) {
+  deleteUnitGroup(id: $id) {
+    unitGroup {
+      ...UnitGroupDetailFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

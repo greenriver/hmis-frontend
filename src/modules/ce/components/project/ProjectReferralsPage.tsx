@@ -20,6 +20,7 @@ const ProjectReferralsPage: React.FC = () => {
     showReferrals,
     showAvailableUnits,
     showOutgoingReferrals,
+    showOutgoingReferralButton,
     showLegacyReferrals,
   } = useProjectCeVisibility(project);
 
@@ -68,7 +69,7 @@ const ProjectReferralsPage: React.FC = () => {
   ]);
 
   const actions = useMemo(() => {
-    if (showOutgoingReferrals) {
+    if (showOutgoingReferralButton) {
       return (
         <ButtonLink
           startIcon={<SendIcon />}
@@ -80,7 +81,7 @@ const ProjectReferralsPage: React.FC = () => {
         </ButtonLink>
       );
     }
-  }, [project.id, showOutgoingReferrals]);
+  }, [project.id, showOutgoingReferralButton]);
 
   if (tabDefinitions.length === 0) {
     return <NotFound />;

@@ -14,6 +14,7 @@ export function useProjectCeVisibility(project?: ProjectAllFieldsFragment) {
 
     // User permissions related to CE Referrals
     const {
+      canViewOutgoingReferralSummaries,
       canManageOutgoingReferrals,
       canViewReferrals,
       canViewOwnReferrals,
@@ -29,8 +30,12 @@ export function useProjectCeVisibility(project?: ProjectAllFieldsFragment) {
     // Only waitlist (not direct) referrals because it doesn't make sense to link to a unit from here if it doesn't have waitlist.
     const showAvailableUnits = supportsWaitlistReferrals && canViewUnits;
 
-    // If the project can send direct referrals AND the user has permission to manage outgoing referrals, show the Outgoing Referrals tab
+    // If the project can send direct referrals AND the user has permission to view outgoing referral summaries, show the Outgoing Referrals tab
     const showOutgoingReferrals =
+      sendsDirectReferrals && canViewOutgoingReferralSummaries;
+
+    // If the project can send referrals and the user has permission to *manage* outgoing referrals, show the 'send' button
+    const showOutgoingReferralButton =
       sendsDirectReferrals && canManageOutgoingReferrals;
 
     // When to enable the 'Legacy Referrals' tab:
@@ -46,6 +51,7 @@ export function useProjectCeVisibility(project?: ProjectAllFieldsFragment) {
       showReferrals,
       showAvailableUnits,
       showOutgoingReferrals,
+      showOutgoingReferralButton,
       showLegacyReferrals,
     };
   }, [project]);

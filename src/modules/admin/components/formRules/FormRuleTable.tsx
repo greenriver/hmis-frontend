@@ -4,7 +4,6 @@ import React from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { FormRule } from '@/modules/admin/components/formRules/FormRule';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { cache } from '@/providers/apolloClient';
 import {
   ActiveStatus,
   FormRole,
@@ -14,27 +13,18 @@ import {
   GetFormRulesQueryVariables,
   useDeactivateFormRuleMutation,
 } from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
 
 type RowType = FormRuleFieldsFragment;
 
 interface Props {
   formId: string;
   formRole: FormRole;
-  formCacheKey: string;
 }
 
-const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
+const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
   const [deactivate, { loading, error }] = useDeactivateFormRuleMutation({
-    onCompleted: (data) => {
-      if (data.deleteFormRule?.formRule) {
-        evictQuery('formRules');
-        cache.evict({
-          id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
-          fieldName: 'projectMatches',
-        });
-      }
-    },
+    awaitRefetchQueries: true,
+    refetchQueries: ['GetFormRules', 'GetFormProjectMatches'],
   });
 
   if (error) throw error;
@@ -46,11 +36,11 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
         GetFormRulesQueryVariables,
         RowType
       >
-        queryVariables={{ filters: { definition: formId } }}
+        queryVariables={{ id: formId }}
         defaultFilterValues={{ activeStatus: ActiveStatus.Active }}
         queryDocument={GetFormRulesDocument}
         columns={[]}
-        pagePath='formRules'
+        pagePath='formDefinition.formRules'
         noData='No form rules'
         recordType='FormRule'
         paginationItemName='rule'

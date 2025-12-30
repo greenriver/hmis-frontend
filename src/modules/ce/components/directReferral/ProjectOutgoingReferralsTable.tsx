@@ -86,9 +86,11 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
         noData='No referrals'
         paginationItemName='outgoing referrals'
         rowLinkTo={(referral) => {
+          // If the user has access to view the full details of this referral (not just the summary)
           if (referral.access.canViewReferralDetails) {
+            // Link to the referral in this (source project) context.
             return generateSafePath(ProjectDashboardRoutes.REFERRAL, {
-              projectId: referral.targetProjectId,
+              projectId: projectId,
               referralId: referral.id,
             });
           }

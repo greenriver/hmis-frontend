@@ -4,6 +4,7 @@ import { applyDataCollectedAbout } from './formUtil';
 import {
   DataCollectedAbout,
   FormDefinitionFieldsFragment,
+  ItemType,
   NoYesReasonsForMissingData,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -179,5 +180,59 @@ describe('applyDataCollectedAbout', () => {
         RelationshipToHoH.SelfHeadOfHousehold
       )
     ).toHaveLength(0);
+  });
+
+  it('removes groups when all child items are filtered out', () => {
+    const items = [
+      {
+        linkId: 'group1',
+        type: ItemType.Group,
+        item: [
+          {
+            linkId: 'child1',
+            dataCollectedAbout: DataCollectedAbout.Hoh,
+          },
+          {
+            linkId: 'child2',
+            dataCollectedAbout: DataCollectedAbout.Hoh,
+          },
+        ],
+      },
+      {
+        linkId: 'group2',
+        type: ItemType.Group,
+        item: [
+          {
+            linkId: 'child3',
+            // No dataCollectedAbout, so it should remain
+          },
+          {
+            linkId: 'child4',
+            dataCollectedAbout: DataCollectedAbout.Hoh,
+          },
+        ],
+      },
+    ];
+
+    // When client is not HOH, all HOH items should be filtered out
+    // group1 should be removed entirely since all children are filtered
+    // group2 should remain but only contain child3
+    expect(
+      applyDataCollectedAbout(
+        items as FormDefinitionFieldsFragment['definition']['item'],
+        client,
+        RelationshipToHoH.OtherRelative
+      )
+    ).toMatchObject([
+      {
+        linkId: 'group2',
+        type: ItemType.Group,
+        item: [
+          {
+            linkId: 'child3',
+          },
+        ],
+      },
+    ]);
   });
 });

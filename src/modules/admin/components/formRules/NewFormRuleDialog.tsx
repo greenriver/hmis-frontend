@@ -21,7 +21,6 @@ import { localResolvePickList } from '@/modules/form/util/formUtil';
 import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
-import { cache } from '@/providers/apolloClient';
 import {
   DataCollectedAbout,
   FormRole,
@@ -60,7 +59,6 @@ interface Props {
   formId: string;
   formTitle: string;
   formRole: FormRole;
-  formCacheKey: string;
 }
 
 const NewFormRuleDialog: React.FC<Props> = ({
@@ -69,7 +67,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
   formId,
   formTitle,
   formRole,
-  formCacheKey,
 }) => {
   // Form state for the rule
   const [dataCollectedAbout, setDataCollectedAbout] =
@@ -120,32 +117,12 @@ const NewFormRuleDialog: React.FC<Props> = ({
   }, [onClose]);
 
   const [createFormRule, { loading, error }] = useCreateFormRuleMutation({
+    awaitRefetchQueries: true,
+    // Refetch this form's rules and projectMatches, so both tables reflect the new rule
+    refetchQueries: ['GetFormRules', 'GetFormProjectMatches'],
     onCompleted: (data) => {
       if (data.createFormRule?.formRule) {
         onCloseDialog();
-
-        // Apollo has now already added the new rule to the cache, but here we add it to the cached result of the
-        // `formRules` query (by reference), so that it's reflected in the FormRuleTable
-        cache.modify({
-          fields: {
-            formRules(existingRules = {}) {
-              return {
-                ...existingRules,
-                nodesCount: existingRules.nodesCount + 1, // this isn't used, but update it anyway to avoid inconsistency
-                nodes: [
-                  ...existingRules.nodes,
-                  { __ref: `FormRule:${data.createFormRule?.formRule?.id}` },
-                ],
-              };
-            },
-          },
-        });
-
-        // Evict the existing `projectMatches` for this form, so that they are re-fetched and reflect the new rule
-        cache.evict({
-          id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
-          fieldName: 'projectMatches',
-        });
       } else if (data.createFormRule?.errors?.length) {
         setValidationError(data.createFormRule.errors[0].fullMessage);
       }
