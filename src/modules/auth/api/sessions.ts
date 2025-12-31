@@ -124,8 +124,12 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
-  const response = await fetchWithCsrf('/hmis/session_keepalive', {
-    method: 'POST',
+  const response = await fetch('/hmis/session_keepalive', {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+    },
   });
   trackSessionFromResponse(response);
   return response;
