@@ -4,6 +4,8 @@ import { HmisUser } from '@/modules/auth/api/sessions';
 import { useSessionTracking } from '@/modules/auth/hooks/useSessionTracking';
 import { currentTimeInSeconds } from '@/utils/time';
 
+const POLL_INTERVAL_SECS = 30; // Check session status every 30 seconds
+
 export type HmisSessionProps = {
   status: 'invalid' | 'expired' | 'valid';
   promptToExtend: boolean;
@@ -44,7 +46,13 @@ const useSessionStatus = ({
       setTimeRemaining(value > 0 ? value : 0);
     };
 
+    // Update immediately and then poll regularly
     updateTimeRemaining();
+    const pollInterval = setInterval(
+      updateTimeRemaining,
+      POLL_INTERVAL_SECS * 1000
+    );
+
     const now = currentTimeInSeconds();
     const timeouts: Array<NodeJS.Timeout> = [];
 
@@ -74,6 +82,7 @@ const useSessionStatus = ({
 
     // cleanup events
     return () => {
+      clearInterval(pollInterval);
       for (const timeout of timeouts) clearTimeout(timeout);
     };
   }, [
@@ -104,21 +113,27 @@ const useSessionStatus = ({
     }
   }, [exitStatus, timeRemaining, tracking?.userId, sessionTrackingUserId]);
 
-  // debugging
-  /*
+  // Debugging: log session status every 30 seconds (development only)
   useEffect(() => {
-    console.info('expiry', expiry, currentTimeInSeconds());
-  }, [expiry]);
-  useEffect(() => {
-    console.info('time remaining', timeRemaining, currentTimeInSeconds());
-  }, [timeRemaining]);
-  useEffect(() => {
-    console.info('exit status', exitStatus, currentTimeInSeconds());
-  }, [exitStatus]);
-  useEffect(() => {
-    console.info('initial user id', initialUserId, currentTimeInSeconds());
-  }, [initialUserId]);
-  */
+    if (process.env.NODE_ENV !== 'development') return;
+
+    const pollInterval = setInterval(() => {
+      console.debug('Session status poll:');
+      console.debug('  timeRemaining (seconds):', timeRemaining);
+      console.debug('  promptToExtendBefore (seconds):', promptToExtendBefore);
+      console.debug('  exitStatus:', exitStatus);
+      console.debug('  tracking.userId:', tracking?.userId);
+      console.debug('  sessionTrackingUserId:', sessionTrackingUserId);
+    }, 30 * 1000);
+
+    return () => clearInterval(pollInterval);
+  }, [
+    timeRemaining,
+    promptToExtendBefore,
+    exitStatus,
+    tracking?.userId,
+    sessionTrackingUserId,
+  ]);
 
   return useMemo<HmisSessionProps>(() => {
     if (exitStatus) return { status: exitStatus, promptToExtend: false };
