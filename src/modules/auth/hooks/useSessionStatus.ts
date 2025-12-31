@@ -124,7 +124,7 @@ const useSessionStatus = ({
       console.debug('  exitStatus:', exitStatus);
       console.debug('  tracking.userId:', tracking?.userId);
       console.debug('  sessionTrackingUserId:', sessionTrackingUserId);
-    }, 30 * 1000);
+    }, POLL_INTERVAL_SECS * 1000);
 
     return () => clearInterval(pollInterval);
   }, [
