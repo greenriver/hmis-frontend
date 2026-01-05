@@ -68,7 +68,7 @@ export const useEnrichedFormData = <T extends FieldValues>({
       //console.info('form init autofill', linkId, change)
       if (change) newValues[linkId] = change.value;
     });
-    // 3. Normalize boolean checkbox fields to be bi-state (true/false only)
+    // 3. Normalize boolean checkbox fields to be bi-state (true/false only) as opposed to tri-state (true/false/null)
     normalizeBooleanCheckboxValues(newValues, itemMap);
 
     return newValues as DefaultValues<T>;
