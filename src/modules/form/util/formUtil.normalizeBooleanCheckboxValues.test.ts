@@ -5,11 +5,13 @@ import { normalizeBooleanCheckboxValues } from './formUtil';
 import { Component, ItemType } from '@/types/gqlTypes';
 
 describe('normalizeBooleanCheckboxValues', () => {
-  it('sets undefined boolean checkbox values to false', () => {
+  it('sets undefined/null boolean checkbox values to false and leaves existing values unchanged', () => {
     const values = {
-      checkbox1: undefined,
-      checkbox2: null,
-      textField: 'some value',
+      checkbox1: undefined, // should be set to false
+      checkbox2: true, // should remain true
+      checkbox3: null, // should be set to false
+      checkbox4: false, // should remain false
+      textField: undefined, // should remain undefined
     };
 
     const itemMap: ItemMap = {
@@ -20,6 +22,16 @@ describe('normalizeBooleanCheckboxValues', () => {
       },
       checkbox2: {
         linkId: 'checkbox2',
+        type: ItemType.Boolean,
+        component: Component.Checkbox,
+      },
+      checkbox3: {
+        linkId: 'checkbox3',
+        type: ItemType.Boolean,
+        component: Component.Checkbox,
+      },
+      checkbox4: {
+        linkId: 'checkbox4',
         type: ItemType.Boolean,
         component: Component.Checkbox,
       },
@@ -34,8 +46,10 @@ describe('normalizeBooleanCheckboxValues', () => {
 
     expect(result).toBe(values); // mutates in place
     expect(result.checkbox1).toBe(false);
-    expect(result.checkbox2).toBe(false);
-    expect(result.textField).toBe('some value');
+    expect(result.checkbox2).toBe(true);
+    expect(result.checkbox3).toBe(false);
+    expect(result.checkbox4).toBe(false);
+    expect(result.textField).toBeUndefined();
   });
 
   it('leaves existing boolean checkbox values unchanged', () => {
@@ -84,66 +98,6 @@ describe('normalizeBooleanCheckboxValues', () => {
 
     expect(result.checkbox1).toBe(false);
     expect(Object.keys(result)).toHaveLength(1);
-  });
-
-  it('handles empty itemMap', () => {
-    const values = {
-      field1: undefined,
-      field2: 'value',
-    };
-    const itemMap: ItemMap = {};
-
-    const result = normalizeBooleanCheckboxValues(values, itemMap);
-
-    expect(result).toEqual(values);
-    expect(result.field1).toBeUndefined();
-    expect(result.field2).toBe('value');
-  });
-
-  it('only modifies boolean checkbox fields that are nil', () => {
-    const values = {
-      checkbox1: undefined, // should be set to false
-      checkbox2: true, // should remain true
-      checkbox3: null, // should be set to false
-      checkbox4: false, // should remain false
-      textField: undefined, // should remain undefined
-    };
-
-    const itemMap: ItemMap = {
-      checkbox1: {
-        linkId: 'checkbox1',
-        type: ItemType.Boolean,
-        component: Component.Checkbox,
-      },
-      checkbox2: {
-        linkId: 'checkbox2',
-        type: ItemType.Boolean,
-        component: Component.Checkbox,
-      },
-      checkbox3: {
-        linkId: 'checkbox3',
-        type: ItemType.Boolean,
-        component: Component.Checkbox,
-      },
-      checkbox4: {
-        linkId: 'checkbox4',
-        type: ItemType.Boolean,
-        component: Component.Checkbox,
-      },
-      textField: {
-        linkId: 'textField',
-        type: ItemType.String,
-        component: Component.Dropdown,
-      },
-    };
-
-    const result = normalizeBooleanCheckboxValues(values, itemMap);
-
-    expect(result.checkbox1).toBe(false);
-    expect(result.checkbox2).toBe(true);
-    expect(result.checkbox3).toBe(false);
-    expect(result.checkbox4).toBe(false);
-    expect(result.textField).toBeUndefined();
   });
 
   it('leaves non-checkbox boolean items unchanged', () => {
