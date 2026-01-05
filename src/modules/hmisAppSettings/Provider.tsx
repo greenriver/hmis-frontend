@@ -39,7 +39,7 @@ interface Props {
   children: ReactNode;
 }
 export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
-  const [appSettings, setAppSettings] = useState<HmisAppSettings | null>(null);
+  const [appSettings, setAppSettings] = useState<HmisAppSettings>({});
   const [user, setUser] = useState<HmisUser>();
   const [error, setError] = useState<Error | HttpError>();
   const [loading, setLoading] = useState(true);
@@ -151,7 +151,17 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
         setAppSettings(cachedAppSettings);
         promises.push(prefetchLogo(cachedAppSettings.logoPath));
       } else {
-        promises.push(fetchHmisAppSettings().then(saveSettings));
+        promises.push(
+          fetchHmisAppSettings()
+            .then(saveSettings)
+            .catch((err) => {
+              // If 401, keep empty object (for public/unauthenticated pages)
+              // Otherwise, rethrow to be handled by Promise.all
+              if (err?.status !== 401) {
+                throw err;
+              }
+            })
+        );
       }
     } else {
       // No cached user - attempt to fetch user to check if authenticated
