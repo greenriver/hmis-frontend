@@ -4371,6 +4371,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'externalFormObjectKey',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',

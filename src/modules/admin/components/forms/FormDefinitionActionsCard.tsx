@@ -37,6 +37,7 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
     ? parseHmisDateString(formIdentifier.draftVersion?.dateUpdated)
     : undefined;
 
+  const { externalFormObjectKey } = formIdentifier.displayVersion;
   const { managedInVersionControl, access } = formIdentifier;
   const { canManageForm, canPublishForm, canDuplicateForm } = access;
 
@@ -54,6 +55,18 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
         >
           View Published Form
         </ButtonLink>
+        {externalFormObjectKey && (
+          <ButtonLink
+            // TODO: DEV ONLY
+            to={`https://hmis-warehouse.dev.test/hmis_external_api/external_forms/${externalFormObjectKey}`}
+            // variant={hasDraft ? 'outlined' : 'contained'}
+            openInNew
+            fullWidth
+            disabled={!isPublished}
+          >
+            View External Form Preview
+          </ButtonLink>
+        )}
         {isPublished && (
           <Typography variant='caption'>
             Published {publishedOn ? formatRelativeDateTime(publishedOn) : ''}{' '}

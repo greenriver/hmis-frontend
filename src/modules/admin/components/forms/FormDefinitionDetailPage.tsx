@@ -65,6 +65,11 @@ const FormDefinitionDetailPage = () => {
                 <CommonLabeledTextBlock title='Form ID'>
                   {formIdentifier.identifier}
                 </CommonLabeledTextBlock>
+                {formIdentifier.displayVersion?.externalFormObjectKey && (
+                  <CommonLabeledTextBlock title='External Form Key'>
+                    {formIdentifier.displayVersion.externalFormObjectKey}
+                  </CommonLabeledTextBlock>
+                )}
                 <CommonLabeledTextBlock title='Form Type'>
                   <Chip
                     size='small'

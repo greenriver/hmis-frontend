@@ -175,6 +175,7 @@ fragment FormIdentifierDetails on FormIdentifier {
     canDuplicateForm
   }
   displayVersion {
+    externalFormObjectKey
     ...FormDefinitionMetadata
   }
   draftVersion {
