@@ -122,13 +122,13 @@ export default defineConfig(({ command, mode }) => {
         port: 5173, // expected in capybara system test instructions
         strictPort: true,
         host: '0.0.0.0', // Listen on all interfaces for Docker container access
-        allowedHosts: isCI ? '.' : ['hmis.dev.test', 'localhost'], // Allow all hosts in CI, restrict in development
+        allowedHosts: isCI ? true : ['hmis.dev.test', 'localhost'], // Allow all hosts in CI, restrict in development
       },
       server: {
         port: 5173,
         open: true,
         host: '0.0.0.0', // env.HMIS_HOST || 'hmis.dev.test',
-        allowedHosts: isCI ? '.' : ['hmis.dev.test', 'localhost'], // Allow all hosts in CI, restrict in development
+        allowedHosts: isCI ? true : ['hmis.dev.test', 'localhost'], // Allow all hosts in CI, restrict in development
         hmr: { host: 'localhost' },
         https:
           env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
