@@ -13,7 +13,7 @@ import FormDefinitionActionsCard from '@/modules/admin/components/forms/FormDefi
 import FormStatusText from '@/modules/admin/components/forms/FormStatusText';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
-import { useGetFormIdentifierDetailsQuery } from '@/types/gqlTypes';
+import { FormRole, useGetFormIdentifierDetailsQuery } from '@/types/gqlTypes';
 
 const FormDefinitionDetailPage = () => {
   const { identifier } = useSafeParams() as {
@@ -65,11 +65,6 @@ const FormDefinitionDetailPage = () => {
                 <CommonLabeledTextBlock title='Form ID'>
                   {formIdentifier.identifier}
                 </CommonLabeledTextBlock>
-                {formIdentifier.displayVersion?.externalFormObjectKey && (
-                  <CommonLabeledTextBlock title='External Form Key'>
-                    {formIdentifier.displayVersion.externalFormObjectKey}
-                  </CommonLabeledTextBlock>
-                )}
                 <CommonLabeledTextBlock title='Form Type'>
                   <Chip
                     size='small'
@@ -85,6 +80,18 @@ const FormDefinitionDetailPage = () => {
                 <CommonLabeledTextBlock title='Form Status'>
                   <FormStatusText identifier={formIdentifier} />
                 </CommonLabeledTextBlock>
+                {formIdentifier.displayVersion.role ===
+                  FormRole.ExternalForm && (
+                  <CommonLabeledTextBlock title='External Form Key'>
+                    {formIdentifier.displayVersion.externalFormObjectKey ? (
+                      formIdentifier.displayVersion.externalFormObjectKey
+                    ) : (
+                      <Typography variant='body2' color='error.dark'>
+                        Contact support to configure
+                      </Typography>
+                    )}
+                  </CommonLabeledTextBlock>
+                )}
               </Stack>
             </CommonCard>
           </Grid>
