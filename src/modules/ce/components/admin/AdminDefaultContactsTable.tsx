@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import Loading from '@/components/elements/Loading';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetDefaultSwimlaneAssignmentsDocument,
@@ -37,6 +38,11 @@ const BASE_COLUMNS: DataColumnDef<
 interface Props {}
 const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
   const { data: { ceSwimlanes } = {}, loading, error } = useGetSwimlanesQuery();
+
+  const projectFilters = useFilters({
+    type: 'ProjectFilterOptions',
+    omit: ['status', 'funder', 'projectType'],
+  });
 
   const columns: DataColumnDef<
     ProjectWithDefaultSwimlaneAssignmentsFragment,
@@ -103,6 +109,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
             }),
           },
         ]}
+        filters={projectFilters}
       />
     </Paper>
   );
