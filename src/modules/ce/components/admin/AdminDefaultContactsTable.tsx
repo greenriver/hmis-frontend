@@ -1,5 +1,6 @@
 import { Paper } from '@mui/material';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+import EditCeDefaultContactsModal from './EditCeDefaultContactsModal';
 import Loading from '@/components/elements/Loading';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -38,6 +39,7 @@ const BASE_COLUMNS: DataColumnDef<
 interface Props {}
 const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
   const { data: { ceSwimlanes } = {}, loading, error } = useGetSwimlanesQuery();
+  const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
 
   const projectFilters = useFilters({
     type: 'ProjectFilterOptions',
@@ -78,40 +80,46 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
   if (error) throw error;
 
   return (
-    <Paper>
-      <GenericTableWithData<
-        GetDefaultSwimlaneAssignmentsQuery,
-        GetDefaultSwimlaneAssignmentsQueryVariables,
-        ProjectWithDefaultSwimlaneAssignmentsFragment
-      >
-        columns={columns}
-        queryVariables={{
-          filters: {
-            status: [ProjectFilterOptionStatus.Open],
-          },
-        }}
-        defaultSortOption={ProjectSortOption.Name}
-        queryDocument={GetDefaultSwimlaneAssignmentsDocument}
-        pagePath='projects'
-        paginationItemName='project'
-        rowLinkTo={(row) =>
-          generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
-            projectId: row.id,
-          })
-        }
-        rowActionTitle='View Project'
-        rowSecondaryActionConfigs={(row) => [
-          {
-            key: 'edit',
-            title: 'Edit Project Contacts',
-            to: generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
-              projectId: row.id,
-            }),
-          },
-        ]}
-        filters={projectFilters}
-      />
-    </Paper>
+    <>
+      <Paper>
+        <GenericTableWithData<
+          GetDefaultSwimlaneAssignmentsQuery,
+          GetDefaultSwimlaneAssignmentsQueryVariables,
+          ProjectWithDefaultSwimlaneAssignmentsFragment
+        >
+          columns={columns}
+          queryVariables={{
+            filters: {
+              status: [ProjectFilterOptionStatus.Open],
+            },
+          }}
+          defaultSortOption={ProjectSortOption.Name}
+          queryDocument={GetDefaultSwimlaneAssignmentsDocument}
+          pagePath='projects'
+          paginationItemName='project'
+          handleRowClick={(row) => setEditingProjectId(row.id)}
+          rowActionTitle='Edit Project Contacts'
+          rowSecondaryActionConfigs={(row) => [
+            {
+              key: 'view',
+              title: 'View Project',
+              to: generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
+                projectId: row.id,
+              }),
+            },
+          ]}
+          filters={projectFilters}
+        />
+      </Paper>
+
+      {editingProjectId && (
+        <EditCeDefaultContactsModal
+          projectId={editingProjectId}
+          open={!!editingProjectId}
+          onClose={() => setEditingProjectId(null)}
+        />
+      )}
+    </>
   );
 };
 

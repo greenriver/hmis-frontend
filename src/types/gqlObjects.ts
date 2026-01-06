@@ -8345,6 +8345,32 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'CeDefaultSwimlaneAssignmentInput',
+    args: [
+      {
+        name: 'assignments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'INPUT_OBJECT',
+                name: 'SwimlaneAssignmentInput',
+                ofType: null,
+              },
+            },
+          },
+        },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+    ],
+  },
+  {
     name: 'CeEligibleUnitGroupFilterOptions',
     args: [
       {
@@ -10265,6 +10291,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'validateOnly',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'SwimlaneAssignmentInput',
+    args: [
+      {
+        name: 'swimlaneId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'userIds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
+        },
       },
     ],
   },

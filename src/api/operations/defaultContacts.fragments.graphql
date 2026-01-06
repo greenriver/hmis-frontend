@@ -5,30 +5,34 @@ fragment SwimlaneFields on CeSwimlane {
   templateName
 }
 
+fragment CeDefaultSwimlaneAssignmentFields on CeDefaultSwimlaneAssignment {
+  id
+  global
+  user {
+    id
+    name
+    email
+  }
+  organization {
+    id
+    ...OrganizationNameFields
+  }
+  project {
+    id
+    ...ProjectNameAndType
+  }
+  unitGroup {
+    id
+    name
+  }
+}
+
 fragment CeProjectDefaultAssignmentFields on CeProjectDefaultAssignment {
   swimlane {
     ...SwimlaneFields
   }
   assignments {
-    id
-    global
-    user {
-      id
-      name
-      email
-    }
-    organization {
-      id
-      ...OrganizationNameFields
-    }
-    project {
-      id
-      ...ProjectNameAndType
-    }
-    unitGroup {
-      id
-      name
-    }
+    ...CeDefaultSwimlaneAssignmentFields
   }
 }
 
