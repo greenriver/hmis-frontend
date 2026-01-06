@@ -5,6 +5,7 @@ import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
 
+import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
 import DuplicateFormButton from '@/modules/admin/components/forms/DuplicateFormButton';
 import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
 import {
@@ -55,16 +56,16 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
         >
           View Published Form
         </ButtonLink>
-        {externalFormObjectKey && (
+        {/* In Dev only, expose link to external form preview. This is not available in non-dev environments. */}
+        {externalFormObjectKey && import.meta.env.MODE === 'development' && (
           <ButtonLink
-            // TODO: DEV ONLY
-            to={`https://hmis-warehouse.dev.test/hmis_external_api/external_forms/${externalFormObjectKey}`}
-            // variant={hasDraft ? 'outlined' : 'contained'}
+            to={`/hmis_external_api/external_forms/${externalFormObjectKey}`}
             openInNew
             fullWidth
+            Icon={OpenInNewIcon}
             disabled={!isPublished}
           >
-            View External Form Preview
+            External Form Preview
           </ButtonLink>
         )}
         {isPublished && (
