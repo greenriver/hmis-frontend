@@ -24,6 +24,13 @@ export const useAdminDashboardNavItems = () => {
             hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
           {
+            id: 'default-contacts',
+            title: 'Default Contacts',
+            path: AdminDashboardRoutes.DEFAULT_CONTACTS,
+            permissions: ['canAdministrateCoordinatedEntry'],
+            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
+          },
+          {
             id: 'referrals',
             title: 'Referrals',
             path: AdminDashboardRoutes.REFERRALS,

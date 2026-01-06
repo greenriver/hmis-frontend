@@ -1,0 +1,44 @@
+fragment SwimlaneFields on CeSwimlane {
+  id
+  name
+  templateIdentifier
+  templateName
+}
+
+fragment CeProjectDefaultAssignmentFields on CeProjectDefaultAssignment {
+  swimlane {
+    ...SwimlaneFields
+  }
+  assignments {
+    id
+    global
+    user {
+      id
+      name
+      email
+    }
+    organization {
+      id
+      ...OrganizationNameFields
+    }
+    project {
+      id
+      ...ProjectNameAndType
+    }
+    unitGroup {
+      id
+      name
+    }
+  }
+}
+
+fragment ProjectWithDefaultSwimlaneAssignments on Project {
+  ...ProjectNameAndType
+  organization {
+    id
+    ...OrganizationNameFields
+  }
+  defaultSwimlaneAssignments {
+    ...CeProjectDefaultAssignmentFields
+  }
+}

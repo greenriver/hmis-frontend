@@ -665,6 +665,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeDefaultSwimlaneAssignment',
+    fields: [
+      {
+        name: 'global',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeEligibleUnitGroup',
     fields: [
       {
@@ -1033,6 +1054,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
+  { name: 'CeProjectDefaultAssignment', fields: [] },
   {
     name: 'CeReferral',
     fields: [
@@ -1537,6 +1559,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'CeSwimlane',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'templateIdentifier',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'templateName',
         type: {
           kind: 'NON_NULL',
           name: null,
