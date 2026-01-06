@@ -42,8 +42,6 @@ const validOperatorsForType = (type: ItemType, repeats: boolean) => {
   if (getItemCategory(type) === 'question') {
     if (repeats) {
       // this question has multiple answers, so we use "includes" or "excludes" to evaluate whether the list includes/excludes the comparison value
-      // operators.push(EnableOperator.Includes);
-      // operators.push(EnableOperator.Excludes);
       operators.push(...ARRAY_COMPARISON_OPERATORS);
     } else {
       // compare if answer is equal/not-equal to the comparison value
