@@ -32,12 +32,13 @@ const FormDefinitionDetailPage = () => {
   if (!formIdentifier && loading) return <Loading />;
   if (!formIdentifier) return <NotFound />;
 
+  // FormDefinition used for "display" in configuration tool,
+  // which is either the published version or the most recent version (if no published version exists)
+  const { displayVersion } = formIdentifier;
+
   return (
     <>
-      <PageTitle
-        overlineText='Selected Form'
-        title={formIdentifier.displayVersion.title}
-      />
+      <PageTitle overlineText='Selected Form' title={displayVersion.title} />
       <Stack gap={2}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
@@ -72,7 +73,7 @@ const FormDefinitionDetailPage = () => {
                     label={
                       <HmisEnum
                         enumMap={HmisEnums.FormRole}
-                        value={formIdentifier.displayVersion.role}
+                        value={displayVersion.role}
                       />
                     }
                   />
@@ -80,11 +81,10 @@ const FormDefinitionDetailPage = () => {
                 <CommonLabeledTextBlock title='Form Status'>
                   <FormStatusText identifier={formIdentifier} />
                 </CommonLabeledTextBlock>
-                {formIdentifier.displayVersion.role ===
-                  FormRole.ExternalForm && (
+                {displayVersion.role === FormRole.ExternalForm && (
                   <CommonLabeledTextBlock title='External Form Key'>
-                    {formIdentifier.displayVersion.externalFormObjectKey ? (
-                      formIdentifier.displayVersion.externalFormObjectKey
+                    {displayVersion.externalFormObjectKey ? (
+                      displayVersion.externalFormObjectKey
                     ) : (
                       <Typography variant='body2' color='error.dark'>
                         Contact support to configure
@@ -100,9 +100,9 @@ const FormDefinitionDetailPage = () => {
           </Grid>
         </Grid>
         <FormRulesCard
-          formId={formIdentifier.displayVersion.id}
-          formTitle={formIdentifier.displayVersion.title}
-          formRole={formIdentifier.displayVersion.role}
+          formId={displayVersion.id}
+          formTitle={displayVersion.title}
+          formRole={displayVersion.role}
           managedInVersionControl={formIdentifier.managedInVersionControl}
         />
         <CommonCard
