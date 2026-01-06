@@ -14,8 +14,10 @@ import { ValidationDialogProps } from '@/modules/errors/components/ValidationDia
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import { ErrorState } from '@/modules/errors/util';
 
-export interface DynamicFormSaveButtonsProps
-  extends Omit<FormActionProps, 'loading' | 'onSubmit' | 'onSaveDraft'> {
+export interface DynamicFormSaveButtonsProps extends Omit<
+  FormActionProps,
+  'loading' | 'onSubmit' | 'onSaveDraft'
+> {
   handlers: FormDefinitionHandlers;
   onSubmit: DynamicFormOnSubmit;
   onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;

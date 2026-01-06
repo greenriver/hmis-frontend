@@ -103,7 +103,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.3",
-    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/cli": "^6.0.0",
     "@graphql-codegen/fragment-matcher": "^5.0.2",
     "@graphql-codegen/introspection": "^4.0.3",
     "@graphql-codegen/typescript": "^4.0.9",
@@ -147,7 +147,7 @@
     "husky": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^12.4.1",
-    "playwright": "^1.50.1",
+    "playwright": "^1.55.1",
     "prettier": "^3.3.3",
     "rollup-plugin-visualizer": "^5.6.0",
     "storybook": "^8.6.4",

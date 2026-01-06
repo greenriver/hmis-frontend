@@ -7,6 +7,7 @@ import LabelWithContent from '../LabelWithContent';
 import MultiFieldInput from './MultiFieldInput';
 
 import { DynamicInputCommonProps } from '@/modules/form/types';
+import { preventImplicitSubmission } from '@/utils/forms';
 
 type SsnInputProps = {
   onChange?: (value: string | null) => any;
@@ -34,6 +35,7 @@ const SsnInput = ({
       // FIXME: switch to string input, allow use to type "X" or "x"
       inputMode: 'numeric',
       pattern: '[0-9]+',
+      onKeyDown: preventImplicitSubmission,
       ...inputProps,
     },
     InputProps,

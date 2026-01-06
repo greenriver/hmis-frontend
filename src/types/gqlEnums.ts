@@ -27,6 +27,9 @@ export const HmisEnums = {
     Age62Plus: '62+',
     Age65Plus: '65+',
   },
+  AhaFailedReason: {
+    NO_MCI_UNIQUE_ID: 'Client does not have an MCI unique ID',
+  },
   AnnualPercentAMI: {
     INVALID: 'Invalid Value',
     NUM_0:
@@ -1000,6 +1003,7 @@ export const HmisEnums = {
     CONTINUUM_PROJECTS: 'Continuum Projects',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     CUSTOM_SERVICE_CATEGORIES: 'CUSTOM_SERVICE_CATEGORIES',
+    CUSTOM_SERVICE_TYPES: 'CUSTOM_SERVICE_TYPES',
     DESTINATION: 'DESTINATION',
     ELIGIBLE_REFERRAL_STEP_ASSIGNMENT_USERS:
       'Users who can be assigned to referral steps in the specified project',
@@ -1012,6 +1016,8 @@ export const HmisEnums = {
     EXTERNAL_FORM_TYPES_FOR_PROJECT: 'External form types for the project.',
     FORM_TYPES: 'Form Types',
     GEOCODE: 'GEOCODE',
+    HUD_SERVICE_CATEGORIES: 'HUD_SERVICE_CATEGORIES',
+    HUD_SERVICE_TYPES: 'HUD_SERVICE_TYPES',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     OPEN_PROJECTS: 'Open Projects that the user can see',
     ORGANIZATION: 'All Organizations that the User can see',

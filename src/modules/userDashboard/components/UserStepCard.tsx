@@ -7,13 +7,14 @@ import {
   StepCalendarIcon,
 } from '@/components/elements/SemanticIcons';
 import ReferralStepDatum from '@/modules/ce/components/referral/ReferralStepDatum';
-import { getReferralLink } from '@/modules/ce/util';
 import {
   formatRelativeDate,
   parseHmisDateString,
   stringifyArray,
 } from '@/modules/hmis/hmisUtil';
+import { Routes } from '@/routes/routes';
 import { UserCeReferralStepFieldsFragment } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   step: UserCeReferralStepFieldsFragment;
@@ -26,7 +27,12 @@ interface Props {
  */
 const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
   const { referral, assignees } = step;
-  const path = getReferralLink(referral);
+
+  // For consistency/simplicity, always link to the "floating" referral context here
+  // (even if user has permission to view the referral in its project context)
+  const path = generateSafePath(Routes.REFERRAL, {
+    referralId: referral.id,
+  });
 
   const truncatedAssignees = useMemo(() => {
     if (assignees.length <= 1) return '';

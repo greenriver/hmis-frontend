@@ -25,6 +25,7 @@ import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
+import { isDataNotCollected } from '@/modules/form/util/formUtil';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
@@ -208,47 +209,57 @@ const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
             defaultExpanded: true,
             content: (
               <ClientProfileCardTextTable
-                content={{
-                  Race: (
-                    <MultiHmisEnum
-                      values={client.race}
-                      enumMap={HmisEnums.Race}
-                      noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
-                      oneRowPerValue
-                    />
-                  ),
-                  Gender: (
-                    <>
+                content={Object.fromEntries(
+                  [
+                    [
+                      'Race',
                       <MultiHmisEnum
-                        values={client.gender}
-                        enumMap={HmisEnums.Gender}
+                        values={client.race}
+                        enumMap={HmisEnums.Race}
                         noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
                         oneRowPerValue
-                      >
-                        {client.differentIdentityText && (
-                          <Typography variant='body2'>
-                            {client.differentIdentityText}
-                          </Typography>
-                        )}{' '}
-                      </MultiHmisEnum>
-                    </>
-                  ),
-                  Sex: (
-                    <HmisEnum
-                      value={client.sex}
-                      enumMap={HmisEnums.Sex}
-                      noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
-                    />
-                  ),
-                  Pronouns: pronouns(client) || <NotCollectedText />,
-                  'Veteran Status': (
-                    <HmisEnum
-                      value={client.veteranStatus}
-                      enumMap={HmisEnums.NoYesReasonsForMissingData}
-                      noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
-                    />
-                  ),
-                }}
+                      />,
+                    ],
+                    [
+                      'Gender',
+                      client.gender.some(
+                        (gender) => !isDataNotCollected(gender)
+                      ) && (
+                        <>
+                          <MultiHmisEnum
+                            values={client.gender}
+                            enumMap={HmisEnums.Gender}
+                            noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
+                            oneRowPerValue
+                          >
+                            {client.differentIdentityText && (
+                              <Typography variant='body2'>
+                                {client.differentIdentityText}
+                              </Typography>
+                            )}{' '}
+                          </MultiHmisEnum>
+                        </>
+                      ),
+                    ],
+                    [
+                      'Sex',
+                      <HmisEnum
+                        value={client.sex}
+                        enumMap={HmisEnums.Sex}
+                        noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
+                      />,
+                    ],
+                    ['Pronouns', pronouns(client)],
+                    [
+                      'Veteran Status',
+                      <HmisEnum
+                        value={client.veteranStatus}
+                        enumMap={HmisEnums.NoYesReasonsForMissingData}
+                        noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
+                      />,
+                    ],
+                  ].filter(([, value]) => value)
+                )}
               />
             ),
           },

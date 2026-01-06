@@ -57,7 +57,7 @@ fragment UnitDetailFields on Unit {
   }
   latestOpportunity @include(if: $includeCeFields) {
     ...CeOpportunityFields
-    candidates(limit: 1, offset: 0) {
+    candidates(limit: 1, offset: 0, filters: { excludeDeclinedClients: true }) {
       offset
       limit
       nodesCount
@@ -79,12 +79,16 @@ fragment UnitWithCeFields on Unit {
   canBeMarkedAvailableToday
   canBeMarkedUnavailable
   acceptingCeReferrals
-  workflowTemplateName
 }
 
 fragment UnitGroupFields on UnitGroup {
   id
   name
+  workflowTemplateIdentifier
+  unitType {
+    id
+    description
+  }
 }
 
 fragment UnitGroupCapacityFields on UnitGroup {
@@ -102,10 +106,16 @@ fragment UnitGroupDetailFields on UnitGroup {
   workflowTemplateName
   ceEventType
   workflowTemplateIdentifier
+  directReferralWorkflowTemplateName
+  directReferralWorkflowTemplateIdentifier
   eligibilityRequirements {
     ...CeMatchRuleFields
   }
   prioritySchemes {
     ...CeMatchRuleFields
+  }
+  unitType {
+    id
+    description
   }
 }

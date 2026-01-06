@@ -39,28 +39,6 @@
       ]
     },
     {
-      "type": "BOOLEAN",
-      "linkId": "resendReferralRequest",
-      "required": false,
-      "text": "Re-request?",
-      "mapping": { "fieldName": "resendReferralRequest" },
-      "enableBehavior": "ALL",
-      "disabledDisplay": "HIDDEN",
-      "enableWhen": [
-        {
-          "question": "status",
-          "operator": "EQUAL",
-          "answerCode": "denied_status"
-        },
-        {
-          "_comment": "re-requests are only allowed if the referral came from a request",
-          "question": "has-referral-request",
-          "operator": "EQUAL",
-          "answerBoolean": true
-        }
-      ]
-    },
-    {
       "type": "CHOICE",
       "linkId": "referralResult",
       "required": true,

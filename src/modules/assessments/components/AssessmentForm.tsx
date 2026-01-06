@@ -344,6 +344,13 @@ const AssessmentForm: React.FC<Props> = ({
 
   const showNavigation = !isPrintView && !isMobile;
 
+  if (!assessment && !canEdit) {
+    // If the assessment doesn't exist, and the user doesn't have edit access, it doesn't make sense to render a form.
+    throw new Error(
+      'No assessment, and user does not have edit access. This should never happen'
+    );
+  }
+
   return (
     <>
       <FormNavigationContainer
@@ -385,7 +392,7 @@ const AssessmentForm: React.FC<Props> = ({
             onClick={() => setDialogOpen(true)}
           />
         )}
-        {locked && assessment ? (
+        {locked ? (
           <FormContainer
             actions={
               canEdit && !isPrintView ? (
@@ -401,8 +408,13 @@ const AssessmentForm: React.FC<Props> = ({
             sticky={embeddedInWorkflow ? 'always' : 'auto'}
           >
             <DynamicView
-              // don't use `initialValues` because we don't want the OVERWRITE fields
-              values={initialValuesFromAssessment(itemMap, assessment)}
+              // don't use `initialValues` because we don't want the OVERWRITE fields.
+              // check for assessment to appease typescript; should always be present if locked is true, thanks to the raise above
+              values={
+                assessment
+                  ? initialValuesFromAssessment(itemMap, assessment)
+                  : {}
+              }
               definition={definition.definition}
               pickListArgs={pickListArgs}
               localConstants={localConstants}

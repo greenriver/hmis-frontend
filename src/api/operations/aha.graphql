@@ -4,6 +4,7 @@ mutation FetchAhaScore($clientId: ID!) {
     mciQualityIndicator
     dwClientId
     generator
+    ahaFailedReason
     errors {
       ...ValidationErrorFields
     }

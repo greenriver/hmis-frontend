@@ -51,6 +51,17 @@ const FormDefinitionDetailPage = () => {
                     </Typography>
                   </Alert>
                 )}
+                {formIdentifier.adminEditableOnly && (
+                  <Alert severity='info' icon={<LockIcon />}>
+                    <Typography variant='body2'>
+                      This form is locked
+                      {formIdentifier.access.canManageForm && (
+                        <> to non-admins</>
+                      )}
+                      .
+                    </Typography>
+                  </Alert>
+                )}
                 <CommonLabeledTextBlock title='Form ID'>
                   {formIdentifier.identifier}
                 </CommonLabeledTextBlock>
@@ -80,7 +91,7 @@ const FormDefinitionDetailPage = () => {
           formId={formIdentifier.displayVersion.id}
           formTitle={formIdentifier.displayVersion.title}
           formRole={formIdentifier.displayVersion.role}
-          formCacheKey={formIdentifier.displayVersion.cacheKey}
+          managedInVersionControl={formIdentifier.managedInVersionControl}
         />
         <CommonCard
           title='Version History'

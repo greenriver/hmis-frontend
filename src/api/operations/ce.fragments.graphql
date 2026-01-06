@@ -22,15 +22,10 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
 
 fragment CeOpportunityFields on CeOpportunity {
   ...CeOpportunitySummaryFields
+  stale
   candidatesGeneratedAt
   referral {
     ...CeReferralSummaryFields
-  }
-  eligibilityRequirements {
-    ...CeMatchRuleFields
-  }
-  prioritySchemes {
-    ...CeMatchRuleFields
   }
 }
 
@@ -142,9 +137,6 @@ fragment CeReferralWithProjectFields on CeReferral {
 fragment CeReferralWithProjectAccessFields on CeReferral {
   id
   ...CeReferralWithProjectFields
-  access {
-    canViewTargetProject
-  }
 }
 
 fragment CeReferralAdminFields on CeReferral {
@@ -264,6 +256,7 @@ fragment CeReferralFields on CeReferral {
     canAssignReferralTasks
     canViewSourceEnrollmentDetails
     canViewTargetProject
+    canCreateReferralNote
   }
 }
 

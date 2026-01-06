@@ -959,6 +959,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'stale',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'status',
         type: {
           kind: 'NON_NULL',
@@ -1082,11 +1090,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'sourceEnrollmentId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'sourceProjectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'status',
@@ -1139,6 +1147,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'canAssignReferralTasks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canCreateReferralNote',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -3104,7 +3120,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'alcoholDrugUseDisorderFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'annualPercentAmi',
@@ -3296,11 +3316,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'incarceratedParent',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'insufficientIncome',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'juvenileJusticeMonths',
@@ -3352,7 +3380,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'mentalHealthDisorderFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'monthsHomelessPastThreeYears',
@@ -3388,7 +3420,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'physicalDisabilityFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'preferredLanguage',
@@ -3508,7 +3544,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'unemploymentFam',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'vamcStation',
@@ -4405,6 +4445,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'FormDefinitionAccess',
+    fields: [
+      {
+        name: 'canDuplicateForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canPublishForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'FormDefinitionForJsonResult',
     fields: [
       {
@@ -4430,6 +4507,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FormIdentifier',
     fields: [
       {
+        name: 'adminEditableOnly',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -4451,6 +4536,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'FormIdentifierAccess',
+    fields: [
+      {
+        name: 'canDuplicateForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canPublishForm',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
     ],
@@ -6162,6 +6284,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewOutgoingReferralDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewOutgoingReferralSummaries',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewOwnReferrals',
         type: {
           kind: 'NON_NULL',
@@ -6783,6 +6921,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewOpenEnrollmentSummary',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewOutgoingReferralDetails',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -7490,10 +7636,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       { name: 'unitSize', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
-      {
-        name: 'workflowTemplateName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
     ],
   },
   {
@@ -7518,6 +7660,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'ceEventType',
         type: { kind: 'ENUM', name: 'EventType', ofType: null },
+      },
+      {
+        name: 'directReferralWorkflowTemplateIdentifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'directReferralWorkflowTemplateName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'id',
@@ -8149,6 +8299,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
           },
         },
+      },
+    ],
+  },
+  {
+    name: 'CeOpportunityCandidatesFilterOptions',
+    args: [
+      {
+        name: 'excludeDeclinedClients',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
     ],
   },
@@ -10131,8 +10290,16 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'ceEventType',
         type: { kind: 'ENUM', name: 'EventType', ofType: null },
       },
+      {
+        name: 'directReferralWorkflowTemplateIdentifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'unitTypeId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
       {
         name: 'workflowTemplateIdentifier',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
@@ -10159,10 +10326,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'unitGroupId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
-      {
-        name: 'unitTypeId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
     ],
   },
   {
@@ -10182,27 +10345,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'UpdateFormRuleInput',
-    args: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'input',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'INPUT_OBJECT', name: 'FormRuleInput', ofType: null },
         },
       },
     ],

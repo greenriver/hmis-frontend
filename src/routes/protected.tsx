@@ -89,7 +89,6 @@ import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdP
 import AdminReferralDenialsPage from '@/modules/legacyReferrals/components/admin/AdminReferralDenialsPage';
 import AdminReferralPosting from '@/modules/legacyReferrals/components/admin/AdminReferralPosting';
 import NewOutgoingReferralPage from '@/modules/legacyReferrals/components/NewOutgoingReferralPage';
-import NewReferralRequestPage from '@/modules/legacyReferrals/components/NewReferralRequestPage';
 import ProjectReferralPostingPage from '@/modules/legacyReferrals/components/ProjectReferralPostingPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AllProjectsPage from '@/modules/projectAdministration/components/AllProjectsPage';
@@ -322,17 +321,6 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
-            element: (
-              <ProjectEditRoute
-                permissions={['canManageIncomingReferrals']}
-                redirectRoute={Routes.PROJECT}
-              >
-                <NewReferralRequestPage />
-              </ProjectEditRoute>
-            ),
-          },
-          {
             path: ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL,
             element: (
               <ProjectEditRoute
@@ -504,11 +492,25 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            // ReferralPage can be rendered in the Target project context,
+            // or in the Source project context (for direct referrals)
             path: ProjectDashboardRoutes.REFERRAL,
             element: (
               <ProjectRoute
-                permissions={['canViewReferrals', 'canViewOwnReferrals']}
-                coordinatedEntryFeatures={['supportsReferrals']}
+                permissions={[
+                  // Permission mode is `any`
+                  // Target project - User must be able to view (all or own)
+                  'canViewReferrals',
+                  'canViewOwnReferrals',
+                  // Source project - User must be able to view outgoing
+                  'canViewOutgoingReferralDetails',
+                ]}
+                coordinatedEntryFeatures={[
+                  // Target project must support referrals
+                  'supportsReferrals',
+                  // Source project must send direct referrals
+                  'sendsDirectReferrals',
+                ]}
               >
                 <ReferralPage />
               </ProjectRoute>

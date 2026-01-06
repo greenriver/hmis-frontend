@@ -15,12 +15,23 @@ const UnitGroupCeConfigurationCard: React.FC<Props> = ({ unitGroup }) => {
       Not Specified
     </Typography>
   );
+  const { workflowTemplateName, directReferralWorkflowTemplateName } =
+    unitGroup;
+
   return (
-    <CommonCard title='Configuration'>
+    <CommonCard title='Configuration' TitleComponent='h2'>
       <Stack gap={1}>
         <CommonLabeledTextBlock title='Referral Workflow' variant='body1'>
-          {unitGroup.workflowTemplateName || missingWorkflowTemplateText}
+          {workflowTemplateName || missingWorkflowTemplateText}
         </CommonLabeledTextBlock>
+        {directReferralWorkflowTemplateName && (
+          <CommonLabeledTextBlock
+            title='Direct Referral Workflow'
+            variant='body1'
+          >
+            {directReferralWorkflowTemplateName}
+          </CommonLabeledTextBlock>
+        )}
         {unitGroup.ceEventType && (
           <CommonLabeledTextBlock title='CE Event Type' variant='body1'>
             {HmisEnums.EventType[unitGroup.ceEventType]}

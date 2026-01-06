@@ -42,6 +42,8 @@ const EnrollmentOverview = () => {
 
   if (!enrollment) return <NotFound />;
 
+  const { canDeleteEnrollments, canEditEnrollments } = enrollment.access;
+
   return (
     <>
       <PageTitle title='Enrollment Overview' />
@@ -73,7 +75,8 @@ const EnrollmentOverview = () => {
               enrollment={enrollment}
               getEnrollmentFeature={getEnrollmentFeature}
             />
-            {enrollment.access.canDeleteEnrollments &&
+            {canDeleteEnrollments &&
+              canEditEnrollments &&
               (enrollment.inProgress || !enrollment.intakeAssessment) && (
                 <DeleteMutationButton<
                   DeleteEnrollmentMutation,
