@@ -59,6 +59,8 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   open,
   onClose,
 }) => {
+  const projectMode = !!project;
+
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   // Transform contacts from the backend format to the form state format
@@ -76,26 +78,26 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
             // In project mode, if the `project` owner field is false for this contact,
             // that means it's owned at a higher level, by the org or data source.
             // Show it in the dropdown for clarity, and disable de-selecting it.
-            disabled: project ? !contact.project : false,
+            disabled: projectMode ? !contact.project : false,
           })
         );
       });
 
       return selections;
     },
-    [project]
+    [projectMode]
   );
 
   const [formState, setFormState] = useState<Record<string, PickListOption[]>>(
     // If we were passed a project that already has default contacts loaded, set that as the initial form state.
     // Otherwise, set it to {} and wait for the global contacts query to load.
-    project ? transformContactsToFormState(project.ceDefaultContacts) : {}
+    projectMode ? transformContactsToFormState(project.ceDefaultContacts) : {}
   );
 
   // In Global mode, fetch global contacts
   const { loading: globalLoading, error: globalError } =
     useGetGlobalDefaultSwimlaneAssignmentsQuery({
-      skip: !open || !!project, // skip this query in project mode
+      skip: !open || projectMode, // skip this query in project mode
       onCompleted: (data) => {
         if (data.globalCeDefaultContacts) {
           setFormState(
@@ -111,7 +113,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     loading: swimlanesLoading,
     error: swimlanesError,
   } = useGetSwimlanesQuery({
-    skip: !open || !!project,
+    skip: !open || projectMode,
   });
   const ceSwimlanes = project?.ceSwimlanes || globalSwimlanes;
 
@@ -182,23 +184,27 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     createAssignments({
       variables: {
         input: {
-          projectId: project?.id, // if project is not passed, the default contact created is global
+          // pass projectId in project mode. In global mode, when projectId is not passed, the mutation creates contacts that are global (owned by the data source)
+          projectId: projectMode ? project?.id : undefined,
           contacts,
         },
       },
     });
-  }, [project, formState, createAssignments]);
+  }, [formState, createAssignments, projectMode, project?.id]);
 
   const getSwimlaneSelect = useCallback(
     (swimlane: CeSwimlaneFieldsFragment) => {
       const isEmpty = !formState[swimlane.id]?.length;
+      // Only show Missing warning in project mode,
+      // For some swimlanes (like Project Staff) it wouldn't make sense to have a global default.
+      const showMissingWarning = isEmpty && projectMode;
 
       const label = (
         <Stack direction='row' spacing={1} alignItems='center'>
           <span>
             {swimlane.name} ({swimlane.templateName})
           </span>
-          {isEmpty && (
+          {showMissingWarning && (
             <Stack direction='row' spacing={0.5} alignItems='center'>
               <ErrorIcon sx={{ fontSize: 'inherit', color: 'warning.main' }} />
               <span>Missing</span>
@@ -217,12 +223,12 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
             multiple
             placeholder='Select'
             helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
-            color={isEmpty ? 'warning' : undefined}
+            color={showMissingWarning ? 'warning' : undefined}
           />
         </Box>
       );
     },
-    [formState, handleChangeUsers, usersPickList]
+    [formState, handleChangeUsers, projectMode, usersPickList]
   );
 
   const loading = globalLoading || swimlanesLoading || usersLoading;
@@ -232,13 +238,15 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
 
   return (
     <CommonDialog open={open} onClose={handleClose} fullWidth>
-      <DialogTitle>Edit {project ? 'Project' : 'Global'} Contacts</DialogTitle>
+      <DialogTitle>
+        Edit {projectMode ? 'Project' : 'Global'} Contacts
+      </DialogTitle>
       <DialogContent>
         {loading ? (
           <Loading />
         ) : (
           <Stack spacing={3} sx={{ mt: 2 }}>
-            {project && (
+            {projectMode && (
               <Box>
                 <Stack direction='row' spacing={4}>
                   <CommonLabeledTextBlock title='Project'>

@@ -13,7 +13,6 @@ import {
   GetDefaultSwimlaneAssignmentsQuery,
   GetDefaultSwimlaneAssignmentsQueryVariables,
   ProjectFilterOptionStatus,
-  ProjectSortOption,
   ProjectWithCeDefaultContactsFragment,
   useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
@@ -140,12 +139,10 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
           queryVariables={{
             filters: {
               status: [ProjectFilterOptionStatus.Open],
-              // todo @Martha - only show projects in this list that have some kind of ce workflow enabled. (needs new filter?)
             },
           }}
-          defaultSortOption={ProjectSortOption.Name}
           queryDocument={GetDefaultSwimlaneAssignmentsDocument}
-          pagePath='projects'
+          pagePath='projectsWithCeDefaultContacts'
           paginationItemName='project'
           handleRowClick={(row) => setEditingProject(row)}
           rowActionTitle='Edit Project Contacts'

@@ -6930,6 +6930,8 @@ export type Query = {
   projectCoc?: Maybe<ProjectCoc>;
   projectConfigs: ProjectConfigsPaginated;
   projects: ProjectsPaginated;
+  /** Projects with CE default contacts */
+  projectsWithCeDefaultContacts: ProjectsPaginated;
   /** Get the most relevant Form Definition to use for record viewing/editing */
   recordFormDefinition?: Maybe<FormDefinition>;
   referralPosting?: Maybe<ReferralPosting>;
@@ -7151,6 +7153,12 @@ export type QueryProjectsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
+};
+
+export type QueryProjectsWithCeDefaultContactsArgs = {
+  filters?: InputMaybe<ProjectFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryRecordFormDefinitionArgs = {
@@ -26926,12 +26934,11 @@ export type GetDefaultSwimlaneAssignmentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<ProjectFilterOptions>;
-  sortOrder?: InputMaybe<ProjectSortOption>;
 }>;
 
 export type GetDefaultSwimlaneAssignmentsQuery = {
   __typename?: 'Query';
-  projects: {
+  projectsWithCeDefaultContacts: {
     __typename?: 'ProjectsPaginated';
     offset: number;
     limit: number;
@@ -59370,13 +59377,11 @@ export const GetDefaultSwimlaneAssignmentsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $filters: ProjectFilterOptions
-    $sortOrder: ProjectSortOption
   ) {
-    projects(
+    projectsWithCeDefaultContacts(
       limit: $limit
       offset: $offset
       filters: $filters
-      sortOrder: $sortOrder
     ) {
       offset
       limit
@@ -59404,7 +59409,6 @@ export const GetDefaultSwimlaneAssignmentsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
- *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
