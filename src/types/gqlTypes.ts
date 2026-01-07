@@ -672,6 +672,13 @@ export type CeCustomReferralStatus = {
   name: Scalars['String']['output'];
 };
 
+export type CeDefaultAssignmentsBySwimlane = {
+  __typename?: 'CeDefaultAssignmentsBySwimlane';
+  /** Default assignments for this swimlane */
+  assignments: Array<CeDefaultSwimlaneAssignment>;
+  swimlane: CeSwimlane;
+};
+
 export type CeDefaultSwimlaneAssignment = {
   __typename?: 'CeDefaultSwimlaneAssignment';
   global: Scalars['Boolean']['output'];
@@ -867,13 +874,6 @@ export type CeParticipationsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
-};
-
-export type CeProjectDefaultAssignment = {
-  __typename?: 'CeProjectDefaultAssignment';
-  /** Default assignments for this swimlane */
-  assignments: Array<CeDefaultSwimlaneAssignment>;
-  swimlane: CeSwimlane;
 };
 
 export type CeReferral = {
@@ -6456,8 +6456,8 @@ export type Project = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  /** Default swimlane assignments for this project, grouped by swimlane */
-  defaultSwimlaneAssignments: Array<CeProjectDefaultAssignment>;
+  /** Default swimlane assignments grouped by swimlane */
+  defaultSwimlaneAssignments: Array<CeDefaultAssignmentsBySwimlane>;
   description?: Maybe<Scalars['String']['output']>;
   enrollments: EnrollmentsPaginated;
   externalFormSubmissions: ExternalFormSubmissionsPaginated;
@@ -6892,6 +6892,8 @@ export type Query = {
   formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
+  /** Global CE default contacts, grouped by swimlane */
+  globalCeDefaultContacts: Array<CeDefaultAssignmentsBySwimlane>;
   globalFeatureFlags: GlobalFeatureFlags;
   /** Household lookup */
   household?: Maybe<Household>;
@@ -26706,6 +26708,13 @@ export type CeDefaultSwimlaneAssignmentFieldsFragment = {
   __typename?: 'CeDefaultSwimlaneAssignment';
   id: string;
   global: boolean;
+  swimlane: {
+    __typename?: 'CeSwimlane';
+    id: string;
+    name: string;
+    templateIdentifier: string;
+    templateName: string;
+  };
   user: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -26727,8 +26736,8 @@ export type CeDefaultSwimlaneAssignmentFieldsFragment = {
   unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
 };
 
-export type CeProjectDefaultAssignmentFieldsFragment = {
-  __typename?: 'CeProjectDefaultAssignment';
+export type CeDefaultAssignmentsBySwimlaneFieldsFragment = {
+  __typename?: 'CeDefaultAssignmentsBySwimlane';
   swimlane: {
     __typename?: 'CeSwimlane';
     id: string;
@@ -26740,6 +26749,13 @@ export type CeProjectDefaultAssignmentFieldsFragment = {
     __typename?: 'CeDefaultSwimlaneAssignment';
     id: string;
     global: boolean;
+    swimlane: {
+      __typename?: 'CeSwimlane';
+      id: string;
+      name: string;
+      templateIdentifier: string;
+      templateName: string;
+    };
     user: {
       __typename?: 'ApplicationUser';
       id: string;
@@ -26774,7 +26790,7 @@ export type ProjectWithDefaultSwimlaneAssignmentsFragment = {
     organizationName: string;
   };
   defaultSwimlaneAssignments: Array<{
-    __typename?: 'CeProjectDefaultAssignment';
+    __typename?: 'CeDefaultAssignmentsBySwimlane';
     swimlane: {
       __typename?: 'CeSwimlane';
       id: string;
@@ -26786,6 +26802,13 @@ export type ProjectWithDefaultSwimlaneAssignmentsFragment = {
       __typename?: 'CeDefaultSwimlaneAssignment';
       id: string;
       global: boolean;
+      swimlane: {
+        __typename?: 'CeSwimlane';
+        id: string;
+        name: string;
+        templateIdentifier: string;
+        templateName: string;
+      };
       user: {
         __typename?: 'ApplicationUser';
         id: string;
@@ -26821,6 +26844,13 @@ export type AssignCeDefaultContactsMutation = {
       __typename?: 'CeDefaultSwimlaneAssignment';
       id: string;
       global: boolean;
+      swimlane: {
+        __typename?: 'CeSwimlane';
+        id: string;
+        name: string;
+        templateIdentifier: string;
+        templateName: string;
+      };
       user: {
         __typename?: 'ApplicationUser';
         id: string;
@@ -26897,7 +26927,7 @@ export type GetDefaultSwimlaneAssignmentsQuery = {
         organizationName: string;
       };
       defaultSwimlaneAssignments: Array<{
-        __typename?: 'CeProjectDefaultAssignment';
+        __typename?: 'CeDefaultAssignmentsBySwimlane';
         swimlane: {
           __typename?: 'CeSwimlane';
           id: string;
@@ -26909,6 +26939,13 @@ export type GetDefaultSwimlaneAssignmentsQuery = {
           __typename?: 'CeDefaultSwimlaneAssignment';
           id: string;
           global: boolean;
+          swimlane: {
+            __typename?: 'CeSwimlane';
+            id: string;
+            name: string;
+            templateIdentifier: string;
+            templateName: string;
+          };
           user: {
             __typename?: 'ApplicationUser';
             id: string;
@@ -26956,7 +26993,7 @@ export type GetProjectDefaultSwimlaneAssignmentsQuery = {
       organizationName: string;
     };
     defaultSwimlaneAssignments: Array<{
-      __typename?: 'CeProjectDefaultAssignment';
+      __typename?: 'CeDefaultAssignmentsBySwimlane';
       swimlane: {
         __typename?: 'CeSwimlane';
         id: string;
@@ -26968,6 +27005,13 @@ export type GetProjectDefaultSwimlaneAssignmentsQuery = {
         __typename?: 'CeDefaultSwimlaneAssignment';
         id: string;
         global: boolean;
+        swimlane: {
+          __typename?: 'CeSwimlane';
+          id: string;
+          name: string;
+          templateIdentifier: string;
+          templateName: string;
+        };
         user: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -26994,6 +27038,55 @@ export type GetProjectDefaultSwimlaneAssignmentsQuery = {
       }>;
     }>;
   } | null;
+};
+
+export type GetGlobalDefaultSwimlaneAssignmentsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetGlobalDefaultSwimlaneAssignmentsQuery = {
+  __typename?: 'Query';
+  globalCeDefaultContacts: Array<{
+    __typename?: 'CeDefaultAssignmentsBySwimlane';
+    swimlane: {
+      __typename?: 'CeSwimlane';
+      id: string;
+      name: string;
+      templateIdentifier: string;
+      templateName: string;
+    };
+    assignments: Array<{
+      __typename?: 'CeDefaultSwimlaneAssignment';
+      id: string;
+      global: boolean;
+      swimlane: {
+        __typename?: 'CeSwimlane';
+        id: string;
+        name: string;
+        templateIdentifier: string;
+        templateName: string;
+      };
+      user: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      };
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        hudId: string;
+        organizationName: string;
+      } | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+      } | null;
+      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    }>;
+  }>;
 };
 
 export type CreateDirectCeReferralMutationVariables = Exact<{
@@ -51180,6 +51273,9 @@ export const CeDefaultSwimlaneAssignmentFieldsFragmentDoc = gql`
   fragment CeDefaultSwimlaneAssignmentFields on CeDefaultSwimlaneAssignment {
     id
     global
+    swimlane {
+      ...SwimlaneFields
+    }
     user {
       id
       name
@@ -51198,11 +51294,12 @@ export const CeDefaultSwimlaneAssignmentFieldsFragmentDoc = gql`
       name
     }
   }
+  ${SwimlaneFieldsFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
-export const CeProjectDefaultAssignmentFieldsFragmentDoc = gql`
-  fragment CeProjectDefaultAssignmentFields on CeProjectDefaultAssignment {
+export const CeDefaultAssignmentsBySwimlaneFieldsFragmentDoc = gql`
+  fragment CeDefaultAssignmentsBySwimlaneFields on CeDefaultAssignmentsBySwimlane {
     swimlane {
       ...SwimlaneFields
     }
@@ -51221,12 +51318,12 @@ export const ProjectWithDefaultSwimlaneAssignmentsFragmentDoc = gql`
       ...OrganizationNameFields
     }
     defaultSwimlaneAssignments {
-      ...CeProjectDefaultAssignmentFields
+      ...CeDefaultAssignmentsBySwimlaneFields
     }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
-  ${CeProjectDefaultAssignmentFieldsFragmentDoc}
+  ${CeDefaultAssignmentsBySwimlaneFieldsFragmentDoc}
 `;
 export const ClientEnrollmentFieldsFragmentDoc = gql`
   fragment ClientEnrollmentFields on Enrollment {
@@ -59402,6 +59499,83 @@ export type GetProjectDefaultSwimlaneAssignmentsQueryResult =
     GetProjectDefaultSwimlaneAssignmentsQuery,
     GetProjectDefaultSwimlaneAssignmentsQueryVariables
   >;
+export const GetGlobalDefaultSwimlaneAssignmentsDocument = gql`
+  query GetGlobalDefaultSwimlaneAssignments {
+    globalCeDefaultContacts {
+      ...CeDefaultAssignmentsBySwimlaneFields
+    }
+  }
+  ${CeDefaultAssignmentsBySwimlaneFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetGlobalDefaultSwimlaneAssignmentsQuery__
+ *
+ * To run a query within a React component, call `useGetGlobalDefaultSwimlaneAssignmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGlobalDefaultSwimlaneAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGlobalDefaultSwimlaneAssignmentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGlobalDefaultSwimlaneAssignmentsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetGlobalDefaultSwimlaneAssignmentsQuery,
+    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetGlobalDefaultSwimlaneAssignmentsQuery,
+    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+  >(GetGlobalDefaultSwimlaneAssignmentsDocument, options);
+}
+export function useGetGlobalDefaultSwimlaneAssignmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetGlobalDefaultSwimlaneAssignmentsQuery,
+    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetGlobalDefaultSwimlaneAssignmentsQuery,
+    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+  >(GetGlobalDefaultSwimlaneAssignmentsDocument, options);
+}
+export function useGetGlobalDefaultSwimlaneAssignmentsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetGlobalDefaultSwimlaneAssignmentsQuery,
+        GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetGlobalDefaultSwimlaneAssignmentsQuery,
+    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+  >(GetGlobalDefaultSwimlaneAssignmentsDocument, options);
+}
+export type GetGlobalDefaultSwimlaneAssignmentsQueryHookResult = ReturnType<
+  typeof useGetGlobalDefaultSwimlaneAssignmentsQuery
+>;
+export type GetGlobalDefaultSwimlaneAssignmentsLazyQueryHookResult = ReturnType<
+  typeof useGetGlobalDefaultSwimlaneAssignmentsLazyQuery
+>;
+export type GetGlobalDefaultSwimlaneAssignmentsSuspenseQueryHookResult =
+  ReturnType<typeof useGetGlobalDefaultSwimlaneAssignmentsSuspenseQuery>;
+export type GetGlobalDefaultSwimlaneAssignmentsQueryResult = Apollo.QueryResult<
+  GetGlobalDefaultSwimlaneAssignmentsQuery,
+  GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+>;
 export const CreateDirectCeReferralDocument = gql`
   mutation CreateDirectCeReferral(
     $targetUnitGroupId: ID!

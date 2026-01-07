@@ -664,6 +664,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
+  { name: 'CeDefaultAssignmentsBySwimlane', fields: [] },
   {
     name: 'CeDefaultSwimlaneAssignment',
     fields: [
@@ -1054,7 +1055,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
-  { name: 'CeProjectDefaultAssignment', fields: [] },
   {
     name: 'CeReferral',
     fields: [

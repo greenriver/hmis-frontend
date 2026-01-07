@@ -4655,6 +4655,58 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CeDefaultAssignmentsBySwimlane",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "assignments",
+            "description": "Default assignments for this swimlane",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeDefaultSwimlaneAssignment",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "swimlane",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CeSwimlane",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CeDefaultSwimlaneAssignment",
         "description": null,
         "isOneOf": null,
@@ -6427,58 +6479,6 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "CeProjectDefaultAssignment",
-        "description": null,
-        "isOneOf": null,
-        "fields": [
-          {
-            "name": "assignments",
-            "description": "Default assignments for this swimlane",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "CeDefaultSwimlaneAssignment",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "swimlane",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "CeSwimlane",
                 "ofType": null
               }
             },
@@ -43028,7 +43028,7 @@
           },
           {
             "name": "defaultSwimlaneAssignments",
-            "description": "Default swimlane assignments for this project, grouped by swimlane",
+            "description": "Default swimlane assignments grouped by swimlane",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -43041,7 +43041,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "CeProjectDefaultAssignment",
+                    "name": "CeDefaultAssignmentsBySwimlane",
                     "ofType": null
                   }
                 }
@@ -47349,6 +47349,30 @@
               "kind": "OBJECT",
               "name": "Funder",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "globalCeDefaultContacts",
+            "description": "Global CE default contacts, grouped by swimlane",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeDefaultAssignmentsBySwimlane",
+                    "ofType": null
+                  }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

@@ -60,6 +60,7 @@ import Person from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import PlusOneIcon from '@mui/icons-material/PlusOne';
+import PublicIcon from '@mui/icons-material/Public';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
@@ -154,4 +155,5 @@ export {
   StickyNote2Rounded as NotesIcon,
   DateRangeRounded as DateRangeIcon,
   SendIcon as SendIcon,
+  PublicIcon as GlobalIcon,
 };

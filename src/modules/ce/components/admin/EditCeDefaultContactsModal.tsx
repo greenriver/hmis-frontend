@@ -8,7 +8,7 @@ import {
   Stack,
 } from '@mui/material';
 import { get } from 'lodash-es';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
@@ -27,9 +27,11 @@ import {
   AssignCeDefaultContactsDocument,
   AssignCeDefaultContactsMutation,
   AssignCeDefaultContactsMutationVariables,
+  CeDefaultAssignmentsBySwimlaneFieldsFragment,
   GetDefaultSwimlaneAssignmentsDocument,
   PickListOption,
   PickListType,
+  useGetGlobalDefaultSwimlaneAssignmentsQuery,
   useGetPickListQuery,
   useGetProjectDefaultSwimlaneAssignmentsQuery,
   useGetSwimlanesQuery,
@@ -41,16 +43,27 @@ interface Props {
   onClose: () => void;
 }
 
+/**
+ * This modal supports editing Coordinated Entry default contacts, in 2 modes:
+ * - Project: When a projectId is passed, it edits contacts for that project.
+ * - Global: When no projectId is passed, it edits global contacts.
+ *
+ * Contacts can be owned by other entities (org and unit group),
+ * but the frontend does not support editing contacts at those levels.
+ */
 const EditCeDefaultContactsModal: React.FC<Props> = ({
   projectId,
   open,
   onClose,
 }) => {
-  // Error state for validation errors
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
+  const [formState, setFormState] = useState<Record<string, PickListOption[]>>(
+    {}
+  );
+
   // Fetch swimlanes
-  // todo @martha - needs to be fetch swimlanes applicable to this project
+  // todo @martha - needs to be fetch swimlanes applicable to this project, if project is passed
   const {
     data: { ceSwimlanes } = {},
     loading: swimlanesLoading,
@@ -59,20 +72,52 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     skip: !open,
   });
 
-  // Fetch existing project default assignments
+  // Populate form state from existing assignments
+  const populateFormState = useCallback(
+    (assignments: CeDefaultAssignmentsBySwimlaneFieldsFragment[]) => {
+      const selections: Record<string, PickListOption[]> = {};
+
+      assignments.forEach((item) => {
+        selections[item.swimlane.id] = item.assignments.map((a) => ({
+          code: a.user.id,
+          label: a.user.name,
+        }));
+      });
+
+      setFormState(selections);
+    },
+    []
+  );
+
+  // In Project mode, fetch existing project contacts
   const {
-    data: projectData,
+    data: { project } = {},
     loading: projectLoading,
     error: projectError,
   } = useGetProjectDefaultSwimlaneAssignmentsQuery({
     variables: { id: projectId || '' },
-    skip: !open || !projectId,
+    skip: !open || !projectId, // skip the query if no project id (global mode)
+    onCompleted: (data) => {
+      if (data.project?.defaultSwimlaneAssignments) {
+        // todo @martha - bug: this includes contacts owned at other levels, which causes duplication
+        populateFormState(data.project.defaultSwimlaneAssignments);
+      }
+    },
   });
 
-  const project = projectData?.project;
+  // In Global mode, fetch existing global contacts
+  const { loading: globalLoading, error: globalError } =
+    useGetGlobalDefaultSwimlaneAssignmentsQuery({
+      skip: !open || !!projectId, // skip this query in project mode
+      onCompleted: (data) => {
+        if (data.globalCeDefaultContacts) {
+          populateFormState(data.globalCeDefaultContacts);
+        }
+      },
+    });
 
   // Fetch users who are eligible to perform tasks in the specified project
-  // todo @martha - this will return empty when project is not passed
+  // todo @martha - this returns empty in global mode
   const {
     data: { pickList: usersPickList } = {},
     loading: usersLoading,
@@ -85,45 +130,9 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     skip: !open,
   });
 
-  // Compute initial values from project data
-  const initialSelectedUsers = useMemo(() => {
-    if (!project || !ceSwimlanes) return {};
-
-    const selections: Record<string, PickListOption[]> = {};
-
-    ceSwimlanes.forEach((swimlane) => {
-      const assignment = project.defaultSwimlaneAssignments.find(
-        (a) => a.swimlane.id === swimlane.id
-      );
-
-      if (assignment) {
-        selections[swimlane.id] = assignment.assignments.map((a) => ({
-          code: a.user.id,
-          label: a.user.name,
-        }));
-      } else {
-        selections[swimlane.id] = [];
-      }
-    });
-
-    return selections;
-  }, [project, ceSwimlanes]);
-
-  // Form state
-  const [selectedUsers, setSelectedUsers] = useState<
-    Record<string, PickListOption[]>
-  >({});
-
-  // Update form state when initial values change
-  useEffect(() => {
-    if (Object.keys(initialSelectedUsers).length > 0) {
-      setSelectedUsers(initialSelectedUsers);
-    }
-  }, [initialSelectedUsers]);
-
   const handleChangeUsers = useCallback(
     (swimlaneId: string, users: PickListOption[]) => {
-      setSelectedUsers((prev) => ({
+      setFormState((prev) => ({
         ...prev,
         [swimlaneId]: users,
       }));
@@ -133,7 +142,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
 
   const handleClose = useCallback(() => {
     setErrorState(emptyErrorState);
-    setSelectedUsers({});
+    setFormState({});
     onClose();
   }, [onClose]);
 
@@ -147,46 +156,46 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       if (errors.length > 0) {
         setErrorState(partitionValidations(errors));
       } else {
-        // Success - close the modal and reset state
         handleClose();
       }
     },
     onError: (apolloError) => {
       setErrorState({ ...emptyErrorState, apolloError });
     },
+    // After completing the mutation, refetch the query for all default contacts
+    // todo @Martha - probably need to refetch something different when calling this from the project card
     refetchQueries: [GetDefaultSwimlaneAssignmentsDocument],
     awaitRefetchQueries: true,
   });
 
   const handleSubmit = useCallback(() => {
-    // Clear previous errors
     setErrorState(emptyErrorState);
 
     // Build the assignments array from the form state
-    const assignments = Object.entries(selectedUsers).map(
+    const assignments = Object.entries(formState).map(
       ([swimlaneId, users]) => ({
         swimlaneId,
         userIds: users.map((u) => u.code),
       })
     );
 
-    // Call the mutation
     createAssignments({
       variables: {
         input: {
-          projectId: projectId || null,
+          projectId: projectId || null, // if projectId is null, the default contact created is global
           assignments,
         },
       },
     });
-  }, [projectId, selectedUsers, createAssignments]);
+  }, [projectId, formState, createAssignments]);
 
-  const loading = projectLoading || swimlanesLoading || usersLoading;
-  const error = projectError || swimlanesError || usersError;
+  const loading =
+    projectLoading || globalLoading || swimlanesLoading || usersLoading;
+  const error = projectError || globalError || swimlanesError || usersError;
 
   if (error) throw error;
 
-  const isDataLoaded = !loading && ceSwimlanes && usersPickList;
+  // const isDataLoaded = !loading && ceSwimlanes && usersPickList;
 
   return (
     <CommonDialog open={open} onClose={handleClose} fullWidth>
@@ -194,7 +203,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
         Edit {projectId ? 'Project' : 'Global'} Contacts
       </DialogTitle>
       <DialogContent>
-        {!isDataLoaded ? (
+        {loading ? (
           <Loading />
         ) : (
           <Stack spacing={3} sx={{ mt: 2 }}>
@@ -211,13 +220,11 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
               </Box>
             )}
 
-            {/*todo @martha - cecelia impersonator is getting duplicated because she is the global contact, need to update those so they are greyed out and not submitted as part of the input*/}
-            {/* Swimlane Assignments */}
             {ceSwimlanes?.map((swimlane) => (
               <Box key={swimlane.id}>
                 <FormSelect
                   label={`${swimlane.name} (${swimlane.templateName})`}
-                  value={selectedUsers[swimlane.id] || []}
+                  value={formState[swimlane.id] || []}
                   options={usersPickList || []}
                   onChange={(_, value) =>
                     handleChangeUsers(swimlane.id, value as PickListOption[])
@@ -228,7 +235,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
               </Box>
             ))}
 
-            {/* Display validation errors */}
+            {/* todo @martha - test both validation and apollo errors */}
             {hasAnyValue(errorState) && (
               <Stack gap={1}>
                 <ApolloErrorAlert error={errorState.apolloError} />
@@ -245,7 +252,6 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
             onClick={handleClose}
             color='grayscale'
             disabled={submitLoading}
-            data-testid='cancelDialogAction'
           >
             Cancel
           </Button>
@@ -253,9 +259,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
             onClick={handleSubmit}
             type='submit'
             loading={submitLoading}
-            disabled={loading}
-            data-testid='confirmDialogAction'
-            sx={{ minWidth: '120px' }}
+            disabled={loading || submitLoading}
           >
             Save
           </LoadingButton>

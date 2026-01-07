@@ -1,4 +1,5 @@
 fragment SwimlaneFields on CeSwimlane {
+  # todo @martha - rename CeSwimlaneFields
   id
   name
   templateIdentifier
@@ -8,6 +9,9 @@ fragment SwimlaneFields on CeSwimlane {
 fragment CeDefaultSwimlaneAssignmentFields on CeDefaultSwimlaneAssignment {
   id
   global
+  swimlane {
+    ...SwimlaneFields
+  }
   user {
     id
     name
@@ -27,7 +31,7 @@ fragment CeDefaultSwimlaneAssignmentFields on CeDefaultSwimlaneAssignment {
   }
 }
 
-fragment CeProjectDefaultAssignmentFields on CeProjectDefaultAssignment {
+fragment CeDefaultAssignmentsBySwimlaneFields on CeDefaultAssignmentsBySwimlane {
   swimlane {
     ...SwimlaneFields
   }
@@ -43,6 +47,6 @@ fragment ProjectWithDefaultSwimlaneAssignments on Project {
     ...OrganizationNameFields
   }
   defaultSwimlaneAssignments {
-    ...CeProjectDefaultAssignmentFields
+    ...CeDefaultAssignmentsBySwimlaneFields
   }
 }

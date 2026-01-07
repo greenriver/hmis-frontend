@@ -31,3 +31,9 @@ query GetProjectDefaultSwimlaneAssignments($id: ID!) {
     ...ProjectWithDefaultSwimlaneAssignments
   }
 }
+
+query GetGlobalDefaultSwimlaneAssignments {
+  globalCeDefaultContacts {
+    ...CeDefaultAssignmentsBySwimlaneFields
+  }
+}
