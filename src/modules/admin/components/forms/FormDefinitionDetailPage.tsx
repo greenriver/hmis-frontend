@@ -13,7 +13,7 @@ import FormDefinitionActionsCard from '@/modules/admin/components/forms/FormDefi
 import FormStatusText from '@/modules/admin/components/forms/FormStatusText';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
-import { useGetFormIdentifierDetailsQuery } from '@/types/gqlTypes';
+import { FormRole, useGetFormIdentifierDetailsQuery } from '@/types/gqlTypes';
 
 const FormDefinitionDetailPage = () => {
   const { identifier } = useSafeParams() as {
@@ -32,12 +32,13 @@ const FormDefinitionDetailPage = () => {
   if (!formIdentifier && loading) return <Loading />;
   if (!formIdentifier) return <NotFound />;
 
+  // FormDefinition used for "display" in configuration tool,
+  // which is either the published version or the most recent version (if no published version exists)
+  const { displayVersion } = formIdentifier;
+
   return (
     <>
-      <PageTitle
-        overlineText='Selected Form'
-        title={formIdentifier.displayVersion.title}
-      />
+      <PageTitle overlineText='Selected Form' title={displayVersion.title} />
       <Stack gap={2}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
@@ -72,7 +73,7 @@ const FormDefinitionDetailPage = () => {
                     label={
                       <HmisEnum
                         enumMap={HmisEnums.FormRole}
-                        value={formIdentifier.displayVersion.role}
+                        value={displayVersion.role}
                       />
                     }
                   />
@@ -80,6 +81,17 @@ const FormDefinitionDetailPage = () => {
                 <CommonLabeledTextBlock title='Form Status'>
                   <FormStatusText identifier={formIdentifier} />
                 </CommonLabeledTextBlock>
+                {displayVersion.role === FormRole.ExternalForm && (
+                  <CommonLabeledTextBlock title='External Form Key'>
+                    {displayVersion.externalFormObjectKey ? (
+                      displayVersion.externalFormObjectKey
+                    ) : (
+                      <Typography variant='body2' color='error.dark'>
+                        Contact support to configure
+                      </Typography>
+                    )}
+                  </CommonLabeledTextBlock>
+                )}
               </Stack>
             </CommonCard>
           </Grid>
@@ -88,9 +100,9 @@ const FormDefinitionDetailPage = () => {
           </Grid>
         </Grid>
         <FormRulesCard
-          formId={formIdentifier.displayVersion.id}
-          formTitle={formIdentifier.displayVersion.title}
-          formRole={formIdentifier.displayVersion.role}
+          formId={displayVersion.id}
+          formTitle={displayVersion.title}
+          formRole={displayVersion.role}
           managedInVersionControl={formIdentifier.managedInVersionControl}
         />
         <CommonCard
