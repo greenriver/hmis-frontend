@@ -2658,7 +2658,7 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "defaultSwimlaneAssignments",
+            "name": "defaultContacts",
             "description": null,
             "args": [],
             "type": {
@@ -2672,7 +2672,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "CeDefaultSwimlaneAssignment",
+                    "name": "CeDefaultContact",
                     "ofType": null
                   }
                 }
@@ -4655,59 +4655,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "CeDefaultAssignmentsBySwimlane",
-        "description": null,
-        "isOneOf": null,
-        "fields": [
-          {
-            "name": "assignments",
-            "description": "Default assignments for this swimlane",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "CeDefaultSwimlaneAssignment",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "swimlane",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "CeSwimlane",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "CeDefaultSwimlaneAssignment",
+        "name": "CeDefaultContact",
         "description": null,
         "isOneOf": null,
         "fields": [
@@ -4818,14 +4766,66 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "CeDefaultContactsBySwimlane",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "contacts",
+            "description": "Default contacts for this swimlane",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeDefaultContact",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "swimlane",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CeSwimlane",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
-        "name": "CeDefaultSwimlaneAssignmentInput",
-        "description": "Input for creating CE default swimlane assignments",
+        "name": "CeDefaultContactsInput",
+        "description": "Input for creating CE default contacts",
         "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
-            "name": "assignments",
+            "name": "contacts",
             "description": "Swimlane to user ID mappings",
             "type": {
               "kind": "NON_NULL",
@@ -4838,7 +4838,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "SwimlaneAssignmentInput",
+                    "name": "CeSwimlaneUsersInput",
                     "ofType": null
                   }
                 }
@@ -4850,7 +4850,7 @@
           },
           {
             "name": "projectId",
-            "description": "Project ID (if null, assignments are global)",
+            "description": "Project ID (if null, contacts are global)",
             "type": {
               "kind": "SCALAR",
               "name": "ID",
@@ -9134,6 +9134,58 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "CeSwimlaneUsersInput",
+        "description": "Mapping of a swimlane to user IDs",
+        "isOneOf": false,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "swimlaneId",
+            "description": "Swimlane ID",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "userIds",
+            "description": "Array of user IDs to assign to this swimlane",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -36235,7 +36287,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CeDefaultSwimlaneAssignmentInput",
+                    "name": "CeDefaultContactsInput",
                     "ofType": null
                   }
                 },
@@ -42679,6 +42731,30 @@
             "deprecationReason": null
           },
           {
+            "name": "ceDefaultContacts",
+            "description": "Coordinated Entry default contacts grouped by swimlane",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeDefaultContactsBySwimlane",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ceOpportunities",
             "description": null,
             "args": [
@@ -43022,30 +43098,6 @@
               "kind": "SCALAR",
               "name": "ISO8601DateTime",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "defaultSwimlaneAssignments",
-            "description": "Default swimlane assignments grouped by swimlane",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "CeDefaultAssignmentsBySwimlane",
-                    "ofType": null
-                  }
-                }
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -47355,7 +47407,7 @@
           },
           {
             "name": "globalCeDefaultContacts",
-            "description": "Global CE default contacts, grouped by swimlane",
+            "description": "Global Coordinated Entry default contacts, grouped by swimlane",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -47368,7 +47420,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "CeDefaultAssignmentsBySwimlane",
+                    "name": "CeDefaultContactsBySwimlane",
                     "ofType": null
                   }
                 }
@@ -56038,58 +56090,6 @@
             "deprecationReason": null
           }
         ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "SwimlaneAssignmentInput",
-        "description": "Mapping of a swimlane to user IDs",
-        "isOneOf": false,
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "swimlaneId",
-            "description": "Swimlane ID",
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "userIds",
-            "description": "Array of user IDs to assign to this swimlane",
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
         "possibleTypes": null
       },
       {

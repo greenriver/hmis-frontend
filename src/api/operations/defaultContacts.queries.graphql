@@ -21,19 +21,19 @@ query GetDefaultSwimlaneAssignments(
     limit
     nodesCount
     nodes {
-      ...ProjectWithDefaultSwimlaneAssignments
+      ...ProjectWithCeDefaultContacts
     }
   }
 }
 
 query GetProjectDefaultSwimlaneAssignments($id: ID!) {
   project(id: $id) {
-    ...ProjectWithDefaultSwimlaneAssignments
+    ...ProjectWithCeDefaultContacts
   }
 }
 
 query GetGlobalDefaultSwimlaneAssignments {
   globalCeDefaultContacts {
-    ...CeDefaultAssignmentsBySwimlaneFields
+    ...CeDefaultContactsBySwimlaneFields
   }
 }

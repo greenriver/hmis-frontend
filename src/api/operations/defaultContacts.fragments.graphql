@@ -6,7 +6,7 @@ fragment SwimlaneFields on CeSwimlane {
   templateName
 }
 
-fragment CeDefaultSwimlaneAssignmentFields on CeDefaultSwimlaneAssignment {
+fragment CeDefaultContactFields on CeDefaultContact {
   id
   global
   swimlane {
@@ -31,22 +31,22 @@ fragment CeDefaultSwimlaneAssignmentFields on CeDefaultSwimlaneAssignment {
   }
 }
 
-fragment CeDefaultAssignmentsBySwimlaneFields on CeDefaultAssignmentsBySwimlane {
+fragment CeDefaultContactsBySwimlaneFields on CeDefaultContactsBySwimlane {
   swimlane {
     ...SwimlaneFields
   }
-  assignments {
-    ...CeDefaultSwimlaneAssignmentFields
+  contacts {
+    ...CeDefaultContactFields
   }
 }
 
-fragment ProjectWithDefaultSwimlaneAssignments on Project {
+fragment ProjectWithCeDefaultContacts on Project {
   ...ProjectNameAndType
   organization {
     id
     ...OrganizationNameFields
   }
-  defaultSwimlaneAssignments {
-    ...CeDefaultAssignmentsBySwimlaneFields
+  ceDefaultContacts {
+    ...CeDefaultContactsBySwimlaneFields
   }
 }

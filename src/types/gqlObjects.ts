@@ -664,9 +664,8 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
-  { name: 'CeDefaultAssignmentsBySwimlane', fields: [] },
   {
-    name: 'CeDefaultSwimlaneAssignment',
+    name: 'CeDefaultContact',
     fields: [
       {
         name: 'global',
@@ -686,6 +685,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
+  { name: 'CeDefaultContactsBySwimlane', fields: [] },
   {
     name: 'CeEligibleUnitGroup',
     fields: [
@@ -8345,10 +8345,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'CeDefaultSwimlaneAssignmentInput',
+    name: 'CeDefaultContactsInput',
     args: [
       {
-        name: 'assignments',
+        name: 'contacts',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -8360,7 +8360,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               name: null,
               ofType: {
                 kind: 'INPUT_OBJECT',
-                name: 'SwimlaneAssignmentInput',
+                name: 'CeSwimlaneUsersInput',
                 ofType: null,
               },
             },
@@ -8563,6 +8563,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'CeSwimlaneUsersInput',
+    args: [
+      {
+        name: 'swimlaneId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'userIds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
         },
       },
     ],
@@ -10291,35 +10320,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'validateOnly',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'SwimlaneAssignmentInput',
-    args: [
-      {
-        name: 'swimlaneId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'userIds',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-            },
-          },
-        },
       },
     ],
   },

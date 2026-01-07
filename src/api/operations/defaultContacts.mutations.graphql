@@ -1,10 +1,7 @@
-mutation AssignCeDefaultContacts(
-  # todo @martha - there is something odd about "default contacts" and "default swimlane assignment" used right next to each other in the same query
-  $input: CeDefaultSwimlaneAssignmentInput!
-) {
+mutation AssignCeDefaultContacts($input: CeDefaultContactsInput!) {
   assignCeDefaultContacts(input: $input) {
-    defaultSwimlaneAssignments {
-      ...CeDefaultSwimlaneAssignmentFields
+    defaultContacts {
+      ...CeDefaultContactFields
     }
     errors {
       ...ValidationErrorFields

@@ -27,7 +27,7 @@ import {
   AssignCeDefaultContactsDocument,
   AssignCeDefaultContactsMutation,
   AssignCeDefaultContactsMutationVariables,
-  CeDefaultAssignmentsBySwimlaneFieldsFragment,
+  CeDefaultContactsBySwimlaneFieldsFragment,
   GetDefaultSwimlaneAssignmentsDocument,
   PickListOption,
   PickListType,
@@ -73,15 +73,15 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     skip: !open,
   });
 
-  // Populate form state from existing assignments
+  // Populate form state from existing contacts
   const populateFormState = useCallback(
-    (assignments: CeDefaultAssignmentsBySwimlaneFieldsFragment[]) => {
+    (contactsBySwimlane: CeDefaultContactsBySwimlaneFieldsFragment[]) => {
       const selections: Record<string, PickListOption[]> = {};
 
-      assignments.forEach((item) => {
-        selections[item.swimlane.id] = item.assignments.map((a) => ({
-          code: a.user.id,
-          label: a.user.name,
+      contactsBySwimlane.forEach((item) => {
+        selections[item.swimlane.id] = item.contacts.map((contact: any) => ({
+          code: contact.user.id,
+          label: contact.user.name,
         }));
       });
 
@@ -99,9 +99,9 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     variables: { id: projectId || '' },
     skip: !open || !projectId, // skip the query if no project id (global mode)
     onCompleted: (data) => {
-      if (data.project?.defaultSwimlaneAssignments) {
+      if (data.project?.ceDefaultContacts) {
         // todo @martha - bug: this includes contacts owned at other levels, which causes duplication
-        populateFormState(data.project.defaultSwimlaneAssignments);
+        populateFormState(data.project.ceDefaultContacts);
       }
     },
   });
@@ -172,19 +172,17 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   const handleSubmit = useCallback(() => {
     setErrorState(emptyErrorState);
 
-    // Build the assignments array from the form state
-    const assignments = Object.entries(formState).map(
-      ([swimlaneId, users]) => ({
-        swimlaneId,
-        userIds: users.map((u) => u.code),
-      })
-    );
+    // Build the contacts array from the form state
+    const contacts = Object.entries(formState).map(([swimlaneId, users]) => ({
+      swimlaneId,
+      userIds: users.map((u) => u.code),
+    }));
 
     createAssignments({
       variables: {
         input: {
           projectId: projectId || null, // if projectId is null, the default contact created is global
-          assignments,
+          contacts,
         },
       },
     });

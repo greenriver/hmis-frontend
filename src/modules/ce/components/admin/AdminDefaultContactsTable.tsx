@@ -12,13 +12,13 @@ import {
   GetDefaultSwimlaneAssignmentsQueryVariables,
   ProjectFilterOptionStatus,
   ProjectSortOption,
-  ProjectWithDefaultSwimlaneAssignmentsFragment,
+  ProjectWithCeDefaultContactsFragment,
   useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const BASE_COLUMNS: DataColumnDef<
-  ProjectWithDefaultSwimlaneAssignmentsFragment,
+  ProjectWithCeDefaultContactsFragment,
   GetDefaultSwimlaneAssignmentsQueryVariables
 >[] = [
   {
@@ -30,7 +30,7 @@ const BASE_COLUMNS: DataColumnDef<
   {
     header: 'Organization',
     key: 'organization',
-    render: (row: ProjectWithDefaultSwimlaneAssignmentsFragment) =>
+    render: (row: ProjectWithCeDefaultContactsFragment) =>
       row.organization.organizationName,
     optional: { defaultHidden: false },
   },
@@ -47,7 +47,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
   });
 
   const columns: DataColumnDef<
-    ProjectWithDefaultSwimlaneAssignmentsFragment,
+    ProjectWithCeDefaultContactsFragment,
     GetDefaultSwimlaneAssignmentsQueryVariables
   >[] = useMemo(() => {
     if (loading || error || !ceSwimlanes) return [];
@@ -57,17 +57,15 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         header: `${swimlane.name} (${swimlane.templateName})`,
         key: swimlane.id,
         optional: { defaultHidden: false },
-        render: (row: ProjectWithDefaultSwimlaneAssignmentsFragment) => {
+        render: (row: ProjectWithCeDefaultContactsFragment) => {
           // todo @martha - render as comma separated list, include indication for global or project-level
-          return row.defaultSwimlaneAssignments
+          return row.ceDefaultContacts
             .filter(
-              (swimlaneAssignment) =>
-                swimlaneAssignment.swimlane.id === swimlane.id
+              (contactsBySwimlane) =>
+                contactsBySwimlane.swimlane.id === swimlane.id
             )
-            .map((swimlaneAssignment) =>
-              swimlaneAssignment.assignments.map(
-                (assignment) => assignment.user.name
-              )
+            .map((contactsBySwimlane) =>
+              contactsBySwimlane.contacts.map((contact) => contact.user.name)
             );
         },
       };
@@ -86,7 +84,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         <GenericTableWithData<
           GetDefaultSwimlaneAssignmentsQuery,
           GetDefaultSwimlaneAssignmentsQueryVariables,
-          ProjectWithDefaultSwimlaneAssignmentsFragment
+          ProjectWithCeDefaultContactsFragment
         >
           columns={columns}
           queryVariables={{
