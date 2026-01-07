@@ -1,5 +1,5 @@
-import { Paper, Stack, Tooltip } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import { Paper, Stack, Tooltip, Typography } from '@mui/material';
+import React, { Fragment, useMemo, useState } from 'react';
 import EditCeDefaultContactsModal from './EditCeDefaultContactsModal';
 import Loading from '@/components/elements/Loading';
 import { InfoIcon } from '@/components/elements/SemanticIcons';
@@ -69,13 +69,28 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         key: swimlane.id,
         optional: { defaultHidden: false },
         render: (row: ProjectWithCeDefaultContactsFragment) => {
-          // todo @martha - add indication for global or project-level
           const contacts =
             row.ceDefaultContacts.find(
               (swimlaneContacts: CeDefaultContactsBySwimlaneFieldsFragment) =>
                 swimlaneContacts.swimlane.id === swimlane.id
             )?.contacts || [];
-          return contacts.map((contact) => contact.user.name).join(', ');
+          return (
+            <>
+              {contacts.map((contact, idx) => (
+                <Fragment key={contact.user.id}>
+                  {idx > 0 && ', '}
+                  <Typography
+                    variant='body2'
+                    component='span'
+                    // If this is a global contact, italicize the name, to help indicate that it should be edited in the Global modal and not the Project modal
+                    sx={{ fontStyle: contact.project ? 'normal' : 'italic' }}
+                  >
+                    {contact.user.name}
+                  </Typography>
+                </Fragment>
+              ))}
+            </>
+          );
         },
       };
     });

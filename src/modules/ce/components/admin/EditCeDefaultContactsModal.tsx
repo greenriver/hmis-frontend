@@ -123,8 +123,8 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       },
     });
 
-  // Fetch users who are eligible to perform tasks in the specified project
-  // todo @martha - bug: this returns empty in global mode
+  // Fetch users who are eligible to perform tasks in the specified project.
+  // If projectId is null, returns all users who can perform referral tasks in any project.
   const {
     data: { pickList: usersPickList } = {},
     loading: usersLoading,
