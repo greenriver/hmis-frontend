@@ -80,14 +80,24 @@ const GenericSelect = <
         tagValue.map((option: T, index: number) => {
           // Avoid console warning: A props object containing a "key" prop is being spread into JSX
           const { key, ...rest } = getTagProps({ index });
+
+          // If the value is an object with a 'disabled' property set to true, disable the chip from being unselected
+          const disabled =
+            (typeof option === 'object' &&
+              option !== null &&
+              'disabled' in option &&
+              (option as any).disabled) ||
+            rest.disabled;
+
           return (
             <Chip
               key={key}
               size='small'
               label={ownerState.getOptionLabel(option)}
               aria-label={`Option: ${ownerState.getOptionLabel(option)}. Press backspace or delete to remove.`}
-              aria-disabled={rest.disabled ? 'true' : undefined}
+              aria-disabled={disabled ? 'true' : undefined}
               {...rest}
+              disabled={disabled}
             />
           );
         })

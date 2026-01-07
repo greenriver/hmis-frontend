@@ -1159,6 +1159,7 @@ export type CeSwimlane = {
   __typename?: 'CeSwimlane';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  taskNames: Array<Scalars['String']['output']>;
   templateIdentifier: Scalars['String']['output'];
   templateName: Scalars['String']['output'];
 };
@@ -3665,6 +3666,8 @@ export type FormDefinition = {
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   definition: FormDefinitionJson;
+  /** External object key, only present for External Form role */
+  externalFormObjectKey?: Maybe<Scalars['String']['output']>;
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   identifier: Scalars['String']['output'];
@@ -26702,6 +26705,7 @@ export type CeSwimlaneFieldsFragment = {
   name: string;
   templateIdentifier: string;
   templateName: string;
+  taskNames: Array<string>;
 };
 
 export type CeDefaultContactFieldsFragment = {
@@ -26714,6 +26718,7 @@ export type CeDefaultContactFieldsFragment = {
     name: string;
     templateIdentifier: string;
     templateName: string;
+    taskNames: Array<string>;
   };
   user: {
     __typename?: 'ApplicationUser';
@@ -26744,6 +26749,7 @@ export type CeDefaultContactsBySwimlaneFieldsFragment = {
     name: string;
     templateIdentifier: string;
     templateName: string;
+    taskNames: Array<string>;
   };
   contacts: Array<{
     __typename?: 'CeDefaultContact';
@@ -26755,6 +26761,7 @@ export type CeDefaultContactsBySwimlaneFieldsFragment = {
       name: string;
       templateIdentifier: string;
       templateName: string;
+      taskNames: Array<string>;
     };
     user: {
       __typename?: 'ApplicationUser';
@@ -26797,6 +26804,7 @@ export type ProjectWithCeDefaultContactsFragment = {
       name: string;
       templateIdentifier: string;
       templateName: string;
+      taskNames: Array<string>;
     };
     contacts: Array<{
       __typename?: 'CeDefaultContact';
@@ -26808,6 +26816,7 @@ export type ProjectWithCeDefaultContactsFragment = {
         name: string;
         templateIdentifier: string;
         templateName: string;
+        taskNames: Array<string>;
       };
       user: {
         __typename?: 'ApplicationUser';
@@ -26850,6 +26859,7 @@ export type AssignCeDefaultContactsMutation = {
         name: string;
         templateIdentifier: string;
         templateName: string;
+        taskNames: Array<string>;
       };
       user: {
         __typename?: 'ApplicationUser';
@@ -26898,6 +26908,7 @@ export type GetSwimlanesQuery = {
     name: string;
     templateIdentifier: string;
     templateName: string;
+    taskNames: Array<string>;
   }>;
 };
 
@@ -26934,6 +26945,7 @@ export type GetDefaultSwimlaneAssignmentsQuery = {
           name: string;
           templateIdentifier: string;
           templateName: string;
+          taskNames: Array<string>;
         };
         contacts: Array<{
           __typename?: 'CeDefaultContact';
@@ -26945,6 +26957,7 @@ export type GetDefaultSwimlaneAssignmentsQuery = {
             name: string;
             templateIdentifier: string;
             templateName: string;
+            taskNames: Array<string>;
           };
           user: {
             __typename?: 'ApplicationUser';
@@ -27000,6 +27013,7 @@ export type GetProjectDefaultSwimlaneAssignmentsQuery = {
         name: string;
         templateIdentifier: string;
         templateName: string;
+        taskNames: Array<string>;
       };
       contacts: Array<{
         __typename?: 'CeDefaultContact';
@@ -27011,6 +27025,7 @@ export type GetProjectDefaultSwimlaneAssignmentsQuery = {
           name: string;
           templateIdentifier: string;
           templateName: string;
+          taskNames: Array<string>;
         };
         user: {
           __typename?: 'ApplicationUser';
@@ -27054,6 +27069,7 @@ export type GetGlobalDefaultSwimlaneAssignmentsQuery = {
       name: string;
       templateIdentifier: string;
       templateName: string;
+      taskNames: Array<string>;
     };
     contacts: Array<{
       __typename?: 'CeDefaultContact';
@@ -27065,6 +27081,7 @@ export type GetGlobalDefaultSwimlaneAssignmentsQuery = {
         name: string;
         templateIdentifier: string;
         templateName: string;
+        taskNames: Array<string>;
       };
       user: {
         __typename?: 'ApplicationUser';
@@ -51267,6 +51284,7 @@ export const CeSwimlaneFieldsFragmentDoc = gql`
     name
     templateIdentifier
     templateName
+    taskNames
   }
 `;
 export const CeDefaultContactFieldsFragmentDoc = gql`

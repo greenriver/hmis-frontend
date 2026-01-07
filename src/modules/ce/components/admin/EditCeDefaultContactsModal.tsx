@@ -27,6 +27,7 @@ import {
   AssignCeDefaultContactsDocument,
   AssignCeDefaultContactsMutation,
   AssignCeDefaultContactsMutationVariables,
+  CeDefaultContactFieldsFragment,
   CeDefaultContactsBySwimlaneFieldsFragment,
   GetDefaultSwimlaneAssignmentsDocument,
   PickListOption,
@@ -79,15 +80,21 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       const selections: Record<string, PickListOption[]> = {};
 
       contactsBySwimlane.forEach((item) => {
-        selections[item.swimlane.id] = item.contacts.map((contact: any) => ({
-          code: contact.user.id,
-          label: contact.user.name,
-        }));
+        selections[item.swimlane.id] = item.contacts.map(
+          (contact: CeDefaultContactFieldsFragment) => ({
+            code: contact.user.id,
+            label: contact.user.name,
+            // In project mode, if the `project` owner field is false for this contact,
+            // that means it's owned at a higher level, by the org or data source.
+            // Show it in the dropdown for clarity, and disable de-selecting it.
+            disabled: projectId ? !contact.project : false,
+          })
+        );
       });
 
       setFormState(selections);
     },
-    []
+    [projectId]
   );
 
   // In Project mode, fetch existing project contacts
@@ -100,7 +107,6 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     skip: !open || !projectId, // skip the query if no project id (global mode)
     onCompleted: (data) => {
       if (data.project?.ceDefaultContacts) {
-        // todo @martha - bug: this includes contacts owned at other levels, which causes duplication
         populateFormState(data.project.ceDefaultContacts);
       }
     },
@@ -130,6 +136,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     },
     skip: !open,
   });
+  // todo @martha - treatment for inactive users?
 
   const handleChangeUsers = useCallback(
     (swimlaneId: string, users: PickListOption[]) => {
@@ -175,7 +182,9 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     // Build the contacts array from the form state
     const contacts = Object.entries(formState).map(([swimlaneId, users]) => ({
       swimlaneId,
-      userIds: users.map((u) => u.code),
+      // Filter out options marked disabled; these are global contacts,
+      // so including them in the submission would cause them to get duplicated at the project level
+      userIds: users.filter((u) => !u.disabled).map((u) => u.code),
     }));
 
     createAssignments({
@@ -193,8 +202,6 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   const error = projectError || globalError || swimlanesError || usersError;
 
   if (error) throw error;
-
-  // const isDataLoaded = !loading && ceSwimlanes && usersPickList;
 
   return (
     <CommonDialog open={open} onClose={handleClose} fullWidth>
@@ -225,11 +232,10 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
                   label={`${swimlane.name} (${swimlane.templateName})`}
                   value={formState[swimlane.id] || []}
                   options={usersPickList || []}
-                  onChange={(_, value) =>
-                    handleChangeUsers(swimlane.id, value as PickListOption[])
-                  }
+                  onChange={(_, value) => handleChangeUsers(swimlane.id, value)}
                   multiple
                   placeholder='Select'
+                  helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
                 />
               </Box>
             ))}

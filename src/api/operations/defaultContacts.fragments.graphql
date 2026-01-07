@@ -3,6 +3,7 @@ fragment CeSwimlaneFields on CeSwimlane {
   name
   templateIdentifier
   templateName
+  taskNames
 }
 
 fragment CeDefaultContactFields on CeDefaultContact {

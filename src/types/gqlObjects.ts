@@ -1587,6 +1587,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'taskNames',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
+        },
+      },
+      {
         name: 'templateIdentifier',
         type: {
           kind: 'NON_NULL',
@@ -4428,6 +4444,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
+      },
+      {
+        name: 'externalFormObjectKey',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'id',

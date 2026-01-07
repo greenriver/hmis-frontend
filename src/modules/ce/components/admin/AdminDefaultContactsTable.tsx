@@ -1,7 +1,8 @@
-import { Paper } from '@mui/material';
+import { Paper, Stack, Tooltip } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import EditCeDefaultContactsModal from './EditCeDefaultContactsModal';
 import Loading from '@/components/elements/Loading';
+import { InfoIcon } from '@/components/elements/SemanticIcons';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -55,7 +56,16 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
 
     const swimlaneColumns = ceSwimlanes.map((swimlane) => {
       return {
-        header: `${swimlane.name} (${swimlane.templateName})`,
+        header: (
+          <Stack direction='row' spacing={1} alignItems='center'>
+            <span>
+              {swimlane.name} ({swimlane.templateName})
+            </span>
+            <Tooltip title={`Tasks: ${swimlane.taskNames.join(', ')}`}>
+              <InfoIcon sx={{ fontSize: 'inherit', color: 'text.secondary' }} />
+            </Tooltip>
+          </Stack>
+        ),
         key: swimlane.id,
         optional: { defaultHidden: false },
         render: (row: ProjectWithCeDefaultContactsFragment) => {
