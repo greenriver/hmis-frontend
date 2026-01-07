@@ -12,6 +12,7 @@ import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInp
 import { usePickList } from '@/modules/form/hooks/usePickList';
 import { ItemMap } from '@/modules/form/types';
 import {
+  ARRAY_COMPARISON_OPERATORS,
   COMPARABLE_ITEM_TYPES,
   getItemCategory,
 } from '@/modules/formBuilder/formBuilderUtil';
@@ -40,11 +41,12 @@ const validOperatorsForType = (type: ItemType, repeats: boolean) => {
 
   if (getItemCategory(type) === 'question') {
     if (repeats) {
-      // this question has multiple answers, so we use "includes" to evaluate whether the list includes the comparison value
-      operators.push(EnableOperator.Includes);
+      // this question has multiple answers, so we use "includes" or "excludes" to evaluate whether the list includes/excludes the comparison value
+      operators.push(...ARRAY_COMPARISON_OPERATORS);
     } else {
-      // compare if answer is equal to comparison value
+      // compare if answer is equal/not-equal to the comparison value
       operators.push(EnableOperator.Equal);
+      operators.push(EnableOperator.NotEqual);
     }
     // "exists" evaluates whether the question has a current value or not. Doesn't really make sense for boolean, since you would just use value=true
     if (type !== ItemType.Boolean) operators.push(EnableOperator.Exists);
