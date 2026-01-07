@@ -1,4 +1,4 @@
-fragment SwimlaneFields on CeSwimlane {
+fragment CeSwimlaneFields on CeSwimlane {
   # todo @martha - rename CeSwimlaneFields
   id
   name
@@ -10,7 +10,7 @@ fragment CeDefaultContactFields on CeDefaultContact {
   id
   global
   swimlane {
-    ...SwimlaneFields
+    ...CeSwimlaneFields
   }
   user {
     id
@@ -33,7 +33,7 @@ fragment CeDefaultContactFields on CeDefaultContact {
 
 fragment CeDefaultContactsBySwimlaneFields on CeDefaultContactsBySwimlane {
   swimlane {
-    ...SwimlaneFields
+    ...CeSwimlaneFields
   }
   contacts {
     ...CeDefaultContactFields

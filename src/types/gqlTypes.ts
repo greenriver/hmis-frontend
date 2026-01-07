@@ -26696,7 +26696,7 @@ export type CustomDataElementFieldsFragment = {
   }> | null;
 };
 
-export type SwimlaneFieldsFragment = {
+export type CeSwimlaneFieldsFragment = {
   __typename?: 'CeSwimlane';
   id: string;
   name: string;
@@ -51261,8 +51261,8 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
 `;
-export const SwimlaneFieldsFragmentDoc = gql`
-  fragment SwimlaneFields on CeSwimlane {
+export const CeSwimlaneFieldsFragmentDoc = gql`
+  fragment CeSwimlaneFields on CeSwimlane {
     id
     name
     templateIdentifier
@@ -51274,7 +51274,7 @@ export const CeDefaultContactFieldsFragmentDoc = gql`
     id
     global
     swimlane {
-      ...SwimlaneFields
+      ...CeSwimlaneFields
     }
     user {
       id
@@ -51294,20 +51294,20 @@ export const CeDefaultContactFieldsFragmentDoc = gql`
       name
     }
   }
-  ${SwimlaneFieldsFragmentDoc}
+  ${CeSwimlaneFieldsFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
 export const CeDefaultContactsBySwimlaneFieldsFragmentDoc = gql`
   fragment CeDefaultContactsBySwimlaneFields on CeDefaultContactsBySwimlane {
     swimlane {
-      ...SwimlaneFields
+      ...CeSwimlaneFields
     }
     contacts {
       ...CeDefaultContactFields
     }
   }
-  ${SwimlaneFieldsFragmentDoc}
+  ${CeSwimlaneFieldsFragmentDoc}
   ${CeDefaultContactFieldsFragmentDoc}
 `;
 export const ProjectWithCeDefaultContactsFragmentDoc = gql`
@@ -59242,10 +59242,10 @@ export type AssignCeDefaultContactsMutationOptions = Apollo.BaseMutationOptions<
 export const GetSwimlanesDocument = gql`
   query GetSwimlanes {
     ceSwimlanes {
-      ...SwimlaneFields
+      ...CeSwimlaneFields
     }
   }
-  ${SwimlaneFieldsFragmentDoc}
+  ${CeSwimlaneFieldsFragmentDoc}
 `;
 
 /**
