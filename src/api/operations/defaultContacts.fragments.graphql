@@ -1,5 +1,4 @@
 fragment CeSwimlaneFields on CeSwimlane {
-  # todo @martha - rename CeSwimlaneFields
   id
   name
   templateIdentifier

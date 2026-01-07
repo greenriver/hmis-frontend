@@ -7,6 +7,7 @@ import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
+  CeDefaultContactsBySwimlaneFieldsFragment,
   GetDefaultSwimlaneAssignmentsDocument,
   GetDefaultSwimlaneAssignmentsQuery,
   GetDefaultSwimlaneAssignmentsQueryVariables,
@@ -58,19 +59,17 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         key: swimlane.id,
         optional: { defaultHidden: false },
         render: (row: ProjectWithCeDefaultContactsFragment) => {
-          // todo @martha - render as comma separated list, include indication for global or project-level
-          return row.ceDefaultContacts
-            .filter(
-              (contactsBySwimlane) =>
-                contactsBySwimlane.swimlane.id === swimlane.id
-            )
-            .map((contactsBySwimlane) =>
-              contactsBySwimlane.contacts.map((contact) => contact.user.name)
-            );
+          // todo @martha - add indication for global or project-level
+          const contacts =
+            row.ceDefaultContacts.find(
+              (swimlaneContacts: CeDefaultContactsBySwimlaneFieldsFragment) =>
+                swimlaneContacts.swimlane.id === swimlane.id
+            )?.contacts || [];
+          return contacts.map((contact) => contact.user.name).join(', ');
         },
       };
     });
-    // todo @Martha - need not applicable and missing treatments
+    // todo @Martha - add not applicable and missing treatments
 
     return [...BASE_COLUMNS, ...swimlaneColumns];
   }, [ceSwimlanes, error, loading]);
@@ -90,7 +89,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
           queryVariables={{
             filters: {
               status: [ProjectFilterOptionStatus.Open],
-              // todo @Martha - ideally, only show projects in this list that have some kind of ce workflow enabled. (needs new filter?)
+              // todo @Martha - only show projects in this list that have some kind of ce workflow enabled. (needs new filter?)
             },
           }}
           defaultSortOption={ProjectSortOption.Name}

@@ -56,7 +56,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   open,
   onClose,
 }) => {
-  // todo @martha - needs not applicable and missing treatments
+  // todo @martha - add not applicable and missing treatments
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   const [formState, setFormState] = useState<Record<string, PickListOption[]>>(
@@ -64,7 +64,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   );
 
   // Fetch swimlanes
-  // todo @martha - needs to be fetch swimlanes applicable to this project, if project is passed
+  // todo @martha - bug: fetch swimlanes applicable to this project, if project is passed
   const {
     data: { ceSwimlanes } = {},
     loading: swimlanesLoading,
@@ -118,7 +118,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     });
 
   // Fetch users who are eligible to perform tasks in the specified project
-  // todo @martha - this returns empty in global mode
+  // todo @martha - bug: this returns empty in global mode
   const {
     data: { pickList: usersPickList } = {},
     loading: usersLoading,
