@@ -2,7 +2,7 @@ import { Paper, Stack, Tooltip, Typography } from '@mui/material';
 import React, { Fragment, useMemo, useState } from 'react';
 import EditCeDefaultContactsModal from './EditCeDefaultContactsModal';
 import Loading from '@/components/elements/Loading';
-import { InfoIcon } from '@/components/elements/SemanticIcons';
+import { ErrorIcon, InfoIcon } from '@/components/elements/SemanticIcons';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -84,6 +84,23 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
               (swimlaneContacts: CeDefaultContactsBySwimlaneFieldsFragment) =>
                 swimlaneContacts.swimlane.id === swimlane.id
             )?.contacts || [];
+
+          if (contacts.length === 0) {
+            return (
+              <Typography
+                variant='body2'
+                color='warning.main'
+                fontWeight='600'
+                sx={{ verticalAlign: 'center' }}
+              >
+                <Stack direction='row' spacing={0.5} alignItems='center'>
+                  <ErrorIcon sx={{ fontSize: 'inherit' }} />
+                  <span>Missing</span>
+                </Stack>
+              </Typography>
+            );
+          }
+
           return (
             <>
               {contacts.map((contact, idx) => (
@@ -104,7 +121,6 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         },
       };
     });
-    // todo @Martha - add not applicable and missing treatments
 
     return [...BASE_COLUMNS, ...swimlaneColumns];
   }, [ceSwimlanes, error, loading]);
