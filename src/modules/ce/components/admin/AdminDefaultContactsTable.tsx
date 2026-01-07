@@ -89,7 +89,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
             return (
               <Typography
                 variant='body2'
-                color='warning.main'
+                color='warning.dark'
                 fontWeight='600'
                 sx={{ verticalAlign: 'center' }}
               >

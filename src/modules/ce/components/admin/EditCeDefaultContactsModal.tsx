@@ -13,6 +13,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
+import { ErrorIcon } from '@/components/elements/SemanticIcons';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
@@ -29,6 +30,7 @@ import {
   AssignCeDefaultContactsMutationVariables,
   CeDefaultContactFieldsFragment,
   CeDefaultContactsBySwimlaneFieldsFragment,
+  CeSwimlaneFieldsFragment,
   GetDefaultSwimlaneAssignmentsDocument,
   PickListOption,
   PickListType,
@@ -57,7 +59,6 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   open,
   onClose,
 }) => {
-  // todo @martha - add missing treatments
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   // Transform contacts from the backend format to the form state format
@@ -188,6 +189,42 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     });
   }, [project, formState, createAssignments]);
 
+  const getSwimlaneSelect = useCallback(
+    (swimlane: CeSwimlaneFieldsFragment) => {
+      const isEmpty = !formState[swimlane.id]?.length;
+
+      const label = (
+        <Stack direction='row' spacing={1} alignItems='center'>
+          <span>
+            {swimlane.name} ({swimlane.templateName})
+          </span>
+          {isEmpty && (
+            <Stack direction='row' spacing={0.5} alignItems='center'>
+              <ErrorIcon sx={{ fontSize: 'inherit', color: 'warning.main' }} />
+              <span>Missing</span>
+            </Stack>
+          )}
+        </Stack>
+      );
+
+      return (
+        <Box key={swimlane.id}>
+          <FormSelect
+            label={label}
+            value={formState[swimlane.id] || []}
+            options={usersPickList || []}
+            onChange={(_, value) => handleChangeUsers(swimlane.id, value)}
+            multiple
+            placeholder='Select'
+            helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
+            color={isEmpty ? 'warning' : undefined}
+          />
+        </Box>
+      );
+    },
+    [formState, handleChangeUsers, usersPickList]
+  );
+
   const loading = globalLoading || swimlanesLoading || usersLoading;
   const error = globalError || swimlanesError || usersError;
 
@@ -214,24 +251,8 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
               </Box>
             )}
 
-            {ceSwimlanes?.map((swimlane) => (
-              <Box key={swimlane.id}>
-                <FormSelect
-                  label={`${swimlane.name} (${swimlane.templateName})`}
-                  value={formState[swimlane.id] || []}
-                  options={usersPickList || []}
-                  onChange={(_, value) => handleChangeUsers(swimlane.id, value)}
-                  multiple
-                  placeholder='Select'
-                  helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
-                  color={
-                    formState[swimlane.id]?.length === 0 ? 'warning' : undefined
-                  }
-                />
-              </Box>
-            ))}
+            {ceSwimlanes?.map((swimlane) => getSwimlaneSelect(swimlane))}
 
-            {/* todo @martha - test both validation and apollo errors */}
             {hasAnyValue(errorState) && (
               <Stack gap={1}>
                 <ApolloErrorAlert error={errorState.apolloError} />
