@@ -119,6 +119,7 @@ const ProjectOverviewPage = () => {
         }
       />
       <InactiveBanner project={project} />
+      {/*todo @martha - add card for default ce contacts*/}
       <ViewRecord record={project} formRole={RecordFormRole.Project} />
     </>
   );

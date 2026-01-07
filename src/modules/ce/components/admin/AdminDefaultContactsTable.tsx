@@ -72,6 +72,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         },
       };
     });
+    // todo @Martha - need not applicable and missing treatments
 
     return [...BASE_COLUMNS, ...swimlaneColumns];
   }, [ceSwimlanes, error, loading]);
@@ -91,6 +92,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
           queryVariables={{
             filters: {
               status: [ProjectFilterOptionStatus.Open],
+              // todo @Martha - ideally, only show projects in this list that have some kind of ce workflow enabled. (needs new filter?)
             },
           }}
           defaultSortOption={ProjectSortOption.Name}
@@ -108,6 +110,8 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
               }),
             },
           ]}
+          // todo @martha - need to enable filter by users. in general, filtering needs revisiting
+          // maybe the neatest thing is for this to use a different query, not the base projects query?
           filters={projectFilters}
         />
       </Paper>

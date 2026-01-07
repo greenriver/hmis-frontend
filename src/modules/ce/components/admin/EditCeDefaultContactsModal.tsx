@@ -56,6 +56,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   open,
   onClose,
 }) => {
+  // todo @martha - needs not applicable and missing treatments
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
   const [formState, setFormState] = useState<Record<string, PickListOption[]>>(
