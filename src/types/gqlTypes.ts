@@ -6452,6 +6452,8 @@ export type Project = {
   ceOpportunities: CeOpportunitiesPaginated;
   ceParticipations: CeParticipationsPaginated;
   ceReferrals: CeReferralsPaginated;
+  /** Coordinated Entry swimlanes that are in templates used by this project */
+  ceSwimlanes: Array<CeSwimlane>;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
   /**
@@ -26839,6 +26841,14 @@ export type ProjectWithCeDefaultContactsFragment = {
       unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     }>;
   }>;
+  ceSwimlanes: Array<{
+    __typename?: 'CeSwimlane';
+    id: string;
+    name: string;
+    templateIdentifier: string;
+    templateName: string;
+    taskNames: Array<string>;
+  }>;
 };
 
 export type AssignCeDefaultContactsMutationVariables = Exact<{
@@ -26984,6 +26994,14 @@ export type GetDefaultSwimlaneAssignmentsQuery = {
           } | null;
         }>;
       }>;
+      ceSwimlanes: Array<{
+        __typename?: 'CeSwimlane';
+        id: string;
+        name: string;
+        templateIdentifier: string;
+        templateName: string;
+        taskNames: Array<string>;
+      }>;
     }>;
   };
 };
@@ -27051,6 +27069,14 @@ export type GetProjectDefaultSwimlaneAssignmentsQuery = {
           name: string;
         } | null;
       }>;
+    }>;
+    ceSwimlanes: Array<{
+      __typename?: 'CeSwimlane';
+      id: string;
+      name: string;
+      templateIdentifier: string;
+      templateName: string;
+      taskNames: Array<string>;
     }>;
   } | null;
 };
@@ -51338,10 +51364,14 @@ export const ProjectWithCeDefaultContactsFragmentDoc = gql`
     ceDefaultContacts {
       ...CeDefaultContactsBySwimlaneFields
     }
+    ceSwimlanes {
+      ...CeSwimlaneFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${CeDefaultContactsBySwimlaneFieldsFragmentDoc}
+  ${CeSwimlaneFieldsFragmentDoc}
 `;
 export const ClientEnrollmentFieldsFragmentDoc = gql`
   fragment ClientEnrollmentFields on Enrollment {

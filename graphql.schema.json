@@ -42950,6 +42950,30 @@
             "deprecationReason": null
           },
           {
+            "name": "ceSwimlanes",
+            "description": "Coordinated Entry swimlanes that are in templates used by this project",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeSwimlane",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "contactInformation",
             "description": null,
             "args": [],

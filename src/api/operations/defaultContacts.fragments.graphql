@@ -49,4 +49,7 @@ fragment ProjectWithCeDefaultContacts on Project {
   ceDefaultContacts {
     ...CeDefaultContactsBySwimlaneFields
   }
+  ceSwimlanes {
+    ...CeSwimlaneFields
+  }
 }

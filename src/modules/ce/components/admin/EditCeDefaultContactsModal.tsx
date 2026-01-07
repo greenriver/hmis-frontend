@@ -32,14 +32,14 @@ import {
   GetDefaultSwimlaneAssignmentsDocument,
   PickListOption,
   PickListType,
+  ProjectWithCeDefaultContactsFragment,
   useGetGlobalDefaultSwimlaneAssignmentsQuery,
   useGetPickListQuery,
-  useGetProjectDefaultSwimlaneAssignmentsQuery,
   useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
 
 interface Props {
-  projectId?: string;
+  project?: ProjectWithCeDefaultContactsFragment;
   open: boolean;
   onClose: () => void;
 }
@@ -53,30 +53,18 @@ interface Props {
  * but the frontend does not support editing contacts at those levels.
  */
 const EditCeDefaultContactsModal: React.FC<Props> = ({
-  projectId,
+  project,
   open,
   onClose,
 }) => {
-  // todo @martha - add not applicable and missing treatments
+  // todo @martha - add missing treatments
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
-  const [formState, setFormState] = useState<Record<string, PickListOption[]>>(
-    {}
-  );
-
-  // Fetch swimlanes
-  // todo @martha - bug: fetch swimlanes applicable to this project, if project is passed
-  const {
-    data: { ceSwimlanes } = {},
-    loading: swimlanesLoading,
-    error: swimlanesError,
-  } = useGetSwimlanesQuery({
-    skip: !open,
-  });
-
-  // Populate form state from existing contacts
-  const populateFormState = useCallback(
-    (contactsBySwimlane: CeDefaultContactsBySwimlaneFieldsFragment[]) => {
+  // Transform contacts from the backend format to the form state format
+  const transformContactsToFormState = useCallback(
+    (
+      contactsBySwimlane: CeDefaultContactsBySwimlaneFieldsFragment[]
+    ): Record<string, PickListOption[]> => {
       const selections: Record<string, PickListOption[]> = {};
 
       contactsBySwimlane.forEach((item) => {
@@ -87,41 +75,44 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
             // In project mode, if the `project` owner field is false for this contact,
             // that means it's owned at a higher level, by the org or data source.
             // Show it in the dropdown for clarity, and disable de-selecting it.
-            disabled: projectId ? !contact.project : false,
+            disabled: project ? !contact.project : false,
           })
         );
       });
 
-      setFormState(selections);
+      return selections;
     },
-    [projectId]
+    [project]
   );
 
-  // In Project mode, fetch existing project contacts
-  const {
-    data: { project } = {},
-    loading: projectLoading,
-    error: projectError,
-  } = useGetProjectDefaultSwimlaneAssignmentsQuery({
-    variables: { id: projectId || '' },
-    skip: !open || !projectId, // skip the query if no project id (global mode)
-    onCompleted: (data) => {
-      if (data.project?.ceDefaultContacts) {
-        populateFormState(data.project.ceDefaultContacts);
-      }
-    },
-  });
+  const [formState, setFormState] = useState<Record<string, PickListOption[]>>(
+    // If we were passed a project that already has default contacts loaded, set that as the initial form state.
+    // Otherwise, set it to {} and wait for the global contacts query to load.
+    project ? transformContactsToFormState(project.ceDefaultContacts) : {}
+  );
 
-  // In Global mode, fetch existing global contacts
+  // In Global mode, fetch global contacts
   const { loading: globalLoading, error: globalError } =
     useGetGlobalDefaultSwimlaneAssignmentsQuery({
-      skip: !open || !!projectId, // skip this query in project mode
+      skip: !open || !!project, // skip this query in project mode
       onCompleted: (data) => {
         if (data.globalCeDefaultContacts) {
-          populateFormState(data.globalCeDefaultContacts);
+          setFormState(
+            transformContactsToFormState(data.globalCeDefaultContacts)
+          );
         }
       },
     });
+
+  // In Global mode, fetch global list of swimlanes. (In project mode, use swimlanes already fetched on the project)
+  const {
+    data: { ceSwimlanes: globalSwimlanes } = {},
+    loading: swimlanesLoading,
+    error: swimlanesError,
+  } = useGetSwimlanesQuery({
+    skip: !open || !!project,
+  });
+  const ceSwimlanes = project?.ceSwimlanes || globalSwimlanes;
 
   // Fetch users who are eligible to perform tasks in the specified project.
   // If projectId is null, returns all users who can perform referral tasks in any project.
@@ -132,7 +123,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   } = useGetPickListQuery({
     variables: {
       pickListType: PickListType.EligibleReferralStepAssignmentUsers,
-      projectId: projectId,
+      projectId: project?.id,
     },
     skip: !open,
   });
@@ -171,7 +162,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       setErrorState({ ...emptyErrorState, apolloError });
     },
     // After completing the mutation, refetch the query for all default contacts
-    // todo @Martha - probably need to refetch something different when calling this from the project card
+    // todo @Martha - probably need to refetch something different when calling this from the project card; maybe pass this in as an argument?
     refetchQueries: [GetDefaultSwimlaneAssignmentsDocument],
     awaitRefetchQueries: true,
   });
@@ -190,24 +181,21 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     createAssignments({
       variables: {
         input: {
-          projectId: projectId || null, // if projectId is null, the default contact created is global
+          projectId: project?.id, // if project is not passed, the default contact created is global
           contacts,
         },
       },
     });
-  }, [projectId, formState, createAssignments]);
+  }, [project, formState, createAssignments]);
 
-  const loading =
-    projectLoading || globalLoading || swimlanesLoading || usersLoading;
-  const error = projectError || globalError || swimlanesError || usersError;
+  const loading = globalLoading || swimlanesLoading || usersLoading;
+  const error = globalError || swimlanesError || usersError;
 
   if (error) throw error;
 
   return (
     <CommonDialog open={open} onClose={handleClose} fullWidth>
-      <DialogTitle>
-        Edit {projectId ? 'Project' : 'Global'} Contacts
-      </DialogTitle>
+      <DialogTitle>Edit {project ? 'Project' : 'Global'} Contacts</DialogTitle>
       <DialogContent>
         {loading ? (
           <Loading />

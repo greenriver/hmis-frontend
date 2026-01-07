@@ -41,7 +41,8 @@ const BASE_COLUMNS: DataColumnDef<
 interface Props {}
 const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
   const { data: { ceSwimlanes } = {}, loading, error } = useGetSwimlanesQuery();
-  const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
+  const [editingProject, setEditingProject] =
+    useState<ProjectWithCeDefaultContactsFragment | null>(null);
 
   const projectFilters = useFilters({
     type: 'ProjectFilterOptions',
@@ -69,6 +70,15 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         key: swimlane.id,
         optional: { defaultHidden: false },
         render: (row: ProjectWithCeDefaultContactsFragment) => {
+          if (!row.ceSwimlanes.find((s) => s.id === swimlane.id)) {
+            // The project's applicable swimlanes list doesn't include this column, so show n/a
+            return (
+              <Typography variant='body2' color='text.secondary'>
+                Not applicable
+              </Typography>
+            );
+          }
+
           const contacts =
             row.ceDefaultContacts.find(
               (swimlaneContacts: CeDefaultContactsBySwimlaneFieldsFragment) =>
@@ -121,7 +131,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
           queryDocument={GetDefaultSwimlaneAssignmentsDocument}
           pagePath='projects'
           paginationItemName='project'
-          handleRowClick={(row) => setEditingProjectId(row.id)}
+          handleRowClick={(row) => setEditingProject(row)}
           rowActionTitle='Edit Project Contacts'
           rowSecondaryActionConfigs={(row) => [
             {
@@ -138,11 +148,11 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         />
       </Paper>
 
-      {editingProjectId && (
+      {editingProject && (
         <EditCeDefaultContactsModal
-          projectId={editingProjectId}
-          open={!!editingProjectId}
-          onClose={() => setEditingProjectId(null)}
+          project={editingProject}
+          open={!!editingProject}
+          onClose={() => setEditingProject(null)}
         />
       )}
     </>
