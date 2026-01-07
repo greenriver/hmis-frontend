@@ -22,6 +22,7 @@ export interface GenericSelectProps<
   label?: ReactNode;
   textInputProps?: TextInputProps;
   ariaLabel?: string;
+  color?: 'warning' | 'error';
 }
 
 const GenericSelect = <
@@ -34,6 +35,7 @@ const GenericSelect = <
   textInputProps,
   options,
   ariaLabel,
+  color,
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
   const { placeholder, ...inputProps } = textInputProps || {};
@@ -41,7 +43,10 @@ const GenericSelect = <
   const startAdornment =
     rest.loading && hasMeaningfulValue(value) ? (
       <InputAdornment position='start' sx={{ pl: 1 }}>
-        <CircularProgress size={15} color='inherit' />
+        <CircularProgress
+          size={15}
+          color={color === 'warning' || color === 'error' ? color : 'inherit'}
+        />
       </InputAdornment>
     ) : undefined;
 
@@ -57,10 +62,28 @@ const GenericSelect = <
             ...params.InputProps,
             ...(startAdornment ? { startAdornment } : undefined),
             ...inputProps.InputProps,
+            sx: {
+              ...(color && {
+                backgroundColor: `${color}.100`,
+                '& .MuiInputAdornment-root': {
+                  color: `${color}.dark`,
+                },
+              }),
+              ...(inputProps.InputProps?.sx || {}),
+            },
           }}
           InputLabelProps={{
             ...params.InputLabelProps,
             ...inputProps.InputLabelProps,
+            sx: {
+              ...(color && {
+                color: `${color}.dark`,
+                '&.Mui-focused': {
+                  color: `${color}.dark`,
+                },
+              }),
+              ...(inputProps.InputLabelProps?.sx || {}),
+            },
           }}
           inputProps={{
             ...params.inputProps,

@@ -224,6 +224,9 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
                   multiple
                   placeholder='Select'
                   helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
+                  color={
+                    formState[swimlane.id]?.length === 0 ? 'warning' : undefined
+                  }
                 />
               </Box>
             ))}
