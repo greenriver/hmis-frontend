@@ -118,7 +118,12 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
                       {contacts.map((contact, idx) => (
                         <Fragment key={contact.user.id}>
                           {idx > 0 && ', '}
-                          <span
+                          <Typography
+                            variant='body2'
+                            component='span'
+                            color={
+                              contact.user.active ? 'inherit' : 'warning.dark'
+                            }
                             // Italicize global contacts for editors, to help indicate how they should be edited.
                             style={{
                               fontStyle:
@@ -127,8 +132,9 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
                                   : 'normal',
                             }}
                           >
-                            {contact.user.name}
-                          </span>
+                            {contact.user.name}{' '}
+                            {!contact.user.active && <span>(Inactive)</span>}
+                          </Typography>
                         </Fragment>
                       ))}
                     </>

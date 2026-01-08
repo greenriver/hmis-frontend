@@ -154,6 +154,7 @@ export enum AnnualPercentAmi {
 /** User account for a user of the system */
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
+  active: Scalars['Boolean']['output'];
   activityLogs: ActivityLogsPaginated;
   auditHistory: ApplicationUserAuditEventsPaginated;
   clientAccessSummaries: ClientAccessSummariesPaginated;
@@ -26743,6 +26744,7 @@ export type CeDefaultContactFieldsFragment = {
     id: string;
     name: string;
     email: string;
+    active: boolean;
   };
   organization?: {
     __typename?: 'Organization';
@@ -26786,6 +26788,7 @@ export type CeDefaultContactsBySwimlaneFieldsFragment = {
       id: string;
       name: string;
       email: string;
+      active: boolean;
     };
     organization?: {
       __typename?: 'Organization';
@@ -26841,6 +26844,7 @@ export type ProjectWithCeDefaultContactsFragment = {
         id: string;
         name: string;
         email: string;
+        active: boolean;
       };
       organization?: {
         __typename?: 'Organization';
@@ -26892,6 +26896,7 @@ export type AssignCeDefaultContactsMutation = {
         id: string;
         name: string;
         email: string;
+        active: boolean;
       };
       organization?: {
         __typename?: 'Organization';
@@ -26989,6 +26994,7 @@ export type GetDefaultSwimlaneAssignmentsQuery = {
             id: string;
             name: string;
             email: string;
+            active: boolean;
           };
           organization?: {
             __typename?: 'Organization';
@@ -27065,6 +27071,7 @@ export type GetProjectDefaultSwimlaneAssignmentsQuery = {
           id: string;
           name: string;
           email: string;
+          active: boolean;
         };
         organization?: {
           __typename?: 'Organization';
@@ -27129,6 +27136,7 @@ export type GetGlobalDefaultSwimlaneAssignmentsQuery = {
         id: string;
         name: string;
         email: string;
+        active: boolean;
       };
       organization?: {
         __typename?: 'Organization';
@@ -39437,6 +39445,7 @@ export type SubmitFormMutation = {
                 id: string;
                 name: string;
                 email: string;
+                active: boolean;
               };
               organization?: {
                 __typename?: 'Organization';
@@ -43228,6 +43237,7 @@ export type ProjectAllFieldsFragment = {
         id: string;
         name: string;
         email: string;
+        active: boolean;
       };
       organization?: {
         __typename?: 'Organization';
@@ -44190,6 +44200,7 @@ export type GetProjectQuery = {
           id: string;
           name: string;
           email: string;
+          active: boolean;
         };
         organization?: {
           __typename?: 'Organization';
@@ -52050,6 +52061,7 @@ export const CeDefaultContactFieldsFragmentDoc = gql`
       id
       name
       email
+      active
     }
     organization {
       id

@@ -85,6 +85,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ApplicationUser',
     fields: [
       {
+        name: 'active',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'dateCreated',
         type: {
           kind: 'NON_NULL',

@@ -16,6 +16,7 @@ fragment CeDefaultContactFields on CeDefaultContact {
     id
     name
     email
+    active
   }
   organization {
     id
