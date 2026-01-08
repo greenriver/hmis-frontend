@@ -10025,6 +10025,47 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ProjectsWithCeDefaultContactsFilterOptions',
+    args: [
+      {
+        name: 'organization',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'ReferralPostingFilterOptions',
     args: [
       {

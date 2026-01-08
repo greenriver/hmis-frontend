@@ -12,7 +12,6 @@ import {
   GetDefaultSwimlaneAssignmentsDocument,
   GetDefaultSwimlaneAssignmentsQuery,
   GetDefaultSwimlaneAssignmentsQueryVariables,
-  ProjectFilterOptionStatus,
   ProjectWithCeDefaultContactsFragment,
   useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
@@ -43,9 +42,8 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
   const [editingProject, setEditingProject] =
     useState<ProjectWithCeDefaultContactsFragment | null>(null);
 
-  const projectFilters = useFilters({
-    type: 'ProjectFilterOptions',
-    omit: ['status', 'funder', 'projectType'],
+  const filters = useFilters({
+    type: 'ProjectsWithCeDefaultContactsFilterOptions',
   });
 
   const columns: DataColumnDef<
@@ -136,14 +134,11 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
           ProjectWithCeDefaultContactsFragment
         >
           columns={columns}
-          queryVariables={{
-            filters: {
-              status: [ProjectFilterOptionStatus.Open],
-            },
-          }}
+          queryVariables={{}}
+          filters={filters}
           queryDocument={GetDefaultSwimlaneAssignmentsDocument}
           pagePath='projectsWithCeDefaultContacts'
-          paginationItemName='project'
+          paginationItemName='coordinated entry project'
           handleRowClick={(row) => setEditingProject(row)}
           rowActionTitle='Edit Project Contacts'
           rowSecondaryActionConfigs={(row) => [
@@ -155,9 +150,6 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
               }),
             },
           ]}
-          // todo @martha - need to enable filter by users. in general, filtering needs revisiting
-          // maybe the neatest thing is for this to use a different query, not the base projects query?
-          filters={projectFilters}
         />
       </Paper>
 

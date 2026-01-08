@@ -8,7 +8,7 @@ query GetSwimlanes {
 query GetDefaultSwimlaneAssignments(
   $limit: Int = 10
   $offset: Int = 0
-  $filters: ProjectFilterOptions
+  $filters: ProjectsWithCeDefaultContactsFilterOptions
 ) {
   projectsWithCeDefaultContacts(
     limit: $limit

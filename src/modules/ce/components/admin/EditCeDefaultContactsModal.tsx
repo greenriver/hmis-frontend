@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import {
+  Alert,
   Box,
   Button,
   DialogActions,
@@ -9,6 +10,7 @@ import {
 } from '@mui/material';
 import { get } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
+import ButtonLink from '@/components/elements/ButtonLink';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
@@ -24,6 +26,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import FormSelect from '@/modules/form/components/FormSelect';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   AssignCeDefaultContactsDocument,
   AssignCeDefaultContactsMutation,
@@ -39,6 +42,7 @@ import {
   useGetPickListQuery,
   useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   project?: ProjectWithCeDefaultContactsFragment;
@@ -236,6 +240,8 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
 
   if (error) throw error;
 
+  const hasSwimlanes = !!ceSwimlanes?.length;
+
   return (
     <CommonDialog open={open} onClose={handleClose} fullWidth>
       <DialogTitle>
@@ -261,6 +267,13 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
 
             {ceSwimlanes?.map((swimlane) => getSwimlaneSelect(swimlane))}
 
+            {!hasSwimlanes && (
+              <Alert severity='info'>
+                This project does not have any unit groups that are using
+                Coordinated Entry referral workflows.
+              </Alert>
+            )}
+
             {hasAnyValue(errorState) && (
               <Stack gap={1}>
                 <ApolloErrorAlert error={errorState.apolloError} />
@@ -280,14 +293,25 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
           >
             Cancel
           </Button>
-          <LoadingButton
-            onClick={handleSubmit}
-            type='submit'
-            loading={submitLoading}
-            disabled={loading || submitLoading}
-          >
-            Save
-          </LoadingButton>
+          {(loading || hasSwimlanes) && (
+            <LoadingButton
+              onClick={handleSubmit}
+              type='submit'
+              loading={submitLoading}
+              disabled={loading || submitLoading}
+            >
+              Save
+            </LoadingButton>
+          )}
+          {!loading && !hasSwimlanes && (
+            <ButtonLink
+              to={generateSafePath(ProjectDashboardRoutes.UNITS, {
+                projectId: project?.id,
+              })}
+            >
+              View Project Units
+            </ButtonLink>
+          )}
         </Stack>
       </DialogActions>
     </CommonDialog>
