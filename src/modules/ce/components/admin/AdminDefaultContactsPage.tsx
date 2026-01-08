@@ -2,8 +2,8 @@ import { Button } from '@mui/material';
 import React, { useState } from 'react';
 import { GlobalIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
-import AdminDefaultContactsTable from '@/modules/ce/components/admin/AdminDefaultContactsTable';
 import EditCeDefaultContactsModal from '@/modules/ce/components/admin/EditCeDefaultContactsModal';
+import AdminDefaultContactsTable from '@/modules/ce/components/defaultContacts/AdminDefaultContactsTable';
 
 const AdminDefaultContactsPage: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);

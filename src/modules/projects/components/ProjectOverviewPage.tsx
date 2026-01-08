@@ -7,7 +7,7 @@ import { useProjectDashboardContext } from './ProjectDashboard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
-import ProjectDefaultContactsCard from '@/modules/ce/components/project/ProjectDefaultContactsCard';
+import ProjectDefaultContactsCard from '@/modules/ce/components/defaultContacts/ProjectDefaultContactsCard';
 import ViewRecord from '@/modules/form/components/ViewRecord';
 import {
   parseAndFormatDateRange,

@@ -1,21 +1,17 @@
-import { Stack, Tooltip, Typography } from '@mui/material';
-import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Stack, Typography } from '@mui/material';
+import { useCallback, useMemo, useState } from 'react';
+import SwimlaneLabel from './SwimlaneLabel';
 import CommonCard from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
-import { ErrorIcon, InfoIcon } from '@/components/elements/SemanticIcons';
 import EditCeDefaultContactsModal from '@/modules/ce/components/admin/EditCeDefaultContactsModal';
+import DefaultContactNamesList from '@/modules/ce/components/defaultContacts/DefaultContactNamesList';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
-import {
-  ProjectAllFieldsFragment,
-  ProjectWithCeDefaultContactsFragment,
-} from '@/types/gqlTypes';
+import { ProjectWithCeDefaultContactsFragment } from '@/types/gqlTypes';
 
 interface Props {
-  project: ProjectWithCeDefaultContactsFragment &
-    ProjectAllFieldsFragment['access'] &
-    ProjectAllFieldsFragment['coordinatedEntryFeatures'];
+  project: ProjectWithCeDefaultContactsFragment;
 }
 
 const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
@@ -80,65 +76,18 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
           )}
           {project.ceSwimlanes.map((swimlane) => {
             const contacts = contactsBySwimlane[swimlane.id] || [];
-            const isEmpty = contacts.length === 0;
 
             return (
               <Stack key={swimlane.id} spacing={0.5}>
                 <CommonLabeledTextBlock
-                  title={
-                    <>
-                      {swimlane.name} ({swimlane.templateName}){' '}
-                      <Tooltip
-                        title={`Tasks: ${swimlane.taskNames.join(', ')}`}
-                      >
-                        <InfoIcon
-                          sx={{
-                            fontSize: 'inherit',
-                            color: 'text.secondary',
-                            verticalAlign: 'middle',
-                            ml: 0.5,
-                          }}
-                        />
-                      </Tooltip>
-                    </>
-                  }
+                  title={<SwimlaneLabel swimlane={swimlane} />}
                 >
-                  {isEmpty ? (
-                    <Typography
-                      variant='body2'
-                      color='warning.dark'
-                      fontWeight='600'
-                      sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
-                    >
-                      <ErrorIcon sx={{ fontSize: 'inherit' }} />
-                      <span>Missing</span>
-                    </Typography>
-                  ) : (
-                    <>
-                      {contacts.map((contact, idx) => (
-                        <Fragment key={contact.user.id}>
-                          {idx > 0 && ', '}
-                          <Typography
-                            variant='body2'
-                            component='span'
-                            color={
-                              contact.user.active ? 'inherit' : 'warning.dark'
-                            }
-                            // Italicize global contacts for editors, to help indicate how they should be edited.
-                            style={{
-                              fontStyle:
-                                !contact.project && canEditContacts
-                                  ? 'italic'
-                                  : 'normal',
-                            }}
-                          >
-                            {contact.user.name}{' '}
-                            {!contact.user.active && <span>(Inactive)</span>}
-                          </Typography>
-                        </Fragment>
-                      ))}
-                    </>
-                  )}
+                  <DefaultContactNamesList
+                    contacts={contacts}
+                    // Italicize global contacts for editors, to help indicate how they should be edited
+                    // (at the project level or globally).
+                    italicizeGlobalContacts={canEditContacts}
+                  />
                 </CommonLabeledTextBlock>
               </Stack>
             );

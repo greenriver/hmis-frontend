@@ -1,8 +1,9 @@
-import { Paper, Stack, Tooltip, Typography } from '@mui/material';
-import React, { Fragment, useMemo, useState } from 'react';
-import EditCeDefaultContactsModal from './EditCeDefaultContactsModal';
+import { Paper, Typography } from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import EditCeDefaultContactsModal from '../admin/EditCeDefaultContactsModal';
+import DefaultContactNamesList from './DefaultContactNamesList';
+import SwimlaneLabel from './SwimlaneLabel';
 import Loading from '@/components/elements/Loading';
-import { ErrorIcon, InfoIcon } from '@/components/elements/SemanticIcons';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -54,16 +55,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
 
     const swimlaneColumns = ceSwimlanes.map((swimlane) => {
       return {
-        header: (
-          <Stack direction='row' spacing={1} alignItems='center'>
-            <span>
-              {swimlane.name} ({swimlane.templateName})
-            </span>
-            <Tooltip title={`Tasks: ${swimlane.taskNames.join(', ')}`}>
-              <InfoIcon sx={{ fontSize: 'inherit', color: 'text.secondary' }} />
-            </Tooltip>
-          </Stack>
-        ),
+        header: <SwimlaneLabel swimlane={swimlane} />,
         key: swimlane.id,
         optional: { defaultHidden: false },
         render: (row: ProjectWithCeDefaultContactsFragment) => {
@@ -82,38 +74,11 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
                 swimlaneContacts.swimlane.id === swimlane.id
             )?.contacts || [];
 
-          if (contacts.length === 0) {
-            return (
-              <Typography
-                variant='body2'
-                color='warning.dark'
-                fontWeight='600'
-                sx={{ verticalAlign: 'center' }}
-              >
-                <Stack direction='row' spacing={0.5} alignItems='center'>
-                  <ErrorIcon sx={{ fontSize: 'inherit' }} />
-                  <span>Missing</span>
-                </Stack>
-              </Typography>
-            );
-          }
-
           return (
-            <>
-              {contacts.map((contact, idx) => (
-                <Fragment key={contact.user.id}>
-                  {idx > 0 && ', '}
-                  <Typography
-                    variant='body2'
-                    component='span'
-                    // If this is a global contact, italicize the name, to help indicate that it should be edited in the Global modal and not the Project modal
-                    sx={{ fontStyle: contact.project ? 'normal' : 'italic' }}
-                  >
-                    {contact.user.name}
-                  </Typography>
-                </Fragment>
-              ))}
-            </>
+            <DefaultContactNamesList
+              contacts={contacts}
+              italicizeGlobalContacts={true}
+            />
           );
         },
       };

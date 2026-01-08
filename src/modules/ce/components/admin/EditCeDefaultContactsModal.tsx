@@ -16,6 +16,7 @@ import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextB
 import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
 import { ErrorIcon } from '@/components/elements/SemanticIcons';
+import SwimlaneLabel from '@/modules/ce/components/defaultContacts/SwimlaneLabel';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
@@ -204,9 +205,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
 
       const label = (
         <Stack direction='row' spacing={1} alignItems='center'>
-          <span>
-            {swimlane.name} ({swimlane.templateName})
-          </span>
+          <SwimlaneLabel swimlane={swimlane} showTooltip={false} />
           {showMissingWarning && (
             <Stack direction='row' spacing={0.5} alignItems='center'>
               <ErrorIcon sx={{ fontSize: 'inherit', color: 'warning.main' }} />
