@@ -23,6 +23,8 @@ export interface GenericSelectProps<
   textInputProps?: TextInputProps;
   ariaLabel?: string;
   color?: 'warning' | 'error';
+  /** Function to determine chip color for each selected option. For now only supports `warning` */
+  getChipColor?: (option: T) => 'warning' | undefined;
 }
 
 const GenericSelect = <
@@ -36,6 +38,7 @@ const GenericSelect = <
   options,
   ariaLabel,
   color,
+  getChipColor,
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
   const { placeholder, ...inputProps } = textInputProps || {};
@@ -104,13 +107,15 @@ const GenericSelect = <
           // Avoid console warning: A props object containing a "key" prop is being spread into JSX
           const { key, ...rest } = getTagProps({ index });
 
-          // If the value is an object with a 'disabled' property set to true, disable the chip from being unselected
+          // If the selected value is an object with a 'disabled' property set to true, disable the chip from being unselected
           const disabled =
             (typeof option === 'object' &&
               option !== null &&
               'disabled' in option &&
               (option as any).disabled) ||
             rest.disabled;
+
+          const chipColor = getChipColor?.(option);
 
           return (
             <Chip
@@ -119,6 +124,7 @@ const GenericSelect = <
               label={ownerState.getOptionLabel(option)}
               aria-label={`Option: ${ownerState.getOptionLabel(option)}. Press backspace or delete to remove.`}
               aria-disabled={disabled ? 'true' : undefined}
+              color={chipColor}
               {...rest}
               disabled={disabled}
             />

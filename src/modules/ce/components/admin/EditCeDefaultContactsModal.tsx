@@ -9,7 +9,7 @@ import {
   Stack,
 } from '@mui/material';
 import { get } from 'lodash-es';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -79,7 +79,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
         selections[item.swimlane.id] = item.contacts.map(
           (contact: CeDefaultContactFieldsFragment) => ({
             code: contact.user.id,
-            label: contact.user.name,
+            label: `${contact.user.name}${contact.user.active ? '' : ' (Inactive)'}`,
             // In project mode, if the `project` owner field is false for this contact,
             // that means it's owned at a higher level, by the org or data source.
             // Show it in the dropdown for clarity, and disable de-selecting it.
@@ -135,7 +135,17 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     },
     skip: !open,
   });
-  // todo @martha - treatment for inactive users?
+
+  // For convenience, build a map of userId to active status from the current contacts
+  const userActiveStatusMap = useMemo(() => {
+    const contacts = projectMode
+      ? project.ceDefaultContacts.flatMap((item) => item.contacts)
+      : [];
+
+    return new Map(
+      contacts.map((contact) => [contact.user.id, contact.user.active])
+    );
+  }, [project, projectMode]);
 
   const handleChangeUsers = useCallback(
     (swimlaneId: string, users: PickListOption[]) => {
@@ -226,11 +236,22 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
             placeholder='Select'
             helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
             color={showMissingWarning ? 'warning' : undefined}
+            getChipColor={(option) => {
+              // Show warning color for inactive users
+              const isActive = userActiveStatusMap.get(option.code);
+              return isActive === false ? 'warning' : undefined;
+            }}
           />
         </Box>
       );
     },
-    [formState, handleChangeUsers, projectMode, usersPickList]
+    [
+      formState,
+      handleChangeUsers,
+      projectMode,
+      usersPickList,
+      userActiveStatusMap,
+    ]
   );
 
   const loading = globalLoading || swimlanesLoading || usersLoading;
