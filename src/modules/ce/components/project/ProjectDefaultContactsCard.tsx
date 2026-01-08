@@ -7,17 +7,21 @@ import { ErrorIcon, InfoIcon } from '@/components/elements/SemanticIcons';
 import EditCeDefaultContactsModal from '@/modules/ce/components/admin/EditCeDefaultContactsModal';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
-import { ProjectWithCeDefaultContactsFragment } from '@/types/gqlTypes';
+import {
+  ProjectAllFieldsFragment,
+  ProjectWithCeDefaultContactsFragment,
+} from '@/types/gqlTypes';
 
 interface Props {
-  project: ProjectWithCeDefaultContactsFragment;
+  project: ProjectWithCeDefaultContactsFragment &
+    ProjectAllFieldsFragment['access'] &
+    ProjectAllFieldsFragment['coordinatedEntryFeatures'];
 }
 
 const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [globalModalOpen, setGlobalModalOpen] = useState(false);
 
-  // todo @Martha - permission check against this project
   const [rootPermissions] = useRootPermissions();
   const canEditContacts = rootPermissions?.canAdministrateCoordinatedEntry;
 
@@ -115,10 +119,12 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
                         <Fragment key={contact.user.id}>
                           {idx > 0 && ', '}
                           <span
-                            // Italicize global contacts to indicate how they should be edited
-                            // todo @martha - only italicize for user who can edit
+                            // Italicize global contacts for editors, to help indicate how they should be edited.
                             style={{
-                              fontStyle: contact.project ? 'normal' : 'italic',
+                              fontStyle:
+                                !contact.project && canEditContacts
+                                  ? 'italic'
+                                  : 'normal',
                             }}
                           >
                             {contact.user.name}
