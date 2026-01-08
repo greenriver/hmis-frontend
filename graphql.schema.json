@@ -39763,6 +39763,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CUSTOM_SERVICE_TYPES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "DESTINATION",
             "description": null,
             "isDeprecated": false,
@@ -39812,6 +39818,18 @@
           },
           {
             "name": "GEOCODE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_SERVICE_CATEGORIES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_SERVICE_TYPES",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

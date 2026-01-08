@@ -59,6 +59,7 @@ interface Props {
   formId: string;
   formTitle: string;
   formRole: FormRole;
+  managedInVersionControl: boolean;
 }
 
 const NewFormRuleDialog: React.FC<Props> = ({
@@ -67,6 +68,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
   formId,
   formTitle,
   formRole,
+  managedInVersionControl,
 }) => {
   // Form state for the rule
   const [dataCollectedAbout, setDataCollectedAbout] =
@@ -194,11 +196,27 @@ const NewFormRuleDialog: React.FC<Props> = ({
     },
   });
 
+  // Logic for Service Type / Service Category picklists:
+  // - If this is the default service form (managed in version control), show only HUD services.
+  // - Otherwise, show only custom services.
+  const { serviceTypePickListReference, serviceCategoryPickListReference } =
+    useMemo(() => {
+      if (managedInVersionControl)
+        return {
+          serviceTypePickListReference: PickListType.HudServiceTypes,
+          serviceCategoryPickListReference: PickListType.HudServiceCategories,
+        };
+      return {
+        serviceTypePickListReference: PickListType.CustomServiceTypes,
+        serviceCategoryPickListReference: PickListType.CustomServiceCategories,
+      };
+    }, [managedInVersionControl]);
+
   const { pickList: serviceTypePickList } = usePickList({
     item: {
       linkId: 'fake',
       type: ItemType.Choice,
-      pickListReference: PickListType.AllServiceTypes,
+      pickListReference: serviceTypePickListReference,
     },
   });
 
@@ -206,7 +224,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
     item: {
       linkId: 'fake',
       type: ItemType.Choice,
-      pickListReference: PickListType.AllServiceCategories,
+      pickListReference: serviceCategoryPickListReference,
     },
   });
 
