@@ -169,7 +169,6 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       setErrorState({ ...emptyErrorState, apolloError });
     },
     // After completing the mutation, refetch the query for all default contacts
-    // todo @Martha - probably need to refetch something different when calling this from the project card; maybe pass this in as an argument?
     refetchQueries: [GetDefaultSwimlaneAssignmentsDocument],
     awaitRefetchQueries: true,
   });

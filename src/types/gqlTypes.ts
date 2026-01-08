@@ -39410,6 +39410,61 @@ export type SubmitFormMutation = {
             __typename?: 'ProjectCocsPaginated';
             nodesCount: number;
           };
+          ceDefaultContacts: Array<{
+            __typename?: 'CeDefaultContactsBySwimlane';
+            swimlane: {
+              __typename?: 'CeSwimlane';
+              id: string;
+              name: string;
+              templateIdentifier: string;
+              templateName: string;
+              taskNames: Array<string>;
+            };
+            contacts: Array<{
+              __typename?: 'CeDefaultContact';
+              id: string;
+              global: boolean;
+              swimlane: {
+                __typename?: 'CeSwimlane';
+                id: string;
+                name: string;
+                templateIdentifier: string;
+                templateName: string;
+                taskNames: Array<string>;
+              };
+              user: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+                email: string;
+              };
+              organization?: {
+                __typename?: 'Organization';
+                id: string;
+                hudId: string;
+                organizationName: string;
+              } | null;
+              project?: {
+                __typename?: 'Project';
+                id: string;
+                projectName: string;
+                projectType?: ProjectType | null;
+              } | null;
+              unitGroup?: {
+                __typename?: 'UnitGroup';
+                id: string;
+                name: string;
+              } | null;
+            }>;
+          }>;
+          ceSwimlanes: Array<{
+            __typename?: 'CeSwimlane';
+            id: string;
+            name: string;
+            templateIdentifier: string;
+            templateName: string;
+            taskNames: Array<string>;
+          }>;
         }
       | {
           __typename?: 'ProjectCoc';
@@ -43146,6 +43201,57 @@ export type ProjectAllFieldsFragment = {
     };
   }>;
   projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
+  ceDefaultContacts: Array<{
+    __typename?: 'CeDefaultContactsBySwimlane';
+    swimlane: {
+      __typename?: 'CeSwimlane';
+      id: string;
+      name: string;
+      templateIdentifier: string;
+      templateName: string;
+      taskNames: Array<string>;
+    };
+    contacts: Array<{
+      __typename?: 'CeDefaultContact';
+      id: string;
+      global: boolean;
+      swimlane: {
+        __typename?: 'CeSwimlane';
+        id: string;
+        name: string;
+        templateIdentifier: string;
+        templateName: string;
+        taskNames: Array<string>;
+      };
+      user: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      };
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        hudId: string;
+        organizationName: string;
+      } | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+      } | null;
+      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
+    }>;
+  }>;
+  ceSwimlanes: Array<{
+    __typename?: 'CeSwimlane';
+    id: string;
+    name: string;
+    templateIdentifier: string;
+    templateName: string;
+    taskNames: Array<string>;
+  }>;
 };
 
 export type DataCollectionFeatureFieldsFragment = {
@@ -44057,6 +44163,61 @@ export type GetProjectQuery = {
       };
     }>;
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
+    ceDefaultContacts: Array<{
+      __typename?: 'CeDefaultContactsBySwimlane';
+      swimlane: {
+        __typename?: 'CeSwimlane';
+        id: string;
+        name: string;
+        templateIdentifier: string;
+        templateName: string;
+        taskNames: Array<string>;
+      };
+      contacts: Array<{
+        __typename?: 'CeDefaultContact';
+        id: string;
+        global: boolean;
+        swimlane: {
+          __typename?: 'CeSwimlane';
+          id: string;
+          name: string;
+          templateIdentifier: string;
+          templateName: string;
+          taskNames: Array<string>;
+        };
+        user: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        };
+        organization?: {
+          __typename?: 'Organization';
+          id: string;
+          hudId: string;
+          organizationName: string;
+        } | null;
+        project?: {
+          __typename?: 'Project';
+          id: string;
+          projectName: string;
+          projectType?: ProjectType | null;
+        } | null;
+        unitGroup?: {
+          __typename?: 'UnitGroup';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    }>;
+    ceSwimlanes: Array<{
+      __typename?: 'CeSwimlane';
+      id: string;
+      name: string;
+      templateIdentifier: string;
+      templateName: string;
+      taskNames: Array<string>;
+    }>;
   } | null;
 };
 
@@ -51319,75 +51480,6 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
 `;
-export const CeSwimlaneFieldsFragmentDoc = gql`
-  fragment CeSwimlaneFields on CeSwimlane {
-    id
-    name
-    templateIdentifier
-    templateName
-    taskNames
-  }
-`;
-export const CeDefaultContactFieldsFragmentDoc = gql`
-  fragment CeDefaultContactFields on CeDefaultContact {
-    id
-    global
-    swimlane {
-      ...CeSwimlaneFields
-    }
-    user {
-      id
-      name
-      email
-    }
-    organization {
-      id
-      ...OrganizationNameFields
-    }
-    project {
-      id
-      ...ProjectNameAndType
-    }
-    unitGroup {
-      id
-      name
-    }
-  }
-  ${CeSwimlaneFieldsFragmentDoc}
-  ${OrganizationNameFieldsFragmentDoc}
-  ${ProjectNameAndTypeFragmentDoc}
-`;
-export const CeDefaultContactsBySwimlaneFieldsFragmentDoc = gql`
-  fragment CeDefaultContactsBySwimlaneFields on CeDefaultContactsBySwimlane {
-    swimlane {
-      ...CeSwimlaneFields
-    }
-    contacts {
-      ...CeDefaultContactFields
-    }
-  }
-  ${CeSwimlaneFieldsFragmentDoc}
-  ${CeDefaultContactFieldsFragmentDoc}
-`;
-export const ProjectWithCeDefaultContactsFragmentDoc = gql`
-  fragment ProjectWithCeDefaultContacts on Project {
-    ...ProjectNameAndType
-    organization {
-      id
-      ...OrganizationNameFields
-    }
-    ceDefaultContacts {
-      ...CeDefaultContactsBySwimlaneFields
-    }
-    ceSwimlanes {
-      ...CeSwimlaneFields
-    }
-  }
-  ${ProjectNameAndTypeFragmentDoc}
-  ${OrganizationNameFieldsFragmentDoc}
-  ${CeDefaultContactsBySwimlaneFieldsFragmentDoc}
-  ${CeSwimlaneFieldsFragmentDoc}
-`;
 export const ClientEnrollmentFieldsFragmentDoc = gql`
   fragment ClientEnrollmentFields on Enrollment {
     id
@@ -51938,6 +52030,75 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canStartReferrals
   }
 `;
+export const CeSwimlaneFieldsFragmentDoc = gql`
+  fragment CeSwimlaneFields on CeSwimlane {
+    id
+    name
+    templateIdentifier
+    templateName
+    taskNames
+  }
+`;
+export const CeDefaultContactFieldsFragmentDoc = gql`
+  fragment CeDefaultContactFields on CeDefaultContact {
+    id
+    global
+    swimlane {
+      ...CeSwimlaneFields
+    }
+    user {
+      id
+      name
+      email
+    }
+    organization {
+      id
+      ...OrganizationNameFields
+    }
+    project {
+      id
+      ...ProjectNameAndType
+    }
+    unitGroup {
+      id
+      name
+    }
+  }
+  ${CeSwimlaneFieldsFragmentDoc}
+  ${OrganizationNameFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+`;
+export const CeDefaultContactsBySwimlaneFieldsFragmentDoc = gql`
+  fragment CeDefaultContactsBySwimlaneFields on CeDefaultContactsBySwimlane {
+    swimlane {
+      ...CeSwimlaneFields
+    }
+    contacts {
+      ...CeDefaultContactFields
+    }
+  }
+  ${CeSwimlaneFieldsFragmentDoc}
+  ${CeDefaultContactFieldsFragmentDoc}
+`;
+export const ProjectWithCeDefaultContactsFragmentDoc = gql`
+  fragment ProjectWithCeDefaultContacts on Project {
+    ...ProjectNameAndType
+    organization {
+      id
+      ...OrganizationNameFields
+    }
+    ceDefaultContacts {
+      ...CeDefaultContactsBySwimlaneFields
+    }
+    ceSwimlanes {
+      ...CeSwimlaneFields
+    }
+  }
+  ${ProjectNameAndTypeFragmentDoc}
+  ${OrganizationNameFieldsFragmentDoc}
+  ${CeDefaultContactsBySwimlaneFieldsFragmentDoc}
+  ${CeSwimlaneFieldsFragmentDoc}
+`;
 export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
     id
@@ -51981,6 +52142,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
     }
     ...ProjectCocCount
     hasUnits
+    ...ProjectWithCeDefaultContacts
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}
@@ -51991,6 +52153,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
   ${DataCollectionFeatureFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
   ${ProjectCocCountFragmentDoc}
+  ${ProjectWithCeDefaultContactsFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
   fragment ProjectCocFields on ProjectCoc {

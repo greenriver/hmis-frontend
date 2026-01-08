@@ -57,6 +57,7 @@ fragment ProjectAllFields on Project {
   }
   ...ProjectCocCount
   hasUnits
+  ...ProjectWithCeDefaultContacts
 }
 
 fragment DataCollectionFeatureFields on DataCollectionFeature {
