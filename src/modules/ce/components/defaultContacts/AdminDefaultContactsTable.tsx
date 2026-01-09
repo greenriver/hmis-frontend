@@ -1,7 +1,7 @@
 import { Paper, Typography } from '@mui/material';
 import React, { useMemo, useState } from 'react';
-import EditCeDefaultContactsModal from '../admin/EditCeDefaultContactsModal';
 import DefaultContactNamesList from './DefaultContactNamesList';
+import EditCeDefaultContactsModal from './EditCeDefaultContactsModal';
 import SwimlaneLabel from './SwimlaneLabel';
 import Loading from '@/components/elements/Loading';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';

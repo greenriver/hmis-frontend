@@ -53,10 +53,10 @@ import ClientCaseNotesPrintPage from '@/modules/caseNotes/components/ClientCaseN
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
 import AdminAvailableUnitsPage from '@/modules/ce/components/admin/AdminAvailableUnitsPage';
-import AdminDefaultContactsPage from '@/modules/ce/components/admin/AdminDefaultContactsPage';
 import AdminEligibleClientsPage from '@/modules/ce/components/admin/AdminEligibleClientsPage';
 import AdminReferralsPage from '@/modules/ce/components/admin/AdminReferralsPage';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
+import AdminDefaultContactsPage from '@/modules/ce/components/defaultContacts/AdminDefaultContactsPage';
 
 import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
 import ProjectReferralsPage from '@/modules/ce/components/project/ProjectReferralsPage';

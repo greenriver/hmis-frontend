@@ -9,7 +9,7 @@ import {
   Stack,
 } from '@mui/material';
 import { get } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -136,17 +136,6 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     skip: !open,
   });
 
-  // For convenience, build a map of userId to active status from the current contacts
-  const userActiveStatusMap = useMemo(() => {
-    const contacts = projectMode
-      ? project.ceDefaultContacts.flatMap((item) => item.contacts)
-      : [];
-
-    return new Map(
-      contacts.map((contact) => [contact.user.id, contact.user.active])
-    );
-  }, [project, projectMode]);
-
   const handleChangeUsers = useCallback(
     (swimlaneId: string, users: PickListOption[]) => {
       setFormState((prev) => ({
@@ -213,6 +202,11 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       // For some swimlanes (like Project Staff) it wouldn't make sense to have a global default.
       const showMissingWarning = isEmpty && projectMode;
 
+      const anyUserInactive =
+        formState[swimlane.id]?.some((user) =>
+          user.label?.includes('(Inactive)')
+        ) || false;
+
       const label = (
         <Stack direction='row' spacing={1} alignItems='center'>
           <SwimlaneLabel swimlane={swimlane} showTooltip={false} />
@@ -235,23 +229,14 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
             multiple
             placeholder='Select'
             helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
-            color={showMissingWarning ? 'warning' : undefined}
-            getChipColor={(option) => {
-              // Show warning color for inactive users
-              const isActive = userActiveStatusMap.get(option.code);
-              return isActive === false ? 'warning' : undefined;
-            }}
+            color={
+              showMissingWarning || anyUserInactive ? 'warning' : undefined
+            }
           />
         </Box>
       );
     },
-    [
-      formState,
-      handleChangeUsers,
-      projectMode,
-      usersPickList,
-      userActiveStatusMap,
-    ]
+    [formState, handleChangeUsers, projectMode, usersPickList]
   );
 
   const loading = globalLoading || swimlanesLoading || usersLoading;
