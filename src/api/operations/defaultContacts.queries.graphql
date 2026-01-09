@@ -5,7 +5,7 @@ query GetSwimlanes {
   }
 }
 
-query GetDefaultSwimlaneAssignments(
+query GetDefaultContacts(
   $limit: Int = 10
   $offset: Int = 0
   $filters: ProjectsWithCeDefaultContactsFilterOptions
@@ -24,13 +24,13 @@ query GetDefaultSwimlaneAssignments(
   }
 }
 
-query GetProjectDefaultSwimlaneAssignments($id: ID!) {
+query GetProjectDefaultContacts($id: ID!) {
   project(id: $id) {
     ...ProjectWithCeDefaultContacts
   }
 }
 
-query GetGlobalDefaultSwimlaneAssignments {
+query GetGlobalDefaultContacts {
   globalCeDefaultContacts {
     ...CeDefaultContactsBySwimlaneFields
   }

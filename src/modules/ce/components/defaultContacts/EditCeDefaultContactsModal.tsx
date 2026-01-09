@@ -35,11 +35,11 @@ import {
   CeDefaultContactFieldsFragment,
   CeDefaultContactsBySwimlaneFieldsFragment,
   CeSwimlaneFieldsFragment,
-  GetDefaultSwimlaneAssignmentsDocument,
+  GetDefaultContactsDocument,
   PickListOption,
   PickListType,
   ProjectWithCeDefaultContactsFragment,
-  useGetGlobalDefaultSwimlaneAssignmentsQuery,
+  useGetGlobalDefaultContactsQuery,
   useGetPickListQuery,
   useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
@@ -101,7 +101,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
 
   // In Global mode, fetch global contacts
   const { loading: globalLoading, error: globalError } =
-    useGetGlobalDefaultSwimlaneAssignmentsQuery({
+    useGetGlobalDefaultContactsQuery({
       skip: !open || projectMode, // skip this query in project mode
       onCompleted: (data) => {
         if (data.globalCeDefaultContacts) {
@@ -169,7 +169,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       setErrorState({ ...emptyErrorState, apolloError });
     },
     // After completing the mutation, refetch the query for all default contacts
-    refetchQueries: [GetDefaultSwimlaneAssignmentsDocument],
+    refetchQueries: [GetDefaultContactsDocument],
     awaitRefetchQueries: true,
   });
 

@@ -10,9 +10,9 @@ import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeDefaultContactsBySwimlaneFieldsFragment,
-  GetDefaultSwimlaneAssignmentsDocument,
-  GetDefaultSwimlaneAssignmentsQuery,
-  GetDefaultSwimlaneAssignmentsQueryVariables,
+  GetDefaultContactsDocument,
+  GetDefaultContactsQuery,
+  GetDefaultContactsQueryVariables,
   ProjectWithCeDefaultContactsFragment,
   useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
@@ -20,7 +20,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const BASE_COLUMNS: DataColumnDef<
   ProjectWithCeDefaultContactsFragment,
-  GetDefaultSwimlaneAssignmentsQueryVariables
+  GetDefaultContactsQueryVariables
 >[] = [
   {
     header: 'Project',
@@ -49,7 +49,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
 
   const columns: DataColumnDef<
     ProjectWithCeDefaultContactsFragment,
-    GetDefaultSwimlaneAssignmentsQueryVariables
+    GetDefaultContactsQueryVariables
   >[] = useMemo(() => {
     if (loading || error || !ceSwimlanes) return [];
 
@@ -94,14 +94,14 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
     <>
       <Paper>
         <GenericTableWithData<
-          GetDefaultSwimlaneAssignmentsQuery,
-          GetDefaultSwimlaneAssignmentsQueryVariables,
+          GetDefaultContactsQuery,
+          GetDefaultContactsQueryVariables,
           ProjectWithCeDefaultContactsFragment
         >
           columns={columns}
           queryVariables={{}}
           filters={filters}
-          queryDocument={GetDefaultSwimlaneAssignmentsDocument}
+          queryDocument={GetDefaultContactsDocument}
           pagePath='projectsWithCeDefaultContacts'
           paginationItemName='coordinated entry project'
           handleRowClick={(row) => setEditingProject(row)}

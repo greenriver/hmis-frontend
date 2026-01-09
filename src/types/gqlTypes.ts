@@ -26943,13 +26943,13 @@ export type GetSwimlanesQuery = {
   }>;
 };
 
-export type GetDefaultSwimlaneAssignmentsQueryVariables = Exact<{
+export type GetDefaultContactsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<ProjectsWithCeDefaultContactsFilterOptions>;
 }>;
 
-export type GetDefaultSwimlaneAssignmentsQuery = {
+export type GetDefaultContactsQuery = {
   __typename?: 'Query';
   projectsWithCeDefaultContacts: {
     __typename?: 'ProjectsPaginated';
@@ -27027,11 +27027,11 @@ export type GetDefaultSwimlaneAssignmentsQuery = {
   };
 };
 
-export type GetProjectDefaultSwimlaneAssignmentsQueryVariables = Exact<{
+export type GetProjectDefaultContactsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
-export type GetProjectDefaultSwimlaneAssignmentsQuery = {
+export type GetProjectDefaultContactsQuery = {
   __typename?: 'Query';
   project?: {
     __typename?: 'Project';
@@ -27103,11 +27103,11 @@ export type GetProjectDefaultSwimlaneAssignmentsQuery = {
   } | null;
 };
 
-export type GetGlobalDefaultSwimlaneAssignmentsQueryVariables = Exact<{
+export type GetGlobalDefaultContactsQueryVariables = Exact<{
   [key: string]: never;
 }>;
 
-export type GetGlobalDefaultSwimlaneAssignmentsQuery = {
+export type GetGlobalDefaultContactsQuery = {
   __typename?: 'Query';
   globalCeDefaultContacts: Array<{
     __typename?: 'CeDefaultContactsBySwimlane';
@@ -59559,8 +59559,8 @@ export type GetSwimlanesQueryResult = Apollo.QueryResult<
   GetSwimlanesQuery,
   GetSwimlanesQueryVariables
 >;
-export const GetDefaultSwimlaneAssignmentsDocument = gql`
-  query GetDefaultSwimlaneAssignments(
+export const GetDefaultContactsDocument = gql`
+  query GetDefaultContacts(
     $limit: Int = 10
     $offset: Int = 0
     $filters: ProjectsWithCeDefaultContactsFilterOptions
@@ -59582,16 +59582,16 @@ export const GetDefaultSwimlaneAssignmentsDocument = gql`
 `;
 
 /**
- * __useGetDefaultSwimlaneAssignmentsQuery__
+ * __useGetDefaultContactsQuery__
  *
- * To run a query within a React component, call `useGetDefaultSwimlaneAssignmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDefaultSwimlaneAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetDefaultContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDefaultContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetDefaultSwimlaneAssignmentsQuery({
+ * const { data, loading, error } = useGetDefaultContactsQuery({
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
@@ -59599,36 +59599,36 @@ export const GetDefaultSwimlaneAssignmentsDocument = gql`
  *   },
  * });
  */
-export function useGetDefaultSwimlaneAssignmentsQuery(
+export function useGetDefaultContactsQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetDefaultSwimlaneAssignmentsQuery,
-    GetDefaultSwimlaneAssignmentsQueryVariables
+    GetDefaultContactsQuery,
+    GetDefaultContactsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetDefaultSwimlaneAssignmentsQuery,
-    GetDefaultSwimlaneAssignmentsQueryVariables
-  >(GetDefaultSwimlaneAssignmentsDocument, options);
+    GetDefaultContactsQuery,
+    GetDefaultContactsQueryVariables
+  >(GetDefaultContactsDocument, options);
 }
-export function useGetDefaultSwimlaneAssignmentsLazyQuery(
+export function useGetDefaultContactsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetDefaultSwimlaneAssignmentsQuery,
-    GetDefaultSwimlaneAssignmentsQueryVariables
+    GetDefaultContactsQuery,
+    GetDefaultContactsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetDefaultSwimlaneAssignmentsQuery,
-    GetDefaultSwimlaneAssignmentsQueryVariables
-  >(GetDefaultSwimlaneAssignmentsDocument, options);
+    GetDefaultContactsQuery,
+    GetDefaultContactsQueryVariables
+  >(GetDefaultContactsDocument, options);
 }
-export function useGetDefaultSwimlaneAssignmentsSuspenseQuery(
+export function useGetDefaultContactsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetDefaultSwimlaneAssignmentsQuery,
-        GetDefaultSwimlaneAssignmentsQueryVariables
+        GetDefaultContactsQuery,
+        GetDefaultContactsQueryVariables
       >
 ) {
   const options =
@@ -59636,25 +59636,25 @@ export function useGetDefaultSwimlaneAssignmentsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetDefaultSwimlaneAssignmentsQuery,
-    GetDefaultSwimlaneAssignmentsQueryVariables
-  >(GetDefaultSwimlaneAssignmentsDocument, options);
+    GetDefaultContactsQuery,
+    GetDefaultContactsQueryVariables
+  >(GetDefaultContactsDocument, options);
 }
-export type GetDefaultSwimlaneAssignmentsQueryHookResult = ReturnType<
-  typeof useGetDefaultSwimlaneAssignmentsQuery
+export type GetDefaultContactsQueryHookResult = ReturnType<
+  typeof useGetDefaultContactsQuery
 >;
-export type GetDefaultSwimlaneAssignmentsLazyQueryHookResult = ReturnType<
-  typeof useGetDefaultSwimlaneAssignmentsLazyQuery
+export type GetDefaultContactsLazyQueryHookResult = ReturnType<
+  typeof useGetDefaultContactsLazyQuery
 >;
-export type GetDefaultSwimlaneAssignmentsSuspenseQueryHookResult = ReturnType<
-  typeof useGetDefaultSwimlaneAssignmentsSuspenseQuery
+export type GetDefaultContactsSuspenseQueryHookResult = ReturnType<
+  typeof useGetDefaultContactsSuspenseQuery
 >;
-export type GetDefaultSwimlaneAssignmentsQueryResult = Apollo.QueryResult<
-  GetDefaultSwimlaneAssignmentsQuery,
-  GetDefaultSwimlaneAssignmentsQueryVariables
+export type GetDefaultContactsQueryResult = Apollo.QueryResult<
+  GetDefaultContactsQuery,
+  GetDefaultContactsQueryVariables
 >;
-export const GetProjectDefaultSwimlaneAssignmentsDocument = gql`
-  query GetProjectDefaultSwimlaneAssignments($id: ID!) {
+export const GetProjectDefaultContactsDocument = gql`
+  query GetProjectDefaultContacts($id: ID!) {
     project(id: $id) {
       ...ProjectWithCeDefaultContacts
     }
@@ -59663,58 +59663,55 @@ export const GetProjectDefaultSwimlaneAssignmentsDocument = gql`
 `;
 
 /**
- * __useGetProjectDefaultSwimlaneAssignmentsQuery__
+ * __useGetProjectDefaultContactsQuery__
  *
- * To run a query within a React component, call `useGetProjectDefaultSwimlaneAssignmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectDefaultSwimlaneAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProjectDefaultContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectDefaultContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetProjectDefaultSwimlaneAssignmentsQuery({
+ * const { data, loading, error } = useGetProjectDefaultContactsQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetProjectDefaultSwimlaneAssignmentsQuery(
+export function useGetProjectDefaultContactsQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetProjectDefaultSwimlaneAssignmentsQuery,
-    GetProjectDefaultSwimlaneAssignmentsQueryVariables
+    GetProjectDefaultContactsQuery,
+    GetProjectDefaultContactsQueryVariables
   > &
     (
-      | {
-          variables: GetProjectDefaultSwimlaneAssignmentsQueryVariables;
-          skip?: boolean;
-        }
+      | { variables: GetProjectDefaultContactsQueryVariables; skip?: boolean }
       | { skip: boolean }
     )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetProjectDefaultSwimlaneAssignmentsQuery,
-    GetProjectDefaultSwimlaneAssignmentsQueryVariables
-  >(GetProjectDefaultSwimlaneAssignmentsDocument, options);
+    GetProjectDefaultContactsQuery,
+    GetProjectDefaultContactsQueryVariables
+  >(GetProjectDefaultContactsDocument, options);
 }
-export function useGetProjectDefaultSwimlaneAssignmentsLazyQuery(
+export function useGetProjectDefaultContactsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetProjectDefaultSwimlaneAssignmentsQuery,
-    GetProjectDefaultSwimlaneAssignmentsQueryVariables
+    GetProjectDefaultContactsQuery,
+    GetProjectDefaultContactsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetProjectDefaultSwimlaneAssignmentsQuery,
-    GetProjectDefaultSwimlaneAssignmentsQueryVariables
-  >(GetProjectDefaultSwimlaneAssignmentsDocument, options);
+    GetProjectDefaultContactsQuery,
+    GetProjectDefaultContactsQueryVariables
+  >(GetProjectDefaultContactsDocument, options);
 }
-export function useGetProjectDefaultSwimlaneAssignmentsSuspenseQuery(
+export function useGetProjectDefaultContactsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetProjectDefaultSwimlaneAssignmentsQuery,
-        GetProjectDefaultSwimlaneAssignmentsQueryVariables
+        GetProjectDefaultContactsQuery,
+        GetProjectDefaultContactsQueryVariables
       >
 ) {
   const options =
@@ -59722,24 +59719,25 @@ export function useGetProjectDefaultSwimlaneAssignmentsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetProjectDefaultSwimlaneAssignmentsQuery,
-    GetProjectDefaultSwimlaneAssignmentsQueryVariables
-  >(GetProjectDefaultSwimlaneAssignmentsDocument, options);
+    GetProjectDefaultContactsQuery,
+    GetProjectDefaultContactsQueryVariables
+  >(GetProjectDefaultContactsDocument, options);
 }
-export type GetProjectDefaultSwimlaneAssignmentsQueryHookResult = ReturnType<
-  typeof useGetProjectDefaultSwimlaneAssignmentsQuery
+export type GetProjectDefaultContactsQueryHookResult = ReturnType<
+  typeof useGetProjectDefaultContactsQuery
 >;
-export type GetProjectDefaultSwimlaneAssignmentsLazyQueryHookResult =
-  ReturnType<typeof useGetProjectDefaultSwimlaneAssignmentsLazyQuery>;
-export type GetProjectDefaultSwimlaneAssignmentsSuspenseQueryHookResult =
-  ReturnType<typeof useGetProjectDefaultSwimlaneAssignmentsSuspenseQuery>;
-export type GetProjectDefaultSwimlaneAssignmentsQueryResult =
-  Apollo.QueryResult<
-    GetProjectDefaultSwimlaneAssignmentsQuery,
-    GetProjectDefaultSwimlaneAssignmentsQueryVariables
-  >;
-export const GetGlobalDefaultSwimlaneAssignmentsDocument = gql`
-  query GetGlobalDefaultSwimlaneAssignments {
+export type GetProjectDefaultContactsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectDefaultContactsLazyQuery
+>;
+export type GetProjectDefaultContactsSuspenseQueryHookResult = ReturnType<
+  typeof useGetProjectDefaultContactsSuspenseQuery
+>;
+export type GetProjectDefaultContactsQueryResult = Apollo.QueryResult<
+  GetProjectDefaultContactsQuery,
+  GetProjectDefaultContactsQueryVariables
+>;
+export const GetGlobalDefaultContactsDocument = gql`
+  query GetGlobalDefaultContacts {
     globalCeDefaultContacts {
       ...CeDefaultContactsBySwimlaneFields
     }
@@ -59748,50 +59746,50 @@ export const GetGlobalDefaultSwimlaneAssignmentsDocument = gql`
 `;
 
 /**
- * __useGetGlobalDefaultSwimlaneAssignmentsQuery__
+ * __useGetGlobalDefaultContactsQuery__
  *
- * To run a query within a React component, call `useGetGlobalDefaultSwimlaneAssignmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetGlobalDefaultSwimlaneAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetGlobalDefaultContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGlobalDefaultContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetGlobalDefaultSwimlaneAssignmentsQuery({
+ * const { data, loading, error } = useGetGlobalDefaultContactsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetGlobalDefaultSwimlaneAssignmentsQuery(
+export function useGetGlobalDefaultContactsQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetGlobalDefaultSwimlaneAssignmentsQuery,
-    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+    GetGlobalDefaultContactsQuery,
+    GetGlobalDefaultContactsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetGlobalDefaultSwimlaneAssignmentsQuery,
-    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
-  >(GetGlobalDefaultSwimlaneAssignmentsDocument, options);
+    GetGlobalDefaultContactsQuery,
+    GetGlobalDefaultContactsQueryVariables
+  >(GetGlobalDefaultContactsDocument, options);
 }
-export function useGetGlobalDefaultSwimlaneAssignmentsLazyQuery(
+export function useGetGlobalDefaultContactsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetGlobalDefaultSwimlaneAssignmentsQuery,
-    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+    GetGlobalDefaultContactsQuery,
+    GetGlobalDefaultContactsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetGlobalDefaultSwimlaneAssignmentsQuery,
-    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
-  >(GetGlobalDefaultSwimlaneAssignmentsDocument, options);
+    GetGlobalDefaultContactsQuery,
+    GetGlobalDefaultContactsQueryVariables
+  >(GetGlobalDefaultContactsDocument, options);
 }
-export function useGetGlobalDefaultSwimlaneAssignmentsSuspenseQuery(
+export function useGetGlobalDefaultContactsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetGlobalDefaultSwimlaneAssignmentsQuery,
-        GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+        GetGlobalDefaultContactsQuery,
+        GetGlobalDefaultContactsQueryVariables
       >
 ) {
   const options =
@@ -59799,21 +59797,22 @@ export function useGetGlobalDefaultSwimlaneAssignmentsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetGlobalDefaultSwimlaneAssignmentsQuery,
-    GetGlobalDefaultSwimlaneAssignmentsQueryVariables
-  >(GetGlobalDefaultSwimlaneAssignmentsDocument, options);
+    GetGlobalDefaultContactsQuery,
+    GetGlobalDefaultContactsQueryVariables
+  >(GetGlobalDefaultContactsDocument, options);
 }
-export type GetGlobalDefaultSwimlaneAssignmentsQueryHookResult = ReturnType<
-  typeof useGetGlobalDefaultSwimlaneAssignmentsQuery
+export type GetGlobalDefaultContactsQueryHookResult = ReturnType<
+  typeof useGetGlobalDefaultContactsQuery
 >;
-export type GetGlobalDefaultSwimlaneAssignmentsLazyQueryHookResult = ReturnType<
-  typeof useGetGlobalDefaultSwimlaneAssignmentsLazyQuery
+export type GetGlobalDefaultContactsLazyQueryHookResult = ReturnType<
+  typeof useGetGlobalDefaultContactsLazyQuery
 >;
-export type GetGlobalDefaultSwimlaneAssignmentsSuspenseQueryHookResult =
-  ReturnType<typeof useGetGlobalDefaultSwimlaneAssignmentsSuspenseQuery>;
-export type GetGlobalDefaultSwimlaneAssignmentsQueryResult = Apollo.QueryResult<
-  GetGlobalDefaultSwimlaneAssignmentsQuery,
-  GetGlobalDefaultSwimlaneAssignmentsQueryVariables
+export type GetGlobalDefaultContactsSuspenseQueryHookResult = ReturnType<
+  typeof useGetGlobalDefaultContactsSuspenseQuery
+>;
+export type GetGlobalDefaultContactsQueryResult = Apollo.QueryResult<
+  GetGlobalDefaultContactsQuery,
+  GetGlobalDefaultContactsQueryVariables
 >;
 export const CreateDirectCeReferralDocument = gql`
   mutation CreateDirectCeReferral(
