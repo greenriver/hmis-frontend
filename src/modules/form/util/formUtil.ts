@@ -48,6 +48,7 @@ import { HmisUser } from '@/modules/auth/api/sessions';
 import { sendToSentry } from '@/modules/errors/util';
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 import { collectExpressionReferences } from '@/modules/form/util/expressions/references';
+import { ARRAY_COMPARISON_OPERATORS } from '@/modules/formBuilder/formBuilderUtil';
 import {
   customDataElementValueForKey,
   evaluateDataCollectedAbout,
@@ -345,6 +346,11 @@ const evaluateEnableWhen = ({
     currentValue = currentValue.map((o) => o.code);
   }
 
+  // Set currentValue to [] if nil/undefined and using array comparator
+  if (ARRAY_COMPARISON_OPERATORS.includes(en.operator) && isNil(currentValue)) {
+    currentValue = [];
+  }
+
   // Comparison value
   let comparisonValue: any;
   if (en.operator !== EnableOperator.Exists) {
@@ -432,18 +438,22 @@ const evaluateEnableWhen = ({
       }
       break;
     case EnableOperator.Includes:
-      const currentValues = currentValue || []; // if null, fall back to [] to avoid console warning
-      if (Array.isArray(currentValues)) {
-        result = !!currentValues.find((v) => v === comparisonValue);
+      if (Array.isArray(currentValue)) {
+        result = !!currentValue.find((v) => v === comparisonValue);
       } else {
-        console.warn(
-          "Can't use INCLUDES operator without array comparison value"
-        );
+        sendToSentry(`Misconfigured form, INCLUDES on non-repeating item`);
+      }
+      break;
+    case EnableOperator.Excludes:
+      if (Array.isArray(currentValue)) {
+        result = !currentValue.find((v) => v === comparisonValue);
+      } else {
+        sendToSentry(`Misconfigured form, EXCLUDES on non-repeating item`);
       }
       break;
     default:
       result = false;
-      console.warn('Unsupported enableWhen operator', en.operator);
+      sendToSentry(`Unsupported enableWhen operator: ${en.operator}`);
   }
 
   // console.debug(
@@ -1708,4 +1718,27 @@ export const getEnrichedValueForChoiceItem = ({
     return {};
   }
   return { enrichedValue: found };
+};
+
+// Normalize boolean checkbox fields to be bi-state (true/false only)
+//
+// Context: Boolean items default to the YesNoRadio component, which is tri-state (true/false/null).
+// When the Checkbox component is specified, the frontend is responsible for enforcing bi-state behavior (true/false only).
+// Without this, users  would see inconsistent behavior when viewing checkbox responses, seeing "Data Not Collected" instead of "No".
+// See GH#7239 for more details.
+export const normalizeBooleanCheckboxValues = (
+  values: Record<string, any>,
+  itemMap: ItemMap
+) => {
+  Object.entries(itemMap)
+    .filter(
+      ([linkId, item]) =>
+        item.type === ItemType.Boolean &&
+        item.component === Component.Checkbox &&
+        isNil(values[linkId])
+    )
+    .forEach(([linkId]) => {
+      values[linkId] = false;
+    });
+  return values;
 };

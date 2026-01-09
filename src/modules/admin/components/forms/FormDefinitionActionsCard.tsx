@@ -5,6 +5,7 @@ import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
 
+import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
 import DuplicateFormButton from '@/modules/admin/components/forms/DuplicateFormButton';
 import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
 import {
@@ -37,6 +38,7 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
     ? parseHmisDateString(formIdentifier.draftVersion?.dateUpdated)
     : undefined;
 
+  const { externalFormObjectKey } = formIdentifier.displayVersion;
   const { managedInVersionControl, access } = formIdentifier;
   const { canManageForm, canPublishForm, canDuplicateForm } = access;
 
@@ -54,6 +56,18 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
         >
           View Published Form
         </ButtonLink>
+        {/* In Dev only, expose link to external form preview. This is not available in non-dev environments. */}
+        {externalFormObjectKey && import.meta.env.MODE === 'development' && (
+          <ButtonLink
+            to={`/hmis_external_api/external_forms/${externalFormObjectKey}`}
+            openInNew
+            fullWidth
+            Icon={OpenInNewIcon}
+            disabled={!isPublished}
+          >
+            External Form Preview
+          </ButtonLink>
+        )}
         {isPublished && (
           <Typography variant='caption'>
             Published {publishedOn ? formatRelativeDateTime(publishedOn) : ''}{' '}

@@ -34366,6 +34366,7 @@ export type FormIdentifierDetailsFragment = {
   };
   displayVersion: {
     __typename?: 'FormDefinition';
+    externalFormObjectKey?: string | null;
     id: string;
     role: FormRole;
     title: string;
@@ -35631,6 +35632,7 @@ export type PublishFormDefinitionMutation = {
       };
       displayVersion: {
         __typename?: 'FormDefinition';
+        externalFormObjectKey?: string | null;
         id: string;
         role: FormRole;
         title: string;
@@ -37880,6 +37882,7 @@ export type GetFormIdentifierDetailsQuery = {
     };
     displayVersion: {
       __typename?: 'FormDefinition';
+      externalFormObjectKey?: string | null;
       id: string;
       role: FormRole;
       title: string;
@@ -51844,6 +51847,7 @@ export const FormIdentifierDetailsFragmentDoc = gql`
       canDuplicateForm
     }
     displayVersion {
+      externalFormObjectKey
       ...FormDefinitionMetadata
     }
     draftVersion {
