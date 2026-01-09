@@ -68,7 +68,11 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
 
   return (
     <>
-      <CommonCard title='Default Contacts' actions={cardActions}>
+      <CommonCard
+        title='Default Contacts'
+        TitleComponent='h2'
+        actions={cardActions}
+      >
         <Stack spacing={2}>
           {!project.ceSwimlanes?.length && <ProjectNoSwimlanesAlert />}
           {project.ceSwimlanes.map((swimlane) => {
