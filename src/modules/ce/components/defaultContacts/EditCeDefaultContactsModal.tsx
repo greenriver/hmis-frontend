@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client';
 import {
-  Alert,
   Box,
   Button,
   DialogActions,
@@ -16,6 +15,7 @@ import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextB
 import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
 import { ErrorIcon } from '@/components/elements/SemanticIcons';
+import ProjectNoSwimlanesAlert from '@/modules/ce/components/defaultContacts/ProjectNoSwimlanesAlert';
 import SwimlaneLabel from '@/modules/ce/components/defaultContacts/SwimlaneLabel';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -271,12 +271,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
 
             {ceSwimlanes?.map((swimlane) => getSwimlaneSelect(swimlane))}
 
-            {!hasSwimlanes && (
-              <Alert severity='info'>
-                This project does not have any unit groups that are using
-                Coordinated Entry referral workflows.
-              </Alert>
-            )}
+            {!hasSwimlanes && <ProjectNoSwimlanesAlert />}
 
             {hasAnyValue(errorState) && (
               <Stack gap={1}>

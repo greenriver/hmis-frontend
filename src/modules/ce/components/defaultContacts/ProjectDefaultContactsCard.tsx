@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 import SwimlaneLabel from './SwimlaneLabel';
 import CommonCard from '@/components/elements/CommonCard';
@@ -6,6 +6,7 @@ import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextB
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import DefaultContactNamesList from '@/modules/ce/components/defaultContacts/DefaultContactNamesList';
 import EditCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditCeDefaultContactsModal';
+import ProjectNoSwimlanesAlert from '@/modules/ce/components/defaultContacts/ProjectNoSwimlanesAlert';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { ProjectWithCeDefaultContactsFragment } from '@/types/gqlTypes';
@@ -69,11 +70,7 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
     <>
       <CommonCard title='Default Contacts' actions={cardActions}>
         <Stack spacing={2}>
-          {!project.ceDefaultContacts?.length && (
-            <Typography variant='body2' color='text.secondary'>
-              No default contacts configured
-            </Typography>
-          )}
+          {!project.ceSwimlanes?.length && <ProjectNoSwimlanesAlert />}
           {project.ceSwimlanes.map((swimlane) => {
             const contacts = contactsBySwimlane[swimlane.id] || [];
 
