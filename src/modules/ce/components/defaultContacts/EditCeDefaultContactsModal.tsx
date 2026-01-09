@@ -79,6 +79,9 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
         selections[item.swimlane.id] = item.contacts.map(
           (contact: CeDefaultContactFieldsFragment) => ({
             code: contact.user.id,
+            // For inactive users, add "(Inactive)" to the label.
+            // Inactive users won't appear in the dropdown anyway,
+            // so this doesn't create a mismatch between the form state and the picklist options.
             label: `${contact.user.name}${contact.user.active ? '' : ' (Inactive)'}`,
             // In project mode, if the `project` owner field is false for this contact,
             // that means it's owned at a higher level, by the org or data source.
@@ -198,8 +201,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   const getSwimlaneSelect = useCallback(
     (swimlane: CeSwimlaneFieldsFragment) => {
       const isEmpty = !formState[swimlane.id]?.length;
-      // Only show Missing warning in project mode,
-      // For some swimlanes (like Project Staff) it wouldn't make sense to have a global default.
+      // Only show Missing warning in project mode. Not all swimlanes need to have a global default, so "Missing" would be misleading
       const showMissingWarning = isEmpty && projectMode;
 
       const anyUserInactive =

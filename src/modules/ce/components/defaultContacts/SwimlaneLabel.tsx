@@ -9,7 +9,7 @@ interface Props {
 
 /**
  * Displays swimlane name with template name and tooltip showing associated tasks.
- * Format: "Swimlane Name (Template Name)" with info icon
+ * Format: "Swimlane Name (Template Name) (i)"
  */
 const SwimlaneLabel: React.FC<Props> = ({ swimlane, showTooltip = true }) => {
   return (

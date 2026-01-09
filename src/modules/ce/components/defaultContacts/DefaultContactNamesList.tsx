@@ -42,8 +42,7 @@ const DefaultContactNamesList: React.FC<Props> = ({
             component='span'
             // Show inactive users with warning color
             color={contact.user.active ? 'inherit' : 'warning.dark'}
-            // Italicize global contacts for editors, to help indicate how they should be edited.
-            // Non-editor users see all contacts unitalicized.
+            // Italicize global contacts to differentiate, so users know how they can be edited.
             style={{
               fontStyle:
                 !contact.project && italicizeGlobalContacts

@@ -9,7 +9,10 @@ import EditCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/
 import ProjectNoSwimlanesAlert from '@/modules/ce/components/defaultContacts/ProjectNoSwimlanesAlert';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
-import { ProjectWithCeDefaultContactsFragment } from '@/types/gqlTypes';
+import {
+  CeDefaultContactFieldsFragment,
+  ProjectWithCeDefaultContactsFragment,
+} from '@/types/gqlTypes';
 
 interface Props {
   project: ProjectWithCeDefaultContactsFragment;
@@ -54,7 +57,7 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
       acc[item.swimlane.id] = item.contacts;
       return acc;
     },
-    {} as Record<string, (typeof project.ceDefaultContacts)[0]['contacts']>
+    {} as Record<string, CeDefaultContactFieldsFragment[]>
   );
 
   const handleClose = useCallback(() => {
