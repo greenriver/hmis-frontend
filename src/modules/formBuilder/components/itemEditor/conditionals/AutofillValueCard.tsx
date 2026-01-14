@@ -7,10 +7,12 @@ import ManageEnableWhen from './ManageEnableWhen';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
+import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
+import { usePickList } from '@/modules/form/hooks/usePickList';
 import { ItemMap } from '@/modules/form/types';
 import { determineAutofillField } from '@/modules/formBuilder/formBuilderUtil';
-import { ItemType } from '@/types/gqlTypes';
+import { FormItem, ItemType } from '@/types/gqlTypes';
 
 interface AutofillValueCardProps {
   control: FormItemControl;
@@ -37,6 +39,23 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
   });
   const fieldType = useMemo(() => determineAutofillField(itemType), [itemType]);
 
+  // Get the current set of PickListOptions for the item (if any) to populate the autofill value dropdown
+  const pickListOptions = useWatch({ control, name: 'pickListOptions' });
+  const pickListReference = useWatch({ control, name: 'pickListReference' });
+  const pickListHookArgs = useMemo(
+    () =>
+      ({
+        linkId: 'fake',
+        type: itemType,
+        pickListOptions,
+        pickListReference,
+      }) as FormItem,
+    [itemType, pickListOptions, pickListReference]
+  );
+
+  const { pickList: currentItemPickList = [], loading: pickListLoading } =
+    usePickList({ item: pickListHookArgs });
+
   // Advanced behaviors that are toggled off by default, or on if either are set
   const [advanced, setAdvanced] = useState({
     useFormula: !!formulaValue,
@@ -54,19 +73,37 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
         {!advanced.useFormula && (
           <>
             {fieldType === 'valueCode' && (
-              <ControlledTextInput
-                name={`autofillValues.${index}.valueCode`}
-                label='Value'
-                control={control}
-                required
-              />
+              <>
+                {currentItemPickList.length > 0 || pickListLoading ? (
+                  <ControlledSelect
+                    loading={pickListLoading}
+                    name={`autofillValues.${index}.valueCode`}
+                    label='Value'
+                    control={control}
+                    options={currentItemPickList}
+                    placeholder='Select an option'
+                    required
+                  />
+                ) : (
+                  <ControlledTextInput
+                    name={`autofillValues.${index}.valueCode`}
+                    label='Value'
+                    control={control}
+                    required
+                  />
+                )}
+              </>
             )}
             {fieldType === 'valueBoolean' && (
               <Controller
                 name={`autofillValues.${index}.valueBoolean`}
                 control={control}
                 shouldUnregister
-                rules={{ required: 'This field is required' }}
+                // RHF `required` treats boolean `false` as empty, so validate true/false explicitly
+                rules={{
+                  validate: (val) =>
+                    val === true || val === false || 'This field is required',
+                }}
                 render={({
                   field: { ref, disabled, ...field },
                   fieldState: { error },
