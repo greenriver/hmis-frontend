@@ -85,6 +85,10 @@ fragment UnitGroupFields on UnitGroup {
   id
   name
   workflowTemplateIdentifier
+  unitType {
+    id
+    description
+  }
 }
 
 fragment UnitGroupCapacityFields on UnitGroup {
@@ -109,5 +113,9 @@ fragment UnitGroupDetailFields on UnitGroup {
   }
   prioritySchemes {
     ...CeMatchRuleFields
+  }
+  unitType {
+    id
+    description
   }
 }

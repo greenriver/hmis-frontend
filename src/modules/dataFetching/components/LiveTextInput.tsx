@@ -8,8 +8,10 @@ import TextInput, {
 } from '@/components/elements/input/TextInput';
 import useDebouncedHandler from '@/hooks/useDebouncedHandler';
 
-export interface Props<Mutation, MutationVariables>
-  extends Omit<TextInputProps, 'onChange' | 'value' | 'initialValue'> {
+export interface Props<Mutation, MutationVariables> extends Omit<
+  TextInputProps,
+  'onChange' | 'value' | 'initialValue'
+> {
   queryDocument: TypedDocumentNode<MutationVariables, MutationVariables>;
   constructVariables: (option: string) => MutationVariables;
   getValueFromResponse: (data: Mutation) => string;

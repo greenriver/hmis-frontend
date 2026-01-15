@@ -5,8 +5,10 @@ import React, { useCallback, useMemo } from 'react';
 import { To, useLocation } from 'react-router-dom';
 import ButtonLink, { ButtonLinkProps } from '../elements/ButtonLink';
 
-export interface PrintViewButtonProps
-  extends Omit<ButtonLinkProps, 'to' | 'ref' | `on${string}`> {
+export interface PrintViewButtonProps extends Omit<
+  ButtonLinkProps,
+  'to' | 'ref' | `on${string}`
+> {
   exit?: boolean;
   to?: To;
   openInNew?: boolean;

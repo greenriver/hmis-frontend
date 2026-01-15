@@ -177,8 +177,6 @@ const UnitGroupPage = () => {
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
         includeCeFields={projectSupportsReferrals}
-        // If adding first units to group, allow user to select unit type. After that, don't allow unit type selection and let the backend infer it.
-        allowSelectUnitType={unitGroup.capacity === 0}
         allowSelectUnitGroup={false}
       />
       <UnitGroupFormDialog

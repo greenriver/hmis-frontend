@@ -8,8 +8,10 @@ import GenericSelect, {
 import InputIndicatorContainer from '@/components/elements/input/InputIndicatorContainer';
 import { PickListOption } from '@/types/gqlTypes';
 
-export interface Props<Mutation, MutationVariables>
-  extends Omit<GenericSelectProps<PickListOption, false, false>, 'onChange'> {
+export interface Props<Mutation, MutationVariables> extends Omit<
+  GenericSelectProps<PickListOption, false, false>,
+  'onChange'
+> {
   queryDocument: TypedDocumentNode<MutationVariables, MutationVariables>;
   constructVariables: (option: PickListOption | null) => MutationVariables;
   getOptionFromResponse: (data: Mutation) => PickListOption | null;

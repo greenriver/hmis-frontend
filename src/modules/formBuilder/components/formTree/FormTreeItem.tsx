@@ -5,7 +5,8 @@ import FormTreeLabel, {
 } from '@/modules/formBuilder/components/formTree/FormTreeLabel';
 
 interface FormTreeItemProps
-  extends Omit<UseTreeItem2Parameters, 'rootRef'>,
+  extends
+    Omit<UseTreeItem2Parameters, 'rootRef'>,
     Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {}
 
 const FormTreeItem = forwardRef(function FormTreeItem(

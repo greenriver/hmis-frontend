@@ -51,6 +51,9 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
   const isEditing = !!unitGroup;
 
   const [name, setName] = useState(unitGroup?.name || '');
+  const [unitTypeId, setUnitTypeId] = useState<string | null>(
+    unitGroup?.unitType?.id || null
+  );
   const [workflowTemplateIdentifier, setWorkflowTemplateIdentifier] = useState<
     string | null
   >(unitGroup?.workflowTemplateIdentifier || null);
@@ -69,6 +72,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
   const handleClose = useCallback(() => {
     // Reset to initial values based on current unitGroup
     setName(unitGroup?.name || '');
+    setUnitTypeId(unitGroup?.unitType?.id || null);
     setWorkflowTemplateIdentifier(
       unitGroup?.workflowTemplateIdentifier || null
     );
@@ -139,6 +143,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
           input: {
             name,
             projectId,
+            unitTypeId,
             workflowTemplateIdentifier,
             directReferralWorkflowTemplateIdentifier,
             ceEventType,
@@ -153,6 +158,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     createUnitGroup,
     updateUnitGroup,
     projectId,
+    unitTypeId,
     workflowTemplateIdentifier,
     directReferralWorkflowTemplateIdentifier,
     ceEventType,
@@ -181,6 +187,17 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
     skip: !projectSupportsReferrals,
   });
 
+  const {
+    data: { pickList: unitTypePickList } = {},
+    loading: unitTypePickListLoading,
+    error: unitTypePickListError,
+  } = useGetPickListQuery({
+    variables: {
+      pickListType: PickListType.PossibleUnitTypesForProject,
+      projectId: projectId,
+    },
+  });
+
   const workflowTemplateIdentifierDisabled =
     isEditing && !!unitGroup?.workflowTemplateIdentifier;
   const directReferralWorkflowTemplateIdentifierDisabled =
@@ -188,6 +205,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
 
   if (templatePickListError) throw templatePickListError;
   if (ceEventPicklistError) throw ceEventPicklistError;
+  if (unitTypePickListError) throw unitTypePickListError;
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
@@ -206,6 +224,26 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
             label={getRequiredLabel('Unit Group Name', true)}
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+          <FormSelect
+            value={unitTypeId ? { code: unitTypeId } : null}
+            label={getRequiredLabel('Unit Type', true)}
+            placeholder='Select Unit Type'
+            loading={unitTypePickListLoading}
+            options={unitTypePickList || []}
+            helperText={
+              isEditing
+                ? 'Unit type cannot be changed.'
+                : 'Select the unit type for this group.'
+            }
+            disabled={isEditing}
+            onChange={(_event, option) => {
+              if (isPickListOption(option)) {
+                setUnitTypeId(option.code);
+              } else if (!option) {
+                setUnitTypeId(null);
+              }
+            }}
           />
           {projectSupportsReferrals && (
             <>

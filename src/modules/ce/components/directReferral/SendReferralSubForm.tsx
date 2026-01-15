@@ -104,6 +104,7 @@ const SendReferralSubForm: React.FC<Props> = ({
       )}
       {formDefinition && (
         <DynamicForm
+          variant={'without_top_level_cards'}
           definition={formDefinition.definition}
           onSubmit={handleSubmit}
           loading={submitLoading}

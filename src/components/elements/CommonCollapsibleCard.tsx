@@ -6,8 +6,10 @@ import {
   ExpandMoreIcon,
 } from '@/components/elements/SemanticIcons';
 
-interface CommonCollapsibleCardProps
-  extends Omit<CommonCardProps, 'onClickHeader' | 'headerActions'> {
+interface CommonCollapsibleCardProps extends Omit<
+  CommonCardProps,
+  'onClickHeader' | 'headerActions'
+> {
   open?: boolean; // Controlled open state
   initialOpen?: boolean; // Uncontrolled initial open state
   onClick?: VoidFunction; // Callback for header click

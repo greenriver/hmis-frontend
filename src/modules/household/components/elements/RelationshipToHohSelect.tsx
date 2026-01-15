@@ -9,8 +9,10 @@ import { RelationshipToHoH } from '@/types/gqlTypes';
 
 export type Option = { value: RelationshipToHoH; label: string };
 
-export interface Props
-  extends Omit<GenericSelectProps<Option, false, false>, 'options' | 'value'> {
+export interface Props extends Omit<
+  GenericSelectProps<Option, false, false>,
+  'options' | 'value'
+> {
   variant: 'includeHoh' | 'excludeHoh';
   value: RelationshipToHoH | null;
 }
