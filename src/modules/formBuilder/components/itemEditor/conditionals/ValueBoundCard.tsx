@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
@@ -58,7 +59,7 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
   const isValid = useMemo(
     () =>
       !!valueDate ||
-      !!valueNumber ||
+      !isNil(valueNumber) ||
       !!valueLocalConstant ||
       !!dependentQuestion,
     [valueDate, valueNumber, valueLocalConstant, dependentQuestion]
