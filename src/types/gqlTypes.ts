@@ -5246,6 +5246,8 @@ export type MutationDeleteUnitsArgs = {
 
 export type MutationFetchAhaScoreArgs = {
   clientId: Scalars['ID']['input'];
+  lookupCatalyst?: InputMaybe<Scalars['String']['input']>;
+  lookupReason?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type MutationJoinHouseholdArgs = {
@@ -9394,6 +9396,10 @@ export type GetRootPermissionsQuery = {
 
 export type FetchAhaScoreMutationVariables = Exact<{
   clientId: Scalars['ID']['input'];
+  lookupCatalyst?: InputMaybe<Scalars['String']['input']>;
+  lookupReason?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
 }>;
 
 export type FetchAhaScoreMutation = {
@@ -52125,8 +52131,16 @@ export type GetRootPermissionsQueryResult = Apollo.QueryResult<
   GetRootPermissionsQueryVariables
 >;
 export const FetchAhaScoreDocument = gql`
-  mutation FetchAhaScore($clientId: ID!) {
-    fetchAhaScore(clientId: $clientId) {
+  mutation FetchAhaScore(
+    $clientId: ID!
+    $lookupCatalyst: String
+    $lookupReason: [String!]
+  ) {
+    fetchAhaScore(
+      clientId: $clientId
+      lookupCatalyst: $lookupCatalyst
+      lookupReason: $lookupReason
+    ) {
       score
       mciQualityIndicator
       dwClientId
@@ -52158,6 +52172,8 @@ export type FetchAhaScoreMutationFn = Apollo.MutationFunction<
  * const [fetchAhaScoreMutation, { data, loading, error }] = useFetchAhaScoreMutation({
  *   variables: {
  *      clientId: // value for 'clientId'
+ *      lookupCatalyst: // value for 'lookupCatalyst'
+ *      lookupReason: // value for 'lookupReason'
  *   },
  * });
  */
