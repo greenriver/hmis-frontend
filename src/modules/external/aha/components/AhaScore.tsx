@@ -8,8 +8,17 @@ import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
-import { ChangeType, GroupItemComponentProps } from '@/modules/form/types';
-import { AhaFailedReason, useFetchAhaScoreMutation } from '@/types/gqlTypes';
+import {
+  ChangeType,
+  GroupItemComponentProps,
+  isPickListOption,
+  isPickListOptionArray,
+} from '@/modules/form/types';
+import {
+  AhaFailedReason,
+  PickListOption,
+  useFetchAhaScoreMutation,
+} from '@/types/gqlTypes';
 
 /**
  * AHA Score Component
@@ -64,6 +73,11 @@ const DW_CLIENT_LINK_ID = 'aha_dw_client_id';
 // Generator of the score, always 'AHA'. Only present if the API call was successful.
 const GENERATOR_LINK_ID = 'aha_generator';
 
+// Optional fields, from elsewhere in the form.
+// If present, pass these form values to the backend when calculating the score.
+const LOOKUP_CATALYST_LINK_ID = 'lookup_catalyst';
+const LOOKUP_REASON_LINK_ID = 'reason_for_aha_lookup';
+
 const EXPECTED_LINK_IDS = [
   SCORE_LINK_ID,
   MCI_QUALITY_INDICATOR_LINK_ID,
@@ -89,10 +103,39 @@ const AhaScore = ({
   const [ahaFailedReason, setAhaFailedReason] = useState<
     AhaFailedReason | undefined | null
   >();
-  // Use RHF to watch the current value of the score field.
-  // This is to disable the fetch button after unlocking an assessment that's already fetched the score.
-  const values = useDynamicFieldWatchValues([SCORE_LINK_ID]);
+
+  // Use RHF to watch the current value of the following fields:
+  // - score: to disable the fetch button after unlocking an assessment that's already fetched the score.
+  // - lookup reason/lookup catalyst: to disable fetch when these haven't been provided yet, and to pass the values to the backend when calculating the score.
+  const values = useDynamicFieldWatchValues([
+    SCORE_LINK_ID,
+    LOOKUP_REASON_LINK_ID,
+    LOOKUP_CATALYST_LINK_ID,
+  ]);
   const scoreValue = values[SCORE_LINK_ID];
+  const { lookupCatalyst, lookupReason, requireCatalystAndReason } =
+    useMemo(() => {
+      const linkIds = Object.keys(handlers?.itemMap || {});
+      const formHasCatalystAndReason =
+        linkIds.includes(LOOKUP_CATALYST_LINK_ID) &&
+        linkIds.includes(LOOKUP_REASON_LINK_ID);
+
+      const catalystPickListOption = values[LOOKUP_CATALYST_LINK_ID];
+      const lookupCatalyst = isPickListOption(catalystPickListOption)
+        ? catalystPickListOption?.code
+        : undefined;
+
+      const reasonPickListOptions = values[LOOKUP_REASON_LINK_ID]; // reason is multi select, so expect an array of pick list options
+      const lookupReason = isPickListOptionArray(reasonPickListOptions)
+        ? reasonPickListOptions?.map((o: PickListOption) => o.code)
+        : undefined;
+
+      return {
+        lookupCatalyst,
+        lookupReason,
+        requireCatalystAndReason: formHasCatalystAndReason,
+      };
+    }, [values, handlers?.itemMap]);
 
   // If client has no score (-1 is returned), hasScore is false and the button stays enabled
   const hasScore =
@@ -105,6 +148,8 @@ const AhaScore = ({
   const [fetchAha, { loading }] = useFetchAhaScoreMutation({
     variables: {
       clientId: clientId,
+      lookupCatalyst: lookupCatalyst,
+      lookupReason: lookupReason,
     },
     onCompleted: (data) => {
       const errors = data.fetchAhaScore?.errors || [];
@@ -136,7 +181,14 @@ const AhaScore = ({
     },
   });
 
-  const hasRequiredContext = !!clientId && clientId !== DUMMY_CLIENT_ID;
+  // Disable the fetch button if:
+  // - we don't have a client ID,
+  // - this is a preview env with a dummy client ID,
+  // - or this form requires lookup catalyst and reason, and they are not filled out yet
+  const hasRequiredContext =
+    !!clientId &&
+    clientId !== DUMMY_CLIENT_ID &&
+    (requireCatalystAndReason ? lookupCatalyst && lookupReason : true);
 
   const handleFetch = useCallback(() => {
     if (hasRequiredContext) {
