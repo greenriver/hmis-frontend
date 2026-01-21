@@ -161,7 +161,7 @@ const OccurrencePointFormWrapper: React.FC<OccurrencePointFormProps> = ({
 }) => {
   return (
     <OccurrencePointForm
-      key={JSON.stringify(record)}
+      // key={JSON.stringify(record)}
       record={record}
       {...props}
     />
