@@ -1,6 +1,5 @@
 import { DocumentNode, useMutation } from '@apollo/client';
 import {
-  Box,
   Button,
   DialogActions,
   DialogContent,
@@ -11,11 +10,9 @@ import { get } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonDialog from '@/components/elements/CommonDialog';
-import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
-import { ErrorIcon } from '@/components/elements/SemanticIcons';
 import ProjectNoSwimlanesAlert from '@/modules/ce/components/defaultContacts/ProjectNoSwimlanesAlert';
-import SwimlaneLabel from '@/modules/ce/components/defaultContacts/SwimlaneLabel';
+import SwimlaneUserSelect from '@/modules/ce/components/defaultContacts/SwimlaneUserSelect';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
@@ -25,7 +22,6 @@ import {
   hasAnyValue,
   partitionValidations,
 } from '@/modules/errors/util';
-import FormSelect from '@/modules/form/components/FormSelect';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   AssignCeDefaultContactsDocument,
@@ -37,7 +33,6 @@ import {
   GetDefaultContactsDocument,
   PickListOption,
   PickListType,
-  useGetPickListQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -105,22 +100,6 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   const [formState, setFormState] = useState<Record<string, PickListOption[]>>(
     transformContactsToFormState(initialValue)
   );
-
-  // Fetch users who are eligible to perform tasks in the specified project.
-  // If projectId is null, returns all users who can perform referral tasks in any project.
-  // TODO: move to select component
-  const {
-    data: { pickList: usersPickList } = {},
-    loading: usersLoading,
-    error: usersError,
-  } = useGetPickListQuery({
-    variables: {
-      pickListType: PickListType.EligibleReferralStepAssignmentUsers,
-      projectId,
-    },
-    skip: !open,
-  });
-
   const handleChangeUsers = useCallback(
     (swimlaneId: string, users: PickListOption[]) => {
       setFormState((prev) => ({
@@ -183,80 +162,39 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     });
   }, [formState, createAssignments, projectId]);
 
-  // TODO: move to select component
-  const getSwimlaneSelect = useCallback(
-    (swimlane: CeSwimlaneFieldsFragment) => {
-      const isEmpty = !formState[swimlane.id]?.length;
-      // Only show Missing warning in project mode. Not all swimlanes need to have a global default, so "Missing" would be misleading
-      const showMissingWarning = isEmpty && projectMode;
-
-      const anyUserInactive =
-        formState[swimlane.id]?.some((user) =>
-          user.label?.includes('(Inactive)')
-        ) || false;
-
-      const label = (
-        <Stack direction='row' spacing={1} alignItems='center'>
-          <SwimlaneLabel swimlane={swimlane} showTooltip={false} />
-          {showMissingWarning && (
-            <Stack direction='row' spacing={0.5} alignItems='center'>
-              <ErrorIcon sx={{ fontSize: 'inherit', color: 'warning.main' }} />
-              <span>Missing</span>
-            </Stack>
-          )}
-        </Stack>
-      );
-
-      return (
-        <Box key={swimlane.id}>
-          <FormSelect
-            label={label}
-            value={formState[swimlane.id] || []}
-            options={usersPickList || []}
-            onChange={(_, value) => handleChangeUsers(swimlane.id, value)}
-            multiple
-            placeholder='Select'
-            helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
-            color={
-              showMissingWarning || anyUserInactive ? 'warning' : undefined
-            }
-          />
-        </Box>
-      );
-    },
-    [formState, handleChangeUsers, projectMode, usersPickList]
-  );
-
-  const loading = usersLoading;
-  const error = usersError;
-
-  if (error) throw error;
-
   const hasSwimlanes = !!ceSwimlanes?.length;
 
   return (
     <CommonDialog open={open} onClose={handleClose} fullWidth>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        {loading ? (
-          <Loading />
-        ) : (
-          <Stack spacing={3} sx={{ mt: 2 }}>
-            {dialogContentHeader}
+        <Stack spacing={3} sx={{ mt: 2 }}>
+          {dialogContentHeader}
 
-            {ceSwimlanes?.map((swimlane) => getSwimlaneSelect(swimlane))}
+          {ceSwimlanes?.map((swimlane) => (
+            <SwimlaneUserSelect
+              key={swimlane.id}
+              value={formState[swimlane.id] || []}
+              onChange={(value) => handleChangeUsers(swimlane.id, value)}
+              warnIfEmpty={projectMode}
+              pickListArgs={{
+                pickListType: PickListType.EligibleReferralStepAssignmentUsers,
+                projectId,
+              }}
+              swimlane={swimlane}
+            />
+          ))}
 
-            {!hasSwimlanes && <ProjectNoSwimlanesAlert />}
+          {!hasSwimlanes && <ProjectNoSwimlanesAlert />}
 
-            {hasAnyValue(errorState) && (
-              <Stack gap={1}>
-                <ApolloErrorAlert error={errorState.apolloError} />
-                <ErrorAlert errors={errorState.errors} />
-                <WarningAlert warnings={errorState.warnings} />
-              </Stack>
-            )}
-          </Stack>
-        )}
+          {hasAnyValue(errorState) && (
+            <Stack gap={1}>
+              <ApolloErrorAlert error={errorState.apolloError} />
+              <ErrorAlert errors={errorState.errors} />
+              <WarningAlert warnings={errorState.warnings} />
+            </Stack>
+          )}
+        </Stack>
       </DialogContent>
       <DialogActions>
         <Stack gap={3} direction='row'>
@@ -267,17 +205,17 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
           >
             Cancel
           </Button>
-          {(loading || hasSwimlanes) && (
+          {hasSwimlanes && (
             <LoadingButton
               onClick={handleSubmit}
               type='submit'
               loading={submitLoading}
-              disabled={loading || submitLoading}
+              disabled={submitLoading}
             >
               Save
             </LoadingButton>
           )}
-          {!loading && !hasSwimlanes && projectId && (
+          {!hasSwimlanes && projectId && (
             <ButtonLink
               to={generateSafePath(ProjectDashboardRoutes.UNITS, {
                 projectId,

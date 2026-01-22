@@ -9,6 +9,7 @@ import React, { ReactNode } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
+import { isPickListOption } from '@/modules/form/types';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 
 export interface GenericSelectProps<
@@ -104,13 +105,12 @@ const GenericSelect = <
           // Avoid console warning: A props object containing a "key" prop is being spread into JSX
           const { key, ...rest } = getTagProps({ index });
 
-          // If the selected value is an object with a 'disabled' property set to true, disable the chip from being unselected
-          const disabled =
-            (typeof option === 'object' &&
-              option !== null &&
-              'disabled' in option &&
-              (option as any).disabled) ||
-            rest.disabled;
+          // If the selected value is an object with a 'disabled' property set to true, visually disable the chip.
+          // See https://v5.mui.com/material-ui/react-autocomplete/#fixed-options
+          // Note that this *only* visually disables the chip. The parent component should modify onChange to prevent the option from being deselected.
+          const disabled = isPickListOption(option)
+            ? !!option.disabled
+            : !!rest.disabled;
 
           return (
             <Chip
