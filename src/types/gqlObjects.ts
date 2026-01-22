@@ -691,6 +691,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'organizationName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'unitGroupId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'unitGroupName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
     ],
   },
   { name: 'CeDefaultContactsBySwimlane', fields: [] },
@@ -9990,10 +10019,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ProjectsForEnrollmentFilterOptions',
     args: [
-      {
-        name: 'ceEnabled',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
       {
         name: 'funder',
         type: {

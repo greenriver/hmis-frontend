@@ -86,7 +86,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
             // In project mode, if the `project` owner field is false for this contact,
             // that means it's owned at a higher level, by the org or data source.
             // Show it in the dropdown for clarity, and disable de-selecting it.
-            disabled: projectMode ? !contact.project : false,
+            disabled: projectMode ? !contact.projectId : false,
           })
         );
       });

@@ -677,10 +677,13 @@ export type CeDefaultContact = {
   __typename?: 'CeDefaultContact';
   global: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
-  organization?: Maybe<Organization>;
-  project?: Maybe<Project>;
+  organizationId?: Maybe<Scalars['ID']['output']>;
+  organizationName: Scalars['String']['output'];
+  projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   swimlane: CeSwimlane;
-  unitGroup?: Maybe<UnitGroup>;
+  unitGroupId?: Maybe<Scalars['ID']['output']>;
+  unitGroupName: Scalars['String']['output'];
   user: ApplicationUser;
 };
 
@@ -6844,7 +6847,6 @@ export enum ProjectType {
 }
 
 export type ProjectsForEnrollmentFilterOptions = {
-  ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   funder?: InputMaybe<Array<FundingSource>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
@@ -26723,6 +26725,7 @@ export type CeDefaultContactFieldsFragment = {
   __typename?: 'CeDefaultContact';
   id: string;
   global: boolean;
+  projectId?: string | null;
   swimlane: {
     __typename?: 'CeSwimlane';
     id: string;
@@ -26738,19 +26741,6 @@ export type CeDefaultContactFieldsFragment = {
     email: string;
     active: boolean;
   };
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    hudId: string;
-    organizationName: string;
-  } | null;
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  } | null;
-  unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
 };
 
 export type CeDefaultContactsBySwimlaneFieldsFragment = {
@@ -26767,6 +26757,7 @@ export type CeDefaultContactsBySwimlaneFieldsFragment = {
     __typename?: 'CeDefaultContact';
     id: string;
     global: boolean;
+    projectId?: string | null;
     swimlane: {
       __typename?: 'CeSwimlane';
       id: string;
@@ -26782,19 +26773,6 @@ export type CeDefaultContactsBySwimlaneFieldsFragment = {
       email: string;
       active: boolean;
     };
-    organization?: {
-      __typename?: 'Organization';
-      id: string;
-      hudId: string;
-      organizationName: string;
-    } | null;
-    project?: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    } | null;
-    unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
   }>;
 };
 
@@ -26823,6 +26801,7 @@ export type ProjectWithCeDefaultContactsFragment = {
       __typename?: 'CeDefaultContact';
       id: string;
       global: boolean;
+      projectId?: string | null;
       swimlane: {
         __typename?: 'CeSwimlane';
         id: string;
@@ -26838,19 +26817,6 @@ export type ProjectWithCeDefaultContactsFragment = {
         email: string;
         active: boolean;
       };
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        hudId: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     }>;
   }>;
   ceSwimlanes: Array<{
@@ -26875,6 +26841,7 @@ export type AssignCeDefaultContactsMutation = {
       __typename?: 'CeDefaultContact';
       id: string;
       global: boolean;
+      projectId?: string | null;
       swimlane: {
         __typename?: 'CeSwimlane';
         id: string;
@@ -26890,19 +26857,6 @@ export type AssignCeDefaultContactsMutation = {
         email: string;
         active: boolean;
       };
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        hudId: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     }>;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -26974,6 +26928,7 @@ export type GetDefaultContactsQuery = {
           __typename?: 'CeDefaultContact';
           id: string;
           global: boolean;
+          projectId?: string | null;
           swimlane: {
             __typename?: 'CeSwimlane';
             id: string;
@@ -26989,23 +26944,6 @@ export type GetDefaultContactsQuery = {
             email: string;
             active: boolean;
           };
-          organization?: {
-            __typename?: 'Organization';
-            id: string;
-            hudId: string;
-            organizationName: string;
-          } | null;
-          project?: {
-            __typename?: 'Project';
-            id: string;
-            projectName: string;
-            projectType?: ProjectType | null;
-          } | null;
-          unitGroup?: {
-            __typename?: 'UnitGroup';
-            id: string;
-            name: string;
-          } | null;
         }>;
       }>;
       ceSwimlanes: Array<{
@@ -27051,6 +26989,7 @@ export type GetProjectDefaultContactsQuery = {
         __typename?: 'CeDefaultContact';
         id: string;
         global: boolean;
+        projectId?: string | null;
         swimlane: {
           __typename?: 'CeSwimlane';
           id: string;
@@ -27066,23 +27005,6 @@ export type GetProjectDefaultContactsQuery = {
           email: string;
           active: boolean;
         };
-        organization?: {
-          __typename?: 'Organization';
-          id: string;
-          hudId: string;
-          organizationName: string;
-        } | null;
-        project?: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        } | null;
-        unitGroup?: {
-          __typename?: 'UnitGroup';
-          id: string;
-          name: string;
-        } | null;
       }>;
     }>;
     ceSwimlanes: Array<{
@@ -27116,6 +27038,7 @@ export type GetGlobalDefaultContactsQuery = {
       __typename?: 'CeDefaultContact';
       id: string;
       global: boolean;
+      projectId?: string | null;
       swimlane: {
         __typename?: 'CeSwimlane';
         id: string;
@@ -27131,19 +27054,6 @@ export type GetGlobalDefaultContactsQuery = {
         email: string;
         active: boolean;
       };
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        hudId: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     }>;
   }>;
 };
@@ -39428,6 +39338,7 @@ export type SubmitFormMutation = {
               __typename?: 'CeDefaultContact';
               id: string;
               global: boolean;
+              projectId?: string | null;
               swimlane: {
                 __typename?: 'CeSwimlane';
                 id: string;
@@ -39443,23 +39354,6 @@ export type SubmitFormMutation = {
                 email: string;
                 active: boolean;
               };
-              organization?: {
-                __typename?: 'Organization';
-                id: string;
-                hudId: string;
-                organizationName: string;
-              } | null;
-              project?: {
-                __typename?: 'Project';
-                id: string;
-                projectName: string;
-                projectType?: ProjectType | null;
-              } | null;
-              unitGroup?: {
-                __typename?: 'UnitGroup';
-                id: string;
-                name: string;
-              } | null;
             }>;
           }>;
           ceSwimlanes: Array<{
@@ -43220,6 +43114,7 @@ export type ProjectAllFieldsFragment = {
       __typename?: 'CeDefaultContact';
       id: string;
       global: boolean;
+      projectId?: string | null;
       swimlane: {
         __typename?: 'CeSwimlane';
         id: string;
@@ -43235,19 +43130,6 @@ export type ProjectAllFieldsFragment = {
         email: string;
         active: boolean;
       };
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        hudId: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
-      unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
     }>;
   }>;
   ceSwimlanes: Array<{
@@ -44183,6 +44065,7 @@ export type GetProjectQuery = {
         __typename?: 'CeDefaultContact';
         id: string;
         global: boolean;
+        projectId?: string | null;
         swimlane: {
           __typename?: 'CeSwimlane';
           id: string;
@@ -44198,23 +44081,6 @@ export type GetProjectQuery = {
           email: string;
           active: boolean;
         };
-        organization?: {
-          __typename?: 'Organization';
-          id: string;
-          hudId: string;
-          organizationName: string;
-        } | null;
-        project?: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        } | null;
-        unitGroup?: {
-          __typename?: 'UnitGroup';
-          id: string;
-          name: string;
-        } | null;
       }>;
     }>;
     ceSwimlanes: Array<{
@@ -52060,22 +51926,9 @@ export const CeDefaultContactFieldsFragmentDoc = gql`
       email
       active
     }
-    organization {
-      id
-      ...OrganizationNameFields
-    }
-    project {
-      id
-      ...ProjectNameAndType
-    }
-    unitGroup {
-      id
-      name
-    }
+    projectId
   }
   ${CeSwimlaneFieldsFragmentDoc}
-  ${OrganizationNameFieldsFragmentDoc}
-  ${ProjectNameAndTypeFragmentDoc}
 `;
 export const CeDefaultContactsBySwimlaneFieldsFragmentDoc = gql`
   fragment CeDefaultContactsBySwimlaneFields on CeDefaultContactsBySwimlane {

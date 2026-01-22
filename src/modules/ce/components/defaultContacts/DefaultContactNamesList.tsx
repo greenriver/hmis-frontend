@@ -45,9 +45,7 @@ const DefaultContactNamesList: React.FC<Props> = ({
             // Italicize global contacts to differentiate, so users know how they can be edited.
             style={{
               fontStyle:
-                !contact.project && italicizeGlobalContacts
-                  ? 'italic'
-                  : 'normal',
+                contact.global && italicizeGlobalContacts ? 'italic' : 'normal',
             }}
           >
             {contact.user.name}

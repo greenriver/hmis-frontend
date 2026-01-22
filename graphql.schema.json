@@ -4708,24 +4708,52 @@
             "deprecationReason": null
           },
           {
-            "name": "organization",
+            "name": "organizationId",
             "description": null,
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Organization",
+              "kind": "SCALAR",
+              "name": "ID",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "project",
+            "name": "organizationName",
             "description": null,
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Project",
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4748,13 +4776,29 @@
             "deprecationReason": null
           },
           {
-            "name": "unitGroup",
+            "name": "unitGroupId",
             "description": null,
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "UnitGroup",
+              "kind": "SCALAR",
+              "name": "ID",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unitGroupName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -46109,18 +46153,6 @@
         "isOneOf": false,
         "fields": null,
         "inputFields": [
-          {
-            "name": "ceEnabled",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "funder",
             "description": null,
