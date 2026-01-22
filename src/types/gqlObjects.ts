@@ -8452,6 +8452,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'workflowTemplate',
         type: {
           kind: 'LIST',
