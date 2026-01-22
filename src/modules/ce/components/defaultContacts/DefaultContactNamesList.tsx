@@ -35,7 +35,7 @@ const DefaultContactNamesList: React.FC<Props> = ({
   return (
     <>
       {contacts.map((contact, idx) => (
-        <Fragment key={contact.user.id}>
+        <Fragment key={contact.id}>
           {idx > 0 && ', '}
           <Typography
             variant='body2'
