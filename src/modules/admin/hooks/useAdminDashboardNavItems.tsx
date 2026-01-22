@@ -24,13 +24,6 @@ export const useAdminDashboardNavItems = () => {
             hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
           {
-            id: 'default-contacts',
-            title: 'Default Contacts',
-            path: AdminDashboardRoutes.DEFAULT_CONTACTS,
-            permissions: ['canAdministrateCoordinatedEntry'],
-            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
-          },
-          {
             id: 'referrals',
             title: 'Referrals',
             path: AdminDashboardRoutes.REFERRALS,
@@ -49,6 +42,13 @@ export const useAdminDashboardNavItems = () => {
             title: 'Denials',
             path: AdminDashboardRoutes.AC_DENIALS,
             permissions: ['canManageDeniedReferrals'],
+          },
+          {
+            id: 'default-contacts',
+            title: 'Default Contacts',
+            path: AdminDashboardRoutes.DEFAULT_CONTACTS,
+            permissions: ['canAdministrateCoordinatedEntry'],
+            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
         ],
       },
