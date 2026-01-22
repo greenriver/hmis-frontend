@@ -322,7 +322,7 @@ const UnitGroupFormDialog: React.FC<UnitGroupFormDialogProps> = ({
           <LoadingButton
             onClick={handleSubmit}
             loading={loading}
-            disabled={!name}
+            disabled={!name || !unitTypeId}
           >
             {isEditing ? 'Save Changes' : 'Create'}
           </LoadingButton>
