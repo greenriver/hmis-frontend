@@ -1,8 +1,9 @@
-import { Paper, Typography } from '@mui/material';
+import { Paper } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import DefaultContactNamesList from './DefaultContactNamesList';
 import SwimlaneLabel from './SwimlaneLabel';
 import Loading from '@/components/elements/Loading';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import EditProjectCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditProjectCeDefaultContactsModal';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -64,11 +65,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
         render: (row: ProjectWithCeDefaultContactsFragment) => {
           if (!row.ceSwimlanes.find((s) => s.id === swimlane.id)) {
             // The project's applicable swimlanes list doesn't include this column, so show n/a
-            return (
-              <Typography variant='body2' color='text.secondary'>
-                Not applicable
-              </Typography>
-            );
+            return <NotCollectedText>Not applicable</NotCollectedText>;
           }
 
           const contacts =
