@@ -1,13 +1,15 @@
-import { Paper } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import DefaultContactNamesList from './DefaultContactNamesList';
 import SwimlaneLabel from './SwimlaneLabel';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import useDebouncedState from '@/hooks/useDebouncedState';
 import EditProjectCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditProjectCeDefaultContactsModal';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeDefaultContactsBySwimlaneFieldsFragment,
@@ -46,9 +48,11 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
   const [editingProject, setEditingProject] =
     useState<ProjectWithCeDefaultContactsFragment | null>(null);
 
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
+
   const filters = useFilters({
     type: 'ProjectFilterOptions',
-    omit: ['status', 'funder', 'organization', 'projectType', 'ceEnabled'],
+    omit: ['status', 'funder', 'ceEnabled', 'searchTerm'],
   });
 
   const columns: DataColumnDef<
@@ -92,38 +96,50 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <Paper>
-        <GenericTableWithData<
-          GetDefaultContactsQuery,
-          GetDefaultContactsQueryVariables,
-          ProjectWithCeDefaultContactsFragment
-        >
-          columns={columns}
-          queryVariables={{
-            filters: {
-              status: [ProjectFilterOptionStatus.Open],
-              ceEnabled: true,
-            },
-          }}
-          defaultSortOption={ProjectSortOption.OrganizationAndName}
-          filters={filters}
-          queryDocument={GetDefaultContactsDocument}
-          pagePath='projects'
-          paginationItemName='coordinated entry project'
-          handleRowClick={(row) => setEditingProject(row)}
-          rowActionTitle='Edit Project Contacts'
-          rowSecondaryActionConfigs={(row) => [
-            {
-              key: 'view',
-              title: 'View Project',
-              to: generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
-                projectId: row.id,
-              }),
-            },
-          ]}
+      <Stack gap={2}>
+        <CommonSearchInput
+          label='Search project default contacts'
+          name='search project default contacts'
+          placeholder='Search by project name or ID'
+          value={search}
+          onChange={setSearch}
+          fullWidth
+          size='small'
+          searchAdornment
         />
-      </Paper>
-
+        <Paper>
+          <GenericTableWithData<
+            GetDefaultContactsQuery,
+            GetDefaultContactsQueryVariables,
+            ProjectWithCeDefaultContactsFragment
+          >
+            columns={columns}
+            queryVariables={{
+              filters: {
+                status: [ProjectFilterOptionStatus.Open],
+                ceEnabled: true,
+                searchTerm: debouncedSearch || undefined,
+              },
+            }}
+            defaultSortOption={ProjectSortOption.OrganizationAndName}
+            filters={filters}
+            queryDocument={GetDefaultContactsDocument}
+            pagePath='projects'
+            paginationItemName='coordinated entry project'
+            handleRowClick={(row) => setEditingProject(row)}
+            rowActionTitle='Edit Project Contacts'
+            rowSecondaryActionConfigs={(row) => [
+              {
+                key: 'view',
+                title: 'View Project',
+                to: generateSafePath(ProjectDashboardRoutes.OVERVIEW, {
+                  projectId: row.id,
+                }),
+              },
+            ]}
+          />
+        </Paper>
+      </Stack>
       {editingProject && (
         <EditProjectCeDefaultContactsModal
           project={editingProject}
