@@ -1,4 +1,6 @@
 import React from 'react';
+import CommonDialog from '@/components/elements/CommonDialog';
+import Loading from '@/components/elements/Loading';
 import EditCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditCeDefaultContactsModal';
 import {
   GetGlobalDefaultContactsDocument,
@@ -14,14 +16,29 @@ const EditGlobalCeDefaultContactsModal: React.FC<Props> = ({
   open,
   onClose,
 }) => {
-  const { data: { globalCeDefaultContacts } = {}, error: globalError } =
-    useGetGlobalDefaultContactsQuery();
-  const { data: { ceSwimlanes } = {}, error: swimlanesError } =
-    useGetSwimlanesQuery();
+  const {
+    data: { globalCeDefaultContacts } = {},
+    error: globalError,
+    loading: globalLoading,
+  } = useGetGlobalDefaultContactsQuery();
+  const {
+    data: { ceSwimlanes } = {},
+    error: swimlanesError,
+    loading: swimlanesLoading,
+  } = useGetSwimlanesQuery();
 
   if (globalError) throw globalError;
   if (swimlanesError) throw swimlanesError;
-  if (!globalCeDefaultContacts || !ceSwimlanes) return null; // won't be able to open the modal until initial data is fetched
+
+  if (globalLoading || swimlanesLoading) {
+    return (
+      <CommonDialog open={open} onClose={onClose} fullWidth>
+        <Loading />
+      </CommonDialog>
+    );
+  }
+
+  if (!globalCeDefaultContacts || !ceSwimlanes) return null; // unexpected to hit this line, but helps
 
   return (
     <EditCeDefaultContactsModal
