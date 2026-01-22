@@ -1,11 +1,14 @@
 import {
   Autocomplete,
+  AutocompleteChangeDetails,
+  AutocompleteChangeReason,
   AutocompleteProps,
+  AutocompleteValue,
   Chip,
   CircularProgress,
   InputAdornment,
 } from '@mui/material';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
@@ -24,6 +27,7 @@ export interface GenericSelectProps<
   textInputProps?: TextInputProps;
   ariaLabel?: string;
   color?: 'warning' | 'error';
+  fixedOptions?: T[];
 }
 
 const GenericSelect = <
@@ -37,6 +41,8 @@ const GenericSelect = <
   options,
   ariaLabel,
   color,
+  fixedOptions,
+  onChange,
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
   const { placeholder, ...inputProps } = textInputProps || {};
@@ -50,6 +56,36 @@ const GenericSelect = <
         />
       </InputAdornment>
     ) : undefined;
+
+  const handleChange = useCallback(
+    (
+      event: React.SyntheticEvent,
+      newValue: AutocompleteValue<T, Multiple, boolean, Creatable>,
+      reason: AutocompleteChangeReason,
+      details?: AutocompleteChangeDetails<T>
+    ) => {
+      // Only handle fixedOptions when multiple is true and fixedOptions are provided
+      if (fixedOptions && rest.multiple && Array.isArray(newValue)) {
+        // Ensure fixedOptions are always included, then add any additional selected options
+        const mergedValue = [
+          ...fixedOptions,
+          ...newValue.filter((option: T) => !fixedOptions.includes(option)),
+        ];
+
+        // TypeScript can't infer that Multiple=true means AutocompleteValue is T[],
+        // but we've verified the runtime conditions, so this is safe
+        return onChange?.(
+          event,
+          mergedValue as AutocompleteValue<T, Multiple, boolean, Creatable>,
+          reason,
+          details
+        );
+      }
+
+      return onChange?.(event, newValue, reason, details);
+    },
+    [onChange, fixedOptions, rest.multiple]
+  );
 
   return (
     <Autocomplete
@@ -126,6 +162,7 @@ const GenericSelect = <
         })
       }
       {...rest}
+      onChange={handleChange}
     />
   );
 };

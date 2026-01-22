@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { ErrorIcon } from '@/components/elements/SemanticIcons';
 import SwimlaneLabel from '@/modules/ce/components/defaultContacts/SwimlaneLabel';
 import FormSelect from '@/modules/form/components/FormSelect';
@@ -40,16 +40,6 @@ const SwimlaneUserSelect: React.FC<Props> = ({
     return value.filter((option) => option.disabled);
   }, [value]);
 
-  const handleChange = useCallback(
-    (_event: React.ChangeEvent<unknown>, newValue: PickListOption[]) => {
-      onChange([
-        ...fixedOptions,
-        ...newValue.filter((option) => fixedOptions.indexOf(option) === -1),
-      ]);
-    },
-    [onChange, fixedOptions]
-  );
-
   if (usersError) throw usersError;
 
   const isEmpty = !value?.length;
@@ -75,7 +65,8 @@ const SwimlaneUserSelect: React.FC<Props> = ({
       label={label}
       value={value || []}
       options={usersPickList || []}
-      onChange={handleChange}
+      onChange={(_, value) => onChange(value)}
+      fixedOptions={fixedOptions}
       multiple
       placeholder='Select'
       helperText={`Tasks: ${swimlane.taskNames.join(', ')}`}
