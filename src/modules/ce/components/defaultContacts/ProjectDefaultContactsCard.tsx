@@ -5,7 +5,8 @@ import CommonCard from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import DefaultContactNamesList from '@/modules/ce/components/defaultContacts/DefaultContactNamesList';
-import EditCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditCeDefaultContactsModal';
+import EditGlobalCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditGlobalCeDefaultContactsModal';
+import EditProjectCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditProjectCeDefaultContactsModal';
 import ProjectNoSwimlanesAlert from '@/modules/ce/components/defaultContacts/ProjectNoSwimlanesAlert';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
@@ -100,14 +101,14 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
       </CommonCard>
 
       {projectModalOpen && (
-        <EditCeDefaultContactsModal
+        <EditProjectCeDefaultContactsModal
           project={project}
           open={projectModalOpen}
           onClose={handleClose}
         />
       )}
       {globalModalOpen && (
-        <EditCeDefaultContactsModal
+        <EditGlobalCeDefaultContactsModal
           open={globalModalOpen}
           onClose={handleClose}
         />

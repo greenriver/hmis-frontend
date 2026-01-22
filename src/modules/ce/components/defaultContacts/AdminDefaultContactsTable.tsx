@@ -1,9 +1,9 @@
 import { Paper, Typography } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import DefaultContactNamesList from './DefaultContactNamesList';
-import EditCeDefaultContactsModal from './EditCeDefaultContactsModal';
 import SwimlaneLabel from './SwimlaneLabel';
 import Loading from '@/components/elements/Loading';
+import EditProjectCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditProjectCeDefaultContactsModal';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -128,7 +128,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
       </Paper>
 
       {editingProject && (
-        <EditCeDefaultContactsModal
+        <EditProjectCeDefaultContactsModal
           project={editingProject}
           open={!!editingProject}
           onClose={() => setEditingProject(null)}

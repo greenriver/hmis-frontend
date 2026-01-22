@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { DocumentNode, useMutation } from '@apollo/client';
 import {
   Box,
   Button,
@@ -11,7 +11,6 @@ import { get } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonDialog from '@/components/elements/CommonDialog';
-import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
 import { ErrorIcon } from '@/components/elements/SemanticIcons';
@@ -38,17 +37,19 @@ import {
   GetDefaultContactsDocument,
   PickListOption,
   PickListType,
-  ProjectWithCeDefaultContactsFragment,
-  useGetGlobalDefaultContactsQuery,
   useGetPickListQuery,
-  useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
-  project?: ProjectWithCeDefaultContactsFragment;
+  ceSwimlanes: CeSwimlaneFieldsFragment[]; // All swimlanes to be edited (one record per swimlane)
+  initialValue: CeDefaultContactsBySwimlaneFieldsFragment[]; // Initial swimlane assignments (one record per swimlane that has any assignments)
+  projectId?: string; // If passed, manage default contacts for the specific project. If not passed, manage global contacts.
   open: boolean;
   onClose: () => void;
+  title: string;
+  dialogContentHeader?: React.ReactNode;
+  awaitRefetchQueriesOnSuccess?: DocumentNode[]; // queries to await refetch after mutation succeeds
 }
 
 /**
@@ -60,11 +61,16 @@ interface Props {
  * but the frontend does not support editing contacts at those levels.
  */
 const EditCeDefaultContactsModal: React.FC<Props> = ({
-  project,
+  ceSwimlanes,
+  initialValue,
+  projectId,
   open,
   onClose,
+  title,
+  dialogContentHeader,
+  awaitRefetchQueriesOnSuccess = [],
 }) => {
-  const projectMode = !!project;
+  const projectMode = !!projectId;
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
@@ -97,36 +103,12 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   );
 
   const [formState, setFormState] = useState<Record<string, PickListOption[]>>(
-    // If we were passed a project that already has default contacts loaded, set that as the initial form state.
-    // Otherwise, set it to {} and wait for the global contacts query to load.
-    projectMode ? transformContactsToFormState(project.ceDefaultContacts) : {}
+    transformContactsToFormState(initialValue)
   );
-
-  // In Global mode, fetch global contacts
-  const { loading: globalLoading, error: globalError } =
-    useGetGlobalDefaultContactsQuery({
-      skip: !open || projectMode, // skip this query in project mode
-      onCompleted: (data) => {
-        if (data.globalCeDefaultContacts) {
-          setFormState(
-            transformContactsToFormState(data.globalCeDefaultContacts)
-          );
-        }
-      },
-    });
-
-  // In Global mode, fetch global list of swimlanes. (In project mode, use swimlanes already fetched on the project)
-  const {
-    data: { ceSwimlanes: globalSwimlanes } = {},
-    loading: swimlanesLoading,
-    error: swimlanesError,
-  } = useGetSwimlanesQuery({
-    skip: !open || projectMode,
-  });
-  const ceSwimlanes = project?.ceSwimlanes || globalSwimlanes;
 
   // Fetch users who are eligible to perform tasks in the specified project.
   // If projectId is null, returns all users who can perform referral tasks in any project.
+  // TODO: move to select component
   const {
     data: { pickList: usersPickList } = {},
     loading: usersLoading,
@@ -134,7 +116,7 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
   } = useGetPickListQuery({
     variables: {
       pickListType: PickListType.EligibleReferralStepAssignmentUsers,
-      projectId: project?.id,
+      projectId,
     },
     skip: !open,
   });
@@ -172,7 +154,10 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       setErrorState({ ...emptyErrorState, apolloError });
     },
     // After completing the mutation, refetch the query for all default contacts
-    refetchQueries: [GetDefaultContactsDocument],
+    refetchQueries: [
+      GetDefaultContactsDocument,
+      ...awaitRefetchQueriesOnSuccess,
+    ],
     awaitRefetchQueries: true,
   });
 
@@ -191,13 +176,14 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
       variables: {
         input: {
           // pass projectId in project mode. In global mode, when projectId is not passed, the mutation creates contacts that are global (owned by the data source)
-          projectId: projectMode ? project?.id : undefined,
+          projectId,
           contacts,
         },
       },
     });
-  }, [formState, createAssignments, projectMode, project?.id]);
+  }, [formState, createAssignments, projectId]);
 
+  // TODO: move to select component
   const getSwimlaneSelect = useCallback(
     (swimlane: CeSwimlaneFieldsFragment) => {
       const isEmpty = !formState[swimlane.id]?.length;
@@ -241,8 +227,8 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
     [formState, handleChangeUsers, projectMode, usersPickList]
   );
 
-  const loading = globalLoading || swimlanesLoading || usersLoading;
-  const error = globalError || swimlanesError || usersError;
+  const loading = usersLoading;
+  const error = usersError;
 
   if (error) throw error;
 
@@ -250,26 +236,13 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
 
   return (
     <CommonDialog open={open} onClose={handleClose} fullWidth>
-      <DialogTitle>
-        Edit {projectMode ? 'Project' : 'Global'} Contacts
-      </DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         {loading ? (
           <Loading />
         ) : (
           <Stack spacing={3} sx={{ mt: 2 }}>
-            {projectMode && (
-              <Box>
-                <Stack direction='row' spacing={4}>
-                  <CommonLabeledTextBlock title='Project'>
-                    {project.projectName}
-                  </CommonLabeledTextBlock>
-                  <CommonLabeledTextBlock title='Organization'>
-                    {project.organization.organizationName}
-                  </CommonLabeledTextBlock>
-                </Stack>
-              </Box>
-            )}
+            {dialogContentHeader}
 
             {ceSwimlanes?.map((swimlane) => getSwimlaneSelect(swimlane))}
 
@@ -304,10 +277,10 @@ const EditCeDefaultContactsModal: React.FC<Props> = ({
               Save
             </LoadingButton>
           )}
-          {!loading && !hasSwimlanes && (
+          {!loading && !hasSwimlanes && projectId && (
             <ButtonLink
               to={generateSafePath(ProjectDashboardRoutes.UNITS, {
-                projectId: project?.id,
+                projectId,
               })}
             >
               View Project Units

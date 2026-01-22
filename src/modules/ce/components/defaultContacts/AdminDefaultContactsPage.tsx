@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { GlobalIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import AdminDefaultContactsTable from '@/modules/ce/components/defaultContacts/AdminDefaultContactsTable';
-import EditCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditCeDefaultContactsModal';
+import EditGlobalCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditGlobalCeDefaultContactsModal';
 
 const AdminDefaultContactsPage: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -25,7 +25,7 @@ const AdminDefaultContactsPage: React.FC = () => {
       />
       <AdminDefaultContactsTable />
       {dialogOpen && (
-        <EditCeDefaultContactsModal
+        <EditGlobalCeDefaultContactsModal
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
         />
