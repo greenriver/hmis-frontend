@@ -9873,6 +9873,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectFilterOptions',
     args: [
       {
+        name: 'ceEnabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'funder',
         type: {
           kind: 'LIST',
@@ -9987,6 +9991,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectsForEnrollmentFilterOptions',
     args: [
       {
+        name: 'ceEnabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'funder',
         type: {
           kind: 'LIST',
@@ -10027,47 +10035,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               name: 'ProjectFilterOptionStatus',
               ofType: null,
             },
-          },
-        },
-      },
-    ],
-  },
-  {
-    name: 'ProjectsWithCeDefaultContactsFilterOptions',
-    args: [
-      {
-        name: 'organization',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'project',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'user',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
       },

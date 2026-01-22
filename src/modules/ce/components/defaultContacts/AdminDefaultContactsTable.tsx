@@ -13,6 +13,8 @@ import {
   GetDefaultContactsDocument,
   GetDefaultContactsQuery,
   GetDefaultContactsQueryVariables,
+  ProjectFilterOptionStatus,
+  ProjectSortOption,
   ProjectWithCeDefaultContactsFragment,
   useGetSwimlanesQuery,
 } from '@/types/gqlTypes';
@@ -44,7 +46,8 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
     useState<ProjectWithCeDefaultContactsFragment | null>(null);
 
   const filters = useFilters({
-    type: 'ProjectsWithCeDefaultContactsFilterOptions',
+    type: 'ProjectFilterOptions',
+    omit: ['status', 'funder', 'organization', 'projectType', 'ceEnabled'],
   });
 
   const columns: DataColumnDef<
@@ -99,10 +102,16 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
           ProjectWithCeDefaultContactsFragment
         >
           columns={columns}
-          queryVariables={{}}
+          queryVariables={{
+            filters: {
+              status: [ProjectFilterOptionStatus.Open],
+              ceEnabled: true,
+            },
+          }}
+          defaultSortOption={ProjectSortOption.OrganizationAndName}
           filters={filters}
           queryDocument={GetDefaultContactsDocument}
-          pagePath='projectsWithCeDefaultContacts'
+          pagePath='projects'
           paginationItemName='coordinated entry project'
           handleRowClick={(row) => setEditingProject(row)}
           rowActionTitle='Edit Project Contacts'
