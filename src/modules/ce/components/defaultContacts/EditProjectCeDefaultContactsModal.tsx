@@ -20,6 +20,9 @@ const EditProjectCeDefaultContactsModal: React.FC<Props> = ({
         <CommonLabeledTextBlock title='Project'>
           {project.projectName}
         </CommonLabeledTextBlock>
+        <CommonLabeledTextBlock title='Organization'>
+          {project.organization.organizationName}
+        </CommonLabeledTextBlock>
       </Stack>
     </Box>
   );
