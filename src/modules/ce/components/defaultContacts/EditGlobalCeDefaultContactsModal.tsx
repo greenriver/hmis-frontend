@@ -38,7 +38,8 @@ const EditGlobalCeDefaultContactsModal: React.FC<Props> = ({
     );
   }
 
-  if (!globalCeDefaultContacts || !ceSwimlanes) return null; // unexpected to hit this line, but helps
+  // unexpected to hit this line, since error and loading are false, but lets TS assume these will always be present
+  if (!globalCeDefaultContacts || !ceSwimlanes) return null;
 
   return (
     <EditCeDefaultContactsModal

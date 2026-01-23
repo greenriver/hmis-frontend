@@ -29,13 +29,7 @@ fragment ProjectAllFields on Project {
   residentialAffiliationProjectIds
   rrhSubType
   staffAssignmentsEnabled
-  coordinatedEntryFeatures {
-    id
-    supportsReferrals
-    supportsWaitlistReferrals
-    receivesDirectReferrals
-    sendsDirectReferrals
-  }
+  ...ProjectCoordinatedEntryFeatures
   targetPopulation
   organization {
     ...OrganizationNameFields
@@ -58,6 +52,17 @@ fragment ProjectAllFields on Project {
   ...ProjectCocCount
   hasUnits
   ...ProjectWithCeDefaultContacts
+}
+
+fragment ProjectCoordinatedEntryFeatures on Project {
+  id
+  coordinatedEntryFeatures {
+    id
+    supportsReferrals
+    supportsWaitlistReferrals
+    receivesDirectReferrals
+    sendsDirectReferrals
+  }
 }
 
 fragment DataCollectionFeatureFields on DataCollectionFeature {

@@ -12,11 +12,13 @@ import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks
 import { cache } from '@/providers/apolloClient';
 import {
   CeDefaultContactFieldsFragment,
+  ProjectCoordinatedEntryFeaturesFragment,
   ProjectWithCeDefaultContactsFragment,
 } from '@/types/gqlTypes';
 
 interface Props {
-  project: ProjectWithCeDefaultContactsFragment;
+  project: ProjectWithCeDefaultContactsFragment &
+    ProjectCoordinatedEntryFeaturesFragment;
 }
 
 const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
@@ -69,6 +71,9 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
     setProjectModalOpen(false);
     setGlobalModalOpen(false);
   }, [project.id]);
+
+  // Extra guard, since the Project Overview already checks this
+  if (!project.coordinatedEntryFeatures?.supportsReferrals) return null;
 
   return (
     <>

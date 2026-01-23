@@ -48,12 +48,10 @@ interface Props {
 }
 
 /**
- * This modal supports editing Coordinated Entry default contacts, in 2 modes:
- * - Project: When a projectId is passed, it edits contacts for that project.
- * - Global: When no projectId is passed, it edits global contacts.
- *
+ * This modal is used internally by EditProjectCeDefaultContactsModal and EditGlobalCeDefaultContactsModal
+ * to abstract their shared functionality.
  * Contacts can be owned by other entities (org and unit group),
- * but the frontend does not support editing contacts at those levels.
+ * but the frontend does not yet support editing contacts at those levels.
  */
 const EditCeDefaultContactsModal: React.FC<Props> = ({
   ceSwimlanes,

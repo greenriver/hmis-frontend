@@ -39135,14 +39135,6 @@ export type SubmitFormMutation = {
           projectType?: ProjectType | null;
           operatingEndDate?: string | null;
           operatingStartDate?: string | null;
-          coordinatedEntryFeatures?: {
-            __typename?: 'ProjectCoordinatedEntryFeatures';
-            id: string;
-            supportsReferrals: boolean;
-            supportsWaitlistReferrals: boolean;
-            receivesDirectReferrals: boolean;
-            sendsDirectReferrals: boolean;
-          } | null;
           organization: {
             __typename?: 'Organization';
             id: string;
@@ -39323,6 +39315,14 @@ export type SubmitFormMutation = {
               name: string;
             };
           }>;
+          coordinatedEntryFeatures?: {
+            __typename?: 'ProjectCoordinatedEntryFeatures';
+            id: string;
+            supportsReferrals: boolean;
+            supportsWaitlistReferrals: boolean;
+            receivesDirectReferrals: boolean;
+            sendsDirectReferrals: boolean;
+          } | null;
           projectCocs: {
             __typename?: 'ProjectCocsPaginated';
             nodesCount: number;
@@ -42914,14 +42914,6 @@ export type ProjectAllFieldsFragment = {
   projectType?: ProjectType | null;
   operatingEndDate?: string | null;
   operatingStartDate?: string | null;
-  coordinatedEntryFeatures?: {
-    __typename?: 'ProjectCoordinatedEntryFeatures';
-    id: string;
-    supportsReferrals: boolean;
-    supportsWaitlistReferrals: boolean;
-    receivesDirectReferrals: boolean;
-    sendsDirectReferrals: boolean;
-  } | null;
   organization: {
     __typename?: 'Organization';
     id: string;
@@ -43102,6 +43094,14 @@ export type ProjectAllFieldsFragment = {
       name: string;
     };
   }>;
+  coordinatedEntryFeatures?: {
+    __typename?: 'ProjectCoordinatedEntryFeatures';
+    id: string;
+    supportsReferrals: boolean;
+    supportsWaitlistReferrals: boolean;
+    receivesDirectReferrals: boolean;
+    sendsDirectReferrals: boolean;
+  } | null;
   projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   ceDefaultContacts: Array<{
     __typename?: 'CeDefaultContactsBySwimlane';
@@ -43143,6 +43143,19 @@ export type ProjectAllFieldsFragment = {
     templateName: string;
     taskNames: Array<string>;
   }>;
+};
+
+export type ProjectCoordinatedEntryFeaturesFragment = {
+  __typename?: 'Project';
+  id: string;
+  coordinatedEntryFeatures?: {
+    __typename?: 'ProjectCoordinatedEntryFeatures';
+    id: string;
+    supportsReferrals: boolean;
+    supportsWaitlistReferrals: boolean;
+    receivesDirectReferrals: boolean;
+    sendsDirectReferrals: boolean;
+  } | null;
 };
 
 export type DataCollectionFeatureFieldsFragment = {
@@ -43865,14 +43878,6 @@ export type GetProjectQuery = {
     projectType?: ProjectType | null;
     operatingEndDate?: string | null;
     operatingStartDate?: string | null;
-    coordinatedEntryFeatures?: {
-      __typename?: 'ProjectCoordinatedEntryFeatures';
-      id: string;
-      supportsReferrals: boolean;
-      supportsWaitlistReferrals: boolean;
-      receivesDirectReferrals: boolean;
-      sendsDirectReferrals: boolean;
-    } | null;
     organization: {
       __typename?: 'Organization';
       id: string;
@@ -44053,6 +44058,14 @@ export type GetProjectQuery = {
         name: string;
       };
     }>;
+    coordinatedEntryFeatures?: {
+      __typename?: 'ProjectCoordinatedEntryFeatures';
+      id: string;
+      supportsReferrals: boolean;
+      supportsWaitlistReferrals: boolean;
+      receivesDirectReferrals: boolean;
+      sendsDirectReferrals: boolean;
+    } | null;
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
     ceDefaultContacts: Array<{
       __typename?: 'CeDefaultContactsBySwimlane';
@@ -51884,6 +51897,18 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
     operatingStartDate
   }
 `;
+export const ProjectCoordinatedEntryFeaturesFragmentDoc = gql`
+  fragment ProjectCoordinatedEntryFeatures on Project {
+    id
+    coordinatedEntryFeatures {
+      id
+      supportsReferrals
+      supportsWaitlistReferrals
+      receivesDirectReferrals
+      sendsDirectReferrals
+    }
+  }
+`;
 export const ProjectAccessFieldsFragmentDoc = gql`
   fragment ProjectAccessFields on ProjectAccess {
     id
@@ -51979,13 +52004,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
     residentialAffiliationProjectIds
     rrhSubType
     staffAssignmentsEnabled
-    coordinatedEntryFeatures {
-      id
-      supportsReferrals
-      supportsWaitlistReferrals
-      receivesDirectReferrals
-      sendsDirectReferrals
-    }
+    ...ProjectCoordinatedEntryFeatures
     targetPopulation
     organization {
       ...OrganizationNameFields
@@ -52011,6 +52030,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}
+  ${ProjectCoordinatedEntryFeaturesFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ProjectAccessFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
