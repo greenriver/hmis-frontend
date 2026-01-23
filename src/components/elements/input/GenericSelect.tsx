@@ -12,7 +12,6 @@ import React, { ReactNode, useCallback } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
-import { isPickListOption } from '@/modules/form/types';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 
 export interface GenericSelectProps<
@@ -61,28 +60,22 @@ const GenericSelect = <
     (
       event: React.SyntheticEvent,
       newValue: AutocompleteValue<T, Multiple, boolean, Creatable>,
-      reason: AutocompleteChangeReason,
-      details?: AutocompleteChangeDetails<T>
+      ...args: [AutocompleteChangeReason, AutocompleteChangeDetails<T>?]
     ) => {
       // Only handle fixedOptions when multiple is true and fixedOptions are provided
       if (fixedOptions && rest.multiple && Array.isArray(newValue)) {
-        // Ensure fixedOptions are always included, then add any additional selected options
+        // Ensure fixedOptions are always included, then add any additional selected options.
+        // Cast is needed because TypeScript can't infer that Multiple=true means AutocompleteValue is T[],
+        // but we've verified the runtime conditions so it is safe
         const mergedValue = [
           ...fixedOptions,
           ...newValue.filter((option: T) => !fixedOptions.includes(option)),
-        ];
+        ] as AutocompleteValue<T, Multiple, boolean, Creatable>;
 
-        // TypeScript can't infer that Multiple=true means AutocompleteValue is T[],
-        // but we've verified the runtime conditions, so this is safe
-        return onChange?.(
-          event,
-          mergedValue as AutocompleteValue<T, Multiple, boolean, Creatable>,
-          reason,
-          details
-        );
+        return onChange?.(event, mergedValue, ...args);
       }
 
-      return onChange?.(event, newValue, reason, details);
+      return onChange?.(event, newValue, ...args);
     },
     [onChange, fixedOptions, rest.multiple]
   );
@@ -141,12 +134,10 @@ const GenericSelect = <
           // Avoid console warning: A props object containing a "key" prop is being spread into JSX
           const { key, ...rest } = getTagProps({ index });
 
-          // If the selected value is an object with a 'disabled' property set to true, visually disable the chip.
+          // If the selected value is included in fixedOptions, visually disable the chip.
           // See https://v5.mui.com/material-ui/react-autocomplete/#fixed-options
-          // Note that this *only* visually disables the chip. The parent component should modify onChange to prevent the option from being deselected.
-          const disabled = isPickListOption(option)
-            ? !!option.disabled
-            : !!rest.disabled;
+          // This only visually disables the chip; handleChange above functionally prevents the option from being deselected.
+          const disabled = fixedOptions?.includes(option) || rest.disabled;
 
           return (
             <Chip
