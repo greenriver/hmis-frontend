@@ -98,8 +98,8 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
     <>
       <Stack gap={2}>
         <CommonSearchInput
-          label='Search project default contacts'
-          name='search project default contacts'
+          label='Search projects'
+          name='search projects'
           placeholder='Search by project name or ID'
           value={search}
           onChange={setSearch}
