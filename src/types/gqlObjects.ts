@@ -9678,6 +9678,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           },
         },
       },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
     ],
   },
   {
@@ -9850,6 +9854,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
