@@ -786,6 +786,7 @@ export type CeOpportunityCandidatesArgs = {
 
 export type CeOpportunityCandidatesFilterOptions = {
   excludeDeclinedClients?: InputMaybe<Scalars['Boolean']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CeOpportunityFilterOptions = {
@@ -948,6 +949,7 @@ export type CeReferralFilterOptions = {
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
   workflowTemplate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
