@@ -6608,6 +6608,7 @@ export type ProjectCeOpportunityFilterOptions = {
 export type ProjectCeReferralFilterOptions = {
   origin?: InputMaybe<Array<CeReferralOrigin>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ProjectCoc = {
@@ -6739,6 +6740,7 @@ export type ProjectOutgoingCeReferralFilterOptions = {
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** HUD Project Sorting Options */
