@@ -395,7 +395,6 @@ fragment CeEligibleUnitGroupFields on CeEligibleUnitGroup {
   projectId
   projectType
   organizationName
-  candidateCreatedAt
   candidateUpdatedAt
   unitsAcceptingReferrals
 }

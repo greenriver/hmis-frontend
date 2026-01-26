@@ -1,8 +1,7 @@
-import { Chip, Paper, Tooltip } from '@mui/material';
+import { Chip, Paper } from '@mui/material';
 import pluralize from 'pluralize';
 import React from 'react';
 
-import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
@@ -53,23 +52,6 @@ const COLUMNS: DataColumnDef<
         variant='status'
       />
     ),
-  },
-  {
-    key: 'candidateCreatedAt',
-    // Date when client became eligible for the pool (not tied to availability)
-    header: (
-      <Tooltip
-        title='Date when the client became eligible'
-        placement='top'
-        arrow
-      >
-        <span>Date Added</span>
-      </Tooltip>
-    ),
-    render: ({ candidateCreatedAt }) => {
-      if (!candidateCreatedAt) return '';
-      return <RelativeDateDisplay dateString={candidateCreatedAt} />;
-    },
   },
 ];
 

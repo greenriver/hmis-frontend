@@ -18835,7 +18835,6 @@ export type CeEligibleUnitGroupFieldsFragment = {
   projectId: string;
   projectType: ProjectType;
   organizationName: string;
-  candidateCreatedAt: string;
   candidateUpdatedAt: string;
   unitsAcceptingReferrals: number;
 };
@@ -22096,7 +22095,6 @@ export type GetCeClientEligibleUnitGroupsQuery = {
         projectId: string;
         projectType: ProjectType;
         organizationName: string;
-        candidateCreatedAt: string;
         candidateUpdatedAt: string;
         unitsAcceptingReferrals: number;
       }>;
@@ -50437,7 +50435,6 @@ export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
     projectId
     projectType
     organizationName
-    candidateCreatedAt
     candidateUpdatedAt
     unitsAcceptingReferrals
   }
