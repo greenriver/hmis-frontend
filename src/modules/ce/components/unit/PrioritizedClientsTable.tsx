@@ -138,7 +138,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
       <CommonSearchInput
         label='Search clients'
         name='search clients'
-        placeholder='Search client by name or candidate ID'
+        placeholder='Search client by name or ID'
         value={search}
         onChange={setSearch}
         fullWidth
