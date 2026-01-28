@@ -786,6 +786,7 @@ export type CeOpportunityCandidatesArgs = {
 
 export type CeOpportunityCandidatesFilterOptions = {
   excludeDeclinedClients?: InputMaybe<Scalars['Boolean']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CeOpportunityFilterOptions = {

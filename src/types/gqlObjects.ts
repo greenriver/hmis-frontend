@@ -8313,6 +8313,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'excludeDeclinedClients',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
     ],
   },
   {
