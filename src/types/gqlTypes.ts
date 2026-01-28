@@ -5332,7 +5332,7 @@ export type MutationUpdateRelationshipToHoHArgs = {
 
 export type MutationUpdateServiceTypeArgs = {
   id: Scalars['ID']['input'];
-  input?: InputMaybe<ServiceTypeInput>;
+  input: ServiceTypeInput;
 };
 
 export type MutationUpdateUnitGroupArgs = {
