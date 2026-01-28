@@ -404,6 +404,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         );
       } else if (
         componentType === Component.RadioButtons ||
+        // TODO: ideally remove deprecated type once we've removed all usages of it in form definitions
         componentType === Component.RadioButtonsVertical
       ) {
         inputComponent = item.repeats ? (

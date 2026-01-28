@@ -5560,18 +5560,6 @@
             "deprecationReason": null
           },
           {
-            "name": "priorityScheme",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CeMatchRule",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Replaced by prioritySchemes"
-          },
-          {
             "name": "prioritySchemes",
             "description": null,
             "args": [],
@@ -5717,6 +5705,18 @@
               "ofType": null
             },
             "defaultValue": "false",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "searchTerm",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -28425,18 +28425,6 @@
             "deprecationReason": null
           },
           {
-            "name": "serviceDetailType",
-            "description": "Whether to apply this field to all clients or a single client when bulk creating",
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "ServiceDetailType",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "from old bulk services implementation, no longer supported"
-          },
-          {
             "name": "size",
             "description": "Size of the input element",
             "args": [],
@@ -28802,12 +28790,6 @@
             "deprecationReason": null
           },
           {
-            "name": "EXTERNAL_FORM_SUBMISSION_REVIEW",
-            "description": "External form submission review",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "FILE",
             "description": "File",
             "isDeprecated": false,
@@ -29101,18 +29083,6 @@
             "deprecationReason": null
           },
           {
-            "name": "project",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Project",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use projectName instead"
-          },
-          {
             "name": "projectId",
             "description": null,
             "args": [],
@@ -29333,18 +29303,6 @@
         "isOneOf": false,
         "fields": null,
         "inputFields": [
-          {
-            "name": "activeStatus",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "ActiveStatus",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "Rules are always active when created. This type is no longer used for updating a form rule. To deactivate, use DeleteFormRule mutation."
-          },
           {
             "name": "dataCollectedAbout",
             "description": null,
@@ -38493,30 +38451,6 @@
                 "defaultValue": null,
                 "isDeprecated": false,
                 "deprecationReason": null
-              },
-              {
-                "name": "name",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": true,
-                "deprecationReason": "Deprecated in favor of input object"
-              },
-              {
-                "name": "supportsBulkAssignment",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": true,
-                "deprecationReason": "Deprecated in favor of input object"
               }
             ],
             "type": {
@@ -42539,22 +42473,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "coordinatedEntryEnabled",
-            "description": "Whether Coordinated Entry is enabled in this project",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use coordinatedEntryFeatures"
           },
           {
             "name": "coordinatedEntryFeatures",
@@ -48911,22 +48829,6 @@
             "deprecationReason": null
           },
           {
-            "name": "canViewCoordinatedEntry",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Replaced with Project-level coordinatedEntryEnabled field and global feature flag"
-          },
-          {
             "name": "canViewDob",
             "description": null,
             "args": [],
@@ -52638,22 +52540,6 @@
             "deprecationReason": null
           },
           {
-            "name": "hud",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "No longer used"
-          },
-          {
             "name": "id",
             "description": null,
             "args": [],
@@ -52742,30 +52628,6 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "ServiceDetailType",
-        "description": null,
-        "isOneOf": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "BULK",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
         "possibleTypes": null
       },
       {
@@ -54992,12 +54854,6 @@
             "deprecationReason": null
           },
           {
-            "name": "EXTERNAL_FORM_SUBMISSION_REVIEW",
-            "description": "External form submission review",
-            "isDeprecated": true,
-            "deprecationReason": "External forms are moving to a directly configured react form, rather than a static form."
-          },
-          {
             "name": "FORM_DEFINITION",
             "description": "Form definition",
             "isDeprecated": false,
@@ -56545,30 +56401,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "ENUM",
-        "name": "UnitFilterOptionStatus",
-        "description": null,
-        "isOneOf": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "AVAILABLE",
-            "description": "Available",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FILLED",
-            "description": "Filled",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
         "kind": "INPUT_OBJECT",
         "name": "UnitFilterOptions",
         "description": null,
@@ -56586,26 +56418,6 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "status",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "UnitFilterOptionStatus",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "Use `occupancyStatus` instead"
           },
           {
             "name": "unitGroup",
@@ -56777,18 +56589,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "priorityScheme",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CeMatchRule",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Replaced by prioritySchemes"
           },
           {
             "name": "prioritySchemes",

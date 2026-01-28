@@ -21,6 +21,13 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
+const getNameWithHohIndicator = (householdMember: {
+  clientName: string;
+  relationshipToHoH: RelationshipToHoH;
+}) => {
+  return `${householdMember.clientName}${householdMember.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ? ' (HoH)' : ''}`;
+};
+
 interface Props {
   enrollment: CeReferralSourceEnrollmentFieldsFragment;
   selected: boolean;
@@ -41,8 +48,6 @@ const SourceEnrollmentCard: React.FC<Props> = ({
     enrollment.dataSource.isCurrentDataSource &&
     enrollment.access.canViewEnrollmentDetails;
 
-  const clientNameWithHohIndicator = `${enrollment.clientName}${enrollment.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ? ' (HoH)' : ''}`;
-
   return (
     <CommonSelectableCard
       key={enrollment.id}
@@ -57,12 +62,16 @@ const SourceEnrollmentCard: React.FC<Props> = ({
           IconProps={{ sx: { color: 'text.secondary' } }}
         >
           {enrollment.householdSize === 1 ? (
-            clientNameWithHohIndicator
+            getNameWithHohIndicator(enrollment)
           ) : (
             <CommonTruncatedList
               items={[
-                clientNameWithHohIndicator,
-                ...enrollment.otherHouseholdMemberNames,
+                getNameWithHohIndicator(enrollment),
+                ...enrollment.householdMembers
+                  .filter(
+                    (member) => member.clientId !== enrollment.sourceClientId
+                  )
+                  .map((member) => getNameWithHohIndicator(member)),
               ]}
             />
           )}
