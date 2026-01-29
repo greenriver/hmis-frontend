@@ -1,0 +1,39 @@
+query GetSwimlanes {
+  # expect few enough that we don't need pagination
+  ceSwimlanes {
+    ...CeSwimlaneFields
+  }
+}
+
+query GetDefaultContacts(
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ProjectFilterOptions
+  $sortOrder: ProjectSortOption
+) {
+  projects(
+    limit: $limit
+    offset: $offset
+    filters: $filters
+    sortOrder: $sortOrder
+  ) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...ProjectWithCeDefaultContacts
+    }
+  }
+}
+
+query GetProjectDefaultContacts($id: ID!) {
+  project(id: $id) {
+    ...ProjectWithCeDefaultContacts
+  }
+}
+
+query GetGlobalDefaultContacts {
+  globalCeDefaultContacts {
+    ...CeDefaultContactsBySwimlaneFields
+  }
+}

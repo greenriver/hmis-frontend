@@ -43,6 +43,13 @@ export const useAdminDashboardNavItems = () => {
             path: AdminDashboardRoutes.AC_DENIALS,
             permissions: ['canManageDeniedReferrals'],
           },
+          {
+            id: 'default-contacts',
+            title: 'Default Contacts',
+            path: AdminDashboardRoutes.DEFAULT_CONTACTS,
+            permissions: ['canAdministrateCoordinatedEntry'],
+            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
+          },
         ],
       },
       {

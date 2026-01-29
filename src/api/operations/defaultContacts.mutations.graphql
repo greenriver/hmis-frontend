@@ -1,0 +1,10 @@
+mutation AssignCeDefaultContacts($input: CeDefaultContactsInput!) {
+  assignCeDefaultContacts(input: $input) {
+    defaultContacts {
+      ...CeDefaultContactFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
