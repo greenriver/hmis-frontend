@@ -4781,10 +4781,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       { name: 'rule', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
-      {
-        name: 'serviceDetailType',
-        type: { kind: 'ENUM', name: 'ServiceDetailType', ofType: null },
-      },
       { name: 'size', type: { kind: 'ENUM', name: 'InputSize', ofType: null } },
       { name: 'text', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
@@ -6127,14 +6123,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'NoYes', ofType: null },
       },
       {
-        name: 'coordinatedEntryEnabled',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'dateCreated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
@@ -6980,14 +6968,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canViewCoordinatedEntry',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canViewDob',
         type: {
           kind: 'NON_NULL',
@@ -7491,14 +7471,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'dateUpdated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'hud',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
       },
       {
         name: 'id',
@@ -9637,10 +9609,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'FormRuleInput',
     args: [
       {
-        name: 'activeStatus',
-        type: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
-      },
-      {
         name: 'dataCollectedAbout',
         type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
       },
@@ -10431,22 +10399,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'occupancyStatus',
         type: { kind: 'ENUM', name: 'UnitOccupancyStatus', ofType: null },
-      },
-      {
-        name: 'status',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: {
-              kind: 'ENUM',
-              name: 'UnitFilterOptionStatus',
-              ofType: null,
-            },
-          },
-        },
       },
       {
         name: 'unitGroup',

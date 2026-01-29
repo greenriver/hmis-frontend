@@ -363,7 +363,12 @@ fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
   autoExited
   relationshipToHoH
   householdSize
-  otherHouseholdMemberNames
+  householdMembers {
+    id
+    clientId
+    relationshipToHoH
+    clientName
+  }
   assessments {
     id
     assessmentName

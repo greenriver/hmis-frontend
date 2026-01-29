@@ -798,8 +798,6 @@ export type CeOpportunity = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   organizationName: Scalars['String']['output'];
-  /** @deprecated Replaced by prioritySchemes */
-  priorityScheme?: Maybe<CeMatchRule>;
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
@@ -3854,11 +3852,6 @@ export type FormItem = {
   required?: Maybe<Scalars['Boolean']['output']>;
   /** Rules that apply to this item */
   rule?: Maybe<Scalars['JSON']['output']>;
-  /**
-   * Whether to apply this field to all clients or a single client when bulk creating
-   * @deprecated from old bulk services implementation, no longer supported
-   */
-  serviceDetailType?: Maybe<ServiceDetailType>;
   /** Size of the input element */
   size?: Maybe<InputSize>;
   /** Primary text for the item */
@@ -3919,8 +3912,6 @@ export enum FormRole {
   Exit = 'EXIT',
   /** External form */
   ExternalForm = 'EXTERNAL_FORM',
-  /** External form submission review */
-  ExternalFormSubmissionReview = 'EXTERNAL_FORM_SUBMISSION_REVIEW',
   /** File */
   File = 'FILE',
   /** Form definition */
@@ -3974,8 +3965,6 @@ export type FormRule = {
   organization?: Maybe<Organization>;
   organizationId?: Maybe<Scalars['ID']['output']>;
   otherFunder?: Maybe<Scalars['String']['output']>;
-  /** @deprecated Use projectName instead */
-  project?: Maybe<Project>;
   projectId?: Maybe<Scalars['ID']['output']>;
   projectName?: Maybe<Scalars['String']['output']>;
   projectType?: Maybe<ProjectType>;
@@ -3995,8 +3984,6 @@ export type FormRuleFilterOptions = {
 };
 
 export type FormRuleInput = {
-  /** @deprecated Rules are always active when created. This type is no longer used for updating a form rule. To deactivate, use DeleteFormRule mutation. */
-  activeStatus?: InputMaybe<ActiveStatus>;
   dataCollectedAbout?: InputMaybe<DataCollectedAbout>;
   funder?: InputMaybe<FundingSource>;
   organizationId?: InputMaybe<Scalars['ID']['input']>;
@@ -5404,9 +5391,7 @@ export type MutationUpdateRelationshipToHoHArgs = {
 
 export type MutationUpdateServiceTypeArgs = {
   id: Scalars['ID']['input'];
-  input?: InputMaybe<ServiceTypeInput>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  supportsBulkAssignment?: InputMaybe<Scalars['Boolean']['input']>;
+  input: ServiceTypeInput;
 };
 
 export type MutationUpdateUnitGroupArgs = {
@@ -6464,11 +6449,6 @@ export type Project = {
   ceSwimlanes: Array<CeSwimlane>;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
-  /**
-   * Whether Coordinated Entry is enabled in this project
-   * @deprecated Use coordinatedEntryFeatures
-   */
-  coordinatedEntryEnabled: Scalars['Boolean']['output'];
   /** Coordinated Entry features that are enabled for this Project */
   coordinatedEntryFeatures?: Maybe<ProjectCoordinatedEntryFeatures>;
   createdBy?: Maybe<ApplicationUser>;
@@ -7267,8 +7247,6 @@ export type QueryAccess = {
   canViewClientName: Scalars['Boolean']['output'];
   canViewClientPhoto: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
-  /** @deprecated Replaced with Project-level coordinatedEntryEnabled field and global feature flag */
-  canViewCoordinatedEntry: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewEnrollmentLocationMap: Scalars['Boolean']['output'];
@@ -7915,8 +7893,6 @@ export type ServiceCategory = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   formRules: FormRulesPaginated;
-  /** @deprecated No longer used */
-  hud: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   serviceTypes: ServiceTypesPaginated;
@@ -7934,11 +7910,6 @@ export type ServiceCategoryServiceTypesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
-
-export enum ServiceDetailType {
-  Bulk = 'BULK',
-  Client = 'CLIENT',
-}
 
 export type ServiceFilterOptions = {
   dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
@@ -8393,11 +8364,6 @@ export enum StaticFormRole {
   AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
-  /**
-   * External form submission review
-   * @deprecated External forms are moving to a directly configured react form, rather than a static form.
-   */
-  ExternalFormSubmissionReview = 'EXTERNAL_FORM_SUBMISSION_REVIEW',
   /** Form definition */
   FormDefinition = 'FORM_DEFINITION',
   /** Form rule */
@@ -8676,17 +8642,8 @@ export type Unit = {
   user?: Maybe<ApplicationUser>;
 };
 
-export enum UnitFilterOptionStatus {
-  /** Available */
-  Available = 'AVAILABLE',
-  /** Filled */
-  Filled = 'FILLED',
-}
-
 export type UnitFilterOptions = {
   occupancyStatus?: InputMaybe<UnitOccupancyStatus>;
-  /** @deprecated Use `occupancyStatus` instead */
-  status?: InputMaybe<Array<UnitFilterOptionStatus>>;
   unitGroup?: InputMaybe<Array<Scalars['ID']['input']>>;
   unitType?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
@@ -8703,8 +8660,6 @@ export type UnitGroup = {
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  /** @deprecated Replaced by prioritySchemes */
-  priorityScheme?: Maybe<CeMatchRule>;
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
   unitType?: Maybe<UnitTypeObject>;
   unitTypes: Array<UnitTypeCapacity>;
@@ -18859,13 +18814,19 @@ export type CeReferralSourceEnrollmentFieldsFragment = {
   autoExited: boolean;
   relationshipToHoH: RelationshipToHoH;
   householdSize: number;
-  otherHouseholdMemberNames: Array<string>;
   dataSource: {
     __typename?: 'DataSource';
     id: string;
     name: string;
     isCurrentDataSource: boolean;
   };
+  householdMembers: Array<{
+    __typename?: 'CeReferralSourceHouseholdMember';
+    id: string;
+    clientId: string;
+    relationshipToHoH: RelationshipToHoH;
+    clientName: string;
+  }>;
   assessments: Array<{
     __typename?: 'AssessmentSummary';
     id: string;
@@ -21007,13 +20968,19 @@ export type GetCeCandidateSourceEnrollmentsQuery = {
           autoExited: boolean;
           relationshipToHoH: RelationshipToHoH;
           householdSize: number;
-          otherHouseholdMemberNames: Array<string>;
           dataSource: {
             __typename?: 'DataSource';
             id: string;
             name: string;
             isCurrentDataSource: boolean;
           };
+          householdMembers: Array<{
+            __typename?: 'CeReferralSourceHouseholdMember';
+            id: string;
+            clientId: string;
+            relationshipToHoH: RelationshipToHoH;
+            clientName: string;
+          }>;
           assessments: Array<{
             __typename?: 'AssessmentSummary';
             id: string;
@@ -24851,7 +24818,7 @@ export type DeleteServiceTypeMutation = {
 
 export type UpdateServiceTypeMutationVariables = Exact<{
   id: Scalars['ID']['input'];
-  input?: InputMaybe<ServiceTypeInput>;
+  input: ServiceTypeInput;
 }>;
 
 export type UpdateServiceTypeMutation = {
@@ -50950,7 +50917,12 @@ export const CeReferralSourceEnrollmentFieldsFragmentDoc = gql`
     autoExited
     relationshipToHoH
     householdSize
-    otherHouseholdMemberNames
+    householdMembers {
+      id
+      clientId
+      relationshipToHoH
+      clientName
+    }
     assessments {
       id
       assessmentName
@@ -58022,7 +57994,7 @@ export type DeleteServiceTypeMutationOptions = Apollo.BaseMutationOptions<
   DeleteServiceTypeMutationVariables
 >;
 export const UpdateServiceTypeDocument = gql`
-  mutation UpdateServiceType($id: ID!, $input: ServiceTypeInput) {
+  mutation UpdateServiceType($id: ID!, $input: ServiceTypeInput!) {
     updateServiceType(id: $id, input: $input) {
       serviceType {
         ...ServiceTypeFields
