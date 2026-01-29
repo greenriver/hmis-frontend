@@ -1,5 +1,5 @@
 import { Alert, Divider, Stack, Typography } from '@mui/material';
-import React, { useId } from 'react';
+import React, { useId, useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonSelectableCard from '@/components/elements/CommonSelectableCard';
 import CommonTextWithIcon from '@/components/elements/CommonTextWithIcon';
@@ -41,6 +41,17 @@ const SourceEnrollmentCard: React.FC<Props> = ({
 }) => {
   const radioId = useId();
 
+  // List of household member names, with the current client first
+  const householdMemberNames = useMemo(
+    () => [
+      getNameWithHohIndicator(enrollment),
+      ...enrollment.householdMembers
+        .filter((m) => m.clientId !== enrollment.sourceClientId)
+        .map(getNameWithHohIndicator),
+    ],
+    [enrollment]
+  );
+
   // will always be true for now (otherwise the enrollment wouldn't have been resolved),
   // but in the future we will resolve enrollments here that user may not be able to view,
   // including enrollments in different data sources. https://github.com/open-path/Green-River/issues/7891
@@ -61,20 +72,7 @@ const SourceEnrollmentCard: React.FC<Props> = ({
           Icon={ClientIcon}
           IconProps={{ sx: { color: 'text.secondary' } }}
         >
-          {enrollment.householdSize === 1 ? (
-            getNameWithHohIndicator(enrollment)
-          ) : (
-            <CommonTruncatedList
-              items={[
-                getNameWithHohIndicator(enrollment),
-                ...enrollment.householdMembers
-                  .filter(
-                    (member) => member.clientId !== enrollment.sourceClientId
-                  )
-                  .map((member) => getNameWithHohIndicator(member)),
-              ]}
-            />
-          )}
+          <CommonTruncatedList items={householdMemberNames} />
         </CommonTextWithIcon>
 
         <Stack gap={1} direction='row' alignItems={'center'}>

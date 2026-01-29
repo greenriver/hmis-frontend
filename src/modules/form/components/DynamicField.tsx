@@ -404,8 +404,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         );
       } else if (
         componentType === Component.RadioButtons ||
-        // TODO: ideally remove deprecated type once we've removed all usages of it in form definitions
-        componentType === Component.RadioButtonsVertical
+        componentType === Component.RadioButtonsVertical // Deprecated in schema but may still be present in form definitions
       ) {
         inputComponent = item.repeats ? (
           <CheckboxGroupInput
