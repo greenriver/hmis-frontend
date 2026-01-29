@@ -103,7 +103,7 @@ const ProjectsTable = ({
 }) => {
   const projectFilters = useFilters({
     type: 'ProjectFilterOptions',
-    omit: ['searchTerm'],
+    omit: ['searchTerm', 'ceEnabled'],
   });
 
   return (

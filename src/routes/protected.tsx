@@ -56,6 +56,7 @@ import AdminAvailableUnitsPage from '@/modules/ce/components/admin/AdminAvailabl
 import AdminEligibleClientsPage from '@/modules/ce/components/admin/AdminEligibleClientsPage';
 import AdminReferralsPage from '@/modules/ce/components/admin/AdminReferralsPage';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
+import AdminDefaultContactsPage from '@/modules/ce/components/defaultContacts/AdminDefaultContactsPage';
 
 import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
 import ProjectReferralsPage from '@/modules/ce/components/project/ProjectReferralsPage';
@@ -889,6 +890,17 @@ export const protectedRoutes: RouteNode[] = [
                 otherwise={<NotFound />}
               >
                 <AdminAvailableUnitsPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.DEFAULT_CONTACTS,
+            element: (
+              <RootPermissionsFilter
+                permissions='canAdministrateCoordinatedEntry'
+                otherwise={<NotFound />}
+              >
+                <AdminDefaultContactsPage />
               </RootPermissionsFilter>
             ),
           },
