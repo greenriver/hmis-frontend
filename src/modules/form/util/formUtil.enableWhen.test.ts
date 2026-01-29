@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'vitest';
+import { afterEach, it, describe, expect, vi, beforeEach } from 'vitest';
 import { FormValues } from '../types';
 import { shouldEnableItem } from './formUtil';
 
@@ -98,6 +98,16 @@ Object.keys(Items).forEach((k, i) => {
   Items[k].linkId = `id-${i}`;
   Items[k].type = ItemType.Display;
   ITEM_MAP[Items[k].linkId] = Items[k] as FormItem;
+});
+
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+beforeEach(() => {
+  consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterEach(() => {
+  consoleErrorSpy.mockRestore();
 });
 
 describe('shouldEnableItem', () => {
@@ -469,5 +479,223 @@ describe('shouldEnableItem', () => {
         '2': undefined,
       })
     ).toBe(false);
+  });
+
+  describe('Includes operator', () => {
+    it('returns true when the value includes the specified code', () => {
+      const values = {
+        '1': ['FOO', 'BAR'],
+      };
+      const item = {
+        enableBehavior: EnableBehavior.Any,
+        enableWhen: [
+          {
+            question: '1',
+            operator: EnableOperator.Includes,
+            answerCode: 'FOO',
+          },
+        ],
+      } as FormItem;
+
+      expect(
+        shouldEnableItem({
+          item,
+          values,
+          itemMap: ITEM_MAP,
+          localConstants: {},
+        })
+      ).toBe(true);
+    });
+
+    it('returns false when the value does not include the specified code', () => {
+      const values = {
+        '1': ['FOO', 'BAR'],
+      };
+      const item = {
+        enableBehavior: EnableBehavior.Any,
+        enableWhen: [
+          {
+            question: '1',
+            operator: EnableOperator.Includes,
+            answerCode: 'BAZ',
+          },
+        ],
+      } as FormItem;
+
+      expect(
+        shouldEnableItem({
+          item,
+          values,
+          itemMap: ITEM_MAP,
+          localConstants: {},
+        })
+      ).toBe(false);
+    });
+
+    it('returns false when the value is empty, null, or undefined', () => {
+      [[], null, undefined].forEach((val) => {
+        const values = {
+          '1': val,
+        };
+        const item = {
+          enableBehavior: EnableBehavior.Any,
+          enableWhen: [
+            {
+              question: '1',
+              operator: EnableOperator.Includes,
+              answerCode: 'BAZ',
+            },
+          ],
+        } as FormItem;
+
+        expect(
+          shouldEnableItem({
+            item,
+            values,
+            itemMap: ITEM_MAP,
+            localConstants: {},
+          })
+        ).toBe(false);
+      });
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('errors on non-array value', () => {
+      const values = {
+        '1': 'FOO',
+      };
+      const item = {
+        enableBehavior: EnableBehavior.Any,
+        enableWhen: [
+          {
+            question: '1',
+            operator: EnableOperator.Includes,
+            answerCode: 'BAZ',
+          },
+        ],
+      } as FormItem;
+
+      expect(
+        shouldEnableItem({
+          item,
+          values,
+          itemMap: ITEM_MAP,
+          localConstants: {},
+        })
+      ).toBe(false);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/Misconfigured form/)
+      );
+    });
+  });
+
+  describe('Excludes operator', () => {
+    it('returns true when the value excludes the specified code', () => {
+      const values = {
+        '1': ['FOO', 'BAR'],
+      };
+      const item = {
+        enableBehavior: EnableBehavior.Any,
+        enableWhen: [
+          {
+            question: '1',
+            operator: EnableOperator.Excludes,
+            answerCode: 'BAZ',
+          },
+        ],
+      } as FormItem;
+
+      expect(
+        shouldEnableItem({
+          item,
+          values,
+          itemMap: ITEM_MAP,
+          localConstants: {},
+        })
+      ).toBe(true);
+    });
+
+    it('returns false when the value includes the specified code', () => {
+      const values = {
+        '1': ['FOO', 'BAR'],
+      };
+      const item = {
+        enableBehavior: EnableBehavior.Any,
+        enableWhen: [
+          {
+            question: '1',
+            operator: EnableOperator.Excludes,
+            answerCode: 'FOO',
+          },
+        ],
+      } as FormItem;
+
+      expect(
+        shouldEnableItem({
+          item,
+          values,
+          itemMap: ITEM_MAP,
+          localConstants: {},
+        })
+      ).toBe(false);
+    });
+
+    it('returns true when the value is empty, null, or undefined', () => {
+      [[], null, undefined].forEach((val) => {
+        const values = {
+          '1': val,
+        };
+        const item = {
+          enableBehavior: EnableBehavior.Any,
+          enableWhen: [
+            {
+              question: '1',
+              operator: EnableOperator.Excludes,
+              answerCode: 'BAZ',
+            },
+          ],
+        } as FormItem;
+
+        expect(
+          shouldEnableItem({
+            item,
+            values,
+            itemMap: ITEM_MAP,
+            localConstants: {},
+          })
+        ).toBe(true);
+      });
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('errors on non-array value', () => {
+      const values = {
+        '1': 'FOO',
+      };
+      const item = {
+        enableBehavior: EnableBehavior.Any,
+        enableWhen: [
+          {
+            question: '1',
+            operator: EnableOperator.Excludes,
+            answerCode: 'BAZ',
+          },
+        ],
+      } as FormItem;
+
+      expect(
+        shouldEnableItem({
+          item,
+          values,
+          itemMap: ITEM_MAP,
+          localConstants: {},
+        })
+      ).toBe(false);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/Misconfigured form/)
+      );
+    });
   });
 });

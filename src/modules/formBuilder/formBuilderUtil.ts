@@ -8,6 +8,7 @@ import {
 import { ItemDependents } from '@/modules/formBuilder/types';
 import {
   Component,
+  EnableOperator,
   FormDefinitionJson,
   FormItem,
   ItemType,
@@ -363,4 +364,9 @@ export const BOUNDABLE_ITEM_TYPES = [
   ItemType.Integer,
   ItemType.Currency,
   ItemType.Date,
+];
+
+export const ARRAY_COMPARISON_OPERATORS = [
+  EnableOperator.Includes,
+  EnableOperator.Excludes,
 ];

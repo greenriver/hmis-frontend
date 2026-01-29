@@ -3616,6 +3616,8 @@ export type FormDefinition = {
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   definition: FormDefinitionJson;
+  /** External object key, only present for External Form role */
+  externalFormObjectKey?: Maybe<Scalars['String']['output']>;
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   identifier: Scalars['String']['output'];
@@ -33847,6 +33849,7 @@ export type FormIdentifierDetailsFragment = {
   };
   displayVersion: {
     __typename?: 'FormDefinition';
+    externalFormObjectKey?: string | null;
     id: string;
     role: FormRole;
     title: string;
@@ -35112,6 +35115,7 @@ export type PublishFormDefinitionMutation = {
       };
       displayVersion: {
         __typename?: 'FormDefinition';
+        externalFormObjectKey?: string | null;
         id: string;
         role: FormRole;
         title: string;
@@ -37361,6 +37365,7 @@ export type GetFormIdentifierDetailsQuery = {
     };
     displayVersion: {
       __typename?: 'FormDefinition';
+      externalFormObjectKey?: string | null;
       id: string;
       role: FormRole;
       title: string;
@@ -51161,6 +51166,7 @@ export const FormIdentifierDetailsFragmentDoc = gql`
       canDuplicateForm
     }
     displayVersion {
+      externalFormObjectKey
       ...FormDefinitionMetadata
     }
     draftVersion {

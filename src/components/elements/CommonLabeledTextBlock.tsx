@@ -2,6 +2,7 @@ import { Box, Typography, TypographyProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 
 interface Props {
   children: ReactNode | string | null | undefined;
@@ -33,7 +34,11 @@ export const CommonLabeledTextBlock: React.FC<Props> = ({
       {title}
     </Box>
     <Box sx={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>
-      {children ? children : <NotCollectedText variant={variant} />}
+      {hasMeaningfulValue(children) ? (
+        children
+      ) : (
+        <NotCollectedText variant={variant} />
+      )}
     </Box>
   </Typography>
 );
