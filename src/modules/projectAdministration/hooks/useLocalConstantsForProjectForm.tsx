@@ -4,15 +4,8 @@ import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
 export const useLocalConstantsForProjectForm = (
   project?: ProjectAllFieldsFragment | null
 ) => {
-  if (!project) {
-    // For Project creation, projectId is undefined
-    return {
-      ...AlwaysPresentLocalConstants,
-    };
-  }
-
   return {
-    projectId: project.id,
+    projectId: project?.id || undefined, // For Project creation, projectId is undefined
     ...AlwaysPresentLocalConstants,
   };
 };
