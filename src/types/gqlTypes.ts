@@ -1037,8 +1037,6 @@ export type CeReferralSourceEnrollment = {
   householdSize: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
-  /** @deprecated Use household_members field instead */
-  otherHouseholdMemberNames: Array<Scalars['String']['output']>;
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
   relationshipToHoH: RelationshipToHoH;

@@ -1376,22 +1376,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'otherHouseholdMemberNames',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-            },
-          },
-        },
-      },
-      {
         name: 'projectName',
         type: {
           kind: 'NON_NULL',
