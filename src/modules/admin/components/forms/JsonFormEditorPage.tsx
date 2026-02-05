@@ -16,6 +16,7 @@ const JsonFormEditorPage = () => {
   const { data: { formDefinition } = {}, error } =
     useGetFormDefinitionFieldsForJsonEditorQuery({
       variables: { id: formId },
+      fetchPolicy: 'network-only', // always get the latest form
     });
 
   const [
