@@ -1,13 +1,10 @@
 import { DialogProps, Paper, Stack } from '@mui/material';
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.js?url';
 import React, { useMemo } from 'react';
-import { pdfjs } from 'react-pdf';
+
 import FilePreview from '@/components/elements/upload/fileDialog/FilePreview';
 import useSafeParams from '@/hooks/useSafeParams';
 import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
 import { FileFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 // component for viewing a FileFieldsFragment. Viewing an unsaved File is not currently supported
 export type FileRecordDialogProps = {
