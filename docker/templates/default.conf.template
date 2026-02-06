@@ -28,8 +28,8 @@ server {
         root   /usr/share/nginx/html;
 
         # map mjs file extension to the application/javascript MIME type (required for react-pdf worker)
-        # include /etc/nginx/mime.types;
-        # types { application/javascript mjs js; }
+        include /etc/nginx/mime.types;
+        types { application/javascript mjs js; }
 
         # Long-lived caching for assets, because they are fingerprinted
         add_header Cache-Control "public, max-age=31536000";
