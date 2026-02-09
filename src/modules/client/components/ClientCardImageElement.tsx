@@ -16,6 +16,7 @@ const ClientCardImageElement: React.FC<Props> = ({
   base64,
   url,
   size = 150,
+  alt,
   ...props
 }) => {
   // let src = 'https://dummyimage.com/150x150/e8e8e8/aaa';
@@ -27,9 +28,15 @@ const ClientCardImageElement: React.FC<Props> = ({
 
   return (
     <Box
-      alt='client'
-      src={src}
       {...props}
+      {...(src
+        ? {
+            src,
+            component: 'img',
+            alt: alt || 'Client image',
+          }
+        : // Don't pass alt text to a div
+          { component: 'div' })}
       sx={{
         height: size,
         width: size,
@@ -37,7 +44,6 @@ const ClientCardImageElement: React.FC<Props> = ({
         borderRadius: (theme) => `${theme.shape.borderRadius}px`,
         ...props.sx,
       }}
-      component={src ? 'img' : undefined}
     >
       {src ? undefined : (
         <Typography

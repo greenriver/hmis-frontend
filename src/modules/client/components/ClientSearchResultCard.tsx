@@ -14,6 +14,7 @@ import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import {
   clientNameAllParts,
   entryExitRange,
+  getClientImageAltText,
   isRecentEnrollment,
   lastUpdatedBy,
   pronouns,
@@ -86,6 +87,7 @@ const ClientSearchResultCard: React.FC<Props> = ({
   linkTargetBlank = false,
   hideImage = false,
 }) => {
+  const clientName = clientNameAllParts(client);
   const {
     data: { client: clientImageData } = {},
     loading: imageLoading = false,
@@ -133,7 +135,7 @@ const ClientSearchResultCard: React.FC<Props> = ({
           >
             <Stack direction='row' spacing={1}>
               <Typography variant='h5' fontWeight={600}>
-                {clientNameAllParts(client)}
+                {clientName}
               </Typography>
               {!isEmpty(client.pronouns) && (
                 <Typography variant='h5' color='text.secondary'>
@@ -144,7 +146,11 @@ const ClientSearchResultCard: React.FC<Props> = ({
           </RouterLink>
           <Stack spacing={3} direction='row'>
             {!hideImage && clientImageData?.image && (
-              <ClientCardImageElement size={150} client={clientImageData} />
+              <ClientCardImageElement
+                size={150}
+                client={clientImageData}
+                alt={getClientImageAltText(clientName)}
+              />
             )}
             <Stack gap={1} sx={{ pr: 1 }}>
               {globalFeatureFlags?.mciIdEnabled && (

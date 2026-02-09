@@ -31,6 +31,7 @@ import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
   clientNameAllParts,
+  getClientImageAltText,
   lastUpdatedBy,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
@@ -271,9 +272,11 @@ const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
 
 const ClientCardImage = ({
   client,
+  clientName,
   size = 150,
 }: {
   client?: ClientImageFragment;
+  clientName?: string;
   size?: number;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -301,12 +304,15 @@ const ClientCardImage = ({
     pointerEvents: 'none',
   };
 
+  const clientImageAltText = getClientImageAltText(clientName);
+
   return (
     <>
       <ClientImageUploadDialog
         open={open}
         onClose={handleClose}
         clientId={client.id}
+        clientName={clientName}
       />
       {client.access.canEditClient ? (
         <Link
@@ -326,7 +332,11 @@ const ClientCardImage = ({
             },
           }}
         >
-          <ClientCardImageElement size={size} client={client} />
+          <ClientCardImageElement
+            size={size}
+            client={client}
+            alt={clientImageAltText}
+          />
           {client.image?.base64 ? (
             // Has photo
             <Box
@@ -358,7 +368,11 @@ const ClientCardImage = ({
           )}
         </Link>
       ) : (
-        <ClientCardImageElement size={size} client={client} />
+        <ClientCardImageElement
+          size={size}
+          client={client}
+          alt={clientImageAltText}
+        />
       )}
     </>
   );
@@ -384,6 +398,7 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
     client.access.canViewFullSsn || client.access.canViewPartialSsn;
 
   const size = 175;
+  const clientName = clientNameAllParts(client);
 
   const navigate = useNavigate();
   const handleOpenClientForm = useCallback(() => {
@@ -406,7 +421,7 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography component='h1' variant='h4'>
-              {clientNameAllParts(client)}
+              {clientName}
             </Typography>
           </Grid>
           <Grid
@@ -431,6 +446,7 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
                 <ClientCardImage
                   size={size}
                   client={clientImageData || undefined}
+                  clientName={clientName}
                 />
               ))}
             <Box
