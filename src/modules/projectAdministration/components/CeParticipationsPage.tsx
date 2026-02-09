@@ -12,6 +12,7 @@ import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRec
 import { parseAndFormatDateRange, yesNo } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { cache } from '@/providers/apolloClient';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeParticipationFieldsFragment,
   DeleteCeParticipationDocument,
@@ -40,41 +41,23 @@ const columns: ColumnDef<CeParticipationFieldsFragment>[] = [
       yesNo(accessPoint),
   },
   {
-    header: 'Assessments',
-    key: 'assessments',
+    header: 'Provided by Project',
+    key: 'servicesProvided',
     render: ({
       accessPoint,
-      preventionAssessment,
-      crisisAssessment,
-      housingAssessment,
+      ceParticipationServices,
     }: CeParticipationFieldsFragment) => {
-      const assmts = [];
-      if (preventionAssessment === NoYes.Yes) {
-        assmts.push('Prevention Assessment');
-      }
-      if (crisisAssessment === NoYes.Yes) {
-        assmts.push('Crisis Assessment');
-      }
-      if (housingAssessment === NoYes.Yes) {
-        assmts.push('Housing Assessment');
-      }
-      if (assmts.length === 0) {
-        return accessPoint === NoYes.Yes ? 'No Assessments' : 'N/A';
+      if (ceParticipationServices.length === 0) {
+        return accessPoint === NoYes.Yes ? 'Not Specified' : 'N/A';
       }
       return (
         <Stack direction='column'>
-          {assmts.map((str) => (
-            <span>{str}</span>
+          {ceParticipationServices.map((str) => (
+            <span>{HmisEnums.CeParticipationServices[str]}</span>
           ))}
         </Stack>
       );
     },
-  },
-  {
-    header: 'Direct Services',
-    key: 'directServices',
-    render: ({ accessPoint, directServices }: CeParticipationFieldsFragment) =>
-      yesNo(directServices, accessPoint === NoYes.Yes ? 'Unknown' : 'N/A'),
   },
   {
     header: 'Receives Referrals',

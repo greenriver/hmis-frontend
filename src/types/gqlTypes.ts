@@ -853,20 +853,36 @@ export enum CeOpportunityStatus {
 export type CeParticipation = {
   __typename?: 'CeParticipation';
   accessPoint?: Maybe<NoYes>;
+  ceParticipationServices: Array<CeParticipationServices>;
   ceParticipationStatusEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   ceParticipationStatusStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   createdBy?: Maybe<ApplicationUser>;
+  /** @deprecated Use ceParticipationServices instead */
   crisisAssessment?: Maybe<NoYes>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  /** @deprecated Use ceParticipationServices instead */
   directServices?: Maybe<NoYes>;
+  /** @deprecated Use ceParticipationServices instead */
   housingAssessment?: Maybe<NoYes>;
   id: Scalars['ID']['output'];
+  /** @deprecated Use ceParticipationServices instead */
   preventionAssessment?: Maybe<NoYes>;
   receivesReferrals?: Maybe<NoYes>;
   user?: Maybe<ApplicationUser>;
 };
+
+export enum CeParticipationServices {
+  /** Shelter Assessment, Screening, and/or Referral */
+  CrisisAssessment = 'CRISIS_ASSESSMENT',
+  /** Direct Services (search and/or placement support) */
+  DirectServices = 'DIRECT_SERVICES',
+  /** Housing Assessment, Screening, and/or Referral */
+  HousingAssessment = 'HOUSING_ASSESSMENT',
+  /** Homelessness Prevention Assessment, Screening, and/or Referral */
+  PreventionAssessment = 'PREVENTION_ASSESSMENT',
+}
 
 export type CeParticipationsPaginated = {
   __typename?: 'CeParticipationsPaginated';
@@ -37916,10 +37932,7 @@ export type SubmitFormMutation = {
           accessPoint?: NoYes | null;
           ceParticipationStatusStartDate?: string | null;
           ceParticipationStatusEndDate?: string | null;
-          crisisAssessment?: NoYes | null;
-          directServices?: NoYes | null;
-          housingAssessment?: NoYes | null;
-          preventionAssessment?: NoYes | null;
+          ceParticipationServices: Array<CeParticipationServices>;
           receivesReferrals?: NoYes | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
@@ -43708,10 +43721,7 @@ export type CeParticipationFieldsFragment = {
   accessPoint?: NoYes | null;
   ceParticipationStatusStartDate?: string | null;
   ceParticipationStatusEndDate?: string | null;
-  crisisAssessment?: NoYes | null;
-  directServices?: NoYes | null;
-  housingAssessment?: NoYes | null;
-  preventionAssessment?: NoYes | null;
+  ceParticipationServices: Array<CeParticipationServices>;
   receivesReferrals?: NoYes | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
@@ -45153,10 +45163,7 @@ export type GetProjectCeParticipationsQuery = {
         accessPoint?: NoYes | null;
         ceParticipationStatusStartDate?: string | null;
         ceParticipationStatusEndDate?: string | null;
-        crisisAssessment?: NoYes | null;
-        directServices?: NoYes | null;
-        housingAssessment?: NoYes | null;
-        preventionAssessment?: NoYes | null;
+        ceParticipationServices: Array<CeParticipationServices>;
         receivesReferrals?: NoYes | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
@@ -52051,10 +52058,7 @@ export const CeParticipationFieldsFragmentDoc = gql`
     accessPoint
     ceParticipationStatusStartDate
     ceParticipationStatusEndDate
-    crisisAssessment
-    directServices
-    housingAssessment
-    preventionAssessment
+    ceParticipationServices
     receivesReferrals
     dateCreated
     dateUpdated

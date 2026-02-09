@@ -90,6 +90,13 @@ export const HmisEnums = {
     DATE_AVAILABLE_LATEST_FIRST: 'Date Available, latest first',
   },
   CeOpportunityStatus: { closed: 'Closed', locked: 'Locked', open: 'Open' },
+  CeParticipationServices: {
+    CRISIS_ASSESSMENT: 'Shelter Assessment, Screening, and/or Referral',
+    DIRECT_SERVICES: 'Direct Services (search and/or placement support)',
+    HOUSING_ASSESSMENT: 'Housing Assessment, Screening, and/or Referral',
+    PREVENTION_ASSESSMENT:
+      'Homelessness Prevention Assessment, Screening, and/or Referral',
+  },
   CeReferralAuditEventType: {
     ACCEPT_REFERRAL: 'Accepted Referral',
     COMPLETE_STEP: 'Completed Task',
