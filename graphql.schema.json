@@ -6254,6 +6254,30 @@
             "deprecationReason": null
           },
           {
+            "name": "ceParticipationServices",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "CeParticipationServices",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ceParticipationStatusEndDate",
             "description": null,
             "args": [],
@@ -6298,8 +6322,8 @@
               "name": "NoYes",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use ceParticipationServices instead"
           },
           {
             "name": "dateCreated",
@@ -6346,8 +6370,8 @@
               "name": "NoYes",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use ceParticipationServices instead"
           },
           {
             "name": "housingAssessment",
@@ -6358,8 +6382,8 @@
               "name": "NoYes",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use ceParticipationServices instead"
           },
           {
             "name": "id",
@@ -6386,8 +6410,8 @@
               "name": "NoYes",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use ceParticipationServices instead"
           },
           {
             "name": "receivesReferrals",
@@ -6417,6 +6441,42 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "CeParticipationServices",
+        "description": null,
+        "isOneOf": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CRISIS_ASSESSMENT",
+            "description": "Shelter Assessment, Screening, and/or Referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DIRECT_SERVICES",
+            "description": "Direct Services (search and/or placement support)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOUSING_ASSESSMENT",
+            "description": "Housing Assessment, Screening, and/or Referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PREVENTION_ASSESSMENT",
+            "description": "Homelessness Prevention Assessment, Screening, and/or Referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

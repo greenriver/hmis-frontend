@@ -118,10 +118,7 @@ fragment CeParticipationFields on CeParticipation {
   accessPoint
   ceParticipationStatusStartDate
   ceParticipationStatusEndDate
-  crisisAssessment
-  directServices
-  housingAssessment
-  preventionAssessment
+  ceParticipationServices
   receivesReferrals
   dateCreated
   dateUpdated
