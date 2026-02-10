@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import useFormDefinition from '../hooks/useFormDefinition';
-import { PickListArgs, SubmitFormAllowedTypes } from '../types';
+import { LocalConstants, PickListArgs, SubmitFormAllowedTypes } from '../types';
 import { createInitialValuesFromRecord } from '../util/formUtil';
 
 import DynamicView from './viewable/DynamicView';
@@ -14,6 +14,7 @@ export interface ViewRecordProps<RecordType> {
   formRole: RecordFormRole;
   pickListArgs?: PickListArgs;
   projectId?: string; // Project context for fetching form definition
+  localConstants?: LocalConstants; // Local constants for displaying the form view
 }
 
 /**
@@ -25,6 +26,7 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   formRole,
   pickListArgs,
   projectId,
+  localConstants,
 }: ViewRecordProps<RecordType>): JSX.Element => {
   const { formDefinition, itemMap, loading } = useFormDefinition({
     role: formRole,
@@ -50,6 +52,7 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
       values={values}
       definition={formDefinition.definition}
       pickListArgs={pickListArgs}
+      localConstants={localConstants}
     />
   );
 };
