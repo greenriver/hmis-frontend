@@ -1,4 +1,3 @@
-import { SvgIconComponent } from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
   Button,
@@ -9,10 +8,11 @@ import {
   Menu,
   MenuItem,
   MenuProps,
+  SvgIconProps,
   Stack,
   Typography,
 } from '@mui/material';
-import { ReactNode, useState } from 'react';
+import { ComponentType, ReactNode, useState } from 'react';
 import { To } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
@@ -22,7 +22,7 @@ import { LocationState } from '@/routes/routeUtil';
 export type CommonMenuItem = {
   key: string;
   title: ReactNode;
-  Icon?: SvgIconComponent;
+  Icon?: ComponentType<SvgIconProps>;
   to?: To;
   onClick?: VoidFunction;
   divider?: boolean;

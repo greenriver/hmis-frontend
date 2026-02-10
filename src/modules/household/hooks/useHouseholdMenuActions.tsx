@@ -157,7 +157,7 @@ export function useHouseholdMenuActions({
           Icon: OpenInNewIcon,
           to: generateSafePath(ClientDashboardRoutes.PROFILE, { clientId }),
           openInNew: true,
-          ariaLabel: `Go to  ${clientBriefName(row.client)}'s Client Profile`,
+          ariaLabel: `Go to  ${clientBriefName(row.client)}'s Client Profile (opens in new tab)`,
         },
       ];
 

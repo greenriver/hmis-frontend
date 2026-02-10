@@ -1,6 +1,6 @@
 import { Link, LinkProps, Typography } from '@mui/material';
 import React from 'react';
-import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
+import NewTabIcon from '@/components/elements/NewTabIcon';
 
 const ExternalLink: React.FC<LinkProps> = ({ children, ...props }) => {
   return (
@@ -14,7 +14,7 @@ const ExternalLink: React.FC<LinkProps> = ({ children, ...props }) => {
           textDecoration: 'inherit',
         }}
       >
-        {children} <OpenInNewIcon fontSize='inherit' />
+        {children} <NewTabIcon />
       </Typography>
     </Link>
   );

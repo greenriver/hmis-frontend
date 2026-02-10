@@ -1,6 +1,5 @@
-import { SvgIconComponent } from '@mui/icons-material';
-import { Button, ButtonProps } from '@mui/material';
-import { forwardRef, Ref } from 'react';
+import { Button, ButtonProps, SvgIconProps } from '@mui/material';
+import { ComponentType, forwardRef, Ref } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 export type ButtonLinkProps = Omit<
@@ -9,7 +8,7 @@ export type ButtonLinkProps = Omit<
 > &
   LinkProps & {
     leftAlign?: boolean;
-    Icon?: SvgIconComponent;
+    Icon?: ComponentType<SvgIconProps>;
     openInNew?: boolean;
   };
 
