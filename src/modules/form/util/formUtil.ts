@@ -195,13 +195,13 @@ export const resolveOptionList = (
   excludeDataNotCollected = false
 ): PickListOption[] | null => {
   if (!item.pickListReference && !item.pickListOptions) return null;
-  if (item.pickListOptions) return item.pickListOptions;
   if (item.pickListReference) {
     return localResolvePickList(
       item.pickListReference,
       excludeDataNotCollected
     );
   }
+  if (item.pickListOptions) return item.pickListOptions;
   return null;
 };
 

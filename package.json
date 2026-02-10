@@ -45,7 +45,7 @@
     ]
   },
   "resolutions": {
-    "axios": "^1.12.0"
+    "giget": "^3.1.2"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
@@ -81,7 +81,7 @@
     "imask": "^7.6.1",
     "jsep": "^1.3.9",
     "leaflet": "^1.9.4",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "material-ui-popup-state": "^5.1.2",
     "pluralize": "^8.0.0",
     "react": "^18.3.1",
@@ -93,7 +93,7 @@
     "react-imask": "^7.6.1",
     "react-leaflet": "^4.2.1",
     "react-number-format": "^5.4.2",
-    "react-pdf": "^8.0.2",
+    "react-pdf": "^10.3.0",
     "react-router-dom": "^6.25.1",
     "typescript": "^5.5.4",
     "uuid": "^10.0.0",
@@ -104,7 +104,6 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.3",
     "@graphql-codegen/cli": "^6.0.0",
-    "@graphql-codegen/fragment-matcher": "^5.0.2",
     "@graphql-codegen/introspection": "^4.0.3",
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-document-nodes": "^4.0.9",
@@ -113,8 +112,8 @@
     "@sentry/vite-plugin": "^2.21.1",
     "@storybook/addon-a11y": "^8.6.4",
     "@storybook/addon-actions": "^8.6.4",
-    "@storybook/addon-essentials": "^8.6.4",
-    "@storybook/addon-interactions": "^8.6.4",
+    "@storybook/addon-essentials": "^8.6.15",
+    "@storybook/addon-interactions": "^8.6.15",
     "@storybook/addon-links": "^8.6.4",
     "@storybook/addon-themes": "^8.6.4",
     "@storybook/blocks": "^8.6.4",
@@ -132,7 +131,6 @@
     "@typescript-eslint/parser": "^7.18.0",
     "axe-playwright": "^2.0.2",
     "chromatic": "^11.10.2",
-    "cross-env": "^7.0.3",
     "eslint": "^8.46.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
@@ -143,9 +141,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-storybook": "^0.11.1",
     "eslint-plugin-vitest": "^0.4.1",
-    "graphql-sock": "^1.0.0",
     "husky": "^8.0.0",
-    "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^12.4.1",
     "playwright": "^1.55.1",
     "prettier": "^3.3.3",
@@ -153,7 +149,6 @@
     "storybook": "^8.6.4",
     "storybook-addon-apollo-client": "^7.3.0",
     "storybook-addon-pseudo-states": "^4.0.2",
-    "ts-node": "^10.9.2",
     "vite-plugin-mkcert": "^1.17.8"
   }
 }

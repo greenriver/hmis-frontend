@@ -90,6 +90,13 @@ export const HmisEnums = {
     DATE_AVAILABLE_LATEST_FIRST: 'Date Available, latest first',
   },
   CeOpportunityStatus: { closed: 'Closed', locked: 'Locked', open: 'Open' },
+  CeParticipationServices: {
+    CRISIS_ASSESSMENT: 'Shelter Assessment, Screening, and/or Referral',
+    DIRECT_SERVICES: 'Direct Services (search and/or placement support)',
+    HOUSING_ASSESSMENT: 'Housing Assessment, Screening, and/or Referral',
+    PREVENTION_ASSESSMENT:
+      'Homelessness Prevention Assessment, Screening, and/or Referral',
+  },
   CeReferralAuditEventType: {
     ACCEPT_REFERRAL: 'Accepted Referral',
     COMPLETE_STEP: 'Completed Task',
@@ -585,7 +592,6 @@ export const HmisEnums = {
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     EXTERNAL_FORM: 'External form',
-    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FILE: 'File',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
@@ -1677,7 +1683,6 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  ServiceDetailType: { BULK: 'BULK', CLIENT: 'CLIENT' },
   ServiceSortOption: {
     AGE_OLDEST_TO_YOUNGEST: 'Client Age: Oldest to Youngest',
     AGE_YOUNGEST_TO_OLDEST: 'Client Age: Youngest to Oldest',
@@ -1914,7 +1919,6 @@ export const HmisEnums = {
   StaticFormRole: {
     AUTO_EXIT_CONFIG: 'Auto exit config',
     CLIENT_ALERT: 'Client alert',
-    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
     PROJECT_CONFIG: 'Project config',
@@ -1978,7 +1982,6 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  UnitFilterOptionStatus: { AVAILABLE: 'Available', FILLED: 'Filled' },
   UnitOccupancyStatus: { OCCUPIED: 'Occupied', VACANT: 'Vacant' },
   ValidationSeverity: { error: 'error', warning: 'warning' },
   ValidationType: {

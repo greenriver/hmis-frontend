@@ -5,6 +5,7 @@ import Loading from '@/components/elements/Loading';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import useDebouncedState from '@/hooks/useDebouncedState';
 import { configurableCeColumns } from '@/modules/ce/components/admin/AdminCeClientsTable';
 import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -15,6 +16,7 @@ import {
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {
   CeCandidateFieldsFragment,
   CeOpportunityFieldsFragment,
@@ -97,7 +99,10 @@ const PrioritizedClientsTable: React.FC<Props> = ({
 
   const filters = useFilters({
     type: 'CeOpportunityCandidatesFilterOptions',
+    omit: ['searchTerm'],
   });
+
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   // If CandidatePool has not been generated yet (due to change in eligibility or prioritization requirements), show a message
   if (!opportunity.candidatesGeneratedAt) {
@@ -130,6 +135,16 @@ const PrioritizedClientsTable: React.FC<Props> = ({
         )}
         {/* May want to add additional explainer text about this list being deduplicated (i.e. it contains destination clients) */}
       </CommonCard>
+      <CommonSearchInput
+        label='Search clients'
+        name='search clients'
+        placeholder='Search client by name or ID'
+        value={search}
+        onChange={setSearch}
+        fullWidth
+        size='small'
+        searchAdornment
+      />
       <Paper>
         <GenericTableWithData<
           GetCeOpportunityCandidatesQuery,
@@ -137,7 +152,10 @@ const PrioritizedClientsTable: React.FC<Props> = ({
           CeCandidateFieldsFragment
         >
           columns={columns}
-          queryVariables={{ opportunityId: opportunity.id }}
+          queryVariables={{
+            opportunityId: opportunity.id,
+            filters: { searchTerm: debouncedSearch || undefined },
+          }}
           queryDocument={GetCeOpportunityCandidatesDocument}
           pagePath='ceOpportunity.candidates'
           paginationItemName='client'

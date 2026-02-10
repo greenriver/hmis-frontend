@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useLocalConstantsForProjectForm } from '../hooks/useLocalConstantsForProjectForm';
 import { useOrganizationCrumbs } from '../hooks/useOrganizationCrumbs';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import NotFound from '@/components/pages/NotFound';
@@ -9,7 +10,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import { RecordFormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
+import { ProjectAllFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const CreateProjectPage = () => {
@@ -32,6 +33,8 @@ const CreateProjectPage = () => {
     [navigate, organizationId]
   );
 
+  const localConstants = useLocalConstantsForProjectForm();
+
   if (!crumbs) return <NotFound />;
 
   return (
@@ -40,6 +43,7 @@ const CreateProjectPage = () => {
         formRole={RecordFormRole.Project}
         onCompleted={onCompleted}
         inputVariables={{ organizationId }}
+        localConstants={localConstants}
         FormActionProps={{ submitButtonText: 'Create Project' }}
         title={
           <Typography component='h1' variant='h3' sx={{ mt: 1, mb: 3 }}>

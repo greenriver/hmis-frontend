@@ -1,5 +1,5 @@
 import { Alert, Divider, Stack, Typography } from '@mui/material';
-import React, { useId } from 'react';
+import React, { useId, useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonSelectableCard from '@/components/elements/CommonSelectableCard';
 import CommonTextWithIcon from '@/components/elements/CommonTextWithIcon';
@@ -21,6 +21,13 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
+const getNameWithHohIndicator = (householdMember: {
+  clientName: string;
+  relationshipToHoH: RelationshipToHoH;
+}) => {
+  return `${householdMember.clientName}${householdMember.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ? ' (HoH)' : ''}`;
+};
+
 interface Props {
   enrollment: CeReferralSourceEnrollmentFieldsFragment;
   selected: boolean;
@@ -34,14 +41,23 @@ const SourceEnrollmentCard: React.FC<Props> = ({
 }) => {
   const radioId = useId();
 
+  // List of household member names, with the current client first
+  const householdMemberNames = useMemo(
+    () => [
+      getNameWithHohIndicator(enrollment),
+      ...enrollment.householdMembers
+        .filter((m) => m.clientId !== enrollment.sourceClientId)
+        .map(getNameWithHohIndicator),
+    ],
+    [enrollment]
+  );
+
   // will always be true for now (otherwise the enrollment wouldn't have been resolved),
   // but in the future we will resolve enrollments here that user may not be able to view,
   // including enrollments in different data sources. https://github.com/open-path/Green-River/issues/7891
   const includeLinks =
     enrollment.dataSource.isCurrentDataSource &&
     enrollment.access.canViewEnrollmentDetails;
-
-  const clientNameWithHohIndicator = `${enrollment.clientName}${enrollment.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ? ' (HoH)' : ''}`;
 
   return (
     <CommonSelectableCard
@@ -56,16 +72,7 @@ const SourceEnrollmentCard: React.FC<Props> = ({
           Icon={ClientIcon}
           IconProps={{ sx: { color: 'text.secondary' } }}
         >
-          {enrollment.householdSize === 1 ? (
-            clientNameWithHohIndicator
-          ) : (
-            <CommonTruncatedList
-              items={[
-                clientNameWithHohIndicator,
-                ...enrollment.otherHouseholdMemberNames,
-              ]}
-            />
-          )}
+          <CommonTruncatedList items={householdMemberNames} />
         </CommonTextWithIcon>
 
         <Stack gap={1} direction='row' alignItems={'center'}>
