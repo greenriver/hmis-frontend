@@ -13,10 +13,9 @@ import {
 import { omit } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 
-import CommonDialog from '../CommonDialog';
-import LoadingButton from '../LoadingButton';
-import Uploader from '../upload/Uploader';
-
+import CommonDialog from '@/components/elements/CommonDialog';
+import LoadingButton from '@/components/elements/LoadingButton';
+import Uploader from '@/components/elements/upload/Uploader';
 import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
