@@ -37,6 +37,16 @@ export type ClientImageUploadDialogProps = {
   baseImageAltText?: string;
 } & DialogProps;
 
+/**
+ * Renders a dialog for updating the client image.
+ * @param clientId - the ID of the client to upload an image for
+ * @param baseImageAltText - the base alt text to use for client images, such as "Profile for client <name>."
+ * This component can render 2 images, the current profile image (if it exists) and the newly uploaded one,
+ * so it appends "new"/"current" to the provided alt text.
+ * @param onClose - callback to close the dialog
+ * @param props - further props to pass down to the CommonDialog rendered internally
+ * @constructor
+ */
 const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   clientId,
   baseImageAltText,
