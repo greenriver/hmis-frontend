@@ -32,15 +32,17 @@ const DependentFormItemWrapper: React.FC<Props> = ({ item, renderChild }) => {
     } else {
       register(item.linkId);
     }
-    // this was added with https://github.com/greenriver/hmis-frontend/commit/fe0ca6663de3fa9f6fa6dc2e3a70409a917205d2
-    // see also: https://github.com/greenriver/hmis-frontend/blame/b3bfc71e008cd99cddbcfe8a0b781ad0bdc09876/src/modules/form/components/DependentFormItemWrapper.tsx
-    // 1. why was it added?
-    // 2. why is the component unmounting?
     return () => {
-      console.log('would unregister:', item.linkId);
-      // unregister(item.linkId);
+      unregister(item.linkId);
     };
-  }, [disabled, visible, unregister, register, item]);
+  }, [
+    disabled,
+    visible,
+    unregister,
+    register,
+    item.disabledDisplay,
+    item.linkId,
+  ]);
 
   if (visible) return renderChild(disabled);
   return null;

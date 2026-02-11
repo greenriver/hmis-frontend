@@ -118,6 +118,7 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
   // If there is NO data present, show DNC directly, rather than showing DNC for each field in the form.
   const dynamicView = hasAnyContent ? (
     <DynamicView
+      key={JSON.stringify(values)} // force re-render when values change
       values={values}
       definition={definitionForDisplay}
       pickListArgs={pickListArgs}
@@ -148,24 +149,4 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
   );
 };
 
-/**
- * Wrapper to force OccurrencePointForm to re-render when the underlying record changes.
- * The DynamicView component does not re-render when the values change, so we need to force a re-render of the entire component.
- * This is a less-than-ideal solution, a more performant solution would be for DynamicView to internally handle changes to values/defaultValues.
- * Note: We stringify the entire record, because the occurrence point form may display data from multiple fields on the record
- * (e.g. custom data elements, move-in date field)
- */
-const OccurrencePointFormWrapper: React.FC<OccurrencePointFormProps> = ({
-  record,
-  ...props
-}) => {
-  return (
-    <OccurrencePointForm
-      // key={JSON.stringify(record)}
-      record={record}
-      {...props}
-    />
-  );
-};
-
-export default OccurrencePointFormWrapper;
+export default OccurrencePointForm;
