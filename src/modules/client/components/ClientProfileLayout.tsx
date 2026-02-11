@@ -2,7 +2,7 @@ import { Box, Grid, Stack } from '@mui/material';
 
 import ClientCustomDataElementsCard from '@/modules/client/components/ClientCustomDataElementsCard';
 import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
-import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
+import ClientProfileCard from '@/modules/client/components/profileCard/ClientProfileCard';
 
 import { ClientAlertProfileWrapper } from '@/modules/clientAlerts/components/ClientAlertWrappers';
 import { ClientFieldsFragment } from '@/types/gqlTypes';

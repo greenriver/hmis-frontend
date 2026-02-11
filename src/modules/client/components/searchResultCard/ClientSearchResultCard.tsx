@@ -1,11 +1,12 @@
 import PersonIcon from '@mui/icons-material/Person';
 import { Grid, Skeleton, Stack, Typography } from '@mui/material';
 import { isEmpty, isNil } from 'lodash-es';
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { ContextualClientDobAge } from '../providers/ClientSsnDobVisibility';
+import { ContextualClientDobAge } from '../../providers/ClientSsnDobVisibility';
 
-import ClientCardImageElement from './ClientCardImageElement';
+import ClientCardImageElement from '../ClientCardImageElement';
+import RecentEnrollments from './SearchResultRecentEnrollments';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { LabeledExternalIdDisplay } from '@/components/elements/ExternalIdDisplay';
@@ -13,68 +14,21 @@ import RouterLink from '@/components/elements/RouterLink';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import {
   clientNameAllParts,
-  entryExitRange,
   getClientImageAltText,
   isRecentEnrollment,
   lastUpdatedBy,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
-import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientSearchResultFieldsFragment,
   ExternalIdentifierType,
-  GetClientEnrollmentsQuery,
   useGetClientEnrollmentsQuery,
   useGetClientImageQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const MAX_RECENT_ENROLLMENTS = 5;
-
-const RecentEnrollments = ({
-  clientId,
-  recentEnrollments,
-}: {
-  clientId: string;
-  recentEnrollments: NonNullable<
-    GetClientEnrollmentsQuery['client']
-  >['enrollments']['nodes'];
-}) => {
-  return (
-    <Grid container spacing={0.5}>
-      {recentEnrollments.map((enrollment) => (
-        <Fragment key={enrollment.id}>
-          <Grid item xs={6} lg={4}>
-            {enrollment.access.canViewEnrollmentDetails ? (
-              <RouterLink
-                aria-label={enrollment.projectName}
-                to={generateSafePath(
-                  EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-                  {
-                    clientId,
-                    enrollmentId: enrollment.id,
-                  }
-                )}
-              >
-                {enrollment.projectName}
-              </RouterLink>
-            ) : (
-              enrollment.projectName
-            )}
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant='body2' sx={{ ml: 1, color: 'text.secondary' }}>
-              {entryExitRange(enrollment)}
-            </Typography>
-          </Grid>
-        </Fragment>
-      ))}
-    </Grid>
-  );
-};
 
 interface Props {
   client: ClientSearchResultFieldsFragment;
