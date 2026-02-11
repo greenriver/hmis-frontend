@@ -45,7 +45,6 @@ export type ClientImageUploadDialogProps = {
  * so it appends "new"/"current" to the provided alt text.
  * @param onClose - callback to close the dialog
  * @param props - further props to pass down to the CommonDialog rendered internally
- * @constructor
  */
 const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   clientId,
