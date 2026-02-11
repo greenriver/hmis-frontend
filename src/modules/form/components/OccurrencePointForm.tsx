@@ -1,7 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Box } from '@mui/material';
-import { assign, isEmpty, isNil, omit } from 'lodash-es';
-import React, { useMemo } from 'react';
+import { assign, isEmpty, isEqual, isNil, omit } from 'lodash-es';
+import React, { useMemo, useRef } from 'react';
 
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import IconButtonContainer from '@/modules/enrollment/components/IconButtonContainer';
@@ -73,6 +73,16 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
     [localConstantsProp]
   );
 
+  // Keep a stable reference to definitionForDisplay to avoid unnecessary re-renders of DynamicView.
+  // This could be avoided if the parent component memoized the definitionForDisplay.
+  const definitionForDisplayRef = useRef<FormDefinitionJson | undefined>();
+  const stableDefinitionForDisplay = useMemo(() => {
+    const prev = definitionForDisplayRef.current;
+    if (prev !== undefined && isEqual(prev, definitionForDisplay)) return prev;
+    definitionForDisplayRef.current = definitionForDisplay;
+    return definitionForDisplay;
+  }, [definitionForDisplay]);
+
   // Build values for DynamicView
   const values = useMemo(() => {
     // Set initial values (for "If Empty") behavior, so that forms can set
@@ -120,7 +130,7 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
     <DynamicView
       key={JSON.stringify(values)} // force re-render when values change
       values={values}
-      definition={definitionForDisplay}
+      definition={stableDefinitionForDisplay}
       pickListArgs={pickListArgs}
     />
   ) : (
