@@ -11,6 +11,9 @@ type Props = {
   size?: number;
 } & BoxProps<'img'>;
 
+/**
+ * Renders a client's profile image. If the client has no image, displays a placeholder box with the text "No Client Photo".
+ */
 const ClientCardImageElement: React.FC<Props> = ({
   client,
   base64,
@@ -35,7 +38,7 @@ const ClientCardImageElement: React.FC<Props> = ({
             component: 'img',
             alt: alt || 'Client image',
           }
-        : // Don't pass alt text to a div
+        : // Don't pass alt text to a div (invalid markup)
           { component: 'div' })}
       sx={{
         height: size,

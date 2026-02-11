@@ -9,6 +9,9 @@ interface Props extends BoxProps<'img'> {
   height?: number;
 }
 
+/**
+ * Renders a client's profile image. Returns null (displays nothing) if the client has no image.
+ */
 const ClientImage: React.FC<Props> = ({
   clientId,
   alt,
