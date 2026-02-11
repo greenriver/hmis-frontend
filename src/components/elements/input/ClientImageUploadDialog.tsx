@@ -35,12 +35,12 @@ import {
 
 export type ClientImageUploadDialogProps = {
   clientId: string;
-  clientName?: string;
+  baseImageAltText?: string;
 } & DialogProps;
 
 const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   clientId,
-  clientName,
+  baseImageAltText,
   onClose,
   ...props
 }) => {
@@ -104,14 +104,6 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
 
   if (!fetching && !client) return null;
 
-  const currentAlt = clientName
-    ? `Current profile image for ${clientName}.`
-    : 'Current profile image.';
-
-  const newAlt = clientName
-    ? `New profile image for ${clientName}.`
-    : 'New profile image.';
-
   return (
     <CommonDialog
       {...omit(props, 'children')}
@@ -145,7 +137,10 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                     <Typography variant='body2' gutterBottom align='center'>
                       Current Photo
                     </Typography>
-                    <ClientCardImageElement client={client} alt={currentAlt} />
+                    <ClientCardImageElement
+                      client={client}
+                      alt={`Current ${baseImageAltText}`}
+                    />
                     {client?.image && (
                       <Box>
                         <LoadingButton
@@ -167,7 +162,10 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                     <Typography variant='body2' gutterBottom align='center'>
                       New Photo
                     </Typography>
-                    <ClientCardImageElement url={newPhotoSrc} alt={newAlt} />
+                    <ClientCardImageElement
+                      url={newPhotoSrc}
+                      alt={`New ${baseImageAltText}`}
+                    />
                   </Grid>
                 </>
               )}

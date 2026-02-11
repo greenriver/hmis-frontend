@@ -312,7 +312,7 @@ const ClientCardImage = ({
         open={open}
         onClose={handleClose}
         clientId={client.id}
-        clientName={clientName}
+        baseImageAltText={clientImageAltText}
       />
       {client.access.canEditClient ? (
         <Link
