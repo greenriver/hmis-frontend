@@ -4,7 +4,7 @@ import { Box, Chip, Link, SxProps } from '@mui/material';
 import { useCallback, useRef, useState } from 'react';
 
 import ClientCardImageElement from '../ClientCardImageElement';
-import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
+import ClientImageUploadDialog from '@/modules/client/components/profileCard/ClientImageUploadDialog';
 import { getClientImageAltText } from '@/modules/hmis/hmisUtil';
 import { ClientImageFragment } from '@/types/gqlTypes';
 
