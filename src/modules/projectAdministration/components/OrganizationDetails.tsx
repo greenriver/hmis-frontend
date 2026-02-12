@@ -36,7 +36,10 @@ const OrganizationDetails = ({
         </CommonLabeledTextBlock>
       )}
       <CommonLabeledTextBlock title='Organization ID'>
-        <ClickToCopyId value={organization.hudId} />
+        <ClickToCopyId
+          value={organization.hudId}
+          ariaLabel='Copy Organization ID'
+        />
       </CommonLabeledTextBlock>
       <CommonLabeledTextBlock title='Victim Service Provider'>
         <HmisEnum

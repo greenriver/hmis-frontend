@@ -43,7 +43,7 @@ const EnrollmentNavHeader = ({
         <EnrollmentDateRangeWithStatus enrollment={enrollment} />
       </CommonLabeledTextBlock>
       <CommonLabeledTextBlock title='Enrollment ID'>
-        <ClickToCopyId value={enrollment.id} />
+        <ClickToCopyId value={enrollment.id} ariaLabel='Copy Enrollment ID' />
       </CommonLabeledTextBlock>
     </Stack>
   );
