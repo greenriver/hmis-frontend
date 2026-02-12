@@ -154,7 +154,7 @@ export function useHouseholdMenuActions({
         {
           key: 'open client profile',
           title: 'Open Client Profile',
-          Icon: OpenInNewIcon,
+          Icon: OpenInNewIcon, // no need to use accessible NewTabIcon here, because we override the aria label anyway.
           to: generateSafePath(ClientDashboardRoutes.PROFILE, { clientId }),
           openInNew: true,
           ariaLabel: `Go to  ${clientBriefName(row.client)}'s Client Profile (opens in new tab)`,
