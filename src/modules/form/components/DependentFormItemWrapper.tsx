@@ -35,7 +35,14 @@ const DependentFormItemWrapper: React.FC<Props> = ({ item, renderChild }) => {
     return () => {
       unregister(item.linkId);
     };
-  }, [disabled, visible, unregister, register, item]);
+  }, [
+    disabled,
+    visible,
+    unregister,
+    register,
+    item.disabledDisplay,
+    item.linkId,
+  ]);
 
   if (visible) return renderChild(disabled);
   return null;
