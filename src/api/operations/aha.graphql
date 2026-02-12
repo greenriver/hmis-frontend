@@ -1,5 +1,13 @@
-mutation FetchAhaScore($clientId: ID!) {
-  fetchAhaScore(clientId: $clientId) {
+mutation FetchAhaScore(
+  $clientId: ID!
+  $lookupCatalyst: String
+  $lookupReason: [String!]
+) {
+  fetchAhaScore(
+    clientId: $clientId
+    lookupCatalyst: $lookupCatalyst
+    lookupReason: $lookupReason
+  ) {
     score
     mciQualityIndicator
     dwClientId
