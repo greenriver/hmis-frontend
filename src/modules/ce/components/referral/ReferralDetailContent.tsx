@@ -237,8 +237,8 @@ const ReferralDetailContent: React.FC<Props> = ({
   }, [referral]);
 
   const eligibilityRequirementsDetails = useMemo(() => {
-    if (!referral.opportunity?.eligibilityRequirements) return null;
-    const { eligibilityRequirements } = referral.opportunity;
+    if (!referral.eligibilityRequirements) return null;
+    const { eligibilityRequirements } = referral;
 
     return eligibilityRequirements.map((requirement) => ({
       id: requirement.id,
