@@ -8,7 +8,8 @@ export const StepCardTitle: React.FC<{
   title: string;
   sx?: SxProps;
   action?: ReactNode;
-}> = ({ step, title, action, sx }) => (
+  component?: React.ElementType;
+}> = ({ step, title, action, sx, component = 'h2' }) => (
   <Stack
     justifyContent='space-between'
     direction='row'
@@ -29,7 +30,9 @@ export const StepCardTitle: React.FC<{
       >
         {step}
       </Box>
-      <Typography variant='h4'>{title}</Typography>
+      <Typography variant='h4' component={component}>
+        {title}
+      </Typography>
     </Stack>
     {action}
   </Stack>
@@ -43,14 +46,29 @@ const StepCard: React.FC<{
   action?: ReactNode;
   disabled?: boolean;
   disabledText?: string;
-}> = ({ step, title, children, action, padded, disabled, disabledText }) => (
+  component?: React.ElementType;
+}> = ({
+  step,
+  title,
+  children,
+  action,
+  padded,
+  disabled,
+  disabledText,
+  component = 'h2',
+}) => (
   <Paper
     sx={{
       pr: padded && !disabled ? 6 : undefined,
       pb: padded && !disabled ? 3 : 0,
     }}
   >
-    <StepCardTitle step={step} title={title} action={action} />
+    <StepCardTitle
+      step={step}
+      title={title}
+      action={action}
+      component={component}
+    />
 
     {disabled ? (
       <CommonCard
