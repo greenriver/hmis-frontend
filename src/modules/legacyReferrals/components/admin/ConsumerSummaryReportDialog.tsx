@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import DatePicker from '@/components/elements/input/DatePicker';
-import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
+import NewTabIcon from '@/components/elements/NewTabIcon';
 import { fetchConsumerSummaryReportUrl } from '@/modules/legacyReferrals/externalReportApi';
 
 export interface ConsumerSummaryReportDialogProps extends DialogProps {
@@ -62,7 +62,7 @@ const ConsumerSummaryReportDialog: React.FC<
             endDate,
           })}
           onClick={(e) => props.onClose && props.onClose(e, 'escapeKeyDown')}
-          endIcon={<OpenInNewIcon />}
+          endIcon={<NewTabIcon />}
         >
           View Consumer Summary Report
         </Button>
