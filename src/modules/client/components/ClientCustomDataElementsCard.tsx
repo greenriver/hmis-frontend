@@ -46,7 +46,11 @@ const ClientCustomDataElementsCard: React.FC<Props> = ({ client }) => {
   if (rows.length === 0) return null;
 
   return (
-    <TitleCard title='Custom Fields' headerVariant='border'>
+    <TitleCard
+      title='Custom Fields'
+      headerVariant='border'
+      headerComponent='h2'
+    >
       <CommonDetailGridContainer>
         {rows.map(({ id, label, value }) => (
           <CommonDetailGridItem label={label} key={id}>

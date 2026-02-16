@@ -55,7 +55,7 @@ const EnrollmentQuickActions = ({
   }
 
   return (
-    <TitleCard title='Quick Actions'>
+    <TitleCard title='Quick Actions' headerComponent='h2'>
       <Stack spacing={2} sx={{ px: 2, pb: 2, textAlign: 'center' }}>
         {/* Record a Service */}
         {canRecordService && (
