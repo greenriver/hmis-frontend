@@ -27,11 +27,15 @@ const DynamicFormFields: React.FC<Props> = ({ handlers, ...props }) => {
     ({ linkId, value: baseValue, type }) => {
       const item = handlers.itemMap[linkId];
       let value = baseValue;
-      // Convert string values to appropriate number types
-      if (item) {
-        if (item.type === ItemType.Integer) value = parseInt(value) || 0;
-        if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
+
+      // If item type is a number, parse the string value as the appropriate number type.
+      if ([ItemType.Integer, ItemType.Currency].includes(item?.type)) {
+        const parsed =
+          item.type === ItemType.Integer ? parseInt(value) : parseFloat(value);
+        // Set value to null if it is not parseable as a number, such as null/empty string.
+        value = isNaN(parsed) ? null : parsed;
       }
+
       handlers.methods.setValue(linkId, value, {
         shouldDirty: type === ChangeType.User,
       });
