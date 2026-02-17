@@ -11,11 +11,15 @@ type Props = {
   size?: number;
 } & BoxProps<'img'>;
 
+/**
+ * Renders a client's profile image. If the client has no image, displays a placeholder box with the text "No Client Photo".
+ */
 const ClientCardImageElement: React.FC<Props> = ({
   client,
   base64,
   url,
   size = 150,
+  alt,
   ...props
 }) => {
   // let src = 'https://dummyimage.com/150x150/e8e8e8/aaa';
@@ -27,9 +31,15 @@ const ClientCardImageElement: React.FC<Props> = ({
 
   return (
     <Box
-      alt='client'
-      src={src}
       {...props}
+      {...(src
+        ? {
+            src,
+            component: 'img',
+            alt: alt || 'Client image',
+          }
+        : // Don't pass alt text to a div (invalid markup)
+          { component: 'div' })}
       sx={{
         height: size,
         width: size,
@@ -37,7 +47,6 @@ const ClientCardImageElement: React.FC<Props> = ({
         borderRadius: (theme) => `${theme.shape.borderRadius}px`,
         ...props.sx,
       }}
-      component={src ? 'img' : undefined}
     >
       {src ? undefined : (
         <Typography

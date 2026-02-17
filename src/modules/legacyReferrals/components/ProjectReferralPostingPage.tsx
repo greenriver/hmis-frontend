@@ -5,7 +5,7 @@ import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
-import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
+import NewTabIcon from '@/components/elements/NewTabIcon';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
@@ -84,7 +84,7 @@ const ProjectReferralPostingPage: React.FC = () => {
                 href={fetchPreventionAssessmentReportUrl(
                   referralPosting.referralIdentifier
                 )}
-                endIcon={<OpenInNewIcon />}
+                endIcon={<NewTabIcon />}
               >
                 LINK Prevention Assessment Report
               </Button>

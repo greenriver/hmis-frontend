@@ -55,10 +55,13 @@ const ProjectNavHeader = ({
         </CommonLabeledTextBlock>
         <Stack gap={0.5}>
           <CommonLabeledTextBlock title='Project ID' horizontal>
-            <ClickToCopyId value={project.hudId} />
+            <ClickToCopyId value={project.hudId} ariaLabel='Copy Project ID' />
           </CommonLabeledTextBlock>
           <CommonLabeledTextBlock title='Organization ID' horizontal>
-            <ClickToCopyId value={project.organization.hudId} />
+            <ClickToCopyId
+              value={project.organization.hudId}
+              ariaLabel='Copy Organization ID'
+            />
           </CommonLabeledTextBlock>
         </Stack>
       </Stack>

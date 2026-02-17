@@ -1,17 +1,16 @@
-import { SvgIconComponent } from '@mui/icons-material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { Link, LinkProps, Stack } from '@mui/material';
-import { forwardRef } from 'react';
+import { Link, LinkProps, Stack, SvgIconProps } from '@mui/material';
+import { ComponentType, forwardRef } from 'react';
 import {
   Link as ReactRouterLink,
   LinkProps as ReactRouterLinkProps,
 } from 'react-router-dom';
+import NewTabIcon from '@/components/elements/NewTabIcon';
 
 export type RouterLinkProps = Omit<LinkProps, 'href'> &
   ReactRouterLinkProps & {
     plain?: boolean;
     openInNew?: boolean;
-    Icon?: SvgIconComponent | false; // pass false to omit icon for openInNew
+    Icon?: ComponentType<SvgIconProps> | false; // pass false to omit icon for openInNew
   };
 
 const RouterLink = forwardRef<HTMLLinkElement, RouterLinkProps>(
@@ -39,7 +38,7 @@ const RouterLink = forwardRef<HTMLLinkElement, RouterLinkProps>(
           >
             {children}
             {openInNew && Icon !== false ? (
-              <OpenInNewIcon fontSize='inherit' />
+              <NewTabIcon fontSize='inherit' />
             ) : (
               Icon && <Icon fontSize='inherit' />
             )}

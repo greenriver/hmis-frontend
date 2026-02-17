@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import BulkServiceSearchToggle from './BulkServiceSearchToggle';
 import BulkServicesTable from './BulkServicesTable';
 import ServiceDateRangeSelect from './ServiceDateRangeSelect';
-import StepCard, { StepCardTitle } from './StepCard';
+import StepCard from './StepCard';
+import StepCardTitle from './StepCardTitle';
 import DatePicker from '@/components/elements/input/DatePicker';
 import PageTitle from '@/components/layout/PageTitle';
 import useSearchParamsState, {

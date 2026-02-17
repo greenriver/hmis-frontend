@@ -1377,10 +1377,7 @@ const getMappedValue = (
       'initialFunderGrantId',
       'initialHmisParticipationType',
       'initialCeAccessPoint',
-      'initialCePreventionAssessment',
-      'initialCeCrisisAssessment',
-      'initialCeHousingAssessment',
-      'initialCeDirectServices',
+      'initialCeParticipationServices',
       'initialCeReceivesReferrals',
     ];
 

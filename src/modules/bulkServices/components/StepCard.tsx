@@ -1,39 +1,7 @@
-import { Box, Paper, Typography } from '@mui/material';
-import { Stack, SxProps } from '@mui/system';
+import { Box, Paper } from '@mui/material';
 import React, { ReactNode } from 'react';
+import StepCardTitle from './StepCardTitle';
 import CommonCard from '@/components/elements/CommonCard';
-
-export const StepCardTitle: React.FC<{
-  step: string;
-  title: string;
-  sx?: SxProps;
-  action?: ReactNode;
-}> = ({ step, title, action, sx }) => (
-  <Stack
-    justifyContent='space-between'
-    direction='row'
-    sx={{ width: '100%', p: 2, ...sx }}
-  >
-    <Stack direction='row' gap={2} alignItems='center'>
-      <Box
-        sx={{
-          backgroundColor: 'primary.main',
-          color: 'white',
-          borderRadius: '50%',
-          width: '26px',
-          height: '26px',
-          lineHeight: '26px',
-          textAlign: 'center',
-          fontWeight: 600,
-        }}
-      >
-        {step}
-      </Box>
-      <Typography variant='h4'>{title}</Typography>
-    </Stack>
-    {action}
-  </Stack>
-);
 
 const StepCard: React.FC<{
   step: string;
@@ -43,14 +11,29 @@ const StepCard: React.FC<{
   action?: ReactNode;
   disabled?: boolean;
   disabledText?: string;
-}> = ({ step, title, children, action, padded, disabled, disabledText }) => (
+  component?: React.ElementType;
+}> = ({
+  step,
+  title,
+  children,
+  action,
+  padded,
+  disabled,
+  disabledText,
+  component = 'h2',
+}) => (
   <Paper
     sx={{
       pr: padded && !disabled ? 6 : undefined,
       pb: padded && !disabled ? 3 : 0,
     }}
   >
-    <StepCardTitle step={step} title={title} action={action} />
+    <StepCardTitle
+      step={step}
+      title={title}
+      action={action}
+      component={component}
+    />
 
     {disabled ? (
       <CommonCard

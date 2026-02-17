@@ -53,9 +53,9 @@ const UserActionsMenu: React.FC<Props> = ({
         key: 'edit',
         to: user.manageAccountUrl,
         title: 'Edit Account',
-        Icon: OpenInNewIcon,
+        Icon: OpenInNewIcon, // no need to use accessible NewTabIcon here, because we override the aria label anyway.
         openInNew: true,
-        ariaLabel: `Edit ${user.name}'s Account in the Warehouse`,
+        ariaLabel: `Edit ${user.name}'s Account in the Warehouse (opens in new tab)`,
       });
     }
     return items;

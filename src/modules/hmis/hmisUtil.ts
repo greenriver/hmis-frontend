@@ -249,6 +249,12 @@ export const clientNameAllParts = (client: ClientNameFragment) => {
   );
 };
 
+export const getClientImageAltText = (clientName?: string): string => {
+  return clientName
+    ? `Profile image for ${clientName}.`
+    : 'Client profile image';
+};
+
 export const clientBriefName = (
   client: ClientNameFragment | ClientNameDobVetFragment
 ) =>

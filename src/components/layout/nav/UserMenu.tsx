@@ -18,7 +18,7 @@ import {
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import React, { ReactNode, useMemo } from 'react';
-import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
+import NewTabIcon from '@/components/elements/NewTabIcon';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
@@ -52,7 +52,7 @@ const UserMenu: React.FC = () => {
           key='manage account'
         >
           <ListItemIcon>
-            <OpenInNewIcon fontSize='small' />
+            <NewTabIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>Manage Account</ListItemText>
         </MenuItem>
@@ -68,7 +68,7 @@ const UserMenu: React.FC = () => {
           key='warehouse'
         >
           <ListItemIcon>
-            <OpenInNewIcon fontSize='small' />
+            <NewTabIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>{warehouseName}</ListItemText>
         </MenuItem>

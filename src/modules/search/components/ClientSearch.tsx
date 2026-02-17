@@ -20,7 +20,7 @@ import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 import ClientName from '@/modules/client/components/ClientName';
-import ClientSearchResultCard from '@/modules/client/components/ClientSearchResultCard';
+import ClientSearchResultCard from '@/modules/client/components/searchResultCard/ClientSearchResultCard';
 import {
   ContextualClientDobAge,
   ContextualDobToggleButton,
