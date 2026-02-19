@@ -22,7 +22,6 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
 
 fragment CeOpportunityFields on CeOpportunity {
   ...CeOpportunitySummaryFields
-  stale
   candidatesGeneratedAt
   referral {
     ...CeReferralSummaryFields

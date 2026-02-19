@@ -17499,7 +17499,6 @@ export type CeOpportunitySummaryFieldsFragment = {
 
 export type CeOpportunityFieldsFragment = {
   __typename?: 'CeOpportunity';
-  stale: boolean;
   candidatesGeneratedAt?: string | null;
   id: string;
   name: string;
@@ -20311,7 +20310,6 @@ export type SubmitCeReferralStepMutation = {
       clientAge?: number | null;
       opportunity?: {
         __typename?: 'CeOpportunity';
-        stale: boolean;
         candidatesGeneratedAt?: string | null;
         id: string;
         name: string;
@@ -48395,7 +48393,6 @@ export type UnitDetailFieldsFragment = {
   }> | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
-    stale: boolean;
     candidatesGeneratedAt?: string | null;
     id: string;
     name: string;
@@ -48813,7 +48810,6 @@ export type GetUnitQuery = {
     }> | null;
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
-      stale: boolean;
       candidatesGeneratedAt?: string | null;
       id: string;
       name: string;
@@ -52499,7 +52495,6 @@ export const UnitTableRowFieldsFragmentDoc = gql`
 export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
     ...CeOpportunitySummaryFields
-    stale
     candidatesGeneratedAt
     referral {
       ...CeReferralSummaryFields
