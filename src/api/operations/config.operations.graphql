@@ -20,7 +20,7 @@ mutation DeleteServiceType($id: ID!) {
   }
 }
 
-mutation UpdateServiceType($id: ID!, $input: ServiceTypeInput) {
+mutation UpdateServiceType($id: ID!, $input: ServiceTypeInput!) {
   updateServiceType(id: $id, input: $input) {
     serviceType {
       ...ServiceTypeFields

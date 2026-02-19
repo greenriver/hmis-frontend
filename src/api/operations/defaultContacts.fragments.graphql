@@ -1,0 +1,45 @@
+fragment CeSwimlaneFields on CeSwimlane {
+  id
+  name
+  templateIdentifier
+  templateName
+  taskNames
+}
+
+fragment CeDefaultContactFields on CeDefaultContact {
+  id
+  global
+  swimlane {
+    ...CeSwimlaneFields
+  }
+  user {
+    id
+    name
+    email
+    active
+  }
+  projectId
+}
+
+fragment CeDefaultContactsBySwimlaneFields on CeDefaultContactsBySwimlane {
+  swimlane {
+    ...CeSwimlaneFields
+  }
+  contacts {
+    ...CeDefaultContactFields
+  }
+}
+
+fragment ProjectWithCeDefaultContacts on Project {
+  ...ProjectNameAndType
+  organization {
+    id
+    ...OrganizationNameFields
+  }
+  ceDefaultContacts {
+    ...CeDefaultContactsBySwimlaneFields
+  }
+  ceSwimlanes {
+    ...CeSwimlaneFields
+  }
+}

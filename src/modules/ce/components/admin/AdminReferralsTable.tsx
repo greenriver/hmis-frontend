@@ -1,6 +1,7 @@
-import { Paper } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import React, { useCallback } from 'react';
 
+import useDebouncedState from '@/hooks/useDebouncedState';
 import {
   REFERRAL_COLUMNS,
   REFERRAL_WITH_PROJECT_COLUMNS,
@@ -8,6 +9,7 @@ import {
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { useFilters } from '@/modules/hmis/filterUtil';
+import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {
   AdminDashboardRoutes,
   ClientDashboardRoutes,
@@ -86,8 +88,11 @@ const COLUMNS: DataColumnDef<
 ];
 interface Props {}
 const AdminReferralsTable: React.FC<Props> = ({}) => {
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
+
   const filters = useFilters({
     type: 'CeReferralFilterOptions',
+    omit: ['searchTerm'], // omit from the filter widget, since this table uses a customized search bar
   });
 
   const rowSecondaryActions = useCallback(
@@ -134,29 +139,43 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
   );
 
   return (
-    <Paper>
-      <GenericTableWithData<
-        GetAdminCeReferralsQuery,
-        GetAdminCeReferralsQueryVariables,
-        CeReferralAdminFieldsFragment
-      >
-        columns={COLUMNS}
-        queryVariables={{}}
-        queryDocument={GetAdminCeReferralsDocument}
-        pagePath='ceReferrals'
-        noData='No referrals'
-        paginationItemName='referrals'
-        filters={filters}
-        rowLinkTo={(row) =>
-          generateSafePath(AdminDashboardRoutes.REFERRAL, {
-            projectId: row.targetProjectId,
-            referralId: row.id,
-          })
-        }
-        rowActionTitle='View Referral'
-        rowSecondaryActionConfigs={rowSecondaryActions}
+    <Stack gap={2}>
+      <CommonSearchInput
+        label='Search referrals'
+        name='search referrals'
+        placeholder='Search by name or referral ID'
+        value={search}
+        onChange={setSearch}
+        fullWidth
+        size='small'
+        searchAdornment
       />
-    </Paper>
+      <Paper>
+        <GenericTableWithData<
+          GetAdminCeReferralsQuery,
+          GetAdminCeReferralsQueryVariables,
+          CeReferralAdminFieldsFragment
+        >
+          columns={COLUMNS}
+          queryVariables={{
+            filters: { searchTerm: debouncedSearch || undefined },
+          }}
+          queryDocument={GetAdminCeReferralsDocument}
+          pagePath='ceReferrals'
+          noData='No referrals'
+          paginationItemName='referrals'
+          filters={filters}
+          rowLinkTo={(row) =>
+            generateSafePath(AdminDashboardRoutes.REFERRAL, {
+              projectId: row.targetProjectId,
+              referralId: row.id,
+            })
+          }
+          rowActionTitle='View Referral'
+          rowSecondaryActionConfigs={rowSecondaryActions}
+        />
+      </Paper>
+    </Stack>
   );
 };
 

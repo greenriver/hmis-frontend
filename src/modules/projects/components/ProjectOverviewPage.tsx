@@ -1,5 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { Alert, Chip, Stack, Tooltip, Typography } from '@mui/material';
+import { Alert, Chip, Grid, Stack, Tooltip, Typography } from '@mui/material';
 import { addDays, isBefore } from 'date-fns';
 import { ReactNode } from 'react';
 
@@ -7,6 +7,7 @@ import { useProjectDashboardContext } from './ProjectDashboard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
+import ProjectDefaultContactsCard from '@/modules/ce/components/defaultContacts/ProjectDefaultContactsCard';
 import ViewRecord from '@/modules/form/components/ViewRecord';
 import {
   parseAndFormatDateRange,
@@ -31,7 +32,7 @@ export const InactiveBanner = ({
     project.operatingEndDate
   );
   return (
-    <Alert severity='info' sx={{ mb: 2 }}>
+    <Alert severity='info'>
       This project is closed
       {dateRange && `. Project operated from ${dateRange}.`}
     </Alert>
@@ -96,6 +97,9 @@ export const ProjectFormTitle = ({
 
 const ProjectOverviewPage = () => {
   const { project } = useProjectDashboardContext();
+  const showDefaultContactCard =
+    project.coordinatedEntryFeatures?.supportsReferrals;
+
   return (
     <>
       <PageTitle
@@ -118,8 +122,19 @@ const ProjectOverviewPage = () => {
           </ProjectPermissionsFilter>
         }
       />
-      <InactiveBanner project={project} />
-      <ViewRecord record={project} formRole={RecordFormRole.Project} />
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <InactiveBanner project={project} />
+        </Grid>
+        <Grid item xs={12} lg={showDefaultContactCard ? 8 : 12}>
+          <ViewRecord record={project} formRole={RecordFormRole.Project} />
+        </Grid>
+        {showDefaultContactCard && (
+          <Grid item xs={12} lg={4}>
+            <ProjectDefaultContactsCard project={project} />
+          </Grid>
+        )}
+      </Grid>
     </>
   );
 };
