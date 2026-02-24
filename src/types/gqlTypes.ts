@@ -793,21 +793,15 @@ export type CeOpportunity = {
   candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
   dateAvailable: Scalars['ISO8601Date']['output'];
-  /** @deprecated Resolve eligibility requirements from the unit group or the referral */
-  eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   organizationName: Scalars['String']['output'];
-  /** @deprecated Resolve priority schemes from the unit group or the referral */
-  prioritySchemes?: Maybe<Array<CeMatchRule>>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
   /** Active or accepted referral */
   referral?: Maybe<CeReferral>;
-  /** @deprecated Always false; rules now come from unit_group and are always current */
-  stale: Scalars['Boolean']['output'];
   status: CeOpportunityStatus;
   unit?: Maybe<Unit>;
 };
