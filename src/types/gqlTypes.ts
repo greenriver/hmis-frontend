@@ -793,17 +793,20 @@ export type CeOpportunity = {
   candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
   dateAvailable: Scalars['ISO8601Date']['output'];
+  /** @deprecated Resolve eligibility requirements from the unit group or the referral */
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   organizationName: Scalars['String']['output'];
+  /** @deprecated Resolve priority schemes from the unit group or the referral */
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
   projectId: Scalars['ID']['output'];
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
   /** Active or accepted referral */
   referral?: Maybe<CeReferral>;
+  /** @deprecated Always false; rules now come from unit_group and are always current */
   stale: Scalars['Boolean']['output'];
   status: CeOpportunityStatus;
   unit?: Maybe<Unit>;
@@ -919,10 +922,17 @@ export type CeReferral = {
   currentSteps?: Maybe<Array<CeReferralStep>>;
   customStatus?: Maybe<CeCustomReferralStatus>;
   daysOnCurrentSteps?: Maybe<Scalars['Int']['output']>;
+  /**
+   * Eligibility requirements at the time the referral was created. May differ from
+   * the unit group's current eligibility requirements.
+   */
+  eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
   notes?: Maybe<CeReferralNotesPaginated>;
   opportunity?: Maybe<CeOpportunity>;
   origin: CeReferralOrigin;
+  /** Priority schemes at the time the referral was created. May differ from the unit group's current priority schemes. */
+  prioritySchemes?: Maybe<Array<CeMatchRule>>;
   referredBy?: Maybe<ApplicationUser>;
   /** Limited details about the source enrollment. Available even without full access to the source record. */
   sourceEnrollment?: Maybe<CeReferralSourceEnrollment>;
@@ -17489,7 +17499,6 @@ export type CeOpportunitySummaryFieldsFragment = {
 
 export type CeOpportunityFieldsFragment = {
   __typename?: 'CeOpportunity';
-  stale: boolean;
   candidatesGeneratedAt?: string | null;
   id: string;
   name: string;
@@ -17858,19 +17867,15 @@ export type CeReferralDetailFieldsFragment = {
     fieldName: string;
     fieldValues: Array<string>;
   }> | null;
-  opportunity?: {
-    __typename?: 'CeOpportunity';
+  eligibilityRequirements?: Array<{
+    __typename?: 'CeMatchRule';
     id: string;
-    eligibilityRequirements?: Array<{
-      __typename?: 'CeMatchRule';
-      id: string;
-      name: string;
-      ownerType: CeMatchRuleOwner;
-      expression: string;
-      projectTypes: Array<ProjectType>;
-      funders?: Array<FundingSource> | null;
-    }> | null;
-  } | null;
+    name: string;
+    ownerType: CeMatchRuleOwner;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
+  }> | null;
 };
 
 export type CeReferralNoteFieldsFragment = {
@@ -17924,15 +17929,6 @@ export type CeReferralFieldsFragment = {
     projectId: string;
     projectName: string;
     dateAvailable: string;
-    eligibilityRequirements?: Array<{
-      __typename?: 'CeMatchRule';
-      id: string;
-      name: string;
-      ownerType: CeMatchRuleOwner;
-      expression: string;
-      projectTypes: Array<ProjectType>;
-      funders?: Array<FundingSource> | null;
-    }> | null;
     unit?: {
       __typename?: 'Unit';
       id: string;
@@ -18009,6 +18005,15 @@ export type CeReferralFieldsFragment = {
     id: string;
     fieldName: string;
     fieldValues: Array<string>;
+  }> | null;
+  eligibilityRequirements?: Array<{
+    __typename?: 'CeMatchRule';
+    id: string;
+    name: string;
+    ownerType: CeMatchRuleOwner;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
   }> | null;
   auditEvents?: {
     __typename?: 'CeReferralAuditEventsPaginated';
@@ -20305,24 +20310,14 @@ export type SubmitCeReferralStepMutation = {
       clientAge?: number | null;
       opportunity?: {
         __typename?: 'CeOpportunity';
-        id: string;
-        stale: boolean;
         candidatesGeneratedAt?: string | null;
+        id: string;
         name: string;
         status: CeOpportunityStatus;
         active: boolean;
         projectId: string;
         projectName: string;
         dateAvailable: string;
-        eligibilityRequirements?: Array<{
-          __typename?: 'CeMatchRule';
-          id: string;
-          name: string;
-          ownerType: CeMatchRuleOwner;
-          expression: string;
-          projectTypes: Array<ProjectType>;
-          funders?: Array<FundingSource> | null;
-        }> | null;
         referral?: {
           __typename?: 'CeReferral';
           id: string;
@@ -20442,6 +20437,15 @@ export type SubmitCeReferralStepMutation = {
         id: string;
         fieldName: string;
         fieldValues: Array<string>;
+      }> | null;
+      eligibilityRequirements?: Array<{
+        __typename?: 'CeMatchRule';
+        id: string;
+        name: string;
+        ownerType: CeMatchRuleOwner;
+        expression: string;
+        projectTypes: Array<ProjectType>;
+        funders?: Array<FundingSource> | null;
       }> | null;
       auditEvents?: {
         __typename?: 'CeReferralAuditEventsPaginated';
@@ -21061,15 +21065,6 @@ export type GetCeReferralQuery = {
       projectId: string;
       projectName: string;
       dateAvailable: string;
-      eligibilityRequirements?: Array<{
-        __typename?: 'CeMatchRule';
-        id: string;
-        name: string;
-        ownerType: CeMatchRuleOwner;
-        expression: string;
-        projectTypes: Array<ProjectType>;
-        funders?: Array<FundingSource> | null;
-      }> | null;
       unit?: {
         __typename?: 'Unit';
         id: string;
@@ -21150,6 +21145,15 @@ export type GetCeReferralQuery = {
       id: string;
       fieldName: string;
       fieldValues: Array<string>;
+    }> | null;
+    eligibilityRequirements?: Array<{
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwner;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
     }> | null;
     auditEvents?: {
       __typename?: 'CeReferralAuditEventsPaginated';
@@ -48389,7 +48393,6 @@ export type UnitDetailFieldsFragment = {
   }> | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
-    stale: boolean;
     candidatesGeneratedAt?: string | null;
     id: string;
     name: string;
@@ -48807,7 +48810,6 @@ export type GetUnitQuery = {
     }> | null;
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
-      stale: boolean;
       candidatesGeneratedAt?: string | null;
       id: string;
       name: string;
@@ -50610,11 +50612,8 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
       fieldName
       fieldValues
     }
-    opportunity {
-      id
-      eligibilityRequirements {
-        ...CeMatchRuleFields
-      }
+    eligibilityRequirements {
+      ...CeMatchRuleFields
     }
   }
   ${ClientIdentifierFieldsFragmentDoc}
@@ -52496,7 +52495,6 @@ export const UnitTableRowFieldsFragmentDoc = gql`
 export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
     ...CeOpportunitySummaryFields
-    stale
     candidatesGeneratedAt
     referral {
       ...CeReferralSummaryFields

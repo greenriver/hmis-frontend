@@ -5828,8 +5828,8 @@
                 }
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Resolve eligibility requirements from the unit group or the referral"
           },
           {
             "name": "expiresAt",
@@ -5908,8 +5908,8 @@
                 }
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Resolve priority schemes from the unit group or the referral"
           },
           {
             "name": "projectId",
@@ -5984,8 +5984,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Always false; rules now come from unit_group and are always current"
           },
           {
             "name": "status",
@@ -6819,6 +6819,26 @@
             "deprecationReason": null
           },
           {
+            "name": "eligibilityRequirements",
+            "description": "Eligibility requirements at the time the referral was created. May differ from\nthe unit group's current eligibility requirements.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CeMatchRule",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "id",
             "description": null,
             "args": [],
@@ -6894,6 +6914,26 @@
                 "kind": "ENUM",
                 "name": "CeReferralOrigin",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "prioritySchemes",
+            "description": "Priority schemes at the time the referral was created. May differ from the unit group's current priority schemes.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CeMatchRule",
+                  "ofType": null
+                }
               }
             },
             "isDeprecated": false,
