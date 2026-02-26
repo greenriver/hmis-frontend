@@ -101,10 +101,6 @@ export const useProjectBreadcrumbConfig = (
         title: 'Active Referral',
         parent: ProjectDashboardRoutes.REFERRALS,
       },
-      [ProjectDashboardRoutes.NEW_REFERRAL_REQUEST]: {
-        title: 'Request a Referral',
-        parent: ProjectDashboardRoutes.REFERRALS,
-      },
       [ProjectDashboardRoutes.NEW_FUNDER]: {
         title: 'Add Funder',
         parent: ProjectDashboardRoutes.FUNDERS,
