@@ -14,6 +14,7 @@ import {
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useLocalConstantsForProjectForm } from '@/modules/projectAdministration/hooks/useLocalConstantsForProjectForm';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { ProjectAllFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -99,6 +100,7 @@ const ProjectOverviewPage = () => {
   const { project } = useProjectDashboardContext();
   const showDefaultContactCard =
     project.coordinatedEntryFeatures?.supportsReferrals;
+  const localConstants = useLocalConstantsForProjectForm(project);
 
   return (
     <>
@@ -127,7 +129,11 @@ const ProjectOverviewPage = () => {
           <InactiveBanner project={project} />
         </Grid>
         <Grid item xs={12} lg={showDefaultContactCard ? 8 : 12}>
-          <ViewRecord record={project} formRole={RecordFormRole.Project} />
+          <ViewRecord
+            record={project}
+            formRole={RecordFormRole.Project}
+            localConstants={localConstants}
+          />
         </Grid>
         {showDefaultContactCard && (
           <Grid item xs={12} lg={4}>

@@ -1363,11 +1363,26 @@ const getMappedValue = (
     const value = get(record, keys); // lodash's `get` will return undefined if the field doesn't exist
 
     // Special cases where we DON'T want to alert Sentry if the field can't be resolved on the record.
-    // - imageBlobId and fileBlobId: we pass these fields when first saving a file, but they aren't persisted on the file or returned on a saved file record.
-    // - mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
-    const specialCaseFieldNames = ['fileBlobId', 'imageBlobId', 'mciId'];
+    const specialCaseFieldNames = [
+      // imageBlobId and fileBlobId: we pass these fields when first saving a file, but they aren't persisted on the file or returned on a saved file record.
+      'fileBlobId',
+      'imageBlobId',
+      // mciId: similarly, we pass this field to save an MCI ID or indicate that a new one would be created, but it's resolved on `externalIds` on the client record
+      'mciId',
+      // initial* fields on project: these are persisted on project related records when creating a new project
+      'initialCocCode',
+      'initialGeocode',
+      'initialFunder',
+      'initialOtherFunder',
+      'initialFunderGrantId',
+      'initialHmisParticipationType',
+      'initialCeAccessPoint',
+      'initialCeParticipationServices',
+      'initialCeReceivesReferrals',
+    ];
+
     if (!specialCaseFieldNames.includes(mapping.fieldName)) {
-      // In general, we do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
+      // Besides the special cases above, we generally do want to alert Sentry if the key is missing, to prevent silently swallowing developer errors.
       // This would indicate we're not resolving a field that we should be resolving.
       if (isMissingField(record, keys)) {
         handleMissingField(

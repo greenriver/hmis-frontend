@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useLocalConstantsForProjectForm } from '@/modules/projectAdministration/hooks/useLocalConstantsForProjectForm';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectFormTitle } from '@/modules/projects/components/ProjectOverviewPage';
 import { cache } from '@/providers/apolloClient';
@@ -50,11 +51,14 @@ const EditProjectPage = () => {
     navigate(generateSafePath(Routes.ORGANIZATION, { organizationId }));
   }, [project, navigate]);
 
+  const localConstants = useLocalConstantsForProjectForm(project);
+
   return (
     <EditRecord<ProjectAllFieldsFragment>
       formRole={RecordFormRole.Project}
       record={project}
       onCompleted={onCompleted}
+      localConstants={localConstants}
       FormActionProps={{
         onDiscard: generateSafePath(Routes.PROJECT, {
           projectId: project?.id,
