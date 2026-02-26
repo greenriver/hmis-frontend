@@ -97,10 +97,6 @@ export const useProjectBreadcrumbConfig = (
         parent: ProjectDashboardRoutes.REFERRALS,
       },
       // TODO(#8142) remove legacy referral routes
-      [ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL]: {
-        title: 'Create Referral',
-        parent: ProjectDashboardRoutes.REFERRALS,
-      },
       [ProjectDashboardRoutes.REFERRAL_POSTING]: {
         title: 'Active Referral',
         parent: ProjectDashboardRoutes.REFERRALS,
