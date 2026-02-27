@@ -216,6 +216,17 @@ const FormItemEditor: React.FC<Props> = ({
     );
   }, [itemTypeValue]);
 
+  // Disable the "Allow multiple" checkbox if the item already has a custom field mapping
+  const disableRepeats = useMemo(
+    () => !!initialItem.mapping?.customFieldKey,
+    [initialItem.mapping?.customFieldKey]
+  );
+  const repeatsHelperText = useMemo(() => {
+    if (!disableRepeats) return undefined;
+    const action = initialItem.repeats ? 'disable' : 'enable';
+    return `This cannot be changed, because the item is already mapped to a custom field. To ${action} multiple responses, delete and re-create the item.`;
+  }, [disableRepeats, initialItem.repeats]);
+
   // Picklist for users to power the editorUserIds multi-select (super admin only UI)
   const {
     data: { pickList: userOptions } = {},
@@ -368,6 +379,8 @@ const FormItemEditor: React.FC<Props> = ({
                 name='repeats'
                 label='Allow multiple responses'
                 control={control}
+                disabled={disableRepeats}
+                helperText={repeatsHelperText}
               />
             )}
           </Section>
