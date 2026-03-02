@@ -108,10 +108,7 @@ const projectDashboardRoutes = {
   ADD_SERVICES: 'add-services',
   ADD_HOUSEHOLD: 'add-household/:household?',
   REFERRALS: 'referrals',
-  NEW_REFERRAL_REQUEST: 'referrals/new-referral-request', // TODO(#8142) remove legacy route
-  NEW_REFERRAL: 'referrals/new-referral', // TODO(#8142) remove legacy route
-  NEW_OUTGOING_REFERRAL: 'referrals/new-outgoing-referral', // TODO(#8142) remove legacy route
-  REFERRAL_POSTING: 'referrals/:referralPostingId', // TODO(#8142) remove legacy route
+  REFERRAL_POSTING: 'referrals/:referralPostingId', // TODO(#8142) remove - still used to update status for existing legacy referrals.
   ESG_FUNDING_REPORT: 'referrals/:referralPostingId/esg-funding-report', // TODO(#8142) remove route
 
   // Project setup
