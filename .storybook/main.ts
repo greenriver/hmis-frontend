@@ -27,6 +27,7 @@ const config = {
       },
     });
   },
+
   stories: [
     // Use implicit paths for all stories
     '../src/**/*.stories.@(js|jsx|ts|tsx)',
@@ -35,6 +36,7 @@ const config = {
     // - Move src/components/clientDashboard components into module(s)
     // - Move src/components/pages into modules too?
   ],
+
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -43,14 +45,14 @@ const config = {
     '@chromatic-com/storybook',
     '@storybook/addon-a11y',
     'storybook-addon-pseudo-states',
+    '@storybook/addon-mdx-gfm',
   ],
+
   framework: {
     name: '@storybook/react-vite',
     options: {},
   },
-  core: {
-    builder: '@storybook/builder-vite',
-  },
+
   typescript: {
     check: false,
     skipBabel: true,
@@ -74,6 +76,9 @@ const config = {
       },
     },
   },
-  docs: {},
+
+  docs: {
+    autodocs: true,
+  },
 };
 export default config;
