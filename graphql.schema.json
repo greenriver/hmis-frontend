@@ -5812,26 +5812,6 @@
             "deprecationReason": null
           },
           {
-            "name": "eligibilityRequirements",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CeMatchRule",
-                  "ofType": null
-                }
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Resolve eligibility requirements from the unit group or the referral"
-          },
-          {
             "name": "expiresAt",
             "description": null,
             "args": [],
@@ -5892,26 +5872,6 @@
             "deprecationReason": null
           },
           {
-            "name": "prioritySchemes",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CeMatchRule",
-                  "ofType": null
-                }
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Resolve priority schemes from the unit group or the referral"
-          },
-          {
             "name": "projectId",
             "description": null,
             "args": [],
@@ -5970,22 +5930,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "stale",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Always false; rules now come from unit_group and are always current"
           },
           {
             "name": "status",
