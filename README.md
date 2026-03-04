@@ -59,6 +59,8 @@
    yarn dev
    ```
 
+For instructions on running multiple HMISes against the same warehouse locally, see the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/stable/drivers/hmis/README.md) in the Warehouse repo.
+
 ### Test, lint, format, and type check
 
 ```sh

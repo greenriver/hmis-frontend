@@ -31,11 +31,23 @@ function sourcemapExclude(opts) {
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  const hmisHost = env.HMIS_HOST || 'hmis.dev.test';
+  // Include all HMIS hostnames in the dev cert
+  const hmisHostnames = env.HMIS_HOSTNAME
+    ? env.HMIS_HOSTNAME.split(',')
+        .map((h) => h.trim())
+        .filter(Boolean)
+    : [hmisHost];
+  const uniqueHmisHosts = [...new Set(hmisHostnames)];
+
   const warehouseProxyServer = {
     target: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
     changeOrigin: true, // sets Host header
     headers: {
       Origin: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
+      // Pass the HMIS hostname so the warehouse can resolve the correct data source.
+      // Use X-HMIS-Host because a reverse proxy (e.g. Traefik) in front of Rails may overwrite X-Forwarded-Host.
+      'X-HMIS-Host': hmisHost,
     },
     secure: false,
   };
@@ -49,7 +61,7 @@ export default defineConfig(({ command, mode }) => {
     },
     plugins: [
       react(),
-      mkcert(),
+      mkcert({ hosts: uniqueHmisHosts }),
       sourcemapExclude({ excludeNodeModules: true }),
       // Note: even though sourcemaps are public, we upload them to get additional Sentry tooling around releases
       ...(env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN
