@@ -199,6 +199,18 @@ const AssessmentForm: React.FC<Props> = ({
     if (source) {
       // Overlay with values from Assessment
       const initFromAssessment = initialValuesFromAssessment(itemMap, source);
+
+      if (sourceAssessment) {
+        // If we are autofilling from another assessment, don't autofill the assessment date.
+        const noAutofillLinkIds = Object.values(itemMap)
+          .filter((item) => !!item.assessmentDate)
+          .map((item) => item.linkId);
+
+        noAutofillLinkIds.forEach((linkId) => {
+          delete initFromAssessment[linkId];
+        });
+      }
+
       assign(init, initFromAssessment);
 
       // Overlay initial values that have "OVERWRITE" specification type ("linked" fields)
