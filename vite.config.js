@@ -42,7 +42,7 @@ export default defineConfig(({ command, mode }) => {
       Origin: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
       // Pass the HMIS hostname so the warehouse can resolve the correct data source (for multi-HMIS local setup).
       // The backend is not able to determine the hostname in the usual way (using trusted rails host resolution)
-      // because dev server requests always appear to be come from 'hmis-warehouse.dev.test'
+      // because dev server requests always appear to come from 'hmis-warehouse.dev.test'
       'X-Hmis-Dev-Host': devHmisHost,
     },
     secure: false,
