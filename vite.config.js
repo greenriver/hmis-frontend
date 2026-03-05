@@ -48,7 +48,7 @@ export default defineConfig(({ command, mode }) => {
       // Pass the HMIS hostname so the warehouse can resolve the correct data source.
       // Use a custom header X-HMIS-Host because a reverse proxy (e.g. Traefik)
       // in front of Rails may overwrite X-Forwarded-Host.
-      'X-HMIS-Host': hmisHost,
+      'X-Hmis-Dev-Host': hmisHost,
     },
     secure: false,
   };
