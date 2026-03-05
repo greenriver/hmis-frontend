@@ -144,7 +144,10 @@ const ManageHousehold = ({
           householdId &&
           !isMobile && (
             <CommonLabeledTextBlock title='Household ID' horizontal>
-              <ClickToCopyId value={householdId} />
+              <ClickToCopyId
+                value={householdId}
+                ariaLabel='Copy Household ID'
+              />
             </CommonLabeledTextBlock>
           )
         }

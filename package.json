@@ -104,7 +104,6 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.3",
     "@graphql-codegen/cli": "^6.0.0",
-    "@graphql-codegen/fragment-matcher": "^5.0.2",
     "@graphql-codegen/introspection": "^4.0.3",
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-document-nodes": "^4.0.9",
@@ -132,7 +131,6 @@
     "@typescript-eslint/parser": "^7.18.0",
     "axe-playwright": "^2.0.2",
     "chromatic": "^11.10.2",
-    "cross-env": "^7.0.3",
     "eslint": "^8.46.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
@@ -143,9 +141,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-storybook": "^0.11.1",
     "eslint-plugin-vitest": "^0.4.1",
-    "graphql-sock": "^1.0.0",
     "husky": "^8.0.0",
-    "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^12.4.1",
     "playwright": "^1.55.1",
     "prettier": "^3.3.3",
@@ -153,7 +149,6 @@
     "storybook": "^8.6.4",
     "storybook-addon-apollo-client": "^7.3.0",
     "storybook-addon-pseudo-states": "^4.0.2",
-    "ts-node": "^10.9.2",
     "vite-plugin-mkcert": "^1.17.8"
   }
 }

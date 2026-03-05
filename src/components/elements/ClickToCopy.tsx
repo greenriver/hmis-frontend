@@ -8,6 +8,7 @@ import { CopyIcon } from './SemanticIcons';
 
 interface Props {
   value: string;
+  ariaLabel?: string;
   sx?: TypographyProps['sx'];
   variant?: TypographyProps['variant'];
   trimLengthAbove?: number | null;
@@ -17,6 +18,7 @@ interface Props {
 export const ClickToCopyId: React.FC<Props> = ({
   value,
   variant = 'body2',
+  ariaLabel = 'copy',
   sx,
 }) => {
   let displayValue = value;
@@ -28,7 +30,7 @@ export const ClickToCopyId: React.FC<Props> = ({
       {displayValue}
       {value !== displayValue && (
         <IconButton
-          aria-label='copy'
+          aria-label={ariaLabel}
           onClick={() => navigator.clipboard.writeText(value)}
           sx={{ fontSize: 'inherit' }}
           size='small'

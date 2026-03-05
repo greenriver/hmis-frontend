@@ -1043,6 +1043,26 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'NoYes', ofType: null },
       },
       {
+        name: 'ceParticipationServices',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'ENUM',
+                name: 'CeParticipationServices',
+                ofType: null,
+              },
+            },
+          },
+        },
+      },
+      {
         name: 'ceParticipationStatusEndDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
