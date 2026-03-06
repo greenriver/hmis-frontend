@@ -102,6 +102,7 @@ export default defineConfig(({ command, mode }) => {
       watch: false,
     },
     build: {
+      target: 'baseline-widely-available',
       rollupOptions: {
         plugins: [
           VISUALIZER && visualizer({ filename: 'bundle_analysis.html' }),
