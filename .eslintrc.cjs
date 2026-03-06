@@ -25,6 +25,12 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['vite.config.js'],
+      rules: {
+        'import/no-unresolved': 'off',
+      },
+    },
+    {
       // storybook files
       files: ['*.stories.tsx'],
       rules: {
