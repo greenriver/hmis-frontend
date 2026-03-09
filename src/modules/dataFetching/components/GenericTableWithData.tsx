@@ -21,6 +21,7 @@ import TableControls, {
 } from '@/components/elements/tableFilters/TableControls';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
+import useSearchParamsState from '@/hooks/useSearchParamState';
 import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColumns';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
@@ -31,6 +32,7 @@ import {
   transformDynamicFilters,
 } from '@/modules/hmis/filterUtil';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
+import { useGetSearchQueryQuery } from '@/types/gqlTypes';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
 
@@ -84,6 +86,19 @@ export interface Props<
   onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
   loading?: boolean;
+  // pass setter for searchQueryId to the generic table component.
+  // this is because some tables (like Client Search) manage all filter state themselves, not delegating to this component,
+  // so this component (which performs the query) needs a way to communicate up the chain that we received a searchQueryId and it should go in the search params.
+  setSearchQueryId?: (queryId: string) => void;
+  // IF we wanted to have the request return the search query details (fields in the query) to avoid a double-query, then we might expand this:
+  // setSearchQuery: (query: SearchQueryObject) -> void; // SearchQueryObject that includes id, firstName, etc.
+  // that's not implemented in this illustration.
+
+  // pass setter for searchTerm to the table, because most components that use a search term
+  // (like ProjectEnrollmentsTable, etc) manage the search term themselves *even if* they otherwise delegate filter state to this component.
+  // this is one of the things that's making me question whether it's worthwhile to bring *all* search param filter state into GenericTableWithData,
+  // when searchTerm is the only one likely to have PII and it's already always managed by the parent.
+  setSearchTerm?: (searchTerm: string) => void;
 }
 
 function allFieldColumns<T, QueryVariables>(
@@ -132,6 +147,8 @@ const GenericTableWithData = <
   filterRows,
   vertical,
   loading: loadingProp,
+  setSearchQueryId,
+  setSearchTerm,
   ...props
 }: Props<
   Query,
@@ -181,6 +198,32 @@ const GenericTableWithData = <
   const offset = page * rowsPerPage;
   const limit = rowsPerPage;
 
+  const [{ searchQueryId }, setSearchParams] = useSearchParamsState({
+    paramsDefinition: {
+      searchQueryId: { type: 'string', default: null },
+    },
+  });
+
+  // this illustrates the double-query approach where:
+  // 1. if we received a searchQueryId, query for it to find out what filters were used
+  // 2. set those filters on the component so they're accurately reflected in the UI *and* the component queries for data with the correct filters
+  const { data: searchQueryData } = useGetSearchQueryQuery({
+    variables: { id: searchQueryId },
+    skip: !searchQueryId,
+    onCompleted: (data) => {
+      if (data?.searchQuery?.params) {
+        const { searchTerm, ...rest } = data.searchQuery.params;
+        if (setSearchTerm && searchTerm) {
+          // this might need to be standardized, sometimes it's searchTerm and sometimes it's textSearch
+          setSearchTerm(searchTerm);
+        }
+        setFilterValues(rest);
+        // this code makes assumptions about what filter values are set at the parent, vs. set in here with the filters table control.
+        // those assumptions might not hold/generalize. we might need to change `setSearchTerm` to a more generic `setFilterQueryVariables`
+      }
+    },
+  });
+
   const { data, loading, error, networkStatus } = useQuery<
     Query,
     QueryVariables
@@ -198,6 +241,19 @@ const GenericTableWithData = <
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
+    // skip the query if searchQueryId is present but we haven't gotten the filters back yet.
+    // this prevents double-query on page load
+    skip: searchQueryId && !searchQueryData,
+    onCompleted: (data) => {
+      if (get(data, `${pagePath}.searchQueryId`)) {
+        // if we got a searchQueryId back from the query, set it in the search params
+        const searchQueryId = get(data, `${pagePath}.searchQueryId`) as string;
+        setSearchParams({ searchQueryId });
+
+        // pass it back up the chain so the parent knows. (currently used by ClientSearch, but not ProjectEnrollments)
+        setSearchQueryId?.(searchQueryId);
+      }
+    },
   });
 
   const hasRefetched = useHasRefetched(networkStatus);

@@ -32,10 +32,12 @@ const ProjectClientEnrollmentsTable = ({
   projectId,
   openOnDate,
   searchTerm,
+  setSearchTerm,
 }: {
   projectId: string;
   openOnDate?: Date;
   searchTerm?: string;
+  setSearchTerm?: (searchTerm: string) => void;
 }) => {
   const openOnDateString = useMemo(
     () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
@@ -86,6 +88,7 @@ const ProjectClientEnrollmentsTable = ({
           openOnDate: openOnDateString,
         },
       }}
+      setSearchTerm={setSearchTerm}
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns}
       rowLinkTo={(row) => getViewEnrollmentMenuItem(row, row.client).to}

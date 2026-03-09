@@ -159,6 +159,7 @@ const ClientSearch = () => {
     return baseColumns;
   }, [isMobile, globalFeatureFlags, displayType, canViewDob]);
 
+  // maybe an effect is not needed if we use the common useSearchParamsState hook?
   useEffect(() => {
     // if search params are derived, we don't want to perform a search on them
     if (derivedSearchParams) return;
@@ -170,6 +171,10 @@ const ClientSearch = () => {
     );
     if (isEmpty(variables)) {
       setInitialValues({});
+    } else if (variables.searchQueryId) {
+      setInitialValues({ searchQueryId: variables.searchQueryId });
+      setSearchInput({ searchQueryId: variables.searchQueryId });
+      // setSearchType('specific');  // todo - return more stuff on the query and determine this, or use the double-query approach
     } else {
       const initState = searchParamsToState(searchParams);
       setInitialValues(initState);
@@ -191,6 +196,7 @@ const ClientSearch = () => {
       if (isEmpty(cleaned)) return;
 
       // Construct derived search parameters and update the URL
+      // this needs to be reworked to continue avoiding double-query
       const searchParams = createSearchParams(cleaned);
       setSearchParams(searchParams);
       setDerivedSearchParams(true); // so that searchParam change doesn't trigger a query
@@ -199,6 +205,13 @@ const ClientSearch = () => {
       setSearchInput(cleaned);
     };
   }, [setSearchParams, setDerivedSearchParams]);
+
+  const setSearchQueryId = useCallback(
+    (queryId: string) => {
+      setSearchParams({ searchQueryId: queryId });
+    },
+    [setSearchParams]
+  );
 
   const filters = useFilters({
     type: 'ClientFilterOptions',
@@ -263,6 +276,7 @@ const ClientSearch = () => {
             SearchClientsQueryVariables,
             ClientSearchResultFieldsFragment
           >
+            setSearchQueryId={setSearchQueryId}
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
             onCompleted={() => setHasSearched(true)}

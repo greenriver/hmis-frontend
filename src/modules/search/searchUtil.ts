@@ -14,6 +14,7 @@ export const searchParamsToVariables = (
     .map((item) => [item.mapping?.fieldName as string, !!item.repeats]);
   fieldNames.push(['textSearch', false]);
   fieldNames.push(['projects', true]);
+  fieldNames.push(['searchQueryId', false]);
   fieldNames.forEach(([fieldName, repeats]) => {
     if (!searchParams.has(fieldName)) return;
     if (repeats) {
