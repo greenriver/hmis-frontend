@@ -105,6 +105,7 @@ const ProjectEnrollmentsTable: React.FC<Props> = ({ mode, projectId }) => {
       {mode === 'clients' && (
         <ProjectClientEnrollmentsTable
           searchTerm={debouncedSearch || undefined}
+          setSearchTerm={setSearch}
           projectId={projectId}
         />
       )}

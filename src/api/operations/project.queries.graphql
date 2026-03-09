@@ -60,6 +60,7 @@ query GetProjectEnrollments(
       offset
       limit
       nodesCount
+      searchQueryId
       nodes {
         ...ProjectEnrollmentQueryEnrollmentFields
       }
