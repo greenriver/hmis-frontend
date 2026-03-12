@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { ReactNode, useMemo } from 'react';
+import { ElementType, ReactNode, useMemo } from 'react';
 import { ClientAlertType } from './ClientAlert';
 import ClientAlertStack from './ClientAlertStack';
 import Loading from '@/components/elements/Loading';
@@ -15,12 +15,14 @@ interface ClientAlertCardProps {
   clientAlerts: ClientAlertType[];
   children?: ReactNode;
   loading?: boolean;
+  headerComponent?: ElementType<any>;
 }
 const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   alertContext = AlertContext.Client,
   clientAlerts,
   children,
   loading = false,
+  headerComponent = 'h2',
 }) => {
   const title = useMemo(() => {
     const cardTitle = `${alertContext} Alerts`;
@@ -29,7 +31,11 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   }, [alertContext, clientAlerts.length, loading]);
 
   return (
-    <TitleCard title={title} headerVariant='border'>
+    <TitleCard
+      title={title}
+      headerVariant='border'
+      headerComponent={headerComponent}
+    >
       {loading && <Loading />}
       {!loading && (
         <Box sx={{ m: 2 }}>

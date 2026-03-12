@@ -4,6 +4,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import CommonSelectableCard from '@/components/elements/CommonSelectableCard';
 import CommonTextWithIcon from '@/components/elements/CommonTextWithIcon';
 import CommonTruncatedList from '@/components/elements/CommonTruncatedList';
+import NewTabIcon from '@/components/elements/NewTabIcon';
 import RelativeDateDisplay from '@/components/elements/RelativeDateDisplay';
 import RouterLink from '@/components/elements/RouterLink';
 import {
@@ -138,6 +139,7 @@ const SourceEnrollmentCard: React.FC<Props> = ({
                     variant={'contained'}
                     color={'grayscale'}
                     openInNew={true}
+                    Icon={NewTabIcon}
                   >
                     View Assessment
                   </ButtonLink>

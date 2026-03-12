@@ -13,10 +13,9 @@ import {
 import { omit } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 
-import CommonDialog from '../CommonDialog';
-import LoadingButton from '../LoadingButton';
-import Uploader from '../upload/Uploader';
-
+import CommonDialog from '@/components/elements/CommonDialog';
+import LoadingButton from '@/components/elements/LoadingButton';
+import Uploader from '@/components/elements/upload/Uploader';
 import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -35,10 +34,21 @@ import {
 
 export type ClientImageUploadDialogProps = {
   clientId: string;
+  baseImageAltText?: string;
 } & DialogProps;
 
+/**
+ * Renders a dialog for updating the client image.
+ * @param clientId - the ID of the client to upload an image for
+ * @param baseImageAltText - the base alt text to use for client images, such as "Profile for client <name>."
+ * This component can render 2 images, the current profile image (if it exists) and the newly uploaded one,
+ * so it appends "new"/"current" to the provided alt text.
+ * @param onClose - callback to close the dialog
+ * @param props - further props to pass down to the CommonDialog rendered internally
+ */
 const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   clientId,
+  baseImageAltText,
   onClose,
   ...props
 }) => {
@@ -135,7 +145,10 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                     <Typography variant='body2' gutterBottom align='center'>
                       Current Photo
                     </Typography>
-                    <ClientCardImageElement client={client} />
+                    <ClientCardImageElement
+                      client={client}
+                      alt={`Current ${baseImageAltText}`}
+                    />
                     {client?.image && (
                       <Box>
                         <LoadingButton
@@ -157,7 +170,10 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                     <Typography variant='body2' gutterBottom align='center'>
                       New Photo
                     </Typography>
-                    <ClientCardImageElement url={newPhotoSrc} />
+                    <ClientCardImageElement
+                      url={newPhotoSrc}
+                      alt={`New ${baseImageAltText}`}
+                    />
                   </Grid>
                 </>
               )}

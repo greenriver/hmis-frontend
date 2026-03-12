@@ -74,6 +74,7 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
       )}
       <TitleCard
         title='Staff Assignment'
+        headerComponent='h2'
         stackOnMobile={false}
         actions={
           enrollment.relationshipToHoH ===

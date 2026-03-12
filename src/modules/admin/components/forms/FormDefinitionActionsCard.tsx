@@ -5,7 +5,7 @@ import { generatePath } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
 
-import { OpenInNewIcon } from '@/components/elements/SemanticIcons';
+import NewTabIcon from '@/components/elements/NewTabIcon';
 import DuplicateFormButton from '@/modules/admin/components/forms/DuplicateFormButton';
 import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
 import {
@@ -62,7 +62,7 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             to={`/hmis_external_api/external_forms/${externalFormObjectKey}`}
             openInNew
             fullWidth
-            Icon={OpenInNewIcon}
+            Icon={NewTabIcon}
             disabled={!isPublished}
           >
             External Form Preview

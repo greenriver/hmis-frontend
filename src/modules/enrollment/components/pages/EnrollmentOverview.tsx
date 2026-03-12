@@ -50,7 +50,11 @@ const EnrollmentOverview = () => {
       <Grid container spacing={4}>
         <Grid item md={8} xs={12}>
           <Stack spacing={4}>
-            <TitleCard title='Household' headerVariant='border'>
+            <TitleCard
+              title='Household'
+              headerVariant='border'
+              headerComponent='h2'
+            >
               <HouseholdOverviewTable enrollmentId={enrollmentId} />
             </TitleCard>
             <TitleCard
@@ -59,6 +63,7 @@ const EnrollmentOverview = () => {
                   ? clientBriefName(enrollment.client)
                   : ''
               } Enrollment Details`}
+              headerComponent='h2'
             >
               <EnrollmentDetails enrollment={enrollment} />
             </TitleCard>
