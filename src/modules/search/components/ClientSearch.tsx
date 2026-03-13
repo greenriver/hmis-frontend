@@ -2,9 +2,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
 import { isEmpty, isNil, omitBy } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { createSearchParams, useSearchParams } from 'react-router-dom';
-import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
+import { useCallback, useMemo, useState } from 'react';
 import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 
@@ -27,7 +25,6 @@ import {
   SsnDobShowContextProvider,
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { SearchFormDefinition } from '@/modules/form/data';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 
@@ -119,13 +116,7 @@ const ClientSearch = () => {
   const [searchType, setSearchType] = useState<SearchType>('broad');
   // type of display (table or cards)
   const [displayType, setDisplayType] = useState<DisplayType>('table');
-  // URL search parameters
-  const [searchParams, setSearchParams] = useSearchParams();
-  // whether the search params were derived
-  const [derivedSearchParams, setDerivedSearchParams] =
-    useState<boolean>(false);
-  // initial form state derived from the SearchParams
-  const [initialValues, setInitialValues] = useState<ClientSearchInputType>();
+
   // whether search has occurred
   const [hasSearched, setHasSearched] = useState(false);
 
@@ -159,30 +150,10 @@ const ClientSearch = () => {
     return baseColumns;
   }, [isMobile, globalFeatureFlags, displayType, canViewDob]);
 
-  useEffect(() => {
-    // if search params are derived, we don't want to perform a search on them
-    if (derivedSearchParams) return;
-
-    // this is the first render, so derive the initial state from the SearchParams and perform a search
-    const variables = searchParamsToVariables(
-      SearchFormDefinition,
-      searchParams
-    );
-    if (isEmpty(variables)) {
-      setInitialValues({});
-    } else {
-      const initState = searchParamsToState(searchParams);
-      setInitialValues(initState);
-      setSearchInput(initState);
-      if (!initState.textSearch) setSearchType('specific');
-    }
-  }, [derivedSearchParams, searchParams]);
-
   const onClearSearch = useCallback(() => {
     setSearchInput(null);
-    setSearchParams({});
     setHasSearched(false);
-  }, [setSearchParams]);
+  }, []);
 
   // When form is submitted, update the search parameters and perform the search
   const handleSubmitSearch = useMemo(() => {
@@ -190,15 +161,10 @@ const ClientSearch = () => {
       const cleaned = omitBy(values, isNil);
       if (isEmpty(cleaned)) return;
 
-      // Construct derived search parameters and update the URL
-      const searchParams = createSearchParams(cleaned);
-      setSearchParams(searchParams);
-      setDerivedSearchParams(true); // so that searchParam change doesn't trigger a query
-
       // Perform the search
       setSearchInput(cleaned);
     };
-  }, [setSearchParams, setDerivedSearchParams]);
+  }, []);
 
   const filters = useFilters({
     type: 'ClientFilterOptions',
@@ -236,7 +202,7 @@ const ClientSearch = () => {
       <Box mb={5}>
         {searchType === 'broad' ? (
           <ClientTextSearchForm
-            initialValue={initialValues?.textSearch || ''}
+            initialValue={''}
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
             label={null}
             size='medium'
@@ -250,7 +216,6 @@ const ClientSearch = () => {
           />
         ) : (
           <ClientSearchAdvancedForm
-            initialValues={initialValues}
             onSearch={(input) => handleSubmitSearch(input)}
             onClearSearch={onClearSearch}
           />
