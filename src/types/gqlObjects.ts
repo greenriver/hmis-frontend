@@ -7385,6 +7385,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'SearchQuery',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'params',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'Service',
     fields: [
       {
@@ -8915,6 +8936,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
+      },
+      {
+        name: 'searchQueryId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'ssnSerial',

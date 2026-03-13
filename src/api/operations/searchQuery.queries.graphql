@@ -1,0 +1,6 @@
+query GetSearchQuery($id: ID!) {
+  searchQuery(id: $id) {
+    id
+    params
+  }
+}
