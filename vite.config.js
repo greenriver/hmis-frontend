@@ -31,11 +31,19 @@ function sourcemapExclude(opts) {
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  // HMIS host for this dev server, override with `HMIS_HOST=hmis-2.dev.test yarn dev`
+  const devHmisHost = env.HMIS_HOST || 'hmis.dev.test';
+
+  // warehouseProxyServer is used below only in dev (command !== 'build')
   const warehouseProxyServer = {
     target: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
     changeOrigin: true, // sets Host header
     headers: {
       Origin: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
+      // Pass the HMIS hostname so the warehouse can resolve the correct data source (for multi-HMIS local setup).
+      // The backend is not able to determine the hostname in the usual way (using trusted rails host resolution)
+      // because dev server requests always appear to come from 'hmis-warehouse.dev.test'
+      'X-Hmis-Dev-Host': devHmisHost,
     },
     secure: false,
   };
@@ -49,7 +57,12 @@ export default defineConfig(({ command, mode }) => {
     },
     plugins: [
       react(),
-      mkcert(),
+      mkcert({
+        savePath: resolve(
+          __dirname,
+          `.mkcert-${devHmisHost.replace(/\./g, '-')}`
+        ),
+      }),
       sourcemapExclude({ excludeNodeModules: true }),
       // Note: even though sourcemaps are public, we upload them to get additional Sentry tooling around releases
       ...(env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN
@@ -89,6 +102,7 @@ export default defineConfig(({ command, mode }) => {
       watch: false,
     },
     build: {
+      target: 'baseline-widely-available',
       rollupOptions: {
         plugins: [
           VISUALIZER && visualizer({ filename: 'bundle_analysis.html' }),
@@ -123,7 +137,7 @@ export default defineConfig(({ command, mode }) => {
       server: {
         port: 5173,
         open: true,
-        host: env.HMIS_HOST || 'hmis.dev.test',
+        host: devHmisHost,
         https:
           env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
         proxy: {

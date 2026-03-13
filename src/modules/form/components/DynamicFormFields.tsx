@@ -32,8 +32,8 @@ const DynamicFormFields: React.FC<Props> = ({ handlers, ...props }) => {
       if ([ItemType.Integer, ItemType.Currency].includes(item?.type)) {
         const parsed =
           item.type === ItemType.Integer ? parseInt(value) : parseFloat(value);
-        // Set value to null if it is not parseable as a number, such as null/empty string.
-        value = isNaN(parsed) ? null : parsed;
+        // Set value to undefined if it is not parseable as a number, such as null/empty string.
+        value = isNaN(parsed) ? undefined : parsed;
       }
 
       handlers.methods.setValue(linkId, value, {
