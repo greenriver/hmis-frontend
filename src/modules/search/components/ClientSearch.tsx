@@ -1,8 +1,10 @@
+import { useApolloClient } from '@apollo/client';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
-import { isEmpty, isNil, omitBy } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
+import { isEmpty, isEqual, isNil, omitBy } from 'lodash-es';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import useResolvedSearchQueryId from '../hooks/useResolvedSearchQueryId';
 import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 
@@ -17,6 +19,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
+import useSearchParamsState from '@/hooks/useSearchParamState';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/searchResultCard/ClientSearchResultCard';
 import {
@@ -37,6 +40,7 @@ import {
   ClientSearchResultFieldsFragment,
   ClientSortOption,
   ExternalIdentifierType,
+  GetSearchQueryDocument,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
   ProjectEnrollmentsHouseholdClientFieldsFragment,
@@ -112,6 +116,8 @@ export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFra
  * Client Search page
  */
 const ClientSearch = () => {
+  const apolloClient = useApolloClient();
+
   // type of search (broad or specific)
   const [searchType, setSearchType] = useState<SearchType>('broad');
   // type of display (table or cards)
@@ -125,6 +131,36 @@ const ClientSearch = () => {
   const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
     null
   );
+
+  // treat searchQueryId from URL params as a piece of state, so the source of truth is the URL params
+  const [{ searchQueryId }, setSearchParams] = useSearchParamsState({
+    paramsDefinition: {
+      searchQueryId: { type: 'string', default: null },
+    },
+  });
+
+  // resolve the search query ID into usable search params
+  // todo @martha - render searchQueryLoading in the UI
+  const { resolvedParams, loading: searchQueryLoading } =
+    useResolvedSearchQueryId({
+      searchQueryId,
+      // user,// todo @martha - add current user
+      // todo @martha - avoid double query
+      // this was added to avoid a double query when we received the search query ID back from the server. is there another way around that?
+      // 1. yes, it should avoid since it already got put in the cache manually
+      // 2. maybe, we could avoid the double query by allowing you to pass searchQueryId in the input, which is currently unused I think
+      // skip: searchInput != null,  // we only need to resolve the search query if we don't already have a search input (?)
+    });
+
+  // todo @martha - you might not need an effect - this could be an onCompleted hook for the above?
+  useEffect(() => {
+    if (searchQueryLoading) return;
+    if (!resolvedParams) return;
+
+    if (!isEqual(resolvedParams, searchInput)) {
+      setSearchInput(resolvedParams);
+    }
+  }, [resolvedParams, searchInput, searchQueryLoading]);
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
@@ -202,7 +238,7 @@ const ClientSearch = () => {
       <Box mb={5}>
         {searchType === 'broad' ? (
           <ClientTextSearchForm
-            initialValue={''}
+            initialValue={searchInput?.textSearch || ''}
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
             label={null}
             size='medium'
@@ -230,7 +266,34 @@ const ClientSearch = () => {
           >
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
-            onCompleted={() => setHasSearched(true)}
+            onCompleted={() => setHasSearched(true)} // set hasSearched when the GenericTable returns any results (whether from network or cache)
+            onCompleteNetworkQuery={(data) => {
+              // only update the search params if this is the completion of a network call, not a cache hit.
+              // this avoids buggy behavior with the back-button
+              const returnedSearchQueryId = data?.clientSearch.searchQueryId;
+              if (
+                returnedSearchQueryId &&
+                searchQueryId !== returnedSearchQueryId
+              ) {
+                // update the url bar with the searchQueryId we just received
+                setSearchParams({ searchQueryId: returnedSearchQueryId });
+
+                // write search query we received to the cache with the current search params,
+                // so it's ready next time we query SearchQuery even though it wouldn't normally be in the cache
+                // because we got it from a SearchClients query, not a SearchQuery query
+                apolloClient.writeQuery({
+                  query: GetSearchQueryDocument,
+                  variables: { id: returnedSearchQueryId },
+                  data: {
+                    searchQuery: {
+                      __typename: 'SearchQuery',
+                      id: returnedSearchQueryId,
+                      params: searchInput,
+                    },
+                  },
+                });
+              }
+            }}
             columns={columns}
             rowLinkTo={(client) => getViewClientMenuItem(client).to}
             rowName={(row) => clientBriefName(row)}

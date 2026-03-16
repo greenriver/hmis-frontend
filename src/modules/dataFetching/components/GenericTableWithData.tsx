@@ -81,7 +81,8 @@ export interface Props<
     TableFilterType<FilterOptionsType>,
     SortOptionsType
   >['tableDisplayOptionButtons'];
-  onCompleted?: (data: Query) => void;
+  onCompleted?: (data: Query) => void; // callback when the data is fetched (whether from cache or network)
+  onCompleteNetworkQuery?: (data: Query) => void; // callback when the the data is fetched from the network
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
   loading?: boolean;
 }
@@ -128,6 +129,7 @@ const GenericTableWithData = <
   rowsPerPageOptions,
   tableDisplayOptionButtons,
   onCompleted,
+  onCompleteNetworkQuery,
   paginationItemName,
   filterRows,
   vertical,
@@ -198,6 +200,7 @@ const GenericTableWithData = <
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
+    onCompleted: onCompleteNetworkQuery,
   });
 
   const hasRefetched = useHasRefetched(networkStatus);
