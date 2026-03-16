@@ -6,16 +6,17 @@ import Loading from '@/components/elements/Loading';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 
+import useTableFilters from '@/hooks/useTableFilters';
 import EligibleUnitGroupsDialog from '@/modules/ce/components/admin/EligibleUnitGroupsDialog';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
   CeClientFieldsFragment,
+  CeClientFilterOptions,
   ExternalIdentifierType,
   GetCeClientsDocument,
   GetCeClientsQuery,
@@ -88,11 +89,13 @@ const AdminCeClientsTable: React.FC<Props> = ({}) => {
     ];
   }, [tableConfigLookup, mciIdEnabled]);
 
-  const filters = useFilters({
-    type: 'CeClientFilterOptions',
-    omit: ['searchTerm'],
-    dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<CeClientFilterOptions>({
+      type: 'CeClientFilterOptions',
+      omit: ['searchTerm'],
+      // FIXME: not working with dynamic filters
+      // dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
+    });
 
   const rowSecondaryActionConfigs = useCallback(
     (row: CeClientFieldsFragment) => {
@@ -145,6 +148,8 @@ const AdminCeClientsTable: React.FC<Props> = ({}) => {
           noData='No clients'
           paginationItemName='client'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           handleRowClick={(row) => setSelectedRow(row)}
           rowActionTitle='View Eligible Projects'
           rowSecondaryActionConfigs={rowSecondaryActionConfigs}

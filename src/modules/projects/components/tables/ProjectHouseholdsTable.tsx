@@ -14,6 +14,7 @@ import {
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   HOUSEHOLD_ASSIGNED_STAFF_COL,
@@ -21,7 +22,6 @@ import {
   WITH_ENROLLMENT_OPTIONAL_COLUMNS,
 } from '@/modules/enrollment/columns/enrollmentColumns';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   clientBriefName,
   PERMANENT_HOUSING_PROJECT_TYPES,
@@ -206,11 +206,12 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
     }));
   }, [projectType, staffAssignmentsEnabled]);
 
-  const filters = useFilters({
-    type: 'HouseholdFilterOptions',
-    omit: ['searchTerm', staffAssignmentsEnabled ? '' : 'assignedStaff'],
-    pickListArgs: { projectId: projectId },
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<HouseholdFilterOptions>({
+      type: 'HouseholdFilterOptions',
+      omit: [staffAssignmentsEnabled ? '' : 'assignedStaff'],
+      pickListArgs: { projectId: projectId },
+    });
 
   return (
     <GenericTableWithData<
@@ -257,6 +258,8 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
       noData='No households'
       pagePath='project.households'
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
       recordType='Household'
     />
   );

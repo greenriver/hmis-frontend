@@ -66,6 +66,7 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
       onCancel={cancel}
       onApply={() => props.setFilterValues(cleanedValues(state))}
       onReset={() => {
+        // FIXME: not working with URL params, it needs to reset to a state that contains all known filter keys so they get cleared out.
         props.setFilterValues(cleanedValues(defaultValue));
         reset();
       }}
