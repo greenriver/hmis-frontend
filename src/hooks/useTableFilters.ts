@@ -97,7 +97,7 @@ export const getFilter = (
   return getFilterForType(fieldName, fieldSchema.type, filterPickListArgs);
 };
 
-export interface FilterParams {
+export interface FilterParams<T = Record<string, unknown>> {
   type?: string | null; // filter input type for inferring filters if not provided
   pickListArgs?: PickListArgs; // optional: pick list args to be applied to all PickList filter items
   omit?: Array<string>; // optional: skip some filters
@@ -106,7 +106,7 @@ export interface FilterParams {
   syncToUrl?: boolean;
   /** Keys to exclude from URL (e.g. PII). type 'text' is always excluded. */
   omitFromUrl?: Array<string>;
-  /** Initial filter values. If provided, these will be used to populate the filter values initially. */
+  /** Initial filter values (e.g. defaults when URL has no params). Typed by the same T as useTableFilters<T>. */
   initialFilterValues?: Partial<T>;
 }
 
@@ -149,7 +149,7 @@ const EMPTY_URL_PARAMS: SearchParamsStateType = {
 };
 
 function useFiltersImpl<T>(
-  params: Omit<FilterParams, 'initialFilterValues'> & {
+  params: Omit<FilterParams<T>, 'syncToUrl' | 'omitFromUrl'> & {
     initialFilterValues?: Partial<T>;
   }
 ): TableFilterType<T> {
@@ -188,15 +188,15 @@ function useFiltersImpl<T>(
   }, [type, dynamicFilters, omit, pickListArgs]);
 }
 
-export default function useTableFilters<T>({
+export default function useTableFilters<T = Record<string, unknown>>({
   type,
-  initialFilterValues = {},
+  initialFilterValues = {} as Partial<T>,
   pickListArgs = {},
   omit = [],
   dynamicFilters,
   syncToUrl = true,
   omitFromUrl = [],
-}: FilterParams): {
+}: FilterParams<T>): {
   filters: TableFilterType<T>; // filter configuration
   filterValues: Partial<T>; // filter values (if syncToUrl is true)
   setFilterValues: (values: Partial<T>) => void; // set filter values (if syncToUrl is true)

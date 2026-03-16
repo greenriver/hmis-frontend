@@ -16,8 +16,8 @@ import { ensureArray } from '@/utils/arrays';
 export { getFilter, type FilterParams };
 
 // For backwards compatibility, re-export useTableFilters with old signature. New code should use useTableFilters directly.
-export function useFilters<T>(
-  params: Omit<FilterParams, 'syncToUrl' | 'omitFromUrl'>
+export function useFilters<T = Record<string, unknown>>(
+  params: Omit<FilterParams<T>, 'syncToUrl' | 'omitFromUrl'>
 ): TableFilterType<T> {
   const { filters } = useTableFilters<T>({ ...params, syncToUrl: false });
   return filters;
