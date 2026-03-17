@@ -189,7 +189,6 @@ const ClientSearch = () => {
         setSearchInput(resolvedParams);
       }
     },
-    // user,// todo @martha - add current user?
   });
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
@@ -232,7 +231,6 @@ const ClientSearch = () => {
     omit: ['searchTerm'],
   });
 
-  // todo @martha - back button behavior doesn't always seem consistent, it feels like there are buggy re-renders
   if (searchQueryLoading) return <Loading />;
 
   return (
