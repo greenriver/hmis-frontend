@@ -14,6 +14,7 @@ import CommonTableDisplayToggle, {
   DisplayType,
 } from '@/components/elements/CommonTableDisplayToggle';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
+import Loading from '@/components/elements/Loading';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
@@ -140,9 +141,7 @@ const ClientSearch = () => {
   });
 
   // resolve the search query ID into usable search params
-  // todo @martha - render searchQueryLoading in the UI
-  // const { loading: searchQueryLoading } =
-  useResolvedSearchQueryId({
+  const { loading: searchQueryLoading } = useResolvedSearchQueryId({
     searchQueryId,
     onCompleted: (resolvedParams) => {
       if (!resolvedParams) return;
@@ -199,6 +198,10 @@ const ClientSearch = () => {
   });
 
   const isTiny = useIsMobile('sm');
+
+  // todo @martha - back button behavior doesn't always seem consistent, it feels like there are buggy re-renders
+  // todo @martha - back button to blank search doesn't work
+  if (searchQueryLoading) return <Loading />;
 
   return (
     <SsnDobShowContextProvider>
