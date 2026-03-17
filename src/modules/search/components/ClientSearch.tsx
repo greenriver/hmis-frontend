@@ -145,10 +145,9 @@ const ClientSearch = () => {
     useResolvedSearchQueryId({
       searchQueryId,
       // user,// todo @martha - add current user
-      // todo @martha - avoid double query
+      // todo @martha - avoid double query that i was seeing in console.log
       // this was added to avoid a double query when we received the search query ID back from the server. is there another way around that?
-      // 1. yes, it should avoid since it already got put in the cache manually
-      // 2. maybe, we could avoid the double query by allowing you to pass searchQueryId in the input, which is currently unused I think
+      // yes, it should avoid since it already got put in the cache manually?
       // skip: searchInput != null,  // we only need to resolve the search query if we don't already have a search input (?)
     });
 
@@ -161,6 +160,7 @@ const ClientSearch = () => {
       setSearchInput(resolvedParams);
     }
   }, [resolvedParams, searchInput, searchQueryLoading]);
+  // todo @martha - get advanced search working
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
