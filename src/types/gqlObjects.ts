@@ -8938,10 +8938,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'searchQueryId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
         name: 'ssnSerial',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },

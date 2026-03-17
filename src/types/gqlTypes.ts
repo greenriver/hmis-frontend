@@ -1732,8 +1732,6 @@ export type ClientSearchInput = {
   organizations?: InputMaybe<Array<Scalars['ID']['input']>>;
   personalId?: InputMaybe<Scalars['String']['input']>;
   projects?: InputMaybe<Array<Scalars['ID']['input']>>;
-  /** ID of existing search query */
-  searchQueryId?: InputMaybe<Scalars['ID']['input']>;
   /** Last 4 digits of SSN */
   ssnSerial?: InputMaybe<Scalars['String']['input']>;
   /** Omnisearch string */
