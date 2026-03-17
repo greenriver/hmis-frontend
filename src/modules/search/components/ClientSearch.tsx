@@ -2,8 +2,8 @@ import { useApolloClient } from '@apollo/client';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
-import { isEmpty, isEqual, isNil, omitBy } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { isEmpty, isNil, omitBy } from 'lodash-es';
+import { useCallback, useMemo, useState } from 'react';
 import useResolvedSearchQueryId from '../hooks/useResolvedSearchQueryId';
 import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
@@ -141,26 +141,17 @@ const ClientSearch = () => {
 
   // resolve the search query ID into usable search params
   // todo @martha - render searchQueryLoading in the UI
-  const { resolvedParams, loading: searchQueryLoading } =
-    useResolvedSearchQueryId({
-      searchQueryId,
-      // user,// todo @martha - add current user
-      // todo @martha - avoid double query that i was seeing in console.log
-      // this was added to avoid a double query when we received the search query ID back from the server. is there another way around that?
-      // yes, it should avoid since it already got put in the cache manually?
-      // skip: searchInput != null,  // we only need to resolve the search query if we don't already have a search input (?)
-    });
+  // const { loading: searchQueryLoading } =
+  useResolvedSearchQueryId({
+    searchQueryId,
+    onCompleted: (resolvedParams) => {
+      if (!resolvedParams) return;
 
-  // todo @martha - you might not need an effect - this could be an onCompleted hook for the above?
-  useEffect(() => {
-    if (searchQueryLoading) return;
-    if (!resolvedParams) return;
-
-    if (!isEqual(resolvedParams, searchInput)) {
       setSearchInput(resolvedParams);
-    }
-  }, [resolvedParams, searchInput, searchQueryLoading]);
-  // todo @martha - get advanced search working
+    },
+    // user,// todo @martha - add current user
+  });
+  // todo @martha -get advanced search working
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
