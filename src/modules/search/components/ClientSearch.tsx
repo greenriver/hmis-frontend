@@ -246,6 +246,7 @@ const ClientSearch = () => {
           />
         ) : (
           <ClientSearchAdvancedForm
+            initialValues={searchInput || undefined}
             onSearch={(input) => handleSubmitSearch(input)}
             onClearSearch={onClearSearch}
           />
