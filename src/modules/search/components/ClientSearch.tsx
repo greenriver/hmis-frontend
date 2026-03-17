@@ -126,7 +126,9 @@ const ClientSearch = () => {
     useState<boolean>(false);
   // initial form state derived from the SearchParams
   const [initialValues, setInitialValues] = useState<ClientSearchInputType>();
-  // whether search has occurred
+  // Whether the user has searched for clients (and the results are visible).
+  // Visibility of "Add New Client" button is gated on this, to prevent user from adding
+  // duplicate clients before completing a search.
   const [hasSearched, setHasSearched] = useState(false);
 
   const isMobile = useIsMobile();
@@ -265,7 +267,7 @@ const ClientSearch = () => {
           >
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
-            onCompleted={() => setHasSearched(true)}
+            onDataReady={() => setHasSearched(true)}
             columns={columns}
             rowLinkTo={(client) => getViewClientMenuItem(client).to}
             rowName={(row) => clientBriefName(row)}
