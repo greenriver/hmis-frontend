@@ -3,7 +3,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
 import { isEmpty, isNil, omitBy } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useResolvedSearchQueryId from '../hooks/useResolvedSearchQueryId';
 import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
@@ -118,39 +118,79 @@ export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFra
  */
 const ClientSearch = () => {
   const apolloClient = useApolloClient();
-
-  // type of search (broad or specific)
-  const [searchType, setSearchType] = useState<SearchType>('broad');
-  // type of display (table or cards)
-  const [displayType, setDisplayType] = useState<DisplayType>('table');
+  const isMobile = useIsMobile();
+  const isTiny = useIsMobile('sm');
 
   // whether search has occurred
   const [hasSearched, setHasSearched] = useState(false);
-
-  const isMobile = useIsMobile();
-
+  // the current search input, including text search and advanced search fields
   const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
     null
   );
 
-  // treat searchQueryId from URL params as a piece of state, so the source of truth is the URL params
-  const [{ searchQueryId }, setSearchParams] = useSearchParamsState({
-    paramsDefinition: {
-      searchQueryId: { type: 'string', default: null },
-    },
-  });
+  // URL params representing the state of the page.
+  // Use useSearchParamsState hook so the source of truth is the URL params,
+  // but we can interact with them as if they are React state
+  const [{ searchQueryId, searchType, displayType }, setSearchParams] =
+    useSearchParamsState({
+      paramsDefinition: {
+        // the ID of the ClientSearchQuery from the backend
+        searchQueryId: { type: 'string', default: null },
+        // Whether the search type is broad or specific (advanced)
+        searchType: { type: 'string', default: 'broad' },
+        // Whether the results are displayed as a table or cards
+        displayType: { type: 'string', default: 'table' },
+      },
+    });
 
-  // resolve the search query ID into usable search params
+  const setSearchType = useCallback(
+    (searchType: SearchType) => {
+      // Clear search input when search type changes
+      setSearchParams({ searchType, searchQueryId: null });
+    },
+    [setSearchParams]
+  );
+
+  const setDisplayType = useCallback(
+    (displayType: DisplayType) => {
+      setSearchParams({ displayType });
+    },
+    [setSearchParams]
+  );
+
+  const clearSearch = useCallback(() => {
+    setSearchInput(null);
+    setHasSearched(false);
+  }, []);
+
+  // Clear search when the search type changes
+  useEffect(() => {
+    clearSearch();
+  }, [searchType, clearSearch]);
+
+  // Clear search when the search query ID is cleared (such as using the back-button)
+  useEffect(() => {
+    if (searchQueryId === null) {
+      clearSearch();
+    }
+  }, [searchQueryId, clearSearch]);
+
+  // Callback for use when the 'clear' button is clicked on either search form
+  const onClearSearch = useCallback(() => {
+    clearSearch();
+    setSearchParams({ searchQueryId: null });
+  }, [clearSearch, setSearchParams]);
+
+  // Resolve the search query ID into usable search params
   const { loading: searchQueryLoading } = useResolvedSearchQueryId({
     searchQueryId,
     onCompleted: (resolvedParams) => {
-      if (!resolvedParams) return;
-
-      setSearchInput(resolvedParams);
+      if (resolvedParams) {
+        setSearchInput(resolvedParams);
+      }
     },
-    // user,// todo @martha - add current user
+    // user,// todo @martha - add current user?
   });
-  // todo @martha -get advanced search working
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
@@ -176,11 +216,6 @@ const ClientSearch = () => {
     return baseColumns;
   }, [isMobile, globalFeatureFlags, displayType, canViewDob]);
 
-  const onClearSearch = useCallback(() => {
-    setSearchInput(null);
-    setHasSearched(false);
-  }, []);
-
   // When form is submitted, update the search parameters and perform the search
   const handleSubmitSearch = useMemo(() => {
     return (values: Record<string, any>) => {
@@ -197,10 +232,7 @@ const ClientSearch = () => {
     omit: ['searchTerm'],
   });
 
-  const isTiny = useIsMobile('sm');
-
   // todo @martha - back button behavior doesn't always seem consistent, it feels like there are buggy re-renders
-  // todo @martha - back button to blank search doesn't work
   if (searchQueryLoading) return <Loading />;
 
   return (
