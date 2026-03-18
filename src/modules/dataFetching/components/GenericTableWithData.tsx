@@ -63,7 +63,7 @@ export interface Props<
   defaultSortOption?: keyof SortOptionsType;
   /** Uncontrolled Filters: initial filter values. Ignored when filterValues + onFilterChange are both provided. */
   defaultFilterValues?: Partial<FilterOptionsType>;
-  /** Controlled Filters: current filter values. Use with onFilterChange so the table does not own filter state (e.g. URL-backed via useFilters({ syncToUrl: true })). */
+  /** Controlled Filters: current filter values. Use with onFilterChange so the table does not own filter state (e.g. URL-backed via useTableFilters). */
   filterValues?: Partial<FilterOptionsType>;
   /** Controlled Filters: called when user changes filters. Use with filterValues so the parent can persist state (e.g. to URL). */
   onFilterChange?: (values: Partial<FilterOptionsType>) => void;

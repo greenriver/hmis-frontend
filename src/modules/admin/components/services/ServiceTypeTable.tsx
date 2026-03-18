@@ -1,7 +1,7 @@
 import { Chip } from '@mui/material';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { getServiceTypeForDisplay } from '@/modules/services/serviceColumns';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
@@ -9,6 +9,7 @@ import {
   GetServiceTypesQuery,
   GetServiceTypesQueryVariables,
   ServiceTypeConfigFieldsFragment,
+  ServiceTypeFilterOptions,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -47,10 +48,10 @@ const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
 ];
 
 const ServiceTypeTable = () => {
-  const filters = useFilters({
-    type: 'ServiceTypeFilterOptions',
-    omit: ['searchTerm'],
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ServiceTypeFilterOptions>({
+      type: 'ServiceTypeFilterOptions',
+    });
 
   return (
     <>
@@ -72,6 +73,8 @@ const ServiceTypeTable = () => {
         pagePath='serviceTypes'
         noData='No service types'
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
         recordType='ServiceType'
         paginationItemName='service type'
       />

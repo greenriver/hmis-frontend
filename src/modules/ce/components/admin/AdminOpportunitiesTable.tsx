@@ -64,7 +64,6 @@ const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
         'status', // omitted because only 'open' opportunities are queried
         'availableOnDate', // omitted because filter is not implemented on the backend #7537
       ],
-      syncToUrl: true,
     });
 
   return (

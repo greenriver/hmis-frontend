@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   ClientAccessSummaryFieldsFragment,
+  ClientAccessSummaryFilterOptions,
   GetUserClientSummariesDocument,
   GetUserClientSummariesQuery,
   GetUserClientSummariesQueryVariables,
@@ -44,10 +45,10 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
   startDate,
   searchTerm = '',
 }) => {
-  const filters = useFilters({
-    type: 'ClientAccessSummaryFilterOptions',
-    omit: ['searchTerm'],
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ClientAccessSummaryFilterOptions>({
+      type: 'ClientAccessSummaryFilterOptions',
+    });
 
   return (
     <GenericTableWithData<
@@ -69,6 +70,8 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
       paginationItemName='accessed client'
       recordType='ClientAccessSummary'
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
     />
   );
 };
