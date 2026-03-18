@@ -58,8 +58,7 @@ export const configurableCeColumns = (
   }));
 };
 
-interface Props {}
-const AdminCeClientsTable: React.FC<Props> = ({}) => {
+const AdminCeClientsTable: React.FC = () => {
   // Feature flags to check whether to show MCI ID column
   const { globalFeatureFlags: { mciIdEnabled } = {} } = useGlobalFeatureFlags();
   // Fetch column configuration for global ce client list
@@ -93,8 +92,7 @@ const AdminCeClientsTable: React.FC<Props> = ({}) => {
     useTableFilters<CeClientFilterOptions>({
       type: 'CeClientFilterOptions',
       omit: ['searchTerm'],
-      // FIXME: not working with dynamic filters
-      // dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
+      dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
     });
 
   const rowSecondaryActionConfigs = useCallback(

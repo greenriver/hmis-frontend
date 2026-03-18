@@ -61,29 +61,28 @@ export const transformDynamicFilters = <FilterOptionsType>(
   filters?: TableFilterType<FilterOptionsType>, // Filter configuration, so we know which ones are dynamic
   filterValues?: Partial<FilterOptionsType> // Current filter values
 ) => {
-  if (!filterValues) return;
+  if (!filterValues) return; // No filter values, nothing to transform
 
   // `filterValues` may be present even if `filters` is absent, on tables where `defaultFilterValues` are used without any user-facing filters (such as Bulk Services).
   // In this case, we know the filters aren't dynamic so we don't need to transform them, just return `filterValues` as-is
   if (!filters) return filterValues;
 
-  // Pull out dynamic filters into separate array
-  const dynamicFilters: Array<{ key: string; values: any[] }> = [];
-  Object.keys(filterValues)
-    .filter((key) => !!filters[key as keyof FilterOptionsType]?.isDynamic)
-    .forEach((key) => {
-      dynamicFilters.push({
-        key,
-        values: ensureArray(filterValues[key as keyof FilterOptionsType]),
-      });
-    });
+  // Split filter values into static and dynamic
+  const staticFilterValues: Record<string, unknown> = {};
+  const dynamicFilters: Array<{ key: string; values: any[] }> = []; // { dynamic_key => [value1, value2, ...] }
 
-  const dynamicKeys = new Set(dynamicFilters.map((f) => f.key));
-  const valuesWithoutDynamicKeys = Object.fromEntries(
-    Object.entries(filterValues).filter((e) => !dynamicKeys.has(e[0]))
-  );
-  return {
-    ...valuesWithoutDynamicKeys,
-    ...(dynamicFilters.length > 0 ? { dynamicFilters } : {}),
-  };
+  for (const [key, value] of Object.entries(filterValues)) {
+    const isDynamic = filters[key as keyof FilterOptionsType]?.isDynamic;
+    if (isDynamic) {
+      const values = ensureArray(value);
+      if (values.length > 0) dynamicFilters.push({ key, values });
+    } else {
+      staticFilterValues[key] = value;
+    }
+  }
+
+  if (dynamicFilters.length > 0) {
+    return { ...staticFilterValues, dynamicFilters };
+  }
+  return staticFilterValues;
 };
