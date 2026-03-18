@@ -1,8 +1,4 @@
-import useTableFilters, {
-  FilterParams,
-  getFilter,
-} from '@/hooks/useTableFilters';
-import { TableFilterType } from '@/modules/dataFetching/components/GenericTableWithData';
+import useTableFilters, { FilterParams } from '@/hooks/useTableFilters';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentSortOption,
@@ -10,10 +6,8 @@ import {
   HouseholdSortOption,
   ProjectSortOption,
 } from '@/types/gqlTypes';
+import { TableFilterType } from '@/types/tableFilterTypes';
 import { ensureArray } from '@/utils/arrays';
-
-// Re-export moved hook for backwards compatibility
-export { getFilter, type FilterParams };
 
 // For backwards compatibility, re-export useTableFilters with old signature. New code should use useTableFilters directly.
 export function useFilters<T = Record<string, unknown>>(

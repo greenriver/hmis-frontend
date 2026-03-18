@@ -1,5 +1,5 @@
-import { SelectElementVariant } from '@/modules/dataFetching/types';
 import { PickListOption } from '@/types/gqlTypes';
+import { SelectElementVariant } from '@/types/tableFilterTypes';
 
 export interface TableFilterItemSelectorProps {
   variant?: SelectElementVariant;

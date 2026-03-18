@@ -8,12 +8,12 @@ import useClientDashboardContext from '@/modules/client/hooks/useClientDashboard
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   entryExitRange,
   parseAndFormatDate,
   PERMANENT_HOUSING_PROJECT_TYPES,
 } from '@/modules/hmis/hmisUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,

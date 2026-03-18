@@ -5,7 +5,7 @@ import React from 'react';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeEligibleUnitGroupFieldsFragment,

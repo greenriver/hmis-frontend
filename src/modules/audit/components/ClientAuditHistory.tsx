@@ -8,7 +8,7 @@ import {
   AUDIT_HISTORY_USER_COLUMNS,
 } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import {
   ClientAuditEventFilterOptions,
   GetClientAuditEventsDocument,

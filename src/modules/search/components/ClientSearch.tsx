@@ -28,8 +28,8 @@ import {
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 
 import { isEnrollment, isHouseholdClient } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';

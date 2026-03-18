@@ -5,8 +5,8 @@ import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { Routes } from '@/routes/routes';
 import {
   GetOrganizationProjectsDocument,

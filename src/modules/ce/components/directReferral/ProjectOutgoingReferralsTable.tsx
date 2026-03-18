@@ -5,7 +5,7 @@ import { getViewClientMenuItem } from '@/components/elements/table/tableRowActio
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { useFilters } from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,

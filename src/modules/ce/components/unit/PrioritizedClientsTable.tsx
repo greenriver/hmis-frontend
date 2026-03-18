@@ -9,12 +9,12 @@ import useDebouncedState from '@/hooks/useDebouncedState';
 import { configurableCeColumns } from '@/modules/ce/components/admin/AdminCeClientsTable';
 import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   formatRelativeDateTime,
   parseAndFormatDateTime,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {

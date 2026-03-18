@@ -7,7 +7,7 @@ import TableColumnsMenu, { TableColumnsMenuProps } from './filters/ColumnsMenu';
 import TableFilterMenu from './filters/FilterMenu';
 import TableSortMenu from './filters/SortMenu';
 
-import { FilterType } from '@/modules/dataFetching/types';
+import { FilterType } from '@/types/tableFilterTypes';
 
 export interface PaginationProps {
   totalEntries: number;

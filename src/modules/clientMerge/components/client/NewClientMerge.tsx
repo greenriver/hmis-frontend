@@ -20,7 +20,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
-import { useFilters } from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes } from '@/routes/routes';

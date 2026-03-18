@@ -9,7 +9,7 @@ import { get, isEmpty, isEqual, lowerFirst, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { FilterType, DataColumnDef } from '../types';
+import { DataColumnDef } from '../types';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable, {
@@ -25,16 +25,15 @@ import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColu
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
+import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 import {
   getDefaultSortOptionForType,
   getSortOptionForType,
   transformDynamicFilters,
-} from '@/modules/hmis/filterUtil';
-import { getSchemaForType } from '@/modules/hmis/hmisUtil';
+} from '@/modules/hmis/tableFilterUtil';
+import { TableFilterType } from '@/types/tableFilterTypes';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
-
-export type TableFilterType<T> = Partial<Record<keyof T, FilterType<T>>>;
 
 export interface Props<
   Query,

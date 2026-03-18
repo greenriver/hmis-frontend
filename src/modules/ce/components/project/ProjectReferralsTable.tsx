@@ -3,7 +3,7 @@ import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import { REFERRAL_COLUMNS } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralTableFieldsFragment,

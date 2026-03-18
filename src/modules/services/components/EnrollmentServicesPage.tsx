@@ -6,8 +6,8 @@ import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import {
   getServiceTypeForDisplay,

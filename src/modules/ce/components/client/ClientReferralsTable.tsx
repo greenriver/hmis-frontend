@@ -8,7 +8,7 @@ import {
   REFERRAL_WITH_PROJECT_COLUMNS,
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { Routes } from '@/routes/routes';
 import {
   ClientCeReferralTableFieldsFragment,

@@ -8,7 +8,7 @@ import useDebouncedState from '@/hooks/useDebouncedState';
 import EditProjectCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditProjectCeDefaultContactsModal';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { useFilters } from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {

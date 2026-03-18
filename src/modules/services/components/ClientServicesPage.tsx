@@ -8,8 +8,8 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import {
   getServiceTypeForDisplay,
   SERVICE_BASIC_COLUMNS,

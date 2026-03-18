@@ -20,7 +20,7 @@ import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import AssociatedHouseholdMembers from '@/modules/household/components/AssociatedHouseholdMembers';
 import HouseholdActionButtons from '@/modules/household/components/elements/HouseholdActionButtons';
 import { RecentHouseholdMember } from '@/modules/household/types';
