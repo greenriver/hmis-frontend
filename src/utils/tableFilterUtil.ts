@@ -1,5 +1,6 @@
 import { startCase } from 'lodash-es';
 
+import { SearchParamsStateType } from '@/hooks/useSearchParamState';
 import { PickListArgs } from '@/modules/form/types';
 import { getSchemaForInputType } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -91,7 +92,7 @@ const getFilterForType = (
   return filter || null;
 };
 
-export const getFilter = (
+const getFilter = (
   inputType: string,
   fieldName: string,
   filterPickListArgs?: PickListArgs
@@ -103,6 +104,32 @@ export const getFilter = (
 
   return getFilterForType(fieldName, fieldSchema.type, filterPickListArgs);
 };
+
+// Given a "filter type" (e.g. 'ClientFilterOptions'), build a TableFilterType for it
+// by introspecting the GraphQL schema.
+export function buildTableFilterType<T>(
+  type?: string | null,
+  omit: string[] = [],
+  pickListArgs?: PickListArgs
+): TableFilterType<T> {
+  if (!type) return {};
+
+  const schema = getSchemaForInputType(type);
+  if (!schema) return {};
+
+  const result: Partial<Record<keyof T, FilterType<T>>> = {};
+
+  schema.args.forEach(({ name }) => {
+    if (omit.includes(name)) return;
+
+    const filter = getFilter(type, name, pickListArgs);
+    if (filter) {
+      result[name as keyof T] = filter;
+    }
+  });
+
+  return result;
+}
 
 /**
  * Method for transforming filter values by pulling out dynamic filters into separate key.
@@ -143,3 +170,37 @@ export const transformDynamicFilters = <FilterOptionsType>(
   }
   return staticFilterValues;
 };
+
+/** Build URL param definition from filter config; only includes non–free-text filters (no PII in URL). */
+export function buildUrlParamsDefinition<T>(
+  filters: TableFilterType<T>,
+  omitFromUrl: string[] = []
+): SearchParamsStateType {
+  const def: SearchParamsStateType = {};
+  Object.entries(filters).forEach(([key, filter]) => {
+    if (omitFromUrl.includes(key)) return;
+    const f = filter as FilterType<any>;
+    if (f.type === 'text') return; // never put free-text in URL (PII)
+    if (f.type === 'date') {
+      def[key] = { type: 'date', default: null };
+      return;
+    }
+    if (f.type === 'boolean') {
+      def[key] = { type: 'boolean', default: false };
+      return;
+    }
+    if (
+      f.type === 'enum' ||
+      f.type === 'remote_picklist' ||
+      f.type === 'local_picklist'
+    ) {
+      def[key] = {
+        type: 'string',
+        default: f.multi ? [] : null,
+        multiple: !!f.multi,
+      };
+      return;
+    }
+  });
+  return def;
+}

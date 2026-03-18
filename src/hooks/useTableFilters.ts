@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
 
 import useSearchParamsState, {
-  type SearchParamsStateType,
+  SearchParamsStateType,
 } from '@/hooks/useSearchParamState';
 
 import { PickListArgs } from '@/modules/form/types';
-import { getSchemaForInputType } from '@/modules/hmis/hmisUtil';
 import { TableFilterConfigFieldsFragment } from '@/types/gqlTypes';
 import { FilterType, TableFilterType } from '@/types/tableFilterTypes';
-import { getFilter } from '@/utils/tableFilterUtil';
+import {
+  buildTableFilterType,
+  buildUrlParamsDefinition,
+} from '@/utils/tableFilterUtil';
 
 export interface FilterParams<T = Record<string, unknown>> {
   type?: string | null; // filter input type for inferring filters if not provided
@@ -23,68 +25,46 @@ export interface FilterParams<T = Record<string, unknown>> {
   initialFilterValues?: Partial<T>;
 }
 
-/** Build URL param definition from filter config; only includes non–free-text filters (no PII in URL). */
-function buildUrlParamsDefinition<T>(
-  filters: TableFilterType<T>,
-  omitFromUrl: string[] = []
-): SearchParamsStateType {
-  const def: SearchParamsStateType = {};
-  Object.entries(filters).forEach(([key, filter]) => {
-    if (omitFromUrl.includes(key)) return;
-    const f = filter as FilterType<any>;
-    if (f.type === 'text') return; // never put free-text in URL (PII)
-    if (f.type === 'date') {
-      def[key] = { type: 'date', default: null };
-      return;
-    }
-    if (f.type === 'boolean') {
-      def[key] = { type: 'boolean', default: false };
-      return;
-    }
-    if (
-      f.type === 'enum' ||
-      f.type === 'remote_picklist' ||
-      f.type === 'local_picklist'
-    ) {
-      def[key] = {
-        type: 'string',
-        default: f.multi ? [] : null,
-        multiple: !!f.multi,
-      };
-      return;
-    }
-  });
-  return def;
-}
-
-const EMPTY_URL_PARAMS: SearchParamsStateType = {
-  __noop: { type: 'string', default: null },
+/** useTableFilters export is intentionally overloaded so that when syncToUrl is false,
+ * the return type is only { filters }; when true it includes filterValues and setFilterValues.
+ * Callers then get accurate types without optional/undefined.
+ *
+ * If using useTableFilters with 'syncToUrl: false', filter state is managed by GenericTableWithData.
+ **/
+export default function useTableFilters<T = Record<string, unknown>>(
+  params: FilterParams<T> & { syncToUrl?: true }
+): {
+  filters: TableFilterType<T>;
+  filterValues: Partial<T>;
+  setFilterValues: (values: Partial<T>) => void;
 };
+export default function useTableFilters<T = Record<string, unknown>>(
+  params: FilterParams<T> & { syncToUrl: false }
+): { filters: TableFilterType<T> };
 
-function useFiltersImpl<T>(
-  params: Omit<FilterParams<T>, 'syncToUrl' | 'omitFromUrl'> & {
-    initialFilterValues?: Partial<T>;
-  }
-): TableFilterType<T> {
-  const { type, pickListArgs = {}, omit = [], dynamicFilters } = params;
-
-  return useMemo(() => {
-    if (!type) return {};
-
-    const schema = getSchemaForInputType(type);
-    if (!schema) return {};
-
-    const result: Partial<Record<keyof T, FilterType<T>>> = {};
-
-    schema.args.forEach(({ name }) => {
-      if (omit.includes(name)) return;
-
-      const filter = getFilter(type, name, pickListArgs);
-      if (filter) {
-        result[name as keyof T] = filter;
-      }
-    });
-
+export default function useTableFilters<T = Record<string, unknown>>({
+  type, // Filter type, e.g. 'ClientFilterOptions'
+  initialFilterValues = {} as Partial<T>,
+  pickListArgs = {},
+  omit = [],
+  dynamicFilters,
+  syncToUrl = true,
+  omitFromUrl = [],
+}: FilterParams<T>):
+  | {
+      filters: TableFilterType<T>; // filter configuration
+      filterValues: Partial<T>; // filter values (if syncToUrl is true)
+      setFilterValues: (values: Partial<T>) => void; // set filter values (if syncToUrl is true)
+    }
+  | { filters: TableFilterType<T> } {
+  // Build TableFilterType filter configuration by introspecting on the GraphQL schema for the given filter type.
+  // If dynamicFilters are provided, add them to the filter configuration.
+  const filters = useMemo(() => {
+    const result: TableFilterType<T> = buildTableFilterType(
+      type,
+      omit,
+      pickListArgs
+    );
     // Add dynamic filters if provided
     (dynamicFilters || []).forEach(({ key, label, options }) => {
       result[key as keyof T] = {
@@ -99,42 +79,24 @@ function useFiltersImpl<T>(
 
     return result;
   }, [type, dynamicFilters, omit, pickListArgs]);
-}
 
-export default function useTableFilters<T = Record<string, unknown>>({
-  type,
-  initialFilterValues = {} as Partial<T>,
-  pickListArgs = {},
-  omit = [],
-  dynamicFilters,
-  syncToUrl = true,
-  omitFromUrl = [],
-}: FilterParams<T>): {
-  filters: TableFilterType<T>; // filter configuration
-  filterValues: Partial<T>; // filter values (if syncToUrl is true)
-  setFilterValues: (values: Partial<T>) => void; // set filter values (if syncToUrl is true)
-} {
-  const filters = useFiltersImpl<T>({
-    type,
-    initialFilterValues,
-    pickListArgs,
-    omit,
-    dynamicFilters,
-  });
-
-  const urlParamsDefinition = useMemo(() => {
+  // Build URL param definition from filter configuration; if syncing filter state to URL.
+  const urlParamsDefinition: SearchParamsStateType = useMemo(() => {
     if (!syncToUrl || !filters || Object.keys(filters).length === 0) {
-      return EMPTY_URL_PARAMS;
+      return {};
     }
-
-    const def = buildUrlParamsDefinition(filters, omitFromUrl);
-    return Object.keys(def).length > 0 ? def : EMPTY_URL_PARAMS;
+    return buildUrlParamsDefinition(filters, omitFromUrl);
   }, [syncToUrl, filters, omitFromUrl]);
 
+  // state/setState for filter values that are synced to URL.
   const [urlFilterValues, setUrlFilterValues] = useSearchParamsState({
     paramsDefinition: urlParamsDefinition,
     initial: initialFilterValues,
   });
+
+  if (!syncToUrl) {
+    return { filters };
+  }
 
   return {
     filters,
