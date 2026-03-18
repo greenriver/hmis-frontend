@@ -54,5 +54,5 @@ export type FilterType<I> =
   | LocalPickListFilter<I>
   | DateFilter<I>;
 
-// ?
+// TableFilterType is a map of filter keys to filter types
 export type TableFilterType<T> = Partial<Record<keyof T, FilterType<T>>>;

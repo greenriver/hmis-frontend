@@ -10,6 +10,7 @@ import { getViewClientMenuItem } from '@/components/elements/table/tableRowActio
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
+import { useFilters } from '@/hooks/useTableFilters';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import {
   ContextualClientSsn,
@@ -20,7 +21,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
-import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes } from '@/routes/routes';

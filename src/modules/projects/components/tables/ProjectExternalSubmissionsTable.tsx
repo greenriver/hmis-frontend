@@ -4,10 +4,10 @@ import { useCallback, useState } from 'react';
 import LoadingButton from '@/components/elements/LoadingButton';
 import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
+import { useFilters } from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import ExternalSubmissionsViewModal from '@/modules/projects/components/ExternalSubmissionsViewModal';
 import RefreshExternalSubmissionsButton from '@/modules/projects/components/RefreshExternalSubmissionsButton';
 import {

@@ -4,10 +4,10 @@ import { useCallback, useState } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
+import { useFilters } from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import {
   getServiceTypeForDisplay,

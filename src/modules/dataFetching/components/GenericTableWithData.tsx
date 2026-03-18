@@ -26,12 +26,12 @@ import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
-import {
-  getDefaultSortOptionForType,
-  getSortOptionForType,
-  transformDynamicFilters,
-} from '@/modules/hmis/tableFilterUtil';
 import { TableFilterType } from '@/types/tableFilterTypes';
+import { transformDynamicFilters } from '@/utils/tableFilterUtil';
+import {
+  getSortOptionForType,
+  getDefaultSortOptionForType,
+} from '@/utils/tableSortUtil';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
 

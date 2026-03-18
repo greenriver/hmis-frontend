@@ -4,6 +4,7 @@ import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowA
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import { useFilters } from '@/hooks/useTableFilters';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
@@ -16,7 +17,6 @@ import {
   assessmentDescription,
   clientBriefName,
 } from '@/modules/hmis/hmisUtil';
-import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import {
   AssessmentSortOption,
   GetProjectAssessmentsDocument,

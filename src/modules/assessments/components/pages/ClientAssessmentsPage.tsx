@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import { useFilters } from '@/hooks/useTableFilters';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
 import {
   ASSESSMENT_COLUMNS,
@@ -14,7 +15,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import { assessmentDescription, entryExitRange } from '@/modules/hmis/hmisUtil';
-import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import {
   AssessmentSortOption,
   GetClientAssessmentsDocument,

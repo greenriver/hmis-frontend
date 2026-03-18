@@ -3,10 +3,10 @@ import { useCallback } from 'react';
 import TextInput from '@/components/elements/input/TextInput';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import { useFilters } from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { Routes } from '@/routes/routes';
 import {
   GetOrganizationProjectsDocument,

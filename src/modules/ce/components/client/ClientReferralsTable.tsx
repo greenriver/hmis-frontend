@@ -3,12 +3,12 @@ import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 
+import { useFilters } from '@/hooks/useTableFilters';
 import {
   REFERRAL_COLUMNS,
   REFERRAL_WITH_PROJECT_COLUMNS,
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/tableFilterUtil';
 import { Routes } from '@/routes/routes';
 import {
   ClientCeReferralTableFieldsFragment,
