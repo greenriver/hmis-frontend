@@ -108,7 +108,7 @@ const ProjectsTable = ({
     setFilterValues,
   } = useTableFilters<ProjectFilterOptions>({
     type: 'ProjectFilterOptions',
-    omit: ['ceEnabled'], // TODO update this note. What is ceEnabled filter on Projects for?
+    omit: ['ceEnabled'],
     // Initially, filter to only open projects
     initialFilterValues: { status: [ProjectFilterOptionStatus.Open] },
   });
