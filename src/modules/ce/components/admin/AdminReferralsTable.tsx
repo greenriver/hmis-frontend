@@ -19,6 +19,7 @@ import {
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeReferralAdminFieldsFragment,
+  CeReferralFilterOptions,
   GetAdminCeReferralsDocument,
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables,
@@ -90,11 +91,10 @@ interface Props {}
 const AdminReferralsTable: React.FC<Props> = ({}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const { filters, filterValues, setFilterValues } = useTableFilters<
-    Record<string, unknown>
-  >({
-    type: 'CeReferralFilterOptions',
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<CeReferralFilterOptions>({
+      type: 'CeReferralFilterOptions',
+    });
 
   const rowSecondaryActions = useCallback(
     (row: CeReferralAdminFieldsFragment) => {
@@ -165,9 +165,9 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
           pagePath='ceReferrals'
           noData='No referrals'
           paginationItemName='referrals'
+          filters={filters}
           filterValues={filterValues}
           onFilterChange={setFilterValues}
-          filters={filters}
           rowLinkTo={(row) =>
             generateSafePath(AdminDashboardRoutes.REFERRAL, {
               projectId: row.targetProjectId,

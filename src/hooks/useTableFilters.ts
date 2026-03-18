@@ -51,7 +51,6 @@ const getFilterForType = (
 ): FilterType<any> | null => {
   const inputType = getType(type);
   if (!inputType) return null;
-  if (inputType === 'String') return null; // Free-text filters are not supported because PII is not allowed in URL
 
   const baseFields: BaseFilter<any> = {
     key: fieldName,
@@ -79,6 +78,11 @@ const getFilterForType = (
       enumType: inputType as keyof typeof HmisEnums,
       type: 'enum',
     };
+  }
+
+  if (!filter && inputType === 'String') {
+    // console.log('Skipping free-text filter:', fieldName);
+    return null; // Free-text filters are not supported because PII is not allowed in URL
   }
 
   return filter || null;
