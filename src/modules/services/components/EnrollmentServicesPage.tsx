@@ -4,9 +4,9 @@ import { useCallback, useState } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import {
@@ -20,6 +20,7 @@ import {
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables,
   ServiceFieldsFragment,
+  ServicesForEnrollmentFilterOptions,
 } from '@/types/gqlTypes';
 
 const COLUMNS: ColumnDef<ServiceFieldsFragment>[] = [
@@ -43,9 +44,10 @@ const EnrollmentServicesPage = () => {
     onClose: () => setViewingRecord(undefined),
   });
 
-  const filters = useFilters({
-    type: 'ServicesForEnrollmentFilterOptions',
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ServicesForEnrollmentFilterOptions>({
+      type: 'ServicesForEnrollmentFilterOptions',
+    });
 
   const serviceFeature = getEnrollmentFeature(
     DataCollectionFeatureRole.Service
@@ -103,6 +105,8 @@ const EnrollmentServicesPage = () => {
           noData='No services'
           recordType='Service'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           noSort
         />
       </TitleCard>

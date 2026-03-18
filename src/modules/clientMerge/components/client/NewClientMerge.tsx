@@ -10,6 +10,7 @@ import { getViewClientMenuItem } from '@/components/elements/table/tableRowActio
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
+import useTableFilters from '@/hooks/useTableFilters';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import {
   ContextualClientSsn,
@@ -20,12 +21,12 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  ClientFilterOptions,
   ClientSearchInput,
   ClientSearchResultFieldsFragment,
   ClientSortOption,
@@ -104,9 +105,10 @@ const NewClientMerge = () => {
     []
   );
 
-  const filters = useFilters({
-    type: 'ClientFilterOptions',
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ClientFilterOptions>({
+      type: 'ClientFilterOptions',
+    });
 
   const columns = useMemo(() => {
     return [
@@ -179,6 +181,8 @@ const NewClientMerge = () => {
                   // that no longer exists (e.g. has already been merged in)
                   fetchPolicy='network-only'
                   filters={filters}
+                  filterValues={filterValues}
+                  onFilterChange={setFilterValues}
                   recordType='Client'
                   defaultSortOption={ClientSortOption.BestMatch}
                   rowSecondaryActionConfigs={(row) => [

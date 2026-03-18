@@ -3,9 +3,9 @@ import { useCallback } from 'react';
 import TextInput from '@/components/elements/input/TextInput';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import {
@@ -14,6 +14,7 @@ import {
   GetOrganizationProjectsQueryVariables,
   ProjectAllFieldsFragment,
   ProjectFilterOptionStatus,
+  ProjectsForEnrollmentFilterOptions,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -41,15 +42,10 @@ const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   },
 ];
 
-const OrganizationProjectsTable = ({
-  organizationId,
-  hideSearch = false,
-  hideFilters = false,
-}: {
+interface Props {
   organizationId: string;
-  hideSearch?: boolean;
-  hideFilters?: boolean;
-}) => {
+}
+const OrganizationProjectsTable: React.FC<Props> = ({ organizationId }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
   >(undefined);
@@ -62,10 +58,11 @@ const OrganizationProjectsTable = ({
     []
   );
 
-  const filters = useFilters({
-    type: 'ProjectsForEnrollmentFilterOptions',
-    omit: ['searchTerm'],
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ProjectsForEnrollmentFilterOptions>({
+      type: 'ProjectsForEnrollmentFilterOptions',
+      initialFilterValues: { status: [ProjectFilterOptionStatus.Open] },
+    });
 
   return (
     <GenericTableWithData<
@@ -74,16 +71,14 @@ const OrganizationProjectsTable = ({
       ProjectAllFieldsFragment
     >
       header={
-        !hideSearch && (
-          <TextInput
-            label='Search Projects'
-            name='search projects'
-            placeholder='Search projects...'
-            value={search || ''}
-            onChange={(e) => setSearch(e.target.value)}
-            inputWidth={300}
-          />
-        )
+        <TextInput
+          label='Search Projects'
+          name='search projects'
+          placeholder='Search projects...'
+          value={search || ''}
+          onChange={(e) => setSearch(e.target.value)}
+          inputWidth={300}
+        />
       }
       queryVariables={{
         id: organizationId,
@@ -96,11 +91,10 @@ const OrganizationProjectsTable = ({
       rowName={(row) => row.projectName}
       noData='No projects'
       pagePath='organization.projects'
-      filters={hideFilters ? undefined : filters}
+      filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
       recordType='Project'
-      defaultFilterValues={
-        hideFilters ? undefined : { status: [ProjectFilterOptionStatus.Open] }
-      }
       noSort
     />
   );

@@ -2,10 +2,10 @@ import { Paper } from '@mui/material';
 import React from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
+import useTableFilters from '@/hooks/useTableFilters';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -15,6 +15,7 @@ import {
   GetProjectOutgoingDirectCeReferralsDocument,
   GetProjectOutgoingDirectCeReferralsQuery,
   GetProjectOutgoingDirectCeReferralsQueryVariables,
+  ProjectOutgoingCeReferralFilterOptions,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -65,10 +66,10 @@ interface Props {
  * Table showing outgoing referrals from a project.
  */
 const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
-  const filters = useFilters({
-    type: 'ProjectOutgoingCeReferralFilterOptions',
-    omit: ['searchTerm'],
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ProjectOutgoingCeReferralFilterOptions>({
+      type: 'ProjectOutgoingCeReferralFilterOptions',
+    });
 
   return (
     <Paper>
@@ -82,6 +83,8 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
           id: projectId,
         }}
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
         queryDocument={GetProjectOutgoingDirectCeReferralsDocument}
         pagePath='project.outgoingDirectCeReferrals'
         noData='No referrals'

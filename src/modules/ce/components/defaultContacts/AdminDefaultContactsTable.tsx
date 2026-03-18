@@ -5,10 +5,10 @@ import SwimlaneLabel from './SwimlaneLabel';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import useTableFilters from '@/hooks/useTableFilters';
 import EditProjectCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditProjectCeDefaultContactsModal';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -16,6 +16,7 @@ import {
   GetDefaultContactsDocument,
   GetDefaultContactsQuery,
   GetDefaultContactsQueryVariables,
+  ProjectFilterOptions,
   ProjectFilterOptionStatus,
   ProjectSortOption,
   ProjectWithCeDefaultContactsFragment,
@@ -50,10 +51,11 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
 
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const filters = useFilters({
-    type: 'ProjectFilterOptions',
-    omit: ['status', 'funder', 'ceEnabled', 'searchTerm'],
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ProjectFilterOptions>({
+      type: 'ProjectFilterOptions',
+      omit: ['status', 'funder', 'ceEnabled', 'searchTerm'],
+    });
 
   const columns: DataColumnDef<
     ProjectWithCeDefaultContactsFragment,
@@ -123,6 +125,8 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
             }}
             defaultSortOption={ProjectSortOption.OrganizationAndName}
             filters={filters}
+            filterValues={filterValues}
+            onFilterChange={setFilterValues}
             queryDocument={GetDefaultContactsDocument}
             pagePath='projects'
             paginationItemName='coordinated entry project'

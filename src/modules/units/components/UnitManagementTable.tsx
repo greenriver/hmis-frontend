@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
@@ -20,6 +20,7 @@ import {
   GetUnitsQuery,
   GetUnitsQueryVariables,
   ProjectCoordinatedEntryFeatures,
+  UnitFilterOptions,
   UnitTableRowFieldsFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -59,14 +60,15 @@ const UnitManagementTable: React.FC<Props> = ({
     ];
   }, [coordinatedEntryFeatures.supportsReferrals, unitGroupId]);
 
-  const filters = useFilters({
-    type: 'UnitFilterOptions',
-    omit: [
-      'status', // deprecated filter option, remove
-      ...(unitGroupId ? ['unitType'] : []), // if looking at units in one group, no need to show this filter
-    ],
-    pickListArgs: { projectId },
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<UnitFilterOptions>({
+      type: 'UnitFilterOptions',
+      omit: [
+        'status', // deprecated filter option, remove
+        ...(unitGroupId ? ['unitType'] : []), // if looking at units in one group, no need to show this filter
+      ],
+      pickListArgs: { projectId },
+    });
 
   const { project } = useProjectDashboardContext();
   const { canManageUnits, canUpdateUnitAvailability } = project.access;
@@ -130,6 +132,7 @@ const UnitManagementTable: React.FC<Props> = ({
         queryVariables={{
           id: projectId,
           includeCeFields: coordinatedEntryFeatures.supportsReferrals || false,
+          filters: unitGroupId ? { unitGroup: [unitGroupId] } : undefined,
         }}
         queryDocument={GetUnitsDocument}
         columns={columns}
@@ -143,8 +146,9 @@ const UnitManagementTable: React.FC<Props> = ({
             row.canBeMarkedUnavailable
           )
         }
-        defaultFilterValues={{ unitGroup: unitGroupId }}
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
         recordType='Unit'
         EnhancedTableToolbarProps={{
           title: canDoAnyUnitActions ? 'Manage Units' : 'Units',

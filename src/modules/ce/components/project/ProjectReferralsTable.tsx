@@ -1,15 +1,16 @@
 import { Paper } from '@mui/material';
 import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import { REFERRAL_COLUMNS } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralTableFieldsFragment,
   GetProjectCeReferralsDocument,
   GetProjectCeReferralsQuery,
   GetProjectCeReferralsQueryVariables,
+  ProjectCeReferralFilterOptions,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -34,10 +35,11 @@ interface Props {
  * If user has "canViewOwnReferrals", then they will only be able to see referrals that have an available task assigned to them.
  */
 const ProjectReferralsTable: React.FC<Props> = ({ projectId }) => {
-  const filters = useFilters({
-    type: 'ProjectCeReferralFilterOptions',
-    omit: ['searchTerm'],
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ProjectCeReferralFilterOptions>({
+      type: 'ProjectCeReferralFilterOptions',
+      omit: ['searchTerm'],
+    });
 
   return (
     <Paper>
@@ -51,6 +53,8 @@ const ProjectReferralsTable: React.FC<Props> = ({ projectId }) => {
           id: projectId,
         }}
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
         queryDocument={GetProjectCeReferralsDocument}
         pagePath='project.ceReferrals'
         noData='No referrals'

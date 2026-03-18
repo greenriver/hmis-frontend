@@ -192,6 +192,25 @@ function useFiltersImpl<T>(
   }, [type, dynamicFilters, omit, pickListArgs]);
 }
 
+/** useTableFilters export is intentionally overloaded so that when syncToUrl is false,
+ * the return type is only { filters }; when true it includes filterValues and setFilterValues.
+ * Callers then get accurate types without optional/undefined.
+ *
+ * If using useTableFilters with 'syncToUrl: false', filter state is managed by GenericTableWithData.
+ **/
+
+export default function useTableFilters<T = Record<string, unknown>>(
+  params: FilterParams<T> & { syncToUrl?: true }
+): {
+  filters: TableFilterType<T>;
+  filterValues: Partial<T>;
+  setFilterValues: (values: Partial<T>) => void;
+};
+
+export default function useTableFilters<T = Record<string, unknown>>(
+  params: FilterParams<T> & { syncToUrl: false }
+): { filters: TableFilterType<T> };
+
 export default function useTableFilters<T = Record<string, unknown>>({
   type,
   initialFilterValues = {} as Partial<T>,
@@ -200,11 +219,13 @@ export default function useTableFilters<T = Record<string, unknown>>({
   dynamicFilters,
   syncToUrl = true,
   omitFromUrl = [],
-}: FilterParams<T>): {
-  filters: TableFilterType<T>; // filter configuration
-  filterValues: Partial<T>; // filter values (if syncToUrl is true)
-  setFilterValues: (values: Partial<T>) => void; // set filter values (if syncToUrl is true)
-} {
+}: FilterParams<T>):
+  | {
+      filters: TableFilterType<T>; // filter configuration
+      filterValues: Partial<T>; // filter values (if syncToUrl is true)
+      setFilterValues: (values: Partial<T>) => void; // set filter values (if syncToUrl is true)
+    }
+  | { filters: TableFilterType<T> } {
   const filters = useFiltersImpl<T>({
     type,
     initialFilterValues,
@@ -226,6 +247,10 @@ export default function useTableFilters<T = Record<string, unknown>>({
     paramsDefinition: urlParamsDefinition,
     initial: initialFilterValues,
   });
+
+  if (!syncToUrl) {
+    return { filters };
+  }
 
   return {
     filters,

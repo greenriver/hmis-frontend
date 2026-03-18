@@ -56,6 +56,7 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
   const { filters, filterValues, setFilterValues } =
     useTableFilters<EnrollmentAccessSummaryFilterOptions>({
       type: 'EnrollmentAccessSummaryFilterOptions',
+      initialFilterValues: { onOrAfter: startDate },
     });
 
   return (
@@ -68,7 +69,6 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
         id: userId,
         filters: { searchTerm },
       }}
-      defaultFilterValues={{ onOrAfter: startDate }}
       queryDocument={GetUserEnrollmentSummariesDocument}
       columns={columns}
       pagePath='user.enrollmentAccessSummaries'

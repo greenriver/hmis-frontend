@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import useTableFilters from '@/hooks/useTableFilters';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
 import {
   ASSESSMENT_COLUMNS,
@@ -13,9 +14,9 @@ import useClientDashboardContext from '@/modules/client/hooks/useClientDashboard
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription, entryExitRange } from '@/modules/hmis/hmisUtil';
 import {
+  AssessmentFilterOptions,
   AssessmentSortOption,
   GetClientAssessmentsDocument,
   GetClientAssessmentsQuery,
@@ -50,9 +51,10 @@ const ClientAssessmentsPage = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const { client } = useClientDashboardContext();
 
-  const filters = useFilters({
-    type: 'AssessmentFilterOptions',
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<AssessmentFilterOptions>({
+      type: 'AssessmentFilterOptions',
+    });
 
   const rowLinkTo = useCallback(
     (assessment: ClientAssessmentType) =>
@@ -86,6 +88,8 @@ const ClientAssessmentsPage = () => {
           ClientAssessmentType
         >
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
           columns={COLUMNS}

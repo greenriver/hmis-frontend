@@ -1,4 +1,5 @@
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
@@ -6,12 +7,12 @@ import {
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   assessmentDescription,
   clientBriefName,
 } from '@/modules/hmis/hmisUtil';
 import {
+  AssessmentsForHouseholdFilterOptions,
   GetHouseholdAssessmentsDocument,
   GetHouseholdAssessmentsQuery,
   GetHouseholdAssessmentsQueryVariables,
@@ -38,10 +39,11 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
   householdId,
   projectId,
 }) => {
-  const filters = useFilters({
-    type: 'AssessmentsForHouseholdFilterOptions',
-    pickListArgs: { projectId },
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<AssessmentsForHouseholdFilterOptions>({
+      type: 'AssessmentsForHouseholdFilterOptions',
+      pickListArgs: { projectId },
+    });
 
   return (
     <GenericTableWithData<
@@ -50,6 +52,8 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
       HhmAssessmentType
     >
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
       queryVariables={{ id: householdId }}
       queryDocument={GetHouseholdAssessmentsDocument}
       columns={COLUMNS}

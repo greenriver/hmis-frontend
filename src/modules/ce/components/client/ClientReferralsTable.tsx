@@ -2,16 +2,16 @@ import { Paper } from '@mui/material';
 import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
-
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   REFERRAL_COLUMNS,
   REFERRAL_WITH_PROJECT_COLUMNS,
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { Routes } from '@/routes/routes';
 import {
   ClientCeReferralTableFieldsFragment,
+  ClientCeReferralFilterOptions,
   GetClientCeReferralsDocument,
   GetClientCeReferralsQuery,
   GetClientCeReferralsQueryVariables,
@@ -32,10 +32,11 @@ const ClientReferralsTable: React.FC = () => {
     clientId: string;
   };
 
-  const filters = useFilters({
-    type: 'ClientCeReferralFilterOptions',
-    omit: ['workflowTemplate'],
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ClientCeReferralFilterOptions>({
+      type: 'ClientCeReferralFilterOptions',
+      omit: ['workflowTemplate'],
+    });
 
   return (
     <Paper>
@@ -59,6 +60,8 @@ const ClientReferralsTable: React.FC = () => {
         }
         rowActionTitle='View Referral'
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
       />
     </Paper>
   );

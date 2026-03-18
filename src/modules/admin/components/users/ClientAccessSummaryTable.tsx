@@ -48,6 +48,7 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
   const { filters, filterValues, setFilterValues } =
     useTableFilters<ClientAccessSummaryFilterOptions>({
       type: 'ClientAccessSummaryFilterOptions',
+      initialFilterValues: { onOrAfter: startDate },
     });
 
   return (
@@ -61,9 +62,6 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
         filters: { searchTerm },
       }}
       queryDocument={GetUserClientSummariesDocument}
-      defaultFilterValues={{
-        onOrAfter: startDate,
-      }}
       columns={columns}
       pagePath='user.clientAccessSummaries'
       noData='No access history'
