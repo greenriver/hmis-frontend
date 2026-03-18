@@ -164,6 +164,7 @@ const useSearchParamsState = ({
     const currentParams = getAllCurrentParams(searchParams);
     populateParams(currentParams, accumulator);
 
+    // `navigate` instead of `useSearchParams` as workaround for https://github.com/remix-run/react-router/issues/8393
     navigate(
       {
         pathname,
@@ -213,11 +214,9 @@ const useSearchParamsState = ({
         const hasKey = Object.prototype.hasOwnProperty.call(nextValues, key);
         let value = hasKey ? nextValues[key] : undefined;
 
-        if (hasKey && value !== undefined && paramsDefinition[key]) {
-          if (paramsDefinition[key].type === 'date' && isDate(value)) {
-            // serialize date. if it is invalid, it will be null
-            value = formatDateForGql(value);
-          }
+        if (hasKey && paramsDefinition[key]?.type === 'date' && isDate(value)) {
+          // Try to serialize date. If it is invalid, it will be set to null.
+          value = formatDateForGql(value);
         }
 
         const isEmpty =
