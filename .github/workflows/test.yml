@@ -46,7 +46,7 @@ jobs:
         yarn storybook --smoke-test
     - name: Run Chromatic
       id: chromatic
-      uses: chromaui/action@latest
+      uses: chromaui/action@0794e6939fe40ce46a88963f818092afc427da5b # v15
       with:
         projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
         zip: true
