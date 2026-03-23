@@ -136,48 +136,51 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   const isMobile = useIsMobile();
   const isTiny = useIsMobile('sm');
 
+  // type of display (table or cards)
+  const [displayType, setDisplayType] = useState<DisplayType>('table');
+
   // Whether the user has searched for clients (and the results are visible).
   // Visibility of "Add New Client" button is gated on this, to prevent user from adding
   // duplicate clients before completing a search.
   const [hasSearched, setHasSearched] = useState(false);
+
   // the current search input, including text search and advanced search fields
   const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
     null
   );
 
-  // URL params representing the state of the page.
-  // Use useSearchParamsState hook so the source of truth is the URL params,
-  // but we can interact with them as if they are React state
-  const [{ searchQueryId, displayType }, setSearchParams] =
-    useSearchParamsState({
-      paramsDefinition: {
-        // the ID of the ClientSearchQuery from the backend
-        searchQueryId: { type: 'string', default: null },
-        // Whether the search type is broad or specific (advanced)
-        searchType: { type: 'string', default: 'broad' },
-        // Whether the results are displayed as a table or cards
-        displayType: { type: 'string', default: 'table' },
+  // search query ID in the URL params to support back-button navigation without PII in the URL
+  const [{ searchQueryId }, setSearchParams] = useSearchParamsState({
+    paramsDefinition: {
+      // the ID of the ClientSearchQuery from the backend
+      searchQueryId: { type: 'string', default: null },
+    },
+  });
+
+  // Resolve the search query ID into usable search params
+  const { resolvedParams: resolvedSearchInput, loading: searchQueryLoading } =
+    useResolvedSearchQueryId({
+      searchQueryId,
+      onCompleted: (resolvedParams) => {
+        if (resolvedParams) {
+          setSearchInput(resolvedParams);
+        }
       },
     });
 
-  const setDisplayType = useCallback(
-    (displayType: DisplayType) => {
-      setSearchParams({ displayType });
-    },
-    [setSearchParams]
-  );
+  useEffect(() => {
+    if (resolvedSearchInput) setSearchInput(resolvedSearchInput);
+  }, [resolvedSearchInput]);
 
   const clearSearch = useCallback(() => {
     setSearchInput(null);
     setHasSearched(false);
   }, []);
 
-  // Clear search when the search type changes
-  useEffect(() => {
-    clearSearch();
-  }, [searchType, clearSearch]);
-
   // Clear search when the search query ID is cleared (such as using the back-button)
+  // todo @martha - this still has some funny behavior but not all the time, need to consistently repro.
+  // example: search, search again, click client, back button, back button again
+  // I keep seeing the search params flicker at unexpected times, maybe it's related to a network request
   useEffect(() => {
     if (searchQueryId === null) {
       clearSearch();
@@ -189,16 +192,6 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     clearSearch();
     setSearchParams({ searchQueryId: null });
   }, [clearSearch, setSearchParams]);
-
-  // Resolve the search query ID into usable search params
-  const { loading: searchQueryLoading } = useResolvedSearchQueryId({
-    searchQueryId,
-    onCompleted: (resolvedParams) => {
-      if (resolvedParams) {
-        setSearchInput(resolvedParams);
-      }
-    },
-  });
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
@@ -302,6 +295,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
             queryDocument={SearchClientsDocument}
             onDataReady={() => setHasSearched(true)}
             onCompleted={(data) => {
+              // todo @martha - move this up into a useCallback handler
               // only update the search params if this is the completion of a network call, not a cache hit.
               // this avoids buggy behavior with the back-button
               const returnedSearchQueryId = data?.clientSearch.searchQueryId;
