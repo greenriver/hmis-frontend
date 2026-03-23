@@ -32,10 +32,7 @@ const transformDataToInput = (
   return result;
 };
 
-const useResolvedSearchQueryId = ({
-  searchQueryId,
-  onCompleted,
-}: Props): Result => {
+const useResolvedSearchQueryId = ({ searchQueryId }: Props): Result => {
   const skip = !searchQueryId;
 
   const { data, loading, error } = useGetSearchQueryQuery({
@@ -44,8 +41,6 @@ const useResolvedSearchQueryId = ({
     // cache-first is Apollo's default; Setting it explicitly to call out that having this uuid in the cache already is likely
     // if the user is navigating with the back-button, so we don't want to hit the network again in that case
     fetchPolicy: 'cache-first',
-    onCompleted: (data) =>
-      onCompleted?.(transformDataToInput(data?.searchQuery)),
   });
 
   if (error) throw error;

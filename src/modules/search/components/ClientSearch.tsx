@@ -158,16 +158,14 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   });
 
   // Resolve the search query ID into usable search params
-  const { loading: searchQueryLoading } = useResolvedSearchQueryId({
-    searchQueryId,
-    onCompleted: (clientSearchInput) => {
-      if (clientSearchInput) setSearchInput(clientSearchInput);
-    },
-  });
+  const { resolvedParams: resolvedSearchInput, loading: searchQueryLoading } =
+    useResolvedSearchQueryId({
+      searchQueryId,
+    });
 
-  // useEffect(() => {
-  //   if (resolvedSearchInput) setSearchInput(resolvedSearchInput);
-  // }, [resolvedSearchInput]);
+  useEffect(() => {
+    if (resolvedSearchInput) setSearchInput(resolvedSearchInput);
+  }, [resolvedSearchInput]);
 
   const clearSearch = useCallback(() => {
     setSearchInput(null);
