@@ -244,6 +244,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
               id: returnedSearchQueryId,
               // Populate fields that aren't included in this search as null.
               // Otherwise, apollo makes a network request because it thinks it's missing the full object
+              // todo @martha - can this be neatened up?
               textSearch: searchInput?.textSearch || null,
               personalId: searchInput?.personalId || null,
               warehouseId: searchInput?.warehouseId || null,

@@ -16,6 +16,8 @@ type Result = {
   loading: boolean;
 };
 
+// todo @martha - should this really be the responsibility of the hook, or the parent?
+// consider reusability
 const transformDataToInput = (
   data: GetSearchQueryQuery['searchQuery']
 ): ClientSearchInput => {
