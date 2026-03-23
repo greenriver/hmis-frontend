@@ -65,6 +65,9 @@ const ManageHousehold = ({
   const { globalFeatureFlags } = useGlobalFeatureFlags();
 
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
+  // Whether the user has searched for clients (and the results are visible).
+  // Visibility of "Add New Client" button is gated on this, to prevent user from adding
+  // duplicate clients before completing a search.
   const [hasSearched, setHasSearched] = useState(false);
   // Search is expanded by default only if this is a new household (no members yet)
   const [searchOpen, setSearchOpen] = useState(!householdId);
@@ -252,7 +255,7 @@ const ManageHousehold = ({
                   filters={filters}
                   recordType='Client'
                   defaultSortOption={ClientSortOption.BestMatch}
-                  onCompleted={() => setHasSearched(true)}
+                  onDataReady={() => setHasSearched(true)}
                   rowSecondaryActionConfigs={(row) => [
                     getViewClientMenuItem(row),
                   ]}
