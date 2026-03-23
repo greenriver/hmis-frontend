@@ -113,10 +113,25 @@ export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
   [CLIENT_COLUMNS.name, CLIENT_COLUMNS.id, CLIENT_COLUMNS.dobAge];
 
+interface ClientSearchProps {
+  searchType: SearchType;
+}
+
 /**
- * Client Search page
+ * Main client search UI
+ *
+ * This component renders:
+ * - "Search Type" toggle for switching between 'broad' and 'specific' search modes
+ * - Input form for text search or advanced search, depending on the search type
+ * - Paginated search results table, which can be displayed as cards or table (state tracked internally)
+ *
+ * Special logic:
+ * - Tracks whether or not a search has occurred, and displays an "Add New Client" button if it has.
+ *   This is a guard to prevent users from client duplicate clients without searching first.
+ * - Depending on global feature flags, the table may include an "MCI ID" column.
+ * - Search parameters are synced with the URL (TODO: update when changed to searchQueryId approach)
  */
-const ClientSearch = () => {
+const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   const apolloClient = useApolloClient();
   const isMobile = useIsMobile();
   const isTiny = useIsMobile('sm');
@@ -131,7 +146,7 @@ const ClientSearch = () => {
   // URL params representing the state of the page.
   // Use useSearchParamsState hook so the source of truth is the URL params,
   // but we can interact with them as if they are React state
-  const [{ searchQueryId, searchType, displayType }, setSearchParams] =
+  const [{ searchQueryId, displayType }, setSearchParams] =
     useSearchParamsState({
       paramsDefinition: {
         // the ID of the ClientSearchQuery from the backend
@@ -142,14 +157,6 @@ const ClientSearch = () => {
         displayType: { type: 'string', default: 'table' },
       },
     });
-
-  const setSearchType = useCallback(
-    (searchType: SearchType) => {
-      // Clear search input when search type changes
-      setSearchParams({ searchType, searchQueryId: null });
-    },
-    [setSearchParams]
-  );
 
   const setDisplayType = useCallback(
     (displayType: DisplayType) => {
@@ -242,7 +249,7 @@ const ClientSearch = () => {
         justifyContent='space-between'
         alignItems={isTiny ? undefined : 'flex-end'}
       >
-        <ClientSearchTypeToggle value={searchType} onChange={setSearchType} />
+        <ClientSearchTypeToggle value={searchType} />
         {hasSearched && (
           <RootPermissionsFilter permissions='canEditClients'>
             <Box sx={{ height: 'fit-content' }}>
