@@ -149,7 +149,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     null
   );
 
-  // search query ID in the URL params to support back-button navigation without PII in the URL
+  // The current search query ID. Stored in the URL params to support back-button navigation without PII in the URL.
   const [{ searchQueryId }, setSearchParams] = useSearchParamsState({
     paramsDefinition: {
       // the ID of the ClientSearchQuery from the backend
@@ -158,19 +158,16 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   });
 
   // Resolve the search query ID into usable search params
-  const { resolvedParams: resolvedSearchInput, loading: searchQueryLoading } =
-    useResolvedSearchQueryId({
-      searchQueryId,
-      onCompleted: (resolvedParams) => {
-        if (resolvedParams) {
-          setSearchInput(resolvedParams);
-        }
-      },
-    });
+  const { loading: searchQueryLoading } = useResolvedSearchQueryId({
+    searchQueryId,
+    onCompleted: (clientSearchInput) => {
+      if (clientSearchInput) setSearchInput(clientSearchInput);
+    },
+  });
 
-  useEffect(() => {
-    if (resolvedSearchInput) setSearchInput(resolvedSearchInput);
-  }, [resolvedSearchInput]);
+  // useEffect(() => {
+  //   if (resolvedSearchInput) setSearchInput(resolvedSearchInput);
+  // }, [resolvedSearchInput]);
 
   const clearSearch = useCallback(() => {
     setSearchInput(null);
@@ -227,6 +224,43 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
       setSearchInput(cleaned);
     };
   }, []);
+
+  // When search data is returned, update the URL params and the apollo cache
+  const handleSearchCompleted = useCallback(
+    (data: SearchClientsQuery) => {
+      // only update the search params if this is the completion of a network call, not a cache hit.
+      // this avoids buggy behavior with the back-button
+      const returnedSearchQueryId = data?.clientSearch.searchQueryId;
+      if (returnedSearchQueryId && searchQueryId !== returnedSearchQueryId) {
+        // Write the search query we received to the cache with the current search params,
+        // so it's ready next time we query SearchQuery even though it wouldn't normally be in the cache
+        // because we got it from a SearchClients query, not a SearchQuery query.
+        apolloClient.writeQuery({
+          query: GetSearchQueryDocument,
+          variables: { id: returnedSearchQueryId },
+          data: {
+            searchQuery: {
+              __typename: 'SearchQuery',
+              id: returnedSearchQueryId,
+              // Populate fields that aren't included in this search as null.
+              // Otherwise, apollo makes a network request because it thinks it's missing the full object
+              textSearch: searchInput?.textSearch || null,
+              personalId: searchInput?.personalId || null,
+              warehouseId: searchInput?.warehouseId || null,
+              firstName: searchInput?.firstName || null,
+              lastName: searchInput?.lastName || null,
+              ssnSerial: searchInput?.ssnSerial || null,
+              dob: searchInput?.dob || null,
+            },
+          },
+        });
+
+        // update the url bar with the searchQueryId we just received.
+        setSearchParams({ searchQueryId: returnedSearchQueryId });
+      }
+    },
+    [searchQueryId, setSearchParams, searchInput, apolloClient]
+  );
 
   const filters = useFilters({
     type: 'ClientFilterOptions',
@@ -294,34 +328,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
             onDataReady={() => setHasSearched(true)}
-            onCompleted={(data) => {
-              // todo @martha - move this up into a useCallback handler
-              // only update the search params if this is the completion of a network call, not a cache hit.
-              // this avoids buggy behavior with the back-button
-              const returnedSearchQueryId = data?.clientSearch.searchQueryId;
-              if (
-                returnedSearchQueryId &&
-                searchQueryId !== returnedSearchQueryId
-              ) {
-                // update the url bar with the searchQueryId we just received
-                setSearchParams({ searchQueryId: returnedSearchQueryId });
-
-                // write search query we received to the cache with the current search params,
-                // so it's ready next time we query SearchQuery even though it wouldn't normally be in the cache
-                // because we got it from a SearchClients query, not a SearchQuery query
-                apolloClient.writeQuery({
-                  query: GetSearchQueryDocument,
-                  variables: { id: returnedSearchQueryId },
-                  data: {
-                    searchQuery: {
-                      __typename: 'SearchQuery',
-                      id: returnedSearchQueryId,
-                      params: searchInput,
-                    },
-                  },
-                });
-              }
-            }}
+            onCompleted={handleSearchCompleted}
             columns={columns}
             rowLinkTo={(client) => getViewClientMenuItem(client).to}
             rowName={(row) => clientBriefName(row)}

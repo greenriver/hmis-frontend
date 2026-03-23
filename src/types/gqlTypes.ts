@@ -7920,8 +7920,14 @@ export enum SchoolStatus {
 
 export type SearchQuery = {
   __typename?: 'SearchQuery';
+  dob?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  params: Scalars['JsonObject']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  personalId?: Maybe<Scalars['String']['output']>;
+  ssnSerial?: Maybe<Scalars['String']['output']>;
+  textSearch?: Maybe<Scalars['String']['output']>;
+  warehouseId?: Maybe<Scalars['String']['output']>;
 };
 
 /** HUD or Custom Service rendered */
@@ -46873,7 +46879,17 @@ export type GetSearchQueryQueryVariables = Exact<{
 
 export type GetSearchQueryQuery = {
   __typename?: 'Query';
-  searchQuery?: { __typename?: 'SearchQuery'; id: string; params: any } | null;
+  searchQuery?: {
+    __typename?: 'SearchQuery';
+    id: string;
+    textSearch?: string | null;
+    personalId?: string | null;
+    warehouseId?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    ssnSerial?: string | null;
+    dob?: string | null;
+  } | null;
 };
 
 export type ServiceTypeFieldsFragment = {
@@ -69265,7 +69281,13 @@ export const GetSearchQueryDocument = gql`
   query GetSearchQuery($id: ID!) {
     searchQuery(id: $id) {
       id
-      params
+      textSearch
+      personalId
+      warehouseId
+      firstName
+      lastName
+      ssnSerial
+      dob
     }
   }
 `;

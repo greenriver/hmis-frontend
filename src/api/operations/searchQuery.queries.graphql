@@ -1,6 +1,12 @@
 query GetSearchQuery($id: ID!) {
   searchQuery(id: $id) {
     id
-    params
+    textSearch
+    personalId
+    warehouseId
+    firstName
+    lastName
+    ssnSerial
+    dob
   }
 }

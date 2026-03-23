@@ -7387,6 +7387,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'SearchQuery',
     fields: [
+      { name: 'dob', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'firstName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       {
         name: 'id',
         type: {
@@ -7396,12 +7401,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'params',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
-        },
+        name: 'lastName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'personalId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'ssnSerial',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'textSearch',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'warehouseId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
