@@ -136,7 +136,9 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   const isMobile = useIsMobile();
   const isTiny = useIsMobile('sm');
 
-  // whether search has occurred
+  // Whether the user has searched for clients (and the results are visible).
+  // Visibility of "Add New Client" button is gated on this, to prevent user from adding
+  // duplicate clients before completing a search.
   const [hasSearched, setHasSearched] = useState(false);
   // the current search input, including text search and advanced search fields
   const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
@@ -298,8 +300,8 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
           >
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
-            onCompleted={() => setHasSearched(true)} // set hasSearched when the GenericTable returns any results (whether from network or cache)
-            onCompleteNetworkQuery={(data) => {
+            onDataReady={() => setHasSearched(true)}
+            onCompleted={(data) => {
               // only update the search params if this is the completion of a network call, not a cache hit.
               // this avoids buggy behavior with the back-button
               const returnedSearchQueryId = data?.clientSearch.searchQueryId;

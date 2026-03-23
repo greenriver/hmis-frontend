@@ -81,8 +81,10 @@ export interface Props<
     TableFilterType<FilterOptionsType>,
     SortOptionsType
   >['tableDisplayOptionButtons'];
-  onCompleted?: (data: Query) => void; // callback when the data is fetched (whether from cache or network)
-  onCompleteNetworkQuery?: (data: Query) => void; // callback when the the data is fetched from the network
+  /** Fires when data is available (network or cache). Use to gate actions until results are shown, e.g. to reduce duplicate client record creation. */
+  onDataReady?: (data: Query) => void;
+  /** Fires when data is fetched from network */
+  onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
   loading?: boolean;
 }
@@ -128,8 +130,8 @@ const GenericTableWithData = <
   noData,
   rowsPerPageOptions,
   tableDisplayOptionButtons,
+  onDataReady,
   onCompleted,
-  onCompleteNetworkQuery,
   paginationItemName,
   filterRows,
   vertical,
@@ -200,15 +202,17 @@ const GenericTableWithData = <
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
-    onCompleted: onCompleteNetworkQuery,
+    onCompleted,
   });
 
   const hasRefetched = useHasRefetched(networkStatus);
 
-  // workaround to fire "onCompleted" even if data was fetched from cache
+  // Fire onDataReady when data is available (from network or cache). Apollo's onCompleted
+  // only runs for network completions, so we use this effect to run the callback whenever
+  // the table has data to show.
   useEffect(() => {
-    if (onCompleted && data) onCompleted(data);
-  }, [data, onCompleted]);
+    if (onDataReady && data) onDataReady(data);
+  }, [onDataReady, data]);
 
   useEffect(() => {
     if (!isEqual(previousQueryVariables, queryVariables)) {
