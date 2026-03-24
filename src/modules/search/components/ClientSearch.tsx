@@ -4,7 +4,7 @@ import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
 import { isEmpty, isNil, omitBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import useResolvedSearchQueryId from '../hooks/useResolvedSearchQueryId';
+import useSearchQuery from '../hooks/useSearchQuery';
 import {
   clientSearchInputToSearchQueryCacheFields,
   searchQueryToClientSearchInput,
@@ -161,9 +161,9 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   });
 
   // If there is a searchQueryId in the URL params, load the search query (from cache or network)
-  const { searchQuery, loading: searchQueryLoading } = useResolvedSearchQueryId(
-    { searchQueryId }
-  );
+  const { searchQuery, loading: searchQueryLoading } = useSearchQuery({
+    searchQueryId,
+  });
 
   // Resolve the search query into a usable ClientSearchInput
   const resolvedSearchInput = useMemo(

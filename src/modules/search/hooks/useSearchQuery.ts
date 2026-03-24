@@ -16,7 +16,7 @@ type Result = {
 /**
  * Loads `searchQuery` by id (e.g. from URL).
  */
-const useResolvedSearchQueryId = ({ searchQueryId }: Props): Result => {
+const useSearchQuery = ({ searchQueryId }: Props): Result => {
   const skip = !searchQueryId;
 
   const { data, loading, error } = useGetSearchQueryQuery({
@@ -35,4 +35,4 @@ const useResolvedSearchQueryId = ({ searchQueryId }: Props): Result => {
   };
 };
 
-export default useResolvedSearchQueryId;
+export default useSearchQuery;
