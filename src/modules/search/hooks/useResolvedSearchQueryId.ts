@@ -1,37 +1,18 @@
-import { useMemo } from 'react';
-import {
-  ClientSearchInput,
-  GetSearchQueryQuery,
-  useGetSearchQueryQuery,
-} from '@/types/gqlTypes';
+import { GetSearchQueryQuery, useGetSearchQueryQuery } from '@/types/gqlTypes';
 
 interface Props {
-  searchQueryId?: string;
-  user?: any;
-  onCompleted?: (input: ClientSearchInput) => void;
+  searchQueryId?: string | null;
 }
 
 type Result = {
-  resolvedParams: ClientSearchInput;
+  /** Loaded `SearchQuery` for the URL id, or undefined while loading / when skipped. */
+  searchQuery: GetSearchQueryQuery['searchQuery'];
   loading: boolean;
-};
+}; // todo @martha - use a fragment
 
-// todo @martha - should this really be the responsibility of the hook, or the parent?
-// consider reusability
-const transformDataToInput = (
-  data: GetSearchQueryQuery['searchQuery']
-): ClientSearchInput => {
-  const result: ClientSearchInput = {};
-  if (data?.textSearch) result.textSearch = data.textSearch;
-  if (data?.personalId) result.personalId = data.personalId;
-  if (data?.warehouseId) result.warehouseId = data.warehouseId;
-  if (data?.firstName) result.firstName = data.firstName;
-  if (data?.lastName) result.lastName = data.lastName;
-  if (data?.ssnSerial) result.ssnSerial = data.ssnSerial;
-  if (data?.dob) result.dob = data.dob;
-  return result;
-};
-
+/**
+ * Loads `searchQuery` by id (e.g. from URL).
+ */
 const useResolvedSearchQueryId = ({ searchQueryId }: Props): Result => {
   const skip = !searchQueryId;
 
@@ -45,12 +26,8 @@ const useResolvedSearchQueryId = ({ searchQueryId }: Props): Result => {
 
   if (error) throw error;
 
-  const result = useMemo(() => {
-    return transformDataToInput(data?.searchQuery);
-  }, [data?.searchQuery]);
-
   return {
-    resolvedParams: result,
+    searchQuery: data?.searchQuery,
     loading: skip ? false : loading,
   };
 };

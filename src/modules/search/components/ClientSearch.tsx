@@ -5,6 +5,10 @@ import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 import { isEmpty, isNil, omitBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import useResolvedSearchQueryId from '../hooks/useResolvedSearchQueryId';
+import {
+  clientSearchInputToSearchQueryCacheFields,
+  searchQueryToClientSearchInput,
+} from '../searchUtil';
 import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 
@@ -144,7 +148,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   // duplicate clients before completing a search.
   const [hasSearched, setHasSearched] = useState(false);
 
-  // the current search input, including text search and advanced search fields
+  // the current search input (form state), including free text search and advanced search fields
   const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
     null
   );
@@ -152,17 +156,22 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   // The current search query ID. Stored in the URL params to support back-button navigation without PII in the URL.
   const [{ searchQueryId }, setSearchParams] = useSearchParamsState({
     paramsDefinition: {
-      // the ID of the ClientSearchQuery from the backend
       searchQueryId: { type: 'string', default: null },
     },
   });
 
-  // Resolve the search query ID into usable search params
-  const { resolvedParams: resolvedSearchInput, loading: searchQueryLoading } =
-    useResolvedSearchQueryId({
-      searchQueryId,
-    });
+  // If there is a searchQueryId in the URL params, load the search query (from cache or network)
+  const { searchQuery, loading: searchQueryLoading } = useResolvedSearchQueryId(
+    { searchQueryId }
+  );
 
+  // Resolve the search query into a usable ClientSearchInput
+  const resolvedSearchInput = useMemo(
+    () => searchQueryToClientSearchInput(searchQuery),
+    [searchQuery]
+  );
+
+  // Populate the form state with the resolved search input from the SearchQuery
   useEffect(() => {
     if (resolvedSearchInput) setSearchInput(resolvedSearchInput);
   }, [resolvedSearchInput]);
@@ -173,13 +182,8 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   }, []);
 
   // Clear search when the search query ID is cleared (such as using the back-button)
-  // todo @martha - this still has some funny behavior but not all the time, need to consistently repro.
-  // example: search, search again, click client, back button, back button again
-  // I keep seeing the search params flicker at unexpected times, maybe it's related to a network request
   useEffect(() => {
-    if (searchQueryId === null) {
-      clearSearch();
-    }
+    if (searchQueryId === null) clearSearch();
   }, [searchQueryId, clearSearch]);
 
   // Callback for use when the 'clear' button is clicked on either search form
@@ -223,11 +227,12 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     };
   }, []);
 
-  // When search data is returned, update the URL params and the apollo cache
+  // When search data is returned, update the URL params and the apollo cache.
+  // Passed as onCompleted, NOT onDataReady, so we only update the search params
+  // if this is the completion of a network call, not a cache hit.
+  // This avoids buggy behavior with the back-button.
   const handleSearchCompleted = useCallback(
     (data: SearchClientsQuery) => {
-      // only update the search params if this is the completion of a network call, not a cache hit.
-      // this avoids buggy behavior with the back-button
       const returnedSearchQueryId = data?.clientSearch.searchQueryId;
       if (returnedSearchQueryId && searchQueryId !== returnedSearchQueryId) {
         // Write the search query we received to the cache with the current search params,
@@ -240,16 +245,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
             searchQuery: {
               __typename: 'SearchQuery',
               id: returnedSearchQueryId,
-              // Populate fields that aren't included in this search as null.
-              // Otherwise, apollo makes a network request because it thinks it's missing the full object
-              // todo @martha - can this be neatened up?
-              textSearch: searchInput?.textSearch || null,
-              personalId: searchInput?.personalId || null,
-              warehouseId: searchInput?.warehouseId || null,
-              firstName: searchInput?.firstName || null,
-              lastName: searchInput?.lastName || null,
-              ssnSerial: searchInput?.ssnSerial || null,
-              dob: searchInput?.dob || null,
+              ...clientSearchInputToSearchQueryCacheFields(searchInput),
             },
           },
         });

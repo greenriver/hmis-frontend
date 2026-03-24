@@ -1,46 +1,60 @@
-import { isNil, omitBy } from 'lodash-es';
 import { FormValues } from '../form/types';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { ClientSearchInput, FormDefinitionJson } from '@/types/gqlTypes';
+import { ClientSearchInput, GetSearchQueryQuery } from '@/types/gqlTypes';
 
-// Construct js object of permitted query terms from search params
-export const searchParamsToVariables = (
-  searchFormDefinition: FormDefinitionJson,
-  searchParams: URLSearchParams
-) => {
-  const variables: Record<string, any> = {};
-  const fieldNames: [string, boolean][] = searchFormDefinition.item
-    .filter((i) => !!i.mapping?.fieldName)
-    .map((item) => [item.mapping?.fieldName as string, !!item.repeats]);
-  fieldNames.push(['textSearch', false]);
-  fieldNames.push(['projects', true]);
-  fieldNames.forEach(([fieldName, repeats]) => {
-    if (!searchParams.has(fieldName)) return;
-    if (repeats) {
-      variables[fieldName] = searchParams.getAll(fieldName);
-    } else {
-      variables[fieldName] = searchParams.get(fieldName);
-    }
-  });
+/**
+ * Field names shared between the `GetSearchQuery` GraphQL selection and `ClientSearchInput`.
+ * Used to map a loaded `SearchQuery` into form state and to prime Apollo cache after `SearchClients`.
+ */
+const SEARCH_QUERY_FIELD_NAMES = [
+  'textSearch',
+  'personalId',
+  'warehouseId',
+  'firstName',
+  'lastName',
+  'ssnSerial',
+  'dob',
+] as const satisfies ReadonlyArray<keyof ClientSearchInput>;
 
-  return omitBy(variables, isNil);
-};
+// String name of a field shared between SearchQueryType and ClientSearchInput
+type SearchQueryFieldName = (typeof SEARCH_QUERY_FIELD_NAMES)[number];
 
-// Construct from state from query variables
-export const searchParamsToState = (
-  searchParams: URLSearchParams
-): ClientSearchInput => {
-  const variables: Record<string, any> = {};
-  const fieldNames: string[] = SearchFormDefinition.item.map(
-    (item) => item.mapping?.fieldName as string
-  );
+// The `searchQuery` object shape returned by `GetSearchQuery` graphql query
+type SearchQueryType = NonNullable<GetSearchQueryQuery['searchQuery']>;
 
-  [...fieldNames, 'textSearch'].forEach((fieldName) => {
-    if (!searchParams.has(fieldName)) return;
-    variables[fieldName] = searchParams.get(fieldName);
-  });
-  return omitBy(variables, isNil);
-};
+/**
+ * Maps a loaded `SearchQuery` into `ClientSearchInput`.
+ */
+export function searchQueryToClientSearchInput(
+  data: SearchQueryType | null | undefined
+): ClientSearchInput {
+  if (!data) return {};
+  const result: ClientSearchInput = {};
+  for (const key of SEARCH_QUERY_FIELD_NAMES) {
+    const v = data[key];
+    // Omit empty/unset fields, to avoid a double-query with all the unset fields set explicitly to null.
+    if (v) result[key] = v;
+  }
+  return result;
+}
+
+/**
+ * Builds the `SearchQuery`-shaped object for Apollo `writeQuery`, with `null` for missing
+ * keys so the normalized cache object matches the `GetSearchQuery` selection set.
+ */
+export function clientSearchInputToSearchQueryCacheFields(
+  input: ClientSearchInput | null | undefined
+): Pick<SearchQueryType, SearchQueryFieldName> {
+  return {
+    textSearch: input?.textSearch ?? null,
+    personalId: input?.personalId ?? null,
+    warehouseId: input?.warehouseId ?? null,
+    firstName: input?.firstName ?? null,
+    lastName: input?.lastName ?? null,
+    ssnSerial: input?.ssnSerial ?? null,
+    dob: input?.dob ?? null,
+  } satisfies Pick<SearchQueryType, SearchQueryFieldName>;
+}
 
 export const keySearchParamsByLinkId = (
   values?: ClientSearchInput
