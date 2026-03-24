@@ -1072,7 +1072,14 @@ export const protectedRoutes: RouteNode[] = [
           },
         ],
       },
-      { path: '/', element: <ClientSearchPage /> },
+      {
+        path: Routes.CLIENT_SEARCH_ADVANCED,
+        element: <ClientSearchPage searchType='specific' />,
+      },
+      {
+        path: Routes.CLIENT_SEARCH,
+        element: <ClientSearchPage searchType='broad' />,
+      },
       {
         path: '*',
         element: (

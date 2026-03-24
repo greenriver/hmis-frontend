@@ -111,12 +111,25 @@ export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientSearchResultFieldsFragment>[] =
   [CLIENT_COLUMNS.name, CLIENT_COLUMNS.id, CLIENT_COLUMNS.dobAge];
 
+interface ClientSearchProps {
+  searchType: SearchType;
+}
+
 /**
- * Client Search page
+ * Main client search UI
+ *
+ * This component renders:
+ * - "Search Type" toggle for switching between 'broad' and 'specific' search modes
+ * - Input form for text search or advanced search, depending on the search type
+ * - Paginated search results table, which can be displayed as cards or table (state tracked internally)
+ *
+ * Special logic:
+ * - Tracks whether or not a search has occurred, and displays an "Add New Client" button if it has.
+ *   This is a guard to prevent users from client duplicate clients without searching first.
+ * - Depending on global feature flags, the table may include an "MCI ID" column.
+ * - Search parameters are synced with the URL (TODO: update when changed to searchQueryId approach)
  */
-const ClientSearch = () => {
-  // type of search (broad or specific)
-  const [searchType, setSearchType] = useState<SearchType>('broad');
+const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   // type of display (table or cards)
   const [displayType, setDisplayType] = useState<DisplayType>('table');
   // URL search parameters
@@ -126,7 +139,9 @@ const ClientSearch = () => {
     useState<boolean>(false);
   // initial form state derived from the SearchParams
   const [initialValues, setInitialValues] = useState<ClientSearchInputType>();
-  // whether search has occurred
+  // Whether the user has searched for clients (and the results are visible).
+  // Visibility of "Add New Client" button is gated on this, to prevent user from adding
+  // duplicate clients before completing a search.
   const [hasSearched, setHasSearched] = useState(false);
 
   const isMobile = useIsMobile();
@@ -174,7 +189,6 @@ const ClientSearch = () => {
       const initState = searchParamsToState(searchParams);
       setInitialValues(initState);
       setSearchInput(initState);
-      if (!initState.textSearch) setSearchType('specific');
     }
   }, [derivedSearchParams, searchParams]);
 
@@ -216,7 +230,7 @@ const ClientSearch = () => {
         justifyContent='space-between'
         alignItems={isTiny ? undefined : 'flex-end'}
       >
-        <ClientSearchTypeToggle value={searchType} onChange={setSearchType} />
+        <ClientSearchTypeToggle value={searchType} />
         {hasSearched && (
           <RootPermissionsFilter permissions='canEditClients'>
             <Box sx={{ height: 'fit-content' }}>
@@ -265,7 +279,7 @@ const ClientSearch = () => {
           >
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
-            onCompleted={() => setHasSearched(true)}
+            onDataReady={() => setHasSearched(true)}
             columns={columns}
             rowLinkTo={(client) => getViewClientMenuItem(client).to}
             rowName={(row) => clientBriefName(row)}
