@@ -42282,6 +42282,7 @@ export type OmniSearchClientsQuery = {
     __typename?: 'ClientsPaginated';
     limit: number;
     nodesCount: number;
+    searchQueryId?: string | null;
     nodes: Array<{
       __typename?: 'Client';
       id: string;
@@ -65064,6 +65065,7 @@ export const OmniSearchClientsDocument = gql`
         id
         ...ClientOmniSearchFields
       }
+      searchQueryId
     }
   }
   ${ClientOmniSearchFieldsFragmentDoc}

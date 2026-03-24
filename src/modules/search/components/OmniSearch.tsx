@@ -79,12 +79,18 @@ const OmniSearch: React.FC = () => {
     const clients = clientsData?.clientOmniSearch?.nodes || [];
     const numClients = clientsData?.clientOmniSearch?.nodesCount || 0;
     const projects = projectsData?.projects?.nodes || [];
+    const searchQueryId = clientsData?.clientOmniSearch?.searchQueryId || null;
     const recentItems =
       recentItemsData?.currentUser?.recentItems?.slice(0, MAX_RECENT_ITEMS) ||
       [];
 
-    const seeMoreOption: { id: 'seeMore'; __typename: 'SeeMore' } = {
+    const seeMoreOption: {
+      id: 'seeMore';
+      searchQueryId: string | null;
+      __typename: 'SeeMore';
+    } = {
       id: 'seeMore',
+      searchQueryId,
       __typename: 'SeeMore',
     };
 
@@ -137,9 +143,10 @@ const OmniSearch: React.FC = () => {
         });
       }
       if (option.__typename === 'SeeMore') {
-        const search = debouncedSearch
-          ? new URLSearchParams({ textSearch: debouncedSearch })
-          : undefined;
+        const search =
+          debouncedSearch && typeof option.searchQueryId === 'string'
+            ? new URLSearchParams({ searchQueryId: option.searchQueryId })
+            : undefined;
         targetPath =
           generateSafePath(Routes.CLIENT_SEARCH) + (search ? `?${search}` : '');
       }
