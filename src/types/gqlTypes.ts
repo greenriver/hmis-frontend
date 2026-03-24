@@ -3902,8 +3902,6 @@ export type FormProjectMatchesPaginated = {
 export enum FormRole {
   /** Annual */
   Annual = 'ANNUAL',
-  /** Auto exit config */
-  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Case note */
   CaseNote = 'CASE_NOTE',
   /** CE assessment */
@@ -8378,8 +8376,6 @@ export type StartCeReferralStepPayload = {
 
 /** Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations. */
 export enum StaticFormRole {
-  /** Auto exit config */
-  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
   /** Form definition */
