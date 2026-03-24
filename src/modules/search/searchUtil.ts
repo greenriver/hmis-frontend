@@ -3,8 +3,9 @@ import { SearchFormDefinition } from '@/modules/form/data';
 import { ClientSearchInput, SearchQueryFieldsFragment } from '@/types/gqlTypes';
 
 /**
- * Field names from `SearchQueryFields` that map to `ClientSearchInput`.
- * Used to map a loaded `SearchQuery` into form state and to prime Apollo cache after `SearchClients`.
+ * Field names from `SearchQueryFields` that map to `ClientSearchInput`. Used:
+ * - to map a loaded `SearchQuery` into form state
+ * - to prime Apollo cache after `SearchClients`
  */
 const SEARCH_QUERY_FIELD_NAMES = [
   'textSearch',
@@ -24,13 +25,16 @@ type SearchQueryFieldName = (typeof SEARCH_QUERY_FIELD_NAMES)[number];
  * (so callers can treat it as "nothing to run yet").
  */
 export function searchQueryToClientSearchInput(
-  data: SearchQueryFieldsFragment | null | undefined
+  data: SearchQueryFieldsFragment | null
 ): ClientSearchInput | null {
   if (!data) return null;
   const result: ClientSearchInput = {};
   for (const key of SEARCH_QUERY_FIELD_NAMES) {
     const v = data[key];
-    // Omit empty/unset fields, to avoid a double-query with all the unset fields set explicitly to null.
+    // Omit empty/unset fields.
+    // This prevents the constructed search input object from appearing
+    // to have changed compared to the object ClientSearch created from
+    // user input, which is desirable to avoid double-querying.
     if (v) result[key] = v;
   }
   return result;
@@ -41,7 +45,7 @@ export function searchQueryToClientSearchInput(
  * keys so the normalized cache object matches the `SearchQueryFields` fragment selection.
  */
 export function clientSearchInputToSearchQueryCacheFields(
-  input: ClientSearchInput | null | undefined
+  input: ClientSearchInput | null
 ): Pick<SearchQueryFieldsFragment, SearchQueryFieldName> {
   return {
     textSearch: input?.textSearch ?? null,
