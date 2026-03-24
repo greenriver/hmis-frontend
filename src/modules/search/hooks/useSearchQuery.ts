@@ -8,13 +8,12 @@ interface Props {
 }
 
 type Result = {
-  // Loaded `SearchQueryFields` fragment, or undefined while loading / when skipped.
-  searchQuery: SearchQueryFieldsFragment | null | undefined;
+  searchQuery: SearchQueryFieldsFragment | null;
   loading: boolean;
 };
 
 /**
- * Loads `searchQuery` by id (e.g. from URL).
+ * Loads `searchQuery` by id
  */
 const useSearchQuery = ({ searchQueryId }: Props): Result => {
   const skip = !searchQueryId;
@@ -30,7 +29,7 @@ const useSearchQuery = ({ searchQueryId }: Props): Result => {
   if (error) throw error;
 
   return {
-    searchQuery: data?.searchQuery,
+    searchQuery: data?.searchQuery || null,
     loading: skip ? false : loading,
   };
 };

@@ -153,14 +153,14 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     null
   );
 
-  // The current search query ID. Stored in the URL params to support back-button navigation without PII in the URL.
+  // The current search query ID. Stored in the URL params to support back-button navigation
   const [{ searchQueryId }, setSearchParams] = useSearchParamsState({
     paramsDefinition: {
       searchQueryId: { type: 'string', default: null },
     },
   });
 
-  // If there is a searchQueryId in the URL params, load the search query (from cache or network)
+  // If there is a searchQueryId in the URL params, load the search query
   const { searchQuery, loading: searchQueryLoading } = useSearchQuery({
     searchQueryId,
   });
@@ -228,16 +228,15 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   }, []);
 
   // When search data is returned, update the URL params and the apollo cache.
-  // Passed as onCompleted, NOT onDataReady, so we only update the search params
+  // Passed to GenericTable as onCompleted, NOT onDataReady, so we only update the search params
   // if this is the completion of a network call, not a cache hit.
   // This avoids buggy behavior with the back-button.
   const handleSearchCompleted = useCallback(
     (data: SearchClientsQuery) => {
       const returnedSearchQueryId = data?.clientSearch.searchQueryId;
       if (returnedSearchQueryId && searchQueryId !== returnedSearchQueryId) {
-        // Write the search query we received to the cache with the current search params,
-        // so it's ready next time we query SearchQuery even though it wouldn't normally be in the cache
-        // because we got it from a SearchClients query, not a SearchQuery query.
+        // Prime the Apollo cache with the search query we just received,
+        // so it's ready next time we query with GetSearchQuery
         apolloClient.writeQuery({
           query: GetSearchQueryDocument,
           variables: { id: returnedSearchQueryId },
@@ -250,7 +249,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
           },
         });
 
-        // update the url bar with the searchQueryId we just received.
+        // Update the url bar with the searchQueryId we just received.
         setSearchParams({ searchQueryId: returnedSearchQueryId });
       }
     },
