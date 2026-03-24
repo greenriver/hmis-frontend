@@ -1,14 +1,17 @@
-import { GetSearchQueryQuery, useGetSearchQueryQuery } from '@/types/gqlTypes';
+import {
+  SearchQueryFieldsFragment,
+  useGetSearchQueryQuery,
+} from '@/types/gqlTypes';
 
 interface Props {
   searchQueryId?: string | null;
 }
 
 type Result = {
-  /** Loaded `SearchQuery` for the URL id, or undefined while loading / when skipped. */
-  searchQuery: GetSearchQueryQuery['searchQuery'];
+  // Loaded `SearchQueryFields` fragment, or undefined while loading / when skipped.
+  searchQuery: SearchQueryFieldsFragment | null | undefined;
   loading: boolean;
-}; // todo @martha - use a fragment
+};
 
 /**
  * Loads `searchQuery` by id (e.g. from URL).

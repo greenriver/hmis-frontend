@@ -1,9 +1,9 @@
 import { FormValues } from '../form/types';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { ClientSearchInput, GetSearchQueryQuery } from '@/types/gqlTypes';
+import { ClientSearchInput, SearchQueryFieldsFragment } from '@/types/gqlTypes';
 
 /**
- * Field names shared between the `GetSearchQuery` GraphQL selection and `ClientSearchInput`.
+ * Field names from `SearchQueryFields` that map to `ClientSearchInput`.
  * Used to map a loaded `SearchQuery` into form state and to prime Apollo cache after `SearchClients`.
  */
 const SEARCH_QUERY_FIELD_NAMES = [
@@ -16,17 +16,13 @@ const SEARCH_QUERY_FIELD_NAMES = [
   'dob',
 ] as const satisfies ReadonlyArray<keyof ClientSearchInput>;
 
-// String name of a field shared between SearchQueryType and ClientSearchInput
 type SearchQueryFieldName = (typeof SEARCH_QUERY_FIELD_NAMES)[number];
-
-// The `searchQuery` object shape returned by `GetSearchQuery` graphql query
-type SearchQueryType = NonNullable<GetSearchQueryQuery['searchQuery']>;
 
 /**
  * Maps a loaded `SearchQuery` into `ClientSearchInput`.
  */
 export function searchQueryToClientSearchInput(
-  data: SearchQueryType | null | undefined
+  data: SearchQueryFieldsFragment | null | undefined
 ): ClientSearchInput {
   if (!data) return {};
   const result: ClientSearchInput = {};
@@ -40,11 +36,11 @@ export function searchQueryToClientSearchInput(
 
 /**
  * Builds the `SearchQuery`-shaped object for Apollo `writeQuery`, with `null` for missing
- * keys so the normalized cache object matches the `GetSearchQuery` selection set.
+ * keys so the normalized cache object matches the `SearchQueryFields` fragment selection.
  */
 export function clientSearchInputToSearchQueryCacheFields(
   input: ClientSearchInput | null | undefined
-): Pick<SearchQueryType, SearchQueryFieldName> {
+): Pick<SearchQueryFieldsFragment, SearchQueryFieldName> {
   return {
     textSearch: input?.textSearch ?? null,
     personalId: input?.personalId ?? null,
@@ -53,7 +49,7 @@ export function clientSearchInputToSearchQueryCacheFields(
     lastName: input?.lastName ?? null,
     ssnSerial: input?.ssnSerial ?? null,
     dob: input?.dob ?? null,
-  } satisfies Pick<SearchQueryType, SearchQueryFieldName>;
+  } satisfies Pick<SearchQueryFieldsFragment, SearchQueryFieldName>;
 }
 
 export const keySearchParamsByLinkId = (

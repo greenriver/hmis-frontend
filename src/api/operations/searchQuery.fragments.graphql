@@ -1,0 +1,10 @@
+fragment SearchQueryFields on SearchQuery {
+  id
+  textSearch
+  personalId
+  warehouseId
+  firstName
+  lastName
+  ssnSerial
+  dob
+}

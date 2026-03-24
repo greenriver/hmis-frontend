@@ -46873,6 +46873,18 @@ export type RestoreScanCardMutation = {
   } | null;
 };
 
+export type SearchQueryFieldsFragment = {
+  __typename?: 'SearchQuery';
+  id: string;
+  textSearch?: string | null;
+  personalId?: string | null;
+  warehouseId?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  ssnSerial?: string | null;
+  dob?: string | null;
+};
+
 export type GetSearchQueryQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -52387,6 +52399,18 @@ export const ScanCardFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const SearchQueryFieldsFragmentDoc = gql`
+  fragment SearchQueryFields on SearchQuery {
+    id
+    textSearch
+    personalId
+    warehouseId
+    firstName
+    lastName
+    ssnSerial
+    dob
+  }
 `;
 export const ServiceBasicFieldsFragmentDoc = gql`
   fragment ServiceBasicFields on Service {
@@ -69280,16 +69304,10 @@ export type RestoreScanCardMutationOptions = Apollo.BaseMutationOptions<
 export const GetSearchQueryDocument = gql`
   query GetSearchQuery($id: ID!) {
     searchQuery(id: $id) {
-      id
-      textSearch
-      personalId
-      warehouseId
-      firstName
-      lastName
-      ssnSerial
-      dob
+      ...SearchQueryFields
     }
   }
+  ${SearchQueryFieldsFragmentDoc}
 `;
 
 /**
