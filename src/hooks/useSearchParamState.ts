@@ -1,5 +1,4 @@
 import { isDate } from 'date-fns';
-import { isNil } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
@@ -127,8 +126,9 @@ type Args = {
   initial?: ValueType;
 };
 
-// Returns state and setState function
-type ReturnType = [ValueType, (value: ValueType) => void];
+// Returns state and setState function (supports updater: setValues(prev => ({ ...prev, key: val })))
+type SetStateAction = ValueType | ((prev: ValueType) => ValueType);
+type ReturnType = [ValueType, (value: SetStateAction) => void];
 
 const useSearchParamsState = ({
   paramsDefinition,
@@ -186,31 +186,53 @@ const useSearchParamsState = ({
     return getValues(paramsDefinition, searchParams);
   }, [initial, mounted, paramsDefinition, searchParams]);
 
+  /**
+   * Updates URL search params (same keys as paramsDefinition). Behaves like React setState:
+   * - Pass an object to set/replace: keys present are updated, keys in paramsDefinition but
+   * not in the object are cleared. setValues({}) clears all defined params.
+   * - Pass an updater function to merge with current values: setValues(prev => ({ ...prev, page: 2 })).
+   *
+   * Any keys not present in paramsDefinition are ignored.
+   *
+   * @example
+   * setValues({ page: 1, limit: 25 });           // set these, clear other defined params
+   * setValues({});                               // clear all params in paramsDefinition
+   * setValues(prev => ({ ...prev, page: prev.page + 1 }));  // merge: increment page only
+   */
   const setValues = useCallback(
-    (newValues: Record<string, any>) => {
+    (newValuesOrUpdater: SetStateAction) => {
       const currentParams = getAllCurrentParams(searchParams);
-      for (const key in newValues) {
-        if (Object.prototype.hasOwnProperty.call(newValues, key)) {
-          let value = newValues[key];
+      const currentValues = getValues(paramsDefinition, searchParams);
+      const nextValues =
+        typeof newValuesOrUpdater === 'function'
+          ? newValuesOrUpdater(currentValues)
+          : newValuesOrUpdater;
 
-          if (paramsDefinition[key].type === 'date' && isDate(value)) {
-            // serialize date. if it is invalid, it will be null
-            value = newValues[key] = formatDateForGql(value);
-          }
+      // Iterate paramsDefinition so setValues({}) clears all defined params
+      for (const key of Object.keys(paramsDefinition)) {
+        const hasKey = Object.prototype.hasOwnProperty.call(nextValues, key);
+        let value = hasKey ? nextValues[key] : undefined;
 
-          if (
-            isNil(value) ||
-            value === '' ||
-            (Array.isArray(value) && value.length === 0)
-          ) {
-            delete currentParams[key];
-            delete newValues[key];
-          }
+        if (hasKey && paramsDefinition[key]?.type === 'date' && isDate(value)) {
+          // Try to serialize date. If it is invalid, it will be set to null.
+          value = formatDateForGql(value);
+        }
+
+        const isEmpty =
+          value === undefined ||
+          value === null ||
+          value === '' ||
+          (Array.isArray(value) && value.length === 0);
+        if (isEmpty) {
+          delete currentParams[key];
+        } else {
+          currentParams[key] = value;
         }
       }
-      // `navigate` instead of `useSearchParams` as workaround for https://github.com/remix-run/react-router/issues/8393
+
       const accumulator = new URLSearchParams();
-      populateParams({ ...currentParams, ...newValues }, accumulator);
+      populateParams(currentParams, accumulator);
+      // `navigate` instead of `useSearchParams` as workaround for https://github.com/remix-run/react-router/issues/8393
       navigate({
         pathname,
         hash,
