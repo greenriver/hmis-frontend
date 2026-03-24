@@ -20,11 +20,13 @@ type SearchQueryFieldName = (typeof SEARCH_QUERY_FIELD_NAMES)[number];
 
 /**
  * Maps a loaded `SearchQuery` into `ClientSearchInput`.
+ * Returns `null` when there is no record or no mapped search criteria
+ * (so callers can treat it as "nothing to run yet").
  */
 export function searchQueryToClientSearchInput(
   data: SearchQueryFieldsFragment | null | undefined
-): ClientSearchInput {
-  if (!data) return {};
+): ClientSearchInput | null {
+  if (!data) return null;
   const result: ClientSearchInput = {};
   for (const key of SEARCH_QUERY_FIELD_NAMES) {
     const v = data[key];
