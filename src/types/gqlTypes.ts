@@ -5648,6 +5648,8 @@ export enum PickListType {
   AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
+  /** Projects with an active CE Participation record with Access Point = Yes */
+  CeAccessPointProjectNames = 'CE_ACCESS_POINT_PROJECT_NAMES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
   CeReferralStatuses = 'CE_REFERRAL_STATUSES',
