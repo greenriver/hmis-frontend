@@ -7416,10 +7416,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'textSearch',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
-      {
-        name: 'warehouseId',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
     ],
   },
   {

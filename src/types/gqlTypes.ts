@@ -1729,13 +1729,16 @@ export type ClientSearchInput = {
   /** Client primary key */
   id?: InputMaybe<Scalars['ID']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
+  /** @deprecated Use the Client Filter instead */
   organizations?: InputMaybe<Array<Scalars['ID']['input']>>;
   personalId?: InputMaybe<Scalars['String']['input']>;
+  /** @deprecated Use the Client Filter instead */
   projects?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Last 4 digits of SSN */
   ssnSerial?: InputMaybe<Scalars['String']['input']>;
   /** Omnisearch string */
   textSearch?: InputMaybe<Scalars['String']['input']>;
+  /** @deprecated Searching by warehouse_id is supported via free text search */
   warehouseId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -7927,7 +7930,6 @@ export type SearchQuery = {
   personalId?: Maybe<Scalars['String']['output']>;
   ssnSerial?: Maybe<Scalars['String']['output']>;
   textSearch?: Maybe<Scalars['String']['output']>;
-  warehouseId?: Maybe<Scalars['String']['output']>;
 };
 
 /** HUD or Custom Service rendered */
@@ -46879,7 +46881,6 @@ export type SearchQueryFieldsFragment = {
   id: string;
   textSearch?: string | null;
   personalId?: string | null;
-  warehouseId?: string | null;
   firstName?: string | null;
   lastName?: string | null;
   ssnSerial?: string | null;
@@ -46897,7 +46898,6 @@ export type GetSearchQueryQuery = {
     id: string;
     textSearch?: string | null;
     personalId?: string | null;
-    warehouseId?: string | null;
     firstName?: string | null;
     lastName?: string | null;
     ssnSerial?: string | null;
@@ -52406,7 +52406,6 @@ export const SearchQueryFieldsFragmentDoc = gql`
     id
     textSearch
     personalId
-    warehouseId
     firstName
     lastName
     ssnSerial

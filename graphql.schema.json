@@ -13990,8 +13990,8 @@
               }
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use the Client Filter instead"
           },
           {
             "name": "personalId",
@@ -14022,8 +14022,8 @@
               }
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use the Client Filter instead"
           },
           {
             "name": "ssnSerial",
@@ -14058,8 +14058,8 @@
               "ofType": null
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Searching by warehouse_id is supported via free text search"
           }
         ],
         "interfaces": null,
@@ -53328,18 +53328,6 @@
           },
           {
             "name": "textSearch",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "warehouseId",
             "description": null,
             "args": [],
             "type": {

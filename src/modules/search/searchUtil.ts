@@ -10,7 +10,6 @@ import { ClientSearchInput, SearchQueryFieldsFragment } from '@/types/gqlTypes';
 const SEARCH_QUERY_FIELD_NAMES = [
   'textSearch',
   'personalId',
-  'warehouseId',
   'firstName',
   'lastName',
   'ssnSerial',
