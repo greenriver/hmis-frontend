@@ -1044,7 +1044,7 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
     UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL:
       'Unit groups for the given project that can receive CE referrals',
-    USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
+    USERS: 'User accounts',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',
