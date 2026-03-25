@@ -49,7 +49,6 @@ export function clientSearchInputToSearchQueryCacheFields(
   return {
     textSearch: input?.textSearch ?? null,
     personalId: input?.personalId ?? null,
-    warehouseId: input?.warehouseId ?? null,
     firstName: input?.firstName ?? null,
     lastName: input?.lastName ?? null,
     ssnSerial: input?.ssnSerial ?? null,
