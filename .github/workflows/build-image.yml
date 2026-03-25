@@ -86,11 +86,7 @@ jobs:
       - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
         id: vuln_scan
-<<<<<<< Updated upstream
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # 0.35.0
-=======
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
->>>>>>> Stashed changes
         env:
           TRIVY_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-db:2"
           TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
@@ -127,11 +123,7 @@ jobs:
       - name: Run scan for medium vulnerabilities
         if: github.event_name != 'pull_request'
         id: scan_medium
-<<<<<<< Updated upstream
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # 0.35.0
-=======
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
->>>>>>> Stashed changes
         env:
           TRIVY_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-db:2"
           TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
@@ -147,11 +139,7 @@ jobs:
       - name: Run scan for critical and high vulnerabilities
         if: github.event_name != 'pull_request'
         id: scan_crit
-<<<<<<< Updated upstream
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # 0.35.0
-=======
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
->>>>>>> Stashed changes
         env:
           TRIVY_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-db:2"
           TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
