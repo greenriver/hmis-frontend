@@ -20,8 +20,8 @@ type SearchQueryFieldName = (typeof SEARCH_QUERY_FIELD_NAMES)[number];
 
 /**
  * Maps a loaded `SearchQuery` into `ClientSearchInput`.
- * Returns `null` when there is no record or no mapped search criteria
- * (so callers can treat it as "nothing to run yet").
+ * Returns `null` when there is no record, so callers can treat it as "nothing to run yet".
+ * Returns {} when there are no mapped search criteria (unexpected).
  */
 export function searchQueryToClientSearchInput(
   data: SearchQueryFieldsFragment | null
