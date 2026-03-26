@@ -31,7 +31,7 @@ export function searchQueryToClientSearchInput(
   for (const key of SEARCH_QUERY_FIELD_NAMES) {
     const v = data[key];
     // Omit empty/unset fields.
-    // This prevents GraphQL from re-running the query because
+    // This prevents GenericTableWithData from re-running the query because
     // the constructed ClientSearchInput appears to have changed
     // compared to the original ClientSearchInput created from user input.
     if (v) result[key] = v;
