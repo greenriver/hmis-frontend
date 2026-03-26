@@ -133,7 +133,25 @@ interface ClientSearchProps {
  * - Tracks whether or not a search has occurred, and displays an "Add New Client" button if it has.
  *   This is a guard to prevent users from client duplicate clients without searching first.
  * - Depending on global feature flags, the table may include an "MCI ID" column.
- * - Search parameters are synced with the URL (TODO: update when changed to searchQueryId approach)
+ * - Searches return a searchQueryId which is synced with the URL to support back-button navigation.
+ *
+ * There is some tricky logic around Apollo caching and avoiding extra network hits that's worth outlining.
+ * 1. User searches. `searchInput` gets set to `{textSearch: "example"}`
+ * 2. `handleSearchCompleted` does 2 things:
+ *  - pre-warms the cache with a SearchQuery object.
+ *    This object must have all fields (lastName, dob, etc.) defined, or else at step 3,
+ *    GraphQL thinks it needs to make a network request. (`clientSearchInputToSearchQueryCacheFields`)
+ *  - sets `searchQueryId` equal to the value returned from the query.
+ * 3. the `useSearchQuery` hook runs, because `searchQueryId` changed (from null to non-null).
+ *    It hits the cache and returns the pre-warmed query inserted at step 2.
+ * 4. `resolvedSearchInput` (memoized) is re-computed, because `searchQuery` changed (from null to non-null).
+ *    This object must only have fields that the user actually searched by,
+ *    or else `GenericTableWithData` thinks the search input has changed, and re-queries.
+ *    (`searchQueryToClientSearchInput`)
+ * 5. `setSearchInput` runs in a `useEffect`, because `resolvedSearchInput` has changed (from null to non-null).
+ *    `searchInput` was already set to `{textSearch: "example"}` before, at step 1.
+ *     Now it's being set again to `{textSearch: "example"}`, the same value as before.
+ *     Since it's unchanged, `GenericTableWithData` does *not* re-query.
  */
 const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   const apolloClient = useApolloClient();
