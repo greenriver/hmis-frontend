@@ -1742,6 +1742,17 @@ export type ClientSearchInput = {
   warehouseId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ClientSearchParams = {
+  __typename?: 'ClientSearchParams';
+  dob?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  personalId?: Maybe<Scalars['String']['output']>;
+  ssnSerial?: Maybe<Scalars['String']['output']>;
+  textSearch?: Maybe<Scalars['String']['output']>;
+};
+
 /** HUD Client Sorting Options */
 export enum ClientSortOption {
   /** Age: Oldest to Youngest */
@@ -6975,6 +6986,8 @@ export type Query = {
   organization?: Maybe<Organization>;
   organizations: OrganizationsPaginated;
   parsedFormDefinition?: Maybe<FormDefinitionForJsonResult>;
+  /** Persisted search params lookup */
+  persistedClientSearchParams?: Maybe<ClientSearchParams>;
   /** Get list of options for pick list */
   pickList: Array<PickListOption>;
   /** Project lookup */
@@ -6988,8 +7001,6 @@ export type Query = {
   /** Get the most relevant Form Definition to use for record viewing/editing */
   recordFormDefinition?: Maybe<FormDefinition>;
   referralPosting?: Maybe<ReferralPosting>;
-  /** Search query lookup */
-  searchQuery?: Maybe<SearchQuery>;
   /** Service lookup */
   service?: Maybe<Service>;
   serviceCategories: ServiceCategoriesPaginated;
@@ -7175,6 +7186,10 @@ export type QueryParsedFormDefinitionArgs = {
   input: Scalars['String']['input'];
 };
 
+export type QueryPersistedClientSearchParamsArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type QueryPickListArgs = {
   clientId?: InputMaybe<Scalars['ID']['input']>;
   enrollmentId?: InputMaybe<Scalars['ID']['input']>;
@@ -7217,10 +7232,6 @@ export type QueryRecordFormDefinitionArgs = {
 };
 
 export type QueryReferralPostingArgs = {
-  id: Scalars['ID']['input'];
-};
-
-export type QuerySearchQueryArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -7920,17 +7931,6 @@ export enum SchoolStatus {
   /** (6) Suspended */
   Suspended = 'SUSPENDED',
 }
-
-export type SearchQuery = {
-  __typename?: 'SearchQuery';
-  dob?: Maybe<Scalars['String']['output']>;
-  firstName?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  lastName?: Maybe<Scalars['String']['output']>;
-  personalId?: Maybe<Scalars['String']['output']>;
-  ssnSerial?: Maybe<Scalars['String']['output']>;
-  textSearch?: Maybe<Scalars['String']['output']>;
-};
 
 /** HUD or Custom Service rendered */
 export type Service = {
@@ -24754,6 +24754,35 @@ export type BulkMergeClientsMutation = {
       section?: string | null;
       data?: any | null;
     }>;
+  } | null;
+};
+
+export type ClientSearchParamsFieldsFragment = {
+  __typename?: 'ClientSearchParams';
+  id: string;
+  textSearch?: string | null;
+  personalId?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  ssnSerial?: string | null;
+  dob?: string | null;
+};
+
+export type GetPersistedClientSearchParamsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetPersistedClientSearchParamsQuery = {
+  __typename?: 'Query';
+  persistedClientSearchParams?: {
+    __typename?: 'ClientSearchParams';
+    id: string;
+    textSearch?: string | null;
+    personalId?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    ssnSerial?: string | null;
+    dob?: string | null;
   } | null;
 };
 
@@ -46876,35 +46905,6 @@ export type RestoreScanCardMutation = {
   } | null;
 };
 
-export type SearchQueryFieldsFragment = {
-  __typename?: 'SearchQuery';
-  id: string;
-  textSearch?: string | null;
-  personalId?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  ssnSerial?: string | null;
-  dob?: string | null;
-};
-
-export type GetSearchQueryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetSearchQueryQuery = {
-  __typename?: 'Query';
-  searchQuery?: {
-    __typename?: 'SearchQuery';
-    id: string;
-    textSearch?: string | null;
-    personalId?: string | null;
-    firstName?: string | null;
-    lastName?: string | null;
-    ssnSerial?: string | null;
-    dob?: string | null;
-  } | null;
-};
-
 export type ServiceTypeFieldsFragment = {
   __typename?: 'ServiceType';
   id: string;
@@ -51289,6 +51289,17 @@ export const MergeAuditEventFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const ClientSearchParamsFieldsFragmentDoc = gql`
+  fragment ClientSearchParamsFields on ClientSearchParams {
+    id
+    textSearch
+    personalId
+    firstName
+    lastName
+    ssnSerial
+    dob
+  }
+`;
 export const OrganizationNameFieldsFragmentDoc = gql`
   fragment OrganizationNameFields on Organization {
     id
@@ -52400,17 +52411,6 @@ export const ScanCardFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
-`;
-export const SearchQueryFieldsFragmentDoc = gql`
-  fragment SearchQueryFields on SearchQuery {
-    id
-    textSearch
-    personalId
-    firstName
-    lastName
-    ssnSerial
-    dob
-  }
 `;
 export const ServiceBasicFieldsFragmentDoc = gql`
   fragment ServiceBasicFields on Service {
@@ -58791,6 +58791,113 @@ export type BulkMergeClientsMutationResult =
 export type BulkMergeClientsMutationOptions = Apollo.BaseMutationOptions<
   BulkMergeClientsMutation,
   BulkMergeClientsMutationVariables
+>;
+export const GetPersistedClientSearchParamsDocument = gql`
+  query GetPersistedClientSearchParams($id: ID!) {
+    persistedClientSearchParams(id: $id) {
+      ...ClientSearchParamsFields
+    }
+  }
+  ${ClientSearchParamsFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetPersistedClientSearchParamsQuery__
+ *
+ * To run a query within a React component, call `useGetPersistedClientSearchParamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPersistedClientSearchParamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPersistedClientSearchParamsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetPersistedClientSearchParamsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  > &
+    (
+      | {
+          variables: GetPersistedClientSearchParamsQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >(GetPersistedClientSearchParamsDocument, options);
+}
+export function useGetPersistedClientSearchParamsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >(GetPersistedClientSearchParamsDocument, options);
+}
+// @ts-ignore
+export function useGetPersistedClientSearchParamsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetPersistedClientSearchParamsQuery,
+  GetPersistedClientSearchParamsQueryVariables
+>;
+export function useGetPersistedClientSearchParamsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetPersistedClientSearchParamsQuery,
+        GetPersistedClientSearchParamsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetPersistedClientSearchParamsQuery | undefined,
+  GetPersistedClientSearchParamsQueryVariables
+>;
+export function useGetPersistedClientSearchParamsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetPersistedClientSearchParamsQuery,
+        GetPersistedClientSearchParamsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >(GetPersistedClientSearchParamsDocument, options);
+}
+export type GetPersistedClientSearchParamsQueryHookResult = ReturnType<
+  typeof useGetPersistedClientSearchParamsQuery
+>;
+export type GetPersistedClientSearchParamsLazyQueryHookResult = ReturnType<
+  typeof useGetPersistedClientSearchParamsLazyQuery
+>;
+export type GetPersistedClientSearchParamsSuspenseQueryHookResult = ReturnType<
+  typeof useGetPersistedClientSearchParamsSuspenseQuery
+>;
+export type GetPersistedClientSearchParamsQueryResult = Apollo.QueryResult<
+  GetPersistedClientSearchParamsQuery,
+  GetPersistedClientSearchParamsQueryVariables
 >;
 export const CreateServiceTypeDocument = gql`
   mutation CreateServiceType($input: ServiceTypeInput!) {
@@ -69301,110 +69408,6 @@ export type RestoreScanCardMutationResult =
 export type RestoreScanCardMutationOptions = Apollo.BaseMutationOptions<
   RestoreScanCardMutation,
   RestoreScanCardMutationVariables
->;
-export const GetSearchQueryDocument = gql`
-  query GetSearchQuery($id: ID!) {
-    searchQuery(id: $id) {
-      ...SearchQueryFields
-    }
-  }
-  ${SearchQueryFieldsFragmentDoc}
-`;
-
-/**
- * __useGetSearchQueryQuery__
- *
- * To run a query within a React component, call `useGetSearchQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSearchQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetSearchQueryQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetSearchQueryQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetSearchQueryQuery,
-    GetSearchQueryQueryVariables
-  > &
-    (
-      | { variables: GetSearchQueryQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetSearchQueryQuery, GetSearchQueryQueryVariables>(
-    GetSearchQueryDocument,
-    options
-  );
-}
-export function useGetSearchQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetSearchQueryQuery,
-    GetSearchQueryQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetSearchQueryQuery, GetSearchQueryQueryVariables>(
-    GetSearchQueryDocument,
-    options
-  );
-}
-// @ts-ignore
-export function useGetSearchQuerySuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetSearchQueryQuery,
-    GetSearchQueryQueryVariables
-  >
-): Apollo.UseSuspenseQueryResult<
-  GetSearchQueryQuery,
-  GetSearchQueryQueryVariables
->;
-export function useGetSearchQuerySuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetSearchQueryQuery,
-        GetSearchQueryQueryVariables
-      >
-): Apollo.UseSuspenseQueryResult<
-  GetSearchQueryQuery | undefined,
-  GetSearchQueryQueryVariables
->;
-export function useGetSearchQuerySuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetSearchQueryQuery,
-        GetSearchQueryQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetSearchQueryQuery,
-    GetSearchQueryQueryVariables
-  >(GetSearchQueryDocument, options);
-}
-export type GetSearchQueryQueryHookResult = ReturnType<
-  typeof useGetSearchQueryQuery
->;
-export type GetSearchQueryLazyQueryHookResult = ReturnType<
-  typeof useGetSearchQueryLazyQuery
->;
-export type GetSearchQuerySuspenseQueryHookResult = ReturnType<
-  typeof useGetSearchQuerySuspenseQuery
->;
-export type GetSearchQueryQueryResult = Apollo.QueryResult<
-  GetSearchQueryQuery,
-  GetSearchQueryQueryVariables
 >;
 export const GetServiceDocument = gql`
   query GetService($id: ID!) {

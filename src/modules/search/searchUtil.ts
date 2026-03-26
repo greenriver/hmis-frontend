@@ -1,13 +1,16 @@
 import { FormValues } from '../form/types';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { ClientSearchInput, SearchQueryFieldsFragment } from '@/types/gqlTypes';
+import {
+  ClientSearchInput,
+  ClientSearchParamsFieldsFragment,
+} from '@/types/gqlTypes';
 
 /**
- * Field names from `SearchQueryFields` that map to `ClientSearchInput`. Used:
- * - to map a loaded `SearchQuery` into form state
+ * Field names from `ClientSearchParamsFields` that map to `ClientSearchInput`. Used:
+ * - to map a loaded `ClientSearchParams` into form state
  * - to prime Apollo cache after `SearchClients`
  */
-const SEARCH_QUERY_FIELD_NAMES = [
+const SEARCH_INPUT_FIELD_NAMES = [
   'textSearch',
   'personalId',
   'firstName',
@@ -16,19 +19,19 @@ const SEARCH_QUERY_FIELD_NAMES = [
   'dob',
 ] as const satisfies ReadonlyArray<keyof ClientSearchInput>;
 
-type SearchQueryFieldName = (typeof SEARCH_QUERY_FIELD_NAMES)[number];
+type SearchInputFieldName = (typeof SEARCH_INPUT_FIELD_NAMES)[number];
 
 /**
- * Maps a loaded `SearchQuery` into `ClientSearchInput`.
+ * Maps a loaded `ClientSearchParams` into `ClientSearchInput`.
  * Returns `null` when there is no record, so callers can treat it as "nothing to run yet".
  * Returns {} when there are no mapped search criteria (unexpected).
  */
-export function searchQueryToClientSearchInput(
-  data: SearchQueryFieldsFragment | null
+export function searchParamsToClientSearchInput(
+  data: ClientSearchParamsFieldsFragment | null
 ): ClientSearchInput | null {
   if (!data) return null;
   const result: ClientSearchInput = {};
-  for (const key of SEARCH_QUERY_FIELD_NAMES) {
+  for (const key of SEARCH_INPUT_FIELD_NAMES) {
     const v = data[key];
     // Omit empty/unset fields.
     // This prevents GenericTableWithData from re-running the query because
@@ -40,12 +43,12 @@ export function searchQueryToClientSearchInput(
 }
 
 /**
- * Builds the `SearchQuery`-shaped object for Apollo `writeQuery`, with `null` for missing
- * keys so the normalized cache object matches the `SearchQueryFields` fragment selection.
+ * Builds the `ClientSearchParams`-shaped object for Apollo `writeQuery`, with `null` for missing
+ * keys so the normalized cache object matches the `ClientSearchParamsFields` fragment selection.
  */
-export function clientSearchInputToSearchQueryCacheFields(
+export function clientSearchInputToSearchParamsCacheFields(
   input: ClientSearchInput | null
-): Pick<SearchQueryFieldsFragment, SearchQueryFieldName> {
+): Pick<ClientSearchParamsFieldsFragment, SearchInputFieldName> {
   return {
     textSearch: input?.textSearch ?? null,
     personalId: input?.personalId ?? null,
@@ -53,7 +56,7 @@ export function clientSearchInputToSearchQueryCacheFields(
     lastName: input?.lastName ?? null,
     ssnSerial: input?.ssnSerial ?? null,
     dob: input?.dob ?? null,
-  } satisfies Pick<SearchQueryFieldsFragment, SearchQueryFieldName>;
+  } satisfies Pick<ClientSearchParamsFieldsFragment, SearchInputFieldName>;
 }
 
 export const keySearchParamsByLinkId = (

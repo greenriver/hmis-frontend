@@ -3,10 +3,10 @@ import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
 import { isEmpty, isNil, omitBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import useSearchQuery from '../hooks/useSearchQuery';
+import useClientSearchParams from '../hooks/useClientSearchParams';
 import {
-  clientSearchInputToSearchQueryCacheFields,
-  searchQueryToClientSearchInput,
+  clientSearchInputToSearchParamsCacheFields,
+  searchParamsToClientSearchInput,
 } from '../searchUtil';
 import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
@@ -136,16 +136,16 @@ interface ClientSearchProps {
  * There is some tricky logic around Apollo caching and avoiding extra network hits that's worth outlining.
  * 1. User searches. `searchInput` gets set to `{textSearch: "example"}`
  * 2. `handleSearchCompleted` does 2 things:
- *  - pre-warms the cache with a SearchQuery object.
+ *  - pre-warms the cache with a ClientSearchParams object.
  *    This object must have all fields (lastName, dob, etc.) defined, or else at step 3,
- *    GraphQL thinks it needs to make a network request. (`clientSearchInputToSearchQueryCacheFields`)
+ *    GraphQL thinks it needs to make a network request. (`clientSearchInputToSearchParamsCacheFields`)
  *  - sets `searchQueryId` equal to the value returned from the query.
- * 3. the `useSearchQuery` hook runs, because `searchQueryId` changed (from null to non-null).
- *    It hits the cache and returns the pre-warmed query inserted at step 2.
- * 4. `resolvedSearchInput` (memoized) is re-computed, because `searchQuery` changed (from null to non-null).
+ * 3. the `useClientSearchParams` hook runs, because `searchQueryId` changed (from null to non-null).
+ *    It hits the cache and returns the pre-warmed params inserted at step 2.
+ * 4. `resolvedSearchInput` (memoized) is re-computed, because `clientSearchParams` changed (from null to non-null).
  *    This object must only have fields that the user actually searched by,
  *    or else `GenericTableWithData` thinks the search input has changed, and re-queries.
- *    (`searchQueryToClientSearchInput`)
+ *    (`searchParamsToClientSearchInput`)
  * 5. `setSearchInput` runs in a `useEffect`, because `resolvedSearchInput` has changed (from null to non-null).
  *    `searchInput` was already set to `{textSearch: "example"}` before, at step 1.
  *     Now it's being set again to `{textSearch: "example"}`, the same value as before.
@@ -175,22 +175,22 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     },
   });
 
-  // If there is a searchQueryId in the URL params, load the search query
+  // If there is a searchQueryId in the URL params, load persisted client search params
   const {
-    searchQuery,
-    loading: searchQueryLoading,
-    writeSearchQueryToCache,
-  } = useSearchQuery({
+    clientSearchParams,
+    loading: clientSearchParamsLoading,
+    writeClientSearchParamsToCache,
+  } = useClientSearchParams({
     searchQueryId,
   });
 
-  // Resolve the search query into a usable ClientSearchInput
+  // Resolve persisted params into a usable ClientSearchInput
   const resolvedSearchInput = useMemo(
-    () => searchQueryToClientSearchInput(searchQuery),
-    [searchQuery]
+    () => searchParamsToClientSearchInput(clientSearchParams),
+    [clientSearchParams]
   );
 
-  // Populate the form state with the resolved search input from the SearchQuery
+  // Populate the form state with the resolved search input from persisted params
   useEffect(() => {
     if (resolvedSearchInput) setSearchInput(resolvedSearchInput);
   }, [resolvedSearchInput]);
@@ -254,18 +254,23 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     (data: SearchClientsQuery) => {
       const returnedSearchQueryId = data?.clientSearch.searchQueryId;
       if (returnedSearchQueryId && searchQueryId !== returnedSearchQueryId) {
-        // Prime the Apollo cache with the search query we just received,
-        // so it's ready next time we query with GetSearchQuery
-        writeSearchQueryToCache(
+        // Prime the Apollo cache with the params we just received,
+        // so it's ready next time we query with GetPersistedClientSearchParams
+        writeClientSearchParamsToCache(
           returnedSearchQueryId,
-          clientSearchInputToSearchQueryCacheFields(searchInput)
+          clientSearchInputToSearchParamsCacheFields(searchInput)
         );
 
         // Update the url bar with the searchQueryId we just received.
         setSearchParams({ searchQueryId: returnedSearchQueryId });
       }
     },
-    [searchQueryId, writeSearchQueryToCache, searchInput, setSearchParams]
+    [
+      searchQueryId,
+      writeClientSearchParamsToCache,
+      searchInput,
+      setSearchParams,
+    ]
   );
 
   const filters = useFilters({
@@ -273,7 +278,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     omit: ['searchTerm'],
   });
 
-  if (searchQueryLoading) return <Loading />;
+  if (clientSearchParamsLoading) return <Loading />;
 
   return (
     <SsnDobShowContextProvider>

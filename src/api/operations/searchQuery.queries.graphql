@@ -1,5 +1,0 @@
-query GetSearchQuery($id: ID!) {
-  searchQuery(id: $id) {
-    ...SearchQueryFields
-  }
-}
