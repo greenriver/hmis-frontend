@@ -1,21 +1,17 @@
-import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/material';
 
 import ProjectOutgoingReferralPostingsTable from './ProjectOutgoingReferralPostingsTable';
 import ProjectReferralPostingsTable from './ProjectReferralPostingsTable';
 
-import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ProjectDashboardRoutes } from '@/routes/routes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 /**
- * This component is used to show the legacy referrals page.
+ * Legacy referrals tab:
+ * - Legacy Outgoing Referrals: read-only history (no new legacy referrals can be sent).
+ * - Legacy Incoming Referrals: view and update status (e.g. accept/deny) of existing referrals.
  *
- * If the project has CE referrals enabled, it disables the ability to create
- * new legacy referrals.
  * TODO(#8142) fully sunset legacy referrals, remove this tab
  */
 const ProjectLegacyReferrals = () => {
@@ -23,34 +19,10 @@ const ProjectLegacyReferrals = () => {
     useGlobalFeatureFlags();
   const { project } = useProjectDashboardContext();
 
-  // If this project has CE Referrals enabled (either Direct or Waitlist),
-  // hide functions to create new legacy referrals.
-  const { supportsReferrals, sendsDirectReferrals } =
-    project.coordinatedEntryFeatures || {};
-  const allowCreatingNewReferrals = !supportsReferrals && !sendsDirectReferrals;
-
   return (
     <Stack spacing={4}>
       {project.access.canManageOutgoingReferrals && (
-        <TitleCard
-          title='Outgoing Referrals'
-          headerVariant='border'
-          actions={
-            allowCreatingNewReferrals && (
-              <ButtonLink
-                to={generateSafePath(
-                  ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL,
-                  {
-                    projectId: project.id,
-                  }
-                )}
-                Icon={AddIcon}
-              >
-                New Referral
-              </ButtonLink>
-            )
-          }
-        >
+        <TitleCard title='Outgoing Referrals' headerVariant='border'>
           <ProjectOutgoingReferralPostingsTable projectId={project.id} />
         </TitleCard>
       )}
