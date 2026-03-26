@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
@@ -45,7 +44,6 @@ import {
   ClientSearchResultFieldsFragment,
   ClientSortOption,
   ExternalIdentifierType,
-  GetSearchQueryDocument,
   HouseholdClientFieldsFragment,
   ProjectEnrollmentFieldsFragment,
   ProjectEnrollmentsHouseholdClientFieldsFragment,
@@ -154,7 +152,6 @@ interface ClientSearchProps {
  *     Since it's unchanged, `GenericTableWithData` does *not* re-query.
  */
 const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
-  const apolloClient = useApolloClient();
   const isMobile = useIsMobile();
   const isTiny = useIsMobile('sm');
 
@@ -179,7 +176,11 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   });
 
   // If there is a searchQueryId in the URL params, load the search query
-  const { searchQuery, loading: searchQueryLoading } = useSearchQuery({
+  const {
+    searchQuery,
+    loading: searchQueryLoading,
+    writeSearchQueryToCache,
+  } = useSearchQuery({
     searchQueryId,
   });
 
@@ -255,23 +256,16 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
       if (returnedSearchQueryId && searchQueryId !== returnedSearchQueryId) {
         // Prime the Apollo cache with the search query we just received,
         // so it's ready next time we query with GetSearchQuery
-        apolloClient.writeQuery({
-          query: GetSearchQueryDocument,
-          variables: { id: returnedSearchQueryId },
-          data: {
-            searchQuery: {
-              __typename: 'SearchQuery',
-              id: returnedSearchQueryId,
-              ...clientSearchInputToSearchQueryCacheFields(searchInput),
-            },
-          },
-        });
+        writeSearchQueryToCache(
+          returnedSearchQueryId,
+          clientSearchInputToSearchQueryCacheFields(searchInput)
+        );
 
         // Update the url bar with the searchQueryId we just received.
         setSearchParams({ searchQueryId: returnedSearchQueryId });
       }
     },
-    [searchQueryId, setSearchParams, searchInput, apolloClient]
+    [searchQueryId, writeSearchQueryToCache, searchInput, setSearchParams]
   );
 
   const filters = useFilters({

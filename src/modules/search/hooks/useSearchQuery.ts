@@ -1,4 +1,7 @@
+import { useCallback } from 'react';
+import apolloClient from '@/providers/apolloClient';
 import {
+  GetSearchQueryDocument,
   SearchQueryFieldsFragment,
   useGetSearchQueryQuery,
 } from '@/types/gqlTypes';
@@ -6,10 +9,12 @@ import {
 interface Props {
   searchQueryId?: string | null;
 }
+type SearchQueryFields = Omit<SearchQueryFieldsFragment, 'id' | '__typename'>;
 
 type Result = {
   searchQuery: SearchQueryFieldsFragment | null;
   loading: boolean;
+  writeSearchQueryToCache: (id: string, fields: SearchQueryFields) => void;
 };
 
 /**
@@ -28,9 +33,23 @@ const useSearchQuery = ({ searchQueryId }: Props): Result => {
 
   if (error) throw error;
 
+  // Helper to write a search query to the cache. This can be used to
+  // populate the cache with a search query when it is received from the server with a searchQueryId.
+  const writeSearchQueryToCache = useCallback(
+    (id: string, params: SearchQueryFields) => {
+      apolloClient.writeQuery({
+        query: GetSearchQueryDocument,
+        variables: { id },
+        data: { searchQuery: { __typename: 'SearchQuery', id, ...params } },
+      });
+    },
+    []
+  );
+
   return {
     searchQuery: data?.searchQuery || null,
     loading: skip ? false : loading,
+    writeSearchQueryToCache,
   };
 };
 
