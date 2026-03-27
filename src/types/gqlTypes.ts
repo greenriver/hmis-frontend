@@ -3902,8 +3902,6 @@ export type FormProjectMatchesPaginated = {
 export enum FormRole {
   /** Annual */
   Annual = 'ANNUAL',
-  /** Auto exit config */
-  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Case note */
   CaseNote = 'CASE_NOTE',
   /** CE assessment */
@@ -5650,6 +5648,8 @@ export enum PickListType {
   AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
+  /** Projects with an active CE Participation record with Access Point = Yes */
+  CeAccessPointProjectNames = 'CE_ACCESS_POINT_PROJECT_NAMES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
   CeReferralStatuses = 'CE_REFERRAL_STATUSES',
@@ -8378,8 +8378,6 @@ export type StartCeReferralStepPayload = {
 
 /** Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations. */
 export enum StaticFormRole {
-  /** Auto exit config */
-  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
   /** Form definition */
