@@ -5651,6 +5651,8 @@ export enum PickListType {
   AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
+  /** Projects with an active CE Participation record with Access Point = Yes */
+  CeAccessPointProjectNames = 'CE_ACCESS_POINT_PROJECT_NAMES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
   CeReferralStatuses = 'CE_REFERRAL_STATUSES',
@@ -5711,7 +5713,7 @@ export enum PickListType {
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
   /** Unit groups for the given project that can receive CE referrals */
   UnitGroupsForProjectDirectCeReferral = 'UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL',
-  /** User accounts */
+  /** User accounts. Returns all users, for use when filtering audit events */
   Users = 'USERS',
 }
 
