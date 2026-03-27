@@ -85,7 +85,6 @@ const getFilterForType = (
   }
 
   if (!filter && inputType === 'String') {
-    // console.log('Skipping free-text filter:', fieldName);
     return null; // Free-text filters are not supported because PII is not allowed in URL
   }
 
@@ -174,11 +173,11 @@ export const transformDynamicFilters = <FilterOptionsType>(
 /** Build URL param definition from filter config; only includes non–free-text filters (no PII in URL). */
 export function buildUrlParamsDefinition<T>(
   filters: TableFilterType<T>,
-  omitFromUrl: string[] = []
+  omit: string[] = []
 ): SearchParamsStateType {
   const def: SearchParamsStateType = {};
   Object.entries(filters).forEach(([key, filter]) => {
-    if (omitFromUrl.includes(key)) return;
+    if (omit.includes(key)) return;
     const f = filter as FilterType<any>;
     if (f.type === 'text') return; // never put free-text in URL (PII)
     if (f.type === 'date') {

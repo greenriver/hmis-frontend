@@ -209,7 +209,7 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
   const { filters, filterValues, setFilterValues } =
     useTableFilters<HouseholdFilterOptions>({
       type: 'HouseholdFilterOptions',
-      omit: [staffAssignmentsEnabled ? '' : 'assignedStaff'],
+      omit: staffAssignmentsEnabled ? undefined : ['assignedStaff'],
       pickListArgs: { projectId: projectId },
     });
 

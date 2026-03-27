@@ -91,7 +91,6 @@ const AdminCeClientsTable: React.FC = () => {
   const { filters, filterValues, setFilterValues } =
     useTableFilters<CeClientFilterOptions>({
       type: 'CeClientFilterOptions',
-      omit: ['searchTerm'],
       dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
     });
 
