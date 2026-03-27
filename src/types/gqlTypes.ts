@@ -165,11 +165,15 @@ export type ApplicationUser = {
   enrollmentAccessSummaries: EnrollmentAccessSummariesPaginated;
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  /** True if this user is currently being impersonated by another user */
+  impersonating: Scalars['Boolean']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   loginActivities?: Maybe<LoginActivitiesPaginated>;
   manageAccountUrl: Scalars['String']['output'];
   name: Scalars['String']['output'];
   recentItems: Array<OmnisearchResult>;
+  /** The actual user who is impersonating (null if not impersonating) */
+  trueUser?: Maybe<ApplicationUser>;
 };
 
 /** User account for a user of the system */
@@ -9523,6 +9527,12 @@ export type ClientWithAlertFieldsFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   }>;
   access: {
@@ -9547,6 +9557,12 @@ export type ClientAlertFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -9572,6 +9588,12 @@ export type CreateClientAlertMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     errors: Array<{
@@ -9613,6 +9635,12 @@ export type DeleteClientAlertMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     errors: Array<{
@@ -9666,6 +9694,12 @@ export type GetHouseholdClientAlertsQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }>;
         access: {
@@ -9697,6 +9731,12 @@ export type AssessmentFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
@@ -9705,6 +9745,12 @@ export type AssessmentFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   definition: {
     __typename?: 'FormDefinition';
@@ -9845,6 +9891,12 @@ export type AssessmentWithRecordsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -9854,6 +9906,12 @@ export type AssessmentWithRecordsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -9901,6 +9959,12 @@ export type AssessmentWithRecordsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -9910,6 +9974,12 @@ export type AssessmentWithRecordsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -9934,6 +10004,12 @@ export type AssessmentWithRecordsFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
   event?: {
@@ -9957,6 +10033,12 @@ export type AssessmentWithRecordsFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
   incomeBenefit?: {
@@ -10087,6 +10169,12 @@ export type AssessmentWithRecordsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -10096,6 +10184,12 @@ export type AssessmentWithRecordsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -10143,6 +10237,12 @@ export type AssessmentWithRecordsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -10152,6 +10252,12 @@ export type AssessmentWithRecordsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -10289,6 +10395,12 @@ export type AssessmentWithRecordsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -10298,6 +10410,12 @@ export type AssessmentWithRecordsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -10345,6 +10463,12 @@ export type AssessmentWithRecordsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -10354,6 +10478,12 @@ export type AssessmentWithRecordsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -10436,6 +10566,12 @@ export type AssessmentWithRecordsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -10445,6 +10581,12 @@ export type AssessmentWithRecordsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -10492,6 +10634,12 @@ export type AssessmentWithRecordsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -10501,6 +10649,12 @@ export type AssessmentWithRecordsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -10528,6 +10682,12 @@ export type AssessmentWithRecordsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
@@ -10536,6 +10696,12 @@ export type AssessmentWithRecordsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   definition: {
     __typename?: 'FormDefinition';
@@ -10564,6 +10730,12 @@ export type AssessmentWithValuesFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
@@ -10572,6 +10744,12 @@ export type AssessmentWithValuesFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   definition: {
     __typename?: 'FormDefinition';
@@ -10713,6 +10891,12 @@ export type FullAssessmentFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -10722,6 +10906,12 @@ export type FullAssessmentFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -10769,6 +10959,12 @@ export type FullAssessmentFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -10778,6 +10974,12 @@ export type FullAssessmentFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -10802,6 +11004,12 @@ export type FullAssessmentFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
   event?: {
@@ -10825,6 +11033,12 @@ export type FullAssessmentFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
   incomeBenefit?: {
@@ -10955,6 +11169,12 @@ export type FullAssessmentFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -10964,6 +11184,12 @@ export type FullAssessmentFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -11011,6 +11237,12 @@ export type FullAssessmentFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -11020,6 +11252,12 @@ export type FullAssessmentFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -11157,6 +11395,12 @@ export type FullAssessmentFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -11166,6 +11410,12 @@ export type FullAssessmentFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -11213,6 +11463,12 @@ export type FullAssessmentFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -11222,6 +11478,12 @@ export type FullAssessmentFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -11304,6 +11566,12 @@ export type FullAssessmentFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -11313,6 +11581,12 @@ export type FullAssessmentFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -11360,6 +11634,12 @@ export type FullAssessmentFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -11369,6 +11649,12 @@ export type FullAssessmentFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -11396,6 +11682,12 @@ export type FullAssessmentFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
@@ -11404,6 +11696,12 @@ export type FullAssessmentFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   definition: {
     __typename?: 'FormDefinition';
@@ -11477,6 +11775,12 @@ export type AssessmentWithCdesFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -11486,6 +11790,12 @@ export type AssessmentWithCdesFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -11533,6 +11843,12 @@ export type AssessmentWithCdesFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -11542,6 +11858,12 @@ export type AssessmentWithCdesFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -11552,6 +11874,12 @@ export type AssessmentWithCdesFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
@@ -11560,6 +11888,12 @@ export type AssessmentWithCdesFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   definition: {
     __typename?: 'FormDefinition';
@@ -12749,6 +13083,12 @@ export type GetAssessmentQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -12758,6 +13098,12 @@ export type GetAssessmentQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -12805,6 +13151,12 @@ export type GetAssessmentQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -12814,6 +13166,12 @@ export type GetAssessmentQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -12838,6 +13196,12 @@ export type GetAssessmentQuery = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     event?: {
@@ -12861,6 +13225,12 @@ export type GetAssessmentQuery = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     incomeBenefit?: {
@@ -12991,6 +13361,12 @@ export type GetAssessmentQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -13000,6 +13376,12 @@ export type GetAssessmentQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -13047,6 +13429,12 @@ export type GetAssessmentQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -13056,6 +13444,12 @@ export type GetAssessmentQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -13193,6 +13587,12 @@ export type GetAssessmentQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -13202,6 +13602,12 @@ export type GetAssessmentQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -13249,6 +13655,12 @@ export type GetAssessmentQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -13258,6 +13670,12 @@ export type GetAssessmentQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -13340,6 +13758,12 @@ export type GetAssessmentQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -13349,6 +13773,12 @@ export type GetAssessmentQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -13396,6 +13826,12 @@ export type GetAssessmentQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -13405,6 +13841,12 @@ export type GetAssessmentQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -13432,6 +13874,12 @@ export type GetAssessmentQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
     createdBy?: {
       __typename: 'ApplicationUser';
@@ -13440,6 +13888,12 @@ export type GetAssessmentQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
 };
@@ -13548,6 +14002,12 @@ export type GetClientAssessmentsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -13557,6 +14017,12 @@ export type GetClientAssessmentsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -13604,6 +14070,12 @@ export type GetClientAssessmentsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -13613,6 +14085,12 @@ export type GetClientAssessmentsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -13623,6 +14101,12 @@ export type GetClientAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
@@ -13631,6 +14115,12 @@ export type GetClientAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         definition: {
           __typename?: 'FormDefinition';
@@ -13727,6 +14217,12 @@ export type GetEnrollmentAssessmentsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -13736,6 +14232,12 @@ export type GetEnrollmentAssessmentsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -13783,6 +14285,12 @@ export type GetEnrollmentAssessmentsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -13792,6 +14300,12 @@ export type GetEnrollmentAssessmentsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -13802,6 +14316,12 @@ export type GetEnrollmentAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
@@ -13810,6 +14330,12 @@ export type GetEnrollmentAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         definition: {
           __typename?: 'FormDefinition';
@@ -13920,6 +14446,12 @@ export type GetHouseholdAssessmentsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -13929,6 +14461,12 @@ export type GetHouseholdAssessmentsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -13976,6 +14514,12 @@ export type GetHouseholdAssessmentsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -13985,6 +14529,12 @@ export type GetHouseholdAssessmentsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -13995,6 +14545,12 @@ export type GetHouseholdAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
@@ -14003,6 +14559,12 @@ export type GetHouseholdAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         definition: {
           __typename?: 'FormDefinition';
@@ -14070,6 +14632,12 @@ export type SaveAssessmentMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       createdBy?: {
         __typename: 'ApplicationUser';
@@ -14078,6 +14646,12 @@ export type SaveAssessmentMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       definition: {
         __typename?: 'FormDefinition';
@@ -14242,6 +14816,12 @@ export type SubmitAssessmentMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -14251,6 +14831,12 @@ export type SubmitAssessmentMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -14298,6 +14884,12 @@ export type SubmitAssessmentMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -14307,6 +14899,12 @@ export type SubmitAssessmentMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -14331,6 +14929,12 @@ export type SubmitAssessmentMutation = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       event?: {
@@ -14354,6 +14958,12 @@ export type SubmitAssessmentMutation = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       incomeBenefit?: {
@@ -14484,6 +15094,12 @@ export type SubmitAssessmentMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -14493,6 +15109,12 @@ export type SubmitAssessmentMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -14540,6 +15162,12 @@ export type SubmitAssessmentMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -14549,6 +15177,12 @@ export type SubmitAssessmentMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -14686,6 +15320,12 @@ export type SubmitAssessmentMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -14695,6 +15335,12 @@ export type SubmitAssessmentMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -14742,6 +15388,12 @@ export type SubmitAssessmentMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -14751,6 +15403,12 @@ export type SubmitAssessmentMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -14833,6 +15491,12 @@ export type SubmitAssessmentMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -14842,6 +15506,12 @@ export type SubmitAssessmentMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -14889,6 +15559,12 @@ export type SubmitAssessmentMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -14898,6 +15574,12 @@ export type SubmitAssessmentMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -14925,6 +15607,12 @@ export type SubmitAssessmentMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       createdBy?: {
         __typename: 'ApplicationUser';
@@ -14933,6 +15621,12 @@ export type SubmitAssessmentMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       definition: {
         __typename?: 'FormDefinition';
@@ -15097,6 +15791,12 @@ export type SubmitHouseholdAssessmentsMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -15106,6 +15806,12 @@ export type SubmitHouseholdAssessmentsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -15153,6 +15859,12 @@ export type SubmitHouseholdAssessmentsMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -15162,6 +15874,12 @@ export type SubmitHouseholdAssessmentsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -15186,6 +15904,12 @@ export type SubmitHouseholdAssessmentsMutation = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       event?: {
@@ -15209,6 +15933,12 @@ export type SubmitHouseholdAssessmentsMutation = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       incomeBenefit?: {
@@ -15339,6 +16069,12 @@ export type SubmitHouseholdAssessmentsMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -15348,6 +16084,12 @@ export type SubmitHouseholdAssessmentsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -15395,6 +16137,12 @@ export type SubmitHouseholdAssessmentsMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -15404,6 +16152,12 @@ export type SubmitHouseholdAssessmentsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -15541,6 +16295,12 @@ export type SubmitHouseholdAssessmentsMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -15550,6 +16310,12 @@ export type SubmitHouseholdAssessmentsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -15597,6 +16363,12 @@ export type SubmitHouseholdAssessmentsMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -15606,6 +16378,12 @@ export type SubmitHouseholdAssessmentsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -15688,6 +16466,12 @@ export type SubmitHouseholdAssessmentsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -15697,6 +16481,12 @@ export type SubmitHouseholdAssessmentsMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -15744,6 +16534,12 @@ export type SubmitHouseholdAssessmentsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -15753,6 +16549,12 @@ export type SubmitHouseholdAssessmentsMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -15780,6 +16582,12 @@ export type SubmitHouseholdAssessmentsMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       createdBy?: {
         __typename: 'ApplicationUser';
@@ -15788,6 +16596,12 @@ export type SubmitHouseholdAssessmentsMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       definition: {
         __typename?: 'FormDefinition';
@@ -15969,6 +16783,12 @@ export type GetAssessmentsForPopulationQuery = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -15978,6 +16798,12 @@ export type GetAssessmentsForPopulationQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -16025,6 +16851,12 @@ export type GetAssessmentsForPopulationQuery = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -16034,6 +16866,12 @@ export type GetAssessmentsForPopulationQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -16058,6 +16896,12 @@ export type GetAssessmentsForPopulationQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         event?: {
@@ -16081,6 +16925,12 @@ export type GetAssessmentsForPopulationQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         incomeBenefit?: {
@@ -16211,6 +17061,12 @@ export type GetAssessmentsForPopulationQuery = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -16220,6 +17076,12 @@ export type GetAssessmentsForPopulationQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -16267,6 +17129,12 @@ export type GetAssessmentsForPopulationQuery = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -16276,6 +17144,12 @@ export type GetAssessmentsForPopulationQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -16413,6 +17287,12 @@ export type GetAssessmentsForPopulationQuery = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -16422,6 +17302,12 @@ export type GetAssessmentsForPopulationQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -16469,6 +17355,12 @@ export type GetAssessmentsForPopulationQuery = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -16478,6 +17370,12 @@ export type GetAssessmentsForPopulationQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -16560,6 +17458,12 @@ export type GetAssessmentsForPopulationQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -16569,6 +17473,12 @@ export type GetAssessmentsForPopulationQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -16616,6 +17526,12 @@ export type GetAssessmentsForPopulationQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -16625,6 +17541,12 @@ export type GetAssessmentsForPopulationQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -16652,6 +17574,12 @@ export type GetAssessmentsForPopulationQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
@@ -16660,6 +17588,12 @@ export type GetAssessmentsForPopulationQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         definition: {
           __typename?: 'FormDefinition';
@@ -16774,6 +17708,12 @@ export type EnrollmentFieldsFromAssessmentFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   project: {
     __typename?: 'Project';
@@ -16947,6 +17887,12 @@ export type IncomeBenefitFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   enrollment: {
     __typename?: 'Enrollment';
@@ -17019,6 +17965,12 @@ export type DisabilityGroupFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   enrollment: {
     __typename?: 'Enrollment';
@@ -17073,6 +18025,12 @@ export type HealthAndDvFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   enrollment: {
     __typename?: 'Enrollment';
@@ -17397,6 +18355,12 @@ export type BulkServicesClientSearchQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
       activeEnrollment?: {
@@ -18709,6 +19673,12 @@ export type CeReferralStepFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -18718,6 +19688,12 @@ export type CeReferralStepFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -18765,6 +19741,12 @@ export type CeReferralStepFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -18774,6 +19756,12 @@ export type CeReferralStepFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -19516,6 +20504,12 @@ export type StartCeReferralStepMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -19525,6 +20519,12 @@ export type StartCeReferralStepMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -19572,6 +20572,12 @@ export type StartCeReferralStepMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -19581,6 +20587,12 @@ export type StartCeReferralStepMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -20209,6 +21221,12 @@ export type SubmitCeReferralStepMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -20218,6 +21236,12 @@ export type SubmitCeReferralStepMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -20265,6 +21289,12 @@ export type SubmitCeReferralStepMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -20274,6 +21304,12 @@ export type SubmitCeReferralStepMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -21772,6 +22808,12 @@ export type GetCeReferralStepQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -21781,6 +22823,12 @@ export type GetCeReferralStepQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -21828,6 +22876,12 @@ export type GetCeReferralStepQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -21837,6 +22891,12 @@ export type GetCeReferralStepQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -22188,6 +23248,12 @@ export type ClientSearchResultFieldsFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   }>;
   access: {
@@ -22251,6 +23317,12 @@ export type ClientFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   access: {
     __typename?: 'ClientAccess';
@@ -22330,6 +23402,12 @@ export type ClientFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -22339,6 +23417,12 @@ export type ClientFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -22386,6 +23470,12 @@ export type ClientFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -22395,6 +23485,12 @@ export type ClientFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -22462,6 +23558,12 @@ export type ClientFieldsFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   }>;
 };
@@ -22668,6 +23770,12 @@ export type SearchClientsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
       access: {
@@ -22739,6 +23847,12 @@ export type GetClientQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
     access: {
       __typename?: 'ClientAccess';
@@ -22818,6 +23932,12 @@ export type GetClientQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -22827,6 +23947,12 @@ export type GetClientQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -22874,6 +24000,12 @@ export type GetClientQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -22883,6 +24015,12 @@ export type GetClientQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -22950,6 +24088,12 @@ export type GetClientQuery = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }>;
   } | null;
@@ -23169,6 +24313,12 @@ export type GetClientServicesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -23223,6 +24373,12 @@ export type GetClientServicesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -23232,6 +24388,12 @@ export type GetClientServicesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -23279,6 +24441,12 @@ export type GetClientServicesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -23288,6 +24456,12 @@ export type GetClientServicesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -23423,6 +24597,12 @@ export type DeleteClientFileMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     errors: Array<{
@@ -23564,6 +24744,12 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               }>;
             };
@@ -23628,6 +24814,12 @@ export type GetFileQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
 };
@@ -23701,6 +24893,12 @@ export type GetClientFilesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -24251,6 +25449,12 @@ export type MergeAuditEventFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -24322,6 +25526,12 @@ export type ClientMergeHistoryQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -24362,6 +25572,12 @@ export type GlobalClientMergeHistoryQuery = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }>;
   };
@@ -24428,6 +25644,12 @@ export type MergeClientsMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       access: {
         __typename?: 'ClientAccess';
@@ -24507,6 +25729,12 @@ export type MergeClientsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -24516,6 +25744,12 @@ export type MergeClientsMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -24563,6 +25797,12 @@ export type MergeClientsMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -24572,6 +25812,12 @@ export type MergeClientsMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -24639,6 +25885,12 @@ export type MergeClientsMutation = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     } | null;
@@ -25311,6 +26563,12 @@ export type CurrentLivingSituationFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -25365,6 +26623,12 @@ export type CurrentLivingSituationFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -25374,6 +26638,12 @@ export type CurrentLivingSituationFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -25421,6 +26691,12 @@ export type CurrentLivingSituationFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -25430,6 +26706,12 @@ export type CurrentLivingSituationFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -25484,6 +26766,12 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -25538,6 +26826,12 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -25547,6 +26841,12 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -25594,6 +26894,12 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -25603,6 +26909,12 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -25657,6 +26969,12 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -25711,6 +27029,12 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -25720,6 +27044,12 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -25767,6 +27097,12 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -25776,6 +27112,12 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -25849,6 +27191,12 @@ export type GetProjectCurrentLivingSituationsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -25903,6 +27251,12 @@ export type GetProjectCurrentLivingSituationsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -25912,6 +27266,12 @@ export type GetProjectCurrentLivingSituationsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -25959,6 +27319,12 @@ export type GetProjectCurrentLivingSituationsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -25968,6 +27334,12 @@ export type GetProjectCurrentLivingSituationsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -26001,6 +27373,12 @@ export type CustomCaseNoteFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
@@ -26009,6 +27387,12 @@ export type CustomCaseNoteFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -26063,6 +27447,12 @@ export type CustomCaseNoteFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -26072,6 +27462,12 @@ export type CustomCaseNoteFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -26119,6 +27515,12 @@ export type CustomCaseNoteFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -26128,6 +27530,12 @@ export type CustomCaseNoteFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -26165,6 +27573,12 @@ export type GetEnrollmentCustomCaseNotesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
@@ -26173,6 +27587,12 @@ export type GetEnrollmentCustomCaseNotesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -26227,6 +27647,12 @@ export type GetEnrollmentCustomCaseNotesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -26236,6 +27662,12 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -26283,6 +27715,12 @@ export type GetEnrollmentCustomCaseNotesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -26292,6 +27730,12 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -26379,6 +27823,12 @@ export type GetClientCaseNotesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
@@ -26387,6 +27837,12 @@ export type GetClientCaseNotesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -26441,6 +27897,12 @@ export type GetClientCaseNotesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -26450,6 +27912,12 @@ export type GetClientCaseNotesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -26497,6 +27965,12 @@ export type GetClientCaseNotesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -26506,6 +27980,12 @@ export type GetClientCaseNotesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -26559,6 +28039,12 @@ export type CustomDataElementValueFieldsFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
   user?: {
@@ -26568,6 +28054,12 @@ export type CustomDataElementValueFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -26624,6 +28116,12 @@ export type CustomDataElementFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     user?: {
@@ -26633,6 +28131,12 @@ export type CustomDataElementFieldsFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
   values?: Array<{
@@ -26680,6 +28184,12 @@ export type CustomDataElementFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     user?: {
@@ -26689,6 +28199,12 @@ export type CustomDataElementFieldsFragment = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   }> | null;
 };
@@ -27861,6 +29377,12 @@ export type EnrolledClientFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -27870,6 +29392,12 @@ export type EnrolledClientFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -27917,6 +29445,12 @@ export type EnrolledClientFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -27926,6 +29460,12 @@ export type EnrolledClientFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -28012,6 +29552,12 @@ export type AllEnrollmentDetailsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -28021,6 +29567,12 @@ export type AllEnrollmentDetailsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -28068,6 +29620,12 @@ export type AllEnrollmentDetailsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -28077,6 +29635,12 @@ export type AllEnrollmentDetailsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -28146,6 +29710,12 @@ export type AllEnrollmentDetailsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -28155,6 +29725,12 @@ export type AllEnrollmentDetailsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -28202,6 +29778,12 @@ export type AllEnrollmentDetailsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -28211,6 +29793,12 @@ export type AllEnrollmentDetailsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -28999,6 +30587,12 @@ export type SubmittedEnrollmentResultFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -29008,6 +30602,12 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -29055,6 +30655,12 @@ export type SubmittedEnrollmentResultFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -29064,6 +30670,12 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -29130,6 +30742,12 @@ export type CeAssessmentFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -29237,6 +30855,12 @@ export type EnrollmentWithHouseholdFieldsFragment = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }>;
       };
@@ -29476,6 +31100,12 @@ export type GetEnrollmentDetailsQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -29485,6 +31115,12 @@ export type GetEnrollmentDetailsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -29532,6 +31168,12 @@ export type GetEnrollmentDetailsQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -29541,6 +31183,12 @@ export type GetEnrollmentDetailsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -29610,6 +31258,12 @@ export type GetEnrollmentDetailsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -29619,6 +31273,12 @@ export type GetEnrollmentDetailsQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -29666,6 +31326,12 @@ export type GetEnrollmentDetailsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -29675,6 +31341,12 @@ export type GetEnrollmentDetailsQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -30378,6 +32050,12 @@ export type GetEnrollmentWithHouseholdQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }>;
         };
@@ -30465,6 +32143,12 @@ export type GetEnrollmentEventsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -30506,6 +32190,12 @@ export type GetEnrollmentCeAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -30722,6 +32412,12 @@ export type EventFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -31999,6 +33695,12 @@ export type FileFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -37839,6 +39541,12 @@ export type GetFormIdentifierVersionsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         access: {
           __typename?: 'FormDefinitionAccess';
@@ -37922,6 +39630,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }
       | {
@@ -37941,6 +39655,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }
       | {
@@ -37996,6 +39716,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           access: {
             __typename?: 'ClientAccess';
@@ -38075,6 +39801,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38084,6 +39816,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -38131,6 +39869,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38140,6 +39884,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -38207,6 +39957,12 @@ export type SubmitFormMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }>;
         }
@@ -38233,6 +39989,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -38287,6 +40049,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38296,6 +40064,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -38343,6 +40117,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38352,6 +40132,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -38381,6 +40167,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           createdBy?: {
             __typename: 'ApplicationUser';
@@ -38389,6 +40181,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -38443,6 +40241,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38452,6 +40256,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -38499,6 +40309,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38508,6 +40324,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -38589,6 +40411,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38598,6 +40426,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -38645,6 +40479,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38654,6 +40494,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -38725,6 +40571,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }
       | {
@@ -38760,6 +40612,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }
       | {
@@ -38780,6 +40638,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }
       | {
@@ -38797,6 +40661,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }
       | {
@@ -38827,6 +40697,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -38881,6 +40757,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38890,6 +40772,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -38937,6 +40825,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -38946,6 +40840,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -38968,6 +40868,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -39022,6 +40928,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -39031,6 +40943,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -39078,6 +40996,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -39087,6 +41011,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -39145,6 +41075,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -39199,6 +41135,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -39208,6 +41150,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -39255,6 +41203,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -39264,6 +41218,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -39364,6 +41324,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }
       | { __typename?: 'ReferralPosting'; id: string }
@@ -39405,6 +41371,12 @@ export type SubmitFormMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -39459,6 +41431,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -39468,6 +41446,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             values?: Array<{
@@ -39515,6 +41499,12 @@ export type SubmitFormMutation = {
                   firstName?: string | null;
                   lastName?: string | null;
                   email: string;
+                  impersonating: boolean;
+                  trueUser?: {
+                    __typename?: 'ApplicationUser';
+                    id: string;
+                    name: string;
+                  } | null;
                 } | null;
               } | null;
               user?: {
@@ -39524,6 +41514,12 @@ export type SubmitFormMutation = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             }> | null;
           }>;
@@ -41150,6 +43146,12 @@ export type GeolocationFieldsWithMetadataFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -41180,6 +43182,12 @@ export type GetEnrollmentGeolocationsQuery = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }>;
   } | null;
@@ -41279,6 +43287,12 @@ export type HouseholdFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -41362,6 +43376,12 @@ export type HouseholdClientFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }>;
   };
@@ -41542,6 +43562,12 @@ export type JoinHouseholdMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }>;
         };
@@ -41633,6 +43659,12 @@ export type JoinHouseholdMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }>;
         };
@@ -41737,6 +43769,12 @@ export type SplitHouseholdMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }>;
         };
@@ -41828,6 +43866,12 @@ export type SplitHouseholdMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }>;
         };
@@ -41928,6 +43972,12 @@ export type GetHouseholdQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }>;
       };
@@ -42020,6 +44070,12 @@ export type InventoryFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -42074,6 +44130,12 @@ export type InventoryFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -42083,6 +44145,12 @@ export type InventoryFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -42130,6 +44198,12 @@ export type InventoryFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -42139,6 +44213,12 @@ export type InventoryFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -42352,6 +44432,12 @@ export type OrganizationDetailFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -42406,6 +44492,12 @@ export type OrganizationDetailFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -42415,6 +44507,12 @@ export type OrganizationDetailFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -42462,6 +44560,12 @@ export type OrganizationDetailFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -42471,6 +44575,12 @@ export type OrganizationDetailFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -42494,6 +44604,12 @@ export type OrganizationFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -42548,6 +44664,12 @@ export type OrganizationFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -42557,6 +44679,12 @@ export type OrganizationFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -42604,6 +44732,12 @@ export type OrganizationFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -42613,6 +44747,12 @@ export type OrganizationFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -42669,6 +44809,12 @@ export type GetOrganizationQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -42723,6 +44869,12 @@ export type GetOrganizationQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -42732,6 +44884,12 @@ export type GetOrganizationQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -42779,6 +44937,12 @@ export type GetOrganizationQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -42788,6 +44952,12 @@ export type GetOrganizationQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -42924,6 +45094,12 @@ export type ProjectAllFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -42978,6 +45154,12 @@ export type ProjectAllFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -42987,6 +45169,12 @@ export type ProjectAllFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -43034,6 +45222,12 @@ export type ProjectAllFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -43043,6 +45237,12 @@ export type ProjectAllFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -43689,6 +45889,12 @@ export type ProjectCocFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -43710,6 +45916,12 @@ export type FunderFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -43730,6 +45942,12 @@ export type CeParticipationFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -43748,6 +45966,12 @@ export type HmisParticipationFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -43885,6 +46109,12 @@ export type GetProjectQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -43939,6 +46169,12 @@ export type GetProjectQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -43948,6 +46184,12 @@ export type GetProjectQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -43995,6 +46237,12 @@ export type GetProjectQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -44004,6 +46252,12 @@ export type GetProjectQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -44444,6 +46698,12 @@ export type GetProjectAssessmentsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -44453,6 +46713,12 @@ export type GetProjectAssessmentsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -44500,6 +46766,12 @@ export type GetProjectAssessmentsQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -44509,6 +46781,12 @@ export type GetProjectAssessmentsQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -44519,6 +46797,12 @@ export type GetProjectAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
@@ -44527,6 +46811,12 @@ export type GetProjectAssessmentsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         definition: {
           __typename?: 'FormDefinition';
@@ -44590,6 +46880,12 @@ export type GetFunderQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
 };
@@ -44628,6 +46924,12 @@ export type GetInventoryQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -44682,6 +46984,12 @@ export type GetInventoryQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -44691,6 +46999,12 @@ export type GetInventoryQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -44738,6 +47052,12 @@ export type GetInventoryQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -44747,6 +47067,12 @@ export type GetInventoryQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -44780,6 +47106,12 @@ export type GetProjectCocQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
   } | null;
 };
@@ -44828,6 +47160,12 @@ export type GetProjectInventoriesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -44882,6 +47220,12 @@ export type GetProjectInventoriesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -44891,6 +47235,12 @@ export type GetProjectInventoriesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -44938,6 +47288,12 @@ export type GetProjectInventoriesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -44947,6 +47303,12 @@ export type GetProjectInventoriesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -45093,6 +47455,12 @@ export type GetProjectProjectCocsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -45133,6 +47501,12 @@ export type GetProjectFundersQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -45172,6 +47546,12 @@ export type GetProjectCeParticipationsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -45209,6 +47589,12 @@ export type GetProjectHmisParticipationsQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -45678,6 +48064,12 @@ export type UpdateReferralPostingMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -45687,6 +48079,12 @@ export type UpdateReferralPostingMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -45734,6 +48132,12 @@ export type UpdateReferralPostingMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -45743,6 +48147,12 @@ export type UpdateReferralPostingMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -45918,6 +48328,12 @@ export type GetReferralPostingQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -45927,6 +48343,12 @@ export type GetReferralPostingQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -45974,6 +48396,12 @@ export type GetReferralPostingQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -45983,6 +48411,12 @@ export type GetReferralPostingQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -46197,6 +48631,12 @@ export type ReferralPostingDetailFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -46206,6 +48646,12 @@ export type ReferralPostingDetailFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -46253,6 +48699,12 @@ export type ReferralPostingDetailFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -46262,6 +48714,12 @@ export type ReferralPostingDetailFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -46370,6 +48828,12 @@ export type EsgFundingServiceFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -46379,6 +48843,12 @@ export type EsgFundingServiceFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -46426,6 +48896,12 @@ export type EsgFundingServiceFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -46435,6 +48911,12 @@ export type EsgFundingServiceFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -46521,6 +49003,12 @@ export type GetEsgFundingReportQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -46530,6 +49018,12 @@ export type GetEsgFundingReportQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -46577,6 +49071,12 @@ export type GetEsgFundingReportQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -46586,6 +49086,12 @@ export type GetEsgFundingReportQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -46605,6 +49111,12 @@ export type ScanCardFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   deletedBy?: {
     __typename: 'ApplicationUser';
@@ -46613,6 +49125,12 @@ export type ScanCardFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -46645,6 +49163,12 @@ export type GetClientScanCardCodesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         deletedBy?: {
           __typename: 'ApplicationUser';
@@ -46653,6 +49177,12 @@ export type GetClientScanCardCodesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }>;
     };
@@ -46680,6 +49210,12 @@ export type CreateScanCardMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       deletedBy?: {
         __typename: 'ApplicationUser';
@@ -46688,6 +49224,12 @@ export type CreateScanCardMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     errors: Array<{
@@ -46728,6 +49270,12 @@ export type DeleteScanCardMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       deletedBy?: {
         __typename: 'ApplicationUser';
@@ -46736,6 +49284,12 @@ export type DeleteScanCardMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     errors: Array<{
@@ -46776,6 +49330,12 @@ export type RestoreScanCardMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       deletedBy?: {
         __typename: 'ApplicationUser';
@@ -46784,6 +49344,12 @@ export type RestoreScanCardMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     errors: Array<{
@@ -46880,6 +49446,12 @@ export type ServiceDetailFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -46934,6 +49506,12 @@ export type ServiceDetailFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -46943,6 +49521,12 @@ export type ServiceDetailFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -46990,6 +49574,12 @@ export type ServiceDetailFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -46999,6 +49589,12 @@ export type ServiceDetailFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -47042,6 +49638,12 @@ export type ServiceFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -47096,6 +49698,12 @@ export type ServiceFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -47105,6 +49713,12 @@ export type ServiceFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -47152,6 +49766,12 @@ export type ServiceFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -47161,6 +49781,12 @@ export type ServiceFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -47204,6 +49830,12 @@ export type ClientServiceFieldsFragment = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -47258,6 +49890,12 @@ export type ClientServiceFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -47267,6 +49905,12 @@ export type ClientServiceFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     } | null;
     values?: Array<{
@@ -47314,6 +49958,12 @@ export type ClientServiceFieldsFragment = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       user?: {
@@ -47323,6 +49973,12 @@ export type ClientServiceFieldsFragment = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
     }> | null;
   }>;
@@ -47385,6 +50041,12 @@ export type GetServiceQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -47439,6 +50101,12 @@ export type GetServiceQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -47448,6 +50116,12 @@ export type GetServiceQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       } | null;
       values?: Array<{
@@ -47495,6 +50169,12 @@ export type GetServiceQuery = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         user?: {
@@ -47504,6 +50184,12 @@ export type GetServiceQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
       }> | null;
     }>;
@@ -47581,6 +50267,12 @@ export type DeleteServiceMutation = {
         firstName?: string | null;
         lastName?: string | null;
         email: string;
+        impersonating: boolean;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -47635,6 +50327,12 @@ export type DeleteServiceMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -47644,6 +50342,12 @@ export type DeleteServiceMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         } | null;
         values?: Array<{
@@ -47691,6 +50395,12 @@ export type DeleteServiceMutation = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           user?: {
@@ -47700,6 +50410,12 @@ export type DeleteServiceMutation = {
             firstName?: string | null;
             lastName?: string | null;
             email: string;
+            impersonating: boolean;
+            trueUser?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
         }> | null;
       }>;
@@ -47776,6 +50492,12 @@ export type GetEnrollmentServicesQuery = {
           firstName?: string | null;
           lastName?: string | null;
           email: string;
+          impersonating: boolean;
+          trueUser?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -47830,6 +50552,12 @@ export type GetEnrollmentServicesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -47839,6 +50567,12 @@ export type GetEnrollmentServicesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           } | null;
           values?: Array<{
@@ -47886,6 +50620,12 @@ export type GetEnrollmentServicesQuery = {
                 firstName?: string | null;
                 lastName?: string | null;
                 email: string;
+                impersonating: boolean;
+                trueUser?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
               } | null;
             } | null;
             user?: {
@@ -47895,6 +50635,12 @@ export type GetEnrollmentServicesQuery = {
               firstName?: string | null;
               lastName?: string | null;
               email: string;
+              impersonating: boolean;
+              trueUser?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
           }> | null;
         }>;
@@ -49326,6 +52072,12 @@ export type UserFieldsFragment = {
   firstName?: string | null;
   lastName?: string | null;
   email: string;
+  impersonating: boolean;
+  trueUser?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type UserAdminFieldsFragment = {
@@ -49336,6 +52088,12 @@ export type UserAdminFieldsFragment = {
   firstName?: string | null;
   lastName?: string | null;
   email: string;
+  impersonating: boolean;
+  trueUser?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type UserActivityLogFieldsFragment = {
@@ -49390,6 +52148,12 @@ export type GetApplicationUsersQuery = {
       firstName?: string | null;
       lastName?: string | null;
       email: string;
+      impersonating: boolean;
+      trueUser?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     }>;
   };
 };
@@ -49407,6 +52171,12 @@ export type GetUserQuery = {
     firstName?: string | null;
     lastName?: string | null;
     email: string;
+    impersonating: boolean;
+    trueUser?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -49684,6 +52454,11 @@ export const UserFieldsFragmentDoc = gql`
     firstName
     lastName
     email
+    impersonating
+    trueUser {
+      id
+      name
+    }
   }
 `;
 export const ClientAlertFieldsFragmentDoc = gql`

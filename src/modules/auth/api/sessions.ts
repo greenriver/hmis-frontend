@@ -16,6 +16,11 @@ export interface HmisUser {
   phone?: string;
   sessionDuration: number;
   impersonating: boolean;
+  trueUser?: {
+    id: string;
+    name: string;
+  };
+  primaryIdp?: string;
 }
 interface HmisError {
   type: string;
@@ -85,6 +90,10 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
     const user: HmisUser | undefined = await response.json();
     if (user?.id) {
       storage.setUser(user);
+      // Store primaryIdp for bypassing IDP picker on next sign-in
+      if (user.primaryIdp) {
+        storage.setLastConnectorId(user.primaryIdp);
+      }
       return user;
     }
     storage.clearUser();
@@ -115,8 +124,12 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
-  const response = await fetchWithCsrf('/hmis/session_keepalive', {
-    method: 'POST',
+  const response = await fetch('/hmis/session_keepalive', {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+    },
   });
   trackSessionFromResponse(response);
   return response;

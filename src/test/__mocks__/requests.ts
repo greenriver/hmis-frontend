@@ -78,6 +78,7 @@ export const applicationUserMock: UserFieldsFragment = {
   firstName: 'Provider',
   lastName: 'User',
   email: 'fake@email.org',
+  impersonating: false,
 };
 
 export const fakeEnrollment = () => {

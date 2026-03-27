@@ -35,6 +35,7 @@ export const Default: Story = {
         id: 'user1',
         name: 'John Doe',
         email: '',
+        impersonating: false,
       },
       dateUpdated: '2022-01-02T12:00:00Z',
       user: {
@@ -42,6 +43,7 @@ export const Default: Story = {
         id: 'user2',
         name: 'Jane Smith',
         email: '',
+        impersonating: false,
       },
       customDataElements: [
         {

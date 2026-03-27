@@ -39,7 +39,7 @@ interface Props {
   children: ReactNode;
 }
 export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
-  const [appSettings, setAppSettings] = useState<HmisAppSettings>();
+  const [appSettings, setAppSettings] = useState<HmisAppSettings>({});
   const [user, setUser] = useState<HmisUser>();
   const [error, setError] = useState<Error | HttpError>();
   const [loading, setLoading] = useState(true);
@@ -62,15 +62,36 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
   const logoutUser = useCallback(() => {
     setLoading(true);
-    const fn = user?.impersonating ? stopImpersonating : logout;
-    return fn()
-      .then(() => {
-        reloadWindow();
-      })
-      .catch((e) => {
-        setLoading(false);
-        setError(e);
-      });
+    if (user?.impersonating) {
+      // Stop impersonating returns HmisUser
+      return stopImpersonating()
+        .then(() => {
+          reloadWindow();
+        })
+        .catch((e) => {
+          setLoading(false);
+          setError(e);
+        });
+    } else {
+      // Logout returns Response with redirect_url
+      return logout()
+        .then((response) => {
+          if (response.ok) {
+            return response.json().then((data: { redirect_url?: string }) => {
+              if (data.redirect_url) {
+                window.location.href = data.redirect_url;
+              } else {
+                reloadWindow();
+              }
+            });
+          }
+          reloadWindow();
+        })
+        .catch((e) => {
+          setLoading(false);
+          setError(e);
+        });
+    }
   }, [user?.impersonating]);
 
   const impersonateUser = useCallback((userId: string) => {
@@ -123,22 +144,57 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     };
 
     if (cachedUser) {
+      // We have a cached user, try to load settings
       setUser(cachedUser);
       const cachedAppSettings = storage.getAppSettings();
       if (cachedAppSettings) {
         setAppSettings(cachedAppSettings);
         promises.push(prefetchLogo(cachedAppSettings.logoPath));
       } else {
-        promises.push(fetchHmisAppSettings().then(saveSettings));
+        promises.push(
+          fetchHmisAppSettings()
+            .then(saveSettings)
+            .catch((err) => {
+              // If 401, keep empty object (for public/unauthenticated pages)
+              // Otherwise, rethrow to be handled by Promise.all
+              if (err?.status !== 401) {
+                throw err;
+              }
+            })
+        );
       }
     } else {
-      promises.push(fetchCurrentUser().then(setUser));
-      promises.push(fetchHmisAppSettings().then(saveSettings));
+      // No cached user - attempt to fetch user to check if authenticated
+      // If successful, user is authenticated. If 401, show public landing page.
+      promises.push(
+        fetchCurrentUser()
+          .then((user) => {
+            setUser(user);
+            // Also fetch app settings after successful user fetch
+            return fetchHmisAppSettings().then(saveSettings);
+          })
+          .catch((err) => {
+            if (err?.status === 401) {
+              // Not authenticated - this is expected for public landing page
+              console.info(
+                'User not authenticated, showing public landing page'
+              );
+            } else {
+              // Real error - throw it
+              throw err;
+            }
+          })
+      );
     }
 
     if (promises.length) {
       Promise.all(promises)
-        .catch(setError)
+        .catch((err) => {
+          // Only set error for non-401 errors
+          if (err?.status !== 401) {
+            setError(err);
+          }
+        })
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
@@ -183,7 +239,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     );
   }
 
-  if (!appSettings) throw new Error(); // shouldn't get here
+  // Allow null appSettings for public/unauthenticated pages
   return (
     <HmisAppSettingsContext.Provider value={appSettings}>
       <HmisAuthContext.Provider value={authState}>

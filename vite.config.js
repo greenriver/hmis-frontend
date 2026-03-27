@@ -11,7 +11,7 @@ import mkcert from 'vite-plugin-mkcert';
 dns.setDefaultResultOrder('ipv4first');
 
 const VISUALIZER = false; // enable to generate bundle visualization on build
-const DEFAULT_WAREHOUSE_SERVER = 'https://hmis-warehouse.dev.test';
+const DEFAULT_WAREHOUSE_SERVER = 'https://hmis-backend.dev.test';
 
 // https://github.com/vitejs/vite/issues/2433#issuecomment-1487472995
 function sourcemapExclude(opts) {
@@ -30,6 +30,8 @@ function sourcemapExclude(opts) {
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const isCI =
+    process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
 
   const warehouseProxyServer = {
     target: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
@@ -119,11 +121,15 @@ export default defineConfig(({ command, mode }) => {
         open: false,
         port: 5173, // expected in capybara system test instructions
         strictPort: true,
+        host: '0.0.0.0', // Listen on all interfaces for Docker container access
+        allowedHosts: isCI ? true : ['hmis.dev.test', 'localhost'], // Allow all hosts in CI, restrict in development
       },
       server: {
         port: 5173,
         open: true,
-        host: env.HMIS_HOST || 'hmis.dev.test',
+        host: '0.0.0.0', // env.HMIS_HOST || 'hmis.dev.test',
+        allowedHosts: isCI ? true : ['hmis.dev.test', 'localhost'], // Allow all hosts in CI, restrict in development
+        hmr: { host: 'localhost' },
         https:
           env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
         proxy: {

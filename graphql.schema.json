@@ -887,6 +887,22 @@
             "deprecationReason": null
           },
           {
+            "name": "impersonating",
+            "description": "True if this user is currently being impersonated by another user",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "lastName",
             "description": null,
             "args": [],
@@ -987,6 +1003,18 @@
                   }
                 }
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "trueUser",
+            "description": "The actual user who is impersonating (null if not impersonating)",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ApplicationUser",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
