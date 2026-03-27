@@ -5636,7 +5636,10 @@ export enum PickListType {
    * exist in the project (both active and inactive).
    */
   AssessmentNames = 'ASSESSMENT_NAMES',
-  /** Current and historical user accounts */
+  /**
+   * Current and historical user accounts
+   * @deprecated No longer used
+   */
   AuditableUsers = 'AUDITABLE_USERS',
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
@@ -5710,7 +5713,7 @@ export enum PickListType {
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
   /** Unit groups for the given project that can receive CE referrals */
   UnitGroupsForProjectDirectCeReferral = 'UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL',
-  /** User accounts. Deprecated in favor of AUDITABLE_USERS */
+  /** User accounts. Returns all users, for use when filtering audit events */
   Users = 'USERS',
 }
 

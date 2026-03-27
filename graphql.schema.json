@@ -40167,8 +40167,8 @@
           {
             "name": "AUDITABLE_USERS",
             "description": "Current and historical user accounts",
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used"
           },
           {
             "name": "AVAILABLE_BULK_SERVICE_TYPES",
@@ -40442,7 +40442,7 @@
           },
           {
             "name": "USERS",
-            "description": "User accounts. Deprecated in favor of AUDITABLE_USERS",
+            "description": "User accounts. Returns all users, for use when filtering audit events",
             "isDeprecated": false,
             "deprecationReason": null
           }
