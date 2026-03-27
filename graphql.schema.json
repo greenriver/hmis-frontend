@@ -29210,12 +29210,6 @@
             "deprecationReason": null
           },
           {
-            "name": "AUTO_EXIT_CONFIG",
-            "description": "Auto exit config",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "CASE_NOTE",
             "description": "Case note",
             "isDeprecated": false,
@@ -40173,8 +40167,8 @@
           {
             "name": "AUDITABLE_USERS",
             "description": "Current and historical user accounts",
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used"
           },
           {
             "name": "AVAILABLE_BULK_SERVICE_TYPES",
@@ -40203,6 +40197,12 @@
           {
             "name": "AVAILABLE_UNIT_TYPES",
             "description": "Unit types that have unoccupied units in the specified project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE_ACCESS_POINT_PROJECT_NAMES",
+            "description": "Projects with an active CE Participation record with Access Point = Yes",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -40442,7 +40442,7 @@
           },
           {
             "name": "USERS",
-            "description": "User accounts. Deprecated in favor of AUDITABLE_USERS",
+            "description": "User accounts. Returns all users, for use when filtering audit events",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -55486,12 +55486,6 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
-          {
-            "name": "AUTO_EXIT_CONFIG",
-            "description": "Auto exit config",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "CLIENT_ALERT",
             "description": "Client alert",

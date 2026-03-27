@@ -3902,8 +3902,6 @@ export type FormProjectMatchesPaginated = {
 export enum FormRole {
   /** Annual */
   Annual = 'ANNUAL',
-  /** Auto exit config */
-  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Case note */
   CaseNote = 'CASE_NOTE',
   /** CE assessment */
@@ -5638,7 +5636,10 @@ export enum PickListType {
    * exist in the project (both active and inactive).
    */
   AssessmentNames = 'ASSESSMENT_NAMES',
-  /** Current and historical user accounts */
+  /**
+   * Current and historical user accounts
+   * @deprecated No longer used
+   */
   AuditableUsers = 'AUDITABLE_USERS',
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
@@ -5650,6 +5651,8 @@ export enum PickListType {
   AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
+  /** Projects with an active CE Participation record with Access Point = Yes */
+  CeAccessPointProjectNames = 'CE_ACCESS_POINT_PROJECT_NAMES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
   CeReferralStatuses = 'CE_REFERRAL_STATUSES',
@@ -5710,7 +5713,7 @@ export enum PickListType {
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
   /** Unit groups for the given project that can receive CE referrals */
   UnitGroupsForProjectDirectCeReferral = 'UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL',
-  /** User accounts. Deprecated in favor of AUDITABLE_USERS */
+  /** User accounts. Returns all users, for use when filtering audit events */
   Users = 'USERS',
 }
 
@@ -8378,8 +8381,6 @@ export type StartCeReferralStepPayload = {
 
 /** Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations. */
 export enum StaticFormRole {
-  /** Auto exit config */
-  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
   /** Form definition */

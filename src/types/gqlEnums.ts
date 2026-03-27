@@ -578,7 +578,6 @@ export const HmisEnums = {
   },
   FormRole: {
     ANNUAL: 'Annual',
-    AUTO_EXIT_CONFIG: 'Auto exit config',
     CASE_NOTE: 'Case note',
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
@@ -999,6 +998,8 @@ export const HmisEnums = {
       'Units available for the given Enrollment at the given project. List is limited to units with the same unit type currently occupied by the household, if any.',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
+    CE_ACCESS_POINT_PROJECT_NAMES:
+      'Projects with an active CE Participation record with Access Point = Yes',
     CE_EVENTS: 'Grouped HUD CE Event types',
     CE_REFERRAL_STATUSES: 'CE_REFERRAL_STATUSES',
     CE_WORKFLOW_TEMPLATE_IDENTIFIERS: 'Templates for CE workflow definitions',
@@ -1045,7 +1046,8 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
     UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL:
       'Unit groups for the given project that can receive CE referrals',
-    USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
+    USERS:
+      'User accounts. Returns all users, for use when filtering audit events',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',
@@ -1917,7 +1919,6 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   StaticFormRole: {
-    AUTO_EXIT_CONFIG: 'Auto exit config',
     CLIENT_ALERT: 'Client alert',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
