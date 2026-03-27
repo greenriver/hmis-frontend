@@ -12,7 +12,7 @@ import {
   buildUrlParamsDefinition,
 } from '@/utils/tableFilterUtil';
 
-export interface FilterParams<T = Record<string, unknown>> {
+interface Args<T = Record<string, unknown>> {
   /** GraphQL type to use for inferring filters (e.g. 'ClientFilterOptions') */
   type: string;
   /** (Optional) Pick list args to be applied to all PickList filter items */
@@ -45,14 +45,14 @@ export interface FilterParams<T = Record<string, unknown>> {
  * filter values do not persist to localStorage. This was an intentional design choice.
  **/
 export default function useTableFilters<T = Record<string, unknown>>(
-  params: FilterParams<T> & { syncToUrl?: true }
+  args: Args<T> & { syncToUrl?: true }
 ): {
   filters: TableFilterType<T>;
   filterValues: Partial<T>;
   setFilterValues: (values: Partial<T>) => void;
 };
 export default function useTableFilters<T = Record<string, unknown>>(
-  params: FilterParams<T> & { syncToUrl: false }
+  args: Args<T> & { syncToUrl: false }
 ): { filters: TableFilterType<T> };
 
 export default function useTableFilters<T = Record<string, unknown>>({
@@ -62,7 +62,7 @@ export default function useTableFilters<T = Record<string, unknown>>({
   omit = [],
   dynamicFilters,
   syncToUrl = true,
-}: FilterParams<T>):
+}: Args<T>):
   | {
       filters: TableFilterType<T>; // filter configuration
       filterValues: Partial<T>; // filter values (if syncToUrl is true)
@@ -120,8 +120,8 @@ export default function useTableFilters<T = Record<string, unknown>>({
 // LEGACY: For backwards compatibility, re-export useTableFilters with old signature.
 // New code should use useTableFilters directly.
 export function useFilters<T = Record<string, unknown>>(
-  params: Omit<FilterParams<T>, 'syncToUrl' | 'initialFilterValues'>
+  args: Omit<Args<T>, 'syncToUrl' | 'initialFilterValues'>
 ): TableFilterType<T> {
-  const { filters } = useTableFilters<T>({ ...params, syncToUrl: false });
+  const { filters } = useTableFilters<T>({ ...args, syncToUrl: false });
   return filters;
 }
