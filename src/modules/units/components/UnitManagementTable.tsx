@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
+import { useFilters } from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 

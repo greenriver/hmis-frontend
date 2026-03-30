@@ -1,16 +1,14 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   getViewClientMenuItem,
   getViewEnrollmentMenuItem,
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   clientBriefName,
-  formatDateForDisplay,
-  formatDateForGql,
   PERMANENT_HOUSING_PROJECT_TYPES,
 } from '@/modules/hmis/hmisUtil';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
@@ -30,18 +28,11 @@ export type ProjectEnrollmentFields = NonNullable<
 
 const ProjectClientEnrollmentsTable = ({
   projectId,
-  openOnDate,
   searchTerm,
 }: {
   projectId: string;
-  openOnDate?: Date;
   searchTerm?: string;
 }) => {
-  const openOnDateString = useMemo(
-    () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
-    [openOnDate]
-  );
-
   const {
     project: { staffAssignmentsEnabled, projectType },
   } = useProjectDashboardContext();
@@ -62,15 +53,15 @@ const ProjectClientEnrollmentsTable = ({
       ];
     }, [projectType, staffAssignmentsEnabled]);
 
-  const filters = useFilters({
-    type: 'EnrollmentsForProjectFilterOptions',
-    omit: [
-      'searchTerm',
-      'bedNightOnDate',
-      staffAssignmentsEnabled ? '' : 'assignedStaff',
-    ],
-    pickListArgs: { projectId: projectId },
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<EnrollmentsForProjectFilterOptions>({
+      type: 'EnrollmentsForProjectFilterOptions',
+      omit: [
+        'bedNightOnDate', // Not applicable, this filter is available via bed night workflow
+        staffAssignmentsEnabled ? '' : 'assignedStaff',
+      ],
+      pickListArgs: { projectId: projectId },
+    });
 
   return (
     <GenericTableWithData<
@@ -81,10 +72,7 @@ const ProjectClientEnrollmentsTable = ({
     >
       queryVariables={{
         id: projectId,
-        filters: {
-          searchTerm,
-          openOnDate: openOnDateString,
-        },
+        filters: { searchTerm },
       }}
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns}
@@ -92,14 +80,12 @@ const ProjectClientEnrollmentsTable = ({
       rowActionTitle='View Enrollment'
       rowName={(row) => clientBriefName(row.client)}
       rowSecondaryActionConfigs={(row) => [getViewClientMenuItem(row.client)]}
-      noData={
-        openOnDate
-          ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
-          : 'No enrollments'
-      }
+      noData='No enrollments'
       pagePath='project.enrollments'
       recordType='Enrollment'
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
       defaultSortOption={EnrollmentSortOption.MostRecent}
     />
   );

@@ -4,6 +4,7 @@ import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowA
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import { useFilters } from '@/hooks/useTableFilters';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
@@ -12,7 +13,6 @@ import {
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   assessmentDescription,
   clientBriefName,

@@ -19,6 +19,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
+import { useFilters } from '@/hooks/useTableFilters';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/searchResultCard/ClientSearchResultCard';
 import {
@@ -28,7 +29,6 @@ import {
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 
 import { isEnrollment, isHouseholdClient } from '@/modules/household/types';

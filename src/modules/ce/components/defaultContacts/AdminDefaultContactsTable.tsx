@@ -5,10 +5,10 @@ import SwimlaneLabel from './SwimlaneLabel';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import { useFilters } from '@/hooks/useTableFilters';
 import EditProjectCeDefaultContactsModal from '@/modules/ce/components/defaultContacts/EditProjectCeDefaultContactsModal';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {

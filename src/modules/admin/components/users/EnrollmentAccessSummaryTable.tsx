@@ -1,9 +1,10 @@
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   EnrollmentAccessSummaryFieldsFragment,
+  EnrollmentAccessSummaryFilterOptions,
   GetUserEnrollmentSummariesDocument,
   GetUserEnrollmentSummariesQuery,
   GetUserEnrollmentSummariesQueryVariables,
@@ -52,10 +53,10 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
   startDate,
   searchTerm,
 }) => {
-  const filters = useFilters({
-    type: 'EnrollmentAccessSummaryFilterOptions',
-    omit: ['searchTerm'],
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<EnrollmentAccessSummaryFilterOptions>({
+      type: 'EnrollmentAccessSummaryFilterOptions',
+    });
 
   return (
     <GenericTableWithData<
@@ -75,6 +76,8 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
       paginationItemName='accessed enrollment'
       recordType='EnrollmentAccessSummary'
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
     />
   );
 };
