@@ -216,7 +216,6 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
 
   const filters = useFilters({
     type: 'ClientFilterOptions',
-    omit: ['searchTerm'],
   });
 
   const isTiny = useIsMobile('sm');

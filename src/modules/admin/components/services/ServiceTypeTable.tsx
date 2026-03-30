@@ -9,7 +9,6 @@ import {
   GetServiceTypesQuery,
   GetServiceTypesQueryVariables,
   ServiceTypeConfigFieldsFragment,
-  ServiceTypeFilterOptions,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -48,10 +47,9 @@ const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
 ];
 
 const ServiceTypeTable = () => {
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<ServiceTypeFilterOptions>({
-      type: 'ServiceTypeFilterOptions',
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'ServiceTypeFilterOptions',
+  });
 
   return (
     <>

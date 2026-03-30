@@ -4,7 +4,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import {
   EnrollmentAccessSummaryFieldsFragment,
-  EnrollmentAccessSummaryFilterOptions,
   GetUserEnrollmentSummariesDocument,
   GetUserEnrollmentSummariesQuery,
   GetUserEnrollmentSummariesQueryVariables,
@@ -53,10 +52,9 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
   startDate,
   searchTerm,
 }) => {
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<EnrollmentAccessSummaryFilterOptions>({
-      type: 'EnrollmentAccessSummaryFilterOptions',
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'EnrollmentAccessSummaryFilterOptions',
+  });
 
   return (
     <GenericTableWithData<

@@ -16,7 +16,6 @@ import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
   CeClientFieldsFragment,
-  CeClientFilterOptions,
   ExternalIdentifierType,
   GetCeClientsDocument,
   GetCeClientsQuery,
@@ -88,11 +87,10 @@ const AdminCeClientsTable: React.FC = () => {
     ];
   }, [tableConfigLookup, mciIdEnabled]);
 
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<CeClientFilterOptions>({
-      type: 'CeClientFilterOptions',
-      dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'CeClientFilterOptions',
+    dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
+  });
 
   const rowSecondaryActionConfigs = useCallback(
     (row: CeClientFieldsFragment) => {

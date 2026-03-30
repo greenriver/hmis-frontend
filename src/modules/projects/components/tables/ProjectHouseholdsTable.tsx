@@ -206,12 +206,11 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
     }));
   }, [projectType, staffAssignmentsEnabled]);
 
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<HouseholdFilterOptions>({
-      type: 'HouseholdFilterOptions',
-      omit: staffAssignmentsEnabled ? undefined : ['assignedStaff'],
-      pickListArgs: { projectId: projectId },
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'HouseholdFilterOptions',
+    omit: staffAssignmentsEnabled ? undefined : ['assignedStaff'],
+    pickListArgs: { projectId: projectId },
+  });
 
   return (
     <GenericTableWithData<

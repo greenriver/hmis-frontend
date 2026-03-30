@@ -8,7 +8,6 @@ import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeOpportunityAdminFieldsFragment,
-  CeOpportunityFilterOptions,
   CeOpportunitySortOption,
   CeOpportunityStatus,
   GetAdminCeOpportunitiesDocument,
@@ -57,14 +56,13 @@ const COLUMNS: DataColumnDef<
 
 interface Props {}
 const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<CeOpportunityFilterOptions>({
-      type: 'CeOpportunityFilterOptions',
-      omit: [
-        'status', // omitted because only 'open' opportunities are queried
-        'availableOnDate', // omitted because filter is not implemented on the backend #7537
-      ],
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'CeOpportunityFilterOptions',
+    omit: [
+      'status', // omitted because only 'open' opportunities are queried
+      'availableOnDate', // omitted because filter is not implemented on the backend #7537
+    ],
+  });
 
   return (
     <Paper>

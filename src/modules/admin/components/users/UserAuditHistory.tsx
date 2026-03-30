@@ -44,10 +44,9 @@ const columns: ColumnDef<UserAuditEventFieldsFragment>[] = [
 
 const UserAuditHistory = () => {
   const { userId } = useSafeParams() as { userId: string };
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<UserAuditEventFilterOptions>({
-      type: 'UserAuditEventFilterOptions',
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'UserAuditEventFilterOptions',
+  });
 
   const rowSecondaryActionConfigs = useCallback(
     ({

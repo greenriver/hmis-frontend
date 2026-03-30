@@ -21,7 +21,7 @@
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
-    "graphql:codegen": "graphql-codegen --config codegen.yml && node scripts/generateEnumDescriptions.js && prettier --write ./src/types/* graphql.schema.json"
+    "graphql:codegen": "graphql-codegen --config codegen.yml && node scripts/generateEnumDescriptions.js && node scripts/generateGqlFilterOptionsTypes.js && prettier --write ./src/types/* graphql.schema.json"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [

@@ -61,10 +61,7 @@ const UnitManagementTable: React.FC<Props> = ({
 
   const filters = useFilters({
     type: 'UnitFilterOptions',
-    omit: [
-      'status', // deprecated filter option, remove
-      ...(unitGroupId ? ['unitType'] : []), // if looking at units in one group, no need to show this filter
-    ],
+    omit: unitGroupId ? ['unitType'] : [], // if looking at units in one group, no need to show this filter
     pickListArgs: { projectId },
   });
 
