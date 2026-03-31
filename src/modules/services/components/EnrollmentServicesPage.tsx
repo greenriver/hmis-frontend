@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import NotFound from '@/components/pages/NotFound';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import useEnrollmentDashboardContext from '@/modules/enrollment/hooks/useEnrollmentDashboardContext';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -43,7 +43,7 @@ const EnrollmentServicesPage = () => {
     onClose: () => setViewingRecord(undefined),
   });
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ServicesForEnrollmentFilterOptions',
   });
 
@@ -103,6 +103,8 @@ const EnrollmentServicesPage = () => {
           noData='No services'
           recordType='Service'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           noSort
         />
       </TitleCard>

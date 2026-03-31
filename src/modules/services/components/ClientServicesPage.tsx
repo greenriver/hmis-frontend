@@ -3,7 +3,7 @@ import React from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
@@ -57,7 +57,7 @@ const ClientServicesPage: React.FC = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const { client } = useClientDashboardContext();
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ServiceFilterOptions',
   });
 
@@ -71,6 +71,8 @@ const ClientServicesPage: React.FC = () => {
           ServiceType
         >
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           queryVariables={{ id: clientId }}
           queryDocument={GetClientServicesDocument}
           columns={columns}

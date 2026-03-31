@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import React from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -65,7 +65,7 @@ interface Props {
  * Table showing outgoing referrals from a project.
  */
 const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ProjectOutgoingCeReferralFilterOptions',
     omit: ['searchTerm'],
   });
@@ -82,6 +82,8 @@ const ProjectOutgoingReferralsTable: React.FC<Props> = ({ projectId }) => {
           id: projectId,
         }}
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
         queryDocument={GetProjectOutgoingDirectCeReferralsDocument}
         pagePath='project.outgoingDirectCeReferrals'
         noData='No referrals'
