@@ -55,11 +55,12 @@ const ProjectClientEnrollmentsTable = ({
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'EnrollmentsForProjectFilterOptions',
-    omit: [
-      'bedNightOnDate', // Not applicable, this filter is available via bed night workflow
-      ...(staffAssignmentsEnabled ? [] : ['assignedStaff']),
-    ] as (keyof EnrollmentsForProjectFilterOptions)[],
-    pickListArgs: { projectId: projectId },
+    // Always exclude bedNightOnDate filter, it is only applicable to bed night workflow.
+    // Exclude assignedStaff filter if staff assignments are not enabled for this project.
+    omit: staffAssignmentsEnabled
+      ? ['bedNightOnDate']
+      : ['bedNightOnDate', 'assignedStaff'],
+    pickListArgs: { projectId },
   });
 
   return (
