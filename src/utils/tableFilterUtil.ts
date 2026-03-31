@@ -108,7 +108,7 @@ const getFilter = (
 // by introspecting the GraphQL schema.
 export function buildTableFilterType<T>(
   type?: string | null,
-  omit: string[] = [],
+  omit: Array<keyof T> = [],
   pickListArgs?: PickListArgs
 ): TableFilterType<T> {
   if (!type) return {};
@@ -119,7 +119,7 @@ export function buildTableFilterType<T>(
   const result: Partial<Record<keyof T, FilterType<T>>> = {};
 
   schema.args.forEach(({ name }) => {
-    if (omit.includes(name)) return;
+    if (omit.includes(name as keyof T)) return;
 
     const filter = getFilter(type, name, pickListArgs);
     if (filter) {
@@ -173,11 +173,11 @@ export const transformDynamicFilters = <FilterOptionsType>(
 /** Build URL param definition from filter config; only includes non–free-text filters (no PII in URL). */
 export function buildUrlParamsDefinition<T>(
   filters: TableFilterType<T>,
-  omit: string[] = []
+  omit: Array<keyof T> = []
 ): SearchParamsStateType {
   const def: SearchParamsStateType = {};
   Object.entries(filters).forEach(([key, filter]) => {
-    if (omit.includes(key)) return;
+    if (omit.includes(key as keyof T)) return;
     const f = filter as FilterType<any>;
     if (f.type === 'text') return; // never put free-text in URL (PII)
     if (f.type === 'date') {

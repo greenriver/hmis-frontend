@@ -25,7 +25,6 @@ import {
   GetProjectsQuery,
   GetProjectsQueryVariables,
   ProjectAllFieldsFragment,
-  ProjectFilterOptions,
   ProjectFilterOptionStatus,
   ProjectSortOption,
 } from '@/types/gqlTypes';
@@ -106,7 +105,7 @@ const ProjectsTable = ({
     filters: projectFilters,
     filterValues,
     setFilterValues,
-  } = useTableFilters<ProjectFilterOptions>({
+  } = useTableFilters({
     type: 'ProjectFilterOptions',
     omit: ['ceEnabled'],
     // Initially, filter to only open projects

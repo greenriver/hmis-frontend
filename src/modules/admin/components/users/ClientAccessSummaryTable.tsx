@@ -6,7 +6,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import {
   ClientAccessSummaryFieldsFragment,
-  ClientAccessSummaryFilterOptions,
   GetUserClientSummariesDocument,
   GetUserClientSummariesQuery,
   GetUserClientSummariesQueryVariables,
@@ -45,10 +44,9 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
   startDate,
   searchTerm = '',
 }) => {
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<ClientAccessSummaryFilterOptions>({
-      type: 'ClientAccessSummaryFilterOptions',
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'ClientAccessSummaryFilterOptions',
+  });
 
   return (
     <GenericTableWithData<

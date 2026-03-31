@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
 
-import useSearchParamsState, {
-  SearchParamsStateType,
-} from '@/hooks/useSearchParamState';
+import useSearchParamsState from '@/hooks/useSearchParamState';
 
 import { PickListArgs } from '@/modules/form/types';
+import type { FilterOptionsByName } from '@/types/gqlFilterOptionsTypes.generated';
 import { TableFilterConfigFieldsFragment } from '@/types/gqlTypes';
 import { FilterType, TableFilterType } from '@/types/tableFilterTypes';
 import {
@@ -12,21 +11,21 @@ import {
   buildUrlParamsDefinition,
 } from '@/utils/tableFilterUtil';
 
-interface Args<T = Record<string, unknown>> {
-  /** GraphQL type to use for inferring filters (e.g. 'ClientFilterOptions') */
-  type: string;
+type Args<K extends keyof FilterOptionsByName> = {
+  /** GraphQL input type name for filter fields (must match a generated *FilterOptions type). */
+  type: K;
   /** (Optional) Pick list args to be applied to all PickList filter items */
   pickListArgs?: PickListArgs;
   /** (Optional) Keys to skip when inferring filters. Filters that are text-based are always skipped
    * because they are not supported in the filter widget (due to limiting PII in URL). */
-  omit?: Array<string>;
+  omit?: Array<keyof FilterOptionsByName[K]>;
   /** (Optional) Dynamic filters to include (e.g. from HMIS Table Configuration) */
   dynamicFilters?: TableFilterConfigFieldsFragment[];
   /** (Optional) Whether to sync filter values to URL. If true, filterValues are reflected as URL search params. (Default: true) */
   syncToUrl?: boolean;
   /** (Optional) Initial filter values to set when URL has no params. Ignored if syncToUrl is false. */
-  initialFilterValues?: Partial<T>;
-}
+  initialFilterValues?: Partial<FilterOptionsByName[K]>;
+};
 
 /**
  * Builds a table filter configuration from a GraphQL filter input type (e.g. `ClientFilterOptions`)
@@ -44,56 +43,56 @@ interface Args<T = Record<string, unknown>> {
  * - Unlike Optional Table Columns (which similarly have logic to sync to URL),
  * filter values do not persist to localStorage. This was an intentional design choice.
  **/
-export default function useTableFilters<T = Record<string, unknown>>(
-  args: Args<T> & { syncToUrl?: true }
+export default function useTableFilters<K extends keyof FilterOptionsByName>(
+  args: Args<K> & { syncToUrl?: true }
 ): {
-  filters: TableFilterType<T>;
-  filterValues: Partial<T>;
-  setFilterValues: (values: Partial<T>) => void;
+  filters: TableFilterType<FilterOptionsByName[K]>;
+  filterValues: Partial<FilterOptionsByName[K]>;
+  setFilterValues: (values: Partial<FilterOptionsByName[K]>) => void;
 };
-export default function useTableFilters<T = Record<string, unknown>>(
-  args: Args<T> & { syncToUrl: false }
-): { filters: TableFilterType<T> };
+export default function useTableFilters<K extends keyof FilterOptionsByName>(
+  args: Args<K> & { syncToUrl: false }
+): { filters: TableFilterType<FilterOptionsByName[K]> };
 
-export default function useTableFilters<T = Record<string, unknown>>({
+export default function useTableFilters<K extends keyof FilterOptionsByName>({
   type, // Filter type, e.g. 'ClientFilterOptions'
-  initialFilterValues = {} as Partial<T>,
+  initialFilterValues = {} as Partial<FilterOptionsByName[K]>,
   pickListArgs = {},
   omit = [],
   dynamicFilters,
   syncToUrl = true,
-}: Args<T>):
+}: Args<K>):
   | {
-      filters: TableFilterType<T>; // filter configuration
-      filterValues: Partial<T>; // filter values (if syncToUrl is true)
-      setFilterValues: (values: Partial<T>) => void; // set filter values (if syncToUrl is true)
+      filters: TableFilterType<FilterOptionsByName[K]>; // filter configuration
+      filterValues: Partial<FilterOptionsByName[K]>; // filter values (if syncToUrl is true)
+      setFilterValues: (values: Partial<FilterOptionsByName[K]>) => void; // set filter values (if syncToUrl is true)
     }
-  | { filters: TableFilterType<T> } {
+  | { filters: TableFilterType<FilterOptionsByName[K]> } {
   // Build TableFilterType filter configuration by introspecting on the GraphQL schema for the given filter type.
   // If dynamicFilters are provided, add them to the filter configuration.
   const filters = useMemo(() => {
-    const result: TableFilterType<T> = buildTableFilterType<T>(
+    const result = buildTableFilterType<FilterOptionsByName[K]>(
       type,
       omit,
       pickListArgs
     );
     // Add dynamic filters if provided
     (dynamicFilters || []).forEach(({ key, label, options }) => {
-      result[key as keyof T] = {
+      result[key as keyof FilterOptionsByName[K]] = {
         key,
         label,
         multi: true,
         type: 'local_picklist', // Dynamic filters must have picklist options defined on them
         isDynamic: true,
         pickListOptions: options,
-      } as FilterType<T>;
+      } as FilterType<FilterOptionsByName[K]>;
     });
 
     return result;
   }, [type, dynamicFilters, omit, pickListArgs]);
 
   // Build URL param definition from filter configuration; if syncing filter state to URL.
-  const urlParamsDefinition: SearchParamsStateType = useMemo(() => {
+  const urlParamsDefinition = useMemo(() => {
     if (!syncToUrl || !filters || Object.keys(filters).length === 0) {
       return {};
     }
@@ -112,16 +111,18 @@ export default function useTableFilters<T = Record<string, unknown>>({
 
   return {
     filters,
-    filterValues: urlFilterValues as Partial<T>,
-    setFilterValues: setUrlFilterValues as (values: Partial<T>) => void,
+    filterValues: urlFilterValues as Partial<FilterOptionsByName[K]>,
+    setFilterValues: setUrlFilterValues as (
+      values: Partial<FilterOptionsByName[K]>
+    ) => void,
   };
 }
 
 // LEGACY: For backwards compatibility, re-export useTableFilters with old signature.
 // New code should use useTableFilters directly.
-export function useFilters<T = Record<string, unknown>>(
-  args: Omit<Args<T>, 'syncToUrl' | 'initialFilterValues'>
-): TableFilterType<T> {
-  const { filters } = useTableFilters<T>({ ...args, syncToUrl: false });
+export function useFilters<K extends keyof FilterOptionsByName>(
+  args: Omit<Args<K>, 'syncToUrl' | 'initialFilterValues'>
+): TableFilterType<FilterOptionsByName[K]> {
+  const { filters } = useTableFilters<K>({ ...args, syncToUrl: false });
   return filters;
 }

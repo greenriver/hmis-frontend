@@ -20,7 +20,6 @@ import {
   GetProjectConfigsQuery,
   GetProjectConfigsQueryVariables,
   ProjectConfigFieldsFragment,
-  ProjectConfigFilterOptions,
   ProjectConfigType,
 } from '@/types/gqlTypes';
 import { evictProjectConfigs } from '@/utils/cacheUtil';
@@ -87,10 +86,9 @@ const ProjectConfigTable = ({
     []
   );
 
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<ProjectConfigFilterOptions>({
-      type: 'ProjectConfigFilterOptions',
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'ProjectConfigFilterOptions',
+  });
 
   return (
     <>

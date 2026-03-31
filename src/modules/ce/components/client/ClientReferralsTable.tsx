@@ -32,10 +32,7 @@ const ClientReferralsTable: React.FC = () => {
     clientId: string;
   };
 
-  const filters = useFilters({
-    type: 'ClientCeReferralFilterOptions',
-    omit: ['workflowTemplate'],
-  });
+  const filters = useFilters({ type: 'ClientCeReferralFilterOptions' });
 
   return (
     <Paper>

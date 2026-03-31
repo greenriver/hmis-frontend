@@ -19,7 +19,6 @@ import {
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeReferralAdminFieldsFragment,
-  CeReferralFilterOptions,
   GetAdminCeReferralsDocument,
   GetAdminCeReferralsQuery,
   GetAdminCeReferralsQueryVariables,
@@ -91,10 +90,9 @@ interface Props {}
 const AdminReferralsTable: React.FC<Props> = ({}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const { filters, filterValues, setFilterValues } =
-    useTableFilters<CeReferralFilterOptions>({
-      type: 'CeReferralFilterOptions',
-    });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'CeReferralFilterOptions',
+  });
 
   const rowSecondaryActions = useCallback(
     (row: CeReferralAdminFieldsFragment) => {
