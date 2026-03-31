@@ -1,11 +1,11 @@
 import { ColumnDef } from '@/components/elements/table/types';
+import { useFilters } from '@/hooks/useTableFilters';
 import {
   ASSESSMENT_COLUMNS,
   ASSESSMENT_DETAILS_COL,
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentFieldsFragment,

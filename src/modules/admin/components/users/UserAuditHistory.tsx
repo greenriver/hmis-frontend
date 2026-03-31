@@ -4,9 +4,9 @@ import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
+import useTableFilters from '@/hooks/useTableFilters';
 import { AUDIT_HISTORY_COLUMNS } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
   ClientDashboardRoutes,
@@ -44,9 +44,10 @@ const columns: ColumnDef<UserAuditEventFieldsFragment>[] = [
 
 const UserAuditHistory = () => {
   const { userId } = useSafeParams() as { userId: string };
-  const filters = useFilters({
-    type: 'UserAuditEventFilterOptions',
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<UserAuditEventFilterOptions>({
+      type: 'UserAuditEventFilterOptions',
+    });
 
   const rowSecondaryActionConfigs = useCallback(
     ({
@@ -110,6 +111,8 @@ const UserAuditHistory = () => {
           queryVariables={{ id: userId }}
           recordType='ApplicationUserAuditEvent'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           rowName={(row) =>
             `${row.clientName}'s ${row.recordName}, ${parseAndFormatDateTime(row.createdAt)}`
           }

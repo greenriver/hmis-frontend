@@ -24,6 +24,7 @@ import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 import useSearchParamsState from '@/hooks/useSearchParamState';
+import { useFilters } from '@/hooks/useTableFilters';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/searchResultCard/ClientSearchResultCard';
 import {
@@ -32,7 +33,6 @@ import {
   SsnDobShowContextProvider,
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 
 import { isEnrollment, isHouseholdClient } from '@/modules/household/types';

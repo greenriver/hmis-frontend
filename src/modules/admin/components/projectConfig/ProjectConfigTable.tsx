@@ -7,10 +7,10 @@ import { ProjectConfigFormRule } from '../formRules/FormRule';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import DeleteMutationConfirmationDialog from '@/modules/dataFetching/components/DeleteMutationConfirmationDialog';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteProjectConfigDocument,
@@ -20,6 +20,7 @@ import {
   GetProjectConfigsQuery,
   GetProjectConfigsQueryVariables,
   ProjectConfigFieldsFragment,
+  ProjectConfigFilterOptions,
   ProjectConfigType,
 } from '@/types/gqlTypes';
 import { evictProjectConfigs } from '@/utils/cacheUtil';
@@ -86,9 +87,10 @@ const ProjectConfigTable = ({
     []
   );
 
-  const filters = useFilters({
-    type: 'ProjectConfigFilterOptions',
-  });
+  const { filters, filterValues, setFilterValues } =
+    useTableFilters<ProjectConfigFilterOptions>({
+      type: 'ProjectConfigFilterOptions',
+    });
 
   return (
     <>
@@ -108,6 +110,8 @@ const ProjectConfigTable = ({
         handleRowClick={onClickRow}
         rowActionTitle='Edit Config'
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
         showTopToolbar
       />
       <DeleteMutationConfirmationDialog<

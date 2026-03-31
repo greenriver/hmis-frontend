@@ -9,7 +9,7 @@ import { get, isEmpty, isEqual, lowerFirst, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { FilterType, DataColumnDef } from '../types';
+import { DataColumnDef } from '../types';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable, {
@@ -25,16 +25,15 @@ import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColu
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
-import {
-  getDefaultSortOptionForType,
-  getSortOptionForType,
-  transformDynamicFilters,
-} from '@/modules/hmis/filterUtil';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
+import { TableFilterType } from '@/types/tableFilterTypes';
+import { transformDynamicFilters } from '@/utils/tableFilterUtil';
+import {
+  getSortOptionForType,
+  getDefaultSortOptionForType,
+} from '@/utils/tableSortUtil';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
-
-export type TableFilterType<T> = Partial<Record<keyof T, FilterType<T>>>;
 
 export interface Props<
   Query,
@@ -57,10 +56,16 @@ export interface Props<
     rows: RowDataType[],
     loading?: boolean
   ) => DataColumnDef<RowDataType, QueryVariables>[]; // dynamically define column defs based on current data
+  /** Filter config (which filters exist, their type/labels). From useFilters() or useTableFilters(). */
   filters?: TableFilterType<FilterOptionsType>;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
+  /** Uncontrolled Filters: initial filter values. Ignored when filterValues + onFilterChange are both provided. */
   defaultFilterValues?: Partial<FilterOptionsType>;
+  /** Controlled Filters: current filter values. Use with onFilterChange so the table does not own filter state (e.g. URL-backed via useTableFilters). */
+  filterValues?: Partial<FilterOptionsType>;
+  /** Controlled Filters: called when user changes filters. Use with filterValues so the parent can persist state (e.g. to URL). */
+  onFilterChange?: (values: Partial<FilterOptionsType>) => void;
   showTopToolbar?: boolean;
   noSort?: boolean;
   queryVariables: QueryVariables;
@@ -111,6 +116,8 @@ const GenericTableWithData = <
 >({
   filters,
   defaultFilterValues = {},
+  filterValues: filterValuesProp,
+  onFilterChange,
   showTopToolbar: showTopToolbarProp = false,
   sortOptions: sortOptionsProp,
   defaultSortOption: defaultSortOptionProp,
@@ -147,8 +154,18 @@ const GenericTableWithData = <
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
-  const [filterValues, setFilterValues] = useState(defaultFilterValues);
+  const [internalFilterValues, setInternalFilterValues] =
+    useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
+
+  const filterValues =
+    filterValuesProp !== undefined && onFilterChange
+      ? filterValuesProp
+      : internalFilterValues;
+  const setFilterValues =
+    filterValuesProp !== undefined && onFilterChange
+      ? onFilterChange
+      : setInternalFilterValues;
 
   // TODO(#7387) Optional column behavior is currently undefined/unsupported
   //  when columns are provided by getColumnDefs instead of the columns prop.
@@ -172,7 +189,7 @@ const GenericTableWithData = <
       filterValues,
       setFilterValues,
     };
-  }, [filterValues, filters]);
+  }, [filterValues, filters, setFilterValues]);
 
   const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
     if (sortOrder) return sortOrder;

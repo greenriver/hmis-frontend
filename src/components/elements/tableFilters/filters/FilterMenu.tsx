@@ -7,7 +7,7 @@ import TableFilterItem from './FilterItem';
 import TableControlPopover from './TableControlPopover';
 import { FilterIcon } from '@/components/elements/SemanticIcons';
 import useIntermediateState from '@/hooks/useIntermediateState';
-import { FilterType } from '@/modules/dataFetching/types';
+import { FilterType } from '@/types/tableFilterTypes';
 
 export interface TableFilterMenuProps<T> {
   filters: Partial<Record<keyof T, FilterType<T>>>;
