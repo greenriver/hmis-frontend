@@ -1,46 +1,63 @@
-import { isNil, omitBy } from 'lodash-es';
 import { FormValues } from '../form/types';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { ClientSearchInput, FormDefinitionJson } from '@/types/gqlTypes';
+import {
+  ClientSearchInput,
+  ClientSearchParamsFieldsFragment,
+} from '@/types/gqlTypes';
 
-// Construct js object of permitted query terms from search params
-export const searchParamsToVariables = (
-  searchFormDefinition: FormDefinitionJson,
-  searchParams: URLSearchParams
-) => {
-  const variables: Record<string, any> = {};
-  const fieldNames: [string, boolean][] = searchFormDefinition.item
-    .filter((i) => !!i.mapping?.fieldName)
-    .map((item) => [item.mapping?.fieldName as string, !!item.repeats]);
-  fieldNames.push(['textSearch', false]);
-  fieldNames.push(['projects', true]);
-  fieldNames.forEach(([fieldName, repeats]) => {
-    if (!searchParams.has(fieldName)) return;
-    if (repeats) {
-      variables[fieldName] = searchParams.getAll(fieldName);
-    } else {
-      variables[fieldName] = searchParams.get(fieldName);
-    }
-  });
+/**
+ * Field names from `ClientSearchParamsFields` that map to `ClientSearchInput`. Used:
+ * - to map a loaded `ClientSearchParams` into form state
+ * - to prime Apollo cache after `SearchClients`
+ */
+const SEARCH_INPUT_FIELD_NAMES = [
+  'textSearch',
+  'personalId',
+  'firstName',
+  'lastName',
+  'ssnSerial',
+  'dob',
+] as const satisfies ReadonlyArray<keyof ClientSearchInput>;
 
-  return omitBy(variables, isNil);
-};
+type SearchInputFieldName = (typeof SEARCH_INPUT_FIELD_NAMES)[number];
 
-// Construct from state from query variables
-export const searchParamsToState = (
-  searchParams: URLSearchParams
-): ClientSearchInput => {
-  const variables: Record<string, any> = {};
-  const fieldNames: string[] = SearchFormDefinition.item.map(
-    (item) => item.mapping?.fieldName as string
-  );
+/**
+ * Maps a loaded `ClientSearchParams` into `ClientSearchInput`.
+ * Returns `null` when there is no record, so callers can treat it as "nothing to run yet".
+ * Returns {} when there are no mapped search criteria (unexpected).
+ */
+export function searchParamsToClientSearchInput(
+  data: ClientSearchParamsFieldsFragment | null
+): ClientSearchInput | null {
+  if (!data) return null;
+  const result: ClientSearchInput = {};
+  for (const key of SEARCH_INPUT_FIELD_NAMES) {
+    const v = data[key];
+    // Omit empty/unset fields.
+    // This prevents GenericTableWithData from re-running the query because
+    // the constructed ClientSearchInput appears to have changed
+    // compared to the original ClientSearchInput created from user input.
+    if (v) result[key] = v;
+  }
+  return result;
+}
 
-  [...fieldNames, 'textSearch'].forEach((fieldName) => {
-    if (!searchParams.has(fieldName)) return;
-    variables[fieldName] = searchParams.get(fieldName);
-  });
-  return omitBy(variables, isNil);
-};
+/**
+ * Builds the `ClientSearchParams`-shaped object for Apollo `writeQuery`, with `null` for missing
+ * keys so the normalized cache object matches the `ClientSearchParamsFields` fragment selection.
+ */
+export function clientSearchInputToSearchParamsCacheFields(
+  input: ClientSearchInput | null
+): Pick<ClientSearchParamsFieldsFragment, SearchInputFieldName> {
+  return {
+    textSearch: input?.textSearch ?? null,
+    personalId: input?.personalId ?? null,
+    firstName: input?.firstName ?? null,
+    lastName: input?.lastName ?? null,
+    ssnSerial: input?.ssnSerial ?? null,
+    dob: input?.dob ?? null,
+  } satisfies Pick<ClientSearchParamsFieldsFragment, SearchInputFieldName>;
+}
 
 export const keySearchParamsByLinkId = (
   values?: ClientSearchInput

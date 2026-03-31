@@ -1,0 +1,9 @@
+fragment ClientSearchParamsFields on ClientSearchParams {
+  id
+  textSearch
+  personalId
+  firstName
+  lastName
+  ssnSerial
+  dob
+}
