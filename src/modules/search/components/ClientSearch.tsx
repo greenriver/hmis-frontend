@@ -3,8 +3,11 @@ import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
 import { isEmpty, isNil, omitBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { createSearchParams, useSearchParams } from 'react-router-dom';
-import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
+import useClientSearchParams from '../hooks/useClientSearchParams';
+import {
+  clientSearchInputToSearchParamsCacheFields,
+  searchParamsToClientSearchInput,
+} from '../searchUtil';
 import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 
@@ -14,11 +17,13 @@ import CommonTableDisplayToggle, {
   DisplayType,
 } from '@/components/elements/CommonTableDisplayToggle';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
+import Loading from '@/components/elements/Loading';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
+import useSearchParamsState from '@/hooks/useSearchParamState';
 import { useFilters } from '@/hooks/useTableFilters';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/searchResultCard/ClientSearchResultCard';
@@ -28,7 +33,6 @@ import {
   SsnDobShowContextProvider,
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { SearchFormDefinition } from '@/modules/form/data';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 
 import { isEnrollment, isHouseholdClient } from '@/modules/household/types';
@@ -127,28 +131,85 @@ interface ClientSearchProps {
  * - Tracks whether or not a search has occurred, and displays an "Add New Client" button if it has.
  *   This is a guard to prevent users from client duplicate clients without searching first.
  * - Depending on global feature flags, the table may include an "MCI ID" column.
- * - Search parameters are synced with the URL (TODO: update when changed to searchQueryId approach)
+ * - Searches return a searchQueryId which is synced with the URL to support back-button navigation.
+ *
+ * There is some tricky logic around Apollo caching and avoiding extra network hits that's worth outlining.
+ * 1. User searches. `searchInput` gets set to `{textSearch: "example"}`
+ * 2. `handleSearchCompleted` does 2 things:
+ *  - pre-warms the cache with a ClientSearchParams object.
+ *    This object must have all fields (lastName, dob, etc.) defined, or else at step 3,
+ *    GraphQL thinks it needs to make a network request. (`clientSearchInputToSearchParamsCacheFields`)
+ *  - sets `searchQueryId` equal to the value returned from the query.
+ * 3. the `useClientSearchParams` hook runs, because `searchQueryId` changed (from null to non-null).
+ *    It hits the cache and returns the pre-warmed params inserted at step 2.
+ * 4. `resolvedSearchInput` (memoized) is re-computed, because `clientSearchParams` changed (from null to non-null).
+ *    This object must only have fields that the user actually searched by,
+ *    or else `GenericTableWithData` thinks the search input has changed, and re-queries.
+ *    (`searchParamsToClientSearchInput`)
+ * 5. `setSearchInput` runs in a `useEffect`, because `resolvedSearchInput` has changed (from null to non-null).
+ *    `searchInput` was already set to `{textSearch: "example"}` before, at step 1.
+ *     Now it's being set again to `{textSearch: "example"}`, the same value as before.
+ *     Since it's unchanged, `GenericTableWithData` does *not* re-query.
  */
 const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
+  const isMobile = useIsMobile();
+  const isTiny = useIsMobile('sm');
+
   // type of display (table or cards)
   const [displayType, setDisplayType] = useState<DisplayType>('table');
-  // URL search parameters
-  const [searchParams, setSearchParams] = useSearchParams();
-  // whether the search params were derived
-  const [derivedSearchParams, setDerivedSearchParams] =
-    useState<boolean>(false);
-  // initial form state derived from the SearchParams
-  const [initialValues, setInitialValues] = useState<ClientSearchInputType>();
+
   // Whether the user has searched for clients (and the results are visible).
   // Visibility of "Add New Client" button is gated on this, to prevent user from adding
   // duplicate clients before completing a search.
   const [hasSearched, setHasSearched] = useState(false);
 
-  const isMobile = useIsMobile();
-
+  // the current search input (form state), including free text search and advanced search fields
   const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
     null
   );
+
+  // The current search query ID. Stored in the URL params to support back-button navigation
+  const [{ searchQueryId }, setSearchParams] = useSearchParamsState({
+    paramsDefinition: {
+      searchQueryId: { type: 'string', default: null },
+    },
+  });
+
+  // If there is a searchQueryId in the URL params, load persisted client search params
+  const {
+    clientSearchParams,
+    loading: clientSearchParamsLoading,
+    writeClientSearchParamsToCache,
+  } = useClientSearchParams({
+    searchQueryId,
+  });
+
+  // Resolve persisted params into a usable ClientSearchInput
+  const resolvedSearchInput = useMemo(
+    () => searchParamsToClientSearchInput(clientSearchParams),
+    [clientSearchParams]
+  );
+
+  // Populate the form state with the resolved search input from persisted params
+  useEffect(() => {
+    if (resolvedSearchInput) setSearchInput(resolvedSearchInput);
+  }, [resolvedSearchInput]);
+
+  const clearSearch = useCallback(() => {
+    setSearchInput(null);
+    setHasSearched(false);
+  }, []);
+
+  // Clear search when the search query ID is cleared (such as using the back-button)
+  useEffect(() => {
+    if (searchQueryId === null) clearSearch();
+  }, [searchQueryId, clearSearch]);
+
+  // Callback for use when the 'clear' button is clicked on either search form
+  const onClearSearch = useCallback(() => {
+    clearSearch();
+    setSearchParams({ searchQueryId: null });
+  }, [clearSearch, setSearchParams]);
 
   const [canViewDob] = useHasRootPermissions(['canViewDob']);
 
@@ -174,52 +235,50 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     return baseColumns;
   }, [isMobile, globalFeatureFlags, displayType, canViewDob]);
 
-  useEffect(() => {
-    // if search params are derived, we don't want to perform a search on them
-    if (derivedSearchParams) return;
-
-    // this is the first render, so derive the initial state from the SearchParams and perform a search
-    const variables = searchParamsToVariables(
-      SearchFormDefinition,
-      searchParams
-    );
-    if (isEmpty(variables)) {
-      setInitialValues({});
-    } else {
-      const initState = searchParamsToState(searchParams);
-      setInitialValues(initState);
-      setSearchInput(initState);
-    }
-  }, [derivedSearchParams, searchParams]);
-
-  const onClearSearch = useCallback(() => {
-    setSearchInput(null);
-    setSearchParams({});
-    setHasSearched(false);
-  }, [setSearchParams]);
-
   // When form is submitted, update the search parameters and perform the search
   const handleSubmitSearch = useMemo(() => {
     return (values: Record<string, any>) => {
       const cleaned = omitBy(values, isNil);
       if (isEmpty(cleaned)) return;
 
-      // Construct derived search parameters and update the URL
-      const searchParams = createSearchParams(cleaned);
-      setSearchParams(searchParams);
-      setDerivedSearchParams(true); // so that searchParam change doesn't trigger a query
-
       // Perform the search
       setSearchInput(cleaned);
     };
-  }, [setSearchParams, setDerivedSearchParams]);
+  }, []);
+
+  // When search data is returned, update the URL params and the apollo cache.
+  // Passed to GenericTable as onCompleted, NOT onDataReady, so we only update the search params
+  // if this is the completion of a network call, not a cache hit.
+  // This avoids buggy behavior with the back-button.
+  const handleSearchCompleted = useCallback(
+    (data: SearchClientsQuery) => {
+      const returnedSearchQueryId = data?.clientSearch.searchQueryId;
+      if (returnedSearchQueryId && searchQueryId !== returnedSearchQueryId) {
+        // Prime the Apollo cache with the params we just received,
+        // so it's ready next time we query with GetPersistedClientSearchParams
+        writeClientSearchParamsToCache(
+          returnedSearchQueryId,
+          clientSearchInputToSearchParamsCacheFields(searchInput)
+        );
+
+        // Update the url bar with the searchQueryId we just received.
+        setSearchParams({ searchQueryId: returnedSearchQueryId });
+      }
+    },
+    [
+      searchQueryId,
+      writeClientSearchParamsToCache,
+      searchInput,
+      setSearchParams,
+    ]
+  );
 
   const filters = useFilters({
     type: 'ClientFilterOptions',
     omit: ['searchTerm'],
   });
 
-  const isTiny = useIsMobile('sm');
+  if (clientSearchParamsLoading) return <Loading />;
 
   return (
     <SsnDobShowContextProvider>
@@ -250,7 +309,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
       <Box mb={5}>
         {searchType === 'broad' ? (
           <ClientTextSearchForm
-            initialValue={initialValues?.textSearch || ''}
+            initialValue={searchInput?.textSearch || ''}
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
             label={null}
             size='medium'
@@ -264,7 +323,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
           />
         ) : (
           <ClientSearchAdvancedForm
-            initialValues={initialValues}
+            initialValues={searchInput || undefined}
             onSearch={(input) => handleSubmitSearch(input)}
             onClearSearch={onClearSearch}
           />
@@ -280,6 +339,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
             onDataReady={() => setHasSearched(true)}
+            onCompleted={handleSearchCompleted}
             columns={columns}
             rowLinkTo={(client) => getViewClientMenuItem(client).to}
             rowName={(row) => clientBriefName(row)}

@@ -88,6 +88,8 @@ export interface Props<
   >['tableDisplayOptionButtons'];
   /** Fires when data is available (network or cache). Use to gate actions until results are shown, e.g. to reduce duplicate client record creation. */
   onDataReady?: (data: Query) => void;
+  /** Fires when data is fetched from network */
+  onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
   loading?: boolean;
 }
@@ -136,6 +138,7 @@ const GenericTableWithData = <
   rowsPerPageOptions,
   tableDisplayOptionButtons,
   onDataReady,
+  onCompleted,
   paginationItemName,
   filterRows,
   vertical,
@@ -216,6 +219,7 @@ const GenericTableWithData = <
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
+    onCompleted,
   });
 
   const hasRefetched = useHasRefetched(networkStatus);
