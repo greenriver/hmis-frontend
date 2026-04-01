@@ -1,5 +1,5 @@
 import { ColumnDef } from '@/components/elements/table/types';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   ASSESSMENT_COLUMNS,
   ASSESSMENT_DETAILS_COL,
@@ -32,7 +32,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
   enrollmentId,
   projectId,
 }) => {
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'AssessmentsForEnrollmentFilterOptions',
     pickListArgs: { projectId },
   });
@@ -44,6 +44,8 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       AssessmentFieldsFragment
     >
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
       queryVariables={{ id: enrollmentId }}
       queryDocument={GetEnrollmentAssessmentsDocument}
       columns={COLUMNS}

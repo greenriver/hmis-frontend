@@ -3,7 +3,7 @@ import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   REFERRAL_COLUMNS,
   REFERRAL_WITH_PROJECT_COLUMNS,
@@ -32,7 +32,9 @@ const ClientReferralsTable: React.FC = () => {
     clientId: string;
   };
 
-  const filters = useFilters({ type: 'ClientCeReferralFilterOptions' });
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'ClientCeReferralFilterOptions',
+  });
 
   return (
     <Paper>
@@ -56,6 +58,8 @@ const ClientReferralsTable: React.FC = () => {
         }
         rowActionTitle='View Referral'
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
       />
     </Paper>
   );

@@ -3,7 +3,7 @@ import { ContextualCollapsibleListsProvider } from '@/components/elements/Collap
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   AUDIT_HISTORY_COLUMNS,
   AUDIT_HISTORY_USER_COLUMNS,
@@ -30,7 +30,7 @@ const columns: ColumnDef<AuditHistoryType>[] = [
 
 const ClientAuditHistory = () => {
   const { clientId } = useSafeParams() as { clientId: string };
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientAuditEventFilterOptions',
   });
 
@@ -57,6 +57,8 @@ const ClientAuditHistory = () => {
           queryVariables={{ id: clientId }}
           recordType='ClientAuditEvent'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
         />
       </Paper>
     </ContextualCollapsibleListsProvider>

@@ -18,7 +18,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import NotFound from '@/components/pages/NotFound';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssociatedHouseholdMembers from '@/modules/household/components/AssociatedHouseholdMembers';
@@ -120,7 +120,7 @@ const ManageHousehold = ({
     ];
   }, [addToEnrollmentColumns, globalFeatureFlags, isMobile]);
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientFilterOptions',
   });
 
@@ -253,6 +253,8 @@ const ManageHousehold = ({
                   pagePath='clientSearch'
                   fetchPolicy='cache-and-network'
                   filters={filters}
+                  filterValues={filterValues}
+                  onFilterChange={setFilterValues}
                   recordType='Client'
                   defaultSortOption={ClientSortOption.BestMatch}
                   onDataReady={() => setHasSearched(true)}

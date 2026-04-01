@@ -117,12 +117,3 @@ export default function useTableFilters<K extends keyof FilterOptionsByName>({
     ) => void,
   };
 }
-
-// LEGACY: For backwards compatibility, re-export useTableFilters with old signature.
-// New code should use useTableFilters directly.
-export function useFilters<K extends keyof FilterOptionsByName>(
-  args: Omit<Args<K>, 'syncToUrl' | 'initialFilterValues'>
-): TableFilterType<FilterOptionsByName[K]> {
-  const { filters } = useTableFilters<K>({ ...args, syncToUrl: false });
-  return filters;
-}

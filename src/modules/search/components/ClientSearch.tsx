@@ -24,7 +24,7 @@ import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 import useSearchParamsState from '@/hooks/useSearchParamState';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientSearchResultCard from '@/modules/client/components/searchResultCard/ClientSearchResultCard';
 import {
@@ -273,7 +273,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
     ]
   );
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientFilterOptions',
   });
 
@@ -346,6 +346,8 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
             filters={filters}
+            filterValues={filterValues}
+            onFilterChange={setFilterValues}
             recordType='Client'
             defaultSortOption={
               searchType === 'broad'

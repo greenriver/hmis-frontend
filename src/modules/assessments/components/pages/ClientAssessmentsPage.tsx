@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import { ClientAssessmentType } from '@/modules/assessments/assessmentTypes';
 import {
   ASSESSMENT_COLUMNS,
@@ -50,7 +50,7 @@ const ClientAssessmentsPage = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const { client } = useClientDashboardContext();
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'AssessmentFilterOptions',
   });
 
@@ -86,6 +86,8 @@ const ClientAssessmentsPage = () => {
           ClientAssessmentType
         >
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
           columns={COLUMNS}

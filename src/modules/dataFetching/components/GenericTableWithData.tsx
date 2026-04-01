@@ -56,7 +56,7 @@ export interface Props<
     rows: RowDataType[],
     loading?: boolean
   ) => DataColumnDef<RowDataType, QueryVariables>[]; // dynamically define column defs based on current data
-  /** Filter config (which filters exist, their type/labels). From useFilters() or useTableFilters(). */
+  /** Filter config (which filters exist, their type/labels). From useTableFilters(). */
   filters?: TableFilterType<FilterOptionsType>;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;

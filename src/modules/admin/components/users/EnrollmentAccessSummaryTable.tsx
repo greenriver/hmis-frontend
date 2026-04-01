@@ -44,12 +44,10 @@ const columns: ColumnDef<EnrollmentAccessSummaryFieldsFragment>[] = [
 
 interface Props {
   userId: string;
-  startDate?: string;
   searchTerm?: string;
 }
 const EnrollmentAccessSummaryTable: React.FC<Props> = ({
   userId,
-  startDate,
   searchTerm,
 }) => {
   const { filters, filterValues, setFilterValues } = useTableFilters({
@@ -66,7 +64,6 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
         id: userId,
         filters: { searchTerm },
       }}
-      defaultFilterValues={{ onOrAfter: startDate }}
       queryDocument={GetUserEnrollmentSummariesDocument}
       columns={columns}
       pagePath='user.enrollmentAccessSummaries'

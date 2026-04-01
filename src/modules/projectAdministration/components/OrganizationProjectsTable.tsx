@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import TextInput from '@/components/elements/input/TextInput';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
@@ -62,9 +62,10 @@ const OrganizationProjectsTable = ({
     []
   );
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ProjectsForEnrollmentFilterOptions',
     omit: ['searchTerm'],
+    initialFilterValues: { status: [ProjectFilterOptionStatus.Open] },
   });
 
   return (
@@ -97,10 +98,9 @@ const OrganizationProjectsTable = ({
       noData='No projects'
       pagePath='organization.projects'
       filters={hideFilters ? undefined : filters}
+      filterValues={hideFilters ? undefined : filterValues}
+      onFilterChange={hideFilters ? undefined : setFilterValues}
       recordType='Project'
-      defaultFilterValues={
-        hideFilters ? undefined : { status: [ProjectFilterOptionStatus.Open] }
-      }
       noSort
     />
   );

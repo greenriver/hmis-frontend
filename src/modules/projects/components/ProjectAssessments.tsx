@@ -4,7 +4,7 @@ import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowA
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
@@ -43,7 +43,7 @@ const ProjectAssessments = () => {
   };
   const { project } = useProjectDashboardContext();
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'AssessmentsForProjectFilterOptions',
     pickListArgs: { projectId },
   });
@@ -80,6 +80,8 @@ const ProjectAssessments = () => {
           pagePath='project.assessments'
           recordType='Assessment'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
       </Paper>

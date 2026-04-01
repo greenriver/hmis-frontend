@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
@@ -49,7 +49,7 @@ const ProjectServicesTable = ({
     ];
   }, [columns]);
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ServicesForProjectFilterOptions',
   });
 
@@ -82,6 +82,8 @@ const ProjectServicesTable = ({
       pagePath='project.services'
       recordType='Service'
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
     />
   );
 };

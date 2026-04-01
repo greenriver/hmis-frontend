@@ -6,7 +6,7 @@ import TableRowActions from '@/components/elements/table/TableRowActions';
 import { BASE_ACTION_COLUMN_DEF } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import { configurableCeColumns } from '@/modules/ce/components/admin/AdminCeClientsTable';
 import StartReferralButton from '@/modules/ce/components/unit/StartReferralButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -97,9 +97,10 @@ const PrioritizedClientsTable: React.FC<Props> = ({
     ];
   }, [project.access, tableConfigLookup, status, opportunity]);
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeOpportunityCandidatesFilterOptions',
     omit: ['searchTerm'],
+    initialFilterValues: { excludeDeclinedClients: true },
   });
 
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
@@ -161,9 +162,8 @@ const PrioritizedClientsTable: React.FC<Props> = ({
           paginationItemName='client'
           noData={'No clients are currently eligible for this unit.'}
           filters={filters}
-          defaultFilterValues={{
-            excludeDeclinedClients: true,
-          }}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
         />
       </Paper>
     </Stack>

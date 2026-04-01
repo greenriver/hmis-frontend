@@ -36,12 +36,10 @@ const columns: ColumnDef<ClientAccessSummaryFieldsFragment>[] = [
 
 interface Props {
   userId: string;
-  startDate?: string;
   searchTerm?: string;
 }
 const ClientAccessSummaryTable: React.FC<Props> = ({
   userId,
-  startDate,
   searchTerm = '',
 }) => {
   const { filters, filterValues, setFilterValues } = useTableFilters({
@@ -59,9 +57,6 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
         filters: { searchTerm },
       }}
       queryDocument={GetUserClientSummariesDocument}
-      defaultFilterValues={{
-        onOrAfter: startDate,
-      }}
       columns={columns}
       pagePath='user.clientAccessSummaries'
       noData='No access history'

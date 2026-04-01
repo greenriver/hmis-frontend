@@ -36,8 +36,10 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
         GetFormRulesQueryVariables,
         RowType
       >
-        queryVariables={{ id: formId }}
-        defaultFilterValues={{ activeStatus: ActiveStatus.Active }}
+        queryVariables={{
+          id: formId,
+          filters: { activeStatus: [ActiveStatus.Active] },
+        }}
         queryDocument={GetFormRulesDocument}
         columns={[]}
         pagePath='formDefinition.formRules'

@@ -2,7 +2,7 @@ import { Paper, Typography } from '@mui/material';
 import React from 'react';
 import DateWithRelativeTooltip from '@/components/elements/DateWithRelativeTooltip';
 import { ColumnDef } from '@/components/elements/table/types';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
@@ -62,7 +62,7 @@ const ClientOpportunitiesTable: React.FC = () => {
   const { id: clientId } = client;
   const clientName = clientBriefName(client);
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientEligibleCeOpportunityFilterOptions',
   });
 
@@ -89,6 +89,8 @@ const ClientOpportunitiesTable: React.FC = () => {
             id: clientId,
           }}
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           queryDocument={GetClientEligibleOpportunitiesDocument}
           pagePath='client.eligibleCeOpportunities'
           noData='No units'

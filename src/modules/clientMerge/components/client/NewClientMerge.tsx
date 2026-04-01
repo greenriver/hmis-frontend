@@ -10,7 +10,7 @@ import { getViewClientMenuItem } from '@/components/elements/table/tableRowActio
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import {
   ContextualClientSsn,
@@ -104,7 +104,7 @@ const NewClientMerge = () => {
     []
   );
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientFilterOptions',
   });
 
@@ -179,6 +179,8 @@ const NewClientMerge = () => {
                   // that no longer exists (e.g. has already been merged in)
                   fetchPolicy='network-only'
                   filters={filters}
+                  filterValues={filterValues}
+                  onFilterChange={setFilterValues}
                   recordType='Client'
                   defaultSortOption={ClientSortOption.BestMatch}
                   rowSecondaryActionConfigs={(row) => [

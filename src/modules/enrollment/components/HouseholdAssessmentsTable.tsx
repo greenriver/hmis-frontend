@@ -1,5 +1,5 @@
 import { ColumnDef } from '@/components/elements/table/types';
-import { useFilters } from '@/hooks/useTableFilters';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   ASSESSMENT_CLIENT_NAME_COL,
   ASSESSMENT_COLUMNS,
@@ -38,7 +38,7 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
   householdId,
   projectId,
 }) => {
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'AssessmentsForHouseholdFilterOptions',
     pickListArgs: { projectId },
   });
@@ -50,6 +50,8 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
       HhmAssessmentType
     >
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
       queryVariables={{ id: householdId }}
       queryDocument={GetHouseholdAssessmentsDocument}
       columns={COLUMNS}
