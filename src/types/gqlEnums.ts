@@ -181,17 +181,6 @@ export const HmisEnums = {
       'No longer interested in participating in this program',
     VETERAN_CANNOT_BE_LOCATED: 'Veteran cannot be located',
   },
-  CompleteDisabilityResponse: {
-    YES: 'Yes',
-    ALCOHOL_USE_DISORDER: 'Alcohol use disorder',
-    BOTH_ALCOHOL_AND_DRUG_USE_DISORDERS: 'Both alcohol and drug use disorders',
-    DRUG_USE_DISORDER: 'Drug use disorder',
-    INVALID: 'Invalid Value',
-    NO: 'No',
-    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
-    CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    DATA_NOT_COLLECTED: 'Data not collected',
-  },
   Component: {
     ADDRESS: 'Client Address input',
     AHA: 'AHA component',
@@ -427,15 +416,6 @@ export const HmisEnums = {
     CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
-  },
-  DisabilityType: {
-    INVALID: 'Invalid Value',
-    PHYSICAL_DISABILITY: 'Physical disability',
-    DEVELOPMENTAL_DISABILITY: 'Developmental disability',
-    CHRONIC_HEALTH_CONDITION: 'Chronic health condition',
-    SUBSTANCE_USE_DISORDER: 'Substance use disorder',
-    HIV_AIDS: 'HIV/AIDS',
-    MENTAL_HEALTH_DISORDER: 'Mental health disorder',
   },
   DisabledDisplay: {
     HIDDEN: 'HIDDEN',
