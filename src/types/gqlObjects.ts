@@ -1925,14 +1925,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canDeleteAssessments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canDeleteClient',
         type: {
           kind: 'NON_NULL',
@@ -1941,23 +1933,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canDeleteEnrollments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canEditClient',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canEditEnrollments',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2021,23 +1997,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canViewAnyConfidentialClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canViewAnyFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewAnyNonconfidentialClientFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6258,30 +6218,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ProjectAccess',
     fields: [
       {
-        name: 'canAssignReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canDeleteAssessments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canDeleteEnrollments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canDeleteProject',
         type: {
           kind: 'NON_NULL',
@@ -6307,14 +6243,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canEnrollClients',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canManageDeniedReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6354,22 +6282,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canPerformAnyReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canPerformOwnReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canSplitHouseholds',
         type: {
           kind: 'NON_NULL',
@@ -6394,23 +6306,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canViewDob',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canViewEnrollmentDetails',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewFullSsn',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6435,14 +6331,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewOwnReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewPartialSsn',
         type: {
           kind: 'NON_NULL',
           name: null,

@@ -1407,11 +1407,8 @@ export type ClientYouthEducationStatusesArgs = {
 export type ClientAccess = {
   __typename?: 'ClientAccess';
   canAuditClients: Scalars['Boolean']['output'];
-  canDeleteAssessments: Scalars['Boolean']['output'];
   canDeleteClient: Scalars['Boolean']['output'];
-  canDeleteEnrollments: Scalars['Boolean']['output'];
   canEditClient: Scalars['Boolean']['output'];
-  canEditEnrollments: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
@@ -1419,9 +1416,7 @@ export type ClientAccess = {
   canMergeClients: Scalars['Boolean']['output'];
   canPrintClientCaseNotes: Scalars['Boolean']['output'];
   canUploadClientFiles: Scalars['Boolean']['output'];
-  canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyFiles: Scalars['Boolean']['output'];
-  canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
   canViewClientName: Scalars['Boolean']['output'];
@@ -6651,30 +6646,21 @@ export type ProjectUnitsArgs = {
 
 export type ProjectAccess = {
   __typename?: 'ProjectAccess';
-  canAssignReferralTasks: Scalars['Boolean']['output'];
-  canDeleteAssessments: Scalars['Boolean']['output'];
-  canDeleteEnrollments: Scalars['Boolean']['output'];
   canDeleteProject: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
   canEditProjectDetails: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
-  canManageDeniedReferrals: Scalars['Boolean']['output'];
   canManageExternalFormSubmissions: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
   canManageUnits: Scalars['Boolean']['output'];
-  canPerformAnyReferralTasks: Scalars['Boolean']['output'];
-  canPerformOwnReferralTasks: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canStartReferrals: Scalars['Boolean']['output'];
   canUpdateUnitAvailability: Scalars['Boolean']['output'];
-  canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
-  canViewFullSsn: Scalars['Boolean']['output'];
   canViewOutgoingReferralDetails: Scalars['Boolean']['output'];
   canViewOutgoingReferralSummaries: Scalars['Boolean']['output'];
   canViewOwnReferrals: Scalars['Boolean']['output'];
-  canViewPartialSsn: Scalars['Boolean']['output'];
   canViewPrioritizedClientLists: Scalars['Boolean']['output'];
   canViewReferrals: Scalars['Boolean']['output'];
   canViewUnits: Scalars['Boolean']['output'];
