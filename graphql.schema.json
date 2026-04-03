@@ -6258,18 +6258,6 @@
             "deprecationReason": null
           },
           {
-            "name": "crisisAssessment",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYes",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use ceParticipationServices instead"
-          },
-          {
             "name": "dateCreated",
             "description": null,
             "args": [],
@@ -6306,30 +6294,6 @@
             "deprecationReason": null
           },
           {
-            "name": "directServices",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYes",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use ceParticipationServices instead"
-          },
-          {
-            "name": "housingAssessment",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYes",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use ceParticipationServices instead"
-          },
-          {
             "name": "id",
             "description": null,
             "args": [],
@@ -6344,18 +6308,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "preventionAssessment",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYes",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use ceParticipationServices instead"
           },
           {
             "name": "receivesReferrals",
@@ -13678,26 +13630,6 @@
             "deprecationReason": null
           },
           {
-            "name": "organizations",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "Use the Client Filter instead"
-          },
-          {
             "name": "personalId",
             "description": null,
             "type": {
@@ -13708,26 +13640,6 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "projects",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "Use the Client Filter instead"
           },
           {
             "name": "ssnSerial",
@@ -13752,18 +13664,6 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "warehouseId",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "Searching by warehouse_id is supported via free text search"
           }
         ],
         "interfaces": null,

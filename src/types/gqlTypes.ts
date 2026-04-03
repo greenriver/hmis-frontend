@@ -854,18 +854,10 @@ export type CeParticipation = {
   ceParticipationStatusEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   ceParticipationStatusStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   createdBy?: Maybe<ApplicationUser>;
-  /** @deprecated Use ceParticipationServices instead */
-  crisisAssessment?: Maybe<NoYes>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  /** @deprecated Use ceParticipationServices instead */
-  directServices?: Maybe<NoYes>;
-  /** @deprecated Use ceParticipationServices instead */
-  housingAssessment?: Maybe<NoYes>;
   id: Scalars['ID']['output'];
-  /** @deprecated Use ceParticipationServices instead */
-  preventionAssessment?: Maybe<NoYes>;
   receivesReferrals?: Maybe<NoYes>;
   user?: Maybe<ApplicationUser>;
 };
@@ -1706,17 +1698,11 @@ export type ClientSearchInput = {
   /** Client primary key */
   id?: InputMaybe<Scalars['ID']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
-  /** @deprecated Use the Client Filter instead */
-  organizations?: InputMaybe<Array<Scalars['ID']['input']>>;
   personalId?: InputMaybe<Scalars['String']['input']>;
-  /** @deprecated Use the Client Filter instead */
-  projects?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Last 4 digits of SSN */
   ssnSerial?: InputMaybe<Scalars['String']['input']>;
   /** Omnisearch string */
   textSearch?: InputMaybe<Scalars['String']['input']>;
-  /** @deprecated Searching by warehouse_id is supported via free text search */
-  warehouseId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ClientSearchParams = {

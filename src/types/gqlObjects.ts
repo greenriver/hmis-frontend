@@ -1063,10 +1063,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
-        name: 'crisisAssessment',
-        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
-      },
-      {
         name: 'dateCreated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
@@ -1079,24 +1075,12 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
-        name: 'directServices',
-        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
-      },
-      {
-        name: 'housingAssessment',
-        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
-      },
-      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
-      },
-      {
-        name: 'preventionAssessment',
-        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
       },
       {
         name: 'receivesReferrals',
@@ -8811,32 +8795,8 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'organizations',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
-      },
-      {
         name: 'personalId',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'projects',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
       },
       {
         name: 'ssnSerial',
@@ -8844,10 +8804,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'textSearch',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'warehouseId',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
