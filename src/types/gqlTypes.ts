@@ -1221,6 +1221,7 @@ export type Client = {
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   ceReferrals: CeReferralsPaginated;
+  contactPoints: Array<ClientContactPoint>;
   createdBy?: Maybe<ApplicationUser>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
   customCaseNotes: CustomCaseNotesPaginated;
