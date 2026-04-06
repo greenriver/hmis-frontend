@@ -27,15 +27,12 @@ These are the main dependency areas for this app. Use this list when scoping mai
 
 Use these criteria when deciding whether to include a package in a maintenance pass or leave it alone.
 
-| Situation                 | Typical action                                                                                                                          |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| **Security**              | Follow process for [Addressing Vulnerability alerts](#addressing-vulnerability-alerts). Priority is driven by triage, not the calendar. |
-| **Unblocks work**         | Upgrade when a bugfix or feature is required for a ticket or integration.                                                               |
-| **Unmaintained or EOL**   | Plan an upgrade to a supported line to keep receiving patches.                                                                          |
-| **Planned maintenance**   | On a **regular cadence**, refresh versions that are still supported but drifting, so future jumps stay smaller.                         |
-| **Cosmetic version only** | No urgent need; optional unless it reduces noise or aligns a cluster (e.g. one MUI package behind the rest).                            |
-
-Skipping an upgrade is acceptable when risk outweighs benefit. Document deferred major work with a ticket if it should not wait indefinitely.
+| Situation               | Typical action                                                                                                                          |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Security**            | Follow process for [Addressing Vulnerability alerts](#addressing-vulnerability-alerts). Priority is driven by triage, not the calendar. |
+| **Unblocks work**       | Upgrade when a bugfix or feature is required for a ticket or integration.                                                               |
+| **Unmaintained or EOL** | Plan an upgrade to a supported line to keep receiving patches.                                                                          |
+| **Planned maintenance** | On a **regular cadence**, refresh versions that are still supported but drifting, so future jumps stay smaller.                         |
 
 ## Cadence
 
@@ -48,15 +45,15 @@ Skipping an upgrade is acceptable when risk outweighs benefit. Document deferred
 ## How to group upgrades
 
 - **Default:** Upgrade **by ecosystem** in a single PR (e.g. Vite + related plugins; Storybook cluster; lint/test toolchain together; React + type packages).
-- **Large or risky ecosystems:** Give **MUI**, **Apollo**, **Node** their own PRs so failures are easier to attribute, and review stays focused.
-- **Avoid** one PR that mixes unrelated ecosystems (e.g. MUI + Apollo + Storybook) when possible
+- **Large or risky ecosystems:** Give **MUI**, **Apollo**, **Node** their own PRs so failures are easier to attribute.
+- Avoid making one PR that mixes unrelated ecosystems (e.g. MUI + Apollo + Storybook) when possible
 
 ## Maintenance cycle checklist
 
 1. **Scope**: Choose ecosystem groups for this cycle, create tickets for major upgrades
 2. **Upgrade**: Upgrade dependencies and refresh the lockfile with the usual Yarn workflow. When available, follow Migration guides and review changelogs.
-3. **Verify** — Types, lint, tests, build; manual spot-check for risky areas.
-4. **PR** — Short summary: what changed, why now, release notes links for majors, any manual QA notes.
+3. **Verify**: Types, lint, tests, build; manual spot-check for risky areas.
+4. **PR**: Short summary: what changed, why now, release notes links for majors, any manual QA notes.
 
 ## Addressing Vulnerability Alerts
 
@@ -77,6 +74,6 @@ The engineer on dev-support owns **monitoring**, **triage**, and **resolution** 
 ### Resolve
 
 1. **Direct dependency with a published fix:** Run `yarn upgrade <package>`. If `package.json` allows a newer patch/minor, the lockfile may pick up a fix. Re-run `yarn audit` to confirm the finding is gone.
-2. **Still flagged:** The vulnerable code may be **transitive**. Run `yarn why <package>` to see the dependency graph (example: `yarn why vite`). Upgrade **intermediate** packages that pull in the fixed version, then re-audit.
+2. **Still flagged:** The vulnerable code may be **transitive**. Run `yarn why <package>` to see the dependency graph (example: `yarn why vite`). Upgrade **intermediate** packages that pull in the fixed version, then re-audit. If unable to resolve through intermediate packages, consider adding a `resolution` to the `package.json` file.
 3. **After upgrades:** Run `yarn dedup`, test affected areas, open a **PR**. A separate ticket is **not** required unless the fix is a major upgrade or work must be deferred.
 4. **Deferred fixes:** If impact is low or the fix is non-trivial, **open a bug ticket** so the alert is tracked and eventually cleared. Keep the Dependabot alert open until ticket is reviewed by team.
