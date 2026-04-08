@@ -120,6 +120,8 @@ yarn yarn-deduplicate
 git add yarn.lock package.json
 ```
 
+See [docs/DEPENDENCY_UPGRADES.md](./docs/DEPENDENCY_UPGRADES.md) for team process.
+
 
 ### Capybara System Tests
 
