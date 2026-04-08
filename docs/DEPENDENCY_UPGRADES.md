@@ -50,10 +50,11 @@ Use these criteria when deciding whether to include a package in a maintenance p
 
 ## Maintenance cycle checklist
 
-1. **Scope**: Choose ecosystem groups for this cycle, create tickets for major upgrades
+1. **Scope**: Choose ecosystem groups for this cycle, create tickets for major upgrades.
+   - Tip: Run `yarn upgrade-interactive --latest` to see how far behind dependencies are, and which major upgrades exist.
 2. **Upgrade**: Upgrade dependencies and refresh the lockfile with the usual Yarn workflow. When available, follow Migration guides and review changelogs.
 3. **Verify**: Types, lint, tests, build; manual spot-check for risky areas.
-4. **PR**: Short summary: what changed, why now, release notes links for majors, any manual QA notes.
+4. **PR**: Short summary of what changed, why now, release notes links for majors, any manual QA notes.
 
 ## Addressing Vulnerability Alerts
 
