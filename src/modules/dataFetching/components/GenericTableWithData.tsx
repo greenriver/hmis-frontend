@@ -162,6 +162,7 @@ const GenericTableWithData = <
     filterValuesProp !== undefined && onFilterChange
       ? filterValuesProp
       : internalFilterValues;
+  const previousFilterValues = usePrevious(filterValues);
   const setFilterValues =
     filterValuesProp !== undefined && onFilterChange
       ? onFilterChange
@@ -176,10 +177,13 @@ const GenericTableWithData = <
     optionalColumnsMenuProps,
   } = useOptionalColumns<RowDataType, QueryVariables>({ columns: columnsProp });
 
-  // if the filters change, return to the first page
+  // If filters change (by value), return to the first page. Use deep comparison so URL-backed
+  // filter objects that get a new reference each render do not reset pagination.
   useEffect(() => {
-    setPage(0);
-  }, [filterValues]);
+    if (!isEqual(previousFilterValues, filterValues)) {
+      setPage(0);
+    }
+  }, [previousFilterValues, filterValues]);
 
   const filterProps = useMemo(() => {
     if (!filters || Object.keys(filters).length === 0) return;
