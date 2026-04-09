@@ -28576,8 +28576,8 @@
               "ofType": null
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend"
           },
           {
             "name": "definition",
@@ -28588,8 +28588,8 @@
               "ofType": null
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend"
           },
           {
             "name": "formType",
@@ -28608,8 +28608,8 @@
               }
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend"
           },
           {
             "name": "projectType",
@@ -28628,8 +28628,8 @@
               }
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend"
           },
           {
             "name": "systemForm",
@@ -28648,8 +28648,8 @@
               }
             },
             "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend"
           }
         ],
         "interfaces": null,
@@ -45815,8 +45815,8 @@
               "name": "FormRule",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend"
           },
           {
             "name": "formRules",
@@ -45880,8 +45880,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend; form rules are queried by their FormDefinition"
           },
           {
             "name": "funder",
@@ -46796,8 +46796,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend"
           },
           {
             "name": "serviceCategory",
@@ -46825,8 +46825,8 @@
               "name": "ServiceCategory",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "No longer used by the frontend"
           },
           {
             "name": "serviceFormDefinition",
