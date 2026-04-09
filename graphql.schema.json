@@ -28576,40 +28576,8 @@
               "ofType": null
             },
             "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend"
-          },
-          {
-            "name": "definition",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend"
-          },
-          {
-            "name": "formType",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "FormRole",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend"
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "projectType",
@@ -28628,8 +28596,8 @@
               }
             },
             "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend"
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "systemForm",
@@ -28648,8 +28616,8 @@
               }
             },
             "defaultValue": null,
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend"
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "interfaces": null,
@@ -45790,100 +45758,6 @@
             "deprecationReason": null
           },
           {
-            "name": "formRule",
-            "description": null,
-            "args": [
-              {
-                "name": "id",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "FormRule",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend"
-          },
-          {
-            "name": "formRules",
-            "description": null,
-            "args": [
-              {
-                "name": "filters",
-                "description": null,
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "FormRuleFilterOptions",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "limit",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "offset",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "sortOrder",
-                "description": null,
-                "type": {
-                  "kind": "ENUM",
-                  "name": "FormRuleSortOption",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "FormRulesPaginated",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend; form rules are queried by their FormDefinition"
-          },
-          {
             "name": "funder",
             "description": "Funder lookup",
             "args": [
@@ -46757,76 +46631,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "serviceCategories",
-            "description": null,
-            "args": [
-              {
-                "name": "limit",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "offset",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "ServiceCategoriesPaginated",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend"
-          },
-          {
-            "name": "serviceCategory",
-            "description": null,
-            "args": [
-              {
-                "name": "id",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "ServiceCategory",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "No longer used by the frontend"
           },
           {
             "name": "serviceFormDefinition",
@@ -51073,138 +50877,6 @@
               "kind": "OBJECT",
               "name": "ApplicationUser",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "ServiceCategoriesPaginated",
-        "description": null,
-        "isOneOf": null,
-        "fields": [
-          {
-            "name": "hasMoreAfter",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "hasMoreBefore",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "limit",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "nodes",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ServiceCategory",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "nodesCount",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "offset",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pagesCount",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null

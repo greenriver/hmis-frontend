@@ -3833,15 +3833,8 @@ export type FormRule = {
 
 export type FormRuleFilterOptions = {
   activeStatus?: InputMaybe<Array<ActiveStatus>>;
-  /** @deprecated No longer used by the frontend */
   appliedToProject?: InputMaybe<Scalars['ID']['input']>;
-  /** @deprecated No longer used by the frontend */
-  definition?: InputMaybe<Scalars['ID']['input']>;
-  /** @deprecated No longer used by the frontend */
-  formType?: InputMaybe<Array<FormRole>>;
-  /** @deprecated No longer used by the frontend */
   projectType?: InputMaybe<Array<ProjectType>>;
-  /** @deprecated No longer used by the frontend */
   systemForm?: InputMaybe<Array<SystemStatus>>;
 };
 
@@ -6720,10 +6713,6 @@ export type Query = {
   formDefinition?: Maybe<FormDefinition>;
   formIdentifier?: Maybe<FormIdentifier>;
   formIdentifiers: FormIdentifiersPaginated;
-  /** @deprecated No longer used by the frontend */
-  formRule?: Maybe<FormRule>;
-  /** @deprecated No longer used by the frontend; form rules are queried by their FormDefinition */
-  formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
   /** Global Coordinated Entry default contacts, grouped by swimlane */
@@ -6758,10 +6747,6 @@ export type Query = {
   referralPosting?: Maybe<ReferralPosting>;
   /** Service lookup */
   service?: Maybe<Service>;
-  /** @deprecated No longer used by the frontend */
-  serviceCategories: ServiceCategoriesPaginated;
-  /** @deprecated No longer used by the frontend */
-  serviceCategory?: Maybe<ServiceCategory>;
   /** Get most relevant form definition for the specified service type */
   serviceFormDefinition?: Maybe<FormDefinition>;
   /** Service type lookup */
@@ -6888,17 +6873,6 @@ export type QueryFormIdentifiersArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type QueryFormRuleArgs = {
-  id: Scalars['ID']['input'];
-};
-
-export type QueryFormRulesArgs = {
-  filters?: InputMaybe<FormRuleFilterOptions>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sortOrder?: InputMaybe<FormRuleSortOption>;
-};
-
 export type QueryFunderArgs = {
   id: Scalars['ID']['input'];
 };
@@ -6993,15 +6967,6 @@ export type QueryReferralPostingArgs = {
 };
 
 export type QueryServiceArgs = {
-  id: Scalars['ID']['input'];
-};
-
-export type QueryServiceCategoriesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type QueryServiceCategoryArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -7693,17 +7658,6 @@ export type Service = {
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
   typeProvided?: Maybe<ServiceTypeProvided>;
   user?: Maybe<ApplicationUser>;
-};
-
-export type ServiceCategoriesPaginated = {
-  __typename?: 'ServiceCategoriesPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<ServiceCategory>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
 };
 
 export type ServiceCategory = {
