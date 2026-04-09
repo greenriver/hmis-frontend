@@ -854,18 +854,10 @@ export type CeParticipation = {
   ceParticipationStatusEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   ceParticipationStatusStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   createdBy?: Maybe<ApplicationUser>;
-  /** @deprecated Use ceParticipationServices instead */
-  crisisAssessment?: Maybe<NoYes>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  /** @deprecated Use ceParticipationServices instead */
-  directServices?: Maybe<NoYes>;
-  /** @deprecated Use ceParticipationServices instead */
-  housingAssessment?: Maybe<NoYes>;
   id: Scalars['ID']['output'];
-  /** @deprecated Use ceParticipationServices instead */
-  preventionAssessment?: Maybe<NoYes>;
   receivesReferrals?: Maybe<NoYes>;
   user?: Maybe<ApplicationUser>;
 };
@@ -1239,25 +1231,21 @@ export type Client = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   desertStorm?: Maybe<NoYesReasonsForMissingData>;
   differentIdentityText?: Maybe<Scalars['String']['output']>;
-  disabilities: DisabilitiesPaginated;
   dischargeStatus?: Maybe<DischargeStatus>;
   dob?: Maybe<Scalars['ISO8601Date']['output']>;
   dobDataQuality: DobDataQuality;
   eligibleCeOpportunities: CeOpportunitiesPaginated;
   emailAddresses: Array<ClientContactPoint>;
-  employmentEducations: EmploymentEducationsPaginated;
   enabledFeatures: Array<ClientDashboardFeature>;
   enrollments: EnrollmentsPaginated;
   externalIds: Array<ExternalIdentifier>;
   files: FilesPaginated;
   firstName?: Maybe<Scalars['String']['output']>;
   gender: Array<Gender>;
-  healthAndDvs: HealthAndDvsPaginated;
   /** Meets the definition for HUD chronically homeless as of today (time of API request) */
   hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<ClientImage>;
-  incomeBenefits: IncomeBenefitsPaginated;
   iraqOif?: Maybe<NoYesReasonsForMissingData>;
   iraqOnd?: Maybe<NoYesReasonsForMissingData>;
   koreanWar?: Maybe<NoYesReasonsForMissingData>;
@@ -1285,7 +1273,6 @@ export type Client = {
   worldWarIi?: Maybe<NoYesReasonsForMissingData>;
   yearEnteredService?: Maybe<Scalars['Int']['output']>;
   yearSeparated?: Maybe<Scalars['Int']['output']>;
-  youthEducationStatuses: YouthEducationStatusesPaginated;
 };
 
 /** HUD Client */
@@ -1331,23 +1318,11 @@ export type ClientCustomCaseNotesArgs = {
 };
 
 /** HUD Client */
-export type ClientDisabilitiesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** HUD Client */
 export type ClientEligibleCeOpportunitiesArgs = {
   filters?: InputMaybe<ClientEligibleCeOpportunityFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<CeOpportunitySortOption>;
-};
-
-/** HUD Client */
-export type ClientEmploymentEducationsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** HUD Client */
@@ -1364,18 +1339,6 @@ export type ClientFilesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<FileSortOption>;
-};
-
-/** HUD Client */
-export type ClientHealthAndDvsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** HUD Client */
-export type ClientIncomeBenefitsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** HUD Client */
@@ -1398,20 +1361,11 @@ export type ClientServicesArgs = {
   sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
-/** HUD Client */
-export type ClientYouthEducationStatusesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type ClientAccess = {
   __typename?: 'ClientAccess';
   canAuditClients: Scalars['Boolean']['output'];
-  canDeleteAssessments: Scalars['Boolean']['output'];
   canDeleteClient: Scalars['Boolean']['output'];
-  canDeleteEnrollments: Scalars['Boolean']['output'];
   canEditClient: Scalars['Boolean']['output'];
-  canEditEnrollments: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
@@ -1419,9 +1373,7 @@ export type ClientAccess = {
   canMergeClients: Scalars['Boolean']['output'];
   canPrintClientCaseNotes: Scalars['Boolean']['output'];
   canUploadClientFiles: Scalars['Boolean']['output'];
-  canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyFiles: Scalars['Boolean']['output'];
-  canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
   canViewClientName: Scalars['Boolean']['output'];
@@ -1711,17 +1663,11 @@ export type ClientSearchInput = {
   /** Client primary key */
   id?: InputMaybe<Scalars['ID']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
-  /** @deprecated Use the Client Filter instead */
-  organizations?: InputMaybe<Array<Scalars['ID']['input']>>;
   personalId?: InputMaybe<Scalars['String']['input']>;
-  /** @deprecated Use the Client Filter instead */
-  projects?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Last 4 digits of SSN */
   ssnSerial?: InputMaybe<Scalars['String']['input']>;
   /** Omnisearch string */
   textSearch?: InputMaybe<Scalars['String']['input']>;
-  /** @deprecated Searching by warehouse_id is supported via free text search */
-  warehouseId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ClientSearchParams = {
@@ -1797,27 +1743,6 @@ export enum CmExitReason {
   VeteranIsIncarcerated = 'VETERAN_IS_INCARCERATED',
   /** (10) Veteran too ill to participate at this time */
   VeteranTooIllToParticipateAtThisTime = 'VETERAN_TOO_ILL_TO_PARTICIPATE_AT_THIS_TIME',
-}
-
-export enum CompleteDisabilityResponse {
-  /** Alcohol use disorder */
-  AlcoholUseDisorder = 'ALCOHOL_USE_DISORDER',
-  /** Both alcohol and drug use disorders */
-  BothAlcoholAndDrugUseDisorders = 'BOTH_ALCOHOL_AND_DRUG_USE_DISORDERS',
-  /** Client doesn't know */
-  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** Client prefers not to answer */
-  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
-  /** Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** Drug use disorder */
-  DrugUseDisorder = 'DRUG_USE_DISORDER',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** No */
-  No = 'NO',
-  /** Yes */
-  Yes = 'YES',
 }
 
 export enum Component {
@@ -2763,40 +2688,6 @@ export type DirectUploadInput = {
   filename: Scalars['String']['input'];
 };
 
-export type DisabilitiesPaginated = {
-  __typename?: 'DisabilitiesPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<Disability>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
-};
-
-export type Disability = {
-  __typename?: 'Disability';
-  antiRetroviral?: Maybe<NoYesReasonsForMissingData>;
-  client: Client;
-  createdBy?: Maybe<ApplicationUser>;
-  dataCollectionStage: DataCollectionStage;
-  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  disabilityResponse: CompleteDisabilityResponse;
-  disabilityType: DisabilityType;
-  enrollment: Enrollment;
-  id: Scalars['ID']['output'];
-  indefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
-  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
-  tCellCount?: Maybe<Scalars['Int']['output']>;
-  tCellCountAvailable?: Maybe<NoYesReasonsForMissingData>;
-  tCellSource?: Maybe<TCellSourceViralLoadSource>;
-  user?: Maybe<ApplicationUser>;
-  viralLoad?: Maybe<Scalars['Int']['output']>;
-  viralLoadAvailable?: Maybe<ViralLoadAvailable>;
-};
-
 /** Group of disability records that were collected at the same time */
 export type DisabilityGroup = {
   __typename?: 'DisabilityGroup';
@@ -2847,24 +2738,6 @@ export enum DisabilityResponse {
   Invalid = 'INVALID',
   /** (0) No */
   No = 'NO',
-}
-
-/** HUD DisabilityType (1.3) */
-export enum DisabilityType {
-  /** (7) Chronic health condition */
-  ChronicHealthCondition = 'CHRONIC_HEALTH_CONDITION',
-  /** (6) Developmental disability */
-  DevelopmentalDisability = 'DEVELOPMENTAL_DISABILITY',
-  /** (8) HIV/AIDS */
-  HivAids = 'HIV_AIDS',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (9) Mental health disorder */
-  MentalHealthDisorder = 'MENTAL_HEALTH_DISORDER',
-  /** (5) Physical disability */
-  PhysicalDisability = 'PHYSICAL_DISABILITY',
-  /** (10) Substance use disorder */
-  SubstanceUseDisorder = 'SUBSTANCE_USE_DISORDER',
 }
 
 export enum DisabledDisplay {
@@ -2921,17 +2794,6 @@ export type EmploymentEducation = {
   notEmployedReason?: Maybe<NotEmployedReason>;
   schoolStatus?: Maybe<SchoolStatus>;
   user?: Maybe<ApplicationUser>;
-};
-
-export type EmploymentEducationsPaginated = {
-  __typename?: 'EmploymentEducationsPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<EmploymentEducation>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
 };
 
 /** HUD EmploymentType (R6.A) */
@@ -3031,11 +2893,9 @@ export type Enrollment = {
   dateToStreetEssh?: Maybe<Scalars['ISO8601Date']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dependentUnder6?: Maybe<DependentUnder6>;
-  disabilities: DisabilitiesPaginated;
   disabledHoh?: Maybe<NoYesMissing>;
   disablingCondition?: Maybe<NoYesReasonsForMissingData>;
   eligibleForRhy?: Maybe<NoYesMissing>;
-  employmentEducations: EmploymentEducationsPaginated;
   enrollmentCoc?: Maybe<Scalars['String']['output']>;
   entryDate: Scalars['ISO8601Date']['output'];
   events: EventsPaginated;
@@ -3048,7 +2908,6 @@ export type Enrollment = {
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
   /** Client Locations that have been collected during this Enrollment */
   geolocations: Array<Geolocation>;
-  healthAndDvs: HealthAndDvsPaginated;
   hh5Plus?: Maybe<NoYesMissing>;
   hohLeaseholder?: Maybe<NoYesMissing>;
   household: Household;
@@ -3060,14 +2919,12 @@ export type Enrollment = {
   inProgress: Scalars['Boolean']['output'];
   incarceratedAdult?: Maybe<IncarceratedAdult>;
   incarceratedParent?: Maybe<NoYesReasonsForMissingData>;
-  incomeBenefits: IncomeBenefitsPaginated;
   insufficientIncome?: Maybe<NoYesReasonsForMissingData>;
   intakeAssessment?: Maybe<Assessment>;
   juvenileJusticeMonths?: Maybe<Scalars['Int']['output']>;
   juvenileJusticeYears?: Maybe<RhyNumberofYears>;
   lastBedNightDate?: Maybe<Scalars['ISO8601Date']['output']>;
   lastContact?: Maybe<LastContact>;
-  lastCurrentLivingSituation?: Maybe<CurrentLivingSituation>;
   lastServiceDate?: Maybe<Scalars['ISO8601Date']['output']>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   literalHomelessHistory?: Maybe<LiteralHomelessHistory>;
@@ -3120,7 +2977,6 @@ export type Enrollment = {
   unemploymentFam?: Maybe<NoYesReasonsForMissingData>;
   user?: Maybe<ApplicationUser>;
   vamcStation?: Maybe<VamcStationNumber>;
-  youthEducationStatuses: YouthEducationStatusesPaginated;
 };
 
 /** HUD Enrollment */
@@ -3160,18 +3016,6 @@ export type EnrollmentCustomCaseNotesArgs = {
 };
 
 /** HUD Enrollment */
-export type EnrollmentDisabilitiesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** HUD Enrollment */
-export type EnrollmentEmploymentEducationsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** HUD Enrollment */
 export type EnrollmentEventsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -3186,18 +3030,6 @@ export type EnrollmentFilesArgs = {
 };
 
 /** HUD Enrollment */
-export type EnrollmentHealthAndDvsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** HUD Enrollment */
-export type EnrollmentIncomeBenefitsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** HUD Enrollment */
 export type EnrollmentLastServiceDateArgs = {
   serviceTypeId: Scalars['ID']['input'];
 };
@@ -3208,12 +3040,6 @@ export type EnrollmentServicesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
-};
-
-/** HUD Enrollment */
-export type EnrollmentYouthEducationStatusesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type EnrollmentAccess = {
@@ -4315,17 +4141,6 @@ export type HealthAndDv = {
   whenOccurred?: Maybe<WhenDvOccurred>;
 };
 
-export type HealthAndDvsPaginated = {
-  __typename?: 'HealthAndDvsPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<HealthAndDv>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
-};
-
 /** HUD HealthStatus (R7.1) */
 export enum HealthStatus {
   /** (8) Client doesn't know */
@@ -4592,17 +4407,6 @@ export type IncomeBenefit = {
   wic?: Maybe<NoYesMissing>;
   workersComp?: Maybe<NoYesMissing>;
   workersCompAmount?: Maybe<Scalars['Float']['output']>;
-};
-
-export type IncomeBenefitsPaginated = {
-  __typename?: 'IncomeBenefitsPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<IncomeBenefit>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
 };
 
 export enum InitialBehavior {
@@ -6468,7 +6272,6 @@ export type Project = {
   HOPWAMedAssistedLivingFac?: Maybe<HopwaMedAssistedLivingFac>;
   access: ProjectAccess;
   active: Scalars['Boolean']['output'];
-  affiliatedProjects: Array<Project>;
   assessments: AssessmentsPaginated;
   /** Whether auto-enter is enabled in this project */
   autoEnterEnabled: Scalars['Boolean']['output'];
@@ -6517,10 +6320,8 @@ export type Project = {
   projectCocs: ProjectCocsPaginated;
   projectName: Scalars['String']['output'];
   projectType?: Maybe<ProjectType>;
-  referralRequests: ReferralRequestsPaginated;
   residentialAffiliation?: Maybe<NoYes>;
   residentialAffiliationProjectIds: Array<Scalars['ID']['output']>;
-  residentialAffiliationProjects: Array<Project>;
   rrhSubType?: Maybe<RrhSubType>;
   /** Service types that are collected for this Project */
   serviceTypes: Array<ServiceType>;
@@ -6626,11 +6427,6 @@ export type ProjectProjectCocsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type ProjectReferralRequestsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type ProjectServicesArgs = {
   filters?: InputMaybe<ServicesForProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -6651,30 +6447,21 @@ export type ProjectUnitsArgs = {
 
 export type ProjectAccess = {
   __typename?: 'ProjectAccess';
-  canAssignReferralTasks: Scalars['Boolean']['output'];
-  canDeleteAssessments: Scalars['Boolean']['output'];
-  canDeleteEnrollments: Scalars['Boolean']['output'];
   canDeleteProject: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
   canEditProjectDetails: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
-  canManageDeniedReferrals: Scalars['Boolean']['output'];
   canManageExternalFormSubmissions: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
   canManageUnits: Scalars['Boolean']['output'];
-  canPerformAnyReferralTasks: Scalars['Boolean']['output'];
-  canPerformOwnReferralTasks: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canStartReferrals: Scalars['Boolean']['output'];
   canUpdateUnitAvailability: Scalars['Boolean']['output'];
-  canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
-  canViewFullSsn: Scalars['Boolean']['output'];
   canViewOutgoingReferralDetails: Scalars['Boolean']['output'];
   canViewOutgoingReferralSummaries: Scalars['Boolean']['output'];
   canViewOwnReferrals: Scalars['Boolean']['output'];
-  canViewPartialSsn: Scalars['Boolean']['output'];
   canViewPrioritizedClientLists: Scalars['Boolean']['output'];
   canViewReferrals: Scalars['Boolean']['output'];
   canViewUnits: Scalars['Boolean']['output'];
@@ -7607,24 +7394,6 @@ export type ReferralPostingsPaginated = {
 export type ReferralRequest = {
   __typename?: 'ReferralRequest';
   id: Scalars['ID']['output'];
-  identifier: Scalars['ID']['output'];
-  neededBy: Scalars['ISO8601Date']['output'];
-  requestedOn: Scalars['ISO8601DateTime']['output'];
-  requestorEmail: Scalars['String']['output'];
-  requestorName: Scalars['String']['output'];
-  requestorPhone: Scalars['String']['output'];
-  unitType: UnitTypeObject;
-};
-
-export type ReferralRequestsPaginated = {
-  __typename?: 'ReferralRequestsPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<ReferralRequest>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
 };
 
 /** HUD ReferralResult (4.20.D) */
@@ -9326,17 +9095,6 @@ export type YouthEducationStatus = {
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   mostRecentEdStatus?: Maybe<MostRecentEdStatus>;
   user?: Maybe<ApplicationUser>;
-};
-
-export type YouthEducationStatusesPaginated = {
-  __typename?: 'YouthEducationStatusesPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<YouthEducationStatus>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
 };
 
 export type RootPermissionsFragment = {

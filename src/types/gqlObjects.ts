@@ -1063,10 +1063,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
-        name: 'crisisAssessment',
-        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
-      },
-      {
         name: 'dateCreated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
@@ -1079,24 +1075,12 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
-        name: 'directServices',
-        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
-      },
-      {
-        name: 'housingAssessment',
-        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
-      },
-      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
-      },
-      {
-        name: 'preventionAssessment',
-        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
       },
       {
         name: 'receivesReferrals',
@@ -1925,14 +1909,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canDeleteAssessments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canDeleteClient',
         type: {
           kind: 'NON_NULL',
@@ -1941,23 +1917,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canDeleteEnrollments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canEditClient',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canEditEnrollments',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2021,23 +1981,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canViewAnyConfidentialClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canViewAnyFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewAnyNonconfidentialClientFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2866,107 +2810,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
-      },
-    ],
-  },
-  {
-    name: 'Disability',
-    fields: [
-      {
-        name: 'antiRetroviral',
-        type: {
-          kind: 'ENUM',
-          name: 'NoYesReasonsForMissingData',
-          ofType: null,
-        },
-      },
-      {
-        name: 'dataCollectionStage',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'DataCollectionStage', ofType: null },
-        },
-      },
-      {
-        name: 'dateCreated',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'dateDeleted',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'dateUpdated',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'disabilityResponse',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'ENUM',
-            name: 'CompleteDisabilityResponse',
-            ofType: null,
-          },
-        },
-      },
-      {
-        name: 'disabilityType',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'DisabilityType', ofType: null },
-        },
-      },
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'indefiniteAndImpairs',
-        type: {
-          kind: 'ENUM',
-          name: 'NoYesReasonsForMissingData',
-          ofType: null,
-        },
-      },
-      {
-        name: 'informationDate',
-        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-      },
-      {
-        name: 'tCellCount',
-        type: { kind: 'SCALAR', name: 'Int', ofType: null },
-      },
-      {
-        name: 'tCellCountAvailable',
-        type: {
-          kind: 'ENUM',
-          name: 'NoYesReasonsForMissingData',
-          ofType: null,
-        },
-      },
-      {
-        name: 'tCellSource',
-        type: {
-          kind: 'ENUM',
-          name: 'TCellSourceViralLoadSource',
-          ofType: null,
-        },
-      },
-      {
-        name: 'viralLoad',
-        type: { kind: 'SCALAR', name: 'Int', ofType: null },
-      },
-      {
-        name: 'viralLoadAvailable',
-        type: { kind: 'ENUM', name: 'ViralLoadAvailable', ofType: null },
       },
     ],
   },
@@ -6258,30 +6101,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ProjectAccess',
     fields: [
       {
-        name: 'canAssignReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canDeleteAssessments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canDeleteEnrollments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canDeleteProject',
         type: {
           kind: 'NON_NULL',
@@ -6307,14 +6126,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canEnrollClients',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canManageDeniedReferrals',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6354,22 +6165,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canPerformAnyReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canPerformOwnReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canSplitHouseholds',
         type: {
           kind: 'NON_NULL',
@@ -6394,23 +6189,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canViewDob',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canViewEnrollmentDetails',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewFullSsn',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6435,14 +6214,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewOwnReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewPartialSsn',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -7288,54 +7059,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'identifier',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'neededBy',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-        },
-      },
-      {
-        name: 'requestedOn',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
-      },
-      {
-        name: 'requestorEmail',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'requestorName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'requestorPhone',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],
@@ -8923,32 +8646,8 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'organizations',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
-      },
-      {
         name: 'personalId',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'projects',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
       },
       {
         name: 'ssnSerial',
@@ -8956,10 +8655,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'textSearch',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'warehouseId',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
