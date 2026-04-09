@@ -30,8 +30,8 @@ type Args<K extends keyof FilterOptionsByName> = {
 /** Stable references for defaults (to avoid new instances each render, impacting useMemo/useEffect deps) */
 const EMPTY_INITIAL_FILTER_VALUES: Partial<
   FilterOptionsByName[keyof FilterOptionsByName]
-> = Object.freeze({});
-const EMPTY_PICK_LIST_ARGS: PickListArgs = Object.freeze({});
+> = {};
+const EMPTY_PICK_LIST_ARGS: PickListArgs = {};
 const EMPTY_OMIT: Array<keyof FilterOptionsByName[keyof FilterOptionsByName]> =
   [];
 
