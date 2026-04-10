@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, Stack } from '@mui/material';
 import pluralize from 'pluralize';
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import BulkServiceSearchToggle from './BulkServiceSearchToggle';
@@ -9,6 +9,7 @@ import ServiceDateRangeSelect from './ServiceDateRangeSelect';
 import StepCard from './StepCard';
 import StepCardTitle from './StepCardTitle';
 import DatePicker from '@/components/elements/input/DatePicker';
+import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import useSearchParamsState, {
   SearchParamsStateType,
@@ -18,8 +19,11 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import CocPicker from '@/modules/projects/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
+import useClientSearchParams from '@/modules/search/hooks/useClientSearchParams';
+import { clientSearchInputToSearchParamsCacheFields } from '@/modules/search/searchUtil';
 import ServiceTypeSelect from '@/modules/services/components/ServiceTypeSelect';
 import { ProjectDashboardRoutes } from '@/routes/routes';
+import { BulkServicesClientSearchQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -36,6 +40,7 @@ const filtersDefaults: SearchParamsStateType = {
   servicePeriodEnd: { type: 'date', default: null },
   searchTerm: { type: 'string', default: null },
   mode: { type: 'string', default: 'search' },
+  searchQueryId: { type: 'string', default: null },
 };
 
 const BulkServicesPage: React.FC<Props> = ({
@@ -58,7 +63,7 @@ const BulkServicesPage: React.FC<Props> = ({
     {
       coc,
       serviceDate,
-      searchTerm,
+      searchQueryId,
       mode: lookupMode,
       servicePeriodStart,
       servicePeriodEnd,
@@ -66,6 +71,25 @@ const BulkServicesPage: React.FC<Props> = ({
     },
     setFilterParams,
   ] = useSearchParamsState({ paramsDefinition: filtersDefaults });
+
+  // Internal state for the plaintext search term, NOT stored in search params
+  const [searchTerm, setSearchTerm] = useState<string | null>(null);
+
+  // Load the persisted client search term if there is a searchQueryId in the URL params
+  const {
+    clientSearchParams,
+    loading: clientSearchParamsLoading,
+    writeClientSearchParamsToCache,
+  } = useClientSearchParams({
+    searchQueryId,
+  });
+
+  // When the persisted search term changes, update the internal state searchTerm
+  useEffect(() => {
+    if (clientSearchParams) {
+      setSearchTerm(clientSearchParams.textSearch || null);
+    }
+  }, [clientSearchParams]);
 
   const serviceTypeId = useMemo(
     () => serviceTypeIdProp || serviceTypeIdParam,
@@ -110,9 +134,7 @@ const BulkServicesPage: React.FC<Props> = ({
       <RootPermissionsFilter permissions='canEditClients'>
         <AddNewClientMenu
           projectId={project.id}
-          onClientAdded={(data) =>
-            setFilterParams((prev) => ({ ...prev, searchTerm: data.client.id }))
-          }
+          onClientAdded={(data) => setSearchTerm(data.client.id)}
           navigateToHousehold={() =>
             navigate(
               {
@@ -128,9 +150,31 @@ const BulkServicesPage: React.FC<Props> = ({
         />
       </RootPermissionsFilter>
     );
-  }, [project, navigate, serviceTypeIdProp, setFilterParams]);
+  }, [serviceTypeIdProp, project.id, navigate]);
 
   const stepThreeTitle = `Assign ${pluralize(serviceTypeName, 2)}`;
+
+  const handleSearchCompleted = useCallback(
+    (data: BulkServicesClientSearchQuery) => {
+      const returnedSearchQueryId = data?.clientSearch.searchQueryId;
+      if (returnedSearchQueryId && searchQueryId !== returnedSearchQueryId) {
+        // Prime the Apollo cache with the params we just received
+        writeClientSearchParamsToCache(
+          returnedSearchQueryId,
+          clientSearchInputToSearchParamsCacheFields({ textSearch: searchTerm })
+        );
+
+        // Update the search params in the URL
+        setFilterParams((prev) => ({
+          ...prev,
+          searchQueryId: returnedSearchQueryId,
+        }));
+      }
+    },
+    [searchQueryId, setFilterParams, searchTerm, writeClientSearchParamsToCache]
+  );
+
+  if (clientSearchParamsLoading) return <Loading />;
 
   return (
     <>
@@ -209,22 +253,19 @@ const BulkServicesPage: React.FC<Props> = ({
                 setFilterParams((prev) => ({
                   ...prev, // Preserve selected CoC, Service Date, and Service Type
                   mode,
-                  searchTerm: null,
+                  searchQueryId: null, // reset the search query ID in the URL
                   servicePeriodStart: null,
                   servicePeriodEnd: null,
                 }));
+                setSearchTerm(null); // reset the plaintext searchTerm
               }}
             />
             <Box sx={{ mt: 2 }} maxWidth='800px'>
               {lookupMode === 'search' && (
                 <ClientTextSearchForm
-                  initialValue={searchTerm}
-                  onSearch={(value) =>
-                    setFilterParams((prev) => ({ ...prev, searchTerm: value }))
-                  }
-                  onClearSearch={() =>
-                    setFilterParams((prev) => ({ ...prev, searchTerm: null }))
-                  }
+                  initialValue={searchTerm || undefined}
+                  onSearch={(value) => setSearchTerm(value)}
+                  onClearSearch={() => setSearchTerm(null)}
                   label={null}
                   placeholder='Client Name, DOB, SSN or ID'
                   helperText='Search includes all of HMIS'
@@ -261,7 +302,7 @@ const BulkServicesPage: React.FC<Props> = ({
                 serviceTypeName={serviceTypeName}
                 serviceTypeId={serviceTypeId}
                 serviceDate={serviceDate}
-                searchTerm={searchTerm}
+                searchTerm={searchTerm || undefined}
                 servicePeriod={servicePeriod}
                 cocCode={coc}
                 title={
@@ -272,6 +313,7 @@ const BulkServicesPage: React.FC<Props> = ({
                     action={addNewClientMenuButton}
                   />
                 }
+                onCompleted={handleSearchCompleted}
               />
             </Paper>
           ) : (
