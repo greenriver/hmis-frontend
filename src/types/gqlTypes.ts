@@ -17150,6 +17150,7 @@ export type BulkServicesClientSearchQuery = {
     __typename?: 'ClientsPaginated';
     offset: number;
     limit: number;
+    searchQueryId?: string | null;
     nodesCount: number;
     nodes: Array<{
       __typename?: 'Client';
@@ -54407,6 +54408,7 @@ export const BulkServicesClientSearchDocument = gql`
     ) {
       offset
       limit
+      searchQueryId
       nodesCount
       nodes {
         id
