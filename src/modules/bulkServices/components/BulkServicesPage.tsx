@@ -265,7 +265,13 @@ const BulkServicesPage: React.FC<Props> = ({
                 <ClientTextSearchForm
                   initialValue={searchTerm || undefined}
                   onSearch={(value) => setSearchTerm(value)}
-                  onClearSearch={() => setSearchTerm(null)}
+                  onClearSearch={() => {
+                    setSearchTerm(null);
+                    setFilterParams((prev) => ({
+                      ...prev,
+                      searchQueryId: null,
+                    }));
+                  }}
                   label={null}
                   placeholder='Client Name, DOB, SSN or ID'
                   helperText='Search includes all of HMIS'
