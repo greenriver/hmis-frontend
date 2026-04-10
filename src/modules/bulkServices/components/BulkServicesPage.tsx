@@ -38,7 +38,6 @@ const filtersDefaults: SearchParamsStateType = {
   serviceDate: { type: 'date', default: new Date() },
   servicePeriodStart: { type: 'date', default: null },
   servicePeriodEnd: { type: 'date', default: null },
-  searchTerm: { type: 'string', default: null },
   mode: { type: 'string', default: 'search' },
   searchQueryId: { type: 'string', default: null },
 };
@@ -84,7 +83,7 @@ const BulkServicesPage: React.FC<Props> = ({
     searchQueryId,
   });
 
-  // When the persisted search term changes, update the internal state searchTerm
+  // When the persisted search term changes (e.g. browser back-button), update the internal state searchTerm
   useEffect(() => {
     if (clientSearchParams) {
       setSearchTerm(clientSearchParams.textSearch || null);
