@@ -27,6 +27,14 @@ type Args<K extends keyof FilterOptionsByName> = {
   initialFilterValues?: Partial<FilterOptionsByName[K]>;
 };
 
+/** Stable references for defaults (to avoid new instances each render, impacting useMemo/useEffect deps) */
+const EMPTY_INITIAL_FILTER_VALUES: Partial<
+  FilterOptionsByName[keyof FilterOptionsByName]
+> = {};
+const EMPTY_PICK_LIST_ARGS: PickListArgs = {};
+const EMPTY_OMIT: Array<keyof FilterOptionsByName[keyof FilterOptionsByName]> =
+  [];
+
 /**
  * Builds a table filter configuration from a GraphQL filter input type (e.g. `ClientFilterOptions`)
  * and optionally mirrors filter values in the URL so they persist on navigation and can be shared.
@@ -56,9 +64,11 @@ export default function useTableFilters<K extends keyof FilterOptionsByName>(
 
 export default function useTableFilters<K extends keyof FilterOptionsByName>({
   type, // Filter type, e.g. 'ClientFilterOptions'
-  initialFilterValues = {} as Partial<FilterOptionsByName[K]>,
-  pickListArgs = {},
-  omit = [],
+  initialFilterValues = EMPTY_INITIAL_FILTER_VALUES as Partial<
+    FilterOptionsByName[K]
+  >,
+  pickListArgs = EMPTY_PICK_LIST_ARGS,
+  omit = EMPTY_OMIT,
   dynamicFilters,
   syncToUrl = true,
 }: Args<K>):
