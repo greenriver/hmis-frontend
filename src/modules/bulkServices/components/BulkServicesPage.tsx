@@ -40,6 +40,7 @@ const filtersDefaults: SearchParamsStateType = {
   servicePeriodEnd: { type: 'date', default: null },
   mode: { type: 'string', default: 'search' },
   searchQueryId: { type: 'string', default: null },
+  householdId: { type: 'string', default: null },
 };
 
 const BulkServicesPage: React.FC<Props> = ({
@@ -67,6 +68,7 @@ const BulkServicesPage: React.FC<Props> = ({
       servicePeriodStart,
       servicePeriodEnd,
       serviceTypeId: serviceTypeIdParam,
+      householdId: householdIdParam,
     },
     setFilterParams,
   ] = useSearchParamsState({ paramsDefinition: filtersDefaults });
@@ -83,12 +85,32 @@ const BulkServicesPage: React.FC<Props> = ({
     searchQueryId,
   });
 
-  // When the persisted search term changes (e.g. browser back-button), update the internal state searchTerm
+  // Sync persisted search params (loaded via searchQueryId) into local searchTerm state.
+  // Runs when navigating back to this page with a searchQueryId in the URL.
   useEffect(() => {
     if (clientSearchParams) {
       setSearchTerm(clientSearchParams.textSearch || null);
     }
   }, [clientSearchParams]);
+
+  // When returning from CreateHouseholdPage, householdId is a one-shot URL param
+  // that pre-fills the search with the new household. Consume it, then clear it
+  // (along with any stale searchQueryId) so it doesn't interfere with later searches.
+  //
+  // On the initial render after navigating back from CreateHouseholdPage, both effects may fire:
+  // the clientSearchParams effect sets searchTerm from the old cached query,
+  // then this effect overwrites it with the household search.
+  // React batches the setState calls, so the last write wins and only "household:<id>" is applied.
+  useEffect(() => {
+    if (householdIdParam) {
+      setSearchTerm(`household:${householdIdParam}`);
+      setFilterParams((prev) => ({
+        ...prev,
+        householdId: null,
+        searchQueryId: null,
+      }));
+    }
+  }, [householdIdParam, setFilterParams]);
 
   const serviceTypeId = useMemo(
     () => serviceTypeIdProp || serviceTypeIdParam,
