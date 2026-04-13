@@ -1153,9 +1153,20 @@ export type CeReferralStepsPaginated = {
 
 export type CeReferralSwimlane = {
   __typename?: 'CeReferralSwimlane';
+  /** Referral-scoped key for Apollo cache to avoid collisions across referrals. */
+  cacheKey: Scalars['ID']['output'];
+  /**
+   * Same as swimlaneId (unchanged for backwards compatibility). Can be updated to
+   * resolve cacheKey value once frontend is updated to send swimlaneId to
+   * assignReferralParticipants.
+   */
   id: Scalars['ID']['output'];
+  /** Swimlane name */
   name: Scalars['String']['output'];
+  /** Assigned users for this swimlane on this referral */
   participants: Array<ApplicationUser>;
+  /** Template swimlane id; same as id. Use as assignReferralParticipants.swimlaneId. */
+  swimlaneId: Scalars['ID']['output'];
 };
 
 export type CeReferralsPaginated = {
@@ -17736,6 +17747,8 @@ export type CeReferralFieldsFragment = {
   swimlanes?: Array<{
     __typename?: 'CeReferralSwimlane';
     id: string;
+    cacheKey: string;
+    swimlaneId: string;
     name: string;
     participants: Array<{
       __typename?: 'ApplicationUser';
@@ -17861,6 +17874,8 @@ export type CeReferralWithNotesAndAuditEventsFragment = {
 export type CeReferralSwimlaneFieldsFragment = {
   __typename?: 'CeReferralSwimlane';
   id: string;
+  cacheKey: string;
+  swimlaneId: string;
   name: string;
   participants: Array<{
     __typename?: 'ApplicationUser';
@@ -17875,6 +17890,8 @@ export type CeReferralWithSwimlanesFragment = {
   swimlanes?: Array<{
     __typename?: 'CeReferralSwimlane';
     id: string;
+    cacheKey: string;
+    swimlaneId: string;
     name: string;
     participants: Array<{
       __typename?: 'ApplicationUser';
@@ -20168,6 +20185,8 @@ export type SubmitCeReferralStepMutation = {
       swimlanes?: Array<{
         __typename?: 'CeReferralSwimlane';
         id: string;
+        cacheKey: string;
+        swimlaneId: string;
         name: string;
         participants: Array<{
           __typename?: 'ApplicationUser';
@@ -20507,6 +20526,8 @@ export type AssignParticipantsMutation = {
       swimlanes?: Array<{
         __typename?: 'CeReferralSwimlane';
         id: string;
+        cacheKey: string;
+        swimlaneId: string;
         name: string;
         participants: Array<{
           __typename?: 'ApplicationUser';
@@ -20876,6 +20897,8 @@ export type GetCeReferralQuery = {
     swimlanes?: Array<{
       __typename?: 'CeReferralSwimlane';
       id: string;
+      cacheKey: string;
+      swimlaneId: string;
       name: string;
       participants: Array<{
         __typename?: 'ApplicationUser';
@@ -50350,6 +50373,8 @@ export const ClientCeReferralTableFieldsFragmentDoc = gql`
 export const CeReferralSwimlaneFieldsFragmentDoc = gql`
   fragment CeReferralSwimlaneFields on CeReferralSwimlane {
     id
+    cacheKey
+    swimlaneId
     name
     participants {
       id
