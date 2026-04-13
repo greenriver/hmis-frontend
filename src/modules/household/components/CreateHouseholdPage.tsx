@@ -78,7 +78,7 @@ const CreateHouseholdPage = () => {
       navigate(-1);
     } else if (householdId) {
       const path = injectSearchParams(state.prev, {
-        searchTerm: `household:${householdId}`,
+        householdId,
       });
       navigate(path as To);
     } else {
