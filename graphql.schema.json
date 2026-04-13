@@ -8913,7 +8913,7 @@
         "fields": [
           {
             "name": "cacheKey",
-            "description": "Referral-scoped key for Apollo cache to avoid collisions across referrals.",
+            "description": "Referral-scoped key for Apollo cache to avoid collisions across referrals",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -8929,7 +8929,7 @@
           },
           {
             "name": "id",
-            "description": "Same as swimlaneId (unchanged for backwards compatibility). Can be updated to\nresolve cacheKey value once frontend is updated to send swimlaneId to\nassignReferralParticipants.",
+            "description": "Swimlane id; client should pass this as assignReferralParticipants.swimlaneId",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -8978,22 +8978,6 @@
                     "ofType": null
                   }
                 }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "swimlaneId",
-            "description": "Template swimlane id; same as id. Use as assignReferralParticipants.swimlaneId.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
               }
             },
             "isDeprecated": false,

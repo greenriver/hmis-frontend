@@ -276,7 +276,6 @@ fragment CeReferralWithNotesAndAuditEvents on CeReferral {
 fragment CeReferralSwimlaneFields on CeReferralSwimlane {
   id
   cacheKey
-  swimlaneId
   name
   participants {
     id

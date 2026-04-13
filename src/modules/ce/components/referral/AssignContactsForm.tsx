@@ -71,9 +71,9 @@ const AssignContactsForm: React.FC<Props> = ({
             <AssignContactFormItem
               key={swimlane.id}
               swimlane={swimlane}
-              users={values[swimlane.swimlaneId] || []}
+              users={values[swimlane.id] || []}
               setUsers={(userIds) => {
-                handleChangeValue(swimlane.swimlaneId, userIds);
+                handleChangeValue(swimlane.id, userIds);
               }}
               projectId={projectId}
             />
