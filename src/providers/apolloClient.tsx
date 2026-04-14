@@ -110,6 +110,10 @@ export const cache = new InMemoryCache({
     FormDefinition: {
       keyFields: ['cacheKey'],
     },
+    // CeReferralSwimlane uses 'cacheKey' because 'id' was non-unique and changing it would be backwards-incompatible, so new cacheKey was added.
+    CeReferralSwimlane: {
+      keyFields: ['cacheKey'],
+    },
     ValueBound: { keyFields: false },
     ValidationError: { keyFields: false },
   },
