@@ -1567,6 +1567,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeReferralSwimlane',
     fields: [
       {
+        name: 'cacheKey',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
