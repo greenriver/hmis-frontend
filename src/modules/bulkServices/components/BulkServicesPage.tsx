@@ -111,7 +111,7 @@ const BulkServicesPage: React.FC<Props> = ({
         <AddNewClientMenu
           projectId={project.id}
           onClientAdded={(data) =>
-            setFilterParams({ searchTerm: data.client.id })
+            setFilterParams((prev) => ({ ...prev, searchTerm: data.client.id }))
           }
           navigateToHousehold={() =>
             navigate(
@@ -155,7 +155,10 @@ const BulkServicesPage: React.FC<Props> = ({
                     // ServiceTypeSelect's internal effect causes `onChange` to be called even when option value is not changing.
                     // To avoid unneeded rerenders, only setFilterParams if the value is changing
                     if (option?.code !== serviceTypeId) {
-                      setFilterParams({ serviceTypeId: option?.code });
+                      setFilterParams((prev) => ({
+                        ...prev,
+                        serviceTypeId: option?.code,
+                      }));
                     }
                   }}
                   label='Service Type'
@@ -164,7 +167,9 @@ const BulkServicesPage: React.FC<Props> = ({
               )}
               <DatePicker
                 value={serviceDate}
-                onChange={(date) => setFilterParams({ serviceDate: date })}
+                onChange={(date) =>
+                  setFilterParams((prev) => ({ ...prev, serviceDate: date }))
+                }
                 max={new Date()}
                 sx={{ width: '200px' }}
                 label={
@@ -179,7 +184,9 @@ const BulkServicesPage: React.FC<Props> = ({
                 <CocPicker
                   project={project}
                   value={coc ? { code: coc } : null}
-                  onChange={(option) => setFilterParams({ coc: option?.code })}
+                  onChange={(option) =>
+                    setFilterParams((prev) => ({ ...prev, coc: option?.code }))
+                  }
                   label='CoC Code'
                   helperText='CoC to use when enrolling new clients'
                 />
@@ -199,20 +206,25 @@ const BulkServicesPage: React.FC<Props> = ({
               value={lookupMode}
               serviceTypeName={serviceTypeName}
               onChange={(mode) => {
-                setFilterParams({
+                setFilterParams((prev) => ({
+                  ...prev, // Preserve selected CoC, Service Date, and Service Type
                   mode,
                   searchTerm: null,
                   servicePeriodStart: null,
                   servicePeriodEnd: null,
-                });
+                }));
               }}
             />
             <Box sx={{ mt: 2 }} maxWidth='800px'>
               {lookupMode === 'search' && (
                 <ClientTextSearchForm
                   initialValue={searchTerm}
-                  onSearch={(value) => setFilterParams({ searchTerm: value })}
-                  onClearSearch={() => setFilterParams({ searchTerm: null })}
+                  onSearch={(value) =>
+                    setFilterParams((prev) => ({ ...prev, searchTerm: value }))
+                  }
+                  onClearSearch={() =>
+                    setFilterParams((prev) => ({ ...prev, searchTerm: null }))
+                  }
                   label={null}
                   placeholder='Client Name, DOB, SSN or ID'
                   helperText='Search includes all of HMIS'
@@ -230,10 +242,11 @@ const BulkServicesPage: React.FC<Props> = ({
                 <ServiceDateRangeSelect
                   initialValue={servicePeriod}
                   onChange={(servicePeriod) =>
-                    setFilterParams({
+                    setFilterParams((prev) => ({
+                      ...prev,
                       servicePeriodStart: servicePeriod?.start,
                       servicePeriodEnd: servicePeriod?.end,
-                    })
+                    }))
                   }
                 />
               )}

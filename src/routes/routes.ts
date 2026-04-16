@@ -5,6 +5,7 @@ const ReferralSubRoutes = {
 
 export const Routes = {
   CLIENT_SEARCH: '/',
+  CLIENT_SEARCH_ADVANCED: '/advanced-search',
   CREATE_CLIENT: '/client/new',
   CLIENT_DASHBOARD: '/client/:clientId',
   ENROLLMENT_DASHBOARD: '/client/:clientId/enrollments/:enrollmentId',
