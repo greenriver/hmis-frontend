@@ -38,6 +38,14 @@ const COLUMNS: DataColumnDef<
   },
 ];
 
+const configurableColumnValue = (
+  row: CeClientFieldsFragment | CeCandidateFieldsFragment,
+  key: string
+) => {
+  if ('clientAttributes' in row && row.clientAttributes)
+    return row.clientAttributes[key];
+};
+
 export const configurableCeColumns = (
   columns: TableColumnConfigFieldsFragment[]
 ) => {
@@ -45,8 +53,7 @@ export const configurableCeColumns = (
     key: key,
     header: label,
     render: (row: CeClientFieldsFragment | CeCandidateFieldsFragment) => {
-      if (!row.clientAttributes) return null;
-      const value = row.clientAttributes[key];
+      const value = configurableColumnValue(row, key);
       if (!value) return null;
       let values = ensureArray(value);
       if (type === TableColumnConfigType.Date) {
@@ -73,6 +80,14 @@ const AdminCeClientsTable: React.FC = () => {
     React.useState<CeClientFieldsFragment | null>(null);
 
   // Define table columns (Default + MCI + Custom configured)
+  const clientAttributeKeys = useMemo(
+    () =>
+      (tableConfigLookup?.ceClientsGlobalConfig?.columns || []).map(
+        (c) => c.key
+      ),
+    [tableConfigLookup?.ceClientsGlobalConfig?.columns]
+  );
+
   const columnsWithCustom = useMemo(() => {
     const columnConfig = tableConfigLookup?.ceClientsGlobalConfig?.columns;
     const customColumns = columnConfig
@@ -137,6 +152,7 @@ const AdminCeClientsTable: React.FC = () => {
           columns={columnsWithCustom}
           queryVariables={{
             filters: { searchTerm: debouncedSearch || undefined },
+            clientAttributeKeys,
           }}
           queryDocument={GetCeClientsDocument}
           pagePath='ceClients'

@@ -590,7 +590,7 @@ export type CeAssessmentsPaginated = {
 
 export type CeCandidate = {
   __typename?: 'CeCandidate';
-  /** Most recent snapshot of client attributes */
+  /** Current values for the given expression keys */
   clientAttributes: Scalars['JSON']['output'];
   /** Masked as "Candidate 123" unless the user has permission to view */
   clientName: Scalars['String']['output'];
@@ -598,6 +598,10 @@ export type CeCandidate = {
   enrollments: CeReferralSourceEnrollmentsPaginated;
   id: Scalars['ID']['output'];
   priorityScores: Array<Scalars['Int']['output']>;
+};
+
+export type CeCandidateClientAttributesArgs = {
+  keys?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type CeCandidateEnrollmentsArgs = {
@@ -622,7 +626,7 @@ export type CeCandidatesPaginated = {
  */
 export type CeClient = {
   __typename?: 'CeClient';
-  /** Aggregation of most recent snapshots from all candidate pools this client belongs to */
+  /** Current values for the given expression keys */
   clientAttributes: Scalars['JSON']['output'];
   clientName: Scalars['String']['output'];
   destinationClientId: Scalars['ID']['output'];
@@ -636,6 +640,14 @@ export type CeClient = {
    * data source and are viewable by the current user
    */
   viewableSourceClientIds: Array<Scalars['ID']['output']>;
+};
+
+/**
+ * A client who is eligible for Coordinated Entry (CE), represented by a
+ * ClientProxy. Underlying client record is Destination Client.
+ */
+export type CeClientClientAttributesArgs = {
+  keys?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 /**
@@ -20677,6 +20689,9 @@ export type GetCeOpportunityCandidatesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<CeOpportunityCandidatesFilterOptions>;
+  clientAttributeKeys?:
+    | Array<Scalars['String']['input']>
+    | Scalars['String']['input'];
 }>;
 
 export type GetCeOpportunityCandidatesQuery = {
@@ -21847,6 +21862,9 @@ export type GetCeClientsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<CeClientFilterOptions>;
+  clientAttributeKeys?:
+    | Array<Scalars['String']['input']>
+    | Scalars['String']['input'];
 }>;
 
 export type GetCeClientsQuery = {
@@ -48332,6 +48350,9 @@ export type GetUnitGroupQuery = {
 export type GetUnitQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   includeCeFields?: InputMaybe<Scalars['Boolean']['input']>;
+  clientAttributeKeys?:
+    | Array<Scalars['String']['input']>
+    | Scalars['String']['input'];
 }>;
 
 export type GetUnitQuery = {
@@ -50518,7 +50539,7 @@ export const CeClientFieldsFragmentDoc = gql`
     destinationClientId
     viewableSourceClientIds
     clientName
-    clientAttributes
+    clientAttributes(keys: $clientAttributeKeys)
     externalIds {
       ...ClientIdentifierFields
     }
@@ -52093,7 +52114,7 @@ export const CeCandidateFieldsFragmentDoc = gql`
     id
     priorityScores
     clientName
-    clientAttributes
+    clientAttributes(keys: $clientAttributeKeys)
   }
 `;
 export const UnitDetailFieldsFragmentDoc = gql`
@@ -55186,6 +55207,7 @@ export const GetCeOpportunityCandidatesDocument = gql`
     $limit: Int = 25
     $offset: Int = 0
     $filters: CeOpportunityCandidatesFilterOptions
+    $clientAttributeKeys: [String!]! = []
   ) {
     ceOpportunity(id: $opportunityId) {
       id
@@ -55219,6 +55241,7 @@ export const GetCeOpportunityCandidatesDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
+ *      clientAttributeKeys: // value for 'clientAttributeKeys'
  *   },
  * });
  */
@@ -56118,6 +56141,7 @@ export const GetCeClientsDocument = gql`
     $limit: Int = 25
     $offset: Int = 0
     $filters: CeClientFilterOptions = null
+    $clientAttributeKeys: [String!]! = []
   ) {
     ceClients(limit: $limit, offset: $offset, filters: $filters) {
       offset
@@ -56146,6 +56170,7 @@ export const GetCeClientsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
+ *      clientAttributeKeys: // value for 'clientAttributeKeys'
  *   },
  * });
  */
@@ -69815,7 +69840,11 @@ export type GetUnitGroupQueryResult = Apollo.QueryResult<
   GetUnitGroupQueryVariables
 >;
 export const GetUnitDocument = gql`
-  query GetUnit($id: ID!, $includeCeFields: Boolean = false) {
+  query GetUnit(
+    $id: ID!
+    $includeCeFields: Boolean = false
+    $clientAttributeKeys: [String!]! = []
+  ) {
     unit(id: $id) {
       ...UnitDetailFields
     }
@@ -69837,6 +69866,7 @@ export const GetUnitDocument = gql`
  *   variables: {
  *      id: // value for 'id'
  *      includeCeFields: // value for 'includeCeFields'
+ *      clientAttributeKeys: // value for 'clientAttributeKeys'
  *   },
  * });
  */

@@ -3971,8 +3971,29 @@
         "fields": [
           {
             "name": "clientAttributes",
-            "description": "Most recent snapshot of client attributes",
-            "args": [],
+            "description": "Current values for the given expression keys",
+            "args": [
+              {
+                "name": "keys",
+                "description": "Keys whose values should be returned. Same format as TableColumnConfig keys.",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -4244,8 +4265,29 @@
         "fields": [
           {
             "name": "clientAttributes",
-            "description": "Aggregation of most recent snapshots from all candidate pools this client belongs to",
-            "args": [],
+            "description": "Current values for the given expression keys",
+            "args": [
+              {
+                "name": "keys",
+                "description": "Keys whose values should be returned. Same format as TableColumnConfig keys.",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
               "kind": "NON_NULL",
               "name": null,

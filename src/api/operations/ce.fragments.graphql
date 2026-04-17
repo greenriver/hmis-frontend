@@ -58,7 +58,7 @@ fragment CeCandidateFields on CeCandidate {
   id
   priorityScores
   clientName
-  clientAttributes
+  clientAttributes(keys: $clientAttributeKeys)
 }
 
 fragment CeReferralSummaryFields on CeReferral {
@@ -378,12 +378,13 @@ fragment CeReferralSourceEnrollmentFields on CeReferralSourceEnrollment {
 }
 
 # CE Client (backed by Client Proxy) is used on the global eligible clients list
+# $clientAttributeKeys is supplied by GetCeClients when requesting live expression values.
 fragment CeClientFields on CeClient {
   id
   destinationClientId
   viewableSourceClientIds
   clientName
-  clientAttributes
+  clientAttributes(keys: $clientAttributeKeys)
   externalIds {
     ...ClientIdentifierFields
   }

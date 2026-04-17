@@ -64,6 +64,14 @@ const PrioritizedClientsTable: React.FC<Props> = ({
   });
 
   // Define table columns (Default + MCI + Custom configured + Action)
+  const clientAttributeKeys = useMemo(
+    () =>
+      (tableConfigLookup?.ceClientsUnitGroupConfig?.columns || []).map(
+        (c) => c.key
+      ),
+    [tableConfigLookup?.ceClientsUnitGroupConfig?.columns]
+  );
+
   const columns: ColumnDef<CeCandidateFieldsFragment>[] = useMemo(() => {
     const canStartReferrals =
       project.access.canStartReferrals && project.access.canViewReferrals;
@@ -156,6 +164,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
           queryVariables={{
             opportunityId: opportunity.id,
             filters: { searchTerm: debouncedSearch || undefined },
+            clientAttributeKeys,
           }}
           queryDocument={GetCeOpportunityCandidatesDocument}
           pagePath='ceOpportunity.candidates'
