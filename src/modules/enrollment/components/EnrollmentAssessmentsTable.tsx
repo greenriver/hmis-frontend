@@ -1,11 +1,11 @@
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   ASSESSMENT_COLUMNS,
   ASSESSMENT_DETAILS_COL,
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentFieldsFragment,
@@ -32,7 +32,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
   enrollmentId,
   projectId,
 }) => {
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'AssessmentsForEnrollmentFilterOptions',
     pickListArgs: { projectId },
   });
@@ -44,6 +44,8 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       AssessmentFieldsFragment
     >
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
       queryVariables={{ id: enrollmentId }}
       queryDocument={GetEnrollmentAssessmentsDocument}
       columns={COLUMNS}

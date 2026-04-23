@@ -8,8 +8,8 @@ import PickListWrapper from './items/PickListWrapper';
 import TableFilterItemSelect from './items/TableFilterItemSelect';
 
 import { TableFilterItemSelectorProps } from './items/types';
-import { FilterType } from '@/modules/dataFetching/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
+import { FilterType } from '@/types/tableFilterTypes';
 
 const TableFilterItemSelector = ({
   variant = 'select',

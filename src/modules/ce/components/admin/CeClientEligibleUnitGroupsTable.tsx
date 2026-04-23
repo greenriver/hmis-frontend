@@ -2,10 +2,10 @@ import { Chip, Paper } from '@mui/material';
 import pluralize from 'pluralize';
 import React from 'react';
 
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeEligibleUnitGroupFieldsFragment,
@@ -59,8 +59,9 @@ interface Props {
   ceClientId: string;
 }
 const CeClientEligibleUnitGroupsTable: React.FC<Props> = ({ ceClientId }) => {
-  const filters = useFilters({
+  const { filters } = useTableFilters({
     type: 'CeEligibleUnitGroupFilterOptions',
+    syncToUrl: false, // don't sync filters to URL because this table is used in a dialog
   });
 
   return (

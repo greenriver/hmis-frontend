@@ -4,9 +4,9 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { getViewClientMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
+import useTableFilters from '@/hooks/useTableFilters';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GlobalClientMergeHistoryDocument,
@@ -32,7 +32,7 @@ const GlobalClientMergeHistory = () => {
   const pathToMerge = generateSafePath(
     AdminDashboardRoutes.PERFORM_CLIENT_MERGES
   );
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'MergeAuditEventFilterOptions',
   });
 
@@ -56,6 +56,8 @@ const GlobalClientMergeHistory = () => {
           pagePath='mergeAuditHistory'
           noData='No merge history'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           recordType='MergeAuditEvent'
           paginationItemName='merge event'
           noSort

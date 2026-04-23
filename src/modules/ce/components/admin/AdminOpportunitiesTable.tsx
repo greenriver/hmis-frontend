@@ -1,10 +1,10 @@
 import { Paper } from '@mui/material';
 import React from 'react';
+import useTableFilters from '@/hooks/useTableFilters';
 import { OPPORTUNITY_COLUMNS } from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeOpportunityAdminFieldsFragment,
@@ -56,10 +56,10 @@ const COLUMNS: DataColumnDef<
 
 interface Props {}
 const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeOpportunityFilterOptions',
     omit: [
-      'status', // omitted because only 'open' opportunities are shown
+      'status', // omitted because only 'open' opportunities are queried
       'availableOnDate', // omitted because filter is not implemented on the backend #7537
     ],
   });
@@ -84,9 +84,8 @@ const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
         noData='No available units'
         paginationItemName='available unit'
         filters={filters}
-        defaultFilterValues={{
-          status: [CeOpportunityStatus.Open],
-        }}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
         rowLinkTo={(row) =>
           // Link to Unit Page. If the project doesn't support waitlists, this will redirect to the All Units page.
           generateSafePath(ProjectDashboardRoutes.UNIT, {

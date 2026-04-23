@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   ClientAccessSummaryFieldsFragment,
   GetUserClientSummariesDocument,
@@ -36,17 +36,14 @@ const columns: ColumnDef<ClientAccessSummaryFieldsFragment>[] = [
 
 interface Props {
   userId: string;
-  startDate?: string;
   searchTerm?: string;
 }
 const ClientAccessSummaryTable: React.FC<Props> = ({
   userId,
-  startDate,
   searchTerm = '',
 }) => {
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientAccessSummaryFilterOptions',
-    omit: ['searchTerm'],
   });
 
   return (
@@ -60,15 +57,14 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
         filters: { searchTerm },
       }}
       queryDocument={GetUserClientSummariesDocument}
-      defaultFilterValues={{
-        onOrAfter: startDate,
-      }}
       columns={columns}
       pagePath='user.clientAccessSummaries'
       noData='No access history'
       paginationItemName='accessed client'
       recordType='ClientAccessSummary'
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
     />
   );
 };

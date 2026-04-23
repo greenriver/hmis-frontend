@@ -112,14 +112,12 @@ const UserAccessHistory = ({ accessEntityType }: Props) => {
         {accessEntityType === 'clients' && (
           <ClientAccessSummaryTable
             userId={userId}
-            // startDate={defaultStartDate}
             searchTerm={debouncedSearch}
           />
         )}
         {accessEntityType === 'enrollments' && (
           <EnrollmentAccessSummaryTable
             userId={userId}
-            // startDate={defaultStartDate}
             searchTerm={debouncedSearch}
           />
         )}

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
@@ -59,12 +59,9 @@ const UnitManagementTable: React.FC<Props> = ({
     ];
   }, [coordinatedEntryFeatures.supportsReferrals, unitGroupId]);
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'UnitFilterOptions',
-    omit: [
-      'status', // deprecated filter option, remove
-      ...(unitGroupId ? ['unitType'] : []), // if looking at units in one group, no need to show this filter
-    ],
+    omit: unitGroupId ? ['unitType'] : [], // if looking at units in one group, no need to show this filter
     pickListArgs: { projectId },
   });
 
@@ -130,6 +127,7 @@ const UnitManagementTable: React.FC<Props> = ({
         queryVariables={{
           id: projectId,
           includeCeFields: coordinatedEntryFeatures.supportsReferrals || false,
+          filters: { unitGroup: unitGroupId ? [unitGroupId] : undefined },
         }}
         queryDocument={GetUnitsDocument}
         columns={columns}
@@ -143,8 +141,9 @@ const UnitManagementTable: React.FC<Props> = ({
             row.canBeMarkedUnavailable
           )
         }
-        defaultFilterValues={{ unitGroup: unitGroupId }}
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
         recordType='Unit'
         EnhancedTableToolbarProps={{
           title: canDoAnyUnitActions ? 'Manage Units' : 'Units',

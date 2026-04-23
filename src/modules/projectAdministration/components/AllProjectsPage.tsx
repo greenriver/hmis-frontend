@@ -11,9 +11,9 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageContainer from '@/components/layout/PageContainer';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
@@ -101,9 +101,15 @@ const ProjectsTable = ({
   setSearch: Dispatch<SetStateAction<string>>;
   debouncedSearch?: string;
 }) => {
-  const projectFilters = useFilters({
+  const {
+    filters: projectFilters,
+    filterValues,
+    setFilterValues,
+  } = useTableFilters({
     type: 'ProjectFilterOptions',
-    omit: ['searchTerm', 'ceEnabled'],
+    omit: ['ceEnabled'],
+    // Initially, filter to only open projects
+    initialFilterValues: { status: [ProjectFilterOptionStatus.Open] },
   });
 
   return (
@@ -142,10 +148,9 @@ const ProjectsTable = ({
           noData='No projects'
           pagePath='projects'
           recordType='Project'
-          defaultFilterValues={{
-            status: [ProjectFilterOptionStatus.Open],
-          }}
           filters={projectFilters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           defaultPageSize={25}
         />
       </Paper>

@@ -3,12 +3,12 @@ import { ContextualCollapsibleListsProvider } from '@/components/elements/Collap
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   AUDIT_HISTORY_COLUMNS,
   AUDIT_HISTORY_USER_COLUMNS,
 } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   EnrollmentAuditEventFilterOptions,
   GetEnrollmentAuditEventsDocument,
@@ -30,7 +30,7 @@ const columns: ColumnDef<AuditHistoryType>[] = [
 
 const EnrollmentAuditHistory = () => {
   const { enrollmentId } = useSafeParams() as { enrollmentId: string };
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'EnrollmentAuditEventFilterOptions',
   });
 
@@ -57,6 +57,8 @@ const EnrollmentAuditHistory = () => {
           queryVariables={{ id: enrollmentId }}
           recordType='EnrollmentAuditEvent'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
         />
       </Paper>
     </ContextualCollapsibleListsProvider>

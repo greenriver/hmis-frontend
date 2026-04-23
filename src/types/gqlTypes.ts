@@ -1711,14 +1711,28 @@ export type ClientSearchInput = {
   /** Client primary key */
   id?: InputMaybe<Scalars['ID']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
+  /** @deprecated Use the Client Filter instead */
   organizations?: InputMaybe<Array<Scalars['ID']['input']>>;
   personalId?: InputMaybe<Scalars['String']['input']>;
+  /** @deprecated Use the Client Filter instead */
   projects?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Last 4 digits of SSN */
   ssnSerial?: InputMaybe<Scalars['String']['input']>;
   /** Omnisearch string */
   textSearch?: InputMaybe<Scalars['String']['input']>;
+  /** @deprecated Searching by warehouse_id is supported via free text search */
   warehouseId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ClientSearchParams = {
+  __typename?: 'ClientSearchParams';
+  dob?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  personalId?: Maybe<Scalars['String']['output']>;
+  ssnSerial?: Maybe<Scalars['String']['output']>;
+  textSearch?: Maybe<Scalars['String']['output']>;
 };
 
 /** HUD Client Sorting Options */
@@ -1750,6 +1764,7 @@ export type ClientsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+  searchQueryId?: Maybe<Scalars['String']['output']>;
 };
 
 /** HUD CmExitReason (V9.1) */
@@ -5636,7 +5651,10 @@ export enum PickListType {
    * exist in the project (both active and inactive).
    */
   AssessmentNames = 'ASSESSMENT_NAMES',
-  /** Current and historical user accounts */
+  /**
+   * Current and historical user accounts
+   * @deprecated No longer used
+   */
   AuditableUsers = 'AUDITABLE_USERS',
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
@@ -5710,7 +5728,7 @@ export enum PickListType {
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
   /** Unit groups for the given project that can receive CE referrals */
   UnitGroupsForProjectDirectCeReferral = 'UNIT_GROUPS_FOR_PROJECT_DIRECT_CE_REFERRAL',
-  /** User accounts. Deprecated in favor of AUDITABLE_USERS */
+  /** User accounts. Returns all users, for use when filtering audit events */
   Users = 'USERS',
 }
 
@@ -6929,6 +6947,8 @@ export type Query = {
   organization?: Maybe<Organization>;
   organizations: OrganizationsPaginated;
   parsedFormDefinition?: Maybe<FormDefinitionForJsonResult>;
+  /** Persisted search params lookup */
+  persistedClientSearchParams?: Maybe<ClientSearchParams>;
   /** Get list of options for pick list */
   pickList: Array<PickListOption>;
   /** Project lookup */
@@ -7125,6 +7145,10 @@ export type QueryOrganizationsArgs = {
 
 export type QueryParsedFormDefinitionArgs = {
   input: Scalars['String']['input'];
+};
+
+export type QueryPersistedClientSearchParamsArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type QueryPickListArgs = {
@@ -22628,6 +22652,7 @@ export type SearchClientsQuery = {
     offset: number;
     limit: number;
     nodesCount: number;
+    searchQueryId?: string | null;
     nodes: Array<{
       __typename?: 'Client';
       dateCreated?: string | null;
@@ -24680,6 +24705,35 @@ export type BulkMergeClientsMutation = {
       section?: string | null;
       data?: any | null;
     }>;
+  } | null;
+};
+
+export type ClientSearchParamsFieldsFragment = {
+  __typename?: 'ClientSearchParams';
+  id: string;
+  textSearch?: string | null;
+  personalId?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  ssnSerial?: string | null;
+  dob?: string | null;
+};
+
+export type GetPersistedClientSearchParamsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetPersistedClientSearchParamsQuery = {
+  __typename?: 'Query';
+  persistedClientSearchParams?: {
+    __typename?: 'ClientSearchParams';
+    id: string;
+    textSearch?: string | null;
+    personalId?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    ssnSerial?: string | null;
+    dob?: string | null;
   } | null;
 };
 
@@ -42210,6 +42264,7 @@ export type OmniSearchClientsQuery = {
     __typename?: 'ClientsPaginated';
     limit: number;
     nodesCount: number;
+    searchQueryId?: string | null;
     nodes: Array<{
       __typename?: 'Client';
       id: string;
@@ -51185,6 +51240,17 @@ export const MergeAuditEventFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const ClientSearchParamsFieldsFragmentDoc = gql`
+  fragment ClientSearchParamsFields on ClientSearchParams {
+    id
+    textSearch
+    personalId
+    firstName
+    lastName
+    ssnSerial
+    dob
+  }
+`;
 export const OrganizationNameFieldsFragmentDoc = gql`
   fragment OrganizationNameFields on Organization {
     id
@@ -56770,6 +56836,7 @@ export const SearchClientsDocument = gql`
       nodes {
         ...ClientSearchResultFields
       }
+      searchQueryId
     }
   }
   ${ClientSearchResultFieldsFragmentDoc}
@@ -58675,6 +58742,113 @@ export type BulkMergeClientsMutationResult =
 export type BulkMergeClientsMutationOptions = Apollo.BaseMutationOptions<
   BulkMergeClientsMutation,
   BulkMergeClientsMutationVariables
+>;
+export const GetPersistedClientSearchParamsDocument = gql`
+  query GetPersistedClientSearchParams($id: ID!) {
+    persistedClientSearchParams(id: $id) {
+      ...ClientSearchParamsFields
+    }
+  }
+  ${ClientSearchParamsFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetPersistedClientSearchParamsQuery__
+ *
+ * To run a query within a React component, call `useGetPersistedClientSearchParamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPersistedClientSearchParamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPersistedClientSearchParamsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetPersistedClientSearchParamsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  > &
+    (
+      | {
+          variables: GetPersistedClientSearchParamsQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >(GetPersistedClientSearchParamsDocument, options);
+}
+export function useGetPersistedClientSearchParamsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >(GetPersistedClientSearchParamsDocument, options);
+}
+// @ts-ignore
+export function useGetPersistedClientSearchParamsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetPersistedClientSearchParamsQuery,
+  GetPersistedClientSearchParamsQueryVariables
+>;
+export function useGetPersistedClientSearchParamsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetPersistedClientSearchParamsQuery,
+        GetPersistedClientSearchParamsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetPersistedClientSearchParamsQuery | undefined,
+  GetPersistedClientSearchParamsQueryVariables
+>;
+export function useGetPersistedClientSearchParamsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetPersistedClientSearchParamsQuery,
+        GetPersistedClientSearchParamsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetPersistedClientSearchParamsQuery,
+    GetPersistedClientSearchParamsQueryVariables
+  >(GetPersistedClientSearchParamsDocument, options);
+}
+export type GetPersistedClientSearchParamsQueryHookResult = ReturnType<
+  typeof useGetPersistedClientSearchParamsQuery
+>;
+export type GetPersistedClientSearchParamsLazyQueryHookResult = ReturnType<
+  typeof useGetPersistedClientSearchParamsLazyQuery
+>;
+export type GetPersistedClientSearchParamsSuspenseQueryHookResult = ReturnType<
+  typeof useGetPersistedClientSearchParamsSuspenseQuery
+>;
+export type GetPersistedClientSearchParamsQueryResult = Apollo.QueryResult<
+  GetPersistedClientSearchParamsQuery,
+  GetPersistedClientSearchParamsQueryVariables
 >;
 export const CreateServiceTypeDocument = gql`
   mutation CreateServiceType($input: ServiceTypeInput!) {
@@ -64948,6 +65122,7 @@ export const OmniSearchClientsDocument = gql`
         id
         ...ClientOmniSearchFields
       }
+      searchQueryId
     }
   }
   ${ClientOmniSearchFieldsFragmentDoc}

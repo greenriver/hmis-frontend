@@ -1,6 +1,6 @@
-import { EnumFilter } from '../dataFetching/types';
 import { localResolvePickList } from '../form/util/formUtil';
 import { PickListOption, ReferralPostingStatus } from '@/types/gqlTypes';
+import { EnumFilter } from '@/types/tableFilterTypes';
 
 const sortValue = (status: ReferralPostingStatus) => {
   switch (status) {
@@ -19,7 +19,7 @@ const sortValue = (status: ReferralPostingStatus) => {
   }
 };
 
-// Define a filter for ReferralPostingStatuses
+// Define a filter for legacy ReferralPostingStatuses
 export const getReferralFilter = (
   statuses: ReferralPostingStatus[]
 ): EnumFilter<Record<string, any>> => {

@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { getViewEnrollmentMenuItem } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 
 import { WITH_ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   getServiceTypeForDisplay,
@@ -49,7 +49,7 @@ const ProjectServicesTable = ({
     ];
   }, [columns]);
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ServicesForProjectFilterOptions',
   });
 
@@ -82,6 +82,8 @@ const ProjectServicesTable = ({
       pagePath='project.services'
       recordType='Service'
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
     />
   );
 };

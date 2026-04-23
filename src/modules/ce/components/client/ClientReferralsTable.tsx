@@ -3,12 +3,12 @@ import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   REFERRAL_COLUMNS,
   REFERRAL_WITH_PROJECT_COLUMNS,
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import { Routes } from '@/routes/routes';
 import {
   ClientCeReferralTableFieldsFragment,
@@ -32,9 +32,8 @@ const ClientReferralsTable: React.FC = () => {
     clientId: string;
   };
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientCeReferralFilterOptions',
-    omit: ['workflowTemplate'],
   });
 
   return (
@@ -59,6 +58,8 @@ const ClientReferralsTable: React.FC = () => {
         }
         rowActionTitle='View Referral'
         filters={filters}
+        filterValues={filterValues}
+        onFilterChange={setFilterValues}
       />
     </Paper>
   );

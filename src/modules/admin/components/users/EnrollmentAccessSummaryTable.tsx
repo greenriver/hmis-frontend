@@ -1,7 +1,7 @@
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   EnrollmentAccessSummaryFieldsFragment,
   GetUserEnrollmentSummariesDocument,
@@ -44,17 +44,14 @@ const columns: ColumnDef<EnrollmentAccessSummaryFieldsFragment>[] = [
 
 interface Props {
   userId: string;
-  startDate?: string;
   searchTerm?: string;
 }
 const EnrollmentAccessSummaryTable: React.FC<Props> = ({
   userId,
-  startDate,
   searchTerm,
 }) => {
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'EnrollmentAccessSummaryFilterOptions',
-    omit: ['searchTerm'],
   });
 
   return (
@@ -67,7 +64,6 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
         id: userId,
         filters: { searchTerm },
       }}
-      defaultFilterValues={{ onOrAfter: startDate }}
       queryDocument={GetUserEnrollmentSummariesDocument}
       columns={columns}
       pagePath='user.enrollmentAccessSummaries'
@@ -75,6 +71,8 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
       paginationItemName='accessed enrollment'
       recordType='EnrollmentAccessSummary'
       filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
     />
   );
 };

@@ -2,13 +2,13 @@ import { Paper, Stack } from '@mui/material';
 import React, { useCallback } from 'react';
 
 import useDebouncedState from '@/hooks/useDebouncedState';
+import useTableFilters from '@/hooks/useTableFilters';
 import {
   REFERRAL_COLUMNS,
   REFERRAL_WITH_PROJECT_COLUMNS,
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {
   AdminDashboardRoutes,
@@ -90,9 +90,8 @@ interface Props {}
 const AdminReferralsTable: React.FC<Props> = ({}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeReferralFilterOptions',
-    omit: ['searchTerm'], // omit from the filter widget, since this table uses a customized search bar
   });
 
   const rowSecondaryActions = useCallback(
@@ -165,6 +164,8 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
           noData='No referrals'
           paginationItemName='referrals'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           rowLinkTo={(row) =>
             generateSafePath(AdminDashboardRoutes.REFERRAL, {
               projectId: row.targetProjectId,

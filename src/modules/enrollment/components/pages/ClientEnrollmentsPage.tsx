@@ -4,11 +4,11 @@ import { ReactNode, useCallback } from 'react';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
+import useTableFilters from '@/hooks/useTableFilters';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ENROLLMENT_COLUMNS } from '@/modules/enrollment/columns/enrollmentColumns';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   entryExitRange,
   parseAndFormatDate,
@@ -122,7 +122,7 @@ const COLUMNS: ColumnDef<ClientEnrollmentFieldsFragment>[] = [
 const ClientEnrollmentsPage = () => {
   const { client } = useClientDashboardContext();
 
-  const filters = useFilters({
+  const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'EnrollmentsForClientFilterOptions',
   });
 
@@ -155,6 +155,8 @@ const ClientEnrollmentsPage = () => {
           rowActionTitle='View Enrollment'
           pagePath='client.enrollments'
           filters={filters}
+          filterValues={filterValues}
+          onFilterChange={setFilterValues}
           recordType='Enrollment'
           noSort
           defaultSortOption={EnrollmentSortOption.MostRecent}
