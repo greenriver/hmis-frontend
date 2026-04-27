@@ -113,6 +113,16 @@ export const cache = new InMemoryCache({
     // CeReferralSwimlane uses 'cacheKey' because 'id' was non-unique and changing it would be backwards-incompatible, so new cacheKey was added.
     CeReferralSwimlane: {
       keyFields: ['cacheKey'],
+      fields: {
+        // Opt in to default behavior to prevent console warnings. Incoming participants should replace existing participants.
+        participants: { merge: false },
+      },
+    },
+    CeReferralStep: {
+      fields: {
+        // Opt in to default behavior to prevent console warnings. Incoming assignees should replace existing assignees.
+        assignees: { merge: false },
+      },
     },
     ValueBound: { keyFields: false },
     ValidationError: { keyFields: false },
