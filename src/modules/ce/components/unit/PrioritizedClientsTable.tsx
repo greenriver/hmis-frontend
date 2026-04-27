@@ -63,22 +63,24 @@ const PrioritizedClientsTable: React.FC<Props> = ({
     skip: !unitGroupId,
   });
 
-  // Define table columns (Default + MCI + Custom configured + Action)
-  const clientAttributeKeys = useMemo(
-    () =>
-      (tableConfigLookup?.ceClientsUnitGroupConfig?.columns || []).map(
-        (c) => c.key
-      ),
-    [tableConfigLookup?.ceClientsUnitGroupConfig?.columns]
+  const tableColumnConfig = useMemo(
+    () => tableConfigLookup?.ceClientsUnitGroupConfig?.columns,
+    [tableConfigLookup]
   );
 
+  // Keys to resolve for client attributes (based on column configuration)
+  const clientAttributeKeys = useMemo(
+    () => (tableColumnConfig || []).map((c) => c.key),
+    [tableColumnConfig]
+  );
+
+  // Define table columns (Default + MCI + Custom configured + Action)
   const columns: ColumnDef<CeCandidateFieldsFragment>[] = useMemo(() => {
     const canStartReferrals =
       project.access.canStartReferrals && project.access.canViewReferrals;
 
-    const columnConfig = tableConfigLookup?.ceClientsUnitGroupConfig?.columns;
     const customColumns = (
-      columnConfig ? configurableCeColumns(columnConfig) : []
+      tableColumnConfig ? configurableCeColumns(tableColumnConfig) : []
     ) as ColumnDef<CeCandidateFieldsFragment>[];
 
     return [
@@ -103,7 +105,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
         ),
       },
     ];
-  }, [project.access, tableConfigLookup, status, opportunity]);
+  }, [project.access, tableColumnConfig, status, opportunity]);
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeOpportunityCandidatesFilterOptions',

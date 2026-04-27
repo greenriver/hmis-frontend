@@ -38,14 +38,6 @@ const COLUMNS: DataColumnDef<
   },
 ];
 
-const configurableColumnValue = (
-  row: CeClientFieldsFragment | CeCandidateFieldsFragment,
-  key: string
-) => {
-  if ('clientAttributes' in row && row.clientAttributes)
-    return row.clientAttributes[key];
-};
-
 export const configurableCeColumns = (
   columns: TableColumnConfigFieldsFragment[]
 ) => {
@@ -53,7 +45,8 @@ export const configurableCeColumns = (
     key: key,
     header: label,
     render: (row: CeClientFieldsFragment | CeCandidateFieldsFragment) => {
-      const value = configurableColumnValue(row, key);
+      if (!row.clientAttributes) return null;
+      const value = row.clientAttributes[key];
       if (!value) return null;
       let values = ensureArray(value);
       if (type === TableColumnConfigType.Date) {
@@ -79,19 +72,21 @@ const AdminCeClientsTable: React.FC = () => {
   const [selectedRow, setSelectedRow] =
     React.useState<CeClientFieldsFragment | null>(null);
 
-  // Define table columns (Default + MCI + Custom configured)
-  const clientAttributeKeys = useMemo(
-    () =>
-      (tableConfigLookup?.ceClientsGlobalConfig?.columns || []).map(
-        (c) => c.key
-      ),
-    [tableConfigLookup?.ceClientsGlobalConfig?.columns]
+  const tableColumnConfig = useMemo(
+    () => tableConfigLookup?.ceClientsGlobalConfig?.columns,
+    [tableConfigLookup]
   );
 
+  // Keys to resolve for client attributes (based on column configuration)
+  const clientAttributeKeys = useMemo(
+    () => (tableColumnConfig || []).map((c) => c.key),
+    [tableColumnConfig]
+  );
+
+  // Define table columns (Default + MCI + Custom configured)
   const columnsWithCustom = useMemo(() => {
-    const columnConfig = tableConfigLookup?.ceClientsGlobalConfig?.columns;
-    const customColumns = columnConfig
-      ? configurableCeColumns(columnConfig)
+    const customColumns = tableColumnConfig
+      ? configurableCeColumns(tableColumnConfig)
       : [];
     return [
       ...COLUMNS,
@@ -100,7 +95,7 @@ const AdminCeClientsTable: React.FC = () => {
         : []),
       ...(customColumns || []),
     ];
-  }, [tableConfigLookup, mciIdEnabled]);
+  }, [tableColumnConfig, mciIdEnabled]);
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeClientFilterOptions',
