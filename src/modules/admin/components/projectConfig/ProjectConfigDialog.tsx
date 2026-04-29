@@ -55,7 +55,6 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
               })}
               getErrors={(data) => data.updateProjectConfig?.errors || []}
               onCompleted={(data) => {
-                evictProjectConfigs();
                 if (!data?.updateProjectConfig?.errors?.length && props.onClose)
                   props.onClose({}, 'escapeKeyDown');
               }}
