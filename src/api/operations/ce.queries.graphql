@@ -41,6 +41,7 @@ query GetCeOpportunityCandidates(
   $limit: Int = 25
   $offset: Int = 0
   $filters: CeOpportunityCandidatesFilterOptions
+  $clientAttributeKeys: [String!]! = []
 ) {
   ceOpportunity(id: $opportunityId) {
     id
@@ -169,6 +170,7 @@ query GetCeClients(
   $limit: Int = 25
   $offset: Int = 0
   $filters: CeClientFilterOptions = null
+  $clientAttributeKeys: [String!]! = []
 ) {
   ceClients(limit: $limit, offset: $offset, filters: $filters) {
     offset

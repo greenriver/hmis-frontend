@@ -72,11 +72,21 @@ const AdminCeClientsTable: React.FC = () => {
   const [selectedRow, setSelectedRow] =
     React.useState<CeClientFieldsFragment | null>(null);
 
+  const tableColumnConfig = useMemo(
+    () => tableConfigLookup?.ceClientsGlobalConfig?.columns,
+    [tableConfigLookup]
+  );
+
+  // Keys to resolve for client attributes (based on column configuration)
+  const clientAttributeKeys = useMemo(
+    () => (tableColumnConfig || []).map((c) => c.key),
+    [tableColumnConfig]
+  );
+
   // Define table columns (Default + MCI + Custom configured)
   const columnsWithCustom = useMemo(() => {
-    const columnConfig = tableConfigLookup?.ceClientsGlobalConfig?.columns;
-    const customColumns = columnConfig
-      ? configurableCeColumns(columnConfig)
+    const customColumns = tableColumnConfig
+      ? configurableCeColumns(tableColumnConfig)
       : [];
     return [
       ...COLUMNS,
@@ -85,7 +95,7 @@ const AdminCeClientsTable: React.FC = () => {
         : []),
       ...(customColumns || []),
     ];
-  }, [tableConfigLookup, mciIdEnabled]);
+  }, [tableColumnConfig, mciIdEnabled]);
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeClientFilterOptions',
@@ -137,6 +147,7 @@ const AdminCeClientsTable: React.FC = () => {
           columns={columnsWithCustom}
           queryVariables={{
             filters: { searchTerm: debouncedSearch || undefined },
+            clientAttributeKeys,
           }}
           queryDocument={GetCeClientsDocument}
           pagePath='ceClients'

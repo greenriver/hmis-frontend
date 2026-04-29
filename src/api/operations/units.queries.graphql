@@ -40,7 +40,11 @@ query GetUnitGroup($id: ID!) {
   }
 }
 
-query GetUnit($id: ID!, $includeCeFields: Boolean = false) {
+query GetUnit(
+  $id: ID!
+  $includeCeFields: Boolean = false
+  $clientAttributeKeys: [String!]! = []
+) {
   unit(id: $id) {
     ...UnitDetailFields
   }
