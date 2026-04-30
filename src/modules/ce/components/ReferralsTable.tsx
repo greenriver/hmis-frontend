@@ -11,10 +11,10 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {
-  AdminDashboardRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
+  ReferralRoutes,
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -86,8 +86,8 @@ const COLUMNS: DataColumnDef<
     optional: { defaultHidden: false },
   },
 ];
-interface Props {}
-const AdminReferralsTable: React.FC<Props> = ({}) => {
+
+const ReferralsTable: React.FC = () => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
@@ -167,8 +167,7 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
           filterValues={filterValues}
           onFilterChange={setFilterValues}
           rowLinkTo={(row) =>
-            generateSafePath(AdminDashboardRoutes.REFERRAL, {
-              projectId: row.targetProjectId,
+            generateSafePath(ReferralRoutes.REFERRAL, {
               referralId: row.id,
             })
           }
@@ -180,4 +179,4 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
   );
 };
 
-export default AdminReferralsTable;
+export default ReferralsTable;
