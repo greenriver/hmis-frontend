@@ -302,14 +302,6 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         parent: AdminDashboardRoutes.USERS,
         title: 'Audit User',
       },
-      [AdminDashboardRoutes.REFERRAL]: {
-        title: 'Referral',
-        parent: AdminDashboardRoutes.REFERRALS,
-      },
-      [AdminDashboardRoutes.REFERRAL_STEP]: {
-        title: 'Referral',
-        parent: AdminDashboardRoutes.REFERRALS,
-      },
     };
     return buildDefaultCrumbs(AdminDashboardRoutes, overrides);
   }, []);
