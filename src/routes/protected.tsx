@@ -6,6 +6,7 @@ import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
+  ReferralRoutes,
   Routes,
 } from './routes';
 
@@ -54,7 +55,6 @@ import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNo
 
 import AdminAvailableUnitsPage from '@/modules/ce/components/admin/AdminAvailableUnitsPage';
 import AdminEligibleClientsPage from '@/modules/ce/components/admin/AdminEligibleClientsPage';
-import AdminReferralsPage from '@/modules/ce/components/admin/AdminReferralsPage';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import AdminDefaultContactsPage from '@/modules/ce/components/defaultContacts/AdminDefaultContactsPage';
 
@@ -63,6 +63,7 @@ import ProjectReferralsPage from '@/modules/ce/components/project/ProjectReferra
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/referral/ReferralSteps';
+import ReferralsPage from '@/modules/ce/components/ReferralsPage';
 import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
 import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
 import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
@@ -176,15 +177,22 @@ export const protectedRoutes: RouteNode[] = [
         element: <Navigate to='/dashboard' replace />,
       },
       {
-        // "Floating" referrals for users who have permission to view referrals in projects where they don't have access to the project dashboard.
-        path: Routes.REFERRAL,
+        path: Routes.REFERRALS,
         element: (
-          // Doesn't need a permission filter wrapper; internally it will just return NotFound if the client doesn't have access to view the referral.
-          <ReferralPage />
+          <RootPermissionsFilter
+            permissions='canAdministrateCoordinatedEntry' // todo @martha - resolve new root permission "can view some referrals" that indicates whether CE is enabled overall in the project
+            otherwise={<NotFound />}
+          >
+            <ReferralsPage />
+          </RootPermissionsFilter>
         ),
+      },
+      {
+        path: ReferralRoutes.REFERRAL,
+        element: <ReferralPage />,
         children: [
           {
-            path: Routes.REFERRAL_STEP,
+            path: ReferralRoutes.REFERRAL_STEP,
             element: <ReferralStep />,
           },
           { path: '', element: <ReferralSteps /> },
@@ -892,34 +900,20 @@ export const protectedRoutes: RouteNode[] = [
               </RootPermissionsFilter>
             ),
           },
+          // For backwards compat, old admin referral routes redirect to the root referrals page
           {
             path: AdminDashboardRoutes.REFERRALS,
-            element: (
-              <RootPermissionsFilter
-                permissions='canAdministrateCoordinatedEntry'
-                otherwise={<NotFound />}
-              >
-                <AdminReferralsPage />
-              </RootPermissionsFilter>
-            ),
-          },
-          {
-            path: AdminDashboardRoutes.REFERRAL,
-            element: (
-              <RootPermissionsFilter
-                permissions='canAdministrateCoordinatedEntry'
-                otherwise={<NotFound />}
-              >
-                <ReferralPage />
-              </RootPermissionsFilter>
-            ),
+            element: <Navigate to='/referrals' replace />,
             children: [
+              // todo @martha - would be nice to get these to redirect more specifically
+              {
+                path: AdminDashboardRoutes.REFERRAL,
+                element: <Navigate to='/referrals' replace />,
+              },
               {
                 path: AdminDashboardRoutes.REFERRAL_STEP,
-                element: <ReferralStep />,
+                element: <Navigate to='/referrals' replace />,
               },
-              { path: '', element: <ReferralSteps /> },
-              { path: '*', element: <Navigate to='' replace /> },
             ],
           },
           {
