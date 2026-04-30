@@ -24,11 +24,7 @@ import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsF
 
 import ReferralTimeline from '@/modules/ce/components/referral/ReferralTimeline';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import {
-  AdminDashboardRoutes,
-  ProjectDashboardRoutes,
-  Routes,
-} from '@/routes/routes';
+import { ProjectDashboardRoutes, ReferralRoutes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
   useGetCeReferralQuery,
@@ -37,20 +33,14 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const getReferralPaths = (currentPath: string) => {
   switch (currentPath) {
-    case AdminDashboardRoutes.REFERRAL: {
-      return [
-        AdminDashboardRoutes.REFERRAL,
-        AdminDashboardRoutes.REFERRAL_STEP,
-      ];
-    }
     case ProjectDashboardRoutes.REFERRAL: {
       return [
         ProjectDashboardRoutes.REFERRAL,
         ProjectDashboardRoutes.REFERRAL_STEP,
       ];
     }
-    case Routes.REFERRAL: {
-      return [Routes.REFERRAL, Routes.REFERRAL_STEP];
+    case ReferralRoutes.REFERRAL: {
+      return [ReferralRoutes.REFERRAL, ReferralRoutes.REFERRAL_STEP];
     }
     default: {
       throw new Error(`unexpected path rendered ReferralPage: ${currentPath}`);
@@ -66,8 +56,7 @@ interface Props {}
  *
  * This page is rendered in multiple contexts:
  * - In the Project Dashboard - either Source or Target project
- * - In the Admin Dashboard
- * - "Floating" as its own page (when accessed from user dashboard notification)
+ * - "Floating" at `/referrals/:referralId` (top-level referrals area)
  */
 const ReferralPage: React.FC<Props> = ({}) => {
   const { referralId } = useSafeParams() as { referralId: string };
@@ -130,9 +119,9 @@ const ReferralPage: React.FC<Props> = ({}) => {
     <>
       <CommonStickyBar
         top={
-          currentBasePath === Routes.REFERRAL
+          currentBasePath === ReferralRoutes.REFERRAL
             ? STICKY_BAR_HEIGHT // Floating context doesn't need additional height for sticky scroll
-            : STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT // Project/Admin dashboard contexts do
+            : STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT // Project dashboard contexts do
         }
         sx={{ pb: 0, pt: isMobile ? 1 : 0 }}
       >

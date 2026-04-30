@@ -9,7 +9,7 @@ import {
   REFERRAL_WITH_PROJECT_COLUMNS,
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { Routes } from '@/routes/routes';
+import { ReferralRoutes } from '@/routes/routes';
 import {
   ClientCeReferralTableFieldsFragment,
   GetClientCeReferralsDocument,
@@ -52,7 +52,7 @@ const ClientReferralsTable: React.FC = () => {
         noData='No referrals'
         paginationItemName='referrals'
         rowLinkTo={({ id }) =>
-          generateSafePath(Routes.REFERRAL, {
+          generateSafePath(ReferralRoutes.REFERRAL, {
             referralId: id,
           })
         }
