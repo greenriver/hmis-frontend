@@ -7041,6 +7041,7 @@ export type QueryAccess = {
   canEditUsersInWarehouse: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
   canImpersonateUsers: Scalars['Boolean']['output'];
+  canIndexReferrals: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
@@ -9097,6 +9098,7 @@ export type RootPermissionsFragment = {
   canViewClientAlerts: boolean;
   canEditOrganization: boolean;
   canEditProjectDetails: boolean;
+  canIndexReferrals: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -9196,6 +9198,7 @@ export type GetRootPermissionsQuery = {
     canViewClientAlerts: boolean;
     canEditOrganization: boolean;
     canEditProjectDetails: boolean;
+    canIndexReferrals: boolean;
   };
 };
 
@@ -49257,6 +49260,7 @@ export const RootPermissionsFragmentDoc = gql`
     canViewClientAlerts
     canEditOrganization
     canEditProjectDetails
+    canIndexReferrals
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`

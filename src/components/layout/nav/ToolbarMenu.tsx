@@ -3,9 +3,9 @@ import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
-import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useAdminDashboardNavItems } from '@/modules/admin/hooks/useAdminDashboardNavItems';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { Routes } from '@/routes/routes';
 import {
   RootPermissionsFragment,
@@ -40,7 +40,6 @@ interface ToolbarMenuProps {
 }
 const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
   const { data: userDashboardConfigData } = useGetUserDashboardConfigQuery();
-  const { globalFeatureFlags } = useGlobalFeatureFlags();
 
   const showUserDashboard = useMemo(() => {
     if (!userDashboardConfigData) return false;
@@ -52,6 +51,8 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
   }, [userDashboardConfigData]);
 
   const { showAdminDashboard } = useAdminDashboardNavItems();
+
+  const [access] = useRootPermissions();
 
   const baseMenuItems: (Required<
     Pick<NavItem<RootPermissionsFragment>, 'path'>
@@ -81,12 +82,11 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
         title: 'Projects',
       },
       {
-        // todo @martha: Gate on root-level permission
         path: Routes.REFERRALS,
         id: 'navToReferrals',
         activeItemPathIncludes: 'referrals',
         title: 'Referrals',
-        hide: !globalFeatureFlags?.coordinatedEntryEnabled,
+        hide: !access?.canIndexReferrals,
       },
       {
         path: Routes.ADMIN,
@@ -96,7 +96,7 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
         hide: !showAdminDashboard,
       },
     ];
-  }, [showAdminDashboard, showUserDashboard, globalFeatureFlags]);
+  }, [showAdminDashboard, showUserDashboard, access?.canIndexReferrals]);
 
   const activeItem = useActiveNavItem();
 

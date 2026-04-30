@@ -180,7 +180,7 @@ export const protectedRoutes: RouteNode[] = [
         path: Routes.REFERRALS,
         element: (
           <RootPermissionsFilter
-            permissions='canAdministrateCoordinatedEntry' // todo @martha - resolve new root permission "can view some referrals" that indicates whether CE is enabled overall in the project
+            permissions='canIndexReferrals'
             otherwise={<NotFound />}
           >
             <ReferralsPage />
