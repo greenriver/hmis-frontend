@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
+import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import { useAdminDashboardNavItems } from '@/modules/admin/hooks/useAdminDashboardNavItems';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
@@ -26,6 +27,8 @@ export const useActiveNavItem = () => {
         return 'admin';
       case 'dashboard':
         return 'dashboard';
+      case 'referrals':
+        return 'referrals';
       default:
         return null;
     }
@@ -37,6 +40,7 @@ interface ToolbarMenuProps {
 }
 const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
   const { data: userDashboardConfigData } = useGetUserDashboardConfigQuery();
+  const { globalFeatureFlags } = useGlobalFeatureFlags();
 
   const showUserDashboard = useMemo(() => {
     if (!userDashboardConfigData) return false;
@@ -77,6 +81,14 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
         title: 'Projects',
       },
       {
+        // todo @martha: Gate on root-level permission
+        path: Routes.REFERRALS,
+        id: 'navToReferrals',
+        activeItemPathIncludes: 'referrals',
+        title: 'Referrals',
+        hide: !globalFeatureFlags?.coordinatedEntryEnabled,
+      },
+      {
         path: Routes.ADMIN,
         id: 'navToAdmin',
         activeItemPathIncludes: 'admin',
@@ -84,7 +96,7 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
         hide: !showAdminDashboard,
       },
     ];
-  }, [showAdminDashboard, showUserDashboard]);
+  }, [showAdminDashboard, showUserDashboard, globalFeatureFlags]);
 
   const activeItem = useActiveNavItem();
 
