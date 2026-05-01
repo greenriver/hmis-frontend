@@ -1,4 +1,4 @@
-import { ReactNode, Suspense } from 'react';
+import { createElement, ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
@@ -26,6 +26,7 @@ import {
 } from '@/components/layout/nav/useMobileMenuContext';
 
 import NotFound from '@/components/pages/NotFound';
+import useSafeParams from '@/hooks/useSafeParams';
 import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
@@ -126,6 +127,7 @@ import UnitPage from '@/modules/units/components/UnitPage';
 import Units from '@/modules/units/components/Units';
 import UserDashboardPage from '@/modules/userDashboard/components/UserDashboardPage';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const App = () => {
   // Setup mobile menu context - open/closed state and handlers
@@ -900,21 +902,48 @@ export const protectedRoutes: RouteNode[] = [
               </RootPermissionsFilter>
             ),
           },
-          // For backwards compat, old admin referral routes redirect to the root referrals page
+          // For backwards compat, old admin referral routes redirect to equivalent top-level `/referrals` URLs.
+          //
+          // These redirects use `useSafeParams`, so they must run inside a component.
+          // `createElement(() => { ... })` defines that component inline next to the route,
+          // which avoids splitting this (hopefully short-lived) code to another module.
+          {
+            path: AdminDashboardRoutes.REFERRAL_STEP,
+            element: createElement(() => {
+              const { referralId, stepId } = useSafeParams() as {
+                referralId: string;
+                stepId: string;
+              };
+              return (
+                <Navigate
+                  to={generateSafePath(ReferralRoutes.REFERRAL_STEP, {
+                    referralId,
+                    stepId,
+                  })}
+                  replace
+                />
+              );
+            }),
+          },
+          {
+            path: AdminDashboardRoutes.REFERRAL,
+            element: createElement(() => {
+              const { referralId } = useSafeParams() as {
+                referralId: string;
+              };
+              return (
+                <Navigate
+                  to={generateSafePath(ReferralRoutes.REFERRAL, {
+                    referralId,
+                  })}
+                  replace
+                />
+              );
+            }),
+          },
           {
             path: AdminDashboardRoutes.REFERRALS,
-            element: <Navigate to='/referrals' replace />,
-            children: [
-              // todo @martha - would be nice to get these to redirect more specifically
-              {
-                path: AdminDashboardRoutes.REFERRAL,
-                element: <Navigate to='/referrals' replace />,
-              },
-              {
-                path: AdminDashboardRoutes.REFERRAL_STEP,
-                element: <Navigate to='/referrals' replace />,
-              },
-            ],
+            element: <Navigate to={Routes.REFERRALS} replace />,
           },
           {
             path: AdminDashboardRoutes.ELIGIBLE_CLIENTS,
