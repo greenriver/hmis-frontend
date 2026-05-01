@@ -56,7 +56,7 @@ interface Props {}
  *
  * This page is rendered in multiple contexts:
  * - In the Project Dashboard - either Source or Target project
- * - "Floating" at `/referrals/:referralId`
+ * - "Floating" at `/ce/referrals/:referralId`
  */
 const ReferralPage: React.FC<Props> = ({}) => {
   const { referralId } = useSafeParams() as { referralId: string };

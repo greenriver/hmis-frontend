@@ -178,6 +178,7 @@ export const protectedRoutes: RouteNode[] = [
       },
       {
         path: Routes.REFERRALS,
+        // For backwards compat, old '/referrals' redirects to '/ce/referrals'
         element: <Navigate to={CeRoutes.REFERRALS} replace />,
       },
       {
