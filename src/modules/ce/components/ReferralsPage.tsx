@@ -38,8 +38,12 @@ const ReferralsPage: React.FC = () => {
 
   return (
     <PageContainer title='Referrals' overlineText='Coordinated Entry'>
-      {/* non-admins see only Referrals and no tabs thanks to collapseSingleTab (true by default) */}
-      <CommonTabs tabDefinitions={tabDefinitions} ariaLabel='Referrals' />
+      {/* non-admins see only Referrals, thanks to collapseSingleTab */}
+      <CommonTabs
+        tabDefinitions={tabDefinitions}
+        ariaLabel='Referrals'
+        collapseSingleTab
+      />
     </PageContainer>
   );
 };

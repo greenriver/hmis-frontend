@@ -189,6 +189,7 @@ export const protectedRoutes: RouteNode[] = [
       },
       {
         path: ReferralRoutes.REFERRAL,
+        // Doesn't need a permission filter wrapper; internally it will just return NotFound if the client doesn't have access to view the referral.
         element: <ReferralPage />,
         children: [
           {
@@ -900,8 +901,6 @@ export const protectedRoutes: RouteNode[] = [
               </RootPermissionsFilter>
             ),
           },
-          // For backwards compat, old admin referral routes redirect to equivalent top-level `/referrals` URLs.
-          //
           // These redirects use `useSafeParams`, so they must run inside a component.
           // `createElement(() => { ... })` defines that component inline next to the route,
           // which avoids splitting this (hopefully short-lived) code to another module.
