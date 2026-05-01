@@ -12,9 +12,9 @@ import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {
   ClientDashboardRoutes,
+  CeRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
-  ReferralRoutes,
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -167,7 +167,7 @@ const ReferralsTable: React.FC = () => {
           filterValues={filterValues}
           onFilterChange={setFilterValues}
           rowLinkTo={(row) =>
-            generateSafePath(ReferralRoutes.REFERRAL, {
+            generateSafePath(CeRoutes.REFERRAL, {
               referralId: row.id,
             })
           }

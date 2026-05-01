@@ -18,7 +18,8 @@ export const Routes = {
   CREATE_ORGANIZATION: '/projects/new-organization',
   USER_DASHBOARD: '/dashboard',
   MY_DASHBOARD: '/my-dashboard', // maintained for backwards compat
-  REFERRALS: '/referrals',
+  REFERRALS: '/referrals', // maintained for backwards compat; redirects to CeRoutes.REFERRALS
+  CE: '/ce',
 } as const;
 
 const adminDashboardRoutes = {
@@ -136,9 +137,12 @@ const projectDashboardRoutes = {
   SEND_REFERRAL: 'ce/send-referral',
 };
 
-const referralRoutes = {
-  REFERRAL: ':referralId',
-  REFERRAL_STEP: ':referralId/tasks/:stepId',
+const ceRoutes = {
+  REFERRALS: 'referrals',
+  AVAILABLE_UNITS: 'available-units',
+  ELIGIBLE_CLIENTS: 'eligible-clients',
+  REFERRAL: ReferralSubRoutes.ReferralPath,
+  REFERRAL_STEP: ReferralSubRoutes.ReferralStepPath,
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`
@@ -162,10 +166,10 @@ for (key3 in projectDashboardRoutes) {
     `${Routes.PROJECT}/${projectDashboardRoutes[key3]}`;
 }
 
-type ReferralsSubRoutesType = keyof typeof referralRoutes;
-let keyR: ReferralsSubRoutesType;
-for (keyR in referralRoutes) {
-  referralRoutes[keyR] = `${Routes.REFERRALS}/${referralRoutes[keyR]}`;
+type CeSubRoutesType = keyof typeof ceRoutes;
+let keyCe: CeSubRoutesType;
+for (keyCe in ceRoutes) {
+  ceRoutes[keyCe] = `${Routes.CE}/${ceRoutes[keyCe]}`;
 }
 
 type AdminSubRoutesType = keyof typeof adminDashboardRoutes;
@@ -185,9 +189,9 @@ export const ProjectDashboardRoutes: {
   [k in ProjectSubRoutesType]: string;
 } = projectDashboardRoutes;
 
-export const ReferralRoutes: {
-  [k in ReferralsSubRoutesType]: string;
-} = referralRoutes;
+export const CeRoutes: {
+  [k in CeSubRoutesType]: string;
+} = ceRoutes;
 
 export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
@@ -236,7 +240,7 @@ export const PRINTABLE_ROUTES = [
 
 export const allRoutes = [
   Routes,
-  ReferralRoutes,
+  CeRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,

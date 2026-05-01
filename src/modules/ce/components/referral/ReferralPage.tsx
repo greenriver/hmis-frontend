@@ -24,7 +24,7 @@ import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsF
 
 import ReferralTimeline from '@/modules/ce/components/referral/ReferralTimeline';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ProjectDashboardRoutes, ReferralRoutes } from '@/routes/routes';
+import { CeRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeReferralFieldsFragment,
   useGetCeReferralQuery,
@@ -39,8 +39,8 @@ const getReferralPaths = (currentPath: string) => {
         ProjectDashboardRoutes.REFERRAL_STEP,
       ];
     }
-    case ReferralRoutes.REFERRAL: {
-      return [ReferralRoutes.REFERRAL, ReferralRoutes.REFERRAL_STEP];
+    case CeRoutes.REFERRAL: {
+      return [CeRoutes.REFERRAL, CeRoutes.REFERRAL_STEP];
     }
     default: {
       throw new Error(`unexpected path rendered ReferralPage: ${currentPath}`);
@@ -119,7 +119,7 @@ const ReferralPage: React.FC<Props> = ({}) => {
     <>
       <CommonStickyBar
         top={
-          currentBasePath === ReferralRoutes.REFERRAL
+          currentBasePath === CeRoutes.REFERRAL
             ? STICKY_BAR_HEIGHT // Floating context doesn't need additional height for sticky scroll
             : STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT // Project dashboard contexts do
         }
