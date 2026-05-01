@@ -54,8 +54,6 @@ import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import ClientCaseNotesPrintPage from '@/modules/caseNotes/components/ClientCaseNotesPrintPage';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
-import AdminAvailableUnitsPage from '@/modules/ce/components/admin/AdminAvailableUnitsPage';
-import AdminEligibleClientsPage from '@/modules/ce/components/admin/AdminEligibleClientsPage';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import AdminDefaultContactsPage from '@/modules/ce/components/defaultContacts/AdminDefaultContactsPage';
 
@@ -887,7 +885,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateCoordinatedEntry'
                 otherwise={<NotFound />}
               >
-                <AdminAvailableUnitsPage />
+                <Navigate to={`${Routes.REFERRALS}#units`} replace />
               </RootPermissionsFilter>
             ),
           },
@@ -952,7 +950,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateCoordinatedEntry'
                 otherwise={<NotFound />}
               >
-                <AdminEligibleClientsPage />
+                <Navigate to={`${Routes.REFERRALS}#clients`} replace />
               </RootPermissionsFilter>
             ),
           },
