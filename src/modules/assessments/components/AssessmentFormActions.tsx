@@ -11,6 +11,7 @@ import {
   AssessmentRole,
   EnrollmentFieldsFragment,
   FullAssessmentFragment,
+  RelationshipToHoH,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -67,6 +68,13 @@ const AssessmentFormActions: React.FC<Props> = ({
 
   const showPrintViewButton = !isPrintView && locked && assessment;
 
+  const isHeadOfMultiMemberHousehold = useMemo(
+    () =>
+      enrollment.householdSize > 1 &&
+      enrollment.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold,
+    [enrollment]
+  );
+
   if (showAutofill || showPrintViewButton || showDeleteAssessmentButton) {
     return (
       <>
@@ -90,6 +98,7 @@ const AssessmentFormActions: React.FC<Props> = ({
               clientId={enrollment.client.id}
               enrollmentId={enrollment.id}
               onSuccess={navigateToEnrollment}
+              isHeadOfMultiMemberHousehold={isHeadOfMultiMemberHousehold}
             />
           )}
         </Stack>
