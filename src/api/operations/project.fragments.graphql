@@ -111,6 +111,9 @@ fragment FunderFields on Funder {
   user {
     ...UserFields
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 fragment CeParticipationFields on CeParticipation {

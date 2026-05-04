@@ -38433,6 +38433,127 @@ export type SubmitFormMutation = {
             lastName?: string | null;
             email: string;
           } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            fieldType: CustomDataElementType;
+            repeats: boolean;
+            displayHooks: Array<DisplayHook>;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                ownFile: boolean;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'HmisParticipation';
@@ -43364,6 +43485,127 @@ export type FunderFieldsFragment = {
     lastName?: string | null;
     email: string;
   } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        ownFile: boolean;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
 };
 
 export type CeParticipationFieldsFragment = {
@@ -44244,6 +44486,127 @@ export type GetFunderQuery = {
       lastName?: string | null;
       email: string;
     } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      displayHooks: Array<DisplayHook>;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          ownFile: boolean;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -44787,6 +45150,127 @@ export type GetProjectFundersQuery = {
           lastName?: string | null;
           email: string;
         } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              ownFile: boolean;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -51654,8 +52138,12 @@ export const FunderFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const CeParticipationFieldsFragmentDoc = gql`
   fragment CeParticipationFields on CeParticipation {
