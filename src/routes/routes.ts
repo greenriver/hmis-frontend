@@ -18,8 +18,7 @@ export const Routes = {
   CREATE_ORGANIZATION: '/projects/new-organization',
   USER_DASHBOARD: '/dashboard',
   MY_DASHBOARD: '/my-dashboard', // maintained for backwards compat
-  REFERRALS: '/referrals', // maintained for backwards compat; redirects to CeRoutes.REFERRALS
-  CE: '/ce',
+  REFERRALS: '/referrals',
 } as const;
 
 const adminDashboardRoutes = {
@@ -137,12 +136,11 @@ const projectDashboardRoutes = {
   SEND_REFERRAL: 'ce/send-referral',
 };
 
-const ceRoutes = {
-  REFERRALS: 'referrals',
+const referralRoutes = {
   AVAILABLE_UNITS: 'available-units',
   ELIGIBLE_CLIENTS: 'eligible-clients',
-  REFERRAL: ReferralSubRoutes.ReferralPath,
-  REFERRAL_STEP: ReferralSubRoutes.ReferralStepPath,
+  REFERRAL: ':referralId',
+  REFERRAL_STEP: ':referralId/tasks/:stepId',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`
@@ -166,16 +164,16 @@ for (key3 in projectDashboardRoutes) {
     `${Routes.PROJECT}/${projectDashboardRoutes[key3]}`;
 }
 
-type CeSubRoutesType = keyof typeof ceRoutes;
-let keyCe: CeSubRoutesType;
-for (keyCe in ceRoutes) {
-  ceRoutes[keyCe] = `${Routes.CE}/${ceRoutes[keyCe]}`;
-}
-
 type AdminSubRoutesType = keyof typeof adminDashboardRoutes;
 let key4: AdminSubRoutesType;
 for (key4 in adminDashboardRoutes) {
   adminDashboardRoutes[key4] = `${Routes.ADMIN}/${adminDashboardRoutes[key4]}`;
+}
+
+type ReferralSubRoutesType = keyof typeof referralRoutes;
+let key5: ReferralSubRoutesType;
+for (key5 in referralRoutes) {
+  referralRoutes[key5] = `${Routes.REFERRALS}/${referralRoutes[key5]}`;
 }
 
 export const ClientDashboardRoutes: { [k in ClientSubRoutesType]: string } =
@@ -189,9 +187,9 @@ export const ProjectDashboardRoutes: {
   [k in ProjectSubRoutesType]: string;
 } = projectDashboardRoutes;
 
-export const CeRoutes: {
-  [k in CeSubRoutesType]: string;
-} = ceRoutes;
+export const ReferralRoutes: {
+  [k in ReferralSubRoutesType]: string;
+} = referralRoutes;
 
 export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
@@ -240,7 +238,7 @@ export const PRINTABLE_ROUTES = [
 
 export const allRoutes = [
   Routes,
-  CeRoutes,
+  ReferralRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,

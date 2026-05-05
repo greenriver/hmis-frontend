@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import {
   AdminDashboardRoutes,
-  CeRoutes,
+  ReferralRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -178,11 +178,6 @@ export const protectedRoutes: RouteNode[] = [
       },
       {
         path: Routes.REFERRALS,
-        // For backwards compat, old '/referrals' redirects to '/ce/referrals'
-        element: <Navigate to={CeRoutes.REFERRALS} replace />,
-      },
-      {
-        path: CeRoutes.REFERRALS,
         element: (
           <RootPermissionsFilter
             permissions='canIndexReferrals'
@@ -193,7 +188,7 @@ export const protectedRoutes: RouteNode[] = [
         ),
       },
       {
-        path: CeRoutes.AVAILABLE_UNITS,
+        path: ReferralRoutes.AVAILABLE_UNITS,
         element: (
           <RootPermissionsFilter
             permissions='canAdministrateCoordinatedEntry'
@@ -204,7 +199,7 @@ export const protectedRoutes: RouteNode[] = [
         ),
       },
       {
-        path: CeRoutes.ELIGIBLE_CLIENTS,
+        path: ReferralRoutes.ELIGIBLE_CLIENTS,
         element: (
           <RootPermissionsFilter
             permissions='canAdministrateCoordinatedEntry'
@@ -215,12 +210,13 @@ export const protectedRoutes: RouteNode[] = [
         ),
       },
       {
-        path: CeRoutes.REFERRAL,
+        path: ReferralRoutes.REFERRAL,
+        // todo @martha - is this going to have /referrals/referral/...?
         // Doesn't need a permission filter wrapper; internally it will just return NotFound if the client doesn't have access to view the referral.
         element: <ReferralPage />,
         children: [
           {
-            path: CeRoutes.REFERRAL_STEP,
+            path: ReferralRoutes.REFERRAL_STEP,
             element: <ReferralStep />,
           },
           { path: '', element: <ReferralSteps /> },
@@ -913,7 +909,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateCoordinatedEntry'
                 otherwise={<NotFound />}
               >
-                <Navigate to={CeRoutes.AVAILABLE_UNITS} replace />
+                <Navigate to={ReferralRoutes.AVAILABLE_UNITS} replace />
               </RootPermissionsFilter>
             ),
           },
@@ -940,7 +936,7 @@ export const protectedRoutes: RouteNode[] = [
               };
               return (
                 <Navigate
-                  to={generateSafePath(CeRoutes.REFERRAL_STEP, {
+                  to={generateSafePath(ReferralRoutes.REFERRAL_STEP, {
                     referralId,
                     stepId,
                   })}
@@ -957,7 +953,7 @@ export const protectedRoutes: RouteNode[] = [
               };
               return (
                 <Navigate
-                  to={generateSafePath(CeRoutes.REFERRAL, {
+                  to={generateSafePath(ReferralRoutes.REFERRAL, {
                     referralId,
                   })}
                   replace
@@ -967,7 +963,7 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: AdminDashboardRoutes.REFERRALS,
-            element: <Navigate to={CeRoutes.REFERRALS} replace />,
+            element: <Navigate to={Routes.REFERRALS} replace />,
           },
           {
             path: AdminDashboardRoutes.ELIGIBLE_CLIENTS,
@@ -976,7 +972,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateCoordinatedEntry'
                 otherwise={<NotFound />}
               >
-                <Navigate to={CeRoutes.ELIGIBLE_CLIENTS} replace />
+                <Navigate to={ReferralRoutes.ELIGIBLE_CLIENTS} replace />
               </RootPermissionsFilter>
             ),
           },

@@ -7,7 +7,7 @@ import AdminCeClientsTable from '@/modules/ce/components/admin/AdminCeClientsTab
 import AdminOpportunitiesTable from '@/modules/ce/components/admin/AdminOpportunitiesTable';
 import ReferralsTable from '@/modules/ce/components/ReferralsTable';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { CeRoutes } from '@/routes/routes';
+import { Routes, ReferralRoutes } from '@/routes/routes';
 
 export type CeTabKey = 'referrals' | 'available-units' | 'eligible-clients';
 
@@ -48,13 +48,13 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
   const handleChangeTab = (key: string) => {
     switch (key) {
       case 'referrals':
-        navigate(CeRoutes.REFERRALS);
+        navigate(Routes.REFERRALS);
         break;
       case 'available-units':
-        navigate(CeRoutes.AVAILABLE_UNITS);
+        navigate(ReferralRoutes.AVAILABLE_UNITS);
         break;
       case 'eligible-clients':
-        navigate(CeRoutes.ELIGIBLE_CLIENTS);
+        navigate(ReferralRoutes.ELIGIBLE_CLIENTS);
         break;
     }
   };
