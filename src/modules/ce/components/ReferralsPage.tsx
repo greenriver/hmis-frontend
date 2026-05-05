@@ -60,7 +60,7 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
   };
 
   return (
-    <PageContainer title='Referrals' overlineText='Coordinated Entry'>
+    <PageContainer title='Referrals'>
       {/* non-admins see only Referrals, thanks to collapseSingleTab */}
       <CommonTabs
         tabDefinitions={tabDefinitions}
