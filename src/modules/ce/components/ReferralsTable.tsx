@@ -18,16 +18,16 @@ import {
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  CeReferralAdminFieldsFragment,
-  GetAdminCeReferralsDocument,
-  GetAdminCeReferralsQuery,
-  GetAdminCeReferralsQueryVariables,
+  CeReferralTableFieldsFragment,
+  GetCeReferralsDocument,
+  GetCeReferralsQuery,
+  GetCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: DataColumnDef<
-  CeReferralAdminFieldsFragment,
-  GetAdminCeReferralsQueryVariables
+  CeReferralTableFieldsFragment,
+  GetCeReferralsQueryVariables
 >[] = [
   REFERRAL_COLUMNS.client,
   REFERRAL_COLUMNS.status,
@@ -95,7 +95,7 @@ const ReferralsTable: React.FC = () => {
   });
 
   const rowSecondaryActions = useCallback(
-    (row: CeReferralAdminFieldsFragment) => {
+    (row: CeReferralTableFieldsFragment) => {
       const actions = [];
 
       if (row.client) {
@@ -151,15 +151,15 @@ const ReferralsTable: React.FC = () => {
       />
       <Paper>
         <GenericTableWithData<
-          GetAdminCeReferralsQuery,
-          GetAdminCeReferralsQueryVariables,
-          CeReferralAdminFieldsFragment
+          GetCeReferralsQuery,
+          GetCeReferralsQueryVariables,
+          CeReferralTableFieldsFragment
         >
           columns={COLUMNS}
           queryVariables={{
             filters: { searchTerm: debouncedSearch || undefined },
           }}
-          queryDocument={GetAdminCeReferralsDocument}
+          queryDocument={GetCeReferralsDocument}
           pagePath='ceReferrals'
           noData='No referrals'
           paginationItemName='referrals'

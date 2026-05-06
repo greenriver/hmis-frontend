@@ -6,14 +6,14 @@ import { REFERRAL_COLUMNS } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  CeReferralTableFieldsFragment,
+  CeReferralBaseTableFieldsFragment,
   GetProjectCeReferralsDocument,
   GetProjectCeReferralsQuery,
   GetProjectCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const COLUMNS: ColumnDef<CeReferralTableFieldsFragment>[] = [
+const COLUMNS: ColumnDef<CeReferralBaseTableFieldsFragment>[] = [
   REFERRAL_COLUMNS.client,
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.currentSteps,
@@ -44,7 +44,7 @@ const ProjectReferralsTable: React.FC<Props> = ({ projectId }) => {
       <GenericTableWithData<
         GetProjectCeReferralsQuery,
         GetProjectCeReferralsQueryVariables,
-        CeReferralTableFieldsFragment
+        CeReferralBaseTableFieldsFragment
       >
         columns={COLUMNS}
         queryVariables={{
