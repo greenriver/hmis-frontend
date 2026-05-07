@@ -116,8 +116,7 @@ const EnrollmentOverview = () => {
                       </Typography>
                       {isHoHInMultiMemberHousehold && (
                         <Typography fontWeight={600}>
-                          This will delete the enrollments of all household
-                          members.
+                          This will delete all enrollments in the household.
                         </Typography>
                       )}
                     </Stack>

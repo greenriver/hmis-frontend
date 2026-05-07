@@ -65,7 +65,7 @@ const DeleteAssessmentButton = ({
         deletesEnrollment
           ? {
               title: 'Delete Enrollment',
-              confirmText: 'Yes, delete enrollment',
+              confirmText: `Yes, delete enrollment${isHeadOfMultiMemberHousehold ? 's' : ''}`,
               color: 'error',
             }
           : undefined
@@ -78,11 +78,11 @@ const DeleteAssessmentButton = ({
           {assessment.role === AssessmentRole.Intake && (
             <>
               <Typography fontWeight={600}>
-                This will delete the enrollment{' '}
-                {isHeadOfMultiMemberHousehold && (
-                  <>and the enrollments of all household members.</>
+                {isHeadOfMultiMemberHousehold ? (
+                  <>This will delete all enrollments in the household.</>
+                ) : (
+                  <>This will delete the enrollment.</>
                 )}
-                .
               </Typography>
             </>
           )}
