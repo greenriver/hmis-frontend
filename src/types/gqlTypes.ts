@@ -3839,8 +3839,6 @@ export type FormRule = {
 export type FormRuleFilterOptions = {
   activeStatus?: InputMaybe<Array<ActiveStatus>>;
   appliedToProject?: InputMaybe<Scalars['ID']['input']>;
-  definition?: InputMaybe<Scalars['ID']['input']>;
-  formType?: InputMaybe<Array<FormRole>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   systemForm?: InputMaybe<Array<SystemStatus>>;
 };
@@ -6720,8 +6718,6 @@ export type Query = {
   formDefinition?: Maybe<FormDefinition>;
   formIdentifier?: Maybe<FormIdentifier>;
   formIdentifiers: FormIdentifiersPaginated;
-  formRule?: Maybe<FormRule>;
-  formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
   /** Global Coordinated Entry default contacts, grouped by swimlane */
@@ -6756,8 +6752,6 @@ export type Query = {
   referralPosting?: Maybe<ReferralPosting>;
   /** Service lookup */
   service?: Maybe<Service>;
-  serviceCategories: ServiceCategoriesPaginated;
-  serviceCategory?: Maybe<ServiceCategory>;
   /** Get most relevant form definition for the specified service type */
   serviceFormDefinition?: Maybe<FormDefinition>;
   /** Service type lookup */
@@ -6884,17 +6878,6 @@ export type QueryFormIdentifiersArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type QueryFormRuleArgs = {
-  id: Scalars['ID']['input'];
-};
-
-export type QueryFormRulesArgs = {
-  filters?: InputMaybe<FormRuleFilterOptions>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sortOrder?: InputMaybe<FormRuleSortOption>;
-};
-
 export type QueryFunderArgs = {
   id: Scalars['ID']['input'];
 };
@@ -6989,15 +6972,6 @@ export type QueryReferralPostingArgs = {
 };
 
 export type QueryServiceArgs = {
-  id: Scalars['ID']['input'];
-};
-
-export type QueryServiceCategoriesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type QueryServiceCategoryArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -7689,17 +7663,6 @@ export type Service = {
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
   typeProvided?: Maybe<ServiceTypeProvided>;
   user?: Maybe<ApplicationUser>;
-};
-
-export type ServiceCategoriesPaginated = {
-  __typename?: 'ServiceCategoriesPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<ServiceCategory>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
 };
 
 export type ServiceCategory = {
@@ -17155,6 +17118,7 @@ export type BulkServicesClientSearchQuery = {
     __typename?: 'ClientsPaginated';
     offset: number;
     limit: number;
+    searchQueryId?: string | null;
     nodesCount: number;
     nodes: Array<{
       __typename?: 'Client';
@@ -24789,130 +24753,6 @@ export type GetFormProjectMatchesQuery = {
   } | null;
 };
 
-export type GetServiceCategoryRulesQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<FormRuleFilterOptions>;
-  sortOrder?: InputMaybe<FormRuleSortOption>;
-}>;
-
-export type GetServiceCategoryRulesQuery = {
-  __typename?: 'Query';
-  serviceCategory?: {
-    __typename?: 'ServiceCategory';
-    id: string;
-    formRules: {
-      __typename?: 'FormRulesPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'FormRule';
-        id: string;
-        active: boolean;
-        activeStatus: ActiveStatus;
-        system: boolean;
-        definitionIdentifier: string;
-        definitionId?: string | null;
-        definitionTitle?: string | null;
-        definitionRole?: FormRole | null;
-        dataCollectedAbout?: DataCollectedAbout | null;
-        funder?: FundingSource | null;
-        otherFunder?: string | null;
-        projectType?: ProjectType | null;
-        projectId?: string | null;
-        projectName?: string | null;
-        organizationId?: string | null;
-        createdAt: string;
-        updatedAt: string;
-        organization?: {
-          __typename?: 'Organization';
-          id: string;
-          hudId: string;
-          organizationName: string;
-        } | null;
-        serviceCategory?: {
-          __typename?: 'ServiceCategory';
-          id: string;
-          name: string;
-        } | null;
-        serviceType?: {
-          __typename?: 'ServiceType';
-          id: string;
-          name: string;
-          hud: boolean;
-          hudRecordType?: RecordType | null;
-          hudTypeProvided?: ServiceTypeProvided | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          supportsBulkAssignment: boolean;
-          serviceCategory: {
-            __typename?: 'ServiceCategory';
-            id: string;
-            name: string;
-          };
-        } | null;
-      }>;
-    };
-  } | null;
-};
-
-export type GetFormRuleQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetFormRuleQuery = {
-  __typename?: 'Query';
-  formRule?: {
-    __typename?: 'FormRule';
-    id: string;
-    active: boolean;
-    activeStatus: ActiveStatus;
-    system: boolean;
-    definitionIdentifier: string;
-    definitionId?: string | null;
-    definitionTitle?: string | null;
-    definitionRole?: FormRole | null;
-    dataCollectedAbout?: DataCollectedAbout | null;
-    funder?: FundingSource | null;
-    otherFunder?: string | null;
-    projectType?: ProjectType | null;
-    projectId?: string | null;
-    projectName?: string | null;
-    organizationId?: string | null;
-    createdAt: string;
-    updatedAt: string;
-    organization?: {
-      __typename?: 'Organization';
-      id: string;
-      hudId: string;
-      organizationName: string;
-    } | null;
-    serviceCategory?: {
-      __typename?: 'ServiceCategory';
-      id: string;
-      name: string;
-    } | null;
-    serviceType?: {
-      __typename?: 'ServiceType';
-      id: string;
-      name: string;
-      hud: boolean;
-      hudRecordType?: RecordType | null;
-      hudTypeProvided?: ServiceTypeProvided | null;
-      dateCreated?: string | null;
-      dateUpdated?: string | null;
-      supportsBulkAssignment: boolean;
-      serviceCategory: {
-        __typename?: 'ServiceCategory';
-        id: string;
-        name: string;
-      };
-    } | null;
-  } | null;
-};
-
 export type CreateFormRuleMutationVariables = Exact<{
   input: CreateFormRuleInput;
 }>;
@@ -25046,33 +24886,6 @@ export type GetServiceTypesQuery = {
         __typename?: 'ServiceCategory';
         id: string;
         name: string;
-      };
-    }>;
-  };
-};
-
-export type GetServiceCategoriesQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetServiceCategoriesQuery = {
-  __typename?: 'Query';
-  serviceCategories: {
-    __typename?: 'ServiceCategoriesPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'ServiceCategory';
-      id: string;
-      name: string;
-      serviceTypes: {
-        __typename?: 'ServiceTypesPaginated';
-        offset: number;
-        limit: number;
-        nodesCount: number;
-        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
       };
     }>;
   };
@@ -47725,62 +47538,6 @@ export type GetEnrollmentServicesQuery = {
   } | null;
 };
 
-export type GetServiceCategoryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetServiceCategoryQuery = {
-  __typename?: 'Query';
-  serviceCategory?: {
-    __typename?: 'ServiceCategory';
-    id: string;
-    name: string;
-    serviceTypes: {
-      __typename?: 'ServiceTypesPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
-    };
-  } | null;
-};
-
-export type GetServiceCategoryTypesQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetServiceCategoryTypesQuery = {
-  __typename?: 'Query';
-  serviceCategory?: {
-    __typename?: 'ServiceCategory';
-    id: string;
-    serviceTypes: {
-      __typename?: 'ServiceTypesPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'ServiceType';
-        id: string;
-        name: string;
-        hud: boolean;
-        hudRecordType?: RecordType | null;
-        hudTypeProvided?: ServiceTypeProvided | null;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-        supportsBulkAssignment: boolean;
-        serviceCategory: {
-          __typename?: 'ServiceCategory';
-          id: string;
-          name: string;
-        };
-      }>;
-    };
-  } | null;
-};
-
 export type HouseholdWithStaffAssignmentsFragment = {
   __typename?: 'Household';
   id: string;
@@ -54419,6 +54176,7 @@ export const BulkServicesClientSearchDocument = gql`
     ) {
       offset
       limit
+      searchQueryId
       nodesCount
       nodes {
         id
@@ -59031,232 +58789,6 @@ export type GetFormProjectMatchesQueryResult = Apollo.QueryResult<
   GetFormProjectMatchesQuery,
   GetFormProjectMatchesQueryVariables
 >;
-export const GetServiceCategoryRulesDocument = gql`
-  query GetServiceCategoryRules(
-    $id: ID!
-    $limit: Int = 25
-    $offset: Int = 0
-    $filters: FormRuleFilterOptions
-    $sortOrder: FormRuleSortOption
-  ) {
-    serviceCategory(id: $id) {
-      id
-      formRules(
-        limit: $limit
-        offset: $offset
-        filters: $filters
-        sortOrder: $sortOrder
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...FormRuleFields
-        }
-      }
-    }
-  }
-  ${FormRuleFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoryRulesQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoryRulesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoryRulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoryRulesQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *      filters: // value for 'filters'
- *      sortOrder: // value for 'sortOrder'
- *   },
- * });
- */
-export function useGetServiceCategoryRulesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetServiceCategoryRulesQuery,
-    GetServiceCategoryRulesQueryVariables
-  > &
-    (
-      | { variables: GetServiceCategoryRulesQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoryRulesQuery,
-    GetServiceCategoryRulesQueryVariables
-  >(GetServiceCategoryRulesDocument, options);
-}
-export function useGetServiceCategoryRulesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoryRulesQuery,
-    GetServiceCategoryRulesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoryRulesQuery,
-    GetServiceCategoryRulesQueryVariables
-  >(GetServiceCategoryRulesDocument, options);
-}
-// @ts-ignore
-export function useGetServiceCategoryRulesSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetServiceCategoryRulesQuery,
-    GetServiceCategoryRulesQueryVariables
-  >
-): Apollo.UseSuspenseQueryResult<
-  GetServiceCategoryRulesQuery,
-  GetServiceCategoryRulesQueryVariables
->;
-export function useGetServiceCategoryRulesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetServiceCategoryRulesQuery,
-        GetServiceCategoryRulesQueryVariables
-      >
-): Apollo.UseSuspenseQueryResult<
-  GetServiceCategoryRulesQuery | undefined,
-  GetServiceCategoryRulesQueryVariables
->;
-export function useGetServiceCategoryRulesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetServiceCategoryRulesQuery,
-        GetServiceCategoryRulesQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetServiceCategoryRulesQuery,
-    GetServiceCategoryRulesQueryVariables
-  >(GetServiceCategoryRulesDocument, options);
-}
-export type GetServiceCategoryRulesQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryRulesQuery
->;
-export type GetServiceCategoryRulesLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryRulesLazyQuery
->;
-export type GetServiceCategoryRulesSuspenseQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryRulesSuspenseQuery
->;
-export type GetServiceCategoryRulesQueryResult = Apollo.QueryResult<
-  GetServiceCategoryRulesQuery,
-  GetServiceCategoryRulesQueryVariables
->;
-export const GetFormRuleDocument = gql`
-  query GetFormRule($id: ID!) {
-    formRule(id: $id) {
-      ...FormRuleFields
-    }
-  }
-  ${FormRuleFieldsFragmentDoc}
-`;
-
-/**
- * __useGetFormRuleQuery__
- *
- * To run a query within a React component, call `useGetFormRuleQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFormRuleQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetFormRuleQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetFormRuleQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetFormRuleQuery,
-    GetFormRuleQueryVariables
-  > &
-    (
-      | { variables: GetFormRuleQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetFormRuleQuery, GetFormRuleQueryVariables>(
-    GetFormRuleDocument,
-    options
-  );
-}
-export function useGetFormRuleLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetFormRuleQuery,
-    GetFormRuleQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetFormRuleQuery, GetFormRuleQueryVariables>(
-    GetFormRuleDocument,
-    options
-  );
-}
-// @ts-ignore
-export function useGetFormRuleSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetFormRuleQuery,
-    GetFormRuleQueryVariables
-  >
-): Apollo.UseSuspenseQueryResult<GetFormRuleQuery, GetFormRuleQueryVariables>;
-export function useGetFormRuleSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetFormRuleQuery,
-        GetFormRuleQueryVariables
-      >
-): Apollo.UseSuspenseQueryResult<
-  GetFormRuleQuery | undefined,
-  GetFormRuleQueryVariables
->;
-export function useGetFormRuleSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetFormRuleQuery,
-        GetFormRuleQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetFormRuleQuery, GetFormRuleQueryVariables>(
-    GetFormRuleDocument,
-    options
-  );
-}
-export type GetFormRuleQueryHookResult = ReturnType<typeof useGetFormRuleQuery>;
-export type GetFormRuleLazyQueryHookResult = ReturnType<
-  typeof useGetFormRuleLazyQuery
->;
-export type GetFormRuleSuspenseQueryHookResult = ReturnType<
-  typeof useGetFormRuleSuspenseQuery
->;
-export type GetFormRuleQueryResult = Apollo.QueryResult<
-  GetFormRuleQuery,
-  GetFormRuleQueryVariables
->;
 export const CreateFormRuleDocument = gql`
   mutation CreateFormRule($input: CreateFormRuleInput!) {
     createFormRule(input: $input) {
@@ -59482,112 +59014,6 @@ export type GetServiceTypesSuspenseQueryHookResult = ReturnType<
 export type GetServiceTypesQueryResult = Apollo.QueryResult<
   GetServiceTypesQuery,
   GetServiceTypesQueryVariables
->;
-export const GetServiceCategoriesDocument = gql`
-  query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
-    serviceCategories(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...ServiceCategoryFields
-      }
-    }
-  }
-  ${ServiceCategoryFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoriesQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoriesQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetServiceCategoriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-export function useGetServiceCategoriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-// @ts-ignore
-export function useGetServiceCategoriesSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-): Apollo.UseSuspenseQueryResult<
-  GetServiceCategoriesQuery,
-  GetServiceCategoriesQueryVariables
->;
-export function useGetServiceCategoriesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetServiceCategoriesQuery,
-        GetServiceCategoriesQueryVariables
-      >
-): Apollo.UseSuspenseQueryResult<
-  GetServiceCategoriesQuery | undefined,
-  GetServiceCategoriesQueryVariables
->;
-export function useGetServiceCategoriesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetServiceCategoriesQuery,
-        GetServiceCategoriesQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-export type GetServiceCategoriesQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesQuery
->;
-export type GetServiceCategoriesLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesLazyQuery
->;
-export type GetServiceCategoriesSuspenseQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesSuspenseQuery
->;
-export type GetServiceCategoriesQueryResult = Apollo.QueryResult<
-  GetServiceCategoriesQuery,
-  GetServiceCategoriesQueryVariables
 >;
 export const GetServiceTypeDetailsDocument = gql`
   query GetServiceTypeDetails($id: ID!) {
@@ -69504,224 +68930,6 @@ export type GetEnrollmentServicesSuspenseQueryHookResult = ReturnType<
 export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables
->;
-export const GetServiceCategoryDocument = gql`
-  query GetServiceCategory($id: ID!) {
-    serviceCategory(id: $id) {
-      ...ServiceCategoryFields
-    }
-  }
-  ${ServiceCategoryFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoryQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoryQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetServiceCategoryQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  > &
-    (
-      | { variables: GetServiceCategoryQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >(GetServiceCategoryDocument, options);
-}
-export function useGetServiceCategoryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >(GetServiceCategoryDocument, options);
-}
-// @ts-ignore
-export function useGetServiceCategorySuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >
-): Apollo.UseSuspenseQueryResult<
-  GetServiceCategoryQuery,
-  GetServiceCategoryQueryVariables
->;
-export function useGetServiceCategorySuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetServiceCategoryQuery,
-        GetServiceCategoryQueryVariables
-      >
-): Apollo.UseSuspenseQueryResult<
-  GetServiceCategoryQuery | undefined,
-  GetServiceCategoryQueryVariables
->;
-export function useGetServiceCategorySuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetServiceCategoryQuery,
-        GetServiceCategoryQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >(GetServiceCategoryDocument, options);
-}
-export type GetServiceCategoryQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryQuery
->;
-export type GetServiceCategoryLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryLazyQuery
->;
-export type GetServiceCategorySuspenseQueryHookResult = ReturnType<
-  typeof useGetServiceCategorySuspenseQuery
->;
-export type GetServiceCategoryQueryResult = Apollo.QueryResult<
-  GetServiceCategoryQuery,
-  GetServiceCategoryQueryVariables
->;
-export const GetServiceCategoryTypesDocument = gql`
-  query GetServiceCategoryTypes($id: ID!, $limit: Int = 25, $offset: Int = 0) {
-    serviceCategory(id: $id) {
-      id
-      serviceTypes(limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...ServiceTypeFields
-        }
-      }
-    }
-  }
-  ${ServiceTypeFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoryTypesQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoryTypesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoryTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoryTypesQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetServiceCategoryTypesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  > &
-    (
-      | { variables: GetServiceCategoryTypesQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    )
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >(GetServiceCategoryTypesDocument, options);
-}
-export function useGetServiceCategoryTypesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >(GetServiceCategoryTypesDocument, options);
-}
-// @ts-ignore
-export function useGetServiceCategoryTypesSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >
-): Apollo.UseSuspenseQueryResult<
-  GetServiceCategoryTypesQuery,
-  GetServiceCategoryTypesQueryVariables
->;
-export function useGetServiceCategoryTypesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetServiceCategoryTypesQuery,
-        GetServiceCategoryTypesQueryVariables
-      >
-): Apollo.UseSuspenseQueryResult<
-  GetServiceCategoryTypesQuery | undefined,
-  GetServiceCategoryTypesQueryVariables
->;
-export function useGetServiceCategoryTypesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        GetServiceCategoryTypesQuery,
-        GetServiceCategoryTypesQueryVariables
-      >
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >(GetServiceCategoryTypesDocument, options);
-}
-export type GetServiceCategoryTypesQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryTypesQuery
->;
-export type GetServiceCategoryTypesLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryTypesLazyQuery
->;
-export type GetServiceCategoryTypesSuspenseQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryTypesSuspenseQuery
->;
-export type GetServiceCategoryTypesQueryResult = Apollo.QueryResult<
-  GetServiceCategoryTypesQuery,
-  GetServiceCategoryTypesQueryVariables
 >;
 export const AssignStaffDocument = gql`
   mutation AssignStaff($input: AssignStaffInput!) {

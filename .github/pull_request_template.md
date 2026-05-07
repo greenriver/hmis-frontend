@@ -16,6 +16,5 @@ How to test:
 - [ ] I have run the code that is being changed under ideal conditions, and it doesn't fail
 - [ ] I have used Axe DevTools to scan for accessibility issues (or not applicable)
 - [ ] My code includes comments and/or descriptive variable names to help other engineers understand the intent (or not applicable)
-- [ ] My code follows the style guidelines of this project (eslint)
 - [ ] I have updated the documentation (or not applicable)
 - [ ] If it's not obvious how to test this change, I have provided testing instructions in this PR or the related issue

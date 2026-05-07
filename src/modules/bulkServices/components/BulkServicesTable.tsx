@@ -40,6 +40,7 @@ interface Props {
   servicePeriod?: ServicePeriod;
   cocCode?: string;
   title: ReactNode;
+  onCompleted: (data: BulkServicesClientSearchQuery) => void;
 }
 
 type RowType = BulkServicesClientSearchQuery['clientSearch']['nodes'][0];
@@ -53,6 +54,7 @@ const BulkServicesTable: React.FC<Props> = ({
   servicePeriod,
   title,
   cocCode,
+  onCompleted,
 }) => {
   const [anyRowsSelected, setAnyRowsSelected] = useState<boolean>(false);
 
@@ -218,6 +220,7 @@ const BulkServicesTable: React.FC<Props> = ({
             />
           ),
         }}
+        onCompleted={onCompleted}
       />
     </SsnDobShowContextProvider>
   );

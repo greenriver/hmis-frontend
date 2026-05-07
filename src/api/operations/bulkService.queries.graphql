@@ -17,6 +17,7 @@ query BulkServicesClientSearch(
   ) {
     offset
     limit
+    searchQueryId
     nodesCount
     nodes {
       id

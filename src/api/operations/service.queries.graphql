@@ -40,23 +40,3 @@ query GetEnrollmentServices(
     }
   }
 }
-
-query GetServiceCategory($id: ID!) {
-  serviceCategory(id: $id) {
-    ...ServiceCategoryFields
-  }
-}
-
-query GetServiceCategoryTypes($id: ID!, $limit: Int = 25, $offset: Int = 0) {
-  serviceCategory(id: $id) {
-    id
-    serviceTypes(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...ServiceTypeFields
-      }
-    }
-  }
-}
