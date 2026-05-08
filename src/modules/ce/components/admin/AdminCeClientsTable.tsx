@@ -57,7 +57,11 @@ export const configurableCeColumns = (
   }));
 };
 
-const AdminCeClientsTable: React.FC = () => {
+interface Props {
+  projectGroupId?: string;
+}
+
+const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
   // Feature flags to check whether to show MCI ID column
   const { globalFeatureFlags: { mciIdEnabled } = {} } = useGlobalFeatureFlags();
   // Fetch column configuration for global ce client list
@@ -100,6 +104,7 @@ const AdminCeClientsTable: React.FC = () => {
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeClientFilterOptions',
     dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
+    omit: ['projectGroupId'], // only exposed via Workspaces
   });
 
   const rowSecondaryActionConfigs = useCallback(
@@ -146,7 +151,10 @@ const AdminCeClientsTable: React.FC = () => {
         >
           columns={columnsWithCustom}
           queryVariables={{
-            filters: { searchTerm: debouncedSearch || undefined },
+            filters: {
+              searchTerm: debouncedSearch || undefined,
+              projectGroupId,
+            },
             clientAttributeKeys,
           }}
           queryDocument={GetCeClientsDocument}

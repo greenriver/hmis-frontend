@@ -87,11 +87,16 @@ const COLUMNS: DataColumnDef<
   },
 ];
 
-const ReferralsTable: React.FC = () => {
+interface Props {
+  projectGroupId?: string;
+}
+
+const ReferralsTable: React.FC<Props> = ({ projectGroupId }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeReferralFilterOptions',
+    omit: ['projectGroupId'], // only exposed via Workspaces
   });
 
   const rowSecondaryActions = useCallback(
@@ -157,7 +162,10 @@ const ReferralsTable: React.FC = () => {
         >
           columns={COLUMNS}
           queryVariables={{
-            filters: { searchTerm: debouncedSearch || undefined },
+            filters: {
+              searchTerm: debouncedSearch || undefined,
+              projectGroupId,
+            },
           }}
           queryDocument={GetCeReferralsDocument}
           pagePath='ceReferrals'
