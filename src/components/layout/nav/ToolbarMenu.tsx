@@ -5,6 +5,7 @@ import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
 import { useAdminDashboardNavItems } from '@/modules/admin/hooks/useAdminDashboardNavItems';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { Routes } from '@/routes/routes';
 import {
   RootPermissionsFragment,
@@ -26,6 +27,8 @@ export const useActiveNavItem = () => {
         return 'admin';
       case 'dashboard':
         return 'dashboard';
+      case 'referrals':
+        return 'referrals';
       default:
         return null;
     }
@@ -48,6 +51,8 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
   }, [userDashboardConfigData]);
 
   const { showAdminDashboard } = useAdminDashboardNavItems();
+
+  const [access] = useRootPermissions();
 
   const baseMenuItems: (Required<
     Pick<NavItem<RootPermissionsFragment>, 'path'>
@@ -77,6 +82,13 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
         title: 'Projects',
       },
       {
+        path: Routes.REFERRALS,
+        id: 'navToReferrals',
+        activeItemPathIncludes: 'referrals',
+        title: 'Referrals',
+        hide: !access?.canIndexReferrals,
+      },
+      {
         path: Routes.ADMIN,
         id: 'navToAdmin',
         activeItemPathIncludes: 'admin',
@@ -84,7 +96,7 @@ const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
         hide: !showAdminDashboard,
       },
     ];
-  }, [showAdminDashboard, showUserDashboard]);
+  }, [showAdminDashboard, showUserDashboard, access?.canIndexReferrals]);
 
   const activeItem = useActiveNavItem();
 

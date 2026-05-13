@@ -9,16 +9,16 @@ import {
   REFERRAL_WITH_PROJECT_COLUMNS,
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { Routes } from '@/routes/routes';
+import { ReferralRoutes } from '@/routes/routes';
 import {
-  ClientCeReferralTableFieldsFragment,
+  CeReferralClientTableFieldsFragment,
   GetClientCeReferralsDocument,
   GetClientCeReferralsQuery,
   GetClientCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const COLUMNS: ColumnDef<ClientCeReferralTableFieldsFragment>[] = [
+const COLUMNS: ColumnDef<CeReferralClientTableFieldsFragment>[] = [
   { ...REFERRAL_WITH_PROJECT_COLUMNS.projectName, sticky: 'left' },
   REFERRAL_COLUMNS.date,
   REFERRAL_COLUMNS.status,
@@ -41,7 +41,7 @@ const ClientReferralsTable: React.FC = () => {
       <GenericTableWithData<
         GetClientCeReferralsQuery,
         GetClientCeReferralsQueryVariables,
-        ClientCeReferralTableFieldsFragment
+        CeReferralClientTableFieldsFragment
       >
         columns={COLUMNS}
         queryVariables={{
@@ -52,7 +52,7 @@ const ClientReferralsTable: React.FC = () => {
         noData='No referrals'
         paginationItemName='referrals'
         rowLinkTo={({ id }) =>
-          generateSafePath(Routes.REFERRAL, {
+          generateSafePath(ReferralRoutes.REFERRAL, {
             referralId: id,
           })
         }

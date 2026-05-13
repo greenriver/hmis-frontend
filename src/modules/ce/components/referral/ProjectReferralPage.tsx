@@ -4,19 +4,21 @@ import ReferralContent from './ReferralContent';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useReferralDashboardContext } from '@/modules/ce/components/referral/ReferralDashboard';
-import { ReferralRoutes } from '@/routes/routes';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { useGetCeReferralQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 /**
- * Thin wrapper around ReferralContent for Referrals rendered in the Referral context
- * (what we previously called "floating referrals").
+ * Thin wrapper around ReferralContent for Referrals rendered within a ProjectDashboard.
+ * The project can be the referral's target project, or its source project (for direct referrals).
+ *
+ * Referrals can also be rendered in the Referral context (what we previously called "floating referrals"); see ReferralPage
  */
-const ReferralPage: React.FC = () => {
+const ProjectReferralPage: React.FC = () => {
   const { referralId } = useSafeParams() as { referralId: string };
 
-  const { overrideBreadcrumbTitles } = useReferralDashboardContext();
+  const { project, overrideBreadcrumbTitles } = useProjectDashboardContext();
 
   const {
     data: { ceReferral: referral } = {},
@@ -31,14 +33,16 @@ const ReferralPage: React.FC = () => {
   useEffect(() => {
     if (!referral) return;
     overrideBreadcrumbTitles({
-      [ReferralRoutes.REFERRAL]: `${referral.targetProjectName} - ${referral.clientName}`,
+      [ProjectDashboardRoutes.REFERRAL]: referral.clientName,
     });
   }, [referral, overrideBreadcrumbTitles]);
 
   const overrideStepTitle = useCallback(
     (name: string | undefined) => {
       if (name === undefined) return;
-      overrideBreadcrumbTitles({ [ReferralRoutes.REFERRAL_STEP]: name });
+      overrideBreadcrumbTitles({
+        [ProjectDashboardRoutes.REFERRAL_STEP]: name,
+      });
     },
     [overrideBreadcrumbTitles]
   );
@@ -50,23 +54,22 @@ const ReferralPage: React.FC = () => {
   return (
     <ReferralContent
       referral={referral}
-      referralPath={generateSafePath(ReferralRoutes.REFERRAL, {
+      referralPath={generateSafePath(ProjectDashboardRoutes.REFERRAL, {
         referralId: referral.id,
+        projectId: project.id,
       })}
       generateReferralStepPath={(stepId) =>
-        generateSafePath(ReferralRoutes.REFERRAL_STEP, {
+        generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
           referralId: referral.id,
           stepId,
+          projectId: project.id,
         })
       }
       overrideStepTitle={overrideStepTitle}
-      linkToProject
+      // Link to the target project if we are in the source project context
+      linkToProject={project.id !== referral.targetProjectId}
     />
   );
 };
 
-export {
-  type ReferralContext,
-  useReferralContext,
-} from './referralOutletContext';
-export default ReferralPage;
+export default ProjectReferralPage;
