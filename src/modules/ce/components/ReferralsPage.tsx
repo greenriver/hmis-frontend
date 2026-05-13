@@ -31,15 +31,29 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
     error: workspaceError,
   } = useWorkspaceSelector(WorkspaceAppliesTo.CeReferrals);
 
+  // Only CE Admins can see the Units and Eligible Clients tabs
+  const showUnitsAndEligibleClients = useMemo(
+    () => !!access?.canAdministrateCoordinatedEntry,
+    [access?.canAdministrateCoordinatedEntry]
+  );
+
   const tabDefinitions = useMemo(() => {
     const tabs = [
       {
         title: 'Referrals',
         key: 'referrals',
-        contents: <ReferralsTable projectGroupId={selectedProjectGroupId} />,
+        contents: (
+          <ReferralsTable
+            projectGroupId={selectedProjectGroupId}
+            searchSize={
+              // Show small search input for admins who see multiple tabs
+              showUnitsAndEligibleClients ? 'small' : 'medium'
+            }
+          />
+        ),
       },
     ];
-    if (!!access?.canAdministrateCoordinatedEntry) {
+    if (showUnitsAndEligibleClients) {
       tabs.push(
         // Admins see additional tabs
         {
@@ -59,7 +73,7 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
       );
     }
     return tabs;
-  }, [access?.canAdministrateCoordinatedEntry, selectedProjectGroupId]);
+  }, [showUnitsAndEligibleClients, selectedProjectGroupId]);
 
   const handleChangeTab = (key: string) => {
     const workspace = new URLSearchParams(location.search).get('workspace');
@@ -92,7 +106,7 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
         <CommonTabs
           tabDefinitions={tabDefinitions}
           ariaLabel='Referrals'
-          collapseSingleTab //non-admins only see Referrals, with no tabs
+          collapseSingleTab // non-admins only see Referrals, with no tabs
           currentTab={currentTab}
           onChangeTab={handleChangeTab}
         />

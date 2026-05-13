@@ -13,6 +13,8 @@ import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
+  ReferralRoutes,
+  Routes,
 } from '@/routes/routes';
 
 type CrumbConfig = {
@@ -142,8 +144,8 @@ export const useProjectBreadcrumbConfig = (
         parent: ProjectDashboardRoutes.CE,
       },
       [ProjectDashboardRoutes.REFERRAL_STEP]: {
-        title: 'Referral',
-        parent: ProjectDashboardRoutes.CE,
+        title: 'Step',
+        parent: ProjectDashboardRoutes.REFERRAL,
       },
       [ProjectDashboardRoutes.SEND_REFERRAL]: {
         title: 'Send Referral',
@@ -165,6 +167,22 @@ export const useProjectBreadcrumbConfig = (
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;
     return buildDefaultCrumbs(ProjectDashboardRoutes, overrides, projectRoot);
   }, [context]);
+};
+
+export const useReferralBreadcrumbConfig = (): CrumbConfig => {
+  return useMemo(() => {
+    return {
+      [Routes.REFERRALS]: { title: 'Referrals' },
+      [ReferralRoutes.REFERRAL]: {
+        title: 'Referral',
+        parent: Routes.REFERRALS,
+      },
+      [ReferralRoutes.REFERRAL_STEP]: {
+        title: 'Step',
+        parent: ReferralRoutes.REFERRAL,
+      },
+    };
+  }, []);
 };
 
 export const useClientBreadcrumbConfig = (

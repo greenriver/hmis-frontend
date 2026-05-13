@@ -9,12 +9,14 @@ import {
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import CommonSearchInput, {
+  type CommonSearchInputProps,
+} from '@/modules/search/components/CommonSearchInput';
 import {
   ClientDashboardRoutes,
-  ReferralRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
+  ReferralRoutes,
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -89,9 +91,13 @@ const COLUMNS: DataColumnDef<
 
 interface Props {
   projectGroupId?: string;
+  searchSize?: CommonSearchInputProps['size'];
 }
 
-const ReferralsTable: React.FC<Props> = ({ projectGroupId }) => {
+const ReferralsTable: React.FC<Props> = ({
+  projectGroupId,
+  searchSize = 'medium',
+}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
@@ -151,7 +157,7 @@ const ReferralsTable: React.FC<Props> = ({ projectGroupId }) => {
         value={search}
         onChange={setSearch}
         fullWidth
-        size='medium'
+        size={searchSize}
         searchAdornment
       />
       <Paper>

@@ -1,13 +1,9 @@
 import { Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { cache } from '@/providers/apolloClient';
-import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   DeleteAssessmentDocument,
@@ -23,11 +19,13 @@ const DeleteAssessmentButton = ({
   clientId,
   onSuccess,
   enrollmentId,
+  isHeadOfMultiMemberHousehold,
 }: {
   assessment: FullAssessmentFragment;
   clientId: string;
   enrollmentId: string;
   onSuccess?: VoidFunction;
+  isHeadOfMultiMemberHousehold: boolean;
 }) => {
   const navigate = useNavigate();
   const deletesEnrollment = assessment.role === AssessmentRole.Intake;
@@ -67,7 +65,7 @@ const DeleteAssessmentButton = ({
         deletesEnrollment
           ? {
               title: 'Delete Enrollment',
-              confirmText: 'Yes, delete enrollment',
+              confirmText: `Yes, delete enrollment${isHeadOfMultiMemberHousehold ? 's' : ''}`,
               color: 'error',
             }
           : undefined
@@ -80,24 +78,11 @@ const DeleteAssessmentButton = ({
           {assessment.role === AssessmentRole.Intake && (
             <>
               <Typography fontWeight={600}>
-                This will delete the enrollment.
-              </Typography>
-
-              <Typography>
-                If there are other household members, you may need to{' '}
-                <RouterLink
-                  to={generateSafePath(
-                    EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
-                    {
-                      clientId,
-                      enrollmentId,
-                    }
-                  )}
-                  variant='inherit'
-                >
-                  change the Head of Household
-                </RouterLink>{' '}
-                before taking this action.
+                {isHeadOfMultiMemberHousehold ? (
+                  <>This will delete all enrollments in the household.</>
+                ) : (
+                  <>This will delete the enrollment.</>
+                )}
               </Typography>
             </>
           )}
