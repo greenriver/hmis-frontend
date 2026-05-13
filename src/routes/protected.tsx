@@ -59,6 +59,8 @@ import AdminDefaultContactsPage from '@/modules/ce/components/defaultContacts/Ad
 
 import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
 import ProjectReferralsPage from '@/modules/ce/components/project/ProjectReferralsPage';
+import ProjectReferralPage from '@/modules/ce/components/referral/ProjectReferralPage';
+import ReferralDashboard from '@/modules/ce/components/referral/ReferralDashboard';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/referral/ReferralSteps';
@@ -211,15 +213,20 @@ export const protectedRoutes: RouteNode[] = [
       },
       {
         path: ReferralRoutes.REFERRAL,
-        // Doesn't need a permission filter wrapper; internally it will just return NotFound if the client doesn't have access to view the referral.
-        element: <ReferralPage />,
+        element: <ReferralDashboard />,
         children: [
           {
-            path: ReferralRoutes.REFERRAL_STEP,
-            element: <ReferralStep />,
+            path: '',
+            element: <ReferralPage />,
+            children: [
+              {
+                path: 'tasks/:stepId',
+                element: <ReferralStep />,
+              },
+              { path: '', element: <ReferralSteps /> },
+              { path: '*', element: <Navigate to='' replace /> },
+            ],
           },
-          { path: '', element: <ReferralSteps /> },
-          { path: '*', element: <Navigate to='' replace /> },
         ],
       },
       {
@@ -512,7 +519,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            // ReferralPage can be rendered in the Target project context,
+            // ProjectReferralPage can be rendered in the Target project context,
             // or in the Source project context (for direct referrals)
             path: ProjectDashboardRoutes.REFERRAL,
             element: (
@@ -532,7 +539,7 @@ export const protectedRoutes: RouteNode[] = [
                   'sendsDirectReferrals',
                 ]}
               >
-                <ReferralPage />
+                <ProjectReferralPage />
               </ProjectRoute>
             ),
             children: [

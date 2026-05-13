@@ -1,5 +1,5 @@
 import { Box, Divider, Stack } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReferralStepDetails from './ReferralStepDetails';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
@@ -15,7 +15,7 @@ import {
 } from '@/types/gqlTypes';
 
 const ReferralStep: React.FC = ({}) => {
-  const { referral, referralPath } = useReferralContext();
+  const { referral, referralPath, overrideStepTitle } = useReferralContext();
   const { stepId } = useSafeParams() as {
     stepId: string;
   };
@@ -31,6 +31,10 @@ const ReferralStep: React.FC = ({}) => {
   });
 
   const stepSummary = referral.steps?.find((s) => s.stepId === stepId);
+
+  useEffect(() => {
+    if (stepSummary?.name) overrideStepTitle?.(stepSummary.name);
+  }, [overrideStepTitle, stepSummary?.name]);
 
   if (fetchError) throw fetchError;
   if (!stepSummary) return <NotFound />;
