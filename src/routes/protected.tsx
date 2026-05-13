@@ -211,7 +211,6 @@ export const protectedRoutes: RouteNode[] = [
       },
       {
         path: ReferralRoutes.REFERRAL,
-        // todo @martha - is this going to have /referrals/referral/...?
         // Doesn't need a permission filter wrapper; internally it will just return NotFound if the client doesn't have access to view the referral.
         element: <ReferralPage />,
         children: [
