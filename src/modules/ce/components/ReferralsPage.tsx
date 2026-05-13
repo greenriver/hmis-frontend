@@ -24,7 +24,14 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
       {
         title: 'Referrals',
         key: 'referrals',
-        contents: <ReferralsTable />,
+        contents: (
+          <ReferralsTable
+            searchSize={
+              // Show small search input for admins who see multiple tabs
+              access?.canAdministrateCoordinatedEntry ? 'small' : 'medium'
+            }
+          />
+        ),
       },
     ];
     if (!!access?.canAdministrateCoordinatedEntry) {

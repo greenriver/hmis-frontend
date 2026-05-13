@@ -9,7 +9,9 @@ import {
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import CommonSearchInput, {
+  type CommonSearchInputProps,
+} from '@/modules/search/components/CommonSearchInput';
 import {
   ClientDashboardRoutes,
   ReferralRoutes,
@@ -87,7 +89,13 @@ const COLUMNS: DataColumnDef<
   },
 ];
 
-const ReferralsTable: React.FC = () => {
+interface ReferralsTableProps {
+  searchSize?: CommonSearchInputProps['size'];
+}
+
+const ReferralsTable: React.FC<ReferralsTableProps> = ({
+  searchSize = 'medium',
+}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
@@ -146,7 +154,7 @@ const ReferralsTable: React.FC = () => {
         value={search}
         onChange={setSearch}
         fullWidth
-        size='medium'
+        size={searchSize}
         searchAdornment
       />
       <Paper>

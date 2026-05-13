@@ -135,7 +135,7 @@ const AdminCeClientsTable: React.FC = () => {
         value={search}
         onChange={setSearch}
         fullWidth
-        size='medium'
+        size='small'
         searchAdornment
       />
       <Paper>
