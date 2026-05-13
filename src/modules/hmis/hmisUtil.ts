@@ -368,6 +368,13 @@ export const entryExitRange = (
   );
 };
 
+export const isHeadOfMultiMemberHousehold = (enrollment: {
+  householdSize: number;
+  relationshipToHoH: RelationshipToHoH;
+}): boolean =>
+  enrollment.householdSize > 1 &&
+  enrollment.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
+
 // Open, or closed within the last X days
 export const isRecentEnrollment = (
   enrollment: EnrollmentFieldsFragment | ClientEnrollmentFieldsFragment,
