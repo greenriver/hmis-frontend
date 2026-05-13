@@ -140,7 +140,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
         value={search}
         onChange={setSearch}
         fullWidth
-        size='medium'
+        size='small'
         searchAdornment
       />
       <Paper>

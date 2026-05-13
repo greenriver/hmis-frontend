@@ -23,6 +23,8 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
   const [access] = useRootPermissions();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Load workspace selector (if configured) for selecting project group
   const {
     selector: workspaceSelector,
     hasWorkspaces,
