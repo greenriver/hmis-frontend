@@ -27,6 +27,8 @@ fragment RootPermissions on QueryAccess {
   # Root Project permissions:
   canEditOrganization # globally, determines whether user can create organization
   canEditProjectDetails # globally, determines whether user can create project
+  # Root Referral permissions
+  canIndexReferrals
 }
 
 # Permissions on Client to determine what to show on the Client Dashboard

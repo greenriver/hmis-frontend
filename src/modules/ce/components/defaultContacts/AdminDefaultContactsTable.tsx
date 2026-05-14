@@ -104,7 +104,7 @@ const AdminDefaultContactsTable: React.FC<Props> = ({}) => {
           value={search}
           onChange={setSearch}
           fullWidth
-          size='small'
+          size='medium'
           searchAdornment
         />
         <Paper>

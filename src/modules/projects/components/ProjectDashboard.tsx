@@ -1,5 +1,5 @@
 import { Container, Stack, Typography } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useDetailedProject } from '../hooks/useDetailedProject';
@@ -76,13 +76,18 @@ const ProjectDashboard: React.FC = () => {
   const navItems = useProjectDashboardNavItems(project);
   const { noPadding, ...dashboardState } = useDashboardState();
   // allow pages to "override" the default breadcrumb text
-  const [breadcrumbOverrides, overrideBreadcrumbTitles] = useState<
+  const [breadcrumbOverrides, setBreadcrumbOverrides] = useState<
     Record<string, string> | undefined
   >();
+  const overrideBreadcrumbTitles = useCallback(
+    (crumbs: Record<string, string>) =>
+      setBreadcrumbOverrides((prev) => ({ ...prev, ...crumbs })),
+    []
+  );
 
   const outletContext: ProjectDashboardContext | undefined = useMemo(
     () => (project ? { project, overrideBreadcrumbTitles } : undefined),
-    [project]
+    [project, overrideBreadcrumbTitles]
   );
 
   const breadCrumbConfig = useProjectBreadcrumbConfig(outletContext);

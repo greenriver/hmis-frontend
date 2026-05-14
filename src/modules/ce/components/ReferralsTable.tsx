@@ -9,25 +9,27 @@ import {
 } from '@/modules/ce/referralColumns';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import CommonSearchInput, {
+  type CommonSearchInputProps,
+} from '@/modules/search/components/CommonSearchInput';
 import {
-  AdminDashboardRoutes,
   ClientDashboardRoutes,
+  ReferralRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  CeReferralAdminFieldsFragment,
-  GetAdminCeReferralsDocument,
-  GetAdminCeReferralsQuery,
-  GetAdminCeReferralsQueryVariables,
+  CeReferralTableFieldsFragment,
+  GetCeReferralsDocument,
+  GetCeReferralsQuery,
+  GetCeReferralsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const COLUMNS: DataColumnDef<
-  CeReferralAdminFieldsFragment,
-  GetAdminCeReferralsQueryVariables
+  CeReferralTableFieldsFragment,
+  GetCeReferralsQueryVariables
 >[] = [
   REFERRAL_COLUMNS.client,
   REFERRAL_COLUMNS.status,
@@ -86,8 +88,14 @@ const COLUMNS: DataColumnDef<
     optional: { defaultHidden: false },
   },
 ];
-interface Props {}
-const AdminReferralsTable: React.FC<Props> = ({}) => {
+
+interface ReferralsTableProps {
+  searchSize?: CommonSearchInputProps['size'];
+}
+
+const ReferralsTable: React.FC<ReferralsTableProps> = ({
+  searchSize = 'medium',
+}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
@@ -95,7 +103,7 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
   });
 
   const rowSecondaryActions = useCallback(
-    (row: CeReferralAdminFieldsFragment) => {
+    (row: CeReferralTableFieldsFragment) => {
       const actions = [];
 
       if (row.client) {
@@ -146,20 +154,20 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
         value={search}
         onChange={setSearch}
         fullWidth
-        size='small'
+        size={searchSize}
         searchAdornment
       />
       <Paper>
         <GenericTableWithData<
-          GetAdminCeReferralsQuery,
-          GetAdminCeReferralsQueryVariables,
-          CeReferralAdminFieldsFragment
+          GetCeReferralsQuery,
+          GetCeReferralsQueryVariables,
+          CeReferralTableFieldsFragment
         >
           columns={COLUMNS}
           queryVariables={{
             filters: { searchTerm: debouncedSearch || undefined },
           }}
-          queryDocument={GetAdminCeReferralsDocument}
+          queryDocument={GetCeReferralsDocument}
           pagePath='ceReferrals'
           noData='No referrals'
           paginationItemName='referrals'
@@ -167,8 +175,7 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
           filterValues={filterValues}
           onFilterChange={setFilterValues}
           rowLinkTo={(row) =>
-            generateSafePath(AdminDashboardRoutes.REFERRAL, {
-              projectId: row.targetProjectId,
+            generateSafePath(ReferralRoutes.REFERRAL, {
               referralId: row.id,
             })
           }
@@ -180,4 +187,4 @@ const AdminReferralsTable: React.FC<Props> = ({}) => {
   );
 };
 
-export default AdminReferralsTable;
+export default ReferralsTable;
