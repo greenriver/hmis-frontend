@@ -2,7 +2,7 @@
 # build container
 #####################################################################
 ARG NODE_VERSION
-FROM node:${NODE_VERSION}-alpine AS builder
+FROM node:${NODE_VERSION}-alpine3.23 AS builder
 
 ARG GITHASH
 ARG FULL_GITHASH
@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/app/node_modules \
 #####################################################################
 # nginx container
 #####################################################################
-FROM nginx:1.25-alpine
+FROM nginx:1.28-alpine3.23
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}
 
