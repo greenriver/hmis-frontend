@@ -9130,10 +9130,15 @@ export type ClientAccessFieldsFragment = {
   canManageScanCards: boolean;
   canMergeClients: boolean;
   canIndexFiles: boolean;
-  canUploadClientFiles: boolean;
   canViewReferrals: boolean;
   canViewOwnReferrals: boolean;
   canViewClientEligibleOpportunities: boolean;
+};
+
+export type ClientFileUploadAccessFieldsFragment = {
+  __typename?: 'ClientAccess';
+  id: string;
+  canUploadClientFiles: boolean;
 };
 
 export type EnrollmentAccessFieldsFragment = {
@@ -22055,7 +22060,6 @@ export type ClientFieldsFragment = {
     canManageScanCards: boolean;
     canMergeClients: boolean;
     canIndexFiles: boolean;
-    canUploadClientFiles: boolean;
     canViewReferrals: boolean;
     canViewOwnReferrals: boolean;
     canViewClientEligibleOpportunities: boolean;
@@ -22542,7 +22546,6 @@ export type GetClientQuery = {
       canManageScanCards: boolean;
       canMergeClients: boolean;
       canIndexFiles: boolean;
-      canUploadClientFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
@@ -22781,10 +22784,26 @@ export type GetClientPermissionsQuery = {
       canManageScanCards: boolean;
       canMergeClients: boolean;
       canIndexFiles: boolean;
-      canUploadClientFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
+    };
+  } | null;
+};
+
+export type GetClientFileUploadAccessQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetClientFileUploadAccessQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    access: {
+      __typename?: 'ClientAccess';
+      id: string;
+      canUploadClientFiles: boolean;
     };
   } | null;
 };
@@ -23315,7 +23334,6 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canManageScanCards: boolean;
                 canMergeClients: boolean;
                 canIndexFiles: boolean;
-                canUploadClientFiles: boolean;
                 canViewReferrals: boolean;
                 canViewOwnReferrals: boolean;
                 canViewClientEligibleOpportunities: boolean;
@@ -24225,7 +24243,6 @@ export type MergeClientsMutation = {
         canManageScanCards: boolean;
         canMergeClients: boolean;
         canIndexFiles: boolean;
-        canUploadClientFiles: boolean;
         canViewReferrals: boolean;
         canViewOwnReferrals: boolean;
         canViewClientEligibleOpportunities: boolean;
@@ -28862,7 +28879,6 @@ export type EnrollmentWithHouseholdFieldsFragment = {
           canManageScanCards: boolean;
           canMergeClients: boolean;
           canIndexFiles: boolean;
-          canUploadClientFiles: boolean;
           canViewReferrals: boolean;
           canViewOwnReferrals: boolean;
           canViewClientEligibleOpportunities: boolean;
@@ -30001,7 +30017,6 @@ export type GetEnrollmentWithHouseholdQuery = {
             canManageScanCards: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
-            canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -37665,7 +37680,6 @@ export type SubmitFormMutation = {
             canManageScanCards: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
-            canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41019,7 +41033,6 @@ export type HouseholdFieldsFragment = {
         canManageScanCards: boolean;
         canMergeClients: boolean;
         canIndexFiles: boolean;
-        canUploadClientFiles: boolean;
         canViewReferrals: boolean;
         canViewOwnReferrals: boolean;
         canViewClientEligibleOpportunities: boolean;
@@ -41100,7 +41113,6 @@ export type HouseholdClientFieldsFragment = {
       canManageScanCards: boolean;
       canMergeClients: boolean;
       canIndexFiles: boolean;
-      canUploadClientFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
@@ -41278,7 +41290,6 @@ export type JoinHouseholdMutation = {
             canManageScanCards: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
-            canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41367,7 +41378,6 @@ export type JoinHouseholdMutation = {
             canManageScanCards: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
-            canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41469,7 +41479,6 @@ export type SplitHouseholdMutation = {
             canManageScanCards: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
-            canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41558,7 +41567,6 @@ export type SplitHouseholdMutation = {
             canManageScanCards: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
-            canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41656,7 +41664,6 @@ export type GetHouseholdQuery = {
           canManageScanCards: boolean;
           canMergeClients: boolean;
           canIndexFiles: boolean;
-          canUploadClientFiles: boolean;
           canViewReferrals: boolean;
           canViewOwnReferrals: boolean;
           canViewClientEligibleOpportunities: boolean;
@@ -49726,6 +49733,12 @@ export const RootPermissionsFragmentDoc = gql`
     canIndexReferrals
   }
 `;
+export const ClientFileUploadAccessFieldsFragmentDoc = gql`
+  fragment ClientFileUploadAccessFields on ClientAccess {
+    id
+    canUploadClientFiles
+  }
+`;
 export const OrganizationAccessFieldsFragmentDoc = gql`
   fragment OrganizationAccessFields on OrganizationAccess {
     id
@@ -51105,7 +51118,6 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canManageScanCards
     canMergeClients
     canIndexFiles
-    canUploadClientFiles
     canViewReferrals
     canViewOwnReferrals
     canViewClientEligibleOpportunities
@@ -57267,6 +57279,113 @@ export type GetClientPermissionsSuspenseQueryHookResult = ReturnType<
 export type GetClientPermissionsQueryResult = Apollo.QueryResult<
   GetClientPermissionsQuery,
   GetClientPermissionsQueryVariables
+>;
+export const GetClientFileUploadAccessDocument = gql`
+  query GetClientFileUploadAccess($id: ID!) {
+    client(id: $id) {
+      id
+      access {
+        ...ClientFileUploadAccessFields
+      }
+    }
+  }
+  ${ClientFileUploadAccessFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientFileUploadAccessQuery__
+ *
+ * To run a query within a React component, call `useGetClientFileUploadAccessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientFileUploadAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientFileUploadAccessQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetClientFileUploadAccessQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  > &
+    (
+      | { variables: GetClientFileUploadAccessQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >(GetClientFileUploadAccessDocument, options);
+}
+export function useGetClientFileUploadAccessLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >(GetClientFileUploadAccessDocument, options);
+}
+// @ts-ignore
+export function useGetClientFileUploadAccessSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetClientFileUploadAccessQuery,
+  GetClientFileUploadAccessQueryVariables
+>;
+export function useGetClientFileUploadAccessSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetClientFileUploadAccessQuery,
+        GetClientFileUploadAccessQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetClientFileUploadAccessQuery | undefined,
+  GetClientFileUploadAccessQueryVariables
+>;
+export function useGetClientFileUploadAccessSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetClientFileUploadAccessQuery,
+        GetClientFileUploadAccessQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >(GetClientFileUploadAccessDocument, options);
+}
+export type GetClientFileUploadAccessQueryHookResult = ReturnType<
+  typeof useGetClientFileUploadAccessQuery
+>;
+export type GetClientFileUploadAccessLazyQueryHookResult = ReturnType<
+  typeof useGetClientFileUploadAccessLazyQuery
+>;
+export type GetClientFileUploadAccessSuspenseQueryHookResult = ReturnType<
+  typeof useGetClientFileUploadAccessSuspenseQuery
+>;
+export type GetClientFileUploadAccessQueryResult = Apollo.QueryResult<
+  GetClientFileUploadAccessQuery,
+  GetClientFileUploadAccessQueryVariables
 >;
 export const GetClientImageDocument = gql`
   query GetClientImage($id: ID!) {

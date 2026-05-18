@@ -46,6 +46,15 @@ query GetClientPermissions($id: ID!) {
   }
 }
 
+query GetClientFileUploadAccess($id: ID!) {
+  client(id: $id) {
+    id
+    access {
+      ...ClientFileUploadAccessFields
+    }
+  }
+}
+
 query GetClientImage($id: ID!) {
   client(id: $id) {
     ...ClientImage

@@ -13,13 +13,13 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientFilesDocument,
   GetClientFilesQuery,
   GetClientFilesQueryVariables,
   PickListType,
+  useGetClientFileUploadAccessQuery,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -55,9 +55,11 @@ const ClientFilesPage = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const [viewingFile, setViewingFile] = useState<ClientFileType | undefined>();
 
-  const [canUpload] = useHasClientPermissions(clientId, [
-    'canUploadClientFiles',
-  ]);
+  const { data: clientAccessData } = useGetClientFileUploadAccessQuery({
+    variables: { id: clientId },
+  });
+  const canUpload = clientAccessData?.client?.access?.canUploadClientFiles;
+
   const { data: pickListData } = useGetPickListQuery({
     variables: { pickListType: PickListType.AvailableFileTypes },
   });

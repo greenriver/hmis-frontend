@@ -54,14 +54,16 @@ fragment ClientAccessFields on ClientAccess {
   canMergeClients
   canIndexFiles
 
-  # The below perms could be pulled out and fetched on Client Files tab, for perf improvement
-  # todo @Martha
-  canUploadClientFiles
-
   # Referral-related root permissions, resolved on Client for convenience
   canViewReferrals
   canViewOwnReferrals
   canViewClientEligibleOpportunities
+}
+
+# Resolved only where client file upload UI is shown (not part of ClientAccessFields).
+fragment ClientFileUploadAccessFields on ClientAccess {
+  id
+  canUploadClientFiles
 }
 
 fragment EnrollmentAccessFields on EnrollmentAccess {
