@@ -7,7 +7,6 @@ fragment FileFields on File {
   name
   url
   tags
-  ownFile # todo @martha - can remove?
   access {
     canManage
   }

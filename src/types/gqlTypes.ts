@@ -9594,7 +9594,6 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -9651,7 +9650,6 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -9838,7 +9836,6 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -9895,7 +9892,6 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -10042,7 +10038,6 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -10099,7 +10094,6 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -10191,7 +10185,6 @@ export type AssessmentWithRecordsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -10248,7 +10241,6 @@ export type AssessmentWithRecordsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -10470,7 +10462,6 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -10527,7 +10518,6 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -10714,7 +10704,6 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -10771,7 +10760,6 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -10918,7 +10906,6 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -10975,7 +10962,6 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -11067,7 +11053,6 @@ export type FullAssessmentFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -11124,7 +11109,6 @@ export type FullAssessmentFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -11242,7 +11226,6 @@ export type AssessmentWithCdesFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -11299,7 +11282,6 @@ export type AssessmentWithCdesFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -12516,7 +12498,6 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -12573,7 +12554,6 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -12760,7 +12740,6 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -12817,7 +12796,6 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -12964,7 +12942,6 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -13021,7 +12998,6 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -13113,7 +13089,6 @@ export type GetAssessmentQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -13170,7 +13145,6 @@ export type GetAssessmentQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -13323,7 +13297,6 @@ export type GetClientAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -13380,7 +13353,6 @@ export type GetClientAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -13504,7 +13476,6 @@ export type GetEnrollmentAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -13561,7 +13532,6 @@ export type GetEnrollmentAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -13699,7 +13669,6 @@ export type GetHouseholdAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -13756,7 +13725,6 @@ export type GetHouseholdAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -14023,7 +13991,6 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -14080,7 +14047,6 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -14267,7 +14233,6 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -14324,7 +14289,6 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -14471,7 +14435,6 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -14528,7 +14491,6 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -14620,7 +14582,6 @@ export type SubmitAssessmentMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -14677,7 +14638,6 @@ export type SubmitAssessmentMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -14886,7 +14846,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -14943,7 +14902,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -15130,7 +15088,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -15187,7 +15144,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -15334,7 +15290,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -15391,7 +15346,6 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -15483,7 +15437,6 @@ export type SubmitHouseholdAssessmentsMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -15540,7 +15493,6 @@ export type SubmitHouseholdAssessmentsMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -15766,7 +15718,6 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -15823,7 +15774,6 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -16010,7 +15960,6 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -16067,7 +16016,6 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -16214,7 +16162,6 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -16271,7 +16218,6 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -16363,7 +16309,6 @@ export type GetAssessmentsForPopulationQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -16420,7 +16365,6 @@ export type GetAssessmentsForPopulationQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -18518,7 +18462,6 @@ export type CeReferralStepFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -18575,7 +18518,6 @@ export type CeReferralStepFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -19327,7 +19269,6 @@ export type StartCeReferralStepMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -19384,7 +19325,6 @@ export type StartCeReferralStepMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -20022,7 +19962,6 @@ export type SubmitCeReferralStepMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -20079,7 +20018,6 @@ export type SubmitCeReferralStepMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -21593,7 +21531,6 @@ export type GetCeReferralStepQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -21650,7 +21587,6 @@ export type GetCeReferralStepQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -22154,7 +22090,6 @@ export type ClientFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -22211,7 +22146,6 @@ export type ClientFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -22643,7 +22577,6 @@ export type GetClientQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -22700,7 +22633,6 @@ export type GetClientQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -23048,7 +22980,6 @@ export type GetClientServicesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -23105,7 +23036,6 @@ export type GetClientServicesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -23250,7 +23180,6 @@ export type DeleteClientFileMutation = {
       name: string;
       url?: string | null;
       tags: Array<string>;
-      ownFile: boolean;
       redacted: boolean;
       enrollmentId?: string | null;
       dateCreated?: string | null;
@@ -23454,7 +23383,6 @@ export type GetFileQuery = {
     name: string;
     url?: string | null;
     tags: Array<string>;
-    ownFile: boolean;
     redacted: boolean;
     enrollmentId?: string | null;
     dateCreated?: string | null;
@@ -23509,7 +23437,6 @@ export type GetClientFilesQuery = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -24333,7 +24260,6 @@ export type MergeClientsMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -24390,7 +24316,6 @@ export type MergeClientsMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -25071,7 +24996,6 @@ export type CurrentLivingSituationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -25128,7 +25052,6 @@ export type CurrentLivingSituationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -25246,7 +25169,6 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -25303,7 +25225,6 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -25421,7 +25342,6 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -25478,7 +25398,6 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -25615,7 +25534,6 @@ export type GetProjectCurrentLivingSituationsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -25672,7 +25590,6 @@ export type GetProjectCurrentLivingSituationsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -25777,7 +25694,6 @@ export type CustomCaseNoteFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -25834,7 +25750,6 @@ export type CustomCaseNoteFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -25943,7 +25858,6 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -26000,7 +25914,6 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -26159,7 +26072,6 @@ export type GetClientCaseNotesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -26216,7 +26128,6 @@ export type GetClientCaseNotesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -26279,7 +26190,6 @@ export type CustomDataElementValueFieldsFragment = {
     name: string;
     url?: string | null;
     tags: Array<string>;
-    ownFile: boolean;
     redacted: boolean;
     enrollmentId?: string | null;
     dateCreated?: string | null;
@@ -26345,7 +26255,6 @@ export type CustomDataElementFieldsFragment = {
       name: string;
       url?: string | null;
       tags: Array<string>;
-      ownFile: boolean;
       redacted: boolean;
       enrollmentId?: string | null;
       dateCreated?: string | null;
@@ -26402,7 +26311,6 @@ export type CustomDataElementFieldsFragment = {
       name: string;
       url?: string | null;
       tags: Array<string>;
-      ownFile: boolean;
       redacted: boolean;
       enrollmentId?: string | null;
       dateCreated?: string | null;
@@ -27584,7 +27492,6 @@ export type EnrolledClientFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -27641,7 +27548,6 @@ export type EnrolledClientFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -27737,7 +27643,6 @@ export type AllEnrollmentDetailsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -27794,7 +27699,6 @@ export type AllEnrollmentDetailsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -27873,7 +27777,6 @@ export type AllEnrollmentDetailsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -27930,7 +27833,6 @@ export type AllEnrollmentDetailsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -28728,7 +28630,6 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -28785,7 +28686,6 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -29205,7 +29105,6 @@ export type GetEnrollmentDetailsQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -29262,7 +29161,6 @@ export type GetEnrollmentDetailsQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -29341,7 +29239,6 @@ export type GetEnrollmentDetailsQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -29398,7 +29295,6 @@ export type GetEnrollmentDetailsQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -31730,7 +31626,6 @@ export type FileFieldsFragment = {
   name: string;
   url?: string | null;
   tags: Array<string>;
-  ownFile: boolean;
   redacted: boolean;
   enrollmentId?: string | null;
   dateCreated?: string | null;
@@ -37805,7 +37700,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -37862,7 +37756,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38019,7 +37912,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38076,7 +37968,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38177,7 +38068,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38234,7 +38124,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38325,7 +38214,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38382,7 +38270,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38498,7 +38385,6 @@ export type SubmitFormMutation = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -38573,7 +38459,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38630,7 +38515,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38743,7 +38627,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38800,7 +38683,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38886,7 +38768,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -38943,7 +38824,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -39065,7 +38945,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -39122,7 +39001,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -39327,7 +39205,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -39384,7 +39261,6 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
@@ -41930,7 +41806,6 @@ export type InventoryFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -41987,7 +41862,6 @@ export type InventoryFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -42265,7 +42139,6 @@ export type OrganizationDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -42322,7 +42195,6 @@ export type OrganizationDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -42409,7 +42281,6 @@ export type OrganizationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -42466,7 +42337,6 @@ export type OrganizationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -42586,7 +42456,6 @@ export type GetOrganizationQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -42643,7 +42512,6 @@ export type GetOrganizationQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -42843,7 +42711,6 @@ export type ProjectAllFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -42900,7 +42767,6 @@ export type ProjectAllFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -43631,7 +43497,6 @@ export type FunderFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -43688,7 +43553,6 @@ export type FunderFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -43929,7 +43793,6 @@ export type GetProjectQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -43986,7 +43849,6 @@ export type GetProjectQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -44436,7 +44298,6 @@ export type GetProjectAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -44493,7 +44354,6 @@ export type GetProjectAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -44638,7 +44498,6 @@ export type GetFunderQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -44695,7 +44554,6 @@ export type GetFunderQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -44799,7 +44657,6 @@ export type GetInventoryQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -44856,7 +44713,6 @@ export type GetInventoryQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -45001,7 +44857,6 @@ export type GetProjectInventoriesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -45058,7 +44913,6 @@ export type GetProjectInventoriesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -45308,7 +45162,6 @@ export type GetProjectFundersQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -45365,7 +45218,6 @@ export type GetProjectFundersQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -45922,7 +45774,6 @@ export type UpdateReferralPostingMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -45979,7 +45830,6 @@ export type UpdateReferralPostingMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -46164,7 +46014,6 @@ export type GetReferralPostingQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -46221,7 +46070,6 @@ export type GetReferralPostingQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -46445,7 +46293,6 @@ export type ReferralPostingDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -46502,7 +46349,6 @@ export type ReferralPostingDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -46620,7 +46466,6 @@ export type EsgFundingServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -46677,7 +46522,6 @@ export type EsgFundingServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -46773,7 +46617,6 @@ export type GetEsgFundingReportQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -46830,7 +46673,6 @@ export type GetEsgFundingReportQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -47188,7 +47030,6 @@ export type ServiceDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -47245,7 +47086,6 @@ export type ServiceDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -47352,7 +47192,6 @@ export type ServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -47409,7 +47248,6 @@ export type ServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -47516,7 +47354,6 @@ export type ClientServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -47573,7 +47410,6 @@ export type ClientServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -47699,7 +47535,6 @@ export type GetServiceQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -47756,7 +47591,6 @@ export type GetServiceQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
@@ -47897,7 +47731,6 @@ export type DeleteServiceMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -47954,7 +47787,6 @@ export type DeleteServiceMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
@@ -48094,7 +47926,6 @@ export type GetEnrollmentServicesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -48151,7 +47982,6 @@ export type GetEnrollmentServicesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
@@ -50059,7 +49889,6 @@ export const FileFieldsFragmentDoc = gql`
     name
     url
     tags
-    ownFile
     access {
       canManage
     }
