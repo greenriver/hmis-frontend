@@ -842,7 +842,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.FILES,
             element: (
               <ClientRoute
-                permissions='canViewAnyFiles'
+                permissions='canIndexFiles'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientFilesPage />

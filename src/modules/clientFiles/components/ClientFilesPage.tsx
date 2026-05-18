@@ -13,10 +13,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import {
-  useClientPermissions,
-  useHasClientPermissions,
-} from '@/modules/permissions/useHasPermissionsHooks';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientFilesDocument,
@@ -32,25 +29,19 @@ type ClientFileType = NonNullable<
 >['nodes'][0];
 
 const FileActions: React.FC<{
-  clientId: string;
   file: ClientFileType;
   onDone?: (file: ClientFileType) => any;
   noDownload?: boolean;
-}> = ({ clientId, file, onDone = () => {}, noDownload }) => {
+}> = ({ file, onDone = () => {}, noDownload }) => {
   const { getActionsForFile } = useFileActions({
     onDeleteFile: () => onDone(file),
   });
-
-  const [perms] = useClientPermissions(clientId);
-  const { canManageOwnClientFiles, canManageAnyClientFiles } = perms || {};
-  const canManage =
-    canManageAnyClientFiles || (canManageOwnClientFiles && file.ownFile);
 
   const { editButton, deleteButton, downloadButton } = getActionsForFile(file);
   return (
     <>
       {!noDownload && downloadButton}
-      {canManage && (
+      {file.access.canManage && (
         <>
           {editButton}
           {deleteButton}
@@ -193,7 +184,6 @@ const ClientFilesPage = () => {
           file={viewingFile}
           actions={
             <FileActions
-              clientId={clientId}
               file={viewingFile}
               onDone={() => setViewingFile(undefined)}
             />

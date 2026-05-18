@@ -52,11 +52,10 @@ fragment ClientAccessFields on ClientAccess {
   canAuditClients
   canManageScanCards
   canMergeClients
-  canViewAnyFiles
+  canIndexFiles
 
   # The below perms could be pulled out and fetched on Client Files tab, for perf improvement
-  canManageAnyClientFiles
-  canManageOwnClientFiles
+  # todo @Martha
   canUploadClientFiles
 
   # Referral-related root permissions, resolved on Client for convenience

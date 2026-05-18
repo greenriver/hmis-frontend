@@ -25,18 +25,16 @@ const FileEditRoute: React.FC<
   });
   const [permissions, { loading }] = useClientPermissions(clientId || '');
 
-  const canEdit =
-    permissions?.canManageAnyClientFiles ||
-    permissions?.canManageOwnClientFiles;
-  const canEditAny = permissions?.canManageAnyClientFiles;
-
   if (loading) return <Loading />;
   if (!file && !create) {
     console.error('File not found');
     return <NotFound />;
   }
-  if (!canEdit) return <NotFound />;
-  if (!create && !canEditAny && !file.data?.file?.ownFile) return <NotFound />;
+
+  // If uploading, check on the client whether the user can upload files
+  if (create && !permissions?.canUploadClientFiles) return <NotFound />;
+  // If attempting to edit an existing file, check permission on the file
+  if (!create && !file.data?.file?.access?.canManage) return <NotFound />;
 
   return <>{children}</>;
 };

@@ -1383,13 +1383,17 @@ export type ClientAccess = {
   canAuditClients: Scalars['Boolean']['output'];
   canDeleteClient: Scalars['Boolean']['output'];
   canEditClient: Scalars['Boolean']['output'];
+  canIndexFiles: Scalars['Boolean']['output'];
+  /** @deprecated Resolve canManage on individual file access field instead */
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
+  /** @deprecated Resolve canManage on individual file access field instead */
   canManageOwnClientFiles: Scalars['Boolean']['output'];
   canManageScanCards: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
   canPrintClientCaseNotes: Scalars['Boolean']['output'];
   canUploadClientFiles: Scalars['Boolean']['output'];
+  /** @deprecated Use canIndexFiles */
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
@@ -3502,6 +3506,7 @@ export type FieldMapping = {
 /** File */
 export type File = {
   __typename?: 'File';
+  access: FileAccess;
   confidential?: Maybe<Scalars['Boolean']['output']>;
   contentType?: Maybe<Scalars['String']['output']>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3519,6 +3524,12 @@ export type File = {
   uploadedBy?: Maybe<ApplicationUser>;
   url?: Maybe<Scalars['String']['output']>;
   user?: Maybe<ApplicationUser>;
+};
+
+export type FileAccess = {
+  __typename?: 'FileAccess';
+  canManage: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 /** File Sorting Options */
@@ -9118,9 +9129,7 @@ export type ClientAccessFieldsFragment = {
   canAuditClients: boolean;
   canManageScanCards: boolean;
   canMergeClients: boolean;
-  canViewAnyFiles: boolean;
-  canManageAnyClientFiles: boolean;
-  canManageOwnClientFiles: boolean;
+  canIndexFiles: boolean;
   canUploadClientFiles: boolean;
   canViewReferrals: boolean;
   canViewOwnReferrals: boolean;
@@ -9590,6 +9599,7 @@ export type AssessmentWithRecordsFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -9646,6 +9656,7 @@ export type AssessmentWithRecordsFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -9832,6 +9843,7 @@ export type AssessmentWithRecordsFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -9888,6 +9900,7 @@ export type AssessmentWithRecordsFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10034,6 +10047,7 @@ export type AssessmentWithRecordsFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10090,6 +10104,7 @@ export type AssessmentWithRecordsFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10181,6 +10196,7 @@ export type AssessmentWithRecordsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -10237,6 +10253,7 @@ export type AssessmentWithRecordsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -10458,6 +10475,7 @@ export type FullAssessmentFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10514,6 +10532,7 @@ export type FullAssessmentFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10700,6 +10719,7 @@ export type FullAssessmentFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10756,6 +10776,7 @@ export type FullAssessmentFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10902,6 +10923,7 @@ export type FullAssessmentFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10958,6 +10980,7 @@ export type FullAssessmentFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -11049,6 +11072,7 @@ export type FullAssessmentFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -11105,6 +11129,7 @@ export type FullAssessmentFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -11222,6 +11247,7 @@ export type AssessmentWithCdesFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -11278,6 +11304,7 @@ export type AssessmentWithCdesFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -12494,6 +12521,7 @@ export type GetAssessmentQuery = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12550,6 +12578,7 @@ export type GetAssessmentQuery = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12736,6 +12765,7 @@ export type GetAssessmentQuery = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12792,6 +12822,7 @@ export type GetAssessmentQuery = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12938,6 +12969,7 @@ export type GetAssessmentQuery = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12994,6 +13026,7 @@ export type GetAssessmentQuery = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -13085,6 +13118,7 @@ export type GetAssessmentQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -13141,6 +13175,7 @@ export type GetAssessmentQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -13293,6 +13328,7 @@ export type GetClientAssessmentsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13349,6 +13385,7 @@ export type GetClientAssessmentsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13472,6 +13509,7 @@ export type GetEnrollmentAssessmentsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13528,6 +13566,7 @@ export type GetEnrollmentAssessmentsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13665,6 +13704,7 @@ export type GetHouseholdAssessmentsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13721,6 +13761,7 @@ export type GetHouseholdAssessmentsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13987,6 +14028,7 @@ export type SubmitAssessmentMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14043,6 +14085,7 @@ export type SubmitAssessmentMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14229,6 +14272,7 @@ export type SubmitAssessmentMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14285,6 +14329,7 @@ export type SubmitAssessmentMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14431,6 +14476,7 @@ export type SubmitAssessmentMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14487,6 +14533,7 @@ export type SubmitAssessmentMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14578,6 +14625,7 @@ export type SubmitAssessmentMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -14634,6 +14682,7 @@ export type SubmitAssessmentMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -14842,6 +14891,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14898,6 +14948,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15084,6 +15135,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15140,6 +15192,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15286,6 +15339,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15342,6 +15396,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15433,6 +15488,7 @@ export type SubmitHouseholdAssessmentsMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -15489,6 +15545,7 @@ export type SubmitHouseholdAssessmentsMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -15714,6 +15771,7 @@ export type GetAssessmentsForPopulationQuery = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -15770,6 +15828,7 @@ export type GetAssessmentsForPopulationQuery = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -15956,6 +16015,7 @@ export type GetAssessmentsForPopulationQuery = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -16012,6 +16072,7 @@ export type GetAssessmentsForPopulationQuery = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -16158,6 +16219,7 @@ export type GetAssessmentsForPopulationQuery = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -16214,6 +16276,7 @@ export type GetAssessmentsForPopulationQuery = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -16305,6 +16368,7 @@ export type GetAssessmentsForPopulationQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -16361,6 +16425,7 @@ export type GetAssessmentsForPopulationQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -18458,6 +18523,7 @@ export type CeReferralStepFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -18514,6 +18580,7 @@ export type CeReferralStepFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -19265,6 +19332,7 @@ export type StartCeReferralStepMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -19321,6 +19389,7 @@ export type StartCeReferralStepMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -19958,6 +20027,7 @@ export type SubmitCeReferralStepMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -20014,6 +20084,7 @@ export type SubmitCeReferralStepMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -21527,6 +21598,7 @@ export type GetCeReferralStepQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -21583,6 +21655,7 @@ export type GetCeReferralStepQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -22045,9 +22118,7 @@ export type ClientFieldsFragment = {
     canAuditClients: boolean;
     canManageScanCards: boolean;
     canMergeClients: boolean;
-    canViewAnyFiles: boolean;
-    canManageAnyClientFiles: boolean;
-    canManageOwnClientFiles: boolean;
+    canIndexFiles: boolean;
     canUploadClientFiles: boolean;
     canViewReferrals: boolean;
     canViewOwnReferrals: boolean;
@@ -22088,6 +22159,7 @@ export type ClientFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -22144,6 +22216,7 @@ export type ClientFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -22534,9 +22607,7 @@ export type GetClientQuery = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewAnyFiles: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
+      canIndexFiles: boolean;
       canUploadClientFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
@@ -22577,6 +22648,7 @@ export type GetClientQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -22633,6 +22705,7 @@ export type GetClientQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -22775,9 +22848,7 @@ export type GetClientPermissionsQuery = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewAnyFiles: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
+      canIndexFiles: boolean;
       canUploadClientFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
@@ -22982,6 +23053,7 @@ export type GetClientServicesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -23038,6 +23110,7 @@ export type GetClientServicesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -23182,6 +23255,7 @@ export type DeleteClientFileMutation = {
       enrollmentId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      access: { __typename?: 'FileAccess'; canManage: boolean };
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
       uploadedBy?: {
         __typename?: 'ApplicationUser';
@@ -23311,9 +23385,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canAuditClients: boolean;
                 canManageScanCards: boolean;
                 canMergeClients: boolean;
-                canViewAnyFiles: boolean;
-                canManageAnyClientFiles: boolean;
-                canManageOwnClientFiles: boolean;
+                canIndexFiles: boolean;
                 canUploadClientFiles: boolean;
                 canViewReferrals: boolean;
                 canViewOwnReferrals: boolean;
@@ -23387,6 +23459,7 @@ export type GetFileQuery = {
     enrollmentId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    access: { __typename?: 'FileAccess'; canManage: boolean };
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
     uploadedBy?: {
       __typename?: 'ApplicationUser';
@@ -23461,6 +23534,7 @@ export type GetClientFilesQuery = {
             canViewEnrollmentDetails: boolean;
           };
         } | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         uploadedBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -24223,9 +24297,7 @@ export type MergeClientsMutation = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
-        canViewAnyFiles: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
+        canIndexFiles: boolean;
         canUploadClientFiles: boolean;
         canViewReferrals: boolean;
         canViewOwnReferrals: boolean;
@@ -24266,6 +24338,7 @@ export type MergeClientsMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -24322,6 +24395,7 @@ export type MergeClientsMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -25002,6 +25076,7 @@ export type CurrentLivingSituationFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25058,6 +25133,7 @@ export type CurrentLivingSituationFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25175,6 +25251,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25231,6 +25308,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25348,6 +25426,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25404,6 +25483,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25540,6 +25620,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25596,6 +25677,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25700,6 +25782,7 @@ export type CustomCaseNoteFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25756,6 +25839,7 @@ export type CustomCaseNoteFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25864,6 +25948,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25920,6 +26005,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -26078,6 +26164,7 @@ export type GetClientCaseNotesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -26134,6 +26221,7 @@ export type GetClientCaseNotesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -26196,6 +26284,7 @@ export type CustomDataElementValueFieldsFragment = {
     enrollmentId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    access: { __typename?: 'FileAccess'; canManage: boolean };
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
     uploadedBy?: {
       __typename?: 'ApplicationUser';
@@ -26261,6 +26350,7 @@ export type CustomDataElementFieldsFragment = {
       enrollmentId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      access: { __typename?: 'FileAccess'; canManage: boolean };
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
       uploadedBy?: {
         __typename?: 'ApplicationUser';
@@ -26317,6 +26407,7 @@ export type CustomDataElementFieldsFragment = {
       enrollmentId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      access: { __typename?: 'FileAccess'; canManage: boolean };
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
       uploadedBy?: {
         __typename?: 'ApplicationUser';
@@ -27498,6 +27589,7 @@ export type EnrolledClientFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -27554,6 +27646,7 @@ export type EnrolledClientFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -27649,6 +27742,7 @@ export type AllEnrollmentDetailsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -27705,6 +27799,7 @@ export type AllEnrollmentDetailsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -27783,6 +27878,7 @@ export type AllEnrollmentDetailsFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -27839,6 +27935,7 @@ export type AllEnrollmentDetailsFragment = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -28636,6 +28733,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -28692,6 +28790,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -28862,9 +28961,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
           canAuditClients: boolean;
           canManageScanCards: boolean;
           canMergeClients: boolean;
-          canViewAnyFiles: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
+          canIndexFiles: boolean;
           canUploadClientFiles: boolean;
           canViewReferrals: boolean;
           canViewOwnReferrals: boolean;
@@ -29113,6 +29210,7 @@ export type GetEnrollmentDetailsQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -29169,6 +29267,7 @@ export type GetEnrollmentDetailsQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -29247,6 +29346,7 @@ export type GetEnrollmentDetailsQuery = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -29303,6 +29403,7 @@ export type GetEnrollmentDetailsQuery = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -30003,9 +30104,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
+            canIndexFiles: boolean;
             canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
@@ -31636,6 +31735,7 @@ export type FileFieldsFragment = {
   enrollmentId?: string | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  access: { __typename?: 'FileAccess'; canManage: boolean };
   enrollment?: { __typename?: 'Enrollment'; id: string } | null;
   uploadedBy?: {
     __typename?: 'ApplicationUser';
@@ -37669,9 +37769,7 @@ export type SubmitFormMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
+            canIndexFiles: boolean;
             canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
@@ -37712,6 +37810,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -37768,6 +37867,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -37924,6 +38024,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -37980,6 +38081,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38080,6 +38182,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38136,6 +38239,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38226,6 +38330,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38282,6 +38387,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38397,6 +38503,7 @@ export type SubmitFormMutation = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -38471,6 +38578,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38527,6 +38635,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38639,6 +38748,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38695,6 +38805,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38780,6 +38891,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38836,6 +38948,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38957,6 +39070,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -39013,6 +39127,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -39217,6 +39332,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -39273,6 +39389,7 @@ export type SubmitFormMutation = {
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: { __typename?: 'FileAccess'; canManage: boolean };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -41025,9 +41142,7 @@ export type HouseholdFieldsFragment = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
-        canViewAnyFiles: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
+        canIndexFiles: boolean;
         canUploadClientFiles: boolean;
         canViewReferrals: boolean;
         canViewOwnReferrals: boolean;
@@ -41108,9 +41223,7 @@ export type HouseholdClientFieldsFragment = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewAnyFiles: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
+      canIndexFiles: boolean;
       canUploadClientFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
@@ -41288,9 +41401,7 @@ export type JoinHouseholdMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
+            canIndexFiles: boolean;
             canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
@@ -41379,9 +41490,7 @@ export type JoinHouseholdMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
+            canIndexFiles: boolean;
             canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
@@ -41483,9 +41592,7 @@ export type SplitHouseholdMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
+            canIndexFiles: boolean;
             canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
@@ -41574,9 +41681,7 @@ export type SplitHouseholdMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
+            canIndexFiles: boolean;
             canUploadClientFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
@@ -41674,9 +41779,7 @@ export type GetHouseholdQuery = {
           canAuditClients: boolean;
           canManageScanCards: boolean;
           canMergeClients: boolean;
-          canViewAnyFiles: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
+          canIndexFiles: boolean;
           canUploadClientFiles: boolean;
           canViewReferrals: boolean;
           canViewOwnReferrals: boolean;
@@ -41832,6 +41935,7 @@ export type InventoryFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -41888,6 +41992,7 @@ export type InventoryFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42165,6 +42270,7 @@ export type OrganizationDetailFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42221,6 +42327,7 @@ export type OrganizationDetailFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42307,6 +42414,7 @@ export type OrganizationFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42363,6 +42471,7 @@ export type OrganizationFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42482,6 +42591,7 @@ export type GetOrganizationQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -42538,6 +42648,7 @@ export type GetOrganizationQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -42737,6 +42848,7 @@ export type ProjectAllFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42793,6 +42905,7 @@ export type ProjectAllFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -43523,6 +43636,7 @@ export type FunderFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -43579,6 +43693,7 @@ export type FunderFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -43819,6 +43934,7 @@ export type GetProjectQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -43875,6 +43991,7 @@ export type GetProjectQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44324,6 +44441,7 @@ export type GetProjectAssessmentsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -44380,6 +44498,7 @@ export type GetProjectAssessmentsQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -44524,6 +44643,7 @@ export type GetFunderQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44580,6 +44700,7 @@ export type GetFunderQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44683,6 +44804,7 @@ export type GetInventoryQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44739,6 +44861,7 @@ export type GetInventoryQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44883,6 +45006,7 @@ export type GetProjectInventoriesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -44939,6 +45063,7 @@ export type GetProjectInventoriesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -45188,6 +45313,7 @@ export type GetProjectFundersQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -45244,6 +45370,7 @@ export type GetProjectFundersQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -45800,6 +45927,7 @@ export type UpdateReferralPostingMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -45856,6 +45984,7 @@ export type UpdateReferralPostingMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -46040,6 +46169,7 @@ export type GetReferralPostingQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -46096,6 +46226,7 @@ export type GetReferralPostingQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -46319,6 +46450,7 @@ export type ReferralPostingDetailFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -46375,6 +46507,7 @@ export type ReferralPostingDetailFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -46492,6 +46625,7 @@ export type EsgFundingServiceFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -46548,6 +46682,7 @@ export type EsgFundingServiceFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -46643,6 +46778,7 @@ export type GetEsgFundingReportQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -46699,6 +46835,7 @@ export type GetEsgFundingReportQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -47056,6 +47193,7 @@ export type ServiceDetailFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47112,6 +47250,7 @@ export type ServiceDetailFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47218,6 +47357,7 @@ export type ServiceFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47274,6 +47414,7 @@ export type ServiceFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47380,6 +47521,7 @@ export type ClientServiceFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47436,6 +47578,7 @@ export type ClientServiceFieldsFragment = {
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: { __typename?: 'FileAccess'; canManage: boolean };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47561,6 +47704,7 @@ export type GetServiceQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -47617,6 +47761,7 @@ export type GetServiceQuery = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: { __typename?: 'FileAccess'; canManage: boolean };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -47757,6 +47902,7 @@ export type DeleteServiceMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -47813,6 +47959,7 @@ export type DeleteServiceMutation = {
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: { __typename?: 'FileAccess'; canManage: boolean };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -47952,6 +48099,7 @@ export type GetEnrollmentServicesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -48008,6 +48156,7 @@ export type GetEnrollmentServicesQuery = {
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: { __typename?: 'FileAccess'; canManage: boolean };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -49911,6 +50060,9 @@ export const FileFieldsFragmentDoc = gql`
     url
     tags
     ownFile
+    access {
+      canManage
+    }
     redacted
     enrollmentId
     enrollment {
@@ -51123,9 +51275,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canAuditClients
     canManageScanCards
     canMergeClients
-    canViewAnyFiles
-    canManageAnyClientFiles
-    canManageOwnClientFiles
+    canIndexFiles
     canUploadClientFiles
     canViewReferrals
     canViewOwnReferrals
