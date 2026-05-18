@@ -40,8 +40,6 @@ const useWorkspaceSelector = (appliesTo: WorkspaceAppliesTo) => {
     workspaces,
     // The workspace select component (if workspaces exist)
     selector,
-    // Whether any workspaces are configured for this usage (WorkspaceAppliesTo)
-    hasWorkspaces: workspaces.length > 0,
     // The project group id of the selected workspace
     selectedProjectGroupId: selectedWorkspace?.projectGroupId,
     loading,

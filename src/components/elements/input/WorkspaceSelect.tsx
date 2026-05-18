@@ -10,6 +10,23 @@ const ALL_WORKSPACES_OPTION: PickListOption = {
   label: 'All Projects',
 };
 
+// Circular input adornment to use as `startAdornment` in the Select input component.
+// This is to bring visual attention to the workspace selector on the page, and does not have any functional purpose.
+// Move to a shared component/variant (e.g. CircularAdornedInput) if needed elsewhere.
+const CircularInputAdornment: React.FC = () => (
+  <InputAdornment position='start' aria-hidden='true' sx={{ ml: 1, mr: 0 }}>
+    <Box
+      component='span'
+      sx={{
+        width: 12,
+        height: 12,
+        borderRadius: '50%',
+        bgcolor: 'primary.main',
+      }}
+    />
+  </InputAdornment>
+);
+
 interface Props {
   selectedWorkspace?: WorkspaceFieldsFragment;
   workspaces: WorkspaceFieldsFragment[];
@@ -46,31 +63,19 @@ const WorkspaceSelect: React.FC<Props> = ({
       isOptionEqualToValue={(option, value) => option.code === value.code}
       blurOnSelect
       disableClearable
-      onChange={(_event, value) => onChange(value?.code || null)}
+      onChange={(_event, value) =>
+        onChange(
+          value?.code === ALL_WORKSPACES_OPTION.code
+            ? null
+            : value?.code || null
+        )
+      }
       sx={{
         minWidth: 240,
         '& .MuiInputBase-input': { fontWeight: 600, color: 'primary.dark' },
       }}
       textInputProps={{
-        InputProps: {
-          startAdornment: (
-            <InputAdornment
-              position='start'
-              aria-hidden='true'
-              sx={{ ml: 1, mr: 0 }}
-            >
-              <Box
-                component='span'
-                sx={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: '50%',
-                  bgcolor: 'primary.main',
-                }}
-              />
-            </InputAdornment>
-          ),
-        },
+        InputProps: { startAdornment: <CircularInputAdornment /> },
       }}
     />
   );

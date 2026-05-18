@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
@@ -19,15 +19,20 @@ interface Props {
   currentTab: CeTabKey;
 }
 
+const TAB_ROUTES: Record<CeTabKey, string> = {
+  referrals: Routes.REFERRALS,
+  'available-units': ReferralRoutes.AVAILABLE_UNITS,
+  'eligible-clients': ReferralRoutes.ELIGIBLE_CLIENTS,
+};
+
 const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
   const [access] = useRootPermissions();
   const navigate = useNavigate();
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
 
   // Load workspace selector (if configured) for selecting project group
   const {
     selector: workspaceSelector,
-    hasWorkspaces,
     selectedProjectGroupId,
     loading: workspaceLoading,
     error: workspaceError,
@@ -78,41 +83,29 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
   }, [showUnitsAndEligibleClients, selectedProjectGroupId]);
 
   const handleChangeTab = (key: string) => {
-    const workspace = new URLSearchParams(location.search).get('workspace');
-    const search = workspace
-      ? `?workspace=${encodeURIComponent(workspace)}`
+    const pathname = TAB_ROUTES[key as CeTabKey];
+    if (!pathname) return;
+
+    const workspaceParam = searchParams.get('workspace');
+    const search = workspaceParam
+      ? new URLSearchParams({ workspace: workspaceParam }).toString()
       : '';
-    switch (key) {
-      case 'referrals':
-        navigate(`${Routes.REFERRALS}${search}`);
-        break;
-      case 'available-units':
-        navigate(`${ReferralRoutes.AVAILABLE_UNITS}${search}`);
-        break;
-      case 'eligible-clients':
-        navigate(`${ReferralRoutes.ELIGIBLE_CLIENTS}${search}`);
-        break;
-    }
+
+    navigate({ pathname, search });
   };
 
   if (workspaceError) throw workspaceError;
+  if (workspaceLoading) return <Loading />;
 
   return (
-    <PageContainer
-      title='Referrals'
-      actions={hasWorkspaces ? workspaceSelector : undefined}
-    >
-      {workspaceLoading ? (
-        <Loading />
-      ) : (
-        <CommonTabs
-          tabDefinitions={tabDefinitions}
-          ariaLabel='Referrals'
-          collapseSingleTab // non-admins only see Referrals, with no tabs
-          currentTab={currentTab}
-          onChangeTab={handleChangeTab}
-        />
-      )}
+    <PageContainer title='Referrals' actions={workspaceSelector}>
+      <CommonTabs
+        tabDefinitions={tabDefinitions}
+        ariaLabel='Referrals'
+        collapseSingleTab
+        currentTab={currentTab}
+        onChangeTab={handleChangeTab}
+      />
     </PageContainer>
   );
 };
