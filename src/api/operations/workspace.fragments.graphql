@@ -1,0 +1,6 @@
+fragment WorkspaceFields on Workspace {
+  id
+  slug
+  name
+  projectGroupId
+}

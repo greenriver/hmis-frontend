@@ -54,13 +54,16 @@ const COLUMNS: DataColumnDef<
   },
 ];
 
-interface Props {}
-const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
+interface Props {
+  projectGroupId?: string;
+}
+const AdminOpportunitiesTable: React.FC<Props> = ({ projectGroupId }) => {
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeOpportunityFilterOptions',
     omit: [
       'status', // omitted because only 'open' opportunities are queried
       'availableOnDate', // omitted because filter is not implemented on the backend #7537
+      'projectGroupId', // only exposed via Workspaces
     ],
   });
 
@@ -75,6 +78,7 @@ const AdminOpportunitiesTable: React.FC<Props> = ({}) => {
         queryVariables={{
           filters: {
             status: [CeOpportunityStatus.Open],
+            projectGroupId,
           },
         }}
         defaultSortOption={CeOpportunitySortOption.DateAvailableEarliestFirst}

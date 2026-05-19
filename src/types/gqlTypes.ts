@@ -662,6 +662,8 @@ export type CeClientEligibleUnitGroupsArgs = {
 
 export type CeClientFilterOptions = {
   dynamicFilters?: InputMaybe<Array<TableFilterValue>>;
+  /** Filter to Clients that are eligible for projects in the specified Project Group */
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
   /** Filter to Clients that are eligible for the specified Project Types */
   projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
@@ -837,6 +839,7 @@ export type CeOpportunityFilterOptions = {
   availableOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<CeOpportunityStatus>>;
   workflowTemplate?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -1006,6 +1009,8 @@ export type CeReferralFilterOptions = {
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   origin?: InputMaybe<Array<CeReferralOrigin>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Filter to referrals where the target project belongs to the specified project group */
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<Array<ProjectType>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
@@ -1542,6 +1547,8 @@ export type ClientCeReferralFilterOptions = {
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   origin?: InputMaybe<Array<CeReferralOrigin>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Filter to referrals where the target project belongs to the specified project group */
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<Array<ProjectType>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
 };
@@ -1595,6 +1602,7 @@ export enum ClientDashboardFeature {
 export type ClientEligibleCeOpportunityFilterOptions = {
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<Array<ProjectType>>;
 };
 
@@ -6776,6 +6784,7 @@ export type Query = {
   /** User lookup */
   user?: Maybe<ApplicationUser>;
   userDashboard: UserDashboard;
+  workspaces: Array<Workspace>;
 };
 
 export type QueryApplicationUsersArgs = {
@@ -7017,6 +7026,10 @@ export type QueryUnitGroupArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryWorkspacesArgs = {
+  appliesTo: WorkspaceAppliesTo;
 };
 
 export type QueryAccess = {
@@ -9058,6 +9071,19 @@ export enum WorkerResponse {
   WorkerDoesNotKnow = 'WORKER_DOES_NOT_KNOW',
   /** (1) Yes */
   Yes = 'YES',
+}
+
+export type Workspace = {
+  __typename?: 'Workspace';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  projectGroupId: Scalars['ID']['output'];
+  slug: Scalars['String']['output'];
+};
+
+export enum WorkspaceAppliesTo {
+  /** CE referrals workspace switcher */
+  CeReferrals = 'CE_REFERRALS',
 }
 
 /** HUD Youth Education Status */
@@ -49724,6 +49750,29 @@ export type GetUserStaffAssignmentsQuery = {
   };
 };
 
+export type WorkspaceFieldsFragment = {
+  __typename?: 'Workspace';
+  id: string;
+  slug: string;
+  name: string;
+  projectGroupId: string;
+};
+
+export type GetWorkspacesQueryVariables = Exact<{
+  appliesTo: WorkspaceAppliesTo;
+}>;
+
+export type GetWorkspacesQuery = {
+  __typename?: 'Query';
+  workspaces: Array<{
+    __typename?: 'Workspace';
+    id: string;
+    slug: string;
+    name: string;
+    projectGroupId: string;
+  }>;
+};
+
 export const RootPermissionsFragmentDoc = gql`
   fragment RootPermissions on QueryAccess {
     id
@@ -52734,6 +52783,14 @@ export const UserDashboardConfigFieldsFragmentDoc = gql`
     id
     showStaffAssignment
     showReferrals
+  }
+`;
+export const WorkspaceFieldsFragmentDoc = gql`
+  fragment WorkspaceFields on Workspace {
+    id
+    slug
+    name
+    projectGroupId
   }
 `;
 export const GetRootPermissionsDocument = gql`
@@ -71814,4 +71871,108 @@ export type GetUserStaffAssignmentsSuspenseQueryHookResult = ReturnType<
 export type GetUserStaffAssignmentsQueryResult = Apollo.QueryResult<
   GetUserStaffAssignmentsQuery,
   GetUserStaffAssignmentsQueryVariables
+>;
+export const GetWorkspacesDocument = gql`
+  query GetWorkspaces($appliesTo: WorkspaceAppliesTo!) {
+    workspaces(appliesTo: $appliesTo) {
+      ...WorkspaceFields
+    }
+  }
+  ${WorkspaceFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetWorkspacesQuery__
+ *
+ * To run a query within a React component, call `useGetWorkspacesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkspacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkspacesQuery({
+ *   variables: {
+ *      appliesTo: // value for 'appliesTo'
+ *   },
+ * });
+ */
+export function useGetWorkspacesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetWorkspacesQuery,
+    GetWorkspacesQueryVariables
+  > &
+    (
+      | { variables: GetWorkspacesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetWorkspacesQuery, GetWorkspacesQueryVariables>(
+    GetWorkspacesDocument,
+    options
+  );
+}
+export function useGetWorkspacesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkspacesQuery,
+    GetWorkspacesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetWorkspacesQuery, GetWorkspacesQueryVariables>(
+    GetWorkspacesDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetWorkspacesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetWorkspacesQuery,
+    GetWorkspacesQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetWorkspacesQuery,
+  GetWorkspacesQueryVariables
+>;
+export function useGetWorkspacesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetWorkspacesQuery,
+        GetWorkspacesQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetWorkspacesQuery | undefined,
+  GetWorkspacesQueryVariables
+>;
+export function useGetWorkspacesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetWorkspacesQuery,
+        GetWorkspacesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetWorkspacesQuery,
+    GetWorkspacesQueryVariables
+  >(GetWorkspacesDocument, options);
+}
+export type GetWorkspacesQueryHookResult = ReturnType<
+  typeof useGetWorkspacesQuery
+>;
+export type GetWorkspacesLazyQueryHookResult = ReturnType<
+  typeof useGetWorkspacesLazyQuery
+>;
+export type GetWorkspacesSuspenseQueryHookResult = ReturnType<
+  typeof useGetWorkspacesSuspenseQuery
+>;
+export type GetWorkspacesQueryResult = Apollo.QueryResult<
+  GetWorkspacesQuery,
+  GetWorkspacesQueryVariables
 >;
