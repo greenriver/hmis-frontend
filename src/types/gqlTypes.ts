@@ -1005,6 +1005,7 @@ export type CeReferralAuditEventsPaginated = {
 };
 
 export type CeReferralFilterOptions = {
+  assignedToYou?: InputMaybe<Scalars['Boolean']['input']>;
   onCurrentTaskSince?: InputMaybe<Scalars['ISO8601Date']['input']>;
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   origin?: InputMaybe<Array<CeReferralOrigin>>;
