@@ -9,7 +9,6 @@ import AssessmentAutofillButton from '@/modules/assessments/components/Assessmen
 import { isHeadOfMultiMemberHousehold } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  AssessmentRole,
   EnrollmentFieldsFragment,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
@@ -44,27 +43,7 @@ const AssessmentFormActions: React.FC<Props> = ({
     [enrollment, navigate]
   );
 
-  const showDeleteAssessmentButton = useMemo(() => {
-    if (!assessment) return false;
-
-    const { canDeleteAssessments, canEditEnrollments, canDeleteEnrollments } =
-      assessment.access;
-
-    // canEditEnrollments is required for deleting WIP or Submitted assessments
-    if (!canEditEnrollments) return false;
-
-    const isSubmitted = !assessment.inProgress;
-    const deletesEnrollment = assessment.role === AssessmentRole.Intake;
-    if (isSubmitted) {
-      // canDeleteAssessments is required for deleting submitted assessments
-      if (!canDeleteAssessments) return false;
-
-      // canDeleteEnrollments is required for deleting submitted INTAKE assessments
-      if (!canDeleteEnrollments && deletesEnrollment) return false;
-    }
-
-    return true;
-  }, [assessment]);
+  const showDeleteAssessmentButton = assessment?.access.canDeleteAssessments;
 
   const showPrintViewButton = !isPrintView && locked && assessment;
 

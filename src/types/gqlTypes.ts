@@ -293,8 +293,11 @@ export type Assessment = {
 
 export type AssessmentAccess = {
   __typename?: 'AssessmentAccess';
+  /** Whether the user can delete this assessment */
   canDeleteAssessments: Scalars['Boolean']['output'];
+  /** @deprecated Use assessment.access.canDeleteAssessments for delete checks */
   canDeleteEnrollments: Scalars['Boolean']['output'];
+  /** @deprecated Use enrollment.access.canEditEnrollments for enrollment edit checks */
   canEditEnrollments: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
@@ -9166,8 +9169,6 @@ export type AssessmentAccessFieldsFragment = {
   __typename?: 'AssessmentAccess';
   id: string;
   canDeleteAssessments: boolean;
-  canDeleteEnrollments: boolean;
-  canEditEnrollments: boolean;
 };
 
 export type ProjectAccessFieldsFragment = {
@@ -10297,8 +10298,6 @@ export type AssessmentWithRecordsFragment = {
     __typename?: 'AssessmentAccess';
     id: string;
     canDeleteAssessments: boolean;
-    canDeleteEnrollments: boolean;
-    canEditEnrollments: boolean;
   };
   geolocation?: {
     __typename?: 'Geolocation';
@@ -11165,8 +11164,6 @@ export type FullAssessmentFragment = {
     __typename?: 'AssessmentAccess';
     id: string;
     canDeleteAssessments: boolean;
-    canDeleteEnrollments: boolean;
-    canEditEnrollments: boolean;
   };
   geolocation?: {
     __typename?: 'Geolocation';
@@ -13201,8 +13198,6 @@ export type GetAssessmentQuery = {
       __typename?: 'AssessmentAccess';
       id: string;
       canDeleteAssessments: boolean;
-      canDeleteEnrollments: boolean;
-      canEditEnrollments: boolean;
     };
     geolocation?: {
       __typename?: 'Geolocation';
@@ -14694,8 +14689,6 @@ export type SubmitAssessmentMutation = {
         __typename?: 'AssessmentAccess';
         id: string;
         canDeleteAssessments: boolean;
-        canDeleteEnrollments: boolean;
-        canEditEnrollments: boolean;
       };
       geolocation?: {
         __typename?: 'Geolocation';
@@ -15549,8 +15542,6 @@ export type SubmitHouseholdAssessmentsMutation = {
         __typename?: 'AssessmentAccess';
         id: string;
         canDeleteAssessments: boolean;
-        canDeleteEnrollments: boolean;
-        canEditEnrollments: boolean;
       };
       geolocation?: {
         __typename?: 'Geolocation';
@@ -16421,8 +16412,6 @@ export type GetAssessmentsForPopulationQuery = {
           __typename?: 'AssessmentAccess';
           id: string;
           canDeleteAssessments: boolean;
-          canDeleteEnrollments: boolean;
-          canEditEnrollments: boolean;
         };
         geolocation?: {
           __typename?: 'Geolocation';
@@ -50254,8 +50243,6 @@ export const AssessmentAccessFieldsFragmentDoc = gql`
   fragment AssessmentAccessFields on AssessmentAccess {
     id
     canDeleteAssessments
-    canDeleteEnrollments
-    canEditEnrollments
   }
 `;
 export const GeolocationFieldsFragmentDoc = gql`
