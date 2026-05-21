@@ -1,0 +1,5 @@
+query GetWorkspaces($appliesTo: WorkspaceAppliesTo!) {
+  workspaces(appliesTo: $appliesTo) {
+    ...WorkspaceFields
+  }
+}
