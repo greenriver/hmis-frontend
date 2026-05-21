@@ -75,7 +75,7 @@ fragment EnrollmentAccessFields on EnrollmentAccess {
 
 fragment AssessmentAccessFields on AssessmentAccess {
   id
-  canDeleteAssessments
+  canDelete
 }
 
 fragment ProjectAccessFields on ProjectAccess {
