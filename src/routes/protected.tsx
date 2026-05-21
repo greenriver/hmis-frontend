@@ -1,8 +1,9 @@
-import { ReactNode, Suspense } from 'react';
+import { createElement, ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
   AdminDashboardRoutes,
+  ReferralRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -25,6 +26,7 @@ import {
 } from '@/components/layout/nav/useMobileMenuContext';
 
 import NotFound from '@/components/pages/NotFound';
+import useSafeParams from '@/hooks/useSafeParams';
 import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
@@ -52,17 +54,17 @@ import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import ClientCaseNotesPrintPage from '@/modules/caseNotes/components/ClientCaseNotesPrintPage';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
-import AdminAvailableUnitsPage from '@/modules/ce/components/admin/AdminAvailableUnitsPage';
-import AdminEligibleClientsPage from '@/modules/ce/components/admin/AdminEligibleClientsPage';
-import AdminReferralsPage from '@/modules/ce/components/admin/AdminReferralsPage';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import AdminDefaultContactsPage from '@/modules/ce/components/defaultContacts/AdminDefaultContactsPage';
 
 import SendReferralPage from '@/modules/ce/components/directReferral/SendReferralPage';
 import ProjectReferralsPage from '@/modules/ce/components/project/ProjectReferralsPage';
+import ProjectReferralPage from '@/modules/ce/components/referral/ProjectReferralPage';
+import ReferralDashboard from '@/modules/ce/components/referral/ReferralDashboard';
 import ReferralPage from '@/modules/ce/components/referral/ReferralPage';
 import ReferralStep from '@/modules/ce/components/referral/ReferralStep';
 import ReferralSteps from '@/modules/ce/components/referral/ReferralSteps';
+import ReferralsPage from '@/modules/ce/components/ReferralsPage';
 import ClientDashboard from '@/modules/client/components/pages/ClientDashboard';
 import ClientProfilePage from '@/modules/client/components/pages/ClientProfilePage';
 import CreateClientPage from '@/modules/client/components/pages/CreateClientPage';
@@ -125,6 +127,7 @@ import UnitPage from '@/modules/units/components/UnitPage';
 import Units from '@/modules/units/components/Units';
 import UserDashboardPage from '@/modules/userDashboard/components/UserDashboardPage';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const App = () => {
   // Setup mobile menu context - open/closed state and handlers
@@ -176,19 +179,54 @@ export const protectedRoutes: RouteNode[] = [
         element: <Navigate to='/dashboard' replace />,
       },
       {
-        // "Floating" referrals for users who have permission to view referrals in projects where they don't have access to the project dashboard.
-        path: Routes.REFERRAL,
+        path: Routes.REFERRALS,
         element: (
-          // Doesn't need a permission filter wrapper; internally it will just return NotFound if the client doesn't have access to view the referral.
-          <ReferralPage />
+          <RootPermissionsFilter
+            permissions='canIndexReferrals'
+            otherwise={<NotFound />}
+          >
+            <ReferralsPage currentTab='referrals' />
+          </RootPermissionsFilter>
         ),
+      },
+      {
+        path: ReferralRoutes.AVAILABLE_UNITS,
+        element: (
+          <RootPermissionsFilter
+            permissions='canAdministrateCoordinatedEntry'
+            otherwise={<NotFound />}
+          >
+            <ReferralsPage currentTab='available-units' />
+          </RootPermissionsFilter>
+        ),
+      },
+      {
+        path: ReferralRoutes.ELIGIBLE_CLIENTS,
+        element: (
+          <RootPermissionsFilter
+            permissions='canAdministrateCoordinatedEntry'
+            otherwise={<NotFound />}
+          >
+            <ReferralsPage currentTab='eligible-clients' />
+          </RootPermissionsFilter>
+        ),
+      },
+      {
+        path: ReferralRoutes.REFERRAL,
+        element: <ReferralDashboard />,
         children: [
           {
-            path: Routes.REFERRAL_STEP,
-            element: <ReferralStep />,
+            path: '',
+            element: <ReferralPage />,
+            children: [
+              {
+                path: 'tasks/:stepId',
+                element: <ReferralStep />,
+              },
+              { path: '', element: <ReferralSteps /> },
+              { path: '*', element: <Navigate to='' replace /> },
+            ],
           },
-          { path: '', element: <ReferralSteps /> },
-          { path: '*', element: <Navigate to='' replace /> },
         ],
       },
       {
@@ -481,7 +519,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            // ReferralPage can be rendered in the Target project context,
+            // ProjectReferralPage can be rendered in the Target project context,
             // or in the Source project context (for direct referrals)
             path: ProjectDashboardRoutes.REFERRAL,
             element: (
@@ -501,7 +539,7 @@ export const protectedRoutes: RouteNode[] = [
                   'sendsDirectReferrals',
                 ]}
               >
-                <ReferralPage />
+                <ProjectReferralPage />
               </ProjectRoute>
             ),
             children: [
@@ -877,7 +915,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateCoordinatedEntry'
                 otherwise={<NotFound />}
               >
-                <AdminAvailableUnitsPage />
+                <Navigate to={ReferralRoutes.AVAILABLE_UNITS} replace />
               </RootPermissionsFilter>
             ),
           },
@@ -892,35 +930,46 @@ export const protectedRoutes: RouteNode[] = [
               </RootPermissionsFilter>
             ),
           },
+          // These redirects use `useSafeParams`, so they must run inside a component.
+          // `createElement(() => { ... })` defines that component inline next to the route,
+          // which avoids splitting this (hopefully short-lived) code to another module.
           {
-            path: AdminDashboardRoutes.REFERRALS,
-            element: (
-              <RootPermissionsFilter
-                permissions='canAdministrateCoordinatedEntry'
-                otherwise={<NotFound />}
-              >
-                <AdminReferralsPage />
-              </RootPermissionsFilter>
-            ),
+            path: AdminDashboardRoutes.REFERRAL_STEP,
+            element: createElement(() => {
+              const { referralId, stepId } = useSafeParams() as {
+                referralId: string;
+                stepId: string;
+              };
+              return (
+                <Navigate
+                  to={generateSafePath(ReferralRoutes.REFERRAL_STEP, {
+                    referralId,
+                    stepId,
+                  })}
+                  replace
+                />
+              );
+            }),
           },
           {
             path: AdminDashboardRoutes.REFERRAL,
-            element: (
-              <RootPermissionsFilter
-                permissions='canAdministrateCoordinatedEntry'
-                otherwise={<NotFound />}
-              >
-                <ReferralPage />
-              </RootPermissionsFilter>
-            ),
-            children: [
-              {
-                path: AdminDashboardRoutes.REFERRAL_STEP,
-                element: <ReferralStep />,
-              },
-              { path: '', element: <ReferralSteps /> },
-              { path: '*', element: <Navigate to='' replace /> },
-            ],
+            element: createElement(() => {
+              const { referralId } = useSafeParams() as {
+                referralId: string;
+              };
+              return (
+                <Navigate
+                  to={generateSafePath(ReferralRoutes.REFERRAL, {
+                    referralId,
+                  })}
+                  replace
+                />
+              );
+            }),
+          },
+          {
+            path: AdminDashboardRoutes.REFERRALS,
+            element: <Navigate to={Routes.REFERRALS} replace />,
           },
           {
             path: AdminDashboardRoutes.ELIGIBLE_CLIENTS,
@@ -929,7 +978,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateCoordinatedEntry'
                 otherwise={<NotFound />}
               >
-                <AdminEligibleClientsPage />
+                <Navigate to={ReferralRoutes.ELIGIBLE_CLIENTS} replace />
               </RootPermissionsFilter>
             ),
           },

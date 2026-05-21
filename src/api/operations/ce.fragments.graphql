@@ -75,7 +75,7 @@ fragment CeReferralSummaryFields on CeReferral {
   origin
 }
 
-fragment CeReferralTableFields on CeReferral {
+fragment CeReferralBaseTableFields on CeReferral {
   ...CeReferralSummaryFields
   createdAt
   opportunity {
@@ -138,8 +138,8 @@ fragment CeReferralWithProjectAccessFields on CeReferral {
   ...CeReferralWithProjectFields
 }
 
-fragment CeReferralAdminFields on CeReferral {
-  ...CeReferralTableFields
+fragment CeReferralTableFields on CeReferral {
+  ...CeReferralBaseTableFields
   ...CeReferralWithProjectFields
   targetEnrollment {
     id
@@ -165,8 +165,8 @@ fragment CeReferralAdminFields on CeReferral {
   }
 }
 
-fragment ClientCeReferralTableFields on CeReferral {
-  ...CeReferralTableFields
+fragment CeReferralClientTableFields on CeReferral {
+  ...CeReferralBaseTableFields
   ...CeReferralWithProjectAccessFields
 }
 

@@ -7041,6 +7041,7 @@ export type QueryAccess = {
   canEditUsersInWarehouse: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
   canImpersonateUsers: Scalars['Boolean']['output'];
+  canIndexReferrals: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
@@ -9097,6 +9098,7 @@ export type RootPermissionsFragment = {
   canViewClientAlerts: boolean;
   canEditOrganization: boolean;
   canEditProjectDetails: boolean;
+  canIndexReferrals: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -9196,6 +9198,7 @@ export type GetRootPermissionsQuery = {
     canViewClientAlerts: boolean;
     canEditOrganization: boolean;
     canEditProjectDetails: boolean;
+    canIndexReferrals: boolean;
   };
 };
 
@@ -17372,7 +17375,7 @@ export type CeReferralSummaryFieldsFragment = {
   } | null;
 };
 
-export type CeReferralTableFieldsFragment = {
+export type CeReferralBaseTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
   daysOnCurrentSteps?: number | null;
@@ -17465,7 +17468,7 @@ export type CeReferralWithProjectAccessFieldsFragment = {
   targetProjectType: ProjectType;
 };
 
-export type CeReferralAdminFieldsFragment = {
+export type CeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
   targetOrganizationName: string;
   createdAt: string;
@@ -17529,7 +17532,7 @@ export type CeReferralAdminFieldsFragment = {
   } | null;
 };
 
-export type ClientCeReferralTableFieldsFragment = {
+export type CeReferralClientTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
   daysOnCurrentSteps?: number | null;
@@ -21778,14 +21781,14 @@ export type GetAdminCeOpportunitiesQuery = {
   };
 };
 
-export type GetAdminCeReferralsQueryVariables = Exact<{
+export type GetCeReferralsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   filters?: InputMaybe<CeReferralFilterOptions>;
   includeUnit?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
-export type GetAdminCeReferralsQuery = {
+export type GetCeReferralsQuery = {
   __typename?: 'Query';
   ceReferrals: {
     __typename?: 'CeReferralsPaginated';
@@ -49741,6 +49744,7 @@ export const RootPermissionsFragmentDoc = gql`
     canViewClientAlerts
     canEditOrganization
     canEditProjectDetails
+    canIndexReferrals
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`
@@ -50531,8 +50535,8 @@ export const CeReferralSummaryFieldsFragmentDoc = gql`
     origin
   }
 `;
-export const CeReferralTableFieldsFragmentDoc = gql`
-  fragment CeReferralTableFields on CeReferral {
+export const CeReferralBaseTableFieldsFragmentDoc = gql`
+  fragment CeReferralBaseTableFields on CeReferral {
     ...CeReferralSummaryFields
     createdAt
     opportunity {
@@ -50574,9 +50578,9 @@ export const UnitTypeFieldsFragmentDoc = gql`
     dateCreated
   }
 `;
-export const CeReferralAdminFieldsFragmentDoc = gql`
-  fragment CeReferralAdminFields on CeReferral {
-    ...CeReferralTableFields
+export const CeReferralTableFieldsFragmentDoc = gql`
+  fragment CeReferralTableFields on CeReferral {
+    ...CeReferralBaseTableFields
     ...CeReferralWithProjectFields
     targetEnrollment {
       id
@@ -50601,7 +50605,7 @@ export const CeReferralAdminFieldsFragmentDoc = gql`
       }
     }
   }
-  ${CeReferralTableFieldsFragmentDoc}
+  ${CeReferralBaseTableFieldsFragmentDoc}
   ${CeReferralWithProjectFieldsFragmentDoc}
   ${UnitTypeFieldsFragmentDoc}
 `;
@@ -50612,12 +50616,12 @@ export const CeReferralWithProjectAccessFieldsFragmentDoc = gql`
   }
   ${CeReferralWithProjectFieldsFragmentDoc}
 `;
-export const ClientCeReferralTableFieldsFragmentDoc = gql`
-  fragment ClientCeReferralTableFields on CeReferral {
-    ...CeReferralTableFields
+export const CeReferralClientTableFieldsFragmentDoc = gql`
+  fragment CeReferralClientTableFields on CeReferral {
+    ...CeReferralBaseTableFields
     ...CeReferralWithProjectAccessFields
   }
-  ${CeReferralTableFieldsFragmentDoc}
+  ${CeReferralBaseTableFieldsFragmentDoc}
   ${CeReferralWithProjectAccessFieldsFragmentDoc}
 `;
 export const CeReferralSwimlaneFieldsFragmentDoc = gql`
@@ -55583,12 +55587,12 @@ export const GetProjectCeReferralsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...CeReferralTableFields
+          ...CeReferralBaseTableFields
         }
       }
     }
   }
-  ${CeReferralTableFieldsFragmentDoc}
+  ${CeReferralBaseTableFieldsFragmentDoc}
 `;
 
 /**
@@ -56160,12 +56164,12 @@ export const GetClientCeReferralsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...ClientCeReferralTableFields
+          ...CeReferralClientTableFields
         }
       }
     }
   }
-  ${ClientCeReferralTableFieldsFragmentDoc}
+  ${CeReferralClientTableFieldsFragmentDoc}
 `;
 
 /**
@@ -56511,8 +56515,8 @@ export type GetAdminCeOpportunitiesQueryResult = Apollo.QueryResult<
   GetAdminCeOpportunitiesQuery,
   GetAdminCeOpportunitiesQueryVariables
 >;
-export const GetAdminCeReferralsDocument = gql`
-  query GetAdminCeReferrals(
+export const GetCeReferralsDocument = gql`
+  query GetCeReferrals(
     $limit: Int = 3
     $offset: Int = 0
     $filters: CeReferralFilterOptions = null
@@ -56523,24 +56527,24 @@ export const GetAdminCeReferralsDocument = gql`
       limit
       nodesCount
       nodes {
-        ...CeReferralAdminFields
+        ...CeReferralTableFields
       }
     }
   }
-  ${CeReferralAdminFieldsFragmentDoc}
+  ${CeReferralTableFieldsFragmentDoc}
 `;
 
 /**
- * __useGetAdminCeReferralsQuery__
+ * __useGetCeReferralsQuery__
  *
- * To run a query within a React component, call `useGetAdminCeReferralsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAdminCeReferralsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCeReferralsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeReferralsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAdminCeReferralsQuery({
+ * const { data, loading, error } = useGetCeReferralsQuery({
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
@@ -56549,57 +56553,57 @@ export const GetAdminCeReferralsDocument = gql`
  *   },
  * });
  */
-export function useGetAdminCeReferralsQuery(
+export function useGetCeReferralsQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetAdminCeReferralsQuery,
-    GetAdminCeReferralsQueryVariables
+    GetCeReferralsQuery,
+    GetCeReferralsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetAdminCeReferralsQuery,
-    GetAdminCeReferralsQueryVariables
-  >(GetAdminCeReferralsDocument, options);
+  return Apollo.useQuery<GetCeReferralsQuery, GetCeReferralsQueryVariables>(
+    GetCeReferralsDocument,
+    options
+  );
 }
-export function useGetAdminCeReferralsLazyQuery(
+export function useGetCeReferralsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAdminCeReferralsQuery,
-    GetAdminCeReferralsQueryVariables
+    GetCeReferralsQuery,
+    GetCeReferralsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetAdminCeReferralsQuery,
-    GetAdminCeReferralsQueryVariables
-  >(GetAdminCeReferralsDocument, options);
+  return Apollo.useLazyQuery<GetCeReferralsQuery, GetCeReferralsQueryVariables>(
+    GetCeReferralsDocument,
+    options
+  );
 }
 // @ts-ignore
-export function useGetAdminCeReferralsSuspenseQuery(
+export function useGetCeReferralsSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetAdminCeReferralsQuery,
-    GetAdminCeReferralsQueryVariables
+    GetCeReferralsQuery,
+    GetCeReferralsQueryVariables
   >
 ): Apollo.UseSuspenseQueryResult<
-  GetAdminCeReferralsQuery,
-  GetAdminCeReferralsQueryVariables
+  GetCeReferralsQuery,
+  GetCeReferralsQueryVariables
 >;
-export function useGetAdminCeReferralsSuspenseQuery(
+export function useGetCeReferralsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetAdminCeReferralsQuery,
-        GetAdminCeReferralsQueryVariables
+        GetCeReferralsQuery,
+        GetCeReferralsQueryVariables
       >
 ): Apollo.UseSuspenseQueryResult<
-  GetAdminCeReferralsQuery | undefined,
-  GetAdminCeReferralsQueryVariables
+  GetCeReferralsQuery | undefined,
+  GetCeReferralsQueryVariables
 >;
-export function useGetAdminCeReferralsSuspenseQuery(
+export function useGetCeReferralsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetAdminCeReferralsQuery,
-        GetAdminCeReferralsQueryVariables
+        GetCeReferralsQuery,
+        GetCeReferralsQueryVariables
       >
 ) {
   const options =
@@ -56607,22 +56611,22 @@ export function useGetAdminCeReferralsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetAdminCeReferralsQuery,
-    GetAdminCeReferralsQueryVariables
-  >(GetAdminCeReferralsDocument, options);
+    GetCeReferralsQuery,
+    GetCeReferralsQueryVariables
+  >(GetCeReferralsDocument, options);
 }
-export type GetAdminCeReferralsQueryHookResult = ReturnType<
-  typeof useGetAdminCeReferralsQuery
+export type GetCeReferralsQueryHookResult = ReturnType<
+  typeof useGetCeReferralsQuery
 >;
-export type GetAdminCeReferralsLazyQueryHookResult = ReturnType<
-  typeof useGetAdminCeReferralsLazyQuery
+export type GetCeReferralsLazyQueryHookResult = ReturnType<
+  typeof useGetCeReferralsLazyQuery
 >;
-export type GetAdminCeReferralsSuspenseQueryHookResult = ReturnType<
-  typeof useGetAdminCeReferralsSuspenseQuery
+export type GetCeReferralsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeReferralsSuspenseQuery
 >;
-export type GetAdminCeReferralsQueryResult = Apollo.QueryResult<
-  GetAdminCeReferralsQuery,
-  GetAdminCeReferralsQueryVariables
+export type GetCeReferralsQueryResult = Apollo.QueryResult<
+  GetCeReferralsQuery,
+  GetCeReferralsQueryVariables
 >;
 export const GetCeClientsDocument = gql`
   query GetCeClients(

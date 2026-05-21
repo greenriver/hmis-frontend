@@ -18,10 +18,7 @@ export const Routes = {
   CREATE_ORGANIZATION: '/projects/new-organization',
   USER_DASHBOARD: '/dashboard',
   MY_DASHBOARD: '/my-dashboard', // maintained for backwards compat
-
-  // "Floating" referrals:
-  REFERRAL: '/' + ReferralSubRoutes.ReferralPath,
-  REFERRAL_STEP: '/' + ReferralSubRoutes.ReferralStepPath,
+  REFERRALS: '/referrals',
 } as const;
 
 const adminDashboardRoutes = {
@@ -139,6 +136,13 @@ const projectDashboardRoutes = {
   SEND_REFERRAL: 'ce/send-referral',
 };
 
+const referralRoutes = {
+  AVAILABLE_UNITS: 'available-units',
+  ELIGIBLE_CLIENTS: 'eligible-clients',
+  REFERRAL: ':referralId',
+  REFERRAL_STEP: ':referralId/tasks/:stepId',
+};
+
 // Set up full dashboard routes so we can use `generateSafePath`
 type ClientSubRoutesType = keyof typeof clientDashboardRoutes;
 let key: ClientSubRoutesType;
@@ -166,6 +170,12 @@ for (key4 in adminDashboardRoutes) {
   adminDashboardRoutes[key4] = `${Routes.ADMIN}/${adminDashboardRoutes[key4]}`;
 }
 
+type ReferralSubRoutesType = keyof typeof referralRoutes;
+let key5: ReferralSubRoutesType;
+for (key5 in referralRoutes) {
+  referralRoutes[key5] = `${Routes.REFERRALS}/${referralRoutes[key5]}`;
+}
+
 export const ClientDashboardRoutes: { [k in ClientSubRoutesType]: string } =
   clientDashboardRoutes;
 
@@ -177,6 +187,10 @@ export const ProjectDashboardRoutes: {
   [k in ProjectSubRoutesType]: string;
 } = projectDashboardRoutes;
 
+export const ReferralRoutes: {
+  [k in ReferralSubRoutesType]: string;
+} = referralRoutes;
+
 export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
 } = adminDashboardRoutes;
@@ -185,8 +199,6 @@ export const AdminDashboardRoutes: {
 export const NO_PADDING_ROUTES: string[] = [
   ProjectDashboardRoutes.REFERRAL,
   ProjectDashboardRoutes.REFERRAL_STEP,
-  AdminDashboardRoutes.REFERRAL,
-  AdminDashboardRoutes.REFERRAL_STEP,
   AdminDashboardRoutes.EDIT_FORM,
 ];
 
@@ -226,6 +238,7 @@ export const PRINTABLE_ROUTES = [
 
 export const allRoutes = [
   Routes,
+  ReferralRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,

@@ -12,7 +12,7 @@ import {
   parseHmisDateString,
   stringifyArray,
 } from '@/modules/hmis/hmisUtil';
-import { Routes } from '@/routes/routes';
+import { ReferralRoutes } from '@/routes/routes';
 import { UserCeReferralStepFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -30,7 +30,7 @@ const UserStepCard: React.FC<Props> = ({ step, currentUserId }) => {
 
   // For consistency/simplicity, always link to the "floating" referral context here
   // (even if user has permission to view the referral in its project context)
-  const path = generateSafePath(Routes.REFERRAL, {
+  const path = generateSafePath(ReferralRoutes.REFERRAL, {
     referralId: referral.id,
   });
 

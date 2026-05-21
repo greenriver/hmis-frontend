@@ -17,27 +17,6 @@ export const useAdminDashboardNavItems = () => {
         title: 'Coordinated Entry',
         items: [
           {
-            id: 'available-units',
-            title: 'Available Units',
-            path: AdminDashboardRoutes.AVAILABLE_UNITS,
-            permissions: ['canAdministrateCoordinatedEntry'],
-            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
-          },
-          {
-            id: 'referrals',
-            title: 'Referrals',
-            path: AdminDashboardRoutes.REFERRALS,
-            permissions: ['canAdministrateCoordinatedEntry'],
-            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
-          },
-          {
-            id: 'eligible-clients',
-            title: 'Eligible Clients',
-            path: AdminDashboardRoutes.ELIGIBLE_CLIENTS,
-            permissions: ['canAdministrateCoordinatedEntry'],
-            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
-          },
-          {
             id: 'denials',
             title: 'Denials',
             path: AdminDashboardRoutes.AC_DENIALS,

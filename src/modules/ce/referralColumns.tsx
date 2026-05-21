@@ -5,50 +5,38 @@ import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusC
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
-  CeReferralTableFieldsFragment,
+  CeReferralBaseTableFieldsFragment,
   CeReferralWithProjectFieldsFragment,
-  ClientCeReferralTableFieldsFragment,
 } from '@/types/gqlTypes';
 
 export const REFERRAL_COLUMNS: Record<
   string,
-  ColumnDef<CeReferralTableFieldsFragment | ClientCeReferralTableFieldsFragment>
+  ColumnDef<CeReferralBaseTableFieldsFragment>
 > = {
   client: {
     header: 'Client',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => referral.clientName,
+    render: (referral: CeReferralBaseTableFieldsFragment) =>
+      referral.clientName,
     key: 'name',
     sticky: 'left',
   },
   opportunity: {
     header: 'Unit',
     key: 'unit',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => referral.opportunity?.name,
+    render: (referral: CeReferralBaseTableFieldsFragment) =>
+      referral.opportunity?.name,
   },
   date: {
     header: 'Referral Date',
     key: 'date',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => parseAndFormatDate(referral.createdAt),
+    render: (referral: CeReferralBaseTableFieldsFragment) =>
+      parseAndFormatDate(referral.createdAt),
   },
   status: {
     header: 'Status',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => <ReferralStatusChip referral={referral} size='small' />,
+    render: (referral: CeReferralBaseTableFieldsFragment) => (
+      <ReferralStatusChip referral={referral} size='small' />
+    ),
     key: 'status',
   },
   currentSteps: {
@@ -99,11 +87,8 @@ export const REFERRAL_COLUMNS: Record<
   referredBy: {
     header: 'Referred By',
     key: 'referredBy',
-    render: (
-      referral:
-        | CeReferralTableFieldsFragment
-        | ClientCeReferralTableFieldsFragment
-    ) => referral.referredBy?.name,
+    render: (referral: CeReferralBaseTableFieldsFragment) =>
+      referral.referredBy?.name,
   },
   // TODO(#7321) - add column for sending project
 };

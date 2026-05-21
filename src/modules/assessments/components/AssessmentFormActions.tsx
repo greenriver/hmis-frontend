@@ -6,6 +6,7 @@ import DeleteAssessmentButton from './DeleteAssessmentButton';
 import PrintViewButton from '@/components/layout/PrintViewButton';
 import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 
+import { isHeadOfMultiMemberHousehold } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
@@ -67,6 +68,11 @@ const AssessmentFormActions: React.FC<Props> = ({
 
   const showPrintViewButton = !isPrintView && locked && assessment;
 
+  const isHoHInMultiMemberHousehold = useMemo(
+    () => isHeadOfMultiMemberHousehold(enrollment),
+    [enrollment]
+  );
+
   if (showAutofill || showPrintViewButton || showDeleteAssessmentButton) {
     return (
       <>
@@ -90,6 +96,7 @@ const AssessmentFormActions: React.FC<Props> = ({
               clientId={enrollment.client.id}
               enrollmentId={enrollment.id}
               onSuccess={navigateToEnrollment}
+              isHeadOfMultiMemberHousehold={isHoHInMultiMemberHousehold}
             />
           )}
         </Stack>
