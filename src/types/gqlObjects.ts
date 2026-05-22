@@ -7808,6 +7808,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'Workspace',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'projectGroupId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'slug',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'YouthEducationStatus',
     fields: [
       {
@@ -8154,6 +8191,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
+        name: 'projectGroupId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'projectType',
         type: {
           kind: 'LIST',
@@ -8259,6 +8300,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
+        name: 'projectGroupId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'projectType',
         type: {
           kind: 'LIST',
@@ -8300,6 +8345,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'CeReferralFilterOptions',
     args: [
       {
+        name: 'assignedToYou',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'onCurrentTaskSince',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
@@ -8338,6 +8387,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
+      },
+      {
+        name: 'projectGroupId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'projectType',
@@ -8553,6 +8606,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
+        name: 'projectGroupId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'projectType',
         type: {
           kind: 'LIST',
@@ -8604,6 +8661,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
+      },
+      {
+        name: 'projectGroupId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'projectType',

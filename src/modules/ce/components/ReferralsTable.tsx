@@ -14,9 +14,9 @@ import CommonSearchInput, {
 } from '@/modules/search/components/CommonSearchInput';
 import {
   ClientDashboardRoutes,
-  ReferralRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
+  ReferralRoutes,
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -89,17 +89,20 @@ const COLUMNS: DataColumnDef<
   },
 ];
 
-interface ReferralsTableProps {
+interface Props {
+  projectGroupId?: string;
   searchSize?: CommonSearchInputProps['size'];
 }
 
-const ReferralsTable: React.FC<ReferralsTableProps> = ({
+const ReferralsTable: React.FC<Props> = ({
+  projectGroupId,
   searchSize = 'medium',
 }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeReferralFilterOptions',
+    omit: ['projectGroupId'], // only exposed via Workspaces
   });
 
   const rowSecondaryActions = useCallback(
@@ -165,7 +168,10 @@ const ReferralsTable: React.FC<ReferralsTableProps> = ({
         >
           columns={COLUMNS}
           queryVariables={{
-            filters: { searchTerm: debouncedSearch || undefined },
+            filters: {
+              searchTerm: debouncedSearch || undefined,
+              projectGroupId,
+            },
           }}
           queryDocument={GetCeReferralsDocument}
           pagePath='ceReferrals'
