@@ -4348,7 +4348,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FileAccess',
     fields: [
       {
-        name: 'canManage',
+        name: 'canDeleteFile',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEditFile',
         type: {
           kind: 'NON_NULL',
           name: null,
