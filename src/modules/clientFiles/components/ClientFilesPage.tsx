@@ -37,16 +37,13 @@ const FileActions: React.FC<{
     onDeleteFile: () => onDone(file),
   });
 
+  // editButton and deleteButton will be null if the user doesn't have permission
   const { editButton, deleteButton, downloadButton } = getActionsForFile(file);
   return (
     <>
       {!noDownload && downloadButton}
-      {file.access.canManage && (
-        <>
-          {editButton}
-          {deleteButton}
-        </>
-      )}
+      {editButton}
+      {deleteButton}
     </>
   );
 };

@@ -31,6 +31,7 @@ const FileEditRoute: React.FC<
     skip: !clientId,
   });
   const canUpload = data?.client?.access?.canUploadClientFiles;
+  const canEdit = file.data?.file?.access?.canEditFile;
 
   if (loading) return <Loading />;
   if (!file && !create) {
@@ -41,7 +42,7 @@ const FileEditRoute: React.FC<
   // If uploading, check on the client whether the user can upload files
   if (create && !canUpload) return <NotFound />;
   // If attempting to edit an existing file, check permission on the file
-  if (!create && !file.data?.file?.access?.canManage) return <NotFound />;
+  if (!create && !canEdit) return <NotFound />;
 
   return <>{children}</>;
 };

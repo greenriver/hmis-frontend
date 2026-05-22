@@ -8,7 +8,8 @@ fragment FileFields on File {
   url
   tags
   access {
-    canManage
+    canEditFile
+    canDeleteFile
   }
   redacted
   enrollmentId

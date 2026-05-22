@@ -75,8 +75,8 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
 
       return {
         downloadButton: file.url ? downloadButton : null,
-        editButton: file.access.canManage ? editButton : null,
-        deleteButton: file.access.canManage ? deleteButton : null,
+        editButton: file.access.canEditFile ? editButton : null,
+        deleteButton: file.access.canDeleteFile ? deleteButton : null,
       } as const;
     },
     [clientId, onDeleteFile]
