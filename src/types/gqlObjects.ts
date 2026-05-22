@@ -8324,6 +8324,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'CeReferralFilterOptions',
     args: [
       {
+        name: 'assignedToYou',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'onCurrentTaskSince',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
