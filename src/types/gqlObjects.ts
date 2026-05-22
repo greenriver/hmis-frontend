@@ -316,7 +316,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'AssessmentAccess',
     fields: [
       {
-        name: 'canDelete',
+        name: 'canDeleteAssessment',
         type: {
           kind: 'NON_NULL',
           name: null,

@@ -43,7 +43,7 @@ const AssessmentFormActions: React.FC<Props> = ({
     [enrollment, navigate]
   );
 
-  const showDeleteAssessmentButton = assessment?.access.canDelete;
+  const showDeleteAssessmentButton = assessment?.access.canDeleteAssessment;
 
   const showPrintViewButton = !isPrintView && locked && assessment;
 
