@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/app/node_modules \
 #####################################################################
 # nginx container
 #####################################################################
-FROM nginx:1.28-alpine3.23
+FROM nginx:1.30-alpine3.23
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}
 
