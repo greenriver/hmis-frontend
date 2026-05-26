@@ -1880,8 +1880,8 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "canDeleteAssessments",
-            "description": null,
+            "name": "canDeleteAssessment",
+            "description": "Whether the user can delete this assessment",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1894,6 +1894,22 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "canDeleteAssessments",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use assessment.access.canDeleteAssessment"
           },
           {
             "name": "canDeleteEnrollments",
@@ -1908,8 +1924,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use assessment.access.canDeleteAssessment"
           },
           {
             "name": "canEditEnrollments",
@@ -1924,8 +1940,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use enrollment.access.canEditEnrollments for enrollment edit checks"
           },
           {
             "name": "id",
