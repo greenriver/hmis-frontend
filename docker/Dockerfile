@@ -60,7 +60,7 @@ COPY --chown=app:app ./docker/templates/*.template /etc/nginx/templates/
 
 # Set entrypoint to handle signals
 #   15 = SIGTERM (what is sent to nicely ask process to stop)
-#   3 =  SIGQUIT (what we should send to nginx to make it actuly stop gracefully)
+#   3 =  SIGQUIT (what we should send to nginx to make it actually stop gracefully)
 #   We remap stop to quit to make nginx act more kindly toward existing
 #   connections and requests
 ENTRYPOINT ["/usr/bin/dumb-init", "--rewrite", "15:3", "--", "/docker-entrypoint.sh"]
