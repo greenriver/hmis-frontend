@@ -1,4 +1,4 @@
-FROM ruby:3.2-slim-bookworm
+FROM ruby:3.2-slim-trixie
 
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}

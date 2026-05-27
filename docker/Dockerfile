@@ -37,7 +37,7 @@ RUN --mount=type=cache,target=/app/node_modules \
 #####################################################################
 # nginx container
 #####################################################################
-FROM nginx:1.30-bookworm
+FROM nginx:1.30-trixie
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}
 
