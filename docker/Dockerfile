@@ -2,7 +2,7 @@
 # build container
 #####################################################################
 ARG NODE_VERSION
-FROM node:${NODE_VERSION}-alpine3.23 AS builder
+FROM node:${NODE_VERSION}-bookworm-slim AS builder
 
 ARG GITHASH
 ARG FULL_GITHASH
@@ -34,31 +34,32 @@ RUN --mount=type=cache,target=/app/node_modules \
 #####################################################################
 # nginx container
 #####################################################################
-FROM nginx:1.28-alpine3.23
+FROM nginx:1.28-bookworm
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}
 
 WORKDIR /usr/share/nginx/html
 
-COPY --from=builder --chown=app:app /app/dist .
-COPY ./docker/nginx.conf /etc/nginx/nginx.conf
-COPY --chown=app:app ./docker/nginx-reload ./docker/docker-entrypoint.sh /
-COPY ./docker/templates/*.template /etc/nginx/templates/
-
-RUN addgroup --gid ${GROUPID} --system app \
- && adduser  --uid ${USERID} --system --ingroup app --home /usr/share/nginx/html app \
+RUN groupadd --gid ${GROUPID} app \
+ && useradd --uid ${USERID} --gid app --home-dir /usr/share/nginx/html --no-create-home app \
  && chown -R app:app /var/cache/nginx \
  && chmod -R g+w /var/cache/nginx \
  && chown -R app:app /etc/nginx \
  && chmod -R g+w /etc/nginx \
  && touch /tmp/nginx.pid \
  && chown -R app:app /tmp/nginx.pid \
- && apk update \
- && apk upgrade --no-cache \
- && apk add --no-cache dumb-init
+ && apt-get update \
+ && apt-get upgrade -y --no-install-recommends \
+ && apt-get install -y --no-install-recommends dumb-init \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder --chown=app:app /app/dist .
+COPY --chown=app:app ./docker/nginx.conf /etc/nginx/nginx.conf
+COPY --chown=app:app ./docker/nginx-reload ./docker/docker-entrypoint.sh /
+COPY --chown=app:app ./docker/templates/*.template /etc/nginx/templates/
 
 # Set entrypoint to handle signals
-#   15 = SIGSTOP (what is sent to nicely ask process to stop)
+#   15 = SIGTERM (what is sent to nicely ask process to stop)
 #   3 =  SIGQUIT (what we should send to nginx to make it actuly stop gracefully)
 #   We remap stop to quit to make nginx act more kindly toward existing
 #   connections and requests
