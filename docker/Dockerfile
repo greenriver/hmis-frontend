@@ -25,7 +25,10 @@ ENV NODE_OPTIONS '--max-old-space-size=32768'
 COPY . .
 
 RUN --mount=type=cache,target=/app/node_modules \
-     corepack enable \
+     apt-get update \
+     && apt-get install -y --no-install-recommends ca-certificates \
+     && rm -rf /var/lib/apt/lists/* \
+     && corepack enable \
      && yarn install \
      && yarn format:check \
      && yarn lint:check \
