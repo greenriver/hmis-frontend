@@ -26,7 +26,7 @@ const ProjectDefaultContactsCard: React.FC<Props> = ({ project }: Props) => {
   const [globalModalOpen, setGlobalModalOpen] = useState(false);
 
   const [rootPermissions] = useRootPermissions();
-  const canEditContacts = rootPermissions?.canAdministrateCoordinatedEntry;
+  const canEditContacts = rootPermissions?.canManageCeDefaultContacts;
 
   const cardActions = useMemo(() => {
     if (!canEditContacts) return undefined;

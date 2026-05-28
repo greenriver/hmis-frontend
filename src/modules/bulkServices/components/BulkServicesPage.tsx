@@ -152,7 +152,7 @@ const BulkServicesPage: React.FC<Props> = ({
       : ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD;
 
     return (
-      <RootPermissionsFilter permissions='canEditClients'>
+      <RootPermissionsFilter permissions='canCreateClients'>
         <AddNewClientMenu
           projectId={project.id}
           onClientAdded={(data) => setSearchTerm(data.client.id)}

@@ -12,7 +12,7 @@ interface Props {
 const MatchRuleCard: React.FC<Props> = ({ title, rules }) => {
   const [access] = useRootPermissions();
   // For CE Admins, display the underlying expressions in tooltips
-  const { canAdministrateCoordinatedEntry } = access || {};
+  const { canManageCeMatchRules } = access || {};
 
   return (
     <CommonCard title={title} TitleComponent={'h3'}>
@@ -24,7 +24,7 @@ const MatchRuleCard: React.FC<Props> = ({ title, rules }) => {
             alignItems='top'
             justifyContent={'space-between'}
           >
-            {canAdministrateCoordinatedEntry ? (
+            {canManageCeMatchRules ? (
               <Tooltip title={rule.expression} arrow placement='top'>
                 <span>{rule.name}</span>
               </Tooltip>

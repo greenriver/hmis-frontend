@@ -290,7 +290,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
       >
         <ClientSearchTypeToggle value={searchType} />
         {hasSearched && (
-          <RootPermissionsFilter permissions='canEditClients'>
+          <RootPermissionsFilter permissions='canCreateClients'>
             <Box sx={{ height: 'fit-content' }}>
               <ButtonLink
                 data-testid='addClientButton'
