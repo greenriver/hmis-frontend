@@ -1,8 +1,13 @@
+# SecretsUsedInArgOrEnv: SENTRY_AUTH_TOKEN must be a build arg; no way to avoid this warning
+# InvalidDefaultArgInFrom: NODE_VERSION intentionally has no default — callers must pass it
+# UndefinedVar: ARG USERID/GROUPID use ${VAR:-default} fallback syntax, which is valid
+# check=skip=SecretsUsedInArgOrEnv,InvalidDefaultArgInFrom,UndefinedVar
+
 #####################################################################
 # build container
 #####################################################################
 ARG NODE_VERSION
-FROM node:${NODE_VERSION}-alpine3.23 AS builder
+FROM node:${NODE_VERSION}-bookworm-slim AS builder
 
 ARG GITHASH
 ARG FULL_GITHASH
@@ -12,12 +17,12 @@ WORKDIR /app
 ENV INLINE_RUNTIME_CHUNK=false
 
 # Env vars prefixed with PUBLIC_ are made available to the app at build time
-ENV PUBLIC_GIT_COMMIT_HASH ${GITHASH}
-ENV FULL_GITHASH ${FULL_GITHASH}
-ENV SENTRY_AUTH_TOKEN ${SENTRY_AUTH_TOKEN}
-ENV SENTRY_ORG 'green-river'
-ENV SENTRY_PROJECT 'hmis-frontend'
-ENV NODE_OPTIONS '--max-old-space-size=32768'
+ENV PUBLIC_GIT_COMMIT_HASH=${GITHASH}
+ENV FULL_GITHASH=${FULL_GITHASH}
+ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+ENV SENTRY_ORG='green-river'
+ENV SENTRY_PROJECT='hmis-frontend'
+ENV NODE_OPTIONS='--max-old-space-size=32768'
 
 # Use this for faster iterations on nginx config
 # RUN mkdir -p /app/dist  && echo hello > /app/dist/index.html
@@ -25,7 +30,10 @@ ENV NODE_OPTIONS '--max-old-space-size=32768'
 COPY . .
 
 RUN --mount=type=cache,target=/app/node_modules \
-     corepack enable \
+     apt-get update \
+     && apt-get install -y --no-install-recommends ca-certificates \
+     && rm -rf /var/lib/apt/lists/* \
+     && corepack enable \
      && yarn install \
      && yarn format:check \
      && yarn lint:check \
@@ -34,32 +42,33 @@ RUN --mount=type=cache,target=/app/node_modules \
 #####################################################################
 # nginx container
 #####################################################################
-FROM nginx:1.30-alpine3.23
+FROM nginx:1.30-trixie
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}
 
 WORKDIR /usr/share/nginx/html
 
-COPY --from=builder --chown=app:app /app/dist .
-COPY ./docker/nginx.conf /etc/nginx/nginx.conf
-COPY --chown=app:app ./docker/nginx-reload ./docker/docker-entrypoint.sh /
-COPY ./docker/templates/*.template /etc/nginx/templates/
-
-RUN addgroup --gid ${GROUPID} --system app \
- && adduser  --uid ${USERID} --system --ingroup app --home /usr/share/nginx/html app \
+RUN groupadd --gid ${GROUPID} app \
+ && useradd --uid ${USERID} --gid app --home-dir /usr/share/nginx/html --no-create-home app \
  && chown -R app:app /var/cache/nginx \
  && chmod -R g+w /var/cache/nginx \
  && chown -R app:app /etc/nginx \
  && chmod -R g+w /etc/nginx \
  && touch /tmp/nginx.pid \
  && chown -R app:app /tmp/nginx.pid \
- && apk update \
- && apk upgrade --no-cache \
- && apk add --no-cache dumb-init
+ && apt-get update \
+ && apt-get upgrade -y --no-install-recommends \
+ && apt-get install -y --no-install-recommends dumb-init \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder --chown=app:app /app/dist .
+COPY --chown=app:app ./docker/nginx.conf /etc/nginx/nginx.conf
+COPY --chown=app:app ./docker/nginx-reload ./docker/docker-entrypoint.sh /
+COPY --chown=app:app ./docker/templates/*.template /etc/nginx/templates/
 
 # Set entrypoint to handle signals
-#   15 = SIGSTOP (what is sent to nicely ask process to stop)
-#   3 =  SIGQUIT (what we should send to nginx to make it actuly stop gracefully)
+#   15 = SIGTERM (what is sent to nicely ask process to stop)
+#   3 =  SIGQUIT (what we should send to nginx to make it actually stop gracefully)
 #   We remap stop to quit to make nginx act more kindly toward existing
 #   connections and requests
 ENTRYPOINT ["/usr/bin/dumb-init", "--rewrite", "15:3", "--", "/docker-entrypoint.sh"]

@@ -1,4 +1,4 @@
-require 'rack'
+require 'rackup'
 
 app = proc do |env|
   headers =
@@ -10,4 +10,4 @@ app = proc do |env|
   [200, { 'Content-Type' => 'text/plain' }, headers]
 end
 
-Rack::Server.start app: app, Port: 8080
+Rackup::Server.start app: app, Port: 8080
