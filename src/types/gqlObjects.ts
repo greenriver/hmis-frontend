@@ -882,6 +882,45 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeMatchRuleClause',
+    fields: [
+      {
+        name: 'comparator',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CeMatchRuleComparator', ofType: null },
+        },
+      },
+      {
+        name: 'field',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      { name: 'value', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
+    ],
+  },
+  {
+    name: 'CeMatchRuleStructuredExpression',
+    fields: [
+      {
+        name: 'operator',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'CeMatchRuleBooleanOperator',
+            ofType: null,
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeMatchValue',
     fields: [
       {
