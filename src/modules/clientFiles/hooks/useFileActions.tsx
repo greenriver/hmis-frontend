@@ -4,7 +4,6 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
@@ -21,14 +20,6 @@ export type UseFileActionsArgs = {
 
 const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
   const { clientId } = useSafeParams() as { clientId: string };
-
-  const [canEdit] = useHasClientPermissions(clientId, [
-    'canManageAnyClientFiles',
-    'canManageOwnClientFiles',
-  ]);
-  const [canEditAny] = useHasClientPermissions(clientId, [
-    'canManageAnyClientFiles',
-  ]);
 
   const getActionsForFile = useCallback(
     (file: FileFieldsFragment) => {
@@ -84,12 +75,11 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
 
       return {
         downloadButton: file.url ? downloadButton : null,
-        editButton: canEdit || canEditAny || file.ownFile ? editButton : null,
-        deleteButton:
-          canEdit || canEditAny || file.ownFile ? deleteButton : null,
+        editButton: file.access.canEditFile ? editButton : null,
+        deleteButton: file.access.canDeleteFile ? deleteButton : null,
       } as const;
     },
-    [canEditAny, canEdit, clientId, onDeleteFile]
+    [clientId, onDeleteFile]
   );
 
   return useMemo(

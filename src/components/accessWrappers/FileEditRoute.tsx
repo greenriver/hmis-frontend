@@ -2,8 +2,10 @@ import Loading from '../elements/Loading';
 import NotFound from '../pages/NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
-import { useClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { useGetFileQuery } from '@/types/gqlTypes';
+import {
+  useGetClientFileUploadAccessQuery,
+  useGetFileQuery,
+} from '@/types/gqlTypes';
 
 const FileEditRoute: React.FC<
   React.PropsWithChildren<{
@@ -23,20 +25,24 @@ const FileEditRoute: React.FC<
     variables: { id: fileId || '' },
     skip: !fileId,
   });
-  const [permissions, { loading }] = useClientPermissions(clientId || '');
 
-  const canEdit =
-    permissions?.canManageAnyClientFiles ||
-    permissions?.canManageOwnClientFiles;
-  const canEditAny = permissions?.canManageAnyClientFiles;
+  const { data, loading } = useGetClientFileUploadAccessQuery({
+    variables: { id: clientId || '' },
+    skip: !clientId,
+  });
+  const canUpload = data?.client?.access?.canUploadClientFiles;
+  const canEdit = file.data?.file?.access?.canEditFile;
 
   if (loading) return <Loading />;
   if (!file && !create) {
     console.error('File not found');
     return <NotFound />;
   }
-  if (!canEdit) return <NotFound />;
-  if (!create && !canEditAny && !file.data?.file?.ownFile) return <NotFound />;
+
+  // If uploading, check on the client whether the user can upload files
+  if (create && !canUpload) return <NotFound />;
+  // If attempting to edit an existing file, check permission on the file
+  if (!create && !canEdit) return <NotFound />;
 
   return <>{children}</>;
 };

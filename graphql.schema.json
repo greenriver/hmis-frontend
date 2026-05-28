@@ -1880,8 +1880,8 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "canDeleteAssessments",
-            "description": null,
+            "name": "canDeleteAssessment",
+            "description": "Whether the user can delete this assessment",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1894,6 +1894,22 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "canDeleteAssessments",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use assessment.access.canDeleteAssessment"
           },
           {
             "name": "canDeleteEnrollments",
@@ -1908,8 +1924,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use assessment.access.canDeleteAssessment"
           },
           {
             "name": "canEditEnrollments",
@@ -1924,8 +1940,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use enrollment.access.canEditEnrollments for enrollment edit checks"
           },
           {
             "name": "id",
@@ -7479,6 +7495,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "assignedToYou",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "onCurrentTaskSince",
             "description": null,
             "type": {
@@ -10978,7 +11006,7 @@
             "deprecationReason": null
           },
           {
-            "name": "canManageAnyClientFiles",
+            "name": "canIndexFiles",
             "description": null,
             "args": [],
             "type": {
@@ -10992,6 +11020,22 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "canManageAnyClientFiles",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Resolve canManage on individual file access field instead"
           },
           {
             "name": "canManageClientAlerts",
@@ -11022,8 +11066,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Resolve canManage on individual file access field instead"
           },
           {
             "name": "canManageScanCards",
@@ -11102,8 +11146,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use canIndexFiles"
           },
           {
             "name": "canViewClientAlerts",
@@ -25867,6 +25911,22 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "access",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "FileAccess",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "confidential",
             "description": null,
             "args": [],
@@ -26094,6 +26154,66 @@
               "kind": "OBJECT",
               "name": "ApplicationUser",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "FileAccess",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "canDeleteFile",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canEditFile",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

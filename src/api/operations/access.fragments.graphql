@@ -52,17 +52,18 @@ fragment ClientAccessFields on ClientAccess {
   canAuditClients
   canManageScanCards
   canMergeClients
-  canViewAnyFiles
-
-  # The below perms could be pulled out and fetched on Client Files tab, for perf improvement
-  canManageAnyClientFiles
-  canManageOwnClientFiles
-  canUploadClientFiles
+  canIndexFiles
 
   # Referral-related root permissions, resolved on Client for convenience
   canViewReferrals
   canViewOwnReferrals
   canViewClientEligibleOpportunities
+}
+
+# Resolved only where client file upload UI is shown (not part of ClientAccessFields).
+fragment ClientFileUploadAccessFields on ClientAccess {
+  id
+  canUploadClientFiles
 }
 
 fragment EnrollmentAccessFields on EnrollmentAccess {
@@ -75,9 +76,7 @@ fragment EnrollmentAccessFields on EnrollmentAccess {
 
 fragment AssessmentAccessFields on AssessmentAccess {
   id
-  canDeleteAssessments
-  canDeleteEnrollments
-  canEditEnrollments
+  canDeleteAssessment
 }
 
 fragment ProjectAccessFields on ProjectAccess {
