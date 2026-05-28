@@ -1,3 +1,8 @@
+# SecretsUsedInArgOrEnv: SENTRY_AUTH_TOKEN must be a build arg; no way to avoid this warning
+# InvalidDefaultArgInFrom: NODE_VERSION intentionally has no default — callers must pass it
+# UndefinedVar: ARG USERID/GROUPID use ${VAR:-default} fallback syntax, which is valid
+# check=skip=SecretsUsedInArgOrEnv,InvalidDefaultArgInFrom,UndefinedVar
+
 #####################################################################
 # build container
 #####################################################################
@@ -12,12 +17,12 @@ WORKDIR /app
 ENV INLINE_RUNTIME_CHUNK=false
 
 # Env vars prefixed with PUBLIC_ are made available to the app at build time
-ENV PUBLIC_GIT_COMMIT_HASH ${GITHASH}
-ENV FULL_GITHASH ${FULL_GITHASH}
-ENV SENTRY_AUTH_TOKEN ${SENTRY_AUTH_TOKEN}
-ENV SENTRY_ORG 'green-river'
-ENV SENTRY_PROJECT 'hmis-frontend'
-ENV NODE_OPTIONS '--max-old-space-size=32768'
+ENV PUBLIC_GIT_COMMIT_HASH=${GITHASH}
+ENV FULL_GITHASH=${FULL_GITHASH}
+ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+ENV SENTRY_ORG='green-river'
+ENV SENTRY_PROJECT='hmis-frontend'
+ENV NODE_OPTIONS='--max-old-space-size=32768'
 
 # Use this for faster iterations on nginx config
 # RUN mkdir -p /app/dist  && echo hello > /app/dist/index.html
