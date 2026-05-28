@@ -18,7 +18,10 @@ const CreateProjectPage = () => {
   const { organizationId } = useSafeParams() as {
     organizationId: string;
   };
-  const { crumbs, organizationName } = useOrganizationCrumbs('Add Project');
+  const { crumbs, organization, organizationName } =
+    useOrganizationCrumbs('Add Project');
+
+  const canCreateProject = organization?.access.canCreateProjects;
 
   const onCompleted = useCallback(
     (createdProject: ProjectAllFieldsFragment) => {
@@ -36,6 +39,7 @@ const CreateProjectPage = () => {
   const localConstants = useLocalConstantsForProjectForm();
 
   if (!crumbs) return <NotFound />;
+  if (!canCreateProject) return <NotFound />;
 
   return (
     <BasicBreadcrumbPageLayout crumbs={crumbs}>
