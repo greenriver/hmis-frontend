@@ -1,12 +1,13 @@
-FROM ruby:3.2-alpine
+FROM ruby:3.2-slim-trixie
 
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}
 
-RUN addgroup --gid ${GROUPID} --system app \
- && adduser  --uid ${USERID} --system --ingroup app --home /home/app app \
- && apk update \
- && apk add curl build-base \
+RUN groupadd --gid ${GROUPID} app \
+ && useradd --uid ${USERID} --gid app --home-dir /home/app --no-create-home app \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends curl build-essential \
+ && rm -rf /var/lib/apt/lists/* \
  && gem install rack rackup puma \
  && mkdir /app
 
