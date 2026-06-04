@@ -34,6 +34,7 @@ const ClientReferralsTable: React.FC = () => {
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientCeReferralFilterOptions',
+    omit: ['projectGroupId'], // skip explicitly (for now) because it doesn't have a picklist
   });
 
   return (

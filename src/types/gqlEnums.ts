@@ -2151,4 +2151,5 @@ export const HmisEnums = {
     NO: 'No',
     WORKER_DOES_NOT_KNOW: 'Worker does not know',
   },
+  WorkspaceAppliesTo: { CE_REFERRALS: 'CE referrals workspace switcher' },
 };

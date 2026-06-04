@@ -64,6 +64,7 @@ const ClientOpportunitiesTable: React.FC = () => {
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ClientEligibleCeOpportunityFilterOptions',
+    omit: ['projectGroupId'], // skip explicitly (for now) because it doesn't have a picklist
   });
 
   return (
