@@ -78,6 +78,17 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  CeMatchRuleBooleanOperator: { AND: 'AND', OR: 'OR' },
+  CeMatchRuleComparator: {
+    EQ: 'EQ',
+    EXCLUDES: 'EXCLUDES',
+    GT: 'GT',
+    GTE: 'GTE',
+    INCLUDES: 'INCLUDES',
+    LT: 'LT',
+    LTE: 'LTE',
+    NOT_EQ: 'NOT_EQ',
+  },
   CeMatchRuleOwner: {
     DATA_SOURCE: 'Data Source',
     ORGANIZATION: 'Organization',

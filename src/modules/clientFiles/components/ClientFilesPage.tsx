@@ -13,16 +13,13 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import {
-  useClientPermissions,
-  useHasClientPermissions,
-} from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetClientFilesDocument,
   GetClientFilesQuery,
   GetClientFilesQueryVariables,
   PickListType,
+  useGetClientFileUploadAccessQuery,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -32,30 +29,21 @@ type ClientFileType = NonNullable<
 >['nodes'][0];
 
 const FileActions: React.FC<{
-  clientId: string;
   file: ClientFileType;
   onDone?: (file: ClientFileType) => any;
   noDownload?: boolean;
-}> = ({ clientId, file, onDone = () => {}, noDownload }) => {
+}> = ({ file, onDone = () => {}, noDownload }) => {
   const { getActionsForFile } = useFileActions({
     onDeleteFile: () => onDone(file),
   });
 
-  const [perms] = useClientPermissions(clientId);
-  const { canManageOwnClientFiles, canManageAnyClientFiles } = perms || {};
-  const canManage =
-    canManageAnyClientFiles || (canManageOwnClientFiles && file.ownFile);
-
+  // editButton and deleteButton will be null if the user doesn't have permission
   const { editButton, deleteButton, downloadButton } = getActionsForFile(file);
   return (
     <>
       {!noDownload && downloadButton}
-      {canManage && (
-        <>
-          {editButton}
-          {deleteButton}
-        </>
-      )}
+      {editButton}
+      {deleteButton}
     </>
   );
 };
@@ -64,9 +52,11 @@ const ClientFilesPage = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const [viewingFile, setViewingFile] = useState<ClientFileType | undefined>();
 
-  const [canUpload] = useHasClientPermissions(clientId, [
-    'canUploadClientFiles',
-  ]);
+  const { data: clientAccessData } = useGetClientFileUploadAccessQuery({
+    variables: { id: clientId },
+  });
+  const canUpload = clientAccessData?.client?.access?.canUploadClientFiles;
+
   const { data: pickListData } = useGetPickListQuery({
     variables: { pickListType: PickListType.AvailableFileTypes },
   });
@@ -193,7 +183,6 @@ const ClientFilesPage = () => {
           file={viewingFile}
           actions={
             <FileActions
-              clientId={clientId}
               file={viewingFile}
               onDone={() => setViewingFile(undefined)}
             />

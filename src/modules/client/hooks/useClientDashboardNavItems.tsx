@@ -44,7 +44,7 @@ export const useClientDashboardNavItems = (
             id: 'files',
             title: 'Files',
             path: ClientDashboardRoutes.FILES,
-            permissions: ['canViewAnyFiles'],
+            permissions: ['canIndexFiles'],
             hide: !enabledFeatures.includes(ClientDashboardFeature.File),
           },
           {
