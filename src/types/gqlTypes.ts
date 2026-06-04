@@ -767,7 +767,38 @@ export type CeMatchRule = {
   ownerType: CeMatchRuleOwner;
   /** Rule applicability is limited to projects with these types */
   projectTypes: Array<ProjectType>;
+  /** Expression translated into a structured clause list; null if the expression is too complex to translate */
+  structuredExpression?: Maybe<CeMatchRuleStructuredExpression>;
 };
+
+export enum CeMatchRuleBooleanOperator {
+  And = 'AND',
+  Or = 'OR',
+}
+
+export type CeMatchRuleClause = {
+  __typename?: 'CeMatchRuleClause';
+  /** The comparison operator to apply to the field and value, such as EQ */
+  comparator: CeMatchRuleComparator;
+  /** The name of the field for comparison, such as client_age or cde.custom_assessment.my_score */
+  field: Scalars['String']['output'];
+  /**
+   * The value to compare the field against, such as 18 or "1 Bed". JSON scalar
+   * (e.g. integer, float, string, boolean, or null). Not a list or nested object.
+   */
+  value?: Maybe<Scalars['JSON']['output']>;
+};
+
+export enum CeMatchRuleComparator {
+  Eq = 'EQ',
+  Excludes = 'EXCLUDES',
+  Gt = 'GT',
+  Gte = 'GTE',
+  Includes = 'INCLUDES',
+  Lt = 'LT',
+  Lte = 'LTE',
+  NotEq = 'NOT_EQ',
+}
 
 export enum CeMatchRuleOwner {
   /** Data Source */
@@ -781,6 +812,12 @@ export enum CeMatchRuleOwner {
   /** Unit Group */
   UnitGroup = 'UNIT_GROUP',
 }
+
+export type CeMatchRuleStructuredExpression = {
+  __typename?: 'CeMatchRuleStructuredExpression';
+  clauses: Array<CeMatchRuleClause>;
+  operator: CeMatchRuleBooleanOperator;
+};
 
 export type CeMatchValue = {
   __typename?: 'CeMatchValue';
