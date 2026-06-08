@@ -182,7 +182,7 @@ const OrganizationsTable = ({
           searchAdornment
           clearAdornment
         />
-        <RootPermissionsFilter permissions={['canEditOrganization']}>
+        <RootPermissionsFilter permissions={['canCreateOrganizations']}>
           <Box
             sx={{
               width: 'fit-content',

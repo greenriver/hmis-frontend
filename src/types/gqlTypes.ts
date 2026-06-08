@@ -5441,6 +5441,7 @@ export type OrganizationProjectsArgs = {
 
 export type OrganizationAccess = {
   __typename?: 'OrganizationAccess';
+  canCreateProjects: Scalars['Boolean']['output'];
   canDeleteOrganization: Scalars['Boolean']['output'];
   canEditOrganization: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
@@ -7089,67 +7090,40 @@ export type QueryWorkspacesArgs = {
 
 export type QueryAccess = {
   __typename?: 'QueryAccess';
+  /** @deprecated Unused in the frontend */
   canAdministerHmis: Scalars['Boolean']['output'];
   canAdministrateConfig: Scalars['Boolean']['output'];
+  /** @deprecated Use policy permission specific to the need, such as canManageCeDefaultContacts or canIndexOpportunities */
   canAdministrateCoordinatedEntry: Scalars['Boolean']['output'];
-  canAssignReferralTasks: Scalars['Boolean']['output'];
-  canAuditClients: Scalars['Boolean']['output'];
-  canAuditEnrollments: Scalars['Boolean']['output'];
   canAuditUsers: Scalars['Boolean']['output'];
+  /** @deprecated Use policy permission specific to the need, such as canManageFormRules or canManageServices */
   canConfigureDataCollection: Scalars['Boolean']['output'];
-  canDeleteAssessments: Scalars['Boolean']['output'];
-  canDeleteClients: Scalars['Boolean']['output'];
-  canDeleteEnrollments: Scalars['Boolean']['output'];
-  canDeleteOrganization: Scalars['Boolean']['output'];
-  canDeleteProject: Scalars['Boolean']['output'];
+  canCreateClients: Scalars['Boolean']['output'];
+  canCreateOrganizations: Scalars['Boolean']['output'];
+  /** @deprecated Use canCreateClients when checking for creation permission. Use client access object when checking for ability to edit a specific client. */
   canEditClients: Scalars['Boolean']['output'];
-  canEditEnrollments: Scalars['Boolean']['output'];
+  /** @deprecated Use canCreateOrganizations when checking for creation permission. Use organization access object when checking for ability to edit a specific organization. */
   canEditOrganization: Scalars['Boolean']['output'];
+  /** @deprecated Use canCreateProjects on the organization access object */
   canEditProjectDetails: Scalars['Boolean']['output'];
   canEditUsersInWarehouse: Scalars['Boolean']['output'];
-  canEnrollClients: Scalars['Boolean']['output'];
   canImpersonateUsers: Scalars['Boolean']['output'];
+  canIndexEligibleClients: Scalars['Boolean']['output'];
+  canIndexOpportunities: Scalars['Boolean']['output'];
   canIndexReferrals: Scalars['Boolean']['output'];
-  canManageAnyClientFiles: Scalars['Boolean']['output'];
-  canManageClientAlerts: Scalars['Boolean']['output'];
+  canManageCeDefaultContacts: Scalars['Boolean']['output'];
+  canManageCeMatchRules: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
-  canManageExternalFormSubmissions: Scalars['Boolean']['output'];
+  canManageFormRules: Scalars['Boolean']['output'];
   canManageForms: Scalars['Boolean']['output'];
-  canManageIncomingReferrals: Scalars['Boolean']['output'];
-  canManageOutgoingReferrals: Scalars['Boolean']['output'];
-  canManageOwnClientFiles: Scalars['Boolean']['output'];
-  canManageScanCards: Scalars['Boolean']['output'];
-  canManageUnits: Scalars['Boolean']['output'];
+  canManageProjectConfigs: Scalars['Boolean']['output'];
+  canManageServices: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
-  canPerformAnyReferralTasks: Scalars['Boolean']['output'];
-  canPerformOwnReferralTasks: Scalars['Boolean']['output'];
-  canPrintClientCaseNotes: Scalars['Boolean']['output'];
-  canSplitHouseholds: Scalars['Boolean']['output'];
-  canStartReferrals: Scalars['Boolean']['output'];
+  /** @deprecated Unused in the frontend */
   canTransferEnrollments: Scalars['Boolean']['output'];
-  canUpdateUnitAvailability: Scalars['Boolean']['output'];
-  canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
-  canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
-  canViewClientContactInfo: Scalars['Boolean']['output'];
-  canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
-  canViewClientName: Scalars['Boolean']['output'];
-  canViewClientPhoto: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
-  canViewEnrollmentDetails: Scalars['Boolean']['output'];
-  canViewEnrollmentLocationMap: Scalars['Boolean']['output'];
-  canViewFullSsn: Scalars['Boolean']['output'];
-  canViewHudChronicStatus: Scalars['Boolean']['output'];
-  canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
-  canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
-  canViewOutgoingReferralDetails: Scalars['Boolean']['output'];
-  canViewOwnReferrals: Scalars['Boolean']['output'];
-  canViewPartialSsn: Scalars['Boolean']['output'];
-  canViewPrioritizedClientLists: Scalars['Boolean']['output'];
-  canViewProject: Scalars['Boolean']['output'];
-  canViewReferrals: Scalars['Boolean']['output'];
-  canViewUnits: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -9162,23 +9136,25 @@ export type YouthEducationStatus = {
 export type RootPermissionsFragment = {
   __typename?: 'QueryAccess';
   id: string;
-  canAdministerHmis: boolean;
   canManageForms: boolean;
   canAdministrateConfig: boolean;
-  canConfigureDataCollection: boolean;
+  canManageFormRules: boolean;
+  canManageServices: boolean;
+  canManageProjectConfigs: boolean;
   canImpersonateUsers: boolean;
   canAuditUsers: boolean;
   canManageDeniedReferrals: boolean;
   canMergeClients: boolean;
-  canTransferEnrollments: boolean;
   canEditUsersInWarehouse: boolean;
-  canAdministrateCoordinatedEntry: boolean;
+  canManageCeDefaultContacts: boolean;
+  canManageCeMatchRules: boolean;
+  canIndexOpportunities: boolean;
+  canIndexEligibleClients: boolean;
   canViewClients: boolean;
-  canEditClients: boolean;
+  canCreateClients: boolean;
   canViewDob: boolean;
   canViewClientAlerts: boolean;
-  canEditOrganization: boolean;
-  canEditProjectDetails: boolean;
+  canCreateOrganizations: boolean;
   canIndexReferrals: boolean;
 };
 
@@ -9254,6 +9230,7 @@ export type OrganizationAccessFieldsFragment = {
   id: string;
   canEditOrganization: boolean;
   canDeleteOrganization: boolean;
+  canCreateProjects: boolean;
 };
 
 export type GetRootPermissionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -9263,23 +9240,25 @@ export type GetRootPermissionsQuery = {
   access: {
     __typename?: 'QueryAccess';
     id: string;
-    canAdministerHmis: boolean;
     canManageForms: boolean;
     canAdministrateConfig: boolean;
-    canConfigureDataCollection: boolean;
+    canManageFormRules: boolean;
+    canManageServices: boolean;
+    canManageProjectConfigs: boolean;
     canImpersonateUsers: boolean;
     canAuditUsers: boolean;
     canManageDeniedReferrals: boolean;
     canMergeClients: boolean;
-    canTransferEnrollments: boolean;
     canEditUsersInWarehouse: boolean;
-    canAdministrateCoordinatedEntry: boolean;
+    canManageCeDefaultContacts: boolean;
+    canManageCeMatchRules: boolean;
+    canIndexOpportunities: boolean;
+    canIndexEligibleClients: boolean;
     canViewClients: boolean;
-    canEditClients: boolean;
+    canCreateClients: boolean;
     canViewDob: boolean;
     canViewClientAlerts: boolean;
-    canEditOrganization: boolean;
-    canEditProjectDetails: boolean;
+    canCreateOrganizations: boolean;
     canIndexReferrals: boolean;
   };
 };
@@ -43000,6 +42979,7 @@ export type GetOrganizationQuery = {
       id: string;
       canEditOrganization: boolean;
       canDeleteOrganization: boolean;
+      canCreateProjects: boolean;
     };
     user?: {
       __typename: 'ApplicationUser';
@@ -50472,23 +50452,25 @@ export type GetWorkspacesQuery = {
 export const RootPermissionsFragmentDoc = gql`
   fragment RootPermissions on QueryAccess {
     id
-    canAdministerHmis
     canManageForms
     canAdministrateConfig
-    canConfigureDataCollection
+    canManageFormRules
+    canManageServices
+    canManageProjectConfigs
     canImpersonateUsers
     canAuditUsers
     canManageDeniedReferrals
     canMergeClients
-    canTransferEnrollments
     canEditUsersInWarehouse
-    canAdministrateCoordinatedEntry
+    canManageCeDefaultContacts
+    canManageCeMatchRules
+    canIndexOpportunities
+    canIndexEligibleClients
     canViewClients
-    canEditClients
+    canCreateClients
     canViewDob
     canViewClientAlerts
-    canEditOrganization
-    canEditProjectDetails
+    canCreateOrganizations
     canIndexReferrals
   }
 `;
@@ -50503,6 +50485,7 @@ export const OrganizationAccessFieldsFragmentDoc = gql`
     id
     canEditOrganization
     canDeleteOrganization
+    canCreateProjects
   }
 `;
 export const ClientNameFragmentDoc = gql`

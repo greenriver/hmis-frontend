@@ -39,10 +39,12 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
   } = useWorkspaceSelector(WorkspaceAppliesTo.CeReferrals);
 
   // Only CE Admins can see the Units and Eligible Clients tabs
-  const showUnitsAndEligibleClients = useMemo(
-    () => !!access?.canAdministrateCoordinatedEntry,
-    [access?.canAdministrateCoordinatedEntry]
+  const showUnits = useMemo(() => !!access?.canIndexOpportunities, [access]);
+  const showEligibleClients = useMemo(
+    () => !!access?.canIndexEligibleClients,
+    [access]
   );
+  const showUnitsAndEligibleClients = showUnits && showEligibleClients;
 
   const tabDefinitions = useMemo(() => {
     const tabs = [
@@ -60,27 +62,31 @@ const ReferralsPage: React.FC<Props> = ({ currentTab }) => {
         ),
       },
     ];
-    if (showUnitsAndEligibleClients) {
-      tabs.push(
-        // Admins see additional tabs
-        {
-          title: 'Available Units',
-          key: 'available-units',
-          contents: (
-            <AdminOpportunitiesTable projectGroupId={selectedProjectGroupId} />
-          ),
-        },
-        {
-          title: 'Eligible Clients',
-          key: 'eligible-clients',
-          contents: (
-            <AdminCeClientsTable projectGroupId={selectedProjectGroupId} />
-          ),
-        }
-      );
+    if (showUnits) {
+      tabs.push({
+        title: 'Available Units',
+        key: 'available-units',
+        contents: (
+          <AdminOpportunitiesTable projectGroupId={selectedProjectGroupId} />
+        ),
+      });
+    }
+    if (showEligibleClients) {
+      tabs.push({
+        title: 'Eligible Clients',
+        key: 'eligible-clients',
+        contents: (
+          <AdminCeClientsTable projectGroupId={selectedProjectGroupId} />
+        ),
+      });
     }
     return tabs;
-  }, [showUnitsAndEligibleClients, selectedProjectGroupId]);
+  }, [
+    selectedProjectGroupId,
+    showUnitsAndEligibleClients,
+    showUnits,
+    showEligibleClients,
+  ]);
 
   const handleChangeTab = (key: string) => {
     const pathname = TAB_ROUTES[key as CeTabKey];
