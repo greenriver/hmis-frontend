@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client';
 import { useMemo } from 'react';
 
 import { getItemMap } from '../util/formUtil';
@@ -9,13 +8,11 @@ interface Args {
   projectId: string;
   serviceTypeId?: string;
   formDefinitionId?: string | null; // provided when editing existing service
-  onError?: (error: ApolloError) => void;
 }
 const useServiceFormDefinition = ({
   serviceTypeId,
   projectId,
   formDefinitionId,
-  onError,
 }: Args) => {
   const { data, loading } = useGetServiceFormDefinitionQuery({
     variables: {
@@ -24,7 +21,6 @@ const useServiceFormDefinition = ({
       formDefinitionId,
     },
     skip: !serviceTypeId,
-    onError,
   });
 
   const { formDefinition, itemMap } = useMemo(() => {
