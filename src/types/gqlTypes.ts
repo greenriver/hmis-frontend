@@ -764,7 +764,7 @@ export type CeMatchField = {
   /** The CDED key for this field, or the client field key for a client field */
   key: Scalars['String']['output'];
   label: Scalars['String']['output'];
-  pickListOptions: Array<PickListOption>;
+  pickListOptions?: Maybe<Array<PickListOption>>;
   pickListReference?: Maybe<Scalars['String']['output']>;
   repeats: Scalars['Boolean']['output'];
 };
@@ -22349,6 +22349,7 @@ export type GetCeClientEligibleUnitGroupsQuery = {
 
 export type CeMatchFieldFieldsFragment = {
   __typename?: 'CeMatchField';
+  id: string;
   key: string;
   label: string;
   itemType: ItemType;
@@ -22356,7 +22357,7 @@ export type CeMatchFieldFieldsFragment = {
   expressionField: string;
   formDefinitionIdentifier?: string | null;
   pickListReference?: string | null;
-  pickListOptions: Array<{
+  pickListOptions?: Array<{
     __typename?: 'PickListOption';
     code: string;
     label?: string | null;
@@ -22367,7 +22368,7 @@ export type CeMatchFieldFieldsFragment = {
     helperText?: string | null;
     numericValue?: number | null;
     disabled?: boolean | null;
-  }>;
+  }> | null;
 };
 
 export type CeMatchRuleFieldsFragment = {
@@ -22443,6 +22444,7 @@ export type GetCeMatchClientFieldsQuery = {
   __typename?: 'Query';
   ceMatchClientFields: Array<{
     __typename?: 'CeMatchField';
+    id: string;
     key: string;
     label: string;
     itemType: ItemType;
@@ -22450,7 +22452,7 @@ export type GetCeMatchClientFieldsQuery = {
     expressionField: string;
     formDefinitionIdentifier?: string | null;
     pickListReference?: string | null;
-    pickListOptions: Array<{
+    pickListOptions?: Array<{
       __typename?: 'PickListOption';
       code: string;
       label?: string | null;
@@ -22461,7 +22463,7 @@ export type GetCeMatchClientFieldsQuery = {
       helperText?: string | null;
       numericValue?: number | null;
       disabled?: boolean | null;
-    }>;
+    }> | null;
   }>;
 };
 
@@ -22487,6 +22489,7 @@ export type GetCeMatchCustomAssessmentFieldsQuery = {
   __typename?: 'Query';
   ceMatchCustomAssessmentFields: Array<{
     __typename?: 'CeMatchField';
+    id: string;
     key: string;
     label: string;
     itemType: ItemType;
@@ -22494,7 +22497,7 @@ export type GetCeMatchCustomAssessmentFieldsQuery = {
     expressionField: string;
     formDefinitionIdentifier?: string | null;
     pickListReference?: string | null;
-    pickListOptions: Array<{
+    pickListOptions?: Array<{
       __typename?: 'PickListOption';
       code: string;
       label?: string | null;
@@ -22505,7 +22508,7 @@ export type GetCeMatchCustomAssessmentFieldsQuery = {
       helperText?: string | null;
       numericValue?: number | null;
       disabled?: boolean | null;
-    }>;
+    }> | null;
   }>;
 };
 
@@ -52189,6 +52192,7 @@ export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
 `;
 export const CeMatchFieldFieldsFragmentDoc = gql`
   fragment CeMatchFieldFields on CeMatchField {
+    id
     key
     label
     itemType
