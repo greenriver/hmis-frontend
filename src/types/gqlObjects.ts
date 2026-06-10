@@ -817,6 +817,67 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeMatchField',
+    fields: [
+      {
+        name: 'expressionField',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'formDefinitionIdentifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'itemType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ItemType', ofType: null },
+        },
+      },
+      {
+        name: 'key',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'label',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'pickListReference',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'repeats',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeMatchRule',
     fields: [
       {
@@ -8041,6 +8102,96 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'CeMatchRuleClauseInput',
+    args: [
+      {
+        name: 'comparator',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CeMatchRuleComparator', ofType: null },
+        },
+      },
+      {
+        name: 'field',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      { name: 'value', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
+    ],
+  },
+  {
+    name: 'CeMatchRuleInput',
+    args: [
+      {
+        name: 'expression',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'ownerId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'ownerType',
+        type: { kind: 'ENUM', name: 'CeMatchRuleOwner', ofType: null },
+      },
+      {
+        name: 'priorityRank',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'ruleType',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'structuredExpression',
+        type: {
+          kind: 'INPUT_OBJECT',
+          name: 'CeMatchRuleStructuredExpressionInput',
+          ofType: null,
+        },
+      },
+    ],
+  },
+  {
+    name: 'CeMatchRuleStructuredExpressionInput',
+    args: [
+      {
+        name: 'clauses',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'INPUT_OBJECT',
+                name: 'CeMatchRuleClauseInput',
+                ofType: null,
+              },
+            },
+          },
+        },
+      },
+      {
+        name: 'operator',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'CeMatchRuleBooleanOperator',
+            ofType: null,
           },
         },
       },

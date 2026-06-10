@@ -29,6 +29,13 @@ export const useAdminDashboardNavItems = () => {
             permissions: ['canManageCeDefaultContacts'],
             hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
+          {
+            // TODO: swap to canAdministrateCoordinatedEntry once UX is ready for non-GR users.
+            id: 'ce-match-rules',
+            title: 'CE Match Rules',
+            path: AdminDashboardRoutes.CE_MATCH_RULES,
+            permissions: ['canAdministrateConfig'],
+          },
         ],
       },
       {

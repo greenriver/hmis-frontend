@@ -45,15 +45,6 @@ fragment ClientCeOpportunitySummaryFields on CeOpportunity {
   projectType
 }
 
-fragment CeMatchRuleFields on CeMatchRule {
-  id
-  name
-  ownerType
-  expression
-  projectTypes
-  funders
-}
-
 fragment CeCandidateFields on CeCandidate {
   id
   priorityScores
