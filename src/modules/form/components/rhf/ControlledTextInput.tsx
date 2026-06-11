@@ -19,8 +19,7 @@ interface ControlledTextInputProps<
   name: Path<T>;
   control?: Control<T>; // Optional when using FormProvider
   rules?: RhfRules;
-  // Defaults to true to preserve existing behavior; conditional builders can opt
-  // out when they need explicit reset logic to decide which values are stale.
+  // Whether RHF should delete a field's value when the input unmounts. True by default.
   shouldUnregister?: boolean;
 }
 

@@ -16,8 +16,10 @@ import {
 } from 'react-hook-form';
 
 import CeMatchClauseRow from './CeMatchClauseRow';
-import type { CeMatchRuleFormValues } from './CeMatchRuleForm';
-import { booleanOperatorOptions, newDraftClause } from './ceMatchRuleUtil';
+import type {
+  CeMatchDraftClause,
+  CeMatchRuleFormValues,
+} from './CeMatchRuleForm';
 import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import Loading from '@/components/elements/Loading';
 import {
@@ -29,12 +31,19 @@ import {
 interface Props {
   control: Control<CeMatchRuleFormValues>;
   setValue: UseFormSetValue<CeMatchRuleFormValues>;
+  newDraftClause: () => CeMatchDraftClause;
   validationError?: string;
 }
+
+const booleanOperatorOptions = [
+  { code: CeMatchRuleBooleanOperator.And, label: 'ALL' },
+  { code: CeMatchRuleBooleanOperator.Or, label: 'ANY' },
+];
 
 const StructuredExpressionBuilder: React.FC<Props> = ({
   control,
   setValue,
+  newDraftClause,
   validationError,
 }) => {
   const { fields, append, remove } = useFieldArray({

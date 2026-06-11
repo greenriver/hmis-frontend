@@ -2,45 +2,26 @@ import { Grid, Stack } from '@mui/material';
 import { useMemo } from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 
-import type { CeMatchRuleFormValues } from './CeMatchRuleForm';
-import {
-  booleanValueOptions,
+import CeMatchAssessmentSelect from './CeMatchAssessmentSelect';
+import CeMatchComparatorSelect, {
+  defaultComparatorForField,
+} from './CeMatchComparatorSelect';
+import CeMatchFieldSelect from './CeMatchFieldSelect';
+import CeMatchFieldTypeSelect from './CeMatchFieldTypeSelect';
+import type {
   CeMatchFieldSource,
-  comparatorOptionsForField,
-  customAssessmentFormToOption,
-  fieldSourceOptions,
-  pickListOptionsForField,
-  valueInputType,
-} from './ceMatchRuleUtil';
-import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
-import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
+  CeMatchRuleFormValues,
+} from './CeMatchRuleForm';
+import CeMatchValueInput from './CeMatchValueInput';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
   CeMatchFieldDetailsFragment,
   CeMatchRuleComparator,
-  PickListOption,
   useGetCeMatchCustomAssessmentFieldsQuery,
 } from '@/types/gqlTypes';
 
 // Extract as a constant to avoid re-creating the array on every render
 const emptyCustomAssessmentFields: CeMatchFieldDetailsFragment[] = [];
-
-// Field labels may be missing in older CDED metadata, so fall back to stable
-// expression identifiers for the select option label.
-const fieldLabel = (field: CeMatchFieldDetailsFragment) =>
-  field.label.trim() || field.expressionField || field.key;
-
-// ControlledSelect can emit booleans for JSON-valued fields; only string values
-// are safe to reuse as select option codes for form state.
-const optionCode = (value: PickListOption['code'] | boolean | null) => {
-  if (typeof value === 'string') return value;
-};
-
-// This row maps both client and custom CDED fields into the same select shape.
-const fieldToOption = (field: CeMatchFieldDetailsFragment): PickListOption => ({
-  code: field.expressionField,
-  label: fieldLabel(field),
-});
 
 interface Props {
   control: Control<CeMatchRuleFormValues>;
@@ -99,27 +80,6 @@ const CeMatchClauseRow: React.FC<Props> = ({
     [fieldValue, fields]
   );
 
-  const fieldOptions = useMemo(() => {
-    if (source === 'client')
-      return clientItems.map((field) => fieldToOption(field));
-    if (source === 'custom')
-      return customAssessmentFields.map((field) => fieldToOption(field));
-    return [];
-  }, [clientItems, source, customAssessmentFields]);
-
-  const customAssessmentFormOptions = useMemo(
-    () => customAssessmentForms.map(customAssessmentFormToOption),
-    [customAssessmentForms]
-  );
-
-  const comparatorOptions = useMemo(
-    () => comparatorOptionsForField(selectedField),
-    [selectedField]
-  );
-
-  const valueOptions = pickListOptionsForField(selectedField);
-  const valueType = valueInputType(selectedField, valueOptions);
-
   if (customAssessmentFieldsError) throw customAssessmentFieldsError;
 
   // This row switches between several inputs for the same clause. Keep
@@ -142,115 +102,59 @@ const CeMatchClauseRow: React.FC<Props> = ({
     <Stack gap={3}>
       <Grid container spacing={2} alignItems='flex-start'>
         <Grid item xs={12} md={4}>
-          <ControlledSelect
-            name={`${clausePath}.source`}
+          <CeMatchFieldTypeSelect
+            clausePath={clausePath}
             control={control}
-            label='Field Type'
-            placeholder='Select type'
-            options={fieldSourceOptions}
-            shouldUnregister={false}
-            onChange={(value) => {
-              const nextSource = optionCode(value) || '';
-              setValue(
-                `${clausePath}.source`,
-                nextSource as CeMatchFieldSource | ''
-              );
-              resetCustomAssessmentSelection();
-            }}
+            setValue={setValue}
+            onSourceChange={resetCustomAssessmentSelection}
           />
         </Grid>
         {source === 'custom' && (
           <Grid item xs={12} md={4}>
-            <ControlledSelect
-              name={`${clausePath}.customAssessmentFormIdentifier`}
+            <CeMatchAssessmentSelect
+              clausePath={clausePath}
               control={control}
-              label='Assessment'
-              placeholder='Select assessment'
-              options={customAssessmentFormOptions}
-              shouldUnregister={false}
-              onChange={() => resetFieldSelection()}
+              customAssessmentForms={customAssessmentForms}
+              onAssessmentChange={() => resetFieldSelection()}
             />
           </Grid>
         )}
       </Grid>
       <Grid container spacing={2} alignItems='flex-start'>
         <Grid item xs={12} md={4}>
-          <ControlledSelect
-            name={`${clausePath}.field`}
+          <CeMatchFieldSelect
+            clausePath={clausePath}
             control={control}
-            label={source === 'client' ? 'Client Field' : 'Custom Field'}
-            placeholder='Select field'
-            options={fieldOptions}
-            shouldUnregister={false}
-            disabled={
-              !source ||
-              (source === 'custom' && !selectedCustomAssessmentFormIdentifier)
+            source={source as CeMatchFieldSource | ''}
+            selectedCustomAssessmentFormIdentifier={
+              selectedCustomAssessmentFormIdentifier
             }
-            loading={customAssessmentFieldsLoading}
-            onChange={(value) => {
-              const selectedFieldExpression = optionCode(value);
-              const nextField = fields.find(
-                (field) => field.expressionField === selectedFieldExpression
-              );
-              const nextComparator =
-                comparatorOptionsForField(nextField)[0]?.code ||
-                CeMatchRuleComparator.Eq;
+            clientItems={clientItems}
+            customAssessmentFields={customAssessmentFields}
+            customAssessmentFieldsLoading={customAssessmentFieldsLoading}
+            onFieldChange={(field) => {
               setValue(
                 `${clausePath}.comparator`,
-                nextComparator as CeMatchRuleComparator
+                defaultComparatorForField(field) as CeMatchRuleComparator
               );
               resetValueSelection();
             }}
           />
         </Grid>
         <Grid item xs={12} md={4}>
-          <ControlledSelect
-            name={`${clausePath}.comparator`}
+          <CeMatchComparatorSelect
+            clausePath={clausePath}
             control={control}
-            label='Comparator'
-            placeholder='Select'
-            options={comparatorOptions}
-            shouldUnregister={false}
-            disabled={!selectedField}
-            onChange={resetValueSelection}
+            selectedField={selectedField}
+            onComparatorChange={resetValueSelection}
           />
         </Grid>
         <Grid item xs={12} md={4}>
-          {valueType === 'choice' && (
-            <ControlledSelect
-              name={`${clausePath}.value`}
-              control={control}
-              label='Value'
-              placeholder='Select value'
-              options={valueOptions}
-              disabled={!selectedField}
-              shouldUnregister={false}
-            />
-          )}
-          {valueType === 'boolean' && (
-            <ControlledSelect
-              name={`${clausePath}.value`}
-              control={control}
-              label='Value'
-              placeholder='Select value'
-              options={booleanValueOptions}
-              disabled={!selectedField}
-              // Empty must stay empty; otherwise clearing the select would
-              // become false, which is a valid submitted JSON value.
-              setValueAs={(option) => (option ? option.code === 'true' : '')}
-              shouldUnregister={false}
-            />
-          )}
-          {valueType !== 'choice' && valueType !== 'boolean' && (
-            <ControlledTextInput
-              name={`${clausePath}.value`}
-              control={control}
-              label='Value'
-              type={valueType}
-              disabled={!selectedField}
-              shouldUnregister={false}
-            />
-          )}
+          <CeMatchValueInput
+            clausePath={clausePath}
+            control={control}
+            selectedField={selectedField}
+          />
         </Grid>
       </Grid>
     </Stack>
