@@ -2,7 +2,7 @@ import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { COMPARABLE_ITEM_TYPES } from '@/modules/formBuilder/formBuilderUtil';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
-  CeMatchFieldFieldsFragment,
+  CeMatchFieldDetailsFragment,
   CeMatchRuleBooleanOperator,
   CeMatchRuleClauseInput,
   CeMatchRuleComparator,
@@ -45,7 +45,7 @@ export const customAssessmentFormToOption = (
 });
 
 export const pickListOptionsForField = (
-  field?: CeMatchFieldFieldsFragment
+  field?: CeMatchFieldDetailsFragment
 ): PickListOption[] => {
   if (!field) return [];
 
@@ -61,7 +61,7 @@ export const pickListOptionsForField = (
 };
 
 export const valueInputType = (
-  field: CeMatchFieldFieldsFragment | undefined,
+  field: CeMatchFieldDetailsFragment | undefined,
   options: PickListOption[]
 ) => {
   if (!field) return 'text';
@@ -106,7 +106,7 @@ export const comparatorLabel = (comparator: CeMatchRuleComparator) => {
 };
 
 export const comparatorOptionsForField = (
-  field?: CeMatchFieldFieldsFragment
+  field?: CeMatchFieldDetailsFragment
 ): PickListOption[] => {
   if (field?.repeats) {
     // Repeating values are arrays, so only array membership operators apply.

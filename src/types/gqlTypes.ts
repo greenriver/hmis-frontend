@@ -22307,7 +22307,7 @@ export type GetCeClientEligibleUnitGroupsQuery = {
   } | null;
 };
 
-export type CeMatchFieldFieldsFragment = {
+export type CeMatchFieldDetailsFragment = {
   __typename?: 'CeMatchField';
   id: string;
   key: string;
@@ -52039,8 +52039,8 @@ export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
     unitsAcceptingReferrals
   }
 `;
-export const CeMatchFieldFieldsFragmentDoc = gql`
-  fragment CeMatchFieldFields on CeMatchField {
+export const CeMatchFieldDetailsFragmentDoc = gql`
+  fragment CeMatchFieldDetails on CeMatchField {
     id
     key
     label
@@ -57955,10 +57955,10 @@ export type CreateCeMatchRuleMutationOptions = Apollo.BaseMutationOptions<
 export const GetCeMatchClientFieldsDocument = gql`
   query GetCeMatchClientFields {
     ceMatchClientFields {
-      ...CeMatchFieldFields
+      ...CeMatchFieldDetails
     }
   }
-  ${CeMatchFieldFieldsFragmentDoc}
+  ${CeMatchFieldDetailsFragmentDoc}
 `;
 
 /**
@@ -58155,10 +58155,10 @@ export const GetCeMatchCustomAssessmentFieldsDocument = gql`
     ceMatchCustomAssessmentFields(
       formDefinitionIdentifier: $formDefinitionIdentifier
     ) {
-      ...CeMatchFieldFields
+      ...CeMatchFieldDetails
     }
   }
-  ${CeMatchFieldFieldsFragmentDoc}
+  ${CeMatchFieldDetailsFragmentDoc}
 `;
 
 /**

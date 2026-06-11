@@ -1,4 +1,4 @@
-fragment CeMatchFieldFields on CeMatchField {
+fragment CeMatchFieldDetails on CeMatchField {
   id
   key
   label

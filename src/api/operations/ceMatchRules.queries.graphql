@@ -2,7 +2,7 @@
 # for CE Match Rule expressions.
 query GetCeMatchClientFields {
   ceMatchClientFields {
-    ...CeMatchFieldFields
+    ...CeMatchFieldDetails
   }
 }
 
@@ -19,6 +19,6 @@ query GetCeMatchCustomAssessmentFields($formDefinitionIdentifier: String!) {
   ceMatchCustomAssessmentFields(
     formDefinitionIdentifier: $formDefinitionIdentifier
   ) {
-    ...CeMatchFieldFields
+    ...CeMatchFieldDetails
   }
 }

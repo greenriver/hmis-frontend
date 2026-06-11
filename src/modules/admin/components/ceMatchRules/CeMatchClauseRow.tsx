@@ -16,18 +16,18 @@ import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
-  CeMatchFieldFieldsFragment,
+  CeMatchFieldDetailsFragment,
   CeMatchRuleComparator,
   PickListOption,
   useGetCeMatchCustomAssessmentFieldsQuery,
 } from '@/types/gqlTypes';
 
 // Extract as a constant to avoid re-creating the array on every render
-const emptyCustomAssessmentFields: CeMatchFieldFieldsFragment[] = [];
+const emptyCustomAssessmentFields: CeMatchFieldDetailsFragment[] = [];
 
 // Field labels may be missing in older CDED metadata, so fall back to stable
 // expression identifiers for the select option label.
-const fieldLabel = (field: CeMatchFieldFieldsFragment) =>
+const fieldLabel = (field: CeMatchFieldDetailsFragment) =>
   field.label.trim() || field.expressionField || field.key;
 
 // ControlledSelect can emit booleans for JSON-valued fields; only string values
@@ -37,7 +37,7 @@ const optionCode = (value: PickListOption['code'] | boolean | null) => {
 };
 
 // This row maps both client and custom CDED fields into the same select shape.
-const fieldToOption = (field: CeMatchFieldFieldsFragment): PickListOption => ({
+const fieldToOption = (field: CeMatchFieldDetailsFragment): PickListOption => ({
   code: field.expressionField,
   label: fieldLabel(field),
 });
@@ -46,7 +46,7 @@ interface Props {
   control: Control<CeMatchRuleFormValues>;
   setValue: UseFormSetValue<CeMatchRuleFormValues>;
   index: number;
-  clientItems: CeMatchFieldFieldsFragment[];
+  clientItems: CeMatchFieldDetailsFragment[];
   customAssessmentForms: CeMatchCustomAssessmentFormFieldsFragment[];
 }
 
