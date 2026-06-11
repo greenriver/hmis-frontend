@@ -9,6 +9,7 @@ import {
 } from '@/types/gqlTypes';
 
 export type CeMatchFieldSource = 'client' | 'custom';
+export type CeMatchExpressionMode = 'structured' | 'freeText';
 
 export type CeMatchBuilderField = CeMatchFieldFieldsFragment;
 
@@ -30,6 +31,26 @@ export const newDraftClause = (): CeMatchDraftClause => ({
   field: '',
   comparator: CeMatchRuleComparator.Eq,
   value: '',
+});
+
+export interface CeMatchRuleFormValues {
+  name: string;
+  mode: CeMatchExpressionMode;
+  structuredExpression: {
+    operator: CeMatchRuleBooleanOperator;
+    clauses: CeMatchDraftClause[];
+  };
+  freeTextExpression: string;
+}
+
+export const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
+  name: '',
+  mode: 'structured',
+  structuredExpression: {
+    operator: CeMatchRuleBooleanOperator.And,
+    clauses: [newDraftClause()],
+  },
+  freeTextExpression: '',
 });
 
 export const fieldLabel = (field: CeMatchBuilderField) =>

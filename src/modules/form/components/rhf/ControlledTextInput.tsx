@@ -1,40 +1,47 @@
 import { ChangeEvent, useCallback } from 'react';
-import { Control, useController } from 'react-hook-form';
+import {
+  Control,
+  FieldValues,
+  Path,
+  RegisterOptions,
+  useController,
+} from 'react-hook-form';
 
 import TextInput, {
   TextInputProps,
 } from '@/components/elements/input/TextInput';
 import { RhfRules } from '@/modules/form/types';
 
-interface ControlledTextInputProps extends Omit<
-  TextInputProps,
-  'value' | 'onChange'
-> {
-  name: string;
-  control?: Control; // Optional when using FormProvider
+interface ControlledTextInputProps<
+  T extends FieldValues = FieldValues,
+> extends Omit<TextInputProps, 'value' | 'onChange'> {
+  name: Path<T>;
+  control?: Control<T>; // Optional when using FormProvider
   rules?: RhfRules;
+  shouldUnregister?: boolean;
 }
 
 // React-Hook-Form wrapper around TextInput
-const ControlledTextInput: React.FC<ControlledTextInputProps> = ({
+const ControlledTextInput = <T extends FieldValues = FieldValues>({
   name,
   control,
   onBlur,
   rules,
   required,
+  shouldUnregister = true,
   ...props
-}) => {
+}: ControlledTextInputProps<T>) => {
   const {
     field,
     fieldState: { error },
-  } = useController({
+  } = useController<T>({
     name,
     control,
-    shouldUnregister: true,
+    shouldUnregister,
     rules: {
       required: required ? 'This field is required' : false,
       ...rules,
-    },
+    } as RegisterOptions<T, Path<T>>,
   });
 
   const { onChange: formOnChange, onBlur: formOnBlur } = field;

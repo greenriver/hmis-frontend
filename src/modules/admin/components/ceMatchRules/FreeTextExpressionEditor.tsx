@@ -1,16 +1,16 @@
 import { Alert, Stack } from '@mui/material';
+import { Control } from 'react-hook-form';
 
-import TextInput from '@/components/elements/input/TextInput';
+import { CeMatchRuleFormValues } from './ceMatchRuleUtil';
+import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 
 interface Props {
-  value: string;
-  onChange: (value: string) => void;
+  control: Control<CeMatchRuleFormValues>;
   validationError?: string;
 }
 
 const FreeTextExpressionEditor: React.FC<Props> = ({
-  value,
-  onChange,
+  control,
   validationError,
 }) => (
   <Stack gap={2}>
@@ -19,13 +19,15 @@ const FreeTextExpressionEditor: React.FC<Props> = ({
       structured builder does not support.
     </Alert>
     {validationError && <Alert severity='error'>{validationError}</Alert>}
-    <TextInput
+    <ControlledTextInput
+      name='freeTextExpression'
+      control={control}
       label='Expression'
-      value={value}
       minRows={6}
       multiline
       placeholder='current_age >= 18 AND veteran_status = 1'
-      onChange={(event) => onChange(event.target.value)}
+      required
+      shouldUnregister={false}
     />
   </Stack>
 );

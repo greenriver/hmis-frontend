@@ -1,7 +1,5 @@
-import AddIcon from '@mui/icons-material/Add';
 import {
   Alert,
-  Button,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -9,14 +7,24 @@ import {
   Typography,
 } from '@mui/material';
 import { Fragment } from 'react';
+import {
+  Control,
+  Controller,
+  UseFormSetValue,
+  useFieldArray,
+  useWatch,
+} from 'react-hook-form';
 
 import CeMatchClauseRow from './CeMatchClauseRow';
 import {
-  CeMatchDraftClause,
+  CeMatchRuleFormValues,
   booleanOperatorOptions,
   newDraftClause,
 } from './ceMatchRuleUtil';
 import Loading from '@/components/elements/Loading';
+import CardGroup, {
+  RemovableCard,
+} from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import {
   CeMatchRuleBooleanOperator,
   useGetCeMatchClientFieldsQuery,
@@ -24,20 +32,27 @@ import {
 } from '@/types/gqlTypes';
 
 interface Props {
-  clauses: CeMatchDraftClause[];
-  operator: CeMatchRuleBooleanOperator;
-  onChangeClauses: (clauses: CeMatchDraftClause[]) => void;
-  onChangeOperator: (operator: CeMatchRuleBooleanOperator) => void;
+  control: Control<CeMatchRuleFormValues>;
+  setValue: UseFormSetValue<CeMatchRuleFormValues>;
   validationError?: string;
 }
 
 const StructuredExpressionBuilder: React.FC<Props> = ({
-  clauses,
-  operator,
-  onChangeClauses,
-  onChangeOperator,
+  control,
+  setValue,
   validationError,
 }) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'structuredExpression.clauses',
+    shouldUnregister: false,
+  });
+  const operator =
+    useWatch({
+      control,
+      name: 'structuredExpression.operator',
+    }) || CeMatchRuleBooleanOperator.And;
+
   const {
     data: clientItemsData,
     loading: clientItemsLoading,
@@ -54,14 +69,6 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
   const customAssessmentForms =
     customAssessmentFormsData?.ceMatchCustomAssessmentForms || [];
 
-  const replaceClause = (nextClause: CeMatchDraftClause) => {
-    onChangeClauses(
-      clauses.map((clause) =>
-        clause.id === nextClause.id ? nextClause : clause
-      )
-    );
-  };
-
   if (clientItemsError) throw clientItemsError;
   if (customAssessmentFormsError) throw customAssessmentFormsError;
 
@@ -73,57 +80,56 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
           <Typography variant='body2' fontWeight={600}>
             Client must meet
           </Typography>
-          <RadioGroup
-            row
-            value={operator}
-            onChange={(event) =>
-              onChangeOperator(event.target.value as CeMatchRuleBooleanOperator)
-            }
-          >
-            {booleanOperatorOptions.map((option) => (
-              <FormControlLabel
-                key={option.code}
-                value={option.code}
-                control={<Radio size='small' />}
-                label={<strong>{option.label}</strong>}
-              />
-            ))}
-          </RadioGroup>
+          <Controller
+            control={control}
+            name='structuredExpression.operator'
+            render={({ field }) => (
+              <RadioGroup row {...field}>
+                {booleanOperatorOptions.map((option) => (
+                  <FormControlLabel
+                    key={option.code}
+                    value={option.code}
+                    control={<Radio size='small' />}
+                    label={<strong>{option.label}</strong>}
+                  />
+                ))}
+              </RadioGroup>
+            )}
+          />
           <Typography variant='body2' fontWeight={600}>
             of the following requirements
           </Typography>
         </Stack>
       </Stack>
       {loading && <Loading />}
-      {!loading &&
-        clauses.map((clause, index) => (
-          <Fragment key={clause.id}>
-            {index > 0 && (
-              <Typography variant='body2' fontWeight={600}>
-                {operator === CeMatchRuleBooleanOperator.And ? 'AND' : 'OR'}
-              </Typography>
-            )}
-            <CeMatchClauseRow
-              clause={clause}
-              index={index}
-              clientItems={clientItems}
-              customAssessmentForms={customAssessmentForms}
-              onChange={replaceClause}
-              onRemove={() =>
-                onChangeClauses(clauses.filter(({ id }) => id !== clause.id))
-              }
-              canRemove={clauses.length > 1}
-            />
-          </Fragment>
-        ))}
-      <Button
-        startIcon={<AddIcon />}
-        variant='outlined'
-        onClick={() => onChangeClauses([...clauses, newDraftClause()])}
-        sx={{ width: 'fit-content' }}
-      >
-        Add Requirement
-      </Button>
+      {!loading && (
+        <CardGroup
+          onAddItem={() => append(newDraftClause(), { shouldFocus: false })}
+          addItemText='Add Requirement'
+        >
+          {fields.map((clause, index) => (
+            <Fragment key={clause.id}>
+              {index > 0 && (
+                <Typography variant='body2' fontWeight={600}>
+                  {operator === CeMatchRuleBooleanOperator.And ? 'AND' : 'OR'}
+                </Typography>
+              )}
+              <RemovableCard
+                onRemove={() => remove(index)}
+                removeTooltip='Remove Requirement'
+              >
+                <CeMatchClauseRow
+                  control={control}
+                  setValue={setValue}
+                  index={index}
+                  clientItems={clientItems}
+                  customAssessmentForms={customAssessmentForms}
+                />
+              </RemovableCard>
+            </Fragment>
+          ))}
+        </CardGroup>
+      )}
     </Stack>
   );
 };

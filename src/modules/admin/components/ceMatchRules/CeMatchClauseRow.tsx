@@ -1,26 +1,19 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  IconButton,
-  Stack,
-} from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { useMemo } from 'react';
+import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 
 import {
   CeMatchBuilderField,
-  CeMatchDraftClause,
   CeMatchDraftCustomAssessmentForm,
   CeMatchFieldSource,
+  CeMatchRuleFormValues,
   comparatorOptionsForField,
   customAssessmentFormToOption,
   fieldToOption,
   pickListOptionsForField,
 } from './ceMatchRuleUtil';
-import TextInput from '@/components/elements/input/TextInput';
-import { DeleteIcon } from '@/components/elements/SemanticIcons';
-import FormSelect from '@/modules/form/components/FormSelect';
+import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
+import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import {
   CeMatchRuleComparator,
   ItemType,
@@ -40,9 +33,6 @@ const booleanOptions: PickListOption[] = [
 
 const emptyCustomAssessmentFields: CeMatchBuilderField[] = [];
 
-const singleOption = (option: PickListOption | PickListOption[] | null) =>
-  Array.isArray(option) ? option[0] : option;
-
 const valueInputType = (
   field: CeMatchBuilderField | undefined,
   options: PickListOption[]
@@ -61,38 +51,41 @@ const valueInputType = (
   return 'text';
 };
 
-const coerceValue = (field: CeMatchBuilderField | undefined, value: string) => {
-  if (value === '') return '';
-  if (!field) return value;
-  if (field.itemType === ItemType.Boolean) return value === 'true';
-  if ([ItemType.Integer, ItemType.Currency].includes(field.itemType)) {
-    const parsed = Number(value);
-    return Number.isNaN(parsed) ? value : parsed;
-  }
-  return value;
+const optionCode = (value: PickListOption['code'] | boolean | null) => {
+  if (typeof value === 'string') return value;
 };
 
 interface Props {
-  clause: CeMatchDraftClause;
+  control: Control<CeMatchRuleFormValues>;
+  setValue: UseFormSetValue<CeMatchRuleFormValues>;
   index: number;
   clientItems: CeMatchBuilderField[];
   customAssessmentForms: CeMatchDraftCustomAssessmentForm[];
-  onChange: (clause: CeMatchDraftClause) => void;
-  onRemove: VoidFunction;
-  canRemove: boolean;
 }
 
 const CeMatchClauseRow: React.FC<Props> = ({
-  clause,
+  control,
+  setValue,
   index,
   clientItems,
   customAssessmentForms,
-  onChange,
-  onRemove,
-  canRemove,
 }) => {
+  const clausePath = `structuredExpression.clauses.${index}` as const;
+  const source =
+    useWatch({
+      control,
+      name: `${clausePath}.source`,
+    }) || '';
   const selectedCustomAssessmentFormIdentifier =
-    clause.customAssessmentFormIdentifier || '';
+    useWatch({
+      control,
+      name: `${clausePath}.customAssessmentFormIdentifier`,
+    }) || '';
+  const fieldValue = useWatch({
+    control,
+    name: `${clausePath}.field`,
+  });
+
   const {
     data: customAssessmentFieldsData,
     loading: customAssessmentFieldsLoading,
@@ -101,30 +94,30 @@ const CeMatchClauseRow: React.FC<Props> = ({
     variables: {
       formDefinitionIdentifier: selectedCustomAssessmentFormIdentifier,
     },
-    skip: clause.source !== 'custom' || !selectedCustomAssessmentFormIdentifier,
+    skip: source !== 'custom' || !selectedCustomAssessmentFormIdentifier,
   });
   const customAssessmentFields =
     customAssessmentFieldsData?.ceMatchCustomAssessmentFields ||
     emptyCustomAssessmentFields;
 
   const fields = useMemo(() => {
-    if (clause.source === 'client') return clientItems;
-    if (clause.source === 'custom') return customAssessmentFields;
+    if (source === 'client') return clientItems;
+    if (source === 'custom') return customAssessmentFields;
     return [];
-  }, [clientItems, clause.source, customAssessmentFields]);
+  }, [clientItems, source, customAssessmentFields]);
 
   const selectedField = useMemo(
-    () => fields.find((field) => field.expressionField === clause.field),
-    [clause.field, fields]
+    () => fields.find((field) => field.expressionField === fieldValue),
+    [fieldValue, fields]
   );
 
   const fieldOptions = useMemo(() => {
-    if (clause.source === 'client')
+    if (source === 'client')
       return clientItems.map((field) => fieldToOption(field));
-    if (clause.source === 'custom')
+    if (source === 'custom')
       return customAssessmentFields.map((field) => fieldToOption(field));
     return [];
-  }, [clientItems, clause.source, customAssessmentFields]);
+  }, [clientItems, source, customAssessmentFields]);
 
   const customAssessmentFormOptions = useMemo(
     () => customAssessmentForms.map(customAssessmentFormToOption),
@@ -138,190 +131,130 @@ const CeMatchClauseRow: React.FC<Props> = ({
 
   const valueOptions = pickListOptionsForField(selectedField);
   const valueType = valueInputType(selectedField, valueOptions);
-  const sourceValue =
-    fieldSourceOptions.find((option) => option.code === clause.source) || null;
-  const fieldValue =
-    fieldOptions.find((option) => option.code === clause.field) || null;
-  const customAssessmentFormValue =
-    customAssessmentFormOptions.find(
-      (option) => option.code === selectedCustomAssessmentFormIdentifier
-    ) || null;
-  const comparatorValue =
-    comparatorOptions.find((option) => option.code === clause.comparator) ||
-    null;
-
-  const update = (patch: Partial<CeMatchDraftClause>) =>
-    onChange({ ...clause, ...patch });
 
   if (customAssessmentFieldsError) throw customAssessmentFieldsError;
 
   return (
-    <Card variant='outlined'>
-      <CardHeader
-        title={`Requirement ${index + 1}`}
-        titleTypographyProps={{
-          variant: 'body1',
-          fontWeight: 600,
-          component: 'h3',
-        }}
-        action={
-          <IconButton
-            aria-label='Remove condition'
-            disabled={!canRemove}
-            onClick={onRemove}
-          >
-            <DeleteIcon />
-          </IconButton>
-        }
-        sx={{
-          bgcolor: 'background.default',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-        }}
-      />
-      <CardContent>
-        <Stack gap={3}>
-          <Grid container spacing={2} alignItems='flex-start'>
-            <Grid item xs={12} md={4}>
-              <FormSelect
-                label='Field Type'
-                placeholder='Select type'
-                options={fieldSourceOptions}
-                value={sourceValue}
-                onChange={(_, rawOption) => {
-                  const option = singleOption(rawOption);
-                  update({
-                    source: (option?.code || '') as CeMatchFieldSource | '',
-                    customAssessmentFormIdentifier: '',
-                    field: '',
-                    comparator: CeMatchRuleComparator.Eq,
-                    value: '',
-                  });
-                }}
-              />
-            </Grid>
-            {clause.source === 'custom' && (
-              <Grid item xs={12} md={4}>
-                <FormSelect
-                  label='Assessment'
-                  placeholder='Select assessment'
-                  options={customAssessmentFormOptions}
-                  value={customAssessmentFormValue}
-                  onChange={(_, rawOption) => {
-                    const option = singleOption(rawOption);
-                    update({
-                      customAssessmentFormIdentifier: option?.code || '',
-                      field: '',
-                      comparator: CeMatchRuleComparator.Eq,
-                      value: '',
-                    });
-                  }}
-                />
-              </Grid>
-            )}
+    <Stack gap={3}>
+      <Grid container spacing={2} alignItems='flex-start'>
+        <Grid item xs={12} md={4}>
+          <ControlledSelect
+            name={`${clausePath}.source`}
+            control={control}
+            label='Field Type'
+            placeholder='Select type'
+            options={fieldSourceOptions}
+            shouldUnregister={false}
+            onChange={(value) => {
+              const nextSource = optionCode(value) || '';
+              setValue(
+                `${clausePath}.source`,
+                nextSource as CeMatchFieldSource | ''
+              );
+              setValue(`${clausePath}.customAssessmentFormIdentifier`, '');
+              setValue(`${clausePath}.field`, '');
+              setValue(`${clausePath}.comparator`, CeMatchRuleComparator.Eq);
+              setValue(`${clausePath}.value`, '');
+            }}
+          />
+        </Grid>
+        {source === 'custom' && (
+          <Grid item xs={12} md={4}>
+            <ControlledSelect
+              name={`${clausePath}.customAssessmentFormIdentifier`}
+              control={control}
+              label='Assessment'
+              placeholder='Select assessment'
+              options={customAssessmentFormOptions}
+              shouldUnregister={false}
+              onChange={() => {
+                setValue(`${clausePath}.field`, '');
+                setValue(`${clausePath}.comparator`, CeMatchRuleComparator.Eq);
+                setValue(`${clausePath}.value`, '');
+              }}
+            />
           </Grid>
-          <Grid container spacing={2} alignItems='flex-start'>
-            <Grid item xs={12} md={4}>
-              <FormSelect
-                label={
-                  clause.source === 'client' ? 'Client Field' : 'Custom Field'
-                }
-                placeholder='Select field'
-                options={fieldOptions}
-                value={fieldValue}
-                disabled={
-                  !clause.source ||
-                  (clause.source === 'custom' &&
-                    !selectedCustomAssessmentFormIdentifier)
-                }
-                loading={customAssessmentFieldsLoading}
-                onChange={(_, rawOption) => {
-                  const option = singleOption(rawOption);
-                  const nextField = fields.find(
-                    (field) => field.expressionField === option?.code
-                  );
-                  const nextComparator =
-                    comparatorOptionsForField(nextField)[0]?.code ||
-                    CeMatchRuleComparator.Eq;
-                  update({
-                    field: option?.code || '',
-                    comparator: nextComparator as CeMatchRuleComparator,
-                    value: '',
-                  });
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <FormSelect
-                label='Comparator'
-                placeholder='Select'
-                options={comparatorOptions}
-                value={comparatorValue}
-                disabled={!selectedField}
-                onChange={(_, rawOption) => {
-                  const option = singleOption(rawOption);
-                  update({
-                    comparator:
-                      (option?.code as CeMatchRuleComparator) ||
-                      CeMatchRuleComparator.Eq,
-                    value: '',
-                  });
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              {valueType === 'choice' && (
-                <FormSelect
-                  label='Value'
-                  placeholder='Select value'
-                  options={valueOptions}
-                  value={
-                    valueOptions.find(
-                      (option) => option.code === String(clause.value)
-                    ) || null
-                  }
-                  disabled={!selectedField}
-                  onChange={(_, rawOption) => {
-                    const option = singleOption(rawOption);
-                    update({ value: option?.code || '' });
-                  }}
-                />
-              )}
-              {valueType === 'boolean' && (
-                <FormSelect
-                  label='Value'
-                  placeholder='Select value'
-                  options={booleanOptions}
-                  value={
-                    booleanOptions.find(
-                      (option) => option.code === String(clause.value)
-                    ) || null
-                  }
-                  disabled={!selectedField}
-                  onChange={(_, rawOption) => {
-                    const option = singleOption(rawOption);
-                    update({ value: option?.code === 'true' });
-                  }}
-                />
-              )}
-              {valueType !== 'choice' && valueType !== 'boolean' && (
-                <TextInput
-                  label='Value'
-                  type={valueType}
-                  value={clause.value ?? ''}
-                  disabled={!selectedField}
-                  onChange={(event) =>
-                    update({
-                      value: coerceValue(selectedField, event.target.value),
-                    })
-                  }
-                />
-              )}
-            </Grid>
-          </Grid>
-        </Stack>
-      </CardContent>
-    </Card>
+        )}
+      </Grid>
+      <Grid container spacing={2} alignItems='flex-start'>
+        <Grid item xs={12} md={4}>
+          <ControlledSelect
+            name={`${clausePath}.field`}
+            control={control}
+            label={source === 'client' ? 'Client Field' : 'Custom Field'}
+            placeholder='Select field'
+            options={fieldOptions}
+            shouldUnregister={false}
+            disabled={
+              !source ||
+              (source === 'custom' && !selectedCustomAssessmentFormIdentifier)
+            }
+            loading={customAssessmentFieldsLoading}
+            onChange={(value) => {
+              const selectedFieldExpression = optionCode(value);
+              const nextField = fields.find(
+                (field) => field.expressionField === selectedFieldExpression
+              );
+              const nextComparator =
+                comparatorOptionsForField(nextField)[0]?.code ||
+                CeMatchRuleComparator.Eq;
+              setValue(
+                `${clausePath}.comparator`,
+                nextComparator as CeMatchRuleComparator
+              );
+              setValue(`${clausePath}.value`, '');
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <ControlledSelect
+            name={`${clausePath}.comparator`}
+            control={control}
+            label='Comparator'
+            placeholder='Select'
+            options={comparatorOptions}
+            shouldUnregister={false}
+            disabled={!selectedField}
+            onChange={() => setValue(`${clausePath}.value`, '')}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          {valueType === 'choice' && (
+            <ControlledSelect
+              name={`${clausePath}.value`}
+              control={control}
+              label='Value'
+              placeholder='Select value'
+              options={valueOptions}
+              disabled={!selectedField}
+              shouldUnregister={false}
+            />
+          )}
+          {valueType === 'boolean' && (
+            <ControlledSelect
+              name={`${clausePath}.value`}
+              control={control}
+              label='Value'
+              placeholder='Select value'
+              options={booleanOptions}
+              disabled={!selectedField}
+              setValueAs={(option) => option?.code === 'true'}
+              shouldUnregister={false}
+            />
+          )}
+          {valueType !== 'choice' && valueType !== 'boolean' && (
+            <ControlledTextInput
+              name={`${clausePath}.value`}
+              control={control}
+              label='Value'
+              type={valueType}
+              disabled={!selectedField}
+              shouldUnregister={false}
+            />
+          )}
+        </Grid>
+      </Grid>
+    </Stack>
   );
 };
 
