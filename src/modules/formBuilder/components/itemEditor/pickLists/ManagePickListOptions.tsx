@@ -1,11 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import { useFieldArray, UseFormSetValue, useWatch } from 'react-hook-form';
 import PickListOption from './PickListOption';
+import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { chooseSelectComponentType } from '@/modules/form/util/formUtil';
-import CardGroup, {
-  RemovableCard,
-} from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import {
   FormItemControl,
   FormItemState,

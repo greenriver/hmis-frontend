@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useFieldArray, UseFormSetValue } from 'react-hook-form';
 import { FormItemControl, FormItemState } from '../types';
-import CardGroup, { RemovableCard } from './CardGroup';
 import EnableWhenCondition from './EnableWhenCondition';
 import { useItemPickList } from './useItemPickList';
+import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import ControlledRadioGroupInput from '@/modules/form/components/rhf/ControlledRadioGroupInput';
 import { ItemMap } from '@/modules/form/types';
 import { EnableBehavior } from '@/types/gqlTypes';
