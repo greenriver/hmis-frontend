@@ -2,24 +2,26 @@ import { Box, Typography } from '@mui/material';
 import pluralize from 'pluralize';
 import { useMemo } from 'react';
 
-import { AffectedUnitGroup } from './ceMatchRuleUtil';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import { WarningSection } from '@/modules/errors/components/WarningAlert';
 
-type Row = AffectedUnitGroup & { id: string };
+// Expected shape of the items returned from the server in `errors[x].data.affectedUnitGroups`.
+export interface AffectedUnitGroup {
+  id: string;
+  unitGroupName: string;
+  projectId: string;
+  projectName: string;
+  currentCandidateCount: number;
+  removedCandidateCount: number;
+}
 
 const AffectedUnitGroupsTable = ({
   unitGroups,
 }: {
   unitGroups: AffectedUnitGroup[];
 }) => {
-  const rows = useMemo(
-    () => unitGroups.map((group) => ({ ...group, id: group.unitGroupId })),
-    [unitGroups]
-  );
-
-  const columns: ColumnDef<Row>[] = useMemo(
+  const columns: ColumnDef<AffectedUnitGroup>[] = useMemo(
     () => [
       {
         header: 'Project',
@@ -58,7 +60,7 @@ const AffectedUnitGroupsTable = ({
       >
         <Box sx={{ mx: -2, mb: -2 }}>
           <GenericTable
-            rows={rows}
+            rows={unitGroups}
             columns={columns}
             rowSx={() => ({ td: { py: 1.5 } })}
           />

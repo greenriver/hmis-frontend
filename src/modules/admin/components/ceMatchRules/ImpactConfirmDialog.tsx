@@ -1,5 +1,7 @@
-import AffectedUnitGroupsTable from './AffectedUnitGroupsTable';
-import { getAffectedUnitGroups } from './ceMatchRuleUtil';
+import { useMemo } from 'react';
+import AffectedUnitGroupsTable, {
+  AffectedUnitGroup,
+} from './AffectedUnitGroupsTable';
 import ValidationDialog from '@/modules/errors/components/ValidationDialog';
 import { ErrorState } from '@/modules/errors/util';
 
@@ -16,7 +18,14 @@ const ImpactConfirmDialog: React.FC<Props> = ({
   onConfirm,
   onCancel,
 }) => {
-  const affectedUnitGroups = getAffectedUnitGroups(errorState.warnings);
+  const affectedUnitGroups = useMemo(() => {
+    return errorState.warnings.flatMap(
+      (warning) =>
+        // Affected unit groups returned by the backend are freeform JSON, so cast them to the shape we expect
+        (warning.data?.affectedUnitGroups as AffectedUnitGroup[] | undefined) ||
+        []
+    );
+  }, [errorState.warnings]);
 
   return (
     <ValidationDialog
@@ -27,10 +36,9 @@ const ImpactConfirmDialog: React.FC<Props> = ({
       onConfirm={onConfirm}
       onCancel={onCancel}
       confirmText='Save Anyway'
-      warningExtraContent={
-        <AffectedUnitGroupsTable unitGroups={affectedUnitGroups} />
-      }
-    />
+    >
+      <AffectedUnitGroupsTable unitGroups={affectedUnitGroups} />
+    </ValidationDialog>
   );
 };
 

@@ -24,7 +24,7 @@ type WarningProps = {
   errorState: ErrorState;
   sectionLabels?: SectionLabels;
   warningsLoading?: boolean; // if true, render loading spinner while errorState is nil
-  warningExtraContent?: ReactNode;
+  children?: ReactNode;
 };
 export type ValidationDialogProps = Omit<ConfirmationDialogProps, 'children'> &
   WarningProps;
@@ -90,7 +90,7 @@ const ValidationDialog = ({
   sectionLabels,
   renderError,
   warningsLoading,
-  warningExtraContent,
+  children,
   ...props
 }: ValidationDialogProps) => {
   if (!hasAnyValue(errorState) && !warningsLoading) return null;
@@ -129,7 +129,7 @@ const ValidationDialog = ({
             Please confirm the following warnings.
           </Typography>
           {warningContent}
-          {warningExtraContent}
+          {children}
         </>
       )}
       {warningsLoading && <Loading />}
