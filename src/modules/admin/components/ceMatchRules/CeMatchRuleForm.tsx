@@ -1,10 +1,8 @@
-import CodeIcon from '@mui/icons-material/Code';
 import { Alert, Button, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { CeMatchDraftClause, newDraftClause } from './ceMatchRuleUtil';
-import FreeTextExpressionEditor from './FreeTextExpressionEditor';
 import StructuredExpressionBuilder from './StructuredExpressionBuilder';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
@@ -24,45 +22,30 @@ import {
   useCreateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
 
-export type CeMatchExpressionMode = 'structured' | 'freeText';
-
 export interface CeMatchRuleFormValues {
   name: string;
-  mode: CeMatchExpressionMode;
   structuredExpression: {
     operator: CeMatchRuleBooleanOperator;
     clauses: CeMatchDraftClause[];
   };
-  freeTextExpression: string;
 }
 
 const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   name: '',
-  mode: 'structured',
   structuredExpression: {
     operator: CeMatchRuleBooleanOperator.And,
     clauses: [newDraftClause()],
   },
-  freeTextExpression: '',
 });
 
 const buildCeMatchRuleInput = ({
   name,
-  mode,
   structuredExpression,
-  freeTextExpression,
 }: CeMatchRuleFormValues): CeMatchRuleInput => {
   const base = {
     name: name.trim(),
     ruleType: 'eligibility_requirement',
   };
-
-  if (mode === 'freeText') {
-    return {
-      ...base,
-      expression: freeTextExpression.trim(),
-    };
-  }
 
   return {
     ...base,
@@ -81,14 +64,13 @@ const buildCeMatchRuleInput = ({
 };
 
 const CeMatchRuleForm = () => {
-  const { control, handleSubmit, reset, setValue, watch } =
+  const { control, handleSubmit, reset, setValue } =
     useForm<CeMatchRuleFormValues>({
       defaultValues: defaultCeMatchRuleFormValues(),
     });
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [saved, setSaved] = useState(false);
-  const mode = watch('mode');
 
   const resetForm = () => {
     setErrorState(emptyErrorState);
@@ -145,38 +127,9 @@ const CeMatchRuleForm = () => {
           />
         </Stack>
       </TitleCard>
-      <TitleCard
-        title='Build rule'
-        headerComponent='h2'
-        padded
-        actions={
-          <Button
-            size='small'
-            variant='text'
-            startIcon={<CodeIcon />}
-            onClick={() =>
-              setValue(
-                'mode',
-                mode === 'structured' ? 'freeText' : 'structured',
-                { shouldDirty: true }
-              )
-            }
-          >
-            {mode === 'structured'
-              ? 'Switch to Advanced Expression Editor'
-              : 'Switch to Structured Editor'}
-          </Button>
-        }
-      >
+      <TitleCard title='Build rule' headerComponent='h2' padded>
         <Stack gap={2}>
-          {mode === 'structured' ? (
-            <StructuredExpressionBuilder
-              control={control}
-              setValue={setValue}
-            />
-          ) : (
-            <FreeTextExpressionEditor control={control} />
-          )}
+          <StructuredExpressionBuilder control={control} setValue={setValue} />
         </Stack>
       </TitleCard>
       <Stack direction='row' gap={2}>
