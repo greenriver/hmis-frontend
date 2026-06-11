@@ -1,7 +1,7 @@
 mutation CreateCeMatchRule($input: CeMatchRuleInput!, $confirmed: Boolean) {
   createCeMatchRule(input: $input, confirmed: $confirmed) {
     rule {
-      ...CeMatchRuleFields
+      ...CeMatchRuleDetails
     }
     errors {
       ...ValidationErrorFields

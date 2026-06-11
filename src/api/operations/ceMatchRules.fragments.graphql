@@ -17,6 +17,12 @@ fragment CeMatchRuleFields on CeMatchRule {
   name
   ownerType
   expression
+  projectTypes
+  funders
+}
+
+fragment CeMatchRuleDetails on CeMatchRule {
+  ...CeMatchRuleFields
   structuredExpression {
     operator
     clauses {
@@ -25,6 +31,4 @@ fragment CeMatchRuleFields on CeMatchRule {
       value
     }
   }
-  projectTypes
-  funders
 }

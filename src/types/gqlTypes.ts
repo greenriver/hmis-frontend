@@ -17982,16 +17982,6 @@ export type CeReferralDetailFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-    structuredExpression?: {
-      __typename?: 'CeMatchRuleStructuredExpression';
-      operator: CeMatchRuleBooleanOperator;
-      clauses: Array<{
-        __typename?: 'CeMatchRuleClause';
-        field: string;
-        comparator: CeMatchRuleComparator;
-        value?: any | null;
-      }>;
-    } | null;
   }> | null;
 };
 
@@ -18132,16 +18122,6 @@ export type CeReferralFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-    structuredExpression?: {
-      __typename?: 'CeMatchRuleStructuredExpression';
-      operator: CeMatchRuleBooleanOperator;
-      clauses: Array<{
-        __typename?: 'CeMatchRuleClause';
-        field: string;
-        comparator: CeMatchRuleComparator;
-        value?: any | null;
-      }>;
-    } | null;
   }> | null;
   auditEvents?: {
     __typename?: 'CeReferralAuditEventsPaginated';
@@ -20601,16 +20581,6 @@ export type SubmitCeReferralStepMutation = {
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
-        structuredExpression?: {
-          __typename?: 'CeMatchRuleStructuredExpression';
-          operator: CeMatchRuleBooleanOperator;
-          clauses: Array<{
-            __typename?: 'CeMatchRuleClause';
-            field: string;
-            comparator: CeMatchRuleComparator;
-            value?: any | null;
-          }>;
-        } | null;
       }> | null;
       auditEvents?: {
         __typename?: 'CeReferralAuditEventsPaginated';
@@ -21324,16 +21294,6 @@ export type GetCeReferralQuery = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-      structuredExpression?: {
-        __typename?: 'CeMatchRuleStructuredExpression';
-        operator: CeMatchRuleBooleanOperator;
-        clauses: Array<{
-          __typename?: 'CeMatchRuleClause';
-          field: string;
-          comparator: CeMatchRuleComparator;
-          value?: any | null;
-        }>;
-      } | null;
     }> | null;
     auditEvents?: {
       __typename?: 'CeReferralAuditEventsPaginated';
@@ -22372,6 +22332,16 @@ export type CeMatchFieldFieldsFragment = {
 };
 
 export type CeMatchRuleFieldsFragment = {
+  __typename?: 'CeMatchRule';
+  id: string;
+  name: string;
+  ownerType: CeMatchRuleOwner;
+  expression: string;
+  projectTypes: Array<ProjectType>;
+  funders?: Array<FundingSource> | null;
+};
+
+export type CeMatchRuleDetailsFragment = {
   __typename?: 'CeMatchRule';
   id: string;
   name: string;
@@ -49442,16 +49412,6 @@ export type UnitDetailFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-    structuredExpression?: {
-      __typename?: 'CeMatchRuleStructuredExpression';
-      operator: CeMatchRuleBooleanOperator;
-      clauses: Array<{
-        __typename?: 'CeMatchRuleClause';
-        field: string;
-        comparator: CeMatchRuleComparator;
-        value?: any | null;
-      }>;
-    } | null;
   }> | null;
   prioritySchemes?: Array<{
     __typename?: 'CeMatchRule';
@@ -49461,16 +49421,6 @@ export type UnitDetailFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-    structuredExpression?: {
-      __typename?: 'CeMatchRuleStructuredExpression';
-      operator: CeMatchRuleBooleanOperator;
-      clauses: Array<{
-        __typename?: 'CeMatchRuleClause';
-        field: string;
-        comparator: CeMatchRuleComparator;
-        value?: any | null;
-      }>;
-    } | null;
   }> | null;
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
@@ -49614,16 +49564,6 @@ export type UnitGroupDetailFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-    structuredExpression?: {
-      __typename?: 'CeMatchRuleStructuredExpression';
-      operator: CeMatchRuleBooleanOperator;
-      clauses: Array<{
-        __typename?: 'CeMatchRuleClause';
-        field: string;
-        comparator: CeMatchRuleComparator;
-        value?: any | null;
-      }>;
-    } | null;
   }> | null;
   prioritySchemes?: Array<{
     __typename?: 'CeMatchRule';
@@ -49633,16 +49573,6 @@ export type UnitGroupDetailFieldsFragment = {
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
-    structuredExpression?: {
-      __typename?: 'CeMatchRuleStructuredExpression';
-      operator: CeMatchRuleBooleanOperator;
-      clauses: Array<{
-        __typename?: 'CeMatchRuleClause';
-        field: string;
-        comparator: CeMatchRuleComparator;
-        value?: any | null;
-      }>;
-    } | null;
   }> | null;
   unitType?: {
     __typename?: 'UnitTypeObject';
@@ -49832,16 +49762,6 @@ export type GetUnitGroupQuery = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-      structuredExpression?: {
-        __typename?: 'CeMatchRuleStructuredExpression';
-        operator: CeMatchRuleBooleanOperator;
-        clauses: Array<{
-          __typename?: 'CeMatchRuleClause';
-          field: string;
-          comparator: CeMatchRuleComparator;
-          value?: any | null;
-        }>;
-      } | null;
     }> | null;
     prioritySchemes?: Array<{
       __typename?: 'CeMatchRule';
@@ -49851,16 +49771,6 @@ export type GetUnitGroupQuery = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-      structuredExpression?: {
-        __typename?: 'CeMatchRuleStructuredExpression';
-        operator: CeMatchRuleBooleanOperator;
-        clauses: Array<{
-          __typename?: 'CeMatchRuleClause';
-          field: string;
-          comparator: CeMatchRuleComparator;
-          value?: any | null;
-        }>;
-      } | null;
     }> | null;
     unitType?: {
       __typename?: 'UnitTypeObject';
@@ -49922,16 +49832,6 @@ export type GetUnitQuery = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-      structuredExpression?: {
-        __typename?: 'CeMatchRuleStructuredExpression';
-        operator: CeMatchRuleBooleanOperator;
-        clauses: Array<{
-          __typename?: 'CeMatchRuleClause';
-          field: string;
-          comparator: CeMatchRuleComparator;
-          value?: any | null;
-        }>;
-      } | null;
     }> | null;
     prioritySchemes?: Array<{
       __typename?: 'CeMatchRule';
@@ -49941,16 +49841,6 @@ export type GetUnitQuery = {
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
-      structuredExpression?: {
-        __typename?: 'CeMatchRuleStructuredExpression';
-        operator: CeMatchRuleBooleanOperator;
-        clauses: Array<{
-          __typename?: 'CeMatchRuleClause';
-          field: string;
-          comparator: CeMatchRuleComparator;
-          value?: any | null;
-        }>;
-      } | null;
     }> | null;
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
@@ -50347,16 +50237,6 @@ export type UpdateUnitGroupMutation = {
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
-        structuredExpression?: {
-          __typename?: 'CeMatchRuleStructuredExpression';
-          operator: CeMatchRuleBooleanOperator;
-          clauses: Array<{
-            __typename?: 'CeMatchRuleClause';
-            field: string;
-            comparator: CeMatchRuleComparator;
-            value?: any | null;
-          }>;
-        } | null;
       }> | null;
       prioritySchemes?: Array<{
         __typename?: 'CeMatchRule';
@@ -50366,16 +50246,6 @@ export type UpdateUnitGroupMutation = {
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
-        structuredExpression?: {
-          __typename?: 'CeMatchRuleStructuredExpression';
-          operator: CeMatchRuleBooleanOperator;
-          clauses: Array<{
-            __typename?: 'CeMatchRuleClause';
-            field: string;
-            comparator: CeMatchRuleComparator;
-            value?: any | null;
-          }>;
-        } | null;
       }> | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
@@ -50434,16 +50304,6 @@ export type DeleteUnitGroupMutation = {
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
-        structuredExpression?: {
-          __typename?: 'CeMatchRuleStructuredExpression';
-          operator: CeMatchRuleBooleanOperator;
-          clauses: Array<{
-            __typename?: 'CeMatchRuleClause';
-            field: string;
-            comparator: CeMatchRuleComparator;
-            value?: any | null;
-          }>;
-        } | null;
       }> | null;
       prioritySchemes?: Array<{
         __typename?: 'CeMatchRule';
@@ -50453,16 +50313,6 @@ export type DeleteUnitGroupMutation = {
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
-        structuredExpression?: {
-          __typename?: 'CeMatchRuleStructuredExpression';
-          operator: CeMatchRuleBooleanOperator;
-          clauses: Array<{
-            __typename?: 'CeMatchRuleClause';
-            field: string;
-            comparator: CeMatchRuleComparator;
-            value?: any | null;
-          }>;
-        } | null;
       }> | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
@@ -51795,14 +51645,6 @@ export const CeMatchRuleFieldsFragmentDoc = gql`
     name
     ownerType
     expression
-    structuredExpression {
-      operator
-      clauses {
-        field
-        comparator
-        value
-      }
-    }
     projectTypes
     funders
   }
@@ -52205,6 +52047,20 @@ export const CeMatchFieldFieldsFragmentDoc = gql`
     }
   }
   ${PickListOptionFieldsFragmentDoc}
+`;
+export const CeMatchRuleDetailsFragmentDoc = gql`
+  fragment CeMatchRuleDetails on CeMatchRule {
+    ...CeMatchRuleFields
+    structuredExpression {
+      operator
+      clauses {
+        field
+        comparator
+        value
+      }
+    }
+  }
+  ${CeMatchRuleFieldsFragmentDoc}
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
@@ -58028,14 +57884,14 @@ export const CreateCeMatchRuleDocument = gql`
   mutation CreateCeMatchRule($input: CeMatchRuleInput!, $confirmed: Boolean) {
     createCeMatchRule(input: $input, confirmed: $confirmed) {
       rule {
-        ...CeMatchRuleFields
+        ...CeMatchRuleDetails
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${CeMatchRuleFieldsFragmentDoc}
+  ${CeMatchRuleDetailsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateCeMatchRuleMutationFn = Apollo.MutationFunction<
