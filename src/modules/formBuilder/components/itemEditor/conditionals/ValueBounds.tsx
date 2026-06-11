@@ -1,8 +1,8 @@
 import { useFieldArray } from 'react-hook-form';
 import { v4 } from 'uuid';
 import { FormItemControl } from '../types';
-import CardGroup, { RemovableCard } from './CardGroup';
 import ValueBoundCard from './ValueBoundCard';
+import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import { ItemMap } from '@/modules/form/types';
 import { BoundType, ValidationSeverity } from '@/types/gqlTypes';
 interface Props {
