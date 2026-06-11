@@ -10,6 +10,7 @@ interface RemovableCardProps {
   removeTooltip?: string;
   sx?: SxProps;
 }
+
 export const RemovableCard: React.FC<RemovableCardProps> = ({
   children,
   onRemove,
@@ -31,7 +32,11 @@ export const RemovableCard: React.FC<RemovableCardProps> = ({
       {children}
       <Box component='span' sx={{ position: 'absolute', right: 4, top: 4 }}>
         <ButtonTooltipContainer title={removeTooltip}>
-          <IconButton onClick={onRemove} size='small'>
+          <IconButton
+            onClick={onRemove}
+            size='small'
+            aria-label={removeTooltip || 'Remove'}
+          >
             <CloseIcon fontSize='small' />
           </IconButton>
         </ButtonTooltipContainer>
@@ -47,6 +52,7 @@ interface CardGroupProps {
   maxItems?: number;
   disableAdd?: boolean;
 }
+
 const CardGroup: React.FC<CardGroupProps> = ({
   children,
   onAddItem,
@@ -74,4 +80,5 @@ const CardGroup: React.FC<CardGroupProps> = ({
     </Box>
   );
 };
+
 export default CardGroup;

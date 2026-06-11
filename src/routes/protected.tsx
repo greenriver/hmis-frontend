@@ -193,7 +193,7 @@ export const protectedRoutes: RouteNode[] = [
         path: ReferralRoutes.AVAILABLE_UNITS,
         element: (
           <RootPermissionsFilter
-            permissions='canAdministrateCoordinatedEntry'
+            permissions='canIndexOpportunities'
             otherwise={<NotFound />}
           >
             <ReferralsPage currentTab='available-units' />
@@ -204,7 +204,7 @@ export const protectedRoutes: RouteNode[] = [
         path: ReferralRoutes.ELIGIBLE_CLIENTS,
         element: (
           <RootPermissionsFilter
-            permissions='canAdministrateCoordinatedEntry'
+            permissions='canIndexEligibleClients'
             otherwise={<NotFound />}
           >
             <ReferralsPage currentTab='eligible-clients' />
@@ -555,11 +555,8 @@ export const protectedRoutes: RouteNode[] = [
       },
       {
         path: Routes.CREATE_PROJECT,
-        element: (
-          <RootPermissionsFilter permissions={['canEditProjectDetails']}>
-            <CreateProjectPage />
-          </RootPermissionsFilter>
-        ),
+        // No RootPermissionsFilter wrapper here, since CreateProjectPage internally checks canCreateProjects on the organization
+        element: <CreateProjectPage />,
       },
       { path: Routes.ORGANIZATION, element: <OrganizationPage /> },
       {
@@ -569,7 +566,7 @@ export const protectedRoutes: RouteNode[] = [
       {
         path: Routes.CREATE_ORGANIZATION,
         element: (
-          <RootPermissionsFilter permissions='canEditOrganization'>
+          <RootPermissionsFilter permissions='canCreateOrganizations'>
             <CreateOrganizationPage />
           </RootPermissionsFilter>
         ),
@@ -577,7 +574,7 @@ export const protectedRoutes: RouteNode[] = [
       {
         path: Routes.CREATE_CLIENT,
         element: (
-          <RootPermissionsFilter permissions='canEditClients'>
+          <RootPermissionsFilter permissions='canCreateClients'>
             <CreateClientPage />
           </RootPermissionsFilter>
         ),
@@ -912,7 +909,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.AVAILABLE_UNITS,
             element: (
               <RootPermissionsFilter
-                permissions='canAdministrateCoordinatedEntry'
+                permissions='canIndexOpportunities'
                 otherwise={<NotFound />}
               >
                 <Navigate to={ReferralRoutes.AVAILABLE_UNITS} replace />
@@ -923,7 +920,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.DEFAULT_CONTACTS,
             element: (
               <RootPermissionsFilter
-                permissions='canAdministrateCoordinatedEntry'
+                permissions='canManageCeDefaultContacts'
                 otherwise={<NotFound />}
               >
                 <AdminDefaultContactsPage />
@@ -975,7 +972,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.ELIGIBLE_CLIENTS,
             element: (
               <RootPermissionsFilter
-                permissions='canAdministrateCoordinatedEntry'
+                permissions='canIndexEligibleClients'
                 otherwise={<NotFound />}
               >
                 <Navigate to={ReferralRoutes.ELIGIBLE_CLIENTS} replace />
@@ -1050,7 +1047,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.FORMS,
             element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+              <RootPermissionsFilter permissions='canManageFormRules'>
                 <FormDefinitionsPage />
               </RootPermissionsFilter>
             ),
@@ -1058,7 +1055,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.VIEW_FORM,
             element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+              <RootPermissionsFilter permissions='canManageFormRules'>
                 <FormDefinitionDetailPage />
               </RootPermissionsFilter>
             ),
@@ -1082,7 +1079,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.PREVIEW_FORM,
             element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+              <RootPermissionsFilter permissions='canManageFormRules'>
                 <FormPreview />
               </RootPermissionsFilter>
             ),
@@ -1090,7 +1087,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.PREVIEW_FORM_DRAFT,
             element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+              <RootPermissionsFilter permissions='canManageFormRules'>
                 <FormPreview />
               </RootPermissionsFilter>
             ),
@@ -1098,7 +1095,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.CONFIGURE_SERVICES,
             element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+              <RootPermissionsFilter permissions='canManageServices'>
                 <ServiceTypePage />
               </RootPermissionsFilter>
             ),
@@ -1106,7 +1103,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE,
             element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+              <RootPermissionsFilter permissions='canManageServices'>
                 <ServiceTypeDetailPage />
               </RootPermissionsFilter>
             ),
@@ -1114,7 +1111,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.PROJECT_CONFIG,
             element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+              <RootPermissionsFilter permissions='canManageProjectConfigs'>
                 <ProjectConfigPage />
               </RootPermissionsFilter>
             ),

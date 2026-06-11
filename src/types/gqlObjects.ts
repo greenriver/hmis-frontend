@@ -5977,6 +5977,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'OrganizationAccess',
     fields: [
       {
+        name: 'canCreateProjects',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteOrganization',
         type: {
           kind: 'NON_NULL',
@@ -6517,30 +6525,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canAssignReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canAuditClients',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canAuditEnrollments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canAuditUsers',
         type: {
           kind: 'NON_NULL',
@@ -6557,7 +6541,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canDeleteAssessments',
+        name: 'canCreateClients',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6565,31 +6549,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canDeleteClients',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canDeleteEnrollments',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canDeleteOrganization',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canDeleteProject',
+        name: 'canCreateOrganizations',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6598,14 +6558,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canEditClients',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canEditEnrollments',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6637,7 +6589,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canEnrollClients',
+        name: 'canImpersonateUsers',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6645,7 +6597,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canImpersonateUsers',
+        name: 'canIndexEligibleClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canIndexOpportunities',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6661,7 +6621,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageAnyClientFiles',
+        name: 'canManageCeDefaultContacts',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6669,7 +6629,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageClientAlerts',
+        name: 'canManageCeMatchRules',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6685,7 +6645,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageExternalFormSubmissions',
+        name: 'canManageFormRules',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6701,7 +6661,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageIncomingReferrals',
+        name: 'canManageProjectConfigs',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6709,31 +6669,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageOutgoingReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canManageOwnClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canManageScanCards',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canManageUnits',
+        name: 'canManageServices',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6749,46 +6685,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canPerformAnyReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canPerformOwnReferralTasks',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canPrintClientCaseNotes',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canSplitHouseholds',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canStartReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canTransferEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -6797,63 +6693,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canUpdateUnitAvailability',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewAnyConfidentialClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewAnyNonconfidentialClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canViewClientAlerts',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewClientContactInfo',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewClientEligibleOpportunities',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewClientName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewClientPhoto',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6870,110 +6710,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewDob',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewEnrollmentDetails',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewEnrollmentLocationMap',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewFullSsn',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewHudChronicStatus',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewLimitedEnrollmentDetails',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewOpenEnrollmentSummary',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewOutgoingReferralDetails',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewOwnReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewPartialSsn',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewPrioritizedClientLists',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewProject',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewReferrals',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewUnits',
         type: {
           kind: 'NON_NULL',
           name: null,

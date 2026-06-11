@@ -13,7 +13,6 @@ import NotFound from '@/components/pages/NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import OrganizationDetails from '@/modules/projectAdministration/components/OrganizationDetails';
 import OrganizationProjectsTable from '@/modules/projectAdministration/components/OrganizationProjectsTable';
 import { Routes } from '@/routes/routes';
@@ -23,10 +22,11 @@ const OrganizationPage = () => {
   const { organizationId } = useSafeParams() as {
     organizationId: string;
   };
-  const [canCreateProject] = useHasRootPermissions(['canEditProjectDetails']);
 
   const { crumbs, loading, organization, organizationName } =
     useOrganizationCrumbs();
+
+  const canCreateProject = organization?.access.canCreateProjects;
 
   if (loading && !organization) return <Loading />;
   if (!crumbs || !organization) return <NotFound />;
