@@ -2,12 +2,10 @@ import { Grid, Stack } from '@mui/material';
 import { useMemo } from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 
+import type { CeMatchRuleFormValues } from './CeMatchRuleForm';
 import {
   booleanValueOptions,
-  CeMatchBuilderField,
-  CeMatchDraftCustomAssessmentForm,
   CeMatchFieldSource,
-  CeMatchRuleFormValues,
   comparatorOptionsForField,
   customAssessmentFormToOption,
   fieldSourceOptions,
@@ -19,18 +17,21 @@ import {
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import {
+  CeMatchCustomAssessmentFormFieldsFragment,
+  CeMatchFieldFieldsFragment,
   CeMatchRuleComparator,
   useGetCeMatchCustomAssessmentFieldsQuery,
 } from '@/types/gqlTypes';
 
-const emptyCustomAssessmentFields: CeMatchBuilderField[] = [];
+// Extract as a constant to avoid re-creating the array on every render
+const emptyCustomAssessmentFields: CeMatchFieldFieldsFragment[] = [];
 
 interface Props {
   control: Control<CeMatchRuleFormValues>;
   setValue: UseFormSetValue<CeMatchRuleFormValues>;
   index: number;
-  clientItems: CeMatchBuilderField[];
-  customAssessmentForms: CeMatchDraftCustomAssessmentForm[];
+  clientItems: CeMatchFieldFieldsFragment[];
+  customAssessmentForms: CeMatchCustomAssessmentFormFieldsFragment[];
 }
 
 const CeMatchClauseRow: React.FC<Props> = ({

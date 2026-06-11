@@ -22331,6 +22331,13 @@ export type CeMatchFieldFieldsFragment = {
   }> | null;
 };
 
+export type CeMatchCustomAssessmentFormFieldsFragment = {
+  __typename?: 'FormDefinition';
+  cacheKey: string;
+  identifier: string;
+  title: string;
+};
+
 export type CeMatchRuleFieldsFragment = {
   __typename?: 'CeMatchRule';
   id: string;
@@ -52048,6 +52055,13 @@ export const CeMatchFieldFieldsFragmentDoc = gql`
   }
   ${PickListOptionFieldsFragmentDoc}
 `;
+export const CeMatchCustomAssessmentFormFieldsFragmentDoc = gql`
+  fragment CeMatchCustomAssessmentFormFields on FormDefinition {
+    cacheKey
+    identifier
+    title
+  }
+`;
 export const CeMatchRuleDetailsFragmentDoc = gql`
   fragment CeMatchRuleDetails on CeMatchRule {
     ...CeMatchRuleFields
@@ -58040,11 +58054,10 @@ export type GetCeMatchClientFieldsQueryResult = Apollo.QueryResult<
 export const GetCeMatchCustomAssessmentFormsDocument = gql`
   query GetCeMatchCustomAssessmentForms {
     ceMatchCustomAssessmentForms {
-      cacheKey
-      identifier
-      title
+      ...CeMatchCustomAssessmentFormFields
     }
   }
+  ${CeMatchCustomAssessmentFormFieldsFragmentDoc}
 `;
 
 /**

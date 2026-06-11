@@ -1,6 +1,7 @@
 import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { COMPARABLE_ITEM_TYPES } from '@/modules/formBuilder/formBuilderUtil';
 import {
+  CeMatchCustomAssessmentFormFieldsFragment,
   CeMatchFieldFieldsFragment,
   CeMatchRuleBooleanOperator,
   CeMatchRuleClauseInput,
@@ -10,21 +11,6 @@ import {
 } from '@/types/gqlTypes';
 
 export type CeMatchFieldSource = 'client' | 'custom';
-export type CeMatchExpressionMode = 'structured' | 'freeText';
-
-export type CeMatchBuilderField = CeMatchFieldFieldsFragment;
-
-export interface CeMatchDraftClause extends CeMatchRuleClauseInput {
-  id: string;
-  source: CeMatchFieldSource | '';
-  customAssessmentFormIdentifier?: string;
-}
-
-export interface CeMatchDraftCustomAssessmentForm {
-  cacheKey: string;
-  identifier: string;
-  title: string;
-}
 
 export const fieldSourceOptions: PickListOption[] = [
   { code: 'client', label: 'Client field' },
@@ -36,6 +22,13 @@ export const booleanValueOptions: PickListOption[] = [
   { code: 'false', label: 'False' },
 ];
 
+// Extend the CeMatchRuleClauseInput type with additional state that the form collects but doesn't submit to the backend
+export interface CeMatchDraftClause extends CeMatchRuleClauseInput {
+  id: string;
+  source: CeMatchFieldSource | '';
+  customAssessmentFormIdentifier?: string;
+}
+
 export const newDraftClause = (): CeMatchDraftClause => ({
   id: crypto.randomUUID(),
   source: '',
@@ -44,27 +37,7 @@ export const newDraftClause = (): CeMatchDraftClause => ({
   value: '',
 });
 
-export interface CeMatchRuleFormValues {
-  name: string;
-  mode: CeMatchExpressionMode;
-  structuredExpression: {
-    operator: CeMatchRuleBooleanOperator;
-    clauses: CeMatchDraftClause[];
-  };
-  freeTextExpression: string;
-}
-
-export const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
-  name: '',
-  mode: 'structured',
-  structuredExpression: {
-    operator: CeMatchRuleBooleanOperator.And,
-    clauses: [newDraftClause()],
-  },
-  freeTextExpression: '',
-});
-
-export const fieldLabel = (field: CeMatchBuilderField) =>
+export const fieldLabel = (field: CeMatchFieldFieldsFragment) =>
   field.label.trim() || field.expressionField || field.key;
 
 export const optionCode = (value: PickListOption['code'] | boolean | null) => {
@@ -74,7 +47,7 @@ export const optionCode = (value: PickListOption['code'] | boolean | null) => {
 };
 
 export const fieldToOption = (
-  field: CeMatchBuilderField,
+  field: CeMatchFieldFieldsFragment,
   groupLabel?: string
 ): PickListOption => ({
   code: field.expressionField,
@@ -83,14 +56,14 @@ export const fieldToOption = (
 });
 
 export const customAssessmentFormToOption = (
-  form: CeMatchDraftCustomAssessmentForm
+  form: CeMatchCustomAssessmentFormFieldsFragment
 ): PickListOption => ({
   code: form.identifier,
   label: form.title,
 });
 
 export const pickListOptionsForField = (
-  field?: CeMatchBuilderField
+  field?: CeMatchFieldFieldsFragment
 ): PickListOption[] => {
   if (!field) return [];
 
@@ -106,7 +79,7 @@ export const pickListOptionsForField = (
 };
 
 export const valueInputType = (
-  field: CeMatchBuilderField | undefined,
+  field: CeMatchFieldFieldsFragment | undefined,
   options: PickListOption[]
 ) => {
   if (!field) return 'text';
@@ -151,7 +124,7 @@ export const comparatorLabel = (comparator: CeMatchRuleComparator) => {
 };
 
 export const comparatorOptionsForField = (
-  field?: CeMatchBuilderField
+  field?: CeMatchFieldFieldsFragment
 ): PickListOption[] => {
   if (field?.repeats) {
     // Repeating values are arrays, so only array membership operators apply.

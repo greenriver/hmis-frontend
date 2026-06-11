@@ -3,10 +3,7 @@ import { Alert, Button, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  CeMatchRuleFormValues,
-  defaultCeMatchRuleFormValues,
-} from './ceMatchRuleUtil';
+import { CeMatchDraftClause, newDraftClause } from './ceMatchRuleUtil';
 import FreeTextExpressionEditor from './FreeTextExpressionEditor';
 import ImpactConfirmDialog from './ImpactConfirmDialog';
 import StructuredExpressionBuilder from './StructuredExpressionBuilder';
@@ -24,9 +21,32 @@ import {
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import {
+  CeMatchRuleBooleanOperator,
   CeMatchRuleInput,
   useCreateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
+
+export type CeMatchExpressionMode = 'structured' | 'freeText';
+
+export interface CeMatchRuleFormValues {
+  name: string;
+  mode: CeMatchExpressionMode;
+  structuredExpression: {
+    operator: CeMatchRuleBooleanOperator;
+    clauses: CeMatchDraftClause[];
+  };
+  freeTextExpression: string;
+}
+
+const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
+  name: '',
+  mode: 'structured',
+  structuredExpression: {
+    operator: CeMatchRuleBooleanOperator.And,
+    clauses: [newDraftClause()],
+  },
+  freeTextExpression: '',
+});
 
 const buildCeMatchRuleInput = ({
   name,
@@ -51,6 +71,7 @@ const buildCeMatchRuleInput = ({
     structuredExpression: {
       operator: structuredExpression.operator,
       clauses: structuredExpression.clauses.map(
+        // Strip out unneeded fields from the draft clause
         ({ field, comparator, value }) => ({
           field,
           comparator,

@@ -16,11 +16,8 @@ import {
 } from 'react-hook-form';
 
 import CeMatchClauseRow from './CeMatchClauseRow';
-import {
-  CeMatchRuleFormValues,
-  booleanOperatorOptions,
-  newDraftClause,
-} from './ceMatchRuleUtil';
+import type { CeMatchRuleFormValues } from './CeMatchRuleForm';
+import { booleanOperatorOptions, newDraftClause } from './ceMatchRuleUtil';
 import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import Loading from '@/components/elements/Loading';
 import {

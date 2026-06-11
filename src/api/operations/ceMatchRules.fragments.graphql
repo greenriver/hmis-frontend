@@ -12,6 +12,12 @@ fragment CeMatchFieldFields on CeMatchField {
   }
 }
 
+fragment CeMatchCustomAssessmentFormFields on FormDefinition {
+  cacheKey
+  identifier
+  title
+}
+
 fragment CeMatchRuleFields on CeMatchRule {
   id
   name

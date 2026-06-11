@@ -10,9 +10,7 @@ query GetCeMatchClientFields {
 # least one usable CDED field for CE Match Rule expressions.
 query GetCeMatchCustomAssessmentForms {
   ceMatchCustomAssessmentForms {
-    cacheKey
-    identifier
-    title
+    ...CeMatchCustomAssessmentFormFields
   }
 }
 

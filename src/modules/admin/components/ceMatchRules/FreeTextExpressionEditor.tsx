@@ -1,7 +1,7 @@
 import { Alert, Stack } from '@mui/material';
 import { Control } from 'react-hook-form';
 
-import { CeMatchRuleFormValues } from './ceMatchRuleUtil';
+import type { CeMatchRuleFormValues } from './CeMatchRuleForm';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 
 interface Props {
