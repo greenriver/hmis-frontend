@@ -1119,9 +1119,9 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: AdminDashboardRoutes.CE_MATCH_RULES,
-            // TODO: swap to canAdministrateCoordinatedEntry once UX is ready for non-GR users
             element: (
               <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
                 permissions='canAdministrateConfig'
                 otherwise={<NotFound />}
               >

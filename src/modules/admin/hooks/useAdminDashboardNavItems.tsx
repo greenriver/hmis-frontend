@@ -30,10 +30,10 @@ export const useAdminDashboardNavItems = () => {
             hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
           {
-            // TODO: swap to canAdministrateCoordinatedEntry once UX is ready for non-GR users.
             id: 'ce-match-rules',
             title: 'CE Match Rules',
             path: AdminDashboardRoutes.CE_MATCH_RULES,
+            // TODO(#7544): swap to canAdministrateCoordinatedEntry
             permissions: ['canAdministrateConfig'],
           },
         ],

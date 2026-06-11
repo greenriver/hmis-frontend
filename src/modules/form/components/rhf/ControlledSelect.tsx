@@ -16,6 +16,8 @@ import { RhfRules } from '@/modules/form/types';
 import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
+// The select UI deals in PickListOption, but the form state stores the option code,
+// or sometimes a boolean, or null when cleared.
 type ControlledSelectValue = PickListOption['code'] | boolean | null;
 
 export type ControlledSelectProps<T extends FieldValues = FieldValues> = Omit<
@@ -29,12 +31,11 @@ export type ControlledSelectProps<T extends FieldValues = FieldValues> = Omit<
   required?: boolean;
   helperText?: ReactNode;
   placeholder?: string;
-  // Called with the value stored in RHF, not the raw PickListOption.
+  // Called with the value stored in RHF, not the PickListOption.
   onChange?: (value: ControlledSelectValue) => void;
   // Use when the form value is not the option code, such as boolean JSON values.
   setValueAs?: (option: PickListOption | null) => ControlledSelectValue;
-  // Defaults to true to preserve existing behavior; conditional builders can opt
-  // out when they need explicit reset logic to decide which values are stale.
+  // Whether RHF should delete a field's value when the input unmounts. True by default.
   shouldUnregister?: boolean;
 };
 
