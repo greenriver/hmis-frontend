@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 
 import { CeMatchDraftClause, newDraftClause } from './ceMatchRuleUtil';
 import FreeTextExpressionEditor from './FreeTextExpressionEditor';
-import ImpactConfirmDialog from './ImpactConfirmDialog';
 import StructuredExpressionBuilder from './StructuredExpressionBuilder';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
@@ -15,7 +14,6 @@ import {
   emptyErrorState,
   ErrorState,
   hasErrors,
-  hasOnlyWarnings,
   partitionValidations,
 } from '@/modules/errors/util';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
@@ -115,7 +113,7 @@ const CeMatchRuleForm = () => {
 
   const handleValidSubmit = (
     values: CeMatchRuleFormValues,
-    confirmed = false
+    confirmed = true
   ) => {
     setSaved(false);
 
@@ -126,8 +124,6 @@ const CeMatchRuleForm = () => {
       },
     });
   };
-
-  const showWarningDialog = hasOnlyWarnings(errorState);
 
   return (
     <Stack gap={2}>
@@ -187,7 +183,7 @@ const CeMatchRuleForm = () => {
         <LoadingButton
           loading={loading}
           variant='contained'
-          onClick={handleSubmit((values) => handleValidSubmit(values, false))}
+          onClick={handleSubmit((values) => handleValidSubmit(values))}
         >
           Save
         </LoadingButton>
@@ -195,16 +191,6 @@ const CeMatchRuleForm = () => {
           Reset
         </Button>
       </Stack>
-      {showWarningDialog && (
-        <ImpactConfirmDialog
-          errorState={errorState}
-          loading={loading}
-          onCancel={() => setErrorState(emptyErrorState)}
-          onConfirm={() =>
-            handleSubmit((values) => handleValidSubmit(values, true))()
-          }
-        />
-      )}
     </Stack>
   );
 };
