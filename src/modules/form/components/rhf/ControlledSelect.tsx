@@ -16,18 +16,25 @@ import { RhfRules } from '@/modules/form/types';
 import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
+type ControlledSelectValue = PickListOption['code'] | boolean | null;
+
 export type ControlledSelectProps<T extends FieldValues = FieldValues> = Omit<
   GenericSelectProps<PickListOption, false, false>,
   'value' | 'onChange' | 'onBlur' | 'multiple'
 > & {
+  // Path<T> gives callers type checking for nested RHF paths.
   name: Path<T>;
   control?: Control<T>; // Optional when using FormProvider
   rules?: RhfRules;
   required?: boolean;
   helperText?: ReactNode;
   placeholder?: string;
-  onChange?: (value: PickListOption['code'] | boolean | null) => void;
-  setValueAs?: (option: PickListOption | null) => any; // allow transform PickListOption to desired value (to support boolean)
+  // Called with the value stored in RHF, not the raw PickListOption.
+  onChange?: (value: ControlledSelectValue) => void;
+  // Use when the form value is not the option code, such as boolean JSON values.
+  setValueAs?: (option: PickListOption | null) => ControlledSelectValue;
+  // Defaults to true to preserve existing behavior; conditional builders can opt
+  // out when they need explicit reset logic to decide which values are stale.
   shouldUnregister?: boolean;
 };
 

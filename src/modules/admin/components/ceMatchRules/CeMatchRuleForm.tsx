@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
-  CeMatchDraftClause,
   CeMatchRuleFormValues,
   defaultCeMatchRuleFormValues,
 } from './ceMatchRuleUtil';
@@ -29,22 +28,6 @@ import {
   useCreateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
 
-const hasValue = (value: unknown) =>
-  value !== null && value !== undefined && value !== '';
-
-const validateStructuredClauses = (clauses: CeMatchDraftClause[]) => {
-  if (clauses.length === 0) return 'Add at least one condition.';
-
-  const incomplete = clauses.some(
-    (clause) =>
-      !clause.source ||
-      !clause.field ||
-      !clause.comparator ||
-      !hasValue(clause.value)
-  );
-  if (incomplete) return 'Complete every condition before saving.';
-};
-
 const buildCeMatchRuleInput = ({
   name,
   mode,
@@ -52,14 +35,14 @@ const buildCeMatchRuleInput = ({
   freeTextExpression,
 }: CeMatchRuleFormValues): CeMatchRuleInput => {
   const base = {
-    name,
+    name: name.trim(),
     ruleType: 'eligibility_requirement',
   };
 
   if (mode === 'freeText') {
     return {
       ...base,
-      expression: freeTextExpression,
+      expression: freeTextExpression.trim(),
     };
   }
 
@@ -84,13 +67,11 @@ const CeMatchRuleForm = () => {
       defaultValues: defaultCeMatchRuleFormValues(),
     });
 
-  const [localError, setLocalError] = useState<string>();
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [saved, setSaved] = useState(false);
   const mode = watch('mode');
 
   const resetForm = () => {
-    setLocalError(undefined);
     setErrorState(emptyErrorState);
     setSaved(false);
     reset(defaultCeMatchRuleFormValues());
@@ -101,7 +82,6 @@ const CeMatchRuleForm = () => {
       const payload = data.createCeMatchRule;
       if (payload?.rule) {
         setErrorState(emptyErrorState);
-        setLocalError(undefined);
         setSaved(true);
         reset(defaultCeMatchRuleFormValues());
       } else if (payload?.errors?.length) {
@@ -112,24 +92,11 @@ const CeMatchRuleForm = () => {
       setErrorState({ ...emptyErrorState, apolloError }),
   });
 
-  const validate = (values: CeMatchRuleFormValues) => {
-    if (!values.name.trim()) return 'Rule name is required.';
-    if (values.mode === 'freeText' && !values.freeTextExpression.trim()) {
-      return 'Expression is required.';
-    }
-    if (values.mode === 'structured') {
-      return validateStructuredClauses(values.structuredExpression.clauses);
-    }
-  };
-
   const handleValidSubmit = (
     values: CeMatchRuleFormValues,
     confirmed = false
   ) => {
-    const error = validate(values);
-    setLocalError(error);
     setSaved(false);
-    if (error) return;
 
     createCeMatchRule({
       variables: {
@@ -152,7 +119,6 @@ const CeMatchRuleForm = () => {
               <ErrorAlert errors={errorState.errors} />
             </Stack>
           )}
-          {localError && <Alert severity='error'>{localError}</Alert>}
           <ControlledTextInput
             name='name'
             control={control}

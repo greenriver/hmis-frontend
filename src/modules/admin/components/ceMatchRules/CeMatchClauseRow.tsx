@@ -3,57 +3,27 @@ import { useMemo } from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 
 import {
+  booleanValueOptions,
   CeMatchBuilderField,
   CeMatchDraftCustomAssessmentForm,
   CeMatchFieldSource,
   CeMatchRuleFormValues,
   comparatorOptionsForField,
   customAssessmentFormToOption,
+  fieldSourceOptions,
   fieldToOption,
+  optionCode,
   pickListOptionsForField,
+  valueInputType,
 } from './ceMatchRuleUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import {
   CeMatchRuleComparator,
-  ItemType,
-  PickListOption,
   useGetCeMatchCustomAssessmentFieldsQuery,
 } from '@/types/gqlTypes';
 
-const fieldSourceOptions: PickListOption[] = [
-  { code: 'client', label: 'Client field' },
-  { code: 'custom', label: 'Custom field' },
-];
-
-const booleanOptions: PickListOption[] = [
-  { code: 'true', label: 'True' },
-  { code: 'false', label: 'False' },
-];
-
 const emptyCustomAssessmentFields: CeMatchBuilderField[] = [];
-
-const valueInputType = (
-  field: CeMatchBuilderField | undefined,
-  options: PickListOption[]
-) => {
-  if (!field) return 'text';
-  if (field.itemType === ItemType.Boolean) return 'boolean';
-  if ([ItemType.Integer, ItemType.Currency].includes(field.itemType))
-    return 'number';
-  if (field.itemType === ItemType.Date) return 'date';
-  if (
-    [ItemType.Choice, ItemType.OpenChoice].includes(field.itemType) ||
-    options.length
-  ) {
-    return 'choice';
-  }
-  return 'text';
-};
-
-const optionCode = (value: PickListOption['code'] | boolean | null) => {
-  if (typeof value === 'string') return value;
-};
 
 interface Props {
   control: Control<CeMatchRuleFormValues>;
@@ -134,6 +104,22 @@ const CeMatchClauseRow: React.FC<Props> = ({
 
   if (customAssessmentFieldsError) throw customAssessmentFieldsError;
 
+  // This row switches between several inputs for the same clause. Keep
+  // unmounted fields registered, then explicitly clear stale values when a
+  // parent changes.
+  const resetValueSelection = () => setValue(`${clausePath}.value`, '');
+  const resetFieldSelection = (
+    comparator: CeMatchRuleComparator = CeMatchRuleComparator.Eq
+  ) => {
+    setValue(`${clausePath}.field`, '');
+    setValue(`${clausePath}.comparator`, comparator);
+    resetValueSelection();
+  };
+  const resetCustomAssessmentSelection = () => {
+    setValue(`${clausePath}.customAssessmentFormIdentifier`, '');
+    resetFieldSelection();
+  };
+
   return (
     <Stack gap={3}>
       <Grid container spacing={2} alignItems='flex-start'>
@@ -151,10 +137,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
                 `${clausePath}.source`,
                 nextSource as CeMatchFieldSource | ''
               );
-              setValue(`${clausePath}.customAssessmentFormIdentifier`, '');
-              setValue(`${clausePath}.field`, '');
-              setValue(`${clausePath}.comparator`, CeMatchRuleComparator.Eq);
-              setValue(`${clausePath}.value`, '');
+              resetCustomAssessmentSelection();
             }}
           />
         </Grid>
@@ -167,11 +150,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
               placeholder='Select assessment'
               options={customAssessmentFormOptions}
               shouldUnregister={false}
-              onChange={() => {
-                setValue(`${clausePath}.field`, '');
-                setValue(`${clausePath}.comparator`, CeMatchRuleComparator.Eq);
-                setValue(`${clausePath}.value`, '');
-              }}
+              onChange={() => resetFieldSelection()}
             />
           </Grid>
         )}
@@ -202,7 +181,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
                 `${clausePath}.comparator`,
                 nextComparator as CeMatchRuleComparator
               );
-              setValue(`${clausePath}.value`, '');
+              resetValueSelection();
             }}
           />
         </Grid>
@@ -215,7 +194,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
             options={comparatorOptions}
             shouldUnregister={false}
             disabled={!selectedField}
-            onChange={() => setValue(`${clausePath}.value`, '')}
+            onChange={resetValueSelection}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -236,9 +215,11 @@ const CeMatchClauseRow: React.FC<Props> = ({
               control={control}
               label='Value'
               placeholder='Select value'
-              options={booleanOptions}
+              options={booleanValueOptions}
               disabled={!selectedField}
-              setValueAs={(option) => option?.code === 'true'}
+              // Empty must stay empty; otherwise clearing the select would
+              // become false, which is a valid submitted JSON value.
+              setValueAs={(option) => (option ? option.code === 'true' : '')}
               shouldUnregister={false}
             />
           )}

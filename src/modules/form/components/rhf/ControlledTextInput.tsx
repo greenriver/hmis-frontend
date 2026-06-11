@@ -15,9 +15,12 @@ import { RhfRules } from '@/modules/form/types';
 interface ControlledTextInputProps<
   T extends FieldValues = FieldValues,
 > extends Omit<TextInputProps, 'value' | 'onChange'> {
+  // Path<T> gives callers type checking for nested RHF paths.
   name: Path<T>;
   control?: Control<T>; // Optional when using FormProvider
   rules?: RhfRules;
+  // Defaults to true to preserve existing behavior; conditional builders can opt
+  // out when they need explicit reset logic to decide which values are stale.
   shouldUnregister?: boolean;
 }
 

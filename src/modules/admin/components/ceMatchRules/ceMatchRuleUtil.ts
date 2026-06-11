@@ -5,6 +5,7 @@ import {
   CeMatchRuleBooleanOperator,
   CeMatchRuleClauseInput,
   CeMatchRuleComparator,
+  ItemType,
   PickListOption,
   ValidationError,
 } from '@/types/gqlTypes';
@@ -25,6 +26,16 @@ export interface CeMatchDraftCustomAssessmentForm {
   identifier: string;
   title: string;
 }
+
+export const fieldSourceOptions: PickListOption[] = [
+  { code: 'client', label: 'Client field' },
+  { code: 'custom', label: 'Custom field' },
+];
+
+export const booleanValueOptions: PickListOption[] = [
+  { code: 'true', label: 'True' },
+  { code: 'false', label: 'False' },
+];
 
 export const newDraftClause = (): CeMatchDraftClause => ({
   id: crypto.randomUUID(),
@@ -56,6 +67,12 @@ export const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
 
 export const fieldLabel = (field: CeMatchBuilderField) =>
   field.label.trim() || field.expressionField || field.key;
+
+export const optionCode = (value: PickListOption['code'] | boolean | null) => {
+  // ControlledSelect can store booleans for JSON-valued fields. Only string
+  // values can be reused as select option codes.
+  if (typeof value === 'string') return value;
+};
 
 export const fieldToOption = (
   field: CeMatchBuilderField,
@@ -89,6 +106,28 @@ export const pickListOptionsForField = (
   return field.pickListOptions || [];
 };
 
+export const valueInputType = (
+  field: CeMatchBuilderField | undefined,
+  options: PickListOption[]
+) => {
+  if (!field) return 'text';
+  if (field.itemType === ItemType.Boolean) return 'boolean';
+  if ([ItemType.Integer, ItemType.Currency].includes(field.itemType))
+    return 'number';
+  if (field.itemType === ItemType.Date) return 'date';
+
+  // Fields with enum references or inline options should use a select even when
+  // the backend item type is not strictly Choice/OpenChoice.
+  if (
+    [ItemType.Choice, ItemType.OpenChoice].includes(field.itemType) ||
+    options.length
+  ) {
+    return 'choice';
+  }
+
+  return 'text';
+};
+
 export const comparatorLabel = (comparator: CeMatchRuleComparator) => {
   switch (comparator) {
     case CeMatchRuleComparator.Eq:
@@ -116,6 +155,7 @@ export const comparatorOptionsForField = (
   field?: CeMatchBuilderField
 ): PickListOption[] => {
   if (field?.repeats) {
+    // Repeating values are arrays, so only array membership operators apply.
     return [CeMatchRuleComparator.Includes, CeMatchRuleComparator.Excludes].map(
       (code) => ({
         code,
