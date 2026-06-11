@@ -1,6 +1,14 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Alert, Box, Button, Stack } from '@mui/material';
-import { useMemo } from 'react';
+import {
+  Alert,
+  Button,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { Fragment } from 'react';
 
 import CeMatchClauseRow from './CeMatchClauseRow';
 import {
@@ -9,16 +17,11 @@ import {
   newDraftClause,
 } from './ceMatchRuleUtil';
 import Loading from '@/components/elements/Loading';
-import FormSelect from '@/modules/form/components/FormSelect';
 import {
   CeMatchRuleBooleanOperator,
-  PickListOption,
   useGetCeMatchClientFieldsQuery,
   useGetCeMatchCustomAssessmentFormsQuery,
 } from '@/types/gqlTypes';
-
-const singleOption = (option: PickListOption | PickListOption[] | null) =>
-  Array.isArray(option) ? option[0] : option;
 
 interface Props {
   clauses: CeMatchDraftClause[];
@@ -51,12 +54,6 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
   const customAssessmentForms =
     customAssessmentFormsData?.ceMatchCustomAssessmentForms || [];
 
-  const operatorValue = useMemo(
-    () =>
-      booleanOperatorOptions.find((option) => option.code === operator) || null,
-    [operator]
-  );
-
   const replaceClause = (nextClause: CeMatchDraftClause) => {
     onChangeClauses(
       clauses.map((clause) =>
@@ -71,43 +68,61 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
   return (
     <Stack gap={2}>
       {validationError && <Alert severity='error'>{validationError}</Alert>}
-      {clauses.length > 1 && (
-        <Box sx={{ maxWidth: 300 }}>
-          <FormSelect
-            label='Combine Conditions'
-            options={booleanOperatorOptions}
-            value={operatorValue}
-            onChange={(_, rawOption) => {
-              const option = singleOption(rawOption);
-              onChangeOperator(
-                ((option?.code as CeMatchRuleBooleanOperator | undefined) ||
-                  CeMatchRuleBooleanOperator.And) as CeMatchRuleBooleanOperator
-              );
-            }}
-          />
-        </Box>
-      )}
+      <Stack gap={1}>
+        <Stack direction='row' alignItems='center' gap={1} flexWrap='wrap'>
+          <Typography variant='body2' fontWeight={600}>
+            Client must meet
+          </Typography>
+          <RadioGroup
+            row
+            value={operator}
+            onChange={(event) =>
+              onChangeOperator(event.target.value as CeMatchRuleBooleanOperator)
+            }
+          >
+            {booleanOperatorOptions.map((option) => (
+              <FormControlLabel
+                key={option.code}
+                value={option.code}
+                control={<Radio size='small' />}
+                label={<strong>{option.label}</strong>}
+              />
+            ))}
+          </RadioGroup>
+          <Typography variant='body2' fontWeight={600}>
+            of the following requirements
+          </Typography>
+        </Stack>
+      </Stack>
       {loading && <Loading />}
       {!loading &&
-        clauses.map((clause) => (
-          <CeMatchClauseRow
-            key={clause.id}
-            clause={clause}
-            clientItems={clientItems}
-            customAssessmentForms={customAssessmentForms}
-            onChange={replaceClause}
-            onRemove={() =>
-              onChangeClauses(clauses.filter(({ id }) => id !== clause.id))
-            }
-            canRemove={clauses.length > 1}
-          />
+        clauses.map((clause, index) => (
+          <Fragment key={clause.id}>
+            {index > 0 && (
+              <Typography variant='body2' fontWeight={600}>
+                {operator === CeMatchRuleBooleanOperator.And ? 'AND' : 'OR'}
+              </Typography>
+            )}
+            <CeMatchClauseRow
+              clause={clause}
+              index={index}
+              clientItems={clientItems}
+              customAssessmentForms={customAssessmentForms}
+              onChange={replaceClause}
+              onRemove={() =>
+                onChangeClauses(clauses.filter(({ id }) => id !== clause.id))
+              }
+              canRemove={clauses.length > 1}
+            />
+          </Fragment>
         ))}
       <Button
         startIcon={<AddIcon />}
+        variant='outlined'
         onClick={() => onChangeClauses([...clauses, newDraftClause()])}
         sx={{ width: 'fit-content' }}
       >
-        Add Condition
+        Add Requirement
       </Button>
     </Stack>
   );

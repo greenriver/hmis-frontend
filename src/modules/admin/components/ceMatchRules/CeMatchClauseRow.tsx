@@ -1,11 +1,10 @@
-import CloseIcon from '@mui/icons-material/Close';
 import {
-  Box,
+  Card,
+  CardContent,
+  CardHeader,
   Grid,
   IconButton,
   Stack,
-  Typography,
-  useTheme,
 } from '@mui/material';
 import { useMemo } from 'react';
 
@@ -20,6 +19,7 @@ import {
   pickListOptionsForField,
 } from './ceMatchRuleUtil';
 import TextInput from '@/components/elements/input/TextInput';
+import { DeleteIcon } from '@/components/elements/SemanticIcons';
 import FormSelect from '@/modules/form/components/FormSelect';
 import {
   CeMatchRuleComparator,
@@ -74,6 +74,7 @@ const coerceValue = (field: CeMatchBuilderField | undefined, value: string) => {
 
 interface Props {
   clause: CeMatchDraftClause;
+  index: number;
   clientItems: CeMatchBuilderField[];
   customAssessmentForms: CeMatchDraftCustomAssessmentForm[];
   onChange: (clause: CeMatchDraftClause) => void;
@@ -83,13 +84,13 @@ interface Props {
 
 const CeMatchClauseRow: React.FC<Props> = ({
   clause,
+  index,
   clientItems,
   customAssessmentForms,
   onChange,
   onRemove,
   canRemove,
 }) => {
-  const theme = useTheme();
   const selectedCustomAssessmentFormIdentifier =
     clause.customAssessmentFormIdentifier || '';
   const {
@@ -155,166 +156,172 @@ const CeMatchClauseRow: React.FC<Props> = ({
   if (customAssessmentFieldsError) throw customAssessmentFieldsError;
 
   return (
-    <Box
-      sx={{
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: 1,
-        p: 2,
-      }}
-    >
-      <Grid container spacing={2} alignItems='flex-start'>
-        <Grid item xs={12} md={2.5}>
-          <FormSelect
-            label='Field Type'
-            placeholder='Select type'
-            options={fieldSourceOptions}
-            value={sourceValue}
-            onChange={(_, rawOption) => {
-              const option = singleOption(rawOption);
-              update({
-                source: (option?.code || '') as CeMatchFieldSource | '',
-                customAssessmentFormIdentifier: '',
-                field: '',
-                comparator: CeMatchRuleComparator.Eq,
-                value: '',
-              });
-            }}
-          />
-        </Grid>
-        {clause.source === 'custom' && (
-          <Grid item xs={12} md={2.5}>
-            <FormSelect
-              label='Assessment'
-              placeholder='Select assessment'
-              options={customAssessmentFormOptions}
-              value={customAssessmentFormValue}
-              onChange={(_, rawOption) => {
-                const option = singleOption(rawOption);
-                update({
-                  customAssessmentFormIdentifier: option?.code || '',
-                  field: '',
-                  comparator: CeMatchRuleComparator.Eq,
-                  value: '',
-                });
-              }}
-            />
+    <Card variant='outlined'>
+      <CardHeader
+        title={`Requirement ${index + 1}`}
+        titleTypographyProps={{
+          variant: 'body1',
+          fontWeight: 600,
+          component: 'h3',
+        }}
+        action={
+          <IconButton
+            aria-label='Remove condition'
+            disabled={!canRemove}
+            onClick={onRemove}
+          >
+            <DeleteIcon />
+          </IconButton>
+        }
+        sx={{
+          bgcolor: 'background.default',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+        }}
+      />
+      <CardContent>
+        <Stack gap={3}>
+          <Grid container spacing={2} alignItems='flex-start'>
+            <Grid item xs={12} md={4}>
+              <FormSelect
+                label='Field Type'
+                placeholder='Select type'
+                options={fieldSourceOptions}
+                value={sourceValue}
+                onChange={(_, rawOption) => {
+                  const option = singleOption(rawOption);
+                  update({
+                    source: (option?.code || '') as CeMatchFieldSource | '',
+                    customAssessmentFormIdentifier: '',
+                    field: '',
+                    comparator: CeMatchRuleComparator.Eq,
+                    value: '',
+                  });
+                }}
+              />
+            </Grid>
+            {clause.source === 'custom' && (
+              <Grid item xs={12} md={4}>
+                <FormSelect
+                  label='Assessment'
+                  placeholder='Select assessment'
+                  options={customAssessmentFormOptions}
+                  value={customAssessmentFormValue}
+                  onChange={(_, rawOption) => {
+                    const option = singleOption(rawOption);
+                    update({
+                      customAssessmentFormIdentifier: option?.code || '',
+                      field: '',
+                      comparator: CeMatchRuleComparator.Eq,
+                      value: '',
+                    });
+                  }}
+                />
+              </Grid>
+            )}
           </Grid>
-        )}
-        <Grid item xs={12} md={3}>
-          <FormSelect
-            label={clause.source === 'custom' ? 'CDED' : 'Field'}
-            placeholder='Select field'
-            options={fieldOptions}
-            value={fieldValue}
-            disabled={
-              !clause.source ||
-              (clause.source === 'custom' &&
-                !selectedCustomAssessmentFormIdentifier)
-            }
-            loading={customAssessmentFieldsLoading}
-            onChange={(_, rawOption) => {
-              const option = singleOption(rawOption);
-              const nextField = fields.find(
-                (field) => field.expressionField === option?.code
-              );
-              const nextComparator =
-                comparatorOptionsForField(nextField)[0]?.code ||
-                CeMatchRuleComparator.Eq;
-              update({
-                field: option?.code || '',
-                comparator: nextComparator as CeMatchRuleComparator,
-                value: '',
-              });
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} md={2}>
-          <FormSelect
-            label='Comparator'
-            placeholder='Select'
-            options={comparatorOptions}
-            value={comparatorValue}
-            disabled={!selectedField}
-            onChange={(_, rawOption) => {
-              const option = singleOption(rawOption);
-              update({
-                comparator:
-                  (option?.code as CeMatchRuleComparator) ||
-                  CeMatchRuleComparator.Eq,
-                value: '',
-              });
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} md={3.5}>
-          {valueType === 'choice' && (
-            <FormSelect
-              label='Value'
-              placeholder='Select value'
-              options={valueOptions}
-              value={
-                valueOptions.find(
-                  (option) => option.code === String(clause.value)
-                ) || null
-              }
-              disabled={!selectedField}
-              onChange={(_, rawOption) => {
-                const option = singleOption(rawOption);
-                update({ value: option?.code || '' });
-              }}
-            />
-          )}
-          {valueType === 'boolean' && (
-            <FormSelect
-              label='Value'
-              placeholder='Select value'
-              options={booleanOptions}
-              value={
-                booleanOptions.find(
-                  (option) => option.code === String(clause.value)
-                ) || null
-              }
-              disabled={!selectedField}
-              onChange={(_, rawOption) => {
-                const option = singleOption(rawOption);
-                update({ value: option?.code === 'true' });
-              }}
-            />
-          )}
-          {valueType !== 'choice' && valueType !== 'boolean' && (
-            <TextInput
-              label='Value'
-              type={valueType}
-              value={clause.value ?? ''}
-              disabled={!selectedField}
-              onChange={(event) =>
-                update({
-                  value: coerceValue(selectedField, event.target.value),
-                })
-              }
-            />
-          )}
-        </Grid>
-        <Grid item xs={12} md={1}>
-          <Stack direction='row' justifyContent='flex-end'>
-            <IconButton
-              aria-label='Remove condition'
-              disabled={!canRemove}
-              onClick={onRemove}
-              sx={{ mt: 1 }}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Stack>
-        </Grid>
-      </Grid>
-      {selectedField?.repeats && (
-        <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
-          This field can have multiple values. Use includes/excludes to compare
-          one selected answer.
-        </Typography>
-      )}
-    </Box>
+          <Grid container spacing={2} alignItems='flex-start'>
+            <Grid item xs={12} md={4}>
+              <FormSelect
+                label={
+                  clause.source === 'client' ? 'Client Field' : 'Custom Field'
+                }
+                placeholder='Select field'
+                options={fieldOptions}
+                value={fieldValue}
+                disabled={
+                  !clause.source ||
+                  (clause.source === 'custom' &&
+                    !selectedCustomAssessmentFormIdentifier)
+                }
+                loading={customAssessmentFieldsLoading}
+                onChange={(_, rawOption) => {
+                  const option = singleOption(rawOption);
+                  const nextField = fields.find(
+                    (field) => field.expressionField === option?.code
+                  );
+                  const nextComparator =
+                    comparatorOptionsForField(nextField)[0]?.code ||
+                    CeMatchRuleComparator.Eq;
+                  update({
+                    field: option?.code || '',
+                    comparator: nextComparator as CeMatchRuleComparator,
+                    value: '',
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <FormSelect
+                label='Comparator'
+                placeholder='Select'
+                options={comparatorOptions}
+                value={comparatorValue}
+                disabled={!selectedField}
+                onChange={(_, rawOption) => {
+                  const option = singleOption(rawOption);
+                  update({
+                    comparator:
+                      (option?.code as CeMatchRuleComparator) ||
+                      CeMatchRuleComparator.Eq,
+                    value: '',
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              {valueType === 'choice' && (
+                <FormSelect
+                  label='Value'
+                  placeholder='Select value'
+                  options={valueOptions}
+                  value={
+                    valueOptions.find(
+                      (option) => option.code === String(clause.value)
+                    ) || null
+                  }
+                  disabled={!selectedField}
+                  onChange={(_, rawOption) => {
+                    const option = singleOption(rawOption);
+                    update({ value: option?.code || '' });
+                  }}
+                />
+              )}
+              {valueType === 'boolean' && (
+                <FormSelect
+                  label='Value'
+                  placeholder='Select value'
+                  options={booleanOptions}
+                  value={
+                    booleanOptions.find(
+                      (option) => option.code === String(clause.value)
+                    ) || null
+                  }
+                  disabled={!selectedField}
+                  onChange={(_, rawOption) => {
+                    const option = singleOption(rawOption);
+                    update({ value: option?.code === 'true' });
+                  }}
+                />
+              )}
+              {valueType !== 'choice' && valueType !== 'boolean' && (
+                <TextInput
+                  label='Value'
+                  type={valueType}
+                  value={clause.value ?? ''}
+                  disabled={!selectedField}
+                  onChange={(event) =>
+                    update({
+                      value: coerceValue(selectedField, event.target.value),
+                    })
+                  }
+                />
+              )}
+            </Grid>
+          </Grid>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 };
 

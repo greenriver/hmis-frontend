@@ -1,11 +1,5 @@
-import {
-  Alert,
-  Button,
-  Paper,
-  Stack,
-  ToggleButton,
-  ToggleButtonGroup,
-} from '@mui/material';
+import CodeIcon from '@mui/icons-material/Code';
+import { Alert, Button, Paper, Stack, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import { CeMatchDraftClause, newDraftClause } from './ceMatchRuleUtil';
@@ -23,6 +17,7 @@ import {
   hasOnlyWarnings,
   partitionValidations,
 } from '@/modules/errors/util';
+import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import {
   CeMatchRuleBooleanOperator,
   CeMatchRuleInput,
@@ -60,6 +55,17 @@ const CeMatchRuleForm = () => {
   const [localError, setLocalError] = useState<string>();
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [saved, setSaved] = useState(false);
+
+  const resetForm = () => {
+    setName('');
+    setFreeTextExpression('');
+    setLocalError(undefined);
+    setErrorState(emptyErrorState);
+    setSaved(false);
+    setMode('structured');
+    setOperator(CeMatchRuleBooleanOperator.And);
+    setClauses([newDraftClause()]);
+  };
 
   const input = useMemo<CeMatchRuleInput>(() => {
     const base = {
@@ -131,73 +137,78 @@ const CeMatchRuleForm = () => {
   const showWarningDialog = hasOnlyWarnings(errorState);
 
   return (
-    <Paper sx={{ p: 4, maxWidth: 1100 }}>
-      <Stack gap={3}>
-        {saved && <Alert severity='success'>Match rule saved.</Alert>}
-        {hasErrors(errorState) && (
-          <Stack gap={1}>
-            <ApolloErrorAlert error={errorState.apolloError} />
-            <ErrorAlert errors={errorState.errors} />
+    <Stack gap={2}>
+      <Paper sx={{ py: 3, px: 2.5 }}>
+        <Stack gap={2}>
+          {saved && <Alert severity='success'>Match rule saved.</Alert>}
+          {hasErrors(errorState) && (
+            <Stack gap={1}>
+              <ApolloErrorAlert error={errorState.apolloError} />
+              <ErrorAlert errors={errorState.errors} />
+            </Stack>
+          )}
+          {localError && <Alert severity='error'>{localError}</Alert>}
+          <Typography variant='cardTitle' component='h2'>
+            Rule Details
+          </Typography>
+          <TextInput
+            label={getRequiredLabel('Rule Name', true)}
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            maxWidth={620}
+          />
+        </Stack>
+      </Paper>
+      <Paper sx={{ py: 3, px: 2.5 }}>
+        <Stack gap={2}>
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            alignItems='center'
+            gap={2}
+          >
+            <Typography variant='cardTitle' component='h2'>
+              Build rule
+            </Typography>
+            <Button
+              size='small'
+              variant='text'
+              startIcon={<CodeIcon />}
+              onClick={() =>
+                setMode(mode === 'structured' ? 'freeText' : 'structured')
+              }
+            >
+              {mode === 'structured'
+                ? 'Switch to Advanced Expression Editor'
+                : 'Switch to Structured Editor'}
+            </Button>
           </Stack>
-        )}
-        {localError && <Alert severity='error'>{localError}</Alert>}
-        <TextInput
-          label='Rule Name'
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          maxWidth={620}
-        />
-        <Stack gap={1}>
-          <strong>Expression Mode</strong>
-          <ToggleButtonGroup
-            exclusive
-            value={mode}
-            onChange={(_, value) => {
-              if (value) setMode(value);
-            }}
-            size='small'
-          >
-            <ToggleButton value='structured'>Structured</ToggleButton>
-            <ToggleButton value='freeText'>Free Text</ToggleButton>
-          </ToggleButtonGroup>
+          {mode === 'structured' ? (
+            <StructuredExpressionBuilder
+              clauses={clauses}
+              operator={operator}
+              onChangeClauses={setClauses}
+              onChangeOperator={setOperator}
+            />
+          ) : (
+            <FreeTextExpressionEditor
+              value={freeTextExpression}
+              onChange={setFreeTextExpression}
+            />
+          )}
         </Stack>
-        {mode === 'structured' ? (
-          <StructuredExpressionBuilder
-            clauses={clauses}
-            operator={operator}
-            onChangeClauses={setClauses}
-            onChangeOperator={setOperator}
-          />
-        ) : (
-          <FreeTextExpressionEditor
-            value={freeTextExpression}
-            onChange={setFreeTextExpression}
-          />
-        )}
-        <Stack direction='row' gap={2}>
-          <LoadingButton
-            loading={loading}
-            variant='contained'
-            onClick={() => handleSubmit(false)}
-          >
-            Save Changes
-          </LoadingButton>
-          <Button
-            color='grayscale'
-            onClick={() => {
-              setName('');
-              setFreeTextExpression('');
-              setLocalError(undefined);
-              setErrorState(emptyErrorState);
-              setSaved(false);
-              setMode('structured');
-              setOperator(CeMatchRuleBooleanOperator.And);
-              setClauses([newDraftClause()]);
-            }}
-          >
-            Discard
-          </Button>
-        </Stack>
+      </Paper>
+      <Stack direction='row' gap={2}>
+        <LoadingButton
+          loading={loading}
+          variant='contained'
+          onClick={() => handleSubmit(false)}
+        >
+          Save
+        </LoadingButton>
+        <Button variant='outlined' onClick={resetForm}>
+          Reset
+        </Button>
       </Stack>
       {showWarningDialog && (
         <ImpactConfirmDialog
@@ -207,7 +218,7 @@ const CeMatchRuleForm = () => {
           onConfirm={() => handleSubmit(true)}
         />
       )}
-    </Paper>
+    </Stack>
   );
 };
 

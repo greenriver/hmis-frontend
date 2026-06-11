@@ -93,6 +93,15 @@ export const comparatorLabel = (comparator: CeMatchRuleComparator) => {
 export const comparatorOptionsForField = (
   field?: CeMatchBuilderField
 ): PickListOption[] => {
+  if (field?.repeats) {
+    return [CeMatchRuleComparator.Includes, CeMatchRuleComparator.Excludes].map(
+      (code) => ({
+        code,
+        label: comparatorLabel(code),
+      })
+    );
+  }
+
   const comparators = new Set<CeMatchRuleComparator>([
     CeMatchRuleComparator.Eq,
     CeMatchRuleComparator.NotEq,
@@ -105,11 +114,6 @@ export const comparatorOptionsForField = (
     comparators.add(CeMatchRuleComparator.Lte);
   }
 
-  if (field?.repeats) {
-    comparators.add(CeMatchRuleComparator.Includes);
-    comparators.add(CeMatchRuleComparator.Excludes);
-  }
-
   return Array.from(comparators).map((code) => ({
     code,
     label: comparatorLabel(code),
@@ -117,6 +121,6 @@ export const comparatorOptionsForField = (
 };
 
 export const booleanOperatorOptions: PickListOption[] = [
-  { code: CeMatchRuleBooleanOperator.And, label: 'All conditions (AND)' },
-  { code: CeMatchRuleBooleanOperator.Or, label: 'Any condition (OR)' },
+  { code: CeMatchRuleBooleanOperator.And, label: 'ALL' },
+  { code: CeMatchRuleBooleanOperator.Or, label: 'ANY' },
 ];
