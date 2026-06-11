@@ -316,6 +316,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'AssessmentAccess',
     fields: [
       {
+        name: 'canDeleteAssessment',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteAssessments',
         type: {
           kind: 'NON_NULL',
@@ -868,6 +876,45 @@ export const HmisObjectSchemas: GqlSchema[] = [
               name: null,
               ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
             },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'CeMatchRuleClause',
+    fields: [
+      {
+        name: 'comparator',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CeMatchRuleComparator', ofType: null },
+        },
+      },
+      {
+        name: 'field',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      { name: 'value', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
+    ],
+  },
+  {
+    name: 'CeMatchRuleStructuredExpression',
+    fields: [
+      {
+        name: 'operator',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'CeMatchRuleBooleanOperator',
+            ofType: null,
           },
         },
       },
@@ -1926,6 +1973,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canEditClient',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canIndexFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -4334,6 +4389,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       { name: 'url', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'FileAccess',
+    fields: [
+      {
+        name: 'canDeleteFile',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEditFile',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -8315,6 +8399,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'CeReferralFilterOptions',
     args: [
+      {
+        name: 'assignedToYou',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
       {
         name: 'onCurrentTaskSince',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },

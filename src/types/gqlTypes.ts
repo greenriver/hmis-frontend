@@ -293,8 +293,13 @@ export type Assessment = {
 
 export type AssessmentAccess = {
   __typename?: 'AssessmentAccess';
+  /** Whether the user can delete this assessment */
+  canDeleteAssessment: Scalars['Boolean']['output'];
+  /** @deprecated Use assessment.access.canDeleteAssessment */
   canDeleteAssessments: Scalars['Boolean']['output'];
+  /** @deprecated Use assessment.access.canDeleteAssessment */
   canDeleteEnrollments: Scalars['Boolean']['output'];
+  /** @deprecated Use enrollment.access.canEditEnrollments for enrollment edit checks */
   canEditEnrollments: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
@@ -762,7 +767,38 @@ export type CeMatchRule = {
   ownerType: CeMatchRuleOwner;
   /** Rule applicability is limited to projects with these types */
   projectTypes: Array<ProjectType>;
+  /** Expression translated into a structured clause list; null if the expression is too complex to translate */
+  structuredExpression?: Maybe<CeMatchRuleStructuredExpression>;
 };
+
+export enum CeMatchRuleBooleanOperator {
+  And = 'AND',
+  Or = 'OR',
+}
+
+export type CeMatchRuleClause = {
+  __typename?: 'CeMatchRuleClause';
+  /** The comparison operator to apply to the field and value, such as EQ */
+  comparator: CeMatchRuleComparator;
+  /** The name of the field for comparison, such as client_age or cde.custom_assessment.my_score */
+  field: Scalars['String']['output'];
+  /**
+   * The value to compare the field against, such as 18 or "1 Bed". JSON scalar
+   * (e.g. integer, float, string, boolean, or null). Not a list or nested object.
+   */
+  value?: Maybe<Scalars['JSON']['output']>;
+};
+
+export enum CeMatchRuleComparator {
+  Eq = 'EQ',
+  Excludes = 'EXCLUDES',
+  Gt = 'GT',
+  Gte = 'GTE',
+  Includes = 'INCLUDES',
+  Lt = 'LT',
+  Lte = 'LTE',
+  NotEq = 'NOT_EQ',
+}
 
 export enum CeMatchRuleOwner {
   /** Data Source */
@@ -776,6 +812,12 @@ export enum CeMatchRuleOwner {
   /** Unit Group */
   UnitGroup = 'UNIT_GROUP',
 }
+
+export type CeMatchRuleStructuredExpression = {
+  __typename?: 'CeMatchRuleStructuredExpression';
+  clauses: Array<CeMatchRuleClause>;
+  operator: CeMatchRuleBooleanOperator;
+};
 
 export type CeMatchValue = {
   __typename?: 'CeMatchValue';
@@ -1005,6 +1047,7 @@ export type CeReferralAuditEventsPaginated = {
 };
 
 export type CeReferralFilterOptions = {
+  assignedToYou?: InputMaybe<Scalars['Boolean']['input']>;
   onCurrentTaskSince?: InputMaybe<Scalars['ISO8601Date']['input']>;
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   origin?: InputMaybe<Array<CeReferralOrigin>>;
@@ -1388,13 +1431,17 @@ export type ClientAccess = {
   canAuditClients: Scalars['Boolean']['output'];
   canDeleteClient: Scalars['Boolean']['output'];
   canEditClient: Scalars['Boolean']['output'];
+  canIndexFiles: Scalars['Boolean']['output'];
+  /** @deprecated Resolve canManage on individual file access field instead */
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
+  /** @deprecated Resolve canManage on individual file access field instead */
   canManageOwnClientFiles: Scalars['Boolean']['output'];
   canManageScanCards: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
   canPrintClientCaseNotes: Scalars['Boolean']['output'];
   canUploadClientFiles: Scalars['Boolean']['output'];
+  /** @deprecated Use canIndexFiles */
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
@@ -3510,6 +3557,7 @@ export type FieldMapping = {
 /** File */
 export type File = {
   __typename?: 'File';
+  access: FileAccess;
   confidential?: Maybe<Scalars['Boolean']['output']>;
   contentType?: Maybe<Scalars['String']['output']>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3527,6 +3575,13 @@ export type File = {
   uploadedBy?: Maybe<ApplicationUser>;
   url?: Maybe<Scalars['String']['output']>;
   user?: Maybe<ApplicationUser>;
+};
+
+export type FileAccess = {
+  __typename?: 'FileAccess';
+  canDeleteFile: Scalars['Boolean']['output'];
+  canEditFile: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
 };
 
 /** File Sorting Options */
@@ -9144,13 +9199,16 @@ export type ClientAccessFieldsFragment = {
   canAuditClients: boolean;
   canManageScanCards: boolean;
   canMergeClients: boolean;
-  canViewAnyFiles: boolean;
-  canManageAnyClientFiles: boolean;
-  canManageOwnClientFiles: boolean;
-  canUploadClientFiles: boolean;
+  canIndexFiles: boolean;
   canViewReferrals: boolean;
   canViewOwnReferrals: boolean;
   canViewClientEligibleOpportunities: boolean;
+};
+
+export type ClientFileUploadAccessFieldsFragment = {
+  __typename?: 'ClientAccess';
+  id: string;
+  canUploadClientFiles: boolean;
 };
 
 export type EnrollmentAccessFieldsFragment = {
@@ -9165,9 +9223,7 @@ export type EnrollmentAccessFieldsFragment = {
 export type AssessmentAccessFieldsFragment = {
   __typename?: 'AssessmentAccess';
   id: string;
-  canDeleteAssessments: boolean;
-  canDeleteEnrollments: boolean;
-  canEditEnrollments: boolean;
+  canDeleteAssessment: boolean;
 };
 
 export type ProjectAccessFieldsFragment = {
@@ -9611,11 +9667,15 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -9667,11 +9727,15 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -9853,11 +9917,15 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -9909,11 +9977,15 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10055,11 +10127,15 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10111,11 +10187,15 @@ export type AssessmentWithRecordsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10202,11 +10282,15 @@ export type AssessmentWithRecordsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -10258,11 +10342,15 @@ export type AssessmentWithRecordsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -10296,9 +10384,7 @@ export type AssessmentWithRecordsFragment = {
   access: {
     __typename?: 'AssessmentAccess';
     id: string;
-    canDeleteAssessments: boolean;
-    canDeleteEnrollments: boolean;
-    canEditEnrollments: boolean;
+    canDeleteAssessment: boolean;
   };
   geolocation?: {
     __typename?: 'Geolocation';
@@ -10479,11 +10565,15 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10535,11 +10625,15 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10721,11 +10815,15 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10777,11 +10875,15 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10923,11 +11025,15 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -10979,11 +11085,15 @@ export type FullAssessmentFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -11070,11 +11180,15 @@ export type FullAssessmentFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -11126,11 +11240,15 @@ export type FullAssessmentFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -11164,9 +11282,7 @@ export type FullAssessmentFragment = {
   access: {
     __typename?: 'AssessmentAccess';
     id: string;
-    canDeleteAssessments: boolean;
-    canDeleteEnrollments: boolean;
-    canEditEnrollments: boolean;
+    canDeleteAssessment: boolean;
   };
   geolocation?: {
     __typename?: 'Geolocation';
@@ -11243,11 +11359,15 @@ export type AssessmentWithCdesFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -11299,11 +11419,15 @@ export type AssessmentWithCdesFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -12515,11 +12639,15 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12571,11 +12699,15 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12757,11 +12889,15 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12813,11 +12949,15 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -12959,11 +13099,15 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -13015,11 +13159,15 @@ export type GetAssessmentQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -13106,11 +13254,15 @@ export type GetAssessmentQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -13162,11 +13314,15 @@ export type GetAssessmentQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -13200,9 +13356,7 @@ export type GetAssessmentQuery = {
     access: {
       __typename?: 'AssessmentAccess';
       id: string;
-      canDeleteAssessments: boolean;
-      canDeleteEnrollments: boolean;
-      canEditEnrollments: boolean;
+      canDeleteAssessment: boolean;
     };
     geolocation?: {
       __typename?: 'Geolocation';
@@ -13314,11 +13468,15 @@ export type GetClientAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13370,11 +13528,15 @@ export type GetClientAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13493,11 +13655,15 @@ export type GetEnrollmentAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13549,11 +13715,15 @@ export type GetEnrollmentAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13686,11 +13856,15 @@ export type GetHouseholdAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -13742,11 +13916,15 @@ export type GetHouseholdAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14008,11 +14186,15 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14064,11 +14246,15 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14250,11 +14436,15 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14306,11 +14496,15 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14452,11 +14646,15 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14508,11 +14706,15 @@ export type SubmitAssessmentMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14599,11 +14801,15 @@ export type SubmitAssessmentMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -14655,11 +14861,15 @@ export type SubmitAssessmentMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -14693,9 +14903,7 @@ export type SubmitAssessmentMutation = {
       access: {
         __typename?: 'AssessmentAccess';
         id: string;
-        canDeleteAssessments: boolean;
-        canDeleteEnrollments: boolean;
-        canEditEnrollments: boolean;
+        canDeleteAssessment: boolean;
       };
       geolocation?: {
         __typename?: 'Geolocation';
@@ -14863,11 +15071,15 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -14919,11 +15131,15 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15105,11 +15321,15 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15161,11 +15381,15 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15307,11 +15531,15 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15363,11 +15591,15 @@ export type SubmitHouseholdAssessmentsMutation = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -15454,11 +15686,15 @@ export type SubmitHouseholdAssessmentsMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -15510,11 +15746,15 @@ export type SubmitHouseholdAssessmentsMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -15548,9 +15788,7 @@ export type SubmitHouseholdAssessmentsMutation = {
       access: {
         __typename?: 'AssessmentAccess';
         id: string;
-        canDeleteAssessments: boolean;
-        canDeleteEnrollments: boolean;
-        canEditEnrollments: boolean;
+        canDeleteAssessment: boolean;
       };
       geolocation?: {
         __typename?: 'Geolocation';
@@ -15735,11 +15973,15 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -15791,11 +16033,15 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -15977,11 +16223,15 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -16033,11 +16283,15 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -16179,11 +16433,15 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -16235,11 +16493,15 @@ export type GetAssessmentsForPopulationQuery = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -16326,11 +16588,15 @@ export type GetAssessmentsForPopulationQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -16382,11 +16648,15 @@ export type GetAssessmentsForPopulationQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -16420,9 +16690,7 @@ export type GetAssessmentsForPopulationQuery = {
         access: {
           __typename?: 'AssessmentAccess';
           id: string;
-          canDeleteAssessments: boolean;
-          canDeleteEnrollments: boolean;
-          canEditEnrollments: boolean;
+          canDeleteAssessment: boolean;
         };
         geolocation?: {
           __typename?: 'Geolocation';
@@ -18479,11 +18747,15 @@ export type CeReferralStepFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -18535,11 +18807,15 @@ export type CeReferralStepFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -19286,11 +19562,15 @@ export type StartCeReferralStepMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -19342,11 +19622,15 @@ export type StartCeReferralStepMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -19979,11 +20263,15 @@ export type SubmitCeReferralStepMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -20035,11 +20323,15 @@ export type SubmitCeReferralStepMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -21548,11 +21840,15 @@ export type GetCeReferralStepQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -21604,11 +21900,15 @@ export type GetCeReferralStepQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -22071,10 +22371,7 @@ export type ClientFieldsFragment = {
     canAuditClients: boolean;
     canManageScanCards: boolean;
     canMergeClients: boolean;
-    canViewAnyFiles: boolean;
-    canManageAnyClientFiles: boolean;
-    canManageOwnClientFiles: boolean;
-    canUploadClientFiles: boolean;
+    canIndexFiles: boolean;
     canViewReferrals: boolean;
     canViewOwnReferrals: boolean;
     canViewClientEligibleOpportunities: boolean;
@@ -22109,11 +22406,15 @@ export type ClientFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -22165,11 +22466,15 @@ export type ClientFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -22560,10 +22865,7 @@ export type GetClientQuery = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewAnyFiles: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canUploadClientFiles: boolean;
+      canIndexFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
@@ -22598,11 +22900,15 @@ export type GetClientQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -22654,11 +22960,15 @@ export type GetClientQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -22801,13 +23111,27 @@ export type GetClientPermissionsQuery = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewAnyFiles: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canUploadClientFiles: boolean;
+      canIndexFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
+    };
+  } | null;
+};
+
+export type GetClientFileUploadAccessQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetClientFileUploadAccessQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    access: {
+      __typename?: 'ClientAccess';
+      id: string;
+      canUploadClientFiles: boolean;
     };
   } | null;
 };
@@ -23003,11 +23327,15 @@ export type GetClientServicesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -23059,11 +23387,15 @@ export type GetClientServicesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -23203,11 +23535,15 @@ export type DeleteClientFileMutation = {
       name: string;
       url?: string | null;
       tags: Array<string>;
-      ownFile: boolean;
       redacted: boolean;
       enrollmentId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      access: {
+        __typename?: 'FileAccess';
+        canEditFile: boolean;
+        canDeleteFile: boolean;
+      };
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
       uploadedBy?: {
         __typename?: 'ApplicationUser';
@@ -23337,10 +23673,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canAuditClients: boolean;
                 canManageScanCards: boolean;
                 canMergeClients: boolean;
-                canViewAnyFiles: boolean;
-                canManageAnyClientFiles: boolean;
-                canManageOwnClientFiles: boolean;
-                canUploadClientFiles: boolean;
+                canIndexFiles: boolean;
                 canViewReferrals: boolean;
                 canViewOwnReferrals: boolean;
                 canViewClientEligibleOpportunities: boolean;
@@ -23408,11 +23741,15 @@ export type GetFileQuery = {
     name: string;
     url?: string | null;
     tags: Array<string>;
-    ownFile: boolean;
     redacted: boolean;
     enrollmentId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    access: {
+      __typename?: 'FileAccess';
+      canEditFile: boolean;
+      canDeleteFile: boolean;
+    };
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
     uploadedBy?: {
       __typename?: 'ApplicationUser';
@@ -23462,7 +23799,6 @@ export type GetClientFilesQuery = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
@@ -23487,6 +23823,11 @@ export type GetClientFilesQuery = {
             canViewEnrollmentDetails: boolean;
           };
         } | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         uploadedBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -24249,10 +24590,7 @@ export type MergeClientsMutation = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
-        canViewAnyFiles: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canUploadClientFiles: boolean;
+        canIndexFiles: boolean;
         canViewReferrals: boolean;
         canViewOwnReferrals: boolean;
         canViewClientEligibleOpportunities: boolean;
@@ -24287,11 +24625,15 @@ export type MergeClientsMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -24343,11 +24685,15 @@ export type MergeClientsMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -25023,11 +25369,15 @@ export type CurrentLivingSituationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25079,11 +25429,15 @@ export type CurrentLivingSituationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25196,11 +25550,15 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25252,11 +25610,15 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25369,11 +25731,15 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25425,11 +25791,15 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25561,11 +25931,15 @@ export type GetProjectCurrentLivingSituationsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25617,11 +25991,15 @@ export type GetProjectCurrentLivingSituationsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25721,11 +26099,15 @@ export type CustomCaseNoteFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25777,11 +26159,15 @@ export type CustomCaseNoteFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -25885,11 +26271,15 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -25941,11 +26331,15 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -26099,11 +26493,15 @@ export type GetClientCaseNotesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -26155,11 +26553,15 @@ export type GetClientCaseNotesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -26217,11 +26619,15 @@ export type CustomDataElementValueFieldsFragment = {
     name: string;
     url?: string | null;
     tags: Array<string>;
-    ownFile: boolean;
     redacted: boolean;
     enrollmentId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    access: {
+      __typename?: 'FileAccess';
+      canEditFile: boolean;
+      canDeleteFile: boolean;
+    };
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
     uploadedBy?: {
       __typename?: 'ApplicationUser';
@@ -26282,11 +26688,15 @@ export type CustomDataElementFieldsFragment = {
       name: string;
       url?: string | null;
       tags: Array<string>;
-      ownFile: boolean;
       redacted: boolean;
       enrollmentId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      access: {
+        __typename?: 'FileAccess';
+        canEditFile: boolean;
+        canDeleteFile: boolean;
+      };
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
       uploadedBy?: {
         __typename?: 'ApplicationUser';
@@ -26338,11 +26748,15 @@ export type CustomDataElementFieldsFragment = {
       name: string;
       url?: string | null;
       tags: Array<string>;
-      ownFile: boolean;
       redacted: boolean;
       enrollmentId?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      access: {
+        __typename?: 'FileAccess';
+        canEditFile: boolean;
+        canDeleteFile: boolean;
+      };
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
       uploadedBy?: {
         __typename?: 'ApplicationUser';
@@ -27519,11 +27933,15 @@ export type EnrolledClientFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -27575,11 +27993,15 @@ export type EnrolledClientFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -27670,11 +28092,15 @@ export type AllEnrollmentDetailsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -27726,11 +28152,15 @@ export type AllEnrollmentDetailsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -27804,11 +28234,15 @@ export type AllEnrollmentDetailsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -27860,11 +28294,15 @@ export type AllEnrollmentDetailsFragment = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -28657,11 +29095,15 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -28713,11 +29155,15 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -28888,10 +29334,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
           canAuditClients: boolean;
           canManageScanCards: boolean;
           canMergeClients: boolean;
-          canViewAnyFiles: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canUploadClientFiles: boolean;
+          canIndexFiles: boolean;
           canViewReferrals: boolean;
           canViewOwnReferrals: boolean;
           canViewClientEligibleOpportunities: boolean;
@@ -29134,11 +29577,15 @@ export type GetEnrollmentDetailsQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -29190,11 +29637,15 @@ export type GetEnrollmentDetailsQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -29268,11 +29719,15 @@ export type GetEnrollmentDetailsQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -29324,11 +29779,15 @@ export type GetEnrollmentDetailsQuery = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -30029,10 +30488,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canUploadClientFiles: boolean;
+            canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -31657,11 +32113,15 @@ export type FileFieldsFragment = {
   name: string;
   url?: string | null;
   tags: Array<string>;
-  ownFile: boolean;
   redacted: boolean;
   enrollmentId?: string | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  access: {
+    __typename?: 'FileAccess';
+    canEditFile: boolean;
+    canDeleteFile: boolean;
+  };
   enrollment?: { __typename?: 'Enrollment'; id: string } | null;
   uploadedBy?: {
     __typename?: 'ApplicationUser';
@@ -37695,10 +38155,7 @@ export type SubmitFormMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canUploadClientFiles: boolean;
+            canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -37733,11 +38190,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -37789,11 +38250,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -37945,11 +38410,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38001,11 +38470,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38101,11 +38574,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38157,11 +38634,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38247,11 +38728,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38303,11 +38788,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38418,11 +38907,15 @@ export type SubmitFormMutation = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -38492,11 +38985,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38548,11 +39045,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38660,11 +39161,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38716,11 +39221,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38801,11 +39310,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38857,11 +39370,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -38978,11 +39495,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -39034,11 +39555,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -39238,11 +39763,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -39294,11 +39823,15 @@ export type SubmitFormMutation = {
                 name: string;
                 url?: string | null;
                 tags: Array<string>;
-                ownFile: boolean;
                 redacted: boolean;
                 enrollmentId?: string | null;
                 dateCreated?: string | null;
                 dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
                 enrollment?: { __typename?: 'Enrollment'; id: string } | null;
                 uploadedBy?: {
                   __typename?: 'ApplicationUser';
@@ -41051,10 +41584,7 @@ export type HouseholdFieldsFragment = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
-        canViewAnyFiles: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canUploadClientFiles: boolean;
+        canIndexFiles: boolean;
         canViewReferrals: boolean;
         canViewOwnReferrals: boolean;
         canViewClientEligibleOpportunities: boolean;
@@ -41134,10 +41664,7 @@ export type HouseholdClientFieldsFragment = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
-      canViewAnyFiles: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canUploadClientFiles: boolean;
+      canIndexFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
@@ -41314,10 +41841,7 @@ export type JoinHouseholdMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canUploadClientFiles: boolean;
+            canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41405,10 +41929,7 @@ export type JoinHouseholdMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canUploadClientFiles: boolean;
+            canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41509,10 +42030,7 @@ export type SplitHouseholdMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canUploadClientFiles: boolean;
+            canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41600,10 +42118,7 @@ export type SplitHouseholdMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
-            canViewAnyFiles: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canUploadClientFiles: boolean;
+            canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
@@ -41700,10 +42215,7 @@ export type GetHouseholdQuery = {
           canAuditClients: boolean;
           canManageScanCards: boolean;
           canMergeClients: boolean;
-          canViewAnyFiles: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canUploadClientFiles: boolean;
+          canIndexFiles: boolean;
           canViewReferrals: boolean;
           canViewOwnReferrals: boolean;
           canViewClientEligibleOpportunities: boolean;
@@ -41853,11 +42365,15 @@ export type InventoryFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -41909,11 +42425,15 @@ export type InventoryFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42186,11 +42706,15 @@ export type OrganizationDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42242,11 +42766,15 @@ export type OrganizationDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42328,11 +42856,15 @@ export type OrganizationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42384,11 +42916,15 @@ export type OrganizationFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42503,11 +43039,15 @@ export type GetOrganizationQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -42559,11 +43099,15 @@ export type GetOrganizationQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -42758,11 +43302,15 @@ export type ProjectAllFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -42814,11 +43362,15 @@ export type ProjectAllFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -43544,11 +44096,15 @@ export type FunderFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -43600,11 +44156,15 @@ export type FunderFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -43840,11 +44400,15 @@ export type GetProjectQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -43896,11 +44460,15 @@ export type GetProjectQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44345,11 +44913,15 @@ export type GetProjectAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -44401,11 +44973,15 @@ export type GetProjectAssessmentsQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -44545,11 +45121,15 @@ export type GetFunderQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44601,11 +45181,15 @@ export type GetFunderQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44704,11 +45288,15 @@ export type GetInventoryQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44760,11 +45348,15 @@ export type GetInventoryQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -44904,11 +45496,15 @@ export type GetProjectInventoriesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -44960,11 +45556,15 @@ export type GetProjectInventoriesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -45209,11 +45809,15 @@ export type GetProjectFundersQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -45265,11 +45869,15 @@ export type GetProjectFundersQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -45821,11 +46429,15 @@ export type UpdateReferralPostingMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -45877,11 +46489,15 @@ export type UpdateReferralPostingMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -46061,11 +46677,15 @@ export type GetReferralPostingQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -46117,11 +46737,15 @@ export type GetReferralPostingQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -46340,11 +46964,15 @@ export type ReferralPostingDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -46396,11 +47024,15 @@ export type ReferralPostingDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -46513,11 +47145,15 @@ export type EsgFundingServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -46569,11 +47205,15 @@ export type EsgFundingServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -46664,11 +47304,15 @@ export type GetEsgFundingReportQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -46720,11 +47364,15 @@ export type GetEsgFundingReportQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -47077,11 +47725,15 @@ export type ServiceDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47133,11 +47785,15 @@ export type ServiceDetailFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47239,11 +47895,15 @@ export type ServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47295,11 +47955,15 @@ export type ServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47401,11 +48065,15 @@ export type ClientServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47457,11 +48125,15 @@ export type ClientServiceFieldsFragment = {
         name: string;
         url?: string | null;
         tags: Array<string>;
-        ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -47582,11 +48254,15 @@ export type GetServiceQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -47638,11 +48314,15 @@ export type GetServiceQuery = {
           name: string;
           url?: string | null;
           tags: Array<string>;
-          ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -47778,11 +48458,15 @@ export type DeleteServiceMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -47834,11 +48518,15 @@ export type DeleteServiceMutation = {
             name: string;
             url?: string | null;
             tags: Array<string>;
-            ownFile: boolean;
             redacted: boolean;
             enrollmentId?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
             enrollment?: { __typename?: 'Enrollment'; id: string } | null;
             uploadedBy?: {
               __typename?: 'ApplicationUser';
@@ -47973,11 +48661,15 @@ export type GetEnrollmentServicesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -48029,11 +48721,15 @@ export type GetEnrollmentServicesQuery = {
               name: string;
               url?: string | null;
               tags: Array<string>;
-              ownFile: boolean;
               redacted: boolean;
               enrollmentId?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
               enrollment?: { __typename?: 'Enrollment'; id: string } | null;
               uploadedBy?: {
                 __typename?: 'ApplicationUser';
@@ -49796,6 +50492,12 @@ export const RootPermissionsFragmentDoc = gql`
     canIndexReferrals
   }
 `;
+export const ClientFileUploadAccessFieldsFragmentDoc = gql`
+  fragment ClientFileUploadAccessFields on ClientAccess {
+    id
+    canUploadClientFiles
+  }
+`;
 export const OrganizationAccessFieldsFragmentDoc = gql`
   fragment OrganizationAccessFields on OrganizationAccess {
     id
@@ -49959,7 +50661,10 @@ export const FileFieldsFragmentDoc = gql`
     name
     url
     tags
-    ownFile
+    access {
+      canEditFile
+      canDeleteFile
+    }
     redacted
     enrollmentId
     enrollment {
@@ -50253,9 +50958,7 @@ export const EmploymentEducationValuesFragmentDoc = gql`
 export const AssessmentAccessFieldsFragmentDoc = gql`
   fragment AssessmentAccessFields on AssessmentAccess {
     id
-    canDeleteAssessments
-    canDeleteEnrollments
-    canEditEnrollments
+    canDeleteAssessment
   }
 `;
 export const GeolocationFieldsFragmentDoc = gql`
@@ -51172,10 +51875,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canAuditClients
     canManageScanCards
     canMergeClients
-    canViewAnyFiles
-    canManageAnyClientFiles
-    canManageOwnClientFiles
-    canUploadClientFiles
+    canIndexFiles
     canViewReferrals
     canViewOwnReferrals
     canViewClientEligibleOpportunities
@@ -57345,6 +58045,113 @@ export type GetClientPermissionsSuspenseQueryHookResult = ReturnType<
 export type GetClientPermissionsQueryResult = Apollo.QueryResult<
   GetClientPermissionsQuery,
   GetClientPermissionsQueryVariables
+>;
+export const GetClientFileUploadAccessDocument = gql`
+  query GetClientFileUploadAccess($id: ID!) {
+    client(id: $id) {
+      id
+      access {
+        ...ClientFileUploadAccessFields
+      }
+    }
+  }
+  ${ClientFileUploadAccessFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientFileUploadAccessQuery__
+ *
+ * To run a query within a React component, call `useGetClientFileUploadAccessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientFileUploadAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientFileUploadAccessQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetClientFileUploadAccessQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  > &
+    (
+      | { variables: GetClientFileUploadAccessQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >(GetClientFileUploadAccessDocument, options);
+}
+export function useGetClientFileUploadAccessLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >(GetClientFileUploadAccessDocument, options);
+}
+// @ts-ignore
+export function useGetClientFileUploadAccessSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetClientFileUploadAccessQuery,
+  GetClientFileUploadAccessQueryVariables
+>;
+export function useGetClientFileUploadAccessSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetClientFileUploadAccessQuery,
+        GetClientFileUploadAccessQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetClientFileUploadAccessQuery | undefined,
+  GetClientFileUploadAccessQueryVariables
+>;
+export function useGetClientFileUploadAccessSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetClientFileUploadAccessQuery,
+        GetClientFileUploadAccessQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetClientFileUploadAccessQuery,
+    GetClientFileUploadAccessQueryVariables
+  >(GetClientFileUploadAccessDocument, options);
+}
+export type GetClientFileUploadAccessQueryHookResult = ReturnType<
+  typeof useGetClientFileUploadAccessQuery
+>;
+export type GetClientFileUploadAccessLazyQueryHookResult = ReturnType<
+  typeof useGetClientFileUploadAccessLazyQuery
+>;
+export type GetClientFileUploadAccessSuspenseQueryHookResult = ReturnType<
+  typeof useGetClientFileUploadAccessSuspenseQuery
+>;
+export type GetClientFileUploadAccessQueryResult = Apollo.QueryResult<
+  GetClientFileUploadAccessQuery,
+  GetClientFileUploadAccessQueryVariables
 >;
 export const GetClientImageDocument = gql`
   query GetClientImage($id: ID!) {
