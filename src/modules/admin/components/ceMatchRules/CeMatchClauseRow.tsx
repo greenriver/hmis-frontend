@@ -9,8 +9,6 @@ import {
   comparatorOptionsForField,
   customAssessmentFormToOption,
   fieldSourceOptions,
-  fieldToOption,
-  optionCode,
   pickListOptionsForField,
   valueInputType,
 } from './ceMatchRuleUtil';
@@ -20,11 +18,29 @@ import {
   CeMatchCustomAssessmentFormFieldsFragment,
   CeMatchFieldFieldsFragment,
   CeMatchRuleComparator,
+  PickListOption,
   useGetCeMatchCustomAssessmentFieldsQuery,
 } from '@/types/gqlTypes';
 
 // Extract as a constant to avoid re-creating the array on every render
 const emptyCustomAssessmentFields: CeMatchFieldFieldsFragment[] = [];
+
+// Field labels may be missing in older CDED metadata, so fall back to stable
+// expression identifiers for the select option label.
+const fieldLabel = (field: CeMatchFieldFieldsFragment) =>
+  field.label.trim() || field.expressionField || field.key;
+
+// ControlledSelect can emit booleans for JSON-valued fields; only string values
+// are safe to reuse as select option codes for form state.
+const optionCode = (value: PickListOption['code'] | boolean | null) => {
+  if (typeof value === 'string') return value;
+};
+
+// This row maps both client and custom CDED fields into the same select shape.
+const fieldToOption = (field: CeMatchFieldFieldsFragment): PickListOption => ({
+  code: field.expressionField,
+  label: fieldLabel(field),
+});
 
 interface Props {
   control: Control<CeMatchRuleFormValues>;
@@ -41,6 +57,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
   clientItems,
   customAssessmentForms,
 }) => {
+  // Path to the current clause in the RHF form state
   const clausePath = `structuredExpression.clauses.${index}` as const;
   const source =
     useWatch({

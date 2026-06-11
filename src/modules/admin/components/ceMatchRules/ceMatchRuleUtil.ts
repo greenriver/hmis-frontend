@@ -37,24 +37,6 @@ export const newDraftClause = (): CeMatchDraftClause => ({
   value: '',
 });
 
-export const fieldLabel = (field: CeMatchFieldFieldsFragment) =>
-  field.label.trim() || field.expressionField || field.key;
-
-export const optionCode = (value: PickListOption['code'] | boolean | null) => {
-  // ControlledSelect can store booleans for JSON-valued fields. Only string
-  // values can be reused as select option codes.
-  if (typeof value === 'string') return value;
-};
-
-export const fieldToOption = (
-  field: CeMatchFieldFieldsFragment,
-  groupLabel?: string
-): PickListOption => ({
-  code: field.expressionField,
-  label: fieldLabel(field),
-  groupLabel,
-});
-
 export const customAssessmentFormToOption = (
   form: CeMatchCustomAssessmentFormFieldsFragment
 ): PickListOption => ({
