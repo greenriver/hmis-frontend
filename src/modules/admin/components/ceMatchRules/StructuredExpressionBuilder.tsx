@@ -21,10 +21,8 @@ import {
   booleanOperatorOptions,
   newDraftClause,
 } from './ceMatchRuleUtil';
+import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import Loading from '@/components/elements/Loading';
-import CardGroup, {
-  RemovableCard,
-} from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import {
   CeMatchRuleBooleanOperator,
   useGetCeMatchClientFieldsQuery,
