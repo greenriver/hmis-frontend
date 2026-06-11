@@ -1,3 +1,5 @@
+import AffectedUnitGroupsTable from './AffectedUnitGroupsTable';
+import { getAffectedUnitGroups } from './ceMatchRuleUtil';
 import ValidationDialog from '@/modules/errors/components/ValidationDialog';
 import { ErrorState } from '@/modules/errors/util';
 
@@ -13,15 +15,23 @@ const ImpactConfirmDialog: React.FC<Props> = ({
   loading,
   onConfirm,
   onCancel,
-}) => (
-  <ValidationDialog
-    open
-    errorState={errorState}
-    loading={loading}
-    onConfirm={onConfirm}
-    onCancel={onCancel}
-    confirmText='Save Anyway'
-  />
-);
+}) => {
+  const affectedUnitGroups = getAffectedUnitGroups(errorState.warnings);
+
+  return (
+    <ValidationDialog
+      open
+      maxWidth='md'
+      errorState={errorState}
+      loading={loading}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      confirmText='Save Anyway'
+      warningExtraContent={
+        <AffectedUnitGroupsTable unitGroups={affectedUnitGroups} />
+      }
+    />
+  );
+};
 
 export default ImpactConfirmDialog;

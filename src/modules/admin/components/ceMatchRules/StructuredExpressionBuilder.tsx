@@ -75,7 +75,7 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
   return (
     <Stack gap={2}>
       {validationError && <Alert severity='error'>{validationError}</Alert>}
-      <Stack gap={1}>
+      {fields.length > 1 && (
         <Stack direction='row' alignItems='center' gap={1} flexWrap='wrap'>
           <Typography variant='body2' fontWeight={600}>
             Client must meet
@@ -100,7 +100,7 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
             of the following requirements
           </Typography>
         </Stack>
-      </Stack>
+      )}
       {loading && <Loading />}
       {!loading && (
         <CardGroup

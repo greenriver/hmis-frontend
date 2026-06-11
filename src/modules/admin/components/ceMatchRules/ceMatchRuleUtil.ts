@@ -6,6 +6,7 @@ import {
   CeMatchRuleClauseInput,
   CeMatchRuleComparator,
   PickListOption,
+  ValidationError,
 } from '@/types/gqlTypes';
 
 export type CeMatchFieldSource = 'client' | 'custom';
@@ -145,3 +146,31 @@ export const booleanOperatorOptions: PickListOption[] = [
   { code: CeMatchRuleBooleanOperator.And, label: 'ALL' },
   { code: CeMatchRuleBooleanOperator.Or, label: 'ANY' },
 ];
+
+export interface AffectedUnitGroup {
+  unitGroupId: string;
+  unitGroupName: string;
+  projectId: string;
+  projectName: string;
+  currentCandidateCount: number;
+  removedCandidateCount: number;
+}
+
+const isAffectedUnitGroup = (value: unknown): value is AffectedUnitGroup =>
+  !!value &&
+  typeof value === 'object' &&
+  typeof (value as AffectedUnitGroup).unitGroupId === 'string' &&
+  typeof (value as AffectedUnitGroup).unitGroupName === 'string' &&
+  typeof (value as AffectedUnitGroup).projectId === 'string' &&
+  typeof (value as AffectedUnitGroup).projectName === 'string' &&
+  typeof (value as AffectedUnitGroup).currentCandidateCount === 'number' &&
+  typeof (value as AffectedUnitGroup).removedCandidateCount === 'number';
+
+export const getAffectedUnitGroups = (
+  warnings: ValidationError[]
+): AffectedUnitGroup[] =>
+  warnings.flatMap((warning) => {
+    const groups = warning.data?.affectedUnitGroups;
+    if (!Array.isArray(groups)) return [];
+    return groups.filter(isAffectedUnitGroup);
+  });
