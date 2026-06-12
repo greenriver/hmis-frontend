@@ -45,26 +45,24 @@ const comparatorLabel = (comparator: CeMatchRuleComparator) => {
 const comparatorOptionsForField = (
   field?: CeMatchFieldDetailsFragment
 ): PickListOption[] => {
+  const comparators = new Set<CeMatchRuleComparator>();
+
   if (field?.repeats) {
-    // Repeating values are arrays, so only array membership operators apply.
-    return [CeMatchRuleComparator.Includes, CeMatchRuleComparator.Excludes].map(
-      (code) => ({
-        code,
-        label: comparatorLabel(code),
-      })
-    );
-  }
+    // For a repeating value (array), start with Includes/Excludes
+    comparators.add(CeMatchRuleComparator.Includes);
+    comparators.add(CeMatchRuleComparator.Excludes);
+  } else {
+    // Otherwise, start with Equals/Not Equals
+    comparators.add(CeMatchRuleComparator.Eq);
+    comparators.add(CeMatchRuleComparator.NotEq);
 
-  const comparators = new Set<CeMatchRuleComparator>([
-    CeMatchRuleComparator.Eq,
-    CeMatchRuleComparator.NotEq,
-  ]);
-
-  if (field && COMPARABLE_ITEM_TYPES.includes(field.itemType)) {
-    comparators.add(CeMatchRuleComparator.Gt);
-    comparators.add(CeMatchRuleComparator.Gte);
-    comparators.add(CeMatchRuleComparator.Lt);
-    comparators.add(CeMatchRuleComparator.Lte);
+    // If the field type is comparable (numeric/date/etc), add the comparable operators
+    if (field && COMPARABLE_ITEM_TYPES.includes(field.itemType)) {
+      comparators.add(CeMatchRuleComparator.Gt);
+      comparators.add(CeMatchRuleComparator.Gte);
+      comparators.add(CeMatchRuleComparator.Lt);
+      comparators.add(CeMatchRuleComparator.Lte);
+    }
   }
 
   return Array.from(comparators).map((code) => ({
@@ -77,6 +75,10 @@ export const defaultComparatorForField = (
   field?: CeMatchFieldDetailsFragment
 ) => comparatorOptionsForField(field)[0]?.code || CeMatchRuleComparator.Eq;
 
+/**
+ * Dropdown for selecting the match rule's comparator (equals, includes, etc.)
+ * Notifies the parent to clear the clause value when the comparison type changes.
+ */
 const CeMatchComparatorSelect: React.FC<Props> = ({
   control,
   clausePath,

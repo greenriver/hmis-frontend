@@ -31,6 +31,9 @@ interface Props {
   customAssessmentForms: CeMatchCustomAssessmentFormFieldsFragment[];
 }
 
+/**
+ * Renders one requirement clause in the CE Match Rule structured builder.
+ */
 const CeMatchClauseRow: React.FC<Props> = ({
   control,
   setValue,

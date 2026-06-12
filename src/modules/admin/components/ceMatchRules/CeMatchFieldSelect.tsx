@@ -6,7 +6,7 @@ import type {
   CeMatchRuleFormValues,
 } from './CeMatchRuleForm';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
-import { CeMatchFieldDetailsFragment, PickListOption } from '@/types/gqlTypes';
+import { CeMatchFieldDetailsFragment } from '@/types/gqlTypes';
 
 type ClausePath = `structuredExpression.clauses.${number}`;
 
@@ -21,23 +21,10 @@ interface Props {
   onFieldChange: (field?: CeMatchFieldDetailsFragment) => void;
 }
 
-// Field labels may be missing in older CDED metadata, so fall back to stable
-// expression identifiers for the select option label.
-const fieldLabel = (field: CeMatchFieldDetailsFragment) =>
-  field.label.trim() || field.expressionField || field.key;
-
-// ControlledSelect can emit booleans for JSON-valued fields; only string values
-// are safe to reuse as select option codes for form state.
-const optionCode = (value: PickListOption['code'] | boolean | null) => {
-  if (typeof value === 'string') return value;
-};
-
-// This select maps both client and custom CDED fields into the same option shape.
-const fieldToOption = (field: CeMatchFieldDetailsFragment): PickListOption => ({
-  code: field.expressionField,
-  label: fieldLabel(field),
-});
-
+/**
+ * Dropdown for selecting the field for a CE Match Rule clause:
+ * either a client field, or a field from a custom assessment form.
+ */
 const CeMatchFieldSelect: React.FC<Props> = ({
   control,
   clausePath,
@@ -55,7 +42,14 @@ const CeMatchFieldSelect: React.FC<Props> = ({
   }, [clientItems, source, customAssessmentFields]);
 
   const fieldOptions = useMemo(
-    () => fields.map((field) => fieldToOption(field)),
+    () =>
+      fields.map((field) => {
+        return {
+          code: field.expressionField,
+          // Form item labels may be blank, so fall back to stable expression identifiers
+          label: field.label.trim() || field.expressionField || field.key,
+        };
+      }),
     [fields]
   );
 
@@ -73,12 +67,7 @@ const CeMatchFieldSelect: React.FC<Props> = ({
       }
       loading={customAssessmentFieldsLoading}
       onChange={(value) => {
-        const selectedFieldExpression = optionCode(value);
-        onFieldChange(
-          fields.find(
-            (field) => field.expressionField === selectedFieldExpression
-          )
-        );
+        onFieldChange(fields.find((field) => field.expressionField === value));
       }}
     />
   );

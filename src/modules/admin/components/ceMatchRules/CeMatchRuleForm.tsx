@@ -81,6 +81,11 @@ const buildCeMatchRuleInput = ({
   };
 };
 
+/**
+ * The top-level CE match rule form component.
+ * Owns the RHF state to collect rule details and structured clauses,
+ * and the mutation call to submit to the backend.
+ */
 const CeMatchRuleForm = () => {
   const { control, handleSubmit, reset, setValue } =
     useForm<CeMatchRuleFormValues>({

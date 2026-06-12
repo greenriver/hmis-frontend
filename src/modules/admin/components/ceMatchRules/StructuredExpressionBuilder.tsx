@@ -40,6 +40,10 @@ const booleanOperatorOptions = [
   { code: CeMatchRuleBooleanOperator.Or, label: 'ANY' },
 ];
 
+/**
+ * Builds a structured CE match expression by loading field metadata, managing
+ * the clause list, and choosing whether clauses are combined with ALL or ANY.
+ */
 const StructuredExpressionBuilder: React.FC<Props> = ({
   control,
   setValue,

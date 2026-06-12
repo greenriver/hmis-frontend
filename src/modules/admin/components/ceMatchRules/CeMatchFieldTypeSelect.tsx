@@ -5,7 +5,6 @@ import type {
   CeMatchRuleFormValues,
 } from './CeMatchRuleForm';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
-import { PickListOption } from '@/types/gqlTypes';
 
 type ClausePath = `structuredExpression.clauses.${number}`;
 
@@ -16,12 +15,10 @@ interface Props {
   onSourceChange: () => void;
 }
 
-// ControlledSelect can emit booleans for JSON-valued fields; only string values
-// are safe to reuse as select option codes for form state.
-const optionCode = (value: PickListOption['code'] | boolean | null) => {
-  if (typeof value === 'string') return value;
-};
-
+/**
+ * Dropdown for selecting whether a CE Match Rule clause should use a client field
+ * or a custom assessment field.
+ */
 const CeMatchFieldTypeSelect: React.FC<Props> = ({
   control,
   setValue,
@@ -39,8 +36,7 @@ const CeMatchFieldTypeSelect: React.FC<Props> = ({
     ]}
     shouldUnregister={false}
     onChange={(value) => {
-      const nextSource = optionCode(value) || '';
-      setValue(`${clausePath}.source`, nextSource as CeMatchFieldSource | '');
+      setValue(`${clausePath}.source`, value as CeMatchFieldSource | '');
       onSourceChange();
     }}
   />

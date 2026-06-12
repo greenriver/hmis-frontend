@@ -24,10 +24,6 @@ const pickListOptionsForField = (
 ): PickListOption[] => {
   if (!field) return [];
 
-  // Keep CE match CDED metadata aligned with FormItem: enum references are
-  // resolved by the frontend, while backend pick list references are not
-  // expanded here. If historical form versions used a different reference, the
-  // free-text expression builder can still target those raw legacy values.
   if (field.pickListReference) {
     return localResolvePickList(field.pickListReference) || [];
   }
@@ -45,10 +41,10 @@ const valueInputType = (
     return 'number';
   if (field.itemType === ItemType.Date) return 'date';
 
-  // Fields with enum references or inline options should use a select even when
-  // the backend item type is not strictly Choice/OpenChoice.
   if (
     [ItemType.Choice, ItemType.OpenChoice].includes(field.itemType) ||
+    // unexpected: we should only have options for Choice/OpenChoice fields,
+    // but just in case, always use a select if we found options
     options.length
   ) {
     return 'choice';
@@ -57,6 +53,10 @@ const valueInputType = (
   return 'text';
 };
 
+/**
+ * Value control for a CE Match Rule clause. Renders a select or text input based
+ * on the selected field's item type and pick-list metadata.
+ */
 const CeMatchValueInput: React.FC<Props> = ({
   control,
   clausePath,
@@ -91,8 +91,8 @@ const CeMatchValueInput: React.FC<Props> = ({
           { code: 'false', label: 'False' },
         ]}
         disabled={!selectedField}
-        // Empty must stay empty; otherwise clearing the select would become
-        // false, which is a valid submitted JSON value.
+        // Represent empty/unselected as '', otherwise clearing the select would become
+        // `false`, which is a valid submitted JSON value.
         setValueAs={(option) => (option ? option.code === 'true' : '')}
         shouldUnregister={false}
       />
