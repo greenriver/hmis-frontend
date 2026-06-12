@@ -90,11 +90,14 @@ export const HmisEnums = {
     NOT_EQ: 'NOT_EQ',
   },
   CeMatchRuleOwner: {
-    DATA_SOURCE: 'Data Source',
+    DATA_SOURCE: 'Global',
     ORGANIZATION: 'Organization',
     PROJECT: 'Project',
-    UNIT: 'Unit',
     UNIT_GROUP: 'Unit Group',
+  },
+  CeMatchRuleType: {
+    ELIGIBILITY_REQUIREMENT: 'Eligibility requirement',
+    PRIORITY_SCHEME: 'Priority scheme',
   },
   CeOpportunitySortOption: {
     DATE_AVAILABLE_EARLIEST_FIRST: 'Date Available, earliest first',

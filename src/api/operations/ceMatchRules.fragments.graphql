@@ -27,8 +27,16 @@ fragment CeMatchRuleFields on CeMatchRule {
   funders
 }
 
-fragment CeMatchRuleDetails on CeMatchRule {
+fragment CeMatchRuleAdminSummaryFields on CeMatchRule {
   ...CeMatchRuleFields
+  ownerId
+  ownerName
+  ruleType
+  priorityRank
+}
+
+fragment CeMatchRuleDetails on CeMatchRule {
+  ...CeMatchRuleAdminSummaryFields
   structuredExpression {
     operator
     clauses {

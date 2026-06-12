@@ -8,6 +8,7 @@ import type {
   AssessmentsForProjectFilterOptions,
   CeClientFilterOptions,
   CeEligibleUnitGroupFilterOptions,
+  CeMatchRuleFilterOptions,
   CeOpportunityCandidatesFilterOptions,
   CeOpportunityFilterOptions,
   CeReferralFilterOptions,
@@ -49,6 +50,7 @@ export type FilterOptionsByName = {
   AssessmentsForProjectFilterOptions: AssessmentsForProjectFilterOptions;
   CeClientFilterOptions: CeClientFilterOptions;
   CeEligibleUnitGroupFilterOptions: CeEligibleUnitGroupFilterOptions;
+  CeMatchRuleFilterOptions: CeMatchRuleFilterOptions;
   CeOpportunityCandidatesFilterOptions: CeOpportunityCandidatesFilterOptions;
   CeOpportunityFilterOptions: CeOpportunityFilterOptions;
   CeReferralFilterOptions: CeReferralFilterOptions;
@@ -92,6 +94,7 @@ export const FILTER_OPTIONS_GRAPHQL_TYPE_NAMES = [
   'AssessmentsForProjectFilterOptions',
   'CeClientFilterOptions',
   'CeEligibleUnitGroupFilterOptions',
+  'CeMatchRuleFilterOptions',
   'CeOpportunityCandidatesFilterOptions',
   'CeOpportunityFilterOptions',
   'CeReferralFilterOptions',

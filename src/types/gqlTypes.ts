@@ -776,13 +776,17 @@ export type CeMatchRule = {
   funders?: Maybe<Array<FundingSource>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  ownerId: Scalars['ID']['output'];
+  ownerName: Scalars['String']['output'];
   /**
    * Rule applies to projects within this related entity (eg a Data Source,
    * Project, Organization), possibly limited by project type or funder
    */
   ownerType: CeMatchRuleOwner;
+  priorityRank?: Maybe<Scalars['Int']['output']>;
   /** Rule applicability is limited to projects with these types */
   projectTypes: Array<ProjectType>;
+  ruleType: CeMatchRuleType;
   /** Expression translated into a structured clause list; null if the expression is too complex to translate */
   structuredExpression?: Maybe<CeMatchRuleStructuredExpression>;
 };
@@ -822,25 +826,28 @@ export enum CeMatchRuleComparator {
   NotEq = 'NOT_EQ',
 }
 
+export type CeMatchRuleFilterOptions = {
+  ownerId?: InputMaybe<Scalars['ID']['input']>;
+  ownerType?: InputMaybe<CeMatchRuleOwner>;
+};
+
 export type CeMatchRuleInput = {
   expression?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['ID']['input']>;
   ownerType?: InputMaybe<CeMatchRuleOwner>;
   priorityRank?: InputMaybe<Scalars['Int']['input']>;
-  ruleType?: InputMaybe<Scalars['String']['input']>;
+  ruleType?: InputMaybe<CeMatchRuleType>;
   structuredExpression?: InputMaybe<CeMatchRuleStructuredExpressionInput>;
 };
 
 export enum CeMatchRuleOwner {
-  /** Data Source */
+  /** Global */
   DataSource = 'DATA_SOURCE',
   /** Organization */
   Organization = 'ORGANIZATION',
   /** Project */
   Project = 'PROJECT',
-  /** Unit */
-  Unit = 'UNIT',
   /** Unit Group */
   UnitGroup = 'UNIT_GROUP',
 }
@@ -854,6 +861,24 @@ export type CeMatchRuleStructuredExpression = {
 export type CeMatchRuleStructuredExpressionInput = {
   clauses: Array<CeMatchRuleClauseInput>;
   operator: CeMatchRuleBooleanOperator;
+};
+
+export enum CeMatchRuleType {
+  /** Eligibility requirement */
+  EligibilityRequirement = 'ELIGIBILITY_REQUIREMENT',
+  /** Priority scheme */
+  PriorityScheme = 'PRIORITY_SCHEME',
+}
+
+export type CeMatchRulesPaginated = {
+  __typename?: 'CeMatchRulesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CeMatchRule>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type CeMatchValue = {
@@ -6843,6 +6868,9 @@ export type Query = {
   ceMatchCustomAssessmentFields: Array<CeMatchField>;
   /** Published and retired custom assessment form definitions in the user's data source that have CE Match fields. */
   ceMatchCustomAssessmentForms: Array<FormDefinition>;
+  ceMatchRule: CeMatchRule;
+  /** Coordinated Entry Match Rules in the current data source. */
+  ceMatchRules: CeMatchRulesPaginated;
   ceOpportunities: CeOpportunitiesPaginated;
   ceOpportunity?: Maybe<CeOpportunity>;
   ceReferral?: Maybe<CeReferral>;
@@ -6947,6 +6975,16 @@ export type QueryCeClientsArgs = {
 
 export type QueryCeMatchCustomAssessmentFieldsArgs = {
   formDefinitionIdentifier: Scalars['String']['input'];
+};
+
+export type QueryCeMatchRuleArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QueryCeMatchRulesArgs = {
+  filters?: InputMaybe<CeMatchRuleFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryCeOpportunitiesArgs = {
@@ -22348,8 +22386,26 @@ export type CeMatchRuleFieldsFragment = {
   funders?: Array<FundingSource> | null;
 };
 
+export type CeMatchRuleAdminSummaryFieldsFragment = {
+  __typename?: 'CeMatchRule';
+  ownerId: string;
+  ownerName: string;
+  ruleType: CeMatchRuleType;
+  priorityRank?: number | null;
+  id: string;
+  name: string;
+  ownerType: CeMatchRuleOwner;
+  expression: string;
+  projectTypes: Array<ProjectType>;
+  funders?: Array<FundingSource> | null;
+};
+
 export type CeMatchRuleDetailsFragment = {
   __typename?: 'CeMatchRule';
+  ownerId: string;
+  ownerName: string;
+  ruleType: CeMatchRuleType;
+  priorityRank?: number | null;
   id: string;
   name: string;
   ownerType: CeMatchRuleOwner;
@@ -22379,6 +22435,10 @@ export type CreateCeMatchRuleMutation = {
     __typename?: 'CreateCeMatchRulePayload';
     rule?: {
       __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
       id: string;
       name: string;
       ownerType: CeMatchRuleOwner;
@@ -22487,6 +22547,31 @@ export type GetCeMatchCustomAssessmentFieldsQuery = {
       disabled?: boolean | null;
     }> | null;
   }>;
+};
+
+export type GetCeMatchGlobalRulesQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetCeMatchGlobalRulesQuery = {
+  __typename?: 'Query';
+  ceMatchRules: {
+    __typename?: 'CeMatchRulesPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwner;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }>;
+  };
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -52062,9 +52147,23 @@ export const CeMatchCustomAssessmentFormFieldsFragmentDoc = gql`
     title
   }
 `;
+export const CeMatchRuleAdminSummaryFieldsFragmentDoc = gql`
+  fragment CeMatchRuleAdminSummaryFields on CeMatchRule {
+    ...CeMatchRuleFields
+    ownerId
+    ownerName
+    ruleType
+    priorityRank
+  }
+  ${CeMatchRuleFieldsFragmentDoc}
+`;
 export const CeMatchRuleDetailsFragmentDoc = gql`
   fragment CeMatchRuleDetails on CeMatchRule {
     ...CeMatchRuleFields
+    ownerId
+    ownerName
+    ruleType
+    priorityRank
     structuredExpression {
       operator
       clauses {
@@ -58257,6 +58356,108 @@ export type GetCeMatchCustomAssessmentFieldsSuspenseQueryHookResult =
 export type GetCeMatchCustomAssessmentFieldsQueryResult = Apollo.QueryResult<
   GetCeMatchCustomAssessmentFieldsQuery,
   GetCeMatchCustomAssessmentFieldsQueryVariables
+>;
+export const GetCeMatchGlobalRulesDocument = gql`
+  query GetCeMatchGlobalRules {
+    ceMatchRules(filters: { ownerType: DATA_SOURCE }) {
+      nodesCount
+      nodes {
+        ...CeMatchRuleAdminSummaryFields
+      }
+    }
+  }
+  ${CeMatchRuleAdminSummaryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchGlobalRulesQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchGlobalRulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchGlobalRulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchGlobalRulesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCeMatchGlobalRulesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeMatchGlobalRulesQuery,
+    GetCeMatchGlobalRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchGlobalRulesQuery,
+    GetCeMatchGlobalRulesQueryVariables
+  >(GetCeMatchGlobalRulesDocument, options);
+}
+export function useGetCeMatchGlobalRulesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchGlobalRulesQuery,
+    GetCeMatchGlobalRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchGlobalRulesQuery,
+    GetCeMatchGlobalRulesQueryVariables
+  >(GetCeMatchGlobalRulesDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchGlobalRulesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchGlobalRulesQuery,
+    GetCeMatchGlobalRulesQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchGlobalRulesQuery,
+  GetCeMatchGlobalRulesQueryVariables
+>;
+export function useGetCeMatchGlobalRulesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchGlobalRulesQuery,
+        GetCeMatchGlobalRulesQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchGlobalRulesQuery | undefined,
+  GetCeMatchGlobalRulesQueryVariables
+>;
+export function useGetCeMatchGlobalRulesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchGlobalRulesQuery,
+        GetCeMatchGlobalRulesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchGlobalRulesQuery,
+    GetCeMatchGlobalRulesQueryVariables
+  >(GetCeMatchGlobalRulesDocument, options);
+}
+export type GetCeMatchGlobalRulesQueryHookResult = ReturnType<
+  typeof useGetCeMatchGlobalRulesQuery
+>;
+export type GetCeMatchGlobalRulesLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchGlobalRulesLazyQuery
+>;
+export type GetCeMatchGlobalRulesSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchGlobalRulesSuspenseQuery
+>;
+export type GetCeMatchGlobalRulesQueryResult = Apollo.QueryResult<
+  GetCeMatchGlobalRulesQuery,
+  GetCeMatchGlobalRulesQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
