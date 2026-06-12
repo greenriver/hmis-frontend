@@ -273,6 +273,13 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
       [AdminDashboardRoutes.AC_DENIALS]: {
         title: 'Denials',
       },
+      [AdminDashboardRoutes.CE_MATCH_RULES]: {
+        title: 'Global Rules',
+      },
+      [AdminDashboardRoutes.CE_MATCH_RULE_NEW]: {
+        title: 'Add Global Rule',
+        parent: AdminDashboardRoutes.CE_MATCH_RULES,
+      },
       [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {
         title: 'Potential Duplicates',
         parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,

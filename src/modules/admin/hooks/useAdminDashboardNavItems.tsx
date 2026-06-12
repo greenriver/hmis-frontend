@@ -31,7 +31,7 @@ export const useAdminDashboardNavItems = () => {
           },
           {
             id: 'ce-match-rules',
-            title: 'CE Match Rules',
+            title: 'Rules',
             path: AdminDashboardRoutes.CE_MATCH_RULES,
             // TODO(#7544): swap to canAdministrateCoordinatedEntry
             permissions: ['canAdministrateConfig'],
