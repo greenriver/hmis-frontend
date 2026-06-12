@@ -2,9 +2,17 @@ import {
   CeMatchRuleBooleanOperator,
   CeMatchRuleClauseInput,
   CeMatchRuleComparator,
+  CeMatchRuleOwner,
 } from '@/types/gqlTypes';
 
 export type CeMatchFieldSource = 'client' | 'custom';
+
+export const ceMatchRuleOwnerTypeByRouteParam = {
+  global: CeMatchRuleOwner.DataSource,
+  organization: CeMatchRuleOwner.Organization,
+  project: CeMatchRuleOwner.Project,
+  'unit-group': CeMatchRuleOwner.UnitGroup,
+};
 
 // Extend the submitted clause input with UI-only state collected by the form.
 export interface CeMatchDraftClause extends CeMatchRuleClauseInput {

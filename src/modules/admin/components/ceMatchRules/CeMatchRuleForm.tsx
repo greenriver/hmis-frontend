@@ -1,5 +1,5 @@
-import { Alert, Button, Stack } from '@mui/material';
-import { useState } from 'react';
+import { Button, Stack, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
@@ -18,9 +18,18 @@ import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import {
   CeMatchRuleBooleanOperator,
+  CeMatchRuleDetailsFragment,
   CeMatchRuleInput,
+  CeMatchRuleOwner,
+  CeMatchRuleType,
   useCreateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
+
+interface Props {
+  ownerType: CeMatchRuleOwner;
+  onSaved: (rule: CeMatchRuleDetailsFragment) => void;
+  onCancel: VoidFunction;
+}
 
 const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   name: '',
@@ -30,13 +39,14 @@ const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   },
 });
 
-const buildCeMatchRuleInput = ({
-  name,
-  structuredExpression,
-}: CeMatchRuleFormValues): CeMatchRuleInput => {
+const buildCeMatchRuleInput = (
+  { name, structuredExpression }: CeMatchRuleFormValues,
+  ownerType?: CeMatchRuleOwner
+): CeMatchRuleInput => {
   const base = {
     name: name.trim(),
-    ruleType: 'eligibility_requirement',
+    ownerType,
+    ruleType: CeMatchRuleType.EligibilityRequirement,
   };
 
   return {
@@ -60,28 +70,21 @@ const buildCeMatchRuleInput = ({
  * Owns the RHF state to collect rule details and structured clauses,
  * and the mutation call to submit to the backend.
  */
-const CeMatchRuleForm = () => {
+const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
   const { control, handleSubmit, reset, setValue } =
     useForm<CeMatchRuleFormValues>({
       defaultValues: defaultCeMatchRuleFormValues(),
     });
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
-  const [saved, setSaved] = useState(false);
-
-  const resetForm = () => {
-    setErrorState(emptyErrorState);
-    setSaved(false);
-    reset(defaultCeMatchRuleFormValues());
-  };
 
   const [createCeMatchRule, { loading }] = useCreateCeMatchRuleMutation({
     onCompleted: (data) => {
       const payload = data.createCeMatchRule;
       if (payload?.rule) {
         setErrorState(emptyErrorState);
-        setSaved(true);
         reset(defaultCeMatchRuleFormValues());
+        onSaved?.(payload.rule);
       } else if (payload?.errors?.length) {
         setErrorState(partitionValidations(payload.errors));
       }
@@ -94,21 +97,25 @@ const CeMatchRuleForm = () => {
     values: CeMatchRuleFormValues,
     confirmed = true
   ) => {
-    setSaved(false);
-
     createCeMatchRule({
       variables: {
-        input: buildCeMatchRuleInput(values),
+        input: buildCeMatchRuleInput(values, ownerType),
         confirmed,
       },
     });
   };
 
+  const ownerContext = useMemo(() => {
+    if (ownerType === CeMatchRuleOwner.DataSource) {
+      return 'This global eligibility rule will apply to all units.';
+    }
+  }, [ownerType]);
+
   return (
     <Stack gap={2}>
+      {ownerContext && <Typography variant='body2'>{ownerContext}</Typography>}
       <TitleCard title='Rule Details' headerComponent='h2' padded>
         <Stack gap={2}>
-          {saved && <Alert severity='success'>Match rule saved.</Alert>}
           {hasErrors(errorState) && (
             <Stack gap={1}>
               <ApolloErrorAlert error={errorState.apolloError} />
@@ -137,8 +144,8 @@ const CeMatchRuleForm = () => {
         >
           Save Rule
         </LoadingButton>
-        <Button variant='outlined' onClick={resetForm}>
-          Discard
+        <Button variant='outlined' onClick={onCancel}>
+          Cancel
         </Button>
       </Stack>
     </Stack>
