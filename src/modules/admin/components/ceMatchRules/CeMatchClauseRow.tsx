@@ -99,6 +99,19 @@ const CeMatchClauseRow: React.FC<Props> = ({
     resetFieldSelection();
   };
 
+  const fieldSelectDisabled = useMemo(() => {
+    return (
+      !source ||
+      (source === 'custom' && !selectedCustomAssessmentFormIdentifier)
+    );
+  }, [source, selectedCustomAssessmentFormIdentifier]);
+
+  const fieldSelectHelperText = useMemo(() => {
+    if (!source) return 'Choose field type first.';
+    if (source === 'custom' && fieldSelectDisabled)
+      return 'Choose an assessment first.';
+  }, [source, fieldSelectDisabled]);
+
   return (
     <Stack gap={2}>
       <Grid container spacing={2} alignItems='flex-start'>
@@ -128,10 +141,8 @@ const CeMatchClauseRow: React.FC<Props> = ({
             control={control}
             fields={fields}
             fieldLabel={source === 'client' ? 'Client Field' : 'Custom Field'}
-            disabled={
-              !source ||
-              (source === 'custom' && !selectedCustomAssessmentFormIdentifier)
-            }
+            disabled={fieldSelectDisabled}
+            helperText={fieldSelectHelperText}
             customAssessmentFieldsLoading={customAssessmentFieldsLoading}
             onFieldChange={(field) => {
               setValue(

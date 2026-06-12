@@ -13,6 +13,7 @@ interface Props {
   fields: CeMatchFieldDetailsFragment[];
   fieldLabel: string;
   disabled: boolean;
+  helperText?: string;
   customAssessmentFieldsLoading: boolean;
   onFieldChange: (field?: CeMatchFieldDetailsFragment) => void;
 }
@@ -27,6 +28,7 @@ const CeMatchFieldSelect: React.FC<Props> = ({
   fields,
   fieldLabel,
   disabled,
+  helperText,
   customAssessmentFieldsLoading,
   onFieldChange,
 }) => {
@@ -52,6 +54,7 @@ const CeMatchFieldSelect: React.FC<Props> = ({
       options={fieldOptions}
       disabled={disabled}
       loading={customAssessmentFieldsLoading}
+      helperText={helperText}
       onChange={(value) => {
         onFieldChange(fields.find((field) => field.expressionField === value));
       }}

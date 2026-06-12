@@ -130,8 +130,8 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
                 onRemove={fields.length > 1 ? () => remove(index) : undefined}
                 removeTooltip='Remove Requirement'
                 sx={{
-                  backgroundColor: 'primary.100',
-                  borderColor: 'grayscale.300',
+                  backgroundColor: 'grayscale.50',
+                  borderColor: 'grayscale.50',
                 }}
               >
                 <CeMatchClauseRow
