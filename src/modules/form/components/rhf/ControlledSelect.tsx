@@ -106,6 +106,7 @@ const ControlledSelect = <T extends FieldValues = FieldValues>({
       }}
       onBlur={field.onBlur}
       multiple={false}
+      loading={loading}
       // fields for using PickListOption as the option type
       options={options}
       getOptionLabel={getOptionLabel}

@@ -101,6 +101,7 @@ const ControlledMultiSelect: React.FC<ControlledMultiSelectProps> = ({
       }}
       onBlur={field.onBlur}
       multiple={true}
+      loading={loading}
       options={options}
       getOptionLabel={(option) => findOptionLabel(option, options)}
       renderOption={renderOption}
