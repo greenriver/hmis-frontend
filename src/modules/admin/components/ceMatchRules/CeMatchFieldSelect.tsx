@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 import { Control } from 'react-hook-form';
 
-import type {
-  CeMatchFieldSource,
-  CeMatchRuleFormValues,
-} from './ceMatchRuleFormUtil';
+import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { CeMatchFieldDetailsFragment } from '@/types/gqlTypes';
 
@@ -13,10 +10,9 @@ type ClausePath = `structuredExpression.clauses.${number}`;
 interface Props {
   control: Control<CeMatchRuleFormValues>;
   clausePath: ClausePath;
-  source: CeMatchFieldSource | '';
-  selectedCustomAssessmentFormIdentifier: string;
-  clientItems: CeMatchFieldDetailsFragment[];
-  customAssessmentFields: CeMatchFieldDetailsFragment[];
+  fields: CeMatchFieldDetailsFragment[];
+  fieldLabel: string;
+  disabled: boolean;
   customAssessmentFieldsLoading: boolean;
   onFieldChange: (field?: CeMatchFieldDetailsFragment) => void;
 }
@@ -28,19 +24,12 @@ interface Props {
 const CeMatchFieldSelect: React.FC<Props> = ({
   control,
   clausePath,
-  source,
-  selectedCustomAssessmentFormIdentifier,
-  clientItems,
-  customAssessmentFields,
+  fields,
+  fieldLabel,
+  disabled,
   customAssessmentFieldsLoading,
   onFieldChange,
 }) => {
-  const fields = useMemo(() => {
-    if (source === 'client') return clientItems;
-    if (source === 'custom') return customAssessmentFields;
-    return [];
-  }, [clientItems, source, customAssessmentFields]);
-
   const fieldOptions = useMemo(
     () =>
       fields.map((field) => {
@@ -57,13 +46,10 @@ const CeMatchFieldSelect: React.FC<Props> = ({
     <ControlledSelect
       name={`${clausePath}.field`}
       control={control}
-      label={source === 'client' ? 'Client Field' : 'Custom Field'}
+      label={fieldLabel}
       placeholder='Select field'
       options={fieldOptions}
-      disabled={
-        !source ||
-        (source === 'custom' && !selectedCustomAssessmentFormIdentifier)
-      }
+      disabled={disabled}
       loading={customAssessmentFieldsLoading}
       onChange={(value) => {
         onFieldChange(fields.find((field) => field.expressionField === value));

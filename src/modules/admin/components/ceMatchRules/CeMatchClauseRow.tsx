@@ -8,10 +8,7 @@ import CeMatchComparatorSelect, {
 } from './CeMatchComparatorSelect';
 import CeMatchFieldSelect from './CeMatchFieldSelect';
 import CeMatchFieldTypeSelect from './CeMatchFieldTypeSelect';
-import type {
-  CeMatchFieldSource,
-  CeMatchRuleFormValues,
-} from './ceMatchRuleFormUtil';
+import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
 import CeMatchValueInput from './CeMatchValueInput';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
@@ -58,6 +55,8 @@ const CeMatchClauseRow: React.FC<Props> = ({
     name: `${clausePath}.field`,
   });
 
+  // Query for custom assessment field at the row level, because the selected
+  // field metadata drives sibling controls: field, comparator, and value inputs.
   const {
     data: customAssessmentFieldsData,
     loading: customAssessmentFieldsLoading,
@@ -78,6 +77,8 @@ const CeMatchClauseRow: React.FC<Props> = ({
     return [];
   }, [clientItems, source, customAssessmentFields]);
 
+  // The row owns this derived state so all clause controls react to one consistent
+  // field object instead of duplicating query/state across child components.
   const selectedField = useMemo(
     () => fields.find((field) => field.expressionField === fieldValue),
     [fieldValue, fields]
@@ -85,9 +86,8 @@ const CeMatchClauseRow: React.FC<Props> = ({
 
   if (customAssessmentFieldsError) throw customAssessmentFieldsError;
 
-  // This row switches between several inputs for the same clause. Keep
-  // unmounted fields registered, then explicitly clear stale values when a
-  // parent changes.
+  // This row switches between several inputs for the same clause;
+  // explicitly clear stale values when a parent changes.
   const resetValueSelection = () => setValue(`${clausePath}.value`, '');
   const resetFieldSelection = (
     comparator: CeMatchRuleComparator = CeMatchRuleComparator.Eq
@@ -128,12 +128,12 @@ const CeMatchClauseRow: React.FC<Props> = ({
           <CeMatchFieldSelect
             clausePath={clausePath}
             control={control}
-            source={source as CeMatchFieldSource | ''}
-            selectedCustomAssessmentFormIdentifier={
-              selectedCustomAssessmentFormIdentifier
+            fields={fields}
+            fieldLabel={source === 'client' ? 'Client Field' : 'Custom Field'}
+            disabled={
+              !source ||
+              (source === 'custom' && !selectedCustomAssessmentFormIdentifier)
             }
-            clientItems={clientItems}
-            customAssessmentFields={customAssessmentFields}
             customAssessmentFieldsLoading={customAssessmentFieldsLoading}
             onFieldChange={(field) => {
               setValue(
