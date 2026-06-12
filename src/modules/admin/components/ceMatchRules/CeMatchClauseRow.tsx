@@ -104,7 +104,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
   return (
     <Stack gap={3}>
       <Grid container spacing={2} alignItems='flex-start'>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <CeMatchFieldTypeSelect
             clausePath={clausePath}
             control={control}
@@ -113,7 +113,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
           />
         </Grid>
         {source === 'custom' && (
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
             <CeMatchAssessmentSelect
               clausePath={clausePath}
               control={control}

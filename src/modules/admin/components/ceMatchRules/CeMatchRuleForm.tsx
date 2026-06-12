@@ -124,7 +124,7 @@ const CeMatchRuleForm = () => {
           />
         </Stack>
       </TitleCard>
-      <TitleCard title='Build rule' headerComponent='h2' padded>
+      <TitleCard title='Eligibility Requirements' headerComponent='h2' padded>
         <Stack gap={2}>
           <StructuredExpressionBuilder control={control} setValue={setValue} />
         </Stack>
@@ -135,10 +135,10 @@ const CeMatchRuleForm = () => {
           variant='contained'
           onClick={handleSubmit((values) => handleValidSubmit(values))}
         >
-          Save
+          Save Rule
         </LoadingButton>
         <Button variant='outlined' onClick={resetForm}>
-          Reset
+          Discard
         </Button>
       </Stack>
     </Stack>

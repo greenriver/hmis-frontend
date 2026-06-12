@@ -1,5 +1,6 @@
 import {
   Alert,
+  Divider,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -32,8 +33,8 @@ interface Props {
 }
 
 const booleanOperatorOptions = [
-  { code: CeMatchRuleBooleanOperator.And, label: 'ALL' },
-  { code: CeMatchRuleBooleanOperator.Or, label: 'ANY' },
+  { code: CeMatchRuleBooleanOperator.And, label: 'ALL requirements' },
+  { code: CeMatchRuleBooleanOperator.Or, label: 'ANY requirements' },
 ];
 
 /**
@@ -78,28 +79,34 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
     <Stack gap={2}>
       {validationError && <Alert severity='error'>{validationError}</Alert>}
       {fields.length > 1 && (
-        <Stack direction='row' alignItems='center' gap={1} flexWrap='wrap'>
-          <Typography variant='body2' fontWeight={600}>
-            Client must meet
-          </Typography>
-          <Controller
-            control={control}
-            name='structuredExpression.operator'
-            render={({ field }) => (
-              <RadioGroup row {...field}>
-                {booleanOperatorOptions.map((option) => (
-                  <FormControlLabel
-                    key={option.code}
-                    value={option.code}
-                    control={<Radio size='small' />}
-                    label={<strong>{option.label}</strong>}
-                  />
-                ))}
-              </RadioGroup>
-            )}
-          />
-          <Typography variant='body2' fontWeight={600}>
-            of the following requirements
+        <Stack>
+          <Stack direction='row' alignItems='center' gap={1} flexWrap='wrap'>
+            <Typography variant='body2' fontWeight={600}>
+              Match:
+            </Typography>
+            <Controller
+              control={control}
+              name='structuredExpression.operator'
+              render={({ field }) => (
+                <RadioGroup row {...field}>
+                  {booleanOperatorOptions.map((option) => (
+                    <FormControlLabel
+                      key={option.code}
+                      value={option.code}
+                      control={<Radio size='small' />}
+                      label={<strong>{option.label}</strong>}
+                    />
+                  ))}
+                </RadioGroup>
+              )}
+            />
+          </Stack>
+          <Typography variant='body2'>
+            Applicants must meet{' '}
+            {operator === CeMatchRuleBooleanOperator.And
+              ? 'every'
+              : 'at least one'}{' '}
+            requirement below.
           </Typography>
         </Stack>
       )}
@@ -112,13 +119,19 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
           {fields.map((clause, index) => (
             <Fragment key={clause.id}>
               {index > 0 && (
-                <Typography variant='body2' fontWeight={600}>
-                  {operator === CeMatchRuleBooleanOperator.And ? 'AND' : 'OR'}
-                </Typography>
+                <Divider>
+                  <Typography variant='body2' fontWeight={600}>
+                    {operator === CeMatchRuleBooleanOperator.And ? 'AND' : 'OR'}
+                  </Typography>
+                </Divider>
               )}
               <RemovableCard
                 onRemove={() => remove(index)}
                 removeTooltip='Remove Requirement'
+                sx={{
+                  backgroundColor: 'primary.100',
+                  borderColor: 'grayscale.300',
+                }}
               >
                 <CeMatchClauseRow
                   control={control}
