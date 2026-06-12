@@ -35,15 +35,13 @@ const AffectedUnitGroupsTable = ({
         header: 'Currently Eligible',
         key: 'currentCandidateCount',
         textAlign: 'right',
-        render: (row) =>
-          pluralize('candidate', row.currentCandidateCount, true),
+        render: (row) => pluralize('client', row.currentCandidateCount, true),
       },
       {
         header: 'Would Be Removed',
         key: 'removedCandidateCount',
         textAlign: 'right',
-        render: (row) =>
-          pluralize('candidate', row.removedCandidateCount, true),
+        render: (row) => pluralize('client', row.removedCandidateCount, true),
       },
     ],
     []
