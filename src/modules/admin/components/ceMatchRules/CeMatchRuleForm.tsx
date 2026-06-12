@@ -1,9 +1,16 @@
-import { Alert, Button, Stack } from '@mui/material';
+import CodeIcon from '@mui/icons-material/Code';
+import { Alert, Button, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
+import {
+  CeMatchExpressionMode,
+  CeMatchRuleFormValues,
+  newDraftClause,
+} from './ceMatchRuleFormUtil';
+import FreeTextExpressionEditor from './FreeTextExpressionEditor';
 import StructuredExpressionBuilder from './StructuredExpressionBuilder';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -24,20 +31,53 @@ import {
 
 const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   name: '',
+  mode: 'structured',
   structuredExpression: {
     operator: CeMatchRuleBooleanOperator.And,
     clauses: [newDraftClause()],
   },
+  freeTextExpression: '',
 });
+
+const hasValue = (value?: string | null) => !!value?.trim();
+
+const hasExpressionProgress = ({
+  mode,
+  structuredExpression,
+  freeTextExpression,
+}: CeMatchRuleFormValues) => {
+  if (mode === 'freeText') return hasValue(freeTextExpression);
+
+  return (
+    structuredExpression.clauses.length > 1 ||
+    structuredExpression.operator !== CeMatchRuleBooleanOperator.And ||
+    structuredExpression.clauses.some(
+      ({ source, customAssessmentFormIdentifier, field, value }) =>
+        hasValue(source) ||
+        hasValue(customAssessmentFormIdentifier) ||
+        hasValue(field) ||
+        hasValue(value)
+    )
+  );
+};
 
 const buildCeMatchRuleInput = ({
   name,
+  mode,
   structuredExpression,
+  freeTextExpression,
 }: CeMatchRuleFormValues): CeMatchRuleInput => {
   const base = {
     name: name.trim(),
     ruleType: 'eligibility_requirement',
   };
+
+  if (mode === 'freeText') {
+    return {
+      ...base,
+      expression: freeTextExpression.trim(),
+    };
+  }
 
   return {
     ...base,
@@ -61,13 +101,15 @@ const buildCeMatchRuleInput = ({
  * and the mutation call to submit to the backend.
  */
 const CeMatchRuleForm = () => {
-  const { control, handleSubmit, reset, setValue } =
+  const { control, getValues, handleSubmit, reset, setValue, watch } =
     useForm<CeMatchRuleFormValues>({
       defaultValues: defaultCeMatchRuleFormValues(),
     });
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [saved, setSaved] = useState(false);
+  const [pendingMode, setPendingMode] = useState<CeMatchExpressionMode>();
+  const mode = watch('mode');
 
   const resetForm = () => {
     setErrorState(emptyErrorState);
@@ -104,8 +146,36 @@ const CeMatchRuleForm = () => {
     });
   };
 
+  const switchEditorMode = (nextMode: CeMatchExpressionMode) => {
+    setValue('mode', nextMode, { shouldDirty: true });
+    setPendingMode(undefined);
+  };
+
+  const handleSwitchEditorMode = () => {
+    const nextMode = mode === 'structured' ? 'freeText' : 'structured';
+    if (hasExpressionProgress(getValues())) {
+      setPendingMode(nextMode);
+      return;
+    }
+
+    switchEditorMode(nextMode);
+  };
+
   return (
     <Stack gap={2}>
+      <ConfirmationDialog
+        id='confirmSwitchExpressionEditor'
+        open={!!pendingMode}
+        title='Switch Expression Editor?'
+        loading={false}
+        confirmText='Switch Editor'
+        onConfirm={() => pendingMode && switchEditorMode(pendingMode)}
+        onCancel={() => setPendingMode(undefined)}
+      >
+        <Typography variant='body2'>
+          Switching editors will clear your current progress.
+        </Typography>
+      </ConfirmationDialog>
       <TitleCard title='Rule Details' headerComponent='h2' padded>
         <Stack gap={2}>
           {saved && <Alert severity='success'>Match rule saved.</Alert>}
@@ -124,9 +194,32 @@ const CeMatchRuleForm = () => {
           />
         </Stack>
       </TitleCard>
-      <TitleCard title='Eligibility Requirements' headerComponent='h2' padded>
+      <TitleCard
+        title='Eligibility Requirements'
+        headerComponent='h2'
+        padded
+        actions={
+          <Button
+            size='small'
+            variant='text'
+            startIcon={<CodeIcon />}
+            onClick={handleSwitchEditorMode}
+          >
+            {mode === 'structured'
+              ? 'Switch to Advanced Expression Editor'
+              : 'Switch to Structured Editor'}
+          </Button>
+        }
+      >
         <Stack gap={2}>
-          <StructuredExpressionBuilder control={control} setValue={setValue} />
+          {mode === 'structured' ? (
+            <StructuredExpressionBuilder
+              control={control}
+              setValue={setValue}
+            />
+          ) : (
+            <FreeTextExpressionEditor control={control} />
+          )}
         </Stack>
       </TitleCard>
       <Stack direction='row' gap={2}>
