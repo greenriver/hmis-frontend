@@ -55,8 +55,8 @@ const CeMatchClauseRow: React.FC<Props> = ({
     name: `${clausePath}.field`,
   });
 
-  // Query for custom assessment field at the row level, because the selected
-  // field metadata drives sibling controls: field, comparator, and value inputs.
+  // Query for custom assessment field at this level, rather than in the child CeMatchFieldSelect,
+  // because the selected field metadata also impacts the other child controls (comparator and value dropdowns).
   const {
     data: customAssessmentFieldsData,
     loading: customAssessmentFieldsLoading,
@@ -77,8 +77,6 @@ const CeMatchClauseRow: React.FC<Props> = ({
     return [];
   }, [clientItems, source, customAssessmentFields]);
 
-  // The row owns this derived state so all clause controls react to one consistent
-  // field object instead of duplicating query/state across child components.
   const selectedField = useMemo(
     () => fields.find((field) => field.expressionField === fieldValue),
     [fieldValue, fields]
@@ -86,8 +84,8 @@ const CeMatchClauseRow: React.FC<Props> = ({
 
   if (customAssessmentFieldsError) throw customAssessmentFieldsError;
 
-  // This row switches between several inputs for the same clause;
-  // explicitly clear stale values when a parent changes.
+  // This component switches between several inputs for the same clause;
+  // explicitly clear dependent stale values when one dropdown changes.
   const resetValueSelection = () => setValue(`${clausePath}.value`, '');
   const resetFieldSelection = (
     comparator: CeMatchRuleComparator = CeMatchRuleComparator.Eq
@@ -102,7 +100,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
   };
 
   return (
-    <Stack gap={3}>
+    <Stack gap={2}>
       <Grid container spacing={2} alignItems='flex-start'>
         <Grid item xs={12} md={6}>
           <CeMatchFieldTypeSelect
@@ -138,7 +136,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
             onFieldChange={(field) => {
               setValue(
                 `${clausePath}.comparator`,
-                defaultComparatorForField(field) as CeMatchRuleComparator
+                defaultComparatorForField(field)
               );
               resetValueSelection();
             }}

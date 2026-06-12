@@ -48,7 +48,7 @@ const comparatorOptionsForField = (
   const comparators = new Set<CeMatchRuleComparator>();
 
   if (field?.repeats) {
-    // For a repeating value (array), start with Includes/Excludes
+    // For a repeating value (array), only allow Includes/Excludes
     comparators.add(CeMatchRuleComparator.Includes);
     comparators.add(CeMatchRuleComparator.Excludes);
   } else {
@@ -73,11 +73,12 @@ const comparatorOptionsForField = (
 
 export const defaultComparatorForField = (
   field?: CeMatchFieldDetailsFragment
-) => comparatorOptionsForField(field)[0]?.code || CeMatchRuleComparator.Eq;
+) =>
+  (comparatorOptionsForField(field)[0]?.code as CeMatchRuleComparator) ||
+  CeMatchRuleComparator.Eq;
 
 /**
  * Dropdown for selecting the match rule's comparator (equals, includes, etc.)
- * Notifies the parent to clear the clause value when the comparison type changes.
  */
 const CeMatchComparatorSelect: React.FC<Props> = ({
   control,

@@ -35,7 +35,8 @@ const CeMatchFieldSelect: React.FC<Props> = ({
       fields.map((field) => {
         return {
           code: field.expressionField,
-          // Form item labels may be blank, so fall back to stable expression identifiers
+          // field.label is derived from the form item label, which may be blank.
+          // Fall back to stable expression identifiers just in case.
           label: field.label.trim() || field.expressionField || field.key,
         };
       }),

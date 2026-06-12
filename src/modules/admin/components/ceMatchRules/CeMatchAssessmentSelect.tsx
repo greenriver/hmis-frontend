@@ -16,7 +16,6 @@ interface Props {
 
 /**
  * Dropdown for selecting the assessment form to pick custom fields from for a CE Match Rule.
- * Notifies the parent so stale field/value selections reset when the selected form is changed.
  */
 const CeMatchAssessmentSelect: React.FC<Props> = ({
   control,

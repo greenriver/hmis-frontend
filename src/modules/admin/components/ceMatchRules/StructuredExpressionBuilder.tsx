@@ -126,6 +126,7 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
                 </Divider>
               )}
               <RemovableCard
+                // disable removing the last card
                 onRemove={fields.length > 1 ? () => remove(index) : undefined}
                 removeTooltip='Remove Requirement'
                 sx={{
