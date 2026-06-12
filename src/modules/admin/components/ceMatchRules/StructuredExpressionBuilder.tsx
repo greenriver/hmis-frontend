@@ -126,7 +126,7 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
                 </Divider>
               )}
               <RemovableCard
-                onRemove={() => remove(index)}
+                onRemove={fields.length > 1 ? () => remove(index) : undefined}
                 removeTooltip='Remove Requirement'
                 sx={{
                   backgroundColor: 'primary.100',
