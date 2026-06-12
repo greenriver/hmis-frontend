@@ -16,10 +16,7 @@ import {
 } from 'react-hook-form';
 
 import CeMatchClauseRow from './CeMatchClauseRow';
-import type {
-  CeMatchDraftClause,
-  CeMatchRuleFormValues,
-} from './CeMatchRuleForm';
+import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
 import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import Loading from '@/components/elements/Loading';
 import {
@@ -31,7 +28,6 @@ import {
 interface Props {
   control: Control<CeMatchRuleFormValues>;
   setValue: UseFormSetValue<CeMatchRuleFormValues>;
-  newDraftClause: () => CeMatchDraftClause;
   validationError?: string;
 }
 
@@ -47,13 +43,11 @@ const booleanOperatorOptions = [
 const StructuredExpressionBuilder: React.FC<Props> = ({
   control,
   setValue,
-  newDraftClause,
   validationError,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'structuredExpression.clauses',
-    shouldUnregister: false,
   });
   const operator =
     useWatch({

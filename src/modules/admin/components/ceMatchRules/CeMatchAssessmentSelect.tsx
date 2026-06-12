@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Control } from 'react-hook-form';
 
-import type { CeMatchRuleFormValues } from './CeMatchRuleForm';
+import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { CeMatchCustomAssessmentFormFieldsFragment } from '@/types/gqlTypes';
 
@@ -40,7 +40,6 @@ const CeMatchAssessmentSelect: React.FC<Props> = ({
       label='Assessment'
       placeholder='Select assessment'
       options={customAssessmentFormOptions}
-      shouldUnregister={false}
       onChange={onAssessmentChange}
     />
   );

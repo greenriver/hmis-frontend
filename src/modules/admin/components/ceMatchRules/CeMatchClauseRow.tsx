@@ -11,7 +11,7 @@ import CeMatchFieldTypeSelect from './CeMatchFieldTypeSelect';
 import type {
   CeMatchFieldSource,
   CeMatchRuleFormValues,
-} from './CeMatchRuleForm';
+} from './ceMatchRuleFormUtil';
 import CeMatchValueInput from './CeMatchValueInput';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,

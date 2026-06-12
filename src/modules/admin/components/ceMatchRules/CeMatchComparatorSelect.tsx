@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Control } from 'react-hook-form';
 
-import type { CeMatchRuleFormValues } from './CeMatchRuleForm';
+import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { COMPARABLE_ITEM_TYPES } from '@/modules/formBuilder/formBuilderUtil';
 import {
@@ -97,7 +97,6 @@ const CeMatchComparatorSelect: React.FC<Props> = ({
       label='Comparator'
       placeholder='Select'
       options={comparatorOptions}
-      shouldUnregister={false}
       disabled={!selectedField}
       onChange={onComparatorChange}
     />

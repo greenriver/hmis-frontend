@@ -1,6 +1,6 @@
 import { Control } from 'react-hook-form';
 
-import type { CeMatchRuleFormValues } from './CeMatchRuleForm';
+import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
@@ -74,7 +74,6 @@ const CeMatchValueInput: React.FC<Props> = ({
         placeholder='Select value'
         options={valueOptions}
         disabled={!selectedField}
-        shouldUnregister={false}
       />
     );
   }
@@ -94,7 +93,6 @@ const CeMatchValueInput: React.FC<Props> = ({
         // Represent empty/unselected as '', otherwise clearing the select would become
         // `false`, which is a valid submitted JSON value.
         setValueAs={(option) => (option ? option.code === 'true' : '')}
-        shouldUnregister={false}
       />
     );
   }
@@ -106,7 +104,6 @@ const CeMatchValueInput: React.FC<Props> = ({
       label='Value'
       type={valueType}
       disabled={!selectedField}
-      shouldUnregister={false}
     />
   );
 };

@@ -19,8 +19,6 @@ interface ControlledTextInputProps<
   name: Path<T>;
   control?: Control<T>; // Optional when using FormProvider
   rules?: RhfRules;
-  // Whether RHF should delete a field's value when the input unmounts. True by default.
-  shouldUnregister?: boolean;
 }
 
 // React-Hook-Form wrapper around TextInput
@@ -30,7 +28,6 @@ const ControlledTextInput = <T extends FieldValues = FieldValues>({
   onBlur,
   rules,
   required,
-  shouldUnregister = true,
   ...props
 }: ControlledTextInputProps<T>) => {
   const {
@@ -39,7 +36,7 @@ const ControlledTextInput = <T extends FieldValues = FieldValues>({
   } = useController<T>({
     name,
     control,
-    shouldUnregister,
+    shouldUnregister: true,
     rules: {
       required: required ? 'This field is required' : false,
       ...rules,

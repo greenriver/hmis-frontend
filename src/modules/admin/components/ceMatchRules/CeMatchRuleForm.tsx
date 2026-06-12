@@ -2,6 +2,7 @@ import { Alert, Button, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
 import StructuredExpressionBuilder from './StructuredExpressionBuilder';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
@@ -17,36 +18,9 @@ import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import {
   CeMatchRuleBooleanOperator,
-  CeMatchRuleClauseInput,
-  CeMatchRuleComparator,
   CeMatchRuleInput,
   useCreateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
-
-export type CeMatchFieldSource = 'client' | 'custom';
-
-// Extend the submitted clause input with UI-only state collected by the form.
-export interface CeMatchDraftClause extends CeMatchRuleClauseInput {
-  id: string;
-  source: CeMatchFieldSource | '';
-  customAssessmentFormIdentifier?: string;
-}
-
-const newDraftClause = (): CeMatchDraftClause => ({
-  id: crypto.randomUUID(),
-  source: '',
-  field: '',
-  comparator: CeMatchRuleComparator.Eq,
-  value: '',
-});
-
-export interface CeMatchRuleFormValues {
-  name: string;
-  structuredExpression: {
-    operator: CeMatchRuleBooleanOperator;
-    clauses: CeMatchDraftClause[];
-  };
-}
 
 const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   name: '',
@@ -152,11 +126,7 @@ const CeMatchRuleForm = () => {
       </TitleCard>
       <TitleCard title='Build rule' headerComponent='h2' padded>
         <Stack gap={2}>
-          <StructuredExpressionBuilder
-            control={control}
-            setValue={setValue}
-            newDraftClause={newDraftClause}
-          />
+          <StructuredExpressionBuilder control={control} setValue={setValue} />
         </Stack>
       </TitleCard>
       <Stack direction='row' gap={2}>

@@ -4,7 +4,7 @@ import { Control } from 'react-hook-form';
 import type {
   CeMatchFieldSource,
   CeMatchRuleFormValues,
-} from './CeMatchRuleForm';
+} from './ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { CeMatchFieldDetailsFragment } from '@/types/gqlTypes';
 
@@ -60,7 +60,6 @@ const CeMatchFieldSelect: React.FC<Props> = ({
       label={source === 'client' ? 'Client Field' : 'Custom Field'}
       placeholder='Select field'
       options={fieldOptions}
-      shouldUnregister={false}
       disabled={
         !source ||
         (source === 'custom' && !selectedCustomAssessmentFormIdentifier)

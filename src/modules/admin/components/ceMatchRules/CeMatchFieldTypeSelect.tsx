@@ -3,7 +3,7 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 import type {
   CeMatchFieldSource,
   CeMatchRuleFormValues,
-} from './CeMatchRuleForm';
+} from './ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 
 type ClausePath = `structuredExpression.clauses.${number}`;
@@ -34,7 +34,6 @@ const CeMatchFieldTypeSelect: React.FC<Props> = ({
       { code: 'client', label: 'Client field' },
       { code: 'custom', label: 'Custom field' },
     ]}
-    shouldUnregister={false}
     onChange={(value) => {
       setValue(`${clausePath}.source`, value as CeMatchFieldSource | '');
       onSourceChange();

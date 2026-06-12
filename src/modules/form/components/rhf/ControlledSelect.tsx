@@ -35,8 +35,6 @@ export type ControlledSelectProps<T extends FieldValues = FieldValues> = Omit<
   onChange?: (value: ControlledSelectValue) => void;
   // Use when the form value is not the option code, such as boolean JSON values.
   setValueAs?: (option: PickListOption | null) => ControlledSelectValue;
-  // Whether RHF should delete a field's value when the input unmounts. True by default.
-  shouldUnregister?: boolean;
 };
 
 // React-Hook-Form wrapper around GenericSelect for single selection.
@@ -52,7 +50,6 @@ const ControlledSelect = <T extends FieldValues = FieldValues>({
   helperText,
   onChange,
   setValueAs,
-  shouldUnregister = true,
   ...props
 }: ControlledSelectProps<T>) => {
   const {
@@ -61,7 +58,7 @@ const ControlledSelect = <T extends FieldValues = FieldValues>({
   } = useController<T>({
     name,
     control,
-    shouldUnregister,
+    shouldUnregister: true,
     rules: {
       required: required ? 'This field is required' : false,
       ...rules,
