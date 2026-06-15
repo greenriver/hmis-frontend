@@ -2,14 +2,14 @@ import { Grid, Stack } from '@mui/material';
 import { useMemo } from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 
-import CeMatchAssessmentSelect from './CeMatchAssessmentSelect';
-import CeMatchComparatorSelect, {
+import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
+import CeMatchClauseAssessmentSelect from './CeMatchClauseAssessmentSelect';
+import CeMatchClauseComparatorSelect, {
   defaultComparatorForField,
-} from './CeMatchComparatorSelect';
-import CeMatchFieldSelect from './CeMatchFieldSelect';
-import CeMatchFieldTypeSelect from './CeMatchFieldTypeSelect';
-import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
-import CeMatchValueInput from './CeMatchValueInput';
+} from './CeMatchClauseComparatorSelect';
+import CeMatchClauseFieldSelect from './CeMatchClauseFieldSelect';
+import CeMatchClauseFieldSourceSelect from './CeMatchClauseFieldSourceSelect';
+import CeMatchClauseValueInput from './CeMatchClauseValueInput';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
   CeMatchFieldDetailsFragment,
@@ -31,7 +31,7 @@ interface Props {
 /**
  * Renders one requirement clause in the CE Match Rule structured builder.
  */
-const CeMatchClauseRow: React.FC<Props> = ({
+const CeMatchClause: React.FC<Props> = ({
   control,
   setValue,
   index,
@@ -55,7 +55,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
     name: `${clausePath}.field`,
   });
 
-  // Query for custom assessment field at this level, rather than in the child CeMatchFieldSelect,
+  // Query for custom assessment field at this level, rather than in the child CeMatchClauseFieldSelect,
   // because the selected field metadata also impacts the other child controls (comparator and value dropdowns).
   const {
     data: customAssessmentFieldsData,
@@ -116,7 +116,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
     <Stack gap={2}>
       <Grid container spacing={2} alignItems='flex-start'>
         <Grid item xs={12} md={6}>
-          <CeMatchFieldTypeSelect
+          <CeMatchClauseFieldSourceSelect
             clausePath={clausePath}
             control={control}
             setValue={setValue}
@@ -125,7 +125,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
         </Grid>
         {source === 'custom' && (
           <Grid item xs={12} md={6}>
-            <CeMatchAssessmentSelect
+            <CeMatchClauseAssessmentSelect
               clausePath={clausePath}
               control={control}
               customAssessmentForms={customAssessmentForms}
@@ -136,7 +136,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
       </Grid>
       <Grid container spacing={2} alignItems='flex-start'>
         <Grid item xs={12} md={4}>
-          <CeMatchFieldSelect
+          <CeMatchClauseFieldSelect
             clausePath={clausePath}
             control={control}
             fields={fields}
@@ -154,7 +154,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
           />
         </Grid>
         <Grid item xs={12} md={4}>
-          <CeMatchComparatorSelect
+          <CeMatchClauseComparatorSelect
             clausePath={clausePath}
             control={control}
             selectedField={selectedField}
@@ -162,7 +162,7 @@ const CeMatchClauseRow: React.FC<Props> = ({
           />
         </Grid>
         <Grid item xs={12} md={4}>
-          <CeMatchValueInput
+          <CeMatchClauseValueInput
             clausePath={clausePath}
             control={control}
             selectedField={selectedField}
@@ -173,4 +173,4 @@ const CeMatchClauseRow: React.FC<Props> = ({
   );
 };
 
-export default CeMatchClauseRow;
+export default CeMatchClause;

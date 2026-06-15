@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Control } from 'react-hook-form';
 
-import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
+import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { CeMatchFieldDetailsFragment } from '@/types/gqlTypes';
 
@@ -22,7 +22,7 @@ interface Props {
  * Dropdown for selecting the field for a CE Match Rule clause:
  * either a client field, or a field from a custom assessment form.
  */
-const CeMatchFieldSelect: React.FC<Props> = ({
+const CeMatchClauseFieldSelect: React.FC<Props> = ({
   control,
   clausePath,
   fields,
@@ -62,4 +62,4 @@ const CeMatchFieldSelect: React.FC<Props> = ({
   );
 };
 
-export default CeMatchFieldSelect;
+export default CeMatchClauseFieldSelect;
