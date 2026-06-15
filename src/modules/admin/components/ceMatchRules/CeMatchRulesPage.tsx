@@ -1,10 +1,10 @@
-import CeMatchRuleForm from './CeMatchRuleForm';
+import CeMatchRuleLevelTabs from './CeMatchRuleLevelTabs';
 import PageTitle from '@/components/layout/PageTitle';
 
 const CeMatchRulesPage = () => (
   <>
-    <PageTitle title='Global Rule' />
-    <CeMatchRuleForm />
+    <PageTitle overlineText='Coordinated Entry' title='Rules' />
+    <CeMatchRuleLevelTabs />
   </>
 );
 
