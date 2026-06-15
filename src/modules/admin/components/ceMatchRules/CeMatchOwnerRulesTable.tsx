@@ -1,56 +1,29 @@
-import { Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Stack,
+  TableCell,
+  TableRow,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import {
   CeMatchRuleOwnerLevel,
   getPluralCeMatchRuleOwnerLevelLabel,
 } from './ceMatchRuleFormUtil';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import GenericTable from '@/components/elements/table/GenericTable';
-import { ColumnDef } from '@/components/elements/table/types';
+import TableRowActions from '@/components/elements/table/TableRowActions';
 import { HmisEnums } from '@/types/gqlEnums';
-import { CeMatchRuleAdminSummaryFieldsFragment } from '@/types/gqlTypes';
+import {
+  CeMatchRuleAdminSummaryFieldsFragment,
+  CeMatchRuleType,
+} from '@/types/gqlTypes';
 
-const ruleColumns: ColumnDef<CeMatchRuleAdminSummaryFieldsFragment>[] = [
-  {
-    key: 'name',
-    render: 'name',
-    tableCellProps: {
-      sx: { borderBottom: 'none', py: 1 },
-    },
-  },
-  {
-    key: 'ruleType',
-    render: ({ ruleType }) => HmisEnums.CeMatchRuleType[ruleType],
-    tableCellProps: {
-      sx: {
-        borderBottom: 'none',
-        color: 'text.secondary',
-        py: 1,
-      },
-    },
-  },
-  {
-    key: 'applicability',
-    render: ({ funders, projectTypes }) => {
-      if (!funders?.length && !projectTypes.length) {
-        return 'All Projects';
-      }
-
-      return (
-        <Stack>
-          {!!funders?.length && <span>Funder Specific</span>}
-          {!!projectTypes.length && <span>Project Type Specific</span>}
-        </Stack>
-      );
-    },
-    tableCellProps: {
-      sx: {
-        borderBottom: 'none',
-        color: 'text.secondary',
-        py: 1,
-      },
-    },
-  },
-];
+const getRuleName = (rule: CeMatchRuleAdminSummaryFieldsFragment) =>
+  rule.ruleType === CeMatchRuleType.PriorityScheme
+    ? `Prioritize by: ${rule.name}`
+    : rule.name;
 
 export interface CeMatchOwnerRulesTableProps {
   ownerLevel: CeMatchRuleOwnerLevel;
@@ -59,59 +32,122 @@ export interface CeMatchOwnerRulesTableProps {
   // without duplicating queries.
   rules: CeMatchRuleAdminSummaryFieldsFragment[];
   variant?: 'current' | 'inherited';
-  rowSecondaryActionConfigs?: (
-    rule: CeMatchRuleAdminSummaryFieldsFragment
-  ) => CommonMenuItem[];
 }
 
 const CeMatchOwnerRulesTable: React.FC<CeMatchOwnerRulesTableProps> = ({
   ownerLevel,
   rules,
   variant = 'inherited',
-  rowSecondaryActionConfigs,
-}) => (
-  <Stack
-    gap={0.5}
-    sx={{
-      ml: 1,
-      pl: 2,
-      borderLeft: 4,
-      borderColor: variant === 'current' ? 'primary.main' : 'divider',
-    }}
-  >
-    <GenericTable<CeMatchRuleAdminSummaryFieldsFragment>
-      rows={rules}
-      columns={ruleColumns}
-      noHead
-      noData={
-        <Typography variant='body2' textAlign='center'>
-          No {getPluralCeMatchRuleOwnerLevelLabel(ownerLevel)} rules have been
-          created.
-        </Typography>
-      }
-      rowName={(rule) => rule.name}
-      rowSecondaryActionConfigs={rowSecondaryActionConfigs}
-      tableContainerProps={{ sx: { overflow: 'visible' } }}
-      tableProps={{
-        sx: {
-          borderCollapse: 'separate',
-          borderSpacing: '0 4px',
-          height: 'auto',
-          '.MuiTableRow-root': {
-            backgroundColor: 'grayscale.50',
-          },
-          '.MuiTableCell-root:first-of-type': {
-            borderTopLeftRadius: 1,
-            borderBottomLeftRadius: 1,
-          },
-          '.MuiTableCell-root:last-of-type': {
-            borderTopRightRadius: 1,
-            borderBottomRightRadius: 1,
-          },
-        },
+}) => {
+  return (
+    <Stack
+      gap={0.5}
+      sx={{
+        ml: 1,
+        pl: 2,
+        borderLeft: 4,
+        borderColor: variant === 'current' ? 'primary.main' : 'divider',
       }}
-    />
-  </Stack>
-);
+    >
+      <GenericTable<CeMatchRuleAdminSummaryFieldsFragment>
+        rows={rules}
+        columns={[]}
+        noHead
+        noData={
+          <Typography variant='body2' textAlign='center'>
+            No {getPluralCeMatchRuleOwnerLevelLabel(ownerLevel)} rules have been
+            created.
+          </Typography>
+        }
+        rowName={(rule) => rule.name}
+        renderRow={(rule) => {
+          const actionConfigs: CommonMenuItem[] = [
+            {
+              key: 'primary',
+              title: 'View Rule',
+              ariaLabel: `View Rule, ${rule.name}`,
+              // existing rules don't link anywhere yet, implementing in a later phase
+            },
+          ];
+
+          return (
+            <TableRow key={rule.id}>
+              <TableCell colSpan={0} sx={{ border: 0, p: 0 }}>
+                <Box
+                  sx={{
+                    bgcolor: 'grayscale.50',
+                    borderRadius: 1,
+                    mb: 0.5,
+                    pl: 2,
+                    pr: 1,
+                    py: 1,
+                  }}
+                >
+                  <Stack
+                    direction='row'
+                    alignItems='center'
+                    justifyContent='space-between'
+                    gap={1}
+                  >
+                    <Stack direction='row' alignItems='flex-start' gap={2}>
+                      {rule.expression ? (
+                        <Tooltip title={rule.expression} arrow placement='top'>
+                          <Typography
+                            variant='body2'
+                            component='span'
+                            sx={{ width: 'fit-content' }}
+                          >
+                            {getRuleName(rule)}
+                          </Typography>
+                        </Tooltip>
+                      ) : (
+                        <Typography variant='body2'>
+                          {getRuleName(rule)}
+                        </Typography>
+                      )}
+                      {!!(rule.funders?.length || rule.projectTypes.length) && (
+                        <>
+                          <Stack direction='row' gap={0.5} flexWrap='wrap'>
+                            {rule.funders?.map((funder) => (
+                              <Chip
+                                key={`funder-${funder}`}
+                                size='small'
+                                variant='outlined'
+                                label={
+                                  HmisEnums.FundingSource[funder] || funder
+                                }
+                              />
+                            ))}
+                            {rule.projectTypes.map((projectType) => (
+                              <Chip
+                                key={`project-type-${projectType}`}
+                                size='small'
+                                variant='outlined'
+                                label={
+                                  HmisEnums.ProjectType[projectType] ||
+                                  projectType
+                                }
+                              />
+                            ))}
+                          </Stack>
+                        </>
+                      )}
+                    </Stack>
+                    <TableRowActions
+                      record={rule}
+                      recordName={rule.name}
+                      menuActionConfigs={actionConfigs}
+                    />
+                  </Stack>
+                </Box>
+              </TableCell>
+            </TableRow>
+          );
+        }}
+        tableContainerProps={{ sx: { overflow: 'wrap' } }}
+      />
+    </Stack>
+  );
+};
 
 export default CeMatchOwnerRulesTable;
