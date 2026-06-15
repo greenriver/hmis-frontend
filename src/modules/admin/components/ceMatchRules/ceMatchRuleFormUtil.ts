@@ -1,3 +1,4 @@
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchRuleBooleanOperator,
   CeMatchRuleClauseInput,
@@ -13,6 +14,17 @@ export const ceMatchRuleOwnerTypeByRouteParam = {
   project: CeMatchRuleOwner.Project,
   'unit-group': CeMatchRuleOwner.UnitGroup,
 };
+
+export type CeMatchRuleOwnerLevel =
+  keyof typeof ceMatchRuleOwnerTypeByRouteParam;
+
+export const getCeMatchRuleOwnerLevelLabel = (
+  ownerLevel: CeMatchRuleOwnerLevel
+) => HmisEnums.CeMatchRuleOwner[ceMatchRuleOwnerTypeByRouteParam[ownerLevel]];
+
+export const getPluralCeMatchRuleOwnerLevelLabel = (
+  ownerLevel: CeMatchRuleOwnerLevel
+) => (ownerLevel === 'unit-group' ? 'unit groups' : `${ownerLevel}s`);
 
 // Extend the submitted clause input with UI-only state collected by the form.
 export interface CeMatchDraftClause extends CeMatchRuleClauseInput {
