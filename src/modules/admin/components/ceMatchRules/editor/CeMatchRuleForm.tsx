@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 
 import CeMatchExpressionModeSwitch from './CeMatchExpressionModeSwitch';
 import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
+import CeMatchStructuredExpressionBuilder from './CeMatchStructuredExpressionBuilder';
 import FreeTextExpressionEditor from './FreeTextExpressionEditor';
-import StructuredExpressionBuilder from './StructuredExpressionBuilder';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -152,7 +152,7 @@ const CeMatchRuleForm = () => {
       >
         <Stack gap={2}>
           {mode === 'structured' ? (
-            <StructuredExpressionBuilder
+            <CeMatchStructuredExpressionBuilder
               control={control}
               setValue={setValue}
             />

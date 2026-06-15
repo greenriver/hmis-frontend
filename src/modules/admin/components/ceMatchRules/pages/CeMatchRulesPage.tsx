@@ -1,4 +1,4 @@
-import CeMatchRuleForm from './CeMatchRuleForm';
+import CeMatchRuleForm from '../editor/CeMatchRuleForm';
 import PageTitle from '@/components/layout/PageTitle';
 
 const CeMatchRulesPage = () => (
