@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 
-export interface AffectedUnitGroup {
+export interface CeMatchRuleAffectedUnitGroup {
   id: string;
   unitGroupName: string;
   projectId: string;
@@ -14,12 +14,12 @@ export interface AffectedUnitGroup {
   removedCandidateCount: number;
 }
 
-const AffectedUnitGroupsTable = ({
+const CeMatchRuleAffectedUnitGroupsTable = ({
   unitGroups,
 }: {
-  unitGroups: AffectedUnitGroup[];
+  unitGroups: CeMatchRuleAffectedUnitGroup[];
 }) => {
-  const columns: ColumnDef<AffectedUnitGroup>[] = useMemo(
+  const columns: ColumnDef<CeMatchRuleAffectedUnitGroup>[] = useMemo(
     () => [
       {
         header: 'Project',
@@ -60,4 +60,4 @@ const AffectedUnitGroupsTable = ({
   );
 };
 
-export default AffectedUnitGroupsTable;
+export default CeMatchRuleAffectedUnitGroupsTable;

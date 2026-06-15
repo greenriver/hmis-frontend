@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 
 import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
 import CeMatchStructuredExpressionBuilder from './CeMatchStructuredExpressionBuilder';
-import ImpactConfirmDialog from './ImpactConfirmDialog';
+import CeMatchRuleConfirmationDialog from './impactWarnings/CeMatchRuleConfirmationDialog';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -149,7 +149,7 @@ const CeMatchRuleForm = () => {
         </Button>
       </Stack>
       {showWarningDialog && (
-        <ImpactConfirmDialog
+        <CeMatchRuleConfirmationDialog
           errorState={errorState}
           loading={loading}
           onCancel={() => setErrorState(emptyErrorState)}

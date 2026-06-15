@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import AffectedUnitGroupsTable, {
-  AffectedUnitGroup,
-} from './AffectedUnitGroupsTable';
+import CeMatchRuleAffectedUnitGroupsTable, {
+  CeMatchRuleAffectedUnitGroup,
+} from './CeMatchRuleAffectedUnitGroupsTable';
 import ValidationDialog from '@/modules/errors/components/ValidationDialog';
 import { ErrorState } from '@/modules/errors/util';
 
@@ -13,7 +13,7 @@ interface Props {
   onCancel: VoidFunction;
 }
 
-const ImpactConfirmDialog: React.FC<Props> = ({
+const CeMatchRuleConfirmationDialog: React.FC<Props> = ({
   errorState,
   loading,
   onConfirm,
@@ -22,8 +22,9 @@ const ImpactConfirmDialog: React.FC<Props> = ({
   const affectedUnitGroups = useMemo(() => {
     return errorState.warnings.flatMap(
       (warning) =>
-        (warning.data?.affectedUnitGroups as AffectedUnitGroup[] | undefined) ||
-        []
+        (warning.data?.affectedUnitGroups as
+          | CeMatchRuleAffectedUnitGroup[]
+          | undefined) || []
     );
   }, [errorState.warnings]);
 
@@ -37,9 +38,9 @@ const ImpactConfirmDialog: React.FC<Props> = ({
       onCancel={onCancel}
       confirmText='Save Anyway'
     >
-      <AffectedUnitGroupsTable unitGroups={affectedUnitGroups} />
+      <CeMatchRuleAffectedUnitGroupsTable unitGroups={affectedUnitGroups} />
     </ValidationDialog>
   );
 };
 
-export default ImpactConfirmDialog;
+export default CeMatchRuleConfirmationDialog;
