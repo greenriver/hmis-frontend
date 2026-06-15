@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
-import StructuredExpressionBuilder from './StructuredExpressionBuilder';
+import CeMatchStructuredExpressionBuilder from './CeMatchStructuredExpressionBuilder';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -133,7 +133,10 @@ const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
       </TitleCard>
       <TitleCard title='Eligibility Requirements' headerComponent='h2' padded>
         <Stack gap={2}>
-          <StructuredExpressionBuilder control={control} setValue={setValue} />
+          <CeMatchStructuredExpressionBuilder
+            control={control}
+            setValue={setValue}
+          />
         </Stack>
       </TitleCard>
       <Stack direction='row' gap={2}>

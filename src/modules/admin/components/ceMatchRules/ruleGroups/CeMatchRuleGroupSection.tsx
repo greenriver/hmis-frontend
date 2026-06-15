@@ -1,12 +1,12 @@
 import { Button, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import { generatePath } from 'react-router-dom';
-import CeMatchOwnerRulesHeader from './CeMatchOwnerRulesHeader';
-import CeMatchOwnerRulesTable from './CeMatchOwnerRulesTable';
 import {
   CeMatchRuleOwnerLevel,
   getCeMatchRuleOwnerLevelLabel,
-} from './ceMatchRuleFormUtil';
+} from '../editor/ceMatchRuleFormUtil';
+import CeMatchRuleGroupHeader from './CeMatchRuleGroupHeader';
+import CeMatchRuleGroupTable from './CeMatchRuleGroupTable';
 import RouterLink from '@/components/elements/RouterLink';
 import { AddIcon } from '@/components/elements/SemanticIcons';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -20,7 +20,7 @@ interface Props {
   title?: string;
 }
 
-const CeMatchOwnerRulesCurrentLevel: React.FC<Props> = ({
+const CeMatchRuleGroupSection: React.FC<Props> = ({
   ownerLevel,
   icon,
   rules,
@@ -33,7 +33,7 @@ const CeMatchOwnerRulesCurrentLevel: React.FC<Props> = ({
   return (
     <Stack gap={1.5}>
       <Stack direction='row' justifyContent='space-between' alignItems='center'>
-        <CeMatchOwnerRulesHeader icon={icon} title={heading} count={count} />
+        <CeMatchRuleGroupHeader icon={icon} title={heading} count={count} />
         <Button
           component={RouterLink}
           to={generatePath(AdminDashboardRoutes.CE_MATCH_RULE_NEW, {
@@ -45,7 +45,7 @@ const CeMatchOwnerRulesCurrentLevel: React.FC<Props> = ({
           Add {ownerLevelLabel} Rule
         </Button>
       </Stack>
-      <CeMatchOwnerRulesTable
+      <CeMatchRuleGroupTable
         ownerLevel={ownerLevel}
         rules={rules}
         variant='current'
@@ -54,4 +54,4 @@ const CeMatchOwnerRulesCurrentLevel: React.FC<Props> = ({
   );
 };
 
-export default CeMatchOwnerRulesCurrentLevel;
+export default CeMatchRuleGroupSection;

@@ -13,7 +13,7 @@ interface Props {
   children: ReactNode;
 }
 
-const CeMatchOwnerRuleSummary: React.FC<Props> = ({
+const CeMatchEffectiveRulesCard: React.FC<Props> = ({
   ownerName,
   effectiveRulesCount,
   ruleCountSummaries,
@@ -36,4 +36,4 @@ const CeMatchOwnerRuleSummary: React.FC<Props> = ({
   </Paper>
 );
 
-export default CeMatchOwnerRuleSummary;
+export default CeMatchEffectiveRulesCard;

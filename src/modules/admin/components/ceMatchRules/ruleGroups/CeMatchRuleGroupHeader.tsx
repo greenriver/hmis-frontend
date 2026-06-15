@@ -10,7 +10,7 @@ interface Props {
   component?: ElementType;
 }
 
-const CeMatchOwnerRulesHeader: React.FC<Props> = ({
+const CeMatchRuleGroupHeader: React.FC<Props> = ({
   icon,
   title,
   count,
@@ -30,4 +30,4 @@ const CeMatchOwnerRulesHeader: React.FC<Props> = ({
   </Stack>
 );
 
-export default CeMatchOwnerRulesHeader;
+export default CeMatchRuleGroupHeader;

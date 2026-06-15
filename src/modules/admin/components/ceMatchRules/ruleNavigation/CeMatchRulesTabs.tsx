@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import CeMatchGlobalRulesCard from './CeMatchGlobalRulesCard';
+import CeMatchGlobalRules from './CeMatchGlobalRules';
 import CommonTabs from '@/components/elements/CommonTabs';
 import {
   OrganizationIcon,
@@ -8,7 +8,7 @@ import {
   UnitGroupIcon,
 } from '@/components/elements/SemanticIcons';
 
-const CeMatchRuleLevelTabs: React.FC = () => {
+const CeMatchRulesTabs: React.FC = () => {
   const tabDefinitions = useMemo(
     () => [
       {
@@ -16,7 +16,7 @@ const CeMatchRuleLevelTabs: React.FC = () => {
         key: 'global',
         icon: <GlobalIcon />,
         iconPosition: 'start' as const,
-        contents: <CeMatchGlobalRulesCard />,
+        contents: <CeMatchGlobalRules />,
       },
       {
         title: 'Organization',
@@ -51,4 +51,4 @@ const CeMatchRuleLevelTabs: React.FC = () => {
   );
 };
 
-export default CeMatchRuleLevelTabs;
+export default CeMatchRulesTabs;

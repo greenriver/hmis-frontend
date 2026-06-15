@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
-import CeMatchRuleForm from './CeMatchRuleForm';
-import { ceMatchRuleOwnerTypeByRouteParam } from './ceMatchRuleFormUtil';
+import CeMatchRuleForm from '../editor/CeMatchRuleForm';
+import { ceMatchRuleOwnerTypeByRouteParam } from '../editor/ceMatchRuleFormUtil';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';

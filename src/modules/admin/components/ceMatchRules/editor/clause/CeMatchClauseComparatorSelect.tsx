@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Control } from 'react-hook-form';
 
-import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
+import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { COMPARABLE_ITEM_TYPES } from '@/modules/formBuilder/formBuilderUtil';
 import {
@@ -80,7 +80,7 @@ export const defaultComparatorForField = (
 /**
  * Dropdown for selecting the match rule's comparator (equals, includes, etc.)
  */
-const CeMatchComparatorSelect: React.FC<Props> = ({
+const CeMatchClauseComparatorSelect: React.FC<Props> = ({
   control,
   clausePath,
   selectedField,
@@ -104,4 +104,4 @@ const CeMatchComparatorSelect: React.FC<Props> = ({
   );
 };
 
-export default CeMatchComparatorSelect;
+export default CeMatchClauseComparatorSelect;

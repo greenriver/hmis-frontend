@@ -3,7 +3,7 @@ import { Control, UseFormSetValue } from 'react-hook-form';
 import type {
   CeMatchFieldSource,
   CeMatchRuleFormValues,
-} from './ceMatchRuleFormUtil';
+} from '../ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 
 type ClausePath = `structuredExpression.clauses.${number}`;
@@ -19,7 +19,7 @@ interface Props {
  * Dropdown for selecting whether a CE Match Rule clause should use a client field
  * or a custom assessment field.
  */
-const CeMatchFieldTypeSelect: React.FC<Props> = ({
+const CeMatchClauseFieldSourceSelect: React.FC<Props> = ({
   control,
   setValue,
   clausePath,
@@ -41,4 +41,4 @@ const CeMatchFieldTypeSelect: React.FC<Props> = ({
   />
 );
 
-export default CeMatchFieldTypeSelect;
+export default CeMatchClauseFieldSourceSelect;

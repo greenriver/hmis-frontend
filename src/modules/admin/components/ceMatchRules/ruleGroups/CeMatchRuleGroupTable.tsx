@@ -10,7 +10,7 @@ import {
 import {
   CeMatchRuleOwnerLevel,
   getPluralCeMatchRuleOwnerLevelLabel,
-} from './ceMatchRuleFormUtil';
+} from '../editor/ceMatchRuleFormUtil';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import GenericTable from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
@@ -25,7 +25,7 @@ const getRuleName = (rule: CeMatchRuleAdminSummaryFieldsFragment) =>
     ? `Prioritize by: ${rule.name}`
     : rule.name;
 
-export interface CeMatchOwnerRulesTableProps {
+export interface CeMatchRuleGroupTableProps {
   ownerLevel: CeMatchRuleOwnerLevel;
   // Accepts rules as input, rather than using GenericTableWithData,
   // to enable useful design affordances like listing the rules count in parent components
@@ -34,7 +34,7 @@ export interface CeMatchOwnerRulesTableProps {
   variant?: 'current' | 'inherited';
 }
 
-const CeMatchOwnerRulesTable: React.FC<CeMatchOwnerRulesTableProps> = ({
+const CeMatchRuleGroupTable: React.FC<CeMatchRuleGroupTableProps> = ({
   ownerLevel,
   rules,
   variant = 'inherited',
@@ -150,4 +150,4 @@ const CeMatchOwnerRulesTable: React.FC<CeMatchOwnerRulesTableProps> = ({
   );
 };
 
-export default CeMatchOwnerRulesTable;
+export default CeMatchRuleGroupTable;

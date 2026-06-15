@@ -1,11 +1,11 @@
-import CeMatchOwnerRulesCurrentLevel from './CeMatchOwnerRulesCurrentLevel';
-import CeMatchOwnerRuleSummary from './CeMatchOwnerRuleSummary';
+import CeMatchEffectiveRulesCard from '../ruleGroups/CeMatchEffectiveRulesCard';
+import CeMatchRuleGroupSection from '../ruleGroups/CeMatchRuleGroupSection';
 import Loading from '@/components/elements/Loading';
 import { GlobalIcon } from '@/components/elements/SemanticIcons';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useGetCeMatchGlobalRulesQuery } from '@/types/gqlTypes';
 
-const CeMatchGlobalRulesCard: React.FC = () => {
+const CeMatchGlobalRules: React.FC = () => {
   const { data, loading, error } = useGetCeMatchGlobalRulesQuery({
     fetchPolicy: 'cache-and-network',
   });
@@ -17,19 +17,19 @@ const CeMatchGlobalRulesCard: React.FC = () => {
   const count = data?.ceMatchRules.nodesCount || 0;
 
   return (
-    <CeMatchOwnerRuleSummary
+    <CeMatchEffectiveRulesCard
       ownerName='Global'
       effectiveRulesCount={count}
       ruleCountSummaries={[{ label: 'Global', count }]}
     >
-      <CeMatchOwnerRulesCurrentLevel
+      <CeMatchRuleGroupSection
         ownerLevel='global'
         icon={<GlobalIcon color='primary' fontSize='small' />}
         rules={rules}
         count={count}
       />
-    </CeMatchOwnerRuleSummary>
+    </CeMatchEffectiveRulesCard>
   );
 };
 
-export default CeMatchGlobalRulesCard;
+export default CeMatchGlobalRules;

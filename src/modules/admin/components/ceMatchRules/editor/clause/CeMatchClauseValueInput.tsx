@@ -1,6 +1,6 @@
 import { Control } from 'react-hook-form';
 
-import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
+import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
@@ -57,7 +57,7 @@ const valueInputType = (
  * Value control for a CE Match Rule clause. Renders a select or text input based
  * on the selected field's item type and pick-list metadata.
  */
-const CeMatchValueInput: React.FC<Props> = ({
+const CeMatchClauseValueInput: React.FC<Props> = ({
   control,
   clausePath,
   selectedField,
@@ -108,4 +108,4 @@ const CeMatchValueInput: React.FC<Props> = ({
   );
 };
 
-export default CeMatchValueInput;
+export default CeMatchClauseValueInput;
