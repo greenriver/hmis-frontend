@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Control } from 'react-hook-form';
 
-import type { CeMatchRuleFormValues } from './ceMatchRuleFormUtil';
+import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { CeMatchCustomAssessmentFormFieldsFragment } from '@/types/gqlTypes';
 
@@ -17,7 +17,7 @@ interface Props {
 /**
  * Dropdown for selecting the assessment form to pick custom fields from for a CE Match Rule.
  */
-const CeMatchAssessmentSelect: React.FC<Props> = ({
+const CeMatchClauseAssessmentSelect: React.FC<Props> = ({
   control,
   clausePath,
   customAssessmentForms,
@@ -44,4 +44,4 @@ const CeMatchAssessmentSelect: React.FC<Props> = ({
   );
 };
 
-export default CeMatchAssessmentSelect;
+export default CeMatchClauseAssessmentSelect;

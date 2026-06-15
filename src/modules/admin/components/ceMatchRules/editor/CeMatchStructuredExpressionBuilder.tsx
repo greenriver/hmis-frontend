@@ -16,8 +16,8 @@ import {
   useWatch,
 } from 'react-hook-form';
 
-import CeMatchClauseRow from './CeMatchClauseRow';
 import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
+import CeMatchClause from './clause/CeMatchClause';
 import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import Loading from '@/components/elements/Loading';
 import {
@@ -41,7 +41,7 @@ const booleanOperatorOptions = [
  * Builds a structured CE match expression by loading field metadata, managing
  * the clause list, and choosing whether clauses are combined with ALL or ANY.
  */
-const StructuredExpressionBuilder: React.FC<Props> = ({
+const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
   control,
   setValue,
   validationError,
@@ -130,11 +130,11 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
                 onRemove={fields.length > 1 ? () => remove(index) : undefined}
                 removeTooltip='Remove Requirement'
                 sx={{
-                  backgroundColor: 'primary.100',
-                  borderColor: 'grayscale.300',
+                  backgroundColor: 'grayscale.50',
+                  borderColor: 'grayscale.50',
                 }}
               >
-                <CeMatchClauseRow
+                <CeMatchClause
                   control={control}
                   setValue={setValue}
                   index={index}
@@ -150,4 +150,4 @@ const StructuredExpressionBuilder: React.FC<Props> = ({
   );
 };
 
-export default StructuredExpressionBuilder;
+export default CeMatchStructuredExpressionBuilder;
