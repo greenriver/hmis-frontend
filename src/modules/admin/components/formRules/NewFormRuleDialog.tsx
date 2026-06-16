@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useMemo, useState } from 'react';
+import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import CommonDialog from '@/components/elements/CommonDialog';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -18,9 +19,6 @@ import FormSelect from '@/modules/form/components/FormSelect';
 import { usePickList } from '@/modules/form/hooks/usePickList';
 import { isPickListOption } from '@/modules/form/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
-import CardGroup, {
-  RemovableCard,
-} from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import {
   DataCollectedAbout,
   FormRole,

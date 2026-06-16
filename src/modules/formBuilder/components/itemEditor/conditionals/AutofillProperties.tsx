@@ -1,7 +1,7 @@
 import { useFieldArray, UseFormSetValue } from 'react-hook-form';
 import { FormItemControl, FormItemState } from '../types';
 import AutofillValueCard from './AutofillValueCard';
-import CardGroup, { RemovableCard } from './CardGroup';
+import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import { ItemMap } from '@/modules/form/types';
 import { ItemType } from '@/types/gqlTypes';
 

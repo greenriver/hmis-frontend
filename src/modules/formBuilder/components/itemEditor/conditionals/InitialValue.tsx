@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Controller, useFieldArray, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
-import CardGroup, { RemovableCard } from './CardGroup';
+import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledRadioGroupInput from '@/modules/form/components/rhf/ControlledRadioGroupInput';
