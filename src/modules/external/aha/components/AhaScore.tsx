@@ -196,8 +196,11 @@ const AhaScore = ({
     }
   }, [fetchAha, hasRequiredContext]);
 
-  // Throw an error if the children don't match the expected structure
-  if (!isComponentValid) throw new Error('Invalid Aha form component');
+  // Throw an error if the children don't match the expected structure, unless in read-only mode
+  // (enables backwards compatibility with older form definitions)
+  if (!viewOnly && !isComponentValid) {
+    throw new Error('Invalid Aha form component');
+  }
 
   if (viewOnly) {
     return item.item?.map((i) => renderChildItem(i));
