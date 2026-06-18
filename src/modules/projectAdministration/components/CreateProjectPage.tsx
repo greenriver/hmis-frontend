@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useLocalConstantsForProjectForm } from '../hooks/useLocalConstantsForProjectForm';
 import { useOrganizationCrumbs } from '../hooks/useOrganizationCrumbs';
+import Loading from '@/components/elements/Loading';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -18,7 +19,10 @@ const CreateProjectPage = () => {
   const { organizationId } = useSafeParams() as {
     organizationId: string;
   };
-  const { crumbs, organizationName } = useOrganizationCrumbs('Add Project');
+  const { crumbs, loading, organization, organizationName } =
+    useOrganizationCrumbs('Add Project');
+
+  const canCreateProject = organization?.access.canCreateProjects;
 
   const onCompleted = useCallback(
     (createdProject: ProjectAllFieldsFragment) => {
@@ -35,7 +39,9 @@ const CreateProjectPage = () => {
 
   const localConstants = useLocalConstantsForProjectForm();
 
+  if (loading && !organization) return <Loading />;
   if (!crumbs) return <NotFound />;
+  if (!canCreateProject) return <NotFound />;
 
   return (
     <BasicBreadcrumbPageLayout crumbs={crumbs}>

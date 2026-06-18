@@ -6,27 +6,30 @@
 fragment RootPermissions on QueryAccess {
   id
   # Admin permissions:
-  canAdministerHmis
   canManageForms
   canAdministrateConfig
-  canConfigureDataCollection
+  canManageFormRules
+  canManageServices
+  canManageProjectConfigs
   canImpersonateUsers
   canAuditUsers
   canManageDeniedReferrals
   canMergeClients # provides access to admin client merge
-  canTransferEnrollments
   canEditUsersInWarehouse
-  canAdministrateCoordinatedEntry
+  canManageCeDefaultContacts
+  canManageCeMatchRules
+  canIndexOpportunities
+  canIndexEligibleClients
 
   # Root Client permissions:
   canViewClients
-  canEditClients # globally, determines whether user can add new clients
+  canCreateClients
   canViewDob # globally, determines whether to show col header as "DOB" or "Age"
   canViewClientAlerts
 
   # Root Project permissions:
-  canEditOrganization # globally, determines whether user can create organization
-  canEditProjectDetails # globally, determines whether user can create project
+  canCreateOrganizations
+
   # Root Referral permissions
   canIndexReferrals
 }
@@ -105,4 +108,5 @@ fragment OrganizationAccessFields on OrganizationAccess {
   id
   canEditOrganization
   canDeleteOrganization
+  canCreateProjects
 }

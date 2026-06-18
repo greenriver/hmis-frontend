@@ -229,7 +229,7 @@ const ManageHousehold = ({
               <Grid item xs></Grid>
               <Grid item xs={12} md={3}>
                 {hasSearched && (
-                  <RootPermissionsFilter permissions='canEditClients'>
+                  <RootPermissionsFilter permissions='canCreateClients'>
                     <AddNewClientButton
                       projectId={project.id}
                       householdId={householdId}
