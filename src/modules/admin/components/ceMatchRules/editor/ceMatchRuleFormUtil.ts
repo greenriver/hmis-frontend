@@ -23,10 +23,6 @@ export const getCeMatchRuleOwnerLevelLabel = (
 ) =>
   HmisEnums.CeMatchRuleOwnerType[ceMatchRuleOwnerTypeByRouteParam[ownerLevel]];
 
-export const getPluralCeMatchRuleOwnerLevelLabel = (
-  ownerLevel: CeMatchRuleOwnerLevel
-) => (ownerLevel === 'unit-group' ? 'unit groups' : `${ownerLevel}s`);
-
 // Extend the submitted clause input with UI-only state collected by the form.
 export interface CeMatchDraftClause extends CeMatchRuleClauseInput {
   id: string;

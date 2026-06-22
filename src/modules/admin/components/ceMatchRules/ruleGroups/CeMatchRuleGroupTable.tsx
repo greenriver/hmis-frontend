@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import {
   CeMatchRuleOwnerLevel,
-  getPluralCeMatchRuleOwnerLevelLabel,
+  getCeMatchRuleOwnerLevelLabel,
 } from '../editor/ceMatchRuleFormUtil';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -61,8 +61,8 @@ const CeMatchRuleGroupTable: React.FC<CeMatchRuleGroupTableProps> = ({
         noHead
         noData={
           <Typography variant='body2' textAlign='center'>
-            No {getPluralCeMatchRuleOwnerLevelLabel(ownerLevel)} rules have been
-            created.
+            No {getCeMatchRuleOwnerLevelLabel(ownerLevel).toLowerCase()} rules
+            have been created.
           </Typography>
         }
         rowName={(rule) => rule.name}
