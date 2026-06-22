@@ -22,7 +22,7 @@ const CeMatchRuleEditorPage = () => {
   const returnToRulesOverview = useCallback(() => {
     if (!ownerType) return;
     // TODO(#7544): return to correct page depending on ownerType
-    navigate(generatePath(AdminDashboardRoutes.CE_MATCH_RULES));
+    navigate(generatePath(AdminDashboardRoutes.ELIGIBILITY_RULES));
   }, [navigate, ownerType]);
 
   if (!ownerType) return <NotFound />;

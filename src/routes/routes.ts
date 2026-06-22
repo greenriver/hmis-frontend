@@ -47,7 +47,7 @@ const adminDashboardRoutes = {
   PREVIEW_FORM_DRAFT: 'forms/:identifier/:formId/preview-draft',
   PROJECT_CONFIG: 'project-configs',
   ELIGIBILITY_RULES: 'eligibility-rules',
-  CE_MATCH_RULE_NEW: 'ce-match-rules/new/:ownerLevel',
+  ELIGIBILITY_RULE_NEW: 'eligibility-rules/new/:ownerLevel',
 };
 
 // Routes within the client dashboard

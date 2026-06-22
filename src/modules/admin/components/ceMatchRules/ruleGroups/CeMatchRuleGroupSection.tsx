@@ -36,7 +36,7 @@ const CeMatchRuleGroupSection: React.FC<Props> = ({
         <CeMatchRuleGroupHeader icon={icon} title={heading} count={count} />
         <Button
           component={RouterLink}
-          to={generatePath(AdminDashboardRoutes.CE_MATCH_RULE_NEW, {
+          to={generatePath(AdminDashboardRoutes.ELIGIBILITY_RULE_NEW, {
             ownerLevel,
           })}
           variant='outlined'
