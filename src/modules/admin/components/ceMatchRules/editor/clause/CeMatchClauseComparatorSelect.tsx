@@ -47,8 +47,8 @@ const comparatorOptionsForField = (
 ): PickListOption[] => {
   const comparators = new Set<CeMatchRuleComparator>();
 
-  if (field?.repeats) {
-    // For a repeating value (array), only allow Includes/Excludes
+  if (field?.multiple) {
+    // For a multiple value (array), only allow Includes/Excludes
     comparators.add(CeMatchRuleComparator.Includes);
     comparators.add(CeMatchRuleComparator.Excludes);
   } else {
