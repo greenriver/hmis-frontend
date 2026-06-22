@@ -27,6 +27,7 @@ const CeMatchGlobalRules: React.FC = () => {
         icon={<GlobalIcon color='primary' fontSize='small' />}
         rules={rules}
         count={count}
+        variant='current'
       />
     </CeMatchEffectiveRulesCard>
   );

@@ -18,14 +18,20 @@ interface Props {
   rules: CeMatchRuleAdminSummaryFieldsFragment[];
   count: number;
   title?: string;
+  variant?: 'current' | 'inherited';
 }
 
+/**
+ * A collapsible section of rules, representing a single owner level,
+ * wrapping the CeMatchRuleGroupTable for rules owned at this level.
+ */
 const CeMatchRuleGroupSection: React.FC<Props> = ({
   ownerLevel,
   icon,
   rules,
   count,
   title,
+  variant = 'inherited',
 }) => {
   const ownerLevelLabel = getCeMatchRuleOwnerLevelLabel(ownerLevel);
   const heading = title || `${ownerLevelLabel} Rules`;
@@ -33,7 +39,12 @@ const CeMatchRuleGroupSection: React.FC<Props> = ({
   return (
     <Stack gap={1.5}>
       <Stack direction='row' justifyContent='space-between' alignItems='center'>
-        <CeMatchRuleGroupHeader icon={icon} title={heading} count={count} />
+        <CeMatchRuleGroupHeader
+          icon={icon}
+          title={heading}
+          count={count}
+          variant={variant}
+        />
         <Button
           component={RouterLink}
           to={generatePath(AdminDashboardRoutes.ELIGIBILITY_RULE_NEW, {

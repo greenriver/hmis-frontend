@@ -13,6 +13,11 @@ interface Props {
   children: ReactNode;
 }
 
+/**
+ * Card displaying the effective rules for a given owner.
+ * Most of the work is delegated to the children, which render
+ * collapsible sections for rules grouped by their ancestors (global, project, org, etc.).
+ */
 const CeMatchEffectiveRulesCard: React.FC<Props> = ({
   ownerName,
   effectiveRulesCount,

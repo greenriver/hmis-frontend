@@ -8,6 +8,10 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 
+/**
+ * The page for creating/editing a CE match rule. Wraps the CeMatchRuleForm
+ * with page-level UI and navigation logic.
+ */
 const CeMatchRuleEditorPage = () => {
   const navigate = useNavigate();
 

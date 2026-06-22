@@ -20,6 +20,8 @@ import {
   CeMatchRuleType,
 } from '@/types/gqlTypes';
 
+// For priority scheme rules, display the name as "Prioritize by: <name>"
+// For eligibility requirement rules, display the name as is.
 const getRuleName = (rule: CeMatchRuleAdminSummaryFieldsFragment) =>
   rule.ruleType === CeMatchRuleType.PriorityScheme
     ? `Prioritize by: ${rule.name}`
@@ -34,6 +36,10 @@ export interface CeMatchRuleGroupTableProps {
   variant?: 'current' | 'inherited';
 }
 
+/**
+ * Displays CE Match Rules at a given owner level.
+ * Uses GenericTable internally, but displays the rules with custom styling using renderRow.
+ */
 const CeMatchRuleGroupTable: React.FC<CeMatchRuleGroupTableProps> = ({
   ownerLevel,
   rules,
@@ -66,7 +72,7 @@ const CeMatchRuleGroupTable: React.FC<CeMatchRuleGroupTableProps> = ({
               key: 'primary',
               title: 'View Rule',
               ariaLabel: `View Rule, ${rule.name}`,
-              // existing rules don't link anywhere yet, implementing in a later phase
+              // TODO(#7544) existing rules don't link anywhere yet, implementing in a later phase
             },
           ];
 
@@ -90,21 +96,15 @@ const CeMatchRuleGroupTable: React.FC<CeMatchRuleGroupTableProps> = ({
                     gap={1}
                   >
                     <Stack direction='row' alignItems='flex-start' gap={2}>
-                      {rule.expression ? (
-                        <Tooltip title={rule.expression} arrow placement='top'>
-                          <Typography
-                            variant='body2'
-                            component='span'
-                            sx={{ width: 'fit-content' }}
-                          >
-                            {getRuleName(rule)}
-                          </Typography>
-                        </Tooltip>
-                      ) : (
-                        <Typography variant='body2'>
+                      <Tooltip title={rule.expression} arrow placement='top'>
+                        <Typography
+                          variant='body2'
+                          component='span'
+                          sx={{ width: 'fit-content' }}
+                        >
                           {getRuleName(rule)}
                         </Typography>
-                      )}
+                      </Tooltip>
                       {!!(rule.funders?.length || rule.projectTypes.length) && (
                         <>
                           <Stack direction='row' gap={0.5} flexWrap='wrap'>

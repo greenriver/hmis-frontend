@@ -1,29 +1,30 @@
 import { Stack, Typography } from '@mui/material';
-import { TypographyProps } from '@mui/material/Typography';
-import { ElementType, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 interface Props {
   icon: ReactNode;
   title: string;
   count: number;
-  color?: TypographyProps['color'];
-  component?: ElementType;
+  variant?: 'current' | 'inherited';
 }
 
+/**
+ * A header for a section of rules, supporting differentiated styling depending
+ * on whether this section represents the current owner or an ancestor.
+ */
 const CeMatchRuleGroupHeader: React.FC<Props> = ({
   icon,
   title,
   count,
-  color = 'primary.dark',
-  component = 'h3',
+  variant = 'inherited',
 }) => (
   <Stack direction='row' alignItems='center' gap={1}>
     {icon}
     <Typography
       variant='body1'
       fontWeight='600'
-      component={component}
-      color={color}
+      component={variant === 'current' ? 'h3' : 'h4'}
+      color={variant === 'current' ? 'primary.dark' : 'text.secondary'}
     >
       {title} ({count})
     </Typography>
