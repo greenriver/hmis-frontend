@@ -828,10 +828,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'formDefinitionIdentifier',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -864,16 +860,16 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'pickListReference',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'repeats',
+        name: 'multiple',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
+      },
+      {
+        name: 'pickListReference',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

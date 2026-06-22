@@ -1119,7 +1119,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.CE_MATCH_RULES,
+            path: AdminDashboardRoutes.ELIGIBILITY_RULES,
             element: (
               <RootPermissionsFilter
                 // TODO(#7544): swap to canAdministrateCoordinatedEntry

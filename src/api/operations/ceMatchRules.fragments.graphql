@@ -3,9 +3,8 @@ fragment CeMatchFieldDetails on CeMatchField {
   key
   label
   itemType
-  repeats
+  multiple
   expressionField
-  formDefinitionIdentifier
   pickListReference
   pickListOptions {
     ...PickListOptionFields

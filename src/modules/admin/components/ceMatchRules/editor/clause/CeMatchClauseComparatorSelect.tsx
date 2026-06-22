@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Control } from 'react-hook-form';
 
 import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
+import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { COMPARABLE_ITEM_TYPES } from '@/modules/formBuilder/formBuilderUtil';
 import {
@@ -47,8 +48,8 @@ const comparatorOptionsForField = (
 ): PickListOption[] => {
   const comparators = new Set<CeMatchRuleComparator>();
 
-  if (field?.repeats) {
-    // For a repeating value (array), only allow Includes/Excludes
+  if (field?.multiple) {
+    // For a multiple value (array), only allow Includes/Excludes
     comparators.add(CeMatchRuleComparator.Includes);
     comparators.add(CeMatchRuleComparator.Excludes);
   } else {
@@ -95,8 +96,9 @@ const CeMatchClauseComparatorSelect: React.FC<Props> = ({
     <ControlledSelect
       name={`${clausePath}.comparator`}
       control={control}
-      label='Comparator'
+      label={getRequiredLabel('Comparator', true)}
       placeholder='Select'
+      required
       options={comparatorOptions}
       disabled={!selectedField}
       onChange={onComparatorChange}
