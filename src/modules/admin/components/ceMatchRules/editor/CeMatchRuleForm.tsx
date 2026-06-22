@@ -108,7 +108,7 @@ const CeMatchRuleForm = () => {
     <Stack gap={2}>
       <TitleCard title='Rule Details' headerComponent='h2' padded>
         <Stack gap={2}>
-          {saved && <Alert severity='success'>Match rule saved.</Alert>}
+          {saved && <Alert severity='success'>Eligibility rule saved.</Alert>}
           {hasErrors(errorState) && (
             <Stack gap={1}>
               <ApolloErrorAlert error={errorState.apolloError} />
