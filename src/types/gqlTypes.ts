@@ -756,17 +756,24 @@ export type CeEligibleUnitGroupsPaginated = {
 /** Field metadata for CE Match Rule expressions */
 export type CeMatchField = {
   __typename?: 'CeMatchField';
-  /** The identifier used in CE Match Rule expressions */
+  /**
+   * The full-length identifier used in CE Match Rule expressions, such as
+   * "client.current_age" or "custom_assessment.my_assessment.my_score".
+   */
   expressionField: Scalars['String']['output'];
-  formDefinitionIdentifier?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  /** The type of the field, used for determining the possible values it can match against. */
   itemType: ItemType;
   /** The CDED key for this field, or the client field key for a client field */
   key: Scalars['String']['output'];
+  /** Human-readable label for this field */
   label: Scalars['String']['output'];
+  /** Whether a client can have more than one value for the field. */
+  multiple: Scalars['Boolean']['output'];
+  /** The field's pick list options, if applicable. */
   pickListOptions?: Maybe<Array<PickListOption>>;
+  /** The field's reference pick list, if applicable, such as `NoYesReasonsForMissingData`. */
   pickListReference?: Maybe<Scalars['String']['output']>;
-  repeats: Scalars['Boolean']['output'];
 };
 
 export type CeMatchRule = {
@@ -5653,6 +5660,8 @@ export enum PickListType {
   HudServiceTypes = 'HUD_SERVICE_TYPES',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
+  /** Names of organizations with open projects */
+  OpenOrganizationNames = 'OPEN_ORGANIZATION_NAMES',
   /** Open Projects that the user can see */
   OpenProjects = 'OPEN_PROJECTS',
   /** All Organizations that the User can see */
@@ -22313,9 +22322,8 @@ export type CeMatchFieldDetailsFragment = {
   key: string;
   label: string;
   itemType: ItemType;
-  repeats: boolean;
+  multiple: boolean;
   expressionField: string;
-  formDefinitionIdentifier?: string | null;
   pickListReference?: string | null;
   pickListOptions?: Array<{
     __typename?: 'PickListOption';
@@ -22425,9 +22433,8 @@ export type GetCeMatchClientFieldsQuery = {
     key: string;
     label: string;
     itemType: ItemType;
-    repeats: boolean;
+    multiple: boolean;
     expressionField: string;
-    formDefinitionIdentifier?: string | null;
     pickListReference?: string | null;
     pickListOptions?: Array<{
       __typename?: 'PickListOption';
@@ -22470,9 +22477,8 @@ export type GetCeMatchCustomAssessmentFieldsQuery = {
     key: string;
     label: string;
     itemType: ItemType;
-    repeats: boolean;
+    multiple: boolean;
     expressionField: string;
-    formDefinitionIdentifier?: string | null;
     pickListReference?: string | null;
     pickListOptions?: Array<{
       __typename?: 'PickListOption';
@@ -52045,9 +52051,8 @@ export const CeMatchFieldDetailsFragmentDoc = gql`
     key
     label
     itemType
-    repeats
+    multiple
     expressionField
-    formDefinitionIdentifier
     pickListReference
     pickListOptions {
       ...PickListOptionFields

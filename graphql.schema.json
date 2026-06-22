@@ -5339,7 +5339,7 @@
         "fields": [
           {
             "name": "expressionField",
-            "description": "The identifier used in CE Match Rule expressions",
+            "description": "The full-length identifier used in CE Match Rule expressions, such as\n\"client.current_age\" or \"custom_assessment.my_assessment.my_score\".",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -5349,18 +5349,6 @@
                 "name": "String",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "formDefinitionIdentifier",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5383,7 +5371,7 @@
           },
           {
             "name": "itemType",
-            "description": null,
+            "description": "The type of the field, used for determining the possible values it can match against.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -5415,7 +5403,7 @@
           },
           {
             "name": "label",
-            "description": null,
+            "description": "Human-readable label for this field",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -5430,8 +5418,24 @@
             "deprecationReason": null
           },
           {
+            "name": "multiple",
+            "description": "Whether a client can have more than one value for the field.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "pickListOptions",
-            "description": null,
+            "description": "The field's pick list options, if applicable.",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -5451,28 +5455,12 @@
           },
           {
             "name": "pickListReference",
-            "description": null,
+            "description": "The field's reference pick list, if applicable, such as `NoYesReasonsForMissingData`.",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "repeats",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -39938,6 +39926,12 @@
           {
             "name": "OPEN_HOH_ENROLLMENTS_FOR_PROJECT",
             "description": "Open HoH enrollments at the project.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OPEN_ORGANIZATION_NAMES",
+            "description": "Names of organizations with open projects",
             "isDeprecated": false,
             "deprecationReason": null
           },

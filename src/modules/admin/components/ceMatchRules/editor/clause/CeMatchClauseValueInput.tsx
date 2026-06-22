@@ -1,6 +1,7 @@
 import { Control } from 'react-hook-form';
 
 import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
+import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
@@ -12,6 +13,7 @@ import {
 
 type ClausePath = `structuredExpression.clauses.${number}`;
 type ValueInputType = 'boolean' | 'choice' | 'date' | 'number' | 'text';
+const requiredMessage = 'This field is required';
 
 interface Props {
   control: Control<CeMatchRuleFormValues>;
@@ -70,8 +72,9 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
       <ControlledSelect
         name={`${clausePath}.value`}
         control={control}
-        label='Value'
+        label={getRequiredLabel('Value', true)}
         placeholder='Select value'
+        required
         options={valueOptions}
         disabled={!selectedField}
       />
@@ -83,7 +86,7 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
       <ControlledSelect
         name={`${clausePath}.value`}
         control={control}
-        label='Value'
+        label={getRequiredLabel('Value', true)}
         placeholder='Select value'
         options={[
           { code: 'true', label: 'True' },
@@ -93,6 +96,11 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
         // Represent empty/unselected as '', otherwise clearing the select would become
         // `false`, which is a valid submitted JSON value.
         setValueAs={(option) => (option ? option.code === 'true' : '')}
+        // Validate that the value is not empty string, which represents an empty/unselected select,
+        // but would otherwise be treated as a submittable value by RHF
+        rules={{
+          validate: (value) => value !== '' || requiredMessage,
+        }}
       />
     );
   }
@@ -101,8 +109,9 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
     <ControlledTextInput
       name={`${clausePath}.value`}
       control={control}
-      label='Value'
+      label={getRequiredLabel('Value', true)}
       type={valueType}
+      required
       disabled={!selectedField}
     />
   );
