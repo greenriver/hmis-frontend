@@ -5339,7 +5339,7 @@
         "fields": [
           {
             "name": "expressionField",
-            "description": "The full-length identifier used in CE Match Rule expressions, such as\n\"client.current_age\" or \"custom_assessment.my_assessment.my_score\".",
+            "description": "The full-length identifier used in CE Match Rule expressions, such as\n\"current_age\" or \"cde.custom_assessment.my_field_key\".",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -46070,7 +46070,7 @@
           },
           {
             "name": "ceMatchCustomAssessmentForms",
-            "description": "Published and retired custom assessment form definitions in the user's data source that have CE Match fields.",
+            "description": "Custom assessment form definitions for use in CE match rule management.",
             "args": [],
             "type": {
               "kind": "NON_NULL",

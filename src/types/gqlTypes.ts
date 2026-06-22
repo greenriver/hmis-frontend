@@ -758,7 +758,7 @@ export type CeMatchField = {
   __typename?: 'CeMatchField';
   /**
    * The full-length identifier used in CE Match Rule expressions, such as
-   * "client.current_age" or "custom_assessment.my_assessment.my_score".
+   * "current_age" or "cde.custom_assessment.my_field_key".
    */
   expressionField: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -6850,7 +6850,7 @@ export type Query = {
   ceMatchClientFields: Array<CeMatchField>;
   /** Fields on the form that are usable as CE Match Rule condition fields. */
   ceMatchCustomAssessmentFields: Array<CeMatchField>;
-  /** Published and retired custom assessment form definitions in the user's data source that have CE Match fields. */
+  /** Custom assessment form definitions for use in CE match rule management. */
   ceMatchCustomAssessmentForms: Array<FormDefinition>;
   ceOpportunities: CeOpportunitiesPaginated;
   ceOpportunity?: Maybe<CeOpportunity>;
