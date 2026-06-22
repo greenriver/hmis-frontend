@@ -32,13 +32,13 @@ const CeMatchRuleAffectedUnitGroupsTable = ({
         render: 'unitGroupName',
       },
       {
-        header: 'Currently Eligible',
+        header: 'Eligible Now',
         key: 'currentCandidateCount',
         textAlign: 'right',
         render: (row) => pluralize('client', row.currentCandidateCount, true),
       },
       {
-        header: 'Would Be Removed',
+        header: 'Would Lose Eligibility',
         key: 'removedCandidateCount',
         textAlign: 'right',
         render: (row) => pluralize('client', row.removedCandidateCount, true),
