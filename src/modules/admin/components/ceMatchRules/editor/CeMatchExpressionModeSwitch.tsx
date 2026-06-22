@@ -1,49 +1,30 @@
 import CodeIcon from '@mui/icons-material/Code';
 import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
-import { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
+import { Control, UseFormSetValue, useFormState } from 'react-hook-form';
 
 import {
   CeMatchExpressionMode,
   CeMatchRuleFormValues,
 } from './ceMatchRuleFormUtil';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import { CeMatchRuleBooleanOperator } from '@/types/gqlTypes';
 
 interface Props {
   mode: CeMatchExpressionMode;
-  getValues: UseFormGetValues<CeMatchRuleFormValues>;
+  control: Control<CeMatchRuleFormValues>;
   setValue: UseFormSetValue<CeMatchRuleFormValues>;
 }
 
-const hasValue = (value?: string | null) => !!value?.trim();
-
-const hasExpressionProgress = ({
-  mode,
-  structuredExpression,
-  freeTextExpression,
-}: CeMatchRuleFormValues) => {
-  if (mode === 'freeText') return hasValue(freeTextExpression);
-
-  return (
-    structuredExpression.clauses.length > 1 ||
-    structuredExpression.operator !== CeMatchRuleBooleanOperator.And ||
-    structuredExpression.clauses.some(
-      ({ source, customAssessmentFormIdentifier, field, value }) =>
-        hasValue(source) ||
-        hasValue(customAssessmentFormIdentifier) ||
-        hasValue(field) ||
-        hasValue(value)
-    )
-  );
-};
-
 const CeMatchExpressionModeSwitch: React.FC<Props> = ({
   mode,
-  getValues,
+  control,
   setValue,
 }) => {
   const [pendingMode, setPendingMode] = useState<CeMatchExpressionMode>();
+  const { dirtyFields } = useFormState({
+    control,
+    name: mode === 'freeText' ? 'freeTextExpression' : 'structuredExpression',
+  });
 
   const switchEditorMode = (nextMode: CeMatchExpressionMode) => {
     setValue('mode', nextMode, { shouldDirty: true });
@@ -52,7 +33,12 @@ const CeMatchExpressionModeSwitch: React.FC<Props> = ({
 
   const handleSwitchEditorMode = () => {
     const nextMode = mode === 'structured' ? 'freeText' : 'structured';
-    if (hasExpressionProgress(getValues())) {
+    const isDirty =
+      mode === 'freeText'
+        ? !!dirtyFields.freeTextExpression
+        : !!dirtyFields.structuredExpression;
+
+    if (isDirty) {
       setPendingMode(nextMode);
       return;
     }

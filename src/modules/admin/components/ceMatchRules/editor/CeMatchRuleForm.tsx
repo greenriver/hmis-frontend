@@ -74,7 +74,7 @@ const buildCeMatchRuleInput = ({
  * and the mutation call to submit to the backend.
  */
 const CeMatchRuleForm = () => {
-  const { control, getValues, handleSubmit, reset, setValue, watch } =
+  const { control, handleSubmit, reset, setValue, watch } =
     useForm<CeMatchRuleFormValues>({
       defaultValues: defaultCeMatchRuleFormValues(),
     });
@@ -145,7 +145,7 @@ const CeMatchRuleForm = () => {
         actions={
           <CeMatchExpressionModeSwitch
             mode={mode}
-            getValues={getValues}
+            control={control}
             setValue={setValue}
           />
         }
