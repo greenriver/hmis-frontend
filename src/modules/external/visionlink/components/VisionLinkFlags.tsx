@@ -15,6 +15,55 @@ import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { useDynamicFieldWatchValues } from '@/modules/form/hooks/rhf/useDynamicFieldWatchValues';
 import { ChangeType, GroupItemComponentProps } from '@/modules/form/types';
 
+/**
+ * VisionLink Eligibility Flags Component
+ *
+ * AC HMIS community-specific component used when a group item specifies "component: VISIONLINK".
+ * Renders a button to fetch Eviction Prevention eligibility flags from the backend, and dynamically
+ * renders its child items (which may be visible or hidden depending on the form definition).
+ *
+ *
+ * Similar to AhaScore, this component is tightly coupled to its expected form structure.
+ * It MUST have child items with the link_ids listed in VisionLinkLinkIds (see visionLinkUtils.ts).
+ * Fetched flag values are stored as strings ("Flag", "No Flag", or "No Eligibility Data") on separate
+ * form items so they can be stored and exported as custom data elements.
+ *
+ *
+ * EXPECTED GROUP ITEM SHAPE:
+ *  {
+ *    "type": "GROUP",
+ *    "component": "VISIONLINK",
+ *    "item": [
+ *      {
+ *        "link_id": "visionlink_risk_of_homelessness_flag",
+ *        "type": "STRING",
+ *        ...
+ *      },
+ *      {
+ *        "link_id": "visionlink_section_8_housing_flag",
+ *        "type": "STRING",
+ *        ...
+ *      },
+ *      {
+ *        "link_id": "visionlink_subsidized_housing_flag",
+ *        "type": "STRING",
+ *        ...
+ *      },
+ *      {
+ *        "link_id": "visionlink_city_of_pittsburgh_flag",
+ *        "type": "STRING",
+ *        ...
+ *      },
+ *      {
+ *        "link_id": "visionlink_recent_eviction_case_flag",
+ *        "type": "STRING",
+ *        ...
+ *      },
+ *      ... may have additional items
+ *    ]
+ *  }
+ */
+
 const VisionLinkFlags = ({
   item,
   handlers,
