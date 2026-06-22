@@ -12,6 +12,7 @@ import QuestionGroup from './group/QuestionGroup';
 import SignatureGroupCard from './group/SignatureGroupCard';
 import TableGroup from './group/TableGroup';
 import AhaScore from '@/modules/external/aha/components/AhaScore';
+import VisionLinkFlags from '@/modules/external/visionlink/components/VisionLinkFlags';
 import Signature from '@/modules/form/components/group/Signature';
 import { Component } from '@/types/gqlTypes';
 
@@ -73,6 +74,8 @@ const DynamicGroup: React.FC<Props> = (props) => {
       return <TableGroup key={props.item.linkId} {...props} />;
     case Component.Aha:
       return <AhaScore key={props.item.linkId} {...props} />;
+    case Component.Visionlink:
+      return <VisionLinkFlags key={props.item.linkId} {...props} />;
     default:
       return <QuestionGroup key={props.item.linkId} {...props} />;
   }

@@ -9385,21 +9385,17 @@ export type FetchAhaScoreMutation = {
   } | null;
 };
 
-export type FetchVisionLinkFlagsMutationVariables = Exact<{
-  clientId: Scalars['ID']['input'];
+export type CalculateAltAhaScoreMutationVariables = Exact<{
+  enrollmentId: Scalars['ID']['input'];
+  formDefinitionIdentifier: Scalars['String']['input'];
+  valuesByLinkId: Scalars['JsonObject']['input'];
 }>;
 
-export type FetchVisionLinkFlagsMutation = {
+export type CalculateAltAhaScoreMutation = {
   __typename?: 'Mutation';
-  fetchVisionLinkFlags?: {
-    __typename?: 'FetchVisionLinkFlagsPayload';
-    isEligibleRa?: boolean | null;
-    section8?: boolean | null;
-    cityOfPittsburgh?: boolean | null;
-    subsidizedHousing?: boolean | null;
-    recentEvictionCase?: boolean | null;
-    dwClientId?: string | null;
-    failedReason?: AhaFailedReason | null;
+  calculateAltAhaScore?: {
+    __typename?: 'CalculateAltAhaScorePayload';
+    score?: number | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -9417,17 +9413,21 @@ export type FetchVisionLinkFlagsMutation = {
   } | null;
 };
 
-export type CalculateAltAhaScoreMutationVariables = Exact<{
-  enrollmentId: Scalars['ID']['input'];
-  formDefinitionIdentifier: Scalars['String']['input'];
-  valuesByLinkId: Scalars['JsonObject']['input'];
+export type FetchVisionLinkFlagsMutationVariables = Exact<{
+  clientId: Scalars['ID']['input'];
 }>;
 
-export type CalculateAltAhaScoreMutation = {
+export type FetchVisionLinkFlagsMutation = {
   __typename?: 'Mutation';
-  calculateAltAhaScore?: {
-    __typename?: 'CalculateAltAhaScorePayload';
-    score?: number | null;
+  fetchVisionLinkFlags?: {
+    __typename?: 'FetchVisionLinkFlagsPayload';
+    isEligibleRa?: boolean | null;
+    section8?: boolean | null;
+    cityOfPittsburgh?: boolean | null;
+    subsidizedHousing?: boolean | null;
+    recentEvictionCase?: boolean | null;
+    dwClientId?: string | null;
+    failedReason?: AhaFailedReason | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -53764,66 +53764,6 @@ export type FetchAhaScoreMutationOptions = Apollo.BaseMutationOptions<
   FetchAhaScoreMutation,
   FetchAhaScoreMutationVariables
 >;
-export const FetchVisionLinkFlagsDocument = gql`
-  mutation FetchVisionLinkFlags($clientId: ID!) {
-    fetchVisionLinkFlags(clientId: $clientId) {
-      isEligibleRa
-      section8
-      cityOfPittsburgh
-      subsidizedHousing
-      recentEvictionCase
-      dwClientId
-      failedReason
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type FetchVisionLinkFlagsMutationFn = Apollo.MutationFunction<
-  FetchVisionLinkFlagsMutation,
-  FetchVisionLinkFlagsMutationVariables
->;
-
-/**
- * __useFetchVisionLinkFlagsMutation__
- *
- * To run a mutation, you first call `useFetchVisionLinkFlagsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useFetchVisionLinkFlagsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [fetchVisionLinkFlagsMutation, { data, loading, error }] = useFetchVisionLinkFlagsMutation({
- *   variables: {
- *      clientId: // value for 'clientId'
- *   },
- * });
- */
-export function useFetchVisionLinkFlagsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    FetchVisionLinkFlagsMutation,
-    FetchVisionLinkFlagsMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    FetchVisionLinkFlagsMutation,
-    FetchVisionLinkFlagsMutationVariables
-  >(FetchVisionLinkFlagsDocument, options);
-}
-export type FetchVisionLinkFlagsMutationHookResult = ReturnType<
-  typeof useFetchVisionLinkFlagsMutation
->;
-export type FetchVisionLinkFlagsMutationResult =
-  Apollo.MutationResult<FetchVisionLinkFlagsMutation>;
-export type FetchVisionLinkFlagsMutationOptions = Apollo.BaseMutationOptions<
-  FetchVisionLinkFlagsMutation,
-  FetchVisionLinkFlagsMutationVariables
->;
 export const CalculateAltAhaScoreDocument = gql`
   mutation CalculateAltAhaScore(
     $enrollmentId: ID!
@@ -53887,6 +53827,66 @@ export type CalculateAltAhaScoreMutationResult =
 export type CalculateAltAhaScoreMutationOptions = Apollo.BaseMutationOptions<
   CalculateAltAhaScoreMutation,
   CalculateAltAhaScoreMutationVariables
+>;
+export const FetchVisionLinkFlagsDocument = gql`
+  mutation FetchVisionLinkFlags($clientId: ID!) {
+    fetchVisionLinkFlags(clientId: $clientId) {
+      isEligibleRa
+      section8
+      cityOfPittsburgh
+      subsidizedHousing
+      recentEvictionCase
+      dwClientId
+      failedReason
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type FetchVisionLinkFlagsMutationFn = Apollo.MutationFunction<
+  FetchVisionLinkFlagsMutation,
+  FetchVisionLinkFlagsMutationVariables
+>;
+
+/**
+ * __useFetchVisionLinkFlagsMutation__
+ *
+ * To run a mutation, you first call `useFetchVisionLinkFlagsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFetchVisionLinkFlagsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fetchVisionLinkFlagsMutation, { data, loading, error }] = useFetchVisionLinkFlagsMutation({
+ *   variables: {
+ *      clientId: // value for 'clientId'
+ *   },
+ * });
+ */
+export function useFetchVisionLinkFlagsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    FetchVisionLinkFlagsMutation,
+    FetchVisionLinkFlagsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    FetchVisionLinkFlagsMutation,
+    FetchVisionLinkFlagsMutationVariables
+  >(FetchVisionLinkFlagsDocument, options);
+}
+export type FetchVisionLinkFlagsMutationHookResult = ReturnType<
+  typeof useFetchVisionLinkFlagsMutation
+>;
+export type FetchVisionLinkFlagsMutationResult =
+  Apollo.MutationResult<FetchVisionLinkFlagsMutation>;
+export type FetchVisionLinkFlagsMutationOptions = Apollo.BaseMutationOptions<
+  FetchVisionLinkFlagsMutation,
+  FetchVisionLinkFlagsMutationVariables
 >;
 export const CreateClientAlertDocument = gql`
   mutation CreateClientAlert($input: ClientAlertInput!) {
