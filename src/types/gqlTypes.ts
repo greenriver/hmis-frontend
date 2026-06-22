@@ -5637,6 +5637,8 @@ export enum PickListType {
   HudServiceTypes = 'HUD_SERVICE_TYPES',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
+  /** Names of organizations with open projects */
+  OpenOrganizationNames = 'OPEN_ORGANIZATION_NAMES',
   /** Open Projects that the user can see */
   OpenProjects = 'OPEN_PROJECTS',
   /** All Organizations that the User can see */
