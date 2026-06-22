@@ -4,6 +4,7 @@ import type {
   CeMatchFieldSource,
   CeMatchRuleFormValues,
 } from '../ceMatchRuleFormUtil';
+import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 
 type ClausePath = `structuredExpression.clauses.${number}`;
@@ -28,8 +29,9 @@ const CeMatchClauseFieldSourceSelect: React.FC<Props> = ({
   <ControlledSelect
     name={`${clausePath}.source`}
     control={control}
-    label='Field Type'
+    label={getRequiredLabel('Field Type', true)}
     placeholder='Select type'
+    required
     options={[
       { code: 'client', label: 'Client field' },
       { code: 'custom', label: 'Custom field' },
