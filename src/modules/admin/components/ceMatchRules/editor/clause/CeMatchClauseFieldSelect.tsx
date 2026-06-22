@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Control } from 'react-hook-form';
 
 import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
+import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { CeMatchFieldDetailsFragment } from '@/types/gqlTypes';
 
@@ -49,8 +50,9 @@ const CeMatchClauseFieldSelect: React.FC<Props> = ({
     <ControlledSelect
       name={`${clausePath}.field`}
       control={control}
-      label={fieldLabel}
+      label={getRequiredLabel(fieldLabel, true)}
       placeholder='Select field'
+      required
       options={fieldOptions}
       disabled={disabled}
       loading={customAssessmentFieldsLoading}
