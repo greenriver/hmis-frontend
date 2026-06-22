@@ -933,7 +933,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'ENUM', name: 'CeMatchRuleOwner', ofType: null },
+          ofType: { kind: 'ENUM', name: 'CeMatchRuleOwnerType', ofType: null },
         },
       },
       {
@@ -8159,7 +8159,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       { name: 'ownerId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'ownerType',
-        type: { kind: 'ENUM', name: 'CeMatchRuleOwner', ofType: null },
+        type: { kind: 'ENUM', name: 'CeMatchRuleOwnerType', ofType: null },
       },
     ],
   },
@@ -8174,7 +8174,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       { name: 'ownerId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'ownerType',
-        type: { kind: 'ENUM', name: 'CeMatchRuleOwner', ofType: null },
+        type: { kind: 'ENUM', name: 'CeMatchRuleOwnerType', ofType: null },
       },
       {
         name: 'priorityRank',

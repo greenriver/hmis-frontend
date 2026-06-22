@@ -789,7 +789,7 @@ export type CeMatchRule = {
    * Rule applies to projects within this related entity (eg a Data Source,
    * Project, Organization), possibly limited by project type or funder
    */
-  ownerType: CeMatchRuleOwner;
+  ownerType: CeMatchRuleOwnerType;
   priorityRank?: Maybe<Scalars['Int']['output']>;
   /** Rule applicability is limited to projects with these types */
   projectTypes: Array<ProjectType>;
@@ -835,20 +835,20 @@ export enum CeMatchRuleComparator {
 
 export type CeMatchRuleFilterOptions = {
   ownerId?: InputMaybe<Scalars['ID']['input']>;
-  ownerType?: InputMaybe<CeMatchRuleOwner>;
+  ownerType?: InputMaybe<CeMatchRuleOwnerType>;
 };
 
 export type CeMatchRuleInput = {
   expression?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['ID']['input']>;
-  ownerType?: InputMaybe<CeMatchRuleOwner>;
+  ownerType?: InputMaybe<CeMatchRuleOwnerType>;
   priorityRank?: InputMaybe<Scalars['Int']['input']>;
   ruleType?: InputMaybe<CeMatchRuleType>;
   structuredExpression?: InputMaybe<CeMatchRuleStructuredExpressionInput>;
 };
 
-export enum CeMatchRuleOwner {
+export enum CeMatchRuleOwnerType {
   /** Global */
   DataSource = 'DATA_SOURCE',
   /** Organization */
@@ -18025,7 +18025,7 @@ export type CeReferralDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: CeMatchRuleOwner;
+    ownerType: CeMatchRuleOwnerType;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -18165,7 +18165,7 @@ export type CeReferralFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: CeMatchRuleOwner;
+    ownerType: CeMatchRuleOwnerType;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -20624,7 +20624,7 @@ export type SubmitCeReferralStepMutation = {
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
-        ownerType: CeMatchRuleOwner;
+        ownerType: CeMatchRuleOwnerType;
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
@@ -21337,7 +21337,7 @@ export type GetCeReferralQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: CeMatchRuleOwner;
+      ownerType: CeMatchRuleOwnerType;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -22388,7 +22388,7 @@ export type CeMatchRuleFieldsFragment = {
   __typename?: 'CeMatchRule';
   id: string;
   name: string;
-  ownerType: CeMatchRuleOwner;
+  ownerType: CeMatchRuleOwnerType;
   expression: string;
   projectTypes: Array<ProjectType>;
   funders?: Array<FundingSource> | null;
@@ -22402,7 +22402,7 @@ export type CeMatchRuleAdminSummaryFieldsFragment = {
   priorityRank?: number | null;
   id: string;
   name: string;
-  ownerType: CeMatchRuleOwner;
+  ownerType: CeMatchRuleOwnerType;
   expression: string;
   projectTypes: Array<ProjectType>;
   funders?: Array<FundingSource> | null;
@@ -22416,7 +22416,7 @@ export type CeMatchRuleDetailsFragment = {
   priorityRank?: number | null;
   id: string;
   name: string;
-  ownerType: CeMatchRuleOwner;
+  ownerType: CeMatchRuleOwnerType;
   expression: string;
   projectTypes: Array<ProjectType>;
   funders?: Array<FundingSource> | null;
@@ -22449,7 +22449,7 @@ export type CreateCeMatchRuleMutation = {
       priorityRank?: number | null;
       id: string;
       name: string;
-      ownerType: CeMatchRuleOwner;
+      ownerType: CeMatchRuleOwnerType;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -22572,7 +22572,7 @@ export type GetCeMatchGlobalRulesQuery = {
       priorityRank?: number | null;
       id: string;
       name: string;
-      ownerType: CeMatchRuleOwner;
+      ownerType: CeMatchRuleOwnerType;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -49506,7 +49506,7 @@ export type UnitDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: CeMatchRuleOwner;
+    ownerType: CeMatchRuleOwnerType;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -49515,7 +49515,7 @@ export type UnitDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: CeMatchRuleOwner;
+    ownerType: CeMatchRuleOwnerType;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -49658,7 +49658,7 @@ export type UnitGroupDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: CeMatchRuleOwner;
+    ownerType: CeMatchRuleOwnerType;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -49667,7 +49667,7 @@ export type UnitGroupDetailFieldsFragment = {
     __typename?: 'CeMatchRule';
     id: string;
     name: string;
-    ownerType: CeMatchRuleOwner;
+    ownerType: CeMatchRuleOwnerType;
     expression: string;
     projectTypes: Array<ProjectType>;
     funders?: Array<FundingSource> | null;
@@ -49856,7 +49856,7 @@ export type GetUnitGroupQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: CeMatchRuleOwner;
+      ownerType: CeMatchRuleOwnerType;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -49865,7 +49865,7 @@ export type GetUnitGroupQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: CeMatchRuleOwner;
+      ownerType: CeMatchRuleOwnerType;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -49926,7 +49926,7 @@ export type GetUnitQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: CeMatchRuleOwner;
+      ownerType: CeMatchRuleOwnerType;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -49935,7 +49935,7 @@ export type GetUnitQuery = {
       __typename?: 'CeMatchRule';
       id: string;
       name: string;
-      ownerType: CeMatchRuleOwner;
+      ownerType: CeMatchRuleOwnerType;
       expression: string;
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
@@ -50331,7 +50331,7 @@ export type UpdateUnitGroupMutation = {
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
-        ownerType: CeMatchRuleOwner;
+        ownerType: CeMatchRuleOwnerType;
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
@@ -50340,7 +50340,7 @@ export type UpdateUnitGroupMutation = {
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
-        ownerType: CeMatchRuleOwner;
+        ownerType: CeMatchRuleOwnerType;
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
@@ -50398,7 +50398,7 @@ export type DeleteUnitGroupMutation = {
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
-        ownerType: CeMatchRuleOwner;
+        ownerType: CeMatchRuleOwnerType;
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
@@ -50407,7 +50407,7 @@ export type DeleteUnitGroupMutation = {
         __typename?: 'CeMatchRule';
         id: string;
         name: string;
-        ownerType: CeMatchRuleOwner;
+        ownerType: CeMatchRuleOwnerType;
         expression: string;
         projectTypes: Array<ProjectType>;
         funders?: Array<FundingSource> | null;
@@ -52164,11 +52164,7 @@ export const CeMatchRuleAdminSummaryFieldsFragmentDoc = gql`
 `;
 export const CeMatchRuleDetailsFragmentDoc = gql`
   fragment CeMatchRuleDetails on CeMatchRule {
-    ...CeMatchRuleFields
-    ownerId
-    ownerName
-    ruleType
-    priorityRank
+    ...CeMatchRuleAdminSummaryFields
     structuredExpression {
       operator
       clauses {
@@ -52178,7 +52174,7 @@ export const CeMatchRuleDetailsFragmentDoc = gql`
       }
     }
   }
-  ${CeMatchRuleFieldsFragmentDoc}
+  ${CeMatchRuleAdminSummaryFieldsFragmentDoc}
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {

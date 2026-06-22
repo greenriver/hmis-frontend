@@ -35,7 +35,7 @@ const CeMatchRuleEditorPage = () => {
     <>
       <PageTitle
         overlineText='Coordinated Entry Rules'
-        title={`Add ${HmisEnums.CeMatchRuleOwner[ownerType]} Rule`}
+        title={`Add ${HmisEnums.CeMatchRuleOwnerType[ownerType]} Rule`}
       />
       <CeMatchRuleForm
         ownerType={ownerType}

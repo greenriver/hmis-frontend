@@ -5586,7 +5586,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "CeMatchRuleOwner",
+                "name": "CeMatchRuleOwnerType",
                 "ofType": null
               }
             },
@@ -5883,7 +5883,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "CeMatchRuleOwner",
+              "name": "CeMatchRuleOwnerType",
               "ofType": null
             },
             "defaultValue": null,
@@ -5943,7 +5943,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "CeMatchRuleOwner",
+              "name": "CeMatchRuleOwnerType",
               "ofType": null
             },
             "defaultValue": null,
@@ -5993,7 +5993,7 @@
       },
       {
         "kind": "ENUM",
-        "name": "CeMatchRuleOwner",
+        "name": "CeMatchRuleOwnerType",
         "description": null,
         "isOneOf": null,
         "fields": null,

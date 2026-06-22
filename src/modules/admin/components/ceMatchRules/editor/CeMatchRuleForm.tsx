@@ -20,13 +20,13 @@ import {
   CeMatchRuleBooleanOperator,
   CeMatchRuleDetailsFragment,
   CeMatchRuleInput,
-  CeMatchRuleOwner,
+  CeMatchRuleOwnerType,
   CeMatchRuleType,
   useCreateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
-  ownerType: CeMatchRuleOwner;
+  ownerType: CeMatchRuleOwnerType;
   onSaved: (rule: CeMatchRuleDetailsFragment) => void;
   onCancel: VoidFunction;
 }
@@ -41,7 +41,7 @@ const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
 
 const buildCeMatchRuleInput = (
   { name, structuredExpression }: CeMatchRuleFormValues,
-  ownerType?: CeMatchRuleOwner
+  ownerType?: CeMatchRuleOwnerType
 ): CeMatchRuleInput => {
   const base = {
     name: name.trim(),
@@ -106,7 +106,7 @@ const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
   };
 
   const ownerContext = useMemo(() => {
-    if (ownerType === CeMatchRuleOwner.DataSource) {
+    if (ownerType === CeMatchRuleOwnerType.DataSource) {
       return 'This global eligibility rule will apply to all units.';
     }
   }, [ownerType]);

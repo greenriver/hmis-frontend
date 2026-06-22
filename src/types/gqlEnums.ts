@@ -89,7 +89,7 @@ export const HmisEnums = {
     LTE: 'LTE',
     NOT_EQ: 'NOT_EQ',
   },
-  CeMatchRuleOwner: {
+  CeMatchRuleOwnerType: {
     DATA_SOURCE: 'Global',
     ORGANIZATION: 'Organization',
     PROJECT: 'Project',

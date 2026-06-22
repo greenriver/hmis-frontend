@@ -33,12 +33,12 @@ const MatchRuleCard: React.FC<Props> = ({ title, rules }) => {
             )}
 
             <Tooltip
-              title={`Inherited from ${HmisEnums.CeMatchRuleOwner[rule.ownerType]}`}
+              title={`Inherited from ${HmisEnums.CeMatchRuleOwnerType[rule.ownerType]}`}
               arrow
               placement='top'
             >
               <Typography variant='body2' color='text.secondary' ml={1}>
-                {HmisEnums.CeMatchRuleOwner[rule.ownerType]}
+                {HmisEnums.CeMatchRuleOwnerType[rule.ownerType]}
               </Typography>
             </Tooltip>
           </Stack>

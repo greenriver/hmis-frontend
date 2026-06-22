@@ -3,16 +3,16 @@ import {
   CeMatchRuleBooleanOperator,
   CeMatchRuleClauseInput,
   CeMatchRuleComparator,
-  CeMatchRuleOwner,
+  CeMatchRuleOwnerType,
 } from '@/types/gqlTypes';
 
 export type CeMatchFieldSource = 'client' | 'custom';
 
 export const ceMatchRuleOwnerTypeByRouteParam = {
-  global: CeMatchRuleOwner.DataSource,
-  organization: CeMatchRuleOwner.Organization,
-  project: CeMatchRuleOwner.Project,
-  'unit-group': CeMatchRuleOwner.UnitGroup,
+  global: CeMatchRuleOwnerType.DataSource,
+  organization: CeMatchRuleOwnerType.Organization,
+  project: CeMatchRuleOwnerType.Project,
+  'unit-group': CeMatchRuleOwnerType.UnitGroup,
 };
 
 export type CeMatchRuleOwnerLevel =
@@ -20,7 +20,8 @@ export type CeMatchRuleOwnerLevel =
 
 export const getCeMatchRuleOwnerLevelLabel = (
   ownerLevel: CeMatchRuleOwnerLevel
-) => HmisEnums.CeMatchRuleOwner[ceMatchRuleOwnerTypeByRouteParam[ownerLevel]];
+) =>
+  HmisEnums.CeMatchRuleOwnerType[ceMatchRuleOwnerTypeByRouteParam[ownerLevel]];
 
 export const getPluralCeMatchRuleOwnerLevelLabel = (
   ownerLevel: CeMatchRuleOwnerLevel
