@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import { useCallback, useMemo, useState } from 'react';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import LoadingButton from '@/components/elements/LoadingButton';
@@ -196,11 +197,16 @@ const AhaScore = ({
     }
   }, [fetchAha, hasRequiredContext]);
 
-  // Throw an error if the children don't match the expected structure
-  if (!isComponentValid) throw new Error('Invalid Aha form component');
-
   if (viewOnly) {
     return item.item?.map((i) => renderChildItem(i));
+  }
+
+  // Send message if form group doesn't match expected shape. Skip sending in read-only mode to avoid noise, because those forms may be retired.
+  if (!isComponentValid) {
+    Sentry.captureMessage(
+      'Invalid AHA form component. Expected link IDs: ' +
+        EXPECTED_LINK_IDS.join(', ')
+    );
   }
 
   if (!clientId) {
