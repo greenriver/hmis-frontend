@@ -753,6 +753,29 @@ export type CeEligibleUnitGroupsPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
+/** Field metadata for CE Match Rule expressions */
+export type CeMatchField = {
+  __typename?: 'CeMatchField';
+  /**
+   * The full-length identifier used in CE Match Rule expressions, such as
+   * "current_age" or "cde.custom_assessment.my_field_key".
+   */
+  expressionField: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** The type of the field, used for determining the possible values it can match against. */
+  itemType: ItemType;
+  /** The CDED key for this field, or the client field key for a client field */
+  key: Scalars['String']['output'];
+  /** Human-readable label for this field */
+  label: Scalars['String']['output'];
+  /** Whether a client can have more than one value for the field. */
+  multiple: Scalars['Boolean']['output'];
+  /** The field's pick list options, if applicable. */
+  pickListOptions?: Maybe<Array<PickListOption>>;
+  /** The field's reference pick list, if applicable, such as `NoYesReasonsForMissingData`. */
+  pickListReference?: Maybe<Scalars['String']['output']>;
+};
+
 export type CeMatchRule = {
   __typename?: 'CeMatchRule';
   expression: Scalars['String']['output'];
@@ -6823,6 +6846,12 @@ export type Query = {
   ceClient?: Maybe<CeClient>;
   /** Clients who belong to at least one CE candidate pool */
   ceClients: CeClientsPaginated;
+  /** Client fields available for CE Match Rule expressions. */
+  ceMatchClientFields: Array<CeMatchField>;
+  /** Fields on the form that are usable as CE Match Rule condition fields. */
+  ceMatchCustomAssessmentFields: Array<CeMatchField>;
+  /** Custom assessment form definitions for use in CE match rule management. */
+  ceMatchCustomAssessmentForms: Array<FormDefinition>;
   ceOpportunities: CeOpportunitiesPaginated;
   ceOpportunity?: Maybe<CeOpportunity>;
   ceReferral?: Maybe<CeReferral>;
@@ -6923,6 +6952,10 @@ export type QueryCeClientsArgs = {
   filters?: InputMaybe<CeClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QueryCeMatchCustomAssessmentFieldsArgs = {
+  formDefinitionIdentifier: Scalars['String']['input'];
 };
 
 export type QueryCeOpportunitiesArgs = {
@@ -17676,16 +17709,6 @@ export type ClientCeOpportunitySummaryFieldsFragment = {
   } | null;
 };
 
-export type CeMatchRuleFieldsFragment = {
-  __typename?: 'CeMatchRule';
-  id: string;
-  name: string;
-  ownerType: CeMatchRuleOwner;
-  expression: string;
-  projectTypes: Array<ProjectType>;
-  funders?: Array<FundingSource> | null;
-};
-
 export type CeCandidateFieldsFragment = {
   __typename?: 'CeCandidate';
   id: string;
@@ -22291,6 +22314,185 @@ export type GetCeClientEligibleUnitGroupsQuery = {
       }>;
     };
   } | null;
+};
+
+export type CeMatchFieldDetailsFragment = {
+  __typename?: 'CeMatchField';
+  id: string;
+  key: string;
+  label: string;
+  itemType: ItemType;
+  multiple: boolean;
+  expressionField: string;
+  pickListReference?: string | null;
+  pickListOptions?: Array<{
+    __typename?: 'PickListOption';
+    code: string;
+    label?: string | null;
+    secondaryLabel?: string | null;
+    groupLabel?: string | null;
+    groupCode?: string | null;
+    initialSelected?: boolean | null;
+    helperText?: string | null;
+    numericValue?: number | null;
+    disabled?: boolean | null;
+  }> | null;
+};
+
+export type CeMatchCustomAssessmentFormFieldsFragment = {
+  __typename?: 'FormDefinition';
+  cacheKey: string;
+  identifier: string;
+  title: string;
+};
+
+export type CeMatchRuleFieldsFragment = {
+  __typename?: 'CeMatchRule';
+  id: string;
+  name: string;
+  ownerType: CeMatchRuleOwner;
+  expression: string;
+  projectTypes: Array<ProjectType>;
+  funders?: Array<FundingSource> | null;
+};
+
+export type CeMatchRuleDetailsFragment = {
+  __typename?: 'CeMatchRule';
+  id: string;
+  name: string;
+  ownerType: CeMatchRuleOwner;
+  expression: string;
+  projectTypes: Array<ProjectType>;
+  funders?: Array<FundingSource> | null;
+  structuredExpression?: {
+    __typename?: 'CeMatchRuleStructuredExpression';
+    operator: CeMatchRuleBooleanOperator;
+    clauses: Array<{
+      __typename?: 'CeMatchRuleClause';
+      field: string;
+      comparator: CeMatchRuleComparator;
+      value?: any | null;
+    }>;
+  } | null;
+};
+
+export type CreateCeMatchRuleMutationVariables = Exact<{
+  input: CeMatchRuleInput;
+  confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type CreateCeMatchRuleMutation = {
+  __typename?: 'Mutation';
+  createCeMatchRule?: {
+    __typename?: 'CreateCeMatchRulePayload';
+    rule?: {
+      __typename?: 'CeMatchRule';
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwner;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+      structuredExpression?: {
+        __typename?: 'CeMatchRuleStructuredExpression';
+        operator: CeMatchRuleBooleanOperator;
+        clauses: Array<{
+          __typename?: 'CeMatchRuleClause';
+          field: string;
+          comparator: CeMatchRuleComparator;
+          value?: any | null;
+        }>;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetCeMatchClientFieldsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetCeMatchClientFieldsQuery = {
+  __typename?: 'Query';
+  ceMatchClientFields: Array<{
+    __typename?: 'CeMatchField';
+    id: string;
+    key: string;
+    label: string;
+    itemType: ItemType;
+    multiple: boolean;
+    expressionField: string;
+    pickListReference?: string | null;
+    pickListOptions?: Array<{
+      __typename?: 'PickListOption';
+      code: string;
+      label?: string | null;
+      secondaryLabel?: string | null;
+      groupLabel?: string | null;
+      groupCode?: string | null;
+      initialSelected?: boolean | null;
+      helperText?: string | null;
+      numericValue?: number | null;
+      disabled?: boolean | null;
+    }> | null;
+  }>;
+};
+
+export type GetCeMatchCustomAssessmentFormsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetCeMatchCustomAssessmentFormsQuery = {
+  __typename?: 'Query';
+  ceMatchCustomAssessmentForms: Array<{
+    __typename?: 'FormDefinition';
+    cacheKey: string;
+    identifier: string;
+    title: string;
+  }>;
+};
+
+export type GetCeMatchCustomAssessmentFieldsQueryVariables = Exact<{
+  formDefinitionIdentifier: Scalars['String']['input'];
+}>;
+
+export type GetCeMatchCustomAssessmentFieldsQuery = {
+  __typename?: 'Query';
+  ceMatchCustomAssessmentFields: Array<{
+    __typename?: 'CeMatchField';
+    id: string;
+    key: string;
+    label: string;
+    itemType: ItemType;
+    multiple: boolean;
+    expressionField: string;
+    pickListReference?: string | null;
+    pickListOptions?: Array<{
+      __typename?: 'PickListOption';
+      code: string;
+      label?: string | null;
+      secondaryLabel?: string | null;
+      groupLabel?: string | null;
+      groupCode?: string | null;
+      initialSelected?: boolean | null;
+      helperText?: string | null;
+      numericValue?: number | null;
+      disabled?: boolean | null;
+    }> | null;
+  }>;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -51843,6 +52045,42 @@ export const CeEligibleUnitGroupFieldsFragmentDoc = gql`
     unitsAcceptingReferrals
   }
 `;
+export const CeMatchFieldDetailsFragmentDoc = gql`
+  fragment CeMatchFieldDetails on CeMatchField {
+    id
+    key
+    label
+    itemType
+    multiple
+    expressionField
+    pickListReference
+    pickListOptions {
+      ...PickListOptionFields
+    }
+  }
+  ${PickListOptionFieldsFragmentDoc}
+`;
+export const CeMatchCustomAssessmentFormFieldsFragmentDoc = gql`
+  fragment CeMatchCustomAssessmentFormFields on FormDefinition {
+    cacheKey
+    identifier
+    title
+  }
+`;
+export const CeMatchRuleDetailsFragmentDoc = gql`
+  fragment CeMatchRuleDetails on CeMatchRule {
+    ...CeMatchRuleFields
+    structuredExpression {
+      operator
+      clauses {
+        field
+        comparator
+        value
+      }
+    }
+  }
+  ${CeMatchRuleFieldsFragmentDoc}
+`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
@@ -57660,6 +57898,370 @@ export type GetCeClientEligibleUnitGroupsSuspenseQueryHookResult = ReturnType<
 export type GetCeClientEligibleUnitGroupsQueryResult = Apollo.QueryResult<
   GetCeClientEligibleUnitGroupsQuery,
   GetCeClientEligibleUnitGroupsQueryVariables
+>;
+export const CreateCeMatchRuleDocument = gql`
+  mutation CreateCeMatchRule($input: CeMatchRuleInput!, $confirmed: Boolean) {
+    createCeMatchRule(input: $input, confirmed: $confirmed) {
+      rule {
+        ...CeMatchRuleDetails
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${CeMatchRuleDetailsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateCeMatchRuleMutationFn = Apollo.MutationFunction<
+  CreateCeMatchRuleMutation,
+  CreateCeMatchRuleMutationVariables
+>;
+
+/**
+ * __useCreateCeMatchRuleMutation__
+ *
+ * To run a mutation, you first call `useCreateCeMatchRuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCeMatchRuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCeMatchRuleMutation, { data, loading, error }] = useCreateCeMatchRuleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      confirmed: // value for 'confirmed'
+ *   },
+ * });
+ */
+export function useCreateCeMatchRuleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCeMatchRuleMutation,
+    CreateCeMatchRuleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateCeMatchRuleMutation,
+    CreateCeMatchRuleMutationVariables
+  >(CreateCeMatchRuleDocument, options);
+}
+export type CreateCeMatchRuleMutationHookResult = ReturnType<
+  typeof useCreateCeMatchRuleMutation
+>;
+export type CreateCeMatchRuleMutationResult =
+  Apollo.MutationResult<CreateCeMatchRuleMutation>;
+export type CreateCeMatchRuleMutationOptions = Apollo.BaseMutationOptions<
+  CreateCeMatchRuleMutation,
+  CreateCeMatchRuleMutationVariables
+>;
+export const GetCeMatchClientFieldsDocument = gql`
+  query GetCeMatchClientFields {
+    ceMatchClientFields {
+      ...CeMatchFieldDetails
+    }
+  }
+  ${CeMatchFieldDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchClientFieldsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchClientFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchClientFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchClientFieldsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCeMatchClientFieldsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeMatchClientFieldsQuery,
+    GetCeMatchClientFieldsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchClientFieldsQuery,
+    GetCeMatchClientFieldsQueryVariables
+  >(GetCeMatchClientFieldsDocument, options);
+}
+export function useGetCeMatchClientFieldsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchClientFieldsQuery,
+    GetCeMatchClientFieldsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchClientFieldsQuery,
+    GetCeMatchClientFieldsQueryVariables
+  >(GetCeMatchClientFieldsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchClientFieldsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchClientFieldsQuery,
+    GetCeMatchClientFieldsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchClientFieldsQuery,
+  GetCeMatchClientFieldsQueryVariables
+>;
+export function useGetCeMatchClientFieldsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchClientFieldsQuery,
+        GetCeMatchClientFieldsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchClientFieldsQuery | undefined,
+  GetCeMatchClientFieldsQueryVariables
+>;
+export function useGetCeMatchClientFieldsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchClientFieldsQuery,
+        GetCeMatchClientFieldsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchClientFieldsQuery,
+    GetCeMatchClientFieldsQueryVariables
+  >(GetCeMatchClientFieldsDocument, options);
+}
+export type GetCeMatchClientFieldsQueryHookResult = ReturnType<
+  typeof useGetCeMatchClientFieldsQuery
+>;
+export type GetCeMatchClientFieldsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchClientFieldsLazyQuery
+>;
+export type GetCeMatchClientFieldsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchClientFieldsSuspenseQuery
+>;
+export type GetCeMatchClientFieldsQueryResult = Apollo.QueryResult<
+  GetCeMatchClientFieldsQuery,
+  GetCeMatchClientFieldsQueryVariables
+>;
+export const GetCeMatchCustomAssessmentFormsDocument = gql`
+  query GetCeMatchCustomAssessmentForms {
+    ceMatchCustomAssessmentForms {
+      ...CeMatchCustomAssessmentFormFields
+    }
+  }
+  ${CeMatchCustomAssessmentFormFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchCustomAssessmentFormsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchCustomAssessmentFormsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchCustomAssessmentFormsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchCustomAssessmentFormsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCeMatchCustomAssessmentFormsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeMatchCustomAssessmentFormsQuery,
+    GetCeMatchCustomAssessmentFormsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchCustomAssessmentFormsQuery,
+    GetCeMatchCustomAssessmentFormsQueryVariables
+  >(GetCeMatchCustomAssessmentFormsDocument, options);
+}
+export function useGetCeMatchCustomAssessmentFormsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchCustomAssessmentFormsQuery,
+    GetCeMatchCustomAssessmentFormsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchCustomAssessmentFormsQuery,
+    GetCeMatchCustomAssessmentFormsQueryVariables
+  >(GetCeMatchCustomAssessmentFormsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchCustomAssessmentFormsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchCustomAssessmentFormsQuery,
+    GetCeMatchCustomAssessmentFormsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchCustomAssessmentFormsQuery,
+  GetCeMatchCustomAssessmentFormsQueryVariables
+>;
+export function useGetCeMatchCustomAssessmentFormsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchCustomAssessmentFormsQuery,
+        GetCeMatchCustomAssessmentFormsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchCustomAssessmentFormsQuery | undefined,
+  GetCeMatchCustomAssessmentFormsQueryVariables
+>;
+export function useGetCeMatchCustomAssessmentFormsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchCustomAssessmentFormsQuery,
+        GetCeMatchCustomAssessmentFormsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchCustomAssessmentFormsQuery,
+    GetCeMatchCustomAssessmentFormsQueryVariables
+  >(GetCeMatchCustomAssessmentFormsDocument, options);
+}
+export type GetCeMatchCustomAssessmentFormsQueryHookResult = ReturnType<
+  typeof useGetCeMatchCustomAssessmentFormsQuery
+>;
+export type GetCeMatchCustomAssessmentFormsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchCustomAssessmentFormsLazyQuery
+>;
+export type GetCeMatchCustomAssessmentFormsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchCustomAssessmentFormsSuspenseQuery
+>;
+export type GetCeMatchCustomAssessmentFormsQueryResult = Apollo.QueryResult<
+  GetCeMatchCustomAssessmentFormsQuery,
+  GetCeMatchCustomAssessmentFormsQueryVariables
+>;
+export const GetCeMatchCustomAssessmentFieldsDocument = gql`
+  query GetCeMatchCustomAssessmentFields($formDefinitionIdentifier: String!) {
+    ceMatchCustomAssessmentFields(
+      formDefinitionIdentifier: $formDefinitionIdentifier
+    ) {
+      ...CeMatchFieldDetails
+    }
+  }
+  ${CeMatchFieldDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchCustomAssessmentFieldsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchCustomAssessmentFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchCustomAssessmentFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchCustomAssessmentFieldsQuery({
+ *   variables: {
+ *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
+ *   },
+ * });
+ */
+export function useGetCeMatchCustomAssessmentFieldsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeMatchCustomAssessmentFieldsQuery,
+    GetCeMatchCustomAssessmentFieldsQueryVariables
+  > &
+    (
+      | {
+          variables: GetCeMatchCustomAssessmentFieldsQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchCustomAssessmentFieldsQuery,
+    GetCeMatchCustomAssessmentFieldsQueryVariables
+  >(GetCeMatchCustomAssessmentFieldsDocument, options);
+}
+export function useGetCeMatchCustomAssessmentFieldsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchCustomAssessmentFieldsQuery,
+    GetCeMatchCustomAssessmentFieldsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchCustomAssessmentFieldsQuery,
+    GetCeMatchCustomAssessmentFieldsQueryVariables
+  >(GetCeMatchCustomAssessmentFieldsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchCustomAssessmentFieldsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchCustomAssessmentFieldsQuery,
+    GetCeMatchCustomAssessmentFieldsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchCustomAssessmentFieldsQuery,
+  GetCeMatchCustomAssessmentFieldsQueryVariables
+>;
+export function useGetCeMatchCustomAssessmentFieldsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchCustomAssessmentFieldsQuery,
+        GetCeMatchCustomAssessmentFieldsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchCustomAssessmentFieldsQuery | undefined,
+  GetCeMatchCustomAssessmentFieldsQueryVariables
+>;
+export function useGetCeMatchCustomAssessmentFieldsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchCustomAssessmentFieldsQuery,
+        GetCeMatchCustomAssessmentFieldsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchCustomAssessmentFieldsQuery,
+    GetCeMatchCustomAssessmentFieldsQueryVariables
+  >(GetCeMatchCustomAssessmentFieldsDocument, options);
+}
+export type GetCeMatchCustomAssessmentFieldsQueryHookResult = ReturnType<
+  typeof useGetCeMatchCustomAssessmentFieldsQuery
+>;
+export type GetCeMatchCustomAssessmentFieldsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchCustomAssessmentFieldsLazyQuery
+>;
+export type GetCeMatchCustomAssessmentFieldsSuspenseQueryHookResult =
+  ReturnType<typeof useGetCeMatchCustomAssessmentFieldsSuspenseQuery>;
+export type GetCeMatchCustomAssessmentFieldsQueryResult = Apollo.QueryResult<
+  GetCeMatchCustomAssessmentFieldsQuery,
+  GetCeMatchCustomAssessmentFieldsQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
