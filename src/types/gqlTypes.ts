@@ -9396,6 +9396,7 @@ export type FetchAhaScoreMutation = {
   fetchAhaScore?: {
     __typename?: 'FetchAhaScorePayload';
     score?: number | null;
+    mhScore?: number | null;
     mciQualityIndicator?: number | null;
     dwClientId?: string | null;
     generator?: string | null;
@@ -53944,6 +53945,7 @@ export const FetchAhaScoreDocument = gql`
       lookupReason: $lookupReason
     ) {
       score
+      mhScore
       mciQualityIndicator
       dwClientId
       generator

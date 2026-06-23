@@ -9,6 +9,7 @@ mutation FetchAhaScore(
     lookupReason: $lookupReason
   ) {
     score
+    mhScore
     mciQualityIndicator
     dwClientId
     generator
