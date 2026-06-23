@@ -7,6 +7,7 @@ import {
 } from '@/types/gqlTypes';
 
 export type CeMatchFieldSource = 'client' | 'custom';
+export type CeMatchExpressionMode = 'structured' | 'freeText';
 
 export const ceMatchRuleOwnerTypeByRouteParam = {
   global: CeMatchRuleOwnerType.DataSource,
@@ -32,10 +33,12 @@ export interface CeMatchDraftClause extends CeMatchRuleClauseInput {
 
 export interface CeMatchRuleFormValues {
   name: string;
+  mode: CeMatchExpressionMode;
   structuredExpression: {
     operator: CeMatchRuleBooleanOperator;
     clauses: CeMatchDraftClause[];
   };
+  freeTextExpression: string;
 }
 
 export const newDraftClause = (): CeMatchDraftClause => ({

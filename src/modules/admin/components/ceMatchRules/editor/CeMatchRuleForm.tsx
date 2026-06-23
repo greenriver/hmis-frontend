@@ -2,8 +2,11 @@ import { Button, Stack, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import CeMatchExpressionModeSwitch from './CeMatchExpressionModeSwitch';
 import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
 import CeMatchStructuredExpressionBuilder from './CeMatchStructuredExpressionBuilder';
+import FreeTextExpressionEditor from './FreeTextExpressionEditor';
+import CeMatchRuleConfirmationDialog from './impactWarnings/CeMatchRuleConfirmationDialog';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -12,6 +15,7 @@ import {
   emptyErrorState,
   ErrorState,
   hasErrors,
+  hasOnlyWarnings,
   partitionValidations,
 } from '@/modules/errors/util';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
@@ -33,14 +37,21 @@ interface Props {
 
 const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   name: '',
+  mode: 'structured',
   structuredExpression: {
     operator: CeMatchRuleBooleanOperator.And,
     clauses: [newDraftClause()],
   },
+  freeTextExpression: '',
 });
 
 const buildCeMatchRuleInput = (
-  { name, structuredExpression }: CeMatchRuleFormValues,
+  {
+    name,
+    mode,
+    structuredExpression,
+    freeTextExpression,
+  }: CeMatchRuleFormValues,
   ownerType?: CeMatchRuleOwnerType
 ): CeMatchRuleInput => {
   const base = {
@@ -48,6 +59,13 @@ const buildCeMatchRuleInput = (
     ownerType,
     ruleType: CeMatchRuleType.EligibilityRequirement,
   };
+
+  if (mode === 'freeText') {
+    return {
+      ...base,
+      expression: freeTextExpression.trim(),
+    };
+  }
 
   return {
     ...base,
@@ -71,12 +89,13 @@ const buildCeMatchRuleInput = (
  * and the mutation call to submit to the backend.
  */
 const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
-  const { control, handleSubmit, reset, setValue } =
+  const { control, handleSubmit, reset, setValue, watch } =
     useForm<CeMatchRuleFormValues>({
       defaultValues: defaultCeMatchRuleFormValues(),
     });
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
+  const mode = watch('mode');
 
   const [createCeMatchRule, { loading }] = useCreateCeMatchRuleMutation({
     onCompleted: (data) => {
@@ -95,7 +114,7 @@ const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
 
   const handleValidSubmit = (
     values: CeMatchRuleFormValues,
-    confirmed = true
+    confirmed = false
   ) => {
     createCeMatchRule({
       variables: {
@@ -104,6 +123,8 @@ const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
       },
     });
   };
+
+  const showWarningDialog = hasOnlyWarnings(errorState);
 
   const ownerContext = useMemo(() => {
     if (ownerType === CeMatchRuleOwnerType.DataSource) {
@@ -131,19 +152,34 @@ const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
           />
         </Stack>
       </TitleCard>
-      <TitleCard title='Eligibility Requirements' headerComponent='h2' padded>
-        <Stack gap={2}>
-          <CeMatchStructuredExpressionBuilder
+      <TitleCard
+        title='Eligibility Requirements'
+        headerComponent='h2'
+        padded
+        actions={
+          <CeMatchExpressionModeSwitch
+            mode={mode}
             control={control}
             setValue={setValue}
           />
+        }
+      >
+        <Stack gap={2}>
+          {mode === 'structured' ? (
+            <CeMatchStructuredExpressionBuilder
+              control={control}
+              setValue={setValue}
+            />
+          ) : (
+            <FreeTextExpressionEditor control={control} />
+          )}
         </Stack>
       </TitleCard>
       <Stack direction='row' gap={2}>
         <LoadingButton
           loading={loading}
           variant='contained'
-          onClick={handleSubmit((values) => handleValidSubmit(values))}
+          onClick={handleSubmit((values) => handleValidSubmit(values, false))}
         >
           Save Rule
         </LoadingButton>
@@ -151,6 +187,16 @@ const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
           Cancel
         </Button>
       </Stack>
+      {showWarningDialog && (
+        <CeMatchRuleConfirmationDialog
+          errorState={errorState}
+          loading={loading}
+          onCancel={() => setErrorState(emptyErrorState)}
+          onConfirm={() =>
+            handleSubmit((values) => handleValidSubmit(values, true))()
+          }
+        />
+      )}
     </Stack>
   );
 };

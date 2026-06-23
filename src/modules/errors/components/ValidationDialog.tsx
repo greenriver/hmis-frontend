@@ -1,6 +1,7 @@
 import { Chip, Stack, Typography } from '@mui/material';
 import { groupBy } from 'lodash-es';
 import pluralize from 'pluralize';
+import { ReactNode } from 'react';
 
 import {
   ErrorRenderFn,
@@ -23,6 +24,7 @@ type WarningProps = {
   errorState: ErrorState;
   sectionLabels?: SectionLabels;
   warningsLoading?: boolean; // if true, render loading spinner while errorState is nil
+  children?: ReactNode;
 };
 export type ValidationDialogProps = Omit<ConfirmationDialogProps, 'children'> &
   WarningProps;
@@ -88,6 +90,7 @@ const ValidationDialog = ({
   sectionLabels,
   renderError,
   warningsLoading,
+  children,
   ...props
 }: ValidationDialogProps) => {
   if (!hasAnyValue(errorState) && !warningsLoading) return null;
@@ -126,6 +129,7 @@ const ValidationDialog = ({
             Please confirm the following warnings.
           </Typography>
           {warningContent}
+          {children}
         </>
       )}
       {warningsLoading && <Loading />}
