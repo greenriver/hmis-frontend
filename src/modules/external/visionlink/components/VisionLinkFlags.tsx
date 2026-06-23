@@ -1,4 +1,5 @@
 import { Stack } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import { useCallback, useMemo } from 'react';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import LoadingButton from '@/components/elements/LoadingButton';
@@ -105,14 +106,16 @@ const VisionLinkFlags = ({
     { clientId, onFlagsFetched }
   );
 
-  if (!isComponentValid)
-    throw new Error(
+  if (viewOnly) {
+    return item.item?.map((i) => renderChildItem(i));
+  }
+
+  // Send message if form group doesn't match expected shape. Skip sending in read-only mode to avoid noise, because those forms may be retired.
+  if (!isComponentValid) {
+    Sentry.captureMessage(
       'Invalid VisionLink form component. Expected link IDs: ' +
         VisionLinkLinkIds.join(', ')
     );
-
-  if (viewOnly) {
-    return item.item?.map((i) => renderChildItem(i));
   }
 
   if (!clientId) {
