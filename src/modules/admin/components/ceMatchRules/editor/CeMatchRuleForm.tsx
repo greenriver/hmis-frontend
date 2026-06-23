@@ -20,6 +20,7 @@ import {
 } from '@/modules/errors/util';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchRuleBooleanOperator,
   CeMatchRuleDetailsFragment,
@@ -31,6 +32,8 @@ import {
 
 interface Props {
   ownerType: CeMatchRuleOwnerType;
+  ownerId?: string;
+  ownerName?: string;
   onSaved: (rule: CeMatchRuleDetailsFragment) => void;
   onCancel: VoidFunction;
 }
@@ -52,10 +55,12 @@ const buildCeMatchRuleInput = (
     structuredExpression,
     freeTextExpression,
   }: CeMatchRuleFormValues,
-  ownerType?: CeMatchRuleOwnerType
+  ownerType?: CeMatchRuleOwnerType,
+  ownerId?: string
 ): CeMatchRuleInput => {
   const base = {
     name: name.trim(),
+    ownerId,
     ownerType,
     ruleType: CeMatchRuleType.EligibilityRequirement,
   };
@@ -88,7 +93,13 @@ const buildCeMatchRuleInput = (
  * Owns the RHF state to collect rule details and structured clauses,
  * and the mutation call to submit to the backend.
  */
-const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
+const CeMatchRuleForm: React.FC<Props> = ({
+  ownerType,
+  ownerId,
+  ownerName,
+  onSaved,
+  onCancel,
+}) => {
   const { control, handleSubmit, reset, setValue, watch } =
     useForm<CeMatchRuleFormValues>({
       defaultValues: defaultCeMatchRuleFormValues(),
@@ -118,7 +129,7 @@ const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
   ) => {
     createCeMatchRule({
       variables: {
-        input: buildCeMatchRuleInput(values, ownerType),
+        input: buildCeMatchRuleInput(values, ownerType, ownerId),
         confirmed,
       },
     });
@@ -127,10 +138,12 @@ const CeMatchRuleForm: React.FC<Props> = ({ ownerType, onSaved, onCancel }) => {
   const showWarningDialog = hasOnlyWarnings(errorState);
 
   const ownerContext = useMemo(() => {
-    if (ownerType === CeMatchRuleOwnerType.DataSource) {
-      return 'This global eligibility rule will apply to all units.';
+    let substring = '';
+    if (ownerType !== CeMatchRuleOwnerType.DataSource) {
+      substring = ` in the ${ownerName} ${HmisEnums.CeMatchRuleOwnerType[ownerType]}`;
     }
-  }, [ownerType]);
+    return `This eligibility rule will apply to all units${substring}.`;
+  }, [ownerName, ownerType]);
 
   return (
     <Stack gap={2}>

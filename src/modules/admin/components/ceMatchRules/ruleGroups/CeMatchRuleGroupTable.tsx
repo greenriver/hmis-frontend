@@ -8,9 +8,9 @@ import {
   Typography,
 } from '@mui/material';
 import {
-  CeMatchRuleOwnerLevel,
-  getCeMatchRuleOwnerLevelLabel,
-} from '../editor/ceMatchRuleFormUtil';
+  ceMatchRuleOwnerLevelConfigs,
+  type CeMatchRuleOwnerLevel,
+} from '../ceMatchRuleOwnerLevelConfig';
 import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import GenericTable from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
@@ -61,8 +61,8 @@ const CeMatchRuleGroupTable: React.FC<CeMatchRuleGroupTableProps> = ({
         noHead
         noData={
           <Typography variant='body2' textAlign='center'>
-            No {getCeMatchRuleOwnerLevelLabel(ownerLevel).toLowerCase()} rules
-            have been created.
+            No {ceMatchRuleOwnerLevelConfigs[ownerLevel].label.toLowerCase()}{' '}
+            rules have been created.
           </Typography>
         }
         rowName={(rule) => rule.name}

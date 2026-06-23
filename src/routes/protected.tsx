@@ -31,7 +31,8 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
-import CeMatchRuleEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleEditorPage';
+import CeMatchRuleGlobalEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleGlobalEditorPage';
+import CeMatchRuleOrganizationEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleOrganizationEditorPage';
 import CeMatchRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRulesPage';
 import { CeMatchOrganizationRuleDetailPage } from '@/modules/admin/components/ceMatchRules/ruleNavigation/CeMatchOrganizationRules';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
@@ -1175,7 +1176,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateConfig'
                 otherwise={<NotFound />}
               >
-                <CeMatchRuleEditorPage ownerLevel='global' />
+                <CeMatchRuleGlobalEditorPage />
               </RootPermissionsFilter>
             ),
           },
@@ -1187,7 +1188,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateConfig'
                 otherwise={<NotFound />}
               >
-                <CeMatchRuleEditorPage ownerLevel='organization' />
+                <CeMatchRuleOrganizationEditorPage />
               </RootPermissionsFilter>
             ),
           },

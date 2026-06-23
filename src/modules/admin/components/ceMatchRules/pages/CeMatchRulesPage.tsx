@@ -1,4 +1,4 @@
-import { CeMatchRuleOwnerLevel } from '../editor/ceMatchRuleFormUtil';
+import { type CeMatchRuleOwnerLevel } from '../ceMatchRuleOwnerLevelConfig';
 import CeMatchRulesTabs from '../ruleNavigation/CeMatchRulesTabs';
 import PageTitle from '@/components/layout/PageTitle';
 
