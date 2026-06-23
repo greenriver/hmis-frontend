@@ -31,6 +31,7 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
+import CeMatchRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRulesPage';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
@@ -1113,6 +1114,18 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canManageProjectConfigs'>
                 <ProjectConfigPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.ELIGIBILITY_RULES,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRulesPage />
               </RootPermissionsFilter>
             ),
           },

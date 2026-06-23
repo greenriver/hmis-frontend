@@ -1,0 +1,24 @@
+# Client-level fields (current_age, veteran_status, days_since_last_exit) available
+# for CE Match Rule expressions.
+query GetCeMatchClientFields {
+  ceMatchClientFields {
+    ...CeMatchFieldDetails
+  }
+}
+
+# Published/retired custom assessment forms in the user's data source that have at
+# least one usable CDED field for CE Match Rule expressions.
+query GetCeMatchCustomAssessmentForms {
+  ceMatchCustomAssessmentForms {
+    ...CeMatchCustomAssessmentFormFields
+  }
+}
+
+# CE Match fields for one selected custom assessment form.
+query GetCeMatchCustomAssessmentFields($formDefinitionIdentifier: String!) {
+  ceMatchCustomAssessmentFields(
+    formDefinitionIdentifier: $formDefinitionIdentifier
+  ) {
+    ...CeMatchFieldDetails
+  }
+}
