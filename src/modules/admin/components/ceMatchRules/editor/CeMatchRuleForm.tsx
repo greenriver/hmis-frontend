@@ -2,8 +2,10 @@ import { Alert, Button, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import CeMatchExpressionModeSwitch from './CeMatchExpressionModeSwitch';
 import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
 import CeMatchStructuredExpressionBuilder from './CeMatchStructuredExpressionBuilder';
+import FreeTextExpressionEditor from './FreeTextExpressionEditor';
 import CeMatchRuleConfirmationDialog from './impactWarnings/CeMatchRuleConfirmationDialog';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
@@ -26,20 +28,31 @@ import {
 
 const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   name: '',
+  mode: 'structured',
   structuredExpression: {
     operator: CeMatchRuleBooleanOperator.And,
     clauses: [newDraftClause()],
   },
+  freeTextExpression: '',
 });
 
 const buildCeMatchRuleInput = ({
   name,
+  mode,
   structuredExpression,
+  freeTextExpression,
 }: CeMatchRuleFormValues): CeMatchRuleInput => {
   const base = {
     name: name.trim(),
     ruleType: 'eligibility_requirement',
   };
+
+  if (mode === 'freeText') {
+    return {
+      ...base,
+      expression: freeTextExpression.trim(),
+    };
+  }
 
   return {
     ...base,
@@ -63,13 +76,14 @@ const buildCeMatchRuleInput = ({
  * and the mutation call to submit to the backend.
  */
 const CeMatchRuleForm = () => {
-  const { control, handleSubmit, reset, setValue } =
+  const { control, handleSubmit, reset, setValue, watch } =
     useForm<CeMatchRuleFormValues>({
       defaultValues: defaultCeMatchRuleFormValues(),
     });
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [saved, setSaved] = useState(false);
+  const mode = watch('mode');
 
   const resetForm = () => {
     setErrorState(emptyErrorState);
@@ -128,12 +142,27 @@ const CeMatchRuleForm = () => {
           />
         </Stack>
       </TitleCard>
-      <TitleCard title='Eligibility Requirements' headerComponent='h2' padded>
-        <Stack gap={2}>
-          <CeMatchStructuredExpressionBuilder
+      <TitleCard
+        title='Eligibility Requirements'
+        headerComponent='h2'
+        padded
+        actions={
+          <CeMatchExpressionModeSwitch
+            mode={mode}
             control={control}
             setValue={setValue}
           />
+        }
+      >
+        <Stack gap={2}>
+          {mode === 'structured' ? (
+            <CeMatchStructuredExpressionBuilder
+              control={control}
+              setValue={setValue}
+            />
+          ) : (
+            <FreeTextExpressionEditor control={control} />
+          )}
         </Stack>
       </TitleCard>
       <Stack direction='row' gap={2}>
