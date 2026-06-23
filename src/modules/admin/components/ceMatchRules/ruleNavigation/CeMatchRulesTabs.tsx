@@ -1,57 +1,42 @@
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ceMatchRuleOwnerLevelConfigs,
+  ceMatchRuleOwnerLevels,
   type CeMatchRuleOwnerLevel,
 } from '../ceMatchRuleOwnerLevelConfig';
 import CeMatchGlobalRules from './CeMatchGlobalRules';
 import CeMatchOrganizationRules from './CeMatchOrganizationRules';
 import CommonTabs from '@/components/elements/CommonTabs';
-import {
-  GlobalIcon,
-  OrganizationIcon,
-  ProjectIcon,
-  UnitGroupIcon,
-} from '@/components/elements/SemanticIcons';
 
+/**
+ * Renders the owner-level tabs for CE rules, including scaffolded levels.
+ */
 const CeMatchRulesTabs: React.FC<{
   selectedOwnerLevel: CeMatchRuleOwnerLevel;
 }> = ({ selectedOwnerLevel }) => {
   const navigate = useNavigate();
 
-  const tabDefinitions = useMemo(
-    () => [
-      {
-        title: ceMatchRuleOwnerLevelConfigs.global.label,
-        key: 'global',
-        icon: <GlobalIcon />,
+  const tabDefinitions = useMemo(() => {
+    const ownerLevelContents: Partial<
+      Record<CeMatchRuleOwnerLevel, ReactNode>
+    > = {
+      global: <CeMatchGlobalRules />,
+      organization: <CeMatchOrganizationRules />,
+    };
+
+    return ceMatchRuleOwnerLevels.map((ownerLevel) => {
+      const { Icon, label } = ceMatchRuleOwnerLevelConfigs[ownerLevel];
+
+      return {
+        title: label,
+        key: ownerLevel,
+        icon: <Icon />,
         iconPosition: 'start' as const,
-        contents: <CeMatchGlobalRules />,
-      },
-      {
-        title: ceMatchRuleOwnerLevelConfigs.organization.label,
-        key: 'organization',
-        icon: <OrganizationIcon />,
-        iconPosition: 'start' as const,
-        contents: <CeMatchOrganizationRules />,
-      },
-      {
-        title: ceMatchRuleOwnerLevelConfigs.project.label,
-        key: 'project',
-        icon: <ProjectIcon />,
-        iconPosition: 'start' as const,
-        contents: null,
-      },
-      {
-        title: ceMatchRuleOwnerLevelConfigs['unit-group'].label,
-        key: 'unit-group',
-        icon: <UnitGroupIcon />,
-        iconPosition: 'start' as const,
-        contents: null,
-      },
-    ],
-    []
-  );
+        contents: ownerLevelContents[ownerLevel] || null,
+      };
+    });
+  }, []);
 
   const handleChangeTab = (key: string) => {
     if (!(key in ceMatchRuleOwnerLevelConfigs)) return;

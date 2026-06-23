@@ -34,7 +34,7 @@ import AdminDashboard, {
 import CeMatchRuleGlobalEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleGlobalEditorPage';
 import CeMatchRuleOrganizationEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleOrganizationEditorPage';
 import CeMatchRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRulesPage';
-import { CeMatchOrganizationRuleDetailPage } from '@/modules/admin/components/ceMatchRules/ruleNavigation/CeMatchOrganizationRules';
+import CeMatchOrganizationRuleDetailPage from '@/modules/admin/components/ceMatchRules/ruleNavigation/CeMatchOrganizationRuleDetailPage';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';

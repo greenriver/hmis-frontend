@@ -1,7 +1,7 @@
+import { ceMatchRuleOwnerLevelConfigs } from '../ceMatchRuleOwnerLevelConfig';
 import CeMatchEffectiveRulesCard from '../ruleGroups/CeMatchEffectiveRulesCard';
 import CeMatchRuleGroupSection from '../ruleGroups/CeMatchRuleGroupSection';
 import Loading from '@/components/elements/Loading';
-import { GlobalIcon } from '@/components/elements/SemanticIcons';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useGetCeMatchGlobalRulesQuery } from '@/types/gqlTypes';
 
@@ -9,6 +9,7 @@ const CeMatchGlobalRules: React.FC = () => {
   const { data, loading, error } = useGetCeMatchGlobalRulesQuery({
     fetchPolicy: 'cache-and-network',
   });
+  const { label } = ceMatchRuleOwnerLevelConfigs.global;
 
   if (error) return <ApolloErrorAlert error={error} />;
   if (!data && loading) return <Loading />;
@@ -18,13 +19,12 @@ const CeMatchGlobalRules: React.FC = () => {
 
   return (
     <CeMatchEffectiveRulesCard
-      ownerName='Global'
+      ownerName={label}
       effectiveRulesCount={count}
-      ruleCountSummaries={[{ label: 'Global', count }]}
+      ruleCountSummaries={[{ label, count }]}
     >
       <CeMatchRuleGroupSection
         ownerLevel='global'
-        icon={<GlobalIcon color='primary' fontSize='small' />}
         rules={rules}
         count={count}
         variant='current'
