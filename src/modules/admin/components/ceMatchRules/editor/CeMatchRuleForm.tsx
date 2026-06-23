@@ -67,6 +67,13 @@ const buildCeMatchRuleInput = (
     };
   }
 
+  if (mode === 'freeText') {
+    return {
+      ...base,
+      expression: freeTextExpression.trim(),
+    };
+  }
+
   return {
     ...base,
     structuredExpression: {
