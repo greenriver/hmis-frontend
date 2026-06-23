@@ -45,3 +45,31 @@ fragment CeMatchRuleDetails on CeMatchRule {
     }
   }
 }
+
+fragment CeMatchRuleGroupFields on CeMatchRuleGroup {
+  ownerType
+  ownerId
+  ownerName
+  local
+  rules {
+    nodesCount
+    nodes {
+      ...CeMatchRuleAdminSummaryFields
+    }
+  }
+}
+
+fragment CeMatchRuleOrganizationFields on Organization {
+  id
+  organizationName
+  ceWaitlistUnitGroupCount
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+}
+
+fragment CeMatchRuleOrganizationDetails on Organization {
+  ...CeMatchRuleOrganizationFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}
