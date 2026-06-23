@@ -46,8 +46,13 @@ const adminDashboardRoutes = {
   PREVIEW_FORM: 'forms/:identifier/:formId/preview',
   PREVIEW_FORM_DRAFT: 'forms/:identifier/:formId/preview-draft',
   PROJECT_CONFIG: 'project-configs',
-  ELIGIBILITY_RULES: 'eligibility-rules',
-  ELIGIBILITY_RULE_NEW: 'eligibility-rules/new/:ownerLevel',
+  CE_RULES: 'rules/global',
+  CE_RULE_GLOBAL_NEW: 'rules/global/new',
+  CE_RULE_ORGANIZATIONS: 'rules/organizations',
+  CE_RULE_ORGANIZATION: 'rules/organizations/:organizationId',
+  CE_RULE_ORGANIZATION_NEW: 'rules/organizations/:organizationId/new',
+  CE_RULE_PROJECTS: 'rules/projects',
+  CE_RULE_UNIT_GROUPS: 'rules/unit-groups',
 };
 
 // Routes within the client dashboard

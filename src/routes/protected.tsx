@@ -33,6 +33,7 @@ import AdminDashboard, {
 
 import CeMatchRuleEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleEditorPage';
 import CeMatchRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRulesPage';
+import { CeMatchOrganizationRuleDetailPage } from '@/modules/admin/components/ceMatchRules/ruleNavigation/CeMatchOrganizationRules';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
@@ -1119,26 +1120,86 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.ELIGIBILITY_RULES,
+            path: AdminDashboardRoutes.CE_RULES,
             element: (
               <RootPermissionsFilter
                 // TODO(#7544): swap to canAdministrateCoordinatedEntry
                 permissions='canAdministrateConfig'
                 otherwise={<NotFound />}
               >
-                <CeMatchRulesPage />
+                <CeMatchRulesPage ownerLevel='global' />
               </RootPermissionsFilter>
             ),
           },
           {
-            path: AdminDashboardRoutes.ELIGIBILITY_RULE_NEW,
+            path: AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
             element: (
               <RootPermissionsFilter
                 // TODO(#7544): swap to canAdministrateCoordinatedEntry
                 permissions='canAdministrateConfig'
                 otherwise={<NotFound />}
               >
-                <CeMatchRuleEditorPage />
+                <CeMatchRulesPage ownerLevel='organization' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CE_RULE_PROJECTS,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRulesPage ownerLevel='project' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRulesPage ownerLevel='unit-group' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CE_RULE_GLOBAL_NEW,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRuleEditorPage ownerLevel='global' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRuleEditorPage ownerLevel='organization' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CE_RULE_ORGANIZATION,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchOrganizationRuleDetailPage />
               </RootPermissionsFilter>
             ),
           },
