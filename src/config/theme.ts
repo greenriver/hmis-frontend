@@ -66,6 +66,7 @@ declare module '@mui/material/styles' {
   interface SimplePaletteColorOptions {
     surface?: string;
     darkest?: string;
+    50?: string;
     100?: string;
     200?: string;
     300?: string;
@@ -77,6 +78,7 @@ declare module '@mui/material/styles/createPalette' {
   interface SimplePaletteColorOptions {
     surface?: string;
     darkest?: string;
+    50?: string;
     100?: string;
     200?: string;
     300?: string;
@@ -84,6 +86,7 @@ declare module '@mui/material/styles/createPalette' {
   interface PaletteColor {
     surface: string;
     darkest?: string;
+    50: string;
     100: string;
     200: string;
     300: string;
@@ -119,6 +122,7 @@ declare module '@mui/material/Chip' {
 }
 
 const generateShades = (mainColor: string) => ({
+  50: alpha(mainColor, 0.04),
   100: alpha(mainColor, 0.08),
   200: alpha(mainColor, 0.12),
   300: alpha(mainColor, 0.3),

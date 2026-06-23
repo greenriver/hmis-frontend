@@ -1,0 +1,10 @@
+mutation CreateCeMatchRule($input: CeMatchRuleInput!, $confirmed: Boolean) {
+  createCeMatchRule(input: $input, confirmed: $confirmed) {
+    rule {
+      ...CeMatchRuleDetails
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
