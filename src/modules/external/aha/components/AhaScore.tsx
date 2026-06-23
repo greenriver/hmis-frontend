@@ -78,8 +78,8 @@ const MCI_QUALITY_INDICATOR_LINK_ID = 'aha_mci_quality_indicator';
 const DW_CLIENT_LINK_ID = 'aha_dw_client_id';
 // Generator of the score, always 'AHA'. Only present if the API call was successful.
 const GENERATOR_LINK_ID = 'aha_generator';
-// Numeric MH-AHA score, may be -1..10. -1 means no score, which can occur if (1) the client has no MCI Unique ID yet, OR (2) the API call return -1 for the client.
-// This link_id may only be present on some forms, it is optional to record alongside the MH-AHA.
+// Numeric MH-AHA score, may be -1..10. -1 means no score.
+// This link_id may only be present on some forms, it is optional to record alongside the AHA.
 const MH_AHA_SCORE_LINK_ID = 'mh_aha_score';
 
 // Optional fields, from elsewhere in the form.
