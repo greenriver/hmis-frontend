@@ -35,3 +35,18 @@ mutation CalculateAltAhaScore(
     }
   }
 }
+
+mutation FetchVisionLinkFlags($clientId: ID!) {
+  fetchVisionLinkFlags(clientId: $clientId) {
+    isEligibleRa
+    section8
+    cityOfPittsburgh
+    subsidizedHousing
+    recentEvictionCase
+    dwClientId
+    failedReason
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
