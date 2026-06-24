@@ -18,17 +18,19 @@ const CeMatchRuleGroupHeader: React.FC<Props> = ({
   count,
   variant = 'inherited',
 }) => (
-  <Stack direction='row' alignItems='center' gap={1}>
-    {icon}
-    <Typography
-      variant='body1'
-      fontWeight='600'
-      component={variant === 'current' ? 'h3' : 'h4'}
-      color={variant === 'current' ? 'primary.dark' : 'text.secondary'}
-    >
-      {title} ({count})
-    </Typography>
-  </Stack>
+  <Typography
+    variant='body1'
+    fontWeight='600'
+    component={variant === 'current' ? 'h3' : 'h4'}
+    color={variant === 'current' ? 'primary.dark' : 'text.secondary'}
+  >
+    <Stack direction='row' alignItems='center' gap={1}>
+      {icon}
+      <>
+        {title} ({count})
+      </>
+    </Stack>
+  </Typography>
 );
 
 export default CeMatchRuleGroupHeader;

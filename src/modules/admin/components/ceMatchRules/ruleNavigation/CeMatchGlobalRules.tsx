@@ -1,6 +1,6 @@
 import { ceMatchRuleOwnerLevelConfigs } from '../ceMatchRuleOwnerLevelConfig';
 import CeMatchEffectiveRulesCard from '../ruleGroups/CeMatchEffectiveRulesCard';
-import CeMatchRuleGroupSection from '../ruleGroups/CeMatchRuleGroupSection';
+import CeMatchRuleGroup from '../ruleGroups/CeMatchRuleGroup';
 import Loading from '@/components/elements/Loading';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useGetCeMatchGlobalRulesQuery } from '@/types/gqlTypes';
@@ -23,12 +23,7 @@ const CeMatchGlobalRules: React.FC = () => {
       effectiveRulesCount={count}
       ruleCountSummaries={[{ label, count }]}
     >
-      <CeMatchRuleGroupSection
-        ownerLevel='global'
-        rules={rules}
-        count={count}
-        variant='current'
-      />
+      <CeMatchRuleGroup ownerLevel='global' rules={rules} count={count} />
     </CeMatchEffectiveRulesCard>
   );
 };

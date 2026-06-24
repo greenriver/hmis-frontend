@@ -1,5 +1,4 @@
 import { Button, Stack } from '@mui/material';
-import { ReactNode } from 'react';
 import {
   ceMatchRuleOwnerLevelConfigs,
   type CeMatchRuleOwnerLevel,
@@ -13,40 +12,38 @@ import { CeMatchRuleAdminSummaryFieldsFragment } from '@/types/gqlTypes';
 interface Props {
   ownerLevel: CeMatchRuleOwnerLevel;
   ownerId?: string;
-  icon: ReactNode;
   rules: CeMatchRuleAdminSummaryFieldsFragment[];
   count: number;
-  title?: string;
-  variant?: 'current' | 'inherited';
 }
 
 /**
- * todo @martha - this is a lie, collapsible is not true.  sx={{border: '5px solid red'}}
- * A collapsible section of rules, representing a single owner level,
- * wrapping the CeMatchRuleGroupTable for rules owned at this level.
+ * Renders the current level of CE rule group with its header, add action, and table.
+ * For collapsible inherited rule groups, see CeMatchRuleGroupsAccordion.
  */
-const CeMatchRuleGroupSection: React.FC<Props> = ({
+const CeMatchRuleGroup: React.FC<Props> = ({
   ownerLevel,
   ownerId,
-  icon,
   rules,
   count,
-  title,
-  variant = 'inherited',
 }) => {
   const ownerLevelConfig = ceMatchRuleOwnerLevelConfigs[ownerLevel];
-  const ownerLevelLabel = ownerLevelConfig.label;
-  const heading = title || `${ownerLevelLabel} Rules`;
-  const addRulePath = ownerLevelConfig.getAddRulePath({ ownerId });
+  const { Icon, label: ownerLevelLabel, getAddRulePath } = ownerLevelConfig;
+
+  const addRulePath = getAddRulePath({ ownerId });
 
   return (
-    <Stack gap={1.5}>
-      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+    <Stack gap={1.5} p={2}>
+      <Stack
+        direction='row'
+        justifyContent='space-between'
+        alignItems='center'
+        width='100%'
+      >
         <CeMatchRuleGroupHeader
-          icon={icon}
-          title={heading}
+          icon={<Icon color={'primary'} fontSize='small' />}
+          title={`${ownerLevelLabel} Rules`}
           count={count}
-          variant={variant}
+          variant={'current'}
         />
         {addRulePath && (
           <Button
@@ -62,10 +59,10 @@ const CeMatchRuleGroupSection: React.FC<Props> = ({
       <CeMatchRuleGroupTable
         ownerLevel={ownerLevel}
         rules={rules}
-        variant='current'
+        variant={'current'}
       />
     </Stack>
   );
 };
 
-export default CeMatchRuleGroupSection;
+export default CeMatchRuleGroup;
