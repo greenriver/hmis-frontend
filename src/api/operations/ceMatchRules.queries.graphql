@@ -24,7 +24,7 @@ query GetCeMatchCustomAssessmentFields($formDefinitionIdentifier: String!) {
 }
 
 query GetCeMatchGlobalRules {
-  ceMatchRules(filters: { ownerType: DATA_SOURCE }) {
+  ceMatchRules(filters: { global: true }) {
     nodesCount
     nodes {
       ...CeMatchRuleAdminSummaryFields

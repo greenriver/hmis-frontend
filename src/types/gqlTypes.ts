@@ -834,8 +834,8 @@ export enum CeMatchRuleComparator {
 }
 
 export type CeMatchRuleFilterOptions = {
-  ownerId?: InputMaybe<Scalars['ID']['input']>;
-  ownerType?: InputMaybe<CeMatchRuleOwnerType>;
+  /** Rules that are owned at the global level */
+  global?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CeMatchRuleInput = {
@@ -58360,7 +58360,7 @@ export type GetCeMatchCustomAssessmentFieldsQueryResult = Apollo.QueryResult<
 >;
 export const GetCeMatchGlobalRulesDocument = gql`
   query GetCeMatchGlobalRules {
-    ceMatchRules(filters: { ownerType: DATA_SOURCE }) {
+    ceMatchRules(filters: { global: true }) {
       nodesCount
       nodes {
         ...CeMatchRuleAdminSummaryFields

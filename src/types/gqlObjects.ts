@@ -8156,10 +8156,9 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'CeMatchRuleFilterOptions',
     args: [
-      { name: 'ownerId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
-        name: 'ownerType',
-        type: { kind: 'ENUM', name: 'CeMatchRuleOwnerType', ofType: null },
+        name: 'global',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
     ],
   },
