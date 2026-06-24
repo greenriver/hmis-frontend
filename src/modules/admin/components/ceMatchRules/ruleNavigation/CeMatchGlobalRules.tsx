@@ -1,7 +1,6 @@
 import CeMatchEffectiveRulesCard from '../ruleGroups/CeMatchEffectiveRulesCard';
-import CeMatchRuleGroupSection from '../ruleGroups/CeMatchRuleGroupSection';
+import CeMatchRuleGroup from '../ruleGroups/CeMatchRuleGroup';
 import Loading from '@/components/elements/Loading';
-import { GlobalIcon } from '@/components/elements/SemanticIcons';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useGetCeMatchGlobalRulesQuery } from '@/types/gqlTypes';
 
@@ -22,13 +21,7 @@ const CeMatchGlobalRules: React.FC = () => {
       effectiveRulesCount={count}
       ruleCountSummaries={[{ label: 'Global', count }]}
     >
-      <CeMatchRuleGroupSection
-        ownerLevel='global'
-        icon={<GlobalIcon color='primary' fontSize='small' />}
-        rules={rules}
-        count={count}
-        variant='current'
-      />
+      <CeMatchRuleGroup ownerLevel='global' rules={rules} count={count} />
     </CeMatchEffectiveRulesCard>
   );
 };
