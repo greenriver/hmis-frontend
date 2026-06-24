@@ -23,7 +23,7 @@ const CeMatchRuleGroupHeader: React.FC<Props> = ({
   return (
     <Stack direction='row' alignItems='center' gap={1} color={color}>
       <Icon fontSize='small' />
-      <Typography fontWeight='600' component={'h3'}>
+      <Typography fontWeight='600' component='h3'>
         {title} ({count})
       </Typography>
     </Stack>
