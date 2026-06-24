@@ -1,3 +1,4 @@
+import { ceMatchRuleOwnerLevelConfigs } from '../ceMatchRuleOwnerLevelConfig';
 import CeMatchEffectiveRulesCard from '../ruleGroups/CeMatchEffectiveRulesCard';
 import CeMatchRuleGroup from '../ruleGroups/CeMatchRuleGroup';
 import Loading from '@/components/elements/Loading';
@@ -8,6 +9,7 @@ const CeMatchGlobalRules: React.FC = () => {
   const { data, loading, error } = useGetCeMatchGlobalRulesQuery({
     fetchPolicy: 'cache-and-network',
   });
+  const { label } = ceMatchRuleOwnerLevelConfigs.global;
 
   if (error) return <ApolloErrorAlert error={error} />;
   if (!data && loading) return <Loading />;
@@ -17,9 +19,9 @@ const CeMatchGlobalRules: React.FC = () => {
 
   return (
     <CeMatchEffectiveRulesCard
-      ownerName='Global'
+      ownerName={label}
       effectiveRulesCount={count}
-      ruleCountSummaries={[{ label: 'Global', count }]}
+      ruleCountSummaries={[{ label, count }]}
     >
       <CeMatchRuleGroup ownerLevel='global' rules={rules} count={count} />
     </CeMatchEffectiveRulesCard>

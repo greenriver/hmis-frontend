@@ -37,7 +37,7 @@ const CeMatchEffectiveRulesCard: React.FC<Props> = ({
         ))}
       </Stack>
     </Stack>
-    <Stack sx={{ p: 2 }}>{children}</Stack>
+    <Stack>{children}</Stack>
   </Paper>
 );
 

@@ -273,9 +273,32 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
       [AdminDashboardRoutes.AC_DENIALS]: {
         title: 'Denials',
       },
-      [AdminDashboardRoutes.ELIGIBILITY_RULE_NEW]: {
-        title: 'Add Eligibility Rule',
-        parent: AdminDashboardRoutes.ELIGIBILITY_RULES,
+      [AdminDashboardRoutes.CE_RULES]: {
+        title: 'Rules',
+      },
+      [AdminDashboardRoutes.CE_RULE_GLOBAL_NEW]: {
+        title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULES,
+      },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATIONS]: {
+        title: 'Organizations',
+        parent: AdminDashboardRoutes.CE_RULES,
+      },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATION]: {
+        title: 'Organization', // Overridden in the page with overrideBreadcrumbTitles
+        parent: AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
+      },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW]: {
+        title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULE_ORGANIZATION,
+      },
+      [AdminDashboardRoutes.CE_RULE_PROJECTS]: {
+        title: 'Projects',
+        parent: AdminDashboardRoutes.CE_RULES,
+      },
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUPS]: {
+        title: 'Unit Groups',
+        parent: AdminDashboardRoutes.CE_RULES,
       },
       [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {
         title: 'Potential Duplicates',

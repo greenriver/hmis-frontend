@@ -32,7 +32,7 @@ export const useAdminDashboardNavItems = () => {
           {
             id: 'eligibility-rules',
             title: 'Eligibility Rules',
-            path: AdminDashboardRoutes.ELIGIBILITY_RULES,
+            path: AdminDashboardRoutes.CE_RULES,
             // TODO(#7544): swap to canAdministrateCoordinatedEntry
             permissions: ['canAdministrateConfig'],
           },
