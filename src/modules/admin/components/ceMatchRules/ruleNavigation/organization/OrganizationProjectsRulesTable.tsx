@@ -42,12 +42,12 @@ const OrganizationProjectsRulesTable: React.FC<{
             inheritedCount={inheritedRuleCount}
           />
         ),
-        minWidth: '360px',
       },
       {
         header: 'Unit Groups',
         key: 'unitGroups',
-        render: (project) => project.unitGroups.nodesCount,
+        render: (project: OrganizationProjectRow) =>
+          project.unitGroups.nodesCount,
       },
     ];
   }, [inheritedRuleCount]);
