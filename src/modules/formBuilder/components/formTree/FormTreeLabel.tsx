@@ -5,6 +5,7 @@ import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
+import HudChip from '../HudChip';
 import { FormTreeContext } from './FormTreeContext';
 import useUpdateFormStructure from './useUpdateFormStructure';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
@@ -19,6 +20,7 @@ import {
   FormItemPaletteType,
   ItemDependents,
 } from '@/modules/formBuilder/types';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ItemType } from '@/types/gqlTypes';
 
 export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
@@ -61,6 +63,12 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
 
   const item = useMemo(() => itemMap[itemId], [itemMap, itemId]);
 
+  const isHudItem = !!item?.mapping?.fieldName;
+  const isRequiredHudItem = isHudItem && !!item?.required;
+  const [canAdministrateConfig] = useHasRootPermissions([
+    'canAdministrateConfig',
+  ]);
+
   const displayAttrs = useMemo(
     () => getItemDisplayAttrs(item?.type),
     [item?.type]
@@ -97,8 +105,30 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     ItemDependents | undefined
   >(undefined);
 
-  const menuItems = useMemo(
-    () => [
+  const menuItems = useMemo(() => {
+    // Disable deletion for groups that have children.
+    const groupHasChildren =
+      item?.type === ItemType.Group && !!item?.item && item.item.length > 0;
+
+    // Disable deletion (for non-super-admins) if this is a HUD field that is required,
+    // to prevent the user from deleting the field and breaking the form's HUD data collection.
+    // This relies on the form being configured to correctly require HUD fields when the underlying HUD record requires them.
+    const disableDeleteHudItem = isRequiredHudItem && !canAdministrateConfig;
+
+    let disabledReason = undefined;
+    if (groupHasChildren) {
+      disabledReason = 'Groups with items cannot be deleted.';
+    } else if (disableDeleteHudItem) {
+      disabledReason = 'This item maps to a required HUD field.';
+    }
+
+    // For super-admins, show a helper text but don't disable the delete action.
+    const helperText =
+      isRequiredHudItem && canAdministrateConfig
+        ? 'Caution: This item maps to a required HUD field.'
+        : undefined;
+
+    return [
       {
         key: 'edit',
         title: 'Edit',
@@ -108,13 +138,18 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         key: 'delete',
         title: 'Delete',
         onClick: () => onDelete(setDeletionBlockers),
-        // disable deletion for groups that contain items
-        disabled:
-          item?.type === ItemType.Group && !!item?.item && item.item.length > 0,
+        disabled: groupHasChildren || disableDeleteHudItem,
+        disabledReason: disabledReason,
+        helperText,
       },
-    ],
-    [item, openFormItemEditor, onDelete]
-  );
+    ];
+  }, [
+    canAdministrateConfig,
+    isRequiredHudItem,
+    item,
+    onDelete,
+    openFormItemEditor,
+  ]);
 
   return (
     <TreeItem2Label
@@ -166,6 +201,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           </Box>
 
           {item.required && <Typography color='red'>*</Typography>}
+          {isHudItem && <HudChip />}
           {item.enableWhen && item.enableWhen?.length > 0 && (
             <ConditionalIcon
               fontSize='inherit'
