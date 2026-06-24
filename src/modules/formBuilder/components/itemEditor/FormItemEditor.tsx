@@ -410,13 +410,20 @@ const FormItemEditor: React.FC<Props> = ({
                 />
               )}
           </Section>
-          {// Disable changing choices for HUD items
-          !lockHudItemControls &&
-            [ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) && (
-              <Section title='Choices'>
-                <ManagePickListOptions control={control} setValue={setValue} />
-              </Section>
-            )}
+          {
+            // Disable changing choices for HUD items
+            !lockHudItemControls &&
+              [ItemType.Choice, ItemType.OpenChoice].includes(
+                itemTypeValue
+              ) && (
+                <Section title='Choices'>
+                  <ManagePickListOptions
+                    control={control}
+                    setValue={setValue}
+                  />
+                </Section>
+              )
+          }
           {
             // Disable changing visibility for HUD items
             !lockHudItemControls && (
