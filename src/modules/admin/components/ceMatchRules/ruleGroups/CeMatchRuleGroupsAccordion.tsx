@@ -43,7 +43,7 @@ const CeMatchRuleGroupsAccordion: React.FC<Props> = ({ ruleGroups }) => {
               key: getCeMatchRuleGroupKey(group),
               header: (
                 <CeMatchRuleGroupHeader
-                  icon={<Icon color='inherit' fontSize='small' />}
+                  Icon={Icon}
                   title={`${getCeMatchRuleGroupLabel(group)} Rules`}
                   count={getCeMatchRuleGroupCount(group)}
                   variant='inherited'

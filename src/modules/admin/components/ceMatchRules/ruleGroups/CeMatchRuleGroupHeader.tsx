@@ -1,8 +1,8 @@
-import { Stack, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { Stack, SvgIconProps, Typography } from '@mui/material';
+import { ComponentType } from 'react';
 
 interface Props {
-  icon: ReactNode;
+  Icon: ComponentType<SvgIconProps>;
   title: string;
   count: number;
   variant?: 'current' | 'inherited';
@@ -13,24 +13,21 @@ interface Props {
  * on whether this section represents the current owner or an ancestor.
  */
 const CeMatchRuleGroupHeader: React.FC<Props> = ({
-  icon,
+  Icon,
   title,
   count,
   variant = 'inherited',
-}) => (
-  <Typography
-    variant='body1'
-    fontWeight='600'
-    component={variant === 'current' ? 'h3' : 'h4'}
-    color={variant === 'current' ? 'primary.dark' : 'text.secondary'}
-  >
-    <Stack direction='row' alignItems='center' gap={1}>
-      {icon}
-      <>
+}) => {
+  const color = variant === 'current' ? 'primary.dark' : 'text.secondary';
+
+  return (
+    <Stack direction='row' alignItems='center' gap={1} color={color}>
+      <Icon fontSize='small' />
+      <Typography fontWeight='600' component={'h3'}>
         {title} ({count})
-      </>
+      </Typography>
     </Stack>
-  </Typography>
-);
+  );
+};
 
 export default CeMatchRuleGroupHeader;

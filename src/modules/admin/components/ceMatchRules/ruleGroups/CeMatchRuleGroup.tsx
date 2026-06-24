@@ -40,7 +40,7 @@ const CeMatchRuleGroup: React.FC<Props> = ({
         width='100%'
       >
         <CeMatchRuleGroupHeader
-          icon={<Icon color={'primary'} fontSize='small' />}
+          Icon={Icon}
           title={`${ownerLevelLabel} Rules`}
           count={count}
           variant={'current'}
