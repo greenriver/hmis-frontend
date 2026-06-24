@@ -15,17 +15,7 @@ import { CommonMenuItem } from '@/components/elements/CommonMenuButton';
 import GenericTable from '@/components/elements/table/GenericTable';
 import TableRowActions from '@/components/elements/table/TableRowActions';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  CeMatchRuleAdminSummaryFieldsFragment,
-  CeMatchRuleType,
-} from '@/types/gqlTypes';
-
-// For priority scheme rules, display the name as "Prioritize by: <name>"
-// For eligibility requirement rules, display the name as is.
-const getRuleName = (rule: CeMatchRuleAdminSummaryFieldsFragment) =>
-  rule.ruleType === CeMatchRuleType.PriorityScheme
-    ? `Prioritize by: ${rule.name}`
-    : rule.name;
+import { CeMatchRuleAdminSummaryFieldsFragment } from '@/types/gqlTypes';
 
 export interface CeMatchRuleGroupTableProps {
   ownerLevel: CeMatchRuleOwnerLevel;
@@ -102,7 +92,7 @@ const CeMatchRuleGroupTable: React.FC<CeMatchRuleGroupTableProps> = ({
                           component='span'
                           sx={{ width: 'fit-content' }}
                         >
-                          {getRuleName(rule)}
+                          {rule.name}
                         </Typography>
                       </Tooltip>
                       {!!(rule.funders?.length || rule.projectTypes.length) && (
