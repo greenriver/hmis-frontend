@@ -22,3 +22,13 @@ export const getCeMatchRuleGroupLabel = (
   ceMatchRuleOwnerLevelConfigs[
     getCeMatchRuleOwnerLevelByOwnerType(group.ownerType)
   ].label;
+
+export const getCeMatchRuleGroupPath = (
+  group: CeMatchRuleGroupFieldsFragment
+) => {
+  const ownerLevel = getCeMatchRuleOwnerLevelByOwnerType(group.ownerType);
+
+  return ceMatchRuleOwnerLevelConfigs[ownerLevel].getRulesPath({
+    ownerId: group.ownerId || undefined,
+  });
+};

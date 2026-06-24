@@ -6,6 +6,7 @@ import CeMatchRuleGroupsAccordion from '../ruleGroups/CeMatchRuleGroupsAccordion
 import {
   getCeMatchRuleGroupCount,
   getCeMatchRuleGroupLabel,
+  getCeMatchRuleGroupPath,
 } from '../ruleGroups/ceMatchRuleGroupUtil';
 import OrganizationProjectsRulesTable from './organization/OrganizationProjectsRulesTable';
 import Loading from '@/components/elements/Loading';
@@ -58,6 +59,7 @@ const CeMatchOrganizationRuleDetailPage: React.FC = () => {
             (group) => ({
               label: getCeMatchRuleGroupLabel(group),
               count: getCeMatchRuleGroupCount(group),
+              to: group.local ? undefined : getCeMatchRuleGroupPath(group),
             })
           )}
         >
