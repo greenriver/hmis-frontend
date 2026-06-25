@@ -1,0 +1,63 @@
+import { Box } from '@mui/material';
+import pluralize from 'pluralize';
+import { useMemo } from 'react';
+
+import GenericTable from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
+
+export interface CeMatchRuleAffectedUnitGroup {
+  id: string;
+  unitGroupName: string;
+  projectId: string;
+  projectName: string;
+  currentCandidateCount: number;
+  removedCandidateCount: number;
+}
+
+const CeMatchRuleAffectedUnitGroupsTable = ({
+  unitGroups,
+}: {
+  unitGroups: CeMatchRuleAffectedUnitGroup[];
+}) => {
+  const columns: ColumnDef<CeMatchRuleAffectedUnitGroup>[] = useMemo(
+    () => [
+      {
+        header: 'Project',
+        key: 'projectName',
+        render: 'projectName',
+      },
+      {
+        header: 'Unit Group',
+        key: 'unitGroupName',
+        render: 'unitGroupName',
+      },
+      {
+        header: 'Eligible Now',
+        key: 'currentCandidateCount',
+        textAlign: 'right',
+        render: (row) => pluralize('client', row.currentCandidateCount, true),
+      },
+      {
+        header: 'Would Lose Eligibility',
+        key: 'removedCandidateCount',
+        textAlign: 'right',
+        render: (row) => pluralize('client', row.removedCandidateCount, true),
+      },
+    ],
+    []
+  );
+
+  if (unitGroups.length === 0) return null;
+
+  return (
+    <Box sx={{ mt: 2 }}>
+      <GenericTable
+        rows={unitGroups}
+        columns={columns}
+        rowSx={() => ({ td: { py: 1 } })}
+      />
+    </Box>
+  );
+};
+
+export default CeMatchRuleAffectedUnitGroupsTable;
