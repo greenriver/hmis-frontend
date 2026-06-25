@@ -42,9 +42,6 @@ const CeMatchRuleOrganizationEditorPage: React.FC = () => {
       [AdminDashboardRoutes.CE_RULE_ORGANIZATION]:
         organization.organizationName,
     });
-
-    // Reset overrides to avoid staleness
-    return () => overrideBreadcrumbTitles(undefined);
   }, [organization?.organizationName, overrideBreadcrumbTitles]);
 
   if (!organizationId) return <NotFound />;

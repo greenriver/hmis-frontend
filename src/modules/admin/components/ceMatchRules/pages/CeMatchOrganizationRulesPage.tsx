@@ -48,7 +48,7 @@ const CeMatchOrganizationRulesPage: React.FC = () => {
   return (
     <>
       <PageTitle
-        overlineText='Coordinated Entry Rules'
+        overlineText='Organization Rules'
         title={organization.organizationName}
       />
       <Stack gap={3}>
