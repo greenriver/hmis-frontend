@@ -43396,6 +43396,46 @@
             "deprecationReason": null
           },
           {
+            "name": "effectiveCeMatchRuleCount",
+            "description": "Number of CE match rules that apply to this record, including inherited rules.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "effectiveCeMatchRuleGroups",
+            "description": "All CE match rules that apply to this record, including inherited rules, grouped by their owner.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeMatchRuleGroup",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "enrollments",
             "description": null,
             "args": [
@@ -43848,6 +43888,22 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "InventoriesPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "localCeMatchRuleCount",
+            "description": "Number of CE match rules owned directly by this record.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             },

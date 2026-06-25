@@ -1,6 +1,6 @@
 import { Divider, Paper, Stack, Typography } from '@mui/material';
 
-import { useMemo } from 'react';
+import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
 import RuleCountSummary from '../RuleCountSummary';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -14,44 +14,45 @@ type OrganizationProjectRow = NonNullable<
   GetCeMatchOrganizationProjectsQuery['organization']
 >['projects']['nodes'][number];
 
+const COLUMNS: DataColumnDef<
+  OrganizationProjectRow,
+  GetCeMatchOrganizationProjectsQueryVariables
+>[] = [
+  {
+    header: 'Project',
+    key: 'projectName',
+    render: 'projectName',
+  },
+  {
+    header: 'Effective Rules',
+    key: 'effectiveRules',
+    render: (project: OrganizationProjectRow) => {
+      const inheritedCount =
+        project.effectiveCeMatchRuleCount - project.localCeMatchRuleCount;
+
+      return (
+        <RuleCountSummary
+          total={project.effectiveCeMatchRuleCount}
+          localCount={project.localCeMatchRuleCount}
+          inheritedCount={inheritedCount}
+        />
+      );
+    },
+  },
+  {
+    header: 'Unit Groups',
+    key: 'unitGroups',
+    render: (project: OrganizationProjectRow) => project.unitGroups.nodesCount,
+  },
+];
+
 /**
  * Lists CE-waitlist-enabled projects under an organization.
  */
 const CeMatchOrganizationProjectsTable: React.FC<{
   organizationId: string;
   organizationName: string;
-  inheritedRuleCount: number;
-}> = ({ organizationId, organizationName, inheritedRuleCount }) => {
-  const projectColumns: DataColumnDef<
-    OrganizationProjectRow,
-    GetCeMatchOrganizationProjectsQueryVariables
-  >[] = useMemo(() => {
-    return [
-      {
-        header: 'Project',
-        key: 'projectName',
-        render: 'projectName',
-      },
-      {
-        header: 'Effective Rules',
-        key: 'effectiveRules',
-        render: () => (
-          <RuleCountSummary
-            // TODO(#7544) update this with the local project rule count, once available
-            total={inheritedRuleCount}
-            inheritedCount={inheritedRuleCount}
-          />
-        ),
-      },
-      {
-        header: 'Unit Groups',
-        key: 'unitGroups',
-        render: (project: OrganizationProjectRow) =>
-          project.unitGroups.nodesCount,
-      },
-    ];
-  }, [inheritedRuleCount]);
-
+}> = ({ organizationId, organizationName }) => {
   return (
     <Paper>
       <Stack gap={1} p={2} pb={0}>
@@ -69,8 +70,14 @@ const CeMatchOrganizationProjectsTable: React.FC<{
         OrganizationProjectRow
       >
         queryDocument={GetCeMatchOrganizationProjectsDocument}
-        columns={projectColumns}
+        columns={COLUMNS}
+        rowLinkTo={(project) =>
+          ceMatchRuleOwnerLevelConfigs.project.getRulesPath({
+            ownerId: project.id,
+          })
+        }
         rowName={(project) => project.projectName}
+        rowActionTitle='View Project Rules'
         noData='No projects'
         pagePath='organization.projects'
         recordType='Project'

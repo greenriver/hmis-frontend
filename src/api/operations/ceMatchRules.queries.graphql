@@ -56,6 +56,49 @@ query GetCeMatchOrganizationRules($id: ID!) {
   }
 }
 
+query GetCeMatchRuleProjects(
+  $filters: ProjectFilterOptions
+  $limit: Int
+  $offset: Int
+) {
+  projects(
+    filters: $filters
+    sortOrder: ORGANIZATION_AND_NAME
+    limit: $limit
+    offset: $offset
+  ) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleProjectFields
+    }
+  }
+}
+
+query GetCeMatchProjectRules($id: ID!) {
+  project(id: $id) {
+    ...CeMatchRuleProjectDetails
+  }
+}
+
+query GetCeMatchProjectUnitGroups(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    unitGroups(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        name
+      }
+    }
+  }
+}
+
 query GetCeMatchOrganizationProjects(
   $id: ID!
   $limit: Int = 10
@@ -77,6 +120,8 @@ query GetCeMatchOrganizationProjects(
       nodes {
         id
         projectName
+        effectiveCeMatchRuleCount
+        localCeMatchRuleCount
         unitGroups(limit: 1) {
           nodesCount
         }
