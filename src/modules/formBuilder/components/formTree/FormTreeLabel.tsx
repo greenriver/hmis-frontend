@@ -64,7 +64,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   const item = useMemo(() => itemMap[itemId], [itemMap, itemId]);
 
   const isHudItem = !!item?.mapping?.fieldName;
-  const isRequiredHudItem = isHudItem && !!item?.required;
   const [canAdministrateConfig] = useHasRootPermissions([
     'canAdministrateConfig',
   ]);
@@ -110,22 +109,21 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     const groupHasChildren =
       item?.type === ItemType.Group && !!item?.item && item.item.length > 0;
 
-    // Disable deletion (for non-super-admins) if this is a HUD field that is required,
+    // Disable deletion (for non-super-admins) if this is a HUD-mapped field,
     // to prevent the user from deleting the field and breaking the form's HUD data collection.
-    // This relies on the form being configured to correctly require HUD fields when the underlying HUD record requires them.
-    const disableDeleteHudItem = isRequiredHudItem && !canAdministrateConfig;
+    const disableDeleteHudItem = isHudItem && !canAdministrateConfig;
 
     let disabledReason = undefined;
     if (groupHasChildren) {
       disabledReason = 'Groups with items cannot be deleted.';
     } else if (disableDeleteHudItem) {
-      disabledReason = 'This item maps to a required HUD field.';
+      disabledReason = 'This item maps to a HUD field.';
     }
 
     // For super-admins, show a helper text but don't disable the delete action.
     const helperText =
-      isRequiredHudItem && canAdministrateConfig
-        ? 'Caution: This item maps to a required HUD field.'
+      isHudItem && canAdministrateConfig
+        ? 'Caution: This item maps to a HUD field.'
         : undefined;
 
     return [
@@ -143,13 +141,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         helperText,
       },
     ];
-  }, [
-    canAdministrateConfig,
-    isRequiredHudItem,
-    item,
-    onDelete,
-    openFormItemEditor,
-  ]);
+  }, [canAdministrateConfig, isHudItem, item, onDelete, openFormItemEditor]);
 
   return (
     <TreeItem2Label
