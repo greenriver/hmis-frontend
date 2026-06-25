@@ -31,8 +31,7 @@ const CeMatchRulesTabs: React.FC<{
       return {
         title: label,
         key: ownerLevel,
-        icon: <Icon />,
-        iconPosition: 'start' as const,
+        Icon,
         contents: ownerLevelContents[ownerLevel] || null,
       };
     });
