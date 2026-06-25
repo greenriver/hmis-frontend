@@ -46,6 +46,7 @@ const adminDashboardRoutes = {
   PREVIEW_FORM: 'forms/:identifier/:formId/preview',
   PREVIEW_FORM_DRAFT: 'forms/:identifier/:formId/preview-draft',
   PROJECT_CONFIG: 'project-configs',
+  CE_RULES_ROOT: 'rules',
   CE_RULES: 'rules/global',
   CE_RULE_GLOBAL_NEW: 'rules/global/new',
   CE_RULE_ORGANIZATIONS: 'rules/organizations',

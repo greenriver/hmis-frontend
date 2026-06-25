@@ -1121,6 +1121,18 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: AdminDashboardRoutes.CE_RULES_ROOT,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <Navigate to={AdminDashboardRoutes.CE_RULES} replace />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
             path: AdminDashboardRoutes.CE_RULES,
             element: (
               <RootPermissionsFilter
