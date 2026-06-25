@@ -1239,6 +1239,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'updatedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
         name: 'workflowTemplateName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -10077,6 +10085,103 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'values',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'UnitCeReferralFilterOptions',
+    args: [
+      {
+        name: 'assignedToUser',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'assignedToYou',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'onCurrentTaskSince',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'organization',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'origin',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectGroupId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'referralStatus',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'workflowTemplate',
         type: {
           kind: 'LIST',
           name: null,

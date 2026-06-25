@@ -33,6 +33,7 @@ export default defineConfig(({ command, mode }) => {
 
   // HMIS host for this dev server, override with `HMIS_HOST=hmis-2.dev.test yarn dev`
   const devHmisHost = env.HMIS_HOST || 'hmis.dev.test';
+  const usePolling = env.SERVER_WATCH_USE_POLLING === 'true';
 
   // warehouseProxyServer is used below only in dev (command !== 'build')
   const warehouseProxyServer = {
@@ -140,6 +141,7 @@ export default defineConfig(({ command, mode }) => {
         host: devHmisHost,
         https:
           env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
+        watch: usePolling ? { usePolling } : undefined,
         proxy: {
           '/hmis': warehouseProxyServer,
           '/dev-assets/theme': warehouseProxyServer,
