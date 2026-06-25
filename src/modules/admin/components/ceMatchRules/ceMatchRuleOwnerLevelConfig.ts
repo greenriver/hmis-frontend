@@ -1,3 +1,4 @@
+import { generatePath } from 'react-router-dom';
 import {
   GlobalIcon,
   OrganizationIcon,
@@ -23,10 +24,18 @@ export const ceMatchRuleOwnerLevelConfigs = {
     ownerType: CeMatchRuleOwnerType.Organization,
     Icon: OrganizationIcon,
     route: AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
-    getRulesPath: () => undefined,
-    // TODO(#7544) - return the add-path for the given org ID
-    //eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getAddRulePath: ({ ownerId }: { ownerId?: string }) => undefined,
+    getRulesPath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION, {
+            organizationId: ownerId,
+          })
+        : AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
+    getAddRulePath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW, {
+            organizationId: ownerId,
+          })
+        : undefined,
     label: 'Organization',
   },
   project: {
