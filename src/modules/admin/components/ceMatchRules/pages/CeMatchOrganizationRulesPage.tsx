@@ -8,7 +8,7 @@ import {
   getCeMatchRuleGroupLabel,
   getCeMatchRuleGroupPath,
 } from '../ruleGroups/ceMatchRuleGroupUtil';
-import OrganizationProjectsRulesTable from './organization/OrganizationProjectsRulesTable';
+import CeMatchOrganizationProjectsTable from '../ruleNavigation/organization/CeMatchOrganizationProjectsTable';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
@@ -21,7 +21,7 @@ import { useGetCeMatchOrganizationRulesQuery } from '@/types/gqlTypes';
 /**
  * Displays effective CE rules for a selected organization and its descendants.
  */
-const CeMatchOrganizationRuleDetailPage: React.FC = () => {
+const CeMatchOrganizationRulesPage: React.FC = () => {
   const { organizationId } = useSafeParams<{ organizationId?: string }>();
   const { data, loading, error } = useGetCeMatchOrganizationRulesQuery({
     variables: { id: organizationId || '' },
@@ -67,7 +67,7 @@ const CeMatchOrganizationRuleDetailPage: React.FC = () => {
             ruleGroups={organization.effectiveCeMatchRuleGroups}
           />
         </CeMatchEffectiveRulesCard>
-        <OrganizationProjectsRulesTable
+        <CeMatchOrganizationProjectsTable
           organizationId={organization.id}
           organizationName={organization.organizationName}
           inheritedRuleCount={organization.effectiveCeMatchRuleCount}
@@ -77,4 +77,4 @@ const CeMatchOrganizationRuleDetailPage: React.FC = () => {
   );
 };
 
-export default CeMatchOrganizationRuleDetailPage;
+export default CeMatchOrganizationRulesPage;

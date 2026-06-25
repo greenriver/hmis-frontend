@@ -6,7 +6,7 @@ import {
   type CeMatchRuleOwnerLevel,
 } from '../ceMatchRuleOwnerLevelConfig';
 import CeMatchGlobalRules from './CeMatchGlobalRules';
-import CeMatchOrganizationRules from './CeMatchOrganizationRules';
+import CeMatchRuleOrganizations from './organization/CeMatchRuleOrganizations';
 import CommonTabs from '@/components/elements/CommonTabs';
 
 /**
@@ -22,7 +22,7 @@ const CeMatchRulesTabs: React.FC<{
       Record<CeMatchRuleOwnerLevel, ReactNode>
     > = {
       global: <CeMatchGlobalRules />,
-      organization: <CeMatchOrganizationRules />,
+      organization: <CeMatchRuleOrganizations />,
     };
 
     return ceMatchRuleOwnerLevels.map((ownerLevel) => {

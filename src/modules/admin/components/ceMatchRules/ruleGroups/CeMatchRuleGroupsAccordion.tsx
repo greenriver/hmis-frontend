@@ -8,7 +8,6 @@ import CeMatchRuleGroupTable from './CeMatchRuleGroupTable';
 import {
   getCeMatchRuleGroupCount,
   getCeMatchRuleGroupKey,
-  getCeMatchRuleGroupLabel,
 } from './ceMatchRuleGroupUtil';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import { CeMatchRuleGroupFieldsFragment } from '@/types/gqlTypes';
@@ -37,14 +36,14 @@ const CeMatchRuleGroupsAccordion: React.FC<Props> = ({ ruleGroups }) => {
             const ownerLevel = getCeMatchRuleOwnerLevelByOwnerType(
               group.ownerType
             );
-            const { Icon } = ceMatchRuleOwnerLevelConfigs[ownerLevel];
+            const { Icon, label } = ceMatchRuleOwnerLevelConfigs[ownerLevel];
 
             return {
               key: getCeMatchRuleGroupKey(group),
               header: (
                 <CeMatchRuleGroupHeader
                   Icon={Icon}
-                  title={`${getCeMatchRuleGroupLabel(group)} Rules`}
+                  title={`${label} Rules`}
                   count={getCeMatchRuleGroupCount(group)}
                   variant='inherited'
                 />

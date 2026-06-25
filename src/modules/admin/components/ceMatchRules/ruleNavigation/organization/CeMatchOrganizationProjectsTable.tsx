@@ -15,9 +15,9 @@ type OrganizationProjectRow = NonNullable<
 >['projects']['nodes'][number];
 
 /**
- * Lists projects under an organization as the next scaffolded CE rule owner level.
+ * Lists CE-waitlist-enabled projects under an organization.
  */
-const OrganizationProjectsRulesTable: React.FC<{
+const CeMatchOrganizationProjectsTable: React.FC<{
   organizationId: string;
   organizationName: string;
   inheritedRuleCount: number;
@@ -87,4 +87,4 @@ const OrganizationProjectsRulesTable: React.FC<{
   );
 };
 
-export default OrganizationProjectsRulesTable;
+export default CeMatchOrganizationProjectsTable;

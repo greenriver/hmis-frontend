@@ -43,6 +43,7 @@ const CeMatchRuleOrganizationEditorPage: React.FC = () => {
         organization.organizationName,
     });
 
+    // Reset overrides to avoid staleness
     return () => overrideBreadcrumbTitles(undefined);
   }, [organization?.organizationName, overrideBreadcrumbTitles]);
 

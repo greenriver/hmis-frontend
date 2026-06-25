@@ -1,7 +1,7 @@
 import { Paper, Stack, Typography } from '@mui/material';
 
-import { ceMatchRuleOwnerLevelConfigs } from '../ceMatchRuleOwnerLevelConfig';
-import RuleCountSummary from './RuleCountSummary';
+import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
+import RuleCountSummary from '../RuleCountSummary';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -49,7 +49,7 @@ const ORGANIZATION_COLUMNS: DataColumnDef<
 /**
  * Shows the Organization owner-level tab where users choose an organization.
  */
-const CeMatchOrganizationRules: React.FC = () => {
+const CeMatchRuleOrganizations: React.FC = () => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   return (
@@ -107,4 +107,4 @@ const CeMatchOrganizationRules: React.FC = () => {
   );
 };
 
-export default CeMatchOrganizationRules;
+export default CeMatchRuleOrganizations;

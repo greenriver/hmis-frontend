@@ -31,10 +31,10 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
+import CeMatchOrganizationRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchOrganizationRulesPage';
 import CeMatchRuleGlobalEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleGlobalEditorPage';
 import CeMatchRuleOrganizationEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleOrganizationEditorPage';
 import CeMatchRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRulesPage';
-import CeMatchOrganizationRuleDetailPage from '@/modules/admin/components/ceMatchRules/ruleNavigation/CeMatchOrganizationRuleDetailPage';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
@@ -1200,7 +1200,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canAdministrateConfig'
                 otherwise={<NotFound />}
               >
-                <CeMatchOrganizationRuleDetailPage />
+                <CeMatchOrganizationRulesPage />
               </RootPermissionsFilter>
             ),
           },
