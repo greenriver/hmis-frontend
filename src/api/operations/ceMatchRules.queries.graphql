@@ -22,3 +22,12 @@ query GetCeMatchCustomAssessmentFields($formDefinitionIdentifier: String!) {
     ...CeMatchFieldDetails
   }
 }
+
+query GetCeMatchGlobalRules {
+  ceMatchRules(filters: { global: true }) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleAdminSummaryFields
+    }
+  }
+}

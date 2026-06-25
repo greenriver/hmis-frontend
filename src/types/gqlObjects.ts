@@ -913,12 +913,32 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'ownerId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'ownerName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
         name: 'ownerType',
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'ENUM', name: 'CeMatchRuleOwner', ofType: null },
+          ofType: { kind: 'ENUM', name: 'CeMatchRuleOwnerType', ofType: null },
         },
+      },
+      {
+        name: 'priorityRank',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {
         name: 'projectTypes',
@@ -934,6 +954,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
               ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
             },
           },
+        },
+      },
+      {
+        name: 'ruleType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CeMatchRuleType', ofType: null },
         },
       },
     ],
@@ -8126,6 +8154,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'CeMatchRuleFilterOptions',
+    args: [
+      {
+        name: 'global',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'CeMatchRuleInput',
     args: [
       {
@@ -8136,7 +8173,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       { name: 'ownerId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'ownerType',
-        type: { kind: 'ENUM', name: 'CeMatchRuleOwner', ofType: null },
+        type: { kind: 'ENUM', name: 'CeMatchRuleOwnerType', ofType: null },
       },
       {
         name: 'priorityRank',
@@ -8144,7 +8181,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'ruleType',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: { kind: 'ENUM', name: 'CeMatchRuleType', ofType: null },
       },
       {
         name: 'structuredExpression',

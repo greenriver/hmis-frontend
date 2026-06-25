@@ -273,6 +273,25 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
       [AdminDashboardRoutes.AC_DENIALS]: {
         title: 'Denials',
       },
+      [AdminDashboardRoutes.CE_RULES]: {
+        title: 'Rules',
+      },
+      [AdminDashboardRoutes.CE_RULE_GLOBAL_NEW]: {
+        title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULES,
+      },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATIONS]: {
+        title: 'Organizations',
+        parent: AdminDashboardRoutes.CE_RULES,
+      },
+      [AdminDashboardRoutes.CE_RULE_PROJECTS]: {
+        title: 'Projects',
+        parent: AdminDashboardRoutes.CE_RULES,
+      },
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUPS]: {
+        title: 'Unit Groups',
+        parent: AdminDashboardRoutes.CE_RULES,
+      },
       [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {
         title: 'Potential Duplicates',
         parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
