@@ -11,7 +11,7 @@ import React, {
 import { DeepPartial, useForm } from 'react-hook-form';
 import { v4 } from 'uuid';
 import FormEditorItemPreview from '../FormEditorItemPreview';
-import HudChip from '../HudChip';
+import SystemFieldChip from '../SystemFieldChip';
 import AutofillProperties from './conditionals/AutofillProperties';
 import InitialValue from './conditionals/InitialValue';
 import ManageEnableWhen from './conditionals/ManageEnableWhen';
@@ -161,11 +161,14 @@ const FormItemEditor: React.FC<Props> = ({
     [definition.role]
   );
 
-  const isHudItem = !!initialItem.mapping?.fieldName;
+  // If the item maps to a fieldName (as opposed to customFieldKey),
+  // it is a "system" field. Many of these are HUD fields, but not all.
+  // Lock down editing for users who are not super-admins.
+  const isSystemField = !!initialItem.mapping?.fieldName;
   const [canAdministrateConfig] = useHasRootPermissions([
     'canAdministrateConfig',
   ]);
-  const lockHudItemControls = isHudItem && !canAdministrateConfig;
+  const lockSystemFieldControls = isSystemField && !canAdministrateConfig;
 
   const componentOverridePicklist = useMemo(() => {
     if (!itemTypeValue) return [];
@@ -311,22 +314,22 @@ const FormItemEditor: React.FC<Props> = ({
                 <ErrorAlert key='errors' errors={errorState.errors} />
               </Stack>
             )}
-            {isHudItem && (
+            {isSystemField && (
               <Alert severity='info' sx={{ mb: 2 }}>
-                This question collects a HUD field.{' '}
+                This question collects a system field.{' '}
                 {!canAdministrateConfig && (
                   <>Only display text and layout controls are editable.</>
                 )}
                 {canAdministrateConfig && (
                   <>
                     As a super-admin, you can edit all properties, but be
-                    cautious about changing properties that may affect HUD data
-                    collection.
+                    cautious about changing properties that may affect system
+                    field data collection.
                   </>
                 )}
               </Alert>
             )}
-            {!lockHudItemControls &&
+            {!lockSystemFieldControls &&
               itemTypeValue === ItemType.Date &&
               isAssessment && (
                 <ControlledCheckbox
@@ -336,7 +339,7 @@ const FormItemEditor: React.FC<Props> = ({
                   helperText='If checked, this date will be recorded as the Assessment Date on the assessment'
                 />
               )}
-            {isQuestionItem && !lockHudItemControls && (
+            {isQuestionItem && !lockSystemFieldControls && (
               <RequiredOptionalRadio control={control} setValue={setValue} />
             )}
             <ControlledTextInput
@@ -392,7 +395,7 @@ const FormItemEditor: React.FC<Props> = ({
                 options={inputSizePickList}
               />
             )}
-            {!lockHudItemControls &&
+            {!lockSystemFieldControls &&
               ([
                 ItemType.Choice,
                 ItemType.OpenChoice,
@@ -411,8 +414,8 @@ const FormItemEditor: React.FC<Props> = ({
               )}
           </Section>
           {
-            // Disable changing choices for HUD items
-            !lockHudItemControls &&
+            // Disable changing choices for system fields
+            !lockSystemFieldControls &&
               [ItemType.Choice, ItemType.OpenChoice].includes(
                 itemTypeValue
               ) && (
@@ -425,8 +428,8 @@ const FormItemEditor: React.FC<Props> = ({
               )
           }
           {
-            // Disable changing visibility for HUD items
-            !lockHudItemControls && (
+            // Disable changing visibility for system fields
+            !lockSystemFieldControls && (
               <Section title='Visibility'>
                 {isAssessment && (
                   <ControlledSelect
@@ -548,7 +551,7 @@ const FormItemEditor: React.FC<Props> = ({
                   title={
                     <Stack direction='row' gap={1} alignItems='center'>
                       Field Key
-                      {initialItem.mapping?.fieldName && <HudChip />}
+                      {initialItem.mapping?.fieldName && <SystemFieldChip />}
                     </Stack>
                   }
                 >

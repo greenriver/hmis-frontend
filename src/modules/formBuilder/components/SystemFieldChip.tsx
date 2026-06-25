@@ -1,16 +1,16 @@
 import { Chip } from '@mui/material';
 
-const HudChip: React.FC = ({}) => {
+const SystemFieldChip: React.FC = ({}) => {
   return (
     <Chip
-      label='HUD'
+      label='System Field'
       size='small'
       variant='outlined'
       color='primary'
-      aria-label='HUD field'
+      aria-label='System field'
       sx={{ fontWeight: 600, height: '20px' }}
     />
   );
 };
 
-export default HudChip;
+export default SystemFieldChip;
