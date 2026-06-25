@@ -1017,6 +1017,7 @@ export const HmisEnums = {
     HUD_SERVICE_CATEGORIES: 'HUD_SERVICE_CATEGORIES',
     HUD_SERVICE_TYPES: 'HUD_SERVICE_TYPES',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
+    OPEN_ORGANIZATION_NAMES: 'Names of organizations with open projects',
     OPEN_PROJECTS: 'Open Projects that the user can see',
     ORGANIZATION: 'All Organizations that the User can see',
     OTHER_FUNDERS: 'OtherFunder values for all Funders across the installation',
