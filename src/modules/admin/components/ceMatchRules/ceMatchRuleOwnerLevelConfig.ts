@@ -1,6 +1,3 @@
-import { SvgIconProps } from '@mui/material';
-import { ComponentType } from 'react';
-import { generatePath } from 'react-router-dom';
 import {
   GlobalIcon,
   OrganizationIcon,
@@ -10,20 +7,13 @@ import {
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { CeMatchRuleOwnerType } from '@/types/gqlTypes';
 
-type RulePathParams = {
-  ownerId?: string;
-};
-
-type OwnerLevelIcon = ComponentType<SvgIconProps>;
-
 /**
  * Defines route, API, and display behavior for each CE rule owner level.
- * Project and Unit Group entries are scaffolded ahead of their full UI support.
  */
 export const ceMatchRuleOwnerLevelConfigs = {
   global: {
     ownerType: CeMatchRuleOwnerType.DataSource,
-    Icon: GlobalIcon as OwnerLevelIcon,
+    Icon: GlobalIcon,
     route: AdminDashboardRoutes.CE_RULES,
     getRulesPath: () => AdminDashboardRoutes.CE_RULES,
     getAddRulePath: () => AdminDashboardRoutes.CE_RULE_GLOBAL_NEW,
@@ -31,25 +21,17 @@ export const ceMatchRuleOwnerLevelConfigs = {
   },
   organization: {
     ownerType: CeMatchRuleOwnerType.Organization,
-    Icon: OrganizationIcon as OwnerLevelIcon,
+    Icon: OrganizationIcon,
     route: AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
-    getRulesPath: ({ ownerId }: RulePathParams) =>
-      ownerId
-        ? generatePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION, {
-            organizationId: ownerId,
-          })
-        : AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
-    getAddRulePath: ({ ownerId }: RulePathParams) =>
-      ownerId
-        ? generatePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW, {
-            organizationId: ownerId,
-          })
-        : undefined,
+    getRulesPath: () => undefined,
+    // TODO(#7544) - return the add-path for the given org ID
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getAddRulePath: ({ ownerId }: { ownerId?: string }) => undefined,
     label: 'Organization',
   },
   project: {
     ownerType: CeMatchRuleOwnerType.Project,
-    Icon: ProjectIcon as OwnerLevelIcon,
+    Icon: ProjectIcon,
     route: AdminDashboardRoutes.CE_RULE_PROJECTS,
     getRulesPath: () => AdminDashboardRoutes.CE_RULE_PROJECTS,
     getAddRulePath: () => undefined,
@@ -57,7 +39,7 @@ export const ceMatchRuleOwnerLevelConfigs = {
   },
   'unit-group': {
     ownerType: CeMatchRuleOwnerType.UnitGroup,
-    Icon: UnitGroupIcon as OwnerLevelIcon,
+    Icon: UnitGroupIcon,
     route: AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
     getRulesPath: () => AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
     getAddRulePath: () => undefined,
