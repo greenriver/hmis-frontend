@@ -165,7 +165,7 @@ const CommonMenuButton = ({
                       variant={'caption'}
                       sx={{ fontStyle: 'italic' }}
                     >
-                      {helperText }
+                      {helperText}
                     </Typography>
                   )}
                 </Stack>

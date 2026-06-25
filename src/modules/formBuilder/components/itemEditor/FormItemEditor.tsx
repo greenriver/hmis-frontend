@@ -323,8 +323,8 @@ const FormItemEditor: React.FC<Props> = ({
                 {canAdministrateConfig && (
                   <>
                     As a super-admin, you can edit all properties, but be
-                    cautious about changing properties that may affect system
-                    field data collection.
+                    cautious about changing properties that may affect data
+                    collection, such as choices or visibility.
                   </>
                 )}
               </Alert>
