@@ -2,6 +2,7 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
 import ReferralStepDetails from './ReferralStepDetails';
 import ReferralStepAction from '@/modules/ce/components/referral/ReferralStepAction';
+import { LocationState } from '@/routes/routeUtil';
 import {
   CeReferralFieldsFragment,
   CeReferralStepStatus,
@@ -12,9 +13,15 @@ interface Props {
   step: CeReferralStepSummaryFieldsFragment;
   referral: CeReferralFieldsFragment;
   path: string;
+  routeState?: LocationState;
 }
 
-const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
+const ReferralStepCard: React.FC<Props> = ({
+  step,
+  referral,
+  path,
+  routeState,
+}) => {
   const { name, status } = step;
 
   return (
@@ -38,6 +45,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
             step={step}
             referralId={referral.id}
             path={path}
+            routeState={routeState}
           />
         </Box>
       </Stack>

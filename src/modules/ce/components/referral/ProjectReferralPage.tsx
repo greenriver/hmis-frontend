@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import ReferralContent from './ReferralContent';
 import Loading from '@/components/elements/Loading';
@@ -6,6 +7,7 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
+import { LocationState } from '@/routes/routeUtil';
 import { useGetCeReferralQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -17,8 +19,10 @@ import { generateSafePath } from '@/utils/pathEncoding';
  */
 const ProjectReferralPage: React.FC = () => {
   const { referralId } = useSafeParams() as { referralId: string };
+  const { state } = useLocation();
 
   const { project, overrideBreadcrumbTitles } = useProjectDashboardContext();
+  const referralRouteState = state ? (state as LocationState) : undefined;
 
   const {
     data: { ceReferral: referral } = {},
@@ -58,6 +62,7 @@ const ProjectReferralPage: React.FC = () => {
         referralId: referral.id,
         projectId: project.id,
       })}
+      referralRouteState={referralRouteState}
       generateReferralStepPath={(stepId) =>
         generateSafePath(ProjectDashboardRoutes.REFERRAL_STEP, {
           referralId: referral.id,
