@@ -56,6 +56,8 @@ const adminDashboardRoutes = {
   CE_RULE_PROJECT: 'rules/projects/:projectId',
   CE_RULE_PROJECT_NEW: 'rules/projects/:projectId/new',
   CE_RULE_UNIT_GROUPS: 'rules/unit-groups',
+  CE_RULE_UNIT_GROUP: 'rules/unit-groups/:unitGroupId',
+  CE_RULE_UNIT_GROUP_NEW: 'rules/unit-groups/:unitGroupId/new',
 };
 
 // Routes within the client dashboard

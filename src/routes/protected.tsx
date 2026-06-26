@@ -37,6 +37,8 @@ import CeMatchRuleGlobalEditorPage from '@/modules/admin/components/ceMatchRules
 import CeMatchRuleOrganizationEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleOrganizationEditorPage';
 import CeMatchRuleProjectEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleProjectEditorPage';
 import CeMatchRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRulesPage';
+import CeMatchRuleUnitGroupEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleUnitGroupEditorPage';
+import CeMatchUnitGroupRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchUnitGroupRulesPage';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
@@ -1219,6 +1221,18 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: AdminDashboardRoutes.CE_RULE_UNIT_GROUP_NEW,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRuleUnitGroupEditorPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
             path: AdminDashboardRoutes.CE_RULE_ORGANIZATION,
             element: (
               <RootPermissionsFilter
@@ -1227,6 +1241,18 @@ export const protectedRoutes: RouteNode[] = [
                 otherwise={<NotFound />}
               >
                 <CeMatchOrganizationRulesPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CE_RULE_UNIT_GROUP,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchUnitGroupRulesPage />
               </RootPermissionsFilter>
             ),
           },

@@ -1,5 +1,6 @@
 import { Divider, Paper, Stack, Typography } from '@mui/material';
 
+import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
 import RuleCountSummary from '../RuleCountSummary';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -25,13 +26,18 @@ const COLUMNS: DataColumnDef<
   {
     header: 'Effective Rules',
     key: 'effectiveRules',
-    render: () => (
-      <RuleCountSummary
-        // TODO(#7544): Add correct counts when available
-        total={0}
-        inheritedCount={0}
-      />
-    ),
+    render: (unitGroup: ProjectUnitGroupRow) => {
+      const inheritedCount =
+        unitGroup.effectiveCeMatchRuleCount - unitGroup.localCeMatchRuleCount;
+
+      return (
+        <RuleCountSummary
+          total={unitGroup.effectiveCeMatchRuleCount}
+          localCount={unitGroup.localCeMatchRuleCount}
+          inheritedCount={inheritedCount}
+        />
+      );
+    },
   },
 ];
 
@@ -60,7 +66,13 @@ const CeMatchProjectUnitGroupsTable: React.FC<{
       >
         queryDocument={GetCeMatchProjectUnitGroupsDocument}
         columns={COLUMNS}
+        rowLinkTo={(unitGroup) =>
+          ceMatchRuleOwnerLevelConfigs['unit-group'].getRulesPath({
+            ownerId: unitGroup.id,
+          })
+        }
         rowName={(unitGroup) => unitGroup.name}
+        rowActionTitle='View Unit Group Rules'
         noData='No unit groups'
         pagePath='project.unitGroups'
         recordType='Unit Group'
