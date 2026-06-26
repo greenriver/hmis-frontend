@@ -845,12 +845,7 @@ export type CeMatchRuleGroup = {
   ownerId: Scalars['ID']['output'];
   ownerName: Scalars['String']['output'];
   ownerType: CeMatchRuleOwnerType;
-  rules: CeMatchRulesPaginated;
-};
-
-export type CeMatchRuleGroupRulesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
+  rules: Array<CeMatchRule>;
 };
 
 export type CeMatchRuleInput = {
@@ -22522,23 +22517,19 @@ export type CeMatchRuleGroupFieldsFragment = {
   ownerId: string;
   ownerName: string;
   local: boolean;
-  rules: {
-    __typename?: 'CeMatchRulesPaginated';
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'CeMatchRule';
-      ownerId: string;
-      ownerName: string;
-      ruleType: CeMatchRuleType;
-      priorityRank?: number | null;
-      id: string;
-      name: string;
-      ownerType: CeMatchRuleOwnerType;
-      expression: string;
-      projectTypes: Array<ProjectType>;
-      funders?: Array<FundingSource> | null;
-    }>;
-  };
+  rules: Array<{
+    __typename?: 'CeMatchRule';
+    ownerId: string;
+    ownerName: string;
+    ruleType: CeMatchRuleType;
+    priorityRank?: number | null;
+    id: string;
+    name: string;
+    ownerType: CeMatchRuleOwnerType;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
+  }>;
 };
 
 export type CeMatchRuleOrganizationFieldsFragment = {
@@ -22563,23 +22554,19 @@ export type CeMatchRuleOrganizationDetailsFragment = {
     ownerId: string;
     ownerName: string;
     local: boolean;
-    rules: {
-      __typename?: 'CeMatchRulesPaginated';
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'CeMatchRule';
-        ownerId: string;
-        ownerName: string;
-        ruleType: CeMatchRuleType;
-        priorityRank?: number | null;
-        id: string;
-        name: string;
-        ownerType: CeMatchRuleOwnerType;
-        expression: string;
-        projectTypes: Array<ProjectType>;
-        funders?: Array<FundingSource> | null;
-      }>;
-    };
+    rules: Array<{
+      __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwnerType;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }>;
   }>;
 };
 
@@ -22772,23 +22759,19 @@ export type GetCeMatchOrganizationRulesQuery = {
       ownerId: string;
       ownerName: string;
       local: boolean;
-      rules: {
-        __typename?: 'CeMatchRulesPaginated';
-        nodesCount: number;
-        nodes: Array<{
-          __typename?: 'CeMatchRule';
-          ownerId: string;
-          ownerName: string;
-          ruleType: CeMatchRuleType;
-          priorityRank?: number | null;
-          id: string;
-          name: string;
-          ownerType: CeMatchRuleOwnerType;
-          expression: string;
-          projectTypes: Array<ProjectType>;
-          funders?: Array<FundingSource> | null;
-        }>;
-      };
+      rules: Array<{
+        __typename?: 'CeMatchRule';
+        ownerId: string;
+        ownerName: string;
+        ruleType: CeMatchRuleType;
+        priorityRank?: number | null;
+        id: string;
+        name: string;
+        ownerType: CeMatchRuleOwnerType;
+        expression: string;
+        projectTypes: Array<ProjectType>;
+        funders?: Array<FundingSource> | null;
+      }>;
     }>;
   } | null;
 };
@@ -52433,10 +52416,7 @@ export const CeMatchRuleGroupFieldsFragmentDoc = gql`
     ownerName
     local
     rules {
-      nodesCount
-      nodes {
-        ...CeMatchRuleAdminSummaryFields
-      }
+      ...CeMatchRuleAdminSummaryFields
     }
   }
   ${CeMatchRuleAdminSummaryFieldsFragmentDoc}
