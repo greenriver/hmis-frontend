@@ -4,6 +4,7 @@ import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
+import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';
 
 import PrioritizedClientsTable from '@/modules/ce/components/unit/PrioritizedClientsTable';
@@ -19,6 +20,7 @@ const UnitPage: React.FC<Props> = ({}) => {
     unitId: string;
     projectId: string;
   };
+  const currentPath = useCurrentPath();
 
   const { project, overrideBreadcrumbTitles } = useProjectDashboardContext();
 
@@ -89,13 +91,14 @@ const UnitPage: React.FC<Props> = ({}) => {
             projectId={project.id}
             unitId={unitId}
             unitName={unit.name}
+            breadcrumbParentRoute={currentPath || ProjectDashboardRoutes.UNIT}
           />
         ),
       });
     }
 
     return defs;
-  }, [project, unit, unitId]);
+  }, [currentPath, project, unit, unitId]);
 
   if (loading && !unit) return <Loading />;
   if (error) throw error;
