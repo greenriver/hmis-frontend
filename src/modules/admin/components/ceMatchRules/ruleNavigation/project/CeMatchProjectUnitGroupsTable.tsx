@@ -64,7 +64,6 @@ const CeMatchProjectUnitGroupsTable: React.FC<{
         noData='No unit groups'
         pagePath='project.unitGroups'
         recordType='Unit Group'
-        defaultPageSize={10}
         queryVariables={{ id: projectId }}
         noSort
       />

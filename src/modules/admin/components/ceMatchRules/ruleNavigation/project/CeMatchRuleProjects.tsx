@@ -92,7 +92,6 @@ const CeMatchRuleProjects: React.FC = () => {
           noData='No projects with waitlist referrals enabled'
           pagePath='projects'
           recordType='Project'
-          defaultPageSize={10}
           queryVariables={{
             filters: {
               searchTerm: debouncedSearch || undefined,
