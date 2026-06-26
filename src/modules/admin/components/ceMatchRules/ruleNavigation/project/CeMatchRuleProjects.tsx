@@ -84,7 +84,11 @@ const CeMatchRuleProjects: React.FC = () => {
           }
           rowName={(project) => project.projectName}
           rowActionTitle='View Project Rules'
-          noData='No projects with waitlist referrals enabled'
+          noData={
+            debouncedSearch
+              ? 'No projects found'
+              : 'No projects with waitlist referrals enabled'
+          }
           pagePath='projects'
           recordType='Project'
           defaultPageSize={10}

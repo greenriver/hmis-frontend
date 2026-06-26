@@ -84,7 +84,11 @@ const CeMatchRuleOrganizations: React.FC = () => {
           }
           rowName={(organization) => organization.organizationName}
           rowActionTitle='View Organization Rules'
-          noData='No organizations with waitlist referrals enabled'
+          noData={
+            debouncedSearch
+              ? 'No organizations found'
+              : 'No organizations with waitlist referrals enabled'
+          }
           pagePath='organizations'
           recordType='Organization'
           defaultPageSize={10}

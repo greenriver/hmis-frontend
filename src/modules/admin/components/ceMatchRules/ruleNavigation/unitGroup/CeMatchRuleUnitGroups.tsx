@@ -84,7 +84,11 @@ const CeMatchRuleUnitGroups: React.FC = () => {
           }
           rowName={(unitGroup) => unitGroup.name}
           rowActionTitle='View Unit Group Rules'
-          noData='No unit groups with waitlist referrals enabled'
+          noData={
+            debouncedSearch
+              ? 'No unit groups found'
+              : 'No unit groups with waitlist referrals enabled'
+          }
           pagePath='unitGroups'
           recordType='Unit Group'
           defaultPageSize={10}
