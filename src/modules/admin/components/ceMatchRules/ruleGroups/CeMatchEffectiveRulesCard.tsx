@@ -11,6 +11,7 @@ export interface CeMatchRuleCountSummary {
 
 interface Props {
   ownerName: string;
+  ownerTo?: To;
   effectiveRulesCount: number;
   ruleCountSummaries: CeMatchRuleCountSummary[];
   children: ReactNode;
@@ -23,6 +24,7 @@ interface Props {
  */
 const CeMatchEffectiveRulesCard: React.FC<Props> = ({
   ownerName,
+  ownerTo,
   effectiveRulesCount,
   ruleCountSummaries,
   children,
@@ -30,7 +32,13 @@ const CeMatchEffectiveRulesCard: React.FC<Props> = ({
   <Paper>
     <Stack gap={1} sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
       <Typography variant='cardTitle' component='h2' fontWeight='600'>
-        Effective Rules for {ownerName} ({effectiveRulesCount})
+        Effective Rules for{' '}
+        {ownerTo ? (
+          <RouterLink to={ownerTo}>{ownerName}</RouterLink>
+        ) : (
+          ownerName
+        )}{' '}
+        ({effectiveRulesCount})
       </Typography>
       <Stack direction='row' gap={4} flexWrap='wrap'>
         {ruleCountSummaries.map(({ label, count, to }) => (

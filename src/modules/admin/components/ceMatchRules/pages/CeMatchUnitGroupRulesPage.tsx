@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import CeMatchEffectiveRulesCard from '../ruleGroups/CeMatchEffectiveRulesCard';
 import CeMatchRuleGroupsAccordion from '../ruleGroups/CeMatchRuleGroupsAccordion';
@@ -8,7 +8,6 @@ import {
   getCeMatchRuleGroupLabel,
   getCeMatchRuleGroupPath,
 } from '../ruleGroups/ceMatchRuleGroupUtil';
-import CeMatchProjectUnitGroupsTable from '../ruleNavigation/project/CeMatchProjectUnitGroupsTable';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
@@ -16,46 +15,52 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { useAdminDashboardContext } from '@/modules/admin/components/AdminDashboard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { AdminDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
-import { useGetCeMatchProjectRulesQuery } from '@/types/gqlTypes';
+import { useGetCeMatchUnitGroupRulesQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 /**
- * Displays effective CE rules for a selected project, and lists its unit groups.
+ * Displays effective CE rules for a selected unit group.
  */
-const CeMatchProjectRulesPage: React.FC = () => {
-  const { projectId } = useSafeParams<{ projectId?: string }>();
-  const { data, loading, error } = useGetCeMatchProjectRulesQuery({
-    variables: { id: projectId || '' },
-    skip: !projectId,
+const CeMatchUnitGroupRulesPage: React.FC = () => {
+  const { unitGroupId } = useSafeParams<{ unitGroupId?: string }>();
+  const { data, loading, error } = useGetCeMatchUnitGroupRulesQuery({
+    variables: { id: unitGroupId || '' },
+    skip: !unitGroupId,
     fetchPolicy: 'cache-and-network',
   });
-  const project = data?.project;
+  const unitGroup = data?.unitGroup;
   const { overrideBreadcrumbTitles } = useAdminDashboardContext();
 
+  const unitGroupName = useMemo(
+    () => `${unitGroup?.project?.projectName}: ${unitGroup?.name}`,
+    [unitGroup]
+  );
+
   useEffect(() => {
-    if (!project) return;
+    if (!unitGroup) return;
 
     overrideBreadcrumbTitles({
-      [AdminDashboardRoutes.CE_RULE_PROJECT]: project.projectName,
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUP]: unitGroup.name,
     });
-  }, [project, overrideBreadcrumbTitles]);
+  }, [unitGroup, overrideBreadcrumbTitles]);
 
-  if (!projectId) return <NotFound />;
+  if (!unitGroupId) return <NotFound />;
   if (error) return <ApolloErrorAlert error={error} />;
   if (loading && !data) return <Loading />;
-  if (!project) return <NotFound />;
+  if (!unitGroup) return <NotFound />;
 
   return (
     <>
-      <PageTitle overlineText='Project Rules' title={project.projectName} />
+      <PageTitle overlineText='Unit Group Rules' title={unitGroupName} />
       <Stack gap={3}>
         <CeMatchEffectiveRulesCard
-          ownerName={project.projectName}
-          ownerTo={generateSafePath(ProjectDashboardRoutes.UNITS, {
-            projectId: project.id,
+          ownerName={unitGroupName}
+          ownerTo={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+            projectId: unitGroup.project.id,
+            unitGroupId: unitGroup.id,
           })}
-          effectiveRulesCount={project.effectiveCeMatchRuleCount}
-          ruleCountSummaries={project.effectiveCeMatchRuleGroups.map(
+          effectiveRulesCount={unitGroup.effectiveCeMatchRuleCount}
+          ruleCountSummaries={unitGroup.effectiveCeMatchRuleGroups.map(
             (group) => ({
               label: getCeMatchRuleGroupLabel(group),
               count: getCeMatchRuleGroupCount(group),
@@ -64,16 +69,12 @@ const CeMatchProjectRulesPage: React.FC = () => {
           )}
         >
           <CeMatchRuleGroupsAccordion
-            ruleGroups={project.effectiveCeMatchRuleGroups}
+            ruleGroups={unitGroup.effectiveCeMatchRuleGroups}
           />
         </CeMatchEffectiveRulesCard>
-        <CeMatchProjectUnitGroupsTable
-          projectId={project.id}
-          projectName={project.projectName}
-        />
       </Stack>
     </>
   );
 };
 
-export default CeMatchProjectRulesPage;
+export default CeMatchUnitGroupRulesPage;

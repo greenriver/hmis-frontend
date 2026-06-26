@@ -80,6 +80,25 @@ query GetCeMatchProjectRules($id: ID!) {
   }
 }
 
+query GetCeMatchRuleUnitGroups(
+  $filters: UnitGroupFilterOptions
+  $limit: Int
+  $offset: Int
+) {
+  unitGroups(filters: $filters, limit: $limit, offset: $offset) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleUnitGroupFields
+    }
+  }
+}
+
+query GetCeMatchUnitGroupRules($id: ID!) {
+  unitGroup(id: $id) {
+    ...CeMatchRuleUnitGroupDetails
+  }
+}
+
 query GetCeMatchProjectUnitGroups(
   $id: ID!
   $limit: Int = 10
@@ -92,8 +111,7 @@ query GetCeMatchProjectUnitGroups(
       limit
       nodesCount
       nodes {
-        id
-        name
+        ...CeMatchRuleUnitGroupFields
       }
     }
   }
