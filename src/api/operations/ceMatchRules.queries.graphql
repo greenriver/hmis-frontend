@@ -31,3 +31,56 @@ query GetCeMatchGlobalRules {
     }
   }
 }
+
+query GetCeMatchRuleOrganizations(
+  $filters: OrganizationFilterOptions
+  $limit: Int
+  $offset: Int
+) {
+  organizations(
+    filters: $filters
+    sortOrder: NAME
+    limit: $limit
+    offset: $offset
+  ) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleOrganizationFields
+    }
+  }
+}
+
+query GetCeMatchOrganizationRules($id: ID!) {
+  organization(id: $id) {
+    ...CeMatchRuleOrganizationDetails
+  }
+}
+
+query GetCeMatchOrganizationProjects(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ProjectsForEnrollmentFilterOptions
+  $sortOrder: ProjectSortOption
+) {
+  organization(id: $id) {
+    id
+    projects(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: $sortOrder
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        projectName
+        unitGroups(limit: 1) {
+          nodesCount
+        }
+      }
+    }
+  }
+}

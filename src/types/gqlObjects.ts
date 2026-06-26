@@ -989,6 +989,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeMatchRuleGroup',
+    fields: [
+      {
+        name: 'local',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'ownerId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'ownerName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'ownerType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CeMatchRuleOwnerType', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeMatchRuleStructuredExpression',
     fields: [
       {
@@ -6005,6 +6042,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Organization',
     fields: [
       {
+        name: 'ceWaitlistUnitGroupCount',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'contactInformation',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -6025,6 +6070,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'effectiveCeMatchRuleCount',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'hudId',
         type: {
           kind: 'NON_NULL',
@@ -6038,6 +6091,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'localCeMatchRuleCount',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
         },
       },
       {
@@ -9554,6 +9615,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'OrganizationFilterOptions',
     args: [
       {
+        name: 'ceWaitlistsEnabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -9676,6 +9741,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
+        name: 'ceWaitlistsEnabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'funder',
         type: {
           kind: 'LIST',
@@ -9793,6 +9862,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ProjectsForEnrollmentFilterOptions',
     args: [
+      {
+        name: 'ceWaitlistsEnabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
       {
         name: 'funder',
         type: {

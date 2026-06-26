@@ -284,6 +284,14 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Organizations',
         parent: AdminDashboardRoutes.CE_RULES,
       },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATION]: {
+        title: 'Organization', // Overridden in the page with overrideBreadcrumbTitles
+        parent: AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
+      },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW]: {
+        title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULE_ORGANIZATION,
+      },
       [AdminDashboardRoutes.CE_RULE_PROJECTS]: {
         title: 'Projects',
         parent: AdminDashboardRoutes.CE_RULES,

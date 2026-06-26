@@ -1,9 +1,12 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
+import { To } from 'react-router-dom';
+import RouterLink from '@/components/elements/RouterLink';
 
 export interface CeMatchRuleCountSummary {
   label: string;
   count: number;
+  to?: To;
 }
 
 interface Props {
@@ -30,9 +33,10 @@ const CeMatchEffectiveRulesCard: React.FC<Props> = ({
         Effective Rules for {ownerName} ({effectiveRulesCount})
       </Typography>
       <Stack direction='row' gap={4} flexWrap='wrap'>
-        {ruleCountSummaries.map(({ label, count }) => (
+        {ruleCountSummaries.map(({ label, count, to }) => (
           <Typography key={label} variant='body2'>
-            {label}: {count} rules
+            {to ? <RouterLink to={to}>{label}</RouterLink> : label}: {count}{' '}
+            rules
           </Typography>
         ))}
       </Stack>
