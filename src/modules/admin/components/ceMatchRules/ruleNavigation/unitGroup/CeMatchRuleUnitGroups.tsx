@@ -65,14 +65,14 @@ const CeMatchRuleUnitGroups: React.FC = () => {
       <CommonSearchInput
         label='Search Unit Groups'
         name='search unit groups'
-        placeholder='Search by unit group name'
+        placeholder='Search by unit group name or project name'
         value={search}
         onChange={setSearch}
         fullWidth
         size='small'
         searchAdornment
         clearAdornment
-        helperText='Only unit groups in projects with waitlist referrals enabled will appear.'
+        helperText='To appear here, unit groups must be in a project with waitlist referrals enabled, and have a referral template.'
       />
       <Paper>
         <GenericTableWithData<
