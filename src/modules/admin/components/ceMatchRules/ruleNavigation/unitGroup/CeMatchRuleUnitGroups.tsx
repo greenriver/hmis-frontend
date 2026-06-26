@@ -103,7 +103,6 @@ const CeMatchRuleUnitGroups: React.FC = () => {
           }
           pagePath='unitGroups'
           recordType='Unit Group'
-          defaultPageSize={10}
           queryVariables={{
             filters: {
               searchTerm: debouncedSearch || undefined,
