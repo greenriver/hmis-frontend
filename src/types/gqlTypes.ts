@@ -22602,23 +22602,19 @@ export type CeMatchRuleProjectDetailsFragment = {
     ownerId: string;
     ownerName: string;
     local: boolean;
-    rules: {
-      __typename?: 'CeMatchRulesPaginated';
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'CeMatchRule';
-        ownerId: string;
-        ownerName: string;
-        ruleType: CeMatchRuleType;
-        priorityRank?: number | null;
-        id: string;
-        name: string;
-        ownerType: CeMatchRuleOwnerType;
-        expression: string;
-        projectTypes: Array<ProjectType>;
-        funders?: Array<FundingSource> | null;
-      }>;
-    };
+    rules: Array<{
+      __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwnerType;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }>;
   }>;
   organization: {
     __typename?: 'Organization';
@@ -22879,23 +22875,19 @@ export type GetCeMatchProjectRulesQuery = {
       ownerId: string;
       ownerName: string;
       local: boolean;
-      rules: {
-        __typename?: 'CeMatchRulesPaginated';
-        nodesCount: number;
-        nodes: Array<{
-          __typename?: 'CeMatchRule';
-          ownerId: string;
-          ownerName: string;
-          ruleType: CeMatchRuleType;
-          priorityRank?: number | null;
-          id: string;
-          name: string;
-          ownerType: CeMatchRuleOwnerType;
-          expression: string;
-          projectTypes: Array<ProjectType>;
-          funders?: Array<FundingSource> | null;
-        }>;
-      };
+      rules: Array<{
+        __typename?: 'CeMatchRule';
+        ownerId: string;
+        ownerName: string;
+        ruleType: CeMatchRuleType;
+        priorityRank?: number | null;
+        id: string;
+        name: string;
+        ownerType: CeMatchRuleOwnerType;
+        expression: string;
+        projectTypes: Array<ProjectType>;
+        funders?: Array<FundingSource> | null;
+      }>;
     }>;
     organization: {
       __typename?: 'Organization';
