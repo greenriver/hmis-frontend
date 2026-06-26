@@ -26,19 +26,12 @@ const ORGANIZATION_COLUMNS: DataColumnDef<
   {
     header: 'Effective Rules',
     key: 'effectiveCeMatchRuleCount',
-    render: (organization) => {
-      const inheritedCount =
-        organization.effectiveCeMatchRuleCount -
-        organization.localCeMatchRuleCount;
-
-      return (
-        <RuleCountSummary
-          total={organization.effectiveCeMatchRuleCount}
-          localCount={organization.localCeMatchRuleCount}
-          inheritedCount={inheritedCount}
-        />
-      );
-    },
+    render: (organization) => (
+      <RuleCountSummary
+        total={organization.effectiveCeMatchRuleCount}
+        localCount={organization.localCeMatchRuleCount}
+      />
+    ),
   },
   {
     header: 'Unit Groups',

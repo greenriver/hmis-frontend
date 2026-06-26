@@ -26,18 +26,12 @@ const PROJECT_COLUMNS: DataColumnDef<
   {
     header: 'Effective Rules',
     key: 'effectiveCeMatchRuleCount',
-    render: (project) => {
-      const inheritedCount =
-        project.effectiveCeMatchRuleCount - project.localCeMatchRuleCount;
-
-      return (
-        <RuleCountSummary
-          total={project.effectiveCeMatchRuleCount}
-          localCount={project.localCeMatchRuleCount}
-          inheritedCount={inheritedCount}
-        />
-      );
-    },
+    render: (project) => (
+      <RuleCountSummary
+        total={project.effectiveCeMatchRuleCount}
+        localCount={project.localCeMatchRuleCount}
+      />
+    ),
   },
   {
     header: 'Organization',

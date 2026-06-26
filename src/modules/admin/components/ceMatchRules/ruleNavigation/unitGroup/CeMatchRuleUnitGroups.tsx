@@ -26,18 +26,12 @@ const UNIT_GROUP_COLUMNS: DataColumnDef<
   {
     header: 'Rules',
     key: 'effectiveCeMatchRuleCount',
-    render: (unitGroup) => {
-      const inheritedCount =
-        unitGroup.effectiveCeMatchRuleCount - unitGroup.localCeMatchRuleCount;
-
-      return (
-        <RuleCountSummary
-          total={unitGroup.effectiveCeMatchRuleCount}
-          localCount={unitGroup.localCeMatchRuleCount}
-          inheritedCount={inheritedCount}
-        />
-      );
-    },
+    render: (unitGroup) => (
+      <RuleCountSummary
+        total={unitGroup.effectiveCeMatchRuleCount}
+        localCount={unitGroup.localCeMatchRuleCount}
+      />
+    ),
   },
   {
     header: 'Project',
