@@ -46,7 +46,7 @@ const PROJECT_COLUMNS: DataColumnDef<
 ];
 
 /**
- * Shows the Project owner-level tab where users choose a project.
+ * Shows the Project owner-level tab where users choose a project to view its CE rules.
  */
 const CeMatchRuleProjects: React.FC = () => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');

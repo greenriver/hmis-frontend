@@ -36,7 +36,7 @@ const COLUMNS: DataColumnDef<
 ];
 
 /**
- * Lists unit groups under a project as the next scaffolded CE rule owner level.
+ * Lists unit groups under a project with information about their effective CE rules.
  */
 const CeMatchProjectUnitGroupsTable: React.FC<{
   projectId: string;
