@@ -1,11 +1,12 @@
 import { Paper, Stack, Typography } from '@mui/material';
+import { generatePath } from 'react-router-dom';
 
-import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
 import RuleCountSummary from '../RuleCountSummary';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   CeMatchRuleOrganizationFieldsFragment,
   GetCeMatchRuleOrganizationsDocument,
@@ -84,8 +85,8 @@ const CeMatchRuleOrganizations: React.FC = () => {
           queryDocument={GetCeMatchRuleOrganizationsDocument}
           columns={ORGANIZATION_COLUMNS}
           rowLinkTo={(organization) =>
-            ceMatchRuleOwnerLevelConfigs.organization.getRulesPath({
-              ownerId: organization.id,
+            generatePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION, {
+              organizationId: organization.id,
             })
           }
           rowName={(organization) => organization.organizationName}

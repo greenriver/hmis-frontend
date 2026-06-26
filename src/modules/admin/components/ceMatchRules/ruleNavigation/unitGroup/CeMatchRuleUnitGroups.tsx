@@ -1,11 +1,12 @@
 import { Paper, Stack, Typography } from '@mui/material';
+import { generatePath } from 'react-router-dom';
 
-import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
 import RuleCountSummary from '../RuleCountSummary';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   CeMatchRuleUnitGroupFieldsFragment,
   GetCeMatchRuleUnitGroupsDocument,
@@ -83,8 +84,8 @@ const CeMatchRuleUnitGroups: React.FC = () => {
           queryDocument={GetCeMatchRuleUnitGroupsDocument}
           columns={UNIT_GROUP_COLUMNS}
           rowLinkTo={(unitGroup) =>
-            ceMatchRuleOwnerLevelConfigs['unit-group'].getRulesPath({
-              ownerId: unitGroup.id,
+            generatePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP, {
+              unitGroupId: unitGroup.id,
             })
           }
           rowName={(unitGroup) => unitGroup.name}

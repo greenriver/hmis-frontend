@@ -1,9 +1,10 @@
 import { Divider, Paper, Stack, Typography } from '@mui/material';
+import { generatePath } from 'react-router-dom';
 
-import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
 import RuleCountSummary from '../RuleCountSummary';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetCeMatchOrganizationProjectsDocument,
   GetCeMatchOrganizationProjectsQuery,
@@ -72,8 +73,8 @@ const CeMatchOrganizationProjectsTable: React.FC<{
         queryDocument={GetCeMatchOrganizationProjectsDocument}
         columns={COLUMNS}
         rowLinkTo={(project) =>
-          ceMatchRuleOwnerLevelConfigs.project.getRulesPath({
-            ownerId: project.id,
+          generatePath(AdminDashboardRoutes.CE_RULE_PROJECT, {
+            projectId: project.id,
           })
         }
         rowName={(project) => project.projectName}
