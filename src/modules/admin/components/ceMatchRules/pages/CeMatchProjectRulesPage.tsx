@@ -8,7 +8,7 @@ import {
   getCeMatchRuleGroupLabel,
   getCeMatchRuleGroupPath,
 } from '../ruleGroups/ceMatchRuleGroupUtil';
-import CeMatchOrganizationProjectsTable from '../ruleNavigation/organization/CeMatchOrganizationProjectsTable';
+import CeMatchProjectUnitGroupsTable from '../ruleNavigation/project/CeMatchProjectUnitGroupsTable';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
@@ -16,46 +16,42 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { useAdminDashboardContext } from '@/modules/admin/components/AdminDashboard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { AdminDashboardRoutes } from '@/routes/routes';
-import { useGetCeMatchOrganizationRulesQuery } from '@/types/gqlTypes';
+import { useGetCeMatchProjectRulesQuery } from '@/types/gqlTypes';
 
 /**
- * Displays effective CE rules for a selected organization and its descendants.
+ * Displays effective CE rules for a selected project, and lists its unit groups.
  */
-const CeMatchOrganizationRulesPage: React.FC = () => {
-  const { organizationId } = useSafeParams<{ organizationId?: string }>();
-  const { data, loading, error } = useGetCeMatchOrganizationRulesQuery({
-    variables: { id: organizationId || '' },
-    skip: !organizationId,
+const CeMatchProjectRulesPage: React.FC = () => {
+  const { projectId } = useSafeParams<{ projectId?: string }>();
+  const { data, loading, error } = useGetCeMatchProjectRulesQuery({
+    variables: { id: projectId || '' },
+    skip: !projectId,
     fetchPolicy: 'cache-and-network',
   });
-  const organization = data?.organization;
+  const project = data?.project;
   const { overrideBreadcrumbTitles } = useAdminDashboardContext();
 
   useEffect(() => {
-    if (!organization) return;
+    if (!project) return;
 
     overrideBreadcrumbTitles({
-      [AdminDashboardRoutes.CE_RULE_ORGANIZATION]:
-        organization.organizationName,
+      [AdminDashboardRoutes.CE_RULE_PROJECT]: project.projectName,
     });
-  }, [organization, overrideBreadcrumbTitles]);
+  }, [project, overrideBreadcrumbTitles]);
 
-  if (!organizationId) return <NotFound />;
+  if (!projectId) return <NotFound />;
   if (error) return <ApolloErrorAlert error={error} />;
   if (loading && !data) return <Loading />;
-  if (!organization) return <NotFound />;
+  if (!project) return <NotFound />;
 
   return (
     <>
-      <PageTitle
-        overlineText='Organization Rules'
-        title={organization.organizationName}
-      />
+      <PageTitle overlineText='Project Rules' title={project.projectName} />
       <Stack gap={3}>
         <CeMatchEffectiveRulesCard
-          ownerName={organization.organizationName}
-          effectiveRulesCount={organization.effectiveCeMatchRuleCount}
-          ruleCountSummaries={organization.effectiveCeMatchRuleGroups.map(
+          ownerName={project.projectName}
+          effectiveRulesCount={project.effectiveCeMatchRuleCount}
+          ruleCountSummaries={project.effectiveCeMatchRuleGroups.map(
             (group) => ({
               label: getCeMatchRuleGroupLabel(group),
               count: getCeMatchRuleGroupCount(group),
@@ -64,16 +60,16 @@ const CeMatchOrganizationRulesPage: React.FC = () => {
           )}
         >
           <CeMatchRuleGroupsAccordion
-            ruleGroups={organization.effectiveCeMatchRuleGroups}
+            ruleGroups={project.effectiveCeMatchRuleGroups}
           />
         </CeMatchEffectiveRulesCard>
-        <CeMatchOrganizationProjectsTable
-          organizationId={organization.id}
-          organizationName={organization.organizationName}
+        <CeMatchProjectUnitGroupsTable
+          projectId={project.id}
+          projectName={project.projectName}
         />
       </Stack>
     </>
   );
 };
 
-export default CeMatchOrganizationRulesPage;
+export default CeMatchProjectRulesPage;

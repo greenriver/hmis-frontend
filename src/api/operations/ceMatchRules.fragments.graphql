@@ -70,3 +70,24 @@ fragment CeMatchRuleOrganizationDetails on Organization {
     ...CeMatchRuleGroupFields
   }
 }
+
+fragment CeMatchRuleProjectFields on Project {
+  id
+  projectName
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+  organization {
+    id
+    organizationName
+  }
+  unitGroups(limit: 1) {
+    nodesCount
+  }
+}
+
+fragment CeMatchRuleProjectDetails on Project {
+  ...CeMatchRuleProjectFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}

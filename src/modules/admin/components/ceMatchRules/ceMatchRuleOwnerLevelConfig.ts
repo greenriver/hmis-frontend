@@ -42,8 +42,18 @@ export const ceMatchRuleOwnerLevelConfigs = {
     ownerType: CeMatchRuleOwnerType.Project,
     Icon: ProjectIcon,
     route: AdminDashboardRoutes.CE_RULE_PROJECTS,
-    getRulesPath: () => AdminDashboardRoutes.CE_RULE_PROJECTS,
-    getAddRulePath: () => undefined,
+    getRulesPath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_PROJECT, {
+            projectId: ownerId,
+          })
+        : AdminDashboardRoutes.CE_RULE_PROJECTS,
+    getAddRulePath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_PROJECT_NEW, {
+            projectId: ownerId,
+          })
+        : undefined,
     label: 'Project',
   },
   'unit-group': {
