@@ -283,7 +283,10 @@ export const dob = (client: { dob?: string | null }) => {
   return parseAndFormatDate(client.dob);
 };
 
-export const age = (client: { dob?: string | null }) => {
+export const age = (client: { dob?: string | null; age?: number | null }) => {
+  // DOB may be null because it's unknown, OR because the user doesn't have permission to view DOB.
+  // Age is always present if it is known, so return age first if available.
+  if (!isNil(client.age)) return client.age;
   if (!client.dob) return null;
   const date = parseISO(client.dob);
   return differenceInYears(new Date(), date);
@@ -612,7 +615,7 @@ export const evaluateDataCollectedAbout = (
       const clientAge = age(client);
       return (
         relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
-        isNil(client.dob) ||
+        isNil(clientAge) || // If we don't know the client's age, assume adult
         (!isNil(clientAge) && clientAge >= 18)
       );
     case DataCollectedAbout.VeteranHoh:
