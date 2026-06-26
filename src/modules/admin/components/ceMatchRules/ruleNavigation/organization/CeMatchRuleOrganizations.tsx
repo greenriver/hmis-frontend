@@ -102,7 +102,6 @@ const CeMatchRuleOrganizations: React.FC = () => {
           }
           pagePath='organizations'
           recordType='Organization'
-          defaultPageSize={10}
           queryVariables={{
             filters: {
               searchTerm: debouncedSearch || undefined,

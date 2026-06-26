@@ -87,7 +87,6 @@ const CeMatchOrganizationProjectsTable: React.FC<{
         noData='No projects'
         pagePath='organization.projects'
         recordType='Project'
-        defaultPageSize={10}
         queryVariables={{
           id: organizationId,
           filters: {
