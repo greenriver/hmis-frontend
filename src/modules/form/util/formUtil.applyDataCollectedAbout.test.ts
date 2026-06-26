@@ -66,6 +66,30 @@ describe('applyDataCollectedAbout', () => {
       )
     ).toMatchObject(items);
   });
+  it('includes HOH_AND_ADULTS if client has explicit adult age and masked DOB', () => {
+    const items = [
+      { linkId: '1', dataCollectedAbout: DataCollectedAbout.HohAndAdults },
+    ];
+    expect(
+      applyDataCollectedAbout(
+        items as FormDefinitionFieldsFragment['definition']['item'],
+        { ...client, age: 18 },
+        RelationshipToHoH.UnrelatedHouseholdMember
+      )
+    ).toMatchObject(items);
+  });
+  it('excludes non-HOH children from HOH_AND_ADULTS if DOB is masked', () => {
+    const items = [
+      { linkId: '1', dataCollectedAbout: DataCollectedAbout.HohAndAdults },
+    ];
+    expect(
+      applyDataCollectedAbout(
+        items as FormDefinitionFieldsFragment['definition']['item'],
+        { ...client, age: 10 },
+        RelationshipToHoH.UnrelatedHouseholdMember
+      )
+    ).toHaveLength(0);
+  });
   it('excludes non-HOH children from HOH_AND_ADULTS', () => {
     const items = [
       { linkId: '1', dataCollectedAbout: DataCollectedAbout.HohAndAdults },
