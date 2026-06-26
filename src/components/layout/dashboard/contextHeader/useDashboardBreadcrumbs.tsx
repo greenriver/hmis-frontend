@@ -172,8 +172,9 @@ export const useProjectBreadcrumbConfig = (
         routeParams: referralBreadcrumbParentRouteParams,
       },
       [ProjectDashboardRoutes.CE_UNIT]: {
-        title: 'Unit',
+        title: referralBreadcrumbParentTitle || 'Unit',
         parent: ProjectDashboardRoutes.CE,
+        routeParams: referralBreadcrumbParentRouteParams,
       },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;

@@ -25,12 +25,14 @@ interface Props {
   projectId: string;
   unitId: string;
   unitName: string;
+  breadcrumbParentRoute: string;
 }
 
 const UnitReferralHistoryTable: React.FC<Props> = ({
   projectId,
   unitId,
   unitName,
+  breadcrumbParentRoute,
 }) => {
   return (
     <Paper>
@@ -55,7 +57,7 @@ const UnitReferralHistoryTable: React.FC<Props> = ({
         }
         rowLinkState={{
           projectReferralBreadcrumbParent: {
-            route: ProjectDashboardRoutes.UNIT,
+            route: breadcrumbParentRoute,
             routeParams: { projectId, unitId },
             title: unitName,
           },
