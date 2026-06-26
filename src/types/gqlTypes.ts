@@ -23138,6 +23138,7 @@ export type ClientNameFragment = {
 export type ClientNameDobVetFragment = {
   __typename?: 'Client';
   dob?: string | null;
+  age?: number | null;
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
@@ -28335,9 +28336,9 @@ export type ProjectEnrollmentFieldsFragment = {
     __typename?: 'Client';
     id: string;
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
-    age?: number | null;
     gender: Array<Gender>;
     pronouns: Array<string>;
     firstName?: string | null;
@@ -28409,6 +28410,7 @@ export type EnrollmentFieldsFragment = {
   client: {
     __typename?: 'Client';
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
@@ -28433,6 +28435,7 @@ export type AssessedClientFieldsFragment = {
   ssn?: string | null;
   race: Array<Race>;
   dob?: string | null;
+  age?: number | null;
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
@@ -28448,6 +28451,7 @@ export type EnrolledClientFieldsFragment = {
   ssn?: string | null;
   race: Array<Race>;
   dob?: string | null;
+  age?: number | null;
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
@@ -28747,6 +28751,7 @@ export type AllEnrollmentDetailsFragment = {
     __typename?: 'Client';
     hudChronic?: boolean | null;
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     ssn?: string | null;
     race: Array<Race>;
@@ -29755,6 +29760,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
   client: {
     __typename?: 'Client';
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
@@ -29938,6 +29944,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
   client: {
     __typename?: 'Client';
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
@@ -30046,6 +30053,7 @@ export type GetEnrollmentQuery = {
     client: {
       __typename?: 'Client';
       dob?: string | null;
+      age?: number | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
       lockVersion: number;
@@ -30232,6 +30240,7 @@ export type GetEnrollmentDetailsQuery = {
       __typename?: 'Client';
       hudChronic?: boolean | null;
       dob?: string | null;
+      age?: number | null;
       veteranStatus: NoYesReasonsForMissingData;
       ssn?: string | null;
       race: Array<Race>;
@@ -31096,6 +31105,7 @@ export type GetEnrollmentWithHouseholdQuery = {
     client: {
       __typename?: 'Client';
       dob?: string | null;
+      age?: number | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
       lockVersion: number;
@@ -31229,6 +31239,7 @@ export type GetEnrollmentRemindersQuery = {
         __typename?: 'Client';
         id: string;
         dob?: string | null;
+        age?: number | null;
         veteranStatus: NoYesReasonsForMissingData;
         lockVersion: number;
         firstName?: string | null;
@@ -39388,6 +39399,7 @@ export type SubmitFormMutation = {
           client: {
             __typename?: 'Client';
             dob?: string | null;
+            age?: number | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
@@ -44806,9 +44818,9 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
     __typename?: 'Client';
     id: string;
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
-    age?: number | null;
     gender: Array<Gender>;
     pronouns: Array<string>;
     firstName?: string | null;
@@ -45200,9 +45212,9 @@ export type GetProjectEnrollmentsQuery = {
           __typename?: 'Client';
           id: string;
           dob?: string | null;
+          age?: number | null;
           veteranStatus: NoYesReasonsForMissingData;
           lockVersion: number;
-          age?: number | null;
           gender: Array<Gender>;
           pronouns: Array<string>;
           firstName?: string | null;
@@ -45331,6 +45343,7 @@ export type GetProjectServicesQuery = {
           client: {
             __typename?: 'Client';
             dob?: string | null;
+            age?: number | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
@@ -45414,6 +45427,7 @@ export type GetProjectAssessmentsQuery = {
           client: {
             __typename?: 'Client';
             dob?: string | null;
+            age?: number | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
@@ -47637,6 +47651,7 @@ export type ReminderFieldsFragment = {
     __typename?: 'Client';
     id: string;
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
     firstName?: string | null;
@@ -52843,6 +52858,7 @@ export const ClientNameDobVetFragmentDoc = gql`
   fragment ClientNameDobVet on Client {
     ...ClientName
     dob
+    age
     veteranStatus
   }
   ${ClientNameFragmentDoc}
