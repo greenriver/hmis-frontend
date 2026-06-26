@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import CeMatchEffectiveRulesCard from '../ruleGroups/CeMatchEffectiveRulesCard';
 import CeMatchRuleGroupsAccordion from '../ruleGroups/CeMatchRuleGroupsAccordion';
@@ -30,6 +30,11 @@ const CeMatchUnitGroupRulesPage: React.FC = () => {
   const unitGroup = data?.unitGroup;
   const { overrideBreadcrumbTitles } = useAdminDashboardContext();
 
+  const unitGroupName = useMemo(
+    () => `${unitGroup?.project?.projectName}: ${unitGroup?.name}`,
+    [unitGroup]
+  );
+
   useEffect(() => {
     if (!unitGroup) return;
 
@@ -45,10 +50,10 @@ const CeMatchUnitGroupRulesPage: React.FC = () => {
 
   return (
     <>
-      <PageTitle overlineText='Unit Group Rules' title={unitGroup.name} />
+      <PageTitle overlineText='Unit Group Rules' title={unitGroupName} />
       <Stack gap={3}>
         <CeMatchEffectiveRulesCard
-          ownerName={unitGroup.name}
+          ownerName={unitGroupName}
           effectiveRulesCount={unitGroup.effectiveCeMatchRuleCount}
           ruleCountSummaries={unitGroup.effectiveCeMatchRuleGroups.map(
             (group) => ({
