@@ -2,6 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 
 import ClientImage from './ClientImage';
+import RestrictedRecordBadge from './RestrictedRecordBadge';
 
 import {
   clientNameAllParts,
@@ -20,12 +21,17 @@ const ClientCardMini = ({ client, hideImage = false }: Props) => {
   const clientAge = age(client);
   const clientPronouns = pronouns(client);
   const clientName = clientNameAllParts(client);
+  const showRestrictedBadge =
+    client.restricted && client.access.canViewRestrictedStatus;
 
   return (
     <Stack gap={0.5}>
-      <Typography component='p' variant='h5'>
-        {clientName}
-      </Typography>
+      <Stack direction='row' gap={1} alignItems='center' flexWrap='wrap'>
+        <Typography component='p' variant='h5'>
+          {clientName}
+        </Typography>
+        {showRestrictedBadge && <RestrictedRecordBadge />}
+      </Stack>
       <Stack direction='row' gap={1} sx={{ mt: 1 }}>
         {!hideImage && (
           <ClientImage

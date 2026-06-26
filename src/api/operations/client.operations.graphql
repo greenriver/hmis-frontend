@@ -1,0 +1,25 @@
+mutation SetClientRestricted(
+  $clientId: ID!
+  $restricted: Boolean!
+  $lockVersion: Int
+) {
+  setClientRestricted(
+    clientId: $clientId
+    restricted: $restricted
+    lockVersion: $lockVersion
+  ) {
+    client {
+      id
+      lockVersion
+      restricted
+      access {
+        id
+        canMarkRestricted
+        canViewRestrictedStatus
+      }
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

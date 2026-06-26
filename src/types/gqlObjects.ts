@@ -1989,6 +1989,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
+      {
+        name: 'restricted',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
       { name: 'sex', type: { kind: 'ENUM', name: 'Sex', ofType: null } },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
@@ -2105,6 +2113,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canMarkRestricted',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canMergeClients',
         type: {
           kind: 'NON_NULL',
@@ -2210,6 +2226,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewRestrictedStatus',
         type: {
           kind: 'NON_NULL',
           name: null,

@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import ClientProfileCardAccordion from './ClientProfileCardAccordion';
 import ClientProfileCardImage from './ClientProfileCardImage';
 import ClientProfileCardTextTable from './ClientProfileCardTextTable';
+import RestrictClientRecordToggle from '../RestrictClientRecordToggle';
+import RestrictedRecordBadge from '../RestrictedRecordBadge';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
@@ -46,6 +48,8 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
 
   const size = 175;
   const clientName = clientNameAllParts(client);
+  const showRestrictedBadge =
+    client.restricted && client.access.canViewRestrictedStatus;
 
   const navigate = useNavigate();
   const handleOpenClientForm = useCallback(() => {
@@ -67,9 +71,12 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography component='h1' variant='h4'>
-              {clientName}
-            </Typography>
+            <Stack direction='row' gap={1} alignItems='center' flexWrap='wrap'>
+              <Typography component='h1' variant='h4'>
+                {clientName}
+              </Typography>
+              {showRestrictedBadge && <RestrictedRecordBadge />}
+            </Stack>
           </Grid>
           <Grid
             item
@@ -121,6 +128,11 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
                 }}
               />
               <Stack sx={{ flexGrow: 1, maxWidth: '300px' }} gap={1} mt={2}>
+                <RestrictClientRecordToggle
+                  clientId={client.id}
+                  lockVersion={client.lockVersion}
+                  restricted={client.restricted}
+                />
                 <ClientPermissionsFilter
                   id={client.id}
                   permissions='canEditClient'

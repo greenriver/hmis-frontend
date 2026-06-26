@@ -1396,6 +1396,7 @@ export type Client = {
   phoneNumbers: Array<ClientContactPoint>;
   pronouns: Array<Scalars['String']['output']>;
   race: Array<Race>;
+  restricted: Scalars['Boolean']['output'];
   scanCardCodes: ScanCardCodesPaginated;
   services: ServicesPaginated;
   sex?: Maybe<Sex>;
@@ -1507,6 +1508,7 @@ export type ClientAccess = {
   /** @deprecated Resolve canManage on individual file access field instead */
   canManageOwnClientFiles: Scalars['Boolean']['output'];
   canManageScanCards: Scalars['Boolean']['output'];
+  canMarkRestricted: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
   canPrintClientCaseNotes: Scalars['Boolean']['output'];
   canUploadClientFiles: Scalars['Boolean']['output'];
@@ -1522,6 +1524,7 @@ export type ClientAccess = {
   canViewOwnReferrals: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
   canViewReferrals: Scalars['Boolean']['output'];
+  canViewRestrictedStatus: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -5062,6 +5065,7 @@ export type Mutation = {
   restoreScanCardCode?: Maybe<RestoreScanCardCodePayload>;
   /** Create/Save assessment as work-in-progress */
   saveAssessment?: Maybe<SaveAssessmentPayload>;
+  setClientRestricted?: Maybe<SetClientRestrictedPayload>;
   splitHousehold?: Maybe<SplitHouseholdPayload>;
   startCeReferralStep?: Maybe<StartCeReferralStepPayload>;
   /** Create/Submit assessment, and create/update related HUD records */
@@ -5358,6 +5362,12 @@ export type MutationRestoreScanCardCodeArgs = {
 
 export type MutationSaveAssessmentArgs = {
   input: SaveAssessmentInput;
+};
+
+export type MutationSetClientRestrictedArgs = {
+  clientId: Scalars['ID']['input'];
+  lockVersion?: InputMaybe<Scalars['Int']['input']>;
+  restricted: Scalars['Boolean']['input'];
 };
 
 export type MutationSplitHouseholdArgs = {
@@ -8266,6 +8276,12 @@ export type ServicesPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
+export type SetClientRestrictedPayload = {
+  __typename?: 'SetClientRestrictedPayload';
+  client?: Maybe<Client>;
+  errors: Array<ValidationError>;
+};
+
 /** HUD Sex (4.21) */
 export enum Sex {
   /** (8) Client doesn't know */
@@ -9332,11 +9348,13 @@ export type ClientAccessFieldsFragment = {
   canViewEnrollmentDetails: boolean;
   canAuditClients: boolean;
   canManageScanCards: boolean;
+  canMarkRestricted: boolean;
   canMergeClients: boolean;
   canIndexFiles: boolean;
   canViewReferrals: boolean;
   canViewOwnReferrals: boolean;
   canViewClientEligibleOpportunities: boolean;
+  canViewRestrictedStatus: boolean;
 };
 
 export type ClientFileUploadAccessFieldsFragment = {
@@ -9520,6 +9538,7 @@ export type ClientWithAlertFieldsFragment = {
   __typename?: 'Client';
   id: string;
   lockVersion: number;
+  restricted: boolean;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -9663,6 +9682,7 @@ export type GetHouseholdClientAlertsQuery = {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
+        restricted: boolean;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -13990,6 +14010,7 @@ export type GetHouseholdAssessmentsQuery = {
             __typename?: 'Client';
             id: string;
             lockVersion: number;
+            restricted: boolean;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -14172,6 +14193,7 @@ export type GetRelatedAnnualsQuery = {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -17603,6 +17625,7 @@ export type BulkServicesClientSearchQuery = {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -17889,6 +17912,7 @@ export type CeOutgoingReferralsTableFieldsFragment = {
     __typename?: 'Client';
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -20774,6 +20798,7 @@ export type MarkUnitsAvailableMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -20873,6 +20898,7 @@ export type MarkUnitsUnavailableMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -22640,6 +22666,7 @@ export type GetCeMatchGlobalRulesQuery = {
 
 export type ClientSearchResultFieldsFragment = {
   __typename?: 'Client';
+  restricted: boolean;
   dateCreated?: string | null;
   dateDeleted?: string | null;
   dateUpdated?: string | null;
@@ -22720,6 +22747,7 @@ export type ClientFieldsFragment = {
   otherTheater?: NoYesReasonsForMissingData | null;
   militaryBranch?: MilitaryBranch | null;
   dischargeStatus?: DischargeStatus | null;
+  restricted: boolean;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -22756,11 +22784,13 @@ export type ClientFieldsFragment = {
     canViewEnrollmentDetails: boolean;
     canAuditClients: boolean;
     canManageScanCards: boolean;
+    canMarkRestricted: boolean;
     canMergeClients: boolean;
     canIndexFiles: boolean;
     canViewReferrals: boolean;
     canViewOwnReferrals: boolean;
     canViewClientEligibleOpportunities: boolean;
+    canViewRestrictedStatus: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -22963,6 +22993,7 @@ export type ClientNameFragment = {
   __typename?: 'Client';
   id: string;
   lockVersion: number;
+  restricted: boolean;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -22975,6 +23006,7 @@ export type ClientNameDobVetFragment = {
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
+  restricted: boolean;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -23101,10 +23133,50 @@ export type ClientOmniSearchFieldsFragment = {
   __typename?: 'Client';
   id: string;
   lockVersion: number;
+  restricted: boolean;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
+};
+
+export type SetClientRestrictedMutationVariables = Exact<{
+  clientId: Scalars['ID']['input'];
+  restricted: Scalars['Boolean']['input'];
+  lockVersion?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type SetClientRestrictedMutation = {
+  __typename?: 'Mutation';
+  setClientRestricted?: {
+    __typename?: 'SetClientRestrictedPayload';
+    client?: {
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      restricted: boolean;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canMarkRestricted: boolean;
+        canViewRestrictedStatus: boolean;
+      };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
 };
 
 export type SearchClientsQueryVariables = Exact<{
@@ -23126,6 +23198,7 @@ export type SearchClientsQuery = {
     searchQueryId?: string | null;
     nodes: Array<{
       __typename?: 'Client';
+      restricted: boolean;
       dateCreated?: string | null;
       dateDeleted?: string | null;
       dateUpdated?: string | null;
@@ -23214,6 +23287,7 @@ export type GetClientQuery = {
     otherTheater?: NoYesReasonsForMissingData | null;
     militaryBranch?: MilitaryBranch | null;
     dischargeStatus?: DischargeStatus | null;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -23250,11 +23324,13 @@ export type GetClientQuery = {
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
+      canMarkRestricted: boolean;
       canMergeClients: boolean;
       canIndexFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
+      canViewRestrictedStatus: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -23464,6 +23540,7 @@ export type GetClientNameQuery = {
     __typename?: 'Client';
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -23496,11 +23573,13 @@ export type GetClientPermissionsQuery = {
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
+      canMarkRestricted: boolean;
       canMergeClients: boolean;
       canIndexFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
+      canViewRestrictedStatus: boolean;
     };
   } | null;
 };
@@ -24031,6 +24110,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               __typename?: 'Client';
               id: string;
               lockVersion: number;
+              restricted: boolean;
               firstName?: string | null;
               middleName?: string | null;
               lastName?: string | null;
@@ -24058,11 +24138,13 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canViewEnrollmentDetails: boolean;
                 canAuditClients: boolean;
                 canManageScanCards: boolean;
+                canMarkRestricted: boolean;
                 canMergeClients: boolean;
                 canIndexFiles: boolean;
                 canViewReferrals: boolean;
                 canViewOwnReferrals: boolean;
                 canViewClientEligibleOpportunities: boolean;
+                canViewRestrictedStatus: boolean;
               };
               externalIds: Array<{
                 __typename?: 'ExternalIdentifier';
@@ -24802,6 +24884,7 @@ export type GetMergeCandidatesQuery = {
       warehouseUrl: string;
       clients: Array<{
         __typename?: 'Client';
+        restricted: boolean;
         id: string;
         lockVersion: number;
         firstName?: string | null;
@@ -24880,6 +24963,7 @@ export type GlobalClientMergeHistoryQuery = {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
+        restricted: boolean;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -24939,6 +25023,7 @@ export type MergeClientsMutation = {
       otherTheater?: NoYesReasonsForMissingData | null;
       militaryBranch?: MilitaryBranch | null;
       dischargeStatus?: DischargeStatus | null;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -24975,11 +25060,13 @@ export type MergeClientsMutation = {
         canViewEnrollmentDetails: boolean;
         canAuditClients: boolean;
         canManageScanCards: boolean;
+        canMarkRestricted: boolean;
         canMergeClients: boolean;
         canIndexFiles: boolean;
         canViewReferrals: boolean;
         canViewOwnReferrals: boolean;
         canViewClientEligibleOpportunities: boolean;
+        canViewRestrictedStatus: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -25886,6 +25973,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
     __typename?: 'Client';
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -26267,6 +26355,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -28132,6 +28221,7 @@ export type GetProjectOutgoingDirectCeReferralsQuery = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -28174,6 +28264,7 @@ export type ProjectEnrollmentFieldsFragment = {
     age?: number | null;
     gender: Array<Gender>;
     pronouns: Array<string>;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -28246,6 +28337,7 @@ export type EnrollmentFieldsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -28270,6 +28362,7 @@ export type AssessedClientFieldsFragment = {
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
+  restricted: boolean;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -28285,6 +28378,7 @@ export type EnrolledClientFieldsFragment = {
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
+  restricted: boolean;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -28586,6 +28680,7 @@ export type AllEnrollmentDetailsFragment = {
     race: Array<Race>;
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -29592,6 +29687,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -29692,6 +29788,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
+        restricted: boolean;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -29719,11 +29816,13 @@ export type EnrollmentWithHouseholdFieldsFragment = {
           canViewEnrollmentDetails: boolean;
           canAuditClients: boolean;
           canManageScanCards: boolean;
+          canMarkRestricted: boolean;
           canMergeClients: boolean;
           canIndexFiles: boolean;
           canViewReferrals: boolean;
           canViewOwnReferrals: boolean;
           canViewClientEligibleOpportunities: boolean;
+          canViewRestrictedStatus: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -29775,6 +29874,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -29883,6 +29983,7 @@ export type GetEnrollmentQuery = {
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -30071,6 +30172,7 @@ export type GetEnrollmentDetailsQuery = {
       race: Array<Race>;
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -30846,6 +30948,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -30873,11 +30976,13 @@ export type GetEnrollmentWithHouseholdQuery = {
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
+            canMarkRestricted: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
+            canViewRestrictedStatus: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -30933,6 +31038,7 @@ export type GetEnrollmentWithHouseholdQuery = {
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -31065,6 +31171,7 @@ export type GetEnrollmentRemindersQuery = {
         dob?: string | null;
         veteranStatus: NoYesReasonsForMissingData;
         lockVersion: number;
+        restricted: boolean;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -38504,6 +38611,7 @@ export type SubmitFormMutation = {
           otherTheater?: NoYesReasonsForMissingData | null;
           militaryBranch?: MilitaryBranch | null;
           dischargeStatus?: DischargeStatus | null;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -38540,11 +38648,13 @@ export type SubmitFormMutation = {
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
+            canMarkRestricted: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
+            canViewRestrictedStatus: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -39225,6 +39335,7 @@ export type SubmitFormMutation = {
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
+            restricted: boolean;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -41942,6 +42053,7 @@ export type HouseholdFieldsFragment = {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -41969,11 +42081,13 @@ export type HouseholdFieldsFragment = {
         canViewEnrollmentDetails: boolean;
         canAuditClients: boolean;
         canManageScanCards: boolean;
+        canMarkRestricted: boolean;
         canMergeClients: boolean;
         canIndexFiles: boolean;
         canViewReferrals: boolean;
         canViewOwnReferrals: boolean;
         canViewClientEligibleOpportunities: boolean;
+        canViewRestrictedStatus: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -42022,6 +42136,7 @@ export type HouseholdClientFieldsFragment = {
     __typename?: 'Client';
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -42049,11 +42164,13 @@ export type HouseholdClientFieldsFragment = {
       canViewEnrollmentDetails: boolean;
       canAuditClients: boolean;
       canManageScanCards: boolean;
+      canMarkRestricted: boolean;
       canMergeClients: boolean;
       canIndexFiles: boolean;
       canViewReferrals: boolean;
       canViewOwnReferrals: boolean;
       canViewClientEligibleOpportunities: boolean;
+      canViewRestrictedStatus: boolean;
     };
     externalIds: Array<{
       __typename?: 'ExternalIdentifier';
@@ -42106,6 +42223,7 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -42149,6 +42267,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     __typename?: 'Client';
     id: string;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -42199,6 +42318,7 @@ export type JoinHouseholdMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -42226,11 +42346,13 @@ export type JoinHouseholdMutation = {
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
+            canMarkRestricted: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
+            canViewRestrictedStatus: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -42287,6 +42409,7 @@ export type JoinHouseholdMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -42314,11 +42437,13 @@ export type JoinHouseholdMutation = {
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
+            canMarkRestricted: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
+            canViewRestrictedStatus: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -42388,6 +42513,7 @@ export type SplitHouseholdMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -42415,11 +42541,13 @@ export type SplitHouseholdMutation = {
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
+            canMarkRestricted: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
+            canViewRestrictedStatus: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -42476,6 +42604,7 @@ export type SplitHouseholdMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -42503,11 +42632,13 @@ export type SplitHouseholdMutation = {
             canViewEnrollmentDetails: boolean;
             canAuditClients: boolean;
             canManageScanCards: boolean;
+            canMarkRestricted: boolean;
             canMergeClients: boolean;
             canIndexFiles: boolean;
             canViewReferrals: boolean;
             canViewOwnReferrals: boolean;
             canViewClientEligibleOpportunities: boolean;
+            canViewRestrictedStatus: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -42573,6 +42704,7 @@ export type GetHouseholdQuery = {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
+        restricted: boolean;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -42600,11 +42732,13 @@ export type GetHouseholdQuery = {
           canViewEnrollmentDetails: boolean;
           canAuditClients: boolean;
           canManageScanCards: boolean;
+          canMarkRestricted: boolean;
           canMergeClients: boolean;
           canIndexFiles: boolean;
           canViewReferrals: boolean;
           canViewOwnReferrals: boolean;
           canViewClientEligibleOpportunities: boolean;
+          canViewRestrictedStatus: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -42925,6 +43059,7 @@ export type OmniSearchClientsQuery = {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -42965,6 +43100,7 @@ export type GetRecentItemsQuery = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -42995,6 +43131,7 @@ export type AddRecentItemMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -43022,6 +43159,7 @@ export type ClearRecentItemsMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -44645,6 +44783,7 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
     age?: number | null;
     gender: Array<Gender>;
     pronouns: Array<string>;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -45039,6 +45178,7 @@ export type GetProjectEnrollmentsQuery = {
           age?: number | null;
           gender: Array<Gender>;
           pronouns: Array<string>;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -45096,6 +45236,7 @@ export type GetProjectHouseholdsQuery = {
             __typename?: 'Client';
             id: string;
             lockVersion: number;
+            restricted: boolean;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -45168,6 +45309,7 @@ export type GetProjectServicesQuery = {
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
+            restricted: boolean;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -45251,6 +45393,7 @@ export type GetProjectAssessmentsQuery = {
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
+            restricted: boolean;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -46769,6 +46912,7 @@ export type UpdateReferralPostingMutation = {
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -47017,6 +47161,7 @@ export type GetReferralPostingQuery = {
         veteranStatus: NoYesReasonsForMissingData;
         gender: Array<Gender>;
         lockVersion: number;
+        restricted: boolean;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -47304,6 +47449,7 @@ export type ReferralPostingDetailFieldsFragment = {
       veteranStatus: NoYesReasonsForMissingData;
       gender: Array<Gender>;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -47473,6 +47619,7 @@ export type ReminderFieldsFragment = {
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
+    restricted: boolean;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -49194,6 +49341,7 @@ export type StaffAssignmentWithClientsFragment = {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
+        restricted: boolean;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -49292,6 +49440,7 @@ export type GetHouseholdStaffAssignmentsQuery = {
         __typename?: 'Client';
         id: string;
         lockVersion: number;
+        restricted: boolean;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -49478,6 +49627,7 @@ export type UnitTableRowFieldsFragment = {
       __typename?: 'Client';
       id: string;
       lockVersion: number;
+      restricted: boolean;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -49791,6 +49941,7 @@ export type GetUnitsQuery = {
             __typename?: 'Client';
             id: string;
             lockVersion: number;
+            restricted: boolean;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -50113,6 +50264,7 @@ export type CreateUnitsMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -50254,6 +50406,7 @@ export type UpdateUnitsMutation = {
           __typename?: 'Client';
           id: string;
           lockVersion: number;
+          restricted: boolean;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -50801,6 +50954,7 @@ export type GetUserStaffAssignmentsQuery = {
               __typename?: 'Client';
               id: string;
               lockVersion: number;
+              restricted: boolean;
               firstName?: string | null;
               middleName?: string | null;
               lastName?: string | null;
@@ -50899,6 +51053,7 @@ export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     id
     lockVersion
+    restricted
     firstName
     middleName
     lastName
@@ -52261,6 +52416,7 @@ export const ClientSearchResultFieldsFragmentDoc = gql`
     ...ClientName
     ...ClientIdentificationFields
     ...ClientSsnFields @include(if: $includeSsn)
+    restricted
     dateCreated
     dateDeleted
     dateUpdated
@@ -52310,11 +52466,13 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewEnrollmentDetails
     canAuditClients
     canManageScanCards
+    canMarkRestricted
     canMergeClients
     canIndexFiles
     canViewReferrals
     canViewOwnReferrals
     canViewClientEligibleOpportunities
+    canViewRestrictedStatus
   }
 `;
 export const ClientNameObjectFieldsFragmentDoc = gql`
@@ -58579,6 +58737,79 @@ export type GetCeMatchGlobalRulesQueryResult = Apollo.QueryResult<
   GetCeMatchGlobalRulesQuery,
   GetCeMatchGlobalRulesQueryVariables
 >;
+export const SetClientRestrictedDocument = gql`
+  mutation SetClientRestricted(
+    $clientId: ID!
+    $restricted: Boolean!
+    $lockVersion: Int
+  ) {
+    setClientRestricted(
+      clientId: $clientId
+      restricted: $restricted
+      lockVersion: $lockVersion
+    ) {
+      client {
+        id
+        lockVersion
+        restricted
+        access {
+          id
+          canMarkRestricted
+          canViewRestrictedStatus
+        }
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type SetClientRestrictedMutationFn = Apollo.MutationFunction<
+  SetClientRestrictedMutation,
+  SetClientRestrictedMutationVariables
+>;
+
+/**
+ * __useSetClientRestrictedMutation__
+ *
+ * To run a mutation, you first call `useSetClientRestrictedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetClientRestrictedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setClientRestrictedMutation, { data, loading, error }] = useSetClientRestrictedMutation({
+ *   variables: {
+ *      clientId: // value for 'clientId'
+ *      restricted: // value for 'restricted'
+ *      lockVersion: // value for 'lockVersion'
+ *   },
+ * });
+ */
+export function useSetClientRestrictedMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetClientRestrictedMutation,
+    SetClientRestrictedMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SetClientRestrictedMutation,
+    SetClientRestrictedMutationVariables
+  >(SetClientRestrictedDocument, options);
+}
+export type SetClientRestrictedMutationHookResult = ReturnType<
+  typeof useSetClientRestrictedMutation
+>;
+export type SetClientRestrictedMutationResult =
+  Apollo.MutationResult<SetClientRestrictedMutation>;
+export type SetClientRestrictedMutationOptions = Apollo.BaseMutationOptions<
+  SetClientRestrictedMutation,
+  SetClientRestrictedMutationVariables
+>;
 export const SearchClientsDocument = gql`
   query SearchClients(
     $filters: ClientFilterOptions
@@ -60174,6 +60405,7 @@ export const GetMergeCandidatesDocument = gql`
           ...ClientName
           ...ClientIdentificationFields
           ...ClientSsnFields
+          restricted
         }
       }
     }

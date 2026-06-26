@@ -109,6 +109,7 @@ export const RITA_ACKROYD = {
   __typename: 'Client',
   id: '9999',
   lockVersion: 1,
+  restricted: false,
   personalId: '9999',
   ssn: '0001',
   firstName: 'Rita',

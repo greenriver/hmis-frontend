@@ -2,6 +2,7 @@ fragment ClientSearchResultFields on Client {
   ...ClientName
   ...ClientIdentificationFields
   ...ClientSsnFields @include(if: $includeSsn)
+  restricted
   dateCreated
   dateDeleted
   dateUpdated
@@ -67,6 +68,7 @@ fragment ClientFields on Client {
 fragment ClientName on Client {
   id
   lockVersion
+  restricted
   firstName
   middleName
   lastName

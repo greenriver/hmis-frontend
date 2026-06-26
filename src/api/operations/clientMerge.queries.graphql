@@ -10,6 +10,7 @@ query GetMergeCandidates($limit: Int, $offset: Int) {
         ...ClientName
         ...ClientIdentificationFields
         ...ClientSsnFields
+        restricted
       }
     }
   }

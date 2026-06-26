@@ -54,6 +54,7 @@ fragment ClientAccessFields on ClientAccess {
   canViewEnrollmentDetails
   canAuditClients
   canManageScanCards
+  canMarkRestricted
   canMergeClients
   canIndexFiles
 
@@ -61,6 +62,7 @@ fragment ClientAccessFields on ClientAccess {
   canViewReferrals
   canViewOwnReferrals
   canViewClientEligibleOpportunities
+  canViewRestrictedStatus
 }
 
 # Resolved only where client file upload UI is shown (not part of ClientAccessFields).

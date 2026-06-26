@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
+import RestrictedRecordBadge from '@/modules/client/components/RestrictedRecordBadge';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -12,7 +13,9 @@ import {
 
 type ClientType = ClientNameFragment &
   ClientIdentificationFieldsFragment &
-  ClientSsnFieldsFragment;
+  ClientSsnFieldsFragment & {
+    restricted?: boolean;
+  };
 
 interface Props {
   clients: ClientType[];
@@ -36,6 +39,11 @@ const columns: ColumnDef<ClientType>[] = [
     render: (client) => (
       <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
     ),
+  },
+  {
+    header: 'Restricted Record',
+    key: 'restricted',
+    render: (client) => (client.restricted ? <RestrictedRecordBadge /> : null),
   },
 ];
 
