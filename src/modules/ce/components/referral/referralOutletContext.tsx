@@ -1,5 +1,6 @@
 import { useOutletContext } from 'react-router-dom';
 
+import { LocationState } from '@/routes/routeUtil';
 import { CeReferralFieldsFragment } from '@/types/gqlTypes';
 
 export type ReferralContext = {
@@ -7,6 +8,7 @@ export type ReferralContext = {
   referralPath: string;
   unitPath?: string;
   generateReferralStepPath: (stepId: string) => string;
+  referralRouteState?: LocationState;
   overrideStepTitle?: (name: string | undefined) => void;
 };
 

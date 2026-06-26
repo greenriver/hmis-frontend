@@ -19,12 +19,14 @@ import {
 import { useIsMobile } from '@/hooks/useIsMobile';
 import AssignContactsForm from '@/modules/ce/components/referral/AssignContactsForm';
 import ReferralTimeline from '@/modules/ce/components/referral/ReferralTimeline';
+import { LocationState } from '@/routes/routeUtil';
 import { CeReferralFieldsFragment } from '@/types/gqlTypes';
 
 export interface ReferralContentProps {
   referral: CeReferralFieldsFragment;
   referralPath: string;
   generateReferralStepPath: (stepId: string) => string;
+  referralRouteState?: LocationState;
   overrideStepTitle?: (name: string | undefined) => void;
   linkToProject: boolean;
 }
@@ -38,6 +40,7 @@ const ReferralContent: React.FC<ReferralContentProps> = ({
   referral,
   referralPath,
   generateReferralStepPath,
+  referralRouteState,
   overrideStepTitle,
   linkToProject,
 }) => {
@@ -46,9 +49,16 @@ const ReferralContent: React.FC<ReferralContentProps> = ({
       referral,
       referralPath,
       generateReferralStepPath,
+      referralRouteState,
       overrideStepTitle,
     }),
-    [referral, referralPath, generateReferralStepPath, overrideStepTitle]
+    [
+      referral,
+      referralPath,
+      generateReferralStepPath,
+      referralRouteState,
+      overrideStepTitle,
+    ]
   );
 
   const isMobile = useIsMobile();

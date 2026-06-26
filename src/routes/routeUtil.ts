@@ -1,8 +1,16 @@
 import { Location, To } from 'react-router-dom';
 
+type BreadcrumbParent = {
+  route: string;
+  routeParams?: Record<string, string>;
+  title?: string;
+};
+
 export type LocationState = {
   fromLoginRedirect?: boolean;
   backToLabel?: string; // title of page to go back to. Used like `Back to ${backToLabel}`
+  focusModeReturnPath?: string;
+  projectReferralBreadcrumbParent?: BreadcrumbParent;
 };
 
 export const STATE_FROM_LOGIN_REDIRECT: LocationState = {
