@@ -32,6 +32,12 @@ query GetCeMatchGlobalRules {
   }
 }
 
+query GetCeMatchRule($id: ID!) {
+  ceMatchRule(id: $id) {
+    ...CeMatchRuleDetails
+  }
+}
+
 query GetCeMatchRuleOrganizations(
   $filters: OrganizationFilterOptions
   $limit: Int

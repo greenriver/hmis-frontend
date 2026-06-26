@@ -276,6 +276,10 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
       [AdminDashboardRoutes.CE_RULES]: {
         title: 'Rules',
       },
+      [AdminDashboardRoutes.CE_RULE_GLOBAL_DETAIL]: {
+        title: 'Rule',
+        parent: AdminDashboardRoutes.CE_RULES,
+      },
       [AdminDashboardRoutes.CE_RULE_GLOBAL_NEW]: {
         title: 'Add Rule',
         parent: AdminDashboardRoutes.CE_RULES,
@@ -292,6 +296,10 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Add Rule',
         parent: AdminDashboardRoutes.CE_RULE_ORGANIZATION,
       },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATION_DETAIL]: {
+        title: 'Rule',
+        parent: AdminDashboardRoutes.CE_RULE_ORGANIZATION,
+      },
       [AdminDashboardRoutes.CE_RULE_PROJECTS]: {
         title: 'Projects',
         parent: AdminDashboardRoutes.CE_RULES,
@@ -304,6 +312,10 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Add Rule',
         parent: AdminDashboardRoutes.CE_RULE_PROJECT,
       },
+      [AdminDashboardRoutes.CE_RULE_PROJECT_DETAIL]: {
+        title: 'Rule',
+        parent: AdminDashboardRoutes.CE_RULE_PROJECT,
+      },
       [AdminDashboardRoutes.CE_RULE_UNIT_GROUPS]: {
         title: 'Unit Groups',
         parent: AdminDashboardRoutes.CE_RULES,
@@ -314,6 +326,10 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
       },
       [AdminDashboardRoutes.CE_RULE_UNIT_GROUP_NEW]: {
         title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULE_UNIT_GROUP,
+      },
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUP_DETAIL]: {
+        title: 'Rule',
         parent: AdminDashboardRoutes.CE_RULE_UNIT_GROUP,
       },
       [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {

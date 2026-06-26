@@ -89,6 +89,11 @@ export const HmisEnums = {
     LTE: 'LTE',
     NOT_EQ: 'NOT_EQ',
   },
+  CeMatchRuleFieldSource: {
+    CLIENT: 'A client field, such as current_age',
+    CUSTOM_DATA_ELEMENT:
+      'A custom data element, such as cde.custom_assessment.my_score',
+  },
   CeMatchRuleOwnerType: {
     DATA_SOURCE: 'Global',
     ORGANIZATION: 'Organization',

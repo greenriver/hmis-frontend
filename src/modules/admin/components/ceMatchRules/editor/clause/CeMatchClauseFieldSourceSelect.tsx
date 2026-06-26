@@ -1,11 +1,9 @@
 import { Control, UseFormSetValue } from 'react-hook-form';
 
-import type {
-  CeMatchFieldSource,
-  CeMatchRuleFormValues,
-} from '../ceMatchRuleFormUtil';
+import type { CeMatchRuleFormValues } from '../ceMatchRuleFormUtil';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
+import { CeMatchRuleFieldSource } from '@/types/gqlTypes';
 
 type ClausePath = `structuredExpression.clauses.${number}`;
 
@@ -33,11 +31,17 @@ const CeMatchClauseFieldSourceSelect: React.FC<Props> = ({
     placeholder='Select type'
     required
     options={[
-      { code: 'client', label: 'Client field' },
-      { code: 'custom', label: 'Custom field' },
+      {
+        code: CeMatchRuleFieldSource.Client,
+        label: 'Client field',
+      },
+      {
+        code: CeMatchRuleFieldSource.CustomDataElement,
+        label: 'Custom assessment field',
+      },
     ]}
     onChange={(value) => {
-      setValue(`${clausePath}.source`, value as CeMatchFieldSource | '');
+      setValue(`${clausePath}.source`, value as CeMatchRuleFieldSource | '');
       onSourceChange();
     }}
   />
