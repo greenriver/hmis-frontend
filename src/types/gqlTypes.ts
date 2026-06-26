@@ -30998,6 +30998,7 @@ export type GetEnrollmentCeAssessmentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
 }>;
 
 export type GetEnrollmentCeAssessmentsQuery = {
@@ -63225,10 +63226,11 @@ export const GetEnrollmentCeAssessmentsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
   ) {
     enrollment(id: $id) {
       id
-      ceAssessments(limit: $limit, offset: $offset) {
+      ceAssessments(limit: $limit, offset: $offset, sortOrder: $sortOrder) {
         offset
         limit
         nodesCount
@@ -63256,6 +63258,7 @@ export const GetEnrollmentCeAssessmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */

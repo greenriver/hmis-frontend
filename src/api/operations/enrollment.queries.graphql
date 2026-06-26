@@ -34,10 +34,15 @@ query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query GetEnrollmentCeAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetEnrollmentCeAssessments(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+) {
   enrollment(id: $id) {
     id
-    ceAssessments(limit: $limit, offset: $offset) {
+    ceAssessments(limit: $limit, offset: $offset, sortOrder: $sortOrder) {
       offset
       limit
       nodesCount

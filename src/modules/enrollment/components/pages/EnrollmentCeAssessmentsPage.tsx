@@ -12,6 +12,7 @@ import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  AssessmentSortOption,
   CeAssessmentFieldsFragment,
   DataCollectionFeatureRole,
   DeleteCeAssessmentDocument,
@@ -131,6 +132,7 @@ const EnrollmentCeAssessmentsPage = () => {
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCeAssessmentsDocument}
           columns={COLUMNS}
+          defaultSortOption={AssessmentSortOption.AssessmentDate}
           rowActionTitle='View CE Assessment'
           rowName={(row) =>
             parseAndFormatDate(row.assessmentDate) || 'unknown date'
