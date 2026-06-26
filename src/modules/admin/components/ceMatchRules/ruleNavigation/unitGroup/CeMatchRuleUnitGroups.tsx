@@ -6,13 +6,14 @@ import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
-import { AdminDashboardRoutes } from '@/routes/routes';
+import { AdminDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeMatchRuleUnitGroupFieldsFragment,
   GetCeMatchRuleUnitGroupsDocument,
   GetCeMatchRuleUnitGroupsQuery,
   GetCeMatchRuleUnitGroupsQueryVariables,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const UNIT_GROUP_COLUMNS: DataColumnDef<
   CeMatchRuleUnitGroupFieldsFragment,
@@ -84,6 +85,17 @@ const CeMatchRuleUnitGroups: React.FC = () => {
           }
           rowName={(unitGroup) => unitGroup.name}
           rowActionTitle='View Unit Group Rules'
+          rowSecondaryActionConfigs={(unitGroup) => [
+            {
+              title: 'View Unit Group',
+              key: 'viewUnitGroup',
+              ariaLabel: `View Unit Group, ${unitGroup.name}`,
+              to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
+                projectId: unitGroup.project.id,
+                unitGroupId: unitGroup.id,
+              }),
+            },
+          ]}
           noData={
             debouncedSearch
               ? 'No unit groups found'

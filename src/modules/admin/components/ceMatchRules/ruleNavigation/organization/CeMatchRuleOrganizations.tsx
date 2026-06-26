@@ -6,13 +6,14 @@ import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
-import { AdminDashboardRoutes } from '@/routes/routes';
+import { AdminDashboardRoutes, Routes } from '@/routes/routes';
 import {
   CeMatchRuleOrganizationFieldsFragment,
   GetCeMatchRuleOrganizationsDocument,
   GetCeMatchRuleOrganizationsQuery,
   GetCeMatchRuleOrganizationsQueryVariables,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ORGANIZATION_COLUMNS: DataColumnDef<
   CeMatchRuleOrganizationFieldsFragment,
@@ -84,6 +85,16 @@ const CeMatchRuleOrganizations: React.FC = () => {
           }
           rowName={(organization) => organization.organizationName}
           rowActionTitle='View Organization Rules'
+          rowSecondaryActionConfigs={(organization) => [
+            {
+              title: 'View Organization',
+              key: 'viewOrganization',
+              ariaLabel: `View Organization, ${organization.organizationName}`,
+              to: generateSafePath(Routes.ORGANIZATION, {
+                organizationId: organization.id,
+              }),
+            },
+          ]}
           noData={
             debouncedSearch
               ? 'No organizations found'

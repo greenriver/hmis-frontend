@@ -4,12 +4,13 @@ import { generatePath } from 'react-router-dom';
 import RuleCountSummary from '../RuleCountSummary';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { AdminDashboardRoutes } from '@/routes/routes';
+import { AdminDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetCeMatchOrganizationProjectsDocument,
   GetCeMatchOrganizationProjectsQuery,
   GetCeMatchOrganizationProjectsQueryVariables,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type OrganizationProjectRow = NonNullable<
   GetCeMatchOrganizationProjectsQuery['organization']
@@ -73,6 +74,16 @@ const CeMatchOrganizationProjectsTable: React.FC<{
         }
         rowName={(project) => project.projectName}
         rowActionTitle='View Project Rules'
+        rowSecondaryActionConfigs={(project) => [
+          {
+            title: 'View Project',
+            key: 'viewProject',
+            ariaLabel: `View Project, ${project.projectName}`,
+            to: generateSafePath(ProjectDashboardRoutes.UNITS, {
+              projectId: project.id,
+            }),
+          },
+        ]}
         noData='No projects'
         pagePath='organization.projects'
         recordType='Project'

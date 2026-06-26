@@ -6,13 +6,14 @@ import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
-import { AdminDashboardRoutes } from '@/routes/routes';
+import { AdminDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeMatchRuleProjectFieldsFragment,
   GetCeMatchRuleProjectsDocument,
   GetCeMatchRuleProjectsQuery,
   GetCeMatchRuleProjectsQueryVariables,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const PROJECT_COLUMNS: DataColumnDef<
   CeMatchRuleProjectFieldsFragment,
@@ -84,6 +85,16 @@ const CeMatchRuleProjects: React.FC = () => {
           }
           rowName={(project) => project.projectName}
           rowActionTitle='View Project Rules'
+          rowSecondaryActionConfigs={(project) => [
+            {
+              title: 'View Project',
+              key: 'viewProject',
+              ariaLabel: `View Project, ${project.projectName}`,
+              to: generateSafePath(ProjectDashboardRoutes.UNITS, {
+                projectId: project.id,
+              }),
+            },
+          ]}
           noData={
             debouncedSearch
               ? 'No projects found'
