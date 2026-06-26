@@ -6,7 +6,7 @@ import { CeMatchRuleGroupFieldsFragment } from '@/types/gqlTypes';
 
 export const getCeMatchRuleGroupCount = (
   group?: CeMatchRuleGroupFieldsFragment
-) => group?.rules.nodesCount || 0;
+) => group?.rules.length || 0;
 
 /**
  * Builds stable accordion keys from owner identity.

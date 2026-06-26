@@ -52,10 +52,7 @@ fragment CeMatchRuleGroupFields on CeMatchRuleGroup {
   ownerName
   local
   rules {
-    nodesCount
-    nodes {
-      ...CeMatchRuleAdminSummaryFields
-    }
+    ...CeMatchRuleAdminSummaryFields
   }
 }
 

@@ -51,7 +51,7 @@ const CeMatchRuleGroupsAccordion: React.FC<Props> = ({ ruleGroups }) => {
               content: (
                 <CeMatchRuleGroupTable
                   ownerLevel={ownerLevel}
-                  rules={group.rules.nodes}
+                  rules={group.rules}
                   variant='inherited'
                 />
               ),
@@ -72,7 +72,7 @@ const CeMatchRuleGroupsAccordion: React.FC<Props> = ({ ruleGroups }) => {
             localRuleGroup.ownerType
           )}
           ownerId={localRuleGroup.ownerId}
-          rules={localRuleGroup.rules.nodes}
+          rules={localRuleGroup.rules}
           count={getCeMatchRuleGroupCount(localRuleGroup)}
         />
       )}
