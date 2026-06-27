@@ -69,6 +69,7 @@ fragment CeReferralSummaryFields on CeReferral {
 fragment CeReferralBaseTableFields on CeReferral {
   ...CeReferralSummaryFields
   createdAt
+  updatedAt
   opportunity {
     id
     name
