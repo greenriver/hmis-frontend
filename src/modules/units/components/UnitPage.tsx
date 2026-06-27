@@ -41,6 +41,7 @@ const UnitPage: React.FC<Props> = ({}) => {
 
     overrideBreadcrumbTitles({
       [ProjectDashboardRoutes.UNIT]: unit.name,
+      [ProjectDashboardRoutes.CE_UNIT]: unit.name,
       [ProjectDashboardRoutes.UNIT_GROUP]: unit.unitGroup?.name || 'Unit Group',
     });
   }, [overrideBreadcrumbTitles, unit]);
