@@ -1,0 +1,93 @@
+fragment CeMatchFieldDetails on CeMatchField {
+  id
+  key
+  label
+  itemType
+  multiple
+  expressionField
+  pickListReference
+  pickListOptions {
+    ...PickListOptionFields
+  }
+}
+
+fragment CeMatchCustomAssessmentFormFields on FormDefinition {
+  cacheKey
+  identifier
+  title
+}
+
+fragment CeMatchRuleFields on CeMatchRule {
+  id
+  name
+  ownerType
+  expression
+  projectTypes
+  funders
+}
+
+fragment CeMatchRuleAdminSummaryFields on CeMatchRule {
+  ...CeMatchRuleFields
+  ownerId
+  ownerName
+  ruleType
+  priorityRank
+}
+
+fragment CeMatchRuleDetails on CeMatchRule {
+  ...CeMatchRuleAdminSummaryFields
+  structuredExpression {
+    operator
+    clauses {
+      field
+      comparator
+      value
+    }
+  }
+}
+
+fragment CeMatchRuleGroupFields on CeMatchRuleGroup {
+  ownerType
+  ownerId
+  ownerName
+  local
+  rules {
+    ...CeMatchRuleAdminSummaryFields
+  }
+}
+
+fragment CeMatchRuleOrganizationFields on Organization {
+  id
+  organizationName
+  ceWaitlistUnitGroupCount
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+}
+
+fragment CeMatchRuleOrganizationDetails on Organization {
+  ...CeMatchRuleOrganizationFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}
+
+fragment CeMatchRuleProjectFields on Project {
+  id
+  projectName
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+  organization {
+    id
+    organizationName
+  }
+  unitGroups(limit: 1) {
+    nodesCount
+  }
+}
+
+fragment CeMatchRuleProjectDetails on Project {
+  ...CeMatchRuleProjectFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}

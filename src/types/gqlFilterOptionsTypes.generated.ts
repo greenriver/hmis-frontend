@@ -8,6 +8,7 @@ import type {
   AssessmentsForProjectFilterOptions,
   CeClientFilterOptions,
   CeEligibleUnitGroupFilterOptions,
+  CeMatchRuleFilterOptions,
   CeOpportunityCandidatesFilterOptions,
   CeOpportunityFilterOptions,
   CeReferralFilterOptions,
@@ -39,6 +40,7 @@ import type {
   ServiceTypeFilterOptions,
   UnitCeReferralFilterOptions,
   UnitFilterOptions,
+  UnitGroupFilterOptions,
   UserAuditEventFilterOptions,
 } from './gqlTypes';
 
@@ -50,6 +52,7 @@ export type FilterOptionsByName = {
   AssessmentsForProjectFilterOptions: AssessmentsForProjectFilterOptions;
   CeClientFilterOptions: CeClientFilterOptions;
   CeEligibleUnitGroupFilterOptions: CeEligibleUnitGroupFilterOptions;
+  CeMatchRuleFilterOptions: CeMatchRuleFilterOptions;
   CeOpportunityCandidatesFilterOptions: CeOpportunityCandidatesFilterOptions;
   CeOpportunityFilterOptions: CeOpportunityFilterOptions;
   CeReferralFilterOptions: CeReferralFilterOptions;
@@ -81,6 +84,7 @@ export type FilterOptionsByName = {
   ServiceTypeFilterOptions: ServiceTypeFilterOptions;
   UnitCeReferralFilterOptions: UnitCeReferralFilterOptions;
   UnitFilterOptions: UnitFilterOptions;
+  UnitGroupFilterOptions: UnitGroupFilterOptions;
   UserAuditEventFilterOptions: UserAuditEventFilterOptions;
 };
 
@@ -94,6 +98,7 @@ export const FILTER_OPTIONS_GRAPHQL_TYPE_NAMES = [
   'AssessmentsForProjectFilterOptions',
   'CeClientFilterOptions',
   'CeEligibleUnitGroupFilterOptions',
+  'CeMatchRuleFilterOptions',
   'CeOpportunityCandidatesFilterOptions',
   'CeOpportunityFilterOptions',
   'CeReferralFilterOptions',
@@ -125,5 +130,6 @@ export const FILTER_OPTIONS_GRAPHQL_TYPE_NAMES = [
   'ServiceTypeFilterOptions',
   'UnitCeReferralFilterOptions',
   'UnitFilterOptions',
+  'UnitGroupFilterOptions',
   'UserAuditEventFilterOptions',
 ] as const;

@@ -1117,6 +1117,7 @@ export const addDescendants = (
 export type ClientNameDobVeteranFields = {
   id: string;
   dob?: string | null;
+  age?: number | null;
   veteranStatus: NoYesReasonsForMissingData;
 };
 

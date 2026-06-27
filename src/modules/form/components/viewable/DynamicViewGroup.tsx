@@ -12,6 +12,7 @@ import SignatureGroupCard from '../group/SignatureGroupCard';
 import TableGroup from '../group/TableGroup';
 
 import AhaScore from '@/modules/external/aha/components/AhaScore';
+import VisionLinkFlags from '@/modules/external/visionlink/components/VisionLinkFlags';
 import { Component } from '@/types/gqlTypes';
 
 const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
@@ -62,6 +63,8 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
       return <SignatureGroupCard key={props.item.linkId} viewOnly {...props} />;
     case Component.Aha:
       return <AhaScore key={props.item.linkId} viewOnly {...props} />;
+    case Component.Visionlink:
+      return <VisionLinkFlags key={props.item.linkId} viewOnly {...props} />;
     default:
       return (
         <QuestionGroup

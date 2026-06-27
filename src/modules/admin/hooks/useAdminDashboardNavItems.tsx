@@ -29,6 +29,13 @@ export const useAdminDashboardNavItems = () => {
             permissions: ['canManageCeDefaultContacts'],
             hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
+          {
+            id: 'eligibility-rules',
+            title: 'Eligibility Rules',
+            path: AdminDashboardRoutes.CE_RULES_ROOT,
+            // TODO(#7544): swap to canAdministrateCoordinatedEntry
+            permissions: ['canAdministrateConfig'],
+          },
         ],
       },
       {

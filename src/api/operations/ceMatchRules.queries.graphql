@@ -1,0 +1,131 @@
+# Client-level fields (current_age, veteran_status, days_since_last_exit) available
+# for CE Match Rule expressions.
+query GetCeMatchClientFields {
+  ceMatchClientFields {
+    ...CeMatchFieldDetails
+  }
+}
+
+# Published/retired custom assessment forms in the user's data source that have at
+# least one usable CDED field for CE Match Rule expressions.
+query GetCeMatchCustomAssessmentForms {
+  ceMatchCustomAssessmentForms {
+    ...CeMatchCustomAssessmentFormFields
+  }
+}
+
+# CE Match fields for one selected custom assessment form.
+query GetCeMatchCustomAssessmentFields($formDefinitionIdentifier: String!) {
+  ceMatchCustomAssessmentFields(
+    formDefinitionIdentifier: $formDefinitionIdentifier
+  ) {
+    ...CeMatchFieldDetails
+  }
+}
+
+query GetCeMatchGlobalRules {
+  ceMatchRules(filters: { global: true }) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleAdminSummaryFields
+    }
+  }
+}
+
+query GetCeMatchRuleOrganizations(
+  $filters: OrganizationFilterOptions
+  $limit: Int
+  $offset: Int
+) {
+  organizations(
+    filters: $filters
+    sortOrder: NAME
+    limit: $limit
+    offset: $offset
+  ) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleOrganizationFields
+    }
+  }
+}
+
+query GetCeMatchOrganizationRules($id: ID!) {
+  organization(id: $id) {
+    ...CeMatchRuleOrganizationDetails
+  }
+}
+
+query GetCeMatchRuleProjects(
+  $filters: ProjectFilterOptions
+  $limit: Int
+  $offset: Int
+) {
+  projects(
+    filters: $filters
+    sortOrder: ORGANIZATION_AND_NAME
+    limit: $limit
+    offset: $offset
+  ) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleProjectFields
+    }
+  }
+}
+
+query GetCeMatchProjectRules($id: ID!) {
+  project(id: $id) {
+    ...CeMatchRuleProjectDetails
+  }
+}
+
+query GetCeMatchProjectUnitGroups(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    unitGroups(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        name
+      }
+    }
+  }
+}
+
+query GetCeMatchOrganizationProjects(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ProjectsForEnrollmentFilterOptions
+  $sortOrder: ProjectSortOption
+) {
+  organization(id: $id) {
+    id
+    projects(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: $sortOrder
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        projectName
+        effectiveCeMatchRuleCount
+        localCeMatchRuleCount
+        unitGroups(limit: 1) {
+          nodesCount
+        }
+      }
+    }
+  }
+}
