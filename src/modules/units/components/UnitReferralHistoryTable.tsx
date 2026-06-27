@@ -62,6 +62,7 @@ const UnitReferralHistoryTable: React.FC<Props> = ({
             title: unitName,
           },
         }}
+        rowName={(referral) => `Referral for ${referral.clientName}`}
         rowActionTitle='View Referral'
       />
     </Paper>
