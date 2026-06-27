@@ -1,7 +1,13 @@
 import { isNil } from 'lodash-es';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
-import { Control, useController } from 'react-hook-form';
+import {
+  Control,
+  FieldValues,
+  Path,
+  RegisterOptions,
+  useController,
+} from 'react-hook-form';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
@@ -10,23 +16,30 @@ import { RhfRules } from '@/modules/form/types';
 import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
-export type ControlledSelectProps = Omit<
+// The select UI deals in PickListOption, but the form state stores the option code,
+// or sometimes a boolean, or null when cleared.
+type ControlledSelectValue = PickListOption['code'] | boolean | null;
+
+export type ControlledSelectProps<T extends FieldValues = FieldValues> = Omit<
   GenericSelectProps<PickListOption, false, false>,
   'value' | 'onChange' | 'onBlur' | 'multiple'
 > & {
-  name: string;
-  control?: Control; // Optional when using FormProvider
+  // Path<T> gives callers type checking for nested RHF paths.
+  name: Path<T>;
+  control?: Control<T>; // Optional when using FormProvider
   rules?: RhfRules;
   required?: boolean;
   helperText?: ReactNode;
   placeholder?: string;
-  onChange?: (option: PickListOption | null) => void;
-  setValueAs?: (option: PickListOption | null) => any; // allow transform PickListOption to desired value (to support boolean)
+  // Called with the value stored in RHF, not the PickListOption.
+  onChange?: (value: ControlledSelectValue) => void;
+  // Use when the form value is not the option code, such as boolean JSON values.
+  setValueAs?: (option: PickListOption | null) => ControlledSelectValue;
 };
 
 // React-Hook-Form wrapper around GenericSelect for single selection.
 // This component stores a string as the field value, but passes a PickListOption to the GenericSelect. (Logic that is redundant with TableFilterItemSelect, among others)
-const ControlledSelect: React.FC<ControlledSelectProps> = ({
+const ControlledSelect = <T extends FieldValues = FieldValues>({
   name,
   control,
   rules,
@@ -38,18 +51,18 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   onChange,
   setValueAs,
   ...props
-}) => {
+}: ControlledSelectProps<T>) => {
   const {
     field,
     fieldState: { error },
-  } = useController({
+  } = useController<T>({
     name,
     control,
     shouldUnregister: true,
     rules: {
       required: required ? 'This field is required' : false,
       ...rules,
-    },
+    } as RegisterOptions<T, Path<T>>,
   });
 
   const isGrouped = !!options[0]?.groupLabel;
@@ -93,6 +106,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
       }}
       onBlur={field.onBlur}
       multiple={false}
+      loading={loading}
       // fields for using PickListOption as the option type
       options={options}
       getOptionLabel={getOptionLabel}

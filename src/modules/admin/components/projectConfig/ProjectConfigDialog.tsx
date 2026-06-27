@@ -40,6 +40,8 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
               UpdateProjectConfigMutationVariables
             >
               role={StaticFormRole.ProjectConfig}
+              // In edit mode, pass the config ID as a local constant so the form definition knows we are editing an existing record
+              localConstants={{ projectConfigId: config.id }}
               initialValues={{
                 lengthOfAbsenceDays: configOptions.length_of_absence_days,
                 receivesDirectReferrals:

@@ -5,6 +5,7 @@ import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
+import SystemFieldChip from '../SystemFieldChip';
 import { FormTreeContext } from './FormTreeContext';
 import useUpdateFormStructure from './useUpdateFormStructure';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
@@ -19,6 +20,7 @@ import {
   FormItemPaletteType,
   ItemDependents,
 } from '@/modules/formBuilder/types';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ItemType } from '@/types/gqlTypes';
 
 export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
@@ -61,6 +63,14 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
 
   const item = useMemo(() => itemMap[itemId], [itemMap, itemId]);
 
+  // If the item maps to a fieldName (as opposed to customFieldKey),
+  // it is a "system" field. Many of these are HUD fields, but not all.
+  // Restrict deletion for users who are not super-admins.
+  const isSystemField = !!item?.mapping?.fieldName;
+  const [canAdministrateConfig] = useHasRootPermissions([
+    'canAdministrateConfig',
+  ]);
+
   const displayAttrs = useMemo(
     () => getItemDisplayAttrs(item?.type),
     [item?.type]
@@ -97,8 +107,28 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     ItemDependents | undefined
   >(undefined);
 
-  const menuItems = useMemo(
-    () => [
+  const menuItems = useMemo(() => {
+    // Disable deletion for groups that have children.
+    const groupHasChildren =
+      item?.type === ItemType.Group && !!item?.item && item.item.length > 0;
+
+    // Disable deletion (for non-super-admins) if this is a system-mapped field.
+    const disableDeleteSystemField = isSystemField && !canAdministrateConfig;
+
+    let disabledReason = undefined;
+    if (groupHasChildren) {
+      disabledReason = 'Groups with items cannot be deleted.';
+    } else if (disableDeleteSystemField) {
+      disabledReason = 'This item maps to a system field.';
+    }
+
+    // For super-admins, show a helper text but don't disable the delete action.
+    const helperText =
+      isSystemField && canAdministrateConfig
+        ? 'Caution: This item maps to a system field.'
+        : undefined;
+
+    return [
       {
         key: 'edit',
         title: 'Edit',
@@ -108,13 +138,18 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         key: 'delete',
         title: 'Delete',
         onClick: () => onDelete(setDeletionBlockers),
-        // disable deletion for groups that contain items
-        disabled:
-          item?.type === ItemType.Group && !!item?.item && item.item.length > 0,
+        disabled: groupHasChildren || disableDeleteSystemField,
+        disabledReason: disabledReason,
+        helperText,
       },
-    ],
-    [item, openFormItemEditor, onDelete]
-  );
+    ];
+  }, [
+    canAdministrateConfig,
+    isSystemField,
+    item,
+    onDelete,
+    openFormItemEditor,
+  ]);
 
   return (
     <TreeItem2Label
@@ -166,6 +201,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           </Box>
 
           {item.required && <Typography color='red'>*</Typography>}
+          {isSystemField && <SystemFieldChip />}
           {item.enableWhen && item.enableWhen?.length > 0 && (
             <ConditionalIcon
               fontSize='inherit'

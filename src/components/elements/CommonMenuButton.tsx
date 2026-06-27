@@ -28,6 +28,7 @@ export type CommonMenuItem = {
   divider?: boolean;
   disabled?: boolean;
   disabledReason?: string;
+  helperText?: string;
   ariaLabel?: string;
   linkState?: LocationState;
   openInNew?: boolean;
@@ -126,6 +127,7 @@ const CommonMenuButton = ({
             onClick,
             disabled,
             disabledReason,
+            helperText,
             ariaLabel,
             openInNew,
             linkState,
@@ -156,6 +158,14 @@ const CommonMenuButton = ({
                       sx={{ fontStyle: 'italic' }}
                     >
                       {disabledReason}
+                    </Typography>
+                  )}
+                  {helperText && (
+                    <Typography
+                      variant={'caption'}
+                      sx={{ fontStyle: 'italic' }}
+                    >
+                      {helperText}
                     </Typography>
                   )}
                 </Stack>
