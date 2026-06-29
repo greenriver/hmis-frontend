@@ -22643,6 +22643,15 @@ export type CeMatchRuleProjectDetailsFragment = {
   unitGroups: { __typename?: 'UnitGroupsPaginated'; nodesCount: number };
 };
 
+export type CeMatchRuleProjectUnitGroupFieldsFragment = {
+  __typename?: 'UnitGroup';
+  id: string;
+  name: string;
+  effectiveCeMatchRuleCount: number;
+  localCeMatchRuleCount: number;
+  project: { __typename?: 'Project'; id: string; projectName: string };
+};
+
 export type CeMatchRuleUnitGroupFieldsFragment = {
   __typename?: 'UnitGroup';
   id: string;
@@ -23071,16 +23080,7 @@ export type GetCeMatchProjectUnitGroupsQuery = {
         name: string;
         effectiveCeMatchRuleCount: number;
         localCeMatchRuleCount: number;
-        project: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          organization: {
-            __typename?: 'Organization';
-            id: string;
-            organizationName: string;
-          };
-        };
+        project: { __typename?: 'Project'; id: string; projectName: string };
       }>;
     };
   } | null;
@@ -52783,8 +52783,8 @@ export const CeMatchRuleProjectDetailsFragmentDoc = gql`
   ${CeMatchRuleProjectFieldsFragmentDoc}
   ${CeMatchRuleGroupFieldsFragmentDoc}
 `;
-export const CeMatchRuleUnitGroupFieldsFragmentDoc = gql`
-  fragment CeMatchRuleUnitGroupFields on UnitGroup {
+export const CeMatchRuleProjectUnitGroupFieldsFragmentDoc = gql`
+  fragment CeMatchRuleProjectUnitGroupFields on UnitGroup {
     id
     name
     effectiveCeMatchRuleCount
@@ -52792,12 +52792,20 @@ export const CeMatchRuleUnitGroupFieldsFragmentDoc = gql`
     project {
       id
       projectName
+    }
+  }
+`;
+export const CeMatchRuleUnitGroupFieldsFragmentDoc = gql`
+  fragment CeMatchRuleUnitGroupFields on UnitGroup {
+    ...CeMatchRuleProjectUnitGroupFields
+    project {
       organization {
         id
         organizationName
       }
     }
   }
+  ${CeMatchRuleProjectUnitGroupFieldsFragmentDoc}
 `;
 export const CeMatchRuleUnitGroupDetailsFragmentDoc = gql`
   fragment CeMatchRuleUnitGroupDetails on UnitGroup {
@@ -59817,12 +59825,12 @@ export const GetCeMatchProjectUnitGroupsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...CeMatchRuleUnitGroupFields
+          ...CeMatchRuleProjectUnitGroupFields
         }
       }
     }
   }
-  ${CeMatchRuleUnitGroupFieldsFragmentDoc}
+  ${CeMatchRuleProjectUnitGroupFieldsFragmentDoc}
 `;
 
 /**

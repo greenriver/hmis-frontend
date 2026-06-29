@@ -111,7 +111,7 @@ query GetCeMatchProjectUnitGroups(
       limit
       nodesCount
       nodes {
-        ...CeMatchRuleUnitGroupFields
+        ...CeMatchRuleProjectUnitGroupFields
       }
     }
   }

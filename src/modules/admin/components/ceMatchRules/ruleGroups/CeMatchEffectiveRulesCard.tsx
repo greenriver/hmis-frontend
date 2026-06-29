@@ -14,6 +14,8 @@ interface Props {
   ownerTo?: To;
   effectiveRulesCount: number;
   ruleCountSummaries: CeMatchRuleCountSummary[];
+  /** When false, hides the per-owner rule count summary row. Defaults to true. */
+  showSummary?: boolean;
   children: ReactNode;
 }
 
@@ -27,6 +29,7 @@ const CeMatchEffectiveRulesCard: React.FC<Props> = ({
   ownerTo,
   effectiveRulesCount,
   ruleCountSummaries,
+  showSummary = true,
   children,
 }) => (
   <Paper>
@@ -40,7 +43,7 @@ const CeMatchEffectiveRulesCard: React.FC<Props> = ({
         )}{' '}
         ({effectiveRulesCount})
       </Typography>
-      {ownerName !== 'Global' && ( // Hide summary on the Global page, where it's redundant
+      {showSummary && (
         <Stack direction='row' gap={4} flexWrap='wrap'>
           {ruleCountSummaries.map(({ label, count, to }) => (
             <Typography key={label} variant='body2'>
