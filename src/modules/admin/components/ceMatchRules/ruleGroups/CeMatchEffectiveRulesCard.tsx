@@ -40,14 +40,16 @@ const CeMatchEffectiveRulesCard: React.FC<Props> = ({
         )}{' '}
         ({effectiveRulesCount})
       </Typography>
-      <Stack direction='row' gap={4} flexWrap='wrap'>
-        {ruleCountSummaries.map(({ label, count, to }) => (
-          <Typography key={label} variant='body2'>
-            {to ? <RouterLink to={to}>{label}</RouterLink> : label}: {count}{' '}
-            rules
-          </Typography>
-        ))}
-      </Stack>
+      {ownerName !== 'Global' && ( // Hide summary on the Global page, where it's redundant
+        <Stack direction='row' gap={4} flexWrap='wrap'>
+          {ruleCountSummaries.map(({ label, count, to }) => (
+            <Typography key={label} variant='body2'>
+              {to ? <RouterLink to={to}>{label}</RouterLink> : label}: {count}{' '}
+              rules
+            </Typography>
+          ))}
+        </Stack>
+      )}
     </Stack>
     <Stack>{children}</Stack>
   </Paper>
