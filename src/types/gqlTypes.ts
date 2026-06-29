@@ -52783,31 +52783,6 @@ export const CeMatchRuleProjectDetailsFragmentDoc = gql`
   ${CeMatchRuleProjectFieldsFragmentDoc}
   ${CeMatchRuleGroupFieldsFragmentDoc}
 `;
-export const CeMatchRuleProjectFieldsFragmentDoc = gql`
-  fragment CeMatchRuleProjectFields on Project {
-    id
-    projectName
-    effectiveCeMatchRuleCount
-    localCeMatchRuleCount
-    organization {
-      id
-      organizationName
-    }
-    unitGroups(limit: 1) {
-      nodesCount
-    }
-  }
-`;
-export const CeMatchRuleProjectDetailsFragmentDoc = gql`
-  fragment CeMatchRuleProjectDetails on Project {
-    ...CeMatchRuleProjectFields
-    effectiveCeMatchRuleGroups {
-      ...CeMatchRuleGroupFields
-    }
-  }
-  ${CeMatchRuleProjectFieldsFragmentDoc}
-  ${CeMatchRuleGroupFieldsFragmentDoc}
-`;
 export const CeMatchRuleUnitGroupFieldsFragmentDoc = gql`
   fragment CeMatchRuleUnitGroupFields on UnitGroup {
     id
