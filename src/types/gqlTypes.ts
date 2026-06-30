@@ -8683,8 +8683,11 @@ export type UnitGroup = {
   /** Number of CE match rules owned directly by this record. */
   localCeMatchRuleCount: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  organizationId: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
-  project: Project;
+  projectId: Scalars['ID']['output'];
+  projectName: Scalars['String']['output'];
   unitType?: Maybe<UnitTypeObject>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
@@ -22649,33 +22652,32 @@ export type CeMatchRuleProjectUnitGroupFieldsFragment = {
   name: string;
   effectiveCeMatchRuleCount: number;
   localCeMatchRuleCount: number;
-  project: { __typename?: 'Project'; id: string; projectName: string };
+  projectId: string;
+  projectName: string;
 };
 
 export type CeMatchRuleUnitGroupFieldsFragment = {
   __typename?: 'UnitGroup';
+  organizationId: string;
+  organizationName: string;
   id: string;
   name: string;
   effectiveCeMatchRuleCount: number;
   localCeMatchRuleCount: number;
-  project: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    organization: {
-      __typename?: 'Organization';
-      id: string;
-      organizationName: string;
-    };
-  };
+  projectId: string;
+  projectName: string;
 };
 
 export type CeMatchRuleUnitGroupDetailsFragment = {
   __typename?: 'UnitGroup';
+  organizationId: string;
+  organizationName: string;
   id: string;
   name: string;
   effectiveCeMatchRuleCount: number;
   localCeMatchRuleCount: number;
+  projectId: string;
+  projectName: string;
   effectiveCeMatchRuleGroups: Array<{
     __typename?: 'CeMatchRuleGroup';
     ownerType: CeMatchRuleOwnerType;
@@ -22696,16 +22698,6 @@ export type CeMatchRuleUnitGroupDetailsFragment = {
       funders?: Array<FundingSource> | null;
     }>;
   }>;
-  project: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    organization: {
-      __typename?: 'Organization';
-      id: string;
-      organizationName: string;
-    };
-  };
 };
 
 export type CreateCeMatchRuleMutationVariables = Exact<{
@@ -22995,20 +22987,14 @@ export type GetCeMatchRuleUnitGroupsQuery = {
     nodesCount: number;
     nodes: Array<{
       __typename?: 'UnitGroup';
+      organizationId: string;
+      organizationName: string;
       id: string;
       name: string;
       effectiveCeMatchRuleCount: number;
       localCeMatchRuleCount: number;
-      project: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        organization: {
-          __typename?: 'Organization';
-          id: string;
-          organizationName: string;
-        };
-      };
+      projectId: string;
+      projectName: string;
     }>;
   };
 };
@@ -23021,10 +23007,14 @@ export type GetCeMatchUnitGroupRulesQuery = {
   __typename?: 'Query';
   unitGroup?: {
     __typename?: 'UnitGroup';
+    organizationId: string;
+    organizationName: string;
     id: string;
     name: string;
     effectiveCeMatchRuleCount: number;
     localCeMatchRuleCount: number;
+    projectId: string;
+    projectName: string;
     effectiveCeMatchRuleGroups: Array<{
       __typename?: 'CeMatchRuleGroup';
       ownerType: CeMatchRuleOwnerType;
@@ -23045,16 +23035,6 @@ export type GetCeMatchUnitGroupRulesQuery = {
         funders?: Array<FundingSource> | null;
       }>;
     }>;
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      organization: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      };
-    };
   } | null;
 };
 
@@ -23080,7 +23060,8 @@ export type GetCeMatchProjectUnitGroupsQuery = {
         name: string;
         effectiveCeMatchRuleCount: number;
         localCeMatchRuleCount: number;
-        project: { __typename?: 'Project'; id: string; projectName: string };
+        projectId: string;
+        projectName: string;
       }>;
     };
   } | null;
@@ -52789,21 +52770,15 @@ export const CeMatchRuleProjectUnitGroupFieldsFragmentDoc = gql`
     name
     effectiveCeMatchRuleCount
     localCeMatchRuleCount
-    project {
-      id
-      projectName
-    }
+    projectId
+    projectName
   }
 `;
 export const CeMatchRuleUnitGroupFieldsFragmentDoc = gql`
   fragment CeMatchRuleUnitGroupFields on UnitGroup {
     ...CeMatchRuleProjectUnitGroupFields
-    project {
-      organization {
-        id
-        organizationName
-      }
-    }
+    organizationId
+    organizationName
   }
   ${CeMatchRuleProjectUnitGroupFieldsFragmentDoc}
 `;

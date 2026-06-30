@@ -37,7 +37,15 @@ const UNIT_GROUP_COLUMNS: DataColumnDef<
   {
     header: 'Project',
     key: 'projectName',
-    render: (unitGroup) => unitGroup.project.projectName,
+    render: (unitGroup) => unitGroup.projectName,
+  },
+  {
+    header: 'Organization',
+    key: 'organizationName',
+    render: (unitGroup) => unitGroup.organizationName,
+    optional: {
+      defaultHidden: true,
+    },
   },
 ];
 
@@ -91,7 +99,7 @@ const CeMatchRuleUnitGroups: React.FC = () => {
               key: 'viewUnitGroup',
               ariaLabel: `View Unit Group, ${unitGroup.name}`,
               to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-                projectId: unitGroup.project.id,
+                projectId: unitGroup.projectId,
                 unitGroupId: unitGroup.id,
               }),
             },

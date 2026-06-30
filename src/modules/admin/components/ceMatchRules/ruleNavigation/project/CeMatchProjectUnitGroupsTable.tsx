@@ -75,7 +75,7 @@ const CeMatchProjectUnitGroupsTable: React.FC<{
             key: 'viewUnitGroup',
             ariaLabel: `View Unit Group, ${unitGroup.name}`,
             to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-              projectId: unitGroup.project.id,
+              projectId: unitGroup.projectId,
               unitGroupId: unitGroup.id,
             }),
           },

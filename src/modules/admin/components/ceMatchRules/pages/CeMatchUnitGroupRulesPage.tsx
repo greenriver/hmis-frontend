@@ -32,7 +32,7 @@ const CeMatchUnitGroupRulesPage: React.FC = () => {
   const { overrideBreadcrumbTitles } = useAdminDashboardContext();
 
   const unitGroupName = useMemo(
-    () => `${unitGroup?.project?.projectName}: ${unitGroup?.name}`,
+    () => `${unitGroup?.projectName}: ${unitGroup?.name}`,
     [unitGroup]
   );
 
@@ -56,7 +56,7 @@ const CeMatchUnitGroupRulesPage: React.FC = () => {
         <CeMatchEffectiveRulesCard
           ownerName={unitGroupName}
           ownerTo={generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-            projectId: unitGroup.project.id,
+            projectId: unitGroup.projectId,
             unitGroupId: unitGroup.id,
           })}
           effectiveRulesCount={unitGroup.effectiveCeMatchRuleCount}
