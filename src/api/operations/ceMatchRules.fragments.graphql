@@ -99,20 +99,14 @@ fragment CeMatchRuleProjectUnitGroupFields on UnitGroup {
   name
   effectiveCeMatchRuleCount
   localCeMatchRuleCount
-  project {
-    id
-    projectName
-  }
+  projectId
+  projectName
 }
 
 fragment CeMatchRuleUnitGroupFields on UnitGroup {
   ...CeMatchRuleProjectUnitGroupFields
-  project {
-    organization {
-      id
-      organizationName
-    }
-  }
+  organizationId
+  organizationName
 }
 
 fragment CeMatchRuleUnitGroupDetails on UnitGroup {
