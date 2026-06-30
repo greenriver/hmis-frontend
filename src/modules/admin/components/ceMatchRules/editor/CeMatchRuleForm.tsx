@@ -62,10 +62,17 @@ const CeMatchRuleForm: React.FC<Props> = ({
     [initialValues]
   );
 
-  const { control, getValues, handleSubmit, reset, setValue, watch } =
-    useForm<CeMatchRuleFormValues>({
-      defaultValues,
-    });
+  const {
+    control,
+    formState: { dirtyFields },
+    getValues,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+  } = useForm<CeMatchRuleFormValues>({
+    defaultValues,
+  });
 
   // If the component remounts with different default values, reset the form
   useEffect(() => reset(defaultValues), [defaultValues, reset]);
@@ -81,6 +88,8 @@ const CeMatchRuleForm: React.FC<Props> = ({
   const mode = watch('mode');
   const displayValues = editing ? getValues() : defaultValues;
   const showWarningDialog = hasOnlyWarnings(errorState);
+  const expressionDirty =
+    !!dirtyFields.freeTextExpression || !!dirtyFields.structuredExpression;
 
   const handleCancel = useCallback(() => {
     // If this was a new rule, call the onCancel callback
@@ -177,7 +186,9 @@ const CeMatchRuleForm: React.FC<Props> = ({
             <LoadingButton
               loading={loading}
               variant='contained'
-              onClick={handleSubmit((values) => submit(values, false))}
+              onClick={handleSubmit((values) =>
+                submit(values, { expressionDirty })
+              )}
             >
               Save Rule
             </LoadingButton>
@@ -208,7 +219,11 @@ const CeMatchRuleForm: React.FC<Props> = ({
           errorState={errorState}
           loading={loading}
           onCancel={clearErrors}
-          onConfirm={() => handleSubmit((values) => submit(values, true))()}
+          onConfirm={() =>
+            handleSubmit((values) =>
+              submit(values, { confirmed: true, expressionDirty })
+            )()
+          }
         />
       )}
     </Stack>

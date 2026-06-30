@@ -16,7 +16,22 @@ import {
   useUpdateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
 
-const buildCeMatchRuleInput = (
+const buildStructuredExpressionInput = ({
+  operator,
+  clauses,
+}: CeMatchRuleFormValues['structuredExpression']) => ({
+  operator,
+  clauses: clauses.map(
+    // Strip out unneeded fields from the draft clause.
+    ({ field, comparator, value }) => ({
+      field,
+      comparator,
+      value,
+    })
+  ),
+});
+
+const buildCreateCeMatchRuleInput = (
   {
     name,
     mode,
@@ -42,17 +57,42 @@ const buildCeMatchRuleInput = (
 
   return {
     ...base,
-    structuredExpression: {
-      operator: structuredExpression.operator,
-      clauses: structuredExpression.clauses.map(
-        // Strip out unneeded fields from the draft clause.
-        ({ field, comparator, value }) => ({
-          field,
-          comparator,
-          value,
-        })
-      ),
-    },
+    structuredExpression: buildStructuredExpressionInput(structuredExpression),
+  };
+};
+
+interface BuildUpdateCeMatchRuleInputArgs {
+  expressionDirty?: boolean;
+}
+
+const buildUpdateCeMatchRuleInput = (
+  {
+    name,
+    mode,
+    structuredExpression,
+    freeTextExpression,
+  }: CeMatchRuleFormValues,
+  { expressionDirty = false }: BuildUpdateCeMatchRuleInputArgs = {}
+): CeMatchRuleInput => {
+  // Updates intentionally avoid create-only immutable fields (owner/type/ruleType).
+  // Only send expression when the editor value changed, so switching modes or updating name
+  // does not rewrite equivalent saved expressions or trigger impact preview.
+  const input: CeMatchRuleInput = {
+    name: name.trim(),
+  };
+
+  if (!expressionDirty) return input;
+
+  if (mode === 'freeText') {
+    return {
+      ...input,
+      expression: freeTextExpression.trim(),
+    };
+  }
+
+  return {
+    ...input,
+    structuredExpression: buildStructuredExpressionInput(structuredExpression),
   };
 };
 
@@ -61,6 +101,11 @@ interface UseCeMatchRuleFormSubmissionArgs {
   ownerId?: string;
   ruleId?: string;
   onSaved: (rule: CeMatchRuleDetailsFragment) => void;
+}
+
+interface SubmitCeMatchRuleArgs {
+  confirmed?: boolean;
+  expressionDirty?: boolean;
 }
 
 const useCeMatchRuleFormSubmission = ({
@@ -107,20 +152,22 @@ const useCeMatchRuleFormSubmission = ({
     });
 
   const submit = useCallback(
-    (values: CeMatchRuleFormValues, confirmed = false) => {
-      const input = buildCeMatchRuleInput(values, ownerType, ownerId);
+    (
+      values: CeMatchRuleFormValues,
+      { confirmed = false, expressionDirty = false }: SubmitCeMatchRuleArgs = {}
+    ) => {
       if (ruleId) {
         updateCeMatchRule({
           variables: {
             id: ruleId,
-            input,
+            input: buildUpdateCeMatchRuleInput(values, { expressionDirty }),
             confirmed,
           },
         });
       } else {
         createCeMatchRule({
           variables: {
-            input,
+            input: buildCreateCeMatchRuleInput(values, ownerType, ownerId),
             confirmed,
           },
         });
