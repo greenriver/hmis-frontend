@@ -16,21 +16,18 @@ import {
   ReferralRoutes,
   Routes,
 } from '@/routes/routes';
-import { LocationState } from '@/routes/routeUtil';
 
 type CrumbConfig = {
   [x: string]: {
     title: string;
     parent?: string;
     icon?: SvgIconComponent;
-    routeParams?: Record<string, string>;
   };
 };
 
 interface Breadcrumb {
   to: string;
   label: string;
-  routeParams?: Record<string, string>;
 }
 
 const buildParentPaths = (
@@ -68,14 +65,6 @@ const buildDefaultCrumbs = (
 export const useProjectBreadcrumbConfig = (
   context: ProjectDashboardContext | undefined
 ): CrumbConfig => {
-  const { state } = useLocation();
-  const referralBreadcrumbParent = (state as LocationState | undefined)
-    ?.projectReferralBreadcrumbParent;
-  const referralBreadcrumbParentRoute = referralBreadcrumbParent?.route;
-  const referralBreadcrumbParentRouteParams =
-    referralBreadcrumbParent?.routeParams;
-  const referralBreadcrumbParentTitle = referralBreadcrumbParent?.title;
-
   return useMemo(() => {
     if (context === undefined) {
       return {};
@@ -152,7 +141,7 @@ export const useProjectBreadcrumbConfig = (
       },
       [ProjectDashboardRoutes.REFERRAL]: {
         title: 'Referral',
-        parent: referralBreadcrumbParentRoute || ProjectDashboardRoutes.CE,
+        parent: ProjectDashboardRoutes.CE,
       },
       [ProjectDashboardRoutes.REFERRAL_STEP]: {
         title: 'Step',
@@ -167,24 +156,17 @@ export const useProjectBreadcrumbConfig = (
         parent: ProjectDashboardRoutes.UNITS,
       },
       [ProjectDashboardRoutes.UNIT]: {
-        title: referralBreadcrumbParentTitle || 'Unit',
+        title: 'Unit',
         parent: ProjectDashboardRoutes.UNITS,
-        routeParams: referralBreadcrumbParentRouteParams,
       },
       [ProjectDashboardRoutes.CE_UNIT]: {
-        title: referralBreadcrumbParentTitle || 'Unit',
+        title: 'Unit',
         parent: ProjectDashboardRoutes.CE,
-        routeParams: referralBreadcrumbParentRouteParams,
       },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;
     return buildDefaultCrumbs(ProjectDashboardRoutes, overrides, projectRoot);
-  }, [
-    context,
-    referralBreadcrumbParentRoute,
-    referralBreadcrumbParentRouteParams,
-    referralBreadcrumbParentTitle,
-  ]);
+  }, [context]);
 };
 
 export const useReferralBreadcrumbConfig = (): CrumbConfig => {
@@ -397,7 +379,6 @@ export const useDashboardBreadcrumbs = (
       to: path,
       label: breadcrumbOverrides?.[path] || crumbConfig[path]?.title || 'Page',
       icon: crumbConfig[path]?.icon,
-      routeParams: crumbConfig[path]?.routeParams,
     }));
 
     return crumbs;

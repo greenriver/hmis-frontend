@@ -15,8 +15,7 @@ import {
 } from '@/types/gqlTypes';
 
 const ReferralStep: React.FC = ({}) => {
-  const { referral, referralPath, referralRouteState, overrideStepTitle } =
-    useReferralContext();
+  const { referral, referralPath, overrideStepTitle } = useReferralContext();
   const { stepId } = useSafeParams() as {
     stepId: string;
   };
@@ -53,12 +52,7 @@ const ReferralStep: React.FC = ({}) => {
   return (
     <Stack direction='column' gap={2}>
       <Box sx={{ alignSelf: 'start' }}>
-        <ButtonLink
-          variant='text'
-          startIcon={<BackIcon />}
-          to={referralPath}
-          state={referralRouteState}
-        >
+        <ButtonLink variant='text' startIcon={<BackIcon />} to={referralPath}>
           Back to All Tasks
         </ButtonLink>
       </Box>

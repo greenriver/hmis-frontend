@@ -24,16 +24,9 @@ const COLUMNS: ColumnDef<CeReferralBaseTableFieldsFragment>[] = [
 interface Props {
   projectId: string;
   unitId: string;
-  unitName: string;
-  breadcrumbParentRoute: string;
 }
 
-const UnitReferralHistoryTable: React.FC<Props> = ({
-  projectId,
-  unitId,
-  unitName,
-  breadcrumbParentRoute,
-}) => {
+const UnitReferralHistoryTable: React.FC<Props> = ({ projectId, unitId }) => {
   return (
     <Paper>
       <GenericTableWithData<
@@ -55,13 +48,6 @@ const UnitReferralHistoryTable: React.FC<Props> = ({
             referralId: referral.id,
           })
         }
-        rowLinkState={{
-          projectReferralBreadcrumbParent: {
-            route: breadcrumbParentRoute,
-            routeParams: { projectId, unitId },
-            title: unitName,
-          },
-        }}
         rowName={(referral) => `Referral for ${referral.clientName}`}
         rowActionTitle='View Referral'
       />

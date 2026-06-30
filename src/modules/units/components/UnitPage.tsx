@@ -1,10 +1,10 @@
 import { Alert } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
+import { Navigate } from 'react-router-dom';
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
-import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';
 
 import PrioritizedClientsTable from '@/modules/ce/components/unit/PrioritizedClientsTable';
@@ -13,6 +13,7 @@ import UnitOverview from '@/modules/units/components/UnitOverview';
 import UnitReferralHistoryTable from '@/modules/units/components/UnitReferralHistoryTable';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { CeOpportunityStatus, useGetUnitQuery } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {}
 const UnitPage: React.FC<Props> = ({}) => {
@@ -20,7 +21,6 @@ const UnitPage: React.FC<Props> = ({}) => {
     unitId: string;
     projectId: string;
   };
-  const currentPath = useCurrentPath();
 
   const { project, overrideBreadcrumbTitles } = useProjectDashboardContext();
 
@@ -41,7 +41,6 @@ const UnitPage: React.FC<Props> = ({}) => {
 
     overrideBreadcrumbTitles({
       [ProjectDashboardRoutes.UNIT]: unit.name,
-      [ProjectDashboardRoutes.CE_UNIT]: unit.name,
       [ProjectDashboardRoutes.UNIT_GROUP]: unit.unitGroup?.name || 'Unit Group',
     });
   }, [overrideBreadcrumbTitles, unit]);
@@ -56,9 +55,7 @@ const UnitPage: React.FC<Props> = ({}) => {
       contents: <UnitOverview unit={unit} />,
     });
     const opportunity = unit.latestOpportunity;
-    const hasWaitlistWorkflow = !!unit.unitGroup?.workflowTemplateIdentifier;
     if (
-      hasWaitlistWorkflow &&
       opportunity &&
       opportunity.status !== CeOpportunityStatus.Closed &&
       project.access.canViewPrioritizedClientLists
@@ -88,18 +85,13 @@ const UnitPage: React.FC<Props> = ({}) => {
         title: 'Referral History',
         key: 'referral-history',
         contents: (
-          <UnitReferralHistoryTable
-            projectId={project.id}
-            unitId={unitId}
-            unitName={unit.name}
-            breadcrumbParentRoute={currentPath || ProjectDashboardRoutes.UNIT}
-          />
+          <UnitReferralHistoryTable projectId={project.id} unitId={unitId} />
         ),
       });
     }
 
     return defs;
-  }, [currentPath, project, unit, unitId]);
+  }, [project, unit, unitId]);
 
   if (loading && !unit) return <Loading />;
   if (error) throw error;
@@ -111,11 +103,24 @@ const UnitPage: React.FC<Props> = ({}) => {
   if (!project.coordinatedEntryFeatures?.supportsWaitlistReferrals)
     return <NotFound />;
 
+  // If the unit group doesn't have a workflow template identifier, creating client-list-based referrals will not work.
+  // Redirect to the project units page. (redirectRoute in the route definition doesn't handle this)
+  if (!unit.unitGroup?.workflowTemplateIdentifier) {
+    return (
+      <Navigate
+        to={generateSafePath(ProjectDashboardRoutes.UNITS, {
+          projectId: project.id,
+        })}
+        replace
+      />
+    );
+  }
+
   return (
     <>
       <PageTitle title={unit.name} />
       <CommonTabs
-        ariaLabel={'Unit details tabs'}
+        ariaLabel={'Eligible Clients and Details tabs'}
         tabDefinitions={tabDefinitions}
       />
     </>

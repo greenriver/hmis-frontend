@@ -10,7 +10,6 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { cache } from '@/providers/apolloClient';
-import { LocationState } from '@/routes/routeUtil';
 import {
   CeReferralStepStatus,
   CeReferralStepSummaryFieldsFragment,
@@ -22,15 +21,9 @@ interface Props {
   step: CeReferralStepSummaryFieldsFragment;
   referralId: string;
   path: string;
-  routeState?: LocationState;
 }
 
-const ReferralStepAction: React.FC<Props> = ({
-  step,
-  referralId,
-  path,
-  routeState,
-}) => {
+const ReferralStepAction: React.FC<Props> = ({ step, referralId, path }) => {
   const { status, name } = step;
   const navigate = useNavigate();
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
@@ -64,7 +57,7 @@ const ReferralStepAction: React.FC<Props> = ({
             },
           });
 
-          navigate(path, { state: routeState });
+          navigate(path);
         }
       },
     });
@@ -102,7 +95,6 @@ const ReferralStepAction: React.FC<Props> = ({
         sx={buttonSx}
         variant='contained'
         to={path}
-        state={routeState}
         aria-label={`Start step: ${name}`}
       >
         Start
@@ -117,7 +109,6 @@ const ReferralStepAction: React.FC<Props> = ({
         sx={buttonSx}
         aria-label={`View step: ${name}`}
         to={path}
-        state={routeState}
         color='grayscale'
         variant='contained'
       >

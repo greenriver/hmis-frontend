@@ -17,7 +17,6 @@ export interface Breadcrumb {
   label: string;
   to: string;
   icon?: SvgIconComponent;
-  routeParams?: Record<string, string>;
 }
 interface Props extends BreadcrumbsProps {
   crumbs: Breadcrumb[];
@@ -44,7 +43,7 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
       }}
       {...rest}
     >
-      {crumbs.map(({ label, to, icon: Icon, routeParams }, index) => {
+      {crumbs.map(({ label, to, icon: Icon }, index) => {
         if (index === crumbs.length - 1) {
           return (
             <Typography variant={variant} key={to} sx={{ display: 'inline' }}>
@@ -54,10 +53,7 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
         }
 
         // Fill in path with params we already have (e.g. replace :clientId with id)
-        const filledInPath = generateSafePath(to, {
-          ...params,
-          ...routeParams,
-        });
+        const filledInPath = generateSafePath(to, params);
         return (
           <RouterLink
             aria-label={label}
