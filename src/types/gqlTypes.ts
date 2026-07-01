@@ -1069,7 +1069,6 @@ export type CeReferral = {
   targetProjectId: Scalars['ID']['output'];
   targetProjectName: Scalars['String']['output'];
   targetProjectType: ProjectType;
-  updatedAt: Scalars['ISO8601DateTime']['output'];
   updatedBy?: Maybe<ApplicationUser>;
   workflowTemplateName?: Maybe<Scalars['String']['output']>;
 };
@@ -7002,7 +7001,6 @@ export type Query = {
   tableConfigLookup: TableConfigLookup;
   unit?: Maybe<Unit>;
   unitGroup?: Maybe<UnitGroup>;
-  unitGroups: UnitGroupsPaginated;
   /** User lookup */
   user?: Maybe<ApplicationUser>;
   userDashboard: UserDashboard;
@@ -7258,12 +7256,6 @@ export type QueryUnitArgs = {
 
 export type QueryUnitGroupArgs = {
   id: Scalars['ID']['input'];
-};
-
-export type QueryUnitGroupsArgs = {
-  filters?: InputMaybe<UnitGroupFilterOptions>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryUserArgs = {
@@ -8698,17 +8690,10 @@ export type UnitGroup = {
   ceEventType?: Maybe<EventType>;
   directReferralWorkflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
   directReferralWorkflowTemplateName?: Maybe<Scalars['String']['output']>;
-  /** Number of CE match rules that apply to this record, including inherited rules. */
-  effectiveCeMatchRuleCount: Scalars['Int']['output'];
-  /** All CE match rules that apply to this record, including inherited rules, grouped by their owner. */
-  effectiveCeMatchRuleGroups: Array<CeMatchRuleGroup>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
-  /** Number of CE match rules owned directly by this record. */
-  localCeMatchRuleCount: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
-  project: Project;
   unitType?: Maybe<UnitTypeObject>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
@@ -8720,11 +8705,6 @@ export type UnitGroupUnitsArgs = {
   filters?: InputMaybe<UnitFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type UnitGroupFilterOptions = {
-  ceWaitlistsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
-  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UnitGroupInput = {
@@ -17902,7 +17882,6 @@ export type CeReferralSummaryFieldsFragment = {
 export type CeReferralBaseTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
-  updatedAt: string;
   daysOnCurrentSteps?: number | null;
   id: string;
   status: CeReferralStatus;
@@ -17997,7 +17976,6 @@ export type CeReferralTableFieldsFragment = {
   __typename?: 'CeReferral';
   targetOrganizationName: string;
   createdAt: string;
-  updatedAt: string;
   daysOnCurrentSteps?: number | null;
   id: string;
   targetProjectId: string;
@@ -18061,7 +18039,6 @@ export type CeReferralTableFieldsFragment = {
 export type CeReferralClientTableFieldsFragment = {
   __typename?: 'CeReferral';
   createdAt: string;
-  updatedAt: string;
   daysOnCurrentSteps?: number | null;
   id: string;
   status: CeReferralStatus;
@@ -21199,7 +21176,6 @@ export type GetProjectCeReferralsQuery = {
       nodes: Array<{
         __typename?: 'CeReferral';
         createdAt: string;
-        updatedAt: string;
         daysOnCurrentSteps?: number | null;
         id: string;
         status: CeReferralStatus;
@@ -22207,7 +22183,6 @@ export type GetClientCeReferralsQuery = {
       nodes: Array<{
         __typename?: 'CeReferral';
         createdAt: string;
-        updatedAt: string;
         daysOnCurrentSteps?: number | null;
         id: string;
         status: CeReferralStatus;
@@ -22360,7 +22335,6 @@ export type GetCeReferralsQuery = {
       __typename?: 'CeReferral';
       targetOrganizationName: string;
       createdAt: string;
-      updatedAt: string;
       daysOnCurrentSteps?: number | null;
       id: string;
       targetProjectId: string;
@@ -50449,7 +50423,6 @@ export type GetUnitCeReferralsQuery = {
       nodes: Array<{
         __typename?: 'CeReferral';
         createdAt: string;
-        updatedAt: string;
         daysOnCurrentSteps?: number | null;
         id: string;
         status: CeReferralStatus;
@@ -52115,7 +52088,6 @@ export const CeReferralBaseTableFieldsFragmentDoc = gql`
   fragment CeReferralBaseTableFields on CeReferral {
     ...CeReferralSummaryFields
     createdAt
-    updatedAt
     opportunity {
       id
       name

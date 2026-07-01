@@ -17,7 +17,6 @@ const COLUMNS: ColumnDef<CeReferralBaseTableFieldsFragment>[] = [
   REFERRAL_COLUMNS.status,
   REFERRAL_COLUMNS.referredBy,
   REFERRAL_COLUMNS.date,
-  REFERRAL_COLUMNS.updatedDate,
   REFERRAL_COLUMNS.origin,
 ];
 

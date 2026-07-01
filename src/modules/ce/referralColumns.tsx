@@ -33,12 +33,6 @@ export const REFERRAL_COLUMNS: Record<
     render: (referral: CeReferralBaseTableFieldsFragment) =>
       parseAndFormatDate(referral.createdAt),
   },
-  updatedDate: {
-    header: 'Last Updated',
-    key: 'updatedDate',
-    render: (referral: CeReferralBaseTableFieldsFragment) =>
-      parseAndFormatDate(referral.updatedAt),
-  },
   status: {
     header: 'Status',
     render: (referral: CeReferralBaseTableFieldsFragment) => (
