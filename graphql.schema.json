@@ -56009,7 +56009,7 @@
           },
           {
             "name": "ceReferrals",
-            "description": "The CE referrals for the unit",
+            "description": "All current and historical CE referrals for the unit",
             "args": [
               {
                 "name": "filters",

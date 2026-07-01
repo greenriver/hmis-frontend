@@ -8634,7 +8634,7 @@ export type Unit = {
   /** Whether the unit can be marked available for referrals now */
   canBeMarkedAvailableToday: Scalars['Boolean']['output'];
   canBeMarkedUnavailable: Scalars['Boolean']['output'];
-  /** The CE referrals for the unit */
+  /** All current and historical CE referrals for the unit */
   ceReferrals: CeReferralsPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
