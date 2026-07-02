@@ -194,12 +194,12 @@ export const HmisEnums = {
   },
   Component: {
     ADDRESS: 'Client Address input',
-    AHA: 'AHA component',
+    AHA: 'Fetch AHA scores via external API',
     ALERT_ERROR: 'Display text as an error alert',
     ALERT_INFO: 'Display text as an info alert',
     ALERT_SUCCESS: 'Display text as a success alert',
     ALERT_WARNING: 'Display text as a warning alert',
-    ALT_AHA: 'Alt AHA component',
+    ALT_AHA: 'Calculate Alt AHA score',
     CHECKBOX: 'Render a boolean input item as a checkbox',
     CLIENT_CE_ELIGIBILITY:
       'Button to fetch information about client eligibility, based on current form values',
@@ -211,7 +211,7 @@ export const HmisEnums = {
     INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
-    MCI: 'MCI linking component',
+    MCI: 'Perform MCI clearance via external API',
     MINUTES_DURATION:
       'Duration component with hours and minutes, value stored as minutes',
     NAME: 'Client Name input',
@@ -224,6 +224,7 @@ export const HmisEnums = {
     SSN: 'SSN input component',
     TABLE:
       'Render group as a table. Each child item should be a group representing 1 table row.',
+    VISIONLINK: 'Fetch VisionLink eligibility flags via external API',
   },
   CounselingMethod: {
     FAMILY: 'Family',

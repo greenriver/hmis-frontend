@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import { useCallback, useMemo, useState } from 'react';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import LoadingButton from '@/components/elements/LoadingButton';
@@ -59,6 +60,11 @@ import {
  *        "type": "STRING",
  *        ...
  *      },
+ *      {
+ *        "link_id": "mh_aha_score", (OPTIONAL)
+ *        "type": "INTEGER",
+ *        ...
+ *      },
  *      ... may have additional items
  *    ]
  *  }
@@ -72,17 +78,27 @@ const MCI_QUALITY_INDICATOR_LINK_ID = 'aha_mci_quality_indicator';
 const DW_CLIENT_LINK_ID = 'aha_dw_client_id';
 // Generator of the score, always 'AHA'. Only present if the API call was successful.
 const GENERATOR_LINK_ID = 'aha_generator';
+// Numeric MH-AHA score, may be -1..10. -1 means no score.
+// This link_id may only be present on some forms, it is optional to record alongside the AHA.
+const MH_AHA_SCORE_LINK_ID = 'mh_aha_score';
 
 // Optional fields, from elsewhere in the form.
 // If present, pass these form values to the backend when calculating the score.
 const LOOKUP_CATALYST_LINK_ID = 'lookup_catalyst';
 const LOOKUP_REASON_LINK_ID = 'reason_for_aha_lookup';
 
+// Link IDs that are expected to be present on the form.
 const EXPECTED_LINK_IDS = [
   SCORE_LINK_ID,
   MCI_QUALITY_INDICATOR_LINK_ID,
   DW_CLIENT_LINK_ID,
   GENERATOR_LINK_ID,
+];
+
+// Link IDs that are hidden until the AHA score has been fetched.
+const HIDDEN_UNTIL_FETCHED_LINK_IDS = [
+  ...EXPECTED_LINK_IDS,
+  MH_AHA_SCORE_LINK_ID,
 ];
 
 const AhaScore = ({
@@ -98,6 +114,12 @@ const AhaScore = ({
       return item.item?.find((i) => i.linkId === expectedLinkId);
     });
   }, [item]);
+
+  // Whether this form has a MH-AHA score field.
+  const formHasMhAhaScore = useMemo(
+    () => !!item.item?.some((i) => i.linkId === MH_AHA_SCORE_LINK_ID),
+    [item]
+  );
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [ahaFailedReason, setAhaFailedReason] = useState<
@@ -169,6 +191,9 @@ const AhaScore = ({
               data.fetchAhaScore.mciQualityIndicator,
             [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
             [GENERATOR_LINK_ID]: data.fetchAhaScore.generator,
+            ...(formHasMhAhaScore
+              ? { [MH_AHA_SCORE_LINK_ID]: data.fetchAhaScore.mhScore }
+              : {}),
           },
           type: ChangeType.User,
         });
@@ -196,11 +221,16 @@ const AhaScore = ({
     }
   }, [fetchAha, hasRequiredContext]);
 
-  // Throw an error if the children don't match the expected structure
-  if (!isComponentValid) throw new Error('Invalid Aha form component');
-
   if (viewOnly) {
     return item.item?.map((i) => renderChildItem(i));
+  }
+
+  // Send message if form group doesn't match expected shape. Skip sending in read-only mode to avoid noise, because those forms may be retired.
+  if (!isComponentValid) {
+    Sentry.captureMessage(
+      'Invalid AHA form component. Expected link IDs: ' +
+        EXPECTED_LINK_IDS.join(', ')
+    );
   }
 
   if (!clientId) {
@@ -260,7 +290,9 @@ const AhaScore = ({
           // Hide items that display the score if the score hasn't been fetched yet
           item.item
             ?.filter((i) =>
-              hasScore ? true : !EXPECTED_LINK_IDS.includes(i.linkId)
+              hasScore
+                ? true
+                : !HIDDEN_UNTIL_FETCHED_LINK_IDS.includes(i.linkId)
             )
             .map((i) => renderChildItem(i))}
       </Stack>

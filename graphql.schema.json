@@ -5333,6 +5333,146 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CeMatchField",
+        "description": "Field metadata for CE Match Rule expressions",
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "expressionField",
+            "description": "The full-length identifier used in CE Match Rule expressions, such as\n\"current_age\" or \"cde.custom_assessment.my_field_key\".",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "itemType",
+            "description": "The type of the field, used for determining the possible values it can match against.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ItemType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "key",
+            "description": "The CDED key for this field, or the client field key for a client field",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "label",
+            "description": "Human-readable label for this field",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "multiple",
+            "description": "Whether a client can have more than one value for the field.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pickListOptions",
+            "description": "The field's pick list options, if applicable.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PickListOption",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pickListReference",
+            "description": "The field's reference pick list, if applicable, such as `NoYesReasonsForMissingData`.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CeMatchRule",
         "description": null,
         "isOneOf": null,
@@ -14452,7 +14592,7 @@
           },
           {
             "name": "AHA",
-            "description": "AHA component",
+            "description": "Fetch AHA scores via external API",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -14482,7 +14622,7 @@
           },
           {
             "name": "ALT_AHA",
-            "description": "Alt AHA component",
+            "description": "Calculate Alt AHA score",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -14536,7 +14676,7 @@
           },
           {
             "name": "MCI",
-            "description": "MCI linking component",
+            "description": "Perform MCI clearance via external API",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -14591,6 +14731,12 @@
           {
             "name": "TABLE",
             "description": "Render group as a table. Each child item should be a group representing 1 table row.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VISIONLINK",
+            "description": "Fetch VisionLink eligibility flags via external API",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -26343,12 +26489,144 @@
             "deprecationReason": null
           },
           {
+            "name": "mhScore",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "score",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "FetchVisionLinkFlagsPayload",
+        "description": "Autogenerated return type of FetchVisionLinkFlags.",
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "cityOfPittsburgh",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dwClientId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errors",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ValidationError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "failedReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "AhaFailedReason",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isEligibleRa",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "recentEvictionCase",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "section8",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subsidizedHousing",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -37534,6 +37812,35 @@
             "deprecationReason": null
           },
           {
+            "name": "fetchVisionLinkFlags",
+            "description": "Return VisionLink eligibility flags for client",
+            "args": [
+              {
+                "name": "clientId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FetchVisionLinkFlagsPayload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "joinHousehold",
             "description": null,
             "args": [
@@ -38350,8 +38657,8 @@
               "name": "UpdateReferralPostingPayload",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Deprecated in favor of CE Referrals"
           },
           {
             "name": "updateRelationshipToHoH",
@@ -45858,6 +46165,95 @@
                 "kind": "OBJECT",
                 "name": "CeClientsPaginated",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ceMatchClientFields",
+            "description": "Client fields available for CE Match Rule expressions.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeMatchField",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ceMatchCustomAssessmentFields",
+            "description": "Fields on the form that are usable as CE Match Rule condition fields.",
+            "args": [
+              {
+                "name": "formDefinitionIdentifier",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeMatchField",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ceMatchCustomAssessmentForms",
+            "description": "Custom assessment form definitions for use in CE match rule management.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "FormDefinition",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,

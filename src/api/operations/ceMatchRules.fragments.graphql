@@ -1,0 +1,39 @@
+fragment CeMatchFieldDetails on CeMatchField {
+  id
+  key
+  label
+  itemType
+  multiple
+  expressionField
+  pickListReference
+  pickListOptions {
+    ...PickListOptionFields
+  }
+}
+
+fragment CeMatchCustomAssessmentFormFields on FormDefinition {
+  cacheKey
+  identifier
+  title
+}
+
+fragment CeMatchRuleFields on CeMatchRule {
+  id
+  name
+  ownerType
+  expression
+  projectTypes
+  funders
+}
+
+fragment CeMatchRuleDetails on CeMatchRule {
+  ...CeMatchRuleFields
+  structuredExpression {
+    operator
+    clauses {
+      field
+      comparator
+      value
+    }
+  }
+}
