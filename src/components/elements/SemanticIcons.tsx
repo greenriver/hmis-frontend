@@ -12,6 +12,7 @@ import {
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import AddchartRoundedIcon from '@mui/icons-material/AddchartRounded';
+import ApartmentRounded from '@mui/icons-material/ApartmentRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
@@ -54,6 +55,7 @@ import MergeTypeRounded from '@mui/icons-material/MergeTypeRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
+import OtherHousesRounded from '@mui/icons-material/OtherHousesRounded';
 import PeopleIcon from '@mui/icons-material/People';
 import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
 import Person from '@mui/icons-material/Person';
@@ -98,6 +100,8 @@ export {
   // TODO(#7362) - resolve a new icon for Enrollments, use "home" for Projects, per our style guide
   Home as EnrollmentIcon,
   HomeRounded as ProjectIcon,
+  ApartmentRounded as OrganizationIcon,
+  OtherHousesRounded as UnitGroupIcon,
   ExitToAppRoundedIcon as ExitAssessmentIcon,
   ExpandLessRoundedIcon as ExpandLessIcon,
   ExpandMoreRoundedIcon as ExpandMoreIcon,
