@@ -5,8 +5,9 @@ import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
-
 import useTableFilters from '@/hooks/useTableFilters';
+import useTablePagination from '@/hooks/useTablePagination';
+
 import EligibleUnitGroupsDialog from '@/modules/ce/components/admin/EligibleUnitGroupsDialog';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -106,6 +107,10 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
     dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
     omit: ['projectGroupId'], // only exposed via Workspaces
   });
+  const pagination = useTablePagination({
+    pageParam: 'eligibleClientsPage',
+    pageSizeParam: 'eligibleClientsPageSize',
+  });
 
   const rowSecondaryActionConfigs = useCallback(
     (row: CeClientFieldsFragment) => {
@@ -164,6 +169,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
           filters={filters}
           filterValues={filterValues}
           onFilterChange={setFilterValues}
+          pagination={pagination}
           handleRowClick={(row) => setSelectedRow(row)}
           rowActionTitle='View Eligible Projects'
           rowSecondaryActionConfigs={rowSecondaryActionConfigs}

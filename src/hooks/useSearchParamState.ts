@@ -179,9 +179,16 @@ const useSearchParamsState = ({
 
   const values = useMemo(() => {
     if (initial && !mounted) {
-      // If the above useEffect hasn't run yet, return the initial values right away
-      // to avoid flickering
-      return initial;
+      // Before the initial-param effect runs, use URL values that already exist
+      // and fall back to initial values only for missing params.
+      const searchParamValues = getValues(paramsDefinition, searchParams);
+      const valuesWithInitialFallback = { ...searchParamValues };
+      Object.keys(paramsDefinition).forEach((key) => {
+        if (!searchParams.has(key) && Object.hasOwn(initial, key)) {
+          valuesWithInitialFallback[key] = initial[key];
+        }
+      });
+      return valuesWithInitialFallback;
     }
     return getValues(paramsDefinition, searchParams);
   }, [initial, mounted, paramsDefinition, searchParams]);

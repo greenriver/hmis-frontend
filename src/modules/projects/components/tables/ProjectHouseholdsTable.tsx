@@ -15,6 +15,7 @@ import {
 } from '@/components/elements/table/tableRowActionUtil';
 import { ColumnDef } from '@/components/elements/table/types';
 import useTableFilters from '@/hooks/useTableFilters';
+import useTablePagination from '@/hooks/useTablePagination';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   HOUSEHOLD_ASSIGNED_STAFF_COL,
@@ -211,6 +212,7 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
     omit: staffAssignmentsEnabled ? undefined : ['assignedStaff'],
     pickListArgs: { projectId: projectId },
   });
+  const pagination = useTablePagination();
 
   return (
     <GenericTableWithData<
@@ -259,6 +261,7 @@ const ProjectHouseholdsTable: React.FC<Props> = ({ projectId, searchTerm }) => {
       filters={filters}
       filterValues={filterValues}
       onFilterChange={setFilterValues}
+      pagination={pagination}
       recordType='Household'
     />
   );
