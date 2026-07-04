@@ -366,8 +366,9 @@ const GenericTableWithData = <
   const noResults = data && nodesCount === 0;
   const noResultsOnFirstLoad = noResults && !hasRefetched;
 
-  // Hide pagination when possible
-  const hidePagination = !hasRefetched && nodesCount <= defaultPageSize;
+  // Hide pagination when possible. Compare against the active rowsPerPage, not the default,
+  // so an initial URL load with a smaller pageSize still shows controls when more pages exist.
+  const hidePagination = !hasRefetched && nodesCount <= rowsPerPage;
 
   const containerSx = fullHeight ? { height: '100%' } : undefined;
 
