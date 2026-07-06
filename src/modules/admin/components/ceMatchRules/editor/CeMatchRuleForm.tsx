@@ -2,7 +2,12 @@ import UnlockIcon from '@mui/icons-material/Lock';
 import { Button, Stack } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
+import {
+  ceMatchRuleOwnerLevelConfigs,
+  getCeMatchRuleOwnerLevelByOwnerType,
+} from '../ceMatchRuleOwnerLevelConfig';
 import CeMatchExpressionModeSwitch from './CeMatchExpressionModeSwitch';
 import {
   CeMatchRuleFormValues,
@@ -33,7 +38,6 @@ interface Props {
   ownerName?: string;
   ruleId?: string;
   initialValues?: CeMatchRuleFormValues;
-  onSaved?: (rule: CeMatchRuleDetailsFragment) => void;
   onCancel?: VoidFunction;
   onDelete?: VoidFunction;
 }
@@ -50,10 +54,11 @@ const CeMatchRuleForm: React.FC<Props> = ({
   ownerName,
   ruleId,
   initialValues,
-  onSaved = () => undefined,
   onCancel,
   onDelete,
 }) => {
+  const navigate = useNavigate();
+
   // Initially, set the form to editable if this is a new rule
   const [editing, setEditing] = useState(!ruleId);
 
@@ -77,12 +82,31 @@ const CeMatchRuleForm: React.FC<Props> = ({
   // If the component remounts with different default values, reset the form
   useEffect(() => reset(defaultValues), [defaultValues, reset]);
 
+  const handleSaved = useCallback(
+    (rule: CeMatchRuleDetailsFragment) => {
+      // After saving, lock the form
+      setEditing(false);
+
+      // If this was a new rule, navigate to the rule detail page (the locked form)
+      if (!ruleId) {
+        const ownerLevel = getCeMatchRuleOwnerLevelByOwnerType(rule.ownerType);
+        const rulePath = ceMatchRuleOwnerLevelConfigs[ownerLevel].getRulePath({
+          ownerId: rule.ownerId,
+          ruleId: rule.id,
+        });
+
+        if (rulePath) navigate(rulePath);
+      }
+    },
+    [navigate, ruleId]
+  );
+
   const { errorState, loading, submit, clearErrors } =
     useCeMatchRuleFormSubmission({
       ownerType,
       ownerId,
       ruleId,
-      onSaved,
+      onSaved: handleSaved,
     });
 
   const mode = watch('mode');

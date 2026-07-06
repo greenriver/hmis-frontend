@@ -9,6 +9,11 @@ import { AdminDashboardRoutes } from '@/routes/routes';
 import { CeMatchRuleOwnerType } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
+interface GetRulePathArgs {
+  ownerId?: string | null;
+  ruleId: string;
+}
+
 /**
  * Defines route, API, and display behavior for each CE rule owner level.
  */
@@ -19,7 +24,7 @@ export const ceMatchRuleOwnerLevelConfigs = {
     route: AdminDashboardRoutes.CE_RULES,
     getRulesPath: () => AdminDashboardRoutes.CE_RULES,
     getAddRulePath: () => AdminDashboardRoutes.CE_RULE_GLOBAL_NEW,
-    getRulePath: ({ ruleId }: { ruleId: string }) =>
+    getRulePath: ({ ruleId }: GetRulePathArgs) =>
       generateSafePath(AdminDashboardRoutes.CE_RULE_GLOBAL_DETAIL, {
         ruleId,
       }),
@@ -41,11 +46,13 @@ export const ceMatchRuleOwnerLevelConfigs = {
             organizationId: ownerId,
           })
         : undefined,
-    getRulePath: ({ ownerId, ruleId }: { ownerId: string; ruleId: string }) =>
-      generateSafePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION_DETAIL, {
-        organizationId: ownerId,
-        ruleId,
-      }),
+    getRulePath: ({ ownerId, ruleId }: GetRulePathArgs) =>
+      ownerId
+        ? generateSafePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION_DETAIL, {
+            organizationId: ownerId,
+            ruleId,
+          })
+        : undefined,
     label: 'Organization',
   },
   project: {
@@ -64,11 +71,13 @@ export const ceMatchRuleOwnerLevelConfigs = {
             projectId: ownerId,
           })
         : undefined,
-    getRulePath: ({ ownerId, ruleId }: { ownerId: string; ruleId: string }) =>
-      generateSafePath(AdminDashboardRoutes.CE_RULE_PROJECT_DETAIL, {
-        projectId: ownerId,
-        ruleId,
-      }),
+    getRulePath: ({ ownerId, ruleId }: GetRulePathArgs) =>
+      ownerId
+        ? generateSafePath(AdminDashboardRoutes.CE_RULE_PROJECT_DETAIL, {
+            projectId: ownerId,
+            ruleId,
+          })
+        : undefined,
     label: 'Project',
   },
   'unit-group': {
@@ -87,11 +96,13 @@ export const ceMatchRuleOwnerLevelConfigs = {
             unitGroupId: ownerId,
           })
         : undefined,
-    getRulePath: ({ ownerId, ruleId }: { ownerId: string; ruleId: string }) =>
-      generateSafePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP_DETAIL, {
-        unitGroupId: ownerId,
-        ruleId,
-      }),
+    getRulePath: ({ ownerId, ruleId }: GetRulePathArgs) =>
+      ownerId
+        ? generateSafePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP_DETAIL, {
+            unitGroupId: ownerId,
+            ruleId,
+          })
+        : undefined,
     label: 'Unit Group',
   },
 } as const;

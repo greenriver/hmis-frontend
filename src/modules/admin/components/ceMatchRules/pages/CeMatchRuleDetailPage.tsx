@@ -79,7 +79,6 @@ const CeMatchRuleDetailPage: React.FC = () => {
         ownerType={rule.ownerType}
         ownerId={rule.ownerId}
         ownerName={rule.ownerName}
-        onSaved={returnToOwnerRules}
         onDelete={() => setDeleteDialogOpen(true)}
       />
       <CeMatchRuleDeleteDialog

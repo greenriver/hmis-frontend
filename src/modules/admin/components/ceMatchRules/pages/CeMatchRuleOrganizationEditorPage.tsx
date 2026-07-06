@@ -59,7 +59,6 @@ const CeMatchRuleOrganizationEditorPage: React.FC = () => {
         ownerType={CeMatchRuleOwnerType.Organization}
         ownerId={organizationId}
         ownerName={organization.organizationName}
-        onSaved={returnToRulesOverview}
         onCancel={returnToRulesOverview}
       />
     </>
