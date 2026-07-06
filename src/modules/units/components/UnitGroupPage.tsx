@@ -142,18 +142,6 @@ const UnitGroupPage = () => {
           <Grid item xs={4}>
             <Stack gap={2}>
               <UnitGroupCeConfigurationCard unitGroup={unitGroup} />
-              {/* TODO(#7538) - support setting default contacts */}
-              {/* <UnitGroupDefaultContactsCard
-                unitGroup={unitGroup}
-                canEdit={canEditUnitGroup}
-              /> */}
-
-              {/* TODO(#7544) - support configuring eligibility rules */}
-              {/* <UnitGroupEligibilityCard
-                unitGroup={unitGroup}
-                canEdit={canEditUnitGroup}
-              /> */}
-
               {projectSupportsWaitlistReferrals && (
                 <>
                   <MatchRuleCard

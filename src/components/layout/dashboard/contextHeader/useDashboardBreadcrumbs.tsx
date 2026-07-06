@@ -308,6 +308,14 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Unit Groups',
         parent: AdminDashboardRoutes.CE_RULES,
       },
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUP]: {
+        title: 'Unit Group', // Overridden in the page with overrideBreadcrumbTitles
+        parent: AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
+      },
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUP_NEW]: {
+        title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULE_UNIT_GROUP,
+      },
       [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {
         title: 'Potential Duplicates',
         parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,

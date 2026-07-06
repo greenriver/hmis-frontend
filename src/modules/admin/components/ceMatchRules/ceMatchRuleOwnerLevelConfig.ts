@@ -60,8 +60,18 @@ export const ceMatchRuleOwnerLevelConfigs = {
     ownerType: CeMatchRuleOwnerType.UnitGroup,
     Icon: UnitGroupIcon,
     route: AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
-    getRulesPath: () => AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
-    getAddRulePath: () => undefined,
+    getRulesPath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP, {
+            unitGroupId: ownerId,
+          })
+        : AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
+    getAddRulePath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP_NEW, {
+            unitGroupId: ownerId,
+          })
+        : undefined,
     label: 'Unit Group',
   },
 } as const;

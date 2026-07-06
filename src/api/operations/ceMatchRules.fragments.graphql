@@ -91,3 +91,25 @@ fragment CeMatchRuleProjectDetails on Project {
     ...CeMatchRuleGroupFields
   }
 }
+
+fragment CeMatchRuleProjectUnitGroupFields on UnitGroup {
+  id
+  name
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+  projectId
+  projectName
+}
+
+fragment CeMatchRuleUnitGroupFields on UnitGroup {
+  ...CeMatchRuleProjectUnitGroupFields
+  organizationId
+  organizationName
+}
+
+fragment CeMatchRuleUnitGroupDetails on UnitGroup {
+  ...CeMatchRuleUnitGroupFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}
