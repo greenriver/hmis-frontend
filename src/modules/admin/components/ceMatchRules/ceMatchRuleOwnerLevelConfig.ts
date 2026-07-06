@@ -1,3 +1,4 @@
+import { generatePath } from 'react-router-dom';
 import {
   GlobalIcon,
   OrganizationIcon,
@@ -23,26 +24,54 @@ export const ceMatchRuleOwnerLevelConfigs = {
     ownerType: CeMatchRuleOwnerType.Organization,
     Icon: OrganizationIcon,
     route: AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
-    getRulesPath: () => undefined,
-    // TODO(#7544) - return the add-path for the given org ID
-    //eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getAddRulePath: ({ ownerId }: { ownerId?: string }) => undefined,
+    getRulesPath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION, {
+            organizationId: ownerId,
+          })
+        : AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
+    getAddRulePath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW, {
+            organizationId: ownerId,
+          })
+        : undefined,
     label: 'Organization',
   },
   project: {
     ownerType: CeMatchRuleOwnerType.Project,
     Icon: ProjectIcon,
     route: AdminDashboardRoutes.CE_RULE_PROJECTS,
-    getRulesPath: () => AdminDashboardRoutes.CE_RULE_PROJECTS,
-    getAddRulePath: () => undefined,
+    getRulesPath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_PROJECT, {
+            projectId: ownerId,
+          })
+        : AdminDashboardRoutes.CE_RULE_PROJECTS,
+    getAddRulePath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_PROJECT_NEW, {
+            projectId: ownerId,
+          })
+        : undefined,
     label: 'Project',
   },
   'unit-group': {
     ownerType: CeMatchRuleOwnerType.UnitGroup,
     Icon: UnitGroupIcon,
     route: AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
-    getRulesPath: () => AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
-    getAddRulePath: () => undefined,
+    getRulesPath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP, {
+            unitGroupId: ownerId,
+          })
+        : AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
+    getAddRulePath: ({ ownerId }: { ownerId?: string }) =>
+      ownerId
+        ? generatePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP_NEW, {
+            unitGroupId: ownerId,
+          })
+        : undefined,
     label: 'Unit Group',
   },
 } as const;
@@ -53,6 +82,9 @@ export const ceMatchRuleOwnerLevels = Object.keys(
   ceMatchRuleOwnerLevelConfigs
 ) as CeMatchRuleOwnerLevel[];
 
+/**
+ * Reverse lookup from OwnerType (API type) -> OwnerLevel (UI route/tab key)
+ */
 const ceMatchRuleOwnerLevelByOwnerType = Object.fromEntries(
   ceMatchRuleOwnerLevels.map((ownerLevel) => [
     ceMatchRuleOwnerLevelConfigs[ownerLevel].ownerType,

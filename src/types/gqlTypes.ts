@@ -504,7 +504,7 @@ export enum BoundType {
 export type BulkAssignServiceInput = {
   /** Clients that should receive service. Clients that are unenrolled in the project will be enrolled in the project. */
   clientIds: Array<Scalars['ID']['input']>;
-  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operaties in multiple CoCs. */
+  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operates in multiple CoCs. */
   cocCode?: InputMaybe<Scalars['String']['input']>;
   dateProvided: Scalars['ISO8601Date']['input'];
   projectId: Scalars['ID']['input'];
@@ -836,6 +836,16 @@ export enum CeMatchRuleComparator {
 export type CeMatchRuleFilterOptions = {
   /** Rules that are owned at the global level */
   global?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type CeMatchRuleGroup = {
+  __typename?: 'CeMatchRuleGroup';
+  /** True if rules are owned at the current hierarchy level; false if inherited. */
+  local: Scalars['Boolean']['output'];
+  ownerId: Scalars['ID']['output'];
+  ownerName: Scalars['String']['output'];
+  ownerType: CeMatchRuleOwnerType;
+  rules: Array<CeMatchRule>;
 };
 
 export type CeMatchRuleInput = {
@@ -5553,6 +5563,8 @@ export type OmnisearchResult = Client | Project;
 export type Organization = {
   __typename?: 'Organization';
   access: OrganizationAccess;
+  /** Number of unit groups under this organization in projects that have waitlist referrals enabled. */
+  ceWaitlistUnitGroupCount: Scalars['Int']['output'];
   contactInformation?: Maybe<Scalars['String']['output']>;
   createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
@@ -5560,8 +5572,14 @@ export type Organization = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  /** Number of CE match rules that apply to this record, including inherited rules. */
+  effectiveCeMatchRuleCount: Scalars['Int']['output'];
+  /** All CE match rules that apply to this record, including inherited rules, grouped by their owner. */
+  effectiveCeMatchRuleGroups: Array<CeMatchRuleGroup>;
   hudId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
+  /** Number of CE match rules owned directly by this record. */
+  localCeMatchRuleCount: Scalars['Int']['output'];
   organizationName: Scalars['String']['output'];
   projects: ProjectsPaginated;
   user?: Maybe<ApplicationUser>;
@@ -5584,6 +5602,7 @@ export type OrganizationAccess = {
 };
 
 export type OrganizationFilterOptions = {
+  ceWaitlistsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -6516,6 +6535,10 @@ export type Project = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  /** Number of CE match rules that apply to this record, including inherited rules. */
+  effectiveCeMatchRuleCount: Scalars['Int']['output'];
+  /** All CE match rules that apply to this record, including inherited rules, grouped by their owner. */
+  effectiveCeMatchRuleGroups: Array<CeMatchRuleGroup>;
   enrollments: EnrollmentsPaginated;
   externalFormSubmissions: ExternalFormSubmissionsPaginated;
   funders: FundersPaginated;
@@ -6527,6 +6550,8 @@ export type Project = {
   id: Scalars['ID']['output'];
   incomingReferralPostings: ReferralPostingsPaginated;
   inventories: InventoriesPaginated;
+  /** Number of CE match rules owned directly by this record. */
+  localCeMatchRuleCount: Scalars['Int']['output'];
   /** Forms for individual data elements that are collected at occurrence for this Project (e.g. Move-In Date) */
   occurrencePointForms: Array<OccurrencePointForm>;
   operatingEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -6813,6 +6838,7 @@ export enum ProjectFilterOptionStatus {
 
 export type ProjectFilterOptions = {
   ceEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  ceWaitlistsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   funder?: InputMaybe<Array<FundingSource>>;
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
@@ -6871,6 +6897,7 @@ export enum ProjectType {
 }
 
 export type ProjectsForEnrollmentFilterOptions = {
+  ceWaitlistsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   funder?: InputMaybe<Array<FundingSource>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
@@ -6984,6 +7011,7 @@ export type Query = {
   tableConfigLookup: TableConfigLookup;
   unit?: Maybe<Unit>;
   unitGroup?: Maybe<UnitGroup>;
+  unitGroups: UnitGroupsPaginated;
   /** User lookup */
   user?: Maybe<ApplicationUser>;
   userDashboard: UserDashboard;
@@ -7239,6 +7267,12 @@ export type QueryUnitArgs = {
 
 export type QueryUnitGroupArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryUnitGroupsArgs = {
+  filters?: InputMaybe<UnitGroupFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryUserArgs = {
@@ -8656,10 +8690,20 @@ export type UnitGroup = {
   ceEventType?: Maybe<EventType>;
   directReferralWorkflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
   directReferralWorkflowTemplateName?: Maybe<Scalars['String']['output']>;
+  /** Number of CE match rules that apply to this record, including inherited rules. */
+  effectiveCeMatchRuleCount: Scalars['Int']['output'];
+  /** All CE match rules that apply to this record, including inherited rules, grouped by their owner. */
+  effectiveCeMatchRuleGroups: Array<CeMatchRuleGroup>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
+  /** Number of CE match rules owned directly by this record. */
+  localCeMatchRuleCount: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  organizationId: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
+  projectId: Scalars['ID']['output'];
+  projectName: Scalars['String']['output'];
   unitType?: Maybe<UnitTypeObject>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
@@ -8671,6 +8715,11 @@ export type UnitGroupUnitsArgs = {
   filters?: InputMaybe<UnitFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UnitGroupFilterOptions = {
+  ceWaitlistsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UnitGroupInput = {
@@ -22516,6 +22565,167 @@ export type CeMatchRuleDetailsFragment = {
   } | null;
 };
 
+export type CeMatchRuleGroupFieldsFragment = {
+  __typename?: 'CeMatchRuleGroup';
+  ownerType: CeMatchRuleOwnerType;
+  ownerId: string;
+  ownerName: string;
+  local: boolean;
+  rules: Array<{
+    __typename?: 'CeMatchRule';
+    ownerId: string;
+    ownerName: string;
+    ruleType: CeMatchRuleType;
+    priorityRank?: number | null;
+    id: string;
+    name: string;
+    ownerType: CeMatchRuleOwnerType;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
+  }>;
+};
+
+export type CeMatchRuleOrganizationFieldsFragment = {
+  __typename?: 'Organization';
+  id: string;
+  organizationName: string;
+  ceWaitlistUnitGroupCount: number;
+  effectiveCeMatchRuleCount: number;
+  localCeMatchRuleCount: number;
+};
+
+export type CeMatchRuleOrganizationDetailsFragment = {
+  __typename?: 'Organization';
+  id: string;
+  organizationName: string;
+  ceWaitlistUnitGroupCount: number;
+  effectiveCeMatchRuleCount: number;
+  localCeMatchRuleCount: number;
+  effectiveCeMatchRuleGroups: Array<{
+    __typename?: 'CeMatchRuleGroup';
+    ownerType: CeMatchRuleOwnerType;
+    ownerId: string;
+    ownerName: string;
+    local: boolean;
+    rules: Array<{
+      __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwnerType;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }>;
+  }>;
+};
+
+export type CeMatchRuleProjectFieldsFragment = {
+  __typename?: 'Project';
+  id: string;
+  projectName: string;
+  effectiveCeMatchRuleCount: number;
+  localCeMatchRuleCount: number;
+  organization: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  };
+  unitGroups: { __typename?: 'UnitGroupsPaginated'; nodesCount: number };
+};
+
+export type CeMatchRuleProjectDetailsFragment = {
+  __typename?: 'Project';
+  id: string;
+  projectName: string;
+  effectiveCeMatchRuleCount: number;
+  localCeMatchRuleCount: number;
+  effectiveCeMatchRuleGroups: Array<{
+    __typename?: 'CeMatchRuleGroup';
+    ownerType: CeMatchRuleOwnerType;
+    ownerId: string;
+    ownerName: string;
+    local: boolean;
+    rules: Array<{
+      __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwnerType;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }>;
+  }>;
+  organization: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  };
+  unitGroups: { __typename?: 'UnitGroupsPaginated'; nodesCount: number };
+};
+
+export type CeMatchRuleProjectUnitGroupFieldsFragment = {
+  __typename?: 'UnitGroup';
+  id: string;
+  name: string;
+  effectiveCeMatchRuleCount: number;
+  localCeMatchRuleCount: number;
+  projectId: string;
+  projectName: string;
+};
+
+export type CeMatchRuleUnitGroupFieldsFragment = {
+  __typename?: 'UnitGroup';
+  organizationId: string;
+  organizationName: string;
+  id: string;
+  name: string;
+  effectiveCeMatchRuleCount: number;
+  localCeMatchRuleCount: number;
+  projectId: string;
+  projectName: string;
+};
+
+export type CeMatchRuleUnitGroupDetailsFragment = {
+  __typename?: 'UnitGroup';
+  organizationId: string;
+  organizationName: string;
+  id: string;
+  name: string;
+  effectiveCeMatchRuleCount: number;
+  localCeMatchRuleCount: number;
+  projectId: string;
+  projectName: string;
+  effectiveCeMatchRuleGroups: Array<{
+    __typename?: 'CeMatchRuleGroup';
+    ownerType: CeMatchRuleOwnerType;
+    ownerId: string;
+    ownerName: string;
+    local: boolean;
+    rules: Array<{
+      __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwnerType;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+    }>;
+  }>;
+};
+
 export type CreateCeMatchRuleMutationVariables = Exact<{
   input: CeMatchRuleInput;
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
@@ -22662,6 +22872,255 @@ export type GetCeMatchGlobalRulesQuery = {
       funders?: Array<FundingSource> | null;
     }>;
   };
+};
+
+export type GetCeMatchRuleOrganizationsQueryVariables = Exact<{
+  filters?: InputMaybe<OrganizationFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetCeMatchRuleOrganizationsQuery = {
+  __typename?: 'Query';
+  organizations: {
+    __typename?: 'OrganizationsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+      ceWaitlistUnitGroupCount: number;
+      effectiveCeMatchRuleCount: number;
+      localCeMatchRuleCount: number;
+    }>;
+  };
+};
+
+export type GetCeMatchOrganizationRulesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetCeMatchOrganizationRulesQuery = {
+  __typename?: 'Query';
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+    ceWaitlistUnitGroupCount: number;
+    effectiveCeMatchRuleCount: number;
+    localCeMatchRuleCount: number;
+    effectiveCeMatchRuleGroups: Array<{
+      __typename?: 'CeMatchRuleGroup';
+      ownerType: CeMatchRuleOwnerType;
+      ownerId: string;
+      ownerName: string;
+      local: boolean;
+      rules: Array<{
+        __typename?: 'CeMatchRule';
+        ownerId: string;
+        ownerName: string;
+        ruleType: CeMatchRuleType;
+        priorityRank?: number | null;
+        id: string;
+        name: string;
+        ownerType: CeMatchRuleOwnerType;
+        expression: string;
+        projectTypes: Array<ProjectType>;
+        funders?: Array<FundingSource> | null;
+      }>;
+    }>;
+  } | null;
+};
+
+export type GetCeMatchRuleProjectsQueryVariables = Exact<{
+  filters?: InputMaybe<ProjectFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetCeMatchRuleProjectsQuery = {
+  __typename?: 'Query';
+  projects: {
+    __typename?: 'ProjectsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      effectiveCeMatchRuleCount: number;
+      localCeMatchRuleCount: number;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      };
+      unitGroups: { __typename?: 'UnitGroupsPaginated'; nodesCount: number };
+    }>;
+  };
+};
+
+export type GetCeMatchProjectRulesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetCeMatchProjectRulesQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    effectiveCeMatchRuleCount: number;
+    localCeMatchRuleCount: number;
+    effectiveCeMatchRuleGroups: Array<{
+      __typename?: 'CeMatchRuleGroup';
+      ownerType: CeMatchRuleOwnerType;
+      ownerId: string;
+      ownerName: string;
+      local: boolean;
+      rules: Array<{
+        __typename?: 'CeMatchRule';
+        ownerId: string;
+        ownerName: string;
+        ruleType: CeMatchRuleType;
+        priorityRank?: number | null;
+        id: string;
+        name: string;
+        ownerType: CeMatchRuleOwnerType;
+        expression: string;
+        projectTypes: Array<ProjectType>;
+        funders?: Array<FundingSource> | null;
+      }>;
+    }>;
+    organization: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+    };
+    unitGroups: { __typename?: 'UnitGroupsPaginated'; nodesCount: number };
+  } | null;
+};
+
+export type GetCeMatchRuleUnitGroupsQueryVariables = Exact<{
+  filters?: InputMaybe<UnitGroupFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetCeMatchRuleUnitGroupsQuery = {
+  __typename?: 'Query';
+  unitGroups: {
+    __typename?: 'UnitGroupsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'UnitGroup';
+      organizationId: string;
+      organizationName: string;
+      id: string;
+      name: string;
+      effectiveCeMatchRuleCount: number;
+      localCeMatchRuleCount: number;
+      projectId: string;
+      projectName: string;
+    }>;
+  };
+};
+
+export type GetCeMatchUnitGroupRulesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetCeMatchUnitGroupRulesQuery = {
+  __typename?: 'Query';
+  unitGroup?: {
+    __typename?: 'UnitGroup';
+    organizationId: string;
+    organizationName: string;
+    id: string;
+    name: string;
+    effectiveCeMatchRuleCount: number;
+    localCeMatchRuleCount: number;
+    projectId: string;
+    projectName: string;
+    effectiveCeMatchRuleGroups: Array<{
+      __typename?: 'CeMatchRuleGroup';
+      ownerType: CeMatchRuleOwnerType;
+      ownerId: string;
+      ownerName: string;
+      local: boolean;
+      rules: Array<{
+        __typename?: 'CeMatchRule';
+        ownerId: string;
+        ownerName: string;
+        ruleType: CeMatchRuleType;
+        priorityRank?: number | null;
+        id: string;
+        name: string;
+        ownerType: CeMatchRuleOwnerType;
+        expression: string;
+        projectTypes: Array<ProjectType>;
+        funders?: Array<FundingSource> | null;
+      }>;
+    }>;
+  } | null;
+};
+
+export type GetCeMatchProjectUnitGroupsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetCeMatchProjectUnitGroupsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    unitGroups: {
+      __typename?: 'UnitGroupsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'UnitGroup';
+        id: string;
+        name: string;
+        effectiveCeMatchRuleCount: number;
+        localCeMatchRuleCount: number;
+        projectId: string;
+        projectName: string;
+      }>;
+    };
+  } | null;
+};
+
+export type GetCeMatchOrganizationProjectsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ProjectsForEnrollmentFilterOptions>;
+  sortOrder?: InputMaybe<ProjectSortOption>;
+}>;
+
+export type GetCeMatchOrganizationProjectsQuery = {
+  __typename?: 'Query';
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    projects: {
+      __typename?: 'ProjectsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        effectiveCeMatchRuleCount: number;
+        localCeMatchRuleCount: number;
+        unitGroups: { __typename?: 'UnitGroupsPaginated'; nodesCount: number };
+      }>;
+    };
+  } | null;
 };
 
 export type ClientSearchResultFieldsFragment = {
@@ -23003,6 +23462,7 @@ export type ClientNameFragment = {
 export type ClientNameDobVetFragment = {
   __typename?: 'Client';
   dob?: string | null;
+  age?: number | null;
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
@@ -28259,9 +28719,9 @@ export type ProjectEnrollmentFieldsFragment = {
     __typename?: 'Client';
     id: string;
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
-    age?: number | null;
     gender: Array<Gender>;
     pronouns: Array<string>;
     restricted: boolean;
@@ -28334,6 +28794,7 @@ export type EnrollmentFieldsFragment = {
   client: {
     __typename?: 'Client';
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
@@ -28359,6 +28820,7 @@ export type AssessedClientFieldsFragment = {
   ssn?: string | null;
   race: Array<Race>;
   dob?: string | null;
+  age?: number | null;
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
@@ -28375,6 +28837,7 @@ export type EnrolledClientFieldsFragment = {
   ssn?: string | null;
   race: Array<Race>;
   dob?: string | null;
+  age?: number | null;
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
   lockVersion: number;
@@ -28675,6 +29138,7 @@ export type AllEnrollmentDetailsFragment = {
     __typename?: 'Client';
     hudChronic?: boolean | null;
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     ssn?: string | null;
     race: Array<Race>;
@@ -29684,6 +30148,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
   client: {
     __typename?: 'Client';
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
@@ -29871,6 +30336,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
   client: {
     __typename?: 'Client';
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
     lockVersion: number;
@@ -29980,6 +30446,7 @@ export type GetEnrollmentQuery = {
     client: {
       __typename?: 'Client';
       dob?: string | null;
+      age?: number | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
       lockVersion: number;
@@ -30167,6 +30634,7 @@ export type GetEnrollmentDetailsQuery = {
       __typename?: 'Client';
       hudChronic?: boolean | null;
       dob?: string | null;
+      age?: number | null;
       veteranStatus: NoYesReasonsForMissingData;
       ssn?: string | null;
       race: Array<Race>;
@@ -31035,6 +31503,7 @@ export type GetEnrollmentWithHouseholdQuery = {
     client: {
       __typename?: 'Client';
       dob?: string | null;
+      age?: number | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
       lockVersion: number;
@@ -31169,6 +31638,7 @@ export type GetEnrollmentRemindersQuery = {
         __typename?: 'Client';
         id: string;
         dob?: string | null;
+        age?: number | null;
         veteranStatus: NoYesReasonsForMissingData;
         lockVersion: number;
         restricted: boolean;
@@ -39332,6 +39802,7 @@ export type SubmitFormMutation = {
           client: {
             __typename?: 'Client';
             dob?: string | null;
+            age?: number | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
@@ -44778,9 +45249,9 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
     __typename?: 'Client';
     id: string;
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
-    age?: number | null;
     gender: Array<Gender>;
     pronouns: Array<string>;
     restricted: boolean;
@@ -45173,9 +45644,9 @@ export type GetProjectEnrollmentsQuery = {
           __typename?: 'Client';
           id: string;
           dob?: string | null;
+          age?: number | null;
           veteranStatus: NoYesReasonsForMissingData;
           lockVersion: number;
-          age?: number | null;
           gender: Array<Gender>;
           pronouns: Array<string>;
           restricted: boolean;
@@ -45306,6 +45777,7 @@ export type GetProjectServicesQuery = {
           client: {
             __typename?: 'Client';
             dob?: string | null;
+            age?: number | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
@@ -45390,6 +45862,7 @@ export type GetProjectAssessmentsQuery = {
           client: {
             __typename?: 'Client';
             dob?: string | null;
+            age?: number | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
             lockVersion: number;
@@ -47617,6 +48090,7 @@ export type ReminderFieldsFragment = {
     __typename?: 'Client';
     id: string;
     dob?: string | null;
+    age?: number | null;
     veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
     restricted: boolean;
@@ -52389,6 +52863,90 @@ export const CeMatchRuleDetailsFragmentDoc = gql`
   }
   ${CeMatchRuleAdminSummaryFieldsFragmentDoc}
 `;
+export const CeMatchRuleOrganizationFieldsFragmentDoc = gql`
+  fragment CeMatchRuleOrganizationFields on Organization {
+    id
+    organizationName
+    ceWaitlistUnitGroupCount
+    effectiveCeMatchRuleCount
+    localCeMatchRuleCount
+  }
+`;
+export const CeMatchRuleGroupFieldsFragmentDoc = gql`
+  fragment CeMatchRuleGroupFields on CeMatchRuleGroup {
+    ownerType
+    ownerId
+    ownerName
+    local
+    rules {
+      ...CeMatchRuleAdminSummaryFields
+    }
+  }
+  ${CeMatchRuleAdminSummaryFieldsFragmentDoc}
+`;
+export const CeMatchRuleOrganizationDetailsFragmentDoc = gql`
+  fragment CeMatchRuleOrganizationDetails on Organization {
+    ...CeMatchRuleOrganizationFields
+    effectiveCeMatchRuleGroups {
+      ...CeMatchRuleGroupFields
+    }
+  }
+  ${CeMatchRuleOrganizationFieldsFragmentDoc}
+  ${CeMatchRuleGroupFieldsFragmentDoc}
+`;
+export const CeMatchRuleProjectFieldsFragmentDoc = gql`
+  fragment CeMatchRuleProjectFields on Project {
+    id
+    projectName
+    effectiveCeMatchRuleCount
+    localCeMatchRuleCount
+    organization {
+      id
+      organizationName
+    }
+    unitGroups(limit: 1) {
+      nodesCount
+    }
+  }
+`;
+export const CeMatchRuleProjectDetailsFragmentDoc = gql`
+  fragment CeMatchRuleProjectDetails on Project {
+    ...CeMatchRuleProjectFields
+    effectiveCeMatchRuleGroups {
+      ...CeMatchRuleGroupFields
+    }
+  }
+  ${CeMatchRuleProjectFieldsFragmentDoc}
+  ${CeMatchRuleGroupFieldsFragmentDoc}
+`;
+export const CeMatchRuleProjectUnitGroupFieldsFragmentDoc = gql`
+  fragment CeMatchRuleProjectUnitGroupFields on UnitGroup {
+    id
+    name
+    effectiveCeMatchRuleCount
+    localCeMatchRuleCount
+    projectId
+    projectName
+  }
+`;
+export const CeMatchRuleUnitGroupFieldsFragmentDoc = gql`
+  fragment CeMatchRuleUnitGroupFields on UnitGroup {
+    ...CeMatchRuleProjectUnitGroupFields
+    organizationId
+    organizationName
+  }
+  ${CeMatchRuleProjectUnitGroupFieldsFragmentDoc}
+`;
+export const CeMatchRuleUnitGroupDetailsFragmentDoc = gql`
+  fragment CeMatchRuleUnitGroupDetails on UnitGroup {
+    ...CeMatchRuleUnitGroupFields
+    effectiveCeMatchRuleGroups {
+      ...CeMatchRuleGroupFields
+    }
+  }
+  ${CeMatchRuleUnitGroupFieldsFragmentDoc}
+  ${CeMatchRuleGroupFieldsFragmentDoc}
+`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
@@ -52804,6 +53362,7 @@ export const ClientNameDobVetFragmentDoc = gql`
   fragment ClientNameDobVet on Client {
     ...ClientName
     dob
+    age
     veteranStatus
   }
   ${ClientNameFragmentDoc}
@@ -58736,6 +59295,908 @@ export type GetCeMatchGlobalRulesSuspenseQueryHookResult = ReturnType<
 export type GetCeMatchGlobalRulesQueryResult = Apollo.QueryResult<
   GetCeMatchGlobalRulesQuery,
   GetCeMatchGlobalRulesQueryVariables
+>;
+export const GetCeMatchRuleOrganizationsDocument = gql`
+  query GetCeMatchRuleOrganizations(
+    $filters: OrganizationFilterOptions
+    $limit: Int
+    $offset: Int
+  ) {
+    organizations(
+      filters: $filters
+      sortOrder: NAME
+      limit: $limit
+      offset: $offset
+    ) {
+      nodesCount
+      nodes {
+        ...CeMatchRuleOrganizationFields
+      }
+    }
+  }
+  ${CeMatchRuleOrganizationFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchRuleOrganizationsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchRuleOrganizationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchRuleOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchRuleOrganizationsQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetCeMatchRuleOrganizationsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeMatchRuleOrganizationsQuery,
+    GetCeMatchRuleOrganizationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchRuleOrganizationsQuery,
+    GetCeMatchRuleOrganizationsQueryVariables
+  >(GetCeMatchRuleOrganizationsDocument, options);
+}
+export function useGetCeMatchRuleOrganizationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchRuleOrganizationsQuery,
+    GetCeMatchRuleOrganizationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchRuleOrganizationsQuery,
+    GetCeMatchRuleOrganizationsQueryVariables
+  >(GetCeMatchRuleOrganizationsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchRuleOrganizationsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchRuleOrganizationsQuery,
+    GetCeMatchRuleOrganizationsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchRuleOrganizationsQuery,
+  GetCeMatchRuleOrganizationsQueryVariables
+>;
+export function useGetCeMatchRuleOrganizationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchRuleOrganizationsQuery,
+        GetCeMatchRuleOrganizationsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchRuleOrganizationsQuery | undefined,
+  GetCeMatchRuleOrganizationsQueryVariables
+>;
+export function useGetCeMatchRuleOrganizationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchRuleOrganizationsQuery,
+        GetCeMatchRuleOrganizationsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchRuleOrganizationsQuery,
+    GetCeMatchRuleOrganizationsQueryVariables
+  >(GetCeMatchRuleOrganizationsDocument, options);
+}
+export type GetCeMatchRuleOrganizationsQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleOrganizationsQuery
+>;
+export type GetCeMatchRuleOrganizationsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleOrganizationsLazyQuery
+>;
+export type GetCeMatchRuleOrganizationsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleOrganizationsSuspenseQuery
+>;
+export type GetCeMatchRuleOrganizationsQueryResult = Apollo.QueryResult<
+  GetCeMatchRuleOrganizationsQuery,
+  GetCeMatchRuleOrganizationsQueryVariables
+>;
+export const GetCeMatchOrganizationRulesDocument = gql`
+  query GetCeMatchOrganizationRules($id: ID!) {
+    organization(id: $id) {
+      ...CeMatchRuleOrganizationDetails
+    }
+  }
+  ${CeMatchRuleOrganizationDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchOrganizationRulesQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchOrganizationRulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchOrganizationRulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchOrganizationRulesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCeMatchOrganizationRulesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeMatchOrganizationRulesQuery,
+    GetCeMatchOrganizationRulesQueryVariables
+  > &
+    (
+      | { variables: GetCeMatchOrganizationRulesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchOrganizationRulesQuery,
+    GetCeMatchOrganizationRulesQueryVariables
+  >(GetCeMatchOrganizationRulesDocument, options);
+}
+export function useGetCeMatchOrganizationRulesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchOrganizationRulesQuery,
+    GetCeMatchOrganizationRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchOrganizationRulesQuery,
+    GetCeMatchOrganizationRulesQueryVariables
+  >(GetCeMatchOrganizationRulesDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchOrganizationRulesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchOrganizationRulesQuery,
+    GetCeMatchOrganizationRulesQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchOrganizationRulesQuery,
+  GetCeMatchOrganizationRulesQueryVariables
+>;
+export function useGetCeMatchOrganizationRulesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchOrganizationRulesQuery,
+        GetCeMatchOrganizationRulesQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchOrganizationRulesQuery | undefined,
+  GetCeMatchOrganizationRulesQueryVariables
+>;
+export function useGetCeMatchOrganizationRulesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchOrganizationRulesQuery,
+        GetCeMatchOrganizationRulesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchOrganizationRulesQuery,
+    GetCeMatchOrganizationRulesQueryVariables
+  >(GetCeMatchOrganizationRulesDocument, options);
+}
+export type GetCeMatchOrganizationRulesQueryHookResult = ReturnType<
+  typeof useGetCeMatchOrganizationRulesQuery
+>;
+export type GetCeMatchOrganizationRulesLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchOrganizationRulesLazyQuery
+>;
+export type GetCeMatchOrganizationRulesSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchOrganizationRulesSuspenseQuery
+>;
+export type GetCeMatchOrganizationRulesQueryResult = Apollo.QueryResult<
+  GetCeMatchOrganizationRulesQuery,
+  GetCeMatchOrganizationRulesQueryVariables
+>;
+export const GetCeMatchRuleProjectsDocument = gql`
+  query GetCeMatchRuleProjects(
+    $filters: ProjectFilterOptions
+    $limit: Int
+    $offset: Int
+  ) {
+    projects(
+      filters: $filters
+      sortOrder: ORGANIZATION_AND_NAME
+      limit: $limit
+      offset: $offset
+    ) {
+      nodesCount
+      nodes {
+        ...CeMatchRuleProjectFields
+      }
+    }
+  }
+  ${CeMatchRuleProjectFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchRuleProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchRuleProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchRuleProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchRuleProjectsQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetCeMatchRuleProjectsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeMatchRuleProjectsQuery,
+    GetCeMatchRuleProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchRuleProjectsQuery,
+    GetCeMatchRuleProjectsQueryVariables
+  >(GetCeMatchRuleProjectsDocument, options);
+}
+export function useGetCeMatchRuleProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchRuleProjectsQuery,
+    GetCeMatchRuleProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchRuleProjectsQuery,
+    GetCeMatchRuleProjectsQueryVariables
+  >(GetCeMatchRuleProjectsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchRuleProjectsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchRuleProjectsQuery,
+    GetCeMatchRuleProjectsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchRuleProjectsQuery,
+  GetCeMatchRuleProjectsQueryVariables
+>;
+export function useGetCeMatchRuleProjectsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchRuleProjectsQuery,
+        GetCeMatchRuleProjectsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchRuleProjectsQuery | undefined,
+  GetCeMatchRuleProjectsQueryVariables
+>;
+export function useGetCeMatchRuleProjectsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchRuleProjectsQuery,
+        GetCeMatchRuleProjectsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchRuleProjectsQuery,
+    GetCeMatchRuleProjectsQueryVariables
+  >(GetCeMatchRuleProjectsDocument, options);
+}
+export type GetCeMatchRuleProjectsQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleProjectsQuery
+>;
+export type GetCeMatchRuleProjectsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleProjectsLazyQuery
+>;
+export type GetCeMatchRuleProjectsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleProjectsSuspenseQuery
+>;
+export type GetCeMatchRuleProjectsQueryResult = Apollo.QueryResult<
+  GetCeMatchRuleProjectsQuery,
+  GetCeMatchRuleProjectsQueryVariables
+>;
+export const GetCeMatchProjectRulesDocument = gql`
+  query GetCeMatchProjectRules($id: ID!) {
+    project(id: $id) {
+      ...CeMatchRuleProjectDetails
+    }
+  }
+  ${CeMatchRuleProjectDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchProjectRulesQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchProjectRulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchProjectRulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchProjectRulesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCeMatchProjectRulesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeMatchProjectRulesQuery,
+    GetCeMatchProjectRulesQueryVariables
+  > &
+    (
+      | { variables: GetCeMatchProjectRulesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchProjectRulesQuery,
+    GetCeMatchProjectRulesQueryVariables
+  >(GetCeMatchProjectRulesDocument, options);
+}
+export function useGetCeMatchProjectRulesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchProjectRulesQuery,
+    GetCeMatchProjectRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchProjectRulesQuery,
+    GetCeMatchProjectRulesQueryVariables
+  >(GetCeMatchProjectRulesDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchProjectRulesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchProjectRulesQuery,
+    GetCeMatchProjectRulesQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchProjectRulesQuery,
+  GetCeMatchProjectRulesQueryVariables
+>;
+export function useGetCeMatchProjectRulesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchProjectRulesQuery,
+        GetCeMatchProjectRulesQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchProjectRulesQuery | undefined,
+  GetCeMatchProjectRulesQueryVariables
+>;
+export function useGetCeMatchProjectRulesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchProjectRulesQuery,
+        GetCeMatchProjectRulesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchProjectRulesQuery,
+    GetCeMatchProjectRulesQueryVariables
+  >(GetCeMatchProjectRulesDocument, options);
+}
+export type GetCeMatchProjectRulesQueryHookResult = ReturnType<
+  typeof useGetCeMatchProjectRulesQuery
+>;
+export type GetCeMatchProjectRulesLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchProjectRulesLazyQuery
+>;
+export type GetCeMatchProjectRulesSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchProjectRulesSuspenseQuery
+>;
+export type GetCeMatchProjectRulesQueryResult = Apollo.QueryResult<
+  GetCeMatchProjectRulesQuery,
+  GetCeMatchProjectRulesQueryVariables
+>;
+export const GetCeMatchRuleUnitGroupsDocument = gql`
+  query GetCeMatchRuleUnitGroups(
+    $filters: UnitGroupFilterOptions
+    $limit: Int
+    $offset: Int
+  ) {
+    unitGroups(filters: $filters, limit: $limit, offset: $offset) {
+      nodesCount
+      nodes {
+        ...CeMatchRuleUnitGroupFields
+      }
+    }
+  }
+  ${CeMatchRuleUnitGroupFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchRuleUnitGroupsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchRuleUnitGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchRuleUnitGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchRuleUnitGroupsQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetCeMatchRuleUnitGroupsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeMatchRuleUnitGroupsQuery,
+    GetCeMatchRuleUnitGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchRuleUnitGroupsQuery,
+    GetCeMatchRuleUnitGroupsQueryVariables
+  >(GetCeMatchRuleUnitGroupsDocument, options);
+}
+export function useGetCeMatchRuleUnitGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchRuleUnitGroupsQuery,
+    GetCeMatchRuleUnitGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchRuleUnitGroupsQuery,
+    GetCeMatchRuleUnitGroupsQueryVariables
+  >(GetCeMatchRuleUnitGroupsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchRuleUnitGroupsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchRuleUnitGroupsQuery,
+    GetCeMatchRuleUnitGroupsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchRuleUnitGroupsQuery,
+  GetCeMatchRuleUnitGroupsQueryVariables
+>;
+export function useGetCeMatchRuleUnitGroupsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchRuleUnitGroupsQuery,
+        GetCeMatchRuleUnitGroupsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchRuleUnitGroupsQuery | undefined,
+  GetCeMatchRuleUnitGroupsQueryVariables
+>;
+export function useGetCeMatchRuleUnitGroupsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchRuleUnitGroupsQuery,
+        GetCeMatchRuleUnitGroupsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchRuleUnitGroupsQuery,
+    GetCeMatchRuleUnitGroupsQueryVariables
+  >(GetCeMatchRuleUnitGroupsDocument, options);
+}
+export type GetCeMatchRuleUnitGroupsQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleUnitGroupsQuery
+>;
+export type GetCeMatchRuleUnitGroupsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleUnitGroupsLazyQuery
+>;
+export type GetCeMatchRuleUnitGroupsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleUnitGroupsSuspenseQuery
+>;
+export type GetCeMatchRuleUnitGroupsQueryResult = Apollo.QueryResult<
+  GetCeMatchRuleUnitGroupsQuery,
+  GetCeMatchRuleUnitGroupsQueryVariables
+>;
+export const GetCeMatchUnitGroupRulesDocument = gql`
+  query GetCeMatchUnitGroupRules($id: ID!) {
+    unitGroup(id: $id) {
+      ...CeMatchRuleUnitGroupDetails
+    }
+  }
+  ${CeMatchRuleUnitGroupDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchUnitGroupRulesQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchUnitGroupRulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchUnitGroupRulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchUnitGroupRulesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCeMatchUnitGroupRulesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeMatchUnitGroupRulesQuery,
+    GetCeMatchUnitGroupRulesQueryVariables
+  > &
+    (
+      | { variables: GetCeMatchUnitGroupRulesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchUnitGroupRulesQuery,
+    GetCeMatchUnitGroupRulesQueryVariables
+  >(GetCeMatchUnitGroupRulesDocument, options);
+}
+export function useGetCeMatchUnitGroupRulesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchUnitGroupRulesQuery,
+    GetCeMatchUnitGroupRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchUnitGroupRulesQuery,
+    GetCeMatchUnitGroupRulesQueryVariables
+  >(GetCeMatchUnitGroupRulesDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchUnitGroupRulesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchUnitGroupRulesQuery,
+    GetCeMatchUnitGroupRulesQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchUnitGroupRulesQuery,
+  GetCeMatchUnitGroupRulesQueryVariables
+>;
+export function useGetCeMatchUnitGroupRulesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchUnitGroupRulesQuery,
+        GetCeMatchUnitGroupRulesQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchUnitGroupRulesQuery | undefined,
+  GetCeMatchUnitGroupRulesQueryVariables
+>;
+export function useGetCeMatchUnitGroupRulesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchUnitGroupRulesQuery,
+        GetCeMatchUnitGroupRulesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchUnitGroupRulesQuery,
+    GetCeMatchUnitGroupRulesQueryVariables
+  >(GetCeMatchUnitGroupRulesDocument, options);
+}
+export type GetCeMatchUnitGroupRulesQueryHookResult = ReturnType<
+  typeof useGetCeMatchUnitGroupRulesQuery
+>;
+export type GetCeMatchUnitGroupRulesLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchUnitGroupRulesLazyQuery
+>;
+export type GetCeMatchUnitGroupRulesSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchUnitGroupRulesSuspenseQuery
+>;
+export type GetCeMatchUnitGroupRulesQueryResult = Apollo.QueryResult<
+  GetCeMatchUnitGroupRulesQuery,
+  GetCeMatchUnitGroupRulesQueryVariables
+>;
+export const GetCeMatchProjectUnitGroupsDocument = gql`
+  query GetCeMatchProjectUnitGroups(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      unitGroups(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CeMatchRuleProjectUnitGroupFields
+        }
+      }
+    }
+  }
+  ${CeMatchRuleProjectUnitGroupFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchProjectUnitGroupsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchProjectUnitGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchProjectUnitGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchProjectUnitGroupsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetCeMatchProjectUnitGroupsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeMatchProjectUnitGroupsQuery,
+    GetCeMatchProjectUnitGroupsQueryVariables
+  > &
+    (
+      | { variables: GetCeMatchProjectUnitGroupsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchProjectUnitGroupsQuery,
+    GetCeMatchProjectUnitGroupsQueryVariables
+  >(GetCeMatchProjectUnitGroupsDocument, options);
+}
+export function useGetCeMatchProjectUnitGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchProjectUnitGroupsQuery,
+    GetCeMatchProjectUnitGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchProjectUnitGroupsQuery,
+    GetCeMatchProjectUnitGroupsQueryVariables
+  >(GetCeMatchProjectUnitGroupsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchProjectUnitGroupsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchProjectUnitGroupsQuery,
+    GetCeMatchProjectUnitGroupsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchProjectUnitGroupsQuery,
+  GetCeMatchProjectUnitGroupsQueryVariables
+>;
+export function useGetCeMatchProjectUnitGroupsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchProjectUnitGroupsQuery,
+        GetCeMatchProjectUnitGroupsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchProjectUnitGroupsQuery | undefined,
+  GetCeMatchProjectUnitGroupsQueryVariables
+>;
+export function useGetCeMatchProjectUnitGroupsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchProjectUnitGroupsQuery,
+        GetCeMatchProjectUnitGroupsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchProjectUnitGroupsQuery,
+    GetCeMatchProjectUnitGroupsQueryVariables
+  >(GetCeMatchProjectUnitGroupsDocument, options);
+}
+export type GetCeMatchProjectUnitGroupsQueryHookResult = ReturnType<
+  typeof useGetCeMatchProjectUnitGroupsQuery
+>;
+export type GetCeMatchProjectUnitGroupsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchProjectUnitGroupsLazyQuery
+>;
+export type GetCeMatchProjectUnitGroupsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchProjectUnitGroupsSuspenseQuery
+>;
+export type GetCeMatchProjectUnitGroupsQueryResult = Apollo.QueryResult<
+  GetCeMatchProjectUnitGroupsQuery,
+  GetCeMatchProjectUnitGroupsQueryVariables
+>;
+export const GetCeMatchOrganizationProjectsDocument = gql`
+  query GetCeMatchOrganizationProjects(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ProjectsForEnrollmentFilterOptions
+    $sortOrder: ProjectSortOption
+  ) {
+    organization(id: $id) {
+      id
+      projects(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+        sortOrder: $sortOrder
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          id
+          projectName
+          effectiveCeMatchRuleCount
+          localCeMatchRuleCount
+          unitGroups(limit: 1) {
+            nodesCount
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetCeMatchOrganizationProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchOrganizationProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchOrganizationProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchOrganizationProjectsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useGetCeMatchOrganizationProjectsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeMatchOrganizationProjectsQuery,
+    GetCeMatchOrganizationProjectsQueryVariables
+  > &
+    (
+      | {
+          variables: GetCeMatchOrganizationProjectsQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchOrganizationProjectsQuery,
+    GetCeMatchOrganizationProjectsQueryVariables
+  >(GetCeMatchOrganizationProjectsDocument, options);
+}
+export function useGetCeMatchOrganizationProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchOrganizationProjectsQuery,
+    GetCeMatchOrganizationProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchOrganizationProjectsQuery,
+    GetCeMatchOrganizationProjectsQueryVariables
+  >(GetCeMatchOrganizationProjectsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchOrganizationProjectsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchOrganizationProjectsQuery,
+    GetCeMatchOrganizationProjectsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchOrganizationProjectsQuery,
+  GetCeMatchOrganizationProjectsQueryVariables
+>;
+export function useGetCeMatchOrganizationProjectsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchOrganizationProjectsQuery,
+        GetCeMatchOrganizationProjectsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchOrganizationProjectsQuery | undefined,
+  GetCeMatchOrganizationProjectsQueryVariables
+>;
+export function useGetCeMatchOrganizationProjectsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchOrganizationProjectsQuery,
+        GetCeMatchOrganizationProjectsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchOrganizationProjectsQuery,
+    GetCeMatchOrganizationProjectsQueryVariables
+  >(GetCeMatchOrganizationProjectsDocument, options);
+}
+export type GetCeMatchOrganizationProjectsQueryHookResult = ReturnType<
+  typeof useGetCeMatchOrganizationProjectsQuery
+>;
+export type GetCeMatchOrganizationProjectsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchOrganizationProjectsLazyQuery
+>;
+export type GetCeMatchOrganizationProjectsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchOrganizationProjectsSuspenseQuery
+>;
+export type GetCeMatchOrganizationProjectsQueryResult = Apollo.QueryResult<
+  GetCeMatchOrganizationProjectsQuery,
+  GetCeMatchOrganizationProjectsQueryVariables
 >;
 export const SetClientRestrictedDocument = gql`
   mutation SetClientRestricted(

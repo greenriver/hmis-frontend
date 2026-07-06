@@ -284,13 +284,37 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Organizations',
         parent: AdminDashboardRoutes.CE_RULES,
       },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATION]: {
+        title: 'Organization', // Overridden in the page with overrideBreadcrumbTitles
+        parent: AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
+      },
+      [AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW]: {
+        title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULE_ORGANIZATION,
+      },
       [AdminDashboardRoutes.CE_RULE_PROJECTS]: {
         title: 'Projects',
         parent: AdminDashboardRoutes.CE_RULES,
       },
+      [AdminDashboardRoutes.CE_RULE_PROJECT]: {
+        title: 'Project', // Overridden in the page with overrideBreadcrumbTitles
+        parent: AdminDashboardRoutes.CE_RULE_PROJECTS,
+      },
+      [AdminDashboardRoutes.CE_RULE_PROJECT_NEW]: {
+        title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULE_PROJECT,
+      },
       [AdminDashboardRoutes.CE_RULE_UNIT_GROUPS]: {
         title: 'Unit Groups',
         parent: AdminDashboardRoutes.CE_RULES,
+      },
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUP]: {
+        title: 'Unit Group', // Overridden in the page with overrideBreadcrumbTitles
+        parent: AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
+      },
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUP_NEW]: {
+        title: 'Add Rule',
+        parent: AdminDashboardRoutes.CE_RULE_UNIT_GROUP,
       },
       [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {
         title: 'Potential Duplicates',

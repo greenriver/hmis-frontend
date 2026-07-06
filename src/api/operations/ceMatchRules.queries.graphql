@@ -31,3 +31,119 @@ query GetCeMatchGlobalRules {
     }
   }
 }
+
+query GetCeMatchRuleOrganizations(
+  $filters: OrganizationFilterOptions
+  $limit: Int
+  $offset: Int
+) {
+  organizations(
+    filters: $filters
+    sortOrder: NAME
+    limit: $limit
+    offset: $offset
+  ) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleOrganizationFields
+    }
+  }
+}
+
+query GetCeMatchOrganizationRules($id: ID!) {
+  organization(id: $id) {
+    ...CeMatchRuleOrganizationDetails
+  }
+}
+
+query GetCeMatchRuleProjects(
+  $filters: ProjectFilterOptions
+  $limit: Int
+  $offset: Int
+) {
+  projects(
+    filters: $filters
+    sortOrder: ORGANIZATION_AND_NAME
+    limit: $limit
+    offset: $offset
+  ) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleProjectFields
+    }
+  }
+}
+
+query GetCeMatchProjectRules($id: ID!) {
+  project(id: $id) {
+    ...CeMatchRuleProjectDetails
+  }
+}
+
+query GetCeMatchRuleUnitGroups(
+  $filters: UnitGroupFilterOptions
+  $limit: Int
+  $offset: Int
+) {
+  unitGroups(filters: $filters, limit: $limit, offset: $offset) {
+    nodesCount
+    nodes {
+      ...CeMatchRuleUnitGroupFields
+    }
+  }
+}
+
+query GetCeMatchUnitGroupRules($id: ID!) {
+  unitGroup(id: $id) {
+    ...CeMatchRuleUnitGroupDetails
+  }
+}
+
+query GetCeMatchProjectUnitGroups(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    unitGroups(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeMatchRuleProjectUnitGroupFields
+      }
+    }
+  }
+}
+
+query GetCeMatchOrganizationProjects(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ProjectsForEnrollmentFilterOptions
+  $sortOrder: ProjectSortOption
+) {
+  organization(id: $id) {
+    id
+    projects(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: $sortOrder
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        projectName
+        effectiveCeMatchRuleCount
+        localCeMatchRuleCount
+        unitGroups(limit: 1) {
+          nodesCount
+        }
+      }
+    }
+  }
+}

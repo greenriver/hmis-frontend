@@ -39,6 +39,7 @@ import type {
   ServicesForProjectFilterOptions,
   ServiceTypeFilterOptions,
   UnitFilterOptions,
+  UnitGroupFilterOptions,
   UserAuditEventFilterOptions,
 } from './gqlTypes';
 
@@ -81,6 +82,7 @@ export type FilterOptionsByName = {
   ServicesForProjectFilterOptions: ServicesForProjectFilterOptions;
   ServiceTypeFilterOptions: ServiceTypeFilterOptions;
   UnitFilterOptions: UnitFilterOptions;
+  UnitGroupFilterOptions: UnitGroupFilterOptions;
   UserAuditEventFilterOptions: UserAuditEventFilterOptions;
 };
 
@@ -125,5 +127,6 @@ export const FILTER_OPTIONS_GRAPHQL_TYPE_NAMES = [
   'ServicesForProjectFilterOptions',
   'ServiceTypeFilterOptions',
   'UnitFilterOptions',
+  'UnitGroupFilterOptions',
   'UserAuditEventFilterOptions',
 ] as const;

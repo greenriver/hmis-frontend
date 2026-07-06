@@ -77,7 +77,10 @@ fragment ClientName on Client {
 
 fragment ClientNameDobVet on Client {
   ...ClientName
+  # DOB can be null because it's unknown, OR because the user doesn't have permission to view DOB
   dob
+  # Age is always visible to the user on clients they can view, if it is known
+  age
   veteranStatus
 }
 

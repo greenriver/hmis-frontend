@@ -45,3 +45,71 @@ fragment CeMatchRuleDetails on CeMatchRule {
     }
   }
 }
+
+fragment CeMatchRuleGroupFields on CeMatchRuleGroup {
+  ownerType
+  ownerId
+  ownerName
+  local
+  rules {
+    ...CeMatchRuleAdminSummaryFields
+  }
+}
+
+fragment CeMatchRuleOrganizationFields on Organization {
+  id
+  organizationName
+  ceWaitlistUnitGroupCount
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+}
+
+fragment CeMatchRuleOrganizationDetails on Organization {
+  ...CeMatchRuleOrganizationFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}
+
+fragment CeMatchRuleProjectFields on Project {
+  id
+  projectName
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+  organization {
+    id
+    organizationName
+  }
+  unitGroups(limit: 1) {
+    nodesCount
+  }
+}
+
+fragment CeMatchRuleProjectDetails on Project {
+  ...CeMatchRuleProjectFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}
+
+fragment CeMatchRuleProjectUnitGroupFields on UnitGroup {
+  id
+  name
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+  projectId
+  projectName
+}
+
+fragment CeMatchRuleUnitGroupFields on UnitGroup {
+  ...CeMatchRuleProjectUnitGroupFields
+  organizationId
+  organizationName
+}
+
+fragment CeMatchRuleUnitGroupDetails on UnitGroup {
+  ...CeMatchRuleUnitGroupFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}
