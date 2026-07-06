@@ -35,6 +35,7 @@ export const useAdminDashboardNavItems = () => {
             path: AdminDashboardRoutes.CE_RULES_ROOT,
             // TODO(#7544): swap to canAdministrateCoordinatedEntry
             permissions: ['canAdministrateConfig'],
+            hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
         ],
       },

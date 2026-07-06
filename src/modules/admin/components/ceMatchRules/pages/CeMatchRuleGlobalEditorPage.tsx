@@ -20,7 +20,6 @@ const CeMatchRuleGlobalEditorPage: React.FC = () => {
       />
       <CeMatchRuleForm
         ownerType={CeMatchRuleOwnerType.DataSource}
-        onSaved={returnToRulesOverview}
         onCancel={returnToRulesOverview}
       />
     </>
